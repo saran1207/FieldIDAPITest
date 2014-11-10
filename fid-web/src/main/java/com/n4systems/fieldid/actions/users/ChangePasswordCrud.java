@@ -1,10 +1,5 @@
 package com.n4systems.fieldid.actions.users;
 
-import com.n4systems.taskscheduling.task.SendSavedItemsTask;
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
@@ -14,6 +9,9 @@ import com.n4systems.model.security.PasswordPolicy;
 import com.n4systems.model.user.User;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 public class ChangePasswordCrud extends AbstractCrud {
@@ -79,7 +77,7 @@ public class ChangePasswordCrud extends AbstractCrud {
 		}
 		
 		userManager.updatePassword( user.getId(), newPassword, getPasswordPolicy());
-		
+
 		logger.info( "password updated for " + getSessionUser().getUserID() );
 		addFlashMessageText( "message.passwordupdated" );			
 		getSession().remove( "passwordReset" );
@@ -99,7 +97,11 @@ public class ChangePasswordCrud extends AbstractCrud {
         if (!passwordHelper.isPasswordUnique(user, newPassword)) {
         	addActionErrorText("error.password_unique", getPasswordPolicy().getUniqueness()+"" );
         	return false; 
-        }	
+        }
+        if (passwordHelper.containsName(user, newPassword)) {
+            addActionErrorText("error.password_contains_name");
+            return false;
+        }
 		
 		return true;		
 	}

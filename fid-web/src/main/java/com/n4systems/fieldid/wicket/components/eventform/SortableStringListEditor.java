@@ -4,6 +4,7 @@ import com.n4systems.fieldid.utils.Predicate;
 import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressedBehavior;
 import com.n4systems.fieldid.wicket.components.AppendToClassIfCondition;
 import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -14,8 +15,10 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.validation.validator.StringValidator;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 
 import java.util.List;
@@ -25,10 +28,14 @@ public class SortableStringListEditor extends SortableListPanel {
 	private ListView<String> stringList;
     private SortableAjaxBehavior sortableAjaxBehavior;
     private boolean reorderState = false;
+    private FIDFeedbackPanel feedbackPanel;
+
 
 	public SortableStringListEditor(String id, IModel<List<String>> listModel, IModel<String> addItemLabelModel) {
 		super(id, listModel);
         setOutputMarkupId(true);
+
+        add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
 
         add(new Label("addItemTitle", addItemLabelModel));
         
@@ -110,6 +117,7 @@ public class SortableStringListEditor extends SortableListPanel {
         public AddStringForm(String id) {
             super(id);
             add(addItemTextField = new RequiredTextField<String>("string", new PropertyModel<String>(this, "string")));
+            addItemTextField.add(new StringValidator.MaximumLengthValidator(getTextFieldLengthLimit()));
             addItemTextField.setOutputMarkupId(true);
             AjaxButton addButton;
             add(addButton = new AjaxButton("addButton") {
@@ -123,6 +131,7 @@ public class SortableStringListEditor extends SortableListPanel {
 
                 @Override
                 protected void onError(AjaxRequestTarget target, Form<?> form) {
+                    target.add(feedbackPanel);
                 }
             });
             addItemTextField.add(new ClickOnComponentWhenEnterKeyPressedBehavior(addButton));
@@ -151,5 +160,9 @@ public class SortableStringListEditor extends SortableListPanel {
 		getStringList().add(newIndex, movingListItem);
 		target.add(this);
 	}
+
+    protected int getTextFieldLengthLimit() {
+        return 256;
+    }
 
 }

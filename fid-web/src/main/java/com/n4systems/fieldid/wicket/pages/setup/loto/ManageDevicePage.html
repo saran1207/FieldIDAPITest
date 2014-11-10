@@ -1,0 +1,26 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+
+    <div wicket:id="addOrEditDeviceWindow"/>
+
+    <table wicket:id="deviceList" class="device-setup-list">
+        <tr>
+            <th><wicket:message key="label.device"/></th>
+            <th><wicket:message key="label.isolation_method"/></th>
+            <th>&nbsp;</th>
+        </tr>
+        <tr wicket:id="device">
+            <td><span wicket:id="name"/></td>
+            <td><span wicket:id="method"/></td>
+            <td>
+                <a wicket:id="editLink" class="btn-secondary"><wicket:message key="label.edit"/></a>
+                <a wicket:id="deleteLink" class="btn-secondary"><wicket:message key="label.delete"/></a>
+            </td>
+        </tr>
+    </table>
+
+    <wicket:fragment wicket:id="deviceActionGroup">
+        <a class="btn-primary" wicket:id="addLink"><wicket:message key="label.add"/></a>
+    </wicket:fragment>
+</wicket:extend>
+</html>

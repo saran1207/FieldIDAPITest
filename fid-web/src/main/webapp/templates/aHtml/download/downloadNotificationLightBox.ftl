@@ -6,7 +6,7 @@
 		<p><span id="label"><@s.text name="label.downloadname"/></span>&nbsp;<span class="egColor"><@s.text name="message.downloadname" /></span></p>
 		
 		<@s.form id="download_name" action="saveDownloadName" namespace="/" theme="fieldidSimple">	
-			<@s.hidden name="fileId" value="${downloadLink.id}"/>		
+			<@s.hidden id="fileId" name="fileId" value="${downloadLink.id}"/>
 			<@s.textfield id="reportName" name="reportName" maxlength="255"/>
 					
 			<div class="formActions">
@@ -26,8 +26,8 @@
 <script type="text/javascript">
     function saveNameAndCloseLightbox() {
         var params = new Object();
-        params.downloadLinkName=$(reportName).value;
-        params.fileId=$(download_name_fileId).value;
+        params.downloadLinkName = $$('#reportName')[0].value;
+        params.fileId = $$('#fileId')[0].value;
         getResponse('<@s.url action="updateDownloadName" namespace="/ajax"/>', 'post', params);
         closeLightbox();
     }

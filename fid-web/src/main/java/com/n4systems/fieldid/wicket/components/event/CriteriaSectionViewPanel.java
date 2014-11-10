@@ -60,6 +60,10 @@ public class CriteriaSectionViewPanel extends Panel {
                         item.add(new Label("text", new PropertyModel<String>(item.getModel(), "text")));
                         if(item.getModelObject().getState() == Observation.State.OUTSTANDING) {
                             item.add(new AttributeAppender("class", "def-selected"));
+                        } else if(item.getModelObject().getState() == Observation.State.REPAIREDONSITE) {
+                            item.add(new AttributeAppender("class", "def-repaired-on-site"));
+                        } else if(item.getModelObject().getState() == Observation.State.REPAIRED) {
+                            item.add(new AttributeAppender("class", "def-repaired"));
                         }
                     }
                 });

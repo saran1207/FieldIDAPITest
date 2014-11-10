@@ -36,7 +36,7 @@ public abstract class EventFormPanel extends Panel {
     private WebMarkupContainer criteriaSectionContainer;
     private boolean isEdit;
 
-    public EventFormPanel(String id, final IModel<? extends AbstractEvent> event, final IModel<List<AbstractEvent.SectionResults>> results, boolean isEdit) {
+    public EventFormPanel(String id, final IModel<? extends AbstractEvent> event, final IModel<List<AbstractEvent.SectionResults>> results, final boolean isEdit) {
         super(id);
         this.results = results;
         this.event = event;

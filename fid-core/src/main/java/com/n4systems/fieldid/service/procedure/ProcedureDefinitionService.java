@@ -3,6 +3,7 @@ package com.n4systems.fieldid.service.procedure;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.n4systems.exceptions.loto.AnnotatedImageGenerationException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.amazon.S3Service;
@@ -18,6 +19,7 @@ import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.procedure.*;
 import com.n4systems.model.security.OwnerAndDownFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
@@ -33,6 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import rfid.ejb.entity.InfoOptionBean;
 
+import java.io.File;
 import java.util.*;
 
 
@@ -46,6 +49,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     @Autowired private DateService dateService;
     @Autowired private AtomicLongService atomicLongService;
     @Autowired private RecurringScheduleService recurringScheduleService;
+    @Autowired private SvgGenerationService svgGenerationService;
 
 
     public Boolean hasPublishedProcedureDefinition(Asset asset) {
@@ -152,7 +156,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         }
     }
 
-    public void saveProcedureDefinition(ProcedureDefinition procedureDefinition) {
+    public void saveProcedureDefinition(ProcedureDefinition procedureDefinition) throws AnnotatedImageGenerationException {
         saveProcedureDefinitionDraft(procedureDefinition);
 
         if (isProcedureApprovalRequiredForCurrentUser()) {
@@ -673,8 +677,8 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return persistenceService.count(procedureDefinitionCountQuery);
     }
 
-    public List<String> getPreConfiguredDevices(IsolationPointSourceType sourceType) {
-        QueryBuilder<String> query = new QueryBuilder<String>(PreconfiguredDevice.class);
+    public List<String> getPreConfiguredDeviceList(IsolationPointSourceType sourceType) {
+        QueryBuilder<String> query = new QueryBuilder(PreconfiguredDevice.class, new TenantOnlySecurityFilter(getCurrentTenant().getId()));
         query.setSimpleSelect("device");
 
         if(sourceType != null) {
@@ -689,6 +693,33 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return persistenceService.findAll(query);
     }
 
+    public List<PreconfiguredDevice> getPreConfiguredDevices(IsolationPointSourceType sourceType) {
+        QueryBuilder<PreconfiguredDevice> query = createTenantSecurityBuilder(PreconfiguredDevice.class);
+        if(sourceType != null) {
+            query.addSimpleWhere("isolationPointSourceType", sourceType);
+        } else
+            query.addWhere(WhereClauseFactory.createIsNull("isolationPointSourceType"));
+        return persistenceService.findAll(query);
+    }
+
+    public PreconfiguredDevice getPreConfiguredDevice(String device, IsolationPointSourceType sourceType) {
+        QueryBuilder<PreconfiguredDevice> query = createTenantSecurityBuilder(PreconfiguredDevice.class);
+        query.addSimpleWhere("device", device);
+        query.addSimpleWhere("isolationPointSourceType", sourceType);
+        return persistenceService.find(query);
+    }
+
+    public Boolean isPredefinedDeviceNameExists(String device, IsolationPointSourceType sourceType, Long id) {
+        QueryBuilder<PreconfiguredDevice> query = createTenantSecurityBuilder(PreconfiguredDevice.class);
+        query.addSimpleWhere("device", device);
+        query.addSimpleWhere("isolationPointSourceType", sourceType);
+
+        if(id != null) {
+            query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.NE,  "id", id));
+        }
+        return persistenceService.exists(query);
+    }
+
     public List<String> getPreConfiguredEnergySource(IsolationPointSourceType sourceType) {
         QueryBuilder<String> query = new QueryBuilder<String>(PreconfiguredEnergySource.class);
         query.setSimpleSelect("source");
@@ -697,16 +728,23 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return persistenceService.findAll(query);
     }
 
-    public void publishProcedureDefinition(ProcedureDefinition definition) {
-        ProcedureDefinition previousDefinition = getPublishedProcedureDefinition(definition.getAsset(), definition.getFamilyId());
-        if (previousDefinition != null) {
-            previousDefinition.setPublishedState(PublishedState.PREVIOUSLY_PUBLISHED);
-            previousDefinition.setRetireDate(dateService.nowUTC().toDate());
-            persistenceService.update(previousDefinition);
+    public void publishProcedureDefinition(ProcedureDefinition definition) throws AnnotatedImageGenerationException {
+        try {
+            svgGenerationService.generateAndUploadAnnotatedSvgs(definition);
+
+            ProcedureDefinition previousDefinition = getPublishedProcedureDefinition(definition.getAsset(), definition.getFamilyId());
+            if (previousDefinition != null) {
+                previousDefinition.setPublishedState(PublishedState.PREVIOUSLY_PUBLISHED);
+                previousDefinition.setRetireDate(dateService.nowUTC().toDate());
+                persistenceService.update(previousDefinition);
+            }
+            definition.setPublishedState(PublishedState.PUBLISHED);
+            definition.setOriginDate(dateService.nowUTC().toDate());
+            persistenceService.update(definition);
+        } catch (Exception e) {
+            logger.error("Failed to generate annotated svgs for Procedure Definition:" + definition.getId());
+            throw new AnnotatedImageGenerationException(e);
         }
-        definition.setPublishedState(PublishedState.PUBLISHED);
-        definition.setOriginDate(dateService.nowUTC().toDate());
-        persistenceService.update(definition);
     }
 
     /**
@@ -1193,4 +1231,16 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         }
    }
 
+   public CustomLotoDetails getCustomLotoDetails() {
+       return persistenceService.find(createTenantSecurityBuilder(CustomLotoDetails.class));
+   }
+
+   public CustomLotoDetails saveOrUpdateCustomLotoDetails(CustomLotoDetails customLotoDetails) {
+       return persistenceService.saveOrUpdate(customLotoDetails);
+   }
+
+    public void deleteCustomLotoDetails(CustomLotoDetails customLotoDetails) {
+        persistenceService.reattach(customLotoDetails);
+        persistenceService.delete(customLotoDetails);
+    }
 }

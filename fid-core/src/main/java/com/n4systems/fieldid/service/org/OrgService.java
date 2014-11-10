@@ -3,12 +3,15 @@ package com.n4systems.fieldid.service.org;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.*;
 import com.n4systems.model.security.OwnerAndDownWithPrimaryFilter;
 import com.n4systems.util.collections.OrgList;
-import com.n4systems.util.persistence.*;
+import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClause;
+import com.n4systems.util.persistence.WhereClauseFactory;
+import com.n4systems.util.persistence.WhereParameter;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Transactional
-public class OrgService extends FieldIdPersistenceService {
+public class OrgService extends CrudService<BaseOrg> {
+
+	public OrgService() {
+		super(BaseOrg.class);
+	}
 
     @Transactional(readOnly = true)
     public List<InternalOrg> getInternalOrgs() {
@@ -288,6 +295,84 @@ public class OrgService extends FieldIdPersistenceService {
         builder.setOrder("name",true);
         return builder;
     }
+
+	protected void mergeEntity(BaseOrg from, BaseOrg to) {
+		if (!from.getClass().equals(to.getClass())) {
+			throw new IllegalArgumentException("Cannot merge orgs of different types");
+		}
+		if (to instanceof PrimaryOrg) {
+			merge((PrimaryOrg) from, (PrimaryOrg) to);
+		} else if (to instanceof SecondaryOrg) {
+			merge((SecondaryOrg) from, (SecondaryOrg) to);
+		} else if (to instanceof CustomerOrg) {
+			merge((CustomerOrg) from, (CustomerOrg) to);
+		} else {
+			merge((DivisionOrg) from, (DivisionOrg) to);
+		}
+	}
+
+	protected void merge(BaseOrg from, BaseOrg to) {
+		merge(from, to);
+		to.setName(from.getName());
+		to.setAddressInfo(from.getAddressInfo());
+		to.setGlobalId(from.getGlobalId());
+		to.setNotes(from.getNotes());
+		to.setEventTypes(from.getEventTypes());
+		to.setContact(from.getContact());
+		to.setOwner(from.getOwner());
+		to.setCode(from.getCode());
+
+		if (to instanceof PrimaryOrg) {
+			merge((PrimaryOrg) from, (PrimaryOrg) to);
+		} else if (to instanceof SecondaryOrg) {
+			merge((SecondaryOrg) from, (SecondaryOrg) to);
+		} else if (to instanceof CustomerOrg) {
+			merge((CustomerOrg) from, (CustomerOrg) to);
+		} else {
+			merge((DivisionOrg) from, (DivisionOrg) to);
+		}
+	}
+
+	private void merge(InternalOrg from, InternalOrg to) {
+		merge((BaseOrg) from, to);
+		to.setCertificateName(from.getCertificateName());
+		to.setDefaultTimeZone(from.getDefaultTimeZone());
+	}
+
+	private void merge(PrimaryOrg from, PrimaryOrg to) {
+		merge((InternalOrg) from, to);
+		to.setExtendedFeatures(from.getExtendedFeatures());
+		to.setUsingSerialNumber(from.isUsingSerialNumber());
+		to.setIdentifierFormat(from.getIdentifierFormat());
+		to.setWebSite(from.getWebSite());
+		to.setDateFormat(from.getDateFormat());
+		to.setExternalId(from.getExternalId());
+		to.setAutoPublish(from.isAutoPublish());
+		to.setAutoAcceptConnections(from.isAutoAcceptConnections());
+		to.setPlansAndPricingAvailable(from.isPlansAndPricingAvailable());
+		to.setSearchableOnSafetyNetwork(from.isSearchableOnSafetyNetwork());
+		to.setIdentifierLabel(from.getIdentifierLabel());
+	}
+
+	private void merge(SecondaryOrg from, SecondaryOrg to) {
+		merge((InternalOrg) from, to);
+		to.setPrimaryOrg(from.getPrimaryOrg());
+	}
+
+	private void merge(ExternalOrg from, ExternalOrg to) {
+		merge((BaseOrg) from, to);
+		to.setLinkedOrg(from.getLinkedOrg());
+	}
+
+	private void merge(CustomerOrg from, CustomerOrg to) {
+		merge((ExternalOrg) from, to);
+		to.setParent(from.getParent());
+	}
+
+	private void merge(DivisionOrg from, DivisionOrg to) {
+		merge((ExternalOrg) from, to);
+		to.setParent(from.getParent());
+	}
 
 }
 

@@ -32,6 +32,20 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
             "3. Return all controls to the off position and complete all necessary adjustments or repair work.\n" +
             "4. During testing and adjustment, Lockout must be re-applied when contact with hazardous area(s) is required.";
 
+    public static String LOCKOUT_APPLICATION_PROCESS = "1. Notify all affected personnel before the start of this LOCK OUT procedure.\n" +
+            "2. Shut down machinery using normal procedures and operating controls. \n" +
+            "3. Use energy control points to isolate energy sources and apply necessary lockout devices and locks. \n" +
+            "4. Locks applied to energy isolation points must be personally identified and in the \"secured\" position.\n" +
+            "5. Authorized personnel must maintain possession of the key(s) for each lock applied. \n" +
+            "6. Do not work under the protection of a lock you have not personally applied.";
+
+    public static String LOCKOUT_REMOVAL_PROCESS = "1. Ensure all tools and items have been removed.  \n" +
+            "2. Confirm that all employees are safely located.  \n" +
+            "3. Ensure all guarding has been replaced.\n" +
+            "4. Verify that controls are in neutral.  \n" +
+            "5. Remove lockout devices and reenergize machine.  \n" +
+            "6. Notify affected employees that servicing is completed.";
+
     @ManyToOne
     @JoinColumn(name = "asset_id")
     private Asset asset;
@@ -115,10 +129,10 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
 
     //These will soon be additional fields:
     @Column(name="application_process")
-    private String applicationProcess;
+    private String applicationProcess = LOCKOUT_APPLICATION_PROCESS;
 
     @Column(name="removal_process")
-    private String removalProcess;
+    private String removalProcess = LOCKOUT_REMOVAL_PROCESS;
 
     @Column(name="testing_and_verification")
     private String testingAndVerification = TESTING_AND_VERIFICATION_REQUIREMENTS;
@@ -344,6 +358,15 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
         List<IsolationPoint> isolationPointList = getLockIsolationPoints();
         isolationPointList.remove(isolationPoint);
 
+        isolationPoints.remove(isolationPoint);
+
+        reindexLockIsolationPoints(isolationPointList);
+        reindexUnlockIsolationPoints(getUnlockIsolationPoints());
+    }
+
+    public void removeIsolationPointOnly(IsolationPoint isolationPoint) {
+        List<IsolationPoint> isolationPointList = getLockIsolationPoints();
+        isolationPointList.remove(isolationPoint);
         isolationPoints.remove(isolationPoint);
 
         reindexLockIsolationPoints(isolationPointList);

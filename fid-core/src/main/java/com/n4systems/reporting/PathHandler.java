@@ -45,6 +45,15 @@ public class PathHandler {
 	private static final String REPORT_PATH_BASE = PRIVATE_PATH_BASE + "/reports";
     private static final String ALL_TENANT_REPORT_PART = "all_tenants";
 	private static final String ALL_TENANT_REPORT_PATH = REPORT_PATH_BASE + "/" + ALL_TENANT_REPORT_PART;
+
+    private static final String LOTO_DEFAULT_NAME = "procedure";
+    private static final String COMPILED_LOTO_FILE_EXT = ".jasper";
+    private static final String LOTO_FILE_EXT = ".jrxml";
+    private static final String LOTO_S3_BUCKET = "/fieldid-loto";
+    private static final String LOTO_PATH_BASE = PRIVATE_PATH_BASE + "/fieldid-loto";
+    private static final String ALL_TENANT_LOTO_PART = "all_tenants";
+    private static final String ALL_TENANT_LOTO_PATH = LOTO_PATH_BASE + "/" + ALL_TENANT_LOTO_PART;
+
 	private static final String COMMON_IMAGE_PATH_BASE = COMMON_PATH_BASE + "/images";
 	private static final String COMMON_TEMPLATE_BASE = COMMON_PATH_BASE + "/templates";
 	private static final String COMMON_CONFIG_BASE = COMMON_PATH_BASE + "/conf";
@@ -306,7 +315,71 @@ public class PathHandler {
         }
         return absolutize(getCompiledReportPath(printOut, null));
 	}
-	
+
+    //----------------------------------------------------------------------------------
+
+    public static String getLotoDisplayString(LotoPrintout lotoPrintout) {
+        String printOutPath = mergePaths(getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName());
+        return printOutPath;
+    }
+
+    public static String getS3BasePath(LotoPrintout lotoPrintout) {
+        String printOutPath = mergePaths(getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName());
+        return printOutPath;
+    }
+
+    public static String getZipS3Path(LotoPrintout lotoPrintout) {
+        String printOutPath = mergePaths(getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName(), (lotoPrintout.getPrintoutName() + ".zip"));
+        return printOutPath;
+    }
+
+    public static String getS3Path(LotoPrintout lotoPrintout, String fileName) {
+        String printOutPath = mergePaths(getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName(), fileName);
+        return printOutPath;
+    }
+
+
+    public static String getLotoPath(LotoPrintout lotoPrintout) {
+        String printOutPath = mergePaths(getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName());
+        return printOutPath;
+    }
+
+	public static String getLotoDefaultPath(LotoPrintoutType type) {
+		String printOutPath = mergePaths(ALL_TENANT_LOTO_PART, type.getLabel());
+		return printOutPath;
+	}
+
+
+    public static File getAbsoluteLotoPath(LotoPrintout lotoPrintout) {
+        String printOutPath = mergePaths(getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName());
+        return absolutize(printOutPath);
+    }
+
+
+
+
+
+    public static File getAbsoluteLotoDefaultPath(LotoPrintout lotoPrintout) {
+        String printOutPath = mergePaths(ALL_TENANT_LOTO_PART, lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName());
+        return absolutize(printOutPath);
+    }
+
+    public static String getDefaultCompiledLotoFilePath(LotoPrintout lotoPrintout) {
+        String printOutPath = mergePaths(ALL_TENANT_LOTO_PART, lotoPrintout.getPrintoutType().getLabel(), getCompiledLotoFileName());
+        return printOutPath;
+    }
+
+    public static String getCompiledLotoFilePath(LotoPrintout lotoPrintout) {
+        String printOutPath = mergePaths(getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName(), getCompiledLotoFileName());
+        return printOutPath;
+    }
+
+    private static String getCompiledLotoFileName() {
+        return LOTO_DEFAULT_NAME + COMPILED_LOTO_FILE_EXT;
+    }
+
+    //----------------------------------------------------------------------------------
+
 	public static File getPreviewImage(PrintOut printOut) {
 		return absolutize(getPrintOutPreveiwPath(printOut));
 	}

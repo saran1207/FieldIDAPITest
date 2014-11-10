@@ -42,5 +42,9 @@
         cursor: pointer;
     }
 
+    .org-location .text::-ms-clear {
+        display: none;
+    }
+
 
 

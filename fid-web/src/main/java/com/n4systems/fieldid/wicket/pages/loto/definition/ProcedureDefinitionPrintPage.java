@@ -90,7 +90,10 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
         response.renderCSSReference("style/print/style.css");
         response.renderJavaScriptReference("//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js");
         response.renderJavaScriptReference("javascript/print/jquery.imagesloaded.js");
-        response.renderJavaScriptReference("javascript/print/jquery.panzoom.js");
+
+        //Removing the functionality to move the images.
+        //response.renderJavaScriptReference("javascript/print/jquery.panzoom.js");
+
         response.renderJavaScriptReference("javascript/print/jquery.print.js");
     }
 

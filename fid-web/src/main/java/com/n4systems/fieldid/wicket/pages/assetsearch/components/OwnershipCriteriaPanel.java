@@ -8,6 +8,7 @@ import com.n4systems.fieldid.wicket.model.user.GroupedVisibleUsersModel;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.model.user.User;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -17,20 +18,18 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
-public class OwnershipCriteriaPanel extends Panel {
-
-    //private ModalLocationPicker locationPicker;
-    //private PropertyModel<Location> locationModel;
+public class OwnershipCriteriaPanel<T extends SearchCriteria> extends Panel {
 
     private OrgLocationPicker locationPicker;
 
-    public OwnershipCriteriaPanel(String id, IModel<?> model) {
+    public OwnershipCriteriaPanel(String id, IModel<T> model) {
         super(id, model);
         final PropertyModel<BaseOrg> ownerModel = new PropertyModel<BaseOrg>(getDefaultModel(), "owner");
 
         //Owner Picker
         add(new OrgLocationPicker("owner", ownerModel) {
-            @Override protected void onChanged(AjaxRequestTarget target) {
+            @Override
+            protected void onChanged(AjaxRequestTarget target) {
                 if(getTextString() != null && getTextString().equals("")) {
                     locationPicker.setLocationOwner(null);
                 } else {
@@ -47,7 +46,7 @@ public class OwnershipCriteriaPanel extends Panel {
             public String getWatermarkText() {
                 return new FIDLabelModel("message.locationpicker_watermark").getObject();
             }
-        };
+        }.withLocations();
         add(locationPicker);
 
         //Freeform Location

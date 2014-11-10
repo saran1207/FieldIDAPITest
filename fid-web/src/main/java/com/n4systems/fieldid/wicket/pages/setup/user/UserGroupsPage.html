@@ -1,3 +1,4 @@
+<html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
 
     <div class="header">
@@ -16,9 +17,9 @@
                 </h2>
                 <div wicket:id="feedbackPanel"/>
                 <label><wicket:message key="label.name"/></label>
-                <input type="text" wicket:id="name">
+                <input type="text" wicket:id="name" maxlength="256">
                 <label><wicket:message key="label.id"/></label>
-                <input type="text" wicket:id="id">
+                <input type="text" wicket:id="id" maxlength="256">
                 <div class="formActions">
                     <a class="mattButton blueButton" wicket:id="saveButton"><wicket:message key="label.save"/></a>
                 </div>
@@ -102,3 +103,4 @@
     </div>
 
 </wicket:extend>
+</html>

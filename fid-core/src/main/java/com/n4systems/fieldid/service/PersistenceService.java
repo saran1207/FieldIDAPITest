@@ -176,7 +176,7 @@ public class PersistenceService extends FieldIdService {
     }
 
     @Transactional
-    public BaseEntity saveOrUpdate(BaseEntity entity) {
+    public <T extends BaseEntity> T saveOrUpdate(T entity) {
         if (entity.isNew()) {
             save(entity);
             return entity;

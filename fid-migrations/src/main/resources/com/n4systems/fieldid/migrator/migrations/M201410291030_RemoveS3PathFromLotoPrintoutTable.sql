@@ -1,0 +1,1 @@
+ALTER TABLE loto_printouts DROP COLUMN s3_path;

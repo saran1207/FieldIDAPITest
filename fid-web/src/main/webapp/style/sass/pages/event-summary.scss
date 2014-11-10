@@ -63,11 +63,11 @@
 }
 
 .observation-dialog {
-  p.def-selected, p.rec-selected {
+  p.def-selected, p.rec-selected, p.def-repaired-on-site, p.def-repaired {
     background-position: left center;
     background-repeat: no-repeat;
     padding-left: 45px;
-    height: 25px;
+    height: 32px;
 
     span {
       vertical-align: sub;
@@ -81,6 +81,15 @@
   p.rec-selected {
     background-image: url(../../images/recommendation.gif);
   }
+
+  p.def-repaired-on-site {
+    background-image: url(../../images/repairedOnSite.gif);
+  }
+
+  p.def-repaired {
+    background-image: url(../../images/repaired.gif);
+  }
+
 }
 
 .result {

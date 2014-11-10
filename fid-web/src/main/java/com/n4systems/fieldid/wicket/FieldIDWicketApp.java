@@ -10,6 +10,7 @@ import com.n4systems.fieldid.wicket.pages.SelectLanguagePage;
 import com.n4systems.fieldid.wicket.pages.admin.adminusers.AdminUserPage;
 import com.n4systems.fieldid.wicket.pages.admin.connections.ConnectionViewPage;
 import com.n4systems.fieldid.wicket.pages.admin.languages.ConfigureLanguagesPage;
+import com.n4systems.fieldid.wicket.pages.admin.printouts.LotoPrintoutListPage;
 import com.n4systems.fieldid.wicket.pages.admin.security.ChangeAdminPasswordPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.TenantUserListPage;
@@ -60,8 +61,7 @@ import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusArchivedL
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusFormPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventtypegroup.*;
-import com.n4systems.fieldid.wicket.pages.setup.loto.EnableByAssetTypePage;
-import com.n4systems.fieldid.wicket.pages.setup.loto.ProcedureApproverPage;
+import com.n4systems.fieldid.wicket.pages.setup.loto.*;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.ConfirmArchivePage;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
 import com.n4systems.fieldid.wicket.pages.setup.score.ScoreGroupsPage;
@@ -130,6 +130,10 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/eventBookTranslations", EventBookTranslationsPage.class);
         mountPage("setup/languageConfiguration", LanguageConfigurationPage.class);
         mountPage("setup/procedureApprover", ProcedureApproverPage.class);
+        mountPage("setup/printoutTemplate", PrintoutTemplatePage.class);
+        mountPage("setup/lotoSetup", LotoSetupPage.class);
+        mountPage("setup/lotoDetailsSetup", LotoDetailsSetupPage.class);
+        mountPage("setup/manageDevicePage", ManageDevicePage.class);
         mountPage("setup/enableByAssetType", EnableByAssetTypePage.class);
         mountPage("setup/assetStatusList", AssetStatusListAllPage.class);
         mountPage("setup/eventBooksList", EventBooksListAllPage.class);
@@ -248,6 +252,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("admin/configureLanguages", ConfigureLanguagesPage.class);
 		mountPage("admin/tenantUsers", TenantUserListPage.class);
         mountPage("admin/changeAdminPassword", ChangeAdminPasswordPage.class);
+        mountPage("admin/lotoPrintoutSelection", LotoPrintoutListPage.class);
 
         mountPage("secret/test", SecretTestPage.class);
         mountPage("assetSummary", AssetSummaryPage.class);

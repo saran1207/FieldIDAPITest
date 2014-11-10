@@ -481,7 +481,10 @@ function annotateImages( data ){
             data: {}
         }
     }
-    params.annotations.data = data.images;
+
+    if (typeof data != 'undefined') {
+        params.annotations.data = data.images;
+    }
 
     $('img').imagesLoaded(function() {
         $('body').pages(params);

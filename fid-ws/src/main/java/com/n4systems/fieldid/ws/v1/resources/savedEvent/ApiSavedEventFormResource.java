@@ -50,6 +50,7 @@ public class ApiSavedEventFormResource extends FieldIdPersistenceService{
 		apiSection.setActive(!section.isRetired());
 		apiSection.setModified(section.getModified());
 		apiSection.setTitle(section.getTitle());
+        apiSection.setOptional(section.isOptional());
 
 		ApiCriteria criteriaResult;
 		for (Criteria criteria : section.getCriteria()) {
@@ -67,7 +68,7 @@ public class ApiSavedEventFormResource extends FieldIdPersistenceService{
 		if (result == null) return null;
 
 		ApiCriteria apiCriteria = eventTypeResource.convertCriteria(criteria);
-		apiCriteria.setResult(result);
+        apiCriteria.setResult(result);
 		return apiCriteria;
 	}
 	
@@ -94,7 +95,9 @@ public class ApiSavedEventFormResource extends FieldIdPersistenceService{
 		switch(criteriaResult.getCriteria().getCriteriaType()) {
 			case ONE_CLICK: 
 				OneClickCriteriaResult oneClickResult = (OneClickCriteriaResult)criteriaResult;
-				apiResult.setOneClickValue(oneClickResult.getButton().getId());
+                if(oneClickResult.getButton() != null){
+                    apiResult.setOneClickValue(oneClickResult.getButton().getId());
+                }
 				break;
 			case TEXT_FIELD:
 				TextFieldCriteriaResult textFieldResult = (TextFieldCriteriaResult)criteriaResult;

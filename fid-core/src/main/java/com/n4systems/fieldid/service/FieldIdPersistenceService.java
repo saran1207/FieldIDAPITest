@@ -1,11 +1,9 @@
 package com.n4systems.fieldid.service;
 
-import com.n4systems.fieldid.service.amazon.S3Service;
-import com.n4systems.model.parents.AbstractEntity;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.n4systems.model.Tenant;
+import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.user.User;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

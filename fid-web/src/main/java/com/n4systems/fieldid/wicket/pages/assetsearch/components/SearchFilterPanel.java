@@ -42,7 +42,7 @@ public class SearchFilterPanel extends Panel {
 
 		CollapsiblePanel p3 = new CollapsiblePanel("ownershipCriteriaPanel", new StringResourceModel("label.ownership",this,null)) {
 			@Override protected Panel createContainedPanel(String id) {
-				return new OwnershipCriteriaPanel(id, model);
+				return new OwnershipCriteriaPanel<>(id, model);
 			}
 		};
 	  	add(p3);

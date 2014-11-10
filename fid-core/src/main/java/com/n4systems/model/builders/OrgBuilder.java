@@ -45,34 +45,35 @@ public class OrgBuilder extends BaseBuilder<BaseOrg> {
 		this.code = code;
 		this.contact = contact;
 		this.parent = parent;
+        this.notes = notes;
 	}
 	
 	public OrgBuilder withParent(BaseOrg parent) {
-		return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, contact, parent, null));
+		return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, contact, parent, notes));
 	}
 	
 	public OrgBuilder withName(String name) {
-		return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, contact, parent, null));
+		return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, contact, parent, notes));
 	}
 	
 	public OrgBuilder withTestAddress() {
-		return makeBuilder(new OrgBuilder(type, tenant, name, AddressInfoBuilder.anAddressWithTestData().build(), code, contact, parent, null));
+		return makeBuilder(new OrgBuilder(type, tenant, name, AddressInfoBuilder.anAddressWithTestData().build(), code, contact, parent, notes));
 	}
 	
 	public OrgBuilder withTestContact() {
-		return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, ContactBuilder.aContact().build(), parent, null));
+		return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, ContactBuilder.aContact().build(), parent, notes));
 	}
 
     public OrgBuilder tenant(Tenant tenant) {
-        return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, contact, parent, null));
+        return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, contact, parent, notes));
     }
 
     public OrgBuilder withAddress(AddressInfo addressInfo) {
-        return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, contact, parent, null));
+        return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, contact, parent, notes));
     }
 
     public OrgBuilder withCode(String code) {
-        return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, contact, parent, null));
+        return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, contact, parent, notes));
     }
 
     public OrgBuilder withAllTestData() {
@@ -80,7 +81,7 @@ public class OrgBuilder extends BaseBuilder<BaseOrg> {
 	}
 
     public OrgBuilder withContact(String contactName, String email) {
-        return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, ContactBuilder.aContact().withName(contactName).withEmail(email).build(), parent, null));
+        return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, ContactBuilder.aContact().withName(contactName).withEmail(email).build(), parent, notes));
     }
 
     public OrgBuilder withNotes(String notes) {

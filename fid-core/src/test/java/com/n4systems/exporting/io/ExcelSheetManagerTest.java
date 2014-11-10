@@ -32,7 +32,7 @@ public class ExcelSheetManagerTest {
 		sheet1.addCell(cell);
 		replay(sheet1);
 		replay(sheet2);
-		
+
 		WritableWorkbook workbook = createMock(WritableWorkbook.class);
 		expect(workbook.createSheet(titles[0], 0)).andReturn(sheet1);
 		expect(workbook.createSheet(titles[1], 1)).andReturn(sheet2);

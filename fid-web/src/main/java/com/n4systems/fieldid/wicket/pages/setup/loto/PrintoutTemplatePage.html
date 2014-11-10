@@ -1,0 +1,24 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+
+    <form wicket:id="form">
+        <fieldset>
+            <div class="control-group">
+                <label class="label"><wicket:message key="label.long_form"/>:</label>
+                <select wicket:id="longForm"/>
+            </div>
+
+            <div class="control-group">
+                <label class="label"><wicket:message key="label.short_form"/>:</label>
+                <select wicket:id="shortForm"/>
+            </div>
+        </fieldset>
+        <div>
+            <a class="btn-primary" wicket:id="saveLink"><wicket:message key="label.save"/></a>
+            <wicket:message key="label.or"/>
+            <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+        </div>
+    </form>
+
+</wicket:extend>
+</html>

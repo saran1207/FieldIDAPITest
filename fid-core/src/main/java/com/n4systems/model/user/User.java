@@ -53,6 +53,7 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	private Date lockedUntil;
 	private Date passwordChanged;
     private boolean displayLastRunSearches = true;
+    private boolean resetEmailSent = false;
 
 
     private Locale language;
@@ -113,6 +114,13 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 
 	@Column(name = "last_login")
 	private Date lastLogin;
+
+	@Embedded
+	@AttributeOverrides({
+			@AttributeOverride(name = "key", column = @Column(name = "token_key")),
+			@AttributeOverride(name = "secret", column = @Column(name = "token_secret"))
+	})
+	private KeyPair authToken = new KeyPair();
 	
 	@Override
 	protected void onCreate() {
@@ -143,7 +151,14 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 		generateReferralKeyIfNull();
 		generateGlobalIdIfNull();
 		generateAuthKey();
-	}		
+		generateOAuthTokens();
+	}
+
+	private void generateOAuthTokens() {
+		if (!authToken.isSet()) {
+			authToken = KeyPair.generate();
+		}
+	}
 	
 	private void trimNames() {
 		this.userID = (userID != null) ? userID.trim() : null;
@@ -275,6 +290,7 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 		addPreviousPassword();
 		assignPassword(plainTextPassword);
 		setPasswordChanged(new Date());
+        setResetEmailSent(false);
 		clearResetPasswordKey();
 		unlock();
 	}
@@ -595,4 +611,20 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	public void setLastLogin(Date lastLogin) {
 		this.lastLogin = lastLogin;
 	}
+
+	public KeyPair getAuthToken() {
+		return authToken;
+	}
+
+	public void setAuthToken(KeyPair authToken) {
+		this.authToken = authToken;
+	}
+
+    public boolean isResetEmailSent() {
+        return resetEmailSent;
+    }
+
+    public void setResetEmailSent(boolean resetEmailSent) {
+        this.resetEmailSent = resetEmailSent;
+    }
 }

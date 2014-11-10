@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.schedule;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
@@ -25,6 +26,7 @@ import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -68,9 +70,15 @@ public class SchedulePickerPanel<T extends Event> extends Panel {
 
             add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
 
-            add(dateTimePicker = new DateTimePicker("datePicker", new PropertyModel<Date>(eventScheduleModel, "dueDate"), true));
+            add(dateTimePicker = new DateTimePicker("datePicker", new PropertyModel<Date>(eventScheduleModel, "dueDate"), true) {
+                @Override
+                protected void onDatePicked(AjaxRequestTarget target) {
+                    eventScheduleModel.getObject().setAssigneeOrDateUpdated();
+                }
+            });
             dateTimePicker.getDateTextField().setRequired(true);
             dateTimePicker.setAllDay(dueDate == null || DateUtil.isMidnight(dueDate));
+            dateTimePicker.withoutPerformSetDateOnInitialization();
 
             DropDownChoice<EventType> eventTypeSelect = new FidDropDownChoice<EventType>("eventTypeSelect", new PropertyModel<EventType>(eventScheduleModel, "type"), eventTypeOptions, new ListableChoiceRenderer<EventType>());
             DropDownChoice<Project> jobSelect = new FidDropDownChoice<Project>("jobSelect", new PropertyModel<Project>(eventScheduleModel, "project"), jobsOptions, new ListableChoiceRenderer<Project>());
@@ -90,6 +98,8 @@ public class SchedulePickerPanel<T extends Event> extends Panel {
             }
 
             add(jobSelectContainer);
+
+            add(new CheckBox("sendEmailOnUpdate", new PropertyModel<>(eventScheduleModel, "sendEmailOnUpdate")));
 
             //priority
             DropDownChoice<PriorityCode> priorityChoice = new FidDropDownChoice<PriorityCode>("priority", ProxyModel.of(getModel(), on(Event.class).getPriority()), new PrioritiesForTenantModel(), new ListableChoiceRenderer<PriorityCode>());
@@ -112,6 +122,12 @@ public class SchedulePickerPanel<T extends Event> extends Panel {
             if ((null != eventScheduleModel.getObject().getType()) && (eventScheduleModel.getObject().getType().isActionEventType())) {
                 assignedUserOrGroupSelect.setNullVoid(false);
             }
+            assignedUserOrGroupSelect.addBehavior(new UpdateComponentOnChange() {
+                @Override
+                protected void onUpdate(AjaxRequestTarget target) {
+                    eventScheduleModel.getObject().setAssigneeOrDateUpdated();
+                }
+            });
 
             add(assignedUserOrGroupSelect);
 

@@ -27,6 +27,7 @@ import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
@@ -95,17 +96,30 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
             };
             scheduledDateModel.setObject(eventModel.getObject().getDueDate());
 
-            final DateTimePicker scheduledDatePicker = new DateTimePicker("dueDate", scheduledDateModel).withMonthsDisplayed(1).withNoAllDayCheckbox();
+            final DateTimePicker scheduledDatePicker = new DateTimePicker("dueDate", scheduledDateModel) {
+                @Override
+                protected void onDatePicked(AjaxRequestTarget target) {
+                    getModelObject().setAssigneeOrDateUpdated();
+                }
+            }.withMonthsDisplayed(1).withNoAllDayCheckbox();
             scheduledDatePicker.getDateTextField().setRequired(true);
 
             add(scheduledDatePicker);
 
             UsersForTenantModel usersModel = new UsersForTenantModel();
             VisibleUserGroupsModel userGroupsModel = new VisibleUserGroupsModel();
-            add(new AssignedUserOrGroupSelect("assignee",
+            AssignedUserOrGroupSelect assignedUserOrGroupSelect;
+            add(assignedUserOrGroupSelect = new AssignedUserOrGroupSelect("assignee",
                     ProxyModel.of(eventModel, on(Event.class).getAssignedUserOrGroup()),
                     usersModel, userGroupsModel,
-                    new AssigneesModel(userGroupsModel, usersModel)).setRequired(true));
+                    new AssigneesModel(userGroupsModel, usersModel)));
+            assignedUserOrGroupSelect.setRequired(true);
+            assignedUserOrGroupSelect.addBehavior(new UpdateComponentOnChange() {
+                @Override
+                protected void onUpdate(AjaxRequestTarget target) {
+                    getModelObject().setAssigneeOrDateUpdated();
+                }
+            });
 
             add(new DropDownChoice<EventType>("type", ProxyModel.of(getModel(), on(Event.class).getType()), new ActionTypesForTenantModel(), new ListableChoiceRenderer<EventType>()).setNullValid(true).setRequired(true));
 
@@ -135,7 +149,6 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
                 @Override
                 protected void onUpdate(AjaxRequestTarget target) {
                     if (getModelObject().isNew()) {
-//                        autoScheduleBasedOnPriority(getModel());
                         autoScheduleBasedOnPriority(priorityCodeModel, scheduledDateModel);
                         target.add(scheduledDatePicker);
                     }
@@ -146,6 +159,8 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
             TextArea<String> noteTextArea = new TextArea<String>("notes", ProxyModel.of(getModel(), on(Event.class).getNotes()));
             add(noteTextArea);
             noteTextArea.add(new StringValidator.MaximumLengthValidator(500));
+
+            add(new CheckBox("sendEmailOnUpdate", ProxyModel.of(getModel(), on(Event.class).isSendEmailOnUpdate())));
 
             AjaxSubmitLink submitLink = new AjaxSubmitLink("submitLink") {
                 @Override
@@ -247,6 +262,7 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
                 public void onClick(AjaxRequestTarget target) {
                     Date date = getDaysFromNow(deltaDays);
                     scheduledDateModel.setObject(new PlainDate(date));
+                    AddActionForm.this.getModelObject().setAssigneeOrDateUpdated();
                     target.add(scheduledDatePicker);
                 }
             };

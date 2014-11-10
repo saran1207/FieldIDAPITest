@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components;
 
 import com.google.gson.Gson;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -60,7 +61,8 @@ public class DateTimePicker extends Panel {
 
         add(dateTextField = new DateTextField("dateField", (IModel<Date>) dateModel) {
             // need to make the format dynamic since we can toggle the "includeTime" attribute after component created.
-            @Override public <C> IConverter<C> getConverter(Class<C> type) {
+            @Override
+            public <C> IConverter<C> getConverter(Class<C> type) {
                 return (IConverter<C>)new DateConverter() {
                     @Override public DateFormat getDateFormat(Locale locale) {
                         SimpleDateFormat format = new SimpleDateFormat(DateTimePicker.this.getDateFormat());
@@ -84,8 +86,15 @@ public class DateTimePicker extends Panel {
                             date;
                     }
                 };
+
             }
 
+        });
+        dateTextField.add(new UpdateComponentOnChange() {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                onDatePicked(target);
+            }
         });
         dateTextField.setOutputMarkupId(true);
 
@@ -269,5 +278,7 @@ public class DateTimePicker extends Panel {
         performSetDateOnInitialization = false;
         return this;
     }
+
+    protected void onDatePicked(AjaxRequestTarget target) { }
 
 }

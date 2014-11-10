@@ -1,0 +1,8 @@
+package n4systems.fieldid.api.pub.serialization;
+
+option java_outer_classname = "AssetMessage";
+option java_package = "com.n4systems.fieldid.api.pub.serialization";
+
+message Asset {
+	required int32 id = 1;
+}

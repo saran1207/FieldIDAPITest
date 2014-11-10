@@ -1,14 +1,11 @@
 package com.n4systems.fieldid.service.amazon;
 
 import com.amazonaws.AmazonServiceException;
-import com.amazonaws.ClientConfiguration;
 import com.amazonaws.HttpMethod;
-import com.amazonaws.Protocol;
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Maps;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.images.ImageService;
 import com.n4systems.fieldid.service.uuid.UUIDService;
@@ -18,6 +15,7 @@ import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
+import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import com.n4systems.model.user.User;
@@ -32,17 +30,17 @@ import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import javax.activation.MimetypesFileTypeMap;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
-import org.springframework.util.Assert;
 //import sun.misc.BASE64Encoder;
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 
 @Transactional
 public class S3Service extends FieldIdPersistenceService {
@@ -106,6 +104,8 @@ public class S3Service extends FieldIdPersistenceService {
 
     public static final String THUMBNAIL_EXTENSION = ".thumbnail";
     public static final String MEDIUM_EXTENSION = ".medium";
+
+    public static final String LOTO_BUCKET = "fieldid-loto";
 
     @Autowired private ConfigService configService;
     @Autowired private ImageService imageService;
@@ -311,6 +311,97 @@ public class S3Service extends FieldIdPersistenceService {
         return exists;
     }
 
+    //---------------------------------------------------------------------------------
+    public void deleteLotoPrintout(LotoPrintout printout) {
+        deleteLotoObject(PathHandler.getS3BasePath(printout));
+    }
+
+    public byte[] downloadZippedLotoPrintout(LotoPrintout printout) throws  IOException {
+
+        byte[] fileData = downloadLoto(PathHandler.getZipS3Path(printout));
+
+        //String fileName = printout.getPrintoutName() + ".zip";
+        //File file = PathHandler.getUserFile(getCurrentUser(), fileName);
+        //FileOutputStream fileAttachmentFos = new FileOutputStream(file);
+        //fileAttachmentFos.write(fileData);
+
+        return fileData;
+    }
+
+    public Map<String, InputStream> downloadDefaultLotoJasperMap(LotoPrintout printout) throws IOException {
+        return createLotoReportMap(printout.getPrintoutType(), PathHandler.getLotoDefaultPath(printout.getPrintoutType()));
+    }
+
+    public Map<String, InputStream> downloadCustomLotoJasperMap(LotoPrintout printout) throws IOException {
+        return createLotoReportMap(printout.getPrintoutType(), PathHandler.getLotoPath(printout));
+    }
+
+    private Map<String, InputStream> createLotoReportMap(LotoPrintoutType type, String path) throws IOException {
+        Map<String, InputStream> returnMe = Maps.newHashMap();
+
+        returnMe.put("main", new ByteArrayInputStream(downloadLoto(path + "/procedure.jasper")));
+
+        if(type.equals(LotoPrintoutType.LONG)) {
+            returnMe.put("isolationPointSubreport", new ByteArrayInputStream(downloadLoto(path + "/procedure-isolation-points-long.jasper")));
+        } else {
+            returnMe.put("isolationPointSubreport", new ByteArrayInputStream(downloadLoto(path + "/isolation-points-short.jasper")));
+            returnMe.put("imageSubreport", new ByteArrayInputStream(downloadLoto(path + "/isolation-points-images-short.jasper")));
+        }
+
+        return returnMe;
+    }
+
+    public byte[] downloadDefaultLotoPrintout(LotoPrintout printout) throws IOException {
+        File printoutFile = null;
+
+        byte[] fileData = downloadLoto(PathHandler.getDefaultCompiledLotoFilePath(printout));
+//        FileUtils.writeByteArrayToFile(printoutFile, fileData);
+
+        return fileData;
+    }
+
+    public byte[] downloadCustomLotoPrintout(LotoPrintout printout) throws IOException {
+        File printoutFile = null;
+
+        byte[] fileData = downloadLoto(PathHandler.getCompiledLotoFilePath(printout));
+//        FileUtils.writeByteArrayToFile(printoutFile, fileData);
+
+        return fileData;
+    }
+
+    public void saveLotoPrintout(File file, String path) {
+        //path = path + "/";
+        putObjectInLotoBucket(path, file);
+        //uploadResource(file, null, path);
+    }
+
+    private byte[] downloadLoto(String path) throws IOException {
+        InputStream resourceInput = null;
+        try {
+            S3Object resource = getLotoObject(path);
+            resourceInput = resource.getObjectContent();
+            byte[] resourceContent = IOUtils.toByteArray(resourceInput);
+            return resourceContent;
+        } catch (AmazonS3Exception e) {
+            return handleAmazonS3Exception(e, (byte[]) null);
+        } finally {
+            IOUtils.closeQuietly(resourceInput);
+        }
+    }
+
+    private S3Object getLotoObject(String path) {
+        return getClient().getObject(LOTO_BUCKET, getLotoFolder() + "/" + path);
+    }
+
+    private PutObjectResult putObjectInLotoBucket(String path, File file) {
+        PutObjectResult result = getClient().putObject(LOTO_BUCKET, getLotoFolder() + "/" + path, file);
+        return result;
+    }
+
+    //---------------------------------------------------------------------------------
+
+
+
     public byte[] downloadProcedureDefinitionMediumImage(ProcedureDefinitionImage image) throws IOException {
         byte[] imageData = downloadResource(null, PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM,
                 image.getProcedureDefinition().getAsset().getId(),
@@ -384,6 +475,29 @@ public class S3Service extends FieldIdPersistenceService {
         getClient().copyObject(copyObjectRequest);
 
     }
+
+    public void uploadProcedureDefinitionSvg(ProcedureDefinition procedureDefinition, File svgFile) {
+        uploadResource(svgFile, procedureDefinition.getTenant().getId(),
+                PROCEDURE_DEFINITION_IMAGE_PATH,
+                procedureDefinition.getAsset().getId(),
+                procedureDefinition.getId(),
+                svgFile.getName());
+    }
+
+    public byte[] downloadProcedureDefinitionImageSvg(ProcedureDefinitionImage image) throws IOException {
+        return downloadResource(getCurrentTenant().getId(), PROCEDURE_DEFINITION_IMAGE_PATH,
+                image.getProcedureDefinition().getAsset().getId(),
+                image.getProcedureDefinition().getId(),
+                (image.getFileName() + ".svg"));
+    }
+
+    public byte[] downloadProcedureDefinitionImageSvg(ProcedureDefinitionImage image, IsolationPoint isolationPoint) throws IOException {
+        return downloadResource(getCurrentTenant().getId(), PROCEDURE_DEFINITION_IMAGE_PATH,
+                image.getProcedureDefinition().getAsset().getId(),
+                image.getProcedureDefinition().getId(),
+                (image.getFileName() + "_" + isolationPoint.getAnnotation().getId() + ".svg"));
+    }
+
 
     public String uploadTempCriteriaResultImage(CriteriaResultImage criteriaResultImage, byte[] imageData) {
         String contentType = criteriaResultImage.getContentType();
@@ -581,6 +695,14 @@ public class S3Service extends FieldIdPersistenceService {
         );
     }
 
+    public byte[] downloadProcedureDefinitionImage(ProcedureDefinitionImage procedureDefinitionImage) throws IOException {
+        return downloadResource(procedureDefinitionImage.getProcedureDefinition().getTenant().getId(),
+                PROCEDURE_DEFINITION_IMAGE_PATH,
+                procedureDefinitionImage.getProcedureDefinition().getAsset().getId(),
+                procedureDefinitionImage.getProcedureDefinition().getId(),
+                procedureDefinitionImage.getFileName()
+        );
+    }
 
     public URL getPlaceAttachment(BaseOrg org, Attachment attachment) {
         return generateResourceUrl(org.getTenant().getId(), attachment.getFileName(), org.getId());
@@ -707,6 +829,20 @@ public class S3Service extends FieldIdPersistenceService {
         return result;
     }
 
+    private void deleteLotoObject(String path) {
+
+        //Delete the items in the folder first
+        List<S3ObjectSummary> objectSummaryList = getClient().listObjects(LOTO_BUCKET, getLotoFolder() + "/" + path).getObjectSummaries();
+        for(S3ObjectSummary summary: objectSummaryList) {
+            if(summary.getSize() > 0) {
+                getClient().deleteObject(LOTO_BUCKET, summary.getKey());
+            }
+        }
+
+        //delete the folder
+        getClient().deleteObject(LOTO_BUCKET, getLotoFolder() + "/" + path);
+    }
+
     private void deleteObject(String path) {
         getClient().deleteObject(getBucket(), path);
     }
@@ -735,6 +871,11 @@ public class S3Service extends FieldIdPersistenceService {
 
     private AmazonS3Client getClient() {
         return s3client;
+    }
+
+    private String getLotoFolder() {
+        String bucket = configService.getString(ConfigEntry.AMAZON_S3_LOTO_REPORTS);
+        return bucket;
     }
 
     private String getBucket() {

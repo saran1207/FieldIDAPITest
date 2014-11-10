@@ -47,6 +47,12 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         removeNotificationsWithoutAssignees();
     }
 
+    public boolean notificationExists(Event event) {
+        QueryBuilder<AssigneeNotification> query = createTenantSecurityBuilder(AssigneeNotification.class);
+        query.addSimpleWhere("event.id", event.getId());
+        return persistenceService.exists(query);
+    }
+
     private void notifyGroupAssignees() {
         QueryBuilder<AssigneeNotification> assigneeQuery = new QueryBuilder<AssigneeNotification>(AssigneeNotification.class, new OpenSecurityFilter());
         assigneeQuery.addWhere(WhereParameter.Comparator.NOTNULL, "event.assignedGroup", "event.assignedGroup", "");
