@@ -495,7 +495,7 @@ public class S3Service extends FieldIdPersistenceService {
         return downloadResource(getCurrentTenant().getId(), PROCEDURE_DEFINITION_IMAGE_PATH,
                 image.getProcedureDefinition().getAsset().getId(),
                 image.getProcedureDefinition().getId(),
-                (image.getFileName() + "_" + isolationPoint.getId() + ".svg"));
+                (image.getFileName() + "_" + isolationPoint.getAnnotation().getId() + ".svg"));
     }
 
 
