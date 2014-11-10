@@ -110,7 +110,7 @@ public class IsolationPointEditor extends Panel {
         //These all needed to change, because they're not proper components.  We need our internally made components so
         //we get more control over what's rendered...
         form.add(locationField = new LabelledTextField<String>("location", "label.location", new PropertyModel(getDefaultModel(), "location")).required());
-        form.add(checkField = new LabelledTextArea<String>("check", "label.check", new PropertyModel(getDefaultModel(), "check")).setMaxLength(255).required());
+        form.add(checkField = new LabelledTextArea<String>("check", "label.check", new PropertyModel(getDefaultModel(), "check")).setMaxLength(255));
         form.add(methodField = new LabelledTextArea<String>("method", "label.method", new PropertyModel(getDefaultModel(), "method")));
         methodField.setMaxLength(255);
         methodField.required();
