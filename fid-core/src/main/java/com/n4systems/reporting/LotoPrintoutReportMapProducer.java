@@ -1,9 +1,10 @@
 package com.n4systems.reporting;
 
-import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.procedure.SvgGenerationService;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
+import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import com.n4systems.model.procedure.PublishedState;
 import com.n4systems.reporting.data.ImageShortPrintoutContainer;
 import com.n4systems.reporting.data.IsolationPointLongPrintoutContainer;
@@ -11,9 +12,12 @@ import com.n4systems.reporting.data.IsolationPointShortPrintoutContainer;
 import com.n4systems.util.DateTimeDefinition;
 import org.apache.log4j.Logger;
 
-import java.io.File;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -35,13 +39,16 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
     private final String reportTitle;
     private final PrintoutType printoutType;
 
+    private SvgGenerationService svgGenerationService;
+
     private static final Logger logger = Logger.getLogger(ReportMapProducer.class);
 
-    public LotoPrintoutReportMapProducer(String reportTitle, ProcedureDefinition procDef, PrintoutType printoutType, DateTimeDefinition dateTimeDefinition, S3Service s3Service) {
+    public LotoPrintoutReportMapProducer(String reportTitle, ProcedureDefinition procDef, PrintoutType printoutType, DateTimeDefinition dateTimeDefinition, S3Service s3Service, SvgGenerationService svgGenerationService) {
         super(dateTimeDefinition, s3Service);
         this.procDef = procDef;
         this.reportTitle = reportTitle;
         this.printoutType = printoutType;
+        this.svgGenerationService = svgGenerationService;
     }
 
     @Override
@@ -73,7 +80,7 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
         add("reviewedByDate", procDef.getPublishedState().equals(PublishedState.PUBLISHED) ? formatDate(procDef.getModified(), false) : "");
         add("developedByDate", procDef.getCreated() != null ? formatDate(procDef.getCreated(), false) : "");
         add("revisionNumber", procDef.getRevisionNumber().toString());
-        add("inDraft", procDef.getPublishedState().equals(PublishedState.DRAFT) ? "DRAFT" : "PUBLISHED OR SOMETHING");
+        add("inDraft", procDef.getPublishedState().equals(PublishedState.DRAFT));
 
         if(printoutType.equals(PrintoutType.LONG)) {
             //Long form has this field that doesn't exist in shortForm... but for the most part, it's not useful.
@@ -90,24 +97,72 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
 
             //FIXME: Pull proper image data here... we're using static garbage for now...
 
-            //Now, we have to do the images...  Since the report structure is kinda weird, and there's a panel that
-            //holds the one that iterates our objects, we need a nested structure like this.  It's possible we can fix
-            //this issue by rebuilding more of the report, but that can be looked into later.
-            List<ImageShortPrintoutContainer> allImages = Lists.newArrayList();
-            ImageShortPrintoutContainer imageContainer = new ImageShortPrintoutContainer();
-            imageContainer.setPath(new File("/Users/jheath/Pictures/skeptical-smiley-face-g9WKOp-200x200.jpg"));
-            allImages.add(imageContainer);
-            imageContainer = new ImageShortPrintoutContainer();
-            imageContainer.setPath(new File("/Users/jheath/Pictures/skeptical-smiley-face-g9WKOp-200x200.jpg"));
-            allImages.add(imageContainer);
-            imageContainer = new ImageShortPrintoutContainer();
-            imageContainer.setPath(new File("/Users/jheath/Pictures/skeptical-smiley-face-g9WKOp-200x200.jpg"));
-            allImages.add(imageContainer);
-            imageContainer = new ImageShortPrintoutContainer();
-            imageContainer.setPath(new File("/Users/jheath/Pictures/skeptical-smiley-face-g9WKOp-200x200.jpg"));
-            allImages.add(imageContainer);
+            //Now, we have to do the images...  these are special images that hold all annotations associated with the
+            //single image.
+            List<ImageShortPrintoutContainer> allImages = convertToShortImageContainerCollection(procDef.getImages());
+
+
+
+//            ImageShortPrintoutContainer imageContainer = new ImageShortPrintoutContainer();
+//            try {
+//                imageContainer.setImage(new FileInputStream(new File("/Users/jheath/Pictures/skeptical-smiley-face-g9WKOp-200x200.jpg")));
+//                allImages.add(imageContainer);
+//                imageContainer = new ImageShortPrintoutContainer();
+//                imageContainer.setImage(new FileInputStream(new File("/Users/jheath/Pictures/skeptical-smiley-face-g9WKOp-200x200.jpg")));
+//                allImages.add(imageContainer);
+//                imageContainer = new ImageShortPrintoutContainer();
+//                imageContainer.setImage(new FileInputStream(new File("/Users/jheath/Pictures/skeptical-smiley-face-g9WKOp-200x200.jpg")));
+//                allImages.add(imageContainer);
+//                imageContainer = new ImageShortPrintoutContainer();
+//                imageContainer.setImage(new FileInputStream(new File("/Users/jheath/Pictures/skeptical-smiley-face-g9WKOp-200x200.jpg")));
+//                allImages.add(imageContainer);
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            }
+
             add("allImages", allImages);
         }
+    }
+
+    private List<ImageShortPrintoutContainer> convertToShortImageContainerCollection(List<ProcedureDefinitionImage> images) {
+        return images.stream()
+                     .map(this::convertToShortImageContainer)
+                     .filter(container -> container.getImage() != null)
+                     .collect(Collectors.toList());
+    }
+
+    private ImageShortPrintoutContainer convertToShortImageContainer(ProcedureDefinitionImage image) {
+        ImageShortPrintoutContainer returnMe = new ImageShortPrintoutContainer();
+
+        try {
+            byte[] imageData = s3Service.downloadProcedureDefinitionImageSvg(image);
+
+            if(imageData == null) {
+                //This might just mean that we haven't generated the SVGs yet... so we'll do that now.
+                try {
+                    svgGenerationService.generateAndUploadAnnotatedSvgs(procDef);
+
+                    imageData = s3Service.downloadProcedureDefinitionImageSvg(image);
+
+                    if(imageData == null) throw new Exception("Image didn't exist...");
+
+                    returnMe.setImage(new ByteArrayInputStream(imageData));
+                } catch (IOException ioe) {
+                    logger.warn("There was an IOException while trying to download the ProcedureDefinitionImage with ID " + image.getId(), ioe);
+                } catch (Exception e) {
+                    logger.error("There was a problem while Generating SVGs for ProcDef with ID " + procDef.getId(), e);
+                    e.printStackTrace();
+                }
+            } else {
+                returnMe.setImage(new ByteArrayInputStream(imageData));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            logger.warn("There was an error downloading an SVG image for the LOTO Shortform Printout for Image with ID " + image.getId() +  "!!", e);
+            returnMe.setImage(null);
+        }
+
+        return returnMe;
     }
 
     /**
@@ -118,7 +173,7 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
      * @param isolationPoints - A <b>List</b> populated with all <b>IsolationPoint</b>s from the definition.
      * @return A <b>List</b> populated with <b>IsolationPointPrintoutContainer</b>s, representing the provided Isolation Points.
      */
-    public List<IsolationPointLongPrintoutContainer> convertToLongIPContainerCollection(List<IsolationPoint> isolationPoints) {
+    private List<IsolationPointLongPrintoutContainer> convertToLongIPContainerCollection(List<IsolationPoint> isolationPoints) {
         return isolationPoints.stream()
                               //Convert it to the container objects to ensure Jasper has an easy time digging into the
                               //collection.
@@ -126,13 +181,13 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
                               .collect(Collectors.toList());
     }
 
-    public List<IsolationPointShortPrintoutContainer> convertToShortIPContainerCollection(List<IsolationPoint> isolationPoints) {
+    private List<IsolationPointShortPrintoutContainer> convertToShortIPContainerCollection(List<IsolationPoint> isolationPoints) {
         return isolationPoints.stream()
                               .map(this::convertToShortContainer)
                               .collect(Collectors.toList());
     }
 
-    public IsolationPointShortPrintoutContainer convertToShortContainer(IsolationPoint isolationPoint) {
+    private IsolationPointShortPrintoutContainer convertToShortContainer(IsolationPoint isolationPoint) {
         IsolationPointShortPrintoutContainer container = new IsolationPointShortPrintoutContainer();
 
         container.setCheck(isolationPoint.getCheck());
@@ -146,7 +201,7 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
         return container;
     }
 
-    public IsolationPointLongPrintoutContainer convertToLongContainer(IsolationPoint isolationPoint) {
+    private IsolationPointLongPrintoutContainer convertToLongContainer(IsolationPoint isolationPoint) {
 
         IsolationPointLongPrintoutContainer container = new IsolationPointLongPrintoutContainer();
 
@@ -158,34 +213,58 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
         container.setLockoutMethod(isolationPoint.getMethod());
 
         //TODO: Remove this line once you're properly handling images.
-        container.setImage(new File("/Users/jheath/Pictures/skeptical-smiley-face-g9WKOp-200x200.jpg"));
+//        try {
+//            container.setImage(new FileInputStream(new File("/Users/jheath/Pictures/skeptical-smiley-face-g9WKOp-200x200.jpg")));
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
 
 
-        //TODO: Figure out how to properly handle the images... depending on how we actually get them, this might work just fine...ish.
         //Find the relevant image.  We do a bit of cheating, but should receive back an Optional that will either
         //contain the image or null.
-//        Optional<ProcedureDefinitionImage> optionalImage =
-//                procDef
-//                         .getImages()
-//                         .stream()
-//                         //The trick here is to filter by a value that should result in either 0 or 1 elements.
-//                         .filter(image -> image.getId().equals(isolationPoint.getAnnotation().getImage().getId()))
-//                         .findAny();
-//
-//        //Zero elements, you say?
-//        //Well, yeah... images are optional.  This is how we handle that:
-//        try {
-//            ProcedureDefinitionImage theImage = optionalImage.get();
-//            if(theImage == null) throw new NoSuchElementException("The image was empty... that's still bad news.");
-//            container.setImage(JRImageRenderer.getInstance(s3Service.downloadProcedureDefinitionMediumImage(theImage)));
-//        } catch(NoSuchElementException nsee) {
-//            //Aside from a console warning, we don't do anything else...
-//            logger.warn("No image found for Isolation Point with ID: " + isolationPoint.getId());
-//        } catch(IOException ioe) {
-//            //Again, we'll just warn and then continue without the image.  This can all be changed if images are super
-//            //important.
-//            logger.warn("There was an IOException while trying to download the image associated with the Isolation Point with ID " + isolationPoint.getId(), ioe);
-//        }
+        Optional<ProcedureDefinitionImage> optionalImage =
+                procDef.getImages()
+                       .stream()
+                       //The trick here is to filter by a value that should result in either 0 or 1 elements.
+                       .filter(image -> image.getId().equals(isolationPoint.getAnnotation().getImage().getId()))
+                       .findAny();
+
+        //Zero elements, you say?
+        //Well, yeah... images are optional.  This is how we handle that:
+        try {
+            ProcedureDefinitionImage theImage = optionalImage.get();
+            if(theImage == null) throw new NoSuchElementException("The image was empty... that's still bad news.");
+            byte[] imageData = s3Service.downloadProcedureDefinitionImageSvg(theImage, isolationPoint);
+            if(imageData == null) {
+                //It's possible this image was only null because the SVG doesn't exist yet... so we're going to try
+                //to fix that... then we're going to try again.  If it's still bad the second time, we're going to throw
+                //an exception.
+                try {
+                    svgGenerationService.generateAndUploadAnnotatedSvgs(procDef);
+
+                    imageData = s3Service.downloadProcedureDefinitionImageSvg(theImage, isolationPoint);
+
+                    if(imageData == null) throw new Exception("Image doesn't exist...");
+
+                    container.setImage(new ByteArrayInputStream(imageData));
+                } catch (IOException ioe) {
+                    logger.warn("There was an IOException while trying to download the image associated with the Isolation Point with ID " + isolationPoint.getId(), ioe);
+                } catch (Exception e) {
+                    logger.error("There was a problem while Generating SVGs for ProcDef with ID " + procDef.getId(), e);
+                    e.printStackTrace();
+                }
+            } else {
+                container.setImage(new ByteArrayInputStream(imageData));
+            }
+        } catch(NoSuchElementException nsee) {
+            //Aside from a console warning, we don't do anything else... this console warning may even be too much...
+            //but I'd rather have some record of this.
+            logger.warn("No image found for Isolation Point with ID: " + isolationPoint.getId());
+        } catch(IOException ioe) {
+            //Again, we'll just warn and then continue without the image.  This can all be changed if images are super
+            //important.
+            logger.warn("There was an IOException while trying to download the image associated with the Isolation Point with ID " + isolationPoint.getId(), ioe);
+        }
 
         //Now we're left with null if there's no image, or the image data if there IS image data.
 

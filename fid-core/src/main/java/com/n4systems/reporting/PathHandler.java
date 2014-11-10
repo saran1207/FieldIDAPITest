@@ -338,33 +338,39 @@ public class PathHandler {
         return printOutPath;
     }
 
+
     public static String getLotoPath(LotoPrintout lotoPrintout) {
-        String printOutPath = mergePaths(LOTO_PATH_BASE, getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName());
+        String printOutPath = mergePaths(getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName());
         return printOutPath;
     }
 
+	public static String getLotoDefaultPath(LotoPrintoutType type) {
+		String printOutPath = mergePaths(ALL_TENANT_LOTO_PART, type.getLabel());
+		return printOutPath;
+	}
+
+
     public static File getAbsoluteLotoPath(LotoPrintout lotoPrintout) {
-        String printOutPath = mergePaths(LOTO_PATH_BASE, getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName());
+        String printOutPath = mergePaths(getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName());
         return absolutize(printOutPath);
     }
 
-    public static String getLotoDefaultPath(LotoPrintout lotoPrintout) {
-        String printOutPath = mergePaths(LOTO_PATH_BASE, getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName());
-        return printOutPath;
-    }
+
+
+
 
     public static File getAbsoluteLotoDefaultPath(LotoPrintout lotoPrintout) {
-        String printOutPath = mergePaths(LOTO_PATH_BASE, ALL_TENANT_LOTO_PATH, lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName());
+        String printOutPath = mergePaths(ALL_TENANT_LOTO_PART, lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName());
         return absolutize(printOutPath);
     }
 
     public static String getDefaultCompiledLotoFilePath(LotoPrintout lotoPrintout) {
-        String printOutPath = mergePaths(LOTO_PATH_BASE, ALL_TENANT_LOTO_PATH, lotoPrintout.getPrintoutType().getLabel(), getCompiledLotoFileName());
+        String printOutPath = mergePaths(ALL_TENANT_LOTO_PART, lotoPrintout.getPrintoutType().getLabel(), getCompiledLotoFileName());
         return printOutPath;
     }
 
     public static String getCompiledLotoFilePath(LotoPrintout lotoPrintout) {
-        String printOutPath = mergePaths(LOTO_PATH_BASE, getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName(), getCompiledLotoFileName());
+        String printOutPath = mergePaths(getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName(), getCompiledLotoFileName());
         return printOutPath;
     }
 

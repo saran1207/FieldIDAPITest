@@ -1,6 +1,6 @@
 package com.n4systems.reporting.data;
 
-import java.io.File;
+import java.io.InputStream;
 
 /**
  * This container is built just to hold the path to the image.  We should keep this POJO, however, because it will
@@ -9,13 +9,13 @@ import java.io.File;
  * Created by Jordan Heath on 14-11-05.
  */
 public class ImageShortPrintoutContainer {
-    private File path;
+    private InputStream image;
 
-    public File getPath() {
-        return path;
+    public InputStream getImage() {
+        return image;
     }
 
-    public void setPath(File path) {
-        this.path = path;
+    public void setImage(InputStream path) {
+        this.image = path;
     }
 }

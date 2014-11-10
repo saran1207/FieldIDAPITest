@@ -1,6 +1,6 @@
 package com.n4systems.reporting.data;
 
-import java.io.File;
+import java.io.InputStream;
 
 /**
  * This POJO is used to hold information on Isolation Points for use in the new LOTO Short and Long Printouts.
@@ -15,7 +15,7 @@ public class IsolationPointLongPrintoutContainer {
 
     //We use this so that the image itself can be fed directly to the report.  These objects get initialised with a
     //byte array filled with the image data.
-    private File image;
+    private InputStream image;
 
     public String getEnergySource() {
         return energySource;
@@ -41,11 +41,11 @@ public class IsolationPointLongPrintoutContainer {
         this.lockoutMethod = lockoutMethod;
     }
 
-    public File getImage() {
+    public InputStream getImage() {
         return image;
     }
 
-    public void setImage(File image) {
+    public void setImage(InputStream image) {
         this.image = image;
     }
 }

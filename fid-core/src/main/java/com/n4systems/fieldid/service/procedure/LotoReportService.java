@@ -11,11 +11,9 @@ import com.n4systems.util.persistence.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -102,7 +100,7 @@ public class LotoReportService extends FieldIdPersistenceService {
         return shortFormPrintout;
     }
 
-    public File getLongJapser() throws IOException {
+    public byte[] getLongJapser() throws IOException {
         LotoPrintout printout = getSelectedLongForm();
         if(printout == null) {
             printout = new LotoPrintout();
@@ -113,7 +111,34 @@ public class LotoReportService extends FieldIdPersistenceService {
         }
     }
 
-    public File getShortJasper() throws IOException {
+    //TODO Make these two into one method... the only differentiating factor is whether or not we statically set as LONG or SHORT
+    public Map<String, InputStream> getLongJasperMap() throws IOException {
+        LotoPrintout printout = getSelectedLongForm();
+        if(printout == null) {
+            //return the default map...
+            printout = new LotoPrintout();
+            printout.setPrintoutType(LotoPrintoutType.LONG);
+            return s3Service.downloadDefaultLotoJasperMap(printout);
+        } else {
+            //return the custom map...
+            return s3Service.downloadCustomLotoJasperMap(printout);
+        }
+    }
+
+    public Map<String, InputStream> getShortJasperMap() throws IOException {
+        LotoPrintout printout = getSelectedLongForm();
+        if(printout == null) {
+            //return the default map...
+            printout = new LotoPrintout();
+            printout.setPrintoutType(LotoPrintoutType.SHORT);
+            return s3Service.downloadDefaultLotoJasperMap(printout);
+        } else {
+            //return the custom map...
+            return s3Service.downloadCustomLotoJasperMap(printout);
+        }
+    }
+
+    public byte[] getShortJasper() throws IOException {
         LotoPrintout printout = getSelectedShortForm();
         if(printout == null) {
             printout = new LotoPrintout();
