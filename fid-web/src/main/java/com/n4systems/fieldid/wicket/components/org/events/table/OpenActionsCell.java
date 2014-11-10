@@ -31,7 +31,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class OpenActionsCell extends Panel {
 
-    @SpringBean private PlaceEventScheduleService placeEventScheduleService;
+    @SpringBean
+    private PlaceEventScheduleService placeEventScheduleService;
 
     private ModalWindow modalWindow;
     private SchedulePicker<PlaceEvent> schedulePicker;

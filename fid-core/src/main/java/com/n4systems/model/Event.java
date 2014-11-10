@@ -142,6 +142,12 @@ public abstract class Event<T extends EventType, V extends Event, R extends Enti
     @Column(name="created_platform", length = 200)
     private String createdPlatform;
 
+    @Column(name="send_email_on_update")
+    private Boolean sendEmailOnUpdate = Boolean.TRUE;
+
+    @Transient
+    private Boolean assigneeOrDateUpdated = Boolean.FALSE;
+
 	public Event() {
 	}
 
@@ -631,6 +637,14 @@ public abstract class Event<T extends EventType, V extends Event, R extends Enti
         this.assignedGroup = assignedGroup;
     }
 
+    public Boolean isSendEmailOnUpdate() {
+        return sendEmailOnUpdate;
+    }
+
+    public void setSendEmailOnUpdate(Boolean sendEmailOnUpdate) {
+        this.sendEmailOnUpdate = sendEmailOnUpdate;
+    }
+
     @Transient
     public String getAssigneeName() {
         // Used as a path_expression in reporting for column event_search_assignee
@@ -656,6 +670,14 @@ public abstract class Event<T extends EventType, V extends Event, R extends Enti
             this.assignee = null;
             this.assignedGroup = null;
         }
+    }
+
+    public Boolean getAssigneeOrDateUpdated() {
+        return assigneeOrDateUpdated;
+    }
+
+    public void setAssigneeOrDateUpdated() {
+        this.assigneeOrDateUpdated = Boolean.TRUE;
     }
 }
 

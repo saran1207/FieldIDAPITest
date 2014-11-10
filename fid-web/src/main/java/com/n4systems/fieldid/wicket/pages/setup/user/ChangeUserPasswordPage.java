@@ -76,14 +76,24 @@ public class ChangeUserPasswordPage extends FieldIDTemplatePage {
         passwordField.add(new IValidator<String>() {
             @Override
             public void validate(IValidatable<String> validatable) {
+                User user = userService.getUser(FieldIDSession.get().getSessionUser().getId());
                 PasswordHelper passwordHelper = new PasswordHelper(getPasswordPolicy());
-                if (!passwordHelper.isValidPassword(validatable.getValue())) {
+
+                if (passwordHelper.containsName(userModel.getObject(), validatable.getValue()) || !passwordHelper.isValidPassword(validatable.getValue())) {
 
                     PasswordPolicy policy = passwordHelper.getPasswordPolicy();
-                    String message = new FIDLabelModel("error.password_policy", policy.getMinLength() + "",
-                            policy.getMinCapitals() + "",
-                            policy.getMinNumbers() + "",
-                            policy.getMinSymbols() + "").getObject();
+                    String message;
+                    if(policy.isCheckName()) {
+                        message = new FIDLabelModel("error.password_policy_with_name_check", policy.getMinLength() + "",
+                                policy.getMinCapitals() + "",
+                                policy.getMinNumbers() + "",
+                                policy.getMinSymbols() + "").getObject();
+                    } else {
+                        message = new FIDLabelModel("error.password_policy", policy.getMinLength() + "",
+                                policy.getMinCapitals() + "",
+                                policy.getMinNumbers() + "",
+                                policy.getMinSymbols() + "").getObject();
+                    }
 
                     ValidationError error = new ValidationError();
                     error.setMessage(message);

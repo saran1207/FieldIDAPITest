@@ -37,7 +37,7 @@
                     <div class="control-group" wicket:id="identifierContainer">
                          
                         <label>* <span style="word-wrap: break-word;" wicket:id="identifierLabel"></span></label>
-                        <input class="short" wicket:id="identifier">
+                        <input class="short" wicket:id="identifier" type="text" maxlength="50">
                         <a class="links" wicket:id="generateIdentifierLink"><wicket:message key="label.generate"/></a>
 
                         <wicket:enclosure>
@@ -52,7 +52,7 @@
 
                     <div style="clear:both;" class="control-group" wicket:id="rfidContainer">
                         <label><wicket:message key="label.rfidnumber"/></label>
-                        <input wicket:id="rfidNumber">
+                        <input wicket:id="rfidNumber" type="text" maxlength="50">
                         <p wicket:id="duplicateRfidWarning">
                             <wicket:message key="message.warning_duplicate_rfid_number"/>
                         </p>
@@ -60,7 +60,7 @@
 
                     <div class="control-group">
                         <label><wicket:message key="label.reference_number"/></label>
-                        <input wicket:id="referenceNumber">
+                        <input wicket:id="referenceNumber" type="text" maxlength="300">
                     </div>
 
                 </div>

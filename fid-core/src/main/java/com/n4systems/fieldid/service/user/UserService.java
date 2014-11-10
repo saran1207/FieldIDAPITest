@@ -2,7 +2,11 @@ package com.n4systems.fieldid.service.user;
 
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.org.OrgService;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.SendSavedItemSchedule;
+import com.n4systems.model.admin.AdminUser;
+import com.n4systems.model.api.Archivable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.ExternalOrgFilter;
 import com.n4systems.model.orgs.InternalOrgFilter;
@@ -21,6 +25,8 @@ import com.n4systems.util.UserBelongsToFilter;
 import com.n4systems.util.collections.PrioritizedList;
 import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import org.apache.commons.lang.time.DateUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
@@ -29,13 +35,15 @@ import java.util.*;
 @Transactional
 public class UserService extends FieldIdPersistenceService {
 
-    private static String [] DEFAULT_ORDER = {"firstName", "lastName"};
+    @Autowired
+    private OrgService orgService;
 
+    private static String [] DEFAULT_ORDER = {"firstName", "lastName"};
 
     public List<User> getUsers(boolean registered, boolean includeSystem) {
         QueryBuilder<User> builder = createUserQueryBuilder(registered, includeSystem);
 
-        if (!getCurrentUser().getGroups().isEmpty()) {
+        if (!getCurrentUser().getGroups().isEmpty() && isUserGroupFilteringEnabled()) {
             return new ArrayList<User>(ThreadLocalInteractionContext.getInstance().getVisibleUsers());
         }
 
@@ -45,17 +53,41 @@ public class UserService extends FieldIdPersistenceService {
     public List<User> getUsers(UserListFilterCriteria criteria) {
         QueryBuilder<User> builder = createUserQueryBuilder(criteria);
 
-        if (!getCurrentUser().getGroups().isEmpty()) {
-            return new ArrayList<User>(ThreadLocalInteractionContext.getInstance().getVisibleUsers());
+        if (!getCurrentUser().getGroups().isEmpty() && isUserGroupFilteringEnabled()) {
+            return new ArrayList<>(ThreadLocalInteractionContext.getInstance().getVisibleUsers());
         }
 
         return persistenceService.findAll(builder);
     }
 
+    public List<User> getExpiringPasswordUsersByTenant(Long tenantId, int expiringDays) {
+
+        List<User> finalListOfUsers = new ArrayList<>();
+        Date expiringDate = new Date();
+        Date today = new Date();
+        Date userDate = DateUtils.addDays(today, 10);
+
+        QueryBuilder<User> query = new QueryBuilder<>(User.class, new OpenSecurityFilter());
+        query.addSimpleWhere("tenant.id", tenantId);
+        query.addSimpleWhere("state", Archivable.EntityState.ACTIVE);
+        List<User> userList = persistenceService.findAll(query);
+
+        for(User user:userList) {
+            if(user.getPasswordChanged() != null) {
+                expiringDate = DateUtils.addDays(user.getPasswordChanged(), expiringDays);
+                if (expiringDate.before(userDate) && expiringDate.after(today)) {
+                    finalListOfUsers.add(user);
+                }
+            }
+        }
+
+        return finalListOfUsers;
+    }
+
     public Long countUsers(UserListFilterCriteria criteria) {
         QueryBuilder<User> builder = createUserQueryBuilder(criteria);
 
-        if (!getCurrentUser().getGroups().isEmpty()) {
+        if (!getCurrentUser().getGroups().isEmpty() && isUserGroupFilteringEnabled()) {
             return Long.valueOf(new ArrayList<User>(ThreadLocalInteractionContext.getInstance().getVisibleUsers()).size());
         }
 
@@ -202,6 +234,13 @@ public class UserService extends FieldIdPersistenceService {
         return builder;
     }
 
+    public AdminUser getAdminUser(Long userId) {
+        QueryBuilder<AdminUser> builder = createUserSecurityBuilder(AdminUser.class, true);
+        builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "id", userId));
+        AdminUser user = persistenceService.find(builder);
+        return user;
+    }
+
     public User getUser(Long userId) {
         QueryBuilder<User> builder = createUserSecurityBuilder(User.class, true);
         builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "id", userId));
@@ -287,7 +326,7 @@ public class UserService extends FieldIdPersistenceService {
         String queryString = "select DISTINCT ub from " + User.class.getName() + " ub where ub.registered = true and state = 'ACTIVE' and ub.userType != '" + UserType.SYSTEM.toString() + "' and ( "
                 + filter.produceWhereClause(User.class, "ub") + " OR ( " + justTenantFilter.produceWhereClause(User.class, "ub") + " AND ub.owner.customerOrg IS NULL) )";
 
-        if (!getCurrentUser().getGroups().isEmpty()) {
+        if (!getCurrentUser().getGroups().isEmpty() && isUserGroupFilteringEnabled()) {
             queryString += " AND ub in (:visibleUsers) ";
         }
 
@@ -295,7 +334,7 @@ public class UserService extends FieldIdPersistenceService {
 
         Query query = getEntityManager().createQuery(queryString);
 
-        if (!getCurrentUser().getGroups().isEmpty()) {
+        if (!getCurrentUser().getGroups().isEmpty() && isUserGroupFilteringEnabled()) {
             Collection<User> visibleUsers = ThreadLocalInteractionContext.getInstance().getVisibleUsers();
             query.setParameter("visibleUsers", visibleUsers);
         }
@@ -377,6 +416,10 @@ public class UserService extends FieldIdPersistenceService {
     public void unarchive(User user) {
         user.activateEntity();
         persistenceService.update(user);
+    }
+
+    private boolean isUserGroupFilteringEnabled() {
+        return orgService.getPrimaryOrgForTenant(getCurrentTenant().getId()).hasExtendedFeature(ExtendedFeature.UserGroupFiltering);
     }
 
 }

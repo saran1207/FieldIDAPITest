@@ -34,6 +34,8 @@ import com.n4systems.fieldid.wicket.pages.setup.eventbook.EventBooksListAllPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventtypegroup.EventTypeGroupListPage;
 import com.n4systems.fieldid.wicket.pages.setup.loto.EnableByAssetTypePage;
+import com.n4systems.fieldid.wicket.pages.setup.loto.LotoSetupPage;
+import com.n4systems.fieldid.wicket.pages.setup.loto.PrintoutTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.loto.ProcedureApproverPage;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
 import com.n4systems.fieldid.wicket.pages.setup.translations.AssetTypeGroupTranslationsPage;
@@ -289,7 +291,8 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         WebMarkupContainer container = new WebMarkupContainer("lotoSubMenuContainer");
         container.add(new BookmarkablePageLink<ProcedureApproverPage>("procedureApproverLink", ProcedureApproverPage.class));
         container.add(new BookmarkablePageLink<EnableByAssetTypePage>("enableByAssetTypeLink", EnableByAssetTypePage.class));
-
+        container.add(new BookmarkablePageLink<PrintoutTemplatePage>("printoutTemplateLink", PrintoutTemplatePage.class));
+        container.add(new BookmarkablePageLink<LotoSetupPage>("lotoSetupLink", LotoSetupPage.class));
         container.setVisible(getSecurityGuard().isLotoEnabled());
         return container;
     }

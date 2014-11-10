@@ -114,24 +114,29 @@ public class ApiEventResource extends FieldIdPersistenceService {
 			
 			// Update CriteriaResult, Actions if event had a form.
 			if(apiEvent.getForm() != null) {
-				for(ApiCriteriaSectionResult sectionResult : apiEvent.getForm().getSections()) {
-					for(ApiCriteriaResult criteriaResult : sectionResult.getCriteria()) {
-						// Set sid to eventItem's results and remove it from the list.
-						// These sids are sent by client so it can be used to look up when sending criteria images later.
-						criteriaResult.setSid(eventItem.getResults().remove(0).getSid());
-						
-						// Set actions' assetId to eventItem's assetId.
-						for(ApiEventSchedule action : criteriaResult.getActions()) {
-							action.setAssetId(eventItem.getAssetId());
-							
-							if(multiAddEvent.isCopyOwner()) {
-								action.setOwnerId(apiEvent.getOwnerId());
-							}
-						}
-						
-						// NOTE: In the future we can set recommendations, deficiencies collection's sids too if we want.
-					}
-				}
+                // Set sid to eventItem's results and remove it from the list.
+                apiEvent.getForm()
+                        .getSections()
+                        .stream()
+                        .filter(sectionResult -> !sectionResult.isHidden())
+                        .forEach(sectionResult -> {
+                            for (ApiCriteriaResult criteriaResult : sectionResult.getCriteria()) {
+                                // Set sid to eventItem's results and remove it from the list.
+                                // These sids are sent by client so it can be used to look up when sending criteria images later.
+                                criteriaResult.setSid(eventItem.getResults().remove(0).getSid());
+
+                                // Set actions' assetId to eventItem's assetId.
+                                for (ApiEventSchedule action : criteriaResult.getActions()) {
+                                    action.setAssetId(eventItem.getAssetId());
+
+                                    if (multiAddEvent.isCopyOwner()) {
+                                        action.setOwnerId(apiEvent.getOwnerId());
+                                    }
+                                }
+
+                                // NOTE: In the future we can set recommendations, deficiencies collection's sids too if we want.
+                            }
+                        });
 			}
 			
 			createEvent(apiEvent, event);

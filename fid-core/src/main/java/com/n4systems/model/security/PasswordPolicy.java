@@ -1,10 +1,9 @@
 package com.n4systems.model.security;
 
-import java.io.Serializable;
+import com.google.common.base.Objects;
 
 import javax.persistence.Embeddable;
-
-import com.google.common.base.Objects;
+import java.io.Serializable;
 
 @Embeddable
 @SuppressWarnings("serial")
@@ -15,18 +14,20 @@ public class PasswordPolicy implements Serializable {
 	private int minCapitals;
 	private int expiryDays;
 	private int uniqueness;
+    private boolean checkName;
 
 	public PasswordPolicy() {
-		this(6, 0, 0, 0, 0, 0);
+		this(6, 0, 0, 0, 0, 0, false);
 	}
 	
-	public PasswordPolicy(int minLength, int minNumbers, int minSymbols, int minCapitals, int expiryDays, int uniqueness) {
+	public PasswordPolicy(int minLength, int minNumbers, int minSymbols, int minCapitals, int expiryDays, int uniqueness, boolean checkName) {
 		this.minLength = minLength;
 		this.minNumbers = minNumbers;
 		this.minSymbols = minSymbols;
 		this.minCapitals = minCapitals;
 		this.expiryDays = expiryDays;
 		this.uniqueness = uniqueness;
+        this.checkName = checkName;
 	}
 
 	public int getMinLength() {
@@ -76,6 +77,14 @@ public class PasswordPolicy implements Serializable {
 	public int getUniqueness() {
 		return uniqueness;
 	}
+
+    public boolean isCheckName() {
+        return checkName;
+    }
+
+    public void setCheckName(boolean checkName) {
+        this.checkName = checkName;
+    }
 
 	@Override
 	public String toString() {

@@ -1,14 +1,14 @@
 package com.n4systems.model.parents;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.MappedSuperclass;
-
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.SecurityDefiner;
+
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.MappedSuperclass;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
@@ -67,5 +67,9 @@ public class ArchivableEntityWithOwner extends EntityWithOwner implements Archiv
 	@AllowSafetyNetworkAccess
 	public boolean isArchived() {
 		return state == EntityState.ARCHIVED;
+	}
+
+	public void setEntityState(EntityState state) {
+		this.state = state;
 	}
 }

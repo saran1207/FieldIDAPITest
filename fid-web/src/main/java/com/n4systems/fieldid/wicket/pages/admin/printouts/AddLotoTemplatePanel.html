@@ -1,0 +1,27 @@
+<html xmlns:wicket="http://wicket.apache.org" xmlns="http://www.w3.org/1999/html">
+<wicket:panel>
+    <!-- Create label here -->
+    <h3><wicket:message key="label.add_new_template"/></h3>
+    <br/>
+    <br/>
+    <div wicket:id="feedbackPanel"/>
+    <form wicket:id="form" class="crudForm">
+        <div wicket:id="feedback"/>
+        <div wicket:id="name"/>
+
+        <div wicket:id="typeSelector"/>
+        <div class="infoSet">
+            <label class="label"><wicket:message key="label.select_template_to_upload"/></label>
+            <span class="fieldHolder">
+                <input type="file" wicket:id="fileUploader"/>
+            </span>
+        </div>
+
+        <div class="formAction">
+            <a wicket:id="submit" type="submit" class="btn-primary"><wicket:message key="label.save"/></a>
+            <wicket:message key="label.or"/>
+            <a wicket:id="cancelLink" class="btn-link"><wicket:message key="label.cancel"/></a>
+        </div>
+    </form>
+</wicket:panel>
+</html>

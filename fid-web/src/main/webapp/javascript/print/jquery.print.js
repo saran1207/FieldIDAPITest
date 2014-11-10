@@ -488,5 +488,10 @@ function annotateImages( data ){
 
     $('img').imagesLoaded(function() {
         $('body').pages(params);
+        $('.panzoom').panzoom({
+            startTransform: 'scale(1.0)',
+            increment: 0.2,
+            minScale:  1.0
+        }).panzoom('zoom', true);
     });
 };

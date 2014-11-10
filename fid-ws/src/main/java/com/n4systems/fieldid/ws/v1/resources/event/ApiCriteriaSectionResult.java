@@ -5,7 +5,14 @@ import java.util.List;
 
 public class ApiCriteriaSectionResult {
 	private Long sectionId;
-	private List<ApiCriteriaResult> criteria = new ArrayList<ApiCriteriaResult>();
+    private Boolean hidden;
+	private List<ApiCriteriaResult> criteria = new ArrayList<>();
+
+    public ApiCriteriaSectionResult() {
+        //This forces a default value into the field so that - if it is not set by Jackson - it is set by SOMETHING and
+        //prevents NullPointerExceptions down the road.
+        hidden = Boolean.FALSE;
+    }
 
 	public Long getSectionId() {
 		return sectionId;
@@ -23,4 +30,11 @@ public class ApiCriteriaSectionResult {
 		this.criteria = criteria;
 	}
 
+    public Boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(Boolean hidden) {
+        this.hidden = hidden;
+    }
 }

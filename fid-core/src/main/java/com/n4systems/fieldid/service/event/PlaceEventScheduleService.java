@@ -2,12 +2,24 @@ package com.n4systems.fieldid.service.event;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.PlaceEvent;
+import com.n4systems.model.notification.AssigneeNotification;
 import org.springframework.transaction.annotation.Transactional;
 
 public class PlaceEventScheduleService extends FieldIdPersistenceService {
 
+    public PlaceEvent updateSchedule(PlaceEvent schedule){
+        return updateSchedule(schedule, false);
+    }
+
     @Transactional
-    public PlaceEvent updateSchedule(PlaceEvent schedule) {
+    public PlaceEvent updateSchedule(PlaceEvent schedule, boolean dateUpdated) {
+        if(schedule.isSendEmailOnUpdate() && dateUpdated) {
+            AssigneeNotification assigneeNotification = new AssigneeNotification();
+            assigneeNotification.setEvent(schedule);
+            persistenceService.save(assigneeNotification);
+            schedule.setAssigneeNotification(assigneeNotification);
+        }
+
         PlaceEvent updatedSchedule = persistenceService.update(schedule);
         //Update org to notify mobile of change
         updatedSchedule.getPlace().touch();

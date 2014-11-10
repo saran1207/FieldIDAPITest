@@ -13,6 +13,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.common.ImageAnnotationType;
 import com.n4systems.model.procedure.IsolationPoint;
+import com.n4systems.model.procedure.PreconfiguredDevice;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -50,7 +51,7 @@ public class IsolationPointEditor extends Panel {
     private Component lockField;
     private Component checkField;
     private Component locationField;
-    private Component methodField;  //This may actually be the "notes" field, depending on context...
+    private LabelledTextArea methodField;  //This may actually be the "notes" field, depending on context...
     private Component notesField;
     private LabelledComboBox<String> deviceComboBox;
 
@@ -91,7 +92,15 @@ public class IsolationPointEditor extends Panel {
                 return getPreConfiguredDevices(new PropertyModel(getIsolationPoint(),"sourceType"));
             }
         });
-        deviceComboBox.addBehavior(new UpdateComponentOnChange());
+        deviceComboBox.addBehavior(new UpdateComponentOnChange() {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                IsolationPoint isolationPoint = (IsolationPoint) getDefaultModel().getObject();
+                PreconfiguredDevice device = procedureDefinitionService.getPreConfiguredDevice(isolationPoint.getDeviceDefinition().getFreeformDescription(), isolationPoint.getSourceType());
+                methodField.setModelValue(device != null ? device.getMethod() : null);
+                target.add(methodField);
+            }
+        });
         deviceComboBox.add(new TipsyBehavior(new FIDLabelModel("message.isolation_point.device"), TipsyBehavior.Gravity.N));
 
 
@@ -101,8 +110,11 @@ public class IsolationPointEditor extends Panel {
         //These all needed to change, because they're not proper components.  We need our internally made components so
         //we get more control over what's rendered...
         form.add(locationField = new LabelledTextField<String>("location", "label.location", new PropertyModel(getDefaultModel(), "location")).required());
-        form.add(checkField = new LabelledTextArea<String>("check", "label.check", new PropertyModel(getDefaultModel(), "check")).setMaxLength(255).required());
-        form.add(methodField = new LabelledTextArea<String>("method", "label.method", new PropertyModel(getDefaultModel(), "method")).setMaxLength(255).required());
+        form.add(checkField = new LabelledTextArea<String>("check", "label.check", new PropertyModel(getDefaultModel(), "check")).setMaxLength(255));
+        form.add(methodField = new LabelledTextArea<String>("method", "label.method", new PropertyModel(getDefaultModel(), "method")));
+        methodField.setMaxLength(255);
+        methodField.required();
+        methodField.setOutputMarkupId(true);
         form.add(notesField = new LabelledTextArea<String>("notes", "label.notes", new PropertyModel(getDefaultModel(), "method")).setMaxLength(255).required());
 
         form.add(imagePanel = new IsolationPointImagePanel("annotation", (IsolationPoint) getDefaultModelObject()).add(createEditClickBehavior()));
@@ -259,7 +271,7 @@ public class IsolationPointEditor extends Panel {
     public LoadableDetachableModel<List<String>> getPreConfiguredDevices(final IModel<IsolationPointSourceType> sourceType) {
         return new LoadableDetachableModel<List<String>>() {
             @Override protected List<String> load() {
-                return procedureDefinitionService.getPreConfiguredDevices(sourceType.getObject());
+                return procedureDefinitionService.getPreConfiguredDeviceList(sourceType.getObject());
             }
         };
     }

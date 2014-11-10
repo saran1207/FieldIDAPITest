@@ -100,9 +100,6 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
     private String longVal = "";
     boolean hasDefaultVal = false;
 
-
-
-
     @Override
     protected void onInitialize() {
         super.onInitialize();
@@ -449,7 +446,14 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
         return new Link(linkId) {
             {
                 add(new JavaScriptAlertConfirmBehavior(new FIDLabelModel("label.confirm_event_delete")));
-                setVisible(!event.getObject().isNew());
+                if (event.getObject().isNew()) {
+                    setVisible(false);
+                } else if (event.getObject().getWorkflowState().equals(WorkflowState.OPEN)) {
+                    setVisible(false);
+                } else {
+                    setVisible(true);
+                }
+
             }
             @Override
             public void onClick() {

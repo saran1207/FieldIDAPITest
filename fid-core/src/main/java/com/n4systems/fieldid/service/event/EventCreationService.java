@@ -11,6 +11,7 @@ import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.model.*;
 import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
+import com.n4systems.model.notification.AssigneeNotification;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
@@ -36,6 +37,7 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
     @Autowired protected EventScheduleService eventScheduleService;
     @Autowired protected EventService eventService;
     @Autowired protected SignatureService signatureService;
+    @Autowired protected NotifyEventAssigneeService notifyEventAssigneeService;
 
     @Transactional
     public T createEventWithSchedules(T event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle<V>> schedules) {
@@ -288,10 +290,13 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
         setAllTriggersForActions(event);
 
         event.getAttachments().clear();
+
+        addActionNotifications(event);
         
         event = persistenceService.update(event);
         postUpdateEvent(event, fileData);
         processUploadedFiles(event, attachments);
+
 
         return event;
     }
@@ -327,4 +332,19 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
 			}
 		}
 	}
+
+    private void addActionNotifications(T event) {
+        for (CriteriaResult result : event.getResults()) {
+            for (Event action : result.getActions()) {
+                if(action.isSendEmailOnUpdate() && action.getAssigneeOrDateUpdated()) {
+                    if(!notifyEventAssigneeService.notificationExists(action)) {
+                        AssigneeNotification assigneeNotification = new AssigneeNotification();
+                        assigneeNotification.setEvent(action);
+                        persistenceService.save(assigneeNotification);
+                    }
+                }
+            }
+        }
+    }
+
 }

@@ -15,15 +15,20 @@ public class OrgLocationModel extends LoadableDetachableModel<EntityWithTenant> 
     private IModel<BaseOrg> orgModel;
     private IModel<PredefinedLocation> locationModel;
     private EntityWithTenant obj;
+    private boolean isLocationModel;
 
-    public OrgLocationModel(IModel<Asset> assetModel) {
-        this(new PropertyModel(assetModel,"owner"), new PropertyModel(assetModel,"advancedLocation.predefinedLocation"));
+    public OrgLocationModel(IModel<BaseOrg> orgModel) {
+        Preconditions.checkNotNull(orgModel,"you must supply valid BaseOrg model");
+        this.orgModel = orgModel;
+        this.locationModel = null;
+        setInitialValue();
     }
 
     public OrgLocationModel(IModel<BaseOrg> orgModel, IModel<PredefinedLocation> locationModel) {
         Preconditions.checkNotNull(orgModel,"you must supply valid BaseOrg model");
         this.orgModel = orgModel;
         this.locationModel = locationModel;
+        this.isLocationModel = true;
         setInitialValue();
     }
 
@@ -74,7 +79,10 @@ public class OrgLocationModel extends LoadableDetachableModel<EntityWithTenant> 
         }
         setOrg(org);
         setLocation(location);
-        super.setObject(object);
+        if (isLocationModel) {
+            super.setObject(location);
+        } else
+            super.setObject(org);
     }
 
     @Override

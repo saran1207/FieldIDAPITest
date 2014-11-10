@@ -87,7 +87,12 @@ public class NotifyProcedureAuthorizersService extends FieldIdPersistenceService
             // This means we can simply publish the procedure def automatically.
             log.warn("Procedure def waiting for certification but no certifier user or group set: " + procedureDefinition.getId() +". Publishing automatically.");
             securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(tenant.getId()));
-            procedureDefinitionService.publishProcedureDefinition(procedureDefinition);
+            try {
+                procedureDefinitionService.publishProcedureDefinition(procedureDefinition);
+            } catch (Exception e) {
+                log.error("Failed to generate annotated images for Procedure Definition: " + procedureDefinition.getId());
+                log.error(e.getMessage());
+            }
         }
     }
 

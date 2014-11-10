@@ -1,16 +1,16 @@
 package com.n4systems.fieldid.ws.v1.resources.event;
 
+import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventSchedule;
+import com.n4systems.fieldid.ws.v1.resources.model.ApiReadWriteModel;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventSchedule;
-import com.n4systems.fieldid.ws.v1.resources.model.ApiReadWriteModel;
-
 public class ApiCriteriaResult extends ApiReadWriteModel {
 	private Long criteriaId;
-	private List<ApiObservation> recommendations = new ArrayList<ApiObservation>();
-	private List<ApiObservation> deficiencies = new ArrayList<ApiObservation>();
+	private List<ApiObservation> recommendations = new ArrayList<>();
+	private List<ApiObservation> deficiencies = new ArrayList<>();
 	private Long oneClickValue;
 	private String textValue;
 	private String selectValue;
@@ -21,7 +21,7 @@ public class ApiCriteriaResult extends ApiReadWriteModel {
 	private Date dateValue;
 	private Double numberValue;
 	private Long scoreValue;
-	private List<ApiEventSchedule> actions = new ArrayList<ApiEventSchedule>();
+	private List<ApiEventSchedule> actions = new ArrayList<>();
 
 	public Long getCriteriaId() {
 		return criteriaId;

@@ -1,9 +1,10 @@
+<html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 
         <div class="textCriteriaContainer unitOfMeasureCriteriaContainer">
 
             <span class="fieldHolder">
-                <input type="text" wicket:id="primaryUnit" class="criteriaUnitOfMeasureField">
+                <input type="text" wicket:id="primaryUnit" class="criteriaUnitOfMeasureField" maxlength="256">
             </span>
 
             <div class="unitOfMeasureName" wicket:id="primaryUnitLabel"></div>
@@ -12,12 +13,12 @@
 
             <div wicket:id="secondaryUnitContainer">
                 <span class="fieldHolder">
-                    <input type="text" wicket:id="secondaryUnit" class="criteriaUnitOfMeasureField">
+                    <input type="text" wicket:id="secondaryUnit" class="criteriaUnitOfMeasureField" maxlength="256">
                 </span>
                 <div class="unitOfMeasureName" wicket:id="secondaryUnitLabel"></div>
             </div>
 
         </div>
 
-
 </wicket:panel>
+</html>

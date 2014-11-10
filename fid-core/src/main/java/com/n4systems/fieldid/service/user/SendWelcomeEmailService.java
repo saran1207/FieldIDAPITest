@@ -62,6 +62,9 @@ public class SendWelcomeEmailService extends FieldIdPersistenceService {
     }
 
     private String getForgetPasswordUrl(User user, ActionURLBuilder urlBuilder) {
+        if (user.getResetPasswordKey() == null) {
+            user.createResetPasswordKey();
+        }
         return urlBuilder.setAction(FIRST_TIME_LOGIN_ACTION)
                 .addParameter("u", user.getUserID())
                 .addParameter("k", user.getResetPasswordKey())

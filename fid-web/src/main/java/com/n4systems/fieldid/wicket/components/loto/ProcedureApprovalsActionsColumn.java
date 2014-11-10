@@ -25,7 +25,8 @@ public class ProcedureApprovalsActionsColumn extends AbstractColumn<ProcedureDef
     @Override
     public void populateItem(Item<ICellPopulator<ProcedureDefinition>> cellItem, String componentId, IModel<ProcedureDefinition> procedureDefinitionModel) {
         ProcedureDefinition procedureDefinition = procedureDefinitionModel.getObject();
-          cellItem.add(new ProcedureApprovalsActionsCell(componentId, procedureDefinitionModel, procedureListPanel));
+        cellItem.add(new ProcedureApprovalsActionsCell(componentId, procedureDefinitionModel, procedureListPanel));
+
     }
 }
 

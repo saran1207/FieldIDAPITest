@@ -1,0 +1,37 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+    <div class="split-btn">
+        <a wicket:id="editLink" class="btn-secondary">
+            <wicket:message key="label.edit"/>
+        </a>
+        <div wicket:enclosure="optionsContainer" class="dropdown">
+            <button class="btn-secondary">Toggle Dropdown</button>
+            <ul wicket:id="optionsContainer" class="pull-right">
+                <li>
+                    <a wicket:id="deleteLink">
+                        <wicket:message key="label.delete"/>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div wicket:enclosure="optionsContainer2" class="dropdown">
+        <button class="btn-secondary">Print</button>
+        <ul wicket:id="optionsContainer2" class="pull-right">
+            <!-- wicket:message key="label.print"/ -->
+            <li>
+                <a wicket:id="shortLink">
+                    <wicket:container wicket:id="label"/>
+                </a>
+            </li>
+            <li>
+                <a wicket:id="longLink">
+                    <wicket:container wicket:id="label"/>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+</wicket:panel>
+</html>

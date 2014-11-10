@@ -16,32 +16,32 @@
 
         <div class="control-group">
             <label class="label">* <wicket:message key="label.emailaddress"/></label>
-            <input type="text" wicket:id="email"/>
+            <input type="text" wicket:id="email"  maxlength="50"/>
         </div>
 
         <div class="control-group">
             <label class="label">* <wicket:message key="label.firstname"/></label>
-            <input type="text" wicket:id="firstname">
+            <input type="text" wicket:id="firstname" maxlength="30">
         </div>
 
         <div class="control-group">
             <label class="label">* <wicket:message key="label.lastname"/></label>
-            <input type="text" wicket:id="lastname">
+            <input type="text" wicket:id="lastname" maxlength="30">
         </div>
 
         <div class="control-group">
             <label class="label"><wicket:message key="label.initials"/></label>
-            <input type="text" wicket:id="initials">
+            <input type="text" wicket:id="initials"  maxlength="256">
         </div>
 
         <div class="control-group">
             <label class="label"><wicket:message key="label.id"/></label>
-            <input type="text" wicket:id="identifier">
+            <input type="text" wicket:id="identifier" maxlength="20">
         </div>
 
         <div class="control-group">
             <label class="label"><wicket:message key="label.position"/></label>
-            <input type="text" wicket:id="position">
+            <input type="text" wicket:id="position"  maxlength="256">
         </div>
 
         <div class="control-group digital-signature" wicket:enclosure="uploadForm">

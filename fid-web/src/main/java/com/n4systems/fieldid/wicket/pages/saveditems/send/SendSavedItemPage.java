@@ -281,7 +281,7 @@ public abstract class SendSavedItemPage extends FieldIDFrontEndPage {
 
     private void addBlankEmailIfEmptyAddressList(SendSavedItemSchedule sendItemSchedule) {
         // We want to see a blank field for an extra email address to send to if there aren't any yet
-        if (sendItemSchedule.getEmailAddresses().isEmpty()) {
+        if (sendItemSchedule != null && sendItemSchedule.getEmailAddresses().isEmpty()) {
             sendItemSchedule.getEmailAddresses().add("");
         }
     }

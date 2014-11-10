@@ -55,7 +55,7 @@ public class SendSearchService extends FieldIdPersistenceService {
     
     private static final Logger logger = Logger.getLogger(SendSearchService.class);
     private static final int MAX_RESULTS_FOR_SENT_SEARCH = 500;
-    private static final Properties localizationProperties = loadProperties();
+    private static volatile Properties localizationProperties = null;
 
     @Autowired private AssetSearchService searchService;
     @Autowired private ReportService reportService;
@@ -125,6 +125,12 @@ public class SendSearchService extends FieldIdPersistenceService {
             } else if (schedule.getReportFormat() == ReportFormat.EXCEL) {
                 sendSearchExcel(searchCriteria, schedule);
             }
+    }
+
+    public Long countSavedItemSchedules(SavedItem savedItem) {
+        QueryBuilder<SendSavedItemSchedule> query = createUserSecurityBuilder(SendSavedItemSchedule.class);
+        query.addSimpleWhere("savedItem", savedItem);
+        return persistenceService.count(query);
     }
 
     private void sendSearchExcel(SearchCriteria criteria, SendSavedItemSchedule schedule) throws MessagingException {
@@ -252,8 +258,9 @@ public class SendSearchService extends FieldIdPersistenceService {
         User user = getCurrentUser();
 
         for (ColumnMappingView column : columns) {
-            if (localizationProperties.get(column.getLabel()) != null) {
-                column.setLocalizedLabel(localizationProperties.get(column.getLabel()).toString());
+			Properties lang = getLang();
+            if (lang.get(column.getLabel()) != null) {
+                column.setLocalizedLabel(lang.get(column.getLabel()).toString());
             } else {
                 if ("label.eusername".equals(column.getLabel())) {
                     column.setLocalizedLabel(getCustomerLabel(user));
@@ -282,14 +289,21 @@ public class SendSearchService extends FieldIdPersistenceService {
         }
     }
 
-    private static Properties loadProperties() {
-        Properties allProperties = new Properties();
-        try {
-            allProperties.load(SendSearchService.class.getClassLoader().getResourceAsStream("com/n4systems/fieldid/actions/package.properties"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return allProperties;
+    private static Properties getLang() {
+		if (localizationProperties == null) {
+			synchronized (SendSearchService.class) {
+				if (localizationProperties == null) {
+					try {
+						localizationProperties = new Properties();
+						localizationProperties.load(SendSearchService.class.getClassLoader().getResourceAsStream("com/n4systems/fieldid/actions/package.properties"));
+					} catch (IOException e) {
+						logger.error("Failed loading Struts package.properties", e);
+						localizationProperties = null;
+					}
+				}
+			}
+		}
+        return localizationProperties;
     }
 
     private byte[] getFileData(File file) throws IOException {
@@ -302,5 +316,5 @@ public class SendSearchService extends FieldIdPersistenceService {
         }
         return data;
     }
-    
+
 }

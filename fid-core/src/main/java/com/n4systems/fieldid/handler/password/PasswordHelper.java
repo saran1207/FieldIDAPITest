@@ -1,13 +1,12 @@
 package com.n4systems.fieldid.handler.password;
 
-import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.lang.time.DateUtils;
-
 import com.n4systems.model.security.PasswordPolicy;
 import com.n4systems.model.user.User;
 import com.n4systems.security.PasswordComplexityChecker;
+import org.apache.commons.lang.time.DateUtils;
+
+import java.util.Date;
+import java.util.List;
 
 public class PasswordHelper {
 
@@ -40,6 +39,20 @@ public class PasswordHelper {
 		previousPasswords = previousPasswords.subList(start, previousPasswords.size());		
 		return !previousPasswords.contains(User.hashPassword(newPassword));
 	}
+
+    public boolean containsName(User user, String newPassword) {
+        if(!passwordPolicy.isCheckName()) {
+            return false;
+        }
+        String firstName = user.getFirstName().trim().toLowerCase();
+        String lastName = user.getLastName().trim().toLowerCase();
+
+        if(newPassword.trim().toLowerCase().contains(firstName) || newPassword.trim().toLowerCase().contains(lastName)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 	
 	public PasswordPolicy getPasswordPolicy() {
 		return passwordPolicy;

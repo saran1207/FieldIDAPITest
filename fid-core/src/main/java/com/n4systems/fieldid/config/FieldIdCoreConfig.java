@@ -46,9 +46,11 @@ import com.n4systems.fieldid.service.mixpanel.MixpanelService;
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.org.PlaceService;
+import com.n4systems.fieldid.service.procedure.LotoReportService;
 import com.n4systems.fieldid.service.procedure.NotifyProcedureAuthorizersService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
+import com.n4systems.fieldid.service.procedure.SvgGenerationService;
 import com.n4systems.fieldid.service.project.ProjectService;
 import com.n4systems.fieldid.service.schedule.AssetTypeScheduleService;
 import com.n4systems.fieldid.service.schedule.MassScheduleService;
@@ -57,6 +59,7 @@ import com.n4systems.fieldid.service.schedule.ScheduleService;
 import com.n4systems.fieldid.service.search.*;
 import com.n4systems.fieldid.service.search.columns.AssetTextOrFilterSearchService;
 import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
+import com.n4systems.fieldid.service.security.NotifyExpiringPasswordService;
 import com.n4systems.fieldid.service.sendsearch.SendSearchService;
 import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.fieldid.service.task.DownloadLinkService;
@@ -69,6 +72,7 @@ import com.n4systems.fieldid.service.uuid.AtomicLongService;
 import com.n4systems.fieldid.service.uuid.UUIDService;
 import com.n4systems.persistence.listeners.LocalizationListener;
 import com.n4systems.persistence.listeners.SetupDataUpdateEventListener;
+import com.n4systems.services.AuthService;
 import com.n4systems.services.ConfigService;
 import com.n4systems.services.SecurityContext;
 import com.n4systems.services.asset.AssetSaveServiceSpring;
@@ -838,7 +842,27 @@ public class FieldIdCoreConfig {
     }
 
     @Bean
+    public NotifyExpiringPasswordService notifyExpiringPasswordService() {
+        return new NotifyExpiringPasswordService();
+    }
+
+    @Bean
     public MassEventService massEventService() {
         return new MassEventService();
+    }
+
+	@Bean
+	public AuthService authService() {
+		return new AuthService();
+	}
+
+    @Bean
+    public LotoReportService lotoReportService() {
+        return new LotoReportService();
+    }
+
+    @Bean
+    public SvgGenerationService svgGenerationService() {
+        return new SvgGenerationService();
     }
 }
