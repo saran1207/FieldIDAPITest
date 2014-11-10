@@ -730,7 +730,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
 
     public void publishProcedureDefinition(ProcedureDefinition definition) throws AnnotatedImageGenerationException {
         try {
-            generateAndUploadAnnotatedSvgs(definition);
+            svgGenerationService.generateAndUploadAnnotatedSvgs(definition);
 
             ProcedureDefinition previousDefinition = getPublishedProcedureDefinition(definition.getAsset(), definition.getFamilyId());
             if (previousDefinition != null) {
@@ -744,18 +744,6 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         } catch (Exception e) {
             logger.error("Failed to generate annotated svgs for Procedure Definition:" + definition.getId());
             throw new AnnotatedImageGenerationException(e);
-        }
-    }
-
-    public void generateAndUploadAnnotatedSvgs(ProcedureDefinition definition) throws Exception {
-        for(ProcedureDefinitionImage image: definition.getImages()) {
-            File allAnnotations = svgGenerationService.exportToSvg(image);
-            svgGenerationService.uploadSvg(definition, allAnnotations);
-        }
-
-        for (IsolationPoint isolationPoint: definition.getUnlockIsolationPoints()) {
-            File singleAnnotation = svgGenerationService.exportToSvg(isolationPoint.getAnnotation());
-            svgGenerationService.uploadSvg(definition, singleAnnotation);
         }
     }
 

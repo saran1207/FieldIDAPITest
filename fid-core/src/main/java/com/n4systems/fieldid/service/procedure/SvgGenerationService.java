@@ -28,15 +28,27 @@ public class SvgGenerationService extends FieldIdPersistenceService {
     @Autowired
     private S3Service s3Service;
 
-    public void uploadSvg(ProcedureDefinition procedureDefinition, File svgFile) {
+    public void generateAndUploadAnnotatedSvgs(ProcedureDefinition definition) throws Exception {
+        for(ProcedureDefinitionImage image: definition.getImages()) {
+            File allAnnotations = exportToSvg(image);
+            uploadSvg(definition, allAnnotations);
+        }
+
+        for (IsolationPoint isolationPoint: definition.getUnlockIsolationPoints()) {
+            File singleAnnotation = exportToSvg(isolationPoint.getAnnotation());
+            uploadSvg(definition, singleAnnotation);
+        }
+    }
+
+    private void uploadSvg(ProcedureDefinition procedureDefinition, File svgFile) {
         s3Service.uploadProcedureDefinitionSvg(procedureDefinition, svgFile);
     }
 
-    public File exportToSvg(ProcedureDefinitionImage image) throws Exception {
+    private File exportToSvg(ProcedureDefinitionImage image) throws Exception {
         return exportToSvg(new DOMSource(buildSvg(image)), image.getFileName());
     }
 
-    public File exportToSvg(ImageAnnotation annotation) throws Exception {
+    private File exportToSvg(ImageAnnotation annotation) throws Exception {
         return exportToSvg(new DOMSource(buildSvg(annotation)), annotation.getImage().getFileName() + "_" + annotation.getId());
     }
 
