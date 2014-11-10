@@ -131,6 +131,7 @@ public class LotoReportService extends FieldIdPersistenceService {
             unZipIt(zipFile, printout);
             persistenceService.saveOrUpdate(printout);
         } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -156,8 +157,26 @@ public class LotoReportService extends FieldIdPersistenceService {
             return false;
     }
 
+    public void resetIfSelected(LotoPrintout printout) {
+        LotoPrintout selected;
+
+        if(printout.getPrintoutType().equals(LotoPrintoutType.LONG)) {
+            selected = getSelectedLongForm();
+        } else {
+            selected = getSelectedShortForm();
+        }
+
+        if(selected.getId().equals(printout.getId())) {
+            selected.setSelected(false);
+            persistenceService.update(selected);
+        }
+    }
+
     @Transactional
     public void deleteLotoPrintout(LotoPrintout lotoPrintout) {
+        //if selected for print, then revert it to the default one
+        resetIfSelected(lotoPrintout);
+
         //delete from S3
         s3Service.deleteLotoPrintout(lotoPrintout);
 
