@@ -24,6 +24,10 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                    <includes>
+                        <include>src/main/java/**/*.java</include>
+                        <include>src/main/gen/**/*.java</include>
+                    </includes>
                 </configuration>
             </plugin>
             <plugin>
@@ -32,7 +36,7 @@
                 <version>0.3.2</version>
                 <configuration>
                     <protocExecutable>protoc</protocExecutable>
-                    <outputDirectory>${project.basedir}/src/main/java/proto</outputDirectory>
+                    <outputDirectory>${project.basedir}/src/main/gen</outputDirectory>
                 </configuration>
                 <executions>
                     <execution>
@@ -58,6 +62,16 @@
     </dependencyManagement>
     <dependencies>
         <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-servlet</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-jackson</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
             <version>${spring.version}</version>
@@ -82,6 +96,8 @@
             <artifactId>spring-web</artifactId>
             <version>${spring.version}</version>
         </dependency>
+
+        <!--
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
@@ -92,21 +108,12 @@
             <artifactId>spring-context-support</artifactId>
             <version>${spring.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.containers</groupId>
-            <artifactId>jersey-container-servlet</artifactId>
-        </dependency>
-        <!--dependency>
-          <groupId>org.glassfish.jersey.media</groupId>
-              <artifactId>jersey-media-moxy</artifactId>
-              </dependency-->
-        <dependency>
-            <groupId>org.glassfish.jersey.media</groupId>
-            <artifactId>jersey-media-json-jackson</artifactId>
-        </dependency>
+        -->
+
         <dependency>
             <groupId>org.glassfish.jersey.ext</groupId>
             <artifactId>jersey-spring3</artifactId>
+            <version>${jersey.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework</groupId>
@@ -126,7 +133,6 @@
             <groupId>com.fieldid</groupId>
             <artifactId>fid-core</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
@@ -169,6 +175,12 @@
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
             <version>2.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
     <properties>

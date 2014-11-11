@@ -1,17 +1,13 @@
-package com.n4systems.fieldid.api.pub.config;
+package com.n4systems.fieldid.api.pub.filters;
 
 import com.n4systems.fieldid.service.SecurityContextInitializer;
 import org.apache.log4j.Logger;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-@Component
-@Scope("request")
 @Provider
 public class CatchAllExceptionMapper implements ExceptionMapper<Throwable> {
 	private Logger logger = Logger.getLogger(CatchAllExceptionMapper.class);

@@ -1,0 +1,281 @@
+package com.n4systems.fieldid.api.pub.model;
+
+import "google/protobuf/descriptor.proto";
+
+option java_outer_classname = "Messages";
+option java_package = "com.n4systems.fieldid.api.pub.model";
+
+extend google.protobuf.FieldOptions {
+	optional string serialized_name = 50001;
+}
+
+enum AttributeValueType {
+	TEXT 			= 1;
+	SELECT 			= 2;
+	COMBO 			= 3;
+	UNIT 			= 4;
+	DATE 			= 5;
+	DATE_TIME 		= 6;
+}
+
+message AssetMessage {
+	optional string id 						= 1;
+	optional string createdDate 			= 2;
+	optional string modifiedDate 			= 3;
+	optional string createdByUserName 		= 4;
+	optional string createdByUserId 		= 5;
+	optional string modifiedByUserName 		= 6;
+	optional string modifiedByUserId 		= 7;
+	optional string ownerName 				= 8;
+	required string ownerId 				= 9;
+	required string identifier 				= 10;
+	optional string rfidNumber 				= 11;
+	optional string customerRefNumber 		= 12;
+	optional string purchaseOrder 			= 13;
+	optional string comments 				= 14;
+	optional string identifiedDate 			= 15;
+	optional string assetTypeName 			= 16;
+	required string assetTypeId 			= 17;
+	optional string assetStatusName 		= 18;
+	optional string assetStatusId 			= 19;
+	optional string identifiedByUserName 	= 20;
+	optional string identifiedByUserId 		= 21;
+	optional string assignedUserName 		= 22;
+	optional string assignedUserId 			= 23;
+	optional string latitude				= 24;
+	optional string longitude				= 25;
+	optional string freeFormLocation 		= 26;
+	optional string predefinedLocationName	= 27;
+	optional string predefinedLocationId 	= 28;
+	optional string orderNumber 			= 29;
+
+	message AttributeMessage {
+		optional AttributeValueType type	= 1;
+		optional string id 					= 2;
+		optional string name 				= 3;
+		optional string value 				= 4;
+	}
+	repeated AttributeMessage attributes	= 30;
+}
+
+message AssetStatusMessage {
+	optional string id 					= 1;
+	optional string createdDate 		= 2;
+	optional string modifiedDate 		= 3;
+	optional string createdByUserName 	= 4;
+	optional string createdByUserId 	= 5;
+	optional string modifiedByUserName	= 6;
+	optional string modifiedByUserId 	= 7;
+	optional string name 				= 8;
+}
+
+message AssetTypeMessage {
+	optional string id 								= 1;
+	optional string createdDate 					= 2;
+	optional string modifiedDate 					= 3;
+	optional string createdByUserName 				= 4;
+	optional string createdByUserId 				= 5;
+	optional string modifiedByUserName 				= 6;
+	optional string modifiedByUserId 				= 7;
+	required string name 							= 8;
+	optional string warnings						= 9;
+	optional string instructions					= 10;
+	optional string cautionUrl						= 11;
+	optional string imageName						= 12;
+	optional string descriptionTemplate				= 13;
+	optional string descriptionText					= 14;
+	optional string manufactureCertificateText		= 15;
+	optional bool hasManufactureCertificate			= 16;
+	optional bool allowAssetLinking 				= 17;
+	optional bool hasProcedures 					= 18;
+	optional AssetTypeGroupMessage group 			= 19;
+	repeated AssetTypeScheduleMessage schedules 	= 20;
+
+	message AssociatedEventTypeMessage {
+		required string eventTypeId		= 1;
+		required string eventTypeName	= 2;
+	}
+	repeated AssociatedEventTypeMessage associatedEventTypes 	= 21;
+
+	message AssetAttributeTypeMessage {
+		required string id 					= 1;
+		required AttributeValueType type	= 2;
+		required string name 				= 3;
+	}
+	repeated AssetAttributeTypeMessage attributeTypes 			= 22;
+}
+
+message AssetTypeGroupMessage {
+	optional string id 					= 1;
+	optional string createdDate 		= 2;
+	optional string modifiedDate 		= 3;
+	optional string createdByUserName 	= 4;
+	optional string createdByUserId 	= 5;
+	optional string modifiedByUserName 	= 6;
+	optional string modifiedByUserId 	= 7;
+	required string name 				= 8;
+}
+
+message AssetTypeScheduleMessage {
+	optional string id 					= 1;
+	optional string createdDate 		= 2;
+	optional string modifiedDate 		= 3;
+	optional string createdByUserName 	= 4;
+	optional string createdByUserId 	= 5;
+	optional string modifiedByUserName	= 6;
+	optional string modifiedByUserId 	= 7;
+	optional string ownerName 			= 8;
+	required string ownerId 			= 9;
+	optional string assetTypeName 		= 10;
+	required string assetTypeId 		= 11;
+	optional string eventTypeName 		= 12;
+	required string eventTypeId 		= 13;
+	required int64 frequencyInDays		= 14;
+	required bool autoSchedule 			= 15;
+}
+
+message OwnerMessage {
+	optional string id 					= 1;
+	optional string createdDate 		= 2;
+	optional string modifiedDate 		= 3;
+	optional string createdByUserName 	= 4;
+	optional string createdByUserId 	= 5;
+	optional string modifiedByUserName 	= 6;
+	optional string modifiedByUserId 	= 7;
+    required string name 				= 8;
+	optional string parentName			= 9;
+	optional string parentId			= 10;
+	optional string code 				= 11;
+	optional string notes				= 12;
+	optional string streetAddress		= 13;
+	optional string city				= 14;
+	optional string state				= 15;
+	optional string country				= 16;
+	optional string zip					= 17;
+	optional string phone1				= 18;
+	optional string phone2				= 19;
+	optional string fax1				= 20;
+	optional string latitude			= 21;
+	optional string longitude			= 22;
+	optional string contactName			= 23;
+	optional string contactEmail		= 24;
+}
+
+message PredefinedLocationMessage {
+	optional string id 					= 1;
+	optional string createdDate 		= 2;
+	optional string modifiedDate 		= 3;
+	optional string createdByUserName 	= 4;
+	optional string createdByUserId 	= 5;
+	optional string modifiedByUserName 	= 6;
+	optional string modifiedByUserId 	= 7;
+	optional string ownerName 			= 8;
+	optional string ownerId 			= 9;
+	optional string parentName 			= 10;
+	optional string parentId 			= 11;
+	required string name 				= 12;
+}
+
+message TestSimpleMessage {
+    optional double double_field = 1;
+    optional float float_field = 2;
+    optional int32 int32_field = 3;
+    optional int64 int64_field = 4;
+    optional uint32 uint32_field = 5;
+    optional uint64 uint64_field = 6;
+    optional sint32 sint32_field = 7;
+    optional sint64 sint64_field = 8;
+    optional fixed32 fixed32_field = 9;
+    optional fixed64 fixed64_field = 10;
+    optional sfixed32 sfixed32_field = 11;
+    optional sfixed64 sfixed64_field = 12;
+    optional bool bool_field = 13;
+    optional string string_field = 14;
+}
+
+message TestNestedMessage {
+    required string string_field = 1;
+}
+
+message TestContainerMessage {
+    required int32 int32_field = 1;
+    optional TestNestedMessage nested = 2;
+}
+
+message UserMessage {
+	optional string id 						= 1;
+	optional string createdstring 			= 2;
+	optional string modifiedstring 			= 3;
+	optional string createdByUserName 		= 4;
+	optional string createdByUserId 		= 5;
+	optional string modifiedByUserName 		= 6;
+	optional string modifiedByUserId 		= 7;
+	optional string ownerName 				= 8;
+	required string ownerId 				= 9;
+	required string userID 					= 10;
+	optional string firstName 				= 11;
+	optional string lastName 				= 12;
+	optional string emailAddress 			= 13;
+	optional string timeZoneID 				= 14;
+	optional string position 				= 15;
+	optional string initials 				= 16;
+	optional int32 failedLoginAttempts 		= 17;
+	optional bool locked 					= 18;
+	optional string lockedUntilstring 		= 19;
+	optional string passwordChangedstring 	= 20;
+	optional string language 				= 21;
+	optional string identifier 				= 22;
+	optional string lastLoginstring 		= 23;
+
+	repeated UserGroupMessage groups		= 24;
+
+	enum UserType {
+		ALL 		= 0;
+		ADMIN 		= 1;
+		SYSTEM 		= 2;
+		FULL 		= 3;
+		LITE 		= 4;
+		READONLY 	= 5;
+		PERSON 		= 6;
+		USAGE_BASED = 7;
+	}
+	required UserType userType 				= 25;
+
+	message PermissionsMessage {
+		required bool createAssets 			= 1;
+		required bool manageSystemConfig	= 2;
+		required bool manageSystemUsers		= 3;
+		required bool manageEndUsers		= 4;
+		required bool createEvents         	= 5;
+		required bool editEvents           	= 6;
+		required bool manageJobs			= 7;
+		required bool manageSafetyNetwork 	= 8;
+	}
+	required PermissionsMessage permissions = 26;
+}
+
+message UserGroupMessage {
+	optional string id 	= 1;
+	required string name	= 2;
+	required string groupId	= 3;
+}
+
+message ListResponseMessage {
+	required int32 page = 1;
+	required int32 pageSize = 2;
+	required int64 total = 3;
+
+	extensions 1000 to 2000;
+}
+
+extend ListResponseMessage {
+	repeated AssetMessage assets    						= 1000 [(serialized_name) = "list"];
+	repeated OwnerMessage owners    						= 1001 [(serialized_name) = "list"];
+	repeated AssetStatusMessage assetStatuses				= 1002 [(serialized_name) = "list"];
+	repeated AssetTypeMessage assetTypes					= 1003 [(serialized_name) = "list"];
+	repeated AssetTypeGroupMessage assetTypeGroups			= 1004 [(serialized_name) = "list"];
+	repeated AssetTypeScheduleMessage assetTypeSchedules	= 1005 [(serialized_name) = "list"];
+	repeated PredefinedLocationMessage predefinedLocations	= 1006 [(serialized_name) = "list"];
+	repeated UserMessage users								= 1007 [(serialized_name) = "list"];
+	repeated UserGroupMessage userGroups					= 1008 [(serialized_name) = "list"];
+}

@@ -5,10 +5,7 @@ import com.google.protobuf.Descriptors;
 import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.Message;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
-import javax.json.JsonReaderFactory;
+import javax.json.*;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
@@ -77,29 +74,45 @@ public class GoogleProtobufMessageBodyReader implements MessageBodyReader<Messag
 
     private static void populateMessageFromJsonObject(Message.Builder builder, JsonObject source) {
         for(Descriptors.FieldDescriptor descriptor : builder.getDescriptorForType().getFields()) {
-            switch(descriptor.getJavaType()) {
-                case MESSAGE:
-                    populateMessageFromJsonObject(builder.getFieldBuilder(descriptor), source.getJsonObject(GoogleProtobufUtils.getSerializedFieldName(descriptor)));
-                    break;
-                case STRING:
-                    builder.setField(descriptor, source.getString(GoogleProtobufUtils.getSerializedFieldName(descriptor)));
-                    break;
-                case INT:
-                    builder.setField(descriptor, source.getInt(GoogleProtobufUtils.getSerializedFieldName(descriptor)));
-                    break;
-                case LONG:
-                    builder.setField(descriptor, source.getJsonNumber(GoogleProtobufUtils.getSerializedFieldName(descriptor)).longValue());
-                    break;
-                case BOOLEAN:
-                    builder.setField(descriptor, source.getBoolean(GoogleProtobufUtils.getSerializedFieldName(descriptor)));
-                    break;
-                case FLOAT:
-                    builder.setField(descriptor, (float)source.getJsonNumber(GoogleProtobufUtils.getSerializedFieldName(descriptor)).doubleValue());
-                    break;
-                case DOUBLE:
-                    builder.setField(descriptor, source.getJsonNumber(GoogleProtobufUtils.getSerializedFieldName(descriptor)).doubleValue());
-                    break;
-            }
+			String fieldName = GoogleProtobufUtils.getSerializedFieldName(descriptor);
+
+			if (source.get(fieldName) != null) {
+				switch (descriptor.getJavaType()) {
+					case MESSAGE:
+						if (descriptor.isRepeated()) {
+							JsonArray repeatedField = source.getJsonArray(fieldName);
+							for (int i = 0; i < repeatedField.size(); i++) {
+								Message.Builder repeatedFieldBuilder = builder.newBuilderForField(descriptor);
+								populateMessageFromJsonObject(repeatedFieldBuilder, repeatedField.getJsonObject(i));
+								builder.addRepeatedField(descriptor, repeatedFieldBuilder.build());
+							}
+						} else {
+							populateMessageFromJsonObject(builder.getFieldBuilder(descriptor), source.getJsonObject(fieldName));
+						}
+						break;
+					case ENUM:
+						builder.setField(descriptor, descriptor.getEnumType().findValueByName(source.getString(fieldName)));
+						break;
+					case STRING:
+						builder.setField(descriptor, source.getString(fieldName));
+						break;
+					case INT:
+						builder.setField(descriptor, source.getInt(fieldName));
+						break;
+					case LONG:
+						builder.setField(descriptor, source.getJsonNumber(fieldName).longValue());
+						break;
+					case BOOLEAN:
+						builder.setField(descriptor, source.getBoolean(fieldName));
+						break;
+					case FLOAT:
+						builder.setField(descriptor, (float) source.getJsonNumber(fieldName).doubleValue());
+						break;
+					case DOUBLE:
+						builder.setField(descriptor, source.getJsonNumber(fieldName).doubleValue());
+						break;
+				}
+			}
         }
     }
 
