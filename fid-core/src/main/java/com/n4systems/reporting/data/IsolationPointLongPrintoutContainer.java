@@ -10,6 +10,7 @@ import java.io.InputStream;
 public class IsolationPointLongPrintoutContainer {
 
     private String energySource;
+    private String energyType;
     private String device;
     private String lockoutMethod;
 
@@ -23,6 +24,14 @@ public class IsolationPointLongPrintoutContainer {
 
     public void setEnergySource(String energySource) {
         this.energySource = energySource;
+    }
+
+    public String getEnergyType() {
+        return energyType;
+    }
+
+    public void setEnergyType(String energyType) {
+        this.energyType = energyType;
     }
 
     public String getDevice() {
