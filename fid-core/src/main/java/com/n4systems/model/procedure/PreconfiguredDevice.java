@@ -3,16 +3,14 @@ package com.n4systems.model.procedure;
 import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.parents.EntityWithTenant;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "preconfigured_devices")
 public class PreconfiguredDevice extends EntityWithTenant {
 
     @Enumerated(EnumType.STRING)
+    @Column(name="source")
     private IsolationPointSourceType isolationPointSourceType;
 
     private String device;

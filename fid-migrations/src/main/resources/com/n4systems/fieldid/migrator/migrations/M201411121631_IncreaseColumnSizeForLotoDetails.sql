@@ -1,0 +1,1 @@
+ALTER TABLE preconfigured_devices CHANGE isolationPointSourceType source varchar(10);
