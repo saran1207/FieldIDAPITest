@@ -3,7 +3,6 @@ package com.n4systems.fieldid.wicket.pages.admin.printouts;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.procedure.LotoReportService;
 import com.n4systems.fieldid.service.user.UserService;
-import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
 import com.n4systems.fieldid.wicket.components.table.SimpleDefaultDataTable;
@@ -20,16 +19,20 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.DownloadLink;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.IRequestCycle;
+import org.apache.wicket.request.UrlEncoder;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.resource.FileResourceStream;
+import org.apache.wicket.util.resource.IResourceStream;
+import org.apache.wicket.util.time.Duration;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -116,34 +119,44 @@ public class LotoPrintoutListPage extends FieldIDAdminPage {
             }
         });
 
+        columns.add(new LotoDownloadColumn(new FIDLabelModel("label.download"),"download"));
+
+        /*
         columns.add(new PropertyColumn<LotoPrintout>(new FIDLabelModel("label.download"), "download") {
             @Override
             public void populateItem(Item<ICellPopulator<LotoPrintout>> item, String componentId, IModel<LotoPrintout> rowModel) {
-                try {
-                    DownloadLink downloadAllLink;
-                    String fileName = rowModel.getObject().getPrintoutName() + ".zip";
+                Link<LotoPrintout> link = new Link<LotoPrintout>(componentId, rowModel) {
+                    @Override
+                    public void onClick() {
+                        try {
+                            String fileName = rowModel.getObject().getPrintoutName() + ".zip";
 
-                    byte[] fileData = lotoReportService.getZipFile(rowModel.getObject());
+                            byte[] fileData = lotoReportService.getZipFile(rowModel.getObject());
 
-                    File file = File.createTempFile("temp-file", ".tmp");
-                    FileOutputStream fileAttachmentFos = new FileOutputStream(file);
-                    fileAttachmentFos.write(fileData);
+                            File file = File.createTempFile("temp-file", ".tmp");
+                            FileOutputStream fileAttachmentFos = new FileOutputStream(file);
+                            fileAttachmentFos.write(fileData);
 
-                    downloadAllLink = new DownloadLink(componentId, file, fileName);
-                    downloadAllLink.setDeleteAfterDownload(true);
-                    //downloadAllLink.add(new FlatLabel(componentId, new FIDLabelModel("label.download")).setVisible(true));
+                            handleDownload(file, fileName);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
 
-                    FlatLabel label = new FlatLabel(componentId, new FIDLabelModel("label.download"));
-                    label.setEnabled(true);
-                    label.setVisible(true);
+                FlatLabel label = new FlatLabel(componentId, new FIDLabelModel("label.download"));
+                label.setEnabled(true);
+                label.setVisible(true);
+                link.add(label);
 
-                    downloadAllLink.add(label);
-
-                    item.add(downloadAllLink);
-                } catch (IOException e) { }
+                item.add(link);
             }
         });
+        */
 
+        columns.add(new LotoDeleteColumn(new FIDLabelModel("label.delete"),"delete", listContainer));
+
+        /*
         columns.add(new PropertyColumn<LotoPrintout>(new FIDLabelModel("label.delete"), "delete") {
             @Override
             public void populateItem(Item<ICellPopulator<LotoPrintout>> item, String componentId, IModel<LotoPrintout> rowModel) {
@@ -155,6 +168,8 @@ public class LotoPrintoutListPage extends FieldIDAdminPage {
                     }
                 };
 
+                link.add( new SimpleAttributeModifier("onclick", "return confirm('Are you sure you want to remove this procedure?  If this is the selected procedure, it will be reverted to default.');"));
+
                 FlatLabel label = new FlatLabel(componentId, new FIDLabelModel("label.delete"));
                 label.setEnabled(true);
                 label.setVisible(true);
@@ -163,6 +178,7 @@ public class LotoPrintoutListPage extends FieldIDAdminPage {
                 item.add(link);
             }
         });
+        */
 
         return columns;
     }
@@ -192,4 +208,33 @@ public class LotoPrintoutListPage extends FieldIDAdminPage {
             }
         };
     }
+
+
+    /**
+            * Unfortunately, we can't directly apply custom logic to the onClick method of a download link.  This is because
+            * most of the actual "download" logic in the DownloadLink class happens in that method.
+            *
+            * So instead, we've brought the download link logic here.
+            *
+            * @param tempReport
+    * @param fileName
+    */
+    private void handleDownload(File tempReport, String fileName) {
+        String encodedFileName = UrlEncoder.QUERY_INSTANCE.encode(fileName, getRequest().getCharset());
+
+        IResourceStream resourceStream = new FileResourceStream(new org.apache.wicket.util.file.File(tempReport));
+
+        Duration cacheDuration = Duration.hours(2);
+        //Duration cacheDuration = Duration.minutes(5);
+
+        getRequestCycle().scheduleRequestHandlerAfterCurrent(
+                new ResourceStreamRequestHandler(resourceStream) {
+                    @Override
+                    public void respond(IRequestCycle requestCycle) {
+                        super.respond(requestCycle);
+                    }
+                }.setFileName(encodedFileName).setContentDisposition(ContentDisposition.ATTACHMENT).setCacheDuration(cacheDuration)
+        );
+    }
+
 }

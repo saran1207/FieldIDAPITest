@@ -81,7 +81,10 @@ public class PrintImages extends Panel {
         if (null != annotatedImages && annotatedImages.size() > 0) {
             jsonStr = renderer.render(new ImageList(annotatedImages));
             response.renderOnLoadJavaScript("annotateImages(" + jsonStr + ");");
+        } else {
+            response.renderOnLoadJavaScript("annotateImages();");
         }
+
     }
 
     private List<Annotation> convertAnnotations(List<ImageAnnotation> annotations) {

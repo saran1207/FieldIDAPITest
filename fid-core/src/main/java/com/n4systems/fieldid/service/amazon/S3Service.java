@@ -5,6 +5,7 @@ import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Maps;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.images.ImageService;
 import com.n4systems.fieldid.service.uuid.UUIDService;
@@ -14,6 +15,7 @@ import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
+import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import com.n4systems.model.user.User;
@@ -36,10 +38,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 //import sun.misc.BASE64Encoder;
 
@@ -329,22 +328,45 @@ public class S3Service extends FieldIdPersistenceService {
         return fileData;
     }
 
-    public File downloadDefaultLotoPrintout(LotoPrintout printout) throws IOException {
+    public Map<String, InputStream> downloadDefaultLotoJasperMap(LotoPrintout printout) throws IOException {
+        return createLotoReportMap(printout.getPrintoutType(), PathHandler.getLotoDefaultPath(printout.getPrintoutType()));
+    }
+
+    public Map<String, InputStream> downloadCustomLotoJasperMap(LotoPrintout printout) throws IOException {
+        return createLotoReportMap(printout.getPrintoutType(), PathHandler.getLotoPath(printout));
+    }
+
+    private Map<String, InputStream> createLotoReportMap(LotoPrintoutType type, String path) throws IOException {
+        Map<String, InputStream> returnMe = Maps.newHashMap();
+
+        returnMe.put("main", new ByteArrayInputStream(downloadLoto(path + "/procedure.jasper")));
+
+        if(type.equals(LotoPrintoutType.LONG)) {
+            returnMe.put("isolationPointSubreport", new ByteArrayInputStream(downloadLoto(path + "/procedure-isolation-points-long.jasper")));
+        } else {
+            returnMe.put("isolationPointSubreport", new ByteArrayInputStream(downloadLoto(path + "/isolation-points-short.jasper")));
+            returnMe.put("imageSubreport", new ByteArrayInputStream(downloadLoto(path + "/isolation-points-images-short.jasper")));
+        }
+
+        return returnMe;
+    }
+
+    public byte[] downloadDefaultLotoPrintout(LotoPrintout printout) throws IOException {
         File printoutFile = null;
 
         byte[] fileData = downloadLoto(PathHandler.getDefaultCompiledLotoFilePath(printout));
-        FileUtils.writeByteArrayToFile(printoutFile, fileData);
+//        FileUtils.writeByteArrayToFile(printoutFile, fileData);
 
-        return printoutFile;
+        return fileData;
     }
 
-    public File downloadCustomLotoPrintout(LotoPrintout printout) throws IOException {
+    public byte[] downloadCustomLotoPrintout(LotoPrintout printout) throws IOException {
         File printoutFile = null;
 
         byte[] fileData = downloadLoto(PathHandler.getCompiledLotoFilePath(printout));
-        FileUtils.writeByteArrayToFile(printoutFile, fileData);
+//        FileUtils.writeByteArrayToFile(printoutFile, fileData);
 
-        return printoutFile;
+        return fileData;
     }
 
     public void saveLotoPrintout(File file, String path) {
@@ -461,6 +483,21 @@ public class S3Service extends FieldIdPersistenceService {
                 procedureDefinition.getId(),
                 svgFile.getName());
     }
+
+    public byte[] downloadProcedureDefinitionImageSvg(ProcedureDefinitionImage image) throws IOException {
+        return downloadResource(getCurrentTenant().getId(), PROCEDURE_DEFINITION_IMAGE_PATH,
+                image.getProcedureDefinition().getAsset().getId(),
+                image.getProcedureDefinition().getId(),
+                (image.getFileName() + ".svg"));
+    }
+
+    public byte[] downloadProcedureDefinitionImageSvg(ProcedureDefinitionImage image, IsolationPoint isolationPoint) throws IOException {
+        return downloadResource(getCurrentTenant().getId(), PROCEDURE_DEFINITION_IMAGE_PATH,
+                image.getProcedureDefinition().getAsset().getId(),
+                image.getProcedureDefinition().getId(),
+                (image.getFileName() + "_" + isolationPoint.getAnnotation().getId() + ".svg"));
+    }
+
 
     public String uploadTempCriteriaResultImage(CriteriaResultImage criteriaResultImage, byte[] imageData) {
         String contentType = criteriaResultImage.getContentType();

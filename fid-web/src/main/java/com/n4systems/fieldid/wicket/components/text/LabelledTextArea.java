@@ -22,4 +22,8 @@ public class LabelledTextArea<M> extends LabelledComponent<TextArea,M> {
         return 255;
     }
 
+    public void setModelValue(String value) {
+        component.setModelValue(new String[] {value});
+    }
+
 }

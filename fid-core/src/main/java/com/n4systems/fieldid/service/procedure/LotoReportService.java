@@ -11,11 +11,9 @@ import com.n4systems.util.persistence.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -102,12 +100,63 @@ public class LotoReportService extends FieldIdPersistenceService {
         return shortFormPrintout;
     }
 
+    public byte[] getLongJapser() throws IOException {
+        LotoPrintout printout = getSelectedLongForm();
+        if(printout == null) {
+            printout = new LotoPrintout();
+            printout.setPrintoutType(LotoPrintoutType.LONG);
+            return s3Service.downloadDefaultLotoPrintout(printout);
+        } else {
+            return s3Service.downloadCustomLotoPrintout(printout);
+        }
+    }
+
+    //TODO Make these two into one method... the only differentiating factor is whether or not we statically set as LONG or SHORT
+    public Map<String, InputStream> getLongJasperMap() throws IOException {
+        LotoPrintout printout = getSelectedLongForm();
+        if(printout == null) {
+            //return the default map...
+            printout = new LotoPrintout();
+            printout.setPrintoutType(LotoPrintoutType.LONG);
+            return s3Service.downloadDefaultLotoJasperMap(printout);
+        } else {
+            //return the custom map...
+            return s3Service.downloadCustomLotoJasperMap(printout);
+        }
+    }
+
+    public Map<String, InputStream> getShortJasperMap() throws IOException {
+        LotoPrintout printout = getSelectedLongForm();
+        if(printout == null) {
+            //return the default map...
+            printout = new LotoPrintout();
+            printout.setPrintoutType(LotoPrintoutType.SHORT);
+            return s3Service.downloadDefaultLotoJasperMap(printout);
+        } else {
+            //return the custom map...
+            return s3Service.downloadCustomLotoJasperMap(printout);
+        }
+    }
+
+    public byte[] getShortJasper() throws IOException {
+        LotoPrintout printout = getSelectedShortForm();
+        if(printout == null) {
+            printout = new LotoPrintout();
+            printout.setPrintoutType(LotoPrintoutType.SHORT);
+            return s3Service.downloadDefaultLotoPrintout(printout);
+
+        } else {
+            return s3Service.downloadCustomLotoPrintout(printout);
+        }
+    }
+
     @Transactional
     public void saveLotoReport(File zipFile, LotoPrintout printout) {
         try {
             unZipIt(zipFile, printout);
             persistenceService.saveOrUpdate(printout);
         } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -133,8 +182,26 @@ public class LotoReportService extends FieldIdPersistenceService {
             return false;
     }
 
+    public void resetIfSelected(LotoPrintout printout) {
+        LotoPrintout selected;
+
+        if(printout.getPrintoutType().equals(LotoPrintoutType.LONG)) {
+            selected = getSelectedLongForm();
+        } else {
+            selected = getSelectedShortForm();
+        }
+
+        if(selected.getId().equals(printout.getId())) {
+            selected.setSelected(false);
+            persistenceService.update(selected);
+        }
+    }
+
     @Transactional
     public void deleteLotoPrintout(LotoPrintout lotoPrintout) {
+        //if selected for print, then revert it to the default one
+        resetIfSelected(lotoPrintout);
+
         //delete from S3
         s3Service.deleteLotoPrintout(lotoPrintout);
 

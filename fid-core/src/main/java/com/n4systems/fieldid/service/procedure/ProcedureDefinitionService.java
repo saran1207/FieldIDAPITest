@@ -702,11 +702,22 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return persistenceService.findAll(query);
     }
 
-    public String getPreConfiguredDeviceMethod(String device) {
-        QueryBuilder<String> query = new QueryBuilder(PreconfiguredDevice.class, new TenantOnlySecurityFilter(getCurrentTenant().getId()));
-        query.setSimpleSelect("method");
+    public PreconfiguredDevice getPreConfiguredDevice(String device, IsolationPointSourceType sourceType) {
+        QueryBuilder<PreconfiguredDevice> query = createTenantSecurityBuilder(PreconfiguredDevice.class);
         query.addSimpleWhere("device", device);
+        query.addSimpleWhere("isolationPointSourceType", sourceType);
         return persistenceService.find(query);
+    }
+
+    public Boolean isPredefinedDeviceNameExists(String device, IsolationPointSourceType sourceType, Long id) {
+        QueryBuilder<PreconfiguredDevice> query = createTenantSecurityBuilder(PreconfiguredDevice.class);
+        query.addSimpleWhere("device", device);
+        query.addSimpleWhere("isolationPointSourceType", sourceType);
+
+        if(id != null) {
+            query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.NE,  "id", id));
+        }
+        return persistenceService.exists(query);
     }
 
     public List<String> getPreConfiguredEnergySource(IsolationPointSourceType sourceType) {
@@ -719,7 +730,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
 
     public void publishProcedureDefinition(ProcedureDefinition definition) throws AnnotatedImageGenerationException {
         try {
-            generateAndUploadAnnotatedSvgs(definition);
+            svgGenerationService.generateAndUploadAnnotatedSvgs(definition);
 
             ProcedureDefinition previousDefinition = getPublishedProcedureDefinition(definition.getAsset(), definition.getFamilyId());
             if (previousDefinition != null) {
@@ -733,18 +744,6 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         } catch (Exception e) {
             logger.error("Failed to generate annotated svgs for Procedure Definition:" + definition.getId());
             throw new AnnotatedImageGenerationException(e);
-        }
-    }
-
-    private void generateAndUploadAnnotatedSvgs(ProcedureDefinition definition) throws Exception {
-        for(ProcedureDefinitionImage image: definition.getImages()) {
-            File allAnnotations = svgGenerationService.exportToSvg(image);
-            svgGenerationService.uploadSvg(definition, allAnnotations);
-        }
-
-        for (IsolationPoint isolationPoint: definition.getUnlockIsolationPoints()) {
-            File singleAnnotation = svgGenerationService.exportToSvg(isolationPoint.getAnnotation());
-            svgGenerationService.uploadSvg(definition, singleAnnotation);
         }
     }
 
@@ -1240,4 +1239,8 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
        return persistenceService.saveOrUpdate(customLotoDetails);
    }
 
+    public void deleteCustomLotoDetails(CustomLotoDetails customLotoDetails) {
+        persistenceService.reattach(customLotoDetails);
+        persistenceService.delete(customLotoDetails);
+    }
 }
