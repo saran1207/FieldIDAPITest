@@ -18,7 +18,6 @@ import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.model.user.UserQueryHelper;
-import com.n4systems.persistence.utils.PostFetcher;
 import com.n4systems.security.Permissions;
 import com.n4systems.security.UserType;
 import com.n4systems.util.StringUtils;
@@ -324,7 +323,7 @@ public class UserService extends FieldIdPersistenceService {
     public List<User> getExaminers() {
         SecurityFilter filter = securityContext.getUserSecurityFilter();
         SecurityFilter justTenantFilter = securityContext.getTenantSecurityFilter();
-        String queryString = "select DISTINCT ub from " + User.class.getName() + " ub where ub.registered = true and state = 'ACTIVE' and ub.userType != '" + UserType.SYSTEM.toString() + "' and ( "
+        String queryString = "select ub from " + User.class.getName() + " ub where ub.registered = true and state = 'ACTIVE' and ub.userType != '" + UserType.SYSTEM.toString() + "' and ( "
                 + filter.produceWhereClause(User.class, "ub") + " OR ( " + justTenantFilter.produceWhereClause(User.class, "ub") + " AND ub.owner.customerOrg IS NULL) )";
 
         if (!getCurrentUser().getGroups().isEmpty() && isUserGroupFilteringEnabled()) {
@@ -343,11 +342,9 @@ public class UserService extends FieldIdPersistenceService {
         filter.applyParameters(query, User.class);
         justTenantFilter.applyParameters(query, User.class);
 
-        List<User> unfilteredResults = (List<User>) query.getResultList();
+
         // get the userlist and filter out users not having the create/edit
-        List<User> filteredResults = Permissions.filterHasOneOf(unfilteredResults, Permissions.ALLEVENT);
-        List<User> forceLoadedResults = PostFetcher.postFetchFields(filteredResults, "id");
-        return forceLoadedResults;
+        return Permissions.filterHasOneOf((List<User>) query.getResultList(), Permissions.ALLEVENT);
     }
 
     public List<User> search(String term, int threshold) {
