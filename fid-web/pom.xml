@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>fieldid-root</artifactId>
 		<groupId>com.fieldid</groupId>
-        <version>2014.7.1</version>
+        <version>2014.8.0</version>
 	</parent>
 	<artifactId>fid-web</artifactId>
 	<packaging>war</packaging>
@@ -136,6 +136,10 @@
             <version>${commons.collections.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.apache.struts</groupId>
             <artifactId>struts2-core</artifactId>
             <version>${struts.version}</version>
@@ -150,11 +154,23 @@
 			<groupId>org.apache.struts</groupId>
 			<artifactId>struts2-spring-plugin</artifactId>
 			<version>${struts.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javassist</groupId>
+                    <artifactId>javassist</artifactId>
+                </exclusion>
+            </exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.struts</groupId>
 			<artifactId>struts2-sitemesh-plugin</artifactId>
 			<version>${struts.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javassist</groupId>
+                    <artifactId>javassist</artifactId>
+                </exclusion>
+            </exclusions>
 		</dependency>
         <dependency>
             <groupId>javax.servlet</groupId>

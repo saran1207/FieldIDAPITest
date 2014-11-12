@@ -165,6 +165,11 @@
                 <artifactId>fid-connection-monitor</artifactId>
                 <version>${project.version}</version>
             </dependency>
+			<dependency>
+				<groupId>org.javassist</groupId>
+				<artifactId>javassist</artifactId>
+				<version>3.18.2-GA</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<scm>
