@@ -37,10 +37,7 @@ public class NotifyExpiringPasswordService extends FieldIdPersistenceService {
     private MailService mailService;
 
     //Every day at noon
-    //@Scheduled(cron = "0 0 12 * * ?")
-
-    //Every 1 minute after a successful run
-    @Scheduled(fixedDelay = 100000)
+    @Scheduled(cron = "0 0 12 * * ?")
     public void notifyExpiringPasswords() {
 
         //List of all tenants that enforce expiring password policy
