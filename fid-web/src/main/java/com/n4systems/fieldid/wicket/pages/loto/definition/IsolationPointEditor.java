@@ -96,9 +96,14 @@ public class IsolationPointEditor extends Panel {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 IsolationPoint isolationPoint = (IsolationPoint) getDefaultModel().getObject();
-                PreconfiguredDevice device = procedureDefinitionService.getPreConfiguredDevice(isolationPoint.getDeviceDefinition().getFreeformDescription(), isolationPoint.getSourceType());
-                methodField.setModelValue(device != null ? device.getMethod() : null);
-                target.add(methodField);
+                if(isolationPoint.getDeviceDefinition().getFreeformDescription() != null) {
+                    PreconfiguredDevice device = procedureDefinitionService.getPreConfiguredDevice(isolationPoint.getDeviceDefinition().getFreeformDescription(), isolationPoint.getSourceType());
+                    methodField.setModelValue(device != null ? device.getMethod() : null);
+                    target.add(methodField);
+                } else {
+                    methodField.setModelValue(null);
+                    target.add(methodField);
+                }
             }
         });
         deviceComboBox.add(new TipsyBehavior(new FIDLabelModel("message.isolation_point.device"), TipsyBehavior.Gravity.N));
