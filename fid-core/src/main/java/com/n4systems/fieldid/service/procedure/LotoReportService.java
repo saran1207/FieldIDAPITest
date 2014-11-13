@@ -57,11 +57,27 @@ public class LotoReportService extends FieldIdPersistenceService {
         return persistenceService.find(query);
     }
 
+    public LotoPrintout getSelectedLongForm(Long tenantId) {
+        QueryBuilder<LotoPrintout> queryBuilder = new QueryBuilder<>(LotoPrintout.class, new OpenSecurityFilter());
+        queryBuilder.addSimpleWhere("tenant.id", tenantId);
+        queryBuilder.addSimpleWhere("printoutType", LotoPrintoutType.LONG);
+        queryBuilder.addSimpleWhere("selected", true);
+        return persistenceService.find(queryBuilder);
+    }
+
     public LotoPrintout getSelectedShortForm() {
         QueryBuilder<LotoPrintout> query = createUserSecurityBuilder(LotoPrintout.class);
         query.addSimpleWhere("printoutType", LotoPrintoutType.SHORT);
         query.addSimpleWhere("selected", true);
         return persistenceService.find(query);
+    }
+
+    public LotoPrintout getSelectedShortForm(Long tenantId) {
+        QueryBuilder<LotoPrintout> queryBuilder = new QueryBuilder<>(LotoPrintout.class, new OpenSecurityFilter());
+        queryBuilder.addSimpleWhere("tenant.id", tenantId);
+        queryBuilder.addSimpleWhere("printoutType", LotoPrintoutType.SHORT);
+        queryBuilder.addSimpleWhere("selected", true);
+        return persistenceService.find(queryBuilder);
     }
 
     public List<LotoPrintout> getLongLotoPrintouts() {
@@ -186,12 +202,12 @@ public class LotoReportService extends FieldIdPersistenceService {
         LotoPrintout selected;
 
         if(printout.getPrintoutType().equals(LotoPrintoutType.LONG)) {
-            selected = getSelectedLongForm();
+            selected = getSelectedLongForm(printout.getTenant().getId());
         } else {
-            selected = getSelectedShortForm();
+            selected = getSelectedShortForm(printout.getTenant().getId());
         }
 
-        if(selected.getId().equals(printout.getId())) {
+        if(selected != null && selected.getId().equals(printout.getId())) {
             selected.setSelected(false);
             persistenceService.update(selected);
         }
