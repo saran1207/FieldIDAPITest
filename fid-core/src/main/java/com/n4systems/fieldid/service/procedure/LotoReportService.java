@@ -142,7 +142,7 @@ public class LotoReportService extends FieldIdPersistenceService {
     }
 
     public Map<String, InputStream> getShortJasperMap() throws IOException {
-        LotoPrintout printout = getSelectedLongForm();
+        LotoPrintout printout = getSelectedShortForm();
         if(printout == null) {
             //return the default map...
             printout = new LotoPrintout();
