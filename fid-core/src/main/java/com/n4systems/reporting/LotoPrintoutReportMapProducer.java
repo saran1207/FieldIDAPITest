@@ -154,7 +154,7 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
      * POJOs for inclusion in the report.  Like above, this ensures we don't send unneeded information to Jasper.
      *
      * @param isolationPoints - A <b>List</b> populated with all <b>IsolationPoint</b>s from the definition.
-     * @return A <b>List</b> populated with <b>IsolationPointShortPrintoutContainer</b>s, representing the provided Isolation Points.
+     * @return A <b>List</b> populated with <b>IsolationPointPrintoutContainer</b>s, representing the provided Isolation Points.
      */
     private List<IsolationPointPrintoutContainer> convertToIPContainerCollection(List<IsolationPoint> isolationPoints) {
         return isolationPoints.stream()
