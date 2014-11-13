@@ -48,6 +48,7 @@ message AssetMessage {
 	optional string predefinedLocationName	= 27;
 	optional string predefinedLocationId 	= 28;
 	optional string orderNumber 			= 29;
+	optional string description 			= 30;
 
 	message AttributeMessage {
 		optional AttributeValueType type	= 1;
@@ -55,7 +56,7 @@ message AssetMessage {
 		optional string name 				= 3;
 		optional string value 				= 4;
 	}
-	repeated AttributeMessage attributes	= 30;
+	repeated AttributeMessage attributes	= 31;
 }
 
 message AssetStatusMessage {
@@ -81,28 +82,27 @@ message AssetTypeMessage {
 	optional string warnings						= 9;
 	optional string instructions					= 10;
 	optional string cautionUrl						= 11;
-	optional string imageName						= 12;
-	optional string descriptionTemplate				= 13;
-	optional string descriptionText					= 14;
-	optional string manufactureCertificateText		= 15;
-	optional bool hasManufactureCertificate			= 16;
-	optional bool allowAssetLinking 				= 17;
-	optional bool hasProcedures 					= 18;
-	optional AssetTypeGroupMessage group 			= 19;
-	repeated AssetTypeScheduleMessage schedules 	= 20;
+	optional string descriptionTemplate				= 12;
+	optional string manufactureCertificateText		= 13;
+	optional bool hasManufactureCertificate			= 14;
+	optional bool allowAssetLinking 				= 15;
+	optional bool hasProcedures 					= 16;
+	optional string assetTypeGroupId 				= 17;
+	optional string assetTypeGroupName				= 18;
+	repeated AssetTypeScheduleMessage schedules 	= 19;
 
 	message AssociatedEventTypeMessage {
 		required string eventTypeId		= 1;
 		required string eventTypeName	= 2;
 	}
-	repeated AssociatedEventTypeMessage associatedEventTypes 	= 21;
+	repeated AssociatedEventTypeMessage associatedEventTypes 	= 20;
 
 	message AssetAttributeTypeMessage {
 		required string id 					= 1;
 		required AttributeValueType type	= 2;
 		required string name 				= 3;
 	}
-	repeated AssetAttributeTypeMessage attributeTypes 			= 22;
+	repeated AssetAttributeTypeMessage attributeTypes 			= 21;
 }
 
 message AssetTypeGroupMessage {

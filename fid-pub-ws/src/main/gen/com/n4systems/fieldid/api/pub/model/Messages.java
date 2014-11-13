@@ -574,27 +574,42 @@ public final class Messages {
     com.google.protobuf.ByteString
         getOrderNumberBytes();
 
-    // repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;
+    // optional string description = 30;
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;</code>
+     * <code>optional string description = 30;</code>
+     */
+    boolean hasDescription();
+    /**
+     * <code>optional string description = 30;</code>
+     */
+    java.lang.String getDescription();
+    /**
+     * <code>optional string description = 30;</code>
+     */
+    com.google.protobuf.ByteString
+        getDescriptionBytes();
+
+    // repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;
+    /**
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;</code>
      */
     java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage> 
         getAttributesList();
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;</code>
      */
     com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage getAttributes(int index);
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;</code>
      */
     int getAttributesCount();
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;</code>
      */
     java.util.List<? extends com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessageOrBuilder> 
         getAttributesOrBuilderList();
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;</code>
      */
     com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessageOrBuilder getAttributesOrBuilder(
         int index);
@@ -796,9 +811,14 @@ public final class Messages {
               break;
             }
             case 242: {
-              if (!((mutable_bitField0_ & 0x20000000) == 0x20000000)) {
+              bitField0_ |= 0x20000000;
+              description_ = input.readBytes();
+              break;
+            }
+            case 250: {
+              if (!((mutable_bitField0_ & 0x40000000) == 0x40000000)) {
                 attributes_ = new java.util.ArrayList<com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage>();
-                mutable_bitField0_ |= 0x20000000;
+                mutable_bitField0_ |= 0x40000000;
               }
               attributes_.add(input.readMessage(com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage.PARSER, extensionRegistry));
               break;
@@ -811,7 +831,7 @@ public final class Messages {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x20000000) == 0x20000000)) {
+        if (((mutable_bitField0_ & 0x40000000) == 0x40000000)) {
           attributes_ = java.util.Collections.unmodifiableList(attributes_);
         }
         this.unknownFields = unknownFields.build();
@@ -2966,36 +2986,79 @@ public final class Messages {
       }
     }
 
-    // repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;
-    public static final int ATTRIBUTES_FIELD_NUMBER = 30;
+    // optional string description = 30;
+    public static final int DESCRIPTION_FIELD_NUMBER = 30;
+    private java.lang.Object description_;
+    /**
+     * <code>optional string description = 30;</code>
+     */
+    public boolean hasDescription() {
+      return ((bitField0_ & 0x20000000) == 0x20000000);
+    }
+    /**
+     * <code>optional string description = 30;</code>
+     */
+    public java.lang.String getDescription() {
+      java.lang.Object ref = description_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          description_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string description = 30;</code>
+     */
+    public com.google.protobuf.ByteString
+        getDescriptionBytes() {
+      java.lang.Object ref = description_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        description_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;
+    public static final int ATTRIBUTES_FIELD_NUMBER = 31;
     private java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage> attributes_;
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;</code>
      */
     public java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage> getAttributesList() {
       return attributes_;
     }
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;</code>
      */
     public java.util.List<? extends com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessageOrBuilder> 
         getAttributesOrBuilderList() {
       return attributes_;
     }
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;</code>
      */
     public int getAttributesCount() {
       return attributes_.size();
     }
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;</code>
      */
     public com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage getAttributes(int index) {
       return attributes_.get(index);
     }
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;</code>
      */
     public com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessageOrBuilder getAttributesOrBuilder(
         int index) {
@@ -3032,6 +3095,7 @@ public final class Messages {
       predefinedLocationName_ = "";
       predefinedLocationId_ = "";
       orderNumber_ = "";
+      description_ = "";
       attributes_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
@@ -3145,8 +3209,11 @@ public final class Messages {
       if (((bitField0_ & 0x10000000) == 0x10000000)) {
         output.writeBytes(29, getOrderNumberBytes());
       }
+      if (((bitField0_ & 0x20000000) == 0x20000000)) {
+        output.writeBytes(30, getDescriptionBytes());
+      }
       for (int i = 0; i < attributes_.size(); i++) {
-        output.writeMessage(30, attributes_.get(i));
+        output.writeMessage(31, attributes_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -3273,9 +3340,13 @@ public final class Messages {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(29, getOrderNumberBytes());
       }
+      if (((bitField0_ & 0x20000000) == 0x20000000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(30, getDescriptionBytes());
+      }
       for (int i = 0; i < attributes_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(30, attributes_.get(i));
+          .computeMessageSize(31, attributes_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -3452,9 +3523,11 @@ public final class Messages {
         bitField0_ = (bitField0_ & ~0x08000000);
         orderNumber_ = "";
         bitField0_ = (bitField0_ & ~0x10000000);
+        description_ = "";
+        bitField0_ = (bitField0_ & ~0x20000000);
         if (attributesBuilder_ == null) {
           attributes_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x20000000);
+          bitField0_ = (bitField0_ & ~0x40000000);
         } else {
           attributesBuilder_.clear();
         }
@@ -3602,10 +3675,14 @@ public final class Messages {
           to_bitField0_ |= 0x10000000;
         }
         result.orderNumber_ = orderNumber_;
+        if (((from_bitField0_ & 0x20000000) == 0x20000000)) {
+          to_bitField0_ |= 0x20000000;
+        }
+        result.description_ = description_;
         if (attributesBuilder_ == null) {
-          if (((bitField0_ & 0x20000000) == 0x20000000)) {
+          if (((bitField0_ & 0x40000000) == 0x40000000)) {
             attributes_ = java.util.Collections.unmodifiableList(attributes_);
-            bitField0_ = (bitField0_ & ~0x20000000);
+            bitField0_ = (bitField0_ & ~0x40000000);
           }
           result.attributes_ = attributes_;
         } else {
@@ -3772,11 +3849,16 @@ public final class Messages {
           orderNumber_ = other.orderNumber_;
           onChanged();
         }
+        if (other.hasDescription()) {
+          bitField0_ |= 0x20000000;
+          description_ = other.description_;
+          onChanged();
+        }
         if (attributesBuilder_ == null) {
           if (!other.attributes_.isEmpty()) {
             if (attributes_.isEmpty()) {
               attributes_ = other.attributes_;
-              bitField0_ = (bitField0_ & ~0x20000000);
+              bitField0_ = (bitField0_ & ~0x40000000);
             } else {
               ensureAttributesIsMutable();
               attributes_.addAll(other.attributes_);
@@ -3789,7 +3871,7 @@ public final class Messages {
               attributesBuilder_.dispose();
               attributesBuilder_ = null;
               attributes_ = other.attributes_;
-              bitField0_ = (bitField0_ & ~0x20000000);
+              bitField0_ = (bitField0_ & ~0x40000000);
               attributesBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                    getAttributesFieldBuilder() : null;
@@ -5983,13 +6065,87 @@ public final class Messages {
         return this;
       }
 
-      // repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;
+      // optional string description = 30;
+      private java.lang.Object description_ = "";
+      /**
+       * <code>optional string description = 30;</code>
+       */
+      public boolean hasDescription() {
+        return ((bitField0_ & 0x20000000) == 0x20000000);
+      }
+      /**
+       * <code>optional string description = 30;</code>
+       */
+      public java.lang.String getDescription() {
+        java.lang.Object ref = description_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          description_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string description = 30;</code>
+       */
+      public com.google.protobuf.ByteString
+          getDescriptionBytes() {
+        java.lang.Object ref = description_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          description_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string description = 30;</code>
+       */
+      public Builder setDescription(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x20000000;
+        description_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string description = 30;</code>
+       */
+      public Builder clearDescription() {
+        bitField0_ = (bitField0_ & ~0x20000000);
+        description_ = getDefaultInstance().getDescription();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string description = 30;</code>
+       */
+      public Builder setDescriptionBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x20000000;
+        description_ = value;
+        onChanged();
+        return this;
+      }
+
+      // repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;
       private java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage> attributes_ =
         java.util.Collections.emptyList();
       private void ensureAttributesIsMutable() {
-        if (!((bitField0_ & 0x20000000) == 0x20000000)) {
+        if (!((bitField0_ & 0x40000000) == 0x40000000)) {
           attributes_ = new java.util.ArrayList<com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage>(attributes_);
-          bitField0_ |= 0x20000000;
+          bitField0_ |= 0x40000000;
          }
       }
 
@@ -5997,7 +6153,7 @@ public final class Messages {
           com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage, com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage.Builder, com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessageOrBuilder> attributesBuilder_;
 
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;</code>
        */
       public java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage> getAttributesList() {
         if (attributesBuilder_ == null) {
@@ -6007,7 +6163,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;</code>
        */
       public int getAttributesCount() {
         if (attributesBuilder_ == null) {
@@ -6017,7 +6173,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;</code>
        */
       public com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage getAttributes(int index) {
         if (attributesBuilder_ == null) {
@@ -6027,7 +6183,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;</code>
        */
       public Builder setAttributes(
           int index, com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage value) {
@@ -6044,7 +6200,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;</code>
        */
       public Builder setAttributes(
           int index, com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage.Builder builderForValue) {
@@ -6058,7 +6214,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;</code>
        */
       public Builder addAttributes(com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage value) {
         if (attributesBuilder_ == null) {
@@ -6074,7 +6230,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;</code>
        */
       public Builder addAttributes(
           int index, com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage value) {
@@ -6091,7 +6247,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;</code>
        */
       public Builder addAttributes(
           com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage.Builder builderForValue) {
@@ -6105,7 +6261,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;</code>
        */
       public Builder addAttributes(
           int index, com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage.Builder builderForValue) {
@@ -6119,7 +6275,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;</code>
        */
       public Builder addAllAttributes(
           java.lang.Iterable<? extends com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage> values) {
@@ -6133,12 +6289,12 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;</code>
        */
       public Builder clearAttributes() {
         if (attributesBuilder_ == null) {
           attributes_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x20000000);
+          bitField0_ = (bitField0_ & ~0x40000000);
           onChanged();
         } else {
           attributesBuilder_.clear();
@@ -6146,7 +6302,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;</code>
        */
       public Builder removeAttributes(int index) {
         if (attributesBuilder_ == null) {
@@ -6159,14 +6315,14 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;</code>
        */
       public com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage.Builder getAttributesBuilder(
           int index) {
         return getAttributesFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;</code>
        */
       public com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessageOrBuilder getAttributesOrBuilder(
           int index) {
@@ -6176,7 +6332,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;</code>
        */
       public java.util.List<? extends com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessageOrBuilder> 
            getAttributesOrBuilderList() {
@@ -6187,14 +6343,14 @@ public final class Messages {
         }
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;</code>
        */
       public com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage.Builder addAttributesBuilder() {
         return getAttributesFieldBuilder().addBuilder(
             com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage.getDefaultInstance());
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;</code>
        */
       public com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage.Builder addAttributesBuilder(
           int index) {
@@ -6202,7 +6358,7 @@ public final class Messages {
             index, com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage.getDefaultInstance());
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 30;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;</code>
        */
       public java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage.Builder> 
            getAttributesBuilderList() {
@@ -6215,7 +6371,7 @@ public final class Messages {
           attributesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage, com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage.Builder, com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessageOrBuilder>(
                   attributes_,
-                  ((bitField0_ & 0x20000000) == 0x20000000),
+                  ((bitField0_ & 0x40000000) == 0x40000000),
                   getParentForChildren(),
                   isClean());
           attributes_ = null;
@@ -7965,181 +8121,167 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCautionUrlBytes();
 
-    // optional string imageName = 12;
+    // optional string descriptionTemplate = 12;
     /**
-     * <code>optional string imageName = 12;</code>
-     */
-    boolean hasImageName();
-    /**
-     * <code>optional string imageName = 12;</code>
-     */
-    java.lang.String getImageName();
-    /**
-     * <code>optional string imageName = 12;</code>
-     */
-    com.google.protobuf.ByteString
-        getImageNameBytes();
-
-    // optional string descriptionTemplate = 13;
-    /**
-     * <code>optional string descriptionTemplate = 13;</code>
+     * <code>optional string descriptionTemplate = 12;</code>
      */
     boolean hasDescriptionTemplate();
     /**
-     * <code>optional string descriptionTemplate = 13;</code>
+     * <code>optional string descriptionTemplate = 12;</code>
      */
     java.lang.String getDescriptionTemplate();
     /**
-     * <code>optional string descriptionTemplate = 13;</code>
+     * <code>optional string descriptionTemplate = 12;</code>
      */
     com.google.protobuf.ByteString
         getDescriptionTemplateBytes();
 
-    // optional string descriptionText = 14;
+    // optional string manufactureCertificateText = 13;
     /**
-     * <code>optional string descriptionText = 14;</code>
-     */
-    boolean hasDescriptionText();
-    /**
-     * <code>optional string descriptionText = 14;</code>
-     */
-    java.lang.String getDescriptionText();
-    /**
-     * <code>optional string descriptionText = 14;</code>
-     */
-    com.google.protobuf.ByteString
-        getDescriptionTextBytes();
-
-    // optional string manufactureCertificateText = 15;
-    /**
-     * <code>optional string manufactureCertificateText = 15;</code>
+     * <code>optional string manufactureCertificateText = 13;</code>
      */
     boolean hasManufactureCertificateText();
     /**
-     * <code>optional string manufactureCertificateText = 15;</code>
+     * <code>optional string manufactureCertificateText = 13;</code>
      */
     java.lang.String getManufactureCertificateText();
     /**
-     * <code>optional string manufactureCertificateText = 15;</code>
+     * <code>optional string manufactureCertificateText = 13;</code>
      */
     com.google.protobuf.ByteString
         getManufactureCertificateTextBytes();
 
-    // optional bool hasManufactureCertificate = 16;
+    // optional bool hasManufactureCertificate = 14;
     /**
-     * <code>optional bool hasManufactureCertificate = 16;</code>
+     * <code>optional bool hasManufactureCertificate = 14;</code>
      */
     boolean hasHasManufactureCertificate();
     /**
-     * <code>optional bool hasManufactureCertificate = 16;</code>
+     * <code>optional bool hasManufactureCertificate = 14;</code>
      */
     boolean getHasManufactureCertificate();
 
-    // optional bool allowAssetLinking = 17;
+    // optional bool allowAssetLinking = 15;
     /**
-     * <code>optional bool allowAssetLinking = 17;</code>
+     * <code>optional bool allowAssetLinking = 15;</code>
      */
     boolean hasAllowAssetLinking();
     /**
-     * <code>optional bool allowAssetLinking = 17;</code>
+     * <code>optional bool allowAssetLinking = 15;</code>
      */
     boolean getAllowAssetLinking();
 
-    // optional bool hasProcedures = 18;
+    // optional bool hasProcedures = 16;
     /**
-     * <code>optional bool hasProcedures = 18;</code>
+     * <code>optional bool hasProcedures = 16;</code>
      */
     boolean hasHasProcedures();
     /**
-     * <code>optional bool hasProcedures = 18;</code>
+     * <code>optional bool hasProcedures = 16;</code>
      */
     boolean getHasProcedures();
 
-    // optional .com.n4systems.fieldid.api.pub.model.AssetTypeGroupMessage group = 19;
+    // optional string assetTypeGroupId = 17;
     /**
-     * <code>optional .com.n4systems.fieldid.api.pub.model.AssetTypeGroupMessage group = 19;</code>
+     * <code>optional string assetTypeGroupId = 17;</code>
      */
-    boolean hasGroup();
+    boolean hasAssetTypeGroupId();
     /**
-     * <code>optional .com.n4systems.fieldid.api.pub.model.AssetTypeGroupMessage group = 19;</code>
+     * <code>optional string assetTypeGroupId = 17;</code>
      */
-    com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessage getGroup();
+    java.lang.String getAssetTypeGroupId();
     /**
-     * <code>optional .com.n4systems.fieldid.api.pub.model.AssetTypeGroupMessage group = 19;</code>
+     * <code>optional string assetTypeGroupId = 17;</code>
      */
-    com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessageOrBuilder getGroupOrBuilder();
+    com.google.protobuf.ByteString
+        getAssetTypeGroupIdBytes();
 
-    // repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;
+    // optional string assetTypeGroupName = 18;
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;</code>
+     * <code>optional string assetTypeGroupName = 18;</code>
+     */
+    boolean hasAssetTypeGroupName();
+    /**
+     * <code>optional string assetTypeGroupName = 18;</code>
+     */
+    java.lang.String getAssetTypeGroupName();
+    /**
+     * <code>optional string assetTypeGroupName = 18;</code>
+     */
+    com.google.protobuf.ByteString
+        getAssetTypeGroupNameBytes();
+
+    // repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;
+    /**
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;</code>
      */
     java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage> 
         getSchedulesList();
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;</code>
      */
     com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage getSchedules(int index);
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;</code>
      */
     int getSchedulesCount();
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;</code>
      */
     java.util.List<? extends com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessageOrBuilder> 
         getSchedulesOrBuilderList();
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;</code>
      */
     com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessageOrBuilder getSchedulesOrBuilder(
         int index);
 
-    // repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;
+    // repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;</code>
      */
     java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage> 
         getAssociatedEventTypesList();
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;</code>
      */
     com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage getAssociatedEventTypes(int index);
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;</code>
      */
     int getAssociatedEventTypesCount();
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;</code>
      */
     java.util.List<? extends com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessageOrBuilder> 
         getAssociatedEventTypesOrBuilderList();
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;</code>
      */
     com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessageOrBuilder getAssociatedEventTypesOrBuilder(
         int index);
 
-    // repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;
+    // repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;</code>
      */
     java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage> 
         getAttributeTypesList();
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;</code>
      */
     com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage getAttributeTypes(int index);
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;</code>
      */
     int getAttributeTypesCount();
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;</code>
      */
     java.util.List<? extends com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessageOrBuilder> 
         getAttributeTypesOrBuilderList();
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;</code>
      */
     com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessageOrBuilder getAttributeTypesOrBuilder(
         int index);
@@ -8252,72 +8394,59 @@ public final class Messages {
             }
             case 98: {
               bitField0_ |= 0x00000800;
-              imageName_ = input.readBytes();
+              descriptionTemplate_ = input.readBytes();
               break;
             }
             case 106: {
               bitField0_ |= 0x00001000;
-              descriptionTemplate_ = input.readBytes();
-              break;
-            }
-            case 114: {
-              bitField0_ |= 0x00002000;
-              descriptionText_ = input.readBytes();
-              break;
-            }
-            case 122: {
-              bitField0_ |= 0x00004000;
               manufactureCertificateText_ = input.readBytes();
+              break;
+            }
+            case 112: {
+              bitField0_ |= 0x00002000;
+              hasManufactureCertificate_ = input.readBool();
+              break;
+            }
+            case 120: {
+              bitField0_ |= 0x00004000;
+              allowAssetLinking_ = input.readBool();
               break;
             }
             case 128: {
               bitField0_ |= 0x00008000;
-              hasManufactureCertificate_ = input.readBool();
-              break;
-            }
-            case 136: {
-              bitField0_ |= 0x00010000;
-              allowAssetLinking_ = input.readBool();
-              break;
-            }
-            case 144: {
-              bitField0_ |= 0x00020000;
               hasProcedures_ = input.readBool();
               break;
             }
-            case 154: {
-              com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessage.Builder subBuilder = null;
-              if (((bitField0_ & 0x00040000) == 0x00040000)) {
-                subBuilder = group_.toBuilder();
-              }
-              group_ = input.readMessage(com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessage.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(group_);
-                group_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00040000;
+            case 138: {
+              bitField0_ |= 0x00010000;
+              assetTypeGroupId_ = input.readBytes();
               break;
             }
-            case 162: {
-              if (!((mutable_bitField0_ & 0x00080000) == 0x00080000)) {
+            case 146: {
+              bitField0_ |= 0x00020000;
+              assetTypeGroupName_ = input.readBytes();
+              break;
+            }
+            case 154: {
+              if (!((mutable_bitField0_ & 0x00040000) == 0x00040000)) {
                 schedules_ = new java.util.ArrayList<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage>();
-                mutable_bitField0_ |= 0x00080000;
+                mutable_bitField0_ |= 0x00040000;
               }
               schedules_.add(input.readMessage(com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage.PARSER, extensionRegistry));
               break;
             }
-            case 170: {
-              if (!((mutable_bitField0_ & 0x00100000) == 0x00100000)) {
+            case 162: {
+              if (!((mutable_bitField0_ & 0x00080000) == 0x00080000)) {
                 associatedEventTypes_ = new java.util.ArrayList<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage>();
-                mutable_bitField0_ |= 0x00100000;
+                mutable_bitField0_ |= 0x00080000;
               }
               associatedEventTypes_.add(input.readMessage(com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage.PARSER, extensionRegistry));
               break;
             }
-            case 178: {
-              if (!((mutable_bitField0_ & 0x00200000) == 0x00200000)) {
+            case 170: {
+              if (!((mutable_bitField0_ & 0x00100000) == 0x00100000)) {
                 attributeTypes_ = new java.util.ArrayList<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage>();
-                mutable_bitField0_ |= 0x00200000;
+                mutable_bitField0_ |= 0x00100000;
               }
               attributeTypes_.add(input.readMessage(com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage.PARSER, extensionRegistry));
               break;
@@ -8330,13 +8459,13 @@ public final class Messages {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00080000) == 0x00080000)) {
+        if (((mutable_bitField0_ & 0x00040000) == 0x00040000)) {
           schedules_ = java.util.Collections.unmodifiableList(schedules_);
         }
-        if (((mutable_bitField0_ & 0x00100000) == 0x00100000)) {
+        if (((mutable_bitField0_ & 0x00080000) == 0x00080000)) {
           associatedEventTypes_ = java.util.Collections.unmodifiableList(associatedEventTypes_);
         }
-        if (((mutable_bitField0_ & 0x00200000) == 0x00200000)) {
+        if (((mutable_bitField0_ & 0x00100000) == 0x00100000)) {
           attributeTypes_ = java.util.Collections.unmodifiableList(attributeTypes_);
         }
         this.unknownFields = unknownFields.build();
@@ -10228,60 +10357,17 @@ public final class Messages {
       }
     }
 
-    // optional string imageName = 12;
-    public static final int IMAGENAME_FIELD_NUMBER = 12;
-    private java.lang.Object imageName_;
+    // optional string descriptionTemplate = 12;
+    public static final int DESCRIPTIONTEMPLATE_FIELD_NUMBER = 12;
+    private java.lang.Object descriptionTemplate_;
     /**
-     * <code>optional string imageName = 12;</code>
+     * <code>optional string descriptionTemplate = 12;</code>
      */
-    public boolean hasImageName() {
+    public boolean hasDescriptionTemplate() {
       return ((bitField0_ & 0x00000800) == 0x00000800);
     }
     /**
-     * <code>optional string imageName = 12;</code>
-     */
-    public java.lang.String getImageName() {
-      java.lang.Object ref = imageName_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          imageName_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string imageName = 12;</code>
-     */
-    public com.google.protobuf.ByteString
-        getImageNameBytes() {
-      java.lang.Object ref = imageName_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        imageName_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // optional string descriptionTemplate = 13;
-    public static final int DESCRIPTIONTEMPLATE_FIELD_NUMBER = 13;
-    private java.lang.Object descriptionTemplate_;
-    /**
-     * <code>optional string descriptionTemplate = 13;</code>
-     */
-    public boolean hasDescriptionTemplate() {
-      return ((bitField0_ & 0x00001000) == 0x00001000);
-    }
-    /**
-     * <code>optional string descriptionTemplate = 13;</code>
+     * <code>optional string descriptionTemplate = 12;</code>
      */
     public java.lang.String getDescriptionTemplate() {
       java.lang.Object ref = descriptionTemplate_;
@@ -10298,7 +10384,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>optional string descriptionTemplate = 13;</code>
+     * <code>optional string descriptionTemplate = 12;</code>
      */
     public com.google.protobuf.ByteString
         getDescriptionTemplateBytes() {
@@ -10314,60 +10400,17 @@ public final class Messages {
       }
     }
 
-    // optional string descriptionText = 14;
-    public static final int DESCRIPTIONTEXT_FIELD_NUMBER = 14;
-    private java.lang.Object descriptionText_;
-    /**
-     * <code>optional string descriptionText = 14;</code>
-     */
-    public boolean hasDescriptionText() {
-      return ((bitField0_ & 0x00002000) == 0x00002000);
-    }
-    /**
-     * <code>optional string descriptionText = 14;</code>
-     */
-    public java.lang.String getDescriptionText() {
-      java.lang.Object ref = descriptionText_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          descriptionText_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string descriptionText = 14;</code>
-     */
-    public com.google.protobuf.ByteString
-        getDescriptionTextBytes() {
-      java.lang.Object ref = descriptionText_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        descriptionText_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // optional string manufactureCertificateText = 15;
-    public static final int MANUFACTURECERTIFICATETEXT_FIELD_NUMBER = 15;
+    // optional string manufactureCertificateText = 13;
+    public static final int MANUFACTURECERTIFICATETEXT_FIELD_NUMBER = 13;
     private java.lang.Object manufactureCertificateText_;
     /**
-     * <code>optional string manufactureCertificateText = 15;</code>
+     * <code>optional string manufactureCertificateText = 13;</code>
      */
     public boolean hasManufactureCertificateText() {
-      return ((bitField0_ & 0x00004000) == 0x00004000);
+      return ((bitField0_ & 0x00001000) == 0x00001000);
     }
     /**
-     * <code>optional string manufactureCertificateText = 15;</code>
+     * <code>optional string manufactureCertificateText = 13;</code>
      */
     public java.lang.String getManufactureCertificateText() {
       java.lang.Object ref = manufactureCertificateText_;
@@ -10384,7 +10427,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>optional string manufactureCertificateText = 15;</code>
+     * <code>optional string manufactureCertificateText = 13;</code>
      */
     public com.google.protobuf.ByteString
         getManufactureCertificateTextBytes() {
@@ -10400,178 +10443,242 @@ public final class Messages {
       }
     }
 
-    // optional bool hasManufactureCertificate = 16;
-    public static final int HASMANUFACTURECERTIFICATE_FIELD_NUMBER = 16;
+    // optional bool hasManufactureCertificate = 14;
+    public static final int HASMANUFACTURECERTIFICATE_FIELD_NUMBER = 14;
     private boolean hasManufactureCertificate_;
     /**
-     * <code>optional bool hasManufactureCertificate = 16;</code>
+     * <code>optional bool hasManufactureCertificate = 14;</code>
      */
     public boolean hasHasManufactureCertificate() {
-      return ((bitField0_ & 0x00008000) == 0x00008000);
+      return ((bitField0_ & 0x00002000) == 0x00002000);
     }
     /**
-     * <code>optional bool hasManufactureCertificate = 16;</code>
+     * <code>optional bool hasManufactureCertificate = 14;</code>
      */
     public boolean getHasManufactureCertificate() {
       return hasManufactureCertificate_;
     }
 
-    // optional bool allowAssetLinking = 17;
-    public static final int ALLOWASSETLINKING_FIELD_NUMBER = 17;
+    // optional bool allowAssetLinking = 15;
+    public static final int ALLOWASSETLINKING_FIELD_NUMBER = 15;
     private boolean allowAssetLinking_;
     /**
-     * <code>optional bool allowAssetLinking = 17;</code>
+     * <code>optional bool allowAssetLinking = 15;</code>
      */
     public boolean hasAllowAssetLinking() {
-      return ((bitField0_ & 0x00010000) == 0x00010000);
+      return ((bitField0_ & 0x00004000) == 0x00004000);
     }
     /**
-     * <code>optional bool allowAssetLinking = 17;</code>
+     * <code>optional bool allowAssetLinking = 15;</code>
      */
     public boolean getAllowAssetLinking() {
       return allowAssetLinking_;
     }
 
-    // optional bool hasProcedures = 18;
-    public static final int HASPROCEDURES_FIELD_NUMBER = 18;
+    // optional bool hasProcedures = 16;
+    public static final int HASPROCEDURES_FIELD_NUMBER = 16;
     private boolean hasProcedures_;
     /**
-     * <code>optional bool hasProcedures = 18;</code>
+     * <code>optional bool hasProcedures = 16;</code>
      */
     public boolean hasHasProcedures() {
-      return ((bitField0_ & 0x00020000) == 0x00020000);
+      return ((bitField0_ & 0x00008000) == 0x00008000);
     }
     /**
-     * <code>optional bool hasProcedures = 18;</code>
+     * <code>optional bool hasProcedures = 16;</code>
      */
     public boolean getHasProcedures() {
       return hasProcedures_;
     }
 
-    // optional .com.n4systems.fieldid.api.pub.model.AssetTypeGroupMessage group = 19;
-    public static final int GROUP_FIELD_NUMBER = 19;
-    private com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessage group_;
+    // optional string assetTypeGroupId = 17;
+    public static final int ASSETTYPEGROUPID_FIELD_NUMBER = 17;
+    private java.lang.Object assetTypeGroupId_;
     /**
-     * <code>optional .com.n4systems.fieldid.api.pub.model.AssetTypeGroupMessage group = 19;</code>
+     * <code>optional string assetTypeGroupId = 17;</code>
      */
-    public boolean hasGroup() {
-      return ((bitField0_ & 0x00040000) == 0x00040000);
+    public boolean hasAssetTypeGroupId() {
+      return ((bitField0_ & 0x00010000) == 0x00010000);
     }
     /**
-     * <code>optional .com.n4systems.fieldid.api.pub.model.AssetTypeGroupMessage group = 19;</code>
+     * <code>optional string assetTypeGroupId = 17;</code>
      */
-    public com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessage getGroup() {
-      return group_;
+    public java.lang.String getAssetTypeGroupId() {
+      java.lang.Object ref = assetTypeGroupId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          assetTypeGroupId_ = s;
+        }
+        return s;
+      }
     }
     /**
-     * <code>optional .com.n4systems.fieldid.api.pub.model.AssetTypeGroupMessage group = 19;</code>
+     * <code>optional string assetTypeGroupId = 17;</code>
      */
-    public com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessageOrBuilder getGroupOrBuilder() {
-      return group_;
+    public com.google.protobuf.ByteString
+        getAssetTypeGroupIdBytes() {
+      java.lang.Object ref = assetTypeGroupId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        assetTypeGroupId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
-    // repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;
-    public static final int SCHEDULES_FIELD_NUMBER = 20;
+    // optional string assetTypeGroupName = 18;
+    public static final int ASSETTYPEGROUPNAME_FIELD_NUMBER = 18;
+    private java.lang.Object assetTypeGroupName_;
+    /**
+     * <code>optional string assetTypeGroupName = 18;</code>
+     */
+    public boolean hasAssetTypeGroupName() {
+      return ((bitField0_ & 0x00020000) == 0x00020000);
+    }
+    /**
+     * <code>optional string assetTypeGroupName = 18;</code>
+     */
+    public java.lang.String getAssetTypeGroupName() {
+      java.lang.Object ref = assetTypeGroupName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          assetTypeGroupName_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string assetTypeGroupName = 18;</code>
+     */
+    public com.google.protobuf.ByteString
+        getAssetTypeGroupNameBytes() {
+      java.lang.Object ref = assetTypeGroupName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        assetTypeGroupName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;
+    public static final int SCHEDULES_FIELD_NUMBER = 19;
     private java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage> schedules_;
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;</code>
      */
     public java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage> getSchedulesList() {
       return schedules_;
     }
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;</code>
      */
     public java.util.List<? extends com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessageOrBuilder> 
         getSchedulesOrBuilderList() {
       return schedules_;
     }
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;</code>
      */
     public int getSchedulesCount() {
       return schedules_.size();
     }
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;</code>
      */
     public com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage getSchedules(int index) {
       return schedules_.get(index);
     }
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;</code>
      */
     public com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessageOrBuilder getSchedulesOrBuilder(
         int index) {
       return schedules_.get(index);
     }
 
-    // repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;
-    public static final int ASSOCIATEDEVENTTYPES_FIELD_NUMBER = 21;
+    // repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;
+    public static final int ASSOCIATEDEVENTTYPES_FIELD_NUMBER = 20;
     private java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage> associatedEventTypes_;
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;</code>
      */
     public java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage> getAssociatedEventTypesList() {
       return associatedEventTypes_;
     }
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;</code>
      */
     public java.util.List<? extends com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessageOrBuilder> 
         getAssociatedEventTypesOrBuilderList() {
       return associatedEventTypes_;
     }
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;</code>
      */
     public int getAssociatedEventTypesCount() {
       return associatedEventTypes_.size();
     }
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;</code>
      */
     public com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage getAssociatedEventTypes(int index) {
       return associatedEventTypes_.get(index);
     }
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;</code>
      */
     public com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessageOrBuilder getAssociatedEventTypesOrBuilder(
         int index) {
       return associatedEventTypes_.get(index);
     }
 
-    // repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;
-    public static final int ATTRIBUTETYPES_FIELD_NUMBER = 22;
+    // repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;
+    public static final int ATTRIBUTETYPES_FIELD_NUMBER = 21;
     private java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage> attributeTypes_;
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;</code>
      */
     public java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage> getAttributeTypesList() {
       return attributeTypes_;
     }
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;</code>
      */
     public java.util.List<? extends com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessageOrBuilder> 
         getAttributeTypesOrBuilderList() {
       return attributeTypes_;
     }
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;</code>
      */
     public int getAttributeTypesCount() {
       return attributeTypes_.size();
     }
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;</code>
      */
     public com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage getAttributeTypes(int index) {
       return attributeTypes_.get(index);
     }
     /**
-     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;</code>
+     * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;</code>
      */
     public com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessageOrBuilder getAttributeTypesOrBuilder(
         int index) {
@@ -10590,14 +10697,13 @@ public final class Messages {
       warnings_ = "";
       instructions_ = "";
       cautionUrl_ = "";
-      imageName_ = "";
       descriptionTemplate_ = "";
-      descriptionText_ = "";
       manufactureCertificateText_ = "";
       hasManufactureCertificate_ = false;
       allowAssetLinking_ = false;
       hasProcedures_ = false;
-      group_ = com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessage.getDefaultInstance();
+      assetTypeGroupId_ = "";
+      assetTypeGroupName_ = "";
       schedules_ = java.util.Collections.emptyList();
       associatedEventTypes_ = java.util.Collections.emptyList();
       attributeTypes_ = java.util.Collections.emptyList();
@@ -10610,12 +10716,6 @@ public final class Messages {
       if (!hasName()) {
         memoizedIsInitialized = 0;
         return false;
-      }
-      if (hasGroup()) {
-        if (!getGroup().isInitialized()) {
-          memoizedIsInitialized = 0;
-          return false;
-        }
       }
       for (int i = 0; i < getSchedulesCount(); i++) {
         if (!getSchedules(i).isInitialized()) {
@@ -10676,37 +10776,34 @@ public final class Messages {
         output.writeBytes(11, getCautionUrlBytes());
       }
       if (((bitField0_ & 0x00000800) == 0x00000800)) {
-        output.writeBytes(12, getImageNameBytes());
+        output.writeBytes(12, getDescriptionTemplateBytes());
       }
       if (((bitField0_ & 0x00001000) == 0x00001000)) {
-        output.writeBytes(13, getDescriptionTemplateBytes());
+        output.writeBytes(13, getManufactureCertificateTextBytes());
       }
       if (((bitField0_ & 0x00002000) == 0x00002000)) {
-        output.writeBytes(14, getDescriptionTextBytes());
+        output.writeBool(14, hasManufactureCertificate_);
       }
       if (((bitField0_ & 0x00004000) == 0x00004000)) {
-        output.writeBytes(15, getManufactureCertificateTextBytes());
+        output.writeBool(15, allowAssetLinking_);
       }
       if (((bitField0_ & 0x00008000) == 0x00008000)) {
-        output.writeBool(16, hasManufactureCertificate_);
+        output.writeBool(16, hasProcedures_);
       }
       if (((bitField0_ & 0x00010000) == 0x00010000)) {
-        output.writeBool(17, allowAssetLinking_);
+        output.writeBytes(17, getAssetTypeGroupIdBytes());
       }
       if (((bitField0_ & 0x00020000) == 0x00020000)) {
-        output.writeBool(18, hasProcedures_);
-      }
-      if (((bitField0_ & 0x00040000) == 0x00040000)) {
-        output.writeMessage(19, group_);
+        output.writeBytes(18, getAssetTypeGroupNameBytes());
       }
       for (int i = 0; i < schedules_.size(); i++) {
-        output.writeMessage(20, schedules_.get(i));
+        output.writeMessage(19, schedules_.get(i));
       }
       for (int i = 0; i < associatedEventTypes_.size(); i++) {
-        output.writeMessage(21, associatedEventTypes_.get(i));
+        output.writeMessage(20, associatedEventTypes_.get(i));
       }
       for (int i = 0; i < attributeTypes_.size(); i++) {
-        output.writeMessage(22, attributeTypes_.get(i));
+        output.writeMessage(21, attributeTypes_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -10763,47 +10860,43 @@ public final class Messages {
       }
       if (((bitField0_ & 0x00000800) == 0x00000800)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(12, getImageNameBytes());
+          .computeBytesSize(12, getDescriptionTemplateBytes());
       }
       if (((bitField0_ & 0x00001000) == 0x00001000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(13, getDescriptionTemplateBytes());
+          .computeBytesSize(13, getManufactureCertificateTextBytes());
       }
       if (((bitField0_ & 0x00002000) == 0x00002000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(14, getDescriptionTextBytes());
+          .computeBoolSize(14, hasManufactureCertificate_);
       }
       if (((bitField0_ & 0x00004000) == 0x00004000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(15, getManufactureCertificateTextBytes());
+          .computeBoolSize(15, allowAssetLinking_);
       }
       if (((bitField0_ & 0x00008000) == 0x00008000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(16, hasManufactureCertificate_);
+          .computeBoolSize(16, hasProcedures_);
       }
       if (((bitField0_ & 0x00010000) == 0x00010000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(17, allowAssetLinking_);
+          .computeBytesSize(17, getAssetTypeGroupIdBytes());
       }
       if (((bitField0_ & 0x00020000) == 0x00020000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(18, hasProcedures_);
-      }
-      if (((bitField0_ & 0x00040000) == 0x00040000)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(19, group_);
+          .computeBytesSize(18, getAssetTypeGroupNameBytes());
       }
       for (int i = 0; i < schedules_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(20, schedules_.get(i));
+          .computeMessageSize(19, schedules_.get(i));
       }
       for (int i = 0; i < associatedEventTypes_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(21, associatedEventTypes_.get(i));
+          .computeMessageSize(20, associatedEventTypes_.get(i));
       }
       for (int i = 0; i < attributeTypes_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(22, attributeTypes_.get(i));
+          .computeMessageSize(21, attributeTypes_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -10913,7 +11006,6 @@ public final class Messages {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getGroupFieldBuilder();
           getSchedulesFieldBuilder();
           getAssociatedEventTypesFieldBuilder();
           getAttributeTypesFieldBuilder();
@@ -10947,41 +11039,35 @@ public final class Messages {
         bitField0_ = (bitField0_ & ~0x00000200);
         cautionUrl_ = "";
         bitField0_ = (bitField0_ & ~0x00000400);
-        imageName_ = "";
-        bitField0_ = (bitField0_ & ~0x00000800);
         descriptionTemplate_ = "";
-        bitField0_ = (bitField0_ & ~0x00001000);
-        descriptionText_ = "";
-        bitField0_ = (bitField0_ & ~0x00002000);
+        bitField0_ = (bitField0_ & ~0x00000800);
         manufactureCertificateText_ = "";
-        bitField0_ = (bitField0_ & ~0x00004000);
+        bitField0_ = (bitField0_ & ~0x00001000);
         hasManufactureCertificate_ = false;
-        bitField0_ = (bitField0_ & ~0x00008000);
+        bitField0_ = (bitField0_ & ~0x00002000);
         allowAssetLinking_ = false;
-        bitField0_ = (bitField0_ & ~0x00010000);
+        bitField0_ = (bitField0_ & ~0x00004000);
         hasProcedures_ = false;
+        bitField0_ = (bitField0_ & ~0x00008000);
+        assetTypeGroupId_ = "";
+        bitField0_ = (bitField0_ & ~0x00010000);
+        assetTypeGroupName_ = "";
         bitField0_ = (bitField0_ & ~0x00020000);
-        if (groupBuilder_ == null) {
-          group_ = com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessage.getDefaultInstance();
-        } else {
-          groupBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00040000);
         if (schedulesBuilder_ == null) {
           schedules_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00080000);
+          bitField0_ = (bitField0_ & ~0x00040000);
         } else {
           schedulesBuilder_.clear();
         }
         if (associatedEventTypesBuilder_ == null) {
           associatedEventTypes_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00100000);
+          bitField0_ = (bitField0_ & ~0x00080000);
         } else {
           associatedEventTypesBuilder_.clear();
         }
         if (attributeTypesBuilder_ == null) {
           attributeTypes_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00200000);
+          bitField0_ = (bitField0_ & ~0x00100000);
         } else {
           attributeTypesBuilder_.clear();
         }
@@ -11060,61 +11146,53 @@ public final class Messages {
         if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
           to_bitField0_ |= 0x00000800;
         }
-        result.imageName_ = imageName_;
+        result.descriptionTemplate_ = descriptionTemplate_;
         if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
           to_bitField0_ |= 0x00001000;
         }
-        result.descriptionTemplate_ = descriptionTemplate_;
+        result.manufactureCertificateText_ = manufactureCertificateText_;
         if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
           to_bitField0_ |= 0x00002000;
         }
-        result.descriptionText_ = descriptionText_;
+        result.hasManufactureCertificate_ = hasManufactureCertificate_;
         if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
           to_bitField0_ |= 0x00004000;
         }
-        result.manufactureCertificateText_ = manufactureCertificateText_;
+        result.allowAssetLinking_ = allowAssetLinking_;
         if (((from_bitField0_ & 0x00008000) == 0x00008000)) {
           to_bitField0_ |= 0x00008000;
         }
-        result.hasManufactureCertificate_ = hasManufactureCertificate_;
+        result.hasProcedures_ = hasProcedures_;
         if (((from_bitField0_ & 0x00010000) == 0x00010000)) {
           to_bitField0_ |= 0x00010000;
         }
-        result.allowAssetLinking_ = allowAssetLinking_;
+        result.assetTypeGroupId_ = assetTypeGroupId_;
         if (((from_bitField0_ & 0x00020000) == 0x00020000)) {
           to_bitField0_ |= 0x00020000;
         }
-        result.hasProcedures_ = hasProcedures_;
-        if (((from_bitField0_ & 0x00040000) == 0x00040000)) {
-          to_bitField0_ |= 0x00040000;
-        }
-        if (groupBuilder_ == null) {
-          result.group_ = group_;
-        } else {
-          result.group_ = groupBuilder_.build();
-        }
+        result.assetTypeGroupName_ = assetTypeGroupName_;
         if (schedulesBuilder_ == null) {
-          if (((bitField0_ & 0x00080000) == 0x00080000)) {
+          if (((bitField0_ & 0x00040000) == 0x00040000)) {
             schedules_ = java.util.Collections.unmodifiableList(schedules_);
-            bitField0_ = (bitField0_ & ~0x00080000);
+            bitField0_ = (bitField0_ & ~0x00040000);
           }
           result.schedules_ = schedules_;
         } else {
           result.schedules_ = schedulesBuilder_.build();
         }
         if (associatedEventTypesBuilder_ == null) {
-          if (((bitField0_ & 0x00100000) == 0x00100000)) {
+          if (((bitField0_ & 0x00080000) == 0x00080000)) {
             associatedEventTypes_ = java.util.Collections.unmodifiableList(associatedEventTypes_);
-            bitField0_ = (bitField0_ & ~0x00100000);
+            bitField0_ = (bitField0_ & ~0x00080000);
           }
           result.associatedEventTypes_ = associatedEventTypes_;
         } else {
           result.associatedEventTypes_ = associatedEventTypesBuilder_.build();
         }
         if (attributeTypesBuilder_ == null) {
-          if (((bitField0_ & 0x00200000) == 0x00200000)) {
+          if (((bitField0_ & 0x00100000) == 0x00100000)) {
             attributeTypes_ = java.util.Collections.unmodifiableList(attributeTypes_);
-            bitField0_ = (bitField0_ & ~0x00200000);
+            bitField0_ = (bitField0_ & ~0x00100000);
           }
           result.attributeTypes_ = attributeTypes_;
         } else {
@@ -11191,23 +11269,13 @@ public final class Messages {
           cautionUrl_ = other.cautionUrl_;
           onChanged();
         }
-        if (other.hasImageName()) {
-          bitField0_ |= 0x00000800;
-          imageName_ = other.imageName_;
-          onChanged();
-        }
         if (other.hasDescriptionTemplate()) {
-          bitField0_ |= 0x00001000;
+          bitField0_ |= 0x00000800;
           descriptionTemplate_ = other.descriptionTemplate_;
           onChanged();
         }
-        if (other.hasDescriptionText()) {
-          bitField0_ |= 0x00002000;
-          descriptionText_ = other.descriptionText_;
-          onChanged();
-        }
         if (other.hasManufactureCertificateText()) {
-          bitField0_ |= 0x00004000;
+          bitField0_ |= 0x00001000;
           manufactureCertificateText_ = other.manufactureCertificateText_;
           onChanged();
         }
@@ -11220,14 +11288,21 @@ public final class Messages {
         if (other.hasHasProcedures()) {
           setHasProcedures(other.getHasProcedures());
         }
-        if (other.hasGroup()) {
-          mergeGroup(other.getGroup());
+        if (other.hasAssetTypeGroupId()) {
+          bitField0_ |= 0x00010000;
+          assetTypeGroupId_ = other.assetTypeGroupId_;
+          onChanged();
+        }
+        if (other.hasAssetTypeGroupName()) {
+          bitField0_ |= 0x00020000;
+          assetTypeGroupName_ = other.assetTypeGroupName_;
+          onChanged();
         }
         if (schedulesBuilder_ == null) {
           if (!other.schedules_.isEmpty()) {
             if (schedules_.isEmpty()) {
               schedules_ = other.schedules_;
-              bitField0_ = (bitField0_ & ~0x00080000);
+              bitField0_ = (bitField0_ & ~0x00040000);
             } else {
               ensureSchedulesIsMutable();
               schedules_.addAll(other.schedules_);
@@ -11240,7 +11315,7 @@ public final class Messages {
               schedulesBuilder_.dispose();
               schedulesBuilder_ = null;
               schedules_ = other.schedules_;
-              bitField0_ = (bitField0_ & ~0x00080000);
+              bitField0_ = (bitField0_ & ~0x00040000);
               schedulesBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                    getSchedulesFieldBuilder() : null;
@@ -11253,7 +11328,7 @@ public final class Messages {
           if (!other.associatedEventTypes_.isEmpty()) {
             if (associatedEventTypes_.isEmpty()) {
               associatedEventTypes_ = other.associatedEventTypes_;
-              bitField0_ = (bitField0_ & ~0x00100000);
+              bitField0_ = (bitField0_ & ~0x00080000);
             } else {
               ensureAssociatedEventTypesIsMutable();
               associatedEventTypes_.addAll(other.associatedEventTypes_);
@@ -11266,7 +11341,7 @@ public final class Messages {
               associatedEventTypesBuilder_.dispose();
               associatedEventTypesBuilder_ = null;
               associatedEventTypes_ = other.associatedEventTypes_;
-              bitField0_ = (bitField0_ & ~0x00100000);
+              bitField0_ = (bitField0_ & ~0x00080000);
               associatedEventTypesBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                    getAssociatedEventTypesFieldBuilder() : null;
@@ -11279,7 +11354,7 @@ public final class Messages {
           if (!other.attributeTypes_.isEmpty()) {
             if (attributeTypes_.isEmpty()) {
               attributeTypes_ = other.attributeTypes_;
-              bitField0_ = (bitField0_ & ~0x00200000);
+              bitField0_ = (bitField0_ & ~0x00100000);
             } else {
               ensureAttributeTypesIsMutable();
               attributeTypes_.addAll(other.attributeTypes_);
@@ -11292,7 +11367,7 @@ public final class Messages {
               attributeTypesBuilder_.dispose();
               attributeTypesBuilder_ = null;
               attributeTypes_ = other.attributeTypes_;
-              bitField0_ = (bitField0_ & ~0x00200000);
+              bitField0_ = (bitField0_ & ~0x00100000);
               attributeTypesBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                    getAttributeTypesFieldBuilder() : null;
@@ -11309,12 +11384,6 @@ public final class Messages {
         if (!hasName()) {
           
           return false;
-        }
-        if (hasGroup()) {
-          if (!getGroup().isInitialized()) {
-            
-            return false;
-          }
         }
         for (int i = 0; i < getSchedulesCount(); i++) {
           if (!getSchedules(i).isInitialized()) {
@@ -12170,90 +12239,16 @@ public final class Messages {
         return this;
       }
 
-      // optional string imageName = 12;
-      private java.lang.Object imageName_ = "";
+      // optional string descriptionTemplate = 12;
+      private java.lang.Object descriptionTemplate_ = "";
       /**
-       * <code>optional string imageName = 12;</code>
+       * <code>optional string descriptionTemplate = 12;</code>
        */
-      public boolean hasImageName() {
+      public boolean hasDescriptionTemplate() {
         return ((bitField0_ & 0x00000800) == 0x00000800);
       }
       /**
-       * <code>optional string imageName = 12;</code>
-       */
-      public java.lang.String getImageName() {
-        java.lang.Object ref = imageName_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          imageName_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string imageName = 12;</code>
-       */
-      public com.google.protobuf.ByteString
-          getImageNameBytes() {
-        java.lang.Object ref = imageName_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          imageName_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string imageName = 12;</code>
-       */
-      public Builder setImageName(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000800;
-        imageName_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string imageName = 12;</code>
-       */
-      public Builder clearImageName() {
-        bitField0_ = (bitField0_ & ~0x00000800);
-        imageName_ = getDefaultInstance().getImageName();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string imageName = 12;</code>
-       */
-      public Builder setImageNameBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000800;
-        imageName_ = value;
-        onChanged();
-        return this;
-      }
-
-      // optional string descriptionTemplate = 13;
-      private java.lang.Object descriptionTemplate_ = "";
-      /**
-       * <code>optional string descriptionTemplate = 13;</code>
-       */
-      public boolean hasDescriptionTemplate() {
-        return ((bitField0_ & 0x00001000) == 0x00001000);
-      }
-      /**
-       * <code>optional string descriptionTemplate = 13;</code>
+       * <code>optional string descriptionTemplate = 12;</code>
        */
       public java.lang.String getDescriptionTemplate() {
         java.lang.Object ref = descriptionTemplate_;
@@ -12267,7 +12262,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string descriptionTemplate = 13;</code>
+       * <code>optional string descriptionTemplate = 12;</code>
        */
       public com.google.protobuf.ByteString
           getDescriptionTemplateBytes() {
@@ -12283,125 +12278,51 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string descriptionTemplate = 13;</code>
+       * <code>optional string descriptionTemplate = 12;</code>
        */
       public Builder setDescriptionTemplate(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00001000;
+  bitField0_ |= 0x00000800;
         descriptionTemplate_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string descriptionTemplate = 13;</code>
+       * <code>optional string descriptionTemplate = 12;</code>
        */
       public Builder clearDescriptionTemplate() {
-        bitField0_ = (bitField0_ & ~0x00001000);
+        bitField0_ = (bitField0_ & ~0x00000800);
         descriptionTemplate_ = getDefaultInstance().getDescriptionTemplate();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string descriptionTemplate = 13;</code>
+       * <code>optional string descriptionTemplate = 12;</code>
        */
       public Builder setDescriptionTemplateBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00001000;
+  bitField0_ |= 0x00000800;
         descriptionTemplate_ = value;
         onChanged();
         return this;
       }
 
-      // optional string descriptionText = 14;
-      private java.lang.Object descriptionText_ = "";
-      /**
-       * <code>optional string descriptionText = 14;</code>
-       */
-      public boolean hasDescriptionText() {
-        return ((bitField0_ & 0x00002000) == 0x00002000);
-      }
-      /**
-       * <code>optional string descriptionText = 14;</code>
-       */
-      public java.lang.String getDescriptionText() {
-        java.lang.Object ref = descriptionText_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          descriptionText_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string descriptionText = 14;</code>
-       */
-      public com.google.protobuf.ByteString
-          getDescriptionTextBytes() {
-        java.lang.Object ref = descriptionText_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          descriptionText_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string descriptionText = 14;</code>
-       */
-      public Builder setDescriptionText(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00002000;
-        descriptionText_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string descriptionText = 14;</code>
-       */
-      public Builder clearDescriptionText() {
-        bitField0_ = (bitField0_ & ~0x00002000);
-        descriptionText_ = getDefaultInstance().getDescriptionText();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string descriptionText = 14;</code>
-       */
-      public Builder setDescriptionTextBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00002000;
-        descriptionText_ = value;
-        onChanged();
-        return this;
-      }
-
-      // optional string manufactureCertificateText = 15;
+      // optional string manufactureCertificateText = 13;
       private java.lang.Object manufactureCertificateText_ = "";
       /**
-       * <code>optional string manufactureCertificateText = 15;</code>
+       * <code>optional string manufactureCertificateText = 13;</code>
        */
       public boolean hasManufactureCertificateText() {
-        return ((bitField0_ & 0x00004000) == 0x00004000);
+        return ((bitField0_ & 0x00001000) == 0x00001000);
       }
       /**
-       * <code>optional string manufactureCertificateText = 15;</code>
+       * <code>optional string manufactureCertificateText = 13;</code>
        */
       public java.lang.String getManufactureCertificateText() {
         java.lang.Object ref = manufactureCertificateText_;
@@ -12415,7 +12336,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string manufactureCertificateText = 15;</code>
+       * <code>optional string manufactureCertificateText = 13;</code>
        */
       public com.google.protobuf.ByteString
           getManufactureCertificateTextBytes() {
@@ -12431,264 +12352,295 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string manufactureCertificateText = 15;</code>
+       * <code>optional string manufactureCertificateText = 13;</code>
        */
       public Builder setManufactureCertificateText(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00004000;
+  bitField0_ |= 0x00001000;
         manufactureCertificateText_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string manufactureCertificateText = 15;</code>
+       * <code>optional string manufactureCertificateText = 13;</code>
        */
       public Builder clearManufactureCertificateText() {
-        bitField0_ = (bitField0_ & ~0x00004000);
+        bitField0_ = (bitField0_ & ~0x00001000);
         manufactureCertificateText_ = getDefaultInstance().getManufactureCertificateText();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string manufactureCertificateText = 15;</code>
+       * <code>optional string manufactureCertificateText = 13;</code>
        */
       public Builder setManufactureCertificateTextBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00004000;
+  bitField0_ |= 0x00001000;
         manufactureCertificateText_ = value;
         onChanged();
         return this;
       }
 
-      // optional bool hasManufactureCertificate = 16;
+      // optional bool hasManufactureCertificate = 14;
       private boolean hasManufactureCertificate_ ;
       /**
-       * <code>optional bool hasManufactureCertificate = 16;</code>
+       * <code>optional bool hasManufactureCertificate = 14;</code>
        */
       public boolean hasHasManufactureCertificate() {
-        return ((bitField0_ & 0x00008000) == 0x00008000);
+        return ((bitField0_ & 0x00002000) == 0x00002000);
       }
       /**
-       * <code>optional bool hasManufactureCertificate = 16;</code>
+       * <code>optional bool hasManufactureCertificate = 14;</code>
        */
       public boolean getHasManufactureCertificate() {
         return hasManufactureCertificate_;
       }
       /**
-       * <code>optional bool hasManufactureCertificate = 16;</code>
+       * <code>optional bool hasManufactureCertificate = 14;</code>
        */
       public Builder setHasManufactureCertificate(boolean value) {
-        bitField0_ |= 0x00008000;
+        bitField0_ |= 0x00002000;
         hasManufactureCertificate_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional bool hasManufactureCertificate = 16;</code>
+       * <code>optional bool hasManufactureCertificate = 14;</code>
        */
       public Builder clearHasManufactureCertificate() {
-        bitField0_ = (bitField0_ & ~0x00008000);
+        bitField0_ = (bitField0_ & ~0x00002000);
         hasManufactureCertificate_ = false;
         onChanged();
         return this;
       }
 
-      // optional bool allowAssetLinking = 17;
+      // optional bool allowAssetLinking = 15;
       private boolean allowAssetLinking_ ;
       /**
-       * <code>optional bool allowAssetLinking = 17;</code>
+       * <code>optional bool allowAssetLinking = 15;</code>
        */
       public boolean hasAllowAssetLinking() {
-        return ((bitField0_ & 0x00010000) == 0x00010000);
+        return ((bitField0_ & 0x00004000) == 0x00004000);
       }
       /**
-       * <code>optional bool allowAssetLinking = 17;</code>
+       * <code>optional bool allowAssetLinking = 15;</code>
        */
       public boolean getAllowAssetLinking() {
         return allowAssetLinking_;
       }
       /**
-       * <code>optional bool allowAssetLinking = 17;</code>
+       * <code>optional bool allowAssetLinking = 15;</code>
        */
       public Builder setAllowAssetLinking(boolean value) {
-        bitField0_ |= 0x00010000;
+        bitField0_ |= 0x00004000;
         allowAssetLinking_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional bool allowAssetLinking = 17;</code>
+       * <code>optional bool allowAssetLinking = 15;</code>
        */
       public Builder clearAllowAssetLinking() {
-        bitField0_ = (bitField0_ & ~0x00010000);
+        bitField0_ = (bitField0_ & ~0x00004000);
         allowAssetLinking_ = false;
         onChanged();
         return this;
       }
 
-      // optional bool hasProcedures = 18;
+      // optional bool hasProcedures = 16;
       private boolean hasProcedures_ ;
       /**
-       * <code>optional bool hasProcedures = 18;</code>
+       * <code>optional bool hasProcedures = 16;</code>
        */
       public boolean hasHasProcedures() {
-        return ((bitField0_ & 0x00020000) == 0x00020000);
+        return ((bitField0_ & 0x00008000) == 0x00008000);
       }
       /**
-       * <code>optional bool hasProcedures = 18;</code>
+       * <code>optional bool hasProcedures = 16;</code>
        */
       public boolean getHasProcedures() {
         return hasProcedures_;
       }
       /**
-       * <code>optional bool hasProcedures = 18;</code>
+       * <code>optional bool hasProcedures = 16;</code>
        */
       public Builder setHasProcedures(boolean value) {
-        bitField0_ |= 0x00020000;
+        bitField0_ |= 0x00008000;
         hasProcedures_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional bool hasProcedures = 18;</code>
+       * <code>optional bool hasProcedures = 16;</code>
        */
       public Builder clearHasProcedures() {
-        bitField0_ = (bitField0_ & ~0x00020000);
+        bitField0_ = (bitField0_ & ~0x00008000);
         hasProcedures_ = false;
         onChanged();
         return this;
       }
 
-      // optional .com.n4systems.fieldid.api.pub.model.AssetTypeGroupMessage group = 19;
-      private com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessage group_ = com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessage.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
-          com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessage, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessage.Builder, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessageOrBuilder> groupBuilder_;
+      // optional string assetTypeGroupId = 17;
+      private java.lang.Object assetTypeGroupId_ = "";
       /**
-       * <code>optional .com.n4systems.fieldid.api.pub.model.AssetTypeGroupMessage group = 19;</code>
+       * <code>optional string assetTypeGroupId = 17;</code>
        */
-      public boolean hasGroup() {
-        return ((bitField0_ & 0x00040000) == 0x00040000);
+      public boolean hasAssetTypeGroupId() {
+        return ((bitField0_ & 0x00010000) == 0x00010000);
       }
       /**
-       * <code>optional .com.n4systems.fieldid.api.pub.model.AssetTypeGroupMessage group = 19;</code>
+       * <code>optional string assetTypeGroupId = 17;</code>
        */
-      public com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessage getGroup() {
-        if (groupBuilder_ == null) {
-          return group_;
+      public java.lang.String getAssetTypeGroupId() {
+        java.lang.Object ref = assetTypeGroupId_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          assetTypeGroupId_ = s;
+          return s;
         } else {
-          return groupBuilder_.getMessage();
+          return (java.lang.String) ref;
         }
       }
       /**
-       * <code>optional .com.n4systems.fieldid.api.pub.model.AssetTypeGroupMessage group = 19;</code>
+       * <code>optional string assetTypeGroupId = 17;</code>
        */
-      public Builder setGroup(com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessage value) {
-        if (groupBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          group_ = value;
-          onChanged();
+      public com.google.protobuf.ByteString
+          getAssetTypeGroupIdBytes() {
+        java.lang.Object ref = assetTypeGroupId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          assetTypeGroupId_ = b;
+          return b;
         } else {
-          groupBuilder_.setMessage(value);
+          return (com.google.protobuf.ByteString) ref;
         }
-        bitField0_ |= 0x00040000;
-        return this;
       }
       /**
-       * <code>optional .com.n4systems.fieldid.api.pub.model.AssetTypeGroupMessage group = 19;</code>
+       * <code>optional string assetTypeGroupId = 17;</code>
        */
-      public Builder setGroup(
-          com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessage.Builder builderForValue) {
-        if (groupBuilder_ == null) {
-          group_ = builderForValue.build();
-          onChanged();
-        } else {
-          groupBuilder_.setMessage(builderForValue.build());
-        }
-        bitField0_ |= 0x00040000;
-        return this;
-      }
-      /**
-       * <code>optional .com.n4systems.fieldid.api.pub.model.AssetTypeGroupMessage group = 19;</code>
-       */
-      public Builder mergeGroup(com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessage value) {
-        if (groupBuilder_ == null) {
-          if (((bitField0_ & 0x00040000) == 0x00040000) &&
-              group_ != com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessage.getDefaultInstance()) {
-            group_ =
-              com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessage.newBuilder(group_).mergeFrom(value).buildPartial();
-          } else {
-            group_ = value;
-          }
-          onChanged();
-        } else {
-          groupBuilder_.mergeFrom(value);
-        }
-        bitField0_ |= 0x00040000;
-        return this;
-      }
-      /**
-       * <code>optional .com.n4systems.fieldid.api.pub.model.AssetTypeGroupMessage group = 19;</code>
-       */
-      public Builder clearGroup() {
-        if (groupBuilder_ == null) {
-          group_ = com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessage.getDefaultInstance();
-          onChanged();
-        } else {
-          groupBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00040000);
-        return this;
-      }
-      /**
-       * <code>optional .com.n4systems.fieldid.api.pub.model.AssetTypeGroupMessage group = 19;</code>
-       */
-      public com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessage.Builder getGroupBuilder() {
-        bitField0_ |= 0x00040000;
+      public Builder setAssetTypeGroupId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00010000;
+        assetTypeGroupId_ = value;
         onChanged();
-        return getGroupFieldBuilder().getBuilder();
+        return this;
       }
       /**
-       * <code>optional .com.n4systems.fieldid.api.pub.model.AssetTypeGroupMessage group = 19;</code>
+       * <code>optional string assetTypeGroupId = 17;</code>
        */
-      public com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessageOrBuilder getGroupOrBuilder() {
-        if (groupBuilder_ != null) {
-          return groupBuilder_.getMessageOrBuilder();
-        } else {
-          return group_;
-        }
+      public Builder clearAssetTypeGroupId() {
+        bitField0_ = (bitField0_ & ~0x00010000);
+        assetTypeGroupId_ = getDefaultInstance().getAssetTypeGroupId();
+        onChanged();
+        return this;
       }
       /**
-       * <code>optional .com.n4systems.fieldid.api.pub.model.AssetTypeGroupMessage group = 19;</code>
+       * <code>optional string assetTypeGroupId = 17;</code>
        */
-      private com.google.protobuf.SingleFieldBuilder<
-          com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessage, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessage.Builder, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessageOrBuilder> 
-          getGroupFieldBuilder() {
-        if (groupBuilder_ == null) {
-          groupBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessage, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessage.Builder, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessageOrBuilder>(
-                  group_,
-                  getParentForChildren(),
-                  isClean());
-          group_ = null;
-        }
-        return groupBuilder_;
+      public Builder setAssetTypeGroupIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00010000;
+        assetTypeGroupId_ = value;
+        onChanged();
+        return this;
       }
 
-      // repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;
+      // optional string assetTypeGroupName = 18;
+      private java.lang.Object assetTypeGroupName_ = "";
+      /**
+       * <code>optional string assetTypeGroupName = 18;</code>
+       */
+      public boolean hasAssetTypeGroupName() {
+        return ((bitField0_ & 0x00020000) == 0x00020000);
+      }
+      /**
+       * <code>optional string assetTypeGroupName = 18;</code>
+       */
+      public java.lang.String getAssetTypeGroupName() {
+        java.lang.Object ref = assetTypeGroupName_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          assetTypeGroupName_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string assetTypeGroupName = 18;</code>
+       */
+      public com.google.protobuf.ByteString
+          getAssetTypeGroupNameBytes() {
+        java.lang.Object ref = assetTypeGroupName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          assetTypeGroupName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string assetTypeGroupName = 18;</code>
+       */
+      public Builder setAssetTypeGroupName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00020000;
+        assetTypeGroupName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string assetTypeGroupName = 18;</code>
+       */
+      public Builder clearAssetTypeGroupName() {
+        bitField0_ = (bitField0_ & ~0x00020000);
+        assetTypeGroupName_ = getDefaultInstance().getAssetTypeGroupName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string assetTypeGroupName = 18;</code>
+       */
+      public Builder setAssetTypeGroupNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00020000;
+        assetTypeGroupName_ = value;
+        onChanged();
+        return this;
+      }
+
+      // repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;
       private java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage> schedules_ =
         java.util.Collections.emptyList();
       private void ensureSchedulesIsMutable() {
-        if (!((bitField0_ & 0x00080000) == 0x00080000)) {
+        if (!((bitField0_ & 0x00040000) == 0x00040000)) {
           schedules_ = new java.util.ArrayList<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage>(schedules_);
-          bitField0_ |= 0x00080000;
+          bitField0_ |= 0x00040000;
          }
       }
 
@@ -12696,7 +12648,7 @@ public final class Messages {
           com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage.Builder, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessageOrBuilder> schedulesBuilder_;
 
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;</code>
        */
       public java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage> getSchedulesList() {
         if (schedulesBuilder_ == null) {
@@ -12706,7 +12658,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;</code>
        */
       public int getSchedulesCount() {
         if (schedulesBuilder_ == null) {
@@ -12716,7 +12668,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;</code>
        */
       public com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage getSchedules(int index) {
         if (schedulesBuilder_ == null) {
@@ -12726,7 +12678,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;</code>
        */
       public Builder setSchedules(
           int index, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage value) {
@@ -12743,7 +12695,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;</code>
        */
       public Builder setSchedules(
           int index, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage.Builder builderForValue) {
@@ -12757,7 +12709,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;</code>
        */
       public Builder addSchedules(com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage value) {
         if (schedulesBuilder_ == null) {
@@ -12773,7 +12725,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;</code>
        */
       public Builder addSchedules(
           int index, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage value) {
@@ -12790,7 +12742,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;</code>
        */
       public Builder addSchedules(
           com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage.Builder builderForValue) {
@@ -12804,7 +12756,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;</code>
        */
       public Builder addSchedules(
           int index, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage.Builder builderForValue) {
@@ -12818,7 +12770,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;</code>
        */
       public Builder addAllSchedules(
           java.lang.Iterable<? extends com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage> values) {
@@ -12832,12 +12784,12 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;</code>
        */
       public Builder clearSchedules() {
         if (schedulesBuilder_ == null) {
           schedules_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00080000);
+          bitField0_ = (bitField0_ & ~0x00040000);
           onChanged();
         } else {
           schedulesBuilder_.clear();
@@ -12845,7 +12797,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;</code>
        */
       public Builder removeSchedules(int index) {
         if (schedulesBuilder_ == null) {
@@ -12858,14 +12810,14 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;</code>
        */
       public com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage.Builder getSchedulesBuilder(
           int index) {
         return getSchedulesFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;</code>
        */
       public com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessageOrBuilder getSchedulesOrBuilder(
           int index) {
@@ -12875,7 +12827,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;</code>
        */
       public java.util.List<? extends com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessageOrBuilder> 
            getSchedulesOrBuilderList() {
@@ -12886,14 +12838,14 @@ public final class Messages {
         }
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;</code>
        */
       public com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage.Builder addSchedulesBuilder() {
         return getSchedulesFieldBuilder().addBuilder(
             com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage.getDefaultInstance());
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;</code>
        */
       public com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage.Builder addSchedulesBuilder(
           int index) {
@@ -12901,7 +12853,7 @@ public final class Messages {
             index, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage.getDefaultInstance());
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 20;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;</code>
        */
       public java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage.Builder> 
            getSchedulesBuilderList() {
@@ -12914,7 +12866,7 @@ public final class Messages {
           schedulesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage.Builder, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessageOrBuilder>(
                   schedules_,
-                  ((bitField0_ & 0x00080000) == 0x00080000),
+                  ((bitField0_ & 0x00040000) == 0x00040000),
                   getParentForChildren(),
                   isClean());
           schedules_ = null;
@@ -12922,13 +12874,13 @@ public final class Messages {
         return schedulesBuilder_;
       }
 
-      // repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;
+      // repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;
       private java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage> associatedEventTypes_ =
         java.util.Collections.emptyList();
       private void ensureAssociatedEventTypesIsMutable() {
-        if (!((bitField0_ & 0x00100000) == 0x00100000)) {
+        if (!((bitField0_ & 0x00080000) == 0x00080000)) {
           associatedEventTypes_ = new java.util.ArrayList<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage>(associatedEventTypes_);
-          bitField0_ |= 0x00100000;
+          bitField0_ |= 0x00080000;
          }
       }
 
@@ -12936,7 +12888,7 @@ public final class Messages {
           com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage.Builder, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessageOrBuilder> associatedEventTypesBuilder_;
 
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;</code>
        */
       public java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage> getAssociatedEventTypesList() {
         if (associatedEventTypesBuilder_ == null) {
@@ -12946,7 +12898,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;</code>
        */
       public int getAssociatedEventTypesCount() {
         if (associatedEventTypesBuilder_ == null) {
@@ -12956,7 +12908,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;</code>
        */
       public com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage getAssociatedEventTypes(int index) {
         if (associatedEventTypesBuilder_ == null) {
@@ -12966,7 +12918,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;</code>
        */
       public Builder setAssociatedEventTypes(
           int index, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage value) {
@@ -12983,7 +12935,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;</code>
        */
       public Builder setAssociatedEventTypes(
           int index, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage.Builder builderForValue) {
@@ -12997,7 +12949,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;</code>
        */
       public Builder addAssociatedEventTypes(com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage value) {
         if (associatedEventTypesBuilder_ == null) {
@@ -13013,7 +12965,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;</code>
        */
       public Builder addAssociatedEventTypes(
           int index, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage value) {
@@ -13030,7 +12982,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;</code>
        */
       public Builder addAssociatedEventTypes(
           com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage.Builder builderForValue) {
@@ -13044,7 +12996,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;</code>
        */
       public Builder addAssociatedEventTypes(
           int index, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage.Builder builderForValue) {
@@ -13058,7 +13010,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;</code>
        */
       public Builder addAllAssociatedEventTypes(
           java.lang.Iterable<? extends com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage> values) {
@@ -13072,12 +13024,12 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;</code>
        */
       public Builder clearAssociatedEventTypes() {
         if (associatedEventTypesBuilder_ == null) {
           associatedEventTypes_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00100000);
+          bitField0_ = (bitField0_ & ~0x00080000);
           onChanged();
         } else {
           associatedEventTypesBuilder_.clear();
@@ -13085,7 +13037,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;</code>
        */
       public Builder removeAssociatedEventTypes(int index) {
         if (associatedEventTypesBuilder_ == null) {
@@ -13098,14 +13050,14 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;</code>
        */
       public com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage.Builder getAssociatedEventTypesBuilder(
           int index) {
         return getAssociatedEventTypesFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;</code>
        */
       public com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessageOrBuilder getAssociatedEventTypesOrBuilder(
           int index) {
@@ -13115,7 +13067,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;</code>
        */
       public java.util.List<? extends com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessageOrBuilder> 
            getAssociatedEventTypesOrBuilderList() {
@@ -13126,14 +13078,14 @@ public final class Messages {
         }
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;</code>
        */
       public com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage.Builder addAssociatedEventTypesBuilder() {
         return getAssociatedEventTypesFieldBuilder().addBuilder(
             com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage.getDefaultInstance());
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;</code>
        */
       public com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage.Builder addAssociatedEventTypesBuilder(
           int index) {
@@ -13141,7 +13093,7 @@ public final class Messages {
             index, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage.getDefaultInstance());
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 21;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;</code>
        */
       public java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage.Builder> 
            getAssociatedEventTypesBuilderList() {
@@ -13154,7 +13106,7 @@ public final class Messages {
           associatedEventTypesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage.Builder, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessageOrBuilder>(
                   associatedEventTypes_,
-                  ((bitField0_ & 0x00100000) == 0x00100000),
+                  ((bitField0_ & 0x00080000) == 0x00080000),
                   getParentForChildren(),
                   isClean());
           associatedEventTypes_ = null;
@@ -13162,13 +13114,13 @@ public final class Messages {
         return associatedEventTypesBuilder_;
       }
 
-      // repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;
+      // repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;
       private java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage> attributeTypes_ =
         java.util.Collections.emptyList();
       private void ensureAttributeTypesIsMutable() {
-        if (!((bitField0_ & 0x00200000) == 0x00200000)) {
+        if (!((bitField0_ & 0x00100000) == 0x00100000)) {
           attributeTypes_ = new java.util.ArrayList<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage>(attributeTypes_);
-          bitField0_ |= 0x00200000;
+          bitField0_ |= 0x00100000;
          }
       }
 
@@ -13176,7 +13128,7 @@ public final class Messages {
           com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage.Builder, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessageOrBuilder> attributeTypesBuilder_;
 
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;</code>
        */
       public java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage> getAttributeTypesList() {
         if (attributeTypesBuilder_ == null) {
@@ -13186,7 +13138,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;</code>
        */
       public int getAttributeTypesCount() {
         if (attributeTypesBuilder_ == null) {
@@ -13196,7 +13148,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;</code>
        */
       public com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage getAttributeTypes(int index) {
         if (attributeTypesBuilder_ == null) {
@@ -13206,7 +13158,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;</code>
        */
       public Builder setAttributeTypes(
           int index, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage value) {
@@ -13223,7 +13175,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;</code>
        */
       public Builder setAttributeTypes(
           int index, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage.Builder builderForValue) {
@@ -13237,7 +13189,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;</code>
        */
       public Builder addAttributeTypes(com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage value) {
         if (attributeTypesBuilder_ == null) {
@@ -13253,7 +13205,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;</code>
        */
       public Builder addAttributeTypes(
           int index, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage value) {
@@ -13270,7 +13222,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;</code>
        */
       public Builder addAttributeTypes(
           com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage.Builder builderForValue) {
@@ -13284,7 +13236,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;</code>
        */
       public Builder addAttributeTypes(
           int index, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage.Builder builderForValue) {
@@ -13298,7 +13250,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;</code>
        */
       public Builder addAllAttributeTypes(
           java.lang.Iterable<? extends com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage> values) {
@@ -13312,12 +13264,12 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;</code>
        */
       public Builder clearAttributeTypes() {
         if (attributeTypesBuilder_ == null) {
           attributeTypes_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00200000);
+          bitField0_ = (bitField0_ & ~0x00100000);
           onChanged();
         } else {
           attributeTypesBuilder_.clear();
@@ -13325,7 +13277,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;</code>
        */
       public Builder removeAttributeTypes(int index) {
         if (attributeTypesBuilder_ == null) {
@@ -13338,14 +13290,14 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;</code>
        */
       public com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage.Builder getAttributeTypesBuilder(
           int index) {
         return getAttributeTypesFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;</code>
        */
       public com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessageOrBuilder getAttributeTypesOrBuilder(
           int index) {
@@ -13355,7 +13307,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;</code>
        */
       public java.util.List<? extends com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessageOrBuilder> 
            getAttributeTypesOrBuilderList() {
@@ -13366,14 +13318,14 @@ public final class Messages {
         }
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;</code>
        */
       public com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage.Builder addAttributeTypesBuilder() {
         return getAttributeTypesFieldBuilder().addBuilder(
             com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage.getDefaultInstance());
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;</code>
        */
       public com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage.Builder addAttributeTypesBuilder(
           int index) {
@@ -13381,7 +13333,7 @@ public final class Messages {
             index, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage.getDefaultInstance());
       }
       /**
-       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 22;</code>
+       * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;</code>
        */
       public java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage.Builder> 
            getAttributeTypesBuilderList() {
@@ -13394,7 +13346,7 @@ public final class Messages {
           attributeTypesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage.Builder, com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessageOrBuilder>(
                   attributeTypes_,
-                  ((bitField0_ & 0x00200000) == 0x00200000),
+                  ((bitField0_ & 0x00100000) == 0x00100000),
                   getParentForChildren(),
                   isClean());
           attributeTypes_ = null;
@@ -33616,7 +33568,7 @@ public final class Messages {
     java.lang.String[] descriptorData = {
       "\n\016Messages.proto\022#com.n4systems.fieldid." +
       "api.pub.model\032 google/protobuf/descripto" +
-      "r.proto\"\216\007\n\014AssetMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013" +
+      "r.proto\"\243\007\n\014AssetMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013" +
       "createdDate\030\002 \001(\t\022\024\n\014modifiedDate\030\003 \001(\t\022" +
       "\031\n\021createdByUserName\030\004 \001(\t\022\027\n\017createdByU" +
       "serId\030\005 \001(\t\022\032\n\022modifiedByUserName\030\006 \001(\t\022" +
@@ -33633,157 +33585,155 @@ public final class Messages {
       "itude\030\030 \001(\t\022\021\n\tlongitude\030\031 \001(\t\022\030\n\020freeFo" +
       "rmLocation\030\032 \001(\t\022\036\n\026predefinedLocationNa" +
       "me\030\033 \001(\t\022\034\n\024predefinedLocationId\030\034 \001(\t\022\023" +
-      "\n\013orderNumber\030\035 \001(\t\022V\n\nattributes\030\036 \003(\0132",
-      "B.com.n4systems.fieldid.api.pub.model.As" +
-      "setMessage.AttributeMessage\032\202\001\n\020Attribut" +
-      "eMessage\022E\n\004type\030\001 \001(\01627.com.n4systems.f" +
-      "ieldid.api.pub.model.AttributeValueType\022" +
-      "\n\n\002id\030\002 \001(\t\022\014\n\004name\030\003 \001(\t\022\r\n\005value\030\004 \001(\t" +
-      "\"\303\001\n\022AssetStatusMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013c" +
-      "reatedDate\030\002 \001(\t\022\024\n\014modifiedDate\030\003 \001(\t\022\031" +
-      "\n\021createdByUserName\030\004 \001(\t\022\027\n\017createdByUs" +
-      "erId\030\005 \001(\t\022\032\n\022modifiedByUserName\030\006 \001(\t\022\030" +
-      "\n\020modifiedByUserId\030\007 \001(\t\022\014\n\004name\030\010 \001(\t\"\375",
-      "\007\n\020AssetTypeMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013creat" +
-      "edDate\030\002 \001(\t\022\024\n\014modifiedDate\030\003 \001(\t\022\031\n\021cr" +
-      "eatedByUserName\030\004 \001(\t\022\027\n\017createdByUserId" +
-      "\030\005 \001(\t\022\032\n\022modifiedByUserName\030\006 \001(\t\022\030\n\020mo" +
-      "difiedByUserId\030\007 \001(\t\022\014\n\004name\030\010 \002(\t\022\020\n\010wa" +
-      "rnings\030\t \001(\t\022\024\n\014instructions\030\n \001(\t\022\022\n\nca" +
-      "utionUrl\030\013 \001(\t\022\021\n\timageName\030\014 \001(\t\022\033\n\023des" +
-      "criptionTemplate\030\r \001(\t\022\027\n\017descriptionTex" +
-      "t\030\016 \001(\t\022\"\n\032manufactureCertificateText\030\017 " +
-      "\001(\t\022!\n\031hasManufactureCertificate\030\020 \001(\010\022\031",
-      "\n\021allowAssetLinking\030\021 \001(\010\022\025\n\rhasProcedur" +
-      "es\030\022 \001(\010\022I\n\005group\030\023 \001(\0132:.com.n4systems." +
-      "fieldid.api.pub.model.AssetTypeGroupMess" +
-      "age\022P\n\tschedules\030\024 \003(\0132=.com.n4systems.f" +
-      "ieldid.api.pub.model.AssetTypeScheduleMe" +
-      "ssage\022n\n\024associatedEventTypes\030\025 \003(\0132P.co" +
-      "m.n4systems.fieldid.api.pub.model.AssetT" +
-      "ypeMessage.AssociatedEventTypeMessage\022g\n" +
-      "\016attributeTypes\030\026 \003(\0132O.com.n4systems.fi" +
-      "eldid.api.pub.model.AssetTypeMessage.Ass",
-      "etAttributeTypeMessage\032H\n\032AssociatedEven" +
-      "tTypeMessage\022\023\n\013eventTypeId\030\001 \002(\t\022\025\n\reve" +
-      "ntTypeName\030\002 \002(\t\032|\n\031AssetAttributeTypeMe" +
-      "ssage\022\n\n\002id\030\001 \002(\t\022E\n\004type\030\002 \002(\01627.com.n4" +
-      "systems.fieldid.api.pub.model.AttributeV" +
-      "alueType\022\014\n\004name\030\003 \002(\t\"\306\001\n\025AssetTypeGrou" +
-      "pMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(" +
+      "\n\013orderNumber\030\035 \001(\t\022\023\n\013description\030\036 \001(\t",
+      "\022V\n\nattributes\030\037 \003(\0132B.com.n4systems.fie" +
+      "ldid.api.pub.model.AssetMessage.Attribut" +
+      "eMessage\032\202\001\n\020AttributeMessage\022E\n\004type\030\001 " +
+      "\001(\01627.com.n4systems.fieldid.api.pub.mode" +
+      "l.AttributeValueType\022\n\n\002id\030\002 \001(\t\022\014\n\004name" +
+      "\030\003 \001(\t\022\r\n\005value\030\004 \001(\t\"\303\001\n\022AssetStatusMes" +
+      "sage\022\n\n\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n" +
+      "\014modifiedDate\030\003 \001(\t\022\031\n\021createdByUserName" +
+      "\030\004 \001(\t\022\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modif" +
+      "iedByUserName\030\006 \001(\t\022\030\n\020modifiedByUserId\030",
+      "\007 \001(\t\022\014\n\004name\030\010 \001(\t\"\274\007\n\020AssetTypeMessage" +
+      "\022\n\n\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014mod" +
+      "ifiedDate\030\003 \001(\t\022\031\n\021createdByUserName\030\004 \001" +
+      "(\t\022\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modifiedB" +
+      "yUserName\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001(" +
+      "\t\022\014\n\004name\030\010 \002(\t\022\020\n\010warnings\030\t \001(\t\022\024\n\014ins" +
+      "tructions\030\n \001(\t\022\022\n\ncautionUrl\030\013 \001(\t\022\033\n\023d" +
+      "escriptionTemplate\030\014 \001(\t\022\"\n\032manufactureC" +
+      "ertificateText\030\r \001(\t\022!\n\031hasManufactureCe" +
+      "rtificate\030\016 \001(\010\022\031\n\021allowAssetLinking\030\017 \001",
+      "(\010\022\025\n\rhasProcedures\030\020 \001(\010\022\030\n\020assetTypeGr" +
+      "oupId\030\021 \001(\t\022\032\n\022assetTypeGroupName\030\022 \001(\t\022" +
+      "P\n\tschedules\030\023 \003(\0132=.com.n4systems.field" +
+      "id.api.pub.model.AssetTypeScheduleMessag" +
+      "e\022n\n\024associatedEventTypes\030\024 \003(\0132P.com.n4" +
+      "systems.fieldid.api.pub.model.AssetTypeM" +
+      "essage.AssociatedEventTypeMessage\022g\n\016att" +
+      "ributeTypes\030\025 \003(\0132O.com.n4systems.fieldi" +
+      "d.api.pub.model.AssetTypeMessage.AssetAt" +
+      "tributeTypeMessage\032H\n\032AssociatedEventTyp",
+      "eMessage\022\023\n\013eventTypeId\030\001 \002(\t\022\025\n\reventTy" +
+      "peName\030\002 \002(\t\032|\n\031AssetAttributeTypeMessag" +
+      "e\022\n\n\002id\030\001 \002(\t\022E\n\004type\030\002 \002(\01627.com.n4syst" +
+      "ems.fieldid.api.pub.model.AttributeValue" +
+      "Type\022\014\n\004name\030\003 \002(\t\"\306\001\n\025AssetTypeGroupMes" +
+      "sage\022\n\n\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n" +
+      "\014modifiedDate\030\003 \001(\t\022\031\n\021createdByUserName" +
+      "\030\004 \001(\t\022\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modif" +
+      "iedByUserName\030\006 \001(\t\022\030\n\020modifiedByUserId\030" +
+      "\007 \001(\t\022\014\n\004name\030\010 \002(\t\"\346\002\n\030AssetTypeSchedul",
+      "eMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(" +
       "\t\022\024\n\014modifiedDate\030\003 \001(\t\022\031\n\021createdByUser" +
       "Name\030\004 \001(\t\022\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022m" +
-      "odifiedByUserName\030\006 \001(\t\022\030\n\020modifiedByUse",
-      "rId\030\007 \001(\t\022\014\n\004name\030\010 \002(\t\"\346\002\n\030AssetTypeSch" +
-      "eduleMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013createdDate\030" +
-      "\002 \001(\t\022\024\n\014modifiedDate\030\003 \001(\t\022\031\n\021createdBy" +
-      "UserName\030\004 \001(\t\022\027\n\017createdByUserId\030\005 \001(\t\022" +
-      "\032\n\022modifiedByUserName\030\006 \001(\t\022\030\n\020modifiedB" +
-      "yUserId\030\007 \001(\t\022\021\n\townerName\030\010 \001(\t\022\017\n\007owne" +
-      "rId\030\t \002(\t\022\025\n\rassetTypeName\030\n \001(\t\022\023\n\013asse" +
-      "tTypeId\030\013 \002(\t\022\025\n\reventTypeName\030\014 \001(\t\022\023\n\013" +
-      "eventTypeId\030\r \002(\t\022\027\n\017frequencyInDays\030\016 \002" +
-      "(\003\022\024\n\014autoSchedule\030\017 \002(\010\"\320\003\n\014OwnerMessag",
-      "e\022\n\n\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014mo" +
-      "difiedDate\030\003 \001(\t\022\031\n\021createdByUserName\030\004 " +
-      "\001(\t\022\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modified" +
-      "ByUserName\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001" +
-      "(\t\022\014\n\004name\030\010 \002(\t\022\022\n\nparentName\030\t \001(\t\022\020\n\010" +
-      "parentId\030\n \001(\t\022\014\n\004code\030\013 \001(\t\022\r\n\005notes\030\014 " +
-      "\001(\t\022\025\n\rstreetAddress\030\r \001(\t\022\014\n\004city\030\016 \001(\t" +
-      "\022\r\n\005state\030\017 \001(\t\022\017\n\007country\030\020 \001(\t\022\013\n\003zip\030" +
-      "\021 \001(\t\022\016\n\006phone1\030\022 \001(\t\022\016\n\006phone2\030\023 \001(\t\022\014\n" +
-      "\004fax1\030\024 \001(\t\022\020\n\010latitude\030\025 \001(\t\022\021\n\tlongitu",
-      "de\030\026 \001(\t\022\023\n\013contactName\030\027 \001(\t\022\024\n\014contact" +
-      "Email\030\030 \001(\t\"\224\002\n\031PredefinedLocationMessag" +
-      "e\022\n\n\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014mo" +
-      "difiedDate\030\003 \001(\t\022\031\n\021createdByUserName\030\004 " +
-      "\001(\t\022\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modified" +
-      "ByUserName\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001" +
-      "(\t\022\021\n\townerName\030\010 \001(\t\022\017\n\007ownerId\030\t \001(\t\022\022" +
-      "\n\nparentName\030\n \001(\t\022\020\n\010parentId\030\013 \001(\t\022\014\n\004" +
-      "name\030\014 \002(\t\"\310\002\n\021TestSimpleMessage\022\024\n\014doub" +
-      "le_field\030\001 \001(\001\022\023\n\013float_field\030\002 \001(\002\022\023\n\013i",
-      "nt32_field\030\003 \001(\005\022\023\n\013int64_field\030\004 \001(\003\022\024\n" +
-      "\014uint32_field\030\005 \001(\r\022\024\n\014uint64_field\030\006 \001(" +
-      "\004\022\024\n\014sint32_field\030\007 \001(\021\022\024\n\014sint64_field\030" +
-      "\010 \001(\022\022\025\n\rfixed32_field\030\t \001(\007\022\025\n\rfixed64_" +
-      "field\030\n \001(\006\022\026\n\016sfixed32_field\030\013 \001(\017\022\026\n\016s" +
-      "fixed64_field\030\014 \001(\020\022\022\n\nbool_field\030\r \001(\010\022" +
-      "\024\n\014string_field\030\016 \001(\t\")\n\021TestNestedMessa" +
-      "ge\022\024\n\014string_field\030\001 \002(\t\"s\n\024TestContaine" +
-      "rMessage\022\023\n\013int32_field\030\001 \002(\005\022F\n\006nested\030" +
-      "\002 \001(\01326.com.n4systems.fieldid.api.pub.mo",
-      "del.TestNestedMessage\"\257\010\n\013UserMessage\022\n\n" +
-      "\002id\030\001 \001(\t\022\025\n\rcreatedstring\030\002 \001(\t\022\026\n\016modi" +
-      "fiedstring\030\003 \001(\t\022\031\n\021createdByUserName\030\004 " +
-      "\001(\t\022\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modified" +
-      "ByUserName\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001" +
-      "(\t\022\021\n\townerName\030\010 \001(\t\022\017\n\007ownerId\030\t \002(\t\022\016" +
-      "\n\006userID\030\n \002(\t\022\021\n\tfirstName\030\013 \001(\t\022\020\n\010las" +
-      "tName\030\014 \001(\t\022\024\n\014emailAddress\030\r \001(\t\022\022\n\ntim" +
-      "eZoneID\030\016 \001(\t\022\020\n\010position\030\017 \001(\t\022\020\n\010initi" +
-      "als\030\020 \001(\t\022\033\n\023failedLoginAttempts\030\021 \001(\005\022\016",
-      "\n\006locked\030\022 \001(\010\022\031\n\021lockedUntilstring\030\023 \001(" +
-      "\t\022\035\n\025passwordChangedstring\030\024 \001(\t\022\020\n\010lang" +
-      "uage\030\025 \001(\t\022\022\n\nidentifier\030\026 \001(\t\022\027\n\017lastLo" +
-      "ginstring\030\027 \001(\t\022E\n\006groups\030\030 \003(\01325.com.n4" +
-      "systems.fieldid.api.pub.model.UserGroupM" +
-      "essage\022K\n\010userType\030\031 \002(\01629.com.n4systems" +
-      ".fieldid.api.pub.model.UserMessage.UserT" +
-      "ype\022X\n\013permissions\030\032 \002(\0132C.com.n4systems" +
-      ".fieldid.api.pub.model.UserMessage.Permi" +
-      "ssionsMessage\032\324\001\n\022PermissionsMessage\022\024\n\014",
-      "createAssets\030\001 \002(\010\022\032\n\022manageSystemConfig" +
-      "\030\002 \002(\010\022\031\n\021manageSystemUsers\030\003 \002(\010\022\026\n\016man" +
-      "ageEndUsers\030\004 \002(\010\022\024\n\014createEvents\030\005 \002(\010\022" +
-      "\022\n\neditEvents\030\006 \002(\010\022\022\n\nmanageJobs\030\007 \002(\010\022" +
-      "\033\n\023manageSafetyNetwork\030\010 \002(\010\"i\n\010UserType" +
-      "\022\007\n\003ALL\020\000\022\t\n\005ADMIN\020\001\022\n\n\006SYSTEM\020\002\022\010\n\004FULL" +
-      "\020\003\022\010\n\004LITE\020\004\022\014\n\010READONLY\020\005\022\n\n\006PERSON\020\006\022\017" +
-      "\n\013USAGE_BASED\020\007\"=\n\020UserGroupMessage\022\n\n\002i" +
-      "d\030\001 \001(\t\022\014\n\004name\030\002 \002(\t\022\017\n\007groupId\030\003 \002(\t\"L" +
-      "\n\023ListResponseMessage\022\014\n\004page\030\001 \002(\005\022\020\n\010p",
-      "ageSize\030\002 \002(\005\022\r\n\005total\030\003 \002(\003*\006\010\350\007\020\321\017*X\n\022" +
-      "AttributeValueType\022\010\n\004TEXT\020\001\022\n\n\006SELECT\020\002" +
-      "\022\t\n\005COMBO\020\003\022\010\n\004UNIT\020\004\022\010\n\004DATE\020\005\022\r\n\tDATE_" +
-      "TIME\020\006:8\n\017serialized_name\022\035.google.proto" +
-      "buf.FieldOptions\030\321\206\003 \001(\t:\206\001\n\006assets\0228.co" +
-      "m.n4systems.fieldid.api.pub.model.ListRe" +
-      "sponseMessage\030\350\007 \003(\01321.com.n4systems.fie" +
-      "ldid.api.pub.model.AssetMessageB\010\212\265\030\004lis" +
-      "t:\206\001\n\006owners\0228.com.n4systems.fieldid.api" +
-      ".pub.model.ListResponseMessage\030\351\007 \003(\01321.",
-      "com.n4systems.fieldid.api.pub.model.Owne" +
-      "rMessageB\010\212\265\030\004list:\223\001\n\rassetStatuses\0228.c" +
-      "om.n4systems.fieldid.api.pub.model.ListR" +
-      "esponseMessage\030\352\007 \003(\01327.com.n4systems.fi" +
-      "eldid.api.pub.model.AssetStatusMessageB\010" +
-      "\212\265\030\004list:\216\001\n\nassetTypes\0228.com.n4systems." +
-      "fieldid.api.pub.model.ListResponseMessag" +
-      "e\030\353\007 \003(\01325.com.n4systems.fieldid.api.pub" +
-      ".model.AssetTypeMessageB\010\212\265\030\004list:\230\001\n\017as" +
-      "setTypeGroups\0228.com.n4systems.fieldid.ap",
-      "i.pub.model.ListResponseMessage\030\354\007 \003(\0132:" +
-      ".com.n4systems.fieldid.api.pub.model.Ass" +
-      "etTypeGroupMessageB\010\212\265\030\004list:\236\001\n\022assetTy" +
-      "peSchedules\0228.com.n4systems.fieldid.api." +
-      "pub.model.ListResponseMessage\030\355\007 \003(\0132=.c" +
-      "om.n4systems.fieldid.api.pub.model.Asset" +
-      "TypeScheduleMessageB\010\212\265\030\004list:\240\001\n\023predef" +
-      "inedLocations\0228.com.n4systems.fieldid.ap" +
-      "i.pub.model.ListResponseMessage\030\356\007 \003(\0132>" +
-      ".com.n4systems.fieldid.api.pub.model.Pre",
-      "definedLocationMessageB\010\212\265\030\004list:\204\001\n\005use" +
-      "rs\0228.com.n4systems.fieldid.api.pub.model" +
-      ".ListResponseMessage\030\357\007 \003(\01320.com.n4syst" +
-      "ems.fieldid.api.pub.model.UserMessageB\010\212" +
-      "\265\030\004list:\216\001\n\nuserGroups\0228.com.n4systems.f" +
-      "ieldid.api.pub.model.ListResponseMessage" +
-      "\030\360\007 \003(\01325.com.n4systems.fieldid.api.pub." +
-      "model.UserGroupMessageB\010\212\265\030\004listB/\n#com." +
-      "n4systems.fieldid.api.pub.modelB\010Message" +
-      "s"
+      "odifiedByUserName\030\006 \001(\t\022\030\n\020modifiedByUse" +
+      "rId\030\007 \001(\t\022\021\n\townerName\030\010 \001(\t\022\017\n\007ownerId\030" +
+      "\t \002(\t\022\025\n\rassetTypeName\030\n \001(\t\022\023\n\013assetTyp" +
+      "eId\030\013 \002(\t\022\025\n\reventTypeName\030\014 \001(\t\022\023\n\013even" +
+      "tTypeId\030\r \002(\t\022\027\n\017frequencyInDays\030\016 \002(\003\022\024" +
+      "\n\014autoSchedule\030\017 \002(\010\"\320\003\n\014OwnerMessage\022\n\n" +
+      "\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014modifi",
+      "edDate\030\003 \001(\t\022\031\n\021createdByUserName\030\004 \001(\t\022" +
+      "\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modifiedByUs" +
+      "erName\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001(\t\022\014" +
+      "\n\004name\030\010 \002(\t\022\022\n\nparentName\030\t \001(\t\022\020\n\010pare" +
+      "ntId\030\n \001(\t\022\014\n\004code\030\013 \001(\t\022\r\n\005notes\030\014 \001(\t\022" +
+      "\025\n\rstreetAddress\030\r \001(\t\022\014\n\004city\030\016 \001(\t\022\r\n\005" +
+      "state\030\017 \001(\t\022\017\n\007country\030\020 \001(\t\022\013\n\003zip\030\021 \001(" +
+      "\t\022\016\n\006phone1\030\022 \001(\t\022\016\n\006phone2\030\023 \001(\t\022\014\n\004fax" +
+      "1\030\024 \001(\t\022\020\n\010latitude\030\025 \001(\t\022\021\n\tlongitude\030\026" +
+      " \001(\t\022\023\n\013contactName\030\027 \001(\t\022\024\n\014contactEmai",
+      "l\030\030 \001(\t\"\224\002\n\031PredefinedLocationMessage\022\n\n" +
+      "\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014modifi" +
+      "edDate\030\003 \001(\t\022\031\n\021createdByUserName\030\004 \001(\t\022" +
+      "\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modifiedByUs" +
+      "erName\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001(\t\022\021" +
+      "\n\townerName\030\010 \001(\t\022\017\n\007ownerId\030\t \001(\t\022\022\n\npa" +
+      "rentName\030\n \001(\t\022\020\n\010parentId\030\013 \001(\t\022\014\n\004name" +
+      "\030\014 \002(\t\"\310\002\n\021TestSimpleMessage\022\024\n\014double_f" +
+      "ield\030\001 \001(\001\022\023\n\013float_field\030\002 \001(\002\022\023\n\013int32" +
+      "_field\030\003 \001(\005\022\023\n\013int64_field\030\004 \001(\003\022\024\n\014uin",
+      "t32_field\030\005 \001(\r\022\024\n\014uint64_field\030\006 \001(\004\022\024\n" +
+      "\014sint32_field\030\007 \001(\021\022\024\n\014sint64_field\030\010 \001(" +
+      "\022\022\025\n\rfixed32_field\030\t \001(\007\022\025\n\rfixed64_fiel" +
+      "d\030\n \001(\006\022\026\n\016sfixed32_field\030\013 \001(\017\022\026\n\016sfixe" +
+      "d64_field\030\014 \001(\020\022\022\n\nbool_field\030\r \001(\010\022\024\n\014s" +
+      "tring_field\030\016 \001(\t\")\n\021TestNestedMessage\022\024" +
+      "\n\014string_field\030\001 \002(\t\"s\n\024TestContainerMes" +
+      "sage\022\023\n\013int32_field\030\001 \002(\005\022F\n\006nested\030\002 \001(" +
+      "\01326.com.n4systems.fieldid.api.pub.model." +
+      "TestNestedMessage\"\257\010\n\013UserMessage\022\n\n\002id\030",
+      "\001 \001(\t\022\025\n\rcreatedstring\030\002 \001(\t\022\026\n\016modified" +
+      "string\030\003 \001(\t\022\031\n\021createdByUserName\030\004 \001(\t\022" +
+      "\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modifiedByUs" +
+      "erName\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001(\t\022\021" +
+      "\n\townerName\030\010 \001(\t\022\017\n\007ownerId\030\t \002(\t\022\016\n\006us" +
+      "erID\030\n \002(\t\022\021\n\tfirstName\030\013 \001(\t\022\020\n\010lastNam" +
+      "e\030\014 \001(\t\022\024\n\014emailAddress\030\r \001(\t\022\022\n\ntimeZon" +
+      "eID\030\016 \001(\t\022\020\n\010position\030\017 \001(\t\022\020\n\010initials\030" +
+      "\020 \001(\t\022\033\n\023failedLoginAttempts\030\021 \001(\005\022\016\n\006lo" +
+      "cked\030\022 \001(\010\022\031\n\021lockedUntilstring\030\023 \001(\t\022\035\n",
+      "\025passwordChangedstring\030\024 \001(\t\022\020\n\010language" +
+      "\030\025 \001(\t\022\022\n\nidentifier\030\026 \001(\t\022\027\n\017lastLogins" +
+      "tring\030\027 \001(\t\022E\n\006groups\030\030 \003(\01325.com.n4syst" +
+      "ems.fieldid.api.pub.model.UserGroupMessa" +
+      "ge\022K\n\010userType\030\031 \002(\01629.com.n4systems.fie" +
+      "ldid.api.pub.model.UserMessage.UserType\022" +
+      "X\n\013permissions\030\032 \002(\0132C.com.n4systems.fie" +
+      "ldid.api.pub.model.UserMessage.Permissio" +
+      "nsMessage\032\324\001\n\022PermissionsMessage\022\024\n\014crea" +
+      "teAssets\030\001 \002(\010\022\032\n\022manageSystemConfig\030\002 \002",
+      "(\010\022\031\n\021manageSystemUsers\030\003 \002(\010\022\026\n\016manageE" +
+      "ndUsers\030\004 \002(\010\022\024\n\014createEvents\030\005 \002(\010\022\022\n\ne" +
+      "ditEvents\030\006 \002(\010\022\022\n\nmanageJobs\030\007 \002(\010\022\033\n\023m" +
+      "anageSafetyNetwork\030\010 \002(\010\"i\n\010UserType\022\007\n\003" +
+      "ALL\020\000\022\t\n\005ADMIN\020\001\022\n\n\006SYSTEM\020\002\022\010\n\004FULL\020\003\022\010" +
+      "\n\004LITE\020\004\022\014\n\010READONLY\020\005\022\n\n\006PERSON\020\006\022\017\n\013US" +
+      "AGE_BASED\020\007\"=\n\020UserGroupMessage\022\n\n\002id\030\001 " +
+      "\001(\t\022\014\n\004name\030\002 \002(\t\022\017\n\007groupId\030\003 \002(\t\"L\n\023Li" +
+      "stResponseMessage\022\014\n\004page\030\001 \002(\005\022\020\n\010pageS" +
+      "ize\030\002 \002(\005\022\r\n\005total\030\003 \002(\003*\006\010\350\007\020\321\017*X\n\022Attr",
+      "ibuteValueType\022\010\n\004TEXT\020\001\022\n\n\006SELECT\020\002\022\t\n\005" +
+      "COMBO\020\003\022\010\n\004UNIT\020\004\022\010\n\004DATE\020\005\022\r\n\tDATE_TIME" +
+      "\020\006:8\n\017serialized_name\022\035.google.protobuf." +
+      "FieldOptions\030\321\206\003 \001(\t:\206\001\n\006assets\0228.com.n4" +
+      "systems.fieldid.api.pub.model.ListRespon" +
+      "seMessage\030\350\007 \003(\01321.com.n4systems.fieldid" +
+      ".api.pub.model.AssetMessageB\010\212\265\030\004list:\206\001" +
+      "\n\006owners\0228.com.n4systems.fieldid.api.pub" +
+      ".model.ListResponseMessage\030\351\007 \003(\01321.com." +
+      "n4systems.fieldid.api.pub.model.OwnerMes",
+      "sageB\010\212\265\030\004list:\223\001\n\rassetStatuses\0228.com.n" +
+      "4systems.fieldid.api.pub.model.ListRespo" +
+      "nseMessage\030\352\007 \003(\01327.com.n4systems.fieldi" +
+      "d.api.pub.model.AssetStatusMessageB\010\212\265\030\004" +
+      "list:\216\001\n\nassetTypes\0228.com.n4systems.fiel" +
+      "did.api.pub.model.ListResponseMessage\030\353\007" +
+      " \003(\01325.com.n4systems.fieldid.api.pub.mod" +
+      "el.AssetTypeMessageB\010\212\265\030\004list:\230\001\n\017assetT" +
+      "ypeGroups\0228.com.n4systems.fieldid.api.pu" +
+      "b.model.ListResponseMessage\030\354\007 \003(\0132:.com",
+      ".n4systems.fieldid.api.pub.model.AssetTy" +
+      "peGroupMessageB\010\212\265\030\004list:\236\001\n\022assetTypeSc" +
+      "hedules\0228.com.n4systems.fieldid.api.pub." +
+      "model.ListResponseMessage\030\355\007 \003(\0132=.com.n" +
+      "4systems.fieldid.api.pub.model.AssetType" +
+      "ScheduleMessageB\010\212\265\030\004list:\240\001\n\023predefined" +
+      "Locations\0228.com.n4systems.fieldid.api.pu" +
+      "b.model.ListResponseMessage\030\356\007 \003(\0132>.com" +
+      ".n4systems.fieldid.api.pub.model.Predefi" +
+      "nedLocationMessageB\010\212\265\030\004list:\204\001\n\005users\0228",
+      ".com.n4systems.fieldid.api.pub.model.Lis" +
+      "tResponseMessage\030\357\007 \003(\01320.com.n4systems." +
+      "fieldid.api.pub.model.UserMessageB\010\212\265\030\004l" +
+      "ist:\216\001\n\nuserGroups\0228.com.n4systems.field" +
+      "id.api.pub.model.ListResponseMessage\030\360\007 " +
+      "\003(\01325.com.n4systems.fieldid.api.pub.mode" +
+      "l.UserGroupMessageB\010\212\265\030\004listB/\n#com.n4sy" +
+      "stems.fieldid.api.pub.modelB\010Messages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -33795,7 +33745,7 @@ public final class Messages {
           internal_static_com_n4systems_fieldid_api_pub_model_AssetMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_com_n4systems_fieldid_api_pub_model_AssetMessage_descriptor,
-              new java.lang.String[] { "Id", "CreatedDate", "ModifiedDate", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "OwnerName", "OwnerId", "Identifier", "RfidNumber", "CustomerRefNumber", "PurchaseOrder", "Comments", "IdentifiedDate", "AssetTypeName", "AssetTypeId", "AssetStatusName", "AssetStatusId", "IdentifiedByUserName", "IdentifiedByUserId", "AssignedUserName", "AssignedUserId", "Latitude", "Longitude", "FreeFormLocation", "PredefinedLocationName", "PredefinedLocationId", "OrderNumber", "Attributes", });
+              new java.lang.String[] { "Id", "CreatedDate", "ModifiedDate", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "OwnerName", "OwnerId", "Identifier", "RfidNumber", "CustomerRefNumber", "PurchaseOrder", "Comments", "IdentifiedDate", "AssetTypeName", "AssetTypeId", "AssetStatusName", "AssetStatusId", "IdentifiedByUserName", "IdentifiedByUserId", "AssignedUserName", "AssignedUserId", "Latitude", "Longitude", "FreeFormLocation", "PredefinedLocationName", "PredefinedLocationId", "OrderNumber", "Description", "Attributes", });
           internal_static_com_n4systems_fieldid_api_pub_model_AssetMessage_AttributeMessage_descriptor =
             internal_static_com_n4systems_fieldid_api_pub_model_AssetMessage_descriptor.getNestedTypes().get(0);
           internal_static_com_n4systems_fieldid_api_pub_model_AssetMessage_AttributeMessage_fieldAccessorTable = new
@@ -33813,7 +33763,7 @@ public final class Messages {
           internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_descriptor,
-              new java.lang.String[] { "Id", "CreatedDate", "ModifiedDate", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "Name", "Warnings", "Instructions", "CautionUrl", "ImageName", "DescriptionTemplate", "DescriptionText", "ManufactureCertificateText", "HasManufactureCertificate", "AllowAssetLinking", "HasProcedures", "Group", "Schedules", "AssociatedEventTypes", "AttributeTypes", });
+              new java.lang.String[] { "Id", "CreatedDate", "ModifiedDate", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "Name", "Warnings", "Instructions", "CautionUrl", "DescriptionTemplate", "ManufactureCertificateText", "HasManufactureCertificate", "AllowAssetLinking", "HasProcedures", "AssetTypeGroupId", "AssetTypeGroupName", "Schedules", "AssociatedEventTypes", "AttributeTypes", });
           internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_AssociatedEventTypeMessage_descriptor =
             internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_descriptor.getNestedTypes().get(0);
           internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_AssociatedEventTypeMessage_fieldAccessorTable = new

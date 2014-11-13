@@ -57,6 +57,7 @@ public class AssetResource extends CrudResource<Asset, AssetMessage, Builder> {
 				.add(Asset::getPurchaseOrder, Builder::setPurchaseOrder)
 				.add(Asset::getComments, Builder::setComments)
 				.add(Asset::getNonIntergrationOrderNumber, Builder::setOrderNumber)
+				.add(Asset::getDescription, Builder::setDescription)
 				.addDateToString(Asset::getCreated, Builder::setCreatedDate)
 				.addDateToString(Asset::getModified, Builder::setModifiedDate)
 				.addDateToString(Asset::getIdentified, Builder::setIdentifiedDate)

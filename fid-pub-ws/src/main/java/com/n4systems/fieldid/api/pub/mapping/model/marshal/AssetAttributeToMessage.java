@@ -1,10 +1,7 @@
 package com.n4systems.fieldid.api.pub.mapping.model.marshal;
 
-import com.n4systems.fieldid.api.pub.exceptions.NotImplementedException;
 import com.n4systems.fieldid.api.pub.mapping.*;
-import com.n4systems.fieldid.api.pub.model.Messages;
 import com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage;
-import com.n4systems.fieldid.api.pub.model.Messages.AttributeValueType;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
@@ -23,7 +20,7 @@ public class AssetAttributeToMessage extends TypeMapper<InfoOptionBean, Attribut
 		return TypeMapperBuilder.<InfoFieldBean, AttributeMessage.Builder>newBuilder()
 				.add(InfoFieldBean::getPublicId, AttributeMessage.Builder::setId)
 				.add(InfoFieldBean::getName, AttributeMessage.Builder::setName)
-				.add(InfoFieldBean::getType, AttributeMessage.Builder::setType, AssetAttributeToMessage::convertInfoFieldType)
+				.add(InfoFieldBean::getType, AttributeMessage.Builder::setType, new InfoFieldTypeToAttributeValueTypeConverter<>())
 				.build();
 	}
 
@@ -38,26 +35,6 @@ public class AssetAttributeToMessage extends TypeMapper<InfoOptionBean, Attribut
 			}
 		} else {
 			return value;
-		}
-	}
-
-	private static Messages.AttributeValueType convertInfoFieldType(InfoFieldBean.InfoFieldType type, ConversionContext<InfoFieldBean, AttributeMessage.Builder> context) {
-		switch (type) {
-			case TextField:
-				return AttributeValueType.TEXT;
-			case SelectBox:
-				return AttributeValueType.SELECT;
-			case ComboBox:
-				return AttributeValueType.COMBO;
-			case UnitOfMeasure:
-				return AttributeValueType.UNIT;
-			case DateField:
-				if (context.getFrom().isIncludeTime())
-					return AttributeValueType.DATE_TIME;
-				else
-					return AttributeValueType.DATE;
-			default:
-				throw new NotImplementedException(type.toString());
 		}
 	}
 

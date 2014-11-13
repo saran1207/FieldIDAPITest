@@ -48,7 +48,7 @@ public class AssetTypeService extends CrudService<AssetType> {
     @Autowired private ProcedureDefinitionService procedureDefinitionService;
     @Autowired private S3Service s3Service;
 
-	protected AssetTypeService() {
+	public AssetTypeService() {
 		super(AssetType.class);
 	}
 
