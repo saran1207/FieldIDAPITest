@@ -75,15 +75,21 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
         add("revisionNumber", procDef.getRevisionNumber().toString());
         add("inDraft", procDef.getPublishedState().equals(PublishedState.DRAFT));
 
+        try {
+            add("logoStream", s3Service.downloadLotoLogo());
+        } catch (IOException e) {
+            logger.error("There was an exception while attempting to download the static footer Logo for a LOTO Printout!!", e);
+        }
+
         //If it's not long, it's short... or invalid... but we'll pretend that being invalid is impossible.
         List<IsolationPointPrintoutContainer> isolationPoints = convertToIPContainerCollection(procDef.getLockIsolationPoints());
         add("isolationPoints", isolationPoints);
 
         //Now, we have to do the images...  these are special images that hold all annotations associated with the
         //single image.
-        List<ImagePrintoutContainer> allImages = convertToImageContainerCollection(procDef.getImages());
-
-        add("allImages", allImages);
+//        List<ImagePrintoutContainer> allImages = convertToImageContainerCollection(procDef.getImages());
+//
+//        add("allImages", allImages);
     }
 
     /**
