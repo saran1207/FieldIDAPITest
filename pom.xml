@@ -165,7 +165,7 @@
                 <artifactId>fid-connection-monitor</artifactId>
                 <version>${project.version}</version>
             </dependency>
-		</dependencies>
+        </dependencies>
 	</dependencyManagement>
 	<scm>
 		<connection>scm:svn:https://fieldid.jira.com/svn/WEB</connection>

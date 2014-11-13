@@ -70,7 +70,7 @@ public class ManageDevicePage extends FieldIDTemplatePage {
                     @Override
                     public void onClick() {
                         persistenceService.delete(item.getModelObject());
-                        setResponsePage(new ManageDevicePage(PageParametersBuilder.param("type", sourceType.name())));
+                        setResponsePage(new ManageDevicePage(PageParametersBuilder.param("type", sourceType == null ? "all" : sourceType.name())));
                     }
                 });
             }

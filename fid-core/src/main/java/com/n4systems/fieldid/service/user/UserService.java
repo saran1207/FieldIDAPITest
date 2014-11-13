@@ -323,7 +323,7 @@ public class UserService extends FieldIdPersistenceService {
     public List<User> getExaminers() {
         SecurityFilter filter = securityContext.getUserSecurityFilter();
         SecurityFilter justTenantFilter = securityContext.getTenantSecurityFilter();
-        String queryString = "select DISTINCT ub from " + User.class.getName() + " ub where ub.registered = true and state = 'ACTIVE' and ub.userType != '" + UserType.SYSTEM.toString() + "' and ( "
+        String queryString = "select ub from " + User.class.getName() + " ub where ub.registered = true and state = 'ACTIVE' and ub.userType != '" + UserType.SYSTEM.toString() + "' and ( "
                 + filter.produceWhereClause(User.class, "ub") + " OR ( " + justTenantFilter.produceWhereClause(User.class, "ub") + " AND ub.owner.customerOrg IS NULL) )";
 
         if (!getCurrentUser().getGroups().isEmpty() && isUserGroupFilteringEnabled()) {

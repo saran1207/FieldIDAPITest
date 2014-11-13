@@ -6,9 +6,8 @@ import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import com.n4systems.model.procedure.PublishedState;
-import com.n4systems.reporting.data.ImageShortPrintoutContainer;
-import com.n4systems.reporting.data.IsolationPointLongPrintoutContainer;
-import com.n4systems.reporting.data.IsolationPointShortPrintoutContainer;
+import com.n4systems.reporting.data.ImagePrintoutContainer;
+import com.n4systems.reporting.data.IsolationPointPrintoutContainer;
 import com.n4systems.util.DateTimeDefinition;
 import org.apache.log4j.Logger;
 
@@ -27,30 +26,24 @@ import java.util.stream.Collectors;
  */
 public class LotoPrintoutReportMapProducer extends ReportMapProducer {
 
-    public enum PrintoutType {
-        LONG(), SHORT();
-
-        public String getName() {
-            return name();
-        }
-    }
-
     private final ProcedureDefinition procDef;
     private final String reportTitle;
-    private final PrintoutType printoutType;
 
     private SvgGenerationService svgGenerationService;
 
     private static final Logger logger = Logger.getLogger(ReportMapProducer.class);
 
-    public LotoPrintoutReportMapProducer(String reportTitle, ProcedureDefinition procDef, PrintoutType printoutType, DateTimeDefinition dateTimeDefinition, S3Service s3Service, SvgGenerationService svgGenerationService) {
+    public LotoPrintoutReportMapProducer(String reportTitle, ProcedureDefinition procDef, DateTimeDefinition dateTimeDefinition, S3Service s3Service, SvgGenerationService svgGenerationService) {
         super(dateTimeDefinition, s3Service);
         this.procDef = procDef;
         this.reportTitle = reportTitle;
-        this.printoutType = printoutType;
         this.svgGenerationService = svgGenerationService;
     }
 
+    /**
+     * This method produces the necessary map values for Jasper Reports to generate a LOTO Printout (either Longform or
+     * Shortform, depending on what was requested by the caller).
+     */
     @Override
     protected void addParameters() {
         add("reportTitle", reportTitle);
@@ -82,57 +75,45 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
         add("revisionNumber", procDef.getRevisionNumber().toString());
         add("inDraft", procDef.getPublishedState().equals(PublishedState.DRAFT));
 
-        if(printoutType.equals(PrintoutType.LONG)) {
-            //Long form has this field that doesn't exist in shortForm... but for the most part, it's not useful.
-            add("userPosition", procDef.getApprovedBy() != null ? procDef.getApprovedBy().getPosition() : procDef.getRejectedBy() != null ? procDef.getRejectedBy().getPosition() : "");
+        //If it's not long, it's short... or invalid... but we'll pretend that being invalid is impossible.
+        List<IsolationPointPrintoutContainer> isolationPoints = convertToIPContainerCollection(procDef.getLockIsolationPoints());
+        add("isolationPoints", isolationPoints);
 
-            List<IsolationPointLongPrintoutContainer> isolationPoints = convertToLongIPContainerCollection(procDef.getLockIsolationPoints());
-            //Not really too sure we need to send in both... I'm pretty sure we can just send a list right in and
-            //build the JRBeanCollectionDataSource inside the actual report.
-            add("isolationPoints", isolationPoints);
-        } else {
-            //If it's not long, it's short... or invalid... but we'll pretend that being invalid is impossible.
-            List<IsolationPointShortPrintoutContainer> isolationPoints = convertToShortIPContainerCollection(procDef.getLockIsolationPoints());
-            add("isolationPoints", isolationPoints);
+        //Now, we have to do the images...  these are special images that hold all annotations associated with the
+        //single image.
+        List<ImagePrintoutContainer> allImages = convertToImageContainerCollection(procDef.getImages());
 
-            //FIXME: Pull proper image data here... we're using static garbage for now...
-
-            //Now, we have to do the images...  these are special images that hold all annotations associated with the
-            //single image.
-            List<ImageShortPrintoutContainer> allImages = convertToShortImageContainerCollection(procDef.getImages());
-
-
-
-//            ImageShortPrintoutContainer imageContainer = new ImageShortPrintoutContainer();
-//            try {
-//                imageContainer.setImage(new FileInputStream(new File("/Users/jheath/Pictures/skeptical-smiley-face-g9WKOp-200x200.jpg")));
-//                allImages.add(imageContainer);
-//                imageContainer = new ImageShortPrintoutContainer();
-//                imageContainer.setImage(new FileInputStream(new File("/Users/jheath/Pictures/skeptical-smiley-face-g9WKOp-200x200.jpg")));
-//                allImages.add(imageContainer);
-//                imageContainer = new ImageShortPrintoutContainer();
-//                imageContainer.setImage(new FileInputStream(new File("/Users/jheath/Pictures/skeptical-smiley-face-g9WKOp-200x200.jpg")));
-//                allImages.add(imageContainer);
-//                imageContainer = new ImageShortPrintoutContainer();
-//                imageContainer.setImage(new FileInputStream(new File("/Users/jheath/Pictures/skeptical-smiley-face-g9WKOp-200x200.jpg")));
-//                allImages.add(imageContainer);
-//            } catch (FileNotFoundException e) {
-//                e.printStackTrace();
-//            }
-
-            add("allImages", allImages);
-        }
+        add("allImages", allImages);
     }
 
-    private List<ImageShortPrintoutContainer> convertToShortImageContainerCollection(List<ProcedureDefinitionImage> images) {
+    /**
+     * This method converts a <b>List</b> of <b>ProcedureDefinitionImage</b> JPA entities into a <b>List</b> of
+     * <b>ImageShortPrintoutContainer</b> POJOs for use by Jasper.
+     *
+     * @param images - A <b>List</b> populated with <b>ProcedureDefinitionImage</b> JPA entities.
+     * @return A <b>List</b> populated with <b>ImageShortPrintoutContainer</b> POJOs for use by Jasper.
+     */
+    private List<ImagePrintoutContainer> convertToImageContainerCollection(List<ProcedureDefinitionImage> images) {
         return images.stream()
-                     .map(this::convertToShortImageContainer)
+                     .map(this::convertToImageContainer)
                      .filter(container -> container.getImage() != null)
                      .collect(Collectors.toList());
     }
 
-    private ImageShortPrintoutContainer convertToShortImageContainer(ProcedureDefinitionImage image) {
-        ImageShortPrintoutContainer returnMe = new ImageShortPrintoutContainer();
+    /**
+     * This method converts <b>ProcedureDefinitionImage</b> JPA Entities into <b>ImageShortPrintoutContainer</b> POJOs
+     * for use by Jasper.  This eliminates much of the extra - and unneeded - data attached to these entities and
+     * provides Jasper with a cleaner set of data to work with.
+     *
+     * This "conversion" is done by way of downloading the associated SVG image from S3.  Most of the leg work is done
+     * by <b>S3Service.downloadProcedureDefinitionImageSvg(...)</b> to retrieve the images and
+     * <b>S3Service.generateAndUploadAnnotatedSvgs(...)</b> to generate images when they do not exist in S3.
+     *
+     * @param image - A <b>ProcedureDefinitionImage</b> JPA Entity to be converted for Jasper.
+     * @return An <b>ImageShortPrintoutContainer</b> POJO for use by Jasper.
+     */
+    private ImagePrintoutContainer convertToImageContainer(ProcedureDefinitionImage image) {
+        ImagePrintoutContainer returnMe = new ImagePrintoutContainer();
 
         try {
             byte[] imageData = s3Service.downloadProcedureDefinitionImageSvg(image);
@@ -142,8 +123,10 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
                 try {
                     svgGenerationService.generateAndUploadAnnotatedSvgs(procDef);
 
+                    //Now we try to pull the SVG down again...
                     imageData = s3Service.downloadProcedureDefinitionImageSvg(image);
 
+                    //If it's still null, then we need to throw an exception of some sort.
                     if(imageData == null) throw new Exception("Image didn't exist...");
 
                     returnMe.setImage(new ByteArrayInputStream(imageData));
@@ -154,6 +137,7 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
                     e.printStackTrace();
                 }
             } else {
+                //If we succeeded the first time, then we just add the image.
                 returnMe.setImage(new ByteArrayInputStream(imageData));
             }
         } catch (IOException e) {
@@ -166,68 +150,44 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
     }
 
     /**
-     * This method just uses streams and the convertToContainer method to re-map the collection into a series of POJOs
-     * better suited for being fed to Jasper.  This ensures Jasper doesn't have to deal with converting content or
-     * digging deep into the complex relationships of the ProcedureDefinition model.
+     * This method uses Streams and the convertToIPContainer method to re-map the collection into a series of
+     * POJOs for inclusion in the report.  Like above, this ensures we don't send unneeded information to Jasper.
      *
      * @param isolationPoints - A <b>List</b> populated with all <b>IsolationPoint</b>s from the definition.
      * @return A <b>List</b> populated with <b>IsolationPointPrintoutContainer</b>s, representing the provided Isolation Points.
      */
-    private List<IsolationPointLongPrintoutContainer> convertToLongIPContainerCollection(List<IsolationPoint> isolationPoints) {
+    private List<IsolationPointPrintoutContainer> convertToIPContainerCollection(List<IsolationPoint> isolationPoints) {
         return isolationPoints.stream()
-                              //Convert it to the container objects to ensure Jasper has an easy time digging into the
-                              //collection.
-                              .map(this::convertToLongContainer)
+                              .map(this::convertToIPContainer)
                               .collect(Collectors.toList());
     }
 
-    private List<IsolationPointShortPrintoutContainer> convertToShortIPContainerCollection(List<IsolationPoint> isolationPoints) {
-        return isolationPoints.stream()
-                              .map(this::convertToShortContainer)
-                              .collect(Collectors.toList());
-    }
-
-    private IsolationPointShortPrintoutContainer convertToShortContainer(IsolationPoint isolationPoint) {
-        IsolationPointShortPrintoutContainer container = new IsolationPointShortPrintoutContainer();
+    /**
+     * This method converts a single <b>IsolationPoint</b> into a <b>IsolationPointPrintoutContainer</b> for use by
+     * Jasper in generating the report.
+     *
+     * @param isolationPoint - An <b>IsolationPoint</b> JPA Entity that needs to be converted.
+     * @return The resulting <b>IsolationPointPrintoutContainer</b> POJO for use by Jasper.
+     */
+    private IsolationPointPrintoutContainer convertToIPContainer(IsolationPoint isolationPoint) {
+        IsolationPointPrintoutContainer container = new IsolationPointPrintoutContainer();
 
         container.setCheck(isolationPoint.getCheck());
         container.setDevice(isolationPoint.getDeviceDefinition().getAssetType() == null ? isolationPoint.getDeviceDefinition().getFreeformDescription() : isolationPoint.getDeviceDefinition().getAssetType().getDisplayName());
-        //Is this right?
-        container.setEnergySource(isolationPoint.getSourceType() == null ? isolationPoint.getSourceText() : isolationPoint.getSourceType().name());
         container.setLockoutMethod(isolationPoint.getMethod());
         container.setSourceId(isolationPoint.getIdentifier());
         container.setSourceLocation(isolationPoint.getLocation());
-
-        return container;
-    }
-
-    private IsolationPointLongPrintoutContainer convertToLongContainer(IsolationPoint isolationPoint) {
-
-        IsolationPointLongPrintoutContainer container = new IsolationPointLongPrintoutContainer();
-
-        //NOTE: This might not be right.  Check the output, because I think this might be the all-caps value...
-        container.setEnergySource(isolationPoint.getSourceType().toString());
-
-        container.setDevice(isolationPoint.getDeviceDefinition().getAssetType() != null ? isolationPoint.getDeviceDefinition().getAssetType().getDisplayName() : isolationPoint.getDeviceDefinition().getFreeformDescription());
-
-        container.setLockoutMethod(isolationPoint.getMethod());
-
-        //TODO: Remove this line once you're properly handling images.
-//        try {
-//            container.setImage(new FileInputStream(new File("/Users/jheath/Pictures/skeptical-smiley-face-g9WKOp-200x200.jpg")));
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-
+        container.setEnergyType(isolationPoint.getSourceType().name());
+        container.setEnergySource(isolationPoint.getSourceText());
 
         //Find the relevant image.  We do a bit of cheating, but should receive back an Optional that will either
         //contain the image or null.
         Optional<ProcedureDefinitionImage> optionalImage =
                 procDef.getImages()
-                       .stream()
-                       //The trick here is to filter by a value that should result in either 0 or 1 elements.
-                       .filter(image -> image.getId().equals(isolationPoint.getAnnotation().getImage().getId()))
-                       .findAny();
+                        .stream()
+                        //The trick here is to filter by a value that should result in either 0 or 1 elements.
+                        .filter(image -> image.getId().equals(isolationPoint.getAnnotation().getImage().getId()))
+                        .findAny();
 
         //Zero elements, you say?
         //Well, yeah... images are optional.  This is how we handle that:

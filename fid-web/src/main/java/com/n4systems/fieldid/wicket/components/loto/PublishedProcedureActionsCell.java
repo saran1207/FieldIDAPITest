@@ -6,6 +6,7 @@ import com.n4systems.fieldid.service.procedure.LotoReportService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.procedure.SvgGenerationService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
@@ -22,6 +23,7 @@ import com.n4systems.reporting.LotoPrintoutReportMapProducer;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
+import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -68,6 +70,8 @@ public class PublishedProcedureActionsCell extends Panel {
     private SvgGenerationService svgGenerationService;
 
     private final ProcedureDefinition procedureDefinition;
+
+    private static final Logger logger = Logger.getLogger(PublishedProcedureActionsCell.class);
 
     public PublishedProcedureActionsCell(String id, final IModel<ProcedureDefinition> proDef, final ProcedureListPanel procedureListPanel) {
         super(id);
@@ -211,14 +215,13 @@ public class PublishedProcedureActionsCell extends Panel {
                 try {
                     reportMap.putAll(lotoReportService.getShortJasperMap());
                 } catch (IOException e) {
-                    //TODO Handle this error properly with adequate logging...
-                    e.printStackTrace();
+                    logger.error("There was a problem downloading the .jasper files on a Short Form print for user " +
+                                 FieldIDSession.get().getSessionUser().getId(), e);
                 }
 
                                                                     //TODO Provide proper report title
                 reportMap.putAll(new LotoPrintoutReportMapProducer("Report Title",
                                                                     procedureDefinition,
-                                                                    LotoPrintoutReportMapProducer.PrintoutType.SHORT,
                                                                     new DateTimeDefiner("yyyy-MM-dd", TimeZone.getDefault()),
                                                                     s3Service,
                                                                     svgGenerationService).produceMap());
@@ -235,41 +238,18 @@ public class PublishedProcedureActionsCell extends Panel {
         Link longLink = new Link("longLink") {
             @Override
             public void onClick() {
-                //TODO If the new way works, remove all this shit.
-//                File jasper = null;
-//                try {
-//                    jasper = File.createTempFile("temp-file", ".tmp");
-//
-//                    FileOutputStream fileAttachmentFos = new FileOutputStream(jasper);
-//                    fileAttachmentFos.write(lotoReportService.getLongJapser());
-//
-//
-//                    //jasper = new File(lotoReportService.getLongJapser());
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-
-//                LotoPrintout printout = lotoReportService.getSelectedLongForm();
-//                if(printout == null) {
-//                    reportMap.put("SUBREPORT_DIR", PathHandler.getLotoDefaultPath(LotoPrintoutType.LONG) + "/");
-//                } else {
-//                    reportMap.put("SUBREPORT_DIR", PathHandler.getLotoPath(printout) + "/");
-//                }
-
-
                 HashMap<String, Object> reportMap = Maps.newHashMap();
 
                 try {
                     reportMap.putAll(lotoReportService.getLongJasperMap());
                 } catch (IOException e) {
-                    //TODO Handle this error properly with adequate logging...
-                    e.printStackTrace();
+                    logger.error("There was a problem downloading the .jasper files on a Long Form print for user " +
+                                 FieldIDSession.get().getSessionUser().getId(), e);
                 }
 
                                                                     //TODO Provide proper report title.
                 reportMap.putAll(new LotoPrintoutReportMapProducer("Report Title",
                                                                     procedureDefinition,
-                                                                    LotoPrintoutReportMapProducer.PrintoutType.LONG,
                                                                     new DateTimeDefiner("yyyy-MM-dd", TimeZone.getDefault()),
                                                                     s3Service,
                                                                     svgGenerationService).produceMap());

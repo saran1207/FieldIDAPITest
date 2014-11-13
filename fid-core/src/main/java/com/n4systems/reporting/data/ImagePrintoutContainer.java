@@ -8,7 +8,7 @@ import java.io.InputStream;
  *
  * Created by Jordan Heath on 14-11-05.
  */
-public class ImageShortPrintoutContainer {
+public class ImagePrintoutContainer {
     private InputStream image;
 
     public InputStream getImage() {
