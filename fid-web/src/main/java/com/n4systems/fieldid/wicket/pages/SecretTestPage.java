@@ -52,7 +52,7 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
     private ProcedureDefinitionService procedureDefinitionService;
 
     public SecretTestPage() {
-        ProcedureDefinition procedureDefinition = procedureDefinitionService.getProcedureDefinitionById(183L);
+        ProcedureDefinition procedureDefinition = procedureDefinitionService.getProcedureDefinitionById(376L);
 
         add(new ListView<ProcedureDefinitionImage>("image", procedureDefinition.getImages()) {
             @Override
