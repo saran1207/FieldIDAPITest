@@ -219,12 +219,21 @@ public class PublishedProcedureActionsCell extends Panel {
                                  FieldIDSession.get().getSessionUser().getId(), e);
                 }
 
-                                                                    //TODO Provide proper report title
-                reportMap.putAll(new LotoPrintoutReportMapProducer("Report Title",
+                reportMap.putAll(new LotoPrintoutReportMapProducer(procedureDefinition.getProcedureCode() + " Printout",
                                                                     procedureDefinition,
                                                                     new DateTimeDefiner("yyyy-MM-dd", TimeZone.getDefault()),
                                                                     s3Service,
                                                                     svgGenerationService).produceMap());
+
+                if(reportMap.get("isolationPointSubreport") == null) {
+                    logger.warn("Short Form Report for ProcedureDefinition with ID " + procedureDefinition.getId() +
+                                " is missing the Isolation Points Subreport... did you expect this?");
+                }
+
+                if(reportMap.get("imageSubreport") == null) {
+                    logger.warn("Short Form Report for ProcedureDefinition with ID " + procedureDefinition.getId() +
+                                " is missing the Images Subreport... did you expect this?");
+                }
 
                 File tempReport = doPrint((InputStream)reportMap.get("main"), reportMap);
 
@@ -247,12 +256,16 @@ public class PublishedProcedureActionsCell extends Panel {
                                  FieldIDSession.get().getSessionUser().getId(), e);
                 }
 
-                                                                    //TODO Provide proper report title.
-                reportMap.putAll(new LotoPrintoutReportMapProducer("Report Title",
+                reportMap.putAll(new LotoPrintoutReportMapProducer(procedureDefinition.getProcedureCode() + " Printout",
                                                                     procedureDefinition,
                                                                     new DateTimeDefiner("yyyy-MM-dd", TimeZone.getDefault()),
                                                                     s3Service,
                                                                     svgGenerationService).produceMap());
+
+                if(reportMap.get("isolationPointSubreport") == null) {
+                    logger.warn("Long Form Report for ProcedureDefinition with ID " + procedureDefinition.getId() +
+                                " is missing the Isolation Points Subreport... did you expect this?");
+                }
 
                 File tempReport = doPrint((InputStream)reportMap.get("main"), reportMap);
 

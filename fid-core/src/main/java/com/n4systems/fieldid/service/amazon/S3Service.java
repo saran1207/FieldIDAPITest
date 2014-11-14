@@ -341,11 +341,25 @@ public class S3Service extends FieldIdPersistenceService {
 
         returnMe.put("main", new ByteArrayInputStream(downloadLoto(path + "/procedure.jasper")));
 
+        //NOTE: While we handle the failure here, we need to report the failure to load subreport sections at a level
+        //      where we have more visibility of the Procedure Definition.  We need to attach as much information as
+        //      possible to anything we log.  Otherwise, this message becomes meaningless.
+
         if(type.equals(LotoPrintoutType.LONG)) {
-            returnMe.put("isolationPointSubreport", new ByteArrayInputStream(downloadLoto(path + "/procedure-isolation-points-long.jasper")));
+            byte[] ipSubreport = downloadLoto(path + "/procedure-isolation-points-long.jasper");
+            if(ipSubreport != null) {
+                returnMe.put("isolationPointSubreport", new ByteArrayInputStream(ipSubreport));
+            }
         } else {
-            returnMe.put("isolationPointSubreport", new ByteArrayInputStream(downloadLoto(path + "/isolation-points-short.jasper")));
-            returnMe.put("imageSubreport", new ByteArrayInputStream(downloadLoto(path + "/isolation-points-images-short.jasper")));
+            byte[] ipSubreport = downloadLoto(path + "/isolation-points-short.jasper");
+            if(ipSubreport != null) {
+                returnMe.put("isolationPointSubreport", new ByteArrayInputStream(ipSubreport));
+            }
+
+            byte[] imageSubreport = downloadLoto(path + "/isolation-points-images-short.jasper");
+            if(imageSubreport != null) {
+                returnMe.put("imageSubreport", new ByteArrayInputStream(downloadLoto(path + "/isolation-points-images-short.jasper")));
+            }
         }
 
         return returnMe;
