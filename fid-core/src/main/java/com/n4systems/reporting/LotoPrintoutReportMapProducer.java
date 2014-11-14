@@ -76,7 +76,7 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
         add("inDraft", procDef.getPublishedState().equals(PublishedState.DRAFT));
 
         try {
-            add("fieldIdLogo", s3Service.downloadLotoLogo());
+            add("fieldIdLogo", new ByteArrayInputStream(s3Service.downloadLotoLogo()));
         } catch (IOException e) {
             logger.error("There was an exception while attempting to download the static footer Logo for a LOTO Printout!!", e);
         }
