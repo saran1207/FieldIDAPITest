@@ -140,7 +140,7 @@ public class SvgGenerationService extends FieldIdPersistenceService {
 
     private Element createSvgElement(Document doc, Integer width, Integer height) {
         Element svg = doc.createElement("svg");
-        svg.setAttribute("viewBox", "0 0 " + height + " " + width);
+        svg.setAttribute("viewBox", "0 0 " + width + " " + height);
         svg.setAttribute("version", "1.1");
         svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
         svg.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
