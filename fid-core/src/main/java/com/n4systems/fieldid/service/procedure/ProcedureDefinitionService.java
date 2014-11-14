@@ -705,7 +705,12 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     public PreconfiguredDevice getPreConfiguredDevice(String device, IsolationPointSourceType sourceType) {
         QueryBuilder<PreconfiguredDevice> query = createTenantSecurityBuilder(PreconfiguredDevice.class);
         query.addSimpleWhere("device", device);
-        query.addSimpleWhere("isolationPointSourceType", sourceType);
+
+        WhereParameterGroup sourceGroup = new WhereParameterGroup("isolationPointSourceType");
+        sourceGroup.addClause(WhereClauseFactory.createIsNull("isolationPointSourceType"));
+        sourceGroup.addClause(WhereClauseFactory.create("isolationPointSourceType", sourceType, WhereClause.ChainOp.OR));
+        query.addWhere(sourceGroup);
+
         return persistenceService.find(query);
     }
 
