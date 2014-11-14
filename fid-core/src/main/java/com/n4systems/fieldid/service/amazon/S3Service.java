@@ -351,6 +351,10 @@ public class S3Service extends FieldIdPersistenceService {
         return returnMe;
     }
 
+    public byte[] downloadLotoLogo() throws IOException {
+        return downloadLoto("logos/loto-logo-mlock-horiz.jpg");
+    }
+
     public byte[] downloadDefaultLotoPrintout(LotoPrintout printout) throws IOException {
         File printoutFile = null;
 
