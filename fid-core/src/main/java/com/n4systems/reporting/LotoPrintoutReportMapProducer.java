@@ -42,7 +42,7 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
 
     /**
      * This method produces the necessary map values for Jasper Reports to generate a LOTO Printout (either Longform or
-     * Shortform, depending on what was requested by the caller).
+     * Shortform, this method supplies values for both).
      */
     @Override
     protected void addParameters() {
@@ -57,9 +57,9 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
         add("removalProcess", procDef.getRemovalProcess());
         add("testingAndVerification", procDef.getTestingAndVerification());
         add("currentDate", formatDate(new Date(System.currentTimeMillis()), false));
+        add("userPosition", procDef.getApprovedBy() != null ? procDef.getApprovedBy().getPosition() : procDef.getRejectedBy() != null ? procDef.getRejectedBy().getPosition() : "");
 
         //If it's null, that SHOULD mean that there was no previous ProcDef.  At least not one that was published...
-        //Not 100% confident that this will work.  At least not in all cases.
         if(procDef.getRevisionNumber().intValue() > 1) {
             add("revisedBy", procDef.getCreatedBy().getDisplayName());
             add("revisedByDate", formatDate(procDef.getCreated(), false));
@@ -76,10 +76,12 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
         add("inDraft", procDef.getPublishedState().equals(PublishedState.DRAFT));
 
         try {
-            add("logoStream", s3Service.downloadLotoLogo());
+            add("fieldIdLogo", s3Service.downloadLotoLogo());
         } catch (IOException e) {
             logger.error("There was an exception while attempting to download the static footer Logo for a LOTO Printout!!", e);
         }
+
+        add("logoImage", getCustomerLogo(procDef.getOwner().getPrimaryOrg()));
 
         //If it's not long, it's short... or invalid... but we'll pretend that being invalid is impossible.
         List<IsolationPointPrintoutContainer> isolationPoints = convertToIPContainerCollection(procDef.getLockIsolationPoints());
@@ -87,9 +89,9 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
 
         //Now, we have to do the images...  these are special images that hold all annotations associated with the
         //single image.
-//        List<ImagePrintoutContainer> allImages = convertToImageContainerCollection(procDef.getImages());
-//
-//        add("allImages", allImages);
+        List<ImagePrintoutContainer> allImages = convertToImageContainerCollection(procDef.getImages());
+
+        add("allImages", allImages);
     }
 
     /**

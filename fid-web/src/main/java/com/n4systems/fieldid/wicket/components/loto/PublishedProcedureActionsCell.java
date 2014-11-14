@@ -271,8 +271,8 @@ public class PublishedProcedureActionsCell extends Panel {
      *
      * So instead, we've brought the download link logic here.
      *
-     * @param tempReport
-     * @param fileName
+     * @param tempReport - A <b>File</b> pointing to the report.
+     * @param fileName - A <b>String</b> value specifying the name of the file that will be sent back in the response to the client.
      */
     private void handleDownload(File tempReport, String fileName) {
         String encodedFileName = UrlEncoder.QUERY_INSTANCE.encode(fileName, getRequest().getCharset());
@@ -301,33 +301,6 @@ public class PublishedProcedureActionsCell extends Panel {
 
     }
 
-    private File doPrint(File reportTemplate, HashMap<String, Object> reportMap) {
-        try {
-            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(reportTemplate);
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, new JREmptyDataSource());
-
-            JRPdfExporter exporter = new JRPdfExporter();
-            exporter.setParameter(JRExporterParameter.CHARACTER_ENCODING, "UTF-8");
-
-            //TODO Don't leave me empty!!  Kittens will perish!
-            File outFile = File.createTempFile("temp-file", ".tmp");
-
-            FileOutputStream output = new FileOutputStream(outFile);
-            exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-            exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, output);
-            exporter.exportReport();
-            output.close();
-
-            return outFile;
-
-        } catch (JRException | IOException e) {
-            //TODO Do something if this fails with an exception...
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
     private File doPrint(InputStream reportBody, HashMap<String, Object> reportMap) {
         try {
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(reportBody);
@@ -346,8 +319,8 @@ public class PublishedProcedureActionsCell extends Panel {
 
             return outFile;
         } catch (JRException | IOException e) {
-            //TODO Do something if this fails with an exception...
-            e.printStackTrace();
+            logger.error("Jasper Report for user " + FieldIDSession.get().getSessionUser().getId() + " when generating" +
+                         "a LOTO Short or Long form report.", e);
         }
 
         return null;
