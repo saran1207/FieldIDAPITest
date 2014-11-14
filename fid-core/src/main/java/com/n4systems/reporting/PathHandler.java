@@ -349,15 +349,10 @@ public class PathHandler {
 		return printOutPath;
 	}
 
-
     public static File getAbsoluteLotoPath(LotoPrintout lotoPrintout) {
-        String printOutPath = mergePaths(getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName());
+        String printOutPath = mergePaths(LOTO_PATH_BASE, getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName());
         return absolutize(printOutPath);
     }
-
-
-
-
 
     public static File getAbsoluteLotoDefaultPath(LotoPrintout lotoPrintout) {
         String printOutPath = mergePaths(ALL_TENANT_LOTO_PART, lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName());
