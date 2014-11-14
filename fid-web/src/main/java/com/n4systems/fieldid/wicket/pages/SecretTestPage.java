@@ -45,22 +45,7 @@ import java.util.zip.ZipInputStream;
 
 public class SecretTestPage extends FieldIDAuthenticatedPage {
 
-    @SpringBean
-    private S3Service s3Service;
-
-    @SpringBean
-    private ProcedureDefinitionService procedureDefinitionService;
-
     public SecretTestPage() {
-        ProcedureDefinition procedureDefinition = procedureDefinitionService.getProcedureDefinitionById(376L);
-
-        add(new ListView<ProcedureDefinitionImage>("image", procedureDefinition.getImages()) {
-            @Override
-            protected void populateItem(ListItem<ProcedureDefinitionImage> item) {
-                item.add(new ExternalLink("link", s3Service.getProcedureDefinitionImageSvgURL(item.getModelObject()).toString()));
-            }
-        });
-
     }
 
     @Override
