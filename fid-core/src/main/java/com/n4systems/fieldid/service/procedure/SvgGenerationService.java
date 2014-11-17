@@ -3,7 +3,6 @@ package com.n4systems.fieldid.service.procedure;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.common.ImageAnnotation;
-import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import com.n4systems.reporting.PathHandler;
@@ -34,10 +33,19 @@ public class SvgGenerationService extends FieldIdPersistenceService {
             uploadSvg(definition, allAnnotations);
         }
 
-        for (IsolationPoint isolationPoint: definition.getUnlockIsolationPoints()) {
-            File singleAnnotation = exportToSvg(isolationPoint.getAnnotation());
-            uploadSvg(definition, singleAnnotation);
-        }
+        definition.getUnlockIsolationPoints()
+                  .stream()
+                  //We need to make sure to only do this for Isolation Points that have annotations... otherwise we
+                  //get a NullPointerException
+                  .filter(isolationPoint -> isolationPoint.getAnnotation() != null)
+                  .forEach(isolationPoint -> {
+                      try {
+                          File singleAnnotation = exportToSvg(isolationPoint.getAnnotation());
+                          uploadSvg(definition, singleAnnotation);
+                      } catch (Exception e) {
+                          e.printStackTrace();
+                      }
+                  });
     }
 
     private void uploadSvg(ProcedureDefinition procedureDefinition, File svgFile) {
