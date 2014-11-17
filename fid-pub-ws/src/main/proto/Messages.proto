@@ -101,6 +101,7 @@ message AssetTypeMessage {
 		required string id 					= 1;
 		required AttributeValueType type	= 2;
 		required string name 				= 3;
+		repeated string attributeOptions	= 4;
 	}
 	repeated AssetAttributeTypeMessage attributeTypes 			= 21;
 }
@@ -274,8 +275,7 @@ extend ListResponseMessage {
 	repeated AssetStatusMessage assetStatuses				= 1002 [(serialized_name) = "list"];
 	repeated AssetTypeMessage assetTypes					= 1003 [(serialized_name) = "list"];
 	repeated AssetTypeGroupMessage assetTypeGroups			= 1004 [(serialized_name) = "list"];
-	repeated AssetTypeScheduleMessage assetTypeSchedules	= 1005 [(serialized_name) = "list"];
-	repeated PredefinedLocationMessage predefinedLocations	= 1006 [(serialized_name) = "list"];
-	repeated UserMessage users								= 1007 [(serialized_name) = "list"];
-	repeated UserGroupMessage userGroups					= 1008 [(serialized_name) = "list"];
+	repeated PredefinedLocationMessage locations			= 1005 [(serialized_name) = "list"];
+	repeated UserMessage users								= 1006 [(serialized_name) = "list"];
+	repeated UserGroupMessage userGroups					= 1007 [(serialized_name) = "list"];
 }

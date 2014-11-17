@@ -9184,6 +9184,26 @@ public final class Messages {
        */
       com.google.protobuf.ByteString
           getNameBytes();
+
+      // repeated string attributeOptions = 4;
+      /**
+       * <code>repeated string attributeOptions = 4;</code>
+       */
+      java.util.List<java.lang.String>
+      getAttributeOptionsList();
+      /**
+       * <code>repeated string attributeOptions = 4;</code>
+       */
+      int getAttributeOptionsCount();
+      /**
+       * <code>repeated string attributeOptions = 4;</code>
+       */
+      java.lang.String getAttributeOptions(int index);
+      /**
+       * <code>repeated string attributeOptions = 4;</code>
+       */
+      com.google.protobuf.ByteString
+          getAttributeOptionsBytes(int index);
     }
     /**
      * Protobuf type {@code com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage}
@@ -9257,6 +9277,14 @@ public final class Messages {
                 name_ = input.readBytes();
                 break;
               }
+              case 34: {
+                if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+                  attributeOptions_ = new com.google.protobuf.LazyStringArrayList();
+                  mutable_bitField0_ |= 0x00000008;
+                }
+                attributeOptions_.add(input.readBytes());
+                break;
+              }
             }
           }
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -9265,6 +9293,9 @@ public final class Messages {
           throw new com.google.protobuf.InvalidProtocolBufferException(
               e.getMessage()).setUnfinishedMessage(this);
         } finally {
+          if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+            attributeOptions_ = new com.google.protobuf.UnmodifiableLazyStringList(attributeOptions_);
+          }
           this.unknownFields = unknownFields.build();
           makeExtensionsImmutable();
         }
@@ -9399,10 +9430,41 @@ public final class Messages {
         }
       }
 
+      // repeated string attributeOptions = 4;
+      public static final int ATTRIBUTEOPTIONS_FIELD_NUMBER = 4;
+      private com.google.protobuf.LazyStringList attributeOptions_;
+      /**
+       * <code>repeated string attributeOptions = 4;</code>
+       */
+      public java.util.List<java.lang.String>
+          getAttributeOptionsList() {
+        return attributeOptions_;
+      }
+      /**
+       * <code>repeated string attributeOptions = 4;</code>
+       */
+      public int getAttributeOptionsCount() {
+        return attributeOptions_.size();
+      }
+      /**
+       * <code>repeated string attributeOptions = 4;</code>
+       */
+      public java.lang.String getAttributeOptions(int index) {
+        return attributeOptions_.get(index);
+      }
+      /**
+       * <code>repeated string attributeOptions = 4;</code>
+       */
+      public com.google.protobuf.ByteString
+          getAttributeOptionsBytes(int index) {
+        return attributeOptions_.getByteString(index);
+      }
+
       private void initFields() {
         id_ = "";
         type_ = com.n4systems.fieldid.api.pub.model.Messages.AttributeValueType.TEXT;
         name_ = "";
+        attributeOptions_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       }
       private byte memoizedIsInitialized = -1;
       public final boolean isInitialized() {
@@ -9437,6 +9499,9 @@ public final class Messages {
         if (((bitField0_ & 0x00000004) == 0x00000004)) {
           output.writeBytes(3, getNameBytes());
         }
+        for (int i = 0; i < attributeOptions_.size(); i++) {
+          output.writeBytes(4, attributeOptions_.getByteString(i));
+        }
         getUnknownFields().writeTo(output);
       }
 
@@ -9457,6 +9522,15 @@ public final class Messages {
         if (((bitField0_ & 0x00000004) == 0x00000004)) {
           size += com.google.protobuf.CodedOutputStream
             .computeBytesSize(3, getNameBytes());
+        }
+        {
+          int dataSize = 0;
+          for (int i = 0; i < attributeOptions_.size(); i++) {
+            dataSize += com.google.protobuf.CodedOutputStream
+              .computeBytesSizeNoTag(attributeOptions_.getByteString(i));
+          }
+          size += dataSize;
+          size += 1 * getAttributeOptionsList().size();
         }
         size += getUnknownFields().getSerializedSize();
         memoizedSerializedSize = size;
@@ -9580,6 +9654,8 @@ public final class Messages {
           bitField0_ = (bitField0_ & ~0x00000002);
           name_ = "";
           bitField0_ = (bitField0_ & ~0x00000004);
+          attributeOptions_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+          bitField0_ = (bitField0_ & ~0x00000008);
           return this;
         }
 
@@ -9620,6 +9696,12 @@ public final class Messages {
             to_bitField0_ |= 0x00000004;
           }
           result.name_ = name_;
+          if (((bitField0_ & 0x00000008) == 0x00000008)) {
+            attributeOptions_ = new com.google.protobuf.UnmodifiableLazyStringList(
+                attributeOptions_);
+            bitField0_ = (bitField0_ & ~0x00000008);
+          }
+          result.attributeOptions_ = attributeOptions_;
           result.bitField0_ = to_bitField0_;
           onBuilt();
           return result;
@@ -9647,6 +9729,16 @@ public final class Messages {
           if (other.hasName()) {
             bitField0_ |= 0x00000004;
             name_ = other.name_;
+            onChanged();
+          }
+          if (!other.attributeOptions_.isEmpty()) {
+            if (attributeOptions_.isEmpty()) {
+              attributeOptions_ = other.attributeOptions_;
+              bitField0_ = (bitField0_ & ~0x00000008);
+            } else {
+              ensureAttributeOptionsIsMutable();
+              attributeOptions_.addAll(other.attributeOptions_);
+            }
             onChanged();
           }
           this.mergeUnknownFields(other.getUnknownFields());
@@ -9868,6 +9960,99 @@ public final class Messages {
   }
   bitField0_ |= 0x00000004;
           name_ = value;
+          onChanged();
+          return this;
+        }
+
+        // repeated string attributeOptions = 4;
+        private com.google.protobuf.LazyStringList attributeOptions_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        private void ensureAttributeOptionsIsMutable() {
+          if (!((bitField0_ & 0x00000008) == 0x00000008)) {
+            attributeOptions_ = new com.google.protobuf.LazyStringArrayList(attributeOptions_);
+            bitField0_ |= 0x00000008;
+           }
+        }
+        /**
+         * <code>repeated string attributeOptions = 4;</code>
+         */
+        public java.util.List<java.lang.String>
+            getAttributeOptionsList() {
+          return java.util.Collections.unmodifiableList(attributeOptions_);
+        }
+        /**
+         * <code>repeated string attributeOptions = 4;</code>
+         */
+        public int getAttributeOptionsCount() {
+          return attributeOptions_.size();
+        }
+        /**
+         * <code>repeated string attributeOptions = 4;</code>
+         */
+        public java.lang.String getAttributeOptions(int index) {
+          return attributeOptions_.get(index);
+        }
+        /**
+         * <code>repeated string attributeOptions = 4;</code>
+         */
+        public com.google.protobuf.ByteString
+            getAttributeOptionsBytes(int index) {
+          return attributeOptions_.getByteString(index);
+        }
+        /**
+         * <code>repeated string attributeOptions = 4;</code>
+         */
+        public Builder setAttributeOptions(
+            int index, java.lang.String value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureAttributeOptionsIsMutable();
+          attributeOptions_.set(index, value);
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>repeated string attributeOptions = 4;</code>
+         */
+        public Builder addAttributeOptions(
+            java.lang.String value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureAttributeOptionsIsMutable();
+          attributeOptions_.add(value);
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>repeated string attributeOptions = 4;</code>
+         */
+        public Builder addAllAttributeOptions(
+            java.lang.Iterable<java.lang.String> values) {
+          ensureAttributeOptionsIsMutable();
+          super.addAll(values, attributeOptions_);
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>repeated string attributeOptions = 4;</code>
+         */
+        public Builder clearAttributeOptions() {
+          attributeOptions_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+          bitField0_ = (bitField0_ & ~0x00000008);
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>repeated string attributeOptions = 4;</code>
+         */
+        public Builder addAttributeOptionsBytes(
+            com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureAttributeOptionsIsMutable();
+          attributeOptions_.add(value);
           onChanged();
           return this;
         }
@@ -33596,7 +33781,7 @@ public final class Messages {
       "\014modifiedDate\030\003 \001(\t\022\031\n\021createdByUserName" +
       "\030\004 \001(\t\022\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modif" +
       "iedByUserName\030\006 \001(\t\022\030\n\020modifiedByUserId\030",
-      "\007 \001(\t\022\014\n\004name\030\010 \001(\t\"\274\007\n\020AssetTypeMessage" +
+      "\007 \001(\t\022\014\n\004name\030\010 \001(\t\"\327\007\n\020AssetTypeMessage" +
       "\022\n\n\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014mod" +
       "ifiedDate\030\003 \001(\t\022\031\n\021createdByUserName\030\004 \001" +
       "(\t\022\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modifiedB" +
@@ -33617,123 +33802,124 @@ public final class Messages {
       "d.api.pub.model.AssetTypeMessage.AssetAt" +
       "tributeTypeMessage\032H\n\032AssociatedEventTyp",
       "eMessage\022\023\n\013eventTypeId\030\001 \002(\t\022\025\n\reventTy" +
-      "peName\030\002 \002(\t\032|\n\031AssetAttributeTypeMessag" +
-      "e\022\n\n\002id\030\001 \002(\t\022E\n\004type\030\002 \002(\01627.com.n4syst" +
-      "ems.fieldid.api.pub.model.AttributeValue" +
-      "Type\022\014\n\004name\030\003 \002(\t\"\306\001\n\025AssetTypeGroupMes" +
-      "sage\022\n\n\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n" +
-      "\014modifiedDate\030\003 \001(\t\022\031\n\021createdByUserName" +
-      "\030\004 \001(\t\022\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modif" +
-      "iedByUserName\030\006 \001(\t\022\030\n\020modifiedByUserId\030" +
-      "\007 \001(\t\022\014\n\004name\030\010 \002(\t\"\346\002\n\030AssetTypeSchedul",
-      "eMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(" +
-      "\t\022\024\n\014modifiedDate\030\003 \001(\t\022\031\n\021createdByUser" +
-      "Name\030\004 \001(\t\022\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022m" +
-      "odifiedByUserName\030\006 \001(\t\022\030\n\020modifiedByUse" +
-      "rId\030\007 \001(\t\022\021\n\townerName\030\010 \001(\t\022\017\n\007ownerId\030" +
-      "\t \002(\t\022\025\n\rassetTypeName\030\n \001(\t\022\023\n\013assetTyp" +
-      "eId\030\013 \002(\t\022\025\n\reventTypeName\030\014 \001(\t\022\023\n\013even" +
-      "tTypeId\030\r \002(\t\022\027\n\017frequencyInDays\030\016 \002(\003\022\024" +
-      "\n\014autoSchedule\030\017 \002(\010\"\320\003\n\014OwnerMessage\022\n\n" +
-      "\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014modifi",
-      "edDate\030\003 \001(\t\022\031\n\021createdByUserName\030\004 \001(\t\022" +
-      "\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modifiedByUs" +
-      "erName\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001(\t\022\014" +
-      "\n\004name\030\010 \002(\t\022\022\n\nparentName\030\t \001(\t\022\020\n\010pare" +
-      "ntId\030\n \001(\t\022\014\n\004code\030\013 \001(\t\022\r\n\005notes\030\014 \001(\t\022" +
-      "\025\n\rstreetAddress\030\r \001(\t\022\014\n\004city\030\016 \001(\t\022\r\n\005" +
-      "state\030\017 \001(\t\022\017\n\007country\030\020 \001(\t\022\013\n\003zip\030\021 \001(" +
-      "\t\022\016\n\006phone1\030\022 \001(\t\022\016\n\006phone2\030\023 \001(\t\022\014\n\004fax" +
-      "1\030\024 \001(\t\022\020\n\010latitude\030\025 \001(\t\022\021\n\tlongitude\030\026" +
-      " \001(\t\022\023\n\013contactName\030\027 \001(\t\022\024\n\014contactEmai",
-      "l\030\030 \001(\t\"\224\002\n\031PredefinedLocationMessage\022\n\n" +
-      "\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014modifi" +
-      "edDate\030\003 \001(\t\022\031\n\021createdByUserName\030\004 \001(\t\022" +
-      "\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modifiedByUs" +
-      "erName\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001(\t\022\021" +
-      "\n\townerName\030\010 \001(\t\022\017\n\007ownerId\030\t \001(\t\022\022\n\npa" +
-      "rentName\030\n \001(\t\022\020\n\010parentId\030\013 \001(\t\022\014\n\004name" +
-      "\030\014 \002(\t\"\310\002\n\021TestSimpleMessage\022\024\n\014double_f" +
-      "ield\030\001 \001(\001\022\023\n\013float_field\030\002 \001(\002\022\023\n\013int32" +
-      "_field\030\003 \001(\005\022\023\n\013int64_field\030\004 \001(\003\022\024\n\014uin",
-      "t32_field\030\005 \001(\r\022\024\n\014uint64_field\030\006 \001(\004\022\024\n" +
-      "\014sint32_field\030\007 \001(\021\022\024\n\014sint64_field\030\010 \001(" +
-      "\022\022\025\n\rfixed32_field\030\t \001(\007\022\025\n\rfixed64_fiel" +
-      "d\030\n \001(\006\022\026\n\016sfixed32_field\030\013 \001(\017\022\026\n\016sfixe" +
-      "d64_field\030\014 \001(\020\022\022\n\nbool_field\030\r \001(\010\022\024\n\014s" +
-      "tring_field\030\016 \001(\t\")\n\021TestNestedMessage\022\024" +
-      "\n\014string_field\030\001 \002(\t\"s\n\024TestContainerMes" +
-      "sage\022\023\n\013int32_field\030\001 \002(\005\022F\n\006nested\030\002 \001(" +
-      "\01326.com.n4systems.fieldid.api.pub.model." +
-      "TestNestedMessage\"\257\010\n\013UserMessage\022\n\n\002id\030",
-      "\001 \001(\t\022\025\n\rcreatedstring\030\002 \001(\t\022\026\n\016modified" +
-      "string\030\003 \001(\t\022\031\n\021createdByUserName\030\004 \001(\t\022" +
-      "\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modifiedByUs" +
-      "erName\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001(\t\022\021" +
-      "\n\townerName\030\010 \001(\t\022\017\n\007ownerId\030\t \002(\t\022\016\n\006us" +
-      "erID\030\n \002(\t\022\021\n\tfirstName\030\013 \001(\t\022\020\n\010lastNam" +
-      "e\030\014 \001(\t\022\024\n\014emailAddress\030\r \001(\t\022\022\n\ntimeZon" +
-      "eID\030\016 \001(\t\022\020\n\010position\030\017 \001(\t\022\020\n\010initials\030" +
-      "\020 \001(\t\022\033\n\023failedLoginAttempts\030\021 \001(\005\022\016\n\006lo" +
-      "cked\030\022 \001(\010\022\031\n\021lockedUntilstring\030\023 \001(\t\022\035\n",
-      "\025passwordChangedstring\030\024 \001(\t\022\020\n\010language" +
-      "\030\025 \001(\t\022\022\n\nidentifier\030\026 \001(\t\022\027\n\017lastLogins" +
-      "tring\030\027 \001(\t\022E\n\006groups\030\030 \003(\01325.com.n4syst" +
-      "ems.fieldid.api.pub.model.UserGroupMessa" +
-      "ge\022K\n\010userType\030\031 \002(\01629.com.n4systems.fie" +
-      "ldid.api.pub.model.UserMessage.UserType\022" +
-      "X\n\013permissions\030\032 \002(\0132C.com.n4systems.fie" +
-      "ldid.api.pub.model.UserMessage.Permissio" +
-      "nsMessage\032\324\001\n\022PermissionsMessage\022\024\n\014crea" +
-      "teAssets\030\001 \002(\010\022\032\n\022manageSystemConfig\030\002 \002",
-      "(\010\022\031\n\021manageSystemUsers\030\003 \002(\010\022\026\n\016manageE" +
-      "ndUsers\030\004 \002(\010\022\024\n\014createEvents\030\005 \002(\010\022\022\n\ne" +
-      "ditEvents\030\006 \002(\010\022\022\n\nmanageJobs\030\007 \002(\010\022\033\n\023m" +
-      "anageSafetyNetwork\030\010 \002(\010\"i\n\010UserType\022\007\n\003" +
-      "ALL\020\000\022\t\n\005ADMIN\020\001\022\n\n\006SYSTEM\020\002\022\010\n\004FULL\020\003\022\010" +
-      "\n\004LITE\020\004\022\014\n\010READONLY\020\005\022\n\n\006PERSON\020\006\022\017\n\013US" +
-      "AGE_BASED\020\007\"=\n\020UserGroupMessage\022\n\n\002id\030\001 " +
-      "\001(\t\022\014\n\004name\030\002 \002(\t\022\017\n\007groupId\030\003 \002(\t\"L\n\023Li" +
-      "stResponseMessage\022\014\n\004page\030\001 \002(\005\022\020\n\010pageS" +
-      "ize\030\002 \002(\005\022\r\n\005total\030\003 \002(\003*\006\010\350\007\020\321\017*X\n\022Attr",
-      "ibuteValueType\022\010\n\004TEXT\020\001\022\n\n\006SELECT\020\002\022\t\n\005" +
-      "COMBO\020\003\022\010\n\004UNIT\020\004\022\010\n\004DATE\020\005\022\r\n\tDATE_TIME" +
-      "\020\006:8\n\017serialized_name\022\035.google.protobuf." +
-      "FieldOptions\030\321\206\003 \001(\t:\206\001\n\006assets\0228.com.n4" +
-      "systems.fieldid.api.pub.model.ListRespon" +
-      "seMessage\030\350\007 \003(\01321.com.n4systems.fieldid" +
-      ".api.pub.model.AssetMessageB\010\212\265\030\004list:\206\001" +
-      "\n\006owners\0228.com.n4systems.fieldid.api.pub" +
-      ".model.ListResponseMessage\030\351\007 \003(\01321.com." +
-      "n4systems.fieldid.api.pub.model.OwnerMes",
-      "sageB\010\212\265\030\004list:\223\001\n\rassetStatuses\0228.com.n" +
-      "4systems.fieldid.api.pub.model.ListRespo" +
-      "nseMessage\030\352\007 \003(\01327.com.n4systems.fieldi" +
-      "d.api.pub.model.AssetStatusMessageB\010\212\265\030\004" +
-      "list:\216\001\n\nassetTypes\0228.com.n4systems.fiel" +
-      "did.api.pub.model.ListResponseMessage\030\353\007" +
-      " \003(\01325.com.n4systems.fieldid.api.pub.mod" +
-      "el.AssetTypeMessageB\010\212\265\030\004list:\230\001\n\017assetT" +
-      "ypeGroups\0228.com.n4systems.fieldid.api.pu" +
-      "b.model.ListResponseMessage\030\354\007 \003(\0132:.com",
-      ".n4systems.fieldid.api.pub.model.AssetTy" +
-      "peGroupMessageB\010\212\265\030\004list:\236\001\n\022assetTypeSc" +
-      "hedules\0228.com.n4systems.fieldid.api.pub." +
-      "model.ListResponseMessage\030\355\007 \003(\0132=.com.n" +
-      "4systems.fieldid.api.pub.model.AssetType" +
-      "ScheduleMessageB\010\212\265\030\004list:\240\001\n\023predefined" +
-      "Locations\0228.com.n4systems.fieldid.api.pu" +
-      "b.model.ListResponseMessage\030\356\007 \003(\0132>.com" +
-      ".n4systems.fieldid.api.pub.model.Predefi" +
-      "nedLocationMessageB\010\212\265\030\004list:\204\001\n\005users\0228",
-      ".com.n4systems.fieldid.api.pub.model.Lis" +
-      "tResponseMessage\030\357\007 \003(\01320.com.n4systems." +
-      "fieldid.api.pub.model.UserMessageB\010\212\265\030\004l" +
-      "ist:\216\001\n\nuserGroups\0228.com.n4systems.field" +
-      "id.api.pub.model.ListResponseMessage\030\360\007 " +
-      "\003(\01325.com.n4systems.fieldid.api.pub.mode" +
-      "l.UserGroupMessageB\010\212\265\030\004listB/\n#com.n4sy" +
-      "stems.fieldid.api.pub.modelB\010Messages"
+      "peName\030\002 \002(\t\032\226\001\n\031AssetAttributeTypeMessa" +
+      "ge\022\n\n\002id\030\001 \002(\t\022E\n\004type\030\002 \002(\01627.com.n4sys" +
+      "tems.fieldid.api.pub.model.AttributeValu" +
+      "eType\022\014\n\004name\030\003 \002(\t\022\030\n\020attributeOptions\030" +
+      "\004 \003(\t\"\306\001\n\025AssetTypeGroupMessage\022\n\n\002id\030\001 " +
+      "\001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014modifiedDate" +
+      "\030\003 \001(\t\022\031\n\021createdByUserName\030\004 \001(\t\022\027\n\017cre" +
+      "atedByUserId\030\005 \001(\t\022\032\n\022modifiedByUserName" +
+      "\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001(\t\022\014\n\004name",
+      "\030\010 \002(\t\"\346\002\n\030AssetTypeScheduleMessage\022\n\n\002i" +
+      "d\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014modified" +
+      "Date\030\003 \001(\t\022\031\n\021createdByUserName\030\004 \001(\t\022\027\n" +
+      "\017createdByUserId\030\005 \001(\t\022\032\n\022modifiedByUser" +
+      "Name\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001(\t\022\021\n\t" +
+      "ownerName\030\010 \001(\t\022\017\n\007ownerId\030\t \002(\t\022\025\n\rasse" +
+      "tTypeName\030\n \001(\t\022\023\n\013assetTypeId\030\013 \002(\t\022\025\n\r" +
+      "eventTypeName\030\014 \001(\t\022\023\n\013eventTypeId\030\r \002(\t" +
+      "\022\027\n\017frequencyInDays\030\016 \002(\003\022\024\n\014autoSchedul" +
+      "e\030\017 \002(\010\"\320\003\n\014OwnerMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013",
+      "createdDate\030\002 \001(\t\022\024\n\014modifiedDate\030\003 \001(\t\022" +
+      "\031\n\021createdByUserName\030\004 \001(\t\022\027\n\017createdByU" +
+      "serId\030\005 \001(\t\022\032\n\022modifiedByUserName\030\006 \001(\t\022" +
+      "\030\n\020modifiedByUserId\030\007 \001(\t\022\014\n\004name\030\010 \002(\t\022" +
+      "\022\n\nparentName\030\t \001(\t\022\020\n\010parentId\030\n \001(\t\022\014\n" +
+      "\004code\030\013 \001(\t\022\r\n\005notes\030\014 \001(\t\022\025\n\rstreetAddr" +
+      "ess\030\r \001(\t\022\014\n\004city\030\016 \001(\t\022\r\n\005state\030\017 \001(\t\022\017" +
+      "\n\007country\030\020 \001(\t\022\013\n\003zip\030\021 \001(\t\022\016\n\006phone1\030\022" +
+      " \001(\t\022\016\n\006phone2\030\023 \001(\t\022\014\n\004fax1\030\024 \001(\t\022\020\n\010la" +
+      "titude\030\025 \001(\t\022\021\n\tlongitude\030\026 \001(\t\022\023\n\013conta",
+      "ctName\030\027 \001(\t\022\024\n\014contactEmail\030\030 \001(\t\"\224\002\n\031P" +
+      "redefinedLocationMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013" +
+      "createdDate\030\002 \001(\t\022\024\n\014modifiedDate\030\003 \001(\t\022" +
+      "\031\n\021createdByUserName\030\004 \001(\t\022\027\n\017createdByU" +
+      "serId\030\005 \001(\t\022\032\n\022modifiedByUserName\030\006 \001(\t\022" +
+      "\030\n\020modifiedByUserId\030\007 \001(\t\022\021\n\townerName\030\010" +
+      " \001(\t\022\017\n\007ownerId\030\t \001(\t\022\022\n\nparentName\030\n \001(" +
+      "\t\022\020\n\010parentId\030\013 \001(\t\022\014\n\004name\030\014 \002(\t\"\310\002\n\021Te" +
+      "stSimpleMessage\022\024\n\014double_field\030\001 \001(\001\022\023\n" +
+      "\013float_field\030\002 \001(\002\022\023\n\013int32_field\030\003 \001(\005\022",
+      "\023\n\013int64_field\030\004 \001(\003\022\024\n\014uint32_field\030\005 \001" +
+      "(\r\022\024\n\014uint64_field\030\006 \001(\004\022\024\n\014sint32_field" +
+      "\030\007 \001(\021\022\024\n\014sint64_field\030\010 \001(\022\022\025\n\rfixed32_" +
+      "field\030\t \001(\007\022\025\n\rfixed64_field\030\n \001(\006\022\026\n\016sf" +
+      "ixed32_field\030\013 \001(\017\022\026\n\016sfixed64_field\030\014 \001" +
+      "(\020\022\022\n\nbool_field\030\r \001(\010\022\024\n\014string_field\030\016" +
+      " \001(\t\")\n\021TestNestedMessage\022\024\n\014string_fiel" +
+      "d\030\001 \002(\t\"s\n\024TestContainerMessage\022\023\n\013int32" +
+      "_field\030\001 \002(\005\022F\n\006nested\030\002 \001(\01326.com.n4sys" +
+      "tems.fieldid.api.pub.model.TestNestedMes",
+      "sage\"\257\010\n\013UserMessage\022\n\n\002id\030\001 \001(\t\022\025\n\rcrea" +
+      "tedstring\030\002 \001(\t\022\026\n\016modifiedstring\030\003 \001(\t\022" +
+      "\031\n\021createdByUserName\030\004 \001(\t\022\027\n\017createdByU" +
+      "serId\030\005 \001(\t\022\032\n\022modifiedByUserName\030\006 \001(\t\022" +
+      "\030\n\020modifiedByUserId\030\007 \001(\t\022\021\n\townerName\030\010" +
+      " \001(\t\022\017\n\007ownerId\030\t \002(\t\022\016\n\006userID\030\n \002(\t\022\021\n" +
+      "\tfirstName\030\013 \001(\t\022\020\n\010lastName\030\014 \001(\t\022\024\n\014em" +
+      "ailAddress\030\r \001(\t\022\022\n\ntimeZoneID\030\016 \001(\t\022\020\n\010" +
+      "position\030\017 \001(\t\022\020\n\010initials\030\020 \001(\t\022\033\n\023fail" +
+      "edLoginAttempts\030\021 \001(\005\022\016\n\006locked\030\022 \001(\010\022\031\n",
+      "\021lockedUntilstring\030\023 \001(\t\022\035\n\025passwordChan" +
+      "gedstring\030\024 \001(\t\022\020\n\010language\030\025 \001(\t\022\022\n\nide" +
+      "ntifier\030\026 \001(\t\022\027\n\017lastLoginstring\030\027 \001(\t\022E" +
+      "\n\006groups\030\030 \003(\01325.com.n4systems.fieldid.a" +
+      "pi.pub.model.UserGroupMessage\022K\n\010userTyp" +
+      "e\030\031 \002(\01629.com.n4systems.fieldid.api.pub." +
+      "model.UserMessage.UserType\022X\n\013permission" +
+      "s\030\032 \002(\0132C.com.n4systems.fieldid.api.pub." +
+      "model.UserMessage.PermissionsMessage\032\324\001\n" +
+      "\022PermissionsMessage\022\024\n\014createAssets\030\001 \002(",
+      "\010\022\032\n\022manageSystemConfig\030\002 \002(\010\022\031\n\021manageS" +
+      "ystemUsers\030\003 \002(\010\022\026\n\016manageEndUsers\030\004 \002(\010" +
+      "\022\024\n\014createEvents\030\005 \002(\010\022\022\n\neditEvents\030\006 \002" +
+      "(\010\022\022\n\nmanageJobs\030\007 \002(\010\022\033\n\023manageSafetyNe" +
+      "twork\030\010 \002(\010\"i\n\010UserType\022\007\n\003ALL\020\000\022\t\n\005ADMI" +
+      "N\020\001\022\n\n\006SYSTEM\020\002\022\010\n\004FULL\020\003\022\010\n\004LITE\020\004\022\014\n\010R" +
+      "EADONLY\020\005\022\n\n\006PERSON\020\006\022\017\n\013USAGE_BASED\020\007\"=" +
+      "\n\020UserGroupMessage\022\n\n\002id\030\001 \001(\t\022\014\n\004name\030\002" +
+      " \002(\t\022\017\n\007groupId\030\003 \002(\t\"L\n\023ListResponseMes" +
+      "sage\022\014\n\004page\030\001 \002(\005\022\020\n\010pageSize\030\002 \002(\005\022\r\n\005",
+      "total\030\003 \002(\003*\006\010\350\007\020\321\017*X\n\022AttributeValueTyp" +
+      "e\022\010\n\004TEXT\020\001\022\n\n\006SELECT\020\002\022\t\n\005COMBO\020\003\022\010\n\004UN" +
+      "IT\020\004\022\010\n\004DATE\020\005\022\r\n\tDATE_TIME\020\006:8\n\017seriali" +
+      "zed_name\022\035.google.protobuf.FieldOptions\030" +
+      "\321\206\003 \001(\t:\206\001\n\006assets\0228.com.n4systems.field" +
+      "id.api.pub.model.ListResponseMessage\030\350\007 " +
+      "\003(\01321.com.n4systems.fieldid.api.pub.mode" +
+      "l.AssetMessageB\010\212\265\030\004list:\206\001\n\006owners\0228.co" +
+      "m.n4systems.fieldid.api.pub.model.ListRe" +
+      "sponseMessage\030\351\007 \003(\01321.com.n4systems.fie",
+      "ldid.api.pub.model.OwnerMessageB\010\212\265\030\004lis" +
+      "t:\223\001\n\rassetStatuses\0228.com.n4systems.fiel" +
+      "did.api.pub.model.ListResponseMessage\030\352\007" +
+      " \003(\01327.com.n4systems.fieldid.api.pub.mod" +
+      "el.AssetStatusMessageB\010\212\265\030\004list:\216\001\n\nasse" +
+      "tTypes\0228.com.n4systems.fieldid.api.pub.m" +
+      "odel.ListResponseMessage\030\353\007 \003(\01325.com.n4" +
+      "systems.fieldid.api.pub.model.AssetTypeM" +
+      "essageB\010\212\265\030\004list:\230\001\n\017assetTypeGroups\0228.c" +
+      "om.n4systems.fieldid.api.pub.model.ListR",
+      "esponseMessage\030\354\007 \003(\0132:.com.n4systems.fi" +
+      "eldid.api.pub.model.AssetTypeGroupMessag" +
+      "eB\010\212\265\030\004list:\236\001\n\022assetTypeSchedules\0228.com" +
+      ".n4systems.fieldid.api.pub.model.ListRes" +
+      "ponseMessage\030\355\007 \003(\0132=.com.n4systems.fiel" +
+      "did.api.pub.model.AssetTypeScheduleMessa" +
+      "geB\010\212\265\030\004list:\240\001\n\023predefinedLocations\0228.c" +
+      "om.n4systems.fieldid.api.pub.model.ListR" +
+      "esponseMessage\030\356\007 \003(\0132>.com.n4systems.fi" +
+      "eldid.api.pub.model.PredefinedLocationMe",
+      "ssageB\010\212\265\030\004list:\204\001\n\005users\0228.com.n4system" +
+      "s.fieldid.api.pub.model.ListResponseMess" +
+      "age\030\357\007 \003(\01320.com.n4systems.fieldid.api.p" +
+      "ub.model.UserMessageB\010\212\265\030\004list:\216\001\n\nuserG" +
+      "roups\0228.com.n4systems.fieldid.api.pub.mo" +
+      "del.ListResponseMessage\030\360\007 \003(\01325.com.n4s" +
+      "ystems.fieldid.api.pub.model.UserGroupMe" +
+      "ssageB\010\212\265\030\004listB/\n#com.n4systems.fieldid" +
+      ".api.pub.modelB\010Messages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -33775,7 +33961,7 @@ public final class Messages {
           internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_AssetAttributeTypeMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_AssetAttributeTypeMessage_descriptor,
-              new java.lang.String[] { "Id", "Type", "Name", });
+              new java.lang.String[] { "Id", "Type", "Name", "AttributeOptions", });
           internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeGroupMessage_descriptor =
             getDescriptor().getMessageTypes().get(3);
           internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeGroupMessage_fieldAccessorTable = new

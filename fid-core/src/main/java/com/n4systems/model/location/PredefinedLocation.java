@@ -1,5 +1,6 @@
 package com.n4systems.model.location;
 
+import com.n4systems.model.ApiModelWithName;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.api.NamedEntity;
@@ -14,7 +15,7 @@ import java.util.List;
 
 @SuppressWarnings("serial")
 @Entity(name = "predefinedlocations")
-public class PredefinedLocation extends ArchivableEntityWithOwner implements NamedEntity, TreeNode, HasOwner  {
+public class PredefinedLocation extends ArchivableEntityWithOwner implements NamedEntity, TreeNode, HasOwner, ApiModelWithName {
 
 
     public static final SecurityDefiner createSecurityDefiner() {

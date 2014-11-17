@@ -61,7 +61,7 @@ public class AssetResource extends CrudResource<Asset, AssetMessage, Builder> {
 				.addDateToString(Asset::getCreated, Builder::setCreatedDate)
 				.addDateToString(Asset::getModified, Builder::setModifiedDate)
 				.addDateToString(Asset::getIdentified, Builder::setIdentifiedDate)
-				.addModelToMessage(Asset::getOwner, new BaseOrgToMessage<>(Builder::setOwnerId, Builder::setOwnerName))
+				.addModelToMessage(Asset::getOwner, new ApiModelWithNameToMessage<>(Builder::setOwnerId, Builder::setOwnerName))
 				.addModelToMessage(Asset::getCreatedBy, new UserToMessage<>(Builder::setCreatedByUserId, Builder::setCreatedByUserName))
 				.addModelToMessage(Asset::getModifiedBy, new UserToMessage<>(Builder::setModifiedByUserId, Builder::setModifiedByUserName))
 				.addModelToMessage(Asset::getIdentifiedBy, new UserToMessage<>(Builder::setIdentifiedByUserId, Builder::setIdentifiedByUserName))

@@ -2,9 +2,9 @@ package com.n4systems.fieldid.api.pub.resources;
 
 import com.n4systems.fieldid.api.pub.mapping.Mapper;
 import com.n4systems.fieldid.api.pub.mapping.TypeMapperBuilder;
-import com.n4systems.fieldid.api.pub.mapping.model.marshal.BaseOrgToMessage;
-import com.n4systems.fieldid.api.pub.mapping.model.unmarshal.MessageToGpsLocation;
+import com.n4systems.fieldid.api.pub.mapping.model.marshal.ApiModelWithNameToMessage;
 import com.n4systems.fieldid.api.pub.mapping.model.marshal.UserToMessage;
+import com.n4systems.fieldid.api.pub.mapping.model.unmarshal.MessageToGpsLocation;
 import com.n4systems.fieldid.api.pub.model.Messages;
 import com.n4systems.fieldid.api.pub.model.Messages.OwnerMessage;
 import com.n4systems.fieldid.api.pub.model.Messages.OwnerMessage.Builder;
@@ -66,7 +66,7 @@ public class OwnerResource extends CrudResource<BaseOrg, OwnerMessage, Builder> 
 				.addDateToString(BaseOrg::getModified, Builder::setModifiedDate)
 				.addModelToMessage(BaseOrg::getCreatedBy, new UserToMessage<>(Builder::setCreatedByUserId, Builder::setCreatedByUserName))
 				.addModelToMessage(BaseOrg::getModifiedBy, new UserToMessage<>(Builder::setModifiedByUserId, Builder::setModifiedByUserName))
-				.addModelToMessage(BaseOrg::getParent, new BaseOrgToMessage<>(Builder::setParentId, Builder::setParentName))
+				.addModelToMessage(BaseOrg::getParent, new ApiModelWithNameToMessage<>(Builder::setParentId, Builder::setParentName))
 				.addModelToMessage(BaseOrg::getAddressInfo, (subBuilder) -> subBuilder
 						.add(AddressInfo::getStreetAddress, Builder::setStreetAddress)
 						.add(AddressInfo::getCity, Builder::setCity)

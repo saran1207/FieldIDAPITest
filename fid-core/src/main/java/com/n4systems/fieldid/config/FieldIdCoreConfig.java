@@ -46,11 +46,8 @@ import com.n4systems.fieldid.service.mixpanel.MixpanelService;
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.org.PlaceService;
-import com.n4systems.fieldid.service.procedure.LotoReportService;
-import com.n4systems.fieldid.service.procedure.NotifyProcedureAuthorizersService;
-import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
-import com.n4systems.fieldid.service.procedure.ProcedureService;
-import com.n4systems.fieldid.service.procedure.SvgGenerationService;
+import com.n4systems.fieldid.service.predefinedlocation.PredefinedLocationService;
+import com.n4systems.fieldid.service.procedure.*;
 import com.n4systems.fieldid.service.project.ProjectService;
 import com.n4systems.fieldid.service.schedule.AssetTypeScheduleService;
 import com.n4systems.fieldid.service.schedule.MassScheduleService;
@@ -865,4 +862,9 @@ public class FieldIdCoreConfig {
     public SvgGenerationService svgGenerationService() {
         return new SvgGenerationService();
     }
+
+	@Bean
+	public PredefinedLocationService PredefinedLocationService() {
+		return new PredefinedLocationService();
+	}
 }

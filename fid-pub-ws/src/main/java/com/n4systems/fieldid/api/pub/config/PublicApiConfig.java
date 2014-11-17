@@ -5,9 +5,7 @@ import com.n4systems.fieldid.api.pub.filters.OAuthFilter;
 import com.n4systems.fieldid.api.pub.mapping.model.unmarshal.*;
 import com.n4systems.fieldid.api.pub.protocolbuffers.google.GoogleProtobufMessageBodyReader;
 import com.n4systems.fieldid.api.pub.protocolbuffers.google.GoogleProtobufMessageBodyWriter;
-import com.n4systems.fieldid.api.pub.resources.AssetResource;
-import com.n4systems.fieldid.api.pub.resources.AssetTypeResource;
-import com.n4systems.fieldid.api.pub.resources.OwnerResource;
+import com.n4systems.fieldid.api.pub.resources.*;
 import com.n4systems.fieldid.api.pub.resources.test.TestResource;
 import com.n4systems.fieldid.config.FieldIdCoreConfig;
 import com.n4systems.fieldid.config.FieldIdDownloadConfig;
@@ -90,4 +88,13 @@ public class PublicApiConfig {
 		return new AssetTypeResource();
 	}
 
+	@Bean(initMethod = "init")
+	public AssetTypeGroupResource assetTypeGroupResource() {
+		return new AssetTypeGroupResource();
+	}
+
+	@Bean(initMethod = "init")
+	public PredefinedLocationResource predefinedLocationResource() {
+		return new PredefinedLocationResource();
+	}
 }

@@ -7,6 +7,8 @@ import com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttrib
 import com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage.Builder;
 import rfid.ejb.entity.InfoFieldBean;
 
+import java.util.stream.Collectors;
+
 public class AssetAttributeTypeToMessage extends TypeMapper<InfoFieldBean, Builder> implements ValueConverter<InfoFieldBean, AssetAttributeTypeMessage> {
 
 	public AssetAttributeTypeToMessage() {
@@ -14,6 +16,7 @@ public class AssetAttributeTypeToMessage extends TypeMapper<InfoFieldBean, Build
 				.add(InfoFieldBean::getPublicId, Builder::setId)
 				.add(InfoFieldBean::getName, Builder::setName)
 				.add(InfoFieldBean::getType, Builder::setType, new InfoFieldTypeToAttributeValueTypeConverter<>())
+				.addCollection(InfoFieldBean::getInfoOptions, Builder::addAllAttributeOptions, (field) -> field.getName(), Collectors.toList())
 				.build());
 	}
 

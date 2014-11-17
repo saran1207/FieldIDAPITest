@@ -16,7 +16,7 @@ public class AssetTypeScheduleToMessage extends TypeMapper<AssetTypeSchedule, Bu
 				.addDateToString(AssetTypeSchedule::getModified, Builder::setModifiedDate)
 				.addModelToMessage(AssetTypeSchedule::getCreatedBy, new UserToMessage<>(Builder::setCreatedByUserId, Builder::setCreatedByUserName))
 				.addModelToMessage(AssetTypeSchedule::getModifiedBy, new UserToMessage<>(Builder::setModifiedByUserId, Builder::setModifiedByUserName))
-				.addModelToMessage(AssetTypeSchedule::getOwner, new BaseOrgToMessage<>(Builder::setOwnerId, Builder::setOwnerName))
+				.addModelToMessage(AssetTypeSchedule::getOwner, new ApiModelWithNameToMessage<>(Builder::setOwnerId, Builder::setOwnerName))
 				.addModelToMessage(AssetTypeSchedule::getAssetType, new ApiModelWithNameToMessage<>(Builder::setAssetTypeId, Builder::setAssetTypeName))
 				.addModelToMessage(AssetTypeSchedule::getEventType, new ApiModelWithNameToMessage<>(Builder::setEventTypeId, Builder::setEventTypeName))
 				.add(AssetTypeSchedule::getFrequency, Builder::setFrequencyInDays)
