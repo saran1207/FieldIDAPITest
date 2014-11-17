@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.service.amazon;
 
-import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -496,17 +495,7 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     public void uploadProcedureDefinitionSvg(ProcedureDefinition procedureDefinition, File svgFile) {
-        //First we want to remove the old one.......... provided there is one at all.
-        try {
-            removeResource(procedureDefinition.getTenant().getId(),
-                    PROCEDURE_DEFINITION_IMAGE_PATH,
-                    procedureDefinition.getAsset().getId(),
-                    procedureDefinition.getId(),
-                    svgFile.getName());
-        } catch(AmazonClientException e) {
-            logger.warn("Was attempting to delete old .SVGs for ProcedureDefinition(" + procedureDefinition.getId() +
-                        ") and encountered this.", e);
-        }
+
 
         uploadResource(svgFile, procedureDefinition.getTenant().getId(),
                 PROCEDURE_DEFINITION_IMAGE_PATH,

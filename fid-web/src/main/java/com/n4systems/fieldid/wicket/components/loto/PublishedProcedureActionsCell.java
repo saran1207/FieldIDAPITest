@@ -275,19 +275,6 @@ public class PublishedProcedureActionsCell extends Panel {
         longLink.add(new Label("label", new FIDLabelModel("label.long_form")));
         optionsContainer2.add(longLink);
 
-        optionsContainer2.add(new Link<Void>("regenerateLink") {
-            @Override
-            public void onClick() {
-                try {
-                    svgGenerationService.generateAndUploadAnnotatedSvgs(procedureDefinition);
-                } catch (Exception e) {
-                    logger.error("Was trying to gegenerate SVGs for ProcedureDefinition(" + procedureDefinition.getId() +
-                                 " and this happened!  Help me, Obi-Wan Kenobi.  You're my only hope.", e);
-                    throw new RuntimeException("Something horrible happened when trying to generate SVGs for a " +
-                                               "ProcedureDefinition!!");
-                }
-            }
-        });
         add(optionsContainer2);
 
     }
