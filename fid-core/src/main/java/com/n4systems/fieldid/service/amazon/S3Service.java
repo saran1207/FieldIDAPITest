@@ -495,6 +495,8 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     public void uploadProcedureDefinitionSvg(ProcedureDefinition procedureDefinition, File svgFile) {
+
+
         uploadResource(svgFile, procedureDefinition.getTenant().getId(),
                 PROCEDURE_DEFINITION_IMAGE_PATH,
                 procedureDefinition.getAsset().getId(),

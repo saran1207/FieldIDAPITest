@@ -274,6 +274,7 @@ public class PublishedProcedureActionsCell extends Panel {
         };
         longLink.add(new Label("label", new FIDLabelModel("label.long_form")));
         optionsContainer2.add(longLink);
+
         add(optionsContainer2);
 
     }
@@ -333,7 +334,7 @@ public class PublishedProcedureActionsCell extends Panel {
             return outFile;
         } catch (JRException | IOException e) {
             logger.error("Jasper Report for user " + FieldIDSession.get().getSessionUser().getId() + " when generating" +
-                         "a LOTO Short or Long form report.", e);
+                    "a LOTO Short or Long form report.", e);
         }
 
         return null;

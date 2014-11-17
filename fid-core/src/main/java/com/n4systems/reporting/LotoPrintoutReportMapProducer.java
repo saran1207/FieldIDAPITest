@@ -59,7 +59,7 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
         add("currentDate", formatDate(new Date(System.currentTimeMillis()), false));
         add("userPosition", procDef.getApprovedBy() != null ? procDef.getApprovedBy().getPosition() : procDef.getRejectedBy() != null ? procDef.getRejectedBy().getPosition() : "");
 
-        //If it's null, that SHOULD mean that there was no previous ProcDef.  At least not one that was published...
+        //If it's 1, that SHOULD mean that there was no previous ProcDef.  At least not one that was published...
         if(procDef.getRevisionNumber().intValue() > 1) {
             add("revisedBy", procDef.getCreatedBy().getDisplayName());
             add("revisedByDate", formatDate(procDef.getCreated(), false));
