@@ -190,48 +190,50 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
 
         //Find the relevant image.  We do a bit of cheating, but should receive back an Optional that will either
         //contain the image or null.
-        Optional<ProcedureDefinitionImage> optionalImage =
-                procDef.getImages()
-                        .stream()
-                        //The trick here is to filter by a value that should result in either 0 or 1 elements.
-                        .filter(image -> image.getId().equals(isolationPoint.getAnnotation().getImage().getId()))
-                        .findAny();
+        if(isolationPoint.getAnnotation() != null) {
+            Optional<ProcedureDefinitionImage> optionalImage =
+                    procDef.getImages()
+                            .stream()
+                                    //The trick here is to filter by a value that should result in either 0 or 1 elements.
+                            .filter(image -> image.getId().equals(isolationPoint.getAnnotation().getImage().getId()))
+                            .findAny();
 
-        //Zero elements, you say?
-        //Well, yeah... images are optional.  This is how we handle that:
-        try {
-            ProcedureDefinitionImage theImage = optionalImage.get();
-            if(theImage == null) throw new NoSuchElementException("The image was empty... that's still bad news.");
-            byte[] imageData = s3Service.downloadProcedureDefinitionImageSvg(theImage, isolationPoint);
-            if(imageData == null) {
-                //It's possible this image was only null because the SVG doesn't exist yet... so we're going to try
-                //to fix that... then we're going to try again.  If it's still bad the second time, we're going to throw
-                //an exception.
-                try {
-                    svgGenerationService.generateAndUploadAnnotatedSvgs(procDef);
+            //Zero elements, you say?
+            //Well, yeah... images are optional.  This is how we handle that:
+            try {
+                ProcedureDefinitionImage theImage = optionalImage.get();
+                if (theImage == null) throw new NoSuchElementException("The image was empty... that's still bad news.");
+                byte[] imageData = s3Service.downloadProcedureDefinitionImageSvg(theImage, isolationPoint);
+                if (imageData == null) {
+                    //It's possible this image was only null because the SVG doesn't exist yet... so we're going to try
+                    //to fix that... then we're going to try again.  If it's still bad the second time, we're going to throw
+                    //an exception.
+                    try {
+                        svgGenerationService.generateAndUploadAnnotatedSvgs(procDef);
 
-                    imageData = s3Service.downloadProcedureDefinitionImageSvg(theImage, isolationPoint);
+                        imageData = s3Service.downloadProcedureDefinitionImageSvg(theImage, isolationPoint);
 
-                    if(imageData == null) throw new Exception("Image doesn't exist...");
+                        if (imageData == null) throw new Exception("Image doesn't exist...");
 
+                        container.setImage(new ByteArrayInputStream(imageData));
+                    } catch (IOException ioe) {
+                        logger.warn("There was an IOException while trying to download the image associated with the Isolation Point with ID " + isolationPoint.getId(), ioe);
+                    } catch (Exception e) {
+                        logger.error("There was a problem while Generating SVGs for ProcDef with ID " + procDef.getId(), e);
+                        e.printStackTrace();
+                    }
+                } else {
                     container.setImage(new ByteArrayInputStream(imageData));
-                } catch (IOException ioe) {
-                    logger.warn("There was an IOException while trying to download the image associated with the Isolation Point with ID " + isolationPoint.getId(), ioe);
-                } catch (Exception e) {
-                    logger.error("There was a problem while Generating SVGs for ProcDef with ID " + procDef.getId(), e);
-                    e.printStackTrace();
                 }
-            } else {
-                container.setImage(new ByteArrayInputStream(imageData));
+            } catch (NoSuchElementException nsee) {
+                //Aside from a console warning, we don't do anything else... this console warning may even be too much...
+                //but I'd rather have some record of this.
+                logger.warn("No image found for Isolation Point with ID: " + isolationPoint.getId());
+            } catch (IOException ioe) {
+                //Again, we'll just warn and then continue without the image.  This can all be changed if images are super
+                //important.
+                logger.warn("There was an IOException while trying to download the image associated with the Isolation Point with ID " + isolationPoint.getId(), ioe);
             }
-        } catch(NoSuchElementException nsee) {
-            //Aside from a console warning, we don't do anything else... this console warning may even be too much...
-            //but I'd rather have some record of this.
-            logger.warn("No image found for Isolation Point with ID: " + isolationPoint.getId());
-        } catch(IOException ioe) {
-            //Again, we'll just warn and then continue without the image.  This can all be changed if images are super
-            //important.
-            logger.warn("There was an IOException while trying to download the image associated with the Isolation Point with ID " + isolationPoint.getId(), ioe);
         }
 
         //Now we're left with null if there's no image, or the image data if there IS image data.
