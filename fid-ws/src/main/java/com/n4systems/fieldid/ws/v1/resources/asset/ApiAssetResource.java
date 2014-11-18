@@ -40,7 +40,8 @@ import rfid.ejb.entity.InfoOptionBean;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @Path("asset")
@@ -170,6 +171,19 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		}
 
 		logger.info("Saved " + multiAddAsset.getIdentifiers().size() + " Assets ");
+	}
+
+	@PUT
+	@Path("multiv2")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Transactional
+	public void multiAddAsset(ApiAsset[] assets) {
+		//In order to allow Mobile to have an easier time performing offline actions, we're accepting multi-assets as
+		//a simple array.  This allows the assets to be fully created offline, then uploaded at a later time when the
+		//sync process happens.
+		for(ApiAsset asset : assets) {
+			saveAsset(asset);
+		}
 	}
 
     @Path("{assetId}/procedures")
