@@ -268,13 +268,23 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
             //Wipe out previous annotations... we don't need 'em.
             image.setAnnotations(new ArrayList<>());
 
-            //Add the new annotations.
-            image.getAnnotations()
-                 .addAll(procDef.getLockIsolationPoints()
+            try {
+                //Add the new annotations.
+                image.getAnnotations()
+                        .addAll(procDef.getLockIsolationPoints()
                                 .stream()
+                                //Just because some Isolation Points have images, doesn't mean ALL Isolation Points do.
+                                //Also, "Notes" Isolation Points don't have Annotations...
+                                .filter(isolationPoint -> isolationPoint.getAnnotation() != null)
                                 .map(IsolationPoint::getAnnotation)
                                 .filter(annotation -> annotation.getImage().getMobileGUID().equals(image.getMobileGUID()))
                                 .collect(Collectors.toList()));
+            } catch (NullPointerException npe) {
+                //This is actually OK.  It just means that there were no new Annotations to add.  If we don't catch
+                //this error and continue on, the sky will fall, kittens will perish and zombies will rise.
+                log.warn("There was a Null Pointer Exception when processing Annotations on ProcDef with ID " +
+                         procDef.getId() + "... trying to carry on.");
+            }
 
             //Add the image to the updated image list.
             updatedImages.add(image);
