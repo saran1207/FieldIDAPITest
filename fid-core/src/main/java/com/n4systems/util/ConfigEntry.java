@@ -98,10 +98,15 @@ public enum ConfigEntry {
     MIXPANEL_ENABLED                            ( "false" ),
     MIXPANEL_TOKEN                              ( "4c3e64a8211844a634f163b8b1eb5844" ),
     EVENT_INDEX_ENABLED                         (   "true"),
-    EVENT_INDEX_SIZE                            (   "50");
+    EVENT_INDEX_SIZE                            (   "50"),
+    HEADER_SCRIPT                               ( "" ),
+    FOOTER_SCRIPT                               ( "" ),
+    STRUTS_HEADER_SCRIPT                        ( "" ),
+    STRUTS_FOOTER_SCRIPT                        ( "" );
 
-	
-	private String defaultValue;
+
+
+    private String defaultValue;
 	
 	ConfigEntry(String defaultValue) {
 		this.defaultValue = defaultValue;
