@@ -27,7 +27,9 @@
 		<#include "googleAnalytics.ftl"/>
         <footer>
             <script>
-                ${footerScript?js_string}
+                <#if footerScript?exists>
+                    ${footerScript?js_string}
+                </#if>
             </script>
         </footer>
 	</body>
