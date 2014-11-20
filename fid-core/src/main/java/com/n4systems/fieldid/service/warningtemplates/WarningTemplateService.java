@@ -29,12 +29,14 @@ public class WarningTemplateService extends FieldIdPersistenceService {
         return persistenceService.findAll(builder);
     }
 
-    public void save(WarningTemplate template) {
-        persistenceService.save(template);
+    public WarningTemplate save(WarningTemplate template) {
+        Long id = persistenceService.save(template);
+
+        return persistenceService.find(WarningTemplate.class, id);
     }
 
-    public void update(WarningTemplate template) {
-        persistenceService.update(template);
+    public WarningTemplate update(WarningTemplate template) {
+        return persistenceService.update(template);
     }
 
     public void delete(WarningTemplate template) {
