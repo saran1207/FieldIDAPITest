@@ -1,0 +1,1 @@
+ALTER TABLE procedure_definitions MODIFY warnings VARCHAR(2048);
