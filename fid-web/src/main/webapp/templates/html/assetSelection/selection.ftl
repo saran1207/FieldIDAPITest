@@ -23,9 +23,6 @@
 					<@s.text name="instructions.how_to_select_multiple_assets"/>
 				</p>
 			</div>
-			<div id="videoInstruction">
-				<a id="showVideo" href='/videos/instructions/multi-event-video/index.html'><img src="<@s.url value="/images/multi-event-video-small.jpg"/>" alt="<@s.text name="label.multi_event_video"/>"/></a>
-			</div>
 
             <script type="text/javascript">
 
