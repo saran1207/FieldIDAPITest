@@ -628,6 +628,15 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
         return getConfigContext().getString(ConfigEntry.APPTEGIC_DATASET);
     }
 
+    public String getHeaderScript() {
+        return getConfigContext().getString(ConfigEntry.STRUTS_HEADER_SCRIPT, getTenantId());
+    }
+
+    public String geFooterScript() {
+        return getConfigContext().getString(ConfigEntry.STRUTS_FOOTER_SCRIPT, getTenantId());
+    }
+
+
     public String getMainLogoUrl(Long tenantId) {
         return s3Service.getBrandingLogoURL(tenantId).toString();
     }

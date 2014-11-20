@@ -25,5 +25,12 @@
 		</div>
 		
 		<#include "googleAnalytics.ftl"/>
+        <footer>
+            <script>
+                <#if footerScript?exists>
+                    ${footerScript?js_string}
+                </#if>
+            </script>
+        </footer>
 	</body>
 </html>

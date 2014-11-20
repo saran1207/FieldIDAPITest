@@ -67,6 +67,8 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
         expect(configService.getBoolean(ConfigEntry.APPTEGIC_ENABLED)).andReturn(configData.apptegic);
         expect(configService.getString(ConfigEntry.APPTEGIC_DATASET)).andReturn(configData.apptegicDataset);
         expect(configService.getString(ConfigEntry.CUSTOM_JS)).andReturn("");
+        expect(configService.getString(eq(ConfigEntry.FOOTER_SCRIPT), anyLong())).andReturn("");
+        expect(configService.getString(eq(ConfigEntry.HEADER_SCRIPT), anyLong())).andReturn("");
 		replay(configService);
 	}
 

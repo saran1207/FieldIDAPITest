@@ -150,6 +150,13 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         add(topFeedbackPanel = new TopFeedbackPanel("topFeedbackPanel"));
         add(new Label("versionLabel", FieldIdVersion.getVersion()));
 
+        String footerScript = configService.getString(ConfigEntry.FOOTER_SCRIPT, getTenantId());
+        if (footerScript != null && !footerScript.isEmpty()) {
+            add(new Label("footerScript", footerScript).setEscapeModelStrings(false));
+        } else {
+            add(new Label("footerScript").setVisible(false));
+        }
+
         add(createBackToLink("backToLink", "backToLinkLabel"));
         add(createRelogLink());
     }
@@ -412,6 +419,12 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
             TextTemplate apptegicTemplate = new PackageTextTemplate(FieldIDFrontEndPage.class, "apptegic.js");
             response.renderJavaScript(apptegicTemplate.asString(apptegicParams), null);
+        }
+
+        String headerScript = configService.getString(ConfigEntry.HEADER_SCRIPT, getTenantId());
+
+        if (headerScript != null && !headerScript.isEmpty()) {
+            response.renderOnDomReadyJavaScript(headerScript);
         }
     }
 

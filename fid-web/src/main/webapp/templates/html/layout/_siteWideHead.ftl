@@ -32,3 +32,4 @@
 <@n4.includeScript src="my_saved_items.js" />
 
 <#include "apptegic.ftl">
+<script>${headerScript}</script>
