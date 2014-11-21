@@ -4,7 +4,7 @@
     <parent>
         <artifactId>fieldid-root</artifactId>
         <groupId>com.fieldid</groupId>
-        <version>2014.8.0</version>
+        <version>2014.8.1</version>
     </parent>
     <groupId>com.fieldid</groupId>
     <artifactId>fid-pub-ws</artifactId>
