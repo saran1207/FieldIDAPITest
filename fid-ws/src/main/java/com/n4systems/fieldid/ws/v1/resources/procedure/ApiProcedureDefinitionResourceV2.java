@@ -497,7 +497,35 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
 
         isoPoint.setCheck(apiIsolationPoint.getCheck());
 
-        isoPoint.setSourceType(IsolationPointSourceType.valueOf(apiIsolationPoint.getSource()));
+		/*
+		WEB-5345: The following is a temporary hack to allow saving of Valve and Hydraulic source types
+		from mobile version 1.6.0.  The following should be removed in 2014.9
+		 */
+		if (apiIsolationPoint.getSource() != null) {
+			isoPoint.setSourceType(IsolationPointSourceType.valueOf(apiIsolationPoint.getSource()));
+		} else {
+			/*
+			The mobile bug is that the source field for Valve or Hydraulic source types is null.  In this case
+			we will infer the source type from the sourceText which is a required, limited list and is
+			unique for these two types.
+			 */
+			if (apiIsolationPoint.getSourceText().equals("Valve")) {
+				isoPoint.setSourceType(IsolationPointSourceType.V);
+			} else if (apiIsolationPoint.getSourceText().equals("Hydraulic")
+					|| apiIsolationPoint.getSourceText().equals("Hydraulic 600 PSI")
+					|| apiIsolationPoint.getSourceText().equals("Hydraulic 900 PSI")
+					|| apiIsolationPoint.getSourceText().equals("Hydraulic 1200 PSI")) {
+				isoPoint.setSourceType(IsolationPointSourceType.H);
+			} else {
+				throw new NullPointerException("source is null and sourceText is unknown: " + apiIsolationPoint.getSourceText());
+			}
+		}
+		// WEB-5345: END
+
+		/*
+		TODO: Restore the following line in 2014.9
+		isoPoint.setSourceType(IsolationPointSourceType.valueOf(apiIsolationPoint.getSource()));
+		 */
         isoPoint.setSourceText(apiIsolationPoint.getSourceText());
         isoPoint.setIdentifier(apiIsolationPoint.getIdentifier());
         isoPoint.setElectronicIdentifier(apiIsolationPoint.getElectronicIdentifier());
