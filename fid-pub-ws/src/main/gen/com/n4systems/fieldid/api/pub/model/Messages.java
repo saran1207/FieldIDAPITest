@@ -13,8 +13,7 @@ public final class Messages {
     registry.add(com.n4systems.fieldid.api.pub.model.Messages.assetStatuses);
     registry.add(com.n4systems.fieldid.api.pub.model.Messages.assetTypes);
     registry.add(com.n4systems.fieldid.api.pub.model.Messages.assetTypeGroups);
-    registry.add(com.n4systems.fieldid.api.pub.model.Messages.assetTypeSchedules);
-    registry.add(com.n4systems.fieldid.api.pub.model.Messages.predefinedLocations);
+    registry.add(com.n4systems.fieldid.api.pub.model.Messages.locations);
     registry.add(com.n4systems.fieldid.api.pub.model.Messages.users);
     registry.add(com.n4systems.fieldid.api.pub.model.Messages.userGroups);
   }
@@ -26557,35 +26556,35 @@ public final class Messages {
     com.google.protobuf.ByteString
         getIdBytes();
 
-    // optional string createdstring = 2;
+    // optional string created = 2;
     /**
-     * <code>optional string createdstring = 2;</code>
+     * <code>optional string created = 2;</code>
      */
-    boolean hasCreatedstring();
+    boolean hasCreated();
     /**
-     * <code>optional string createdstring = 2;</code>
+     * <code>optional string created = 2;</code>
      */
-    java.lang.String getCreatedstring();
+    java.lang.String getCreated();
     /**
-     * <code>optional string createdstring = 2;</code>
+     * <code>optional string created = 2;</code>
      */
     com.google.protobuf.ByteString
-        getCreatedstringBytes();
+        getCreatedBytes();
 
-    // optional string modifiedstring = 3;
+    // optional string modified = 3;
     /**
-     * <code>optional string modifiedstring = 3;</code>
+     * <code>optional string modified = 3;</code>
      */
-    boolean hasModifiedstring();
+    boolean hasModified();
     /**
-     * <code>optional string modifiedstring = 3;</code>
+     * <code>optional string modified = 3;</code>
      */
-    java.lang.String getModifiedstring();
+    java.lang.String getModified();
     /**
-     * <code>optional string modifiedstring = 3;</code>
+     * <code>optional string modified = 3;</code>
      */
     com.google.protobuf.ByteString
-        getModifiedstringBytes();
+        getModifiedBytes();
 
     // optional string createdByUserName = 4;
     /**
@@ -26677,17 +26676,17 @@ public final class Messages {
     com.google.protobuf.ByteString
         getOwnerIdBytes();
 
-    // required string userID = 10;
+    // optional string userID = 10;
     /**
-     * <code>required string userID = 10;</code>
+     * <code>optional string userID = 10;</code>
      */
     boolean hasUserID();
     /**
-     * <code>required string userID = 10;</code>
+     * <code>optional string userID = 10;</code>
      */
     java.lang.String getUserID();
     /**
-     * <code>required string userID = 10;</code>
+     * <code>optional string userID = 10;</code>
      */
     com.google.protobuf.ByteString
         getUserIDBytes();
@@ -26802,35 +26801,35 @@ public final class Messages {
      */
     boolean getLocked();
 
-    // optional string lockedUntilstring = 19;
+    // optional string lockedUntil = 19;
     /**
-     * <code>optional string lockedUntilstring = 19;</code>
+     * <code>optional string lockedUntil = 19;</code>
      */
-    boolean hasLockedUntilstring();
+    boolean hasLockedUntil();
     /**
-     * <code>optional string lockedUntilstring = 19;</code>
+     * <code>optional string lockedUntil = 19;</code>
      */
-    java.lang.String getLockedUntilstring();
+    java.lang.String getLockedUntil();
     /**
-     * <code>optional string lockedUntilstring = 19;</code>
+     * <code>optional string lockedUntil = 19;</code>
      */
     com.google.protobuf.ByteString
-        getLockedUntilstringBytes();
+        getLockedUntilBytes();
 
-    // optional string passwordChangedstring = 20;
+    // optional string passwordChanged = 20;
     /**
-     * <code>optional string passwordChangedstring = 20;</code>
+     * <code>optional string passwordChanged = 20;</code>
      */
-    boolean hasPasswordChangedstring();
+    boolean hasPasswordChanged();
     /**
-     * <code>optional string passwordChangedstring = 20;</code>
+     * <code>optional string passwordChanged = 20;</code>
      */
-    java.lang.String getPasswordChangedstring();
+    java.lang.String getPasswordChanged();
     /**
-     * <code>optional string passwordChangedstring = 20;</code>
+     * <code>optional string passwordChanged = 20;</code>
      */
     com.google.protobuf.ByteString
-        getPasswordChangedstringBytes();
+        getPasswordChangedBytes();
 
     // optional string language = 21;
     /**
@@ -26862,20 +26861,20 @@ public final class Messages {
     com.google.protobuf.ByteString
         getIdentifierBytes();
 
-    // optional string lastLoginstring = 23;
+    // optional string lastLogin = 23;
     /**
-     * <code>optional string lastLoginstring = 23;</code>
+     * <code>optional string lastLogin = 23;</code>
      */
-    boolean hasLastLoginstring();
+    boolean hasLastLogin();
     /**
-     * <code>optional string lastLoginstring = 23;</code>
+     * <code>optional string lastLogin = 23;</code>
      */
-    java.lang.String getLastLoginstring();
+    java.lang.String getLastLogin();
     /**
-     * <code>optional string lastLoginstring = 23;</code>
+     * <code>optional string lastLogin = 23;</code>
      */
     com.google.protobuf.ByteString
-        getLastLoginstringBytes();
+        getLastLoginBytes();
 
     // repeated .com.n4systems.fieldid.api.pub.model.UserGroupMessage groups = 24;
     /**
@@ -26984,12 +26983,12 @@ public final class Messages {
             }
             case 18: {
               bitField0_ |= 0x00000002;
-              createdstring_ = input.readBytes();
+              created_ = input.readBytes();
               break;
             }
             case 26: {
               bitField0_ |= 0x00000004;
-              modifiedstring_ = input.readBytes();
+              modified_ = input.readBytes();
               break;
             }
             case 34: {
@@ -27069,12 +27068,12 @@ public final class Messages {
             }
             case 154: {
               bitField0_ |= 0x00040000;
-              lockedUntilstring_ = input.readBytes();
+              lockedUntil_ = input.readBytes();
               break;
             }
             case 162: {
               bitField0_ |= 0x00080000;
-              passwordChangedstring_ = input.readBytes();
+              passwordChanged_ = input.readBytes();
               break;
             }
             case 170: {
@@ -27089,7 +27088,7 @@ public final class Messages {
             }
             case 186: {
               bitField0_ |= 0x00400000;
-              lastLoginstring_ = input.readBytes();
+              lastLogin_ = input.readBytes();
               break;
             }
             case 194: {
@@ -27172,85 +27171,58 @@ public final class Messages {
     public enum UserType
         implements com.google.protobuf.ProtocolMessageEnum {
       /**
-       * <code>ALL = 0;</code>
-       */
-      ALL(0, 0),
-      /**
        * <code>ADMIN = 1;</code>
        */
-      ADMIN(1, 1),
+      ADMIN(0, 1),
       /**
-       * <code>SYSTEM = 2;</code>
+       * <code>INSPECTION = 2;</code>
        */
-      SYSTEM(2, 2),
+      INSPECTION(1, 2),
       /**
-       * <code>FULL = 3;</code>
+       * <code>REPORTING = 3;</code>
        */
-      FULL(3, 3),
+      REPORTING(2, 3),
       /**
-       * <code>LITE = 4;</code>
+       * <code>PERSON = 4;</code>
        */
-      LITE(4, 4),
+      PERSON(3, 4),
       /**
-       * <code>READONLY = 5;</code>
+       * <code>USAGE_BASED = 5;</code>
        */
-      READONLY(5, 5),
-      /**
-       * <code>PERSON = 6;</code>
-       */
-      PERSON(6, 6),
-      /**
-       * <code>USAGE_BASED = 7;</code>
-       */
-      USAGE_BASED(7, 7),
+      USAGE_BASED(4, 5),
       ;
 
-      /**
-       * <code>ALL = 0;</code>
-       */
-      public static final int ALL_VALUE = 0;
       /**
        * <code>ADMIN = 1;</code>
        */
       public static final int ADMIN_VALUE = 1;
       /**
-       * <code>SYSTEM = 2;</code>
+       * <code>INSPECTION = 2;</code>
        */
-      public static final int SYSTEM_VALUE = 2;
+      public static final int INSPECTION_VALUE = 2;
       /**
-       * <code>FULL = 3;</code>
+       * <code>REPORTING = 3;</code>
        */
-      public static final int FULL_VALUE = 3;
+      public static final int REPORTING_VALUE = 3;
       /**
-       * <code>LITE = 4;</code>
+       * <code>PERSON = 4;</code>
        */
-      public static final int LITE_VALUE = 4;
+      public static final int PERSON_VALUE = 4;
       /**
-       * <code>READONLY = 5;</code>
+       * <code>USAGE_BASED = 5;</code>
        */
-      public static final int READONLY_VALUE = 5;
-      /**
-       * <code>PERSON = 6;</code>
-       */
-      public static final int PERSON_VALUE = 6;
-      /**
-       * <code>USAGE_BASED = 7;</code>
-       */
-      public static final int USAGE_BASED_VALUE = 7;
+      public static final int USAGE_BASED_VALUE = 5;
 
 
       public final int getNumber() { return value; }
 
       public static UserType valueOf(int value) {
         switch (value) {
-          case 0: return ALL;
           case 1: return ADMIN;
-          case 2: return SYSTEM;
-          case 3: return FULL;
-          case 4: return LITE;
-          case 5: return READONLY;
-          case 6: return PERSON;
-          case 7: return USAGE_BASED;
+          case 2: return INSPECTION;
+          case 3: return REPORTING;
+          case 4: return PERSON;
+          case 5: return USAGE_BASED;
           default: return null;
         }
       }
@@ -28373,20 +28345,20 @@ public final class Messages {
       }
     }
 
-    // optional string createdstring = 2;
-    public static final int CREATEDSTRING_FIELD_NUMBER = 2;
-    private java.lang.Object createdstring_;
+    // optional string created = 2;
+    public static final int CREATED_FIELD_NUMBER = 2;
+    private java.lang.Object created_;
     /**
-     * <code>optional string createdstring = 2;</code>
+     * <code>optional string created = 2;</code>
      */
-    public boolean hasCreatedstring() {
+    public boolean hasCreated() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>optional string createdstring = 2;</code>
+     * <code>optional string created = 2;</code>
      */
-    public java.lang.String getCreatedstring() {
-      java.lang.Object ref = createdstring_;
+    public java.lang.String getCreated() {
+      java.lang.Object ref = created_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
@@ -28394,42 +28366,42 @@ public final class Messages {
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         if (bs.isValidUtf8()) {
-          createdstring_ = s;
+          created_ = s;
         }
         return s;
       }
     }
     /**
-     * <code>optional string createdstring = 2;</code>
+     * <code>optional string created = 2;</code>
      */
     public com.google.protobuf.ByteString
-        getCreatedstringBytes() {
-      java.lang.Object ref = createdstring_;
+        getCreatedBytes() {
+      java.lang.Object ref = created_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        createdstring_ = b;
+        created_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
 
-    // optional string modifiedstring = 3;
-    public static final int MODIFIEDSTRING_FIELD_NUMBER = 3;
-    private java.lang.Object modifiedstring_;
+    // optional string modified = 3;
+    public static final int MODIFIED_FIELD_NUMBER = 3;
+    private java.lang.Object modified_;
     /**
-     * <code>optional string modifiedstring = 3;</code>
+     * <code>optional string modified = 3;</code>
      */
-    public boolean hasModifiedstring() {
+    public boolean hasModified() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>optional string modifiedstring = 3;</code>
+     * <code>optional string modified = 3;</code>
      */
-    public java.lang.String getModifiedstring() {
-      java.lang.Object ref = modifiedstring_;
+    public java.lang.String getModified() {
+      java.lang.Object ref = modified_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
@@ -28437,22 +28409,22 @@ public final class Messages {
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         if (bs.isValidUtf8()) {
-          modifiedstring_ = s;
+          modified_ = s;
         }
         return s;
       }
     }
     /**
-     * <code>optional string modifiedstring = 3;</code>
+     * <code>optional string modified = 3;</code>
      */
     public com.google.protobuf.ByteString
-        getModifiedstringBytes() {
-      java.lang.Object ref = modifiedstring_;
+        getModifiedBytes() {
+      java.lang.Object ref = modified_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        modifiedstring_ = b;
+        modified_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
@@ -28717,17 +28689,17 @@ public final class Messages {
       }
     }
 
-    // required string userID = 10;
+    // optional string userID = 10;
     public static final int USERID_FIELD_NUMBER = 10;
     private java.lang.Object userID_;
     /**
-     * <code>required string userID = 10;</code>
+     * <code>optional string userID = 10;</code>
      */
     public boolean hasUserID() {
       return ((bitField0_ & 0x00000200) == 0x00000200);
     }
     /**
-     * <code>required string userID = 10;</code>
+     * <code>optional string userID = 10;</code>
      */
     public java.lang.String getUserID() {
       java.lang.Object ref = userID_;
@@ -28744,7 +28716,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>required string userID = 10;</code>
+     * <code>optional string userID = 10;</code>
      */
     public com.google.protobuf.ByteString
         getUserIDBytes() {
@@ -29050,20 +29022,20 @@ public final class Messages {
       return locked_;
     }
 
-    // optional string lockedUntilstring = 19;
-    public static final int LOCKEDUNTILSTRING_FIELD_NUMBER = 19;
-    private java.lang.Object lockedUntilstring_;
+    // optional string lockedUntil = 19;
+    public static final int LOCKEDUNTIL_FIELD_NUMBER = 19;
+    private java.lang.Object lockedUntil_;
     /**
-     * <code>optional string lockedUntilstring = 19;</code>
+     * <code>optional string lockedUntil = 19;</code>
      */
-    public boolean hasLockedUntilstring() {
+    public boolean hasLockedUntil() {
       return ((bitField0_ & 0x00040000) == 0x00040000);
     }
     /**
-     * <code>optional string lockedUntilstring = 19;</code>
+     * <code>optional string lockedUntil = 19;</code>
      */
-    public java.lang.String getLockedUntilstring() {
-      java.lang.Object ref = lockedUntilstring_;
+    public java.lang.String getLockedUntil() {
+      java.lang.Object ref = lockedUntil_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
@@ -29071,42 +29043,42 @@ public final class Messages {
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         if (bs.isValidUtf8()) {
-          lockedUntilstring_ = s;
+          lockedUntil_ = s;
         }
         return s;
       }
     }
     /**
-     * <code>optional string lockedUntilstring = 19;</code>
+     * <code>optional string lockedUntil = 19;</code>
      */
     public com.google.protobuf.ByteString
-        getLockedUntilstringBytes() {
-      java.lang.Object ref = lockedUntilstring_;
+        getLockedUntilBytes() {
+      java.lang.Object ref = lockedUntil_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        lockedUntilstring_ = b;
+        lockedUntil_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
 
-    // optional string passwordChangedstring = 20;
-    public static final int PASSWORDCHANGEDSTRING_FIELD_NUMBER = 20;
-    private java.lang.Object passwordChangedstring_;
+    // optional string passwordChanged = 20;
+    public static final int PASSWORDCHANGED_FIELD_NUMBER = 20;
+    private java.lang.Object passwordChanged_;
     /**
-     * <code>optional string passwordChangedstring = 20;</code>
+     * <code>optional string passwordChanged = 20;</code>
      */
-    public boolean hasPasswordChangedstring() {
+    public boolean hasPasswordChanged() {
       return ((bitField0_ & 0x00080000) == 0x00080000);
     }
     /**
-     * <code>optional string passwordChangedstring = 20;</code>
+     * <code>optional string passwordChanged = 20;</code>
      */
-    public java.lang.String getPasswordChangedstring() {
-      java.lang.Object ref = passwordChangedstring_;
+    public java.lang.String getPasswordChanged() {
+      java.lang.Object ref = passwordChanged_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
@@ -29114,22 +29086,22 @@ public final class Messages {
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         if (bs.isValidUtf8()) {
-          passwordChangedstring_ = s;
+          passwordChanged_ = s;
         }
         return s;
       }
     }
     /**
-     * <code>optional string passwordChangedstring = 20;</code>
+     * <code>optional string passwordChanged = 20;</code>
      */
     public com.google.protobuf.ByteString
-        getPasswordChangedstringBytes() {
-      java.lang.Object ref = passwordChangedstring_;
+        getPasswordChangedBytes() {
+      java.lang.Object ref = passwordChanged_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        passwordChangedstring_ = b;
+        passwordChanged_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
@@ -29222,20 +29194,20 @@ public final class Messages {
       }
     }
 
-    // optional string lastLoginstring = 23;
-    public static final int LASTLOGINSTRING_FIELD_NUMBER = 23;
-    private java.lang.Object lastLoginstring_;
+    // optional string lastLogin = 23;
+    public static final int LASTLOGIN_FIELD_NUMBER = 23;
+    private java.lang.Object lastLogin_;
     /**
-     * <code>optional string lastLoginstring = 23;</code>
+     * <code>optional string lastLogin = 23;</code>
      */
-    public boolean hasLastLoginstring() {
+    public boolean hasLastLogin() {
       return ((bitField0_ & 0x00400000) == 0x00400000);
     }
     /**
-     * <code>optional string lastLoginstring = 23;</code>
+     * <code>optional string lastLogin = 23;</code>
      */
-    public java.lang.String getLastLoginstring() {
-      java.lang.Object ref = lastLoginstring_;
+    public java.lang.String getLastLogin() {
+      java.lang.Object ref = lastLogin_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
@@ -29243,22 +29215,22 @@ public final class Messages {
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         if (bs.isValidUtf8()) {
-          lastLoginstring_ = s;
+          lastLogin_ = s;
         }
         return s;
       }
     }
     /**
-     * <code>optional string lastLoginstring = 23;</code>
+     * <code>optional string lastLogin = 23;</code>
      */
     public com.google.protobuf.ByteString
-        getLastLoginstringBytes() {
-      java.lang.Object ref = lastLoginstring_;
+        getLastLoginBytes() {
+      java.lang.Object ref = lastLogin_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        lastLoginstring_ = b;
+        lastLogin_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
@@ -29341,8 +29313,8 @@ public final class Messages {
 
     private void initFields() {
       id_ = "";
-      createdstring_ = "";
-      modifiedstring_ = "";
+      created_ = "";
+      modified_ = "";
       createdByUserName_ = "";
       createdByUserId_ = "";
       modifiedByUserName_ = "";
@@ -29358,13 +29330,13 @@ public final class Messages {
       initials_ = "";
       failedLoginAttempts_ = 0;
       locked_ = false;
-      lockedUntilstring_ = "";
-      passwordChangedstring_ = "";
+      lockedUntil_ = "";
+      passwordChanged_ = "";
       language_ = "";
       identifier_ = "";
-      lastLoginstring_ = "";
+      lastLogin_ = "";
       groups_ = java.util.Collections.emptyList();
-      userType_ = com.n4systems.fieldid.api.pub.model.Messages.UserMessage.UserType.ALL;
+      userType_ = com.n4systems.fieldid.api.pub.model.Messages.UserMessage.UserType.ADMIN;
       permissions_ = com.n4systems.fieldid.api.pub.model.Messages.UserMessage.PermissionsMessage.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
@@ -29373,10 +29345,6 @@ public final class Messages {
       if (isInitialized != -1) return isInitialized == 1;
 
       if (!hasOwnerId()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasUserID()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -29409,10 +29377,10 @@ public final class Messages {
         output.writeBytes(1, getIdBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeBytes(2, getCreatedstringBytes());
+        output.writeBytes(2, getCreatedBytes());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeBytes(3, getModifiedstringBytes());
+        output.writeBytes(3, getModifiedBytes());
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         output.writeBytes(4, getCreatedByUserNameBytes());
@@ -29460,10 +29428,10 @@ public final class Messages {
         output.writeBool(18, locked_);
       }
       if (((bitField0_ & 0x00040000) == 0x00040000)) {
-        output.writeBytes(19, getLockedUntilstringBytes());
+        output.writeBytes(19, getLockedUntilBytes());
       }
       if (((bitField0_ & 0x00080000) == 0x00080000)) {
-        output.writeBytes(20, getPasswordChangedstringBytes());
+        output.writeBytes(20, getPasswordChangedBytes());
       }
       if (((bitField0_ & 0x00100000) == 0x00100000)) {
         output.writeBytes(21, getLanguageBytes());
@@ -29472,7 +29440,7 @@ public final class Messages {
         output.writeBytes(22, getIdentifierBytes());
       }
       if (((bitField0_ & 0x00400000) == 0x00400000)) {
-        output.writeBytes(23, getLastLoginstringBytes());
+        output.writeBytes(23, getLastLoginBytes());
       }
       for (int i = 0; i < groups_.size(); i++) {
         output.writeMessage(24, groups_.get(i));
@@ -29498,11 +29466,11 @@ public final class Messages {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, getCreatedstringBytes());
+          .computeBytesSize(2, getCreatedBytes());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(3, getModifiedstringBytes());
+          .computeBytesSize(3, getModifiedBytes());
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
@@ -29566,11 +29534,11 @@ public final class Messages {
       }
       if (((bitField0_ & 0x00040000) == 0x00040000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(19, getLockedUntilstringBytes());
+          .computeBytesSize(19, getLockedUntilBytes());
       }
       if (((bitField0_ & 0x00080000) == 0x00080000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(20, getPasswordChangedstringBytes());
+          .computeBytesSize(20, getPasswordChangedBytes());
       }
       if (((bitField0_ & 0x00100000) == 0x00100000)) {
         size += com.google.protobuf.CodedOutputStream
@@ -29582,7 +29550,7 @@ public final class Messages {
       }
       if (((bitField0_ & 0x00400000) == 0x00400000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(23, getLastLoginstringBytes());
+          .computeBytesSize(23, getLastLoginBytes());
       }
       for (int i = 0; i < groups_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
@@ -29716,9 +29684,9 @@ public final class Messages {
         super.clear();
         id_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
-        createdstring_ = "";
+        created_ = "";
         bitField0_ = (bitField0_ & ~0x00000002);
-        modifiedstring_ = "";
+        modified_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
         createdByUserName_ = "";
         bitField0_ = (bitField0_ & ~0x00000008);
@@ -29750,15 +29718,15 @@ public final class Messages {
         bitField0_ = (bitField0_ & ~0x00010000);
         locked_ = false;
         bitField0_ = (bitField0_ & ~0x00020000);
-        lockedUntilstring_ = "";
+        lockedUntil_ = "";
         bitField0_ = (bitField0_ & ~0x00040000);
-        passwordChangedstring_ = "";
+        passwordChanged_ = "";
         bitField0_ = (bitField0_ & ~0x00080000);
         language_ = "";
         bitField0_ = (bitField0_ & ~0x00100000);
         identifier_ = "";
         bitField0_ = (bitField0_ & ~0x00200000);
-        lastLoginstring_ = "";
+        lastLogin_ = "";
         bitField0_ = (bitField0_ & ~0x00400000);
         if (groupsBuilder_ == null) {
           groups_ = java.util.Collections.emptyList();
@@ -29766,7 +29734,7 @@ public final class Messages {
         } else {
           groupsBuilder_.clear();
         }
-        userType_ = com.n4systems.fieldid.api.pub.model.Messages.UserMessage.UserType.ALL;
+        userType_ = com.n4systems.fieldid.api.pub.model.Messages.UserMessage.UserType.ADMIN;
         bitField0_ = (bitField0_ & ~0x01000000);
         if (permissionsBuilder_ == null) {
           permissions_ = com.n4systems.fieldid.api.pub.model.Messages.UserMessage.PermissionsMessage.getDefaultInstance();
@@ -29809,11 +29777,11 @@ public final class Messages {
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.createdstring_ = createdstring_;
+        result.created_ = created_;
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
-        result.modifiedstring_ = modifiedstring_;
+        result.modified_ = modified_;
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000008;
         }
@@ -29877,11 +29845,11 @@ public final class Messages {
         if (((from_bitField0_ & 0x00040000) == 0x00040000)) {
           to_bitField0_ |= 0x00040000;
         }
-        result.lockedUntilstring_ = lockedUntilstring_;
+        result.lockedUntil_ = lockedUntil_;
         if (((from_bitField0_ & 0x00080000) == 0x00080000)) {
           to_bitField0_ |= 0x00080000;
         }
-        result.passwordChangedstring_ = passwordChangedstring_;
+        result.passwordChanged_ = passwordChanged_;
         if (((from_bitField0_ & 0x00100000) == 0x00100000)) {
           to_bitField0_ |= 0x00100000;
         }
@@ -29893,7 +29861,7 @@ public final class Messages {
         if (((from_bitField0_ & 0x00400000) == 0x00400000)) {
           to_bitField0_ |= 0x00400000;
         }
-        result.lastLoginstring_ = lastLoginstring_;
+        result.lastLogin_ = lastLogin_;
         if (groupsBuilder_ == null) {
           if (((bitField0_ & 0x00800000) == 0x00800000)) {
             groups_ = java.util.Collections.unmodifiableList(groups_);
@@ -29936,14 +29904,14 @@ public final class Messages {
           id_ = other.id_;
           onChanged();
         }
-        if (other.hasCreatedstring()) {
+        if (other.hasCreated()) {
           bitField0_ |= 0x00000002;
-          createdstring_ = other.createdstring_;
+          created_ = other.created_;
           onChanged();
         }
-        if (other.hasModifiedstring()) {
+        if (other.hasModified()) {
           bitField0_ |= 0x00000004;
-          modifiedstring_ = other.modifiedstring_;
+          modified_ = other.modified_;
           onChanged();
         }
         if (other.hasCreatedByUserName()) {
@@ -30017,14 +29985,14 @@ public final class Messages {
         if (other.hasLocked()) {
           setLocked(other.getLocked());
         }
-        if (other.hasLockedUntilstring()) {
+        if (other.hasLockedUntil()) {
           bitField0_ |= 0x00040000;
-          lockedUntilstring_ = other.lockedUntilstring_;
+          lockedUntil_ = other.lockedUntil_;
           onChanged();
         }
-        if (other.hasPasswordChangedstring()) {
+        if (other.hasPasswordChanged()) {
           bitField0_ |= 0x00080000;
-          passwordChangedstring_ = other.passwordChangedstring_;
+          passwordChanged_ = other.passwordChanged_;
           onChanged();
         }
         if (other.hasLanguage()) {
@@ -30037,9 +30005,9 @@ public final class Messages {
           identifier_ = other.identifier_;
           onChanged();
         }
-        if (other.hasLastLoginstring()) {
+        if (other.hasLastLogin()) {
           bitField0_ |= 0x00400000;
-          lastLoginstring_ = other.lastLoginstring_;
+          lastLogin_ = other.lastLogin_;
           onChanged();
         }
         if (groupsBuilder_ == null) {
@@ -30080,10 +30048,6 @@ public final class Messages {
 
       public final boolean isInitialized() {
         if (!hasOwnerId()) {
-          
-          return false;
-        }
-        if (!hasUserID()) {
           
           return false;
         }
@@ -30201,150 +30165,150 @@ public final class Messages {
         return this;
       }
 
-      // optional string createdstring = 2;
-      private java.lang.Object createdstring_ = "";
+      // optional string created = 2;
+      private java.lang.Object created_ = "";
       /**
-       * <code>optional string createdstring = 2;</code>
+       * <code>optional string created = 2;</code>
        */
-      public boolean hasCreatedstring() {
+      public boolean hasCreated() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>optional string createdstring = 2;</code>
+       * <code>optional string created = 2;</code>
        */
-      public java.lang.String getCreatedstring() {
-        java.lang.Object ref = createdstring_;
+      public java.lang.String getCreated() {
+        java.lang.Object ref = created_;
         if (!(ref instanceof java.lang.String)) {
           java.lang.String s = ((com.google.protobuf.ByteString) ref)
               .toStringUtf8();
-          createdstring_ = s;
+          created_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
       /**
-       * <code>optional string createdstring = 2;</code>
+       * <code>optional string created = 2;</code>
        */
       public com.google.protobuf.ByteString
-          getCreatedstringBytes() {
-        java.lang.Object ref = createdstring_;
+          getCreatedBytes() {
+        java.lang.Object ref = created_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          createdstring_ = b;
+          created_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>optional string createdstring = 2;</code>
+       * <code>optional string created = 2;</code>
        */
-      public Builder setCreatedstring(
+      public Builder setCreated(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00000002;
-        createdstring_ = value;
+        created_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string createdstring = 2;</code>
+       * <code>optional string created = 2;</code>
        */
-      public Builder clearCreatedstring() {
+      public Builder clearCreated() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        createdstring_ = getDefaultInstance().getCreatedstring();
+        created_ = getDefaultInstance().getCreated();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string createdstring = 2;</code>
+       * <code>optional string created = 2;</code>
        */
-      public Builder setCreatedstringBytes(
+      public Builder setCreatedBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00000002;
-        createdstring_ = value;
+        created_ = value;
         onChanged();
         return this;
       }
 
-      // optional string modifiedstring = 3;
-      private java.lang.Object modifiedstring_ = "";
+      // optional string modified = 3;
+      private java.lang.Object modified_ = "";
       /**
-       * <code>optional string modifiedstring = 3;</code>
+       * <code>optional string modified = 3;</code>
        */
-      public boolean hasModifiedstring() {
+      public boolean hasModified() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>optional string modifiedstring = 3;</code>
+       * <code>optional string modified = 3;</code>
        */
-      public java.lang.String getModifiedstring() {
-        java.lang.Object ref = modifiedstring_;
+      public java.lang.String getModified() {
+        java.lang.Object ref = modified_;
         if (!(ref instanceof java.lang.String)) {
           java.lang.String s = ((com.google.protobuf.ByteString) ref)
               .toStringUtf8();
-          modifiedstring_ = s;
+          modified_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
       /**
-       * <code>optional string modifiedstring = 3;</code>
+       * <code>optional string modified = 3;</code>
        */
       public com.google.protobuf.ByteString
-          getModifiedstringBytes() {
-        java.lang.Object ref = modifiedstring_;
+          getModifiedBytes() {
+        java.lang.Object ref = modified_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          modifiedstring_ = b;
+          modified_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>optional string modifiedstring = 3;</code>
+       * <code>optional string modified = 3;</code>
        */
-      public Builder setModifiedstring(
+      public Builder setModified(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00000004;
-        modifiedstring_ = value;
+        modified_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string modifiedstring = 3;</code>
+       * <code>optional string modified = 3;</code>
        */
-      public Builder clearModifiedstring() {
+      public Builder clearModified() {
         bitField0_ = (bitField0_ & ~0x00000004);
-        modifiedstring_ = getDefaultInstance().getModifiedstring();
+        modified_ = getDefaultInstance().getModified();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string modifiedstring = 3;</code>
+       * <code>optional string modified = 3;</code>
        */
-      public Builder setModifiedstringBytes(
+      public Builder setModifiedBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00000004;
-        modifiedstring_ = value;
+        modified_ = value;
         onChanged();
         return this;
       }
@@ -30793,16 +30757,16 @@ public final class Messages {
         return this;
       }
 
-      // required string userID = 10;
+      // optional string userID = 10;
       private java.lang.Object userID_ = "";
       /**
-       * <code>required string userID = 10;</code>
+       * <code>optional string userID = 10;</code>
        */
       public boolean hasUserID() {
         return ((bitField0_ & 0x00000200) == 0x00000200);
       }
       /**
-       * <code>required string userID = 10;</code>
+       * <code>optional string userID = 10;</code>
        */
       public java.lang.String getUserID() {
         java.lang.Object ref = userID_;
@@ -30816,7 +30780,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>required string userID = 10;</code>
+       * <code>optional string userID = 10;</code>
        */
       public com.google.protobuf.ByteString
           getUserIDBytes() {
@@ -30832,7 +30796,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>required string userID = 10;</code>
+       * <code>optional string userID = 10;</code>
        */
       public Builder setUserID(
           java.lang.String value) {
@@ -30845,7 +30809,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>required string userID = 10;</code>
+       * <code>optional string userID = 10;</code>
        */
       public Builder clearUserID() {
         bitField0_ = (bitField0_ & ~0x00000200);
@@ -30854,7 +30818,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>required string userID = 10;</code>
+       * <code>optional string userID = 10;</code>
        */
       public Builder setUserIDBytes(
           com.google.protobuf.ByteString value) {
@@ -31377,150 +31341,150 @@ public final class Messages {
         return this;
       }
 
-      // optional string lockedUntilstring = 19;
-      private java.lang.Object lockedUntilstring_ = "";
+      // optional string lockedUntil = 19;
+      private java.lang.Object lockedUntil_ = "";
       /**
-       * <code>optional string lockedUntilstring = 19;</code>
+       * <code>optional string lockedUntil = 19;</code>
        */
-      public boolean hasLockedUntilstring() {
+      public boolean hasLockedUntil() {
         return ((bitField0_ & 0x00040000) == 0x00040000);
       }
       /**
-       * <code>optional string lockedUntilstring = 19;</code>
+       * <code>optional string lockedUntil = 19;</code>
        */
-      public java.lang.String getLockedUntilstring() {
-        java.lang.Object ref = lockedUntilstring_;
+      public java.lang.String getLockedUntil() {
+        java.lang.Object ref = lockedUntil_;
         if (!(ref instanceof java.lang.String)) {
           java.lang.String s = ((com.google.protobuf.ByteString) ref)
               .toStringUtf8();
-          lockedUntilstring_ = s;
+          lockedUntil_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
       /**
-       * <code>optional string lockedUntilstring = 19;</code>
+       * <code>optional string lockedUntil = 19;</code>
        */
       public com.google.protobuf.ByteString
-          getLockedUntilstringBytes() {
-        java.lang.Object ref = lockedUntilstring_;
+          getLockedUntilBytes() {
+        java.lang.Object ref = lockedUntil_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          lockedUntilstring_ = b;
+          lockedUntil_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>optional string lockedUntilstring = 19;</code>
+       * <code>optional string lockedUntil = 19;</code>
        */
-      public Builder setLockedUntilstring(
+      public Builder setLockedUntil(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00040000;
-        lockedUntilstring_ = value;
+        lockedUntil_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string lockedUntilstring = 19;</code>
+       * <code>optional string lockedUntil = 19;</code>
        */
-      public Builder clearLockedUntilstring() {
+      public Builder clearLockedUntil() {
         bitField0_ = (bitField0_ & ~0x00040000);
-        lockedUntilstring_ = getDefaultInstance().getLockedUntilstring();
+        lockedUntil_ = getDefaultInstance().getLockedUntil();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string lockedUntilstring = 19;</code>
+       * <code>optional string lockedUntil = 19;</code>
        */
-      public Builder setLockedUntilstringBytes(
+      public Builder setLockedUntilBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00040000;
-        lockedUntilstring_ = value;
+        lockedUntil_ = value;
         onChanged();
         return this;
       }
 
-      // optional string passwordChangedstring = 20;
-      private java.lang.Object passwordChangedstring_ = "";
+      // optional string passwordChanged = 20;
+      private java.lang.Object passwordChanged_ = "";
       /**
-       * <code>optional string passwordChangedstring = 20;</code>
+       * <code>optional string passwordChanged = 20;</code>
        */
-      public boolean hasPasswordChangedstring() {
+      public boolean hasPasswordChanged() {
         return ((bitField0_ & 0x00080000) == 0x00080000);
       }
       /**
-       * <code>optional string passwordChangedstring = 20;</code>
+       * <code>optional string passwordChanged = 20;</code>
        */
-      public java.lang.String getPasswordChangedstring() {
-        java.lang.Object ref = passwordChangedstring_;
+      public java.lang.String getPasswordChanged() {
+        java.lang.Object ref = passwordChanged_;
         if (!(ref instanceof java.lang.String)) {
           java.lang.String s = ((com.google.protobuf.ByteString) ref)
               .toStringUtf8();
-          passwordChangedstring_ = s;
+          passwordChanged_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
       /**
-       * <code>optional string passwordChangedstring = 20;</code>
+       * <code>optional string passwordChanged = 20;</code>
        */
       public com.google.protobuf.ByteString
-          getPasswordChangedstringBytes() {
-        java.lang.Object ref = passwordChangedstring_;
+          getPasswordChangedBytes() {
+        java.lang.Object ref = passwordChanged_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          passwordChangedstring_ = b;
+          passwordChanged_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>optional string passwordChangedstring = 20;</code>
+       * <code>optional string passwordChanged = 20;</code>
        */
-      public Builder setPasswordChangedstring(
+      public Builder setPasswordChanged(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00080000;
-        passwordChangedstring_ = value;
+        passwordChanged_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string passwordChangedstring = 20;</code>
+       * <code>optional string passwordChanged = 20;</code>
        */
-      public Builder clearPasswordChangedstring() {
+      public Builder clearPasswordChanged() {
         bitField0_ = (bitField0_ & ~0x00080000);
-        passwordChangedstring_ = getDefaultInstance().getPasswordChangedstring();
+        passwordChanged_ = getDefaultInstance().getPasswordChanged();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string passwordChangedstring = 20;</code>
+       * <code>optional string passwordChanged = 20;</code>
        */
-      public Builder setPasswordChangedstringBytes(
+      public Builder setPasswordChangedBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00080000;
-        passwordChangedstring_ = value;
+        passwordChanged_ = value;
         onChanged();
         return this;
       }
@@ -31673,76 +31637,76 @@ public final class Messages {
         return this;
       }
 
-      // optional string lastLoginstring = 23;
-      private java.lang.Object lastLoginstring_ = "";
+      // optional string lastLogin = 23;
+      private java.lang.Object lastLogin_ = "";
       /**
-       * <code>optional string lastLoginstring = 23;</code>
+       * <code>optional string lastLogin = 23;</code>
        */
-      public boolean hasLastLoginstring() {
+      public boolean hasLastLogin() {
         return ((bitField0_ & 0x00400000) == 0x00400000);
       }
       /**
-       * <code>optional string lastLoginstring = 23;</code>
+       * <code>optional string lastLogin = 23;</code>
        */
-      public java.lang.String getLastLoginstring() {
-        java.lang.Object ref = lastLoginstring_;
+      public java.lang.String getLastLogin() {
+        java.lang.Object ref = lastLogin_;
         if (!(ref instanceof java.lang.String)) {
           java.lang.String s = ((com.google.protobuf.ByteString) ref)
               .toStringUtf8();
-          lastLoginstring_ = s;
+          lastLogin_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
       /**
-       * <code>optional string lastLoginstring = 23;</code>
+       * <code>optional string lastLogin = 23;</code>
        */
       public com.google.protobuf.ByteString
-          getLastLoginstringBytes() {
-        java.lang.Object ref = lastLoginstring_;
+          getLastLoginBytes() {
+        java.lang.Object ref = lastLogin_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          lastLoginstring_ = b;
+          lastLogin_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>optional string lastLoginstring = 23;</code>
+       * <code>optional string lastLogin = 23;</code>
        */
-      public Builder setLastLoginstring(
+      public Builder setLastLogin(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00400000;
-        lastLoginstring_ = value;
+        lastLogin_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string lastLoginstring = 23;</code>
+       * <code>optional string lastLogin = 23;</code>
        */
-      public Builder clearLastLoginstring() {
+      public Builder clearLastLogin() {
         bitField0_ = (bitField0_ & ~0x00400000);
-        lastLoginstring_ = getDefaultInstance().getLastLoginstring();
+        lastLogin_ = getDefaultInstance().getLastLogin();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string lastLoginstring = 23;</code>
+       * <code>optional string lastLogin = 23;</code>
        */
-      public Builder setLastLoginstringBytes(
+      public Builder setLastLoginBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00400000;
-        lastLoginstring_ = value;
+        lastLogin_ = value;
         onChanged();
         return this;
       }
@@ -31988,7 +31952,7 @@ public final class Messages {
       }
 
       // required .com.n4systems.fieldid.api.pub.model.UserMessage.UserType userType = 25;
-      private com.n4systems.fieldid.api.pub.model.Messages.UserMessage.UserType userType_ = com.n4systems.fieldid.api.pub.model.Messages.UserMessage.UserType.ALL;
+      private com.n4systems.fieldid.api.pub.model.Messages.UserMessage.UserType userType_ = com.n4systems.fieldid.api.pub.model.Messages.UserMessage.UserType.ADMIN;
       /**
        * <code>required .com.n4systems.fieldid.api.pub.model.UserMessage.UserType userType = 25;</code>
        */
@@ -32018,7 +31982,7 @@ public final class Messages {
        */
       public Builder clearUserType() {
         bitField0_ = (bitField0_ & ~0x01000000);
-        userType_ = com.n4systems.fieldid.api.pub.model.Messages.UserMessage.UserType.ALL;
+        userType_ = com.n4systems.fieldid.api.pub.model.Messages.UserMessage.UserType.ADMIN;
         onChanged();
         return this;
       }
@@ -32184,17 +32148,17 @@ public final class Messages {
     com.google.protobuf.ByteString
         getNameBytes();
 
-    // required string groupId = 3;
+    // optional string groupId = 3;
     /**
-     * <code>required string groupId = 3;</code>
+     * <code>optional string groupId = 3;</code>
      */
     boolean hasGroupId();
     /**
-     * <code>required string groupId = 3;</code>
+     * <code>optional string groupId = 3;</code>
      */
     java.lang.String getGroupId();
     /**
-     * <code>required string groupId = 3;</code>
+     * <code>optional string groupId = 3;</code>
      */
     com.google.protobuf.ByteString
         getGroupIdBytes();
@@ -32391,17 +32355,17 @@ public final class Messages {
       }
     }
 
-    // required string groupId = 3;
+    // optional string groupId = 3;
     public static final int GROUPID_FIELD_NUMBER = 3;
     private java.lang.Object groupId_;
     /**
-     * <code>required string groupId = 3;</code>
+     * <code>optional string groupId = 3;</code>
      */
     public boolean hasGroupId() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>required string groupId = 3;</code>
+     * <code>optional string groupId = 3;</code>
      */
     public java.lang.String getGroupId() {
       java.lang.Object ref = groupId_;
@@ -32418,7 +32382,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>required string groupId = 3;</code>
+     * <code>optional string groupId = 3;</code>
      */
     public com.google.protobuf.ByteString
         getGroupIdBytes() {
@@ -32445,10 +32409,6 @@ public final class Messages {
       if (isInitialized != -1) return isInitialized == 1;
 
       if (!hasName()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasGroupId()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -32691,10 +32651,6 @@ public final class Messages {
           
           return false;
         }
-        if (!hasGroupId()) {
-          
-          return false;
-        }
         return true;
       }
 
@@ -32865,16 +32821,16 @@ public final class Messages {
         return this;
       }
 
-      // required string groupId = 3;
+      // optional string groupId = 3;
       private java.lang.Object groupId_ = "";
       /**
-       * <code>required string groupId = 3;</code>
+       * <code>optional string groupId = 3;</code>
        */
       public boolean hasGroupId() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>required string groupId = 3;</code>
+       * <code>optional string groupId = 3;</code>
        */
       public java.lang.String getGroupId() {
         java.lang.Object ref = groupId_;
@@ -32888,7 +32844,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>required string groupId = 3;</code>
+       * <code>optional string groupId = 3;</code>
        */
       public com.google.protobuf.ByteString
           getGroupIdBytes() {
@@ -32904,7 +32860,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>required string groupId = 3;</code>
+       * <code>optional string groupId = 3;</code>
        */
       public Builder setGroupId(
           java.lang.String value) {
@@ -32917,7 +32873,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>required string groupId = 3;</code>
+       * <code>optional string groupId = 3;</code>
        */
       public Builder clearGroupId() {
         bitField0_ = (bitField0_ & ~0x00000004);
@@ -32926,7 +32882,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>required string groupId = 3;</code>
+       * <code>optional string groupId = 3;</code>
        */
       public Builder setGroupIdBytes(
           com.google.protobuf.ByteString value) {
@@ -33613,29 +33569,18 @@ public final class Messages {
           .newFileScopedGeneratedExtension(
         com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessage.class,
         com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessage.getDefaultInstance());
-  public static final int ASSETTYPESCHEDULES_FIELD_NUMBER = 1005;
+  public static final int LOCATIONS_FIELD_NUMBER = 1005;
   /**
    * <code>extend .com.n4systems.fieldid.api.pub.model.ListResponseMessage { ... }</code>
    */
   public static final
     com.google.protobuf.GeneratedMessage.GeneratedExtension<
       com.n4systems.fieldid.api.pub.model.Messages.ListResponseMessage,
-      java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage>> assetTypeSchedules = com.google.protobuf.GeneratedMessage
-          .newFileScopedGeneratedExtension(
-        com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage.class,
-        com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage.getDefaultInstance());
-  public static final int PREDEFINEDLOCATIONS_FIELD_NUMBER = 1006;
-  /**
-   * <code>extend .com.n4systems.fieldid.api.pub.model.ListResponseMessage { ... }</code>
-   */
-  public static final
-    com.google.protobuf.GeneratedMessage.GeneratedExtension<
-      com.n4systems.fieldid.api.pub.model.Messages.ListResponseMessage,
-      java.util.List<com.n4systems.fieldid.api.pub.model.Messages.PredefinedLocationMessage>> predefinedLocations = com.google.protobuf.GeneratedMessage
+      java.util.List<com.n4systems.fieldid.api.pub.model.Messages.PredefinedLocationMessage>> locations = com.google.protobuf.GeneratedMessage
           .newFileScopedGeneratedExtension(
         com.n4systems.fieldid.api.pub.model.Messages.PredefinedLocationMessage.class,
         com.n4systems.fieldid.api.pub.model.Messages.PredefinedLocationMessage.getDefaultInstance());
-  public static final int USERS_FIELD_NUMBER = 1007;
+  public static final int USERS_FIELD_NUMBER = 1006;
   /**
    * <code>extend .com.n4systems.fieldid.api.pub.model.ListResponseMessage { ... }</code>
    */
@@ -33646,7 +33591,7 @@ public final class Messages {
           .newFileScopedGeneratedExtension(
         com.n4systems.fieldid.api.pub.model.Messages.UserMessage.class,
         com.n4systems.fieldid.api.pub.model.Messages.UserMessage.getDefaultInstance());
-  public static final int USERGROUPS_FIELD_NUMBER = 1008;
+  public static final int USERGROUPS_FIELD_NUMBER = 1007;
   /**
    * <code>extend .com.n4systems.fieldid.api.pub.model.ListResponseMessage { ... }</code>
    */
@@ -33851,75 +33796,69 @@ public final class Messages {
       "d\030\001 \002(\t\"s\n\024TestContainerMessage\022\023\n\013int32" +
       "_field\030\001 \002(\005\022F\n\006nested\030\002 \001(\01326.com.n4sys" +
       "tems.fieldid.api.pub.model.TestNestedMes",
-      "sage\"\257\010\n\013UserMessage\022\n\n\002id\030\001 \001(\t\022\025\n\rcrea" +
-      "tedstring\030\002 \001(\t\022\026\n\016modifiedstring\030\003 \001(\t\022" +
-      "\031\n\021createdByUserName\030\004 \001(\t\022\027\n\017createdByU" +
-      "serId\030\005 \001(\t\022\032\n\022modifiedByUserName\030\006 \001(\t\022" +
-      "\030\n\020modifiedByUserId\030\007 \001(\t\022\021\n\townerName\030\010" +
-      " \001(\t\022\017\n\007ownerId\030\t \002(\t\022\016\n\006userID\030\n \002(\t\022\021\n" +
-      "\tfirstName\030\013 \001(\t\022\020\n\010lastName\030\014 \001(\t\022\024\n\014em" +
-      "ailAddress\030\r \001(\t\022\022\n\ntimeZoneID\030\016 \001(\t\022\020\n\010" +
-      "position\030\017 \001(\t\022\020\n\010initials\030\020 \001(\t\022\033\n\023fail" +
-      "edLoginAttempts\030\021 \001(\005\022\016\n\006locked\030\022 \001(\010\022\031\n",
-      "\021lockedUntilstring\030\023 \001(\t\022\035\n\025passwordChan" +
-      "gedstring\030\024 \001(\t\022\020\n\010language\030\025 \001(\t\022\022\n\nide" +
-      "ntifier\030\026 \001(\t\022\027\n\017lastLoginstring\030\027 \001(\t\022E" +
-      "\n\006groups\030\030 \003(\01325.com.n4systems.fieldid.a" +
-      "pi.pub.model.UserGroupMessage\022K\n\010userTyp" +
-      "e\030\031 \002(\01629.com.n4systems.fieldid.api.pub." +
-      "model.UserMessage.UserType\022X\n\013permission" +
-      "s\030\032 \002(\0132C.com.n4systems.fieldid.api.pub." +
-      "model.UserMessage.PermissionsMessage\032\324\001\n" +
-      "\022PermissionsMessage\022\024\n\014createAssets\030\001 \002(",
-      "\010\022\032\n\022manageSystemConfig\030\002 \002(\010\022\031\n\021manageS" +
-      "ystemUsers\030\003 \002(\010\022\026\n\016manageEndUsers\030\004 \002(\010" +
-      "\022\024\n\014createEvents\030\005 \002(\010\022\022\n\neditEvents\030\006 \002" +
-      "(\010\022\022\n\nmanageJobs\030\007 \002(\010\022\033\n\023manageSafetyNe" +
-      "twork\030\010 \002(\010\"i\n\010UserType\022\007\n\003ALL\020\000\022\t\n\005ADMI" +
-      "N\020\001\022\n\n\006SYSTEM\020\002\022\010\n\004FULL\020\003\022\010\n\004LITE\020\004\022\014\n\010R" +
-      "EADONLY\020\005\022\n\n\006PERSON\020\006\022\017\n\013USAGE_BASED\020\007\"=" +
-      "\n\020UserGroupMessage\022\n\n\002id\030\001 \001(\t\022\014\n\004name\030\002" +
-      " \002(\t\022\017\n\007groupId\030\003 \002(\t\"L\n\023ListResponseMes" +
-      "sage\022\014\n\004page\030\001 \002(\005\022\020\n\010pageSize\030\002 \002(\005\022\r\n\005",
-      "total\030\003 \002(\003*\006\010\350\007\020\321\017*X\n\022AttributeValueTyp" +
-      "e\022\010\n\004TEXT\020\001\022\n\n\006SELECT\020\002\022\t\n\005COMBO\020\003\022\010\n\004UN" +
-      "IT\020\004\022\010\n\004DATE\020\005\022\r\n\tDATE_TIME\020\006:8\n\017seriali" +
-      "zed_name\022\035.google.protobuf.FieldOptions\030" +
-      "\321\206\003 \001(\t:\206\001\n\006assets\0228.com.n4systems.field" +
-      "id.api.pub.model.ListResponseMessage\030\350\007 " +
-      "\003(\01321.com.n4systems.fieldid.api.pub.mode" +
-      "l.AssetMessageB\010\212\265\030\004list:\206\001\n\006owners\0228.co" +
-      "m.n4systems.fieldid.api.pub.model.ListRe" +
-      "sponseMessage\030\351\007 \003(\01321.com.n4systems.fie",
-      "ldid.api.pub.model.OwnerMessageB\010\212\265\030\004lis" +
-      "t:\223\001\n\rassetStatuses\0228.com.n4systems.fiel" +
-      "did.api.pub.model.ListResponseMessage\030\352\007" +
-      " \003(\01327.com.n4systems.fieldid.api.pub.mod" +
-      "el.AssetStatusMessageB\010\212\265\030\004list:\216\001\n\nasse" +
-      "tTypes\0228.com.n4systems.fieldid.api.pub.m" +
-      "odel.ListResponseMessage\030\353\007 \003(\01325.com.n4" +
-      "systems.fieldid.api.pub.model.AssetTypeM" +
-      "essageB\010\212\265\030\004list:\230\001\n\017assetTypeGroups\0228.c" +
-      "om.n4systems.fieldid.api.pub.model.ListR",
-      "esponseMessage\030\354\007 \003(\0132:.com.n4systems.fi" +
-      "eldid.api.pub.model.AssetTypeGroupMessag" +
-      "eB\010\212\265\030\004list:\236\001\n\022assetTypeSchedules\0228.com" +
-      ".n4systems.fieldid.api.pub.model.ListRes" +
-      "ponseMessage\030\355\007 \003(\0132=.com.n4systems.fiel" +
-      "did.api.pub.model.AssetTypeScheduleMessa" +
-      "geB\010\212\265\030\004list:\240\001\n\023predefinedLocations\0228.c" +
-      "om.n4systems.fieldid.api.pub.model.ListR" +
-      "esponseMessage\030\356\007 \003(\0132>.com.n4systems.fi" +
-      "eldid.api.pub.model.PredefinedLocationMe",
-      "ssageB\010\212\265\030\004list:\204\001\n\005users\0228.com.n4system" +
-      "s.fieldid.api.pub.model.ListResponseMess" +
-      "age\030\357\007 \003(\01320.com.n4systems.fieldid.api.p" +
-      "ub.model.UserMessageB\010\212\265\030\004list:\216\001\n\nuserG" +
-      "roups\0228.com.n4systems.fieldid.api.pub.mo" +
-      "del.ListResponseMessage\030\360\007 \003(\01325.com.n4s" +
-      "ystems.fieldid.api.pub.model.UserGroupMe" +
-      "ssageB\010\212\265\030\004listB/\n#com.n4systems.fieldid" +
-      ".api.pub.modelB\010Messages"
+      "sage\"\371\007\n\013UserMessage\022\n\n\002id\030\001 \001(\t\022\017\n\007crea" +
+      "ted\030\002 \001(\t\022\020\n\010modified\030\003 \001(\t\022\031\n\021createdBy" +
+      "UserName\030\004 \001(\t\022\027\n\017createdByUserId\030\005 \001(\t\022" +
+      "\032\n\022modifiedByUserName\030\006 \001(\t\022\030\n\020modifiedB" +
+      "yUserId\030\007 \001(\t\022\021\n\townerName\030\010 \001(\t\022\017\n\007owne" +
+      "rId\030\t \002(\t\022\016\n\006userID\030\n \001(\t\022\021\n\tfirstName\030\013" +
+      " \001(\t\022\020\n\010lastName\030\014 \001(\t\022\024\n\014emailAddress\030\r" +
+      " \001(\t\022\022\n\ntimeZoneID\030\016 \001(\t\022\020\n\010position\030\017 \001" +
+      "(\t\022\020\n\010initials\030\020 \001(\t\022\033\n\023failedLoginAttem" +
+      "pts\030\021 \001(\005\022\016\n\006locked\030\022 \001(\010\022\023\n\013lockedUntil",
+      "\030\023 \001(\t\022\027\n\017passwordChanged\030\024 \001(\t\022\020\n\010langu" +
+      "age\030\025 \001(\t\022\022\n\nidentifier\030\026 \001(\t\022\021\n\tlastLog" +
+      "in\030\027 \001(\t\022E\n\006groups\030\030 \003(\01325.com.n4systems" +
+      ".fieldid.api.pub.model.UserGroupMessage\022" +
+      "K\n\010userType\030\031 \002(\01629.com.n4systems.fieldi" +
+      "d.api.pub.model.UserMessage.UserType\022X\n\013" +
+      "permissions\030\032 \002(\0132C.com.n4systems.fieldi" +
+      "d.api.pub.model.UserMessage.PermissionsM" +
+      "essage\032\324\001\n\022PermissionsMessage\022\024\n\014createA" +
+      "ssets\030\001 \002(\010\022\032\n\022manageSystemConfig\030\002 \002(\010\022",
+      "\031\n\021manageSystemUsers\030\003 \002(\010\022\026\n\016manageEndU" +
+      "sers\030\004 \002(\010\022\024\n\014createEvents\030\005 \002(\010\022\022\n\nedit" +
+      "Events\030\006 \002(\010\022\022\n\nmanageJobs\030\007 \002(\010\022\033\n\023mana" +
+      "geSafetyNetwork\030\010 \002(\010\"Q\n\010UserType\022\t\n\005ADM" +
+      "IN\020\001\022\016\n\nINSPECTION\020\002\022\r\n\tREPORTING\020\003\022\n\n\006P" +
+      "ERSON\020\004\022\017\n\013USAGE_BASED\020\005\"=\n\020UserGroupMes" +
+      "sage\022\n\n\002id\030\001 \001(\t\022\014\n\004name\030\002 \002(\t\022\017\n\007groupI" +
+      "d\030\003 \001(\t\"L\n\023ListResponseMessage\022\014\n\004page\030\001" +
+      " \002(\005\022\020\n\010pageSize\030\002 \002(\005\022\r\n\005total\030\003 \002(\003*\006\010" +
+      "\350\007\020\321\017*X\n\022AttributeValueType\022\010\n\004TEXT\020\001\022\n\n",
+      "\006SELECT\020\002\022\t\n\005COMBO\020\003\022\010\n\004UNIT\020\004\022\010\n\004DATE\020\005" +
+      "\022\r\n\tDATE_TIME\020\006:8\n\017serialized_name\022\035.goo" +
+      "gle.protobuf.FieldOptions\030\321\206\003 \001(\t:\206\001\n\006as" +
+      "sets\0228.com.n4systems.fieldid.api.pub.mod" +
+      "el.ListResponseMessage\030\350\007 \003(\01321.com.n4sy" +
+      "stems.fieldid.api.pub.model.AssetMessage" +
+      "B\010\212\265\030\004list:\206\001\n\006owners\0228.com.n4systems.fi" +
+      "eldid.api.pub.model.ListResponseMessage\030" +
+      "\351\007 \003(\01321.com.n4systems.fieldid.api.pub.m" +
+      "odel.OwnerMessageB\010\212\265\030\004list:\223\001\n\rassetSta",
+      "tuses\0228.com.n4systems.fieldid.api.pub.mo" +
+      "del.ListResponseMessage\030\352\007 \003(\01327.com.n4s" +
+      "ystems.fieldid.api.pub.model.AssetStatus" +
+      "MessageB\010\212\265\030\004list:\216\001\n\nassetTypes\0228.com.n" +
+      "4systems.fieldid.api.pub.model.ListRespo" +
+      "nseMessage\030\353\007 \003(\01325.com.n4systems.fieldi" +
+      "d.api.pub.model.AssetTypeMessageB\010\212\265\030\004li" +
+      "st:\230\001\n\017assetTypeGroups\0228.com.n4systems.f" +
+      "ieldid.api.pub.model.ListResponseMessage" +
+      "\030\354\007 \003(\0132:.com.n4systems.fieldid.api.pub.",
+      "model.AssetTypeGroupMessageB\010\212\265\030\004list:\226\001" +
+      "\n\tlocations\0228.com.n4systems.fieldid.api." +
+      "pub.model.ListResponseMessage\030\355\007 \003(\0132>.c" +
+      "om.n4systems.fieldid.api.pub.model.Prede" +
+      "finedLocationMessageB\010\212\265\030\004list:\204\001\n\005users" +
+      "\0228.com.n4systems.fieldid.api.pub.model.L" +
+      "istResponseMessage\030\356\007 \003(\01320.com.n4system" +
+      "s.fieldid.api.pub.model.UserMessageB\010\212\265\030" +
+      "\004list:\216\001\n\nuserGroups\0228.com.n4systems.fie" +
+      "ldid.api.pub.model.ListResponseMessage\030\357",
+      "\007 \003(\01325.com.n4systems.fieldid.api.pub.mo" +
+      "del.UserGroupMessageB\010\212\265\030\004listB/\n#com.n4" +
+      "systems.fieldid.api.pub.modelB\010Messages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -34009,7 +33948,7 @@ public final class Messages {
           internal_static_com_n4systems_fieldid_api_pub_model_UserMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_com_n4systems_fieldid_api_pub_model_UserMessage_descriptor,
-              new java.lang.String[] { "Id", "Createdstring", "Modifiedstring", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "OwnerName", "OwnerId", "UserID", "FirstName", "LastName", "EmailAddress", "TimeZoneID", "Position", "Initials", "FailedLoginAttempts", "Locked", "LockedUntilstring", "PasswordChangedstring", "Language", "Identifier", "LastLoginstring", "Groups", "UserType", "Permissions", });
+              new java.lang.String[] { "Id", "Created", "Modified", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "OwnerName", "OwnerId", "UserID", "FirstName", "LastName", "EmailAddress", "TimeZoneID", "Position", "Initials", "FailedLoginAttempts", "Locked", "LockedUntil", "PasswordChanged", "Language", "Identifier", "LastLogin", "Groups", "UserType", "Permissions", });
           internal_static_com_n4systems_fieldid_api_pub_model_UserMessage_PermissionsMessage_descriptor =
             internal_static_com_n4systems_fieldid_api_pub_model_UserMessage_descriptor.getNestedTypes().get(0);
           internal_static_com_n4systems_fieldid_api_pub_model_UserMessage_PermissionsMessage_fieldAccessorTable = new
@@ -34034,13 +33973,11 @@ public final class Messages {
           assetStatuses.internalInit(descriptor.getExtensions().get(3));
           assetTypes.internalInit(descriptor.getExtensions().get(4));
           assetTypeGroups.internalInit(descriptor.getExtensions().get(5));
-          assetTypeSchedules.internalInit(descriptor.getExtensions().get(6));
-          predefinedLocations.internalInit(descriptor.getExtensions().get(7));
-          users.internalInit(descriptor.getExtensions().get(8));
-          userGroups.internalInit(descriptor.getExtensions().get(9));
+          locations.internalInit(descriptor.getExtensions().get(6));
+          users.internalInit(descriptor.getExtensions().get(7));
+          userGroups.internalInit(descriptor.getExtensions().get(8));
           com.google.protobuf.ExtensionRegistry registry =
             com.google.protobuf.ExtensionRegistry.newInstance();
-          registry.add(com.n4systems.fieldid.api.pub.model.Messages.serializedName);
           registry.add(com.n4systems.fieldid.api.pub.model.Messages.serializedName);
           registry.add(com.n4systems.fieldid.api.pub.model.Messages.serializedName);
           registry.add(com.n4systems.fieldid.api.pub.model.Messages.serializedName);

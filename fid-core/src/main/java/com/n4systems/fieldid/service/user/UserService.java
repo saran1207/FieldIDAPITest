@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.service.user;
 
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.SendSavedItemSchedule;
@@ -20,6 +20,7 @@ import com.n4systems.model.user.UserGroup;
 import com.n4systems.model.user.UserQueryHelper;
 import com.n4systems.security.Permissions;
 import com.n4systems.security.UserType;
+import com.n4systems.util.BitField;
 import com.n4systems.util.StringUtils;
 import com.n4systems.util.UserBelongsToFilter;
 import com.n4systems.util.collections.PrioritizedList;
@@ -33,10 +34,14 @@ import javax.persistence.Query;
 import java.util.*;
 
 @Transactional
-public class UserService extends FieldIdPersistenceService {
+public class UserService extends CrudService<User> {
 
     @Autowired
     private OrgService orgService;
+
+	public UserService() {
+		super(User.class);
+	}
 
     private static String [] DEFAULT_ORDER = {"firstName", "lastName"};
 
@@ -60,7 +65,12 @@ public class UserService extends FieldIdPersistenceService {
         return persistenceService.findAll(builder);
     }
 
-    public List<User> getExpiringPasswordUsersByTenant(Long tenantId, int expiringDays) {
+	@Override
+	public List<User> findAll(int page, int pageSize) {
+		return super.findAll(createUserQueryBuilder(true, false), page, pageSize);
+	}
+
+	public List<User> getExpiringPasswordUsersByTenant(Long tenantId, int expiringDays) {
 
         List<User> finalListOfUsers = new ArrayList<>();
         Date expiringDate = new Date();
@@ -378,11 +388,7 @@ public class UserService extends FieldIdPersistenceService {
     }
 
     public void create(User user) {
-        persistenceService.save(user);
-    }
-
-    public void update(User user) {
-        persistenceService.update(user);
+		super.save(user);
     }
 
     public boolean userIdIsUnique(Long tenantId, String userId, Long currentUserId) {
@@ -421,5 +427,59 @@ public class UserService extends FieldIdPersistenceService {
     private boolean isUserGroupFilteringEnabled() {
         return orgService.getPrimaryOrgForTenant(getCurrentTenant().getId()).hasExtendedFeature(ExtendedFeature.UserGroupFiltering);
     }
+
+	@Override
+	public User save(User model) {
+		validateUserBeforeSave(model);
+		return super.save(model);
+	}
+
+	@Override
+	public User update(User model) {
+		validateUserBeforeSave(model);
+		return super.update(model);
+	}
+
+	private void validateUserBeforeSave(User user) {
+		user.setPermissions(ensurePermissionsMatchUserType(user.getUserType(), user.getPermissions()));
+
+		if (user.getUserType() == UserType.SYSTEM || user.getUserType() == UserType.ADMIN) {
+			// system users and admins, must be under the primary org
+			if (!user.getOwner().isPrimary()) {
+				user.setOwner(getCurrentUser().getOwner().getPrimaryOrg());
+			}
+		} else if (user.getUserType() == UserType.PERSON) {
+			// person users cannot login
+			user.setUserID(null);
+			user.setHashPassword(null);
+		}
+	}
+
+	private int ensurePermissionsMatchUserType(UserType type, int permissions) {
+		BitField perms = BitField.create(permissions);
+		switch (type) {
+			case SYSTEM:
+			case ADMIN:
+				// System and Admin users have full permissions
+				perms.set(Permissions.ALL);
+				break;
+			case FULL:
+				// Full users can have any permission
+				break;
+			case LITE:
+			case USAGE_BASED:
+				// lite and usage based users can only have create and edit events
+				perms.retain(Permissions.CreateEvent, Permissions.EditEvent);
+				break;
+			case READONLY:
+			case PERSON:
+				// Readonly and Persons have no permissions
+				perms.clearAll();
+				break;
+			default:
+				throw new IllegalArgumentException("Unhandled UserType: " + type.name());
+		}
+		return perms.getMask();
+	}
 
 }

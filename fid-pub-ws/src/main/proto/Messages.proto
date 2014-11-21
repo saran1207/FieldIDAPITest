@@ -205,15 +205,15 @@ message TestContainerMessage {
 
 message UserMessage {
 	optional string id 						= 1;
-	optional string createdstring 			= 2;
-	optional string modifiedstring 			= 3;
+	optional string created 				= 2;
+	optional string modified 				= 3;
 	optional string createdByUserName 		= 4;
 	optional string createdByUserId 		= 5;
 	optional string modifiedByUserName 		= 6;
 	optional string modifiedByUserId 		= 7;
 	optional string ownerName 				= 8;
 	required string ownerId 				= 9;
-	required string userID 					= 10;
+	optional string userID 					= 10;
 	optional string firstName 				= 11;
 	optional string lastName 				= 12;
 	optional string emailAddress 			= 13;
@@ -222,23 +222,20 @@ message UserMessage {
 	optional string initials 				= 16;
 	optional int32 failedLoginAttempts 		= 17;
 	optional bool locked 					= 18;
-	optional string lockedUntilstring 		= 19;
-	optional string passwordChangedstring 	= 20;
+	optional string lockedUntil 			= 19;
+	optional string passwordChanged 		= 20;
 	optional string language 				= 21;
 	optional string identifier 				= 22;
-	optional string lastLoginstring 		= 23;
+	optional string lastLogin 				= 23;
 
 	repeated UserGroupMessage groups		= 24;
 
 	enum UserType {
-		ALL 		= 0;
 		ADMIN 		= 1;
-		SYSTEM 		= 2;
-		FULL 		= 3;
-		LITE 		= 4;
-		READONLY 	= 5;
-		PERSON 		= 6;
-		USAGE_BASED = 7;
+		INSPECTION 	= 2;
+		REPORTING 	= 3;
+		PERSON 		= 4;
+		USAGE_BASED = 5;
 	}
 	required UserType userType 				= 25;
 
@@ -258,7 +255,7 @@ message UserMessage {
 message UserGroupMessage {
 	optional string id 	= 1;
 	required string name	= 2;
-	required string groupId	= 3;
+	optional string groupId	= 3;
 }
 
 message ListResponseMessage {

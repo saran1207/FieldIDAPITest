@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Path;
 
-@Path("owner")
+@Path("owners")
 @Component
 public class OwnerResource extends CrudResource<BaseOrg, OwnerMessage, Builder> {
 

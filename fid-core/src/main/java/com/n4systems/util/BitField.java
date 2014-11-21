@@ -20,8 +20,9 @@ public class BitField extends Number implements Comparable<BitField> {
 		return mask;
 	}
 
-	public void setMask(int mask) {
+	public BitField setMask(int mask) {
 		this.mask = mask;
+		return this;
 	}
 	
 	/**
@@ -38,20 +39,41 @@ public class BitField extends Number implements Comparable<BitField> {
 		return (mask & bits) == bits;
 	}
 	
-	public void set(int bit, boolean on) {
+	public BitField set(int bit, boolean on) {
 		if (on) {
 			set(bit);
 		} else {
 			clear(bit);
 		}
+		return this;
+	}
+
+	public BitField set(int...bits) {
+		for(int bit: bits) {
+			mask |= bit;
+		}
+		return this;
 	}
 	
-	public void set(int bit) {
-		mask |= bit;
+	public BitField clear(int...bits) {
+		for(int bit: bits) {
+			mask &= ~bit;
+		}
+		return this;
 	}
-	
-	public void clear(int bit) {
-		mask &= ~bit;
+
+	public BitField clearAll() {
+		mask = 0;
+		return this;
+	}
+
+	public BitField retain(int...bits) {
+		int oldMask = mask;
+		mask = 0;
+		for(int bit: bits) {
+			mask |= oldMask & bit;
+		}
+		return this;
 	}
 
 	@Override

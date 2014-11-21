@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 import javax.ws.rs.Path;
 import java.util.stream.Collectors;
 
-@Path("asset")
+@Path("assets")
 @Component
 public class AssetResource extends CrudResource<Asset, AssetMessage, Builder> {
 

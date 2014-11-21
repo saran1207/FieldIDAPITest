@@ -97,4 +97,9 @@ public class PublicApiConfig {
 	public PredefinedLocationResource predefinedLocationResource() {
 		return new PredefinedLocationResource();
 	}
+
+	@Bean(initMethod = "init")
+	public UserResource userResource() {
+		return new UserResource();
+	}
 }

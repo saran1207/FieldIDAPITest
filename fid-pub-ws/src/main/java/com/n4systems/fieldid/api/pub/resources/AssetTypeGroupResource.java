@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 import javax.ws.rs.Path;
 
-@Path("assettypegroup")
+@Path("assettypegroups")
 @Component
 public class AssetTypeGroupResource extends CrudResource<AssetTypeGroup, AssetTypeGroupMessage, Builder> {
 

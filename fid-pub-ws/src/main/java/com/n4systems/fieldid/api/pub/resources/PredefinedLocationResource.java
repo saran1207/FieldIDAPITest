@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 import javax.ws.rs.Path;
 
-@Path("location")
+@Path("locations")
 @Component
 public class PredefinedLocationResource extends CrudResource<PredefinedLocation, PredefinedLocationMessage, Builder> {
 
@@ -26,7 +26,7 @@ public class PredefinedLocationResource extends CrudResource<PredefinedLocation,
 	@Autowired private BaseOrgResolver baseOrgResolver;
 
 	public PredefinedLocationResource() {
-		super(Messages.predefinedLocations);
+		super(Messages.locations);
 	}
 
 	@Override
