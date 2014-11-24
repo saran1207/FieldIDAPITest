@@ -35,7 +35,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import rfid.ejb.entity.InfoOptionBean;
 
-import java.io.File;
 import java.util.*;
 
 
@@ -1236,16 +1235,16 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         }
    }
 
-   public CustomLotoDetails getCustomLotoDetails() {
-       return persistenceService.find(createTenantSecurityBuilder(CustomLotoDetails.class));
+   public LotoSettings getCustomLotoDetails() {
+       return persistenceService.find(createTenantSecurityBuilder(LotoSettings.class));
    }
 
-   public CustomLotoDetails saveOrUpdateCustomLotoDetails(CustomLotoDetails customLotoDetails) {
-       return persistenceService.saveOrUpdate(customLotoDetails);
+   public LotoSettings saveOrUpdateCustomLotoDetails(LotoSettings lotoSettings) {
+       return persistenceService.saveOrUpdate(lotoSettings);
    }
 
-    public void deleteCustomLotoDetails(CustomLotoDetails customLotoDetails) {
-        persistenceService.reattach(customLotoDetails);
-        persistenceService.delete(customLotoDetails);
+    public void deleteCustomLotoDetails(LotoSettings lotoSettings) {
+        persistenceService.reattach(lotoSettings);
+        persistenceService.delete(lotoSettings);
     }
 }

@@ -13,7 +13,7 @@ import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.loto.ProceduresListPage;
 import com.n4systems.model.Asset;
 import com.n4systems.model.IsolationPointSourceType;
-import com.n4systems.model.procedure.CustomLotoDetails;
+import com.n4systems.model.procedure.LotoSettings;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
 import org.apache.wicket.Component;
@@ -66,12 +66,12 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
         pd.setEquipmentLocation(asset.getAdvancedLocation().getFullName());
         pd.setEquipmentDescription(asset.getType().getDisplayName());
 
-        CustomLotoDetails customLotoDetails = procedureDefinitionService.getCustomLotoDetails();
+        LotoSettings lotoSettings = procedureDefinitionService.getCustomLotoDetails();
 
-        if (customLotoDetails != null) {
-            pd.setApplicationProcess(customLotoDetails.getApplicationProcess());
-            pd.setRemovalProcess(customLotoDetails.getRemovalProcess());
-            pd.setTestingAndVerification(customLotoDetails.getTestingAndVerification());
+        if (lotoSettings != null) {
+            pd.setApplicationProcess(lotoSettings.getApplicationProcess());
+            pd.setRemovalProcess(lotoSettings.getRemovalProcess());
+            pd.setTestingAndVerification(lotoSettings.getTestingAndVerification());
         }
 
         init(Model.of(pd));

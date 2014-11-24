@@ -3,7 +3,7 @@ package com.n4systems.fieldid.wicket.pages.setup.loto;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
-import com.n4systems.model.procedure.CustomLotoDetails;
+import com.n4systems.model.procedure.LotoSettings;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -20,31 +20,31 @@ public class LotoDetailsSetupPage extends FieldIDTemplatePage {
     @SpringBean
     ProcedureDefinitionService procedureDefinitionService;
 
-    private IModel<CustomLotoDetails> customLotoDetailsModel;
+    private IModel<LotoSettings> lotoSettingsModel;
 
     public LotoDetailsSetupPage() {
 
-        customLotoDetailsModel = Model.of(getCustomLotoDetails());
+        lotoSettingsModel = Model.of(getLotoSettings());
 
         Form form = new Form("form") {
             @Override
             protected void onSubmit() {
-                CustomLotoDetails customLotoDetails = customLotoDetailsModel.getObject();
+                LotoSettings lotoSettings = lotoSettingsModel.getObject();
 
-                if(customLotoDetails.getApplicationProcess() == null &&
-                        customLotoDetails.getRemovalProcess() == null &&
-                        customLotoDetails.getTestingAndVerification() == null ) {
-                    procedureDefinitionService.deleteCustomLotoDetails(customLotoDetails);
+                if(lotoSettings.getApplicationProcess() == null &&
+                        lotoSettings.getRemovalProcess() == null &&
+                        lotoSettings.getTestingAndVerification() == null ) {
+                    procedureDefinitionService.deleteCustomLotoDetails(lotoSettings);
                 } else {
-                    procedureDefinitionService.saveOrUpdateCustomLotoDetails(customLotoDetails);
+                    procedureDefinitionService.saveOrUpdateCustomLotoDetails(lotoSettings);
                 }
                 setResponsePage(LotoSetupPage.class);
             }
         };
 
-        form.add(new TextArea<String>("applicationProcess", new PropertyModel<>(customLotoDetailsModel, "applicationProcess")));
-        form.add(new TextArea<String>("removalProcess", new PropertyModel<>(customLotoDetailsModel, "removalProcess")));
-        form.add(new TextArea<String>("testingAndVerification", new PropertyModel<>(customLotoDetailsModel, "testingAndVerification")));
+        form.add(new TextArea<String>("applicationProcess", new PropertyModel<>(lotoSettingsModel, "applicationProcess")));
+        form.add(new TextArea<String>("removalProcess", new PropertyModel<>(lotoSettingsModel, "removalProcess")));
+        form.add(new TextArea<String>("testingAndVerification", new PropertyModel<>(lotoSettingsModel, "testingAndVerification")));
 
 
         form.add(new SubmitLink("saveLink"));
@@ -53,9 +53,9 @@ public class LotoDetailsSetupPage extends FieldIDTemplatePage {
 
     }
 
-    private CustomLotoDetails getCustomLotoDetails() {
-        CustomLotoDetails customLotoDetails =  procedureDefinitionService.getCustomLotoDetails();
-        return customLotoDetails != null ? customLotoDetails : new CustomLotoDetails(getTenant());
+    private LotoSettings getLotoSettings() {
+        LotoSettings lotoSettings =  procedureDefinitionService.getCustomLotoDetails();
+        return lotoSettings != null ? lotoSettings : new LotoSettings(getTenant());
     }
 
     @Override

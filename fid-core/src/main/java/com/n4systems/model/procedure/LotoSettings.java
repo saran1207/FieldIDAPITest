@@ -3,13 +3,11 @@ package com.n4systems.model.procedure;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.parents.EntityWithTenant;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table(name="loto_custom_details")
-public class CustomLotoDetails extends EntityWithTenant {
+@Table(name="loto_settings")
+public class LotoSettings extends EntityWithTenant {
 
     @Column(name="application_process")
     private String applicationProcess;
@@ -20,18 +18,22 @@ public class CustomLotoDetails extends EntityWithTenant {
     @Column(name="testing_and_verification")
     private String testingAndVerification;
 
+    @Column(name="annotation_type")
+    @Enumerated(EnumType.STRING)
+    private AnnotationType annotationType;
 
-    public CustomLotoDetails() {}
+    public LotoSettings() {}
 
-    public CustomLotoDetails(Tenant tenant) {
-        this(null, null, null);
+    public LotoSettings(Tenant tenant) {
+        this(null, null, null, AnnotationType.ARROW_STYLE);
         setTenant(tenant);
     }
 
-    public CustomLotoDetails(String applicationProcess, String removalProcess, String testingAndVerification) {
+    public LotoSettings(String applicationProcess, String removalProcess, String testingAndVerification, AnnotationType annotationType) {
         this.applicationProcess = applicationProcess;
         this.removalProcess = removalProcess;
         this.testingAndVerification = testingAndVerification;
+        this.annotationType = annotationType;
     }
 
     public String getApplicationProcess() {
@@ -56,5 +58,13 @@ public class CustomLotoDetails extends EntityWithTenant {
 
     public void setTestingAndVerification(String testingAndVerification) {
         this.testingAndVerification = testingAndVerification;
+    }
+
+    public AnnotationType getAnnotationType() {
+        return annotationType;
+    }
+
+    public void setAnnotationType(AnnotationType annotationType) {
+        this.annotationType = annotationType;
     }
 }
