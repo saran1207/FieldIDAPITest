@@ -1237,15 +1237,15 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         }
    }
 
-   public LotoSettings getCustomLotoDetails() {
+   public LotoSettings getLotoSettings() {
        return persistenceService.find(createTenantSecurityBuilder(LotoSettings.class));
    }
 
-   public LotoSettings saveOrUpdateCustomLotoDetails(LotoSettings lotoSettings) {
+   public LotoSettings saveOrUpdateLotoSettings(LotoSettings lotoSettings) {
        return persistenceService.saveOrUpdate(lotoSettings);
    }
 
-    public void deleteCustomLotoDetails(LotoSettings lotoSettings) {
+    public void deleteLotoSettings(LotoSettings lotoSettings) {
         persistenceService.reattach(lotoSettings);
         persistenceService.delete(lotoSettings);
     }
