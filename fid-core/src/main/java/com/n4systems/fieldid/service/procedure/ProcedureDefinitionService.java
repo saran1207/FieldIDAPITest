@@ -980,6 +980,8 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         to.setText(from.getText());
         to.setX(from.getX());
         to.setY(from.getY());
+        to.setX_tail(from.getX_tail());
+        to.setY_tail(from.getY_tail());
         to.setImage(image);
         image.addAnnotation(to);
         return to;

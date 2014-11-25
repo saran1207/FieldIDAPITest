@@ -137,6 +137,9 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
     @Column(name="testing_and_verification")
     private String testingAndVerification = TESTING_AND_VERIFICATION_REQUIREMENTS;
 
+    @Column(name="annotation_type")
+    private AnnotationType annotationType;
+
 	@Column(nullable=false)
 	private String mobileId;
 
@@ -483,6 +486,14 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
 
     public void setTestingAndVerification(String testingAndVerification) {
         this.testingAndVerification = testingAndVerification;
+    }
+
+    public AnnotationType getAnnotationType() {
+        return annotationType;
+    }
+
+    public void setAnnotationType(AnnotationType annotationType) {
+        this.annotationType = annotationType;
     }
 
     //We are forced to implement this due to the HasOwner interface on the event creation service and related classes

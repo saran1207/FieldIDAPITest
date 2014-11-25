@@ -22,6 +22,10 @@ public class ImageAnnotation extends EntityWithTenant {
 
     private double y;
 
+    private double x_tail;
+
+    private double y_tail;
+
     @Transient
     private Long tempId;
 
@@ -31,6 +35,15 @@ public class ImageAnnotation extends EntityWithTenant {
     public ImageAnnotation(double x, double y, String text, ImageAnnotationType type) {
         this.x = x;
         this.y = y;
+        this.text = text;
+        this.type = type;
+    }
+
+    public ImageAnnotation(double x, double y, double x_tail, double y_tail, String text, ImageAnnotationType type) {
+        this.x = x;
+        this.y = y;
+        this.x_tail = x_tail;
+        this.y_tail = y_tail;
         this.text = text;
         this.type = type;
     }
@@ -73,6 +86,22 @@ public class ImageAnnotation extends EntityWithTenant {
 
     public void setY(double y) {
         this.y = y;
+    }
+
+    public double getX_tail() {
+        return x_tail;
+    }
+
+    public void setX_tail(double x_tail) {
+        this.x_tail = x_tail;
+    }
+
+    public double getY_tail() {
+        return y_tail;
+    }
+
+    public void setY_tail(double y_tail) {
+        this.y_tail = y_tail;
     }
 
     public Long getTempId() {
