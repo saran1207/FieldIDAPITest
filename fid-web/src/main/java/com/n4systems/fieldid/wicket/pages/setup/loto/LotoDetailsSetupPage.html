@@ -1,30 +1,35 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
+    <div wicket:id="addTemplateModal"/>
+    <div wicket:id="feedbackPanel"/>
+    <div style="float: left; width: 380px">
+        <form wicket:id="form">
+            <fieldset>
+                <legend><wicket:message key="label.procedure_details"/></legend>
+                <div class="control-group">
+                    <label class="label"><wicket:message key="label.lockout_application_process"/>:</label>
+                    <textarea wicket:id="applicationProcess"/>
+                </div>
 
-    <form wicket:id="form">
-        <fieldset>
-            <legend><wicket:message key="label.procedure_details"/></legend>
-            <div class="control-group">
-                <label class="label"><wicket:message key="label.lockout_application_process"/>:</label>
-                <textarea wicket:id="applicationProcess"/>
+                <div class="control-group">
+                    <label class="label"><wicket:message key="label.removal_process"/>:</label>
+                    <textarea wicket:id="removalProcess"/>
+                </div>
+
+                <div class="control-group">
+                    <label class="label"><wicket:message key="label.testing_and_verification"/>:</label>
+                    <textarea wicket:id="testingAndVerification"/>
+                </div>
+            </fieldset>
+            <div>
+                <a class="btn-primary" wicket:id="saveLink"><wicket:message key="label.save"/></a>
+                <wicket:message key="label.or"/>
+                <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
             </div>
-
-            <div class="control-group">
-                <label class="label"><wicket:message key="label.removal_process"/>:</label>
-                <textarea wicket:id="removalProcess"/>
-            </div>
-
-            <div class="control-group">
-                <label class="label"><wicket:message key="label.testing_and_verification"/>:</label>
-                <textarea wicket:id="testingAndVerification"/>
-            </div>
-        </fieldset>
-        <div>
-            <a class="btn-primary" wicket:id="saveLink"><wicket:message key="label.save"/></a>
-            <wicket:message key="label.or"/>
-            <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
-        </div>
-    </form>
-
+        </form>
+    </div>
+    <div style="float: right; width: 800px">
+        <div wicket:id="warningTemplateList"/>
+    </div>
 </wicket:extend>
 </html>
