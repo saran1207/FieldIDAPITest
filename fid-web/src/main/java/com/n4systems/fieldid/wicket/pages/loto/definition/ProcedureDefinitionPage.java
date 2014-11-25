@@ -66,7 +66,7 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
         pd.setEquipmentLocation(asset.getAdvancedLocation().getFullName());
         pd.setEquipmentDescription(asset.getType().getDisplayName());
 
-        LotoSettings lotoSettings = procedureDefinitionService.getCustomLotoDetails();
+        LotoSettings lotoSettings = procedureDefinitionService.getLotoSettings();
 
         if (lotoSettings != null) {
             pd.setApplicationProcess(lotoSettings.getApplicationProcess());

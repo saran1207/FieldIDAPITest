@@ -57,7 +57,7 @@ public class LotoSetupPage extends FieldIDTemplatePage {
         annotationTypeSelect.add(new OnChangeAjaxBehavior() {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                procedureDefinitionService.saveOrUpdateCustomLotoDetails(lotoSettingsModel.getObject());
+                procedureDefinitionService.saveOrUpdateLotoSettings(lotoSettingsModel.getObject());
                 info(new FIDLabelModel("message.annotation_style_updated").getObject());
                 target.add(getTopFeedbackPanel());
             }
@@ -66,7 +66,7 @@ public class LotoSetupPage extends FieldIDTemplatePage {
     }
 
     private LotoSettings getLotoSettings() {
-        LotoSettings lotoSettings =  procedureDefinitionService.getCustomLotoDetails();
+        LotoSettings lotoSettings =  procedureDefinitionService.getLotoSettings();
         return lotoSettings != null ? lotoSettings : new LotoSettings(getTenant());
     }
 
