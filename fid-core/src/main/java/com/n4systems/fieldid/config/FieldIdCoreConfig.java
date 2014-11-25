@@ -46,11 +46,7 @@ import com.n4systems.fieldid.service.mixpanel.MixpanelService;
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.org.PlaceService;
-import com.n4systems.fieldid.service.procedure.LotoReportService;
-import com.n4systems.fieldid.service.procedure.NotifyProcedureAuthorizersService;
-import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
-import com.n4systems.fieldid.service.procedure.ProcedureService;
-import com.n4systems.fieldid.service.procedure.SvgGenerationService;
+import com.n4systems.fieldid.service.procedure.*;
 import com.n4systems.fieldid.service.project.ProjectService;
 import com.n4systems.fieldid.service.schedule.AssetTypeScheduleService;
 import com.n4systems.fieldid.service.schedule.MassScheduleService;
@@ -70,6 +66,7 @@ import com.n4systems.fieldid.service.transaction.TransactionService;
 import com.n4systems.fieldid.service.user.*;
 import com.n4systems.fieldid.service.uuid.AtomicLongService;
 import com.n4systems.fieldid.service.uuid.UUIDService;
+import com.n4systems.fieldid.service.warningtemplates.WarningTemplateService;
 import com.n4systems.persistence.listeners.LocalizationListener;
 import com.n4systems.persistence.listeners.SetupDataUpdateEventListener;
 import com.n4systems.services.AuthService;
@@ -321,6 +318,11 @@ public class FieldIdCoreConfig {
     @Bean
     public ProcedureDefinitionService procedureDefinitionService() {
         return new ProcedureDefinitionService();
+    }
+
+    @Bean
+    public WarningTemplateService warningTemplateService() {
+        return new WarningTemplateService();
     }
 
     @Bean
