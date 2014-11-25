@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.loto.definition;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.loto.Warning;
 import com.n4systems.fieldid.wicket.components.text.*;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
@@ -36,7 +37,7 @@ public class DetailsPanel extends Panel {
 
         setOutputMarkupPlaceholderTag(true);
         add(new AttributeAppender("class", Model.of("details")));
-        add(new ProcedureDefinitionDetailsForm("detailsForm", model));
+        add(new ProcedureDefinitionDetailsForm("detailsForm", model).setOutputMarkupId(true));
         add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
     }
 
@@ -52,12 +53,14 @@ public class DetailsPanel extends Panel {
             add(new LabelledTextField<String>("identifier", "label.electronic_id", ProxyModel.of(model, on(ProcedureDefinition.class).getElectronicIdentifier()))
                     .add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.electronic_id"), TipsyBehavior.Gravity.N)));
 
-            add(new LabelledTextArea<String>("warnings", "label.warnings", ProxyModel.of(model, on(ProcedureDefinition.class).getWarnings())){
-                @Override
-                public int getMaxLength() {
-                    return 1024;
-                }
-            });
+//            add(new LabelledTextArea<String>("warnings", "label.warnings", ProxyModel.of(model, on(ProcedureDefinition.class).getWarnings())){
+//                @Override
+//                public int getMaxLength() {
+//                    return 1024;
+//                }
+//            });
+
+            add(new Warning("warnings", ProxyModel.of(model, on(ProcedureDefinition.class).getWarnings())).setOutputMarkupId(true));
 
             //Fields for Application Process and Removal Process of lockouts.
             add(new LabelledTextArea<String>("applicationProcess", "label.lockout_application_process", ProxyModel.of(model, on(ProcedureDefinition.class).getApplicationProcess())){

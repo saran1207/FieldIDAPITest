@@ -1,5 +1,7 @@
 package com.n4systems.model.warningtemplate;
 
+import com.n4systems.model.api.Listable;
+import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.parents.EntityWithTenant;
 
 import javax.persistence.Column;
@@ -18,7 +20,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="warning_templates")
-public class WarningTemplate extends EntityWithTenant {
+public class WarningTemplate extends EntityWithTenant implements Listable<Long>, NamedEntity {
     @Column(nullable=false, length=50)
     private String name;
 
@@ -39,5 +41,15 @@ public class WarningTemplate extends EntityWithTenant {
 
     public void setWarning(String warning) {
         this.warning = warning;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return name;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }
