@@ -22,9 +22,9 @@ public class ImageAnnotation extends EntityWithTenant {
 
     private double y;
 
-    private double x_tail;
+    private double x_tail = 0;
 
-    private double y_tail;
+    private double y_tail = 0;
 
     @Transient
     private Long tempId;
