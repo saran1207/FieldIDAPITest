@@ -24,7 +24,7 @@ public class CopyActionCell extends Panel {
             public void onClick() {
                 ProcedureDefinition copiedDefinition = procedureDefinitionService.cloneProcedureDefinitionForCopy(procedureDefinition.getObject(), assetModel.getObject());
                 copiedDefinition.setPublishedState(PublishedState.DRAFT);
-                setResponsePage(new ProcedureDefinitionPage(Model.of(copiedDefinition)));
+                setResponsePage(new ProcedureDefinitionPage(Model.of(copiedDefinition), true));
             }
         });
     }

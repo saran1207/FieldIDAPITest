@@ -2,6 +2,9 @@ package com.n4systems.model.procedure;
 
 import com.n4systems.model.api.DisplayEnum;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public enum AnnotationType implements DisplayEnum {
     CALL_OUT_STYLE("Call Out Style"), ARROW_STYLE("Arrow Style");
 
@@ -18,5 +21,14 @@ public enum AnnotationType implements DisplayEnum {
 
     public String getName() {
         return name();
+    }
+
+    public List<String> getAllLabels() {
+        List<String> labels = new ArrayList<String>();
+
+        labels.add(this.CALL_OUT_STYLE.getLabel());
+        labels.add(this.ARROW_STYLE.getLabel());
+
+        return labels;
     }
 }

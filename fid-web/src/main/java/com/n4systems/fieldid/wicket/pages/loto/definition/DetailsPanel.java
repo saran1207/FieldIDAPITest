@@ -6,6 +6,7 @@ import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.text.*;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
+import com.n4systems.model.procedure.AnnotationType;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureType;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -30,10 +31,11 @@ public class DetailsPanel extends Panel {
     private FIDFeedbackPanel feedbackPanel;
 
     private @SpringBean ProcedureDefinitionService procedureDefinitionService;
+    private boolean isCopyOrRevise;
 
-    public DetailsPanel(String id, IModel<ProcedureDefinition> model) {
+    public DetailsPanel(String id, IModel<ProcedureDefinition> model, boolean isCopyOrRevise) {
         super(id, model);
-
+        this.isCopyOrRevise = isCopyOrRevise;
         setOutputMarkupPlaceholderTag(true);
         add(new AttributeAppender("class", Model.of("details")));
         add(new ProcedureDefinitionDetailsForm("detailsForm", model));
@@ -138,8 +140,26 @@ public class DetailsPanel extends Panel {
             procedureTypeLabelledDropDown.add(new AttributeAppender("class", "procedure-def-paddingCorrection"));
             add(procedureTypeLabelledDropDown);
 
+            /*
+             * This is the best way to determine whether we should freeze the annotation type to the specific one this procedure deifinition
+             * originated from.
+             */
+            LabelledDropDown<String> annotationTypeDropDown = new LabelledDropDown<String>("annotationType", "label.annotation_type", ProxyModel.of(model, on(ProcedureDefinition.class).getAnnotationTypeLabel())) {
+                    @Override
+                    protected List<String> getChoices() {
+                        if(isCopyOrRevise) {
+                            return Arrays.asList(model.getObject().getAnnotationType().getLabel());
+                        } else {
+                            return AnnotationType.ARROW_STYLE.getAllLabels();
+                        }
+                    }
+                };
+            annotationTypeDropDown.required();
+            add(annotationTypeDropDown);
+
             add(new AjaxLink("cancel") {
-                @Override public void onClick(AjaxRequestTarget target) {
+                @Override
+                public void onClick(AjaxRequestTarget target) {
                     doCancel(target);
                 }
             });

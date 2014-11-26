@@ -883,6 +883,8 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
             to.addIsolationPoint(copiedIsolationPoint);
         }
 
+        to.setAnnotationType(source.getAnnotationType());
+
         return to;
     }
 
@@ -898,9 +900,11 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         to.setProcedureCode(source.getProcedureCode()+" Copy");
         to.setElectronicIdentifier(source.getElectronicIdentifier());
         to.setWarnings(source.getWarnings());
+
         to.setApplicationProcess(source.getApplicationProcess());
         to.setRemovalProcess(source.getRemovalProcess());
         to.setTestingAndVerification(source.getTestingAndVerification());
+
         to.setDevelopedBy(getCurrentUser());
         if(source.getAsset().getId() == asset.getId()) {
             to.setEquipmentNumber(source.getEquipmentNumber());
@@ -923,6 +927,8 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
             IsolationPoint copiedIsolationPoint = cloneIsolationPoint(isolationPoint, clonedImages);
             to.addIsolationPoint(copiedIsolationPoint);
         }
+
+        to.setAnnotationType(source.getAnnotationType());
 
         return to;
     }

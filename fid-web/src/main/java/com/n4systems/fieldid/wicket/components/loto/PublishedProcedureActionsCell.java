@@ -83,7 +83,7 @@ public class PublishedProcedureActionsCell extends Panel {
             public void onClick() {
                 ProcedureDefinition copiedDefinition = procedureDefinitionService.cloneProcedureDefinition(procedureDefinition);
                 copiedDefinition.setPublishedState(PublishedState.DRAFT);
-                setResponsePage(new ProcedureDefinitionPage(Model.of(copiedDefinition)));
+                setResponsePage(new ProcedureDefinitionPage(Model.of(copiedDefinition), true));
             }
         };
 
@@ -114,7 +114,7 @@ public class PublishedProcedureActionsCell extends Panel {
             public void onClick() {
                 ProcedureDefinition copiedDefinition = procedureDefinitionService.cloneProcedureDefinitionForCopy(procedureDefinition);
                 copiedDefinition.setPublishedState(PublishedState.DRAFT);
-                setResponsePage(new ProcedureDefinitionPage(Model.of(copiedDefinition)));
+                setResponsePage(new ProcedureDefinitionPage(Model.of(copiedDefinition), true));
             }
         };
         copyLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(procedureDefinition.getAsset())

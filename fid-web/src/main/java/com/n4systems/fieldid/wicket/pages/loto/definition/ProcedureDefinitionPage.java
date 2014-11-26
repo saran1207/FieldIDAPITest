@@ -13,6 +13,7 @@ import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.loto.ProceduresListPage;
 import com.n4systems.model.Asset;
 import com.n4systems.model.IsolationPointSourceType;
+import com.n4systems.model.procedure.AnnotationType;
 import com.n4systems.model.procedure.LotoSettings;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
@@ -45,6 +46,7 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
     protected Label pageTileLabel;
     protected Label isolationPointLabel;
     private IModel<ProcedureDefinition> model;
+    private boolean isCopyOrRevise = false;
 
     enum ProcedureDefinitionSection { Details, Content, Publish };
 
@@ -72,6 +74,9 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
             pd.setApplicationProcess(lotoSettings.getApplicationProcess());
             pd.setRemovalProcess(lotoSettings.getRemovalProcess());
             pd.setTestingAndVerification(lotoSettings.getTestingAndVerification());
+            pd.setAnnotationType(lotoSettings.getAnnotationType());
+        } else {
+            pd.setAnnotationType(AnnotationType.ARROW_STYLE);
         }
 
         init(Model.of(pd));
@@ -79,6 +84,12 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
 
     public ProcedureDefinitionPage(IModel<ProcedureDefinition> model) {
         super(new PageParameters());
+        init(model);
+    }
+
+    public ProcedureDefinitionPage(IModel<ProcedureDefinition> model, boolean isCopyOrRevise) {
+        super(new PageParameters());
+        this.isCopyOrRevise = isCopyOrRevise;
         init(model);
     }
 
@@ -146,7 +157,7 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
 
             setOutputMarkupId(true);
 
-            add(details = new DetailsPanel("details", model) {
+            add(details = new DetailsPanel("details", model, isCopyOrRevise) {
                 @Override protected void doCancel(AjaxRequestTarget target) {
                     ProcedureDefinitionPage.this.doCancel(target);
                 }

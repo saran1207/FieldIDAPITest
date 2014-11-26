@@ -138,6 +138,7 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
     private String testingAndVerification = TESTING_AND_VERIFICATION_REQUIREMENTS;
 
     @Column(name="annotation_type")
+    @Enumerated(EnumType.STRING)
     private AnnotationType annotationType;
 
 	@Column(nullable=false)
@@ -461,6 +462,18 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
             procedureType = ProcedureType.SUB;
         } else if (label.equals(ProcedureType.MAIN.getLabel())){
             procedureType = ProcedureType.MAIN;
+        }
+    }
+
+    public String getAnnotationTypeLabel() {
+        return annotationType.getLabel();
+    }
+
+    public void setAnnotationTypeLabel(String label) {
+        if(label.equals(AnnotationType.ARROW_STYLE.getLabel())) {
+            setAnnotationType(AnnotationType.ARROW_STYLE);
+        } else {
+            setAnnotationType(AnnotationType.CALL_OUT_STYLE);
         }
     }
 
