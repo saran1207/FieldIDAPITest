@@ -27,6 +27,14 @@ public class WarningTemplate extends EntityWithTenant implements Listable<Long>,
     @Column(nullable=false, length=255)
     private String warning;
 
+    public WarningTemplate() {
+    }
+
+    public WarningTemplate(String name, String warning) {
+        this.name = name;
+        this.warning = warning;
+    }
+
     public String getName() {
         return name;
     }
