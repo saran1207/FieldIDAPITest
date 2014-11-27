@@ -62,8 +62,12 @@ public class LotoDetailsSetupPage extends FieldIDTemplatePage {
 
                 if(customLotoDetails.getApplicationProcess() == null &&
                         customLotoDetails.getRemovalProcess() == null &&
-                        customLotoDetails.getTestingAndVerification() == null ) {
-                    procedureDefinitionService.deleteLotoSettings(customLotoDetails);
+                        customLotoDetails.getTestingAndVerification() == null) {
+
+                    //If the ID is null, it doesn't exist... so we can't delete it.
+                    if(customLotoDetails.getId() != null) {
+                        procedureDefinitionService.deleteLotoSettings(customLotoDetails);
+                    }
                 } else {
                     procedureDefinitionService.saveOrUpdateLotoSettings(customLotoDetails);
                 }
