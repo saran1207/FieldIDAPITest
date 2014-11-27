@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.components.setup.loto;
 
 import com.n4systems.fieldid.service.warningtemplates.WarningTemplateService;
-import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.text.LabelledRequiredTextField;
 import com.n4systems.fieldid.wicket.components.text.LabelledTextArea;
@@ -37,13 +36,6 @@ public class LotoWarningTemplateModalInputPanel extends Panel {
     private LabelledTextArea<String> warningArea;
 
     private static final Logger logger = Logger.getLogger(LotoWarningTemplateModalInputPanel.class);
-
-    public LotoWarningTemplateModalInputPanel(String id) {
-        super(id);
-
-        warningTemplate = new WarningTemplate();
-        warningTemplate.setTenant(FieldIDSession.get().getTenant());
-    }
 
     public LotoWarningTemplateModalInputPanel(String id,
                                               WarningTemplate warningTemplate) {

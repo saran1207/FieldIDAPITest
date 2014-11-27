@@ -140,6 +140,19 @@ public class LotoDetailsSetupPage extends FieldIDTemplatePage {
             protected void doAddAction(AjaxRequestTarget target) {
                 WarningTemplate createMe = new WarningTemplate();
                 createMe.setTenant(getTenant());
+                addTemplateModal.setContent(inputPanel = new LotoWarningTemplateModalInputPanel(addTemplateModal.getContentId(),
+                                                                                                createMe) {
+                    @Override
+                    protected void doCancel(AjaxRequestTarget target) {
+                        target.add(addTemplateModal);
+                        cancelAction(target);
+                    }
+
+                    @Override
+                    protected void doSave(AjaxRequestTarget target) {
+                        warningTemplate = saveAction(target, warningTemplate);
+                    }
+                });
                 target.add(inputPanel);
                 target.add(addTemplateModal);
                 addTemplateModal.show(target);
@@ -147,21 +160,6 @@ public class LotoDetailsSetupPage extends FieldIDTemplatePage {
         });
 
         listPanel.setOutputMarkupId(true);
-
-        addTemplateModal.setContent(inputPanel = new LotoWarningTemplateModalInputPanel(addTemplateModal.getContentId()) {
-            @Override
-            protected void doCancel(AjaxRequestTarget target) {
-                target.add(addTemplateModal);
-                cancelAction(target);
-            }
-
-            @Override
-            protected void doSave(AjaxRequestTarget target) {
-                warningTemplate = saveAction(target, warningTemplate);
-            }
-        });
-
-        inputPanel.setOutputMarkupId(true);
     }
 
     private LotoSettings getLotoSettings() {
@@ -229,7 +227,7 @@ public class LotoDetailsSetupPage extends FieldIDTemplatePage {
             warningTemplate = warningTemplateService.update(fromDB);
         }
         addTemplateModal.close(target);
-        addTemplateModal.setContent(inputPanel = new LotoWarningTemplateModalInputPanel(addTemplateModal.getContentId()));
+//        addTemplateModal.setContent(inputPanel = new LotoWarningTemplateModalInputPanel(addTemplateModal.getContentId()));
         target.add(listPanel); //We need to add this target so that the list refreshes.  Might be nice.
         target.add(inputPanel);
         target.add(addTemplateModal);
