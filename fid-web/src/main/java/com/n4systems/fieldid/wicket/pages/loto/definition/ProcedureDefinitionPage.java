@@ -71,9 +71,18 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
         LotoSettings lotoSettings = procedureDefinitionService.getLotoSettings();
 
         if (lotoSettings != null) {
-            pd.setApplicationProcess(lotoSettings.getApplicationProcess());
-            pd.setRemovalProcess(lotoSettings.getRemovalProcess());
-            pd.setTestingAndVerification(lotoSettings.getTestingAndVerification());
+            if(lotoSettings.getApplicationProcess() != null && !lotoSettings.getApplicationProcess().isEmpty()) {
+                pd.setApplicationProcess(lotoSettings.getApplicationProcess());
+            }
+
+            if(lotoSettings.getRemovalProcess() != null && !lotoSettings.getRemovalProcess().isEmpty()) {
+                pd.setRemovalProcess(lotoSettings.getRemovalProcess());
+            }
+
+            if(lotoSettings.getTestingAndVerification() != null && !lotoSettings.getTestingAndVerification().isEmpty()) {
+                pd.setTestingAndVerification(lotoSettings.getTestingAndVerification());
+            }
+
             pd.setAnnotationType(lotoSettings.getAnnotationType());
         } else {
             pd.setAnnotationType(AnnotationType.ARROW_STYLE);
