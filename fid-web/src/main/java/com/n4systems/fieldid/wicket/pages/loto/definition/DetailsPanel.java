@@ -3,7 +3,7 @@ package com.n4systems.fieldid.wicket.pages.loto.definition;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.components.loto.Warning;
+import com.n4systems.fieldid.wicket.components.loto.WarningPanel;
 import com.n4systems.fieldid.wicket.components.text.*;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
@@ -62,7 +62,7 @@ public class DetailsPanel extends Panel {
 //                }
 //            });
 
-            add(new Warning("warnings", ProxyModel.of(model, on(ProcedureDefinition.class).getWarnings())).setOutputMarkupId(true));
+            add(new WarningPanel("warnings", ProxyModel.of(model, on(ProcedureDefinition.class).getWarnings())).setOutputMarkupId(true));
 
             //Fields for Application Process and Removal Process of lockouts.
             add(new LabelledTextArea<String>("applicationProcess", "label.lockout_application_process", ProxyModel.of(model, on(ProcedureDefinition.class).getApplicationProcess())){

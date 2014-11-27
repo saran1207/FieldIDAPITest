@@ -5,6 +5,7 @@ import com.n4systems.fieldid.ws.v1.resources.event.actions.prioritycode.ApiPrior
 import com.n4systems.fieldid.ws.v1.resources.procedure.ApiProcedureDefinitionResource;
 import com.n4systems.fieldid.ws.v1.resources.procedure.ApiProcedureDefinitionResourceV2;
 import com.n4systems.fieldid.ws.v1.resources.procedure.ApiProcedureResource;
+import com.n4systems.fieldid.ws.v1.resources.procedure.ApiWarningTemplateResource;
 import com.n4systems.fieldid.ws.v1.resources.user.ApiPersonResource;
 import com.n4systems.fieldid.ws.v1.resources.user.ApiUserResource;
 import org.springframework.context.annotation.Bean;
@@ -263,6 +264,12 @@ public class FieldIdWsConfig {
 	}
 
     @Bean
-    public ApiProcedureDefinitionResourceV2 apiProcedureDefinitionResourceV2() { return new ApiProcedureDefinitionResourceV2(); }
+    public ApiProcedureDefinitionResourceV2 apiProcedureDefinitionResourceV2() {
+		return new ApiProcedureDefinitionResourceV2();
+	}
 
+	@Bean
+	public ApiWarningTemplateResource apiWarningTemplateResource() {
+		return new ApiWarningTemplateResource();
+	}
 }
