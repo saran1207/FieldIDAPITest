@@ -52,7 +52,7 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
         }
     }
 
-    private ImageAnnotationType parseAnnotationType(IRequestParameters params) {
+    protected ImageAnnotationType parseAnnotationType(IRequestParameters params) {
         String allClasses = params.getParameterValue("type").toString().toUpperCase();
         for (ImageAnnotationType type:ImageAnnotationType.values()) {
             if (allClasses.contains(type.getCssClass().toUpperCase())) {
@@ -62,7 +62,7 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
         return null;
     }
 
-    private Long parseNoteId(IRequestParameters params) {
+    protected Long parseNoteId(IRequestParameters params) {
         return parsePrefixedId(params, "noteId", "_note");
     }
 

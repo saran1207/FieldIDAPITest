@@ -10,7 +10,7 @@ import java.util.List;
 
 public abstract class EditableImageGallery<T extends EditableImage> extends ImageGallery<T> {
 
-    private final String IMAGE_EDITOR_ENABLE_JS = "imageGallery.edit('%s',%s)";
+    protected final String IMAGE_EDITOR_ENABLE_JS = "imageGallery.edit('%s',%s)";
 
     private final ImageAnnotatingBehavior imageAnnotatingBehavior;
 
@@ -50,7 +50,7 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
         return "new label";
     }
 
-    private String getImageEditorJs() {
+    protected String getImageEditorJs() {
         return String.format(IMAGE_EDITOR_ENABLE_JS,gallery.getMarkupId(),jsonRenderer.render(imageAnnotatingBehavior.getImageAnnotationOptions()));
     }
 
