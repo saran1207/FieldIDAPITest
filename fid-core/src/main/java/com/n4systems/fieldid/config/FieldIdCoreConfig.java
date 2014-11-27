@@ -86,6 +86,7 @@ import com.n4systems.services.signature.SignatureService;
 import com.n4systems.services.tenant.TenantCreationService;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ServiceLocator;
+import com.n4systems.util.json.ArrowStyleAnnotationJsonRenderer;
 import com.n4systems.util.json.JsonRenderer;
 import org.apache.lucene.analysis.util.CharArraySet;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -465,6 +466,11 @@ public class FieldIdCoreConfig {
     @Bean 
     public JsonRenderer jsonRenderer() { 
     	return new JsonRenderer();
+    }
+
+    @Bean
+    public ArrowStyleAnnotationJsonRenderer arrowStyleAnnotationJsonRenderer() {
+        return new ArrowStyleAnnotationJsonRenderer();
     }
     
     @Bean

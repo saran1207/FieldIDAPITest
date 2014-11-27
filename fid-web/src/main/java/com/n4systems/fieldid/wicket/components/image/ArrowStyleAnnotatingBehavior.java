@@ -5,7 +5,7 @@ import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.model.common.EditableImage;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.common.ImageAnnotationType;
-import com.n4systems.util.json.JsonRenderer;
+import com.n4systems.util.json.ArrowStyleAnnotationJsonRenderer;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -17,7 +17,7 @@ import org.apache.wicket.util.string.StringValueConversionException;
 public abstract class ArrowStyleAnnotatingBehavior <T extends EditableImage> extends ImageAnnotatingBehavior {
 
     @SpringBean
-    private JsonRenderer jsonRenderer;
+    private ArrowStyleAnnotationJsonRenderer jsonRenderer;
 
     @SpringBean
     private PersistenceService persistenceService;
