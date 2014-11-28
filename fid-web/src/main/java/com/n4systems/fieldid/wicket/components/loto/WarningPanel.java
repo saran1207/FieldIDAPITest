@@ -58,7 +58,7 @@ public class WarningPanel extends Panel implements IEventBehavior {
 
         onChangeBehaviours.add(this);
 
-        if(choices.size() > 0) {
+        if(choices.size() > 1) {
             text = new LabelledTextArea<>("warningsText", " ", model);
             //In order to prettify this component, we want to bring these two closer together.  BUT we don't want to do
             //this when there are no WarningTemplates.  This is a quick and easy minor adjustment.
@@ -83,7 +83,7 @@ public class WarningPanel extends Panel implements IEventBehavior {
                 return choices;
             }
         };
-        select.setVisible(choices.size() > 0);
+        select.setVisible(choices.size() > 1);
         getSelect().add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
