@@ -5,24 +5,15 @@ import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.IEventBehavior;
 import com.n4systems.fieldid.wicket.components.text.LabelledDropDown;
 import com.n4systems.fieldid.wicket.components.text.LabelledTextArea;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.warningtemplate.WarningTemplate;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.validation.validator.StringValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +39,9 @@ public class WarningPanel extends Panel implements IEventBehavior {
 
     private LabelledDropDown<WarningTemplate> select;
     private LabelledTextArea<String> text;
-    private List<WarningTemplate> choices;
+    private List<WarningTemplate> choices = new ArrayList<>();
+
+    private WarningTemplate selectWarnings = new WarningTemplate("Select Warning(s)", "");
 
     public WarningPanel(String id, final IModel<String> model) {
         super(id);
@@ -59,7 +52,10 @@ public class WarningPanel extends Panel implements IEventBehavior {
     public void onInitialize() {
         super.onInitialize();
 
-        choices = warningTemplateService.getAllTemplatesForTenant();
+        choices.add(selectWarnings);
+
+        choices.addAll(warningTemplateService.getAllTemplatesForTenant());
+
         onChangeBehaviours.add(this);
 
         if(choices.size() > 0) {
@@ -94,6 +90,9 @@ public class WarningPanel extends Panel implements IEventBehavior {
                 fireOnChange(target);
             }
         });
+//        getSelect().setNullValid(true);
+        //Not sure if this trick is necessary at initial load when the component is set to Null being valid.
+        getSelect().setDefaultModelObject(selectWarnings);
         select.setOutputMarkupId(true);
 
         add(select);
@@ -102,11 +101,13 @@ public class WarningPanel extends Panel implements IEventBehavior {
     @Override
     public void onEvent(AjaxRequestTarget target) {
         WarningTemplate warning = (WarningTemplate) select.getDefaultModelObject();
-        if(warning != null) {
-            //Here, we add the warning, then set a blank "Choose One" selection (it gets ripped away when a selection
-            //is made otherwise)
+        if(warning != null && !warning.getName().equalsIgnoreCase(selectWarnings.getName())) {
             addWarning(warning);
-            getSelect().setDefaultModelObject(Model.of(new WarningTemplate("Choose One", "")));
+            //While not explicitly required, it would be ideal to have the ability to select the same option twice in a
+            //row, mainly because it feels like clumsy functionality not to be able to... as such, we force the
+            //DropDownChoice component to set its default model as null.  This forces a blank line into the current
+            //selection, making the component look like it did before the
+            getSelect().setDefaultModelObject(selectWarnings);
             //Don't forget to add both components as targets for update.
             target.add(text);
             target.add(select);
