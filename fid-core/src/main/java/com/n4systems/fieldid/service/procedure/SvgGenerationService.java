@@ -149,6 +149,8 @@ public class SvgGenerationService extends FieldIdPersistenceService {
     private Element createSvgElement(Document doc, Integer width, Integer height) {
         Element svg = doc.createElement("svg");
         svg.setAttribute("viewBox", "0 0 " + width + " " + height);
+        svg.setAttribute("height", height.toString());
+        svg.setAttribute("width", width.toString());
         svg.setAttribute("version", "1.1");
         svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
         svg.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
@@ -159,8 +161,8 @@ public class SvgGenerationService extends FieldIdPersistenceService {
         Element imageElement = doc.createElement("image");
         imageElement.setAttribute("x", "0");
         imageElement.setAttribute("y", "0");
-        imageElement.setAttribute("height", height.toString());
-        imageElement.setAttribute("width", width.toString());
+        imageElement.setAttribute("height", "100%");
+        imageElement.setAttribute("width", "100%");
         imageElement.setAttribute("xlink:href", "data:image/png;base64," + DatatypeConverter.printBase64Binary(bytes));
         return imageElement;
     }
@@ -223,6 +225,9 @@ public class SvgGenerationService extends FieldIdPersistenceService {
 
         return group;
     }
+
+
+    /******************************** Arrow Style Annotation SVG ***********************/
 
 
 }
