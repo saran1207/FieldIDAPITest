@@ -103,10 +103,11 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
     public void renderHead(Component component, IHeaderResponse response) {
         super.renderHead(component, response);
         response.renderJavaScriptReference(WicketAjaxReference.INSTANCE);
-        response.renderJavaScriptReference("javascript/jquery-ui-1.8.20.no-autocomplete.min.js");
         response.renderCSSReference("style/legacy/component/annotated-image.css");
-        response.renderJavaScriptReference("javascript/jquery.annotate.js");
-        response.renderJavaScriptReference("javascript/imageEditor.js");
+        //Depends on the following scripts that are included in ImageGallery.java
+        //response.renderJavaScriptReference("javascript/jquery-ui-1.8.20.no-autocomplete.min.js");
+        //response.renderJavaScriptReference("javascript/jquery.annotate.js");
+        //response.renderJavaScriptReference("javascript/imageEditor.js");
     }
 
     protected abstract ImageAnnotation getAnnotation();
