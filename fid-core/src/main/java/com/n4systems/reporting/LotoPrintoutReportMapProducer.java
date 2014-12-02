@@ -95,10 +95,10 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
         add("allImages", allImages);
     }
 
-    private long countIsolationPoints(List<IsolationPoint> lockIsolationPoints) {
-        return lockIsolationPoints.stream()
+    private String countIsolationPoints(List<IsolationPoint> lockIsolationPoints) {
+        return new Long(lockIsolationPoints.stream()
                            .filter(isolationPoint -> !isolationPoint.getSourceType().equals(IsolationPointSourceType.N))
-                           .count();
+                           .count()).toString();
     }
 
     /**
