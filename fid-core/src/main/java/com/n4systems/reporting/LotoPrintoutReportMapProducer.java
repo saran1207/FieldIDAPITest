@@ -2,6 +2,7 @@ package com.n4systems.reporting;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.procedure.SvgGenerationService;
+import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
@@ -86,12 +87,18 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
         //If it's not long, it's short... or invalid... but we'll pretend that being invalid is impossible.
         List<IsolationPointPrintoutContainer> isolationPoints = convertToIPContainerCollection(procDef.getLockIsolationPoints());
         add("isolationPoints", isolationPoints);
-
+        add("numberOfIsolationPoints", countIsolationPoints(procDef.getLockIsolationPoints()));
         //Now, we have to do the images...  these are special images that hold all annotations associated with the
         //single image.
         List<ImagePrintoutContainer> allImages = convertToImageContainerCollection(procDef.getImages());
 
         add("allImages", allImages);
+    }
+
+    private String countIsolationPoints(List<IsolationPoint> lockIsolationPoints) {
+        return new Long(lockIsolationPoints.stream()
+                           .filter(isolationPoint -> !isolationPoint.getSourceType().equals(IsolationPointSourceType.N))
+                           .count()).toString();
     }
 
     /**
