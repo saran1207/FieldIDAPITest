@@ -144,7 +144,7 @@ public class SvgGenerationService extends FieldIdPersistenceService {
             defs.appendChild(createAnnotationDefinition(doc, annotation, DEFAULT_JASPER_WIDTH));
         }
 
-        Element imageElement = createImageElement(doc, bytes, DEFAULT_JASPER_WIDTH, DEFAULT_JASPER_HEIGHT);
+        Element imageElement = createImageElement(doc, bytes);
 
         svg.appendChild(imageElement);
 
