@@ -2,6 +2,7 @@ package com.n4systems.fieldid.service.procedure;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.images.ImageService;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
@@ -26,6 +27,12 @@ public class SvgGenerationService extends FieldIdPersistenceService {
 
     @Autowired
     private S3Service s3Service;
+
+    @Autowired
+    private ImageService imageService;
+
+    public static int DEFAULT_JASPER_HEIGHT = 140;
+    public static int DEFAULT_JASPER_WIDTH = 140;
 
     public void generateAndUploadAnnotatedSvgs(ProcedureDefinition definition) throws Exception {
         for(ProcedureDefinitionImage image: definition.getImages()) {
@@ -75,6 +82,10 @@ public class SvgGenerationService extends FieldIdPersistenceService {
 
         File imageFile = PathHandler.getTempFile();
         byte [] bytes = s3Service.downloadProcedureDefinitionImage((ProcedureDefinitionImage) annotation.getImage());
+
+        //convert image to be scaled down to jasper size
+        bytes = imageService.scaleImage(bytes, DEFAULT_JASPER_WIDTH, DEFAULT_JASPER_HEIGHT);
+
         FileUtils.writeByteArrayToFile(imageFile, bytes);
         BufferedImage bufferedImage = ImageIO.read(imageFile);
 
@@ -106,6 +117,10 @@ public class SvgGenerationService extends FieldIdPersistenceService {
 
         File imageFile = PathHandler.getTempFile();
         byte [] bytes = s3Service.downloadProcedureDefinitionImage(image);
+
+        //convert image to be scaled down to jasper size
+        bytes = imageService.scaleImage(bytes, DEFAULT_JASPER_WIDTH, DEFAULT_JASPER_HEIGHT);
+
         FileUtils.writeByteArrayToFile(imageFile, bytes);
         BufferedImage bufferedImage = ImageIO.read(imageFile);
 
@@ -121,15 +136,15 @@ public class SvgGenerationService extends FieldIdPersistenceService {
         svg.appendChild(defs);
 
         for(ImageAnnotation annotation: image.getAnnotations()) {
-            defs.appendChild(createAnnotationDefinition(doc, annotation, width));
+            defs.appendChild(createAnnotationDefinition(doc, annotation, DEFAULT_JASPER_WIDTH));
         }
 
-        Element imageElement = createImageElement(doc, bytes, width, height);
+        Element imageElement = createImageElement(doc, bytes, DEFAULT_JASPER_WIDTH, DEFAULT_JASPER_HEIGHT);
 
         svg.appendChild(imageElement);
 
         for(ImageAnnotation annotation: image.getAnnotations()) {
-            svg.appendChild(createAnnotation(doc, annotation, height, width));
+            svg.appendChild(createAnnotation(doc, annotation, DEFAULT_JASPER_HEIGHT, DEFAULT_JASPER_WIDTH));
         }
 
         return doc;
@@ -149,6 +164,8 @@ public class SvgGenerationService extends FieldIdPersistenceService {
     private Element createSvgElement(Document doc, Integer width, Integer height) {
         Element svg = doc.createElement("svg");
         svg.setAttribute("viewBox", "0 0 " + width + " " + height);
+        svg.setAttribute("height", "140");
+        svg.setAttribute("width", "140");
         svg.setAttribute("version", "1.1");
         svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
         svg.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
@@ -159,8 +176,8 @@ public class SvgGenerationService extends FieldIdPersistenceService {
         Element imageElement = doc.createElement("image");
         imageElement.setAttribute("x", "0");
         imageElement.setAttribute("y", "0");
-        imageElement.setAttribute("height", height.toString());
-        imageElement.setAttribute("width", width.toString());
+        imageElement.setAttribute("height", "100%");
+        imageElement.setAttribute("width", "100%");
         imageElement.setAttribute("xlink:href", "data:image/png;base64," + DatatypeConverter.printBase64Binary(bytes));
         return imageElement;
     }
@@ -182,7 +199,7 @@ public class SvgGenerationService extends FieldIdPersistenceService {
 
         Element path = doc.createElement("path");
         path.setAttribute("id", "arrow");
-        path.setAttribute("d", "M 0 0 l -12 12 l 0 -8 l -75 0 l 0 -8 l 75 0 l 0 -8 z");
+        path.setAttribute("d", "M 0 0 l -12 4 l 0 -3 l -40 0 l 0 -3 l 40 0 l 0 -4 z");
         path.setAttribute("fill", annotation.getType().getBackgroundColor());
         path.setAttribute("stroke", annotation.getType().getBorderColor());
         path.setAttribute("stroke-width", "1");
@@ -193,15 +210,26 @@ public class SvgGenerationService extends FieldIdPersistenceService {
         group.appendChild(path);
 
         Element rect = doc.createElement("rect");
-        rect.setAttribute("x", "-155");
-        rect.setAttribute("y", "-13");
+
+        rect.setAttribute("x", "-75");
+        rect.setAttribute("y", "-8");
         rect.setAttribute("rx", "5");
         rect.setAttribute("ry", "5");
-        rect.setAttribute("width", "60");
-        rect.setAttribute("height", "24");
+
+        int lenght = annotation.getText().length();
+        if(lenght <= 4) {
+            rect.setAttribute("width", "25%");
+        } else if ((lenght > 4) && (lenght <= 6)) {
+            rect.setAttribute("width", "35%");
+        } else {
+            rect.setAttribute("width", "47%");
+        }
+
+        rect.setAttribute("height", "10%");
         rect.setAttribute("fill", annotation.getType().getBackgroundColor());
         rect.setAttribute("stroke", annotation.getType().getBorderColor());
-        rect.setAttribute("stroke-width", "2");
+        rect.setAttribute("stroke-width", "1");
+
         if(isReversed) {
             rect.setAttribute("transform", "scale(-1, 1)");
         }
@@ -209,14 +237,24 @@ public class SvgGenerationService extends FieldIdPersistenceService {
         group.appendChild(rect);
 
         Element text = doc.createElement("text");
+
+
         if(isReversed) {
-            text.setAttribute("x", "100");
+            if(lenght <= 4) {
+                text.setAttribute("x", "50");
+            } else if ((lenght > 4) && (lenght <= 6)) {
+                text.setAttribute("x", "39");
+            } else {
+                text.setAttribute("x", "29");
+            }
         } else {
-            text.setAttribute("x", "-150");
+            text.setAttribute("x", "-74");
         }
-        text.setAttribute("y", "6");
+        text.setAttribute("y", "2");
         text.setAttribute("fill", annotation.getType().getFontColor());
-        text.setAttribute("font-size", "16");
+
+        text.setAttribute("font-size", "7");
+
         text.setTextContent(annotation.getText());
 
         group.appendChild(text);
