@@ -1,0 +1,24 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+
+	<div>
+		<ul>
+			<li wicket:id="list">
+                <div class="notes-container">
+                    <img wicket:id="image"/>
+                </div>
+            </li>
+		</ul>
+	</div>
+
+	<div class="navigation">
+		<span class="prev"><img src="/fieldid/images/arrow-prev.png"></span>
+		<span class="next"><img src="/fieldid/images/arrow-next.png"></span>
+	</div>
+
+	<div style="display:none;" wicket:id="blankSlate" class="blank-slate">
+		<wicket:message key="label.no_images"/>
+	</div>
+
+</wicket:panel>
+</html>

@@ -4,8 +4,10 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
 import com.n4systems.fieldid.wicket.components.image.EditableImageList;
+import com.n4systems.fieldid.wicket.components.image.SvgImageList;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.IsolationPointSourceType;
+import com.n4systems.model.procedure.AnnotationType;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
@@ -37,7 +39,7 @@ public class IsolationPointListPanel extends Panel {
 
     private final IModel<ProcedureDefinition> model;
     private final Component blankSlate;
-    private final EditableImageList<ProcedureDefinitionImage> images;
+    private final Component images;
 
     private ListView<IsolationPoint> listView;
     private boolean isLockDirection;
@@ -51,12 +53,27 @@ public class IsolationPointListPanel extends Panel {
 
         add(new AttributeAppender("class", "isolation-point-list"));
 
-        add(images = new EditableImageList<ProcedureDefinitionImage>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getImages())) {
-            @Override protected void createImage(final ListItem<ProcedureDefinitionImage> item) {
-                URL url = s3Service.getProcedureDefinitionImageThumbnailURL(item.getModel().getObject());
-                item.add(new ContextImage("image", url.toString()));
-            }
-        });
+        if (model.getObject().getAnnotationType().equals(AnnotationType.CALL_OUT_STYLE)) {
+            add(images = new EditableImageList<ProcedureDefinitionImage>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getImages())) {
+                @Override
+                protected void createImage(final ListItem<ProcedureDefinitionImage> item) {
+                    URL url = s3Service.getProcedureDefinitionImageThumbnailURL(item.getModel().getObject());
+                    item.add(new ContextImage("image", url.toString()));
+                }
+            });
+        } else {
+            add(images = new SvgImageList<IsolationPoint>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getLockIsolationPoints())) {
+                @Override
+                protected void createImage(ListItem<IsolationPoint> item) {
+
+                    //TODO: Replace this with the new SVG component
+
+                    ProcedureDefinitionImage image = (ProcedureDefinitionImage) item.getModel().getObject().getAnnotation().getImage();
+                    URL url = s3Service.getProcedureDefinitionImageMediumURL(image);
+                    item.add(new ContextImage("image", url.toString()));
+                }
+            });
+        }
 
         add(new AjaxLink<Void>("showLockOrder") {
             @Override
