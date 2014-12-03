@@ -16,12 +16,17 @@ import javax.xml.bind.DatatypeConverter;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 
 public class SvgGenerationService extends FieldIdPersistenceService {
 
@@ -102,7 +107,7 @@ public class SvgGenerationService extends FieldIdPersistenceService {
 
         defs.appendChild(createAnnotationDefinition(doc, annotation, width));
 
-        Element imageElement = createImageElement(doc, bytes, width, height);
+        Element imageElement = createImageElement(doc, bytes);
 
         svg.appendChild(imageElement);
 
@@ -172,7 +177,7 @@ public class SvgGenerationService extends FieldIdPersistenceService {
         return svg;
     }
 
-    private Element createImageElement(Document doc, byte[] bytes, Integer width, Integer height) {
+    private Element createImageElement(Document doc, byte[] bytes) {
         Element imageElement = doc.createElement("image");
         imageElement.setAttribute("x", "0");
         imageElement.setAttribute("y", "0");
@@ -262,5 +267,107 @@ public class SvgGenerationService extends FieldIdPersistenceService {
         return group;
     }
 
+
+    /******************************** Arrow Style Annotation SVG ***********************/
+
+
+    public void generateAndUploadArrowStyleAnnotatedSvgs(ProcedureDefinition definition) throws Exception {
+        definition.getUnlockIsolationPoints()
+                .stream()
+                        //We need to make sure to only do this for Isolation Points that have annotations... otherwise we
+                        //get a NullPointerException
+                .filter(isolationPoint -> isolationPoint.getAnnotation() != null)
+                .forEach(isolationPoint -> {
+                    try {
+                        ImageAnnotation annotation = isolationPoint.getAnnotation();
+                        File singleAnnotation = exportToSvg(new DOMSource(generateArrowStyleAnnotatedImage(annotation)), annotation.getImage().getFileName() + "_" + annotation.getId());
+                        uploadSvg(definition, singleAnnotation);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+
+    public Document generateArrowStyleAnnotatedImage(ImageAnnotation annotation) throws Exception{
+        Document doc = getDocument();
+
+        File imageFile = PathHandler.getTempFile();
+        byte [] bytes = s3Service.downloadProcedureDefinitionImage((ProcedureDefinitionImage) annotation.getImage());
+        FileUtils.writeByteArrayToFile(imageFile, bytes);
+        BufferedImage bufferedImage = ImageIO.read(imageFile);
+
+        Integer width = bufferedImage.getWidth();
+        Integer height = bufferedImage.getHeight();
+
+        Element svg = createSvgElement(doc, width, height);
+
+        svg.appendChild(createArrowMarkerDefinition(doc));
+
+        svg.appendChild(createImageElement(doc, bytes));
+
+        svg.appendChild(createArrowAnnotation(doc, annotation, height, width));
+
+        doc.appendChild(svg);
+
+        //printDocument(doc, System.out);
+        return doc;
+    }
+
+    private Element createArrowMarkerDefinition(Document doc) {
+        Element defs = doc.createElement("defs");
+
+        Element marker = doc.createElement("marker");
+        marker.setAttribute("id", "arrow");
+        marker.setAttribute("markerUnits", "strokeWidth");
+        marker.setAttribute("orient", "auto");
+        marker.setAttribute("markerWidth", "4.6");
+        marker.setAttribute("markerHeight", "4.6");
+        marker.setAttribute("refX", "0.9199999999999999");
+        marker.setAttribute("refY", "2.3");
+
+        Element polygon = doc.createElement("polygon");
+        polygon.setAttribute("id", "arrow-poly");
+        polygon.setAttribute("points", "0,2.3 4.6,0 3.4499999999999997,2.3 4.6,4.6");
+        polygon.setAttribute("fill", "#ff0000");
+
+        marker.appendChild(polygon);
+        defs.appendChild(marker);
+
+        return defs;
+    }
+
+    private Element createArrowAnnotation(Document doc, ImageAnnotation annotation, Integer height, Integer width) {
+        Element group = doc.createElement("g");
+        group.setAttribute("id", "annotations");
+
+        Element line = doc.createElement("line");
+        line.setAttribute("x1", String.valueOf(Math.round(width * annotation.getX())));
+        line.setAttribute("y1", String.valueOf(Math.round(height * annotation.getY())));
+        line.setAttribute("x2", String.valueOf(Math.round(width * annotation.getX_tail())));
+        line.setAttribute("y2", String.valueOf(Math.round(height * annotation.getY_tail())));
+        line.setAttribute("stroke", "#ff0000");
+        line.setAttribute("stroke-width", "5px");
+        line.setAttribute("marker-start", "url(#arrow)");
+
+        group.appendChild(line);
+
+        return group;
+    }
+
+    //For Testing
+    @Deprecated
+    private static void printDocument(Document doc, OutputStream out) throws IOException, TransformerException {
+        TransformerFactory tf = TransformerFactory.newInstance();
+        Transformer transformer = tf.newTransformer();
+        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+
+        transformer.transform(new DOMSource(doc),
+                new StreamResult(new OutputStreamWriter(out, "UTF-8")));
+    }
 
 }

@@ -153,6 +153,7 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
         response.renderJavaScriptReference("javascript/galleria/galleria-1.2.9.min.js");
         response.renderJavaScriptReference("javascript/imageEditor.js");
         response.renderJavaScriptReference("javascript/imageGallery.js");
+        response.renderJavaScriptReference("javascript/jquery.annotate.js");
         response.renderCSSReference("style/legacy/component/imageGallery.css");
         response.renderOnLoadJavaScript(String.format(GALLERY_JS,gallery.getMarkupId(),jsonRenderer.render(createGalleryOptions(getJsonDataSource()))));
     }

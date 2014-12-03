@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.image.ArrowStyleIsolationPointImageGallery;
 import com.n4systems.fieldid.wicket.components.image.IsolationPointImageGallery;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.components.text.LabelledComboBox;
@@ -157,18 +158,33 @@ public class IsolationPointEditor extends Panel {
     }
 
     protected Component createImageGallery(String id) {
-        return new IsolationPointImageGallery(id,procedureDefinition, (IModel<IsolationPoint>) getDefaultModel()) {
-            @Override protected void doneClicked(AjaxRequestTarget target) {
-                target.add(imagePanel, sourceID);
-                modal.close(target);
-                IsolationPointEditor.this.getDefaultModel().detach();
-            }
+        if(procedureDefinition.getAnnotationType().equals(AnnotationType.CALL_OUT_STYLE)) {
+            return new IsolationPointImageGallery(id,procedureDefinition, (IModel<IsolationPoint>) getDefaultModel()) {
+                @Override protected void doneClicked(AjaxRequestTarget target) {
+                    target.add(imagePanel, sourceID);
+                    modal.close(target);
+                    IsolationPointEditor.this.getDefaultModel().detach();
+                }
 
-            @Override
-            protected boolean isRootForm(boolean form) {
-                return false;
-            }
-        };
+                @Override
+                protected boolean isRootForm(boolean form) {
+                    return false;
+                }
+            };
+        } else { //AnnotationType.ARROW_STYLE
+            return new ArrowStyleIsolationPointImageGallery(id, procedureDefinition, (IModel<IsolationPoint>) getDefaultModel()) {
+                @Override protected void doneClicked(AjaxRequestTarget target) {
+                    target.add(imagePanel, sourceID);
+                    modal.close(target);
+                    IsolationPointEditor.this.getDefaultModel().detach();
+                }
+
+                @Override
+                protected boolean isRootForm(boolean form) {
+                    return false;
+                }
+            };
+        }
     }
 
     private IModel<String> getTitleModel() {

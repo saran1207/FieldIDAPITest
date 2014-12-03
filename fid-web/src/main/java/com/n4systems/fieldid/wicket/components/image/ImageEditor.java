@@ -22,6 +22,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValueConversionException;
 
+@Deprecated
 public class ImageEditor extends Panel {
 
     private static final String IMAGE_EDITOR_FORMAT = "imageEditor.init('%s',%s,'%s');";

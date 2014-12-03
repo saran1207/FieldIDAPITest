@@ -36,6 +36,9 @@ public class ArrowStyleAnnotationJsonRenderer implements Serializable {
             object.addProperty("y", annotation.getY());
             object.addProperty("x2", annotation.getX_tail());
             object.addProperty("y2", annotation.getY_tail());
+            //For now, we're adding this here as a static value.  Obviously, Arrow Style annotations will always be of
+            //the Arrow Style type...
+            object.addProperty("annotationType", "ARROW_STYLE");
 
             return object;
         }
