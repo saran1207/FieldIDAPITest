@@ -10,7 +10,7 @@ var svgImageList = (function() {
 			il.find('ul').css('width', carouselWidth);
 
 			//Set height of images to fit in the image list without cropping
-			il.find('.notes-container img').each(function(index, value){
+			il.find('.notes-container svg').each(function(index, value){
 				updateImage($(this),index);
 			});
 
@@ -49,7 +49,7 @@ var svgImageList = (function() {
 			var imageContainerHeight = $this.parent().parent().height();
 			var imageContainerWidth = $this.parent().parent().width();
 
-			if (imageHeight==0 || imageWidth==0) {
+			if (/*imageHeight==0 ||*/ imageWidth==0) {
 				// arggh : this is messy but i need to have the image loaded before i do this code.
 				// if it's not [width()==0] then i'll just hide it, wait and try again.
 				$this.parent().css('visibility','hidden');

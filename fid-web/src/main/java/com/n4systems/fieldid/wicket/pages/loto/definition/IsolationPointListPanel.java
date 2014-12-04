@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
 import com.n4systems.fieldid.wicket.components.image.EditableImageList;
+import com.n4systems.fieldid.wicket.components.image.SvgImageDisplayPanel;
 import com.n4systems.fieldid.wicket.components.image.SvgImageList;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.IsolationPointSourceType;
@@ -66,11 +67,8 @@ public class IsolationPointListPanel extends Panel {
                 @Override
                 protected void createImage(ListItem<IsolationPoint> item) {
 
-                    //TODO: Replace this with the new SVG component
+                    item.add(new SvgImageDisplayPanel("image", item.getModelObject().getAnnotation()));
 
-                    ProcedureDefinitionImage image = (ProcedureDefinitionImage) item.getModel().getObject().getAnnotation().getImage();
-                    URL url = s3Service.getProcedureDefinitionImageMediumURL(image);
-                    item.add(new ContextImage("image", url.toString()));
                 }
             });
         }

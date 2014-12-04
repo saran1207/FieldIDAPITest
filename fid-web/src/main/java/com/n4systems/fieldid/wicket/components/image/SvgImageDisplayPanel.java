@@ -32,13 +32,12 @@ public class SvgImageDisplayPanel extends Panel {
      * the Annotation to be generated on top of the image.
      *
      * @param id - The <b>String</b> representation of the Wicket ID for the SvgImageDisplayPanel instance.
-     * @param theImage - The <b>ProcedureDefinitionImage</b> representing the Image to have an Annotation drawn over it.
      * @param theAnnotation - The <b>ImageAnnotation</b> representing the Annotation to be drawn over the image.
      */
-    public SvgImageDisplayPanel(String id, ProcedureDefinitionImage theImage, ImageAnnotation theAnnotation) {
+    public SvgImageDisplayPanel(String id, ImageAnnotation theAnnotation) {
         super(id);
-        this.theImage = theImage;
         this.theAnnotation = theAnnotation;
+        this.theImage = (ProcedureDefinitionImage) theAnnotation.getImage();
     }
 
     /**
@@ -48,6 +47,13 @@ public class SvgImageDisplayPanel extends Panel {
     @Override
     protected void onInitialize() {
         super.onInitialize();
+
+        add(new AttributeModifier("xmlns", "http://www.w3.org/2000/svg"));
+        add(new AttributeModifier("xmlns:xlink", "http://www.w3.org/1999/xlink"));
+        add(new AttributeModifier("version", "1.1"));
+        add(new AttributeModifier("viewBox", "0 0 400 400"));
+        add(new AttributeModifier("width", "400"));
+
         WebMarkupContainer imageElement = new WebMarkupContainer("imageElement");
         //Holy metal, Batman! It's really this simple!!
         imageElement.add(new AttributeModifier("xlink:href", s3Service.getProcedureDefinitionImageMediumURL(theImage)));
