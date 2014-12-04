@@ -54,7 +54,7 @@ public class IsolationPointListPanel extends Panel {
 
         add(new AttributeAppender("class", "isolation-point-list"));
 
-        if (model.getObject().getAnnotationType().equals(AnnotationType.ARROW_STYLE)) {
+        if (model.getObject().getAnnotationType().equals(AnnotationType.CALL_OUT_STYLE)) {
             add(images = new EditableImageList<ProcedureDefinitionImage>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getImages())) {
                 @Override
                 protected void createImage(final ListItem<ProcedureDefinitionImage> item) {
