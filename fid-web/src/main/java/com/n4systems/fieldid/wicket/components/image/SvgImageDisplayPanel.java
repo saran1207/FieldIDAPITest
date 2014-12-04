@@ -8,6 +8,14 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+import java.awt.*;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Iterator;
+
 /**
  * This component can be used to display SVG Images in the browser.
  *
@@ -48,15 +56,20 @@ public class SvgImageDisplayPanel extends Panel {
     protected void onInitialize() {
         super.onInitialize();
 
+        URL imageUrl = s3Service.getProcedureDefinitionImageMediumURL(theImage);
+
+        Dimension imageDimensions = acquireImageDimensions(imageUrl);
+
         add(new AttributeModifier("xmlns", "http://www.w3.org/2000/svg"));
         add(new AttributeModifier("xmlns:xlink", "http://www.w3.org/1999/xlink"));
         add(new AttributeModifier("version", "1.1"));
-        add(new AttributeModifier("viewBox", "0 0 400 400"));
-        add(new AttributeModifier("width", "400"));
+        add(new AttributeModifier("viewBox", "0 0 " + imageDimensions.getWidth() + " " + imageDimensions.getHeight()));
+        add(new AttributeModifier("width", imageDimensions.getWidth()));
+        add(new AttributeModifier("height", imageDimensions.getHeight()));
 
         WebMarkupContainer imageElement = new WebMarkupContainer("imageElement");
         //Holy metal, Batman! It's really this simple!!
-        imageElement.add(new AttributeModifier("xlink:href", s3Service.getProcedureDefinitionImageMediumURL(theImage)));
+        imageElement.add(new AttributeModifier("xlink:href", imageUrl));
         add(imageElement);
 
 
@@ -66,5 +79,27 @@ public class SvgImageDisplayPanel extends Panel {
         lineElement.add(new AttributeModifier("x2", theAnnotation.getX_tail()));
         lineElement.add(new AttributeModifier("y2", theAnnotation.getY_tail()));
         add(lineElement);
+    }
+
+    private Dimension acquireImageDimensions(URL imageUrl) {
+        try {
+            ImageInputStream in = ImageIO.createImageInputStream(imageUrl.openStream());
+
+            final Iterator<ImageReader> readers = ImageIO.getImageReaders(in);
+            if(readers.hasNext()) {
+                ImageReader reader = readers.next();
+
+                try {
+                    reader.setInput(in);
+                    return new Dimension(reader.getWidth(0), reader.getHeight(0));
+                } finally {
+                    in.close();
+                }
+            }
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
