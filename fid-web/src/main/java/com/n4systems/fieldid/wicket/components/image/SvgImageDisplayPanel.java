@@ -74,10 +74,10 @@ public class SvgImageDisplayPanel extends Panel {
 
 
         WebMarkupContainer lineElement = new WebMarkupContainer("lineElement");
-        lineElement.add(new AttributeModifier("x", theAnnotation.getX()));
-        lineElement.add(new AttributeModifier("y", theAnnotation.getY()));
-        lineElement.add(new AttributeModifier("x2", theAnnotation.getX_tail()));
-        lineElement.add(new AttributeModifier("y2", theAnnotation.getY_tail()));
+        lineElement.add(new AttributeModifier("x1", String.valueOf(Math.round(imageDimensions.getWidth() * theAnnotation.getX()))));
+        lineElement.add(new AttributeModifier("y1", String.valueOf(Math.round(imageDimensions.getHeight() * theAnnotation.getY()))));
+        lineElement.add(new AttributeModifier("x2", String.valueOf(Math.round(imageDimensions.getWidth() * theAnnotation.getX_tail()))));
+        lineElement.add(new AttributeModifier("y2", String.valueOf(Math.round(imageDimensions.getHeight() * theAnnotation.getY_tail()))));
         add(lineElement);
     }
 

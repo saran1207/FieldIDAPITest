@@ -66,8 +66,8 @@ var svgImageList = (function() {
 			} else {
 				var newHeight = imageHeight * (imageContainerWidth/imageWidth);
 				$this.parent().css('margin-top',(imageContainerHeight-newHeight)/2);
-				$this.parent().css('width', imageContainerWidth).css('height',newHeight);
-				$this.css('width',imageContainerWidth);
+				$this.attr('width',imageContainerWidth);
+                $this.attr('height',newHeight);
 			}
 
 		}
