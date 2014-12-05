@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.image;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.common.ImageAnnotation;
+import com.n4systems.model.common.ImageAnnotationType;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -13,6 +14,7 @@ import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 import java.awt.*;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 
@@ -48,6 +50,19 @@ public class SvgImageDisplayPanel extends Panel {
         this.theImage = (ProcedureDefinitionImage) theAnnotation.getImage();
     }
 
+    //TODO This might be fine, but we need a better blank slate image.  I'm pretty sure Disney has some intense copyright on that giant, spherical space station...
+    public SvgImageDisplayPanel(String id) {
+        super(id);
+        this.theAnnotation = new ImageAnnotation(0.5, 0.5, 0.0, 0.0, "bla", ImageAnnotationType.C);
+    }
+
+    public SvgImageDisplayPanel(String id, ProcedureDefinitionImage theImage) {
+        super(id);
+        //TODO Clean this up... this is just to make it load...
+        this.theAnnotation = theImage.getAnnotations() == null ? new ImageAnnotation(0.5, 0.5, 0.0, 0.0, "bla", ImageAnnotationType.C) : theImage.getAnnotations().get(0);
+        this.theImage = theImage;
+    }
+
     /**
      * This override of the onInitialize method simply ensures that the necessary components have their Attributes
      * modified to contain references to data from the ProcedureDefinitionImage and ImageAnnotation objects.
@@ -56,7 +71,16 @@ public class SvgImageDisplayPanel extends Panel {
     protected void onInitialize() {
         super.onInitialize();
 
-        URL imageUrl = s3Service.getProcedureDefinitionImageMediumURL(theImage);
+        URL imageUrl;
+        if(theImage == null)
+            try {
+                imageUrl = new URL("http://s.hswstatic.com/gif/death-star-1.jpg");
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                imageUrl = null;
+            }
+        else
+            imageUrl = s3Service.getProcedureDefinitionImageMediumURL(theImage);
 
         Dimension imageDimensions = acquireImageDimensions(imageUrl);
 
