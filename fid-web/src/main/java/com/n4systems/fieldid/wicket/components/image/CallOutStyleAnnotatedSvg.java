@@ -74,6 +74,16 @@ public class CallOutStyleAnnotatedSvg extends Panel {
                 rect.add(new AttributeModifier("stroke", annotation.getType().getBorderColor()));
                 rect.add(new AttributeModifier("fill", annotation.getType().getBackgroundColor()));
 
+                int textLength = annotation.getText().length();
+
+                if (textLength <= 4) {
+                    rect.add(new AttributeModifier("width", "10%"));
+                } else if (textLength > 4 && textLength <= 6) {
+                    rect.add(new AttributeModifier("width", "11%"));
+                } else {
+                    rect.add(new AttributeModifier("width", "17%"));
+                }
+
                 if (isReversed) {
                     rect.add(new AttributeModifier("transform", "scale(-1, 1)"));
                 }
@@ -84,10 +94,10 @@ public class CallOutStyleAnnotatedSvg extends Panel {
                 text.add(new AttributeModifier("fill", annotation.getType().getFontColor()));
 
                 if (isReversed) {
-                    text.add(new AttributeModifier("x", "100"));
+                    text.add(new AttributeModifier("x", "80"));
                     text.add(new AttributeModifier("y", "5"));
                 } else {
-                    text.add(new AttributeModifier("x", "-150"));
+                    text.add(new AttributeModifier("x", "-130"));
                     text.add(new AttributeModifier("y", "5"));
                 }
 
