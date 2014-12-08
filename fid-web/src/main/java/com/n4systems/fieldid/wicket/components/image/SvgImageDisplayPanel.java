@@ -34,6 +34,7 @@ public class SvgImageDisplayPanel extends Panel {
 
     private ProcedureDefinitionImage theImage;
     private ImageAnnotation theAnnotation;
+    private Boolean showAnnotations = true;
 
     /**
      * This is the main constructor for the SvgImageDisplayPanel.  Since the S3 Service requires a full
@@ -50,16 +51,19 @@ public class SvgImageDisplayPanel extends Panel {
         this.theImage = (ProcedureDefinitionImage) theAnnotation.getImage();
     }
 
-    //TODO This might be fine, but we need a better blank slate image.  I'm pretty sure Disney has some intense copyright on that giant, spherical space station...
+    /**
+     * In some situations, you may want to only display the image and hide the Annotation arrow, such as when you are
+     * showing an image that has yet to have an annotation added to it.
+     *
+     * @param id The <b>String</b> represenation of the markup ID or some such thing for the SvgImageDisplayPanel.
+     */
     public SvgImageDisplayPanel(String id) {
         super(id);
-        this.theAnnotation = new ImageAnnotation(0.5, 0.5, 0.0, 0.0, "bla", ImageAnnotationType.C);
+        this.showAnnotations = false;
     }
 
     public SvgImageDisplayPanel(String id, ProcedureDefinitionImage theImage) {
         super(id);
-        //TODO Clean this up... this is just to make it load...
-        this.theAnnotation = theImage.getAnnotations() == null ? new ImageAnnotation(0.5, 0.5, 0.0, 0.0, "bla", ImageAnnotationType.C) : theImage.getAnnotations().get(0);
         this.theImage = theImage;
     }
 
@@ -74,7 +78,7 @@ public class SvgImageDisplayPanel extends Panel {
         URL imageUrl;
         if(theImage == null)
             try {
-                imageUrl = new URL("http://s.hswstatic.com/gif/death-star-1.jpg");
+                imageUrl = new URL("file:///var/fieldid/images/loto/upload-lightbox-blank-slate.png");
             } catch (MalformedURLException e) {
                 e.printStackTrace();
                 imageUrl = null;
@@ -97,14 +101,39 @@ public class SvgImageDisplayPanel extends Panel {
         add(imageElement);
 
 
+        WebMarkupContainer annotationsElement = new WebMarkupContainer("annotationsElement");
+        annotationsElement.add(new AttributeModifier("visibility", showAnnotations ? "visible" : "hidden"));
+
         WebMarkupContainer lineElement = new WebMarkupContainer("lineElement");
-        lineElement.add(new AttributeModifier("x1", String.valueOf(Math.round(imageDimensions.getWidth() * theAnnotation.getX()))));
-        lineElement.add(new AttributeModifier("y1", String.valueOf(Math.round(imageDimensions.getHeight() * theAnnotation.getY()))));
-        lineElement.add(new AttributeModifier("x2", String.valueOf(Math.round(imageDimensions.getWidth() * theAnnotation.getX_tail()))));
-        lineElement.add(new AttributeModifier("y2", String.valueOf(Math.round(imageDimensions.getHeight() * theAnnotation.getY_tail()))));
-        add(lineElement);
+        if(theAnnotation != null) {
+            lineElement.add(new AttributeModifier("x1", String.valueOf(Math.round(imageDimensions.getWidth() * theAnnotation.getX()))));
+            lineElement.add(new AttributeModifier("y1", String.valueOf(Math.round(imageDimensions.getHeight() * theAnnotation.getY()))));
+            lineElement.add(new AttributeModifier("x2", String.valueOf(Math.round(imageDimensions.getWidth() * theAnnotation.getX_tail()))));
+            lineElement.add(new AttributeModifier("y2", String.valueOf(Math.round(imageDimensions.getHeight() * theAnnotation.getY_tail()))));
+        }
+
+        annotationsElement.add(lineElement);
+        add(annotationsElement);
+
     }
 
+    /**
+     * Call this method when initializing an SvgImageDisplayPanel instance to hide the annotation arrow.
+     *
+     * @return this
+     */
+    public SvgImageDisplayPanel withNoAnnotations() {
+        this.showAnnotations = false;
+        return this;
+    }
+
+    /**
+     * Determine the image size without having to download the whole image.  You can gather this from metadata in the
+     * reader... I think, anyways.  Otherwise this is wasteful and there are far easier ways to get this data.
+     *
+     * @param imageUrl - URL for the image you need to acquire the dimensions of.
+     * @return A <b>Dimension</b> object representing the dimensions of the specified image.
+     */
     private Dimension acquireImageDimensions(URL imageUrl) {
         try {
             ImageInputStream in = ImageIO.createImageInputStream(imageUrl.openStream());

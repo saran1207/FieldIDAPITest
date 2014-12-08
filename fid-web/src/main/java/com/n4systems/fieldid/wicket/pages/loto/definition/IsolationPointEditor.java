@@ -170,11 +170,8 @@ public class IsolationPointEditor extends Panel {
                 }
             };
         } else { //AnnotationType.ARROW_STYLE
-            return new NewImageEditor(id, (IModel<IsolationPoint>)getDefaultModel(), new PropertyModel<>(procedureDefinition, "images")) {
-                @Override
-                protected void doSubmit(AjaxRequestTarget target) {
-                    System.out.println("You tried to upload a file, but that functionality hasn't been added yet...");
-                }
+            return new NewImageEditor(id,
+                                      (IModel<IsolationPoint>)getDefaultModel()) {
 
                 @Override
                 protected void doDone(AjaxRequestTarget target) {
@@ -190,6 +187,11 @@ public class IsolationPointEditor extends Panel {
                     procedureDefinition.addImage(image);
 
                     return image;
+                }
+
+                @Override
+                protected List<ProcedureDefinitionImage> displayableImages() {
+                    return procedureDefinition.getImages();
                 }
             };
         }

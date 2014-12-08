@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.uuid.AtomicLongService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.common.ImageAnnotationType;
 import com.n4systems.model.procedure.IsolationPoint;
@@ -23,6 +24,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.ArrayList;
@@ -47,24 +49,26 @@ public abstract class NewImageEditor extends Panel {
     @SpringBean
     private AtomicLongService atomicLongService;
 
-    private EditableImageList<ProcedureDefinitionImage> images;
+    private ImageList<ProcedureDefinitionImage> images;
     private SvgImageDisplayPanel editor; //This becomes an editor by bolting some JavaScript to it.  It's otherwise just a display panel.
-    private Form tinyForm;
     private FileUploadField fileUploadField;
 
     private List<FileUpload> fileUploads = new ArrayList<>();
     private IModel<IsolationPoint> model;
-    private IModel<List<ProcedureDefinitionImage>> imageModel;
     private ProcedureDefinitionImage currentImage;
 
     private ArrowAnnotatingBehaviour ajaxBehavior;
 
-    public NewImageEditor(String id, IModel<IsolationPoint> model, IModel<List<ProcedureDefinitionImage>> imageModel) {
+    public NewImageEditor(String id, IModel<IsolationPoint> model) {
         super(id, model);
-        this.model = model;
-        this.imageModel = imageModel;                                           //TODO Not sure if this is right either, we may need the real deal here...
+        this.model = model;                                                      //Not sure if this is right either, we may need the real deal here...
         this.currentImage = (model.getObject().getAnnotation() == null ? null : (ProcedureDefinitionImage) model.getObject().getAnnotation().getImage());
     }
+
+
+    /*
+        Overrides...
+     */
 
     @Override
     public void onInitialize() {
@@ -85,7 +89,7 @@ public abstract class NewImageEditor extends Panel {
             @Override
             protected ImageAnnotation getImageAnnotation(Long id, Double x, Double y, Double x2, Double y2) {
                 ImageAnnotation currentAnnotation = model.getObject().getAnnotation();
-                if(currentAnnotation == null && id == null) {
+                if(currentAnnotation == null) {
                     //Must be a new annotation... so make a new one.
                     currentAnnotation = new ImageAnnotation(x, y, x2, y2, "", ImageAnnotationType.fromIsolationPointSourceType(model.getObject().getSourceType()));
                     currentAnnotation.setTempId(atomicLongService.getNext());
@@ -103,22 +107,24 @@ public abstract class NewImageEditor extends Panel {
 
             @Override
             protected ImageAnnotation getAnnotation() {
-                //FIXME Figure out how to handle this: Return Annotation when one exists, but return something that won't shit out a NPE when an annotation doesn't exist...
                 return model.getObject().getAnnotation();
             }
         });
 
         if(currentImage == null) {
+            //Creating the panel without an image leaves a placeholder where the image would otherwise be.
             editor = new SvgImageDisplayPanel("imageEditor");
         } else {
-            editor = new SvgImageDisplayPanel("imageEditor", currentImage);
+            //When have an annotation, we pass that in to be able to display the associated image (if there is one)
+            //or the placeholder if there is not an image.
+            editor = new SvgImageDisplayPanel("imageEditor", model.getObject().getAnnotation());
         }
 
         add(editor);
         editor.setOutputMarkupId(true);
         add(images = createImageList("imageGallery"));
         images.setOutputMarkupId(true);
-        tinyForm = new Form("uploadForm");
+        Form tinyForm = new Form("uploadForm");
         tinyForm.add(fileUploadField = new FileUploadField("fileUpload", new PropertyModel<>(this, "fileUploads")));
         fileUploadField.add(new AjaxFormSubmitBehavior("onchange") {
             @Override
@@ -128,12 +134,18 @@ public abstract class NewImageEditor extends Panel {
                 //1) Take image and ram it up into S3
                 handleUpload(uploadedImage.getBytes(), uploadedImage.getContentType(), uploadedImage.getClientFileName());
 
-                //2) Determine Index... presumably the image list has been updated...
-                //TODO Make sure we don't have to do any extra stuff to add the file to the list... it may not be automatic.
+                //2) Now that the image is in S3 and our image model, refresh the image gallery/list thingy
+                refreshGalleryPanel(target, createImageList("imageGallery"));
+
+                //3) Determine Index... presumably the image list has been updated...
+                //Not sure if extra work needs to be done to add the images to the list, or we just need to implement a
+                //different Model class to carry the value properly.
                 switchToLastCarouselImage(target);
 
-                doSubmit(target);
                 target.add(images);
+                target.add(editor);
+                target.add(NewImageEditor.this);
+
             }
 
             @Override
@@ -153,9 +165,22 @@ public abstract class NewImageEditor extends Panel {
         });
     }
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        //TODO Add JS references and such...
+    }
+
+
+    /*
+        Private methods...
+     */
+
     private void switchToLastCarouselImage(AjaxRequestTarget target) {
-        currentImage = imageModel.getObject().get(imageModel.getObject().size()-1);
-        swapEditorPanel(target, new SvgImageDisplayPanel("imageEditor", currentImage));
+        currentImage = displayableImages().get(displayableImages().size() - 1);
+
+        //If you're switching the image, then your annotation should no longer be shown... right?
+        swapEditorPanel(target, new SvgImageDisplayPanel("imageEditor", currentImage).withNoAnnotations());
     }
 
     private void swapEditorPanel(AjaxRequestTarget target, SvgImageDisplayPanel panel) {
@@ -166,24 +191,20 @@ public abstract class NewImageEditor extends Panel {
         target.appendJavaScript(getEditorJS());
     }
 
+    private void refreshGalleryPanel(AjaxRequestTarget target, ImageList<ProcedureDefinitionImage> panel) {
+        panel.setOutputMarkupId(true);
+        images.replaceWith(panel);
+        target.add(panel);
+        images = panel;
+    }
+
     private void handleUpload(byte[] bytes, String contentType, String clientFileName) {
         ProcedureDefinitionImage image = createImage(clientFileName);
         uploadImage(image, contentType, bytes);
     }
 
-    private void uploadImage(ProcedureDefinitionImage image, String contentType, byte[] imageData) {
-        s3Service.uploadTempProcedureDefImage(image, contentType, imageData);
-    }
-
-
-    /*
-        Overrides...
-     */
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        //TODO Add JS references and such...?
+    private ProcedureDefinitionImage uploadImage(ProcedureDefinitionImage image, String contentType, byte[] imageData) {
+        return s3Service.uploadTempProcedureDefImage(image, contentType, imageData);
     }
 
 
@@ -191,8 +212,8 @@ public abstract class NewImageEditor extends Panel {
         Protected methods...
      */
 
-    protected EditableImageList<ProcedureDefinitionImage> createImageList(String id) {
-        return new EditableImageList<ProcedureDefinitionImage>(id, imageModel) {
+    protected ImageList<ProcedureDefinitionImage> createImageList(String id) {
+        return new ImageList<ProcedureDefinitionImage>(id, new ListModel<>(displayableImages())) {
             @Override
             protected void createImage(ListItem<ProcedureDefinitionImage> item) {
                 item.add(new ContextImage("image", s3Service.getProcedureDefinitionImageThumbnailURL(item.getModelObject()).toString()));
@@ -217,11 +238,10 @@ public abstract class NewImageEditor extends Panel {
         Abstracts...
      */
 
-    //TODO It's a LOT of functionality... we may end up wanting to break this apart into separate methods for image handling...
-    protected abstract void doSubmit(AjaxRequestTarget target);
-
     protected abstract void doDone(AjaxRequestTarget target);
 
     //This needs to be implemented as an abstract method, because we don't know enough about the ProcDef here...
     protected abstract ProcedureDefinitionImage createImage(String clientFileName);
+
+    protected abstract List<ProcedureDefinitionImage> displayableImages();
 }

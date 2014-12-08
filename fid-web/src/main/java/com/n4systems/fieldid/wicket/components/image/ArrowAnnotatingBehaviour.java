@@ -54,7 +54,6 @@ public abstract class ArrowAnnotatingBehaviour extends AbstractDefaultAjaxBehavi
 
     protected abstract ProcedureDefinitionImage getEditedImage();
 
-    //TODO Do we need to have Type (ie. Water, Electrical...) here???
     protected abstract ImageAnnotation getImageAnnotation(Long id, Double x, Double y, Double x2, Double y2);
 
     protected abstract ImageAnnotation getAnnotation();
@@ -72,27 +71,33 @@ public abstract class ArrowAnnotatingBehaviour extends AbstractDefaultAjaxBehavi
     }
 
     protected ArrowAnnotatedImageOptions getArrowAnnotatedImageOptions() {
-        return new ArrowAnnotatedImageOptions(getAnnotation().getId(),
-                                              getAnnotation().getX(),
-                                              getAnnotation().getY(),
-                                              getAnnotation().getX_tail(),
-                                              getAnnotation().getY_tail());
+        if(getAnnotation() != null)
+            return new ArrowAnnotatedImageOptions(getAnnotation().getId(),
+                                                  getAnnotation().getX(),
+                                                  getAnnotation().getY(),
+                                                  getAnnotation().getX_tail(),
+                                                  getAnnotation().getY_tail());
+        else
+            //No annotation?  Nulls are acceptable... they HAVE to be, because that should be telling the editor, "Hey
+            //dude!! No annotation exists yet!" Which should roughly correspond with the whole not having an annotation
+            //already rendered in the editor.
+            return new ArrowAnnotatedImageOptions(null, null, null, null, null);
     }
 
     public class ArrowAnnotatedImageOptions {
         String callback = ArrowAnnotatingBehaviour.this.getCallbackUrl().toString();
         String annotationType = "ARROW_STYLE";
-        long id;
-        double x;
-        double y;
-        double x2;
-        double y2;
+        Long id;
+        Double x;
+        Double y;
+        Double x2;
+        Double y2;
 
-        public ArrowAnnotatedImageOptions(long id,
-                                          double x,
-                                          double y,
-                                          double x2,
-                                          double y2) {
+        public ArrowAnnotatedImageOptions(Long id,
+                                          Double x,
+                                          Double y,
+                                          Double x2,
+                                          Double y2) {
             this.id = id;
             this.x = x;
             this.y = y;
