@@ -50,7 +50,7 @@ public abstract class NewImageEditor extends Panel {
     private AtomicLongService atomicLongService;
 
     private ImageList<ProcedureDefinitionImage> images;
-    private SvgImageDisplayPanel editor; //This becomes an editor by bolting some JavaScript to it.  It's otherwise just a display panel.
+    private ArrowStyleAnnotatedSvg editor; //This becomes an editor by bolting some JavaScript to it.  It's otherwise just a display panel.
     private FileUploadField fileUploadField;
 
     private List<FileUpload> fileUploads = new ArrayList<>();
@@ -113,11 +113,11 @@ public abstract class NewImageEditor extends Panel {
 
         if(currentImage == null) {
             //Creating the panel without an image leaves a placeholder where the image would otherwise be.
-            editor = new SvgImageDisplayPanel("imageEditor");
+            editor = new ArrowStyleAnnotatedSvg("imageEditor");
         } else {
             //When have an annotation, we pass that in to be able to display the associated image (if there is one)
             //or the placeholder if there is not an image.
-            editor = new SvgImageDisplayPanel("imageEditor", model.getObject().getAnnotation());
+            editor = new ArrowStyleAnnotatedSvg("imageEditor", model.getObject().getAnnotation());
         }
 
         add(editor);
@@ -180,10 +180,10 @@ public abstract class NewImageEditor extends Panel {
         currentImage = displayableImages().get(displayableImages().size() - 1);
 
         //If you're switching the image, then your annotation should no longer be shown... right?
-        swapEditorPanel(target, new SvgImageDisplayPanel("imageEditor", currentImage).withNoAnnotations());
+        swapEditorPanel(target, new ArrowStyleAnnotatedSvg("imageEditor", currentImage).withNoAnnotations());
     }
 
-    private void swapEditorPanel(AjaxRequestTarget target, SvgImageDisplayPanel panel) {
+    private void swapEditorPanel(AjaxRequestTarget target, ArrowStyleAnnotatedSvg panel) {
         panel.setOutputMarkupId(true);
         editor.replaceWith(panel);
         target.add(panel);
@@ -222,7 +222,7 @@ public abstract class NewImageEditor extends Panel {
                     protected void onEvent(AjaxRequestTarget target) {
                         //We want to set this image to be equal to whatever is in the editor.
                         currentImage = item.getModelObject();
-                        swapEditorPanel(target, new SvgImageDisplayPanel("imageEditor", item.getModelObject()));
+                        swapEditorPanel(target, new ArrowStyleAnnotatedSvg("imageEditor", item.getModelObject()));
                     }
                 });
             }

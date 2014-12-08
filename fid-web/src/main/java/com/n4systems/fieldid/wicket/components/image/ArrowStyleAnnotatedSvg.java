@@ -27,7 +27,7 @@ import java.util.Iterator;
  *
  * Created by Jordan Heath on 14-12-03.
  */
-public class SvgImageDisplayPanel extends Panel {
+public class ArrowStyleAnnotatedSvg extends Panel {
 
     @SpringBean
     private S3Service s3Service;
@@ -45,7 +45,7 @@ public class SvgImageDisplayPanel extends Panel {
      * @param id - The <b>String</b> representation of the Wicket ID for the SvgImageDisplayPanel instance.
      * @param theAnnotation - The <b>ImageAnnotation</b> representing the Annotation to be drawn over the image.
      */
-    public SvgImageDisplayPanel(String id, ImageAnnotation theAnnotation) {
+    public ArrowStyleAnnotatedSvg(String id, ImageAnnotation theAnnotation) {
         super(id);
         this.theAnnotation = theAnnotation;
         this.theImage = (ProcedureDefinitionImage) theAnnotation.getImage();
@@ -57,12 +57,12 @@ public class SvgImageDisplayPanel extends Panel {
      *
      * @param id The <b>String</b> represenation of the markup ID or some such thing for the SvgImageDisplayPanel.
      */
-    public SvgImageDisplayPanel(String id) {
+    public ArrowStyleAnnotatedSvg(String id) {
         super(id);
         this.showAnnotations = false;
     }
 
-    public SvgImageDisplayPanel(String id, ProcedureDefinitionImage theImage) {
+    public ArrowStyleAnnotatedSvg(String id, ProcedureDefinitionImage theImage) {
         super(id);
         this.theImage = theImage;
     }
@@ -122,7 +122,7 @@ public class SvgImageDisplayPanel extends Panel {
      *
      * @return this
      */
-    public SvgImageDisplayPanel withNoAnnotations() {
+    public ArrowStyleAnnotatedSvg withNoAnnotations() {
         this.showAnnotations = false;
         return this;
     }
