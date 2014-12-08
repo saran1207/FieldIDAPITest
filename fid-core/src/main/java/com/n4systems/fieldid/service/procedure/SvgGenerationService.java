@@ -36,8 +36,8 @@ public class SvgGenerationService extends FieldIdPersistenceService {
     @Autowired
     private ImageService imageService;
 
-    public static int DEFAULT_JASPER_HEIGHT = 140;
-    public static int DEFAULT_JASPER_WIDTH = 140;
+    public static Integer DEFAULT_JASPER_HEIGHT = 140;
+    public static Integer DEFAULT_JASPER_WIDTH = 140;
 
     public void generateAndUploadAnnotatedSvgs(ProcedureDefinition definition) throws Exception {
         for(ProcedureDefinitionImage image: definition.getImages()) {
@@ -105,9 +105,9 @@ public class SvgGenerationService extends FieldIdPersistenceService {
 
         svg.appendChild(defs);
 
-        defs.appendChild(createAnnotationDefinition(doc, annotation, width));
+        defs.appendChild(createAnnotationDefinition(doc, annotation, width, height));
 
-        Element imageElement = createImageElement(doc, bytes);
+        Element imageElement = createImageElement(doc, bytes, height, width);
 
         svg.appendChild(imageElement);
 
@@ -141,15 +141,15 @@ public class SvgGenerationService extends FieldIdPersistenceService {
         svg.appendChild(defs);
 
         for(ImageAnnotation annotation: image.getAnnotations()) {
-            defs.appendChild(createAnnotationDefinition(doc, annotation, DEFAULT_JASPER_WIDTH));
+            defs.appendChild(createAnnotationDefinition(doc, annotation, width, height));
         }
 
-        Element imageElement = createImageElement(doc, bytes);
+        Element imageElement = createImageElement(doc, bytes, height, width);
 
         svg.appendChild(imageElement);
 
         for(ImageAnnotation annotation: image.getAnnotations()) {
-            svg.appendChild(createAnnotation(doc, annotation, DEFAULT_JASPER_HEIGHT, DEFAULT_JASPER_WIDTH));
+            svg.appendChild(createAnnotation(doc, annotation, height, width));
         }
 
         return doc;
@@ -169,8 +169,8 @@ public class SvgGenerationService extends FieldIdPersistenceService {
     private Element createSvgElement(Document doc, Integer width, Integer height) {
         Element svg = doc.createElement("svg");
         svg.setAttribute("viewBox", "0 0 " + width + " " + height);
-        svg.setAttribute("height", "140");
-        svg.setAttribute("width", "140");
+        svg.setAttribute("height", DEFAULT_JASPER_HEIGHT.toString());
+        svg.setAttribute("width", DEFAULT_JASPER_WIDTH.toString());
         svg.setAttribute("version", "1.1");
         svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
         svg.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
@@ -187,6 +187,16 @@ public class SvgGenerationService extends FieldIdPersistenceService {
         return imageElement;
     }
 
+    private Element createImageElement(Document doc, byte[] bytes, int height, int width) {
+        Element imageElement = doc.createElement("image");
+        imageElement.setAttribute("x", "0");
+        imageElement.setAttribute("y", "0");
+        imageElement.setAttribute("height", height+"");
+        imageElement.setAttribute("width", width+"");
+        imageElement.setAttribute("xlink:href", "data:image/png;base64," + DatatypeConverter.printBase64Binary(bytes));
+        return imageElement;
+    }
+
     private Node createAnnotation(Document doc, ImageAnnotation annotation, Integer height, Integer width) {
         Element annotationElement = doc.createElement("use");
         annotationElement.setAttribute("xlink:href", "#" + annotation.getType().getCssClass() + "_" + annotation.getText());
@@ -195,74 +205,134 @@ public class SvgGenerationService extends FieldIdPersistenceService {
         return annotationElement;
     }
 
-    private Node createAnnotationDefinition(Document doc, ImageAnnotation annotation, Integer width) {
+    private Node createAnnotationDefinition(Document doc, ImageAnnotation annotation, Integer width, Integer height) {
 
         Boolean isReversed =  Math.round(width * annotation.getX()) < width/2;
+        Boolean isWide = width > height;
 
         Element group = doc.createElement("g");
         group.setAttribute("id", annotation.getType().getCssClass() + "_" + annotation.getText());
 
-        Element path = doc.createElement("path");
-        path.setAttribute("id", "arrow");
-        path.setAttribute("d", "M 0 0 l -12 4 l 0 -3 l -40 0 l 0 -3 l 40 0 l 0 -4 z");
-        path.setAttribute("fill", annotation.getType().getBackgroundColor());
-        path.setAttribute("stroke", annotation.getType().getBorderColor());
-        path.setAttribute("stroke-width", "1");
-        if(isReversed) {
-            path.setAttribute("transform", "scale(-1, 1)");
-        }
-
-        group.appendChild(path);
-
-        Element rect = doc.createElement("rect");
-
-        rect.setAttribute("x", "-75");
-        rect.setAttribute("y", "-8");
-        rect.setAttribute("rx", "5");
-        rect.setAttribute("ry", "5");
-
-        int lenght = annotation.getText().length();
-        if(lenght <= 4) {
-            rect.setAttribute("width", "25%");
-        } else if ((lenght > 4) && (lenght <= 6)) {
-            rect.setAttribute("width", "35%");
-        } else {
-            rect.setAttribute("width", "47%");
-        }
-
-        rect.setAttribute("height", "10%");
-        rect.setAttribute("fill", annotation.getType().getBackgroundColor());
-        rect.setAttribute("stroke", annotation.getType().getBorderColor());
-        rect.setAttribute("stroke-width", "1");
-
-        if(isReversed) {
-            rect.setAttribute("transform", "scale(-1, 1)");
-        }
-
-        group.appendChild(rect);
-
-        Element text = doc.createElement("text");
-
-
-        if(isReversed) {
-            if(lenght <= 4) {
-                text.setAttribute("x", "50");
-            } else if ((lenght > 4) && (lenght <= 6)) {
-                text.setAttribute("x", "39");
-            } else {
-                text.setAttribute("x", "29");
+        if(isWide) {
+            Element path = doc.createElement("path");
+            path.setAttribute("id", "arrow");
+            path.setAttribute("d", "M 0 0 l -12 4 l 0 -3 l -40 0 l 0 -3 l 40 0 l 0 -4 z");
+            path.setAttribute("fill", annotation.getType().getBackgroundColor());
+            path.setAttribute("stroke", annotation.getType().getBorderColor());
+            path.setAttribute("stroke-width", "1");
+            if (isReversed) {
+                path.setAttribute("transform", "scale(-1, 1)");
             }
+            group.appendChild(path);
+
+            Element rect = doc.createElement("rect");
+
+            rect.setAttribute("x", "-63");
+            rect.setAttribute("y", "-5");
+            rect.setAttribute("rx", "5");
+            rect.setAttribute("ry", "5");
+
+            int lenght = annotation.getText().length();
+            if (lenght <= 4) {
+                rect.setAttribute("width", "25%");
+            } else if ((lenght > 4) && (lenght <= 6)) {
+                rect.setAttribute("width", "35%");
+            } else {
+                rect.setAttribute("width", "40%");
+            }
+
+            rect.setAttribute("height", "10%");
+            rect.setAttribute("fill", annotation.getType().getBackgroundColor());
+            rect.setAttribute("stroke", annotation.getType().getBorderColor());
+            rect.setAttribute("stroke-width", "1");
+
+            if (isReversed) {
+                rect.setAttribute("transform", "scale(-1, 1)");
+            }
+
+            group.appendChild(rect);
+
+            Element text = doc.createElement("text");
+            if (isReversed) {
+                if (lenght <= 4) {
+                    text.setAttribute("x", "30");
+                } else if ((lenght > 4) && (lenght <= 6)) {
+                    text.setAttribute("x", "22");
+                } else {
+                    text.setAttribute("x", "9");
+                }
+            } else {
+                text.setAttribute("x", "-61");
+            }
+            text.setAttribute("y", "2");
+            text.setAttribute("fill", annotation.getType().getFontColor());
+
+            text.setAttribute("font-size", "7");
+
+            text.setTextContent(annotation.getText());
+
+            group.appendChild(text);
         } else {
-            text.setAttribute("x", "-74");
+            Element path = doc.createElement("path");
+            path.setAttribute("id", "arrow");
+            path.setAttribute("d", "M 0 0 l -12 4 l 0 -3 l -40 0 l 0 -3 l 40 0 l 0 -4 z");
+            path.setAttribute("fill", annotation.getType().getBackgroundColor());
+            path.setAttribute("stroke", annotation.getType().getBorderColor());
+            path.setAttribute("stroke-width", "1");
+            if (isReversed) {
+                path.setAttribute("transform", "scale(-1, 1)");
+            }
+
+            group.appendChild(path);
+            Element rect = doc.createElement("rect");
+
+            rect.setAttribute("x", "-75");
+            rect.setAttribute("y", "-8");
+            rect.setAttribute("rx", "5");
+            rect.setAttribute("ry", "5");
+
+            int lenght = annotation.getText().length();
+            if (lenght <= 4) {
+                rect.setAttribute("width", "25%");
+            } else if ((lenght > 4) && (lenght <= 6)) {
+                rect.setAttribute("width", "35%");
+            } else {
+                rect.setAttribute("width", "47%");
+            }
+
+            rect.setAttribute("height", "10%");
+            rect.setAttribute("fill", annotation.getType().getBackgroundColor());
+            rect.setAttribute("stroke", annotation.getType().getBorderColor());
+            rect.setAttribute("stroke-width", "1");
+
+            if (isReversed) {
+                rect.setAttribute("transform", "scale(-1, 1)");
+            }
+
+            group.appendChild(rect);
+            Element text = doc.createElement("text");
+
+
+            if (isReversed) {
+                if (lenght <= 4) {
+                    text.setAttribute("x", "50");
+                } else if ((lenght > 4) && (lenght <= 6)) {
+                    text.setAttribute("x", "39");
+                } else {
+                    text.setAttribute("x", "29");
+                }
+            } else {
+                text.setAttribute("x", "-74");
+            }
+            text.setAttribute("y", "2");
+            text.setAttribute("fill", annotation.getType().getFontColor());
+
+            text.setAttribute("font-size", "7");
+
+            text.setTextContent(annotation.getText());
+
+            group.appendChild(text);
         }
-        text.setAttribute("y", "2");
-        text.setAttribute("fill", annotation.getType().getFontColor());
-
-        text.setAttribute("font-size", "7");
-
-        text.setTextContent(annotation.getText());
-
-        group.appendChild(text);
 
         return group;
     }
