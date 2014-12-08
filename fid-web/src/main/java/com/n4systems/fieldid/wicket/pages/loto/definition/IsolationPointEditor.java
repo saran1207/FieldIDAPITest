@@ -1,11 +1,12 @@
 package com.n4systems.fieldid.wicket.pages.loto.definition;
 
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.components.image.ArrowStyleIsolationPointImageGallery;
 import com.n4systems.fieldid.wicket.components.image.IsolationPointImageGallery;
+import com.n4systems.fieldid.wicket.components.image.NewImageEditor;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.components.text.LabelledComboBox;
 import com.n4systems.fieldid.wicket.components.text.LabelledTextArea;
@@ -13,10 +14,7 @@ import com.n4systems.fieldid.wicket.components.text.LabelledTextField;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.common.ImageAnnotationType;
-import com.n4systems.model.procedure.AnnotationType;
-import com.n4systems.model.procedure.IsolationPoint;
-import com.n4systems.model.procedure.PreconfiguredDevice;
-import com.n4systems.model.procedure.ProcedureDefinition;
+import com.n4systems.model.procedure.*;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -172,16 +170,28 @@ public class IsolationPointEditor extends Panel {
                 }
             };
         } else { //AnnotationType.ARROW_STYLE
-            return new ArrowStyleIsolationPointImageGallery(id, procedureDefinition, (IModel<IsolationPoint>) getDefaultModel()) {
-                @Override protected void doneClicked(AjaxRequestTarget target) {
-                    target.add(imagePanel, sourceID);
-                    modal.close(target);
-                    IsolationPointEditor.this.getDefaultModel().detach();
+            return new NewImageEditor(id,
+                                      (IModel<IsolationPoint>)getDefaultModel()) {
+
+                @Override
+                protected void doDone(AjaxRequestTarget target) {
+                    System.out.println("You tried to click done, but that functionality hasn't been added yet...");
                 }
 
                 @Override
-                protected boolean isRootForm(boolean form) {
-                    return false;
+                protected ProcedureDefinitionImage createImage(String clientFileName) {
+                    ProcedureDefinitionImage image = new ProcedureDefinitionImage();
+                    image.setTenant(FieldIDSession.get().getTenant());
+                    image.setFileName(clientFileName);
+                    image.setProcedureDefinition(procedureDefinition);
+                    procedureDefinition.addImage(image);
+
+                    return image;
+                }
+
+                @Override
+                protected List<ProcedureDefinitionImage> displayableImages() {
+                    return procedureDefinition.getImages();
                 }
             };
         }

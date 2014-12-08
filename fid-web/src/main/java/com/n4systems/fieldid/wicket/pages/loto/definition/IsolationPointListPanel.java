@@ -3,8 +3,8 @@ package com.n4systems.fieldid.wicket.pages.loto.definition;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
-import com.n4systems.fieldid.wicket.components.image.EditableImageList;
-import com.n4systems.fieldid.wicket.components.image.SvgImageDisplayPanel;
+import com.n4systems.fieldid.wicket.components.image.ArrowStyleAnnotatedSvg;
+import com.n4systems.fieldid.wicket.components.image.CallOutStyleAnnotatedSvg;
 import com.n4systems.fieldid.wicket.components.image.SvgImageList;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.IsolationPointSourceType;
@@ -55,20 +55,17 @@ public class IsolationPointListPanel extends Panel {
         add(new AttributeAppender("class", "isolation-point-list"));
 
         if (model.getObject().getAnnotationType().equals(AnnotationType.CALL_OUT_STYLE)) {
-            add(images = new EditableImageList<ProcedureDefinitionImage>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getImages())) {
+            add(images = new SvgImageList<ProcedureDefinitionImage>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getImages())) {
                 @Override
-                protected void createImage(final ListItem<ProcedureDefinitionImage> item) {
-                    URL url = s3Service.getProcedureDefinitionImageThumbnailURL(item.getModel().getObject());
-                    item.add(new ContextImage("image", url.toString()));
+                protected void createImage(ListItem<ProcedureDefinitionImage> item) {
+                    item.add(new CallOutStyleAnnotatedSvg("image", item.getModel()).withScale(2.0));
                 }
             });
         } else {
             add(images = new SvgImageList<IsolationPoint>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getLockIsolationPoints())) {
                 @Override
                 protected void createImage(ListItem<IsolationPoint> item) {
-
-                    item.add(new SvgImageDisplayPanel("image", item.getModelObject().getAnnotation()));
-
+                    item.add(new ArrowStyleAnnotatedSvg("image", item.getModelObject().getAnnotation()));
                 }
             });
         }

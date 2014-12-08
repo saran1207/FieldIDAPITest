@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.image;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.common.ImageAnnotation;
+import com.n4systems.model.common.ImageAnnotationType;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -13,6 +14,7 @@ import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 import java.awt.*;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 
@@ -25,13 +27,14 @@ import java.util.Iterator;
  *
  * Created by Jordan Heath on 14-12-03.
  */
-public class SvgImageDisplayPanel extends Panel {
+public class ArrowStyleAnnotatedSvg extends Panel {
 
     @SpringBean
     private S3Service s3Service;
 
     private ProcedureDefinitionImage theImage;
     private ImageAnnotation theAnnotation;
+    private Boolean showAnnotations = true;
 
     /**
      * This is the main constructor for the SvgImageDisplayPanel.  Since the S3 Service requires a full
@@ -42,10 +45,26 @@ public class SvgImageDisplayPanel extends Panel {
      * @param id - The <b>String</b> representation of the Wicket ID for the SvgImageDisplayPanel instance.
      * @param theAnnotation - The <b>ImageAnnotation</b> representing the Annotation to be drawn over the image.
      */
-    public SvgImageDisplayPanel(String id, ImageAnnotation theAnnotation) {
+    public ArrowStyleAnnotatedSvg(String id, ImageAnnotation theAnnotation) {
         super(id);
         this.theAnnotation = theAnnotation;
         this.theImage = (ProcedureDefinitionImage) theAnnotation.getImage();
+    }
+
+    /**
+     * In some situations, you may want to only display the image and hide the Annotation arrow, such as when you are
+     * showing an image that has yet to have an annotation added to it.
+     *
+     * @param id The <b>String</b> represenation of the markup ID or some such thing for the SvgImageDisplayPanel.
+     */
+    public ArrowStyleAnnotatedSvg(String id) {
+        super(id);
+        this.showAnnotations = false;
+    }
+
+    public ArrowStyleAnnotatedSvg(String id, ProcedureDefinitionImage theImage) {
+        super(id);
+        this.theImage = theImage;
     }
 
     /**
@@ -56,7 +75,16 @@ public class SvgImageDisplayPanel extends Panel {
     protected void onInitialize() {
         super.onInitialize();
 
-        URL imageUrl = s3Service.getProcedureDefinitionImageMediumURL(theImage);
+        URL imageUrl;
+        if(theImage == null)
+            try {
+                imageUrl = new URL("file:///var/fieldid/images/loto/upload-lightbox-blank-slate.png");
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                imageUrl = null;
+            }
+        else
+            imageUrl = s3Service.getProcedureDefinitionImageMediumURL(theImage);
 
         Dimension imageDimensions = acquireImageDimensions(imageUrl);
 
@@ -73,14 +101,39 @@ public class SvgImageDisplayPanel extends Panel {
         add(imageElement);
 
 
+        WebMarkupContainer annotationsElement = new WebMarkupContainer("annotationsElement");
+        annotationsElement.add(new AttributeModifier("visibility", showAnnotations ? "visible" : "hidden"));
+
         WebMarkupContainer lineElement = new WebMarkupContainer("lineElement");
-        lineElement.add(new AttributeModifier("x1", String.valueOf(Math.round(imageDimensions.getWidth() * theAnnotation.getX()))));
-        lineElement.add(new AttributeModifier("y1", String.valueOf(Math.round(imageDimensions.getHeight() * theAnnotation.getY()))));
-        lineElement.add(new AttributeModifier("x2", String.valueOf(Math.round(imageDimensions.getWidth() * theAnnotation.getX_tail()))));
-        lineElement.add(new AttributeModifier("y2", String.valueOf(Math.round(imageDimensions.getHeight() * theAnnotation.getY_tail()))));
-        add(lineElement);
+        if(theAnnotation != null) {
+            lineElement.add(new AttributeModifier("x1", String.valueOf(Math.round(imageDimensions.getWidth() * theAnnotation.getX()))));
+            lineElement.add(new AttributeModifier("y1", String.valueOf(Math.round(imageDimensions.getHeight() * theAnnotation.getY()))));
+            lineElement.add(new AttributeModifier("x2", String.valueOf(Math.round(imageDimensions.getWidth() * theAnnotation.getX_tail()))));
+            lineElement.add(new AttributeModifier("y2", String.valueOf(Math.round(imageDimensions.getHeight() * theAnnotation.getY_tail()))));
+        }
+
+        annotationsElement.add(lineElement);
+        add(annotationsElement);
+
     }
 
+    /**
+     * Call this method when initializing an SvgImageDisplayPanel instance to hide the annotation arrow.
+     *
+     * @return this
+     */
+    public ArrowStyleAnnotatedSvg withNoAnnotations() {
+        this.showAnnotations = false;
+        return this;
+    }
+
+    /**
+     * Determine the image size without having to download the whole image.  You can gather this from metadata in the
+     * reader... I think, anyways.  Otherwise this is wasteful and there are far easier ways to get this data.
+     *
+     * @param imageUrl - URL for the image you need to acquire the dimensions of.
+     * @return A <b>Dimension</b> object representing the dimensions of the specified image.
+     */
     private Dimension acquireImageDimensions(URL imageUrl) {
         try {
             ImageInputStream in = ImageIO.createImageInputStream(imageUrl.openStream());

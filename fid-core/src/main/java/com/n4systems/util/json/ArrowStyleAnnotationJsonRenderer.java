@@ -11,6 +11,8 @@ import java.lang.reflect.Type;
  * Annotations both use the same JPA entity.  Using the same JsonRenderer class would make it impossible to determine
  * which renderer to call.
  *
+ * TODO Do we even need this thing???
+ *
  * Created by Jordan Heath on 14-11-27.
  */
 public class ArrowStyleAnnotationJsonRenderer implements Serializable {
@@ -31,7 +33,6 @@ public class ArrowStyleAnnotationJsonRenderer implements Serializable {
             object.addProperty("id", id);
             object.addProperty("type", annotation.getType().getCssClass());
             //Since this is for arrow, should we even be passing text?  I don't think so, but I don't want to cause errors by it being null...
-            object.addProperty("text", annotation.getText());
             object.addProperty("x", annotation.getX());
             object.addProperty("y", annotation.getY());
             object.addProperty("x2", annotation.getX_tail());
