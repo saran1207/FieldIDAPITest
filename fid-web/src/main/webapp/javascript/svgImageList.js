@@ -59,11 +59,8 @@ var svgImageList = (function() {
 			$this.parent().css('visibility','visible');
 
 			if (imageHeight/imageWidth >= imageContainerHeight/imageContainerWidth) {
-				var newWidth = imageWidth * (imageContainerHeight/imageHeight);
-				$this.parent().css('height', imageContainerHeight).css('width',newWidth);
-				$this.parent().css('margin-left', (imageContainerWidth-newWidth)/2);
 				$this.attr('height',imageContainerHeight);
-                $this.attr('width', newWidth);
+                $this.attr('width', imageContainerWidth);
 			} else {
 				var newHeight = imageHeight * (imageContainerWidth/imageWidth);
 				$this.parent().css('margin-top',(imageContainerHeight-newHeight)/2);

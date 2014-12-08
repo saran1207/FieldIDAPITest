@@ -56,6 +56,7 @@ public class CallOutStyleAnnotatedSvg extends Panel {
                 ImageAnnotation annotation = item.getModelObject();
 
                 Boolean isReversed =  Math.round(imageDimensions.getWidth() * annotation.getX()) < imageDimensions.getWidth()/2;
+                Boolean isWide = imageDimensions.getWidth() > imageDimensions.getHeight();
 
                 item.setMarkupId(annotation.getType().name() + "_" + annotation.getId());
 
@@ -76,12 +77,18 @@ public class CallOutStyleAnnotatedSvg extends Panel {
 
                 int textLength = annotation.getText().length();
 
-                if (textLength <= 4) {
-                    rect.add(new AttributeModifier("width", "10%"));
-                } else if (textLength > 4 && textLength <= 6) {
-                    rect.add(new AttributeModifier("width", "11%"));
+                if (isWide) {
+                    if (textLength <= 6) {
+                        rect.add(new AttributeModifier("width", "10%"));
+                    }  else {
+                        rect.add(new AttributeModifier("width", "16%"));
+                    }
                 } else {
-                    rect.add(new AttributeModifier("width", "17%"));
+                    if (textLength <= 6) {
+                        rect.add(new AttributeModifier("width", "17%"));
+                    }  else {
+                        rect.add(new AttributeModifier("width", "26%"));
+                    }
                 }
 
                 if (isReversed) {
@@ -94,12 +101,24 @@ public class CallOutStyleAnnotatedSvg extends Panel {
                 text.add(new AttributeModifier("fill", annotation.getType().getFontColor()));
 
                 if (isReversed) {
-                    text.add(new AttributeModifier("x", "80"));
-                    text.add(new AttributeModifier("y", "5"));
+                    if (isWide) {
+                        if (textLength <= 6) {
+                            text.add(new AttributeModifier("x", "78"));
+                        } else {
+                            text.add(new AttributeModifier("x", "42"));
+                        }
+                    } else {
+                        if (textLength <= 6) {
+                            text.add(new AttributeModifier("x", "75"));
+                        } else {
+                            text.add(new AttributeModifier("x", "40"));
+                        }
+
+                    }
                 } else {
-                    text.add(new AttributeModifier("x", "-130"));
-                    text.add(new AttributeModifier("y", "5"));
+                    text.add(new AttributeModifier("x", "-133"));
                 }
+                text.add(new AttributeModifier("y", "5"));
 
                 item.add(text);
             }
