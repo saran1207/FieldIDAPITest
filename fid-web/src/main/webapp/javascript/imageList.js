@@ -1,4 +1,4 @@
-var svgImageList = (function() {
+var imageList = (function() {
 
 	function imageList(el) {
 		var il = el instanceof jQuery ? el : $(el);
@@ -41,7 +41,6 @@ var svgImageList = (function() {
 			}
 		}
 
-
 		function updateImage($this,index) {
 			var optionIndex = index;
 			var imageHeight = $this.height();
@@ -75,54 +74,6 @@ var svgImageList = (function() {
 		}
 	};
 
-
-	function menuButton(el) {
-		var mb = el instanceof jQuery ? el : $(el);
-		var items = mb.find('.menu-items');
-		var defaults = {
-			ajaxButton:true
-		};
-		var options = $.extend(defaults);
-
-		function showItems() {
-			items.slideDown(100);
-		}
-		function hideItems() {
-			items.fadeOut(150);
-		}
-
-		function toggleList() {
-			if (items.is(':visible')) {
-				hideItems();
-			} else {
-				showItems();
-			}
-		}
-
-		var init = function() {
-			if (!options.ajaxButton) {
-				mb.click(toggleList);
-			} else {
-				mb.find('.imageButton').click(toggleList);
-			}
-			mb.mouseleave(hideItems);
-			items.find('a').click(hideItems);
-		}
-
-		return {
-			init : init
-		}
-
-	}
-
-	//	------------------------------------------------------------------------------------------------------------
-
-	var createMenuButton = function(id) {
-		var mb = menuButton($('#'+id));
-		mb.init();
-		return mb;
-	};
-
 	var createImageList = function(id) {
 		var il = imageList($('#'+id));
 		il.init();
@@ -130,7 +81,6 @@ var svgImageList = (function() {
 	}
 
 	return {
-		createMenuButton : createMenuButton,
 		createImageList : createImageList
 	};
 

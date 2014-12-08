@@ -1,8 +1,6 @@
 package com.n4systems.fieldid.wicket.components.image;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
-import com.n4systems.model.common.S3Image;
-import com.n4systems.util.json.JsonRenderer;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -12,16 +10,14 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import java.io.Serializable;
 import java.util.List;
 
 
-public abstract class ImageList<T extends S3Image> extends Panel {
+public class ImageList<T> extends Panel {
 
-    private static final String INIT_JS = "fieldIdWidgets.createImageList('%s',%s);";
-
-    private @SpringBean JsonRenderer jsonRenderer;
     private @SpringBean S3Service s3Service;
+
+    private static final String INIT_JS = "imageList.createImageList('%s');";
 
     protected IModel<List<T>> images;
     private final ListView<T> listView;
@@ -32,16 +28,21 @@ public abstract class ImageList<T extends S3Image> extends Panel {
         setOutputMarkupId(true);
         add(new AttributeAppender("class", "image-list"));
         listView = new ListView<T>("list", images) {
-            @Override protected void populateItem(final ListItem<T> item) {
+
+            @Override
+            protected void populateItem(final ListItem<T> item) {
                 createImage(item);
             }
-            @Override public boolean isVisible() {
+
+            @Override
+            public boolean isVisible() {
                 return images.getObject().size()>0;
             }
         };
         add(listView);
         add(new WebMarkupContainer("blankSlate") {
-            @Override public boolean isVisible() {
+            @Override
+            public boolean isVisible() {
                 return images.getObject().size()==0;
             }
         });
@@ -54,19 +55,10 @@ public abstract class ImageList<T extends S3Image> extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         response.renderCSSReference("style/legacy/component/imageList.css");
-        response.renderJavaScriptReference("javascript/fieldIdWidgets.js");
-        response.renderOnLoadJavaScript(String.format(INIT_JS, getMarkupId(), jsonRenderer.render(getOptions())));
-    }
+        response.renderJavaScriptReference("javascript/imageList.js");
+        response.renderOnLoadJavaScript(String.format(INIT_JS, getMarkupId()));
 
-    protected ImageListOptions getOptions() {
-        return new ImageListOptions();
     }
-
-    class ImageListOptions implements Serializable {
-        String yPosition = "middle";
-        String xPosition ="left";
-    }
-
 }
 
 

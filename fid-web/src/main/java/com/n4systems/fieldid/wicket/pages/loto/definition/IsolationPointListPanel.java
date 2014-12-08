@@ -5,7 +5,7 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
 import com.n4systems.fieldid.wicket.components.image.ArrowStyleAnnotatedSvg;
 import com.n4systems.fieldid.wicket.components.image.CallOutStyleAnnotatedSvg;
-import com.n4systems.fieldid.wicket.components.image.SvgImageList;
+import com.n4systems.fieldid.wicket.components.image.ImageList;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.procedure.AnnotationType;
@@ -18,7 +18,6 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -27,7 +26,6 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 
-import java.net.URL;
 import java.util.List;
 
 import static ch.lambdaj.Lambda.on;
@@ -55,14 +53,14 @@ public class IsolationPointListPanel extends Panel {
         add(new AttributeAppender("class", "isolation-point-list"));
 
         if (model.getObject().getAnnotationType().equals(AnnotationType.CALL_OUT_STYLE)) {
-            add(images = new SvgImageList<ProcedureDefinitionImage>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getImages())) {
+            add(images = new ImageList<ProcedureDefinitionImage>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getImages())) {
                 @Override
                 protected void createImage(ListItem<ProcedureDefinitionImage> item) {
                     item.add(new CallOutStyleAnnotatedSvg("image", item.getModel()).withScale(2.0));
                 }
             });
         } else {
-            add(images = new SvgImageList<IsolationPoint>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getLockIsolationPoints())) {
+            add(images = new ImageList<IsolationPoint>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getLockIsolationPoints())) {
                 @Override
                 protected void createImage(ListItem<IsolationPoint> item) {
                     item.add(new ArrowStyleAnnotatedSvg("image", item.getModelObject().getAnnotation()));
