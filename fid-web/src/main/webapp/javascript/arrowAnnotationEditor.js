@@ -28,7 +28,7 @@
     };
     
     function Plugin(element, params){
-        // Check for required elements withing the svg
+        // Check for required elements within the svg
         this.annotations = element.getElementsByClassName('annotations')[0];
         if(!this.annotations){
             return;
