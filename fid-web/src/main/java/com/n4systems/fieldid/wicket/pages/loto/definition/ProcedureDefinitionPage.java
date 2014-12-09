@@ -104,6 +104,7 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
 
     public ProcedureDefinitionPage(PageParameters params) {
         super(params);
+        isCopyOrRevise = Boolean.valueOf(getPageParameters().get("isCopyOrRevise").toString());
         init(createEntityModel());
     }
 

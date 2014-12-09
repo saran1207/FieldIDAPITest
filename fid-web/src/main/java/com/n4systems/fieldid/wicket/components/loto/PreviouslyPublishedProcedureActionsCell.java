@@ -74,7 +74,7 @@ public class PreviouslyPublishedProcedureActionsCell extends Panel {
             public void onClick() {
                 ProcedureDefinition copiedDefinition = procedureDefinitionService.cloneProcedureDefinition(procedureDefinition);
                 copiedDefinition.setPublishedState(PublishedState.DRAFT);
-                setResponsePage(new ProcedureDefinitionPage(Model.of(copiedDefinition)));
+                setResponsePage(new ProcedureDefinitionPage(Model.of(copiedDefinition), true));
             }
         };
 
