@@ -7,6 +7,8 @@ public class CriteriaResultActionView implements Serializable {
     private String workflowState;
     private String eventType;
     private String dueDate;
+    private String completedDate;
+    private String performedBy;
     private String priority;
     private String assignee;
     private String notes;
@@ -57,5 +59,21 @@ public class CriteriaResultActionView implements Serializable {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public String getCompletedDate() {
+        return completedDate;
+    }
+
+    public void setCompletedDate(String completedDate) {
+        this.completedDate = completedDate;
+    }
+
+    public String getPerformedBy() {
+        return performedBy;
+    }
+
+    public void setPerformedBy(String performedBy) {
+        this.performedBy = performedBy;
     }
 }
