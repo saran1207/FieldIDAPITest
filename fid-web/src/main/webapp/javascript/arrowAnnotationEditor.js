@@ -70,7 +70,7 @@
     };
 
     Plugin.prototype.updateArrowOnServer = function(){
-        var url = new String(this.apiUrl) +
+        var url = new String(this.pluginParams.apiUrl) +
             '&x='+  this.arrow.head.x +
             '&y='+  this.arrow.head.y +
             '&x2='+ this.arrow.tail.x +
