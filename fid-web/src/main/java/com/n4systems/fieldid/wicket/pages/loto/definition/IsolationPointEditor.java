@@ -5,8 +5,8 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.image.ArrowStyleEditorAndGalleryPanel;
 import com.n4systems.fieldid.wicket.components.image.IsolationPointImageGallery;
-import com.n4systems.fieldid.wicket.components.image.NewImageEditor;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.components.text.LabelledComboBox;
 import com.n4systems.fieldid.wicket.components.text.LabelledTextArea;
@@ -156,7 +156,7 @@ public class IsolationPointEditor extends Panel {
     }
 
     protected Component createImageGallery(String id) {
-        if(procedureDefinition.getAnnotationType().equals(AnnotationType.CALL_OUT_STYLE)) {
+        if(procedureDefinition.getAnnotationType().equals(AnnotationType.ARROW_STYLE)) {
             return new IsolationPointImageGallery(id,procedureDefinition, (IModel<IsolationPoint>) getDefaultModel()) {
                 @Override protected void doneClicked(AjaxRequestTarget target) {
                     target.add(imagePanel, sourceID);
@@ -170,12 +170,14 @@ public class IsolationPointEditor extends Panel {
                 }
             };
         } else { //AnnotationType.ARROW_STYLE
-            return new NewImageEditor(id,
+            return new ArrowStyleEditorAndGalleryPanel(id,
                                       (IModel<IsolationPoint>)getDefaultModel()) {
 
                 @Override
                 protected void doDone(AjaxRequestTarget target) {
-                    System.out.println("You tried to click done, but that functionality hasn't been added yet...");
+                    target.add(imagePanel, sourceID);
+                    modal.close(target);
+                    IsolationPointEditor.this.getDefaultModel().detach();
                 }
 
                 @Override

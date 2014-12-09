@@ -4,22 +4,20 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.uuid.AtomicLongService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.common.ImageAnnotationType;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import com.n4systems.util.json.ArrowStyleAnnotationJsonRenderer;
+import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
-import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -36,9 +34,9 @@ import java.util.List;
  *
  * Created by Jordan Heath on 14-12-05.
  */
-public abstract class NewImageEditor extends Panel {
+public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
 
-    private final static String IMAGE_EDITOR_ENABLE_JS = "fictionalJS.callAllTheThings(%s, %s)";
+    private final static String IMAGE_EDITOR_ENABLE_JS = "arrowAnnotationEditor.init(%s, %s)";
 
     @SpringBean
     private ArrowStyleAnnotationJsonRenderer jsonRenderer;
@@ -52,16 +50,19 @@ public abstract class NewImageEditor extends Panel {
     private ImageList<ProcedureDefinitionImage> images;
     private ArrowStyleAnnotatedSvg editor; //This becomes an editor by bolting some JavaScript to it.  It's otherwise just a display panel.
     private FileUploadField fileUploadField;
+    private Form tinyForm;
 
     private List<FileUpload> fileUploads = new ArrayList<>();
     private IModel<IsolationPoint> model;
     private ProcedureDefinitionImage currentImage;
 
-    private ArrowAnnotatingBehaviour ajaxBehavior;
+    private ArrowStyleAnnotatingBehaviour ajaxBehavior;
 
-    public NewImageEditor(String id, IModel<IsolationPoint> model) {
+    private final static Logger logger = Logger.getLogger(ArrowStyleEditorAndGalleryPanel.class);
+
+    public ArrowStyleEditorAndGalleryPanel(String id, IModel<IsolationPoint> model) {
         super(id, model);
-        this.model = model;                                                      //Not sure if this is right either, we may need the real deal here...
+        this.model = model;
         this.currentImage = (model.getObject().getAnnotation() == null ? null : (ProcedureDefinitionImage) model.getObject().getAnnotation().getImage());
     }
 
@@ -74,7 +75,80 @@ public abstract class NewImageEditor extends Panel {
     public void onInitialize() {
         super.onInitialize();
         setOutputMarkupId(true);
-        add(ajaxBehavior = new ArrowAnnotatingBehaviour() {
+
+
+        if(currentImage == null) {
+            //Creating the panel without an image leaves a placeholder where the image would otherwise be.
+            editor = new ArrowStyleAnnotationEditor("imageEditor"){
+                @Override
+                protected String createEditorInitJS() {
+                    return String.format(EDITOR_JS_CALL, this.getMarkupId(), jsonRenderer.render(ajaxBehavior.getEditorParams()));
+                }
+            }.withNoAnnotations();
+        } else {
+            //When have an annotation, we pass that in to be able to display the associated image (if there is one)
+            //or the placeholder if there is not an image.
+            editor = new ArrowStyleAnnotationEditor("imageEditor", model.getObject().getAnnotation()){
+                @Override
+                protected String createEditorInitJS() {
+                    return String.format(EDITOR_JS_CALL, this.getMarkupId(), jsonRenderer.render(ajaxBehavior.getEditorParams()));
+                }
+            }.withNoAnnotations();
+        }
+
+        editor.add(ajaxBehavior = createAnnotatingBehaviour());
+
+        add(editor);
+        editor.setOutputMarkupId(true);
+        add(images = createImageList("imageGallery"));
+        images.setOutputMarkupId(true);
+        tinyForm = new Form("uploadForm");
+        tinyForm.setMultiPart(true);
+        tinyForm.add(fileUploadField = new FileUploadField("fileUpload", new PropertyModel<>(this, "fileUploads")));
+        fileUploadField.add(new AjaxFormSubmitBehavior("onchange") {
+            @Override
+            protected void onSubmit(AjaxRequestTarget target) {
+                FileUpload uploadedImage = fileUploadField.getFileUpload();
+                if (uploadedImage != null) {
+                    //Steps to handle image upload...
+                    //1) Take image and ram it up into S3
+                    handleUpload(uploadedImage.getBytes(), uploadedImage.getContentType(), uploadedImage.getClientFileName());
+
+                    //2) Now that the image is in S3 and our image model, refresh the image gallery/list thingy
+                    refreshGalleryPanel(target, createImageList("imageGallery"));
+
+                    //3) The gallery has now been refreshed, so we can switch to the uploaded image... the last in the
+                    //   carousel.
+                    switchToLastCarouselImage(target);
+
+                    target.add(ArrowStyleEditorAndGalleryPanel.this);
+                }
+            }
+
+            @Override
+            protected void onError(AjaxRequestTarget target) {
+                //Do nothing, look pretty...
+            }
+        });
+        add(tinyForm);
+
+        add(new Label("instructions", new FIDLabelModel("label.annotate_instructions")));
+
+        add(new AjaxLink<Void>("done") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                doDone(target);
+            }
+        });
+    }
+
+
+    /*
+        Private methods...
+     */
+
+    private ArrowStyleAnnotatingBehaviour createAnnotatingBehaviour() {
+        return new ArrowStyleAnnotatingBehaviour() {
             @Override
             protected void processAnnotation(ImageAnnotation annotation) {
                 annotation.setText(model.getObject().getIdentifier());
@@ -87,7 +161,7 @@ public abstract class NewImageEditor extends Panel {
             }
 
             @Override
-            protected ImageAnnotation getImageAnnotation(Long id, Double x, Double y, Double x2, Double y2) {
+            protected ImageAnnotation getImageAnnotation(Double x, Double y, Double x2, Double y2) {
                 ImageAnnotation currentAnnotation = model.getObject().getAnnotation();
                 if(currentAnnotation == null) {
                     //Must be a new annotation... so make a new one.
@@ -109,86 +183,44 @@ public abstract class NewImageEditor extends Panel {
             protected ImageAnnotation getAnnotation() {
                 return model.getObject().getAnnotation();
             }
-        });
-
-        if(currentImage == null) {
-            //Creating the panel without an image leaves a placeholder where the image would otherwise be.
-            editor = new ArrowStyleAnnotatedSvg("imageEditor");
-        } else {
-            //When have an annotation, we pass that in to be able to display the associated image (if there is one)
-            //or the placeholder if there is not an image.
-            editor = new ArrowStyleAnnotatedSvg("imageEditor", model.getObject().getAnnotation());
-        }
-
-        add(editor);
-        editor.setOutputMarkupId(true);
-        add(images = createImageList("imageGallery"));
-        images.setOutputMarkupId(true);
-        Form tinyForm = new Form("uploadForm");
-        tinyForm.add(fileUploadField = new FileUploadField("fileUpload", new PropertyModel<>(this, "fileUploads")));
-        fileUploadField.add(new AjaxFormSubmitBehavior("onchange") {
-            @Override
-            protected void onSubmit(AjaxRequestTarget target) {
-                FileUpload uploadedImage = fileUploadField.getFileUpload();
-                //Steps to handle image upload...
-                //1) Take image and ram it up into S3
-                handleUpload(uploadedImage.getBytes(), uploadedImage.getContentType(), uploadedImage.getClientFileName());
-
-                //2) Now that the image is in S3 and our image model, refresh the image gallery/list thingy
-                refreshGalleryPanel(target, createImageList("imageGallery"));
-
-                //3) Determine Index... presumably the image list has been updated...
-                //Not sure if extra work needs to be done to add the images to the list, or we just need to implement a
-                //different Model class to carry the value properly.
-                switchToLastCarouselImage(target);
-
-                target.add(images);
-                target.add(editor);
-                target.add(NewImageEditor.this);
-
-            }
-
-            @Override
-            protected void onError(AjaxRequestTarget target) {
-                //Do nothing, look pretty...
-            }
-        });
-        add(tinyForm);
-
-        add(new Label("instructions", new FIDLabelModel("label.annotate_instructions")));
-
-        add(new AjaxLink<Void>("done") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                doDone(target);
-            }
-        });
+        };
     }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        //TODO Add JS references and such...
-    }
-
-
-    /*
-        Private methods...
-     */
 
     private void switchToLastCarouselImage(AjaxRequestTarget target) {
         currentImage = displayableImages().get(displayableImages().size() - 1);
 
+        //Oh, we should probably set this as the image for the annotation, no?
+        model.getObject().getAnnotation().setImage(currentImage);
+
         //If you're switching the image, then your annotation should no longer be shown... right?
-        swapEditorPanel(target, new ArrowStyleAnnotatedSvg("imageEditor", currentImage).withNoAnnotations());
+        swapEditorPanel(target, new ArrowStyleAnnotationEditor("imageEditor", currentImage) {
+            @Override
+            protected String createEditorInitJS() {
+                if (theAnnotation == null) {
+                    return String.format(EDITOR_JS_CALL, this.getMarkupId(), "");
+                } else {
+                    return String.format(EDITOR_JS_CALL, this.getMarkupId(), jsonRenderer.render(ajaxBehavior.getEditorParams()));
+                }
+            }
+        }.withNoAnnotations());
     }
 
     private void swapEditorPanel(AjaxRequestTarget target, ArrowStyleAnnotatedSvg panel) {
         panel.setOutputMarkupId(true);
+
+        //Since we're going to move the ajax behaviour, we need to remove it...
+        editor.remove(ajaxBehavior);
+
+        //...then destroy it...
+        ajaxBehavior = null;
+
+        //...then replace the panel...
         editor.replaceWith(panel);
         target.add(panel);
+
+        //...then finally add a newly created ajax behaviour.
+        panel.add(ajaxBehavior = createAnnotatingBehaviour());
         editor = panel;
-        target.appendJavaScript(getEditorJS());
     }
 
     private void refreshGalleryPanel(AjaxRequestTarget target, ImageList<ProcedureDefinitionImage> panel) {
@@ -216,21 +248,22 @@ public abstract class NewImageEditor extends Panel {
         return new ImageList<ProcedureDefinitionImage>(id, new ListModel<>(displayableImages())) {
             @Override
             protected void createImage(ListItem<ProcedureDefinitionImage> item) {
-                item.add(new ContextImage("image", s3Service.getProcedureDefinitionImageThumbnailURL(item.getModelObject()).toString()));
+                item.add(new ArrowStyleAnnotatedSvg("image", item.getModelObject()).withNoAnnotations());
                 item.add(new AjaxEventBehavior("onclick") {
                     @Override
                     protected void onEvent(AjaxRequestTarget target) {
                         //We want to set this image to be equal to whatever is in the editor.
                         currentImage = item.getModelObject();
-                        swapEditorPanel(target, new ArrowStyleAnnotatedSvg("imageEditor", item.getModelObject()));
+                        swapEditorPanel(target, new ArrowStyleAnnotationEditor("imageEditor", item.getModelObject()){
+                            @Override
+                            protected String createEditorInitJS() {
+                                return String.format(EDITOR_JS_CALL, this.getMarkupId(), jsonRenderer.render(ajaxBehavior.getEditorParams()));
+                            }
+                        }.withNoAnnotations());
                     }
                 });
             }
         };
-    }
-
-    protected String getEditorJS() {
-        return String.format(IMAGE_EDITOR_ENABLE_JS,editor.getMarkupId(),jsonRenderer.render(ajaxBehavior.getArrowAnnotatedImageOptions()));
     }
 
 

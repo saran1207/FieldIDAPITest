@@ -30,9 +30,9 @@
     function Plugin(element, params){
         // Check for required elements within the svg
         this.annotations = element.getElementsByClassName('annotations')[0];
-        if(!this.annotations){
-            return;
-        }
+        //if(!this.annotations){
+        //    return;
+        //}
 
         this.pluginParams = $.extend({}, defaults, params);
         
