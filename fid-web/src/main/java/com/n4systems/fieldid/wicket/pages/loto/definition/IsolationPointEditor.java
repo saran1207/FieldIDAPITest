@@ -156,7 +156,7 @@ public class IsolationPointEditor extends Panel {
     }
 
     protected Component createImageGallery(String id) {
-        if(procedureDefinition.getAnnotationType().equals(AnnotationType.ARROW_STYLE)) {
+        if(procedureDefinition.getAnnotationType().equals(AnnotationType.CALL_OUT_STYLE)) {
             return new IsolationPointImageGallery(id,procedureDefinition, (IModel<IsolationPoint>) getDefaultModel()) {
                 @Override protected void doneClicked(AjaxRequestTarget target) {
                     target.add(imagePanel, sourceID);
