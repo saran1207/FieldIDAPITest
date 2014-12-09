@@ -56,7 +56,9 @@ public class IsolationPointListPanel extends Panel {
             add(images = new ImageList<ProcedureDefinitionImage>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getImages())) {
                 @Override
                 protected void createImage(ListItem<ProcedureDefinitionImage> item) {
-                    item.add(new CallOutStyleAnnotatedSvg("image", item.getModel()).withScale(2.0));
+                    if (item.getModelObject().getAnnotations().size() > 0) {
+                        item.add(new CallOutStyleAnnotatedSvg("image", item.getModel()).withScale(2.0));
+                    }
                 }
             });
         } else {

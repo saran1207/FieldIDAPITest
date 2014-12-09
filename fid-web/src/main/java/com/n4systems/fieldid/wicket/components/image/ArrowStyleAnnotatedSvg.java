@@ -2,7 +2,6 @@ package com.n4systems.fieldid.wicket.components.image;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.common.ImageAnnotation;
-import com.n4systems.model.common.ImageAnnotationType;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -30,11 +29,11 @@ import java.util.Iterator;
 public class ArrowStyleAnnotatedSvg extends Panel {
 
     @SpringBean
-    private S3Service s3Service;
+    protected S3Service s3Service;
 
-    private ProcedureDefinitionImage theImage;
-    private ImageAnnotation theAnnotation;
-    private Boolean showAnnotations = true;
+    protected ProcedureDefinitionImage theImage;
+    protected ImageAnnotation theAnnotation;
+    protected Boolean showAnnotations = true;
 
     /**
      * This is the main constructor for the SvgImageDisplayPanel.  Since the S3 Service requires a full
@@ -78,7 +77,8 @@ public class ArrowStyleAnnotatedSvg extends Panel {
         URL imageUrl;
         if(theImage == null)
             try {
-                imageUrl = new URL("file:///var/fieldid/images/loto/upload-lightbox-blank-slate.png");
+                //TODO This needs to be replaced with an appropriate placeholder image.
+                imageUrl = new URL("http://s.hswstatic.com/gif/death-star-1.jpg");
             } catch (MalformedURLException e) {
                 e.printStackTrace();
                 imageUrl = null;
@@ -101,19 +101,19 @@ public class ArrowStyleAnnotatedSvg extends Panel {
         add(imageElement);
 
 
-        WebMarkupContainer annotationsElement = new WebMarkupContainer("annotationsElement");
-        annotationsElement.add(new AttributeModifier("visibility", showAnnotations ? "visible" : "hidden"));
-
         WebMarkupContainer lineElement = new WebMarkupContainer("lineElement");
         if(theAnnotation != null) {
             lineElement.add(new AttributeModifier("x1", String.valueOf(Math.round(imageDimensions.getWidth() * theAnnotation.getX()))));
             lineElement.add(new AttributeModifier("y1", String.valueOf(Math.round(imageDimensions.getHeight() * theAnnotation.getY()))));
             lineElement.add(new AttributeModifier("x2", String.valueOf(Math.round(imageDimensions.getWidth() * theAnnotation.getX_tail()))));
             lineElement.add(new AttributeModifier("y2", String.valueOf(Math.round(imageDimensions.getHeight() * theAnnotation.getY_tail()))));
+        } else {
+            showAnnotations = false;
         }
 
-        annotationsElement.add(lineElement);
-        add(annotationsElement);
+        lineElement.setVisible(showAnnotations);
+
+        add(lineElement);
 
     }
 
