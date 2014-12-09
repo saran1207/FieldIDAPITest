@@ -57,4 +57,8 @@ public abstract class LabelledComponent<T extends FormComponent, M > extends Pan
         return (T) this;
     }
 
+    public void clearInput() {
+        component.clearInput();
+    }
+
 }

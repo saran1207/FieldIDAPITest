@@ -108,6 +108,10 @@ public class WarningPanel extends Panel implements IEventBehavior {
             //DropDownChoice component to set its default model as null.  This forces a blank line into the current
             //selection, making the component look like it did before the
             getSelect().setDefaultModelObject(selectWarnings);
+
+            //We need to do this in case there is an error on the page, very strange...
+            text.clearInput();
+
             //Don't forget to add both components as targets for update.
             target.add(text);
             target.add(select);
