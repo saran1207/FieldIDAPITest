@@ -10,6 +10,7 @@ import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import com.n4systems.util.json.ArrowStyleAnnotationJsonRenderer;
 import org.apache.log4j.Logger;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
@@ -19,6 +20,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -52,6 +54,7 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
     private ArrowStyleAnnotatedSvg editor; //This becomes an editor by bolting some JavaScript to it.  It's otherwise just a display panel.
     private FileUploadField fileUploadField;
     private Form tinyForm;
+    private Component placeholder;
     private WebMarkupContainer editorAndGalleryContainer;
 
     private List<FileUpload> fileUploads = new ArrayList<>();
@@ -83,11 +86,22 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
         //image and the Editor panel when adding the first image to a ProcedureDefinition.
         add(editorAndGalleryContainer = new WebMarkupContainer("editorAndGalleryContainer"));
         editorAndGalleryContainer.setOutputMarkupId(true);
+        editorAndGalleryContainer.add(placeholder = new ContextImage("placeholderImage", "images/loto/upload-lightbox-blank-slate.png"));
+        placeholder.setOutputMarkupId(true);
         if(currentImage == null) {
             //Creating the panel without an image leaves a placeholder where the image would otherwise be.
-            editor = new ArrowStyleAnnotatedSvg("imageEditor");
+            editor = (ArrowStyleAnnotatedSvg)new ArrowStyleAnnotationEditor("imageEditor"){
+                @Override
+                protected String createEditorInitJS() {
+                                                                                                //We definitely don't want to pass any coordinates...
+                    return String.format(EDITOR_JS_CALL,
+                                         this.getMarkupId(),
+                                         jsonRenderer.render(ajaxBehavior.getEmptyEditorParams()));
+                }
+            }.withNoAnnotations().setVisible(false);
 
             //...but the placeholder is junk... so instead we hide the editor and build a ContextImage to hold as placeholder.
+            placeholder.setVisible(true);
         } else {
             //When have an annotation, we pass that in to be able to display the associated image (if there is one)
             //or the placeholder if there is not an image.
@@ -99,6 +113,8 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
                                          getEditorJSON());
                 }
             }.withNoAnnotations();
+
+            placeholder.setVisible(false);
         }
 
         editor.add(ajaxBehavior = createAnnotatingBehaviour());
@@ -209,6 +225,12 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
     }
 
     private void swapEditorPanel(AjaxRequestTarget target, ArrowStyleAnnotatedSvg panel) {
+        if(!editor.isVisible()) {
+            editor.setVisible(true);
+            placeholder.setVisible(false);
+            target.add(placeholder, editorAndGalleryContainer);
+        }
+
         panel.setOutputMarkupId(true);
 
         //Since we're going to move the ajax behaviour, we need to remove it...
