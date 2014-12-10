@@ -120,6 +120,9 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
                 List<Map<String, Object>> inspectionResultMaps = new ArrayList<Map<String, Object>>();
                 inspectionResultMaps.add(eventReportMap);
 
+                eventMap.put("resultsBeanList", eventReportMap.get("resultsBeanList"));
+                eventMap.put("actionsByPriorityCode", eventReportMap.get("actionsByPriorityCode"));
+                eventMap.put("observationsBeanList", eventReportMap.get("observationsBeanList"));
 
 
                 for (SubEvent subEvent : event.getSubEvents()) {
