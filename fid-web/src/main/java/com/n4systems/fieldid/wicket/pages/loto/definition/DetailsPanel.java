@@ -11,6 +11,7 @@ import com.n4systems.model.procedure.AnnotationType;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureType;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -151,6 +152,12 @@ public class DetailsPanel extends Panel {
                     }
                 };
             annotationTypeDropDown.required();
+            annotationTypeDropDown.addBehavior(new AjaxFormComponentUpdatingBehavior("onchange") {
+                @Override
+                protected void onUpdate(AjaxRequestTarget target) {
+                    onAnnotationStyleSelected(target);
+                }
+            });
             add(annotationTypeDropDown);
 
             add(new AjaxLink("cancel") {
@@ -184,5 +191,7 @@ public class DetailsPanel extends Panel {
     protected void doContinue(AjaxRequestTarget target) { }
 
     protected void doCancel(AjaxRequestTarget target) { }
+
+    protected void onAnnotationStyleSelected(AjaxRequestTarget target) { }
 
 }

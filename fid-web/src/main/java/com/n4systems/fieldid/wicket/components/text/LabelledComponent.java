@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components.text;
 import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
@@ -59,6 +60,10 @@ public abstract class LabelledComponent<T extends FormComponent, M > extends Pan
 
     public void clearInput() {
         component.clearInput();
+    }
+
+    public void addBehavior(Behavior behavior) {
+        component.add(behavior);
     }
 
 }

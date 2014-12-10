@@ -38,7 +38,7 @@ public class IsolationPointListPanel extends Panel {
 
     private final IModel<ProcedureDefinition> model;
     private final Component blankSlate;
-    private final Component images;
+    private ImageList images;
 
     private ListView<IsolationPoint> listView;
     private boolean isLockDirection;
@@ -52,23 +52,7 @@ public class IsolationPointListPanel extends Panel {
 
         add(new AttributeAppender("class", "isolation-point-list"));
 
-        if (model.getObject().getAnnotationType().equals(AnnotationType.CALL_OUT_STYLE)) {
-            add(images = new ImageList<ProcedureDefinitionImage>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getImages())) {
-                @Override
-                protected void createImage(ListItem<ProcedureDefinitionImage> item) {
-                    if (item.getModelObject().getAnnotations().size() > 0) {
-                        item.add(new CallOutStyleAnnotatedSvg("image", item.getModel()).withScale(2.0));
-                    }
-                }
-            });
-        } else {
-            add(images = new ImageList<IsolationPoint>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getLockIsolationPoints())) {
-                @Override
-                protected void createImage(ListItem<IsolationPoint> item) {
-                    item.add(new ArrowStyleAnnotatedSvg("image", item.getModelObject().getAnnotation()));
-                }
-            });
-        }
+        add(images = getImageList(model));
 
         add(new AjaxLink<Void>("showLockOrder") {
             @Override
@@ -154,6 +138,31 @@ public class IsolationPointListPanel extends Panel {
         super.onBeforeRender();
         boolean showBlankSlate = model.getObject().getLockIsolationPoints().size()==0;
         blankSlate.setVisible(showBlankSlate);
+    }
+
+    private ImageList getImageList(IModel<ProcedureDefinition> model) {
+        if (model.getObject().getAnnotationType().equals(AnnotationType.CALL_OUT_STYLE)) {
+            return new ImageList<ProcedureDefinitionImage>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getImages())) {
+                @Override
+                protected void createImage(ListItem<ProcedureDefinitionImage> item) {
+                    if (item.getModelObject().getAnnotations().size() > 0) {
+                        item.add(new CallOutStyleAnnotatedSvg("image", item.getModel()).withScale(2.0));
+                    }
+                }
+            };
+        } else {
+            return new ImageList<IsolationPoint>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getLockIsolationPoints())) {
+                @Override
+                protected void createImage(ListItem<IsolationPoint> item) {
+                    item.add(new ArrowStyleAnnotatedSvg("image", item.getModelObject().getAnnotation()));
+                }
+            };
+        }
+    }
+
+    public void reloadImageList(AjaxRequestTarget target, IModel<ProcedureDefinition> model) {
+        images.replaceWith(getImageList(model));
+        target.add(images);
     }
 
     protected void doEdit(AjaxRequestTarget target, IsolationPoint isolationPoint) { }

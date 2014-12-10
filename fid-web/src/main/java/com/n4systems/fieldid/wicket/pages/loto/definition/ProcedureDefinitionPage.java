@@ -158,9 +158,9 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
 
     class ProcedureDefinitionFormContainer extends WebMarkupContainer {
 
-        private final Component details;
-        private final Component content;
-        private final Component publish;
+        private final DetailsPanel details;
+        private final ContentPanel content;
+        private final PublishPanel publish;
 
         ProcedureDefinitionFormContainer(String id, final IModel<ProcedureDefinition> model) {
             super(id, model);
@@ -168,38 +168,51 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
             setOutputMarkupId(true);
 
             add(details = new DetailsPanel("details", model, isCopyOrRevise) {
-                @Override protected void doCancel(AjaxRequestTarget target) {
+                @Override
+                protected void doCancel(AjaxRequestTarget target) {
                     ProcedureDefinitionPage.this.doCancel(target);
                 }
 
-                @Override protected void doContinue(AjaxRequestTarget target) {
+                @Override
+                protected void doContinue(AjaxRequestTarget target) {
                     currentSection = ProcedureDefinitionSection.Content;
                     updateSection(target);
+                }
+
+                @Override
+                protected void onAnnotationStyleSelected(AjaxRequestTarget target) {
+                    content.onAnnotationStyleSelected(target);
                 }
             });
 
             add(content = new ContentPanel("content",model) {
-                @Override protected void doCancel(AjaxRequestTarget target) {
+                @Override
+                protected void doCancel(AjaxRequestTarget target) {
                     ProcedureDefinitionPage.this.doCancel(target);
                 }
 
-                @Override protected void doContinue(AjaxRequestTarget target) {
+                @Override
+                protected void doContinue(AjaxRequestTarget target) {
                     currentSection = ProcedureDefinitionSection.Publish;
                     updateSection(target);
                 }
 
-                @Override protected void doAdd(AjaxRequestTarget target, IsolationPointSourceType sourceType) {
+                @Override
+                protected void doAdd(AjaxRequestTarget target, IsolationPointSourceType sourceType) {
                     super.doAdd(target, sourceType);
                 }
-            }.setVisible(false));
+            });
+            content.setVisible(false);
 
             add(publish = new PublishPanel("publish", model) {
-                @Override protected void doCancel(AjaxRequestTarget target) {
+                @Override
+                protected void doCancel(AjaxRequestTarget target) {
                     // leave the model as a detached object....don't save it.   nothing to "undo".
                     ProcedureDefinitionPage.this.doCancel(target);
                 }
 
-                @Override protected void doPublish() {
+                @Override
+                protected void doPublish() {
                     try {
                         procedureDefinitionService.saveProcedureDefinition(model.getObject());
                         gotoProceduresPage();
@@ -208,7 +221,8 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
                     }
                 }
 
-                @Override protected void doSave() {
+                @Override
+                protected void doSave() {
                     procedureDefinitionService.saveProcedureDefinitionDraft(model.getObject());
                     gotoProceduresPage();
                 }
@@ -220,7 +234,8 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
                     notifyService.notifyProcedureRejection(model.getObject(), message);
                     gotoProceduresPage();
                 }
-            }.setVisible(false));
+            });
+            publish.setVisible(false);
         }
 
         public void updateSection(AjaxRequestTarget target) {

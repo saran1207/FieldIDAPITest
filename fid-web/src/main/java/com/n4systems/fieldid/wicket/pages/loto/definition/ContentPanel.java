@@ -33,11 +33,12 @@ public class ContentPanel extends Panel {
 
     private Map<String, Boolean> isolationPointMap;
 
-    private boolean openEditor = true;
+    private IModel<ProcedureDefinition> procedureDefinitionModel;
 
     public ContentPanel(String id, final IModel<ProcedureDefinition> model) {
         super(id, model);
         setOutputMarkupId(true);
+        this.procedureDefinitionModel = model;
 
         add(new AddIsolationPointButton("addButton") {
             @Override protected void doAdd(AjaxRequestTarget target, IsolationPointSourceType sourceType) {
@@ -225,6 +226,11 @@ public class ContentPanel extends Panel {
 
     protected void doCancel(AjaxRequestTarget target) { }
 
+    public void onAnnotationStyleSelected(AjaxRequestTarget target) {
+        lockList.reloadImageList(target, procedureDefinitionModel);
+        unlockList.reloadImageList(target, procedureDefinitionModel);
+    }
+
     private IsolationPoint updateIsolationPoint() {
         return editor.getEditedIsolationPoint();
     }
@@ -280,13 +286,5 @@ public class ContentPanel extends Panel {
             return Long.parseLong(matcher.group(1));
         }
         return null;
-    }
-
-    public boolean isOpenEditor() {
-        return openEditor;
-    }
-
-    public void setOpenEditor(boolean openEditor) {
-        this.openEditor = openEditor;
     }
 }
