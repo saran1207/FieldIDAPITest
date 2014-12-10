@@ -1,7 +1,10 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-    <svg wicket:id="imageEditor"/>
-    <div wicket:id="imageGallery"/>
+    <div wicket:id="editorAndGalleryContainer">
+        <svg wicket:id="imageEditor"/>
+        <img wicket:id="placeholderImage"/>
+        <div wicket:id="imageGallery"/>
+    </div>
     <form wicket:id="uploadForm">
         <input type="file" wicket:id="fileUpload" class="add-image"/>
     </form>

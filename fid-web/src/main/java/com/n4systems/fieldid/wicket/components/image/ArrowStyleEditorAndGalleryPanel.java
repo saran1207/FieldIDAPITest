@@ -10,14 +10,17 @@ import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import com.n4systems.util.json.ArrowStyleAnnotationJsonRenderer;
 import org.apache.log4j.Logger;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -51,6 +54,8 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
     private ArrowStyleAnnotatedSvg editor; //This becomes an editor by bolting some JavaScript to it.  It's otherwise just a display panel.
     private FileUploadField fileUploadField;
     private Form tinyForm;
+    private Component placeholder;
+    private WebMarkupContainer editorAndGalleryContainer;
 
     private List<FileUpload> fileUploads = new ArrayList<>();
     private IModel<IsolationPoint> model;
@@ -76,34 +81,49 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
         super.onInitialize();
         setOutputMarkupId(true);
 
-
+        //We ended up needing this extra WebMarkupContainer to allow us to do a partial refresh of the page.  This ended
+        //up being necessary so that the FileUploadField didn't get refreshed when swapping between the placeholder
+        //image and the Editor panel when adding the first image to a ProcedureDefinition.
+        add(editorAndGalleryContainer = new WebMarkupContainer("editorAndGalleryContainer"));
+        editorAndGalleryContainer.setOutputMarkupId(true);
+        editorAndGalleryContainer.add(placeholder = new ContextImage("placeholderImage", "images/loto/upload-lightbox-blank-slate.png"));
+        placeholder.setOutputMarkupId(true);
         if(currentImage == null) {
             //Creating the panel without an image leaves a placeholder where the image would otherwise be.
-            editor = new ArrowStyleAnnotationEditor("imageEditor"){
+            editor = (ArrowStyleAnnotatedSvg)new ArrowStyleAnnotationEditor("imageEditor"){
                 @Override
                 protected String createEditorInitJS() {
-                    return String.format(EDITOR_JS_CALL, this.getMarkupId(), jsonRenderer.render(ajaxBehavior.getEditorParams()));
+                                                                                                //We definitely don't want to pass any coordinates...
+                    return String.format(EDITOR_JS_CALL,
+                                         this.getMarkupId(),
+                                         jsonRenderer.render(ajaxBehavior.getEmptyEditorParams()));
                 }
-            }.withNoAnnotations();
+            }.withNoAnnotations().setVisible(false);
+
+            //...but the placeholder is junk... so instead we hide the editor and build a ContextImage to hold as placeholder.
+            placeholder.setVisible(true);
         } else {
             //When have an annotation, we pass that in to be able to display the associated image (if there is one)
             //or the placeholder if there is not an image.
             editor = new ArrowStyleAnnotationEditor("imageEditor", model.getObject().getAnnotation()){
                 @Override
                 protected String createEditorInitJS() {
-                    return String.format(EDITOR_JS_CALL, this.getMarkupId(), jsonRenderer.render(ajaxBehavior.getEditorParams()));
+                    return String.format(EDITOR_JS_CALL,
+                                         this.getMarkupId(),
+                                         getEditorJSON());
                 }
             }.withNoAnnotations();
+
+            placeholder.setVisible(false);
         }
 
         editor.add(ajaxBehavior = createAnnotatingBehaviour());
 
-        add(editor);
+        editorAndGalleryContainer.add(editor);
         editor.setOutputMarkupId(true);
-        add(images = createImageList("imageGallery"));
+        editorAndGalleryContainer.add(images = createImageList("imageGallery"));
         images.setOutputMarkupId(true);
         tinyForm = new Form("uploadForm");
-        tinyForm.setMultiPart(true);
         tinyForm.add(fileUploadField = new FileUploadField("fileUpload", new PropertyModel<>(this, "fileUploads")));
         fileUploadField.add(new AjaxFormSubmitBehavior("onchange") {
             @Override
@@ -120,8 +140,6 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
                     //3) The gallery has now been refreshed, so we can switch to the uploaded image... the last in the
                     //   carousel.
                     switchToLastCarouselImage(target);
-
-                    target.add(ArrowStyleEditorAndGalleryPanel.this);
                 }
             }
 
@@ -190,22 +208,29 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
         currentImage = displayableImages().get(displayableImages().size() - 1);
 
         //Oh, we should probably set this as the image for the annotation, no?
+        if(model.getObject().getAnnotation() == null) {
+            model.getObject().setAnnotation(new ImageAnnotation());
+        }
         model.getObject().getAnnotation().setImage(currentImage);
 
         //If you're switching the image, then your annotation should no longer be shown... right?
         swapEditorPanel(target, new ArrowStyleAnnotationEditor("imageEditor", currentImage) {
             @Override
             protected String createEditorInitJS() {
-                if (theAnnotation == null) {
-                    return String.format(EDITOR_JS_CALL, this.getMarkupId(), "");
-                } else {
-                    return String.format(EDITOR_JS_CALL, this.getMarkupId(), jsonRenderer.render(ajaxBehavior.getEditorParams()));
-                }
+                return String.format(EDITOR_JS_CALL,
+                                     this.getMarkupId(),
+                                     getEditorJSON());
             }
         }.withNoAnnotations());
     }
 
     private void swapEditorPanel(AjaxRequestTarget target, ArrowStyleAnnotatedSvg panel) {
+        if(!editor.isVisible()) {
+            editor.setVisible(true);
+            placeholder.setVisible(false);
+            target.add(placeholder, editorAndGalleryContainer);
+        }
+
         panel.setOutputMarkupId(true);
 
         //Since we're going to move the ajax behaviour, we need to remove it...
@@ -216,11 +241,11 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
 
         //...then replace the panel...
         editor.replaceWith(panel);
-        target.add(panel);
 
         //...then finally add a newly created ajax behaviour.
         panel.add(ajaxBehavior = createAnnotatingBehaviour());
         editor = panel;
+        target.add(panel, editor);
     }
 
     private void refreshGalleryPanel(AjaxRequestTarget target, ImageList<ProcedureDefinitionImage> panel) {
@@ -237,6 +262,12 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
 
     private ProcedureDefinitionImage uploadImage(ProcedureDefinitionImage image, String contentType, byte[] imageData) {
         return s3Service.uploadTempProcedureDefImage(image, contentType, imageData);
+    }
+
+    private String getEditorJSON() {
+        return jsonRenderer.render(model.getObject().getAnnotation() == null ?
+                ajaxBehavior.getEmptyEditorParams() :
+                ajaxBehavior.getEditorParams());
     }
 
 
@@ -257,7 +288,9 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
                         swapEditorPanel(target, new ArrowStyleAnnotationEditor("imageEditor", item.getModelObject()){
                             @Override
                             protected String createEditorInitJS() {
-                                return String.format(EDITOR_JS_CALL, this.getMarkupId(), jsonRenderer.render(ajaxBehavior.getEditorParams()));
+                                return String.format(EDITOR_JS_CALL,
+                                                     this.getMarkupId(),
+                                                     getEditorJSON());
                             }
                         }.withNoAnnotations());
                     }

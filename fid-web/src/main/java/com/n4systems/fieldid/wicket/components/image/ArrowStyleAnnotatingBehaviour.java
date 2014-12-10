@@ -75,8 +75,12 @@ public abstract class ArrowStyleAnnotatingBehaviour extends AbstractDefaultAjaxB
                                     getAnnotation().getX_tail(),
                                     getAnnotation().getY_tail());
         } else {
-            return new EditorParams(null, null, null, null);
+            return getEmptyEditorParams();
         }
+    }
+
+    protected EditorParams getEmptyEditorParams() {
+        return new EditorParams(null, null, null, null);
     }
 
     /*
