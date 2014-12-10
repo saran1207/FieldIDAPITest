@@ -17,6 +17,7 @@ import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 import java.awt.*;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 
@@ -26,8 +27,12 @@ public class CallOutStyleAnnotatedSvg extends Panel {
     private S3Service s3Service;
 
     private ProcedureDefinitionImage image;
+    private Dimension imageDimensions;
 
     private Double scale = 1.0;
+
+    private static String BLANK_SLATE_PATH = "/fieldid/images/loto/label-blank-slate.png";
+    private static Dimension BLANK_SLATE_DIMENSIONS = new Dimension(177, 133);
 
     public CallOutStyleAnnotatedSvg(String id, IModel<ProcedureDefinitionImage> imageModel) {
         super(id, imageModel);
@@ -35,13 +40,22 @@ public class CallOutStyleAnnotatedSvg extends Panel {
         this.image = imageModel.getObject();
     }
 
+    public CallOutStyleAnnotatedSvg(String id) {
+        super(id, null);
+    }
+
     @Override
     protected void onInitialize() {
         super.onInitialize();
 
-        URL imageUrl = s3Service.getProcedureDefinitionImageMediumURL(image);
-
-        Dimension imageDimensions = acquireImageDimensions(imageUrl);
+        URL imageUrl;
+        if (image != null) {
+            imageUrl = s3Service.getProcedureDefinitionImageMediumURL(image);
+            imageDimensions = acquireImageDimensions(imageUrl);
+        } else {
+            imageUrl = null;
+            imageDimensions = BLANK_SLATE_DIMENSIONS;
+        }
 
         add(new AttributeModifier("xmlns", "http://www.w3.org/2000/svg"));
         add(new AttributeModifier("xmlns:xlink", "http://www.w3.org/1999/xlink"));
@@ -50,7 +64,37 @@ public class CallOutStyleAnnotatedSvg extends Panel {
         add(new AttributeModifier("width", imageDimensions.getWidth()));
         add(new AttributeModifier("height", imageDimensions.getHeight()));
 
-        add(new ListView<ImageAnnotation>("group", image.getAnnotations()) {
+        if (imageUrl != null)
+            add(new WebMarkupContainer("imageElement").add(new AttributeModifier("xlink:href", imageUrl)));
+        else
+            add(new WebMarkupContainer("imageElement").add(new AttributeModifier("xlink:href", BLANK_SLATE_PATH)));
+
+        if(image != null) {
+            add(createAnnotationDefinitionListView());
+            add(createAnnotationListView());
+        } else {
+            add(new WebMarkupContainer("group").setVisible(false));
+            add(new WebMarkupContainer("annotation").setVisible(false));
+        }
+    }
+
+    private ListView<ImageAnnotation> createAnnotationListView() {
+        return new ListView<ImageAnnotation>("annotation", image.getAnnotations()) {
+            @Override
+            protected void populateItem(ListItem<ImageAnnotation> item) {
+                ImageAnnotation annotation = item.getModelObject();
+                Long x = Math.round(imageDimensions.getWidth() * annotation.getX());
+                Long y = Math.round(imageDimensions.getHeight() * annotation.getY());
+                setMarkupId(annotation.getType().name() + "_" + annotation.getId());
+                item.add(new AttributeModifier("xlink:href", "#" + annotation.getType().name() + "_" + annotation.getId()));
+                item.add(new AttributeModifier("x", x.toString()));
+                item.add(new AttributeModifier("y", y.toString()));
+            }
+        };
+    }
+
+    private ListView<ImageAnnotation> createAnnotationDefinitionListView() {
+        return new ListView<ImageAnnotation>("group", image.getAnnotations()) {
             @Override
             protected void populateItem(ListItem<ImageAnnotation> item) {
                 ImageAnnotation annotation = item.getModelObject();
@@ -124,22 +168,7 @@ public class CallOutStyleAnnotatedSvg extends Panel {
             }
 
 
-        });
-
-        add(new WebMarkupContainer("imageElement").add(new AttributeModifier("xlink:href", imageUrl)));
-
-        add(new ListView<ImageAnnotation>("annotation", image.getAnnotations()) {
-            @Override
-            protected void populateItem(ListItem<ImageAnnotation> item) {
-                ImageAnnotation annotation = item.getModelObject();
-                Long x = Math.round(imageDimensions.getWidth() * annotation.getX());
-                Long y = Math.round(imageDimensions.getHeight() * annotation.getY());
-                setMarkupId(annotation.getType().name() + "_" + annotation.getId());
-                item.add(new AttributeModifier("xlink:href", "#" + annotation.getType().name() + "_" + annotation.getId()));
-                item.add(new AttributeModifier("x", x.toString()));
-                item.add(new AttributeModifier("y", y.toString()));
-            }
-        });
+        };
     }
 
     public CallOutStyleAnnotatedSvg withScale(Double scale) {

@@ -35,6 +35,10 @@ public class ArrowStyleAnnotatedSvg extends Panel {
     protected ImageAnnotation theAnnotation;
     protected Boolean showAnnotations = true;
 
+    private Dimension imageDimensions;
+    private static String BLANK_SLATE_PATH = "/fieldid/images/loto/label-blank-slate.png";
+    private static Dimension BLANK_SLATE_DIMENSIONS = new Dimension(177, 133);
+
     /**
      * This is the main constructor for the SvgImageDisplayPanel.  Since the S3 Service requires a full
      * ProcedureDefinitionImage to be able to acquire a URL for the image, the easiest solution is to just pass in
@@ -75,18 +79,13 @@ public class ArrowStyleAnnotatedSvg extends Panel {
         super.onInitialize();
 
         URL imageUrl;
-        if(theImage == null)
-            try {
-                //TODO This needs to be replaced with an appropriate placeholder image.
-                imageUrl = new URL("http://s.hswstatic.com/gif/death-star-1.jpg");
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-                imageUrl = null;
-            }
-        else
+        if (theImage != null) {
             imageUrl = s3Service.getProcedureDefinitionImageMediumURL(theImage);
-
-        Dimension imageDimensions = acquireImageDimensions(imageUrl);
+            imageDimensions = acquireImageDimensions(imageUrl);
+        } else {
+            imageUrl = null;
+            imageDimensions = BLANK_SLATE_DIMENSIONS;
+        }
 
         add(new AttributeModifier("xmlns", "http://www.w3.org/2000/svg"));
         add(new AttributeModifier("xmlns:xlink", "http://www.w3.org/1999/xlink"));
@@ -95,10 +94,10 @@ public class ArrowStyleAnnotatedSvg extends Panel {
         add(new AttributeModifier("width", imageDimensions.getWidth()));
         add(new AttributeModifier("height", imageDimensions.getHeight()));
 
-        WebMarkupContainer imageElement = new WebMarkupContainer("imageElement");
-        //Holy metal, Batman! It's really this simple!!
-        imageElement.add(new AttributeModifier("xlink:href", imageUrl));
-        add(imageElement);
+        if (imageUrl != null)
+            add(new WebMarkupContainer("imageElement").add(new AttributeModifier("xlink:href", imageUrl)));
+        else
+            add(new WebMarkupContainer("imageElement").add(new AttributeModifier("xlink:href", BLANK_SLATE_PATH)));
 
 
         WebMarkupContainer lineElement = new WebMarkupContainer("lineElement");

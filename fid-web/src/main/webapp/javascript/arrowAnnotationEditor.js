@@ -23,7 +23,7 @@
         
         style: {
             size: 5,
-            color: '#ff0000',
+            color: '#ff0000'
         }
     };
     
