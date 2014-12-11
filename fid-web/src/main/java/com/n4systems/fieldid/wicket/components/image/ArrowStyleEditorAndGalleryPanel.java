@@ -6,9 +6,9 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.common.ImageAnnotationType;
+import com.n4systems.model.procedure.AnnotationType;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
-import com.n4systems.util.json.ArrowStyleAnnotationJsonRenderer;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -39,19 +39,11 @@ import java.util.List;
  */
 public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
 
-    private final static String IMAGE_EDITOR_ENABLE_JS = "arrowAnnotationEditor.init(%s, %s)";
-
-    @SpringBean
-    private ArrowStyleAnnotationJsonRenderer jsonRenderer;
-
     @SpringBean
     private S3Service s3Service;
 
-    @SpringBean
-    private AtomicLongService atomicLongService;
-
     private ImageList<ProcedureDefinitionImage> images;
-    private ArrowStyleAnnotatedSvg editor; //This becomes an editor by bolting some JavaScript to it.  It's otherwise just a display panel.
+    private Component editor;
     private FileUploadField fileUploadField;
     private Form tinyForm;
     private Component placeholder;
@@ -59,16 +51,18 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
 
     private List<FileUpload> fileUploads = new ArrayList<>();
     private IModel<IsolationPoint> model;
+    private AnnotationType annotationType;
     private ProcedureDefinitionImage currentImage;
 
-    private ArrowStyleAnnotatingBehaviour ajaxBehavior;
+//    private ArrowStyleAnnotatingBehaviour ajaxBehavior;
 
     private final static Logger logger = Logger.getLogger(ArrowStyleEditorAndGalleryPanel.class);
 
-    public ArrowStyleEditorAndGalleryPanel(String id, IModel<IsolationPoint> model) {
+    public ArrowStyleEditorAndGalleryPanel(String id, IModel<IsolationPoint> model, AnnotationType annotationType) {
         super(id, model);
         this.model = model;
         this.currentImage = (model.getObject().getAnnotation() == null ? null : (ProcedureDefinitionImage) model.getObject().getAnnotation().getImage());
+        this.annotationType = annotationType;
     }
 
 
@@ -90,34 +84,21 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
         placeholder.setOutputMarkupId(true);
         if(currentImage == null) {
             //Creating the panel without an image leaves a placeholder where the image would otherwise be.
-            editor = (ArrowStyleAnnotatedSvg)new ArrowStyleAnnotationEditor("imageEditor"){
-                @Override
-                protected String createEditorInitJS() {
-                                                                                                //We definitely don't want to pass any coordinates...
-                    return String.format(EDITOR_JS_CALL,
-                                         this.getMarkupId(),
-                                         jsonRenderer.render(ajaxBehavior.getEmptyEditorParams()));
-                }
-            }.withNoAnnotations().setVisible(false);
+            editor = createEditorPanel().setVisible(false);
 
             //...but the placeholder is junk... so instead we hide the editor and build a ContextImage to hold as placeholder.
             placeholder.setVisible(true);
         } else {
             //When have an annotation, we pass that in to be able to display the associated image (if there is one)
             //or the placeholder if there is not an image.
-            editor = new ArrowStyleAnnotationEditor("imageEditor", model.getObject().getAnnotation()){
-                @Override
-                protected String createEditorInitJS() {
-                    return String.format(EDITOR_JS_CALL,
-                                         this.getMarkupId(),
-                                         getEditorJSON());
-                }
-            }.withNoAnnotations();
+            editor = createEditorPanel(model.getObject().getAnnotation());
 
+            //We have an image and annotation, so hide the placeholder.
             placeholder.setVisible(false);
         }
 
-        editor.add(ajaxBehavior = createAnnotatingBehaviour());
+        //TODO Move this inside the editor... that way when it's created, the behaviour is made... that should also prevent juggling the permissions...
+//        editor.add(ajaxBehavior = createAnnotatingBehaviour());
 
         editorAndGalleryContainer.add(editor);
         editor.setOutputMarkupId(true);
@@ -165,45 +146,6 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
         Private methods...
      */
 
-    private ArrowStyleAnnotatingBehaviour createAnnotatingBehaviour() {
-        return new ArrowStyleAnnotatingBehaviour() {
-            @Override
-            protected void processAnnotation(ImageAnnotation annotation) {
-                annotation.setText(model.getObject().getIdentifier());
-                model.getObject().setAnnotation(annotation);
-            }
-
-            @Override
-            protected ProcedureDefinitionImage getEditedImage() {
-                return currentImage;
-            }
-
-            @Override
-            protected ImageAnnotation getImageAnnotation(Double x, Double y, Double x2, Double y2) {
-                ImageAnnotation currentAnnotation = model.getObject().getAnnotation();
-                if(currentAnnotation == null) {
-                    //Must be a new annotation... so make a new one.
-                    currentAnnotation = new ImageAnnotation(x, y, x2, y2, "", ImageAnnotationType.fromIsolationPointSourceType(model.getObject().getSourceType()));
-                    currentAnnotation.setTempId(atomicLongService.getNext());
-                    currentAnnotation.setTenant(FieldIDSession.get().getTenant());
-                }
-                currentAnnotation.setY(y);
-                currentAnnotation.setX(x);
-                currentAnnotation.setX_tail(x2);
-                currentAnnotation.setY_tail(y2);
-                currentAnnotation.setType(ImageAnnotationType.fromIsolationPointSourceType(model.getObject().getSourceType()));
-                currentAnnotation.setText("");
-
-                return currentAnnotation;
-            }
-
-            @Override
-            protected ImageAnnotation getAnnotation() {
-                return model.getObject().getAnnotation();
-            }
-        };
-    }
-
     private void switchToLastCarouselImage(AjaxRequestTarget target) {
         currentImage = displayableImages().get(displayableImages().size() - 1);
 
@@ -214,36 +156,20 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
         model.getObject().getAnnotation().setImage(currentImage);
 
         //If you're switching the image, then your annotation should no longer be shown... right?
-        swapEditorPanel(target, new ArrowStyleAnnotationEditor("imageEditor", currentImage) {
-            @Override
-            protected String createEditorInitJS() {
-                return String.format(EDITOR_JS_CALL,
-                                     this.getMarkupId(),
-                                     getEditorJSON());
-            }
-        }.withNoAnnotations());
+        swapEditorPanel(target, createEditorPanel(currentImage));
     }
 
-    private void swapEditorPanel(AjaxRequestTarget target, ArrowStyleAnnotatedSvg panel) {
+    private void swapEditorPanel(AjaxRequestTarget target, Component panel) {
         if(!editor.isVisible()) {
             editor.setVisible(true);
             placeholder.setVisible(false);
             target.add(placeholder, editorAndGalleryContainer);
         }
 
-        panel.setOutputMarkupId(true);
-
-        //Since we're going to move the ajax behaviour, we need to remove it...
-        editor.remove(ajaxBehavior);
-
-        //...then destroy it...
-        ajaxBehavior = null;
-
-        //...then replace the panel...
+        //Replace the panel...
         editor.replaceWith(panel);
 
-        //...then finally add a newly created ajax behaviour.
-        panel.add(ajaxBehavior = createAnnotatingBehaviour());
+        //...then switch the reference.
         editor = panel;
         target.add(panel, editor);
     }
@@ -264,10 +190,57 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
         return s3Service.uploadTempProcedureDefImage(image, contentType, imageData);
     }
 
-    private String getEditorJSON() {
-        return jsonRenderer.render(model.getObject().getAnnotation() == null ?
-                ajaxBehavior.getEmptyEditorParams() :
-                ajaxBehavior.getEditorParams());
+    private Component createEditorPanel() {
+        if(annotationType.equals(AnnotationType.ARROW_STYLE)) {
+            return new ArrowStyleAnnotationEditor("imageEditor"){
+                @Override
+                protected ProcedureDefinitionImage retrieveCurrentImage() {
+                    return currentImage;
+                }
+
+                @Override
+                protected IsolationPoint retrieveIsolationPoint() {
+                    return model.getObject();
+                }
+            };
+        } else
+            //TODO Return the new panel...
+            return null;
+    }
+
+    private Component createEditorPanel(ImageAnnotation annotation) {
+        if(annotationType.equals(AnnotationType.ARROW_STYLE))
+            return new ArrowStyleAnnotationEditor("imageEditor", annotation){
+                @Override
+                protected ProcedureDefinitionImage retrieveCurrentImage() {
+                    return currentImage;
+                }
+
+                @Override
+                protected IsolationPoint retrieveIsolationPoint() {
+                    return model.getObject();
+                }
+            };
+        else
+            //TODO How will we handle this?  We simply don't have access to all annotations from the level of a single Annotation...
+            return null;
+    }
+
+    private Component createEditorPanel(ProcedureDefinitionImage image) {
+        if(annotationType.equals(AnnotationType.ARROW_STYLE))
+            return new ArrowStyleAnnotationEditor("imageEditor", image) {
+                @Override
+                protected ProcedureDefinitionImage retrieveCurrentImage() {
+                    return currentImage;
+                }
+
+                @Override
+                protected IsolationPoint retrieveIsolationPoint() {
+                    return model.getObject();
+                }
+            };
+        else
+            return null;
     }
 
 
@@ -285,14 +258,7 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
                     protected void onEvent(AjaxRequestTarget target) {
                         //We want to set this image to be equal to whatever is in the editor.
                         currentImage = item.getModelObject();
-                        swapEditorPanel(target, new ArrowStyleAnnotationEditor("imageEditor", item.getModelObject()){
-                            @Override
-                            protected String createEditorInitJS() {
-                                return String.format(EDITOR_JS_CALL,
-                                                     this.getMarkupId(),
-                                                     getEditorJSON());
-                            }
-                        }.withNoAnnotations());
+                        swapEditorPanel(target, createEditorPanel(item.getModelObject()));
                     }
                 });
             }

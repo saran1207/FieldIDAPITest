@@ -171,7 +171,8 @@ public class IsolationPointEditor extends Panel {
             };
         } else { //AnnotationType.ARROW_STYLE
             return new ArrowStyleEditorAndGalleryPanel(id,
-                                      (IModel<IsolationPoint>)getDefaultModel()) {
+                                      (IModel<IsolationPoint>)getDefaultModel(),
+                                      procedureDefinition.getAnnotationType()) {
 
                 @Override
                 protected void doDone(AjaxRequestTarget target) {
