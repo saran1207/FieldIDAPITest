@@ -40,6 +40,8 @@ public class ArrowStyleAnnotatedSvg extends Panel {
     private static String BLANK_SLATE_PATH = "/fieldid/images/loto/label-blank-slate.png";
     private static Dimension BLANK_SLATE_DIMENSIONS = new Dimension(177, 133);
 
+    private Double scale = 1.0;
+
     /**
      * This is the main constructor for the SvgImageDisplayPanel.  Since the S3 Service requires a full
      * ProcedureDefinitionImage to be able to acquire a URL for the image, the easiest solution is to just pass in
@@ -124,6 +126,8 @@ public class ArrowStyleAnnotatedSvg extends Panel {
             lineElement.add(new AttributeModifier("y1", String.valueOf(Math.round(imageDimensions.getHeight() * theAnnotation.getY()))));
             lineElement.add(new AttributeModifier("x2", String.valueOf(Math.round(imageDimensions.getWidth() * theAnnotation.getX_tail()))));
             lineElement.add(new AttributeModifier("y2", String.valueOf(Math.round(imageDimensions.getHeight() * theAnnotation.getY_tail()))));
+            lineElement.add(new AttributeModifier("stroke-width", 5 * scale));
+
         } else {
             showAnnotations = false;
         }
@@ -141,6 +145,11 @@ public class ArrowStyleAnnotatedSvg extends Panel {
      */
     public ArrowStyleAnnotatedSvg withNoAnnotations() {
         this.showAnnotations = false;
+        return this;
+    }
+
+    public ArrowStyleAnnotatedSvg withScale(Double scale) {
+        this.scale = scale;
         return this;
     }
 

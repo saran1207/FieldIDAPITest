@@ -154,7 +154,7 @@ public class IsolationPointListPanel extends Panel {
             return new ImageList<IsolationPoint>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getLockIsolationPoints())) {
                 @Override
                 protected void createImage(ListItem<IsolationPoint> item) {
-                    item.add(new ArrowStyleAnnotatedSvg("image", item.getModelObject().getAnnotation()));
+                    item.add(new ArrowStyleAnnotatedSvg("image", item.getModelObject().getAnnotation()).withScale(2.0));
                 }
             };
         }

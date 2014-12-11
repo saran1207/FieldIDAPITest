@@ -166,7 +166,6 @@ public class CallOutStyleAnnotatedSvg extends Panel {
                 item.add(text);
             }
 
-
         };
     }
 
