@@ -46,7 +46,7 @@ public class IsolationPointEditor extends Panel {
 
     //These components will have their visibility altered by the type of "Isolation Point" being edited...
     //If it's a "Note," then most of these fields will be rendered invisible.
-    private Component imagePanel;
+    private IsolationPointImagePanel imagePanel;
     private Component electronicIdentifier;
     private Component sourceText;
     private Component lockField;
@@ -124,8 +124,7 @@ public class IsolationPointEditor extends Panel {
         methodField.setOutputMarkupId(true);
         form.add(notesField = new LabelledTextArea<String>("notes", "label.notes", new PropertyModel(getDefaultModel(), "method")).setMaxLength(255).required());
 
-        form.add(imagePanel = new IsolationPointImagePanel("annotation", (IsolationPoint) getDefaultModelObject()).add(createEditClickBehavior()));
-
+        form.add(imagePanel = getIsolationPointImagePanel(procedureDefinition));
 
         form.add(new AjaxSubmitLink("done") {
             @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
@@ -146,6 +145,13 @@ public class IsolationPointEditor extends Panel {
 
     }
 
+    private IsolationPointImagePanel getIsolationPointImagePanel(ProcedureDefinition procedureDefinition) {
+        IsolationPointImagePanel isolationPointImagePanel = new IsolationPointImagePanel("annotation", (IModel<IsolationPoint>) getDefaultModel(),
+                new PropertyModel<>(procedureDefinition, "annotationType"));
+        isolationPointImagePanel.add(createEditClickBehavior());
+        return isolationPointImagePanel;
+    }
+
     private Behavior createEditClickBehavior() {
         return new AjaxEventBehavior("onclick") {
             @Override protected void onEvent(AjaxRequestTarget target) {
@@ -159,6 +165,7 @@ public class IsolationPointEditor extends Panel {
         if(procedureDefinition.getAnnotationType().equals(AnnotationType.CALL_OUT_STYLE)) {
             return new IsolationPointImageGallery(id,procedureDefinition, (IModel<IsolationPoint>) getDefaultModel()) {
                 @Override protected void doneClicked(AjaxRequestTarget target) {
+                    imagePanel.onReloadImage(target);
                     target.add(imagePanel, sourceID);
                     modal.close(target);
                     IsolationPointEditor.this.getDefaultModel().detach();
@@ -176,6 +183,7 @@ public class IsolationPointEditor extends Panel {
 
                 @Override
                 protected void doDone(AjaxRequestTarget target) {
+                    imagePanel.onReloadImage(target);
                     target.add(imagePanel, sourceID);
                     modal.close(target);
                     IsolationPointEditor.this.getDefaultModel().detach();

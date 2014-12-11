@@ -162,6 +162,7 @@ public class IsolationPointListPanel extends Panel {
 
     public void reloadImageList(AjaxRequestTarget target, IModel<ProcedureDefinition> model) {
         images.replaceWith(getImageList(model));
+        images.setParent(this);
         target.add(images);
     }
 

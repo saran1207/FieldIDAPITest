@@ -6,6 +6,7 @@ import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import javax.imageio.ImageIO;
@@ -52,6 +53,23 @@ public class ArrowStyleAnnotatedSvg extends Panel {
         super(id);
         this.theAnnotation = theAnnotation;
         this.theImage = (ProcedureDefinitionImage) theAnnotation.getImage();
+    }
+
+    /**
+     * This is the main constructor for the SvgImageDisplayPanel.  Since the S3 Service requires a full
+     * ProcedureDefinitionImage to be able to acquire a URL for the image, the easiest solution is to just pass in
+     * the whole image.  In addition to the image, we also need to be provided the ImageAnnotation object representing
+     * the Annotation to be generated on top of the image.
+     *
+     * @param id - The <b>String</b> representation of the Wicket ID for the SvgImageDisplayPanel instance.
+     * @param theAnnotation - The <b>ImageAnnotation</b> representing the Annotation to be drawn over the image.
+     */
+    public ArrowStyleAnnotatedSvg(String id, IModel<ImageAnnotation> theAnnotation) {
+        super(id);
+        this.theAnnotation = theAnnotation.getObject();
+        if (theAnnotation.getObject() != null) {
+            this.theImage = (ProcedureDefinitionImage) theAnnotation.getObject().getImage();
+        }
     }
 
     /**

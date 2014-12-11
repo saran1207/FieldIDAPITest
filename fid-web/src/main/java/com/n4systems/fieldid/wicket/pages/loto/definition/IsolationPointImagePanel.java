@@ -3,23 +3,23 @@ package com.n4systems.fieldid.wicket.pages.loto.definition;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
+import com.n4systems.fieldid.wicket.components.image.ArrowStyleAnnotatedSvg;
+import com.n4systems.fieldid.wicket.components.image.CallOutStyleAnnotatedSvg;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.common.ImageAnnotation;
+import com.n4systems.model.procedure.AnnotationType;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
-import com.n4systems.util.json.JsonRenderer;
-import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
-import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.io.Serializable;
@@ -27,39 +27,27 @@ import java.util.List;
 
 public class IsolationPointImagePanel extends Panel {
 
-    private static final String INIT_JS = "fieldIdWidgets.createImageList('%s',%s);";
+    private static final String INIT_JS = "imageList.createImageList('%s');";
 
-    private @SpringBean S3Service s3Service;
-    private @SpringBean JsonRenderer jsonRenderer;
-
-    private final WebComponent image;
+    private final Component image;
     private final WebMarkupContainer blankSlate;
     private final WebMarkupContainer outer;
+    private final WebMarkupContainer container;
 
-    public final IsolationPoint isolationPoint;
+    private IModel<AnnotationType> annotationTypeModel;
 
-
-    public IsolationPointImagePanel(String id, final IsolationPoint isolationPoint) {
-        super(id);
-        this.isolationPoint = isolationPoint;
+    public IsolationPointImagePanel(String id, IModel<IsolationPoint> isolationPointModel, IModel<AnnotationType> annotationTypeModel) {
+        super(id, isolationPointModel);
+        setOutputMarkupId(true);
+        this.annotationTypeModel = annotationTypeModel;
         add(blankSlate = new WebMarkupContainer("blankSlate"));
-        WebMarkupContainer annotatedImage, container;
+        WebMarkupContainer annotatedImage;
         add(annotatedImage = new WebMarkupContainer("annotatedImage"));
         annotatedImage.add(outer = new WebMarkupContainer("outerContainer"));
 
         outer.add(container = new WebMarkupContainer("container"));
 
-        container.add(image = new WebComponent("image") {
-            @Override protected void onInitialize() {
-                super.onInitialize();
-                add(new AttributeModifier("src", getImageUrl()));
-            }
-
-            @Override protected void onComponentTag(ComponentTag tag) {
-                super.onComponentTag(tag);
-                checkComponentTag(tag, "img");
-            }
-        });
+        container.add(image = getImage());
 
         annotatedImage.add(new WebMarkupContainer("labelButton").add(new TipsyBehavior(new FIDLabelModel("message.isolation_point.label_image"), TipsyBehavior.Gravity.N)));
 
@@ -73,32 +61,31 @@ public class IsolationPointImagePanel extends Panel {
                     ProcedureDefinitionImage procedureDefinitionImage = (ProcedureDefinitionImage) annotation.getImage();
 
                     ProcedureDefinition procedureDefinition = procedureDefinitionImage.getProcedureDefinition();
-                    isolationPoint.setAnnotation(null);
+                    isolationPointModel.getObject().setAnnotation(null);
 
                     procedureDefinition.softDeleteImage(annotation);
                 }
 
-
                 target.add(IsolationPointImagePanel.this);
-
-
 
             }
         });
 
     }
 
-    protected Model<String> getImageUrl() {
-        return new Model<String>() {
-            @Override public String getObject() {
-                ImageAnnotation annotation = getImageAnnotation();
-                return (annotation==null) ? "" : s3Service.getProcedureDefinitionImageMediumURL((ProcedureDefinitionImage) annotation.getImage()).toString();
-            }
-        };
-    }
-
     private ImageAnnotation getImageAnnotation() {
         return (ImageAnnotation) getDefaultModel().getObject();
+    }
+
+    private Component getImage() {
+        Component image;
+        if (annotationTypeModel.getObject().equals(AnnotationType.ARROW_STYLE)) {
+            image = new ArrowStyleAnnotatedSvg("image",  new PropertyModel<ImageAnnotation>(getDefaultModel(), "annotation"));
+        } else {
+            image = new CallOutStyleAnnotatedSvg("image", new PropertyModel<ProcedureDefinitionImage>(getDefaultModel(), "annotation.image")).withScale(2.0);
+        }
+        image.setOutputMarkupId(true);
+        return image;
     }
 
     @Override
@@ -112,35 +99,15 @@ public class IsolationPointImagePanel extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         response.renderCSSReference("style/legacy/component/imageList.css");
-        response.renderJavaScriptReference("javascript/fieldIdWidgets.js");
-        response.renderOnLoadJavaScript(String.format(INIT_JS, getMarkupId(),jsonRenderer.render(new EditableImageOptions())));
+        response.renderJavaScriptReference("javascript/imageList.js");
+        response.renderOnLoadJavaScript(String.format(INIT_JS, getMarkupId()));
     }
 
-    class EditableImageOptions {
-        List<List<AnnotationOptions>> annotationOptions = Lists.newArrayList();
-
-        EditableImageOptions() {
-            super();
-            if(getImageAnnotation()==null) {
-                return;
-            }
-            List<AnnotationOptions> options = Lists.newArrayList(new AnnotationOptions(getImageAnnotation()));
-            annotationOptions.add(options);
-        }
-    }
-
-    class AnnotationOptions implements Serializable {
-        double x;
-        double y;
-        String text;
-        String cssStyle;
-
-        public AnnotationOptions(ImageAnnotation annotation) {
-            this.x = annotation.getX();
-            this.y = annotation.getY();
-            this.text = annotation.getText();
-            this.cssStyle = annotation.getType().getCssClass();
-        }
+    public void onReloadImage(AjaxRequestTarget target) {
+        Component newImage = getImage();
+        image.replaceWith(newImage);
+        image.setParent(container);
+        target.add(image);
     }
 
 }
