@@ -734,7 +734,12 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
 
     public void publishProcedureDefinition(ProcedureDefinition definition) throws AnnotatedImageGenerationException {
         try {
-            svgGenerationService.generateAndUploadAnnotatedSvgs(definition);
+
+            if (definition.getAnnotationType().equals(AnnotationType.CALL_OUT_STYLE)) {
+                svgGenerationService.generateAndUploadAnnotatedSvgs(definition);
+            } else {
+                svgGenerationService.generateAndUploadArrowStyleAnnotatedSvgs(definition);
+            }
 
             ProcedureDefinition previousDefinition = getPublishedProcedureDefinition(definition.getAsset(), definition.getFamilyId());
             if (previousDefinition != null) {

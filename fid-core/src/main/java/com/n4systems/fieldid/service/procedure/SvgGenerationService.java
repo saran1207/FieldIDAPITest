@@ -417,7 +417,7 @@ public class SvgGenerationService extends FieldIdPersistenceService {
         line.setAttribute("x2", String.valueOf(Math.round(width * annotation.getX_tail())));
         line.setAttribute("y2", String.valueOf(Math.round(height * annotation.getY_tail())));
         line.setAttribute("stroke", "#ff0000");
-        line.setAttribute("stroke-width", "5px");
+        line.setAttribute("stroke-width", "10");
         line.setAttribute("marker-start", "url(#arrow)");
 
         group.appendChild(line);
