@@ -250,13 +250,13 @@ public class IsolationPointEditor extends Panel {
         copyIntoModel(isoPoint);
         manageVisibilityBasedOnSourceType(isoPoint.getSourceType());
         imagePanel.onReloadImage(target);
-        target.add(imagePanel);
     }
 
-    public void editNew(IsolationPoint isoPoint) {
+    public void editNew(IsolationPoint isoPoint, AjaxRequestTarget target) {
         editedIsolationPoint = null;
         copyIntoModel(isoPoint);
         manageVisibilityBasedOnSourceType(isoPoint.getSourceType());
+        imagePanel.onReloadImage(target);
     }
 
     /**

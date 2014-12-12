@@ -244,7 +244,7 @@ public class ContentPanel extends Panel {
     }
 
     protected void doAdd(AjaxRequestTarget target, IsolationPointSourceType sourceType) {
-        editor.editNew(createIsolationPoint(sourceType));
+        editor.editNew(createIsolationPoint(sourceType), target);
         editor.openEditor(target);
 
     }
