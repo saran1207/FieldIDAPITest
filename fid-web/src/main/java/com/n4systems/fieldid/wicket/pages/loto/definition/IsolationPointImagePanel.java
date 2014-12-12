@@ -80,9 +80,10 @@ public class IsolationPointImagePanel extends Panel {
     private Component getImage() {
         Component image;
         if (annotationTypeModel.getObject().equals(AnnotationType.ARROW_STYLE)) {
-            image = new ArrowStyleAnnotatedSvg("image",  new PropertyModel<ImageAnnotation>(getDefaultModel(), "annotation")).withScale(2.0);
+            image = new ArrowStyleAnnotatedSvg("image",  new PropertyModel<>(getDefaultModel(), "annotation")).withScale(2.0);
         } else {
-            image = new CallOutStyleAnnotatedSvg("image", new PropertyModel<ProcedureDefinitionImage>(getDefaultModel(), "annotation.image")).withScale(2.0);
+            image = new CallOutStyleAnnotatedSvg("image", new PropertyModel<>(getDefaultModel(), "annotation.image"),
+                                                          new PropertyModel<>(getDefaultModel(), "annotation")).withScale(2.0);
         }
         image.setOutputMarkupId(true);
         return image;

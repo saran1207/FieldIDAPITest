@@ -45,6 +45,12 @@ public class CallOutStyleAnnotatedSvg extends Panel {
         }
     }
 
+    public CallOutStyleAnnotatedSvg(String id,IModel<ProcedureDefinitionImage> imageModel, IModel<ImageAnnotation> annotationModel) {
+        super(id, imageModel);
+        this.image = imageModel.getObject();
+        this.annotationList = Lists.newArrayList(annotationModel.getObject());
+    }
+
     public CallOutStyleAnnotatedSvg(String id) {
         super(id, null);
     }
