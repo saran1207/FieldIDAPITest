@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.image;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.model.common.ImageAnnotation;
@@ -10,15 +11,17 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
-import java.awt.*;
+import java.awt.Dimension;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
+import java.util.List;
 
 public class CallOutStyleAnnotatedSvg extends Panel {
 
@@ -26,6 +29,7 @@ public class CallOutStyleAnnotatedSvg extends Panel {
     private S3Service s3Service;
 
     private ProcedureDefinitionImage image;
+    private List<ImageAnnotation> annotationList;
     private Dimension imageDimensions;
 
     private Double scale = 1.0;
@@ -35,8 +39,10 @@ public class CallOutStyleAnnotatedSvg extends Panel {
 
     public CallOutStyleAnnotatedSvg(String id, IModel<ProcedureDefinitionImage> imageModel) {
         super(id, imageModel);
-
         this.image = imageModel.getObject();
+        if(image != null) {
+            this.annotationList = imageModel.getObject().getAnnotations();
+        }
     }
 
     public CallOutStyleAnnotatedSvg(String id) {
@@ -78,7 +84,7 @@ public class CallOutStyleAnnotatedSvg extends Panel {
     }
 
     private ListView<ImageAnnotation> createAnnotationListView() {
-        return new ListView<ImageAnnotation>("annotation", image.getAnnotations()) {
+        return new ListView<ImageAnnotation>("annotation", annotationList) {
             @Override
             protected void populateItem(ListItem<ImageAnnotation> item) {
                 ImageAnnotation annotation = item.getModelObject();
@@ -93,7 +99,7 @@ public class CallOutStyleAnnotatedSvg extends Panel {
     }
 
     private ListView<ImageAnnotation> createAnnotationDefinitionListView() {
-        return new ListView<ImageAnnotation>("group", image.getAnnotations()) {
+        return new ListView<ImageAnnotation>("group", annotationList) {
             @Override
             protected void populateItem(ListItem<ImageAnnotation> item) {
                 ImageAnnotation annotation = item.getModelObject();

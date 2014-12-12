@@ -245,10 +245,12 @@ public class IsolationPointEditor extends Panel {
 
     protected void doCancel(AjaxRequestTarget target) { }
 
-    public void edit(IsolationPoint isoPoint) {
+    public void edit(IsolationPoint isoPoint, AjaxRequestTarget target) {
         editedIsolationPoint = isoPoint;
         copyIntoModel(isoPoint);
         manageVisibilityBasedOnSourceType(isoPoint.getSourceType());
+        imagePanel.onReloadImage(target);
+        target.add(imagePanel);
     }
 
     public void editNew(IsolationPoint isoPoint) {

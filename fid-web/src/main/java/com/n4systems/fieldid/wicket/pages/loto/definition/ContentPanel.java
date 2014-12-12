@@ -52,7 +52,7 @@ public class ContentPanel extends Panel {
 
             @Override
             protected void doEdit(AjaxRequestTarget target, IsolationPoint isolationPoint) {
-                editor.edit(isolationPoint);
+                editor.edit(isolationPoint, target);
                 editor.openEditor(target);
             }
 
@@ -90,7 +90,7 @@ public class ContentPanel extends Panel {
 
             @Override
             protected void doEdit(AjaxRequestTarget target, IsolationPoint isolationPoint) {
-                editor.edit(isolationPoint);
+                editor.edit(isolationPoint, target);
                 editor.openEditor(target);
             }
 
