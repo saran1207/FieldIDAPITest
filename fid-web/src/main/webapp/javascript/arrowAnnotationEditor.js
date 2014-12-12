@@ -14,7 +14,7 @@
 
     var plugin = 'arrowAnnotationEditor';
     var defaults = {
-        apiUrl: 'url', // MANDATORY! - Url for AJAX
+        apiUrl: '/api?', // MANDATORY! - Url for AJAX
 
         arrow: {
             head: {'x':null, 'y':null},
@@ -23,16 +23,16 @@
         
         style: {
             size: 5,
-            color: '#ff0000'
+            color: '#ff0000',
         }
     };
     
     function Plugin(element, params){
         // Check for required elements within the svg
         this.annotations = element.getElementsByClassName('annotations')[0];
-        //if(!this.annotations){
-        //    return;
-        //}
+        if(!this.annotations){
+            return;
+        }
 
         this.pluginParams = $.extend({}, defaults, params);
         
@@ -47,7 +47,8 @@
         this.element = element;
         this.width   = $(element).width();
         this.height  = $(element).height();
-
+        this.offset  = $(element).offset();
+        
         // Check for existing arrow values
         if( this.arrow.head.x !== null &&
             this.arrow.head.y !== null &&
@@ -78,24 +79,28 @@
         wicketAjaxGet(url, function(){}, function(){});
     }    
 
-    // Prepare values for storing in the DB
-    Plugin.prototype.calculateX = function(value){
-        return value / this.width;
-    };
-    Plugin.prototype.calculateY = function(value){
-        return value / this.height;
+    // Calculate cross-browser mouse positions
+    Plugin.prototype.position = function(event){
+        // pageX/Y are being normalized by jquery
+        var coords = {}
+        coords.x = (event.pageX - this.offset.left) / this.width,
+        coords.y = (event.pageY - this.offset.top)  / this.height;
+        return coords;
     };
     
     // Track mouse move after the head point has been selected
     Plugin.prototype.move = function(event){
         if( this.state[ this.index] === 'headSelected' ){
+            var position = this.position(event);
+            console.log(position);
+            
             // Store tail based on current mouse position
-            this.arrow.tail.x = this.calculateX( event['offsetX'] );
-            this.arrow.tail.y = this.calculateY( event['offsetY'] );
+            this.arrow.tail.x = position.x;
+            this.arrow.tail.y = position.y;
 
             if( this.arrow.element !== null ){
-                this.arrowAttribute('x2', event['offsetX']);
-                this.arrowAttribute('y2', event['offsetY']);
+                this.arrowAttribute('x2', this.width  * position.x);
+                this.arrowAttribute('y2', this.height * position.y);
             }
         }
     };
@@ -120,13 +125,15 @@
                 break;
         
             case 'headSelected':
+                var position = this.position(event);
+                
                 // Store head based on click position
-                this.arrow.head.x = this.calculateX( event['offsetX'] );
-                this.arrow.head.y = this.calculateY( event['offsetY'] );
+                this.arrow.head.x = position.x;
+                this.arrow.head.y = position.y;
                 
                 // Start the tail at the same location as the head (so it grows out from the head)
-                this.arrow.tail.x = this.calculateX( event['offsetX'] );
-                this.arrow.tail.y = this.calculateY( event['offsetY'] );
+                this.arrow.tail.x = position.x;
+                this.arrow.tail.y = position.y;
                 
                 this.renderArrow();
                 break;
