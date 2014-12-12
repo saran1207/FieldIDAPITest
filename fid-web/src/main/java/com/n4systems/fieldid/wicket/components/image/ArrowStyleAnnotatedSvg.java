@@ -54,7 +54,9 @@ public class ArrowStyleAnnotatedSvg extends Panel {
     public ArrowStyleAnnotatedSvg(String id, ImageAnnotation theAnnotation) {
         super(id);
         this.theAnnotation = theAnnotation;
-        this.theImage = (ProcedureDefinitionImage) theAnnotation.getImage();
+        if(theAnnotation != null) {
+            this.theImage = (ProcedureDefinitionImage) theAnnotation.getImage();
+        }
     }
 
     /**

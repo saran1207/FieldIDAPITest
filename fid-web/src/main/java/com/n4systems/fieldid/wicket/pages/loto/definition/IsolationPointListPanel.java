@@ -20,6 +20,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -154,7 +155,12 @@ public class IsolationPointListPanel extends Panel {
             return new ImageList<IsolationPoint>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getLockIsolationPoints())) {
                 @Override
                 protected void createImage(ListItem<IsolationPoint> item) {
-                    item.add(new ArrowStyleAnnotatedSvg("image", item.getModelObject().getAnnotation()).withScale(2.0));
+                    if(item.getModelObject().getAnnotation() != null) {
+                        item.add(new ArrowStyleAnnotatedSvg("image", item.getModelObject().getAnnotation()).withScale(2.0));
+                    } else {
+                        item.add(new EmptyPanel("image").setVisible(false));
+                        item.setVisible(false);
+                    }
                 }
             };
         }
