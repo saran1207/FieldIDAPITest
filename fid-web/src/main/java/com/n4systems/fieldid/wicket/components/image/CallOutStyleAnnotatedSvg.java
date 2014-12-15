@@ -97,7 +97,7 @@ public class CallOutStyleAnnotatedSvg extends Panel {
                 Long x = Math.round(imageDimensions.getWidth() * annotation.getX());
                 Long y = Math.round(imageDimensions.getHeight() * annotation.getY());
                 setMarkupId(annotation.getType().name() + "_" + annotation.getId());
-                item.add(new AttributeModifier("xlink:href", "#" + annotation.getType().name() + "_" + annotation.getId()));
+                item.add(new AttributeModifier("xlink:href", "#" + annotation.getType().name() + "_" + annotation.getText()));
                 item.add(new AttributeModifier("x", x.toString()));
                 item.add(new AttributeModifier("y", y.toString()));
             }
@@ -113,7 +113,7 @@ public class CallOutStyleAnnotatedSvg extends Panel {
                 Boolean isReversed =  Math.round(imageDimensions.getWidth() * annotation.getX()) < imageDimensions.getWidth()/2;
                 Boolean isWide = imageDimensions.getWidth() > imageDimensions.getHeight();
 
-                item.setMarkupId(annotation.getType().name() + "_" + annotation.getId());
+                item.setMarkupId(annotation.getType().name() + "_" + annotation.getText());
 
                 if (scale != 1.0) {
                     item.add(new AttributeModifier("transform", "scale("+ scale + ")"));
