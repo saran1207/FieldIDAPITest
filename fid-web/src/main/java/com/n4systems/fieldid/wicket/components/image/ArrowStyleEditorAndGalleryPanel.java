@@ -54,8 +54,6 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
     private AnnotationType annotationType;
     private ProcedureDefinitionImage currentImage;
 
-//    private ArrowStyleAnnotatingBehaviour ajaxBehavior;
-
     private final static Logger logger = Logger.getLogger(ArrowStyleEditorAndGalleryPanel.class);
 
     public ArrowStyleEditorAndGalleryPanel(String id, IModel<IsolationPoint> model, AnnotationType annotationType) {
@@ -63,16 +61,6 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
         this.model = model;
         this.currentImage = (model.getObject().getAnnotation() == null ? null : (ProcedureDefinitionImage) model.getObject().getAnnotation().getImage());
         this.annotationType = annotationType;
-    }
-
-
-    /*
-        Overrides...
-     */
-
-    @Override
-    public void onInitialize() {
-        super.onInitialize();
         setOutputMarkupId(true);
 
         //We ended up needing this extra WebMarkupContainer to allow us to do a partial refresh of the page.  This ended
@@ -103,7 +91,6 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
         editorAndGalleryContainer.add(editor);
         editor.setOutputMarkupId(true);
         editorAndGalleryContainer.add(images = createImageList("imageGallery"));
-        images.setOutputMarkupId(true);
         tinyForm = new Form("uploadForm");
         tinyForm.add(fileUploadField = new FileUploadField("fileUpload", new PropertyModel<>(this, "fileUploads")));
         fileUploadField.add(new AjaxFormSubmitBehavior("onchange") {
@@ -141,7 +128,6 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
         });
     }
 
-
     /*
         Private methods...
      */
@@ -168,17 +154,14 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
 
         //Replace the panel...
         editor.replaceWith(panel);
-
-        //...then switch the reference.
-        editor = panel;
-        target.add(panel, editor);
+        target.add(editor);
+        editor.setParent(editorAndGalleryContainer);
     }
 
     private void refreshGalleryPanel(AjaxRequestTarget target, ImageList<ProcedureDefinitionImage> panel) {
-        panel.setOutputMarkupId(true);
         images.replaceWith(panel);
-        target.add(panel);
-        images = panel;
+        target.add(images);
+        images.setParent(editorAndGalleryContainer);
     }
 
     private void handleUpload(byte[] bytes, String contentType, String clientFileName) {

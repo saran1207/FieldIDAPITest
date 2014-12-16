@@ -25,7 +25,7 @@ public class ImageList<T> extends Panel {
     public ImageList(String id, final IModel<List<T>> images) {
         super(id);
         this.images = images;
-        setOutputMarkupId(true);
+        setOutputMarkupPlaceholderTag(true);
         add(new AttributeAppender("class", "image-list"));
         listView = new ListView<T>("list", images) {
 
