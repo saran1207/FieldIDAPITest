@@ -7,6 +7,7 @@ import com.n4systems.mail.MailManagerFactory;
 import com.n4systems.model.*;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.procedure.LotoSettings;
 import com.n4systems.model.safetynetwork.TypedOrgConnection;
 import com.n4systems.model.safetynetwork.TypedOrgConnection.ConnectionType;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -94,6 +95,9 @@ public class TenantCreationService extends FieldIdPersistenceService {
 		settings.setTenant(tenant);
         settings.setDefaultLanguage(Locale.ENGLISH);
 		persistenceService.save(settings);
+
+        LotoSettings lotoSettings = new LotoSettings(tenant);
+        persistenceService.save(lotoSettings);
 	}
 
 	private void createPrimaryOrg(Tenant tenant, PrimaryOrg primaryOrg, String timeZone) {

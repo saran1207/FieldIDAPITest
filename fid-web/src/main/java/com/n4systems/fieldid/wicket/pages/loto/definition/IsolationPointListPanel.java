@@ -3,9 +3,12 @@ package com.n4systems.fieldid.wicket.pages.loto.definition;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
-import com.n4systems.fieldid.wicket.components.image.EditableImageList;
+import com.n4systems.fieldid.wicket.components.image.ArrowStyleAnnotatedSvg;
+import com.n4systems.fieldid.wicket.components.image.CallOutStyleAnnotatedSvg;
+import com.n4systems.fieldid.wicket.components.image.ImageList;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.IsolationPointSourceType;
+import com.n4systems.model.procedure.AnnotationType;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
@@ -15,16 +18,15 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 
-import java.net.URL;
 import java.util.List;
 
 import static ch.lambdaj.Lambda.on;
@@ -37,7 +39,7 @@ public class IsolationPointListPanel extends Panel {
 
     private final IModel<ProcedureDefinition> model;
     private final Component blankSlate;
-    private final EditableImageList<ProcedureDefinitionImage> images;
+    private ImageList images;
 
     private ListView<IsolationPoint> listView;
     private boolean isLockDirection;
@@ -51,12 +53,7 @@ public class IsolationPointListPanel extends Panel {
 
         add(new AttributeAppender("class", "isolation-point-list"));
 
-        add(images = new EditableImageList<ProcedureDefinitionImage>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getImages())) {
-            @Override protected void createImage(final ListItem<ProcedureDefinitionImage> item) {
-                URL url = s3Service.getProcedureDefinitionImageThumbnailURL(item.getModel().getObject());
-                item.add(new ContextImage("image", url.toString()));
-            }
-        });
+        add(images = getImageList(model));
 
         add(new AjaxLink<Void>("showLockOrder") {
             @Override
@@ -142,6 +139,37 @@ public class IsolationPointListPanel extends Panel {
         super.onBeforeRender();
         boolean showBlankSlate = model.getObject().getLockIsolationPoints().size()==0;
         blankSlate.setVisible(showBlankSlate);
+    }
+
+    private ImageList getImageList(IModel<ProcedureDefinition> model) {
+        if (model.getObject().getAnnotationType().equals(AnnotationType.CALL_OUT_STYLE)) {
+            return new ImageList<ProcedureDefinitionImage>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getImages())) {
+                @Override
+                protected void createImage(ListItem<ProcedureDefinitionImage> item) {
+                    if (item.getModelObject().getAnnotations().size() > 0) {
+                        item.add(new CallOutStyleAnnotatedSvg("image", item.getModel()).withScale(2.0));
+                    }
+                }
+            };
+        } else {
+            return new ImageList<IsolationPoint>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getLockIsolationPoints())) {
+                @Override
+                protected void createImage(ListItem<IsolationPoint> item) {
+                    if(item.getModelObject().getAnnotation() != null) {
+                        item.add(new ArrowStyleAnnotatedSvg("image", item.getModelObject().getAnnotation()).withScale(2.0));
+                    } else {
+                        item.add(new EmptyPanel("image").setVisible(false));
+                        item.setVisible(false);
+                    }
+                }
+            };
+        }
+    }
+
+    public void reloadImageList(AjaxRequestTarget target, IModel<ProcedureDefinition> model) {
+        images.replaceWith(getImageList(model));
+        images.setParent(this);
+        target.add(images);
     }
 
     protected void doEdit(AjaxRequestTarget target, IsolationPoint isolationPoint) { }

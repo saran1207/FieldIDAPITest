@@ -1,9 +1,5 @@
 package com.n4systems.fieldid.ws.v1.resources.asset;
 
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-
 import com.n4systems.fieldid.ws.v1.resources.assetattachment.ApiAssetAttachment;
 import com.n4systems.fieldid.ws.v1.resources.assettype.attributevalues.ApiAttributeValue;
 import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiEventHistory;
@@ -11,6 +7,10 @@ import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventSchedule;
 import com.n4systems.fieldid.ws.v1.resources.model.ApiReadWriteModelWithOwner;
 import com.n4systems.fieldid.ws.v1.resources.procedure.ApiProcedure;
 import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedEvent;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 
 public class ApiAsset extends ApiReadWriteModelWithOwner {
 	private String identifier;
@@ -38,6 +38,10 @@ public class ApiAsset extends ApiReadWriteModelWithOwner {
 	private List<ApiEventHistory> eventHistory;
 	private List<ApiSavedEvent> events;
     private List<ApiProcedure> procedures;
+
+	//This field is used to record whether or not the parent Org/Division of this Asset is in any of the Tenant's users'
+	//Offline collection.
+	private Boolean parentOffline;
 
 	public String getIdentifier() {
 		return identifier;
@@ -238,4 +242,12 @@ public class ApiAsset extends ApiReadWriteModelWithOwner {
     public void setProcedures(List<ApiProcedure> procedures) {
         this.procedures = procedures;
     }
+
+	public Boolean getParentOffline() {
+		return parentOffline;
+	}
+
+	public void setParentOffline(Boolean parentOffline) {
+		this.parentOffline = parentOffline;
+	}
 }

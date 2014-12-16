@@ -13,7 +13,8 @@ import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.loto.ProceduresListPage;
 import com.n4systems.model.Asset;
 import com.n4systems.model.IsolationPointSourceType;
-import com.n4systems.model.procedure.CustomLotoDetails;
+import com.n4systems.model.procedure.AnnotationType;
+import com.n4systems.model.procedure.LotoSettings;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
 import org.apache.wicket.Component;
@@ -45,6 +46,7 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
     protected Label pageTileLabel;
     protected Label isolationPointLabel;
     private IModel<ProcedureDefinition> model;
+    private boolean isCopyOrRevise = false;
 
     enum ProcedureDefinitionSection { Details, Content, Publish };
 
@@ -66,12 +68,24 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
         pd.setEquipmentLocation(asset.getAdvancedLocation().getFullName());
         pd.setEquipmentDescription(asset.getType().getDisplayName());
 
-        CustomLotoDetails customLotoDetails = procedureDefinitionService.getCustomLotoDetails();
+        LotoSettings lotoSettings = procedureDefinitionService.getLotoSettings();
 
-        if (customLotoDetails != null) {
-            pd.setApplicationProcess(customLotoDetails.getApplicationProcess());
-            pd.setRemovalProcess(customLotoDetails.getRemovalProcess());
-            pd.setTestingAndVerification(customLotoDetails.getTestingAndVerification());
+        if (lotoSettings != null) {
+            if(lotoSettings.getApplicationProcess() != null && !lotoSettings.getApplicationProcess().isEmpty()) {
+                pd.setApplicationProcess(lotoSettings.getApplicationProcess());
+            }
+
+            if(lotoSettings.getRemovalProcess() != null && !lotoSettings.getRemovalProcess().isEmpty()) {
+                pd.setRemovalProcess(lotoSettings.getRemovalProcess());
+            }
+
+            if(lotoSettings.getTestingAndVerification() != null && !lotoSettings.getTestingAndVerification().isEmpty()) {
+                pd.setTestingAndVerification(lotoSettings.getTestingAndVerification());
+            }
+
+            pd.setAnnotationType(lotoSettings.getAnnotationType());
+        } else {
+            pd.setAnnotationType(AnnotationType.ARROW_STYLE);
         }
 
         init(Model.of(pd));
@@ -82,8 +96,15 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
         init(model);
     }
 
+    public ProcedureDefinitionPage(IModel<ProcedureDefinition> model, boolean isCopyOrRevise) {
+        super(new PageParameters());
+        this.isCopyOrRevise = isCopyOrRevise;
+        init(model);
+    }
+
     public ProcedureDefinitionPage(PageParameters params) {
         super(params);
+        isCopyOrRevise = Boolean.valueOf(getPageParameters().get("isCopyOrRevise").toString());
         init(createEntityModel());
     }
 
@@ -137,48 +158,61 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
 
     class ProcedureDefinitionFormContainer extends WebMarkupContainer {
 
-        private final Component details;
-        private final Component content;
-        private final Component publish;
+        private final DetailsPanel details;
+        private final ContentPanel content;
+        private final PublishPanel publish;
 
         ProcedureDefinitionFormContainer(String id, final IModel<ProcedureDefinition> model) {
             super(id, model);
 
             setOutputMarkupId(true);
 
-            add(details = new DetailsPanel("details", model) {
-                @Override protected void doCancel(AjaxRequestTarget target) {
+            add(details = new DetailsPanel("details", model, isCopyOrRevise) {
+                @Override
+                protected void doCancel(AjaxRequestTarget target) {
                     ProcedureDefinitionPage.this.doCancel(target);
                 }
 
-                @Override protected void doContinue(AjaxRequestTarget target) {
+                @Override
+                protected void doContinue(AjaxRequestTarget target) {
                     currentSection = ProcedureDefinitionSection.Content;
                     updateSection(target);
+                }
+
+                @Override
+                protected void onAnnotationStyleSelected(AjaxRequestTarget target) {
+                    content.onAnnotationStyleSelected(target);
                 }
             });
 
             add(content = new ContentPanel("content",model) {
-                @Override protected void doCancel(AjaxRequestTarget target) {
+                @Override
+                protected void doCancel(AjaxRequestTarget target) {
                     ProcedureDefinitionPage.this.doCancel(target);
                 }
 
-                @Override protected void doContinue(AjaxRequestTarget target) {
+                @Override
+                protected void doContinue(AjaxRequestTarget target) {
                     currentSection = ProcedureDefinitionSection.Publish;
                     updateSection(target);
                 }
 
-                @Override protected void doAdd(AjaxRequestTarget target, IsolationPointSourceType sourceType) {
+                @Override
+                protected void doAdd(AjaxRequestTarget target, IsolationPointSourceType sourceType) {
                     super.doAdd(target, sourceType);
                 }
-            }.setVisible(false));
+            });
+            content.setVisible(false);
 
             add(publish = new PublishPanel("publish", model) {
-                @Override protected void doCancel(AjaxRequestTarget target) {
+                @Override
+                protected void doCancel(AjaxRequestTarget target) {
                     // leave the model as a detached object....don't save it.   nothing to "undo".
                     ProcedureDefinitionPage.this.doCancel(target);
                 }
 
-                @Override protected void doPublish() {
+                @Override
+                protected void doPublish() {
                     try {
                         procedureDefinitionService.saveProcedureDefinition(model.getObject());
                         gotoProceduresPage();
@@ -187,7 +221,8 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
                     }
                 }
 
-                @Override protected void doSave() {
+                @Override
+                protected void doSave() {
                     procedureDefinitionService.saveProcedureDefinitionDraft(model.getObject());
                     gotoProceduresPage();
                 }
@@ -199,7 +234,8 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
                     notifyService.notifyProcedureRejection(model.getObject(), message);
                     gotoProceduresPage();
                 }
-            }.setVisible(false));
+            });
+            publish.setVisible(false);
         }
 
         public void updateSection(AjaxRequestTarget target) {

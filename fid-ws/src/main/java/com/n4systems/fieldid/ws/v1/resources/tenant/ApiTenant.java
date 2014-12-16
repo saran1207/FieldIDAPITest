@@ -13,6 +13,7 @@ public class ApiTenant {
 	private int maxAttempts;
 	private int lockoutDuration;
 	private boolean lockoutOnMobile;
+	private boolean usingEvents;
 	
 	public void setSerialNumberLabel(String serialNumberLabel) {
 		this.serialNumberLabel = serialNumberLabel;
@@ -108,5 +109,13 @@ public class ApiTenant {
 
 	public void setLockoutOnMobile(boolean lockoutOnMobile) {
 		this.lockoutOnMobile = lockoutOnMobile;
+	}
+
+	public boolean isUsingEvents() {
+		return usingEvents;
+	}
+
+	public void setUsingEvents(boolean usingEvents) {
+		this.usingEvents = usingEvents;
 	}
 }

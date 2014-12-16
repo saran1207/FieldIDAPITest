@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.ws.v1.resources;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.model.parents.EntityWithTenant;
@@ -15,11 +15,7 @@ public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPe
 	protected abstract A convertEntityToApiModel(E entityModel);
 
 	protected List<A> convertAllEntitiesToApiModels(List<E> entityModels) {
-		List<A> apiModel = new ArrayList<A>();
-		for (E entityModel: entityModels) {
-			apiModel.add(convertEntityToApiModel(entityModel));
-		}
-		return apiModel;
+		return entityModels.stream().map(this::convertEntityToApiModel).collect(Collectors.toList());
 	}
 
     protected <T extends EntityWithTenant> T findEntity(Class<T> entityClass, Long id) {

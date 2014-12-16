@@ -291,7 +291,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
 
             add(new DropDownChoice<AssetStatus>("assetStatusSelect", ProxyModel.of(assetModel, on(Asset.class).getAssetStatus()), new AssetStatusesForTenantModel(), new ListableChoiceRenderer<AssetStatus>()).setNullValid(true));
 
-            add(new Comment("comments", ProxyModel.of(assetModel, on(Asset.class).getComments())).addMaxLengthValidation(300));
+            add(new Comment("comments", ProxyModel.of(assetModel, on(Asset.class).getComments())).addMaxLengthValidation(3000));
 
             WebMarkupContainer visibilityContainer = new WebMarkupContainer("visibilityContainer");
             add(visibilityContainer);

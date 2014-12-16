@@ -1,12 +1,13 @@
 package com.n4systems.fieldid.service.offlineprofile;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.offlineprofile.OfflineProfile;
 import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 public class OfflineProfileService extends FieldIdPersistenceService {
 
@@ -35,6 +36,13 @@ public class OfflineProfileService extends FieldIdPersistenceService {
 			save(offlineProfile);
 		}
 		return offlineProfile;
+	}
+
+	public List<OfflineProfile> findAllProfilesForTenant(Long tenantId) {
+		QueryBuilder<OfflineProfile> builder = createTenantSecurityBuilder(OfflineProfile.class);
+		builder.addWhere(WhereClauseFactory.create("tenant.id", tenantId));
+
+		return persistenceService.findAll(builder);
 	}
 	
 	@Transactional

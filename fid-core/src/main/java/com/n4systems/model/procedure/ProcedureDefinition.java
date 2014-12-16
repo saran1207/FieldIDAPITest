@@ -137,6 +137,10 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
     @Column(name="testing_and_verification")
     private String testingAndVerification = TESTING_AND_VERIFICATION_REQUIREMENTS;
 
+    @Column(name="annotation_type")
+    @Enumerated(EnumType.STRING)
+    private AnnotationType annotationType;
+
 	@Column(nullable=false)
 	private String mobileId;
 
@@ -461,6 +465,18 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
         }
     }
 
+    public String getAnnotationTypeLabel() {
+        return annotationType.getLabel();
+    }
+
+    public void setAnnotationTypeLabel(String label) {
+        if(label.equals(AnnotationType.ARROW_STYLE.getLabel())) {
+            setAnnotationType(AnnotationType.ARROW_STYLE);
+        } else {
+            setAnnotationType(AnnotationType.CALL_OUT_STYLE);
+        }
+    }
+
     public String getApplicationProcess() {
         return applicationProcess;
     }
@@ -483,6 +499,14 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
 
     public void setTestingAndVerification(String testingAndVerification) {
         this.testingAndVerification = testingAndVerification;
+    }
+
+    public AnnotationType getAnnotationType() {
+        return annotationType;
+    }
+
+    public void setAnnotationType(AnnotationType annotationType) {
+        this.annotationType = annotationType;
     }
 
     //We are forced to implement this due to the HasOwner interface on the event creation service and related classes

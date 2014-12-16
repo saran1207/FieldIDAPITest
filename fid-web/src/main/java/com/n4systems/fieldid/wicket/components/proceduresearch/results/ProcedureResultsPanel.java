@@ -16,6 +16,11 @@ public class ProcedureResultsPanel extends SRSResultsPanel<ProcedureCriteria,Has
     }
 
     @Override
+    protected IColumn<RowView> createAttachmentColumn() {
+        return new BlankColumn();
+    }
+
+    @Override
     protected IColumn<RowView> createActionsColumn() {
         return new ProcedureActionsColumn();
     }

@@ -3,12 +3,15 @@ package com.n4systems.fieldid.wicket.pages.loto.definition;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.loto.WarningPanel;
 import com.n4systems.fieldid.wicket.components.text.*;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
+import com.n4systems.model.procedure.AnnotationType;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureType;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -30,13 +33,14 @@ public class DetailsPanel extends Panel {
     private FIDFeedbackPanel feedbackPanel;
 
     private @SpringBean ProcedureDefinitionService procedureDefinitionService;
+    private boolean isCopyOrRevise;
 
-    public DetailsPanel(String id, IModel<ProcedureDefinition> model) {
+    public DetailsPanel(String id, IModel<ProcedureDefinition> model, boolean isCopyOrRevise) {
         super(id, model);
-
+        this.isCopyOrRevise = isCopyOrRevise;
         setOutputMarkupPlaceholderTag(true);
         add(new AttributeAppender("class", Model.of("details")));
-        add(new ProcedureDefinitionDetailsForm("detailsForm", model));
+        add(new ProcedureDefinitionDetailsForm("detailsForm", model).setOutputMarkupId(true));
         add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
     }
 
@@ -52,12 +56,7 @@ public class DetailsPanel extends Panel {
             add(new LabelledTextField<String>("identifier", "label.electronic_id", ProxyModel.of(model, on(ProcedureDefinition.class).getElectronicIdentifier()))
                     .add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.electronic_id"), TipsyBehavior.Gravity.N)));
 
-            add(new LabelledTextArea<String>("warnings", "label.warnings", ProxyModel.of(model, on(ProcedureDefinition.class).getWarnings())){
-                @Override
-                public int getMaxLength() {
-                    return 1024;
-                }
-            });
+            add(new WarningPanel("warnings", ProxyModel.of(model, on(ProcedureDefinition.class).getWarnings())).setOutputMarkupId(true));
 
             //Fields for Application Process and Removal Process of lockouts.
             add(new LabelledTextArea<String>("applicationProcess", "label.lockout_application_process", ProxyModel.of(model, on(ProcedureDefinition.class).getApplicationProcess())){
@@ -138,8 +137,32 @@ public class DetailsPanel extends Panel {
             procedureTypeLabelledDropDown.add(new AttributeAppender("class", "procedure-def-paddingCorrection"));
             add(procedureTypeLabelledDropDown);
 
+            /*
+             * This is the best way to determine whether we should freeze the annotation type to the specific one this procedure deifinition
+             * originated from.
+             */
+            LabelledDropDown<String> annotationTypeDropDown = new LabelledDropDown<String>("annotationType", "label.annotation_type", ProxyModel.of(model, on(ProcedureDefinition.class).getAnnotationTypeLabel())) {
+                    @Override
+                    protected List<String> getChoices() {
+                        if(isCopyOrRevise) {
+                            return Arrays.asList(model.getObject().getAnnotationType().getLabel());
+                        } else {
+                            return AnnotationType.ARROW_STYLE.getAllLabels();
+                        }
+                    }
+                };
+            annotationTypeDropDown.required();
+            annotationTypeDropDown.addBehavior(new AjaxFormComponentUpdatingBehavior("onchange") {
+                @Override
+                protected void onUpdate(AjaxRequestTarget target) {
+                    onAnnotationStyleSelected(target);
+                }
+            });
+            add(annotationTypeDropDown);
+
             add(new AjaxLink("cancel") {
-                @Override public void onClick(AjaxRequestTarget target) {
+                @Override
+                public void onClick(AjaxRequestTarget target) {
                     doCancel(target);
                 }
             });
@@ -168,5 +191,7 @@ public class DetailsPanel extends Panel {
     protected void doContinue(AjaxRequestTarget target) { }
 
     protected void doCancel(AjaxRequestTarget target) { }
+
+    protected void onAnnotationStyleSelected(AjaxRequestTarget target) { }
 
 }

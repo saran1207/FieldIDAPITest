@@ -2,10 +2,8 @@ package com.n4systems.reporting;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.procedure.SvgGenerationService;
-import com.n4systems.model.procedure.IsolationPoint;
-import com.n4systems.model.procedure.ProcedureDefinition;
-import com.n4systems.model.procedure.ProcedureDefinitionImage;
-import com.n4systems.model.procedure.PublishedState;
+import com.n4systems.model.IsolationPointSourceType;
+import com.n4systems.model.procedure.*;
 import com.n4systems.reporting.data.ImagePrintoutContainer;
 import com.n4systems.reporting.data.IsolationPointPrintoutContainer;
 import com.n4systems.util.DateTimeDefinition;
@@ -86,12 +84,18 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
         //If it's not long, it's short... or invalid... but we'll pretend that being invalid is impossible.
         List<IsolationPointPrintoutContainer> isolationPoints = convertToIPContainerCollection(procDef.getLockIsolationPoints());
         add("isolationPoints", isolationPoints);
-
+        add("numberOfIsolationPoints", countIsolationPoints(procDef.getLockIsolationPoints()));
         //Now, we have to do the images...  these are special images that hold all annotations associated with the
         //single image.
         List<ImagePrintoutContainer> allImages = convertToImageContainerCollection(procDef.getImages());
 
         add("allImages", allImages);
+    }
+
+    private String countIsolationPoints(List<IsolationPoint> lockIsolationPoints) {
+        return new Long(lockIsolationPoints.stream()
+                           .filter(isolationPoint -> !isolationPoint.getSourceType().equals(IsolationPointSourceType.N))
+                           .count()).toString();
     }
 
     /**
@@ -129,7 +133,12 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
             if(imageData == null) {
                 //This might just mean that we haven't generated the SVGs yet... so we'll do that now.
                 try {
-                    svgGenerationService.generateAndUploadAnnotatedSvgs(procDef);
+
+                    if (procDef.getAnnotationType().equals(AnnotationType.CALL_OUT_STYLE)) {
+                        svgGenerationService.generateAndUploadAnnotatedSvgs(procDef);
+                    } else {
+                        svgGenerationService.generateAndUploadArrowStyleAnnotatedSvgs(procDef);
+                    }
 
                     //Now we try to pull the SVG down again...
                     imageData = s3Service.downloadProcedureDefinitionImageSvg(image);
@@ -209,7 +218,13 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
                     //to fix that... then we're going to try again.  If it's still bad the second time, we're going to throw
                     //an exception.
                     try {
-                        svgGenerationService.generateAndUploadAnnotatedSvgs(procDef);
+
+                        if (procDef.getAnnotationType().equals(AnnotationType.CALL_OUT_STYLE)) {
+                            svgGenerationService.generateAndUploadAnnotatedSvgs(procDef);
+                        } else {
+                            svgGenerationService.generateAndUploadArrowStyleAnnotatedSvgs(procDef);
+                        }
+
 
                         imageData = s3Service.downloadProcedureDefinitionImageSvg(theImage, isolationPoint);
 

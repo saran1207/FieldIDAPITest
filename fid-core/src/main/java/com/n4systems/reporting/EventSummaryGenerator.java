@@ -119,7 +119,7 @@ public class EventSummaryGenerator {
 				eventMap.put("assignedTo", event.getAssignedTo() != null && event.getAssignedTo().getAssignedUser() != null
 						? event.getAssignedTo().getAssignedUser().getDisplayName() : "");
 
-				
+
 				Map<String, Object> eventReportMap = new EventReportMapProducer(event, dateDefiner, s3service, eventService, lastEventDateService).produceMap();
 				eventMap.put("mainInspection", eventReportMap);
 				eventMap.put("product", eventReportMap.get("product"));

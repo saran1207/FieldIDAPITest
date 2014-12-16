@@ -2,6 +2,7 @@ package com.n4systems.fieldid.service.procedure;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.images.ImageService;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
@@ -15,17 +16,28 @@ import javax.xml.bind.DatatypeConverter;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 
 public class SvgGenerationService extends FieldIdPersistenceService {
 
     @Autowired
     private S3Service s3Service;
+
+    @Autowired
+    private ImageService imageService;
+
+    public static Integer DEFAULT_JASPER_HEIGHT = 140;
+    public static Integer DEFAULT_JASPER_WIDTH = 140;
 
     public void generateAndUploadAnnotatedSvgs(ProcedureDefinition definition) throws Exception {
         for(ProcedureDefinitionImage image: definition.getImages()) {
@@ -75,6 +87,10 @@ public class SvgGenerationService extends FieldIdPersistenceService {
 
         File imageFile = PathHandler.getTempFile();
         byte [] bytes = s3Service.downloadProcedureDefinitionImage((ProcedureDefinitionImage) annotation.getImage());
+
+        //convert image to be scaled down to jasper size
+        bytes = imageService.scaleImage(bytes, DEFAULT_JASPER_WIDTH, DEFAULT_JASPER_HEIGHT);
+
         FileUtils.writeByteArrayToFile(imageFile, bytes);
         BufferedImage bufferedImage = ImageIO.read(imageFile);
 
@@ -89,9 +105,9 @@ public class SvgGenerationService extends FieldIdPersistenceService {
 
         svg.appendChild(defs);
 
-        defs.appendChild(createAnnotationDefinition(doc, annotation, width));
+        defs.appendChild(createAnnotationDefinition(doc, annotation, width, height));
 
-        Element imageElement = createImageElement(doc, bytes, width, height);
+        Element imageElement = createImageElement(doc, bytes, height, width);
 
         svg.appendChild(imageElement);
 
@@ -106,6 +122,10 @@ public class SvgGenerationService extends FieldIdPersistenceService {
 
         File imageFile = PathHandler.getTempFile();
         byte [] bytes = s3Service.downloadProcedureDefinitionImage(image);
+
+        //convert image to be scaled down to jasper size
+        bytes = imageService.scaleImage(bytes, DEFAULT_JASPER_WIDTH, DEFAULT_JASPER_HEIGHT);
+
         FileUtils.writeByteArrayToFile(imageFile, bytes);
         BufferedImage bufferedImage = ImageIO.read(imageFile);
 
@@ -121,10 +141,10 @@ public class SvgGenerationService extends FieldIdPersistenceService {
         svg.appendChild(defs);
 
         for(ImageAnnotation annotation: image.getAnnotations()) {
-            defs.appendChild(createAnnotationDefinition(doc, annotation, width));
+            defs.appendChild(createAnnotationDefinition(doc, annotation, width, height));
         }
 
-        Element imageElement = createImageElement(doc, bytes, width, height);
+        Element imageElement = createImageElement(doc, bytes, height, width);
 
         svg.appendChild(imageElement);
 
@@ -149,18 +169,30 @@ public class SvgGenerationService extends FieldIdPersistenceService {
     private Element createSvgElement(Document doc, Integer width, Integer height) {
         Element svg = doc.createElement("svg");
         svg.setAttribute("viewBox", "0 0 " + width + " " + height);
+        svg.setAttribute("height", DEFAULT_JASPER_HEIGHT.toString());
+        svg.setAttribute("width", DEFAULT_JASPER_WIDTH.toString());
         svg.setAttribute("version", "1.1");
         svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
         svg.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
         return svg;
     }
 
-    private Element createImageElement(Document doc, byte[] bytes, Integer width, Integer height) {
+    private Element createImageElement(Document doc, byte[] bytes) {
         Element imageElement = doc.createElement("image");
         imageElement.setAttribute("x", "0");
         imageElement.setAttribute("y", "0");
-        imageElement.setAttribute("height", height.toString());
-        imageElement.setAttribute("width", width.toString());
+        imageElement.setAttribute("height", "100%");
+        imageElement.setAttribute("width", "100%");
+        imageElement.setAttribute("xlink:href", "data:image/png;base64," + DatatypeConverter.printBase64Binary(bytes));
+        return imageElement;
+    }
+
+    private Element createImageElement(Document doc, byte[] bytes, int height, int width) {
+        Element imageElement = doc.createElement("image");
+        imageElement.setAttribute("x", "0");
+        imageElement.setAttribute("y", "0");
+        imageElement.setAttribute("height", height+"");
+        imageElement.setAttribute("width", width+"");
         imageElement.setAttribute("xlink:href", "data:image/png;base64," + DatatypeConverter.printBase64Binary(bytes));
         return imageElement;
     }
@@ -173,56 +205,239 @@ public class SvgGenerationService extends FieldIdPersistenceService {
         return annotationElement;
     }
 
-    private Node createAnnotationDefinition(Document doc, ImageAnnotation annotation, Integer width) {
+    private Node createAnnotationDefinition(Document doc, ImageAnnotation annotation, Integer width, Integer height) {
 
         Boolean isReversed =  Math.round(width * annotation.getX()) < width/2;
+        Boolean isWide = width > height;
 
         Element group = doc.createElement("g");
         group.setAttribute("id", annotation.getType().getCssClass() + "_" + annotation.getText());
 
-        Element path = doc.createElement("path");
-        path.setAttribute("id", "arrow");
-        path.setAttribute("d", "M 0 0 l -12 12 l 0 -8 l -75 0 l 0 -8 l 75 0 l 0 -8 z");
-        path.setAttribute("fill", annotation.getType().getBackgroundColor());
-        path.setAttribute("stroke", annotation.getType().getBorderColor());
-        path.setAttribute("stroke-width", "1");
-        if(isReversed) {
-            path.setAttribute("transform", "scale(-1, 1)");
-        }
+        if(isWide) {
+            Element path = doc.createElement("path");
+            path.setAttribute("id", "arrow");
+            path.setAttribute("d", "M 0 0 l -12 4 l 0 -3 l -40 0 l 0 -3 l 40 0 l 0 -4 z");
+            path.setAttribute("fill", annotation.getType().getBackgroundColor());
+            path.setAttribute("stroke", annotation.getType().getBorderColor());
+            path.setAttribute("stroke-width", "1");
+            if (isReversed) {
+                path.setAttribute("transform", "scale(-1, 1)");
+            }
+            group.appendChild(path);
 
-        group.appendChild(path);
+            Element rect = doc.createElement("rect");
 
-        Element rect = doc.createElement("rect");
-        rect.setAttribute("x", "-155");
-        rect.setAttribute("y", "-13");
-        rect.setAttribute("rx", "5");
-        rect.setAttribute("ry", "5");
-        rect.setAttribute("width", "60");
-        rect.setAttribute("height", "24");
-        rect.setAttribute("fill", annotation.getType().getBackgroundColor());
-        rect.setAttribute("stroke", annotation.getType().getBorderColor());
-        rect.setAttribute("stroke-width", "2");
-        if(isReversed) {
-            rect.setAttribute("transform", "scale(-1, 1)");
-        }
+            rect.setAttribute("x", "-63");
+            rect.setAttribute("y", "-5");
+            rect.setAttribute("rx", "5");
+            rect.setAttribute("ry", "5");
 
-        group.appendChild(rect);
+            int lenght = annotation.getText().length();
+            if (lenght <= 4) {
+                rect.setAttribute("width", "25%");
+            } else if ((lenght > 4) && (lenght <= 6)) {
+                rect.setAttribute("width", "35%");
+            } else {
+                rect.setAttribute("width", "40%");
+            }
 
-        Element text = doc.createElement("text");
-        if(isReversed) {
-            text.setAttribute("x", "100");
+            rect.setAttribute("height", "10%");
+            rect.setAttribute("fill", annotation.getType().getBackgroundColor());
+            rect.setAttribute("stroke", annotation.getType().getBorderColor());
+            rect.setAttribute("stroke-width", "1");
+
+            if (isReversed) {
+                rect.setAttribute("transform", "scale(-1, 1)");
+            }
+
+            group.appendChild(rect);
+
+            Element text = doc.createElement("text");
+            if (isReversed) {
+                if (lenght <= 4) {
+                    text.setAttribute("x", "30");
+                } else if ((lenght > 4) && (lenght <= 6)) {
+                    text.setAttribute("x", "22");
+                } else {
+                    text.setAttribute("x", "9");
+                }
+            } else {
+                text.setAttribute("x", "-61");
+            }
+            text.setAttribute("y", "2");
+            text.setAttribute("fill", annotation.getType().getFontColor());
+
+            text.setAttribute("font-size", "7");
+
+            text.setTextContent(annotation.getText());
+
+            group.appendChild(text);
         } else {
-            text.setAttribute("x", "-150");
-        }
-        text.setAttribute("y", "6");
-        text.setAttribute("fill", annotation.getType().getFontColor());
-        text.setAttribute("font-size", "16");
-        text.setTextContent(annotation.getText());
+            Element path = doc.createElement("path");
+            path.setAttribute("id", "arrow");
+            path.setAttribute("d", "M 0 0 l -12 4 l 0 -3 l -40 0 l 0 -3 l 40 0 l 0 -4 z");
+            path.setAttribute("fill", annotation.getType().getBackgroundColor());
+            path.setAttribute("stroke", annotation.getType().getBorderColor());
+            path.setAttribute("stroke-width", "1");
+            if (isReversed) {
+                path.setAttribute("transform", "scale(-1, 1)");
+            }
 
-        group.appendChild(text);
+            group.appendChild(path);
+            Element rect = doc.createElement("rect");
+
+            rect.setAttribute("x", "-75");
+            rect.setAttribute("y", "-8");
+            rect.setAttribute("rx", "5");
+            rect.setAttribute("ry", "5");
+
+            int lenght = annotation.getText().length();
+            if (lenght <= 4) {
+                rect.setAttribute("width", "25%");
+            } else if ((lenght > 4) && (lenght <= 6)) {
+                rect.setAttribute("width", "35%");
+            } else {
+                rect.setAttribute("width", "47%");
+            }
+
+            rect.setAttribute("height", "10%");
+            rect.setAttribute("fill", annotation.getType().getBackgroundColor());
+            rect.setAttribute("stroke", annotation.getType().getBorderColor());
+            rect.setAttribute("stroke-width", "1");
+
+            if (isReversed) {
+                rect.setAttribute("transform", "scale(-1, 1)");
+            }
+
+            group.appendChild(rect);
+            Element text = doc.createElement("text");
+
+
+            if (isReversed) {
+                if (lenght <= 4) {
+                    text.setAttribute("x", "50");
+                } else if ((lenght > 4) && (lenght <= 6)) {
+                    text.setAttribute("x", "39");
+                } else {
+                    text.setAttribute("x", "29");
+                }
+            } else {
+                text.setAttribute("x", "-74");
+            }
+            text.setAttribute("y", "2");
+            text.setAttribute("fill", annotation.getType().getFontColor());
+
+            text.setAttribute("font-size", "7");
+
+            text.setTextContent(annotation.getText());
+
+            group.appendChild(text);
+        }
 
         return group;
     }
 
+
+    /******************************** Arrow Style Annotation SVG ***********************/
+
+
+    public void generateAndUploadArrowStyleAnnotatedSvgs(ProcedureDefinition definition) throws Exception {
+        definition.getUnlockIsolationPoints()
+                .stream()
+                        //We need to make sure to only do this for Isolation Points that have annotations... otherwise we
+                        //get a NullPointerException
+                .filter(isolationPoint -> isolationPoint.getAnnotation() != null)
+                .forEach(isolationPoint -> {
+                    try {
+                        ImageAnnotation annotation = isolationPoint.getAnnotation();
+                        File singleAnnotation = exportToSvg(new DOMSource(generateArrowStyleAnnotatedImage(annotation)), annotation.getImage().getFileName() + "_" + annotation.getId());
+                        uploadSvg(definition, singleAnnotation);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+
+    public Document generateArrowStyleAnnotatedImage(ImageAnnotation annotation) throws Exception{
+        Document doc = getDocument();
+
+        File imageFile = PathHandler.getTempFile();
+        byte [] bytes = s3Service.downloadProcedureDefinitionImage((ProcedureDefinitionImage) annotation.getImage());
+        FileUtils.writeByteArrayToFile(imageFile, bytes);
+        BufferedImage bufferedImage = ImageIO.read(imageFile);
+
+        Integer width = bufferedImage.getWidth();
+        Integer height = bufferedImage.getHeight();
+
+        Element svg = createSvgElement(doc, width, height);
+
+        svg.appendChild(createArrowMarkerDefinition(doc));
+
+        svg.appendChild(createImageElement(doc, bytes));
+
+        svg.appendChild(createArrowAnnotation(doc, annotation, height, width));
+
+        doc.appendChild(svg);
+
+        //printDocument(doc, System.out);
+        return doc;
+    }
+
+    private Element createArrowMarkerDefinition(Document doc) {
+        Element defs = doc.createElement("defs");
+
+        Element marker = doc.createElement("marker");
+        marker.setAttribute("id", "arrow");
+        marker.setAttribute("markerUnits", "strokeWidth");
+        marker.setAttribute("orient", "auto");
+        marker.setAttribute("markerWidth", "4.6");
+        marker.setAttribute("markerHeight", "4.6");
+        marker.setAttribute("refX", "0.9199999999999999");
+        marker.setAttribute("refY", "2.3");
+
+        Element polygon = doc.createElement("polygon");
+        polygon.setAttribute("id", "arrow-poly");
+        polygon.setAttribute("points", "0,2.3 4.6,0 3.4499999999999997,2.3 4.6,4.6");
+        polygon.setAttribute("fill", "#ff0000");
+
+        marker.appendChild(polygon);
+        defs.appendChild(marker);
+
+        return defs;
+    }
+
+    private Element createArrowAnnotation(Document doc, ImageAnnotation annotation, Integer height, Integer width) {
+        Element group = doc.createElement("g");
+        group.setAttribute("id", "annotations");
+
+        Element line = doc.createElement("line");
+        line.setAttribute("x1", String.valueOf(Math.round(width * annotation.getX())));
+        line.setAttribute("y1", String.valueOf(Math.round(height * annotation.getY())));
+        line.setAttribute("x2", String.valueOf(Math.round(width * annotation.getX_tail())));
+        line.setAttribute("y2", String.valueOf(Math.round(height * annotation.getY_tail())));
+        line.setAttribute("stroke", "#ff0000");
+        line.setAttribute("stroke-width", "10");
+        line.setAttribute("marker-start", "url(#arrow)");
+
+        group.appendChild(line);
+
+        return group;
+    }
+
+    //For Testing
+    @Deprecated
+    private static void printDocument(Document doc, OutputStream out) throws IOException, TransformerException {
+        TransformerFactory tf = TransformerFactory.newInstance();
+        Transformer transformer = tf.newTransformer();
+        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+
+        transformer.transform(new DOMSource(doc),
+                new StreamResult(new OutputStreamWriter(out, "UTF-8")));
+    }
 
 }

@@ -52,7 +52,7 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
         }
     }
 
-    private ImageAnnotationType parseAnnotationType(IRequestParameters params) {
+    protected ImageAnnotationType parseAnnotationType(IRequestParameters params) {
         String allClasses = params.getParameterValue("type").toString().toUpperCase();
         for (ImageAnnotationType type:ImageAnnotationType.values()) {
             if (allClasses.contains(type.getCssClass().toUpperCase())) {
@@ -62,7 +62,7 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
         return null;
     }
 
-    private Long parseNoteId(IRequestParameters params) {
+    protected Long parseNoteId(IRequestParameters params) {
         return parsePrefixedId(params, "noteId", "_note");
     }
 
@@ -103,10 +103,11 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
     public void renderHead(Component component, IHeaderResponse response) {
         super.renderHead(component, response);
         response.renderJavaScriptReference(WicketAjaxReference.INSTANCE);
-        response.renderJavaScriptReference("javascript/jquery-ui-1.8.20.no-autocomplete.min.js");
         response.renderCSSReference("style/legacy/component/annotated-image.css");
-        response.renderJavaScriptReference("javascript/jquery.annotate.js");
-        response.renderJavaScriptReference("javascript/imageEditor.js");
+        //Depends on the following scripts that are included in ImageGallery.java
+        //response.renderJavaScriptReference("javascript/jquery-ui-1.8.20.no-autocomplete.min.js");
+        //response.renderJavaScriptReference("javascript/jquery.annotate.js");
+        //response.renderJavaScriptReference("javascript/imageEditor.js");
     }
 
     protected abstract ImageAnnotation getAnnotation();

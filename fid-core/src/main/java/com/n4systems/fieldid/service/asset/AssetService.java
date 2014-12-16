@@ -616,6 +616,19 @@ public class AssetService extends FieldIdPersistenceService {
         return search;
     }
 
+    public boolean hasAssetAttachments(Long id) {
+        QueryBuilder<AssetAttachment> builder = new QueryBuilder<AssetAttachment>(AssetAttachment.class, securityContext.getTenantSecurityFilter());
+        builder.addSimpleWhere("asset.id", id);
+
+        Long size = persistenceService.count(builder);
+
+        if(size > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public List<AssetAttachment> findAssetAttachments(Asset asset) {
         if (asset == null) {
             throw new InvalidArgumentException("you must have an asset to load asset attachments");

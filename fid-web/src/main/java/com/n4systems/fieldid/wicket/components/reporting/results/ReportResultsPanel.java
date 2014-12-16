@@ -19,6 +19,11 @@ public class ReportResultsPanel extends SRSResultsPanel<EventReportCriteria,HasG
     }
 
     @Override
+    protected IColumn<RowView> createAttachmentColumn(){
+        return new EventAttachmentColumn();
+    }
+
+    @Override
     protected IColumn<RowView> createActionsColumn() {
         return new EventActionsColumn();
     }

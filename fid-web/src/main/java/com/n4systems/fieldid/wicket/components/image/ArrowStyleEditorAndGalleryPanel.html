@@ -1,0 +1,16 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+    <div wicket:id="editorAndGalleryContainer">
+        <svg wicket:id="imageEditor"/>
+        <img wicket:id="placeholderImage"/>
+        <div wicket:id="imageGallery"/>
+    </div>
+    <form wicket:id="uploadForm">
+        <input type="file" wicket:id="fileUpload" class="add-image"/>
+    </form>
+    <span wicket:id="instructions" class="instructions"/>
+    <a wicket:id="done" class="mattButton done">
+        <wicket:message key="label.done"/>
+    </a>
+</wicket:panel>
+</html>

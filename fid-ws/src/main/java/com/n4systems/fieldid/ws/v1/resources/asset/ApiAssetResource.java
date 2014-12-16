@@ -3,6 +3,7 @@ package com.n4systems.fieldid.ws.v1.resources.asset;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.LastEventDateService;
+import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.fieldid.ws.v1.resources.assetattachment.ApiAssetAttachment;
@@ -21,6 +22,7 @@ import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.asset.SmartSearchWhereClause;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
+import com.n4systems.model.offlineprofile.OfflineProfile;
 import com.n4systems.model.offlineprofile.OfflineProfile.SyncDuration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OwnerAndDownFilter;
@@ -40,7 +42,8 @@ import rfid.ejb.entity.InfoOptionBean;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @Path("asset")
@@ -58,6 +61,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
     @Autowired private LastEventDateService lastEventDateService;
     @Autowired private ApiProcedureResource procedureResource;
     @Autowired private ApiProcedureDefinitionResourceV2 procedureDefinitionResource;
+	@Autowired private OfflineProfileService offlineProfileService;
 
 
 	@GET
@@ -129,8 +133,10 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		if (asset == null) {
 			throw new NotFoundException("Asset", id);
 		}
-		
-		ApiAsset apiModel = convertToApiAsset(asset, downloadEvents, downloadImageAttachments, SyncDuration.ALL);
+
+		List<Long> offlineOrgs = determineOfflineOrgs();
+
+		ApiAsset apiModel = convertToApiAsset(asset, downloadEvents, downloadImageAttachments, SyncDuration.ALL, offlineOrgs);
 		return apiModel;
 	}
 	
@@ -172,6 +178,19 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		logger.info("Saved " + multiAddAsset.getIdentifiers().size() + " Assets ");
 	}
 
+	@PUT
+	@Path("multiv2")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Transactional
+	public void multiAddAsset(ApiAsset[] assets) {
+		//In order to allow Mobile to have an easier time performing offline actions, we're accepting multi-assets as
+		//a simple array.  This allows the assets to be fully created offline, then uploaded at a later time when the
+		//sync process happens.
+		for(ApiAsset asset : assets) {
+			saveAsset(asset);
+		}
+	}
+
     @Path("{assetId}/procedures")
     public ApiProcedureDefinitionResourceV2 assetProcedureDefinitions() {
         return procedureDefinitionResource;
@@ -201,15 +220,25 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	}
 	
 	protected List<ApiAsset> convertAllAssetsToApiModels(List<Asset> assets, boolean downloadEvents, boolean downloadImageAttachments, SyncDuration syncDuration) {
-		List<ApiAsset> apiAssets = new ArrayList<ApiAsset>();
+		//We need this later to determine who has a parent that is offline.
+		List<Long> offlineOrgs = determineOfflineOrgs();
+
+		List<ApiAsset> apiAssets = new ArrayList<>();
 		for (Asset asset: assets) {
-			apiAssets.add(convertToApiAsset(asset, downloadEvents, downloadImageAttachments, syncDuration));
+			apiAssets.add(convertToApiAsset(asset, downloadEvents, downloadImageAttachments, syncDuration, offlineOrgs));
 		}
 		return apiAssets;
 	}
 	
-	protected ApiAsset convertToApiAsset(Asset asset, boolean downloadEvents, boolean downloadImageAttachments, SyncDuration syncDuration) {
+	protected ApiAsset convertToApiAsset(Asset asset, boolean downloadEvents, boolean downloadImageAttachments, SyncDuration syncDuration, List<Long> offlineOrgs) {
 		ApiAsset apiAsset = convertEntityToApiModel(asset);
+
+		//Does the Asset's Owner (read: Parent) exist in this collection of offline Orgs?  If so... Parent is offline.
+		//This determination is placed here so we don't bastardize the overridden convertEntityToApiModel call, but is
+		//kept low enough in the chain of calls that every call against ApiAssetResource should result in this field
+		//being added.
+		apiAsset.setParentOffline(offlineOrgs.contains(asset.getOwner().getId()));
+
 		apiAsset.setSchedules(apiEventScheduleResource.findAllSchedules(asset.getId(), syncDuration));
         apiAsset.setProcedures(procedureResource.getOpenAndLockedProcedures(asset.getId()));
 		if (downloadEvents) {
@@ -362,5 +391,16 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			}
 		}		
 		return image;
-	}	
+	}
+
+	private List<Long> determineOfflineOrgs() {
+		List<OfflineProfile> offlineProfiles = offlineProfileService.findAllProfilesForTenant(getCurrentTenant().getId());
+		List<Long> offlineOrgs = new ArrayList<>();
+
+		//Process the Offline Profiles to determine all offline orgs.  This will be important for determining who is or
+		//isn't online.  I wonder if there will be duplicates in there?  Hmmm...
+		offlineProfiles.forEach(offlineProfile -> offlineOrgs.addAll(offlineProfile.getOrganizations()));
+
+		return offlineOrgs;
+	}
 }

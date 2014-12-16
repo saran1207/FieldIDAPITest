@@ -4,7 +4,7 @@
     <parent>
         <artifactId>fieldid-root</artifactId>
         <groupId>com.fieldid</groupId>
-        <version>2014.8.1</version>
+        <version>2014.8.1-SNAPSHOT</version>
     </parent>
     <groupId>com.fieldid</groupId>
     <artifactId>fid-pub-ws</artifactId>
@@ -13,7 +13,7 @@
     <pluginRepositories>
         <pluginRepository>
             <id>protoc-plugin</id>
-            <url>http://sergei-ivanov.github.com/maven-protoc-plugin/repo/releases/</url>
+            <url>http://maven.davidtrott.com/repository/</url>
         </pluginRepository>
     </pluginRepositories>
     <build>

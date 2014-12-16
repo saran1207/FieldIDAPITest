@@ -70,6 +70,7 @@ public abstract class SRSResultsPanel<T extends SearchCriteria, S extends HasGps
             }
         };
         convertedColumns.add(0, selectUnselectRowColumn);
+        convertedColumns.add(createAttachmentColumn());
         convertedColumns.add(createActionsColumn());
 
         provider = createDataProvider(criteriaModel);
@@ -176,6 +177,7 @@ public abstract class SRSResultsPanel<T extends SearchCriteria, S extends HasGps
         return true;
     }
 
+    protected abstract IColumn<RowView> createAttachmentColumn();
     protected abstract IColumn<RowView> createActionsColumn();
     protected abstract FieldIdAPIDataProvider createDataProvider(IModel<T> criteriaModel);
     protected void onRowItemCreated(Item<RowView> rowItem, IModel<RowView> rowModel) {}

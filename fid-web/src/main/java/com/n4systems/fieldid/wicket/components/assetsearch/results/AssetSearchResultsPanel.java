@@ -51,6 +51,11 @@ public class AssetSearchResultsPanel extends SRSResultsPanel<AssetSearchCriteria
     }
 
     @Override
+    protected IColumn<RowView> createAttachmentColumn(){
+        return new AssetAttachmentColumn();
+    }
+
+    @Override
     protected IColumn<RowView> createActionsColumn() {
         return new AssetActionsColumn();
     }

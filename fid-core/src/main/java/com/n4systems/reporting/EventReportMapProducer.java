@@ -43,8 +43,27 @@ public class EventReportMapProducer extends AbsractEventReportMapProducer {
 
 		add("priority", event.getPriority() != null ? event.getPriority().getName() : "");
 		add("assignee", event.getAssignee() != null ? event.getAssignee().getFullName() : "");
+		add("performedBy", event.getPerformedBy() != null ? event.getPerformedBy().getFullName() : "");
+
+		add("scheduledDate", event.getDate() == null ? null : DateHelper.convertToUserTimeZone(event.getDueDate(), dateTimeDefinition.getTimeZone()));
+
+		addOwnerInfo(event);
 
 		fillInDate(event);
+	}
+
+	private void addOwnerInfo(ThingEvent event) {
+		add("owner", event.getOwner() == null ? null : event.getOwner().getDisplayName());
+		add("ownerContactName", event.getOwner().getContact() == null ? null : event.getOwner().getContact().getName());
+		add("ownerEmailAddress", event.getOwner().getContact() == null ? null : event.getOwner().getContact().getEmail());
+		add("ownerStreetAddress", event.getOwner().getAddressInfo() == null ? null : event.getOwner().getAddressInfo().getStreetAddress());
+		add("ownerCity", event.getOwner().getAddressInfo() == null ? null : event.getOwner().getAddressInfo().getCity());
+		add("ownerState", event.getOwner().getAddressInfo() == null ? null : event.getOwner().getAddressInfo().getState());
+		add("ownerZip", event.getOwner().getAddressInfo() == null ? null : event.getOwner().getAddressInfo().getZip());
+		add("ownerCountry", event.getOwner().getAddressInfo() == null ? null : event.getOwner().getAddressInfo().getCountry());
+		add("ownerPhone1", event.getOwner().getAddressInfo() == null ? null : event.getOwner().getAddressInfo().getPhone1());
+		add("ownerPhone2", event.getOwner().getAddressInfo() == null ? null : event.getOwner().getAddressInfo().getPhone2());
+		add("ownerFax", event.getOwner().getAddressInfo() == null ? null : event.getOwner().getAddressInfo().getFax1());
 	}
 
     private void addNextAndPreviousData(ThingEvent event) {
@@ -52,7 +71,7 @@ public class EventReportMapProducer extends AbsractEventReportMapProducer {
         Event nextEvent = eventService.findNextOpenOrCompletedEventOfSameType(event);
         Event previousEvent = eventService.findPreviousEventOfSameType(event);
 
-        add("nextOpenEventByTypeDueDate", nextOpenEvent == null ? null : DateHelper.convertToUserTimeZone(nextOpenEvent.getDueDate(), dateTimeDefinition.getTimeZone()));
+		add("nextOpenEventByTypeDueDate", nextOpenEvent == null ? null : DateHelper.convertToUserTimeZone(nextOpenEvent.getDueDate(), dateTimeDefinition.getTimeZone()));
 
         add("nextEventByTypeDueDate", nextEvent == null ? null : DateHelper.convertToUserTimeZone(nextEvent.getDueDate(), dateTimeDefinition.getTimeZone()));
         add("nextEventByTypeDate", nextEvent == null ? null : DateHelper.convertToUserTimeZone(nextEvent.getDate(), dateTimeDefinition.getTimeZone()));

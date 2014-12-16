@@ -52,6 +52,7 @@ import com.n4systems.model.taskconfig.TaskConfigLoader;
 import com.n4systems.model.tenant.PrimaryOrgsWithNameLikeLoader;
 import com.n4systems.model.tenant.SetupDataLastModDatesLoader;
 import com.n4systems.model.user.*;
+import com.n4systems.model.warningtemplate.WarningTempalteListableLoader;
 import com.n4systems.tools.Pager;
 
 import java.io.Serializable;
@@ -191,6 +192,10 @@ public class LoaderFactory implements Serializable {
 
 	public CommentTemplateListableLoader createCommentTemplateListableLoader() {
 		return new CommentTemplateListableLoader(filter);
+	}
+
+	public WarningTempalteListableLoader createWarningTemplateListableLoader() {
+		return new WarningTempalteListableLoader(filter);
 	}
 
 	public UserListableLoader createCurrentCombinedUserListableLoader() {

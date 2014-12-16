@@ -1,9 +1,11 @@
 package com.n4systems.fieldid.wicket.pages.loto.definition;
 
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.image.ArrowStyleEditorAndGalleryPanel;
 import com.n4systems.fieldid.wicket.components.image.IsolationPointImageGallery;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.components.text.LabelledComboBox;
@@ -12,9 +14,8 @@ import com.n4systems.fieldid.wicket.components.text.LabelledTextField;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.common.ImageAnnotationType;
-import com.n4systems.model.procedure.IsolationPoint;
-import com.n4systems.model.procedure.PreconfiguredDevice;
-import com.n4systems.model.procedure.ProcedureDefinition;
+import com.n4systems.model.procedure.*;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -45,7 +46,7 @@ public class IsolationPointEditor extends Panel {
 
     //These components will have their visibility altered by the type of "Isolation Point" being edited...
     //If it's a "Note," then most of these fields will be rendered invisible.
-    private Component imagePanel;
+    private IsolationPointImagePanel imagePanel;
     private Component electronicIdentifier;
     private Component sourceText;
     private Component lockField;
@@ -77,6 +78,7 @@ public class IsolationPointEditor extends Panel {
 
         form.add(sourceID = new RequiredTextField("identifier"));
         sourceID.setOutputMarkupId(true);
+        sourceID.add(new AttributeModifier("maxlength", Integer.toString(procedureDefinition.getAnnotationType().equals(AnnotationType.ARROW_STYLE) ? 50 : 10)));
         form.add(electronicIdentifier = new LabelledTextField<String>("electronicIdentifier", "label.electronic_id", new PropertyModel<String>(getDefaultModel(), "electronicIdentifier"))
                 .add(new TipsyBehavior(new FIDLabelModel("message.isolation_point.electronic_id"), TipsyBehavior.Gravity.N)));
         form.add(sourceText = new LabelledComboBox<String>("sourceText", "label.source", new PropertyModel(getDefaultModel(), "sourceText")) {
@@ -122,8 +124,7 @@ public class IsolationPointEditor extends Panel {
         methodField.setOutputMarkupId(true);
         form.add(notesField = new LabelledTextArea<String>("notes", "label.notes", new PropertyModel(getDefaultModel(), "method")).setMaxLength(255).required());
 
-        form.add(imagePanel = new IsolationPointImagePanel("annotation", (IsolationPoint) getDefaultModelObject()).add(createEditClickBehavior()));
-
+        form.add(imagePanel = getIsolationPointImagePanel(procedureDefinition));
 
         form.add(new AjaxSubmitLink("done") {
             @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
@@ -144,6 +145,13 @@ public class IsolationPointEditor extends Panel {
 
     }
 
+    private IsolationPointImagePanel getIsolationPointImagePanel(ProcedureDefinition procedureDefinition) {
+        IsolationPointImagePanel isolationPointImagePanel = new IsolationPointImagePanel("annotation", (IModel<IsolationPoint>) getDefaultModel(),
+                new PropertyModel<>(procedureDefinition, "annotationType"));
+        isolationPointImagePanel.add(createEditClickBehavior());
+        return isolationPointImagePanel;
+    }
+
     private Behavior createEditClickBehavior() {
         return new AjaxEventBehavior("onclick") {
             @Override protected void onEvent(AjaxRequestTarget target) {
@@ -154,18 +162,50 @@ public class IsolationPointEditor extends Panel {
     }
 
     protected Component createImageGallery(String id) {
-        return new IsolationPointImageGallery(id,procedureDefinition, (IModel<IsolationPoint>) getDefaultModel()) {
-            @Override protected void doneClicked(AjaxRequestTarget target) {
-                target.add(imagePanel, sourceID);
-                modal.close(target);
-                IsolationPointEditor.this.getDefaultModel().detach();
-            }
+        if(procedureDefinition.getAnnotationType().equals(AnnotationType.CALL_OUT_STYLE)) {
+            return new IsolationPointImageGallery(id,procedureDefinition, (IModel<IsolationPoint>) getDefaultModel()) {
+                @Override protected void doneClicked(AjaxRequestTarget target) {
+                    imagePanel.onReloadImage(target);
+                    target.add(imagePanel, sourceID);
+                    modal.close(target);
+                    IsolationPointEditor.this.getDefaultModel().detach();
+                }
 
-            @Override
-            protected boolean isRootForm(boolean form) {
-                return false;
-            }
-        };
+                @Override
+                protected boolean isRootForm(boolean form) {
+                    return false;
+                }
+            };
+        } else { //AnnotationType.ARROW_STYLE
+            return new ArrowStyleEditorAndGalleryPanel(id,
+                                      (IModel<IsolationPoint>)getDefaultModel(),
+                                      procedureDefinition.getAnnotationType()) {
+
+                @Override
+                protected void doDone(AjaxRequestTarget target) {
+                    imagePanel.onReloadImage(target);
+                    target.add(imagePanel, sourceID);
+                    modal.close(target);
+                    IsolationPointEditor.this.getDefaultModel().detach();
+                }
+
+                @Override
+                protected ProcedureDefinitionImage createImage(String clientFileName) {
+                    ProcedureDefinitionImage image = new ProcedureDefinitionImage();
+                    image.setTenant(FieldIDSession.get().getTenant());
+                    image.setFileName(clientFileName);
+                    image.setProcedureDefinition(procedureDefinition);
+                    procedureDefinition.addImage(image);
+
+                    return image;
+                }
+
+                @Override
+                protected List<ProcedureDefinitionImage> displayableImages() {
+                    return procedureDefinition.getImages();
+                }
+            };
+        }
     }
 
     private IModel<String> getTitleModel() {
@@ -205,16 +245,18 @@ public class IsolationPointEditor extends Panel {
 
     protected void doCancel(AjaxRequestTarget target) { }
 
-    public void edit(IsolationPoint isoPoint) {
+    public void edit(IsolationPoint isoPoint, AjaxRequestTarget target) {
         editedIsolationPoint = isoPoint;
         copyIntoModel(isoPoint);
         manageVisibilityBasedOnSourceType(isoPoint.getSourceType());
+        imagePanel.onReloadImage(target);
     }
 
-    public void editNew(IsolationPoint isoPoint) {
+    public void editNew(IsolationPoint isoPoint, AjaxRequestTarget target) {
         editedIsolationPoint = null;
         copyIntoModel(isoPoint);
         manageVisibilityBasedOnSourceType(isoPoint.getSourceType());
+        imagePanel.onReloadImage(target);
     }
 
     /**

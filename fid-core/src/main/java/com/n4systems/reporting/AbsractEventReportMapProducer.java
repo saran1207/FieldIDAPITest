@@ -8,14 +8,12 @@ import com.n4systems.fieldid.util.EventFormHelper;
 import com.n4systems.model.*;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.utils.PlainDate;
-import com.n4systems.services.signature.SignatureService;
 import com.n4systems.util.DateTimeDefinition;
 import com.n4systems.util.DoubleFormatter;
 import com.n4systems.util.ServiceLocator;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,6 +22,11 @@ import java.util.*;
 public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 
     protected LastEventDateService lastEventDateService;
+
+    protected Integer totalNumCriteria = 0;
+    protected Integer totalNumCriteriaWithObservation = 0;
+    protected Integer totalNumCriteriaWithActions = 0;
+    protected Map<String, Integer> actionsByPriorityCode = new HashMap<>();
 
     public AbsractEventReportMapProducer(DateTimeDefinition dateTimeDefinition, S3Service s3Service, LastEventDateService lastEventDateService) {
 		super(dateTimeDefinition, s3Service);
@@ -49,7 +52,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		add("comments", getEvent().getComments());
 		add("eventTypeDescription", getEvent().getType().getName());
 		add("eventInfoOptionMap", eventInfoOptions());
-		
+
 		add("product", new AssetReportMapProducer(getEvent().getTarget(), lastEventDateService, dateTimeDefinition, s3Service).produceMap());
 		
 		List<CriteriaStateView> criteriaViews = createCriteriaViews();
@@ -67,7 +70,29 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 
 		add("images", createEventImages());
 		add("ownerLogo", getCustomerLogo(getEvent().getTarget().getOwner()));
+
+        add("totalNumCriteria", totalNumCriteria.toString());
+        add("totalNumCriteriaWithObservation", totalNumCriteriaWithObservation.toString());
+        add("totalNumCriteriaWithActions", totalNumCriteriaWithActions.toString());
+
+        add("actionsByPriorityCode", new JRBeanCollectionDataSource(createCollectionForActionsByPriorityCode()));
+
 	}
+
+    private List<PriorityCodeListView> createCollectionForActionsByPriorityCode() {
+        List<PriorityCodeListView> list = new ArrayList<>();
+
+        Iterator it = actionsByPriorityCode.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pairs = (Map.Entry)it.next();
+            PriorityCodeListView temp = new PriorityCodeListView();
+            temp.setPriorityCode(pairs.getKey().toString());
+            temp.setCount(pairs.getValue().toString());
+            list.add(temp);
+            it.remove(); // avoids a ConcurrentModificationException
+        }
+        return list;
+    }
 
     private void populateTotalsAndPercentages() {
         add("maximumPossibleScore", new EventFormHelper().calculateMaxScoreForEvent(getEvent()));
@@ -159,11 +184,18 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		for (CriteriaResult result : getEvent().getResults()) {
 			for (Observation observation : result.getDeficiencies()) {
 				observationViews.add(new ObservationView(getEvent(), result, observation));
+                totalNumCriteriaWithObservation++;
 			}
 		}
 	}
 
 	private List<CriteriaStateView> createCriteriaViews() {
+        //Reset values
+        totalNumCriteria = 0;
+        totalNumCriteriaWithObservation = 0;
+        totalNumCriteriaWithActions = 0;
+        actionsByPriorityCode = new HashMap<>();
+
 		// add the main event to the views
 		List<CriteriaStateView> criteriaViews = addToCriteriaView();
 	
@@ -192,9 +224,9 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		Map<Criteria, List<Recommendation>> recommendations =  new HashMap<Criteria, List<Recommendation>>(getEvent().getResults().size());
         Map<Criteria, List<Deficiency>> deficiencies = new HashMap<Criteria, List<Deficiency>>(getEvent().getResults().size());
         Map<Criteria, String> help = new HashMap<Criteria, String>(getEvent().getResults().size());
+
         Map<String, Double> sectionScoreMap = convertSectionScoreMapToNameScoreMap(new EventFormHelper().getScoresForSections(getEvent()));
         Map<String, Double> sectionScorePercentageMap = convertSectionScoreMapToNameScoreMap(new EventFormHelper().getScorePercentageForSections(getEvent()));
-
 
         flattenCriteriaResults(resultMap, recommendations, deficiencies, help);
 		//TODO : move criteria view to 
@@ -202,11 +234,13 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
         if (getEvent().getEventForm() != null) {
             for (CriteriaSection section : getEvent().getEventForm().getSections()) {
                 for (Criteria criteria : section.getCriteria()) {
+                    totalNumCriteria++;
                     if (resultMap.containsKey(criteria)) {
                         CriteriaStateView stateView = new CriteriaStateView(section, criteria, recommendations.get(criteria), deficiencies.get(criteria), help.get(criteria));
                         stateView.setSectionScoreTotal(sectionScoreMap.get(stateView.getSection()));
                         stateView.setSectionScorePercentage(sectionScorePercentageMap.get(stateView.getSection()));
                         CriteriaResult result = resultMap.get(criteria);
+
                         if (result instanceof OneClickCriteriaResult) {
                             stateView.setStateButtonGroup(((OneClickCriteriaResult)result).getButton());
                         } else if (result instanceof TextFieldCriteriaResult) {
@@ -244,13 +278,18 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 
     private void populateResultActions(CriteriaStateView stateView, CriteriaResult result) {
         for (Event action : result.getActions()) {
+            totalNumCriteriaWithActions++;
             CriteriaResultActionView actionView = new CriteriaResultActionView();
             actionView.setAssignee(action.getAssignee() == null ? null : action.getAssignee().getFullName());
+            actionView.setPerformedBy(action.getPerformedBy() == null ? null : action.getPerformedBy().getFullName());
             actionView.setDueDate(action.getDueDate() == null ? null : formatDate(action.getDueDate(), true));
+            actionView.setCompletedDate(action.getCompletedDate() == null ? null : formatDate(action.getCompletedDate(), true));
             actionView.setEventType(action.getEventType().getName());
             actionView.setWorkflowState(action.getWorkflowState().getLabel());
             actionView.setNotes(action.getNotes());
             actionView.setPriority(action.getPriority().getDisplayName());
+            int count = actionsByPriorityCode.containsKey(action.getPriority().getDisplayName()) ? actionsByPriorityCode.get(action.getPriority().getDisplayName()) : 0;
+            actionsByPriorityCode.put(action.getPriority().getDisplayName(), count + 1);
             stateView.getCriteriaActions().add(actionView);
         }
     }

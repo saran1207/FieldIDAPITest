@@ -35,7 +35,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import rfid.ejb.entity.InfoOptionBean;
 
-import java.io.File;
 import java.util.*;
 
 
@@ -735,7 +734,12 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
 
     public void publishProcedureDefinition(ProcedureDefinition definition) throws AnnotatedImageGenerationException {
         try {
-            svgGenerationService.generateAndUploadAnnotatedSvgs(definition);
+
+            if (definition.getAnnotationType().equals(AnnotationType.CALL_OUT_STYLE)) {
+                svgGenerationService.generateAndUploadAnnotatedSvgs(definition);
+            } else {
+                svgGenerationService.generateAndUploadArrowStyleAnnotatedSvgs(definition);
+            }
 
             ProcedureDefinition previousDefinition = getPublishedProcedureDefinition(definition.getAsset(), definition.getFamilyId());
             if (previousDefinition != null) {
@@ -884,6 +888,8 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
             to.addIsolationPoint(copiedIsolationPoint);
         }
 
+        to.setAnnotationType(source.getAnnotationType());
+
         return to;
     }
 
@@ -899,9 +905,11 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         to.setProcedureCode(source.getProcedureCode()+" Copy");
         to.setElectronicIdentifier(source.getElectronicIdentifier());
         to.setWarnings(source.getWarnings());
+
         to.setApplicationProcess(source.getApplicationProcess());
         to.setRemovalProcess(source.getRemovalProcess());
         to.setTestingAndVerification(source.getTestingAndVerification());
+
         to.setDevelopedBy(getCurrentUser());
         if(source.getAsset().getId() == asset.getId()) {
             to.setEquipmentNumber(source.getEquipmentNumber());
@@ -924,6 +932,8 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
             IsolationPoint copiedIsolationPoint = cloneIsolationPoint(isolationPoint, clonedImages);
             to.addIsolationPoint(copiedIsolationPoint);
         }
+
+        to.setAnnotationType(source.getAnnotationType());
 
         return to;
     }
@@ -981,6 +991,8 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         to.setText(from.getText());
         to.setX(from.getX());
         to.setY(from.getY());
+        to.setX_tail(from.getX_tail());
+        to.setY_tail(from.getY_tail());
         to.setImage(image);
         image.addAnnotation(to);
         return to;
@@ -1236,16 +1248,16 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         }
    }
 
-   public CustomLotoDetails getCustomLotoDetails() {
-       return persistenceService.find(createTenantSecurityBuilder(CustomLotoDetails.class));
+   public LotoSettings getLotoSettings() {
+       return persistenceService.find(createTenantSecurityBuilder(LotoSettings.class));
    }
 
-   public CustomLotoDetails saveOrUpdateCustomLotoDetails(CustomLotoDetails customLotoDetails) {
-       return persistenceService.saveOrUpdate(customLotoDetails);
+   public LotoSettings saveOrUpdateLotoSettings(LotoSettings lotoSettings) {
+       return persistenceService.saveOrUpdate(lotoSettings);
    }
 
-    public void deleteCustomLotoDetails(CustomLotoDetails customLotoDetails) {
-        persistenceService.reattach(customLotoDetails);
-        persistenceService.delete(customLotoDetails);
+    public void deleteLotoSettings(LotoSettings lotoSettings) {
+        persistenceService.reattach(lotoSettings);
+        persistenceService.delete(lotoSettings);
     }
 }

@@ -46,11 +46,7 @@ import com.n4systems.fieldid.service.mixpanel.MixpanelService;
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.org.PlaceService;
-import com.n4systems.fieldid.service.procedure.LotoReportService;
-import com.n4systems.fieldid.service.procedure.NotifyProcedureAuthorizersService;
-import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
-import com.n4systems.fieldid.service.procedure.ProcedureService;
-import com.n4systems.fieldid.service.procedure.SvgGenerationService;
+import com.n4systems.fieldid.service.procedure.*;
 import com.n4systems.fieldid.service.project.ProjectService;
 import com.n4systems.fieldid.service.schedule.AssetTypeScheduleService;
 import com.n4systems.fieldid.service.schedule.MassScheduleService;
@@ -70,6 +66,7 @@ import com.n4systems.fieldid.service.transaction.TransactionService;
 import com.n4systems.fieldid.service.user.*;
 import com.n4systems.fieldid.service.uuid.AtomicLongService;
 import com.n4systems.fieldid.service.uuid.UUIDService;
+import com.n4systems.fieldid.service.warningtemplates.WarningTemplateService;
 import com.n4systems.persistence.listeners.LocalizationListener;
 import com.n4systems.persistence.listeners.SetupDataUpdateEventListener;
 import com.n4systems.services.AuthService;
@@ -89,6 +86,7 @@ import com.n4systems.services.signature.SignatureService;
 import com.n4systems.services.tenant.TenantCreationService;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ServiceLocator;
+import com.n4systems.util.json.ArrowStyleAnnotationJsonRenderer;
 import com.n4systems.util.json.JsonRenderer;
 import org.apache.lucene.analysis.util.CharArraySet;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -324,6 +322,11 @@ public class FieldIdCoreConfig {
     }
 
     @Bean
+    public WarningTemplateService warningTemplateService() {
+        return new WarningTemplateService();
+    }
+
+    @Bean
     public AssetSearchService assetSearchService() {
         return new AssetSearchService();
     }
@@ -463,6 +466,11 @@ public class FieldIdCoreConfig {
     @Bean 
     public JsonRenderer jsonRenderer() { 
     	return new JsonRenderer();
+    }
+
+    @Bean
+    public ArrowStyleAnnotationJsonRenderer arrowStyleAnnotationJsonRenderer() {
+        return new ArrowStyleAnnotationJsonRenderer();
     }
     
     @Bean
