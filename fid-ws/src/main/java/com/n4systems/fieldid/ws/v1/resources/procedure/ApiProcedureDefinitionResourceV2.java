@@ -327,11 +327,10 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         return convertedImage;
     }
 
-    private ImageAnnotation createNewImageAnnotation(ApiImageAnnotation apiAnnotation) {
+    private ImageAnnotation createNewImageAnnotation(ApiImageAnnotation apiAnnotation, IsolationPointSourceType sourceType) {
 
         ImageAnnotation entityAnnotation = new ImageAnnotation();
-
-        entityAnnotation.setType(ImageAnnotationType.valueOf(apiAnnotation.getAnnotationType()));
+		entityAnnotation.setType(resolveImageAnnotationTypeType(apiAnnotation.getAnnotationType(), sourceType));
         entityAnnotation.setX(apiAnnotation.getX());
         entityAnnotation.setY(apiAnnotation.getY());
         entityAnnotation.setText(apiAnnotation.getText());
@@ -463,7 +462,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
 
         entityIsolationPoint.setCheck(apiIsolationPoint.getCheck());
 
-        entityIsolationPoint.setSourceType(IsolationPointSourceType.valueOf(apiIsolationPoint.getSource()));
+        entityIsolationPoint.setSourceType(resolveSourceType(apiIsolationPoint.getSource(), apiIsolationPoint.getSourceText()));
         entityIsolationPoint.setSourceText(apiIsolationPoint.getSourceText());
         entityIsolationPoint.setIdentifier(apiIsolationPoint.getIdentifier());
         entityIsolationPoint.setElectronicIdentifier(apiIsolationPoint.getElectronicIdentifier());
@@ -478,7 +477,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         if(apiIsolationPoint.getAnnotation() == null) {
             entityIsolationPoint.setAnnotation(null);
         } else {
-            ImageAnnotation imageAnnotation = createNewImageAnnotation(apiIsolationPoint.getAnnotation());
+            ImageAnnotation imageAnnotation = createNewImageAnnotation(apiIsolationPoint.getAnnotation(), entityIsolationPoint.getSourceType());
             imageAnnotation.setImage(image);
             //Even here, we probably want to save to make sure it's updated... the DB may get angry if we try
             //to save changes in two places.
@@ -496,9 +495,8 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         isoPoint.setTenant(getCurrentTenant());
 
         isoPoint.setCheck(apiIsolationPoint.getCheck());
-
-        isoPoint.setSourceType(IsolationPointSourceType.valueOf(apiIsolationPoint.getSource()));
-        isoPoint.setSourceText(apiIsolationPoint.getSourceText());
+		isoPoint.setSourceType(resolveSourceType(apiIsolationPoint.getSource(), apiIsolationPoint.getSourceText()));
+		isoPoint.setSourceText(apiIsolationPoint.getSourceText());
         isoPoint.setIdentifier(apiIsolationPoint.getIdentifier());
         isoPoint.setElectronicIdentifier(apiIsolationPoint.getElectronicIdentifier());
         isoPoint.setLocation(apiIsolationPoint.getLocation());
@@ -510,7 +508,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         isoPoint.setLockDefinition(convertDefinition(apiIsolationPoint.getLockDefinition()));
 
         if(apiIsolationPoint.getAnnotation() != null) {
-            ImageAnnotation imageAnnotation = createNewImageAnnotation(apiIsolationPoint.getAnnotation());
+            ImageAnnotation imageAnnotation = createNewImageAnnotation(apiIsolationPoint.getAnnotation(), isoPoint.getSourceType());
             imageAnnotation.setImage(image);
             //This is new... it definitely needs to be written to the DB before we do other things.  We want to save
             //these while we're processing the Isolation Points... otherwise we'd have to try to match them back to the
@@ -521,6 +519,41 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
 
         return isoPoint;
     }
+
+	/*
+	WEB-5345: The following is a temporary hack to allow saving of Valve and Hydraulic source types
+	from mobile version 1.6.0.
+
+	The mobile bug is that the source field for Valve or Hydraulic source types is null.  In this case
+		we will infer the source type from the sourceText which is a required, limited list and is
+		unique for these two types.
+	 */
+	private IsolationPointSourceType resolveSourceType(String apiSourceType, String apiSourceText) {
+		if (apiSourceType != null) {
+			return IsolationPointSourceType.valueOf(apiSourceType);
+		} else {
+			if (apiSourceText.equals("Valve")) {
+				return IsolationPointSourceType.V;
+			} else if (apiSourceText.equals("Hydraulic")
+					|| apiSourceText.equals("Hydraulic 600 PSI")
+					|| apiSourceText.equals("Hydraulic 900 PSI")
+					|| apiSourceText.equals("Hydraulic 1200 PSI")) {
+				return IsolationPointSourceType.H;
+			} else {
+				throw new NullPointerException("source is null and sourceText is unknown: " + apiSourceText);
+			}
+		}
+	}
+
+	private ImageAnnotationType resolveImageAnnotationTypeType(String apiAnnotationType, IsolationPointSourceType sourceType) {
+		if (apiAnnotationType != null) {
+			return ImageAnnotationType.valueOf(apiAnnotationType);
+		} else {
+			// Names of the IsolationPointSourceType and ImageAnnotationType should always match
+			return ImageAnnotationType.valueOf(sourceType.name());
+		}
+	}
+	// WEB-5345: END
 
     /*
         Isolation Processing End...
