@@ -65,9 +65,9 @@
         for(var i = 0, len = poly.length; i < len; i++ ){
             poly[i].setAttributeNS(null, 'fill', this.style.color);
         }
-        
-        $(element).on('mousemove', $.proxy(this.move,   this));
-        $(element).on('mousedown', $.proxy(this.click, this));
+
+        $(element).bind('mousemove', $.proxy(this.move,  this));
+        $(element).bind('mousedown', $.proxy(this.click, this));
     };
 
     Plugin.prototype.updateArrowOnServer = function(){
