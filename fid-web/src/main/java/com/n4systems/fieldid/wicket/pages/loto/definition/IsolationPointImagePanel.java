@@ -29,7 +29,7 @@ public class IsolationPointImagePanel extends Panel {
 
     private static final String INIT_JS = "imageList.createImageList('%s');";
 
-    private final Component image;
+    private Component image;
     private final WebMarkupContainer blankSlate;
     private final WebMarkupContainer outer;
     private final WebMarkupContainer container;
@@ -61,10 +61,16 @@ public class IsolationPointImagePanel extends Panel {
                     ProcedureDefinitionImage procedureDefinitionImage = (ProcedureDefinitionImage) annotation.getImage();
 
                     ProcedureDefinition procedureDefinition = procedureDefinitionImage.getProcedureDefinition();
-                    isolationPointModel.getObject().setAnnotation(null);
 
                     procedureDefinition.softDeleteImage(annotation);
                 }
+
+                isolationPointModel.getObject().setAnnotation(null);
+
+                Component newImagePanel = getImage();
+
+                image.replaceWith(newImagePanel);
+                image = newImagePanel;
 
                 target.add(IsolationPointImagePanel.this);
 
