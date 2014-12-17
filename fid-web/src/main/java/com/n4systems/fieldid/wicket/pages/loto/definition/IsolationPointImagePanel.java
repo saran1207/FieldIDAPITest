@@ -57,7 +57,7 @@ public class IsolationPointImagePanel extends Panel {
             public void onClick(AjaxRequestTarget target) {
                 ImageAnnotation annotation = isolationPointModel.getObject().getAnnotation();
 
-                if (null != annotation && null != annotation.getImage()) {
+                if (annotation != null && annotation.getImage() != null && annotation.hasCoordinates(annotationTypeModel.getObject())) {
                     ProcedureDefinitionImage procedureDefinitionImage = (ProcedureDefinitionImage) annotation.getImage();
 
                     ProcedureDefinition procedureDefinition = procedureDefinitionImage.getProcedureDefinition();

@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.image;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.common.ImageAnnotation;
+import com.n4systems.model.procedure.AnnotationType;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -54,7 +55,7 @@ public class ArrowStyleAnnotatedSvg extends Panel {
     public ArrowStyleAnnotatedSvg(String id, ImageAnnotation theAnnotation) {
         super(id);
         this.theAnnotation = theAnnotation;
-        if(theAnnotation != null) {
+        if(theAnnotation != null && theAnnotation.hasCoordinates(AnnotationType.ARROW_STYLE)) {
             this.theImage = (ProcedureDefinitionImage) theAnnotation.getImage();
         }
     }
@@ -71,7 +72,7 @@ public class ArrowStyleAnnotatedSvg extends Panel {
     public ArrowStyleAnnotatedSvg(String id, IModel<ImageAnnotation> theAnnotation) {
         super(id);
         this.theAnnotation = theAnnotation.getObject();
-        if (theAnnotation.getObject() != null) {
+        if (theAnnotation.getObject() != null && theAnnotation.getObject().hasCoordinates(AnnotationType.ARROW_STYLE)) {
             this.theImage = (ProcedureDefinitionImage) theAnnotation.getObject().getImage();
         }
     }
@@ -123,7 +124,7 @@ public class ArrowStyleAnnotatedSvg extends Panel {
 
 
         WebMarkupContainer lineElement = new WebMarkupContainer("lineElement");
-        if(theAnnotation != null) {
+        if(theAnnotation != null && theAnnotation.hasCoordinates(AnnotationType.ARROW_STYLE)) {
             lineElement.add(new AttributeModifier("x1", String.valueOf(Math.round(imageDimensions.getWidth() * theAnnotation.getX()))));
             lineElement.add(new AttributeModifier("y1", String.valueOf(Math.round(imageDimensions.getHeight() * theAnnotation.getY()))));
             lineElement.add(new AttributeModifier("x2", String.valueOf(Math.round(imageDimensions.getWidth() * theAnnotation.getX_tail()))));
