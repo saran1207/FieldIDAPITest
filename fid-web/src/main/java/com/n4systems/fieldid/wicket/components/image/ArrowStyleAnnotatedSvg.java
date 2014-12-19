@@ -5,6 +5,7 @@ import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.procedure.AnnotationType;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -117,11 +118,17 @@ public class ArrowStyleAnnotatedSvg extends Panel {
         add(new AttributeModifier("width", imageDimensions.getWidth()));
         add(new AttributeModifier("height", imageDimensions.getHeight()));
 
-        if (imageUrl != null)
-            add(new WebMarkupContainer("imageElement").add(new AttributeModifier("xlink:href", imageUrl)));
-        else
-            add(new WebMarkupContainer("imageElement").add(new AttributeModifier("xlink:href", BLANK_SLATE_PATH)));
+        WebMarkupContainer imageElement = new WebMarkupContainer("imageElement");
+        if (imageUrl != null) {
+            imageElement.add(new AttributeModifier("xlink:href", imageUrl));
+        } else {
+            imageElement.add(new AttributeModifier("xlink:href", BLANK_SLATE_PATH));
+        }
 
+        imageElement.add(new AttributeAppender("height", imageDimensions.getHeight()));
+        imageElement.add(new AttributeAppender("width", imageDimensions.getWidth()));
+
+        add(imageElement);
 
         WebMarkupContainer lineElement = new WebMarkupContainer("lineElement");
         if(theAnnotation != null && theAnnotation.hasCoordinates(AnnotationType.ARROW_STYLE)) {
