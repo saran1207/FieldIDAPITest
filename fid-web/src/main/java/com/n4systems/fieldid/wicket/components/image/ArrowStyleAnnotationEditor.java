@@ -54,7 +54,7 @@ public abstract class ArrowStyleAnnotationEditor extends ArrowStyleAnnotatedSvg 
     @Override
     public void renderHead(IHeaderResponse response) {
         response.renderJavaScriptReference("javascript/arrowAnnotationEditor.js");
-        response.renderOnDomReadyJavaScript(createEditorInitJS());
+        response.renderOnLoadJavaScript(createEditorInitJS());
     }
 
     protected ArrowStyleAnnotatingBehaviour createAjaxBehaviour() {
