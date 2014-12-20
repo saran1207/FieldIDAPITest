@@ -2702,13 +2702,14 @@ inputsWithLegend .legend span {
     width: auto;
     height: 210px;
     margin: 0 auto;
-    padding-top: 10px;
+    padding-top: 75px;
     display: block;
 }
 .arrow-style-annotation-panel .svg-container {
     position: relative;
-    height: 230px;
+    height: 330px;
     margin: 0 auto;
+    padding: 10px;
 }
 .arrow-style-annotation-panel .svg-container svg { 
     width:  100%;
@@ -2716,15 +2717,33 @@ inputsWithLegend .legend span {
 }
 .arrow-style-annotation-panel .image-list {
     height: 50px;
-    margin: 10px;
+    margin: 0 10px 10px 10px;
+    width: 790px;
 }
 .arrow-style-annotation-panel .image-list li {
-    width: 90px;
-    height: 50px;
+    overflow: hidden;
+    position: relative;
+    width: 67px;
+    height: 42px;
+    border: none;
+    background: transparent;
 }
-.arrow-style-annotation-panel .image-list svg {
-    width: 60px !important;
-    height: 44px !important;
+.arrow-style-annotation-panel .instructions {
     display: block;
-    margin: 2px auto;
+    text-align: center;
+}
+.arrow-style-annotation-panel .done {
+    margin-right: 10px;
+    margin-top: 10px;
+    float: right;
+}
+.arrow-style-annotation-panel .add-image {
+    position: absolute;
+    bottom: 40px;
+    left: 10px;
+}
+.arrow-style-annotation-panel .indicator {
+    position: absolute;
+    bottom: 45px;
+    left: 145px;
 }

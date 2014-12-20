@@ -268,7 +268,7 @@
         polygon.setAttributeNS(null, 'fill', this.style.head.color);
         this.annotations.appendChild(polygon);
     };
-    
+
     // Generic jquery plugin creation / destroy
     Plugin.prototype.destroy = function(){
         this.$el.removeData();
@@ -281,3 +281,35 @@
         });
     };
 })(jQuery, window, document);
+
+
+// For backwards compatibility. This adds the upload button
+// that was used in the original imageGallery panel
+//function initUploadButton(){
+//    var $originalSubmit = $('.arrow-style-annotation-panel .add-image');
+//    var $indicator= $('<img class="indicator" src="/fieldid/images/loader.gif"/>');
+//    if ($.browser.msie) {
+//        // for IE use the ugly default. gives Access Denied if i try to delegate from prettier button.
+//        $originalSubmit.change(function() {
+//            $originalSubmit.attr('disabled',true);
+//            $indicator.addClass('ie').insertAfter($originalSubmit);
+//        })
+//        return;;
+//    } else {
+//        // create a prettier submit button and delegate to the existing/underlying one.
+//        if ($originalSubmit.length==0) {
+//            throw "can't find ADD button. should have class '.image-gallery .add-image'";
+//        }
+//        $originalSubmit.hide();
+//        var $newSubmit = $('<a>').html('Upload New Image').addClass('add-image').addClass('mattButton');
+//        $originalSubmit.change(function() {
+//            $indicator.insertAfter($newSubmit.parent());
+//            $originalSubmit.attr('disabled',true);
+//        });
+//        $newSubmit.insertAfter($originalSubmit);
+//        $newSubmit.click(function() {
+//            $originalSubmit.click();
+//        });
+//    }
+//};
+//initUploadButton();
