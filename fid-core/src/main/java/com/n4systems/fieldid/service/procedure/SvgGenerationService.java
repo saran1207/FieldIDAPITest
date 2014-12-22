@@ -38,6 +38,8 @@ public class SvgGenerationService extends FieldIdPersistenceService {
 
     public static Integer DEFAULT_JASPER_HEIGHT = 140;
     public static Integer DEFAULT_JASPER_WIDTH = 140;
+    private static double DEFAULT_IMAGE_SIZE = 200.0;
+    private static double DEFAULT_STROKE_WIDTH = 5.0;
 
     public void generateAndUploadAnnotatedSvgs(ProcedureDefinition definition) throws Exception {
         for(ProcedureDefinitionImage image: definition.getImages()) {
@@ -417,7 +419,10 @@ public class SvgGenerationService extends FieldIdPersistenceService {
         line.setAttribute("x2", String.valueOf(Math.round(width * annotation.getX_tail())));
         line.setAttribute("y2", String.valueOf(Math.round(height * annotation.getY_tail())));
         line.setAttribute("stroke", "#ff0000");
-        line.setAttribute("stroke-width", "10");
+
+        Double strokeWidth = width / DEFAULT_IMAGE_SIZE * DEFAULT_STROKE_WIDTH;
+
+        line.setAttribute("stroke-width", strokeWidth.toString());
         line.setAttribute("marker-start", "url(#arrow)");
 
         group.appendChild(line);

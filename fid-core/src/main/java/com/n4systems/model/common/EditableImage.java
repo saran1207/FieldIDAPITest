@@ -56,6 +56,10 @@ public class EditableImage extends EntityWithTenant implements S3Image {
         return fileName;
     }
 
+    public boolean hasAnnotation(ImageAnnotation annotation) {
+        return getAnnotations().contains(annotation);
+    }
+
     public void removeAnnotation(ImageAnnotation annotation) {
         Preconditions.checkArgument(getAnnotations().contains(annotation),"trying to remove annotation " + annotation.getId() + " that isn't currently contained in " + getId());
         getAnnotations().remove(annotation);

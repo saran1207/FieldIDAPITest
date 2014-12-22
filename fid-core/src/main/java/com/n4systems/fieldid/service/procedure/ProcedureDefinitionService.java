@@ -1047,7 +1047,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     }
 
     public ImageAnnotation addImageAnnotationToImage(EditableImage image, ImageAnnotation annotation) {
-        if(annotation.getImage()!=null && annotation.getImage()!=image) {
+        if(annotation.getImage()!=null && annotation.getImage()!=image && annotation.getImage().hasAnnotation(annotation)) {
             annotation.getImage().removeAnnotation(annotation);
         }
         image.addAnnotation(annotation);

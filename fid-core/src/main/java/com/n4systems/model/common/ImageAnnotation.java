@@ -1,6 +1,7 @@
 package com.n4systems.model.common;
 
 import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.procedure.AnnotationType;
 
 import javax.persistence.*;
 
@@ -110,5 +111,12 @@ public class ImageAnnotation extends EntityWithTenant {
 
     public void setTempId(Long tempId) {
         this.tempId = tempId;
+    }
+
+    public boolean hasCoordinates(AnnotationType type) {
+        if (type.equals(AnnotationType.CALL_OUT_STYLE))
+            return x != 0 && y != 0;
+        else
+            return x != 0 && y != 0 && x_tail != 0 && y_tail != 0;
     }
 }

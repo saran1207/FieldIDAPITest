@@ -2,8 +2,10 @@ package com.n4systems.fieldid.wicket.components.image;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.common.ImageAnnotation;
+import com.n4systems.model.procedure.AnnotationType;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -54,7 +56,7 @@ public class ArrowStyleAnnotatedSvg extends Panel {
     public ArrowStyleAnnotatedSvg(String id, ImageAnnotation theAnnotation) {
         super(id);
         this.theAnnotation = theAnnotation;
-        if(theAnnotation != null) {
+        if(theAnnotation != null && theAnnotation.hasCoordinates(AnnotationType.ARROW_STYLE)) {
             this.theImage = (ProcedureDefinitionImage) theAnnotation.getImage();
         }
     }
@@ -71,7 +73,7 @@ public class ArrowStyleAnnotatedSvg extends Panel {
     public ArrowStyleAnnotatedSvg(String id, IModel<ImageAnnotation> theAnnotation) {
         super(id);
         this.theAnnotation = theAnnotation.getObject();
-        if (theAnnotation.getObject() != null) {
+        if (theAnnotation.getObject() != null && theAnnotation.getObject().hasCoordinates(AnnotationType.ARROW_STYLE)) {
             this.theImage = (ProcedureDefinitionImage) theAnnotation.getObject().getImage();
         }
     }
@@ -116,28 +118,106 @@ public class ArrowStyleAnnotatedSvg extends Panel {
         add(new AttributeModifier("width", imageDimensions.getWidth()));
         add(new AttributeModifier("height", imageDimensions.getHeight()));
 
-        if (imageUrl != null)
-            add(new WebMarkupContainer("imageElement").add(new AttributeModifier("xlink:href", imageUrl)));
-        else
-            add(new WebMarkupContainer("imageElement").add(new AttributeModifier("xlink:href", BLANK_SLATE_PATH)));
+        WebMarkupContainer imageElement = new WebMarkupContainer("imageElement");
+        if (imageUrl != null) {
+            imageElement.add(new AttributeModifier("xlink:href", imageUrl));
+        } else {
+            imageElement.add(new AttributeModifier("xlink:href", BLANK_SLATE_PATH));
+        }
 
+        imageElement.add(new AttributeAppender("height", imageDimensions.getHeight()));
+        imageElement.add(new AttributeAppender("width", imageDimensions.getWidth()));
+
+        add(imageElement);
 
         WebMarkupContainer lineElement = new WebMarkupContainer("lineElement");
-        if(theAnnotation != null) {
+        WebMarkupContainer arrowElement = new WebMarkupContainer("arrowElement");
+        if(theAnnotation != null && theAnnotation.hasCoordinates(AnnotationType.ARROW_STYLE)) {
             lineElement.add(new AttributeModifier("x1", String.valueOf(Math.round(imageDimensions.getWidth() * theAnnotation.getX()))));
             lineElement.add(new AttributeModifier("y1", String.valueOf(Math.round(imageDimensions.getHeight() * theAnnotation.getY()))));
             lineElement.add(new AttributeModifier("x2", String.valueOf(Math.round(imageDimensions.getWidth() * theAnnotation.getX_tail()))));
             lineElement.add(new AttributeModifier("y2", String.valueOf(Math.round(imageDimensions.getHeight() * theAnnotation.getY_tail()))));
             lineElement.add(new AttributeModifier("stroke-width", 5 * scale));
 
+            arrowElement.add(new AttributeModifier("points", getArrowHeadPoints(imageDimensions, theAnnotation)));
+
+
         } else {
             showAnnotations = false;
         }
 
         lineElement.setVisible(showAnnotations);
+        arrowElement.setVisible(showAnnotations);
 
         add(lineElement);
+        add(arrowElement);
+    }
 
+    //Arrow styling constants
+    private static double HEAD_OFFSET = 5.0;
+    private static double HEAD_LENGTH = 22.0;
+    private static double HEAD_INDENT = 18.0;
+    private static double HEAD_WIDTH = 12.0;
+
+    private String getArrowHeadPoints(Dimension imageDimensions, ImageAnnotation annotation) {
+
+        Double headOffset = HEAD_OFFSET * scale;
+        Double headLength = HEAD_LENGTH * scale;
+        Double headIndent = HEAD_INDENT * scale;
+        Double headWidth = HEAD_WIDTH * scale;
+
+        // Get delta values (aka reference from 0,0)
+        Double deltaX = annotation.getX_tail() - annotation.getX();
+        Double deltaY = annotation.getY_tail() - annotation.getY();
+
+        // Convert delta values from normalized to image coords (internal svg)
+        deltaX = deltaX * imageDimensions.getWidth();
+        deltaY = deltaY * imageDimensions.getHeight();
+
+        // Get the length of the line
+        Double magnitude = Math.sqrt( (deltaX * deltaX) + (deltaY * deltaY) );
+
+        // Calculate the unit vector
+        Double unitX = deltaX / magnitude;
+        Double unitY = deltaY / magnitude;
+
+        //-------------------------------[ Perpendicular Vector ]------
+        // Generate offset cp of the arrow (point down the line)
+        Double cpOffsetX = (annotation.getX() * imageDimensions.getWidth())  - (unitX * headOffset);
+        Double cpOffsetY = (annotation.getY() *  imageDimensions.getHeight()) - (unitY * headOffset);
+
+        // Generate back cp of the arrow
+        Double cpBackX = cpOffsetX + (unitX * headLength);
+        Double cpBackY = cpOffsetY + (unitY * headLength);
+
+        // Generate slight back indent for the arrow
+        Double cpIndentX = cpOffsetX + (unitX * headIndent);
+        Double cpIndentY = cpOffsetY + (unitY * headIndent);
+
+        // Generate side cp of the arrow (left/right of the line)
+        // cpBack is used to position the arrow head
+        //     - at the head (arrow.x1)
+        //     - move that position by head.length
+        //     - add that position to the left/right positions
+        //
+        // Basic form of perpendicular vector
+        // left.x =  unit.y
+        // left.y = -unit.x
+        // right.x = -unit.y
+        // right.x =  unit.x
+
+        Double cpLeftX = cpBackX + ( unitY * headWidth);
+        Double cpLeftY = cpBackY + (-unitX * headWidth);
+
+        Double cpRightX = cpBackX + (-unitY * headWidth);
+        Double cpRightY = cpBackY + ( unitX * headWidth);
+
+        // Compile point data into something that svg polygon can use
+        return "" +
+                cpOffsetX +","+ cpOffsetY +" "+
+                cpLeftX   +","+ cpLeftY   +" "+
+                cpIndentX +","+ cpIndentY +" "+
+                cpRightX  +","+ cpRightY;
     }
 
     /**
