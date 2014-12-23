@@ -2718,7 +2718,8 @@ inputsWithLegend .legend span {
 .arrow-style-annotation-panel .image-list {
     height: 50px;
     margin: 0 10px 10px 10px;
-    width: 790px;
+    width: 815px;
+    position: relative;
 }
 .arrow-style-annotation-panel .image-list li {
     overflow: hidden;
@@ -2727,6 +2728,25 @@ inputsWithLegend .legend span {
     height: 42px;
     border: none;
     background: transparent;
+}
+.arrow-style-annotation-panel .navigation {
+    position: absolute;
+    top: 0;
+    right: 0px;
+    width: 20px;
+    height: 50px;
+    margin-top: 0;
+    background: #eeeeee;
+}
+.arrow-style-annotation-panel .navigation .prev {
+    position: absolute;
+    top: -8px;
+    right: 0;
+}
+.arrow-style-annotation-panel .navigation .next {
+    position: absolute;
+    top: 17px;
+    right: 0;
 }
 .arrow-style-annotation-panel .instructions {
     display: block;
