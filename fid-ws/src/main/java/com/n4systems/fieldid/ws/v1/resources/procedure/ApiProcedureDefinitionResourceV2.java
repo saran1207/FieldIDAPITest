@@ -200,6 +200,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         procDef.setRevisionNumber(apiProcDef.getRevisionNumber());
         procDef.setProcedureCode(apiProcDef.getProcedureCode());
         procDef.setWarnings(apiProcDef.getWarnings());
+	procDef.setAnnotationType(procedureDefinitionService.getLotoSettings().getAnnotationType());
 
         //Ideally, the client should always be providing the ProcedureType, but this just prevents an error if they
         //happened to forget.
@@ -250,7 +251,6 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         //2) Update Annotations.  You've already saved the images with the isolation points, but you now
         //   need to update those images with the Annotations from all of the isolation points... then
         //   you need to go back to those isolation points and update the referenced images with the updated
-        //   images that now contain all of the isolation points.
         procDef = updateAnnotationRelationships(procDef);
 
         return procDef;
