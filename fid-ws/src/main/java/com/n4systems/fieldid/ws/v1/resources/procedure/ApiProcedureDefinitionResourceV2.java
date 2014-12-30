@@ -327,13 +327,13 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         return convertedImage;
     }
 
-    private ImageAnnotation createNewImageAnnotation(ApiImageAnnotation apiAnnotation, IsolationPointSourceType sourceType) {
+    private ImageAnnotation createNewImageAnnotation(ApiImageAnnotation apiAnnotation, IsolationPointSourceType sourceType, String isolationPointIdentifier) {
 
         ImageAnnotation entityAnnotation = new ImageAnnotation();
 		entityAnnotation.setType(resolveImageAnnotationTypeType(apiAnnotation.getAnnotationType(), sourceType));
         entityAnnotation.setX(apiAnnotation.getX());
         entityAnnotation.setY(apiAnnotation.getY());
-        entityAnnotation.setText(apiAnnotation.getText());
+        entityAnnotation.setText(apiAnnotation.getText() != null ? apiAnnotation.getText() : isolationPointIdentifier);
         //I don't think we actually need to set this either.
 //        originalAnnotation.setId(imageAnnotation.getSid());
 
@@ -477,7 +477,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         if(apiIsolationPoint.getAnnotation() == null) {
             entityIsolationPoint.setAnnotation(null);
         } else {
-            ImageAnnotation imageAnnotation = createNewImageAnnotation(apiIsolationPoint.getAnnotation(), entityIsolationPoint.getSourceType());
+            ImageAnnotation imageAnnotation = createNewImageAnnotation(apiIsolationPoint.getAnnotation(), entityIsolationPoint.getSourceType(), entityIsolationPoint.getIdentifier());
             imageAnnotation.setImage(image);
             //Even here, we probably want to save to make sure it's updated... the DB may get angry if we try
             //to save changes in two places.
@@ -508,7 +508,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         isoPoint.setLockDefinition(convertDefinition(apiIsolationPoint.getLockDefinition()));
 
         if(apiIsolationPoint.getAnnotation() != null) {
-            ImageAnnotation imageAnnotation = createNewImageAnnotation(apiIsolationPoint.getAnnotation(), isoPoint.getSourceType());
+            ImageAnnotation imageAnnotation = createNewImageAnnotation(apiIsolationPoint.getAnnotation(), isoPoint.getSourceType(), isoPoint.getIdentifier());
             imageAnnotation.setImage(image);
             //This is new... it definitely needs to be written to the DB before we do other things.  We want to save
             //these while we're processing the Isolation Points... otherwise we'd have to try to match them back to the
