@@ -61,7 +61,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
                 isNew = true;
             }
 
-            procDef = convertApiModelToEntity(apiProcDef, procDef);
+            procDef = convertApiModelToEntity(apiProcDef, procDef, isNew);
 
             //Make sure to write these as a DRAFT.  Mobile doesn't need/want the ability to actually publish.  These are
             //just saved in the field and then modified by someone in an office later before being published.
@@ -187,7 +187,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
     }*/
 
     //API Model to Entity Methods
-    private ProcedureDefinition convertApiModelToEntity(ApiProcedureDefinitionV2 apiProcDef, ProcedureDefinition procDef) throws ImageProcessingException, PersistenceException {
+    private ProcedureDefinition convertApiModelToEntity(ApiProcedureDefinitionV2 apiProcDef, ProcedureDefinition procDef, boolean isNew) throws ImageProcessingException, PersistenceException {
         //Don't forget, you're passing this object in, either full of information or null... point being, it's already
         //initialised.
         procDef.setMobileId(apiProcDef.getSid());
@@ -223,7 +223,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         }
 
         //If this is a new ProcedureDefinition, there are a few other things we need to set.
-        if(procDef.isNew()) {
+        if(isNew) {
             procDef.setTenant(getCurrentTenant());
 
             procDef.setDevelopedBy(userService.getUser(apiProcDef.getDevelopedBy()));
@@ -246,7 +246,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
 
         //Now we do the hard stuff:
         //1) Set the isolation points.
-        procDef = convertToEntityIsolationPoints(procDef, apiProcDef);
+        procDef = convertToEntityIsolationPoints(procDef, apiProcDef, isNew);
 
         //2) Update Annotations.  You've already saved the images with the isolation points, but you now
         //   need to update those images with the Annotations from all of the isolation points... then
@@ -331,8 +331,25 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
 
         ImageAnnotation entityAnnotation = new ImageAnnotation();
 		entityAnnotation.setType(resolveImageAnnotationTypeType(apiAnnotation.getAnnotationType(), sourceType));
-        entityAnnotation.setX(apiAnnotation.getX());
-        entityAnnotation.setY(apiAnnotation.getY());
+
+        // Since these cannot be set by the mobile yet, we need to default them
+        if (apiAnnotation.getX() == 0 && apiAnnotation.getY() == 0) {
+            entityAnnotation.setX(0.5);
+            entityAnnotation.setY(0.5);
+        } else {
+            entityAnnotation.setX(apiAnnotation.getX());
+            entityAnnotation.setY(apiAnnotation.getY());
+        }
+
+        if (apiAnnotation.getX_tail() == 0 && apiAnnotation.getX_tail() == 0) {
+            // Creates a horizontal line pointing to the center of the image
+            entityAnnotation.setX_tail(0.1);
+            entityAnnotation.setY_tail(0.5);
+        } else {
+            entityAnnotation.setX_tail(apiAnnotation.getX_tail());
+            entityAnnotation.setY_tail(apiAnnotation.getY_tail());
+        }
+
         entityAnnotation.setText(apiAnnotation.getText() != null ? apiAnnotation.getText() : isolationPointIdentifier);
         //I don't think we actually need to set this either.
 //        originalAnnotation.setId(imageAnnotation.getSid());
@@ -355,7 +372,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
      */
 
     public ProcedureDefinition convertToEntityIsolationPoints(ProcedureDefinition procDef,
-                                                              ApiProcedureDefinitionV2 apiProcDef)
+                                                              ApiProcedureDefinitionV2 apiProcDef, boolean isNew)
                                                                         throws ImageProcessingException {
 
         //We're working with isolation points, so lets create a list of them now to access easily.
@@ -374,7 +391,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         //As with Image Processing, there are two paths: New and Existing... if it's new, we can forgo a lot of the
         //processing that needs to take place for an existing Procedure Definition.  We're just converting from one
         //model to another.
-        if(procDef.isNew()) {
+        if(isNew) {
             //First, we're going to want to write all of our images and update the image map and Entity.
             for(ApiProcedureDefinitionImage image : apiProcDef.getImages()) {
                 ProcedureDefinitionImage entityImage = createNewImage(image, procDef);
@@ -644,6 +661,8 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         convertedAnnotation.setAnnotationType(annotation.getType().name());
         convertedAnnotation.setX(annotation.getX());
         convertedAnnotation.setY(annotation.getY());
+        convertedAnnotation.setX_tail(annotation.getX_tail());
+        convertedAnnotation.setY_tail(annotation.getY_tail());
         convertedAnnotation.setImageId(annotation.getImage().getMobileGUID());
         return convertedAnnotation;
     }
