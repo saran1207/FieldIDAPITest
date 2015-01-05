@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum AnnotationType implements DisplayEnum {
-    CALL_OUT_STYLE("Call Out Style"), ARROW_STYLE("Arrow Style");
+    CALL_OUT_STYLE("Call Out"), ARROW_STYLE("Arrow");
 
     private String label;
 

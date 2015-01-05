@@ -141,7 +141,7 @@ public class DetailsPanel extends Panel {
              * This is the best way to determine whether we should freeze the annotation type to the specific one this procedure deifinition
              * originated from.
              */
-            LabelledDropDown<String> annotationTypeDropDown = new LabelledDropDown<String>("annotationType", "label.annotation_type", ProxyModel.of(model, on(ProcedureDefinition.class).getAnnotationTypeLabel())) {
+            LabelledDropDown<String> annotationTypeDropDown = new LabelledDropDown<String>("annotationType", "label.annotation_style", ProxyModel.of(model, on(ProcedureDefinition.class).getAnnotationTypeLabel())) {
                     @Override
                     protected List<String> getChoices() {
                         if(isCopyOrRevise) {
