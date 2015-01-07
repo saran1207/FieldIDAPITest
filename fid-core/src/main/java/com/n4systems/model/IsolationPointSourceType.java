@@ -12,6 +12,7 @@ public enum IsolationPointSourceType {
     M("Mechanical"),
     H("Hydraulic"),
     C("Chemical"),
+    SP("Stored Pressure"),
     N("Notes");
 
     private final String identifier;
@@ -27,5 +28,7 @@ public enum IsolationPointSourceType {
     public static IsolationPointSourceType getDefault() {
         return W;
     }
+
+
 
 }

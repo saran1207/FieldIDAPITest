@@ -20,6 +20,7 @@ public enum ImageAnnotationType {
     M("mechanical", "#808080","#FFFFFF","#808080","none","images/loto/mechanical-full.png"),
     H("hydraulic", "#000000","#FFFFFF","#000000","none","images/loto/hydraulic-full.png"),
     C("chemical", "#808080","#808080","#FCF903","none","images/loto/chemical-full.png"),
+    SP("stored-pressure", "#FFFFFF","#000000","#FFFFFF","none","images/loto/stored-pressure-full.png"),
 
     //TODO This has to be unique for this "Isolation Point" type...
     N("notes", "#FFFFFF","#099C4F","#FFFFFF","images/loto/note.jpg","images/loto/note-full.png");
