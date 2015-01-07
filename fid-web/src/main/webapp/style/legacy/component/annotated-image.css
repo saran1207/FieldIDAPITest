@@ -138,6 +138,15 @@
 	.control-panel .icon {
 		display: none;
 	}
+
+.stored-pressure {/*white w/black bg*/
+	color: #ffffff;
+	background: #000000;
+}
+.electrical input {
+	color: #ffffff;
+}
+
 .electrical { /*red w/white bg*/
 	color: #ee1c25;
 	background: #fff;

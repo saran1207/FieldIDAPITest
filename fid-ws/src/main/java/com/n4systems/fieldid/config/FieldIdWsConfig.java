@@ -1,18 +1,7 @@
 package com.n4systems.fieldid.config;
 
-import com.n4systems.fieldid.ws.v1.resources.asset.ApiDeviceLockResource;
-import com.n4systems.fieldid.ws.v1.resources.event.actions.prioritycode.ApiPriorityCodeResource;
-import com.n4systems.fieldid.ws.v1.resources.procedure.ApiProcedureDefinitionResource;
-import com.n4systems.fieldid.ws.v1.resources.procedure.ApiProcedureDefinitionResourceV2;
-import com.n4systems.fieldid.ws.v1.resources.procedure.ApiProcedureResource;
-import com.n4systems.fieldid.ws.v1.resources.procedure.ApiWarningTemplateResource;
-import com.n4systems.fieldid.ws.v1.resources.user.ApiPersonResource;
-import com.n4systems.fieldid.ws.v1.resources.user.ApiUserResource;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
-
 import com.n4systems.fieldid.ws.v1.resources.asset.ApiAssetResource;
+import com.n4systems.fieldid.ws.v1.resources.asset.ApiDeviceLockResource;
 import com.n4systems.fieldid.ws.v1.resources.asset.ApiSubAssetResource;
 import com.n4systems.fieldid.ws.v1.resources.assetattachment.ApiAssetAttachmentResource;
 import com.n4systems.fieldid.ws.v1.resources.assetcount.ApiAssetCountResource;
@@ -26,6 +15,7 @@ import com.n4systems.fieldid.ws.v1.resources.commenttemplate.ApiCommentTemplateR
 import com.n4systems.fieldid.ws.v1.resources.event.ApiEventFormResultResource;
 import com.n4systems.fieldid.ws.v1.resources.event.ApiEventResource;
 import com.n4systems.fieldid.ws.v1.resources.event.ApiExistingEventFormResultResource;
+import com.n4systems.fieldid.ws.v1.resources.event.actions.prioritycode.ApiPriorityCodeResource;
 import com.n4systems.fieldid.ws.v1.resources.event.criteria.ApiCriteriaImagesResource;
 import com.n4systems.fieldid.ws.v1.resources.eventattachment.ApiEventAttachmentResource;
 import com.n4systems.fieldid.ws.v1.resources.eventbook.ApiEventBookResource;
@@ -39,6 +29,7 @@ import com.n4systems.fieldid.ws.v1.resources.location.ApiPredefinedLocationResou
 import com.n4systems.fieldid.ws.v1.resources.logging.ApiLoggingResource;
 import com.n4systems.fieldid.ws.v1.resources.offlineprofile.ApiOfflineProfileResource;
 import com.n4systems.fieldid.ws.v1.resources.org.ApiOrgResource;
+import com.n4systems.fieldid.ws.v1.resources.procedure.*;
 import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedEventFormResource;
 import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedEventResource;
 import com.n4systems.fieldid.ws.v1.resources.search.ApiSearchResource;
@@ -46,8 +37,12 @@ import com.n4systems.fieldid.ws.v1.resources.smartsearch.ApiSmartSearchResource;
 import com.n4systems.fieldid.ws.v1.resources.synchronization.ApiSynchronizationResource;
 import com.n4systems.fieldid.ws.v1.resources.tenant.ApiTenantResource;
 import com.n4systems.fieldid.ws.v1.resources.unit.ApiUnitResource;
-import com.n4systems.fieldid.ws.v1.resources.user.AbstractUserResource;
+import com.n4systems.fieldid.ws.v1.resources.user.ApiPersonResource;
+import com.n4systems.fieldid.ws.v1.resources.user.ApiUserResource;
 import com.n4systems.fieldid.ws.v1.resources.usergroup.ApiUserGroupResource;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
 @Configuration
 public class FieldIdWsConfig {
@@ -271,5 +266,15 @@ public class FieldIdWsConfig {
 	@Bean
 	public ApiWarningTemplateResource apiWarningTemplateResource() {
 		return new ApiWarningTemplateResource();
+	}
+
+	@Bean
+	public ApiPreconfiguredDeviceResource apiPreconfiguredDeviceResource() {
+		return new ApiPreconfiguredDeviceResource();
+	}
+
+	@Bean
+	public ApiEnergySourceResource apiEnergySourceResource() {
+		return new ApiEnergySourceResource();
 	}
 }

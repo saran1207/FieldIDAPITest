@@ -3,6 +3,7 @@ package com.n4systems.model.procedure;
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.api.UnsecuredEntity;
+import com.n4systems.model.parents.AbstractEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table (name="preconfigured_energy_sources")
-public class PreconfiguredEnergySource extends BaseEntity implements UnsecuredEntity {
+public class PreconfiguredEnergySource extends AbstractEntity implements UnsecuredEntity {
 
     @Enumerated(EnumType.STRING)
     private IsolationPointSourceType isolationPointSourceType;

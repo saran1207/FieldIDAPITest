@@ -186,7 +186,7 @@ public class PreviouslyPublishedProcedureActionsCell extends Panel {
      * @param fileName - A <b>String</b> value specifying the name of the file that will be sent back in the response to the client.
      */
     private void handleDownload(File tempReport, String fileName) {
-        String encodedFileName = UrlEncoder.QUERY_INSTANCE.encode(fileName, getRequest().getCharset());
+        String encodedFileName = UrlEncoder.QUERY_INSTANCE.encode(fileName, getRequest().getCharset()) + ".pdf";
 
         IResourceStream resourceStream = new FileResourceStream(new org.apache.wicket.util.file.File(tempReport));
 
