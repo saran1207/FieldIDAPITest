@@ -41,7 +41,7 @@ public class ApiWarningTemplateResource extends ApiResource<ApiWarningTemplate, 
      */
     @GET
     @Path("/")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getWarningTemplateList() {
         //This is a pretty simple wrapper, so we can do it in one line.
         return Response.status(Response.Status.OK)
