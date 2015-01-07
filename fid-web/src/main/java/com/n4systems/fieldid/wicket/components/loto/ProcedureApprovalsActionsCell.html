@@ -3,21 +3,6 @@
     <div wicket:enclosure="actionsList" class="dropdown">
         <button class="btn-secondary">Actions</button>
         <ul wicket:id="actionsList" class="pull-right">
-            <li class="dropdown-secondary">
-                <a href="#"><wicket:message key="label.print"/></a>
-                <ul>
-                    <li>
-                        <a wicket:id="shortLink">
-                            <wicket:message key="label.short_form"/>
-                        </a>
-                    </li>
-                    <li>
-                        <a wicket:id="longLink">
-                            <wicket:message key="label.long_form"/>
-                        </a>
-                    </li>
-                </ul>
-            </li>
 
             <li><span wicket:enclosure="editLink">
                 <a wicket:id="editLink"><wicket:message key="label.edit"/></a>
@@ -36,5 +21,23 @@
 
         </ul>
     </div>
+
+    <div wicket:enclosure="optionsContainer2" class="dropdown">
+        <button class="btn-secondary">Print</button>
+        <ul wicket:id="optionsContainer2" class="pull-right">
+            <!-- wicket:message key="label.print"/ -->
+            <li>
+                <a wicket:id="shortLink">
+                    <wicket:container wicket:id="label"/>
+                </a>
+            </li>
+            <li>
+                <a wicket:id="longLink">
+                    <wicket:container wicket:id="label"/>
+                </a>
+            </li>
+        </ul>
+    </div>
+
 </wicket:panel>
 </html>
