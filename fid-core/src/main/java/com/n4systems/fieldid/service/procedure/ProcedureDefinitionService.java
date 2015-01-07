@@ -692,6 +692,12 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return persistenceService.findAll(query);
     }
 
+    public List<PreconfiguredDevice> getAllPreConfiguredDevices() {
+        QueryBuilder<PreconfiguredDevice> query = createTenantSecurityBuilder(PreconfiguredDevice.class);
+        query.addOrder("source");
+        return persistenceService.findAll(query);
+    }
+
     public List<PreconfiguredDevice> getPreConfiguredDevices(IsolationPointSourceType sourceType) {
         QueryBuilder<PreconfiguredDevice> query = createTenantSecurityBuilder(PreconfiguredDevice.class);
         if(sourceType != null) {
@@ -722,6 +728,12 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
             query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.NE,  "id", id));
         }
         return persistenceService.exists(query);
+    }
+
+    public List<PreconfiguredEnergySource> getAllPreconfiguredEnergySource() {
+        QueryBuilder<PreconfiguredEnergySource> query = new QueryBuilder<PreconfiguredEnergySource>(PreconfiguredEnergySource.class);
+        query.addOrder("isolationPointSourceType");
+        return persistenceService.findAll(query);
     }
 
     public List<String> getPreConfiguredEnergySource(IsolationPointSourceType sourceType) {
