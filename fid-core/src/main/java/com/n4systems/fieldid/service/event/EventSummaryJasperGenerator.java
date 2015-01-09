@@ -63,7 +63,7 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
         }
 
         Map<String, Object> reportMap = criteriaMap(criteria, getCurrentUser().getOwner().getPrimaryOrg(), jasperFile);
-        List<Map<String, Object>> collection = new ArrayList<Map<String, Object>>();
+        List<Map<String, ?>> collection = new ArrayList<>();
 
         addImageStreams(reportMap, getCurrentUser().getOwner().getInternalOrg());
 
@@ -74,6 +74,9 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
             Integer totalPassedEvents = 0;
             Integer totalFailedEvents = 0;
             Integer totalNAEvents = 0;
+            Integer totalNumberOfCriteria = 0;
+            Integer totalCriteriaWithObservations = 0;
+            Integer totalCriteriaWithActions = 0;
 
             ThingEvent event;
             for (Long eventScheduleId : sortedIdList) {
@@ -120,12 +123,15 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
                 List<Map<String, Object>> inspectionResultMaps = new ArrayList<Map<String, Object>>();
                 inspectionResultMaps.add(eventReportMap);
 
-                eventMap.put("results", eventReportMap.get("results"));
-                eventMap.put("resultsCopy", eventReportMap.get("resultsCopy"));
-                eventMap.put("resultsBeanList", eventReportMap.get("resultsBeanList"));
-                eventMap.put("actionsByPriorityCode", eventReportMap.get("actionsByPriorityCode"));
-                eventMap.put("observationsBeanList", eventReportMap.get("observationsBeanList"));
-
+                /*
+                 * we don't need these objects popped out to the top
+                 *
+                    eventMap.put("results", eventReportMap.get("results"));
+                    eventMap.put("resultsCopy", eventReportMap.get("resultsCopy"));
+                    eventMap.put("resultsBeanList", eventReportMap.get("resultsBeanList"));
+                    eventMap.put("actionsByPriorityCode", eventReportMap.get("actionsByPriorityCode"));
+                    eventMap.put("observationsBeanList", eventReportMap.get("observationsBeanList"));
+                */
 
                 for (SubEvent subEvent : event.getSubEvents()) {
                     inspectionResultMaps.add(new SubEventReportMapProducer(subEvent, event, dateDefiner, s3service, lastEventDateService).produceMap());
@@ -156,6 +162,19 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
             reportMap.put("totalPassedEvents", totalPassedEvents);
             reportMap.put("totalFailedEvents", totalFailedEvents);
             reportMap.put("totalNAEvents", totalNAEvents);
+
+            for(Map<String, ?> a:collection){
+                ArrayList<?> temp = (ArrayList <?>) a.get("allInspections");
+                HashMap<String, ?> newTemp = (HashMap<String, ?>) temp.get(0);
+
+                totalNumberOfCriteria += Integer.valueOf((String) newTemp.get("totalNumCriteria"));
+                totalCriteriaWithObservations += Integer.valueOf((String) newTemp.get("totalNumCriteriaWithObservation"));
+                totalCriteriaWithActions += Integer.valueOf((String) newTemp.get("totalNumCriteriaWithActions"));
+            }
+
+            reportMap.put("totalNumberOfCriteria", totalNumberOfCriteria);
+            reportMap.put("totalCriteriaWithObservations", totalCriteriaWithObservations);
+            reportMap.put("totalCriteriaWithActions", totalCriteriaWithActions);
 
         } catch (Exception e) {
             throw new ReportException("Failed to load the criteria", e);

@@ -169,6 +169,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		for (CriteriaResult result : getEvent().getResults()) {
 			for (Observation observation : result.getRecommendations()) {
 				observationViews.add(new ObservationView(getEvent(), result, observation));
+                totalNumCriteriaWithObservation++;
 			}
 		}
 	}
@@ -234,7 +235,9 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
         if (getEvent().getEventForm() != null) {
             for (CriteriaSection section : getEvent().getEventForm().getSections()) {
                 for (Criteria criteria : section.getCriteria()) {
-                    totalNumCriteria++;
+                    if(!section.getTitle().equalsIgnoreCase("summary")){
+                        totalNumCriteria++;
+                    }
                     if (resultMap.containsKey(criteria)) {
                         CriteriaStateView stateView = new CriteriaStateView(section, criteria, recommendations.get(criteria), deficiencies.get(criteria), help.get(criteria));
                         stateView.setSectionScoreTotal(sectionScoreMap.get(stateView.getSection()));
