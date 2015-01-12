@@ -2,7 +2,6 @@ package com.n4systems.fieldid.ws.v1.resources.procedure;
 
 import com.n4systems.fieldid.ws.v1.resources.model.ApiReadWriteModelWithOwner;
 
-import java.util.Date;
 import java.util.List;
 
 public class ApiProcedureDefinitionV2 extends ApiReadWriteModelWithOwner {
@@ -23,6 +22,7 @@ public class ApiProcedureDefinitionV2 extends ApiReadWriteModelWithOwner {
     private String equipmentBuilding;
     private String applicationProcess;
     private String removalProcess;
+    private String testingAndVerification;
     private String status;
     private String rejectedReason;
 
@@ -152,6 +152,14 @@ public class ApiProcedureDefinitionV2 extends ApiReadWriteModelWithOwner {
 
     public void setRemovalProcess(String removalProcess) {
         this.removalProcess = removalProcess;
+    }
+
+    public String getTestingAndVerification() {
+        return testingAndVerification;
+    }
+
+    public void setTestingAndVerification(String testingAndVerification) {
+        this.testingAndVerification = testingAndVerification;
     }
 
     public String getStatus() {
