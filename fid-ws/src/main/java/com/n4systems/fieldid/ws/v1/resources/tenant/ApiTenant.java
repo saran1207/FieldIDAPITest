@@ -14,6 +14,9 @@ public class ApiTenant {
 	private int lockoutDuration;
 	private boolean lockoutOnMobile;
 	private boolean usingEvents;
+	private String applicationProcess;
+	private String removalProcess;
+	private String testingAndVerification;
 	
 	public void setSerialNumberLabel(String serialNumberLabel) {
 		this.serialNumberLabel = serialNumberLabel;
@@ -117,5 +120,29 @@ public class ApiTenant {
 
 	public void setUsingEvents(boolean usingEvents) {
 		this.usingEvents = usingEvents;
+	}
+
+	public String getApplicationProcess() {
+		return applicationProcess;
+	}
+
+	public void setApplicationProcess(String applicationProcess) {
+		this.applicationProcess = applicationProcess;
+	}
+
+	public String getRemovalProcess() {
+		return removalProcess;
+	}
+
+	public void setRemovalProcess(String removalProcess) {
+		this.removalProcess = removalProcess;
+	}
+
+	public String getTestingAndVerification() {
+		return testingAndVerification;
+	}
+
+	public void setTestingAndVerification(String testingAndVerification) {
+		this.testingAndVerification = testingAndVerification;
 	}
 }

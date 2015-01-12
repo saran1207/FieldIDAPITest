@@ -39,7 +39,11 @@ public class ApiPreconfiguredDeviceResource extends ApiResource<ApiPreconfigured
     protected ApiPreconfiguredDevice convertEntityToApiModel(PreconfiguredDevice entityModel) {
         ApiPreconfiguredDevice preconfiguredDevice = new ApiPreconfiguredDevice();
 
-        preconfiguredDevice.setIsolationPointSourceType(entityModel.getIsolationPointSourceType().name());
+        if(entityModel.getIsolationPointSourceType() == null) {
+            preconfiguredDevice.setIsolationPointSourceType("null");
+        } else {
+            preconfiguredDevice.setIsolationPointSourceType(entityModel.getIsolationPointSourceType().name());
+        }
         preconfiguredDevice.setDevice(entityModel.getDevice());
         preconfiguredDevice.setMethod(entityModel.getMethod());
 

@@ -3,6 +3,8 @@ package com.n4systems.fieldid.ws.v1.resources.tenant;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.procedure.LotoSettings;
+import com.n4systems.model.procedure.ProcedureDefinition;
 import rfid.ejb.entity.IdentifierCounter;
 
 public class ApiTenantResource extends ApiResource<ApiTenant, PrimaryOrg> {
@@ -15,6 +17,33 @@ public class ApiTenantResource extends ApiResource<ApiTenant, PrimaryOrg> {
 
 		IdentifierCounter identifierCounter = persistenceService.find(createTenantSecurityBuilder(IdentifierCounter.class));
 		apiTenant.setSerialNumberDecimalFormat(identifierCounter.getDecimalFormat());
+
+		LotoSettings lotoSettings = persistenceService.find(createTenantSecurityBuilder(LotoSettings.class));
+		//Default values for all of the fields
+		if(lotoSettings == null) {
+			apiTenant.setApplicationProcess(ProcedureDefinition.LOCKOUT_APPLICATION_PROCESS);
+			apiTenant.setRemovalProcess(ProcedureDefinition.LOCKOUT_REMOVAL_PROCESS);
+			apiTenant.setTestingAndVerification(ProcedureDefinition.TESTING_AND_VERIFICATION_REQUIREMENTS);
+		} else {
+			//Default values for specific fields
+			if(lotoSettings.getApplicationProcess() == null) {
+				apiTenant.setApplicationProcess(ProcedureDefinition.LOCKOUT_APPLICATION_PROCESS);
+			} else {
+				apiTenant.setApplicationProcess(lotoSettings.getApplicationProcess());
+			}
+
+			if(lotoSettings.getRemovalProcess() == null){
+				apiTenant.setRemovalProcess(ProcedureDefinition.LOCKOUT_REMOVAL_PROCESS);
+			} else {
+				apiTenant.setRemovalProcess(lotoSettings.getRemovalProcess());
+			}
+
+			if(lotoSettings.getTestingAndVerification() == null) {
+				apiTenant.setTestingAndVerification(ProcedureDefinition.TESTING_AND_VERIFICATION_REQUIREMENTS);
+			} else {
+				apiTenant.setTestingAndVerification(lotoSettings.getTestingAndVerification());
+			}
+		}
 
 		apiTenant.setUsingAssignedTo(primaryOrg.hasExtendedFeature(ExtendedFeature.AssignedTo));
 		apiTenant.setUsingJobSites(primaryOrg.hasExtendedFeature(ExtendedFeature.JobSites));
