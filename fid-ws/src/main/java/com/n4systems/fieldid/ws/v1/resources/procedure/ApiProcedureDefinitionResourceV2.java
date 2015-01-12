@@ -214,6 +214,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         procDef.setBuilding(apiProcDef.getEquipmentBuilding());
         procDef.setApplicationProcess(apiProcDef.getApplicationProcess());
         procDef.setRemovalProcess(apiProcDef.getRemovalProcess());
+        procDef.setTestingAndVerification(apiProcDef.getTestingAndVerification());
 
         //You can't directly set this one on our model... so we have to use it as a switch for the appropriate methods.
         if(apiProcDef.isActive()) {
@@ -705,6 +706,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         apiProcedureDef.setEquipmentBuilding(procedureDef.getBuilding());
         apiProcedureDef.setApplicationProcess(procedureDef.getApplicationProcess());
         apiProcedureDef.setRemovalProcess(procedureDef.getRemovalProcess());
+        apiProcedureDef.setTestingAndVerification(procedureDef.getTestingAndVerification());
 
         return apiProcedureDef;
     }
