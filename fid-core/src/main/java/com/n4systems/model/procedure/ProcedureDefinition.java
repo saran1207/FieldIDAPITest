@@ -256,6 +256,10 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
         return unlockIsolationPoints;
     }
 
+    public void copyIsolationPointForApi(IsolationPoint isolationPoint){
+        isolationPoints.add(isolationPoint);
+    }
+
     public void addIsolationPoint(IsolationPoint isolationPoint) {
         int index = 1;
         for (IsolationPoint point: getUnlockIsolationPoints()) {
