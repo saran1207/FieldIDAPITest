@@ -405,7 +405,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
                            .map(isolationPoint ->
                                    createNewIsolationPoint(isolationPoint,
                                            imageMap.get(isolationPoint.getAnnotation() == null ? "nothing":isolationPoint.getAnnotation().getImageId())))
-                           .forEach(procDef::addIsolationPoint);
+                           .forEach(procDef::copyIsolationPointForApi);
         } else {
             //First thing is first... we need to process these images and add any that aren't already in the DB.
             //To do that, we need to reference the map of existing images.  If we don't get an image back, that means we
@@ -456,7 +456,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
                                      .map(isolationPoint ->
                                              createNewIsolationPoint(isolationPoint,
                                                                      imageMap.get(isolationPoint.getAnnotation() == null ? "nothing":isolationPoint.getAnnotation().getImageId())))
-                                     .forEach(procDef::addIsolationPoint);
+                                     .forEach(procDef::copyIsolationPointForApi);
 
             //These ones already existed... this is a little harder...  We'll definitely need that map of the existing
             //Isolation Points to make it easiest to pull the one we want to update.
@@ -466,7 +466,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
                                              updateExistingIsolationPoint(isolationPoint,
                                                                           entityIPMap.get(isolationPoint.getSid()),
                                                                           imageMap.get(isolationPoint.getAnnotation() == null ? "nothing":isolationPoint.getAnnotation().getImageId())))
-                                     .forEach(procDef::addIsolationPoint);
+                                     .forEach(procDef::copyIsolationPointForApi);
         }
 
         return procDef;
