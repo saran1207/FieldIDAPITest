@@ -283,7 +283,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
         for (Event action : result.getActions()) {
             totalNumCriteriaWithActions++;
             CriteriaResultActionView actionView = new CriteriaResultActionView();
-            actionView.setAssignee(action.getAssignee() == null ? null : action.getAssignee().getFullName());
+            actionView.setAssignee(action.getAssigneeName() == null ? null : action.getAssigneeName());
             actionView.setPerformedBy(action.getPerformedBy() == null ? null : action.getPerformedBy().getFullName());
             actionView.setDueDate(action.getDueDate() == null ? null : formatDate(action.getDueDate(), true));
             actionView.setCompletedDate(action.getCompletedDate() == null ? null : formatDate(action.getCompletedDate(), true));
