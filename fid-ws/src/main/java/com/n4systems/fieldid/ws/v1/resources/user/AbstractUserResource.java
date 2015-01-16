@@ -1,23 +1,22 @@
 package com.n4systems.fieldid.ws.v1.resources.user;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-
-import com.n4systems.model.user.UserGroup;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
 import com.n4systems.fieldid.ws.v1.resources.offlineprofile.ApiOfflineProfileResource;
 import com.n4systems.fieldid.ws.v1.resources.tenant.ApiTenantResource;
 import com.n4systems.model.offlineprofile.OfflineProfile;
 import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserGroup;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 public abstract class AbstractUserResource extends SetupDataResource<ApiUser, User> {
 
@@ -37,7 +36,7 @@ public abstract class AbstractUserResource extends SetupDataResource<ApiUser, Us
 			builder.addWhere(WhereClauseFactory.create(Comparator.GT, "modified", after));
 		}
 		builder.addOrder("id");
-        addUserTypeTermToQuery(builder);
+        //addUserTypeTermToQuery(builder);
 		return builder;
 	}
 	
