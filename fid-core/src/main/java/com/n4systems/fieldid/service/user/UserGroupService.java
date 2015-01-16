@@ -1,10 +1,12 @@
 package com.n4systems.fieldid.service.user;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
+import com.n4systems.model.user.UserQueryHelper;
 import com.n4systems.util.persistence.*;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -93,6 +95,21 @@ public class UserGroupService extends FieldIdPersistenceService {
     public List<User> getUsersInGroup(UserGroup userGroup) {
         QueryBuilder<User> query = new QueryBuilder<User>(User.class, new TenantOnlySecurityFilter(userGroup.getTenant().getId()));
         query.addWhere(new InElementsParameter<UserGroup>("groups", userGroup));
+        return persistenceService.findAll(query);
+    }
+
+    public List<User> getArchivedUsersInGroup(User user) {
+        List<User> archivedUsers = Lists.newArrayList();
+        for (UserGroup group: user.getGroups()) {
+            archivedUsers.addAll(getArchivedUsersInGroup(group));
+        }
+        return archivedUsers;
+    }
+
+    public List<User> getArchivedUsersInGroup(UserGroup userGroup) {
+        QueryBuilder<User> query = new QueryBuilder<User>(User.class, new TenantOnlySecurityFilter(userGroup.getTenant().getId()).setShowArchived(true));
+        query.addWhere(new InElementsParameter<UserGroup>("groups", userGroup));
+        UserQueryHelper.applyArchivedFilter(query);
         return persistenceService.findAll(query);
     }
 
