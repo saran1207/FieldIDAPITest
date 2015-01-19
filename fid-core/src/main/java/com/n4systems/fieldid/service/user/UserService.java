@@ -38,6 +38,9 @@ public class UserService extends FieldIdPersistenceService {
     @Autowired
     private OrgService orgService;
 
+    @Autowired
+    private UserGroupService userGroupService;
+
     private static String [] DEFAULT_ORDER = {"firstName", "lastName"};
 
     public List<User> getUsers(boolean registered, boolean includeSystem) {
@@ -53,8 +56,10 @@ public class UserService extends FieldIdPersistenceService {
     public List<User> getUsers(UserListFilterCriteria criteria) {
         QueryBuilder<User> builder = createUserQueryBuilder(criteria);
 
-        if (!getCurrentUser().getGroups().isEmpty() && isUserGroupFilteringEnabled()) {
+        if (!getCurrentUser().getGroups().isEmpty() && isUserGroupFilteringEnabled() && !criteria.isArchivedOnly()) {
             return new ArrayList<>(ThreadLocalInteractionContext.getInstance().getVisibleUsers());
+        } else if (!getCurrentUser().getGroups().isEmpty() && isUserGroupFilteringEnabled() && criteria.isArchivedOnly()) {
+            return userGroupService.getArchivedUsersInGroup(getCurrentUser());
         }
 
         return persistenceService.findAll(builder);
@@ -87,8 +92,10 @@ public class UserService extends FieldIdPersistenceService {
     public Long countUsers(UserListFilterCriteria criteria) {
         QueryBuilder<User> builder = createUserQueryBuilder(criteria);
 
-        if (!getCurrentUser().getGroups().isEmpty() && isUserGroupFilteringEnabled()) {
+        if (!getCurrentUser().getGroups().isEmpty() && isUserGroupFilteringEnabled() && !criteria.isArchivedOnly()) {
             return Long.valueOf(new ArrayList<User>(ThreadLocalInteractionContext.getInstance().getVisibleUsers()).size());
+        } else if (!getCurrentUser().getGroups().isEmpty() && isUserGroupFilteringEnabled() && criteria.isArchivedOnly()) {
+            return Long.valueOf(userGroupService.getArchivedUsersInGroup(getCurrentUser()).size());
         }
 
         return persistenceService.count(builder);
