@@ -87,10 +87,10 @@ public class LocationTreeToHierarchicalNodesConverterTest {
 	public void should_convert_an_location_tree_with_multiple_levels_of_nodes_into_a_tree_of_nodes_matching() throws Exception {
 		
 		
-		PredefinedLocationTreeNode locationNode = aPredefinedLocationTreeNode();
-		PredefinedLocationTreeNode locationNode2 = aPredefinedLocationTreeNode();
+		PredefinedLocationTreeNode locationNode = aPredefinedLocationTreeNode(1l);
+		PredefinedLocationTreeNode locationNode2 = aPredefinedLocationTreeNode(2l);
 		locationNode.addChild(locationNode2);
-		PredefinedLocationTreeNode locationNode3 = aPredefinedLocationTreeNode();
+		PredefinedLocationTreeNode locationNode3 = aPredefinedLocationTreeNode(3l);
 		locationNode2.addChild(locationNode3);
 		
 		
@@ -109,11 +109,11 @@ public class LocationTreeToHierarchicalNodesConverterTest {
 	@Test
 	public void should_order_each_level_of_nodes_by_name_alphabetically_ignoring_case() throws Exception {
 		
-		PredefinedLocationTreeNode locationNode_Bob = aPredefinedLocationTreeNodeNamed("Bob");
-		PredefinedLocationTreeNode locationNode_alex = aPredefinedLocationTreeNodeNamed("alex");
-		PredefinedLocationTreeNode locationNode_Matt = aPredefinedLocationTreeNodeNamed("Matt");
-		PredefinedLocationTreeNode locationNode_47_fraiser = aPredefinedLocationTreeNodeNamed("47 fraiser st");
-		PredefinedLocationTreeNode locationNode_mark = aPredefinedLocationTreeNodeNamed("mark");
+		PredefinedLocationTreeNode locationNode_Bob = aPredefinedLocationTreeNodeNamed("Bob", 1l);
+		PredefinedLocationTreeNode locationNode_alex = aPredefinedLocationTreeNodeNamed("alex", 2l);
+		PredefinedLocationTreeNode locationNode_Matt = aPredefinedLocationTreeNodeNamed("Matt", 3l);
+		PredefinedLocationTreeNode locationNode_47_fraiser = aPredefinedLocationTreeNodeNamed("47 fraiser st", 4l);
+		PredefinedLocationTreeNode locationNode_mark = aPredefinedLocationTreeNodeNamed("mark", 5l);
 		
 		PredefinedLocationTree locationTree = aPredefinedLocationTreeWithTopLevelLocations(locationNode_Bob, locationNode_mark, locationNode_alex, locationNode_Matt, locationNode_47_fraiser);
 		
@@ -166,16 +166,18 @@ public class LocationTreeToHierarchicalNodesConverterTest {
 	}
 
 
-	private PredefinedLocationTreeNode aPredefinedLocationTreeNodeNamed(String name) {
+	private PredefinedLocationTreeNode aPredefinedLocationTreeNodeNamed(String name, Long id) {
 		PredefinedLocation location = new PredefinedLocation();
 		location.setName(name);
-		
+		location.setId(id);
 		return new PredefinedLocationTreeNode(location);
 	}
 
 
-	private PredefinedLocationTreeNode aPredefinedLocationTreeNode() {
-		return new PredefinedLocationTreeNode(new PredefinedLocation());
+	private PredefinedLocationTreeNode aPredefinedLocationTreeNode(Long id) {
+		PredefinedLocation pl = new PredefinedLocation();
+		pl.setId(id);
+		return new PredefinedLocationTreeNode(pl);
 	}
 	
 	

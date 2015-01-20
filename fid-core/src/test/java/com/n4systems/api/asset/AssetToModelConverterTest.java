@@ -128,6 +128,7 @@ public class AssetToModelConverterTest {
 
         PredefinedLocationTree tree = new PredefinedLocationTree();
         PredefinedLocation pdl = new PredefinedLocation();
+		pdl.setId(1L);
         pdl.setName("level1");
         tree.addNode(new PredefinedLocationTreeNode(pdl));
         expect(treeLoader.load(trans)).andReturn(tree);

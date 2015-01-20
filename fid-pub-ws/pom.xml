@@ -29,6 +29,21 @@
                         <include>src/main/gen/**/*.java</include>
                     </includes>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>default-testCompile</id>
+                        <phase>test-compile</phase>
+                        <configuration>
+                            <testIncludes>
+                                <include>src/main/java/**/*.java</include>
+                                <include>src/main/gen/**/*.java</include>
+                            </testIncludes>
+                        </configuration>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>com.google.protobuf.tools</groupId>
