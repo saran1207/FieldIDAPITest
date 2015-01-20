@@ -1,6 +1,7 @@
 package com.n4systems.model.orgs;
 
 import com.n4systems.model.AddressInfo;
+import com.n4systems.model.ApiModelWithName;
 import com.n4systems.model.Contact;
 import com.n4systems.model.PlaceEventType;
 import com.n4systems.model.api.*;
@@ -20,7 +21,7 @@ import java.util.Set;
 @Table(name = "org_base")
 @Inheritance(strategy = InheritanceType.JOINED)
 @Localized(ignore =true)
-public abstract class BaseOrg extends ArchivableEntityWithTenant implements NamedEntity, Listable<Long>, Comparable<BaseOrg>, NetworkEntity<BaseOrg>, Exportable, Archivable, HasOwner {
+public abstract class BaseOrg extends ArchivableEntityWithTenant implements NamedEntity, Listable<Long>, Comparable<BaseOrg>, NetworkEntity<BaseOrg>, Exportable, Archivable, HasOwner, ApiModelWithName {
 
 	private static final long serialVersionUID = 1L;
 	public static final String SECONDARY_ID_FILTER_PATH = "secondaryOrg.id";

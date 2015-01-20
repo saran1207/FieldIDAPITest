@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 
 @Entity
 @Table(name = "assettypes")
-public class AssetType extends ArchivableEntityWithTenant implements NamedEntity, HasFileAttachments, Listable<Long>, Saveable, SecurityEnhanced<AssetType> {
+public class AssetType extends ArchivableEntityWithTenant implements NamedEntity, HasFileAttachments, Listable<Long>, Saveable, SecurityEnhanced<AssetType>, ApiModelWithName {
 
 	private static final Logger logger = Logger.getLogger(AssetType.class);
 	

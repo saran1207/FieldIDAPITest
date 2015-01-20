@@ -1,13 +1,12 @@
 package com.n4systems.model.location;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class PredefinedLocationTree {
 
-	private final Set<PredefinedLocationTreeNode> nodes = new HashSet<PredefinedLocationTreeNode>();
-	
-	
+	private final SortedSet<PredefinedLocationTreeNode> nodes = new TreeSet<>();
+
 	public boolean isEmpty() {
 		return nodes.isEmpty();
 	}
@@ -16,9 +15,8 @@ public class PredefinedLocationTree {
 		nodes.add(node);
 	}
 
-	public Set<PredefinedLocationTreeNode> getNodes() {
+	public SortedSet<PredefinedLocationTreeNode> getNodes() {
 		return nodes;
 	}
-	
-	
+
 }
