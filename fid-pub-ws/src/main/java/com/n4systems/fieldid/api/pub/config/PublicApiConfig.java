@@ -59,6 +59,11 @@ public class PublicApiConfig {
 	}
 
 	@Bean
+	public UserGroupResolver userGroupResolver() {
+		return new UserGroupResolver();
+	}
+
+	@Bean
 	public PredefinedLocationResolver predefinedLocationResolver() {
 		return new PredefinedLocationResolver();
 	}
@@ -102,4 +107,6 @@ public class PublicApiConfig {
 	public UserResource userResource() {
 		return new UserResource();
 	}
+
 }
+

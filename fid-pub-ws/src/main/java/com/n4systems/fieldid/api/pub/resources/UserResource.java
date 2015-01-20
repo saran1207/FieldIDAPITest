@@ -7,6 +7,7 @@ import com.n4systems.fieldid.api.pub.mapping.model.marshal.ApiModelWithNameToMes
 import com.n4systems.fieldid.api.pub.mapping.model.marshal.UserGroupToMessage;
 import com.n4systems.fieldid.api.pub.mapping.model.marshal.UserToMessage;
 import com.n4systems.fieldid.api.pub.mapping.model.unmarshal.BaseOrgResolver;
+import com.n4systems.fieldid.api.pub.mapping.model.unmarshal.UserGroupResolver;
 import com.n4systems.fieldid.api.pub.model.Messages;
 import com.n4systems.fieldid.api.pub.model.Messages.UserMessage;
 import com.n4systems.fieldid.api.pub.model.Messages.UserMessage.Builder;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Component;
 
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.Path;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Path("users")
@@ -29,6 +31,7 @@ public class UserResource extends CrudResource<User, UserMessage, Builder> {
 
 	@Autowired private UserService userService;
 	@Autowired private BaseOrgResolver baseOrgResolver;
+	@Autowired private UserGroupResolver userGroupResolver;
 
 	public UserResource() {
 		super(Messages.users);
@@ -70,7 +73,7 @@ public class UserResource extends CrudResource<User, UserMessage, Builder> {
 				.add(User::isLocked, Builder::setLocked)
 				.addDateToString(User::getLockedUntil, Builder::setLockedUntil)
 				.addDateToString(User::getPasswordChanged, Builder::setPasswordChanged)
-				.addToString(User::getLanguage, Builder::setLanguage)
+				.add(User::getLanguage, Builder::setLanguage, (l) -> l.getLanguage())
 				.addDateToString(User::getLastLogin, Builder::setLastLogin)
 				.add(User::getUserType, Builder::setUserType, this::convertTypeToMessage)
 				.add(User::getPermissions, Builder::setPermissions, this::convertPermissionsToMessage)
@@ -81,7 +84,6 @@ public class UserResource extends CrudResource<User, UserMessage, Builder> {
 	@Override
 	protected Mapper<UserMessage, User> createMessageToModelMapper(TypeMapperBuilder<UserMessage, User> mapperBuilder) {
 		return mapperBuilder
-				.add(UserMessage::getId, User::setPublicId)
 				.add(UserMessage::getOwnerId, User::setOwner, baseOrgResolver)
 				.add(UserMessage::getUserID, User::setUserID)
 				.add(UserMessage::getFirstName, User::setFirstName)
@@ -92,14 +94,14 @@ public class UserResource extends CrudResource<User, UserMessage, Builder> {
 				.add(UserMessage::getInitials, User::setInitials)
 				.add(UserMessage::getLocked, User::setLocked)
 				.add(UserMessage::getIdentifier, User::setIdentifier)
-				.addToString(UserMessage::getLanguage, User::setLanguage)
+				.add(UserMessage::getLanguage, User::setLanguage, (l) -> Locale.forLanguageTag(l))
 				.add(UserMessage::getPermissions, User::setPermissions, this::convertPermissionsToModel)
-				.addCollection(UserMessage::getGroups, Builder::addAllGroups, new UserGroupToMessage(), Collectors.toList())
+				.addCollection(UserMessage::getGroupsList, User::setGroups, userGroupResolver, Collectors.toSet())
 				.add(UserMessage::getUserType, User::setUserType, this::convertTypeToModel) // this needs to come last as it does some permission validation
 				.build();
 	}
 
-	private UserMessage.UserType convertTypeToMessage(UserType type) {Integer.parseInt()
+	private UserMessage.UserType convertTypeToMessage(UserType type) {
 		switch (type) {
 			case ADMIN:
 			case FULL:
