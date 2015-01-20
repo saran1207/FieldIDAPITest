@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.service.user;
 
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
@@ -14,7 +14,11 @@ import java.util.HashSet;
 import java.util.List;
 
 @Transactional
-public class UserGroupService extends FieldIdPersistenceService {
+public class UserGroupService extends CrudService<UserGroup> {
+
+    public UserGroupService() {
+        super(UserGroup.class);
+    }
 
     public Collection<User> findUsersVisibleTo(User user) {
         Collection<User> friends = new HashSet<User>();

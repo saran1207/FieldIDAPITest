@@ -108,5 +108,15 @@ public class PublicApiConfig {
 		return new UserResource();
 	}
 
+	@Bean(initMethod = "init")
+	public AssetStatusResource assetStatusResource() {
+		return new AssetStatusResource();
+	}
+
+	@Bean(initMethod = "init")
+	public UserGroupResource userGroupResource() {
+		return new UserGroupResource();
+	}
+
 }
 
