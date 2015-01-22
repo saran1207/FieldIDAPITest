@@ -879,4 +879,9 @@ public class FieldIdCoreConfig {
 	public PredefinedLocationService PredefinedLocationService() {
 		return new PredefinedLocationService();
 	}
+
+    @Bean
+    public ObservationCountService observationCountService() {
+        return new ObservationCountService();
+    }
 }
