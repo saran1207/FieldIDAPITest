@@ -24,7 +24,7 @@ public class ObservationCountGroup extends ArchivableEntityWithTenant implements
     String name;
 
     @OneToMany(fetch= FetchType.EAGER, cascade= CascadeType.ALL)
-    @JoinTable(name="observationcount_groups_observationcounts", joinColumns = @JoinColumn(name="group_id"), inverseJoinColumns = @JoinColumn(name="observationcount_id"))
+    @JoinTable(name="observationcount_groups_observationcounts", joinColumns = @JoinColumn(name="observationcount_group_id"), inverseJoinColumns = @JoinColumn(name="observationcount_id"))
     @IndexColumn(name="orderIdx")
     private List<ObservationCount> observationCounts = new ArrayList<ObservationCount>();
 

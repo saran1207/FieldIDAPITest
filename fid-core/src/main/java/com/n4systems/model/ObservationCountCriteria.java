@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class ObservationCountCriteria extends Criteria {
 
     @ManyToOne(cascade= CascadeType.REFRESH, fetch= FetchType.EAGER, optional=false)
-    @JoinColumn(name="group_id")
+    @JoinColumn(name="observationcount_group_id")
     private ObservationCountGroup observationCountGroup;
 
     @Override
