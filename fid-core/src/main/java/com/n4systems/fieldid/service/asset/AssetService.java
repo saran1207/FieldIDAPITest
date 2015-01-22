@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import com.n4systems.exceptions.*;
 import com.n4systems.fieldid.LegacyMethod;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.event.LastEventDateService;
 import com.n4systems.fieldid.service.event.ProcedureAuditEventService;
@@ -56,7 +56,7 @@ import javax.persistence.Query;
 import java.util.*;
 
 @Transactional
-public class AssetService extends FieldIdPersistenceService {
+public class AssetService extends CrudService<Asset> {
 
 	@Autowired private ReportServiceHelper reportServiceHelper;
     @Autowired private TransactionService transactionService;
@@ -71,6 +71,10 @@ public class AssetService extends FieldIdPersistenceService {
     @Autowired private ProcedureAuditEventService procedureAuditEventService;
 
 	private Logger logger = Logger.getLogger(AssetService.class);
+
+	public AssetService() {
+		super(Asset.class);
+	}
 
     @Transactional(readOnly=true)
     public Long countAssets() {

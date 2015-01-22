@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.service.asset;
 
 import com.n4systems.exceptions.InvalidQueryException;
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.fieldid.service.search.SavedReportService;
 import com.n4systems.fieldid.service.search.SavedSearchRemoveFilter;
 import com.n4systems.model.AssetType;
@@ -16,19 +16,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AssetTypeGroupService extends FieldIdPersistenceService {
+public class AssetTypeGroupService extends CrudService<AssetTypeGroup> {
+	private static final Logger logger= Logger.getLogger(AssetTypeGroupService.class);
 
     @Autowired
     private SavedReportService savedReportService;
 
-    private List<Long> reorderedIdList = new ArrayList<Long>();
-    private List<AssetTypeGroup> groups;
-    private static final Logger logger= Logger.getLogger(AssetTypeGroupService.class);
+	public AssetTypeGroupService() {
+		super(AssetTypeGroup.class);
+	}
 
     @Transactional
 	public AssetTypeGroupRemovalSummary testDelete(AssetTypeGroup group) {
@@ -125,13 +125,6 @@ public class AssetTypeGroupService extends FieldIdPersistenceService {
         catch (Exception e) {
             logger.error("could not update asset type groups" + e);
         }
-    }
-
-    public List<AssetTypeGroup> getGroups() {
-        if (groups == null) {
-            groups = getAllAssetTypeGroups();
-        }
-        return groups;
     }
 
 

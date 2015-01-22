@@ -56,7 +56,7 @@ public class PredefinedLocationTreeLoaderTest {
 
         PredefinedLocationListLoader loader = createMock(PredefinedLocationListLoader.class);
         expect(loader.getFilter()).andReturn(filter);
-        expect(loader.load(transaction.getEntityManager())).andReturn(ImmutableList.of(aLevelOneLocation(), aLevelOneLocation()));
+        expect(loader.load(transaction.getEntityManager())).andReturn(ImmutableList.of(aLevelOneLocation(1L), aLevelOneLocation(2L)));
 		replay(loader);
 		
 		PredefinedLocationTreeLoader sut = new PredefinedLocationTreeLoader(loader);
@@ -72,9 +72,9 @@ public class PredefinedLocationTreeLoaderTest {
         Transaction transaction = new DummyTransaction();
 
 
-        PredefinedLocation aLevelOneLocation = aLevelOneLocation();
-		PredefinedLocation aLevelTwoLocation = aLocationWithParent(aLevelOneLocation);
-		PredefinedLocation aLevelThreeLocation = aLocationWithParent(aLevelTwoLocation);
+        PredefinedLocation aLevelOneLocation = aLevelOneLocation(1L);
+		PredefinedLocation aLevelTwoLocation = aLocationWithParent(aLevelOneLocation, 2L);
+		PredefinedLocation aLevelThreeLocation = aLocationWithParent(aLevelTwoLocation, 3L);
 		
 		
 		PredefinedLocationListLoader loader = createMock(PredefinedLocationListLoader.class);
@@ -94,12 +94,12 @@ public class PredefinedLocationTreeLoaderTest {
 	public void should_create_a_tree_with_all_multiple_nodes_per_level() throws Exception {
         Transaction transaction = new DummyTransaction();
 
-        PredefinedLocation aLevelOneLocation = aLevelOneLocation();
-		PredefinedLocation aSecondeLevelOneLocation = aLevelOneLocation();
-		PredefinedLocation aLevelTwoLocation = aLocationWithParent(aLevelOneLocation);
-		PredefinedLocation aSecondLevelTwoLocation = aLocationWithParent(aLevelOneLocation);
-		PredefinedLocation aThirdLevelTwoLocation = aLocationWithParent(aSecondeLevelOneLocation);
-		PredefinedLocation aForthLevelTwoLocation = aLocationWithParent(aSecondeLevelOneLocation);
+        PredefinedLocation aLevelOneLocation = aLevelOneLocation(1L);
+		PredefinedLocation aSecondeLevelOneLocation = aLevelOneLocation(2L);
+		PredefinedLocation aLevelTwoLocation = aLocationWithParent(aLevelOneLocation, 3L);
+		PredefinedLocation aSecondLevelTwoLocation = aLocationWithParent(aLevelOneLocation, 4L);
+		PredefinedLocation aThirdLevelTwoLocation = aLocationWithParent(aSecondeLevelOneLocation, 5L);
+		PredefinedLocation aForthLevelTwoLocation = aLocationWithParent(aSecondeLevelOneLocation, 6L);
 		
 		PredefinedLocationListLoader loader = createMock(PredefinedLocationListLoader.class);
         expect(loader.getFilter()).andReturn(filter);
@@ -167,8 +167,9 @@ public class PredefinedLocationTreeLoaderTest {
 	}
 
 
-	private PredefinedLocation aLocationWithParent(PredefinedLocation parent) {
+	private PredefinedLocation aLocationWithParent(PredefinedLocation parent, Long id) {
 		PredefinedLocation predefinedLocation = new PredefinedLocation(aTenant().build(), parent, OrgBuilder.aPrimaryOrg().build());
+		predefinedLocation.setId(id);
 		return predefinedLocation;
 	}
 
@@ -214,8 +215,10 @@ public class PredefinedLocationTreeLoaderTest {
 	}
 
 
-	private PredefinedLocation aLevelOneLocation() {
-		return new PredefinedLocation();
+	private PredefinedLocation aLevelOneLocation(Long id) {
+		PredefinedLocation pl = new PredefinedLocation();
+		pl.setId(id);
+		return pl;
 	}
 
 }

@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "assetstatus")
-public class AssetStatus extends ArchivableEntityWithTenant implements Listable<Long>, Saveable, NamedEntity {
+public class AssetStatus extends ArchivableEntityWithTenant implements Listable<Long>, Saveable, NamedEntity, ApiModelWithName {
 	private static final long serialVersionUID = 1L;
 	
 	private @Localized String name;

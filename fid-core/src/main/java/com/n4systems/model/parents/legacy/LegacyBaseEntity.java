@@ -1,6 +1,7 @@
 package com.n4systems.model.parents.legacy;
 
 import com.google.common.collect.Maps;
+import com.n4systems.model.PublicIdEncoder;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
@@ -85,4 +86,12 @@ abstract public class LegacyBaseEntity implements Serializable, Saveable {
     public Map<String, Object> getTranslatedValues() {
         return translations;
     }
+
+	public String getPublicId() {
+		return PublicIdEncoder.encode(uniqueID);
+	}
+
+	public void setPublicId(String publicId) {
+		uniqueID = PublicIdEncoder.decode(publicId);
+	}
 }

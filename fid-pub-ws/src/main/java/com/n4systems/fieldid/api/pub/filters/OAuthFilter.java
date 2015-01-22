@@ -5,7 +5,6 @@ import com.n4systems.fieldid.service.SecurityContextInitializer;
 import com.n4systems.model.user.User;
 import com.n4systems.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -17,7 +16,6 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
 @Provider
-@Scope("request")
 public class OAuthFilter implements ContainerRequestFilter, ContainerResponseFilter {
 
 	@Autowired

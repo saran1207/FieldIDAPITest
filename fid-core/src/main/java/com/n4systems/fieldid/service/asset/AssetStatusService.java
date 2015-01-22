@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.service.asset;
 
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.user.User;
@@ -16,7 +16,11 @@ import java.util.Date;
 import java.util.List;
 
 @Transactional
-public class AssetStatusService extends FieldIdPersistenceService {
+public class AssetStatusService extends CrudService<AssetStatus> {
+
+    public AssetStatusService() {
+        super(AssetStatus.class);
+    }
 
     public List<AssetStatus> getActiveStatuses() {
 		QueryBuilder<AssetStatus> builder = createUserSecurityBuilder(AssetStatus.class);

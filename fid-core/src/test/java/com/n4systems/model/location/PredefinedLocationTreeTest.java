@@ -19,7 +19,9 @@ public class PredefinedLocationTreeTest {
 	@Test
 	public void should_report_as_not_an_empty_tree_when_there_were_at_least_one_location_is_added() throws Exception {
 		PredefinedLocationTree sut = new PredefinedLocationTree();
-		sut.addNode(new PredefinedLocationTreeNode(new PredefinedLocation()));
+		PredefinedLocation pl = new PredefinedLocation();
+		pl.setId(1L);
+		sut.addNode(new PredefinedLocationTreeNode(pl));
 		
 		assertThat(sut, not(anEmptyLocationTree()));
 	}

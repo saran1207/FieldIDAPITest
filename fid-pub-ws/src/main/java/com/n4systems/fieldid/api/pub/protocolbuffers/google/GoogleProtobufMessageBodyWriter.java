@@ -106,6 +106,11 @@ public class GoogleProtobufMessageBodyWriter implements MessageBodyWriter<Messag
                             generator.writeEnd();
                         }
                         break;
+					case ENUM:
+						for(Enum s : (List<Enum>)value) {
+							generator.write(s.name());
+						}
+						break;
                     case STRING:
                         for(String s : (List<String>)value) {
                             generator.write(s);
@@ -147,6 +152,9 @@ public class GoogleProtobufMessageBodyWriter implements MessageBodyWriter<Messag
                         writeMessage(generator, (Message) value);
                         generator.writeEnd();
                         break;
+					case ENUM:
+						generator.write(GoogleProtobufUtils.getSerializedFieldName(descriptor), value.toString());
+						break;
                     case STRING:
                         generator.write(GoogleProtobufUtils.getSerializedFieldName(descriptor), (String)value);
                         break;
