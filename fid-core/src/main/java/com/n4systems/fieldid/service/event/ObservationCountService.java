@@ -11,4 +11,22 @@ public class ObservationCountService extends FieldIdPersistenceService {
         return persistenceService.findAll(createTenantSecurityBuilder(ObservationCountGroup.class));
     }
 
+    public Long countObservationCountGroups() {
+        return persistenceService.count(createTenantSecurityBuilder(ObservationCountGroup.class));
+    }
+
+    public ObservationCountGroup saveOrUpdate(ObservationCountGroup group) {
+        return persistenceService.saveOrUpdate(group);
+    }
+
+    public ObservationCountGroup archive(ObservationCountGroup group) {
+        group.archiveEntity();
+        return persistenceService.update(group);
+    }
+
+    public ObservationCountGroup unarchive(ObservationCountGroup group) {
+        group.activateEntity();
+        return persistenceService.update(group);
+    }
+
 }
