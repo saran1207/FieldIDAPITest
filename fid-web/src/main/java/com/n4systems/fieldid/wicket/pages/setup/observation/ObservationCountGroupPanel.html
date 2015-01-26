@@ -1,0 +1,38 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+    <wicket:enclosure>
+        <div class="columnHeader">
+            <div wicket:id="reorderScoresButton"></div>
+        </div>
+    </wicket:enclosure>
+
+    <div wicket:id="blankInstructions" class="blankInstructions">
+        <wicket:message key="label.create_new_or_select_existing_score_group"/>
+    </div>
+
+    <div class="scoreGroup">
+
+        <div wicket:id="sortableObservationCountsContainer">
+
+            <div wicket:id="countsList">
+                <div class="score" wicket:id="count"></div>
+            </div>
+
+        </div>
+
+        <form wicket:id="observationCountGroupForm">
+
+            <div wicket:id="feedbackPanel"></div>
+
+            <div class="score newScore" wicket:id="newObservationCount"></div>
+
+            <div class="saveButtonContainer">
+                <a wicket:id="saveLink" class="btn-secondary"><wicket:message key="label.save"/></a>
+            </div>
+
+        </form>
+
+    </div>
+
+</wicket:panel>
+</html>

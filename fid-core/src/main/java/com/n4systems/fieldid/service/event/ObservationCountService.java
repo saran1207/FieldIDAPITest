@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.service.event;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.model.ObservationCount;
 import com.n4systems.model.ObservationCountGroup;
 
 import java.util.List;
@@ -27,6 +28,23 @@ public class ObservationCountService extends FieldIdPersistenceService {
     public ObservationCountGroup unarchive(ObservationCountGroup group) {
         group.activateEntity();
         return persistenceService.update(group);
+    }
+
+    public void addObservationCount(ObservationCountGroup group, ObservationCount count) {
+        persistenceService.save(count);
+        group.getObservationCounts().add(count);
+        saveOrUpdate(group);
+    }
+
+    public void updateObservationCount(ObservationCountGroup group, ObservationCount count) {
+        persistenceService.update(count);
+        saveOrUpdate(group);
+    }
+
+    public void archiveObservationCount(ObservationCountGroup group, ObservationCount count) {
+        group.getObservationCounts().remove(count);
+        persistenceService.archive(count);
+        saveOrUpdate(group);
     }
 
 }

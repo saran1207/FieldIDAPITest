@@ -77,6 +77,7 @@ public class ScoreGroupsListPanel extends Panel {
                         onValidationError(target);
                     }
                 });
+
                 item.add(new AppendToClassIfCondition("selectedGroup", new Predicate() {
                     @Override
                     public boolean evaluate() {
