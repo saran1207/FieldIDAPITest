@@ -5,6 +5,7 @@ import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
+import com.n4systems.fieldid.wicket.pages.setup.observationcount.ObservationCountResultConfigurationPage;
 import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigurationPage;
 import com.n4systems.model.EventType;
 import org.apache.wicket.markup.html.basic.Label;
@@ -42,6 +43,7 @@ public class EventTypePage extends FieldIDFrontEndPage {
                 aNavItem().label("nav.view").page("eventType.action").params(uniqueId(eventTypeId)).build(),
                 aNavItem().label("nav.edit").page("eventTypeEdit.action").params(uniqueId(eventTypeId)).build(),
                 aNavItem().label("nav.event_form").page(EventFormEditPage.class).params(uniqueId(eventTypeId)).build(),
+                aNavItem().label("nav.observations").page(ObservationCountResultConfigurationPage.class).params(uniqueId(eventTypeId)).build(),
                 aNavItem().label("nav.scoring").page(ScoreResultConfigurationPage.class).params(uniqueId(eventTypeId)).build(),
                 aNavItem().label("nav.asset_type_associations").page("selectAssetTypes.action").params(param("eventTypeId", eventTypeId)).cond(eventTypeModel.getObject().isThingEventType()).build()));
     }

@@ -1,14 +1,13 @@
 package com.n4systems.model;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import java.io.Serializable;
 
 @Embeddable
-public class ScoreResultRange implements Serializable {
+public class ResultRange implements Serializable {
 
     @Enumerated(EnumType.STRING)
 	@Column(nullable=false, name="comparator")

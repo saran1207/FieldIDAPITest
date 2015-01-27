@@ -1,22 +1,22 @@
 package com.n4systems.model.builders;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.EventForm;
+import com.n4systems.model.ResultRange;
 import com.n4systems.model.ScoreCalculationType;
-import com.n4systems.model.ScoreResultRange;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EventFormBuilder extends EntityWithTenantBuilder<EventForm> {
 
     private final List<CriteriaSection> sections;
     private final boolean useScore;
     private final ScoreCalculationType scoreCalculationType;
-    private final ScoreResultRange failRange;
-    private final ScoreResultRange passRange;
+    private final ResultRange failRange;
+    private final ResultRange passRange;
 
-    public EventFormBuilder(List<CriteriaSection> sections, boolean useScore, ScoreCalculationType scoreCalculationType, ScoreResultRange failRange, ScoreResultRange passRange) {
+    public EventFormBuilder(List<CriteriaSection> sections, boolean useScore, ScoreCalculationType scoreCalculationType, ResultRange failRange, ResultRange passRange) {
         this.sections = sections;
         this.useScore = useScore;
         this.scoreCalculationType = scoreCalculationType;
@@ -25,7 +25,7 @@ public class EventFormBuilder extends EntityWithTenantBuilder<EventForm> {
     }
 
     public static EventFormBuilder anEventForm() {
-        return new EventFormBuilder(new ArrayList<CriteriaSection>(), false, ScoreCalculationType.SUM, new ScoreResultRange(), new ScoreResultRange());
+        return new EventFormBuilder(new ArrayList<CriteriaSection>(), false, ScoreCalculationType.SUM, new ResultRange(), new ResultRange());
     }
 
     public EventFormBuilder withSections(CriteriaSection... sections) {
@@ -40,11 +40,11 @@ public class EventFormBuilder extends EntityWithTenantBuilder<EventForm> {
         return makeBuilder(new EventFormBuilder(sections, useScore, scoreCalculationType, failRange, passRange));
     }
 
-    public EventFormBuilder failRange(ScoreResultRange failRange) {
+    public EventFormBuilder failRange(ResultRange failRange) {
         return makeBuilder(new EventFormBuilder(sections, useScore, scoreCalculationType, failRange, passRange));
     }
 
-    public EventFormBuilder passRange(ScoreResultRange passRange) {
+    public EventFormBuilder passRange(ResultRange passRange) {
         return makeBuilder(new EventFormBuilder(sections, useScore, scoreCalculationType, failRange, passRange));
     }
 

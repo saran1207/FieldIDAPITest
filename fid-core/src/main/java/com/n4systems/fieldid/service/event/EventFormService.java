@@ -7,8 +7,6 @@ import com.n4systems.model.localization.Translation;
 import com.n4systems.services.localization.LocalizationService;
 import com.n4systems.util.eventform.CriteriaSectionCopyUtil;
 import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClause;
-import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EventFormService extends FieldIdPersistenceService {
 
@@ -53,10 +52,18 @@ public class EventFormService extends FieldIdPersistenceService {
         EventForm oldEventForm = eventType.getEventForm();
         if (oldEventForm != null) {
             oldEventForm.setState(Archivable.EntityState.RETIRED);
+            //Scoring
             eventForm.setScoreCalculationType(oldEventForm.getScoreCalculationType());
             eventForm.setFailRange(oldEventForm.getFailRange());
             eventForm.setPassRange(oldEventForm.getPassRange());
             eventForm.setUseScoreForResult(oldEventForm.isUseScoreForResult());
+            //Observations
+            eventForm.setObservationcountFailCalculationType(oldEventForm.getObservationcountFailCalculationType());
+            eventForm.setObservationcountFailRange(oldEventForm.getObservationcountFailRange());
+            eventForm.setObservationcountPassCalculationType(oldEventForm.getObservationcountPassCalculationType());
+            eventForm.setObservationcountPassRange(oldEventForm.getObservationcountPassRange());
+            eventForm.setObservationCountGroup(eventForm.getObservationCountGroup());
+
             persistenceService.update(oldEventForm);
         }
 

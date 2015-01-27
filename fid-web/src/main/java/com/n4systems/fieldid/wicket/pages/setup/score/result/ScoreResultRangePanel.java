@@ -5,7 +5,7 @@ import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.setup.score.validator.SecondRangeValueValidator;
 import com.n4systems.model.ScoreComparator;
-import com.n4systems.model.ScoreResultRange;
+import com.n4systems.model.ResultRange;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.EnclosureContainer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -20,7 +20,7 @@ import java.util.Arrays;
 
 public class ScoreResultRangePanel extends Panel {
 
-    public ScoreResultRangePanel(String id, final IModel<ScoreResultRange> model) {
+    public ScoreResultRangePanel(String id, final IModel<ResultRange> model) {
         super(id, model);
         setOutputMarkupId(true);
 

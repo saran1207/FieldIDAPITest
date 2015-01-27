@@ -52,7 +52,7 @@ public class EventResultCalculator {
         return total;
     }
 
-    private boolean insideRange(ScoreResultRange range, Double score) {
+    private boolean insideRange(ResultRange range, Double score) {
         if (score == null) {
             return false;
         }

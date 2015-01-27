@@ -39,7 +39,7 @@ public class EventForm extends ArchivableEntityWithTenant {
 		@AttributeOverride(name="value1", column = @Column(name="pass_value1")),
         @AttributeOverride(name="value2", column = @Column(name="pass_value2"))
 	})
-    private ScoreResultRange passRange = new ScoreResultRange();
+    private ResultRange passRange = new ResultRange();
 
     @Embedded
     @AttributeOverrides({
@@ -47,7 +47,35 @@ public class EventForm extends ArchivableEntityWithTenant {
         @AttributeOverride(name="value1", column = @Column(name="fail_value1")),
         @AttributeOverride(name="value2", column = @Column(name="fail_value2"))
     })
-    private ScoreResultRange failRange = new ScoreResultRange();
+    private ResultRange failRange = new ResultRange();
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable=false, name="observationcount_pass_calculation_type")
+    private ScoreCalculationType observationcountPassCalculationType = ScoreCalculationType.SUM;
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name="comparator", column = @Column(name="observationcount_pass_comparator")),
+            @AttributeOverride(name="value1", column = @Column(name="observationcount_pass_value1")),
+            @AttributeOverride(name="value2", column = @Column(name="observationcount_pass_value2"))
+    })
+    private ResultRange observationcountPassRange = new ResultRange();
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable=false, name="observationcount_fail_calculation_type")
+    private ScoreCalculationType observationcountFailCalculationType = ScoreCalculationType.SUM;
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name="comparator", column = @Column(name="observationcount_fail_comparator")),
+            @AttributeOverride(name="value1", column = @Column(name="observationcount_fail_value1")),
+            @AttributeOverride(name="value2", column = @Column(name="observationcount_fail_value2"))
+    })
+    private ResultRange observationcountFailRange = new ResultRange();
+
+    @ManyToOne(cascade= CascadeType.REFRESH, fetch= FetchType.EAGER, optional=false)
+    @JoinColumn(name="observationcount_group_id")
+    private ObservationCountGroup observationCountGroup;
 
     @Transient
     public List<CriteriaSection> getAvailableSections() {
@@ -60,19 +88,19 @@ public class EventForm extends ArchivableEntityWithTenant {
         return availableSections;
     }
 
-    public ScoreResultRange getPassRange() {
+    public ResultRange getPassRange() {
         return passRange;
     }
 
-    public void setPassRange(ScoreResultRange passRange) {
+    public void setPassRange(ResultRange passRange) {
         this.passRange = passRange;
     }
 
-    public ScoreResultRange getFailRange() {
+    public ResultRange getFailRange() {
         return failRange;
     }
 
-    public void setFailRange(ScoreResultRange failRange) {
+    public void setFailRange(ResultRange failRange) {
         this.failRange = failRange;
     }
 
@@ -90,5 +118,45 @@ public class EventForm extends ArchivableEntityWithTenant {
 
     public void setUseScoreForResult(boolean useScoreForResult) {
         this.useScoreForResult = useScoreForResult;
+    }
+
+    public ScoreCalculationType getObservationcountPassCalculationType() {
+        return observationcountPassCalculationType;
+    }
+
+    public void setObservationcountPassCalculationType(ScoreCalculationType observationcountPassCalculationType) {
+        this.observationcountPassCalculationType = observationcountPassCalculationType;
+    }
+
+    public ScoreCalculationType getObservationcountFailCalculationType() {
+        return observationcountFailCalculationType;
+    }
+
+    public void setObservationcountFailCalculationType(ScoreCalculationType observationcountFailCalculationType) {
+        this.observationcountFailCalculationType = observationcountFailCalculationType;
+    }
+
+    public ObservationCountGroup getObservationCountGroup() {
+        return observationCountGroup;
+    }
+
+    public void setObservationCountGroup(ObservationCountGroup observationCountGroup) {
+        this.observationCountGroup = observationCountGroup;
+    }
+
+    public ResultRange getObservationcountPassRange() {
+        return observationcountPassRange;
+    }
+
+    public void setObservationcountPassRange(ResultRange observationcountPassRange) {
+        this.observationcountPassRange = observationcountPassRange;
+    }
+
+    public ResultRange getObservationcountFailRange() {
+        return observationcountFailRange;
+    }
+
+    public void setObservationcountFailRange(ResultRange observationcountFailRange) {
+        this.observationcountFailRange = observationcountFailRange;
     }
 }

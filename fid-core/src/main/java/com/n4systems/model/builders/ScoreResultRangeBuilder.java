@@ -1,9 +1,9 @@
 package com.n4systems.model.builders;
 
 import com.n4systems.model.ScoreComparator;
-import com.n4systems.model.ScoreResultRange;
+import com.n4systems.model.ResultRange;
 
-public class ScoreResultRangeBuilder extends BaseBuilder<ScoreResultRange> {
+public class ScoreResultRangeBuilder extends BaseBuilder<ResultRange> {
 
     private final Double value1;
     private final Double value2;
@@ -36,8 +36,8 @@ public class ScoreResultRangeBuilder extends BaseBuilder<ScoreResultRange> {
     }
 
     @Override
-    public ScoreResultRange createObject() {
-        ScoreResultRange range = new ScoreResultRange();
+    public ResultRange createObject() {
+        ResultRange range = new ResultRange();
 
         range.setValue1(value1);
         range.setValue2(value2);

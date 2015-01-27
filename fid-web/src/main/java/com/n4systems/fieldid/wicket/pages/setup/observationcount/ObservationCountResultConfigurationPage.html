@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+</body>
+</html><wicket:extend>
+
+    <form wicket:id="observationCountConfigurationForm" class="scoreResultConfig">
+
+        <div wicket:id="feedbackPanel"></div>
+
+        <div class="totalTypeSection">
+            <div class="leftColumn">
+                <wicket:message key="label.select_observation_group"/>
+            </div>
+
+            <div class="rightColumn">
+                <select wicket:id="observationCountGroup"></select>
+            </div>
+        </div>
+
+        <div class="rowContainer">
+            <div class="leftColumn">
+                <wicket:message key="label.set_the_result_to"/>
+                <span class="failText"><wicket:message key="label.fail"/></span>
+                <wicket:message key="label.if_score"/>
+                <select wicket:id="observationcountFailCalculationType"></select>
+                <wicket:message key="label.is"/>
+            </div>
+
+            <div class="rightColumn">
+                <div wicket:id="failRangePanel"></div>
+            </div>
+        </div>
+
+        <div class="rowContainer">
+            <div class="leftColumn">
+                <wicket:message key="label.set_the_result_to"/>
+                <span class="passText"><wicket:message key="label.pass"/></span>
+                <wicket:message key="label.if_score"/>
+                <select wicket:id="observationcountPassCalculationType"></select>
+                <wicket:message key="label.is"/>
+            </div>
+
+            <div class="rightColumn">
+                <div wicket:id="passRangePanel"></div>
+            </div>
+        </div>
+
+        <div class="formAction">
+            <input type="submit" wicket:id="submitButton" wicket:message="value:label.save"> <wicket:message key="label.or"/> <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+        </div>
+
+    </form>
+
+</wicket:extend>
