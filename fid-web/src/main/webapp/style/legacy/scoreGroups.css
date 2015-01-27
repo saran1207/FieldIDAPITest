@@ -9,7 +9,9 @@
     margin-top:5px;
     margin-bottom:5px;
 }
-
+.newScoreGroupForm a {
+    margin-left: 105px;
+}
 .blankInstructions {
     font-size: 12px;
     padding: 5px;
@@ -84,6 +86,8 @@ div.score div.editCopyLinks {
 
 .editForm input[type='text'] {
     margin-top:6px;
+    width: 300px;
+    padding: 1px;
 }
 
 .scoreGroup .score {
@@ -100,6 +104,10 @@ div.score div.editCopyLinks {
     width:auto;
 }
 
+.scoreGroup .form {
+    padding: 5px 0;
+}
+
 .scoreGroupName {
     font-size: 12px;
     padding: 4px 0 4px 20px;
@@ -110,6 +118,12 @@ div.score div.editCopyLinks {
     display:block;
     float:left;
     padding: 5px 0 0 5px;
+}
+
+.saveLinkContainer {
+    display:block;
+    float:left;
+    margin-left: 35px;
 }
 
 div.reorderLinkSection {
@@ -128,8 +142,13 @@ div.itemLinkTitle a div.subTitle {
     width: 120px;
 }
 
-.textContainer {
-    background-image: url("../images/bs-logo.png");
+.scoreBlankSlate {
+    background-image: url("../../images/bs-logo.png");
+}
+
+.observationCountBlankSlate {
+    background-image: none;
+    padding-left: 0;
 }
 
 .scores .viewLinkContainer {

@@ -68,7 +68,7 @@ public class ObservationCountGroupPanel extends SortableListPanel {
                 target.add(ObservationCountGroupPanel.this);
                 observationCounts = new ArrayList<ObservationCount>();
                 observationCounts.addAll(getObservationCounts());
-                ObservationCountGroupPanel.this.setDefaultModel(new PropertyModel<List<Score>>(this, "scores"));
+                ObservationCountGroupPanel.this.setDefaultModel(new PropertyModel<List<Score>>(this, "observationCounts"));
                 sortableBehavior.setDisabled(false);
                 reorderState = true;
             }
@@ -85,7 +85,7 @@ public class ObservationCountGroupPanel extends SortableListPanel {
             @Override
             protected void populateItem(final ListItem<ObservationCount> item) {
                 item.setOutputMarkupId(true);
-                item.add(new EditCopyDeleteItemPanel("count", new PropertyModel<String>(item.getModel(), "name"), false) {
+                item.add(new EditCopyDeleteItemPanel("count", new PropertyModel<String>(item.getModel(), "name"), createSubtitleModel(item.getModel()), false) {
                     {
                         setStoreLabel(new FIDLabelModel("label.save"));
                     }
@@ -106,6 +106,11 @@ public class ObservationCountGroupPanel extends SortableListPanel {
                     protected boolean isReorderState() {
                         return reorderState;
                     }
+
+                    @Override
+                    public int getTextDisplayLimit() {
+                        return 40;
+                    }
                 });
             }
         });
@@ -120,6 +125,13 @@ public class ObservationCountGroupPanel extends SortableListPanel {
                 return isGroupSelected();
             }
         });
+    }
+
+    private IModel<String> createSubtitleModel(IModel<ObservationCount> model) {
+        if (model.getObject().isCounted())
+            return new FIDLabelModel("label.is_included_in_total");
+        else
+            return new FIDLabelModel("label.is_not_included_in_total");
     }
 
     private boolean isGroupSelected() {

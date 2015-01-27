@@ -103,6 +103,11 @@ public class ObservationCountGroupPage extends FieldIDFrontEndPage {
                     protected void onFormValidationError(AjaxRequestTarget target) {
                         onValidationError(target);
                     }
+
+                    @Override
+                    public int getTextDisplayLimit() {
+                        return 50;
+                    }
                 });
             }
         });
@@ -131,6 +136,7 @@ public class ObservationCountGroupPage extends FieldIDFrontEndPage {
         super.renderHead(response);
         response.renderCSSReference("style/legacy/scoreGroups.css");
         response.renderCSSReference("style/legacy/newCss/component/header_reorder_link_button.css");
+        response.renderCSSReference("style/legacy/newCss/component/buttons.css");
     }
 
     @Override

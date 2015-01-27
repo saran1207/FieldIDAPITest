@@ -101,6 +101,10 @@ public class ScoreGroupPanel extends SortableListPanel {
 					protected boolean isReorderState() {
                     	return reorderState;
                     }
+                    @Override
+                    public int getTextDisplayLimit() {
+                        return 40;
+                    }
                 });
             }
         });

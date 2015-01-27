@@ -26,7 +26,7 @@ public class ObservationCount extends ArchivableEntityWithTenant{
     private int value;
 
     @Column(name="counted")
-    private boolean counted = false;
+    private boolean counted = true;
 
     public String getName() {
         return name;

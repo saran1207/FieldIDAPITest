@@ -3,7 +3,7 @@
 
     <div wicket:id="feedbackPanel"/>
 
-    <div wicket:id="blankSlatePanel"/>
+    <div wicket:id="blankSlatePanel" class="initialMessage"/>
 
     <div wicket:id="groupsAndObservationsContainer">
 
@@ -15,7 +15,7 @@
 
             <form wicket:id="newObservationGroupForm" class="newScoreGroupForm">
                 <input type="text" wicket:id="name"/>
-                <a wicket:id="submitLink"><wicket:message key="label.save"/></a>
+                <a wicket:id="submitLink" class="btn-secondary btn-xsml"><wicket:message key="label.save"/></a>
             </form>
         </div>
 
@@ -26,13 +26,14 @@
     </div>
 
     <wicket:fragment wicket:id="blankSlate">
-        <h1><wicket:message key="title.no_observation_groups"/></h1>
+        <div class="textContainer observationCountBlankSlate">
+            <h1><wicket:message key="title.no_observation_groups"/></h1>
 
-        <p>
-            <wicket:message key="instructions.no_observation_groups"/>
-        </p>
+            <p><wicket:message key="instructions.no_observation_groups"/></p>
+            <p><a wicket:id="createFirstGroupLink" class="btn-secondary"><wicket:message key="label.create_first_observation_group"/></a></p>
+        </div>
 
-        <a wicket:id="createFirstGroupLink"><wicket:message key="label.create_first_observation_group"/></a>
+
     </wicket:fragment>
 
 </wicket:extend>

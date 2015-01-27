@@ -1,7 +1,11 @@
 package com.n4systems.fieldid.wicket.pages.setup.observation;
 
+import com.google.common.collect.Lists;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.ObservationCount;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -23,9 +27,7 @@ public class NewObservationCountPanel extends Panel {
 
             add(new RequiredTextField<String>("name", new PropertyModel<>(model, "name")));
 
-/*            FidDropDownChoice<Boolean> includeChoice;
-
-            add(includeChoice = new FidDropDownChoice<Boolean>("counted",
+            add(new DropDownChoice<Boolean>("counted",
                     new PropertyModel<>(model, "counted"),
                     Lists.newArrayList(Boolean.TRUE, Boolean.FALSE),
                     new IChoiceRenderer<Boolean>() {
@@ -39,7 +41,6 @@ public class NewObservationCountPanel extends Panel {
                             return object.toString();
                         }
                     }));
-            includeChoice.add(new UpdateComponentOnChange());*/
 
 
 
