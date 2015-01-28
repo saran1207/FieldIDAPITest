@@ -15,4 +15,4 @@ observationcount_fail_comparator = 'BETWEEN',
 observationcount_pass_comparator = 'BETWEEN';
 
 alter table eventforms
-add observationcount_group_id bigint(20) NOT NULL;
+add observationcount_group_id bigint(20) DEFAULT NULL;
