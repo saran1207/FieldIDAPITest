@@ -73,7 +73,7 @@ public class EventForm extends ArchivableEntityWithTenant {
     })
     private ResultRange observationcountFailRange = new ResultRange();
 
-    @ManyToOne(cascade= CascadeType.REFRESH, fetch= FetchType.EAGER, optional=false)
+    @ManyToOne(cascade= CascadeType.REFRESH, fetch= FetchType.EAGER, optional=true)
     @JoinColumn(name="observationcount_group_id")
     private ObservationCountGroup observationCountGroup;
 
