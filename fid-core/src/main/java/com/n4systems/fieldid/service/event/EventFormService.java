@@ -62,7 +62,7 @@ public class EventFormService extends FieldIdPersistenceService {
             eventForm.setObservationcountFailRange(oldEventForm.getObservationcountFailRange());
             eventForm.setObservationcountPassCalculationType(oldEventForm.getObservationcountPassCalculationType());
             eventForm.setObservationcountPassRange(oldEventForm.getObservationcountPassRange());
-            eventForm.setObservationCountGroup(eventForm.getObservationCountGroup());
+            eventForm.setObservationCountGroup(oldEventForm.getObservationCountGroup());
 
             persistenceService.update(oldEventForm);
         }
