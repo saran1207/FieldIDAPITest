@@ -20,11 +20,11 @@ public class ObservationCountCriteria extends Criteria {
         return CriteriaType.OBSERVATION_COUNT;
     }
 
-    public ObservationCountGroup getScoreGroup() {
+    public ObservationCountGroup getObservationCountGroup() {
         return observationCountGroup;
     }
 
-    public void setScoreGroup(ObservationCountGroup observationCountGroup) {
+    public void setObservationCountGroup(ObservationCountGroup observationCountGroup) {
         this.observationCountGroup = observationCountGroup;
     }
 

@@ -119,6 +119,9 @@ ${action.setPageType('event_type', 'show')!}
                                             <#if criteria.criteriaType.name() == 'NUMBER_FIELD'>
                                                 <@s.text name="label.numberfield"/>
                                             </#if>
+                                            <#if criteria.criteriaType.name() == 'OBSERVATION_COUNT'>
+                                            <#include "_observationCountCriteria.ftl"/>
+                                        </#if>
                                         </td>
                                         <td>
                                             <#assign sectionIdx=section_index/>
