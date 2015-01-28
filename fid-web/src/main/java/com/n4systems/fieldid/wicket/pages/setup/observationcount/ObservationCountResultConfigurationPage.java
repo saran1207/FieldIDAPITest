@@ -10,8 +10,10 @@ import com.n4systems.fieldid.wicket.pages.setup.eventtype.EventTypePage;
 import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultRangePanel;
 import com.n4systems.model.*;
 import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.flow.RedirectToUrlException;
@@ -74,15 +76,20 @@ public class ObservationCountResultConfigurationPage extends EventTypePage {
 
         @Override
         protected void onSubmit() {
-            EventType eventType = eventTypeModel.getObject();
-            if (eventType.getEventForm() == null) {
-                eventForm.setTenant(getTenant());
-                eventType.setEventForm(eventForm);
+            //Validate for null Observation selection
+            if(eventForm.getObservationCountGroup() == null){
+                getTopFeedbackPanel().error(new FIDLabelModel("error.select_observation").getObject());
+            } else {
+                EventType eventType = eventTypeModel.getObject();
+                if (eventType.getEventForm() == null) {
+                    eventForm.setTenant(getTenant());
+                    eventType.setEventForm(eventForm);
+                }
+                persistenceService.update(eventType);
+                persistenceService.update(eventForm);
+                FieldIDSession.get().storeInfoMessageForStruts(new FIDLabelModel("label.observation_config_saved").getObject());
+                throw new RedirectToUrlException("/eventType.action?uniqueID=" + eventTypeId);
             }
-            persistenceService.update(eventType);
-            persistenceService.update(eventForm);
-            FieldIDSession.get().storeInfoMessageForStruts(new FIDLabelModel("label.score_config_saved").getObject());
-            throw new RedirectToUrlException("/eventType.action?uniqueID=" + eventTypeId);
         }
 
     }
