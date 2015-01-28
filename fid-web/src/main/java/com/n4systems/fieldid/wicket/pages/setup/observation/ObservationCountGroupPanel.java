@@ -129,9 +129,9 @@ public class ObservationCountGroupPanel extends SortableListPanel {
 
     private IModel<String> createSubtitleModel(IModel<ObservationCount> model) {
         if (model.getObject().isCounted())
-            return new FIDLabelModel("label.is_included_in_total");
+            return new FIDLabelModel("label.included_in_total");
         else
-            return new FIDLabelModel("label.is_not_included_in_total");
+            return new FIDLabelModel("label.not_included_in_total");
     }
 
     private boolean isGroupSelected() {

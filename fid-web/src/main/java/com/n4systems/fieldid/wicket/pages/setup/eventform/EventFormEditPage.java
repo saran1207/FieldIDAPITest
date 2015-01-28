@@ -7,10 +7,7 @@ import com.n4systems.fieldid.wicket.components.eventform.CriteriaPanel;
 import com.n4systems.fieldid.wicket.components.eventform.CriteriaSectionsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.save.SavePanel;
 import com.n4systems.fieldid.wicket.pages.setup.eventtype.EventTypePage;
-import com.n4systems.model.ButtonGroup;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.ScoreGroup;
+import com.n4systems.model.*;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.model.IModel;
@@ -78,7 +75,7 @@ public class EventFormEditPage extends EventTypePage {
         });
 
 
-        add(criteriaPanel = new CriteriaPanel("criteriaPanel") {
+        add(criteriaPanel = new CriteriaPanel("criteriaPanel", new PropertyModel<EventForm>(eventTypeModel, "eventForm")) {
             @Override
             public void onCriteriaAdded(AjaxRequestTarget target, Criteria criteria, int newIndex) {
                 criteria.setTenant(FieldIDSession.get().getSessionUser().getTenant());
@@ -103,6 +100,8 @@ public class EventFormEditPage extends EventTypePage {
             protected void onCriteriaListUpdated(AjaxRequestTarget target) {
                 refreshAllComponents(target);
             }
+
+
         });
         criteriaPanel.setVisible(false);
 
