@@ -122,7 +122,7 @@ public class ObservationCountGroupPanel extends SortableListPanel {
         add(observationCountGroupForm = new ObservationCountGroupForm("observationCountGroupForm", model){
             @Override
             public boolean isVisible() {
-                return isGroupSelected();
+                return isGroupSelected() && model.getObject().getObservationCounts().size() < 5;
             }
         });
     }
@@ -178,7 +178,7 @@ public class ObservationCountGroupPanel extends SortableListPanel {
             add(feedbackPanel = new ContainerFeedbackPanel("feedbackPanel", ObservationCountGroupForm.this));
             feedbackPanel.setOutputMarkupPlaceholderTag(true);
 
-            add(new NewObservationCountPanel("newObservationCount", new PropertyModel<>(this, "observationCount")));
+            add(new NewObservationCountPanel("newObservationCount", new PropertyModel<ObservationCount>(this, "observationCount")));
 
             add(new AjaxSubmitLink("saveLink") {
 
@@ -195,6 +195,7 @@ public class ObservationCountGroupPanel extends SortableListPanel {
                 protected void onError(AjaxRequestTarget target, Form<?> form) {
                     target.add(feedbackPanel);
                 }
+
             });
 
 

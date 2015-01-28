@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.setup.observation;
 
 import com.n4systems.fieldid.service.event.ObservationCountService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.TextFieldWithDescription;
 import com.n4systems.fieldid.wicket.components.eventform.EditCopyDeleteItemPanel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
@@ -11,17 +12,19 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.eventform.ObservationCountGroupsForTenantModel;
 import com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.fieldid.wicket.pages.setup.score.ScoreGroupsPage;
 import com.n4systems.model.ObservationCountGroup;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -141,7 +144,7 @@ public class ObservationCountGroupPage extends FieldIDFrontEndPage {
 
     @Override
     protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("nav.score_groups"));
+        return new Label(labelId, new FIDLabelModel("nav.observation_groups"));
     }
 
     @Override
@@ -151,6 +154,13 @@ public class ObservationCountGroupPage extends FieldIDFrontEndPage {
                 NavigationItemBuilder.aNavItem().page("buttonGroups.action").label("nav.button_groups").build(),
                 NavigationItemBuilder.aNavItem().page(ObservationCountGroupPage.class).label("nav.observation_groups").build(),
                 NavigationItemBuilder.aNavItem().page(ScoreGroupsPage.class).label("nav.score_groups").build()));
+    }
+
+    @Override
+    protected Component createBackToLink(String linkId, String linkLabelId) {
+        BookmarkablePageLink<Void> pageLink = new BookmarkablePageLink<Void>(linkId, AssetsAndEventsPage.class);
+        pageLink.add(new FlatLabel(linkLabelId, new FIDLabelModel("label.back_to_setup")));
+        return pageLink;
     }
 
     private class NewObservationCountGroupForm extends Form {
