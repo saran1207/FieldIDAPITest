@@ -43,6 +43,6 @@
     <root>
 		<priority value="info" />
 		<appender-ref ref="API_LOG" />
-        <!--appender-ref ref="CONSOLE" /-->
+        <appender-ref ref="CONSOLE" />
 	</root>
 </log4j:configuration>
