@@ -42,6 +42,52 @@ public class EventFormService extends FieldIdPersistenceService {
     }
 
     @Transactional
+    public void saveNewEventFormAfterObservationChange(EventForm oldEventForm, List<CriteriaSection> sections, EventType eventType) {
+        EventForm eventForm = new EventForm();
+        eventForm.setTenant(persistenceService.findNonSecure(Tenant.class, securityContext.getUserSecurityFilter().getTenantId()));
+
+        //List<CriteriaSection> original = oldEventForm.getSections();
+        List<CriteriaSection> newCriteriaSections = createCopiesOf(sections);
+
+        eventForm.setSections(convertSectonsToNewObservationCountGroup(newCriteriaSections, oldEventForm.getObservationCountGroup()));
+
+        oldEventForm.setState(Archivable.EntityState.RETIRED);
+        //Scoring
+        eventForm.setScoreCalculationType(oldEventForm.getScoreCalculationType());
+        eventForm.setFailRange(oldEventForm.getFailRange());
+        eventForm.setPassRange(oldEventForm.getPassRange());
+        eventForm.setUseScoreForResult(oldEventForm.isUseScoreForResult());
+        //Observations
+        eventForm.setObservationcountFailCalculationType(oldEventForm.getObservationcountFailCalculationType());
+        eventForm.setObservationcountFailRange(oldEventForm.getObservationcountFailRange());
+        eventForm.setObservationcountPassCalculationType(oldEventForm.getObservationcountPassCalculationType());
+        eventForm.setObservationcountPassRange(oldEventForm.getObservationcountPassRange());
+        eventForm.setObservationCountGroup(oldEventForm.getObservationCountGroup());
+
+        //Save the new form
+        persistenceService.save(eventForm);
+
+        //Attach it to the event type
+        eventType.setEventForm(eventForm);
+        eventType.incrementFormVersion();
+
+        //save the event type
+        persistenceService.update(eventType);
+        restoreTranslations(eventForm);
+    }
+
+    private List<CriteriaSection> convertSectonsToNewObservationCountGroup(List<CriteriaSection> sections, ObservationCountGroup group) {
+        for(CriteriaSection section:sections){
+            for(Criteria criteria:section.getCriteria()){
+                if(criteria instanceof ObservationCountCriteria){
+                    ((ObservationCountCriteria) criteria).setObservationCountGroup(group);
+                }
+            }
+        }
+        return sections;
+    }
+
+    @Transactional
     public void saveNewEventForm(Long eventTypeId, List<CriteriaSection> newCriteriaSections) {
         EventType eventType = persistenceService.find(EventType.class, eventTypeId);
 

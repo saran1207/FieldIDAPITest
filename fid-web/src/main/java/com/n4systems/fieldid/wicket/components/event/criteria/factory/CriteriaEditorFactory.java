@@ -21,6 +21,8 @@ public class CriteriaEditorFactory {
             return new NumberFieldCriteriaEditPanel(componentId, (IModel<NumberFieldCriteriaResult>) resultModel);
         } else if (result instanceof ScoreCriteriaResult) {
             return new ScoreCriteriaEditPanel(componentId, (IModel<ScoreCriteriaResult>) resultModel);
+        } else if (result instanceof ObservationCountCriteriaResult) {
+            return new ObservationCountCriteriaEditPanel(componentId, (IModel<ObservationCountCriteriaResult>) resultModel);
         } else if (result instanceof DateFieldCriteriaResult) {
             return new DateCriteriaEditPanel(componentId, (IModel<DateFieldCriteriaResult>) resultModel);
         } else if (result instanceof UnitOfMeasureCriteriaResult) {

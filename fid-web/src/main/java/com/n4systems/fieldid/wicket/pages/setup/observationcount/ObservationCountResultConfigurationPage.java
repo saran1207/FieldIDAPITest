@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.setup.observationcount;
 
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.service.event.EventFormService;
 import com.n4systems.fieldid.service.event.ObservationCountService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
@@ -32,6 +33,9 @@ public class ObservationCountResultConfigurationPage extends EventTypePage {
 
     @SpringBean
     private ObservationCountService observationCountService;
+
+    @SpringBean
+    private EventFormService eventFormService;
 
     private EventForm eventForm;
 
@@ -84,9 +88,11 @@ public class ObservationCountResultConfigurationPage extends EventTypePage {
                 if (eventType.getEventForm() == null) {
                     eventForm.setTenant(getTenant());
                     eventType.setEventForm(eventForm);
+                    persistenceService.update(eventType);
+                    persistenceService.update(eventForm);
+                } else {
+                    eventFormService.saveNewEventFormAfterObservationChange(eventForm, eventForm.getSections(), eventType);
                 }
-                persistenceService.update(eventType);
-                persistenceService.update(eventForm);
                 FieldIDSession.get().storeInfoMessageForStruts(new FIDLabelModel("label.observation_config_saved").getObject());
                 throw new RedirectToUrlException("/eventType.action?uniqueID=" + eventTypeId);
             }
