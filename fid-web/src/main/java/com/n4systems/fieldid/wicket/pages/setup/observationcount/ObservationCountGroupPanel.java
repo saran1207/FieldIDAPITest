@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.pages.setup.observation;
+package com.n4systems.fieldid.wicket.pages.setup.observationcount;
 
 import com.n4systems.fieldid.service.event.ObservationCountService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
@@ -12,7 +12,6 @@ import com.n4systems.model.ObservationCountGroup;
 import com.n4systems.model.Score;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;

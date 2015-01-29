@@ -29,6 +29,9 @@ public class EventForm extends ArchivableEntityWithTenant {
     @Column(nullable=false, name="use_score_for_result")
     private boolean useScoreForResult;
 
+    @Column(nullable=false, name="use_observation_count_for_result")
+    private boolean useObservationCountForResult;
+
     @Enumerated(EnumType.STRING)
 	@Column(nullable=false, name="score_calculation_type")
     private ScoreCalculationType scoreCalculationType = ScoreCalculationType.SUM;
@@ -118,6 +121,14 @@ public class EventForm extends ArchivableEntityWithTenant {
 
     public void setUseScoreForResult(boolean useScoreForResult) {
         this.useScoreForResult = useScoreForResult;
+    }
+
+    public boolean isUseObservationCountForResult() {
+        return useObservationCountForResult;
+    }
+
+    public void setUseObservationCountForResult(boolean useObservationCountForResult) {
+        this.useObservationCountForResult = useObservationCountForResult;
     }
 
     public ScoreCalculationType getObservationcountPassCalculationType() {

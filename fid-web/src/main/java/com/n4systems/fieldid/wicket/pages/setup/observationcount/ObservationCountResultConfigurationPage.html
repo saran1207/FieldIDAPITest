@@ -1,13 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
-
-</body>
-</html><wicket:extend>
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
 
     <form wicket:id="observationCountConfigurationForm" class="scoreResultConfig">
 
@@ -20,6 +12,15 @@
 
             <div class="rightColumn">
                 <select wicket:id="observationCountGroup"></select>
+            </div>
+        </div>
+
+        <div class="rowContainer">
+            <div class="leftColumn">
+                <wicket:message key="label.use_observations_to_calculate_result"/>
+            </div>
+            <div class="rightColumn">
+                <input type="checkbox" wicket:id="useObservationCountForResult"/>
             </div>
         </div>
 
@@ -58,3 +59,4 @@
     </form>
 
 </wicket:extend>
+</html>

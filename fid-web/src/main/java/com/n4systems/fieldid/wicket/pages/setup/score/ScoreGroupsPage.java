@@ -11,7 +11,7 @@ import com.n4systems.fieldid.wicket.model.eventform.ScoreGroupsForTenantModel;
 import com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
-import com.n4systems.fieldid.wicket.pages.setup.observation.ObservationCountGroupPage;
+import com.n4systems.fieldid.wicket.pages.setup.observationcount.ObservationCountGroupPage;
 import com.n4systems.model.ScoreGroup;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;

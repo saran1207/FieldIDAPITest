@@ -11,10 +11,8 @@ import com.n4systems.fieldid.wicket.pages.setup.eventtype.EventTypePage;
 import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultRangePanel;
 import com.n4systems.model.*;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.flow.RedirectToUrlException;
@@ -67,6 +65,8 @@ public class ObservationCountResultConfigurationPage extends EventTypePage {
             add(new FIDFeedbackPanel("feedbackPanel"));
 
             add(new DropDownChoice<ObservationCountGroup>("observationCountGroup", observationCountService.getObservationCountGroups(), new ObservationCountGroupChoiceRenderer()));
+
+            add(new CheckBox("useObservationCountForResult", new PropertyModel<Boolean>(eventForm, "useObservationCountForResult")));
 
             add(new DropDownChoice<ScoreCalculationType>("observationcountPassCalculationType", Arrays.asList(ScoreCalculationType.values()), new CalculationChoiceRenderer()));
             add(new DropDownChoice<ScoreCalculationType>("observationcountFailCalculationType", Arrays.asList(ScoreCalculationType.values()), new CalculationChoiceRenderer()));
