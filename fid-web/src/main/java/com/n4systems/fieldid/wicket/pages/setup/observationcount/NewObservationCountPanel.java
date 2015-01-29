@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.pages.setup.observation;
+package com.n4systems.fieldid.wicket.pages.setup.observationcount;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;

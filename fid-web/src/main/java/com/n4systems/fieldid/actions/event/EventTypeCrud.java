@@ -298,7 +298,7 @@ public class EventTypeCrud extends AbstractCrud {
         return eventGroups;
     }
 
-    public void setEventType(ThingEventType eventType) {
+    public void setEventType(EventType eventType) {
 		this.eventType = eventType;
 	}
 
