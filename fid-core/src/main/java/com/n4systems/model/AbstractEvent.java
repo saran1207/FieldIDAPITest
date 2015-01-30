@@ -40,6 +40,12 @@ public abstract class AbstractEvent<T extends EventType, R extends EntityWithTen
 
     @Column(name="score")
     private Double score;
+
+    @Column(name="fail_observations")
+    private Double failObservations;
+
+    @Column(name="pass_observations")
+    private Double passObservations;
 	
     @Column(nullable=false)
     private boolean editable = true;
@@ -160,6 +166,22 @@ public abstract class AbstractEvent<T extends EventType, R extends EntityWithTen
 
     public void setScore(Double score) {
         this.score = score;
+    }
+
+    public Double getFailObservations() {
+        return failObservations;
+    }
+
+    public void setFailObservations(Double failObservations) {
+        this.failObservations = failObservations;
+    }
+
+    public Double getPassObservations() {
+        return passObservations;
+    }
+
+    public void setPassObservations(Double passObservations) {
+        this.passObservations = passObservations;
     }
 
     @AllowSafetyNetworkAccess
