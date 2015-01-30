@@ -19,6 +19,7 @@ import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -64,11 +65,21 @@ public class ObservationCountResultConfigurationPage extends EventTypePage{
             super(id, new CompoundPropertyModel<EventForm>(eventForm));
             add(new FIDFeedbackPanel("feedbackPanel"));
 
-            DropDownChoice<ObservationCount> observationCountDropDownChoicePass = new DropDownChoice<ObservationCount>("observationCountPass", eventForm.getObservationCountGroup().getObservationCounts(), new ObservationCountChoiceRenderer());
+            DropDownChoice<ObservationCount> observationCountDropDownChoicePass;
+            DropDownChoice<ObservationCount> observationCountDropDownChoiceFail;
+
+            //Populate depending on whether the eventform has a group associated with it.
+            if (eventForm.getObservationCountGroup() == null) {
+                observationCountDropDownChoicePass = new DropDownChoice<ObservationCount>("observationCountPass", new ArrayList<ObservationCount>(), new ObservationCountChoiceRenderer());
+                observationCountDropDownChoiceFail = new DropDownChoice<ObservationCount>("observationCountFail", new ArrayList<ObservationCount>(), new ObservationCountChoiceRenderer());
+            } else {
+                observationCountDropDownChoicePass = new DropDownChoice<ObservationCount>("observationCountPass", eventForm.getObservationCountGroup().getObservationCounts(), new ObservationCountChoiceRenderer());
+                observationCountDropDownChoiceFail = new DropDownChoice<ObservationCount>("observationCountFail", eventForm.getObservationCountGroup().getObservationCounts(), new ObservationCountChoiceRenderer());
+            }
+
             observationCountDropDownChoicePass.setNullValid(true);
             add(observationCountDropDownChoicePass);
 
-            DropDownChoice<ObservationCount> observationCountDropDownChoiceFail = new DropDownChoice<ObservationCount>("observationCountFail", eventForm.getObservationCountGroup().getObservationCounts(), new ObservationCountChoiceRenderer());
             observationCountDropDownChoiceFail.setNullValid(true);
             add(observationCountDropDownChoiceFail);
 
