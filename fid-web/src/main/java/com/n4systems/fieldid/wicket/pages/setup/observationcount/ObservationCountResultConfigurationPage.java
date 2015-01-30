@@ -11,8 +11,8 @@ import com.n4systems.fieldid.wicket.pages.setup.eventtype.EventTypePage;
 import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultRangePanel;
 import com.n4systems.model.*;
 import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.flow.RedirectToUrlException;
@@ -24,7 +24,7 @@ import java.util.Arrays;
 /**
  * Created by rrana on 2015-01-22.
  */
-public class ObservationCountResultConfigurationPage extends EventTypePage {
+public class ObservationCountResultConfigurationPage extends EventTypePage{
 
     @SpringBean
     private PersistenceService persistenceService;
@@ -64,7 +64,31 @@ public class ObservationCountResultConfigurationPage extends EventTypePage {
             super(id, new CompoundPropertyModel<EventForm>(eventForm));
             add(new FIDFeedbackPanel("feedbackPanel"));
 
-            add(new DropDownChoice<ObservationCountGroup>("observationCountGroup", observationCountService.getObservationCountGroups(), new ObservationCountGroupChoiceRenderer()));
+            DropDownChoice<ObservationCount> observationCountDropDownChoicePass = new DropDownChoice<ObservationCount>("observationCountPass", eventForm.getObservationCountGroup().getObservationCounts(), new ObservationCountChoiceRenderer());
+            observationCountDropDownChoicePass.setNullValid(true);
+            add(observationCountDropDownChoicePass);
+
+            DropDownChoice<ObservationCount> observationCountDropDownChoiceFail = new DropDownChoice<ObservationCount>("observationCountFail", eventForm.getObservationCountGroup().getObservationCounts(), new ObservationCountChoiceRenderer());
+            observationCountDropDownChoiceFail.setNullValid(true);
+            add(observationCountDropDownChoiceFail);
+
+            DropDownChoice<ObservationCountGroup> observationCountGroupDropDownChoice = new DropDownChoice<ObservationCountGroup>("observationCountGroup", observationCountService.getObservationCountGroups(), new ObservationCountGroupChoiceRenderer()) {
+                @Override
+                protected boolean wantOnSelectionChangedNotifications() {
+                    return true;
+                }
+
+                @Override
+                protected void onSelectionChanged(ObservationCountGroup group){
+                    eventForm.setObservationCountGroup(group);
+                    observationCountDropDownChoiceFail.setChoices(group.getObservationCounts());
+                    observationCountDropDownChoicePass.setChoices(group.getObservationCounts());
+                    observationCountDropDownChoiceFail.getModel().setObject(null);
+                    observationCountDropDownChoicePass.getModel().setObject(null);
+                }
+            };
+
+            add(observationCountGroupDropDownChoice);
 
             add(new CheckBox("useObservationCountForResult", new PropertyModel<Boolean>(eventForm, "useObservationCountForResult")));
 
@@ -80,10 +104,13 @@ public class ObservationCountResultConfigurationPage extends EventTypePage {
 
         @Override
         protected void onSubmit() {
-            //Validate for null Observation selection
+            //Validate for null Observation Group and Observation selection
             if(eventForm.getObservationCountGroup() == null){
                 getTopFeedbackPanel().error(new FIDLabelModel("error.select_observation").getObject());
-            } else {
+            } else if (eventForm.getObservationCountFail() == null || eventForm.getObservationCountPass() == null) {
+                getTopFeedbackPanel().error(new FIDLabelModel("error.select_pass_fail_observation_count").getObject());
+            }
+            else {
                 EventType eventType = eventTypeModel.getObject();
                 if (eventType.getEventForm() == null) {
                     eventForm.setTenant(getTenant());
@@ -100,10 +127,27 @@ public class ObservationCountResultConfigurationPage extends EventTypePage {
 
     }
 
+
+    static class ObservationCountChoiceRenderer implements IChoiceRenderer<ObservationCount> {
+        @Override
+        public Object getDisplayValue(ObservationCount object) {
+            return new FIDLabelModel(object.getName()).getObject();
+        }
+
+        @Override
+        public String getIdValue(ObservationCount object, int index) {
+            return object.getName();
+        }
+    }
+
     static class CalculationChoiceRenderer implements IChoiceRenderer<ScoreCalculationType> {
         @Override
         public Object getDisplayValue(ScoreCalculationType object) {
-            return new FIDLabelModel(object.getLabel()).getObject();
+            if(object.getLabel().contains("sum")) {
+                return new FIDLabelModel("Total").getObject();
+            } else {
+                return new FIDLabelModel("Percentage").getObject();
+            }
         }
 
         @Override

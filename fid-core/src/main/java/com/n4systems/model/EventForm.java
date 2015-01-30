@@ -80,6 +80,14 @@ public class EventForm extends ArchivableEntityWithTenant {
     @JoinColumn(name="observationcount_group_id")
     private ObservationCountGroup observationCountGroup;
 
+    @ManyToOne(cascade= CascadeType.REFRESH, fetch= FetchType.EAGER, optional=true)
+    @JoinColumn(name="observationcount_pass")
+    private ObservationCount observationCountPass;
+
+    @ManyToOne(cascade= CascadeType.REFRESH, fetch= FetchType.EAGER, optional=true)
+    @JoinColumn(name="observationcount_fail")
+    private ObservationCount observationCountFail;
+
     @Transient
     public List<CriteriaSection> getAvailableSections() {
         List<CriteriaSection> availableSections = new ArrayList<CriteriaSection>();
@@ -153,6 +161,22 @@ public class EventForm extends ArchivableEntityWithTenant {
 
     public void setObservationCountGroup(ObservationCountGroup observationCountGroup) {
         this.observationCountGroup = observationCountGroup;
+    }
+
+    public ObservationCount getObservationCountPass() {
+        return observationCountPass;
+    }
+
+    public void setObservationCountPass(ObservationCount observationCountPass) {
+        this.observationCountPass = observationCountPass;
+    }
+
+    public ObservationCount getObservationCountFail() {
+        return observationCountFail;
+    }
+
+    public void setObservationCountFail(ObservationCount observationCountFail) {
+        this.observationCountFail = observationCountFail;
     }
 
     public ResultRange getObservationcountPassRange() {
