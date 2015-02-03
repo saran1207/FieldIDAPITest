@@ -168,7 +168,11 @@ public class ProcedureApprovalsActionsCell extends Panel {
 
                 File tempReport = doPrint((InputStream)reportMap.get("main"), reportMap);
 
-                handleDownload(tempReport, "shortformdownload");
+                String downloadName = procedureDefinition.getProcedureCode() + "_-_Short";
+
+                downloadName = downloadName.replaceAll(" ", "_");
+
+                handleDownload(tempReport, downloadName);
             }
         };
 
@@ -200,7 +204,11 @@ public class ProcedureApprovalsActionsCell extends Panel {
 
                 File tempReport = doPrint((InputStream)reportMap.get("main"), reportMap);
 
-                handleDownload(tempReport, "longformdownload");
+                String downloadName = procedureDefinition.getProcedureCode() + "_-_Long";
+
+                downloadName = downloadName.replaceAll(" ", "_");
+
+                handleDownload(tempReport, downloadName);
             }
         };
         longLink.add(new Label("label", new FIDLabelModel("label.long_form")));
