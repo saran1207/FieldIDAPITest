@@ -10,7 +10,7 @@ public class EventResultCalculator {
             return EventResult.NA;
         }
 
-        ObservationCountResult observationCountResult = calculateObservationCount(event);
+        ObservationResult observationCountResult = calculateObservationCount(event);
         event.setFailObservations(observationCountResult.failResult);
         event.setPassObservations(observationCountResult.failResult);
 
@@ -26,7 +26,7 @@ public class EventResultCalculator {
         }
 	}
 
-    private EventResult findResultFromObservationCount(AbstractEvent event, ObservationCountResult observationCountResult) {
+    private EventResult findResultFromObservationCount(AbstractEvent event, ObservationResult observationCountResult) {
         if (insideRange(event.getEventForm().getObservationcountFailRange(), observationCountResult.failResult)) {
             return EventResult.FAIL;
         } else if (insideRange(event.getEventForm().getObservationcountPassRange(), observationCountResult.passResult)) {
@@ -44,29 +44,27 @@ public class EventResultCalculator {
         return EventResult.NA;
     }
 
-    private ObservationCountResult calculateObservationCount(AbstractEvent<?,?> event) {
+    private ObservationResult calculateObservationCount(AbstractEvent<?,?> event) {
 
         double totalObservations = 0;
         double totalFail = 0;
         double totalPass = 0;
 
-        ObservationCountResult result = new ObservationCountResult();
+        ObservationResult result = new ObservationResult();
 
         for (CriteriaResult criteriaResult : event.getResults()) {
             if (criteriaResult.getCriteria().getCriteriaType() == CriteriaType.OBSERVATION_COUNT) {
-                ObservationCountCriteria observationCountCriteria = (ObservationCountCriteria) criteriaResult.getCriteria();
-                for (ObservationCount count: observationCountCriteria.getObservationCountGroup().getObservationCounts()) {
-                    if (count.isCounted()) {
-                        //totalObservations =+ count.getValue();
+                for (ObservationCountResult count: ((ObservationCountCriteriaResult) criteriaResult).getObservationCountResults()) {
+                    if (count.getObservationCount().isCounted()) {
+                        totalObservations =+ count.getValue();
 
-                        if(count.equals(event.getEventForm().getObservationCountFail())) {
-                            //totalFail =+ count.getValue();
+                        if(count.getObservationCount().equals(event.getEventForm().getObservationCountFail())) {
+                            totalFail =+ count.getValue();
                         }
 
-                        if(count.equals(event.getEventForm().getObservationCountPass())) {
-                            //totalPass =+ count.getValue();
+                        if(count.getObservationCount().equals(event.getEventForm().getObservationCountPass())) {
+                            totalPass =+ count.getValue();
                         }
-
                     }
                 }
             }
@@ -149,7 +147,7 @@ public class EventResultCalculator {
 		return currentEventResult;
     }
 
-    private class ObservationCountResult {
+    private class ObservationResult {
         protected double failResult = 0;
         protected double passResult = 0;
     }
