@@ -1,32 +1,44 @@
 package com.n4systems.model;
 
+import com.n4systems.model.api.Listable;
 import com.n4systems.util.DoubleFormatter;
+import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by rrana on 2015-01-21.
  */
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "observationcount_criteriaresults")
 @PrimaryKeyJoinColumn(name="id")
-public class ObservationCountCriteriaResult extends CriteriaResult{
+public class ObservationCountCriteriaResult extends CriteriaResult implements Listable {
 
-    @ManyToOne(cascade= CascadeType.REFRESH, fetch= FetchType.EAGER, optional=false)
-    @JoinColumn(name="observationcount_id")
-    private ObservationCount observationCount;
+    @OneToMany(fetch= FetchType.EAGER, cascade= CascadeType.ALL)
+    @JoinTable(name="observationcount_criteriaresult_observationcountsresults", joinColumns = @JoinColumn(name="observationcountcriteriaresult_id"), inverseJoinColumns = @JoinColumn(name="observationcountresult_id"))
+    @IndexColumn(name="orderIdx")
+    private List<ObservationCountResult> observationCountResults = new ArrayList<ObservationCountResult>();
 
-    public ObservationCount getObservationCount() {
-        return observationCount;
+    public List<ObservationCountResult> getObservationCountResults() {
+        return observationCountResults;
     }
 
-    public void setObservationCount(ObservationCount score) {
-        this.observationCount = score;
+    public void setObservationCountResults(List<ObservationCountResult> observationCountResults) {
+        this.observationCountResults = observationCountResults;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return "";
     }
 
     @Override
     public String getResultString() {
-        return "";
+       return "";
     }
+
 }
