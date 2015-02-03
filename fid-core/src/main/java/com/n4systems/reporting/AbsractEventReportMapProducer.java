@@ -18,6 +18,7 @@ import org.jsoup.nodes.Document;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 
@@ -77,6 +78,18 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 
         add("actionsByPriorityCode", new JRBeanCollectionDataSource(createCollectionForActionsByPriorityCode()));
 
+        //If this is an event with an ObservationCountGroup, we want that data to end up in the root of the ReportMap.
+        if(getEvent().getEventForm().getObservationCountGroup() != null) {
+            //Using the mighty power of streams to remap that List to a List of Strings.
+            List<String> observationCountGroup = getEvent().getEventForm()
+                                                           .getObservationCountGroup()
+                                                           .getObservationCounts()
+                                                           .stream()
+                                                           .map(ObservationCount::getName)
+                                                           .collect(Collectors.toList());
+
+            add("observationCountGroup", observationCountGroup);
+        }
 	}
 
     private List<PriorityCodeListView> createCollectionForActionsByPriorityCode() {
@@ -266,7 +279,27 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
                         } else if (result instanceof ScoreCriteriaResult) {
                             stateView.setState(getScoreStringValue((ScoreCriteriaResult) result));
                             stateView.setLabel(((ScoreCriteriaResult) result).getScore().getName());
+                        } else if (result instanceof  ObservationCountCriteriaResult) {
+                            //In order to provide the result the way we'd like to see it on the reports, we have to do
+                            //a little bit of String manipulation for all ObservationCriteriaResult objects.
+                            StringBuilder concatenatedObservationCounts = new StringBuilder();
+
+                            ((ObservationCountCriteriaResult) result).getObservationCountResults().forEach(observationCountResult -> {
+                                concatenatedObservationCounts.append(observationCountResult.getObservationCount().getName());
+                                concatenatedObservationCounts.append(":");
+                                concatenatedObservationCounts.append(observationCountResult.getObservationCount());
+                                concatenatedObservationCounts.append("|");
+                            });
+
+                            //Sweet, so now that we have the String, there's one more bit of work...  There's a pipe
+                            //at the end of that String that would be nice to get rid of.
+                            //This is going to reliably be the last character, so we'll just substring it out to reduce
+                            //the operations we're performing on it.  This means remove 2 from the length, not 1.
+                            stateView.setState(concatenatedObservationCounts.substring(0, concatenatedObservationCounts.length() - 2));
                         }
+
+
+
                         stateView.setType(criteria.getCriteriaType().getReportIdentifier());
                         populateResultImages(stateView, result);
                         populateResultActions(stateView, result);
