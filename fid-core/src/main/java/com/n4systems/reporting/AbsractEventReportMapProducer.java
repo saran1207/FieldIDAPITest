@@ -79,7 +79,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
         add("actionsByPriorityCode", new JRBeanCollectionDataSource(createCollectionForActionsByPriorityCode()));
 
         //If this is an event with an ObservationCountGroup, we want that data to end up in the root of the ReportMap.
-        if(getEvent().getEventForm().getObservationCountGroup() != null) {
+        if(getEvent().getEventForm() != null && getEvent().getEventForm().getObservationCountGroup() != null) {
             //Using the mighty power of streams to remap that List to a List of Strings.
             List<String> observationCountGroup = getEvent().getEventForm()
                                                            .getObservationCountGroup()
