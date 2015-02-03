@@ -56,14 +56,14 @@ public class EventResultCalculator {
             if (criteriaResult.getCriteria().getCriteriaType() == CriteriaType.OBSERVATION_COUNT) {
                 for (ObservationCountResult count: ((ObservationCountCriteriaResult) criteriaResult).getObservationCountResults()) {
                     if (count.getObservationCount().isCounted()) {
-                        totalObservations =+ count.getValue();
+                        totalObservations += count.getValue();
 
                         if(count.getObservationCount().equals(event.getEventForm().getObservationCountFail())) {
-                            totalFail =+ count.getValue();
+                            totalFail += count.getValue();
                         }
 
                         if(count.getObservationCount().equals(event.getEventForm().getObservationCountPass())) {
-                            totalPass =+ count.getValue();
+                            totalPass += count.getValue();
                         }
                     }
                 }
