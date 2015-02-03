@@ -1,18 +1,12 @@
 package com.n4systems.fieldid.wicket.components.event.criteria.edit;
 
-import com.n4systems.model.ObservationCount;
-import com.n4systems.model.ObservationCountCriteriaResult;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Radio;
-import org.apache.wicket.markup.html.form.RadioGroup;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
+import com.n4systems.fieldid.wicket.components.observationCount.ObservationCountCounterPanel;
+import com.n4systems.model.*;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.Model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,23 +14,28 @@ import java.util.List;
  */
 public class ObservationCountCriteriaEditPanel extends Panel {
 
+    private IModel<ObservationCountCriteriaResult> result;
+    private List<ObservationCount> observationCountList;
+    private List<ObservationCountResult> observationCountResultList;
+
     public ObservationCountCriteriaEditPanel(String id, final IModel<ObservationCountCriteriaResult> result) {
         super(id);
+        this.result = result;
 
-        RadioGroup<ObservationCount> scoreRadioGroup = new RadioGroup<ObservationCount>("scoresRadioGroup", new PropertyModel<ObservationCount>(result, "value"));
-        scoreRadioGroup.add(new AjaxFormChoiceComponentUpdatingBehavior() {
-            @Override protected void onUpdate(AjaxRequestTarget target) { }
-        });
-        add(scoreRadioGroup);
+        observationCountResultList = new ArrayList<>();
+        observationCountList = ((ObservationCountCriteria)result.getObject().getCriteria()).getObservationCountGroup().getObservationCounts();
 
-        scoreRadioGroup.add(new ListView<ObservationCount>("scores", new PropertyModel<List<? extends ObservationCount>>(result, "criteria.scoreGroup.scores")) {
-            @Override
-            protected void populateItem(ListItem<ObservationCount> item) {
-                Radio<ObservationCount> radio = new Radio<ObservationCount>("score", item.getModel());
-                item.add(radio);
-                item.add(new Label("scoreLabel", new PropertyModel<String>(item.getModel(), "name")));
-            }
-        });
+        for(ObservationCount count:observationCountList){
+            ObservationCountResult temp = new ObservationCountResult();
+            temp.setObservationCount(count);
+            observationCountResultList.add(temp);
+        }
+
+        for(ObservationCountResult observationCountResult:observationCountResultList) {
+            int i=0;
+            add(new ObservationCountCounterPanel(id+i, Model.of(observationCountResult), true));
+            i++;
+        }
     }
 
 }
