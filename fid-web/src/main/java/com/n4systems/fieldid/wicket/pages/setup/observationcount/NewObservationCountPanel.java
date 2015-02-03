@@ -2,6 +2,8 @@ package com.n4systems.fieldid.wicket.pages.setup.observationcount;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.util.NoBarsValidator;
+import com.n4systems.fieldid.wicket.util.NoColonsValidator;
 import com.n4systems.model.ObservationCount;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -24,8 +26,10 @@ public class NewObservationCountPanel extends Panel {
         public ObservationCountForm(String id, IModel<ObservationCount> model) {
             super(id, model);
             setOutputMarkupId(true);
-
-            add(new RequiredTextField<String>("name", new PropertyModel<>(model, "name")));
+            RequiredTextField nameField;
+            add(nameField = new RequiredTextField<String>("name", new PropertyModel<>(model, "name")));
+            nameField.add(new NoBarsValidator());
+            nameField.add(new NoColonsValidator());
 
             add(new DropDownChoice<Boolean>("counted",
                     new PropertyModel<>(model, "counted"),
@@ -41,9 +45,6 @@ public class NewObservationCountPanel extends Panel {
                             return object.toString();
                         }
                     }));
-
-
-
         }
     }
 }
