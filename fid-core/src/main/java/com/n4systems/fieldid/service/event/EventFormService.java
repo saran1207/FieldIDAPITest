@@ -65,6 +65,7 @@ public class EventFormService extends FieldIdPersistenceService {
         eventForm.setObservationCountGroup(oldEventForm.getObservationCountGroup());
         eventForm.setObservationCountFail(oldEventForm.getObservationCountFail());
         eventForm.setObservationCountPass(oldEventForm.getObservationCountPass());
+        eventForm.setUseObservationCountForResult(oldEventForm.isUseObservationCountForResult());
 
         //Save the new form
         persistenceService.save(eventForm);
@@ -113,6 +114,7 @@ public class EventFormService extends FieldIdPersistenceService {
             eventForm.setObservationCountGroup(oldEventForm.getObservationCountGroup());
             eventForm.setObservationCountFail(oldEventForm.getObservationCountFail());
             eventForm.setObservationCountPass(oldEventForm.getObservationCountPass());
+            eventForm.setUseObservationCountForResult(oldEventForm.isUseObservationCountForResult());
 
             persistenceService.update(oldEventForm);
         }
