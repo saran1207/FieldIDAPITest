@@ -14,10 +14,13 @@ import com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.fieldid.wicket.pages.setup.score.ScoreGroupsPage;
+import com.n4systems.fieldid.wicket.util.NoBarsValidator;
+import com.n4systems.fieldid.wicket.util.NoColonsValidator;
 import com.n4systems.model.ObservationCountGroup;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -63,7 +66,8 @@ public class ObservationCountGroupPage extends FieldIDFrontEndPage {
             @Override
             protected void populateItem(ListItem<ObservationCountGroup> item) {
                 item.setOutputMarkupId(true);
-                item.add(new EditCopyDeleteItemPanel("editCopyDeletePanel", new PropertyModel<String>(item.getModel(), "name")) {
+                EditCopyDeleteItemPanel editCopyDeleteItemPanel;
+                item.add(editCopyDeleteItemPanel = new EditCopyDeleteItemPanel("editCopyDeletePanel", new PropertyModel<String>(item.getModel(), "name")) {
                     {
                         setStoreLabel(new FIDLabelModel("label.save"));
                         setEditMaximumLength(1024);
@@ -112,6 +116,9 @@ public class ObservationCountGroupPage extends FieldIDFrontEndPage {
                         return 50;
                     }
                 });
+
+                editCopyDeleteItemPanel.getTextField().add(new NoBarsValidator());
+                editCopyDeleteItemPanel.getTextField().add(new NoColonsValidator());
             }
         });
 
@@ -174,19 +181,26 @@ public class ObservationCountGroupPage extends FieldIDFrontEndPage {
                     new FIDLabelModel("label.sample_observation_group_name")));
 
             groupNameField.add(new StringValidator.MaximumLengthValidator(1024));
+            groupNameField.add(new NoBarsValidator());
+            groupNameField.add(new NoColonsValidator());
 
-            add(new SubmitLink("submitLink"));
+            add(new AjaxSubmitLink("submitLink") {
+                @Override
+                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                    ObservationCountGroup group = new ObservationCountGroup();
+                    group.setTenant(getTenant());
+                    group.setName(name);
+                    observationCountService.saveOrUpdate(group);
+                    FieldIDSession.get().info(new FIDLabelModel("label.group_saved").getObject());
+                    setResponsePage(ObservationCountGroupPage.class);
+                }
 
-        }
+                @Override
+                protected void onError(AjaxRequestTarget target, Form<?> form) {
+                    onValidationError(target);
+                }
+            });
 
-        @Override
-        protected void onSubmit() {
-            ObservationCountGroup group = new ObservationCountGroup();
-            group.setTenant(getTenant());
-            group.setName(name);
-            observationCountService.saveOrUpdate(group);
-            FieldIDSession.get().info(new FIDLabelModel("label.group_saved").getObject());
-            setResponsePage(ObservationCountGroupPage.class);
         }
     }
 

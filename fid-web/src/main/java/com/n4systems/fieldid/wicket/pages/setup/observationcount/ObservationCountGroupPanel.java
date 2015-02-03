@@ -6,7 +6,10 @@ import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
 import com.n4systems.fieldid.wicket.components.eventform.EditCopyDeleteItemPanel;
 import com.n4systems.fieldid.wicket.components.eventform.SortableListPanel;
 import com.n4systems.fieldid.wicket.components.feedback.ContainerFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.util.NoBarsValidator;
+import com.n4systems.fieldid.wicket.util.NoColonsValidator;
 import com.n4systems.model.ObservationCount;
 import com.n4systems.model.ObservationCountGroup;
 import com.n4systems.model.Score;
@@ -17,7 +20,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -36,12 +38,17 @@ public class ObservationCountGroupPanel extends SortableListPanel {
     private SortableAjaxBehavior sortableBehavior;
     private Boolean reorderState = false;
 
+    private FIDFeedbackPanel feedbackPanel;
+
 
     public ObservationCountGroupPanel(String id, IModel<ObservationCountGroup> model) {
         super(id);
         this.observationCountGroupModel = model;
         setDefaultModel();
         setOutputMarkupPlaceholderTag(true);
+
+        add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
+        feedbackPanel.setOutputMarkupPlaceholderTag(true);
 
         add(new WebMarkupContainer("blankInstructions") {
             @Override
@@ -84,7 +91,8 @@ public class ObservationCountGroupPanel extends SortableListPanel {
             @Override
             protected void populateItem(final ListItem<ObservationCount> item) {
                 item.setOutputMarkupId(true);
-                item.add(new EditCopyDeleteItemPanel("count", new PropertyModel<String>(item.getModel(), "name"), createSubtitleModel(item.getModel()), false) {
+                EditCopyDeleteItemPanel editCopyDeleteItemPanel;
+                item.add(editCopyDeleteItemPanel = new EditCopyDeleteItemPanel("count", new PropertyModel<String>(item.getModel(), "name"), createSubtitleModel(item.getModel()), false) {
                     {
                         setStoreLabel(new FIDLabelModel("label.save"));
                     }
@@ -110,7 +118,15 @@ public class ObservationCountGroupPanel extends SortableListPanel {
                     public int getTextDisplayLimit() {
                         return 40;
                     }
+
+                    @Override
+                    protected void onFormValidationError(AjaxRequestTarget target) {
+                        target.add(feedbackPanel);
+                    }
                 });
+                editCopyDeleteItemPanel.getTextField().add(new NoBarsValidator());
+                editCopyDeleteItemPanel.getTextField().add(new NoColonsValidator());
+
             }
         });
 
@@ -164,7 +180,6 @@ public class ObservationCountGroupPanel extends SortableListPanel {
     private class ObservationCountGroupForm extends Form<ObservationCountGroup> {
 
         private ObservationCount observationCount;
-        private FeedbackPanel feedbackPanel;
         private IModel<ObservationCountGroup> model;
 
         public ObservationCountGroupForm(String id, IModel<ObservationCountGroup> groupModel) {
@@ -173,9 +188,6 @@ public class ObservationCountGroupPanel extends SortableListPanel {
             model = groupModel;
             observationCount = new ObservationCount();
             setOutputMarkupId(true);
-
-            add(feedbackPanel = new ContainerFeedbackPanel("feedbackPanel", ObservationCountGroupForm.this));
-            feedbackPanel.setOutputMarkupPlaceholderTag(true);
 
             add(new NewObservationCountPanel("newObservationCount", new PropertyModel<ObservationCount>(this, "observationCount")));
 
