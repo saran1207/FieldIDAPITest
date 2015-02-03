@@ -7,7 +7,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -21,15 +20,15 @@ public class ObservationCountCounterPanel extends Panel {
     private WebMarkupContainer widget;
     private int currentCount;
 
-    private ContextImage minusButton;
-    private ContextImage plusButton;
+    private WebMarkupContainer minusButton;
+    private WebMarkupContainer plusButton;
+
     private TextField count;
 
     public ObservationCountCounterPanel(String id, IModel<ObservationCountResult> result, boolean showButtons) {
         super(id);
 
         widget = new WebMarkupContainer("container1");
-
         widget.add(new Label("label", new PropertyModel<String>(result.getObject().getObservationCount(), "name")));
 
         count = new TextField("textField", new PropertyModel<>(result, "value"));
@@ -41,20 +40,21 @@ public class ObservationCountCounterPanel extends Panel {
             currentCount = result.getObject().getValue();
         }
 
-        minusButton = new ContextImage("minusButton", new PropertyModel<String>(this, "buttonMinusImageUrl"));
+        minusButton = new WebMarkupContainer("minusButton");
         minusButton.setOutputMarkupId(true);
         minusButton.add(new AjaxEventBehavior("onclick") {
             @Override
             protected void onEvent(AjaxRequestTarget target) {
-                currentCount = (currentCount - 1);
-                result.getObject().setValue(currentCount);
-                target.add(count);
+                if(currentCount > 0) {
+                    currentCount = (currentCount - 1);
+                    result.getObject().setValue(currentCount);
+                    target.add(count);
+                }
             }
         });
         minusButton.setVisible(showButtons);
 
-
-        plusButton = new ContextImage("plusButton", new PropertyModel<String>(this, "buttonPlusImageUrl"));
+        plusButton = new WebMarkupContainer("plusButton");
         plusButton.setOutputMarkupId(true);
         plusButton.add(new AjaxEventBehavior("onclick") {
             @Override
@@ -72,13 +72,5 @@ public class ObservationCountCounterPanel extends Panel {
 
         add(widget);
 
-    }
-
-    public String getButtonPlusImageUrl() {
-        return "images/add-icon.png";
-    }
-
-    public String getButtonMinusImageUrl() {
-        return "images/minus-icon.png";
     }
 }

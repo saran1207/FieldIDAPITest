@@ -1,8 +1,11 @@
 <wicket:panel>
-<div wicket:id="container1" style="text-align: center;">
-    <span wicket:id="label" >[score label]</span>
-    <img wicket:id="minusButton"/>
-    <input wicket:id="textField" readonly="true" type="text" style="width:20px"/>
-    <img wicket:id="plusButton"/>
+<div wicket:id="container1" class="observationCounter">
+    <label wicket:id="label" >[score label]</label>
+    <div class="observationCounterInputContainer">
+        <div wicket:id="plusButton"  class="increment"/>
+        <div wicket:id="minusButton" class="decrement"/>
+        <input wicket:id="textField" readonly="true" type="text"/>
+    </div>
 </div>
+
 </wicket:panel>
