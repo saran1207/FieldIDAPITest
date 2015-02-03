@@ -57,14 +57,14 @@ public class EventResultCalculator {
                 ObservationCountCriteria observationCountCriteria = (ObservationCountCriteria) criteriaResult.getCriteria();
                 for (ObservationCount count: observationCountCriteria.getObservationCountGroup().getObservationCounts()) {
                     if (count.isCounted()) {
-                        totalObservations =+ count.getValue();
+                        //totalObservations =+ count.getValue();
 
                         if(count.equals(event.getEventForm().getObservationCountFail())) {
-                            totalFail =+ count.getValue();
+                            //totalFail =+ count.getValue();
                         }
 
                         if(count.equals(event.getEventForm().getObservationCountPass())) {
-                            totalPass =+ count.getValue();
+                            //totalPass =+ count.getValue();
                         }
 
                     }
