@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.api.pub.config;
 
 import com.n4systems.fieldid.api.pub.filters.CatchAllExceptionMapper;
+import com.n4systems.fieldid.api.pub.filters.CorsFilter;
 import com.n4systems.fieldid.api.pub.filters.OAuthFilter;
 import com.n4systems.fieldid.api.pub.mapping.model.unmarshal.*;
 import com.n4systems.fieldid.api.pub.protocolbuffers.google.GoogleProtobufMessageBodyReader;
@@ -21,6 +22,11 @@ public class PublicApiConfig {
 	@Bean
 	public OAuthFilter oAuthFilter() {
 		return new OAuthFilter();
+	}
+
+	@Bean
+	public CorsFilter corsFilter() {
+		return new CorsFilter();
 	}
 
     @Bean

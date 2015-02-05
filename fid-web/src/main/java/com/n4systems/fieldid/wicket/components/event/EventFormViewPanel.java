@@ -28,7 +28,7 @@ public class EventFormViewPanel extends EventFormPanel {
     @Override
     protected Component getSectionScore(String id, IModel<CriteriaSection> criteriaSectionModel) {
         return new Label(id, Model.of(getScoresForSections().get(criteriaSectionModel.getObject())))
-                .setVisible(event.getObject().getType().isDisplaySectionTotals());
+                .setVisible(event.getObject().getType().isDisplayScoreSectionTotals());
     }
 
     @Override

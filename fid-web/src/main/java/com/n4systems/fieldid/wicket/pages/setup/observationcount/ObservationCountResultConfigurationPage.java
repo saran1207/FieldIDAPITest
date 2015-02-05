@@ -102,6 +102,8 @@ public class ObservationCountResultConfigurationPage extends EventTypePage{
             add(observationCountGroupDropDownChoice);
 
             add(new CheckBox("useObservationCountForResult", new PropertyModel<Boolean>(eventForm, "useObservationCountForResult")));
+            add(new CheckBox("displayScoreSectionTotals", new PropertyModel<Boolean>(eventTypeModel, "displayObservationSectionTotals")));
+            add(new CheckBox("displayObservationPercentage", new PropertyModel<Boolean>(eventTypeModel, "displayObservationPercentage")));
 
             add(new DropDownChoice<ScoreCalculationType>("observationcountPassCalculationType", Arrays.asList(ScoreCalculationType.values()), new CalculationChoiceRenderer()));
             add(new DropDownChoice<ScoreCalculationType>("observationcountFailCalculationType", Arrays.asList(ScoreCalculationType.values()), new CalculationChoiceRenderer()));
