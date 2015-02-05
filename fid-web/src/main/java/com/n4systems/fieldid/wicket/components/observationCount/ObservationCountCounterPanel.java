@@ -13,12 +13,16 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.validation.validator.RangeValidator;
 
 
 /**
  * Created by rrana on 2015-02-02.
  */
 public class ObservationCountCounterPanel extends Panel {
+
+    private static int COUNTER_MIN = 0;
+    private static int COUNTER_MAX = 999;
 
     private WebMarkupContainer widget;
     private int currentCount;
@@ -43,17 +47,22 @@ public class ObservationCountCounterPanel extends Panel {
         }
 
         //validate negative values
+        RangeValidator validator = new RangeValidator<Integer>(COUNTER_MIN, COUNTER_MAX);
+        count.add(validator);
+
         count.add(new OnChangeAjaxBehavior() {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 int value;
                 try {
                     value = Integer.valueOf(count.getInput());
-                    if(value > 0) {
+                    if(value >= 0) {
                         currentCount = value;
                         result.getObject().setValue(currentCount);
                         //target.add(count);
                     } else {
+                        //set count's value to be the original
+                        count.setConvertedInput(currentCount);
                         result.getObject().setValue(currentCount);
                         target.add(count);
                     }
@@ -75,7 +84,7 @@ public class ObservationCountCounterPanel extends Panel {
         minusButton.add(new AjaxEventBehavior("onclick") {
             @Override
             protected void onEvent(AjaxRequestTarget target) {
-                if(currentCount > 0) {
+                if(currentCount > COUNTER_MIN) {
                     currentCount = (currentCount - 1);
                     result.getObject().setValue(currentCount);
                     target.add(count);
@@ -90,9 +99,11 @@ public class ObservationCountCounterPanel extends Panel {
         plusButton.add(new AjaxEventBehavior("onclick") {
             @Override
             protected void onEvent(AjaxRequestTarget target) {
-                currentCount = (currentCount + 1);
-                result.getObject().setValue(currentCount);
-                target.add(count);
+                if(currentCount < COUNTER_MAX) {
+                    currentCount = (currentCount + 1);
+                    result.getObject().setValue(currentCount);
+                    target.add(count);
+                }
             }
         });
         plusButton.setVisible(showButtons);
