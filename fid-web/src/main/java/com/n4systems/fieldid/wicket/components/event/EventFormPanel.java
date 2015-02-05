@@ -2,9 +2,7 @@ package com.n4systems.fieldid.wicket.components.event;
 
 import com.n4systems.fieldid.util.EventFormHelper;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
-import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.CriteriaSection;
+import com.n4systems.model.*;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -24,6 +22,7 @@ import java.util.Map;
 public abstract class EventFormPanel extends Panel {
 
 
+    private final EventFormHelper eventFormHelper;
     private AbstractEvent.SectionResults currentSection;
     private int currentSectionIndex = 0;
     private int totalSections;
@@ -33,6 +32,9 @@ public abstract class EventFormPanel extends Panel {
     private Map<CriteriaSection, Double> sectionScores;
     private Map<CriteriaSection, Double> sectionScorePercentages;
 
+    private Map<CriteriaSection, Map<ObservationCount, Integer>> sectionObservations;
+    private Map<CriteriaSection, Map<ObservationCount, Double>> sectionObservationPercentages;
+
     private WebMarkupContainer criteriaSectionContainer;
     private boolean isEdit;
 
@@ -41,6 +43,7 @@ public abstract class EventFormPanel extends Panel {
         this.results = results;
         this.event = event;
         this.isEdit = isEdit;
+        this.eventFormHelper = new EventFormHelper();
         setOutputMarkupId(true);
 
         totalSections = results.getObject().size();
@@ -68,6 +71,9 @@ public abstract class EventFormPanel extends Panel {
                 sectionContainer.add(getCriteriaSectionPanel(event.getObject().getClass(), new PropertyModel<List<CriteriaResult>>(item.getModel(), "results")));
                 sectionContainer.add(getSectionScore("sectionScore", new PropertyModel<CriteriaSection>(item.getModel(), "section")));
                 sectionContainer.add(getSectionScorePercentage("sectionScorePercentage", new PropertyModel<CriteriaSection>(item.getModel(), "section")));
+                sectionContainer.add(getSectionObservations("sectionObservation", new PropertyModel<CriteriaSection>(item.getModel(), "section")));
+                sectionContainer.add(getSectionObservationPercentage("sectionObservationPercentage", new PropertyModel<CriteriaSection>(item.getModel(), "section")));
+
                 sectionContainer.add(new AjaxLink<Void>("hideSectionLink") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
@@ -113,7 +119,6 @@ public abstract class EventFormPanel extends Panel {
 
         add(createCriteriaSectionPager("topSectionPager", currentSectionModel, totalSectionsModel));
         add(createCriteriaSectionPager("bottomSectionPager", currentSectionModel, totalSectionsModel));
-
     }
 
     protected Component getSectionScore(String id, IModel<CriteriaSection> criteriaSectionModel) {
@@ -121,6 +126,14 @@ public abstract class EventFormPanel extends Panel {
     }
 
     protected Component getSectionScorePercentage(String id, IModel<CriteriaSection> criteriaSectionModel) {
+        return new Label(id).setVisible(false);
+    }
+
+    protected Component getSectionObservations(String id, IModel<CriteriaSection> criteriaSectionModel) {
+        return new Label(id).setVisible(false);
+    }
+
+    protected Component getSectionObservationPercentage(String id, IModel<CriteriaSection> criteriaSectionModel) {
         return new Label(id).setVisible(false);
     }
 
@@ -167,13 +180,28 @@ public abstract class EventFormPanel extends Panel {
 
     protected Map<CriteriaSection, Double> getScoresForSections() {
         if(sectionScores == null)
-            sectionScores = new EventFormHelper().getScoresForSections(event.getObject());
+            sectionScores = eventFormHelper.getScoresForSections(event.getObject());
         return sectionScores;
     }
-    public Map<CriteriaSection, Double> getScorePercentageForSections() {
+
+    protected Map<CriteriaSection, Double> getScorePercentageForSections() {
        if(sectionScorePercentages == null)
            sectionScorePercentages = new EventFormHelper().getScorePercentageForSections(event.getObject());
         return sectionScorePercentages;
     }
+
+    protected Map<CriteriaSection, Map<ObservationCount, Integer>> getObservationsForSections() {
+        if (sectionObservations == null)
+            sectionObservations = new EventFormHelper().getObservationsForSections(event.getObject());
+        return sectionObservations;
+    }
+
+    protected Map<CriteriaSection, Map<ObservationCount, Double>> getObservationPercentageForSections() {
+        if (sectionObservationPercentages == null)
+            sectionObservationPercentages = new EventFormHelper().getObservationPercentagesForSections(event.getObject());
+        return sectionObservationPercentages;
+    }
+
+
 
 }

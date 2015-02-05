@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.event;
 
 import com.n4systems.fieldid.util.EventFormHelper;
+import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventResult;
 import com.n4systems.model.ObservationCount;
@@ -46,7 +47,7 @@ public class EventResultPanel extends Panel {
         add(new Label("eventStatus", new PropertyModel(model, "eventStatus.displayName")));
 
         Map<ObservationCount, Integer> observationTotals = eventFormHelper.getFormObservationTotals(model.getObject());
-        int formObservationTotal = eventFormHelper.getObservationCountTotal();
+        int formObservationTotal = eventFormHelper.getObservationCountTotal(model.getObject());
 
         add(new ListView<ObservationCount>("observationResult", new PropertyModel<List<ObservationCount>> (model, "type.eventForm.observationCountGroup.observationCounts")) {
             @Override
@@ -56,8 +57,8 @@ public class EventResultPanel extends Panel {
 
                 double percentage = observationTotals.get(item.getModelObject()) * 1.0d / formObservationTotal;
 
-                item.add(new Label("percentage", numberFormat.format(percentage))
-                        .setVisible(item.getModelObject().isCounted()));
+                item.add(new FlatLabel("percentage", numberFormat.format(percentage))
+                        .setVisible(item.getModelObject().isCounted() && model.getObject().getEventType().isDisplayObservationPercentage()));
             }
         });
     }
