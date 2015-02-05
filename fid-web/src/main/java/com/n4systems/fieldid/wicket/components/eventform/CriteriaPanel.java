@@ -304,7 +304,12 @@ public class CriteriaPanel extends SortableListPanel {
     }
 
     private ObservationCountGroup getDefaultObservationCountGroup() {
-           return eventFormModel.getObject().getObservationCountGroup();
+        //When the user is creating a brand new form.
+        if(eventFormModel.getObject() == null) {
+            return null;
+        } else {
+            return eventFormModel.getObject().getObservationCountGroup();
+        }
     }
 
     private UnitOfMeasure getDefaultUnitOfMeasure() {

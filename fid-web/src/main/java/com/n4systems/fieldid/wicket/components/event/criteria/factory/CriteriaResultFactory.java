@@ -23,6 +23,8 @@ public class CriteriaResultFactory {
             return new ScoreCriteriaResultPanel(componentId, (IModel<ScoreCriteriaResult>) resultModel);
         } else if (result instanceof DateFieldCriteriaResult) {
             return new DateCriteriaResultPanel(componentId, (IModel<DateFieldCriteriaResult>) resultModel);
+        } else if (result instanceof ObservationCountCriteriaResult) {
+            return new ObservationCountCriteriaResultPanel(componentId, (IModel<ObservationCountCriteriaResult>) resultModel);
         } else if (result instanceof UnitOfMeasureCriteriaResult) {
             return new UnitOfMeasureCriteriaResultPanel(componentId, (IModel<UnitOfMeasureCriteriaResult>) resultModel);
         } else if (result instanceof SignatureCriteriaResult) {

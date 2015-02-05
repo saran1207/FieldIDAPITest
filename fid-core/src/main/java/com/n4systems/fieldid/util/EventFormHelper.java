@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.util;
 
+import com.google.common.collect.Maps;
 import com.n4systems.model.*;
 
 import java.util.*;
@@ -12,6 +13,8 @@ public class EventFormHelper {
 	private Map<AbstractEvent, Map<CriteriaSection, List<CriteriaResult>>> sections = new HashMap<AbstractEvent, Map<CriteriaSection, List<CriteriaResult>>>();
     private Map<AbstractEvent, Map<CriteriaSection, Double>> eventsSectionsScoresMap = new HashMap<AbstractEvent, Map<CriteriaSection, Double>>();
     private Map<AbstractEvent, Map<CriteriaSection, Double>> eventsSectionsScoresPercentageMap = new HashMap<AbstractEvent, Map<CriteriaSection, Double>>();
+
+    private int observationCountTotal;
 
 	public List<CriteriaSection> getAvailableSections(AbstractEvent event) {
 		if (availableSections.get(event) == null) {
@@ -165,6 +168,33 @@ public class EventFormHelper {
         } else {
             return scoreTotal /total;
         }
+    }
+
+    public Map<ObservationCount, Integer> getFormObservationTotals(AbstractEvent<?, ?> event) {
+        Map<ObservationCount, Integer> formObservationTotals = Maps.newHashMap();
+        observationCountTotal = 0;
+
+        for (CriteriaResult criteriaResult : event.getResults()) {
+            if (criteriaResult.getCriteria().getCriteriaType() == CriteriaType.OBSERVATION_COUNT) {
+                for (ObservationCountResult count: ((ObservationCountCriteriaResult) criteriaResult).getObservationCountResults()) {
+                    if (formObservationTotals.containsKey(count.getObservationCount())) {
+                       int countTotal = formObservationTotals.get(count.getObservationCount());
+                       formObservationTotals.replace(count.getObservationCount(), countTotal + count.getValue());
+                    } else {
+                        formObservationTotals.put(count.getObservationCount(), count.getValue());
+                    }
+
+                    if (count.getObservationCount().isCounted()) {
+                        observationCountTotal += count.getValue();
+                    }
+                }
+            }
+        }
+        return formObservationTotals;
+    }
+
+    public int getObservationCountTotal() {
+        return observationCountTotal;
     }
 
     private Double getSectionsTotal(Map<CriteriaSection, Double> sectionScores) {

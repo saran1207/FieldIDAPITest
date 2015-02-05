@@ -3,13 +3,19 @@ package com.n4systems.fieldid.wicket.components.event;
 import com.n4systems.fieldid.util.EventFormHelper;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventResult;
+import com.n4systems.model.ObservationCount;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
 import java.text.NumberFormat;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class EventResultPanel extends Panel {
 
@@ -20,8 +26,11 @@ public class EventResultPanel extends Panel {
 
         add(new Label("score", new PropertyModel(model, "score")));
 
-        Double percentage = new EventFormHelper().getEventFormScorePercentage(model.getObject());
-        add(new Label("percentage", NumberFormat.getPercentInstance().format(percentage))
+        EventFormHelper eventFormHelper = new EventFormHelper();
+
+        Double percentage = eventFormHelper.getEventFormScorePercentage(model.getObject());
+        NumberFormat numberFormat = NumberFormat.getPercentInstance();
+        add(new Label("percentage", numberFormat.format(percentage))
                 .setVisible(model.getObject().getType().isDisplayScorePercentage()));
 
         add(eventResult = new Label("result", new PropertyModel(model, "eventResult.displayName")));
@@ -35,5 +44,21 @@ public class EventResultPanel extends Panel {
         }
 
         add(new Label("eventStatus", new PropertyModel(model, "eventStatus.displayName")));
+
+        Map<ObservationCount, Integer> observationTotals = eventFormHelper.getFormObservationTotals(model.getObject());
+        int formObservationTotal = eventFormHelper.getObservationCountTotal();
+
+        add(new ListView<ObservationCount>("observationResult", new PropertyModel<List<ObservationCount>> (model, "type.eventForm.observationCountGroup.observationCounts")) {
+            @Override
+            protected void populateItem(ListItem<ObservationCount> item) {
+                item.add(new Label("name", new PropertyModel<>(item.getModel(), "name")));
+                item.add(new Label("total", observationTotals.get(item.getModelObject()).toString()));
+
+                double percentage = observationTotals.get(item.getModelObject()) * 1.0d / formObservationTotal;
+
+                item.add(new Label("percentage", numberFormat.format(percentage))
+                        .setVisible(item.getModelObject().isCounted()));
+            }
+        });
     }
 }

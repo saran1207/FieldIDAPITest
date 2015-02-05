@@ -1,9 +1,9 @@
 package com.n4systems.api.conversion.event;
 
 
-import static com.google.common.base.Preconditions.*;
-
 import com.n4systems.model.*;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 
 public class CriteriaResultFactory {
@@ -51,6 +51,8 @@ public class CriteriaResultFactory {
 			return populator.populate(new NumberFieldCriteriaResult());
         case SCORE:
             return populator.populate(new ScoreCriteriaResult());
+		case OBSERVATION_COUNT:
+			return populator.populate(new ObservationCountCriteriaResult());
 		default:
 			throw new IllegalStateException("can't create criteria result for type '" + criteriaType == null ? "NULL Type" : criteriaType +"'"); 
 		}

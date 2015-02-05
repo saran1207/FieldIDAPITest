@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.components.event.criteria.edit;
+package com.n4systems.fieldid.wicket.components.event.criteria.view;
 
 import com.n4systems.fieldid.wicket.components.observationCount.ObservationCountCounterPanel;
 import com.n4systems.model.ObservationCount;
@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by rrana on 2015-01-27.
+ * Created by rrana on 2015-02-03.
  */
-public class ObservationCountCriteriaEditPanel extends Panel {
+public class ObservationCountCriteriaResultPanel extends Panel {
 
     private IModel<ObservationCountCriteriaResult> result;
     private List<ObservationCount> observationCountList;
@@ -25,7 +25,7 @@ public class ObservationCountCriteriaEditPanel extends Panel {
 
     private List<ObservationCountCounterPanel> panels;
 
-    public ObservationCountCriteriaEditPanel(String id, final IModel<ObservationCountCriteriaResult> result) {
+    public ObservationCountCriteriaResultPanel(String id, IModel<ObservationCountCriteriaResult> result) {
         super(id);
 
         this.result = result;
@@ -47,7 +47,7 @@ public class ObservationCountCriteriaEditPanel extends Panel {
         }
 
         for(ObservationCountResult observationCountResult:observationCountResultList) {
-            panels.add(new ObservationCountCounterPanel("counterPanels", Model.of(observationCountResult), true));
+            panels.add(new ObservationCountCounterPanel("counterPanels", Model.of(observationCountResult), false));
         }
 
         add(new ListView("counterPanel", panels) {
@@ -55,5 +55,8 @@ public class ObservationCountCriteriaEditPanel extends Panel {
                 item.add((ObservationCountCounterPanel) item.getModelObject());
             }
         });
+
+
     }
+
 }
