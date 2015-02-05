@@ -9,7 +9,6 @@ import com.n4systems.fieldid.wicket.pages.setup.eventtype.EventTypePage;
 import com.n4systems.model.EventForm;
 import com.n4systems.model.EventType;
 import com.n4systems.model.ScoreCalculationType;
-import com.n4systems.model.ResultRange;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -26,6 +25,8 @@ public class ScoreResultConfigurationPage extends EventTypePage {
     private PersistenceService persistenceService;
 
     private EventForm eventForm;
+
+    private CheckBox useScoreForResult;
 
     public ScoreResultConfigurationPage(PageParameters params) {
         super(params);
@@ -51,15 +52,28 @@ public class ScoreResultConfigurationPage extends EventTypePage {
     class ScoreConfigurationForm extends Form<EventForm> {
 
         public ScoreConfigurationForm(String id) {
-            super(id, new CompoundPropertyModel<EventForm>(eventForm));
+            super(id, new CompoundPropertyModel<>(eventForm));
             add(new FIDFeedbackPanel("feedbackPanel"));
 
-            add(new CheckBox("displayScoreSectionTotals", new PropertyModel<Boolean>(eventTypeModel, "displayScoreSectionTotals")));
-            add(new CheckBox("displayScorePercentage", new PropertyModel<Boolean>(eventTypeModel, "displayScorePercentage")));
-            add(new CheckBox("useScoreForResult"));
-            add(new DropDownChoice<ScoreCalculationType>("scoreCalculationType", Arrays.asList(ScoreCalculationType.values()), new CalculationChoiceRenderer()));
-            add(new ScoreResultRangePanel("failRangePanel", new PropertyModel<ResultRange>(eventForm, "failRange")));
-            add(new ScoreResultRangePanel("passRangePanel", new PropertyModel<ResultRange>(eventForm, "passRange")));
+            add(new CheckBox("displayScoreSectionTotals", new PropertyModel<>(eventTypeModel, "displayScoreSectionTotals")));
+            add(new CheckBox("displayScorePercentage", new PropertyModel<>(eventTypeModel, "displayScorePercentage")));
+            add(useScoreForResult = new CheckBox("useScoreForResult"));
+            add(new DropDownChoice<>("scoreCalculationType", Arrays.asList(ScoreCalculationType.values()), new CalculationChoiceRenderer()));
+
+            add(new ScoreResultRangePanel("failRangePanel", new PropertyModel<>(eventForm, "failRange")){
+                @Override
+                protected boolean isValidationRequired() {
+                    System.out.println("Checkbox Value: " + useScoreForResult.getModelObject());
+                    return useScoreForResult.getModelObject();
+                }
+            });
+            add(new ScoreResultRangePanel("passRangePanel", new PropertyModel<>(eventForm, "passRange")){
+                @Override
+                protected boolean isValidationRequired() {
+                    System.out.println("Checkbox Value: " + useScoreForResult.getModelObject());
+                    return useScoreForResult.getModelObject();
+                }
+            });
 
             add(new NonWicketLink("cancelLink", "eventType.action?uniqueID="+eventTypeId));
             add(new Button("submitButton"));
