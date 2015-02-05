@@ -52,7 +52,7 @@ public class OAuthFilter implements ContainerRequestFilter, ContainerResponseFil
 				throw new ForbiddenException("OAuth Signature (oauth_signature) not set");
 			}
 
-			if (authService.exceededRequestLimit(params.getConsumerKey(), params.getTokenKey(), 3)) {
+			if (authService.exceededRequestLimit(params.getConsumerKey(), params.getTokenKey(), 10000)) {
 				throw new ForbiddenException("API Request Limit Exceeded");
 			}
 
