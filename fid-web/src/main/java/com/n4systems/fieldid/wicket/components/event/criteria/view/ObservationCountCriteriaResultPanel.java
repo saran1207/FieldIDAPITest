@@ -12,6 +12,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -45,6 +46,10 @@ public class ObservationCountCriteriaResultPanel extends Panel {
             }
             result.getObject().setObservationCountResults(observationCountResultList);
         }
+
+        //I reverse the list because the Event View Page uses CSS that floats these values to the
+        //right.  There is no other reason for doing the reverse.
+        Collections.reverse(observationCountResultList);
 
         for(ObservationCountResult observationCountResult:observationCountResultList) {
             panels.add(new ObservationCountCounterPanel("counterPanels", Model.of(observationCountResult), false));
