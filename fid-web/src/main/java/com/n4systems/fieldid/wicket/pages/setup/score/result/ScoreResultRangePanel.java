@@ -4,8 +4,8 @@ import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.setup.score.validator.SecondRangeValueValidator;
-import com.n4systems.model.ScoreComparator;
 import com.n4systems.model.ResultRange;
+import com.n4systems.model.ScoreComparator;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.EnclosureContainer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -18,7 +18,7 @@ import org.apache.wicket.model.PropertyModel;
 
 import java.util.Arrays;
 
-public class ScoreResultRangePanel extends Panel {
+public abstract class ScoreResultRangePanel extends Panel {
 
     public ScoreResultRangePanel(String id, final IModel<ResultRange> model) {
         super(id, model);
@@ -45,7 +45,12 @@ public class ScoreResultRangePanel extends Panel {
                 return model.getObject().getComparator().isBinary();
             }
         });
-        value2Field.add(new SecondRangeValueValidator(comparatorModel, value1Field));
+        value2Field.add(new SecondRangeValueValidator(comparatorModel, value1Field) {
+            @Override
+            protected boolean validateMe() {
+                return isValidationRequired();
+            }
+        });
         ValidationBehavior.addValidationBehaviorToComponent(value1Field);
         ValidationBehavior.addValidationBehaviorToComponent(value2Field);
         EnclosureContainer enclosureContainer = new EnclosureContainer("enclosureContainer", value2Field);
@@ -67,4 +72,5 @@ public class ScoreResultRangePanel extends Panel {
         };
     }
 
+    protected abstract boolean isValidationRequired();
 }

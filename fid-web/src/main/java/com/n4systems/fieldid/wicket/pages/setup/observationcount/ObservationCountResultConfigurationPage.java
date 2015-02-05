@@ -38,6 +38,8 @@ public class ObservationCountResultConfigurationPage extends EventTypePage{
 
     private EventForm eventForm;
 
+    private CheckBox useObservationCountForResultCheckbox;
+
     public ObservationCountResultConfigurationPage(PageParameters params) {
         super(params);
 
@@ -62,7 +64,7 @@ public class ObservationCountResultConfigurationPage extends EventTypePage{
     class ObservationCountConfigurationForm extends Form<EventForm> {
 
         public ObservationCountConfigurationForm(String id) {
-            super(id, new CompoundPropertyModel<EventForm>(eventForm));
+            super(id, new CompoundPropertyModel<>(eventForm));
             add(new FIDFeedbackPanel("feedbackPanel"));
 
             DropDownChoice<ObservationCount> observationCountDropDownChoicePass;
@@ -70,11 +72,11 @@ public class ObservationCountResultConfigurationPage extends EventTypePage{
 
             //Populate depending on whether the eventform has a group associated with it.
             if (eventForm.getObservationCountGroup() == null) {
-                observationCountDropDownChoicePass = new DropDownChoice<ObservationCount>("observationCountPass", new ArrayList<ObservationCount>(), new ObservationCountChoiceRenderer());
-                observationCountDropDownChoiceFail = new DropDownChoice<ObservationCount>("observationCountFail", new ArrayList<ObservationCount>(), new ObservationCountChoiceRenderer());
+                observationCountDropDownChoicePass = new DropDownChoice<>("observationCountPass", new ArrayList<>(), new ObservationCountChoiceRenderer());
+                observationCountDropDownChoiceFail = new DropDownChoice<>("observationCountFail", new ArrayList<>(), new ObservationCountChoiceRenderer());
             } else {
-                observationCountDropDownChoicePass = new DropDownChoice<ObservationCount>("observationCountPass", eventForm.getObservationCountGroup().getObservationCounts(), new ObservationCountChoiceRenderer());
-                observationCountDropDownChoiceFail = new DropDownChoice<ObservationCount>("observationCountFail", eventForm.getObservationCountGroup().getObservationCounts(), new ObservationCountChoiceRenderer());
+                observationCountDropDownChoicePass = new DropDownChoice<>("observationCountPass", eventForm.getObservationCountGroup().getObservationCounts(), new ObservationCountChoiceRenderer());
+                observationCountDropDownChoiceFail = new DropDownChoice<>("observationCountFail", eventForm.getObservationCountGroup().getObservationCounts(), new ObservationCountChoiceRenderer());
             }
 
             observationCountDropDownChoicePass.setNullValid(true);
@@ -101,15 +103,35 @@ public class ObservationCountResultConfigurationPage extends EventTypePage{
 
             add(observationCountGroupDropDownChoice);
 
-            add(new CheckBox("useObservationCountForResult", new PropertyModel<Boolean>(eventForm, "useObservationCountForResult")));
-            add(new CheckBox("displayScoreSectionTotals", new PropertyModel<Boolean>(eventTypeModel, "displayObservationSectionTotals")));
-            add(new CheckBox("displayObservationPercentage", new PropertyModel<Boolean>(eventTypeModel, "displayObservationPercentage")));
+            add(useObservationCountForResultCheckbox = new CheckBox("useObservationCountForResult", new PropertyModel<>(eventForm, "useObservationCountForResult")) {
+                //Force the CheckBox to notify us when the value changes.  This is important.  Failing to do this makes
+                //the component essentially unaware of its state.
+                @Override
+                protected boolean wantOnSelectionChangedNotifications() {
+                    return true;
+                }
+            });
+            add(new CheckBox("displayScoreSectionTotals", new PropertyModel<>(eventTypeModel, "displayObservationSectionTotals")));
+            add(new CheckBox("displayObservationPercentage", new PropertyModel<>(eventTypeModel, "displayObservationPercentage")));
 
-            add(new DropDownChoice<ScoreCalculationType>("observationcountPassCalculationType", Arrays.asList(ScoreCalculationType.values()), new CalculationChoiceRenderer()));
-            add(new DropDownChoice<ScoreCalculationType>("observationcountFailCalculationType", Arrays.asList(ScoreCalculationType.values()), new CalculationChoiceRenderer()));
+            add(new DropDownChoice<>("observationcountPassCalculationType", Arrays.asList(ScoreCalculationType.values()), new CalculationChoiceRenderer()));
+            add(new DropDownChoice<>("observationcountFailCalculationType", Arrays.asList(ScoreCalculationType.values()), new CalculationChoiceRenderer()));
 
-            add(new ScoreResultRangePanel("passRangePanel", new PropertyModel<ResultRange>(eventForm, "observationcountPassRange")));
-            add(new ScoreResultRangePanel("failRangePanel", new PropertyModel<ResultRange>(eventForm, "observationcountFailRange")));
+
+            add(new ScoreResultRangePanel("passRangePanel", new PropertyModel<>(eventForm, "observationcountPassRange")) {
+                @Override
+                protected boolean isValidationRequired() {
+                    System.out.println("Checkbox Value: " + useObservationCountForResultCheckbox.getModelObject());
+                    return useObservationCountForResultCheckbox.getModelObject();
+                }
+            });
+            add(new ScoreResultRangePanel("failRangePanel", new PropertyModel<>(eventForm, "observationcountFailRange")){
+                @Override
+                protected boolean isValidationRequired() {
+                    System.out.println("Checkbox Value: " + useObservationCountForResultCheckbox.getModelObject());
+                    return useObservationCountForResultCheckbox.getModelObject();
+                }
+            });
 
             add(new NonWicketLink("cancelLink", "eventType.action?uniqueID="+eventTypeId));
             add(new Button("submitButton"));
@@ -120,7 +142,7 @@ public class ObservationCountResultConfigurationPage extends EventTypePage{
             //Validate for null Observation Group and Observation selection
             if(eventForm.getObservationCountGroup() == null){
                 getTopFeedbackPanel().error(new FIDLabelModel("error.select_observation").getObject());
-            } else if (eventForm.getObservationCountFail() == null || eventForm.getObservationCountPass() == null) {
+            } else if (useObservationCountForResultCheckbox.getModelObject() && (eventForm.getObservationCountFail() == null || eventForm.getObservationCountPass() == null)) {
                 getTopFeedbackPanel().error(new FIDLabelModel("error.select_pass_fail_observation_count").getObject());
             }
             else {
