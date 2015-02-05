@@ -37,7 +37,8 @@
 
     .label, .value {
       width: 40%;
-      vertical-align: super;
+      vertical-align: middle;
+      margin-bottom: 6px;
     }
 
     .actions {
@@ -161,3 +162,33 @@ a.download-all {
   }
 }
 
+
+.observationCounter {
+  width: 20%;
+  display: block;
+  float: right;
+  margin-left: -1px;
+
+  label {
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+  .observationCounterInputContainer {
+
+    input {
+      width: 100% !important;
+      height: 33px;
+      padding: 0 !important;
+      margin: 0;
+      text-align: center;
+      font-size: 1em;
+      border-radius: 2px;
+      background: #eee;
+      border: 1px solid #c5c5c5 !important;
+      border-bottom: 1px solid #b6b6b6 !important;
+      color: #444444 !important;
+      text-indent: 0px;
+    }
+  }
+}
