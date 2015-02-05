@@ -26,6 +26,26 @@
 
         <div class="rowContainer">
             <div class="leftColumn">
+                <wicket:message key="label.display_section_totals"/>
+            </div>
+
+            <div class="rightColumn">
+                <input type="checkbox" wicket:id="displayScoreSectionTotals">
+            </div>
+        </div>
+
+        <div class="rowContainer">
+            <div class="leftColumn">
+                <wicket:message key="label.display_observation_percentage"/>
+            </div>
+
+            <div class="rightColumn">
+                <input type="checkbox" wicket:id="displayObservationPercentage">
+            </div>
+        </div>
+
+        <div class="rowContainer">
+            <div class="leftColumn">
                 <wicket:message key="label.set_the_result_to"/>
                 <span class="failText"><wicket:message key="label.fail"/></span>
                 <wicket:message key="label.if"/>

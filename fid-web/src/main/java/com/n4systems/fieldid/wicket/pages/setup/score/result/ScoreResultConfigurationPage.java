@@ -54,7 +54,7 @@ public class ScoreResultConfigurationPage extends EventTypePage {
             super(id, new CompoundPropertyModel<EventForm>(eventForm));
             add(new FIDFeedbackPanel("feedbackPanel"));
 
-            add(new CheckBox("displaySectionTotals", new PropertyModel<Boolean>(eventTypeModel, "displaySectionTotals")));
+            add(new CheckBox("displayScoreSectionTotals", new PropertyModel<Boolean>(eventTypeModel, "displayScoreSectionTotals")));
             add(new CheckBox("displayScorePercentage", new PropertyModel<Boolean>(eventTypeModel, "displayScorePercentage")));
             add(new CheckBox("useScoreForResult"));
             add(new DropDownChoice<ScoreCalculationType>("scoreCalculationType", Arrays.asList(ScoreCalculationType.values()), new CalculationChoiceRenderer()));
