@@ -13,6 +13,25 @@ import javax.ws.rs.ext.Provider;
 public class CatchAllExceptionMapper implements ExceptionMapper<Throwable> {
 	private Logger logger = Logger.getLogger(CatchAllExceptionMapper.class);
 
+	class JsonErrorResponse {
+		final int status;
+		final String message;
+
+		JsonErrorResponse(int status, String message) {
+			this.status = status;
+			this.message = message;
+		}
+
+		public int getStatus() {
+			return status;
+		}
+
+		public String getMessage() {
+			return message;
+		}
+	}
+
+
 	@Override
 	public Response toResponse(Throwable exception) {
 		/*
@@ -21,12 +40,16 @@ public class CatchAllExceptionMapper implements ExceptionMapper<Throwable> {
 		 */
 		SecurityContextInitializer.resetSecurityContext();
 
-		logger.error("Exception in webservice", exception);
-
+		int status;
 		if (exception instanceof WebApplicationException) {
-			return ((WebApplicationException) exception).getResponse();
+			logger.warn(exception.getMessage());
+			status = ((WebApplicationException) exception).getResponse().getStatus();
 		} else {
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN_TYPE).build();
+			logger.error("Unhandled exception in webservice", exception);
+			status = 500;
 		}
+
+		JsonErrorResponse resp = new JsonErrorResponse(status, exception.getMessage());
+		return Response.status(status).type(MediaType.APPLICATION_JSON).entity(resp).build();
 	}
 }
