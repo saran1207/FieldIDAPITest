@@ -49,8 +49,16 @@ public class ObservationCountCounterPanel extends Panel {
         //validate negative values
         RangeValidator validator = new RangeValidator<Integer>(COUNTER_MIN, COUNTER_MAX);
         count.add(validator);
+        count.setRequired(true);
 
         count.add(new OnChangeAjaxBehavior() {
+
+            @Override
+            protected void onError(AjaxRequestTarget target, RuntimeException e)
+            {
+                result.getObject().setValue(0);
+            }
+
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 int value;
