@@ -6,6 +6,7 @@ import com.n4systems.model.Event;
 import com.n4systems.model.EventResult;
 import com.n4systems.model.ObservationCount;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -48,8 +49,13 @@ public class EventResultPanel extends Panel {
 
         Map<ObservationCount, Integer> observationTotals = eventFormHelper.getFormObservationTotals(model.getObject());
         int formObservationTotal = eventFormHelper.getObservationCountTotal(model.getObject());
+        WebMarkupContainer observationResultContainer;
+        add(observationResultContainer = new WebMarkupContainer("observationResultContainer"));
 
-        add(new ListView<ObservationCount>("observationResult", new PropertyModel<List<ObservationCount>> (model, "type.eventForm.observationCountGroup.observationCounts")) {
+        int numObservations = model.getObject().getType().getEventForm().getObservationCountGroup().getObservationCounts().size();
+        observationResultContainer.add(new AttributeAppender("class", "observation-counter-items-" + numObservations).setSeparator(" "));
+
+        observationResultContainer.add(new ListView<ObservationCount>("observationResult", new PropertyModel<List<ObservationCount>> (model, "type.eventForm.observationCountGroup.observationCounts")) {
             @Override
             protected void populateItem(ListItem<ObservationCount> item) {
                 item.add(new Label("name", new PropertyModel<>(item.getModel(), "name")));

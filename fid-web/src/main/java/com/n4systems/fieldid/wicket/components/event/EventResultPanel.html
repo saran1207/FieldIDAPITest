@@ -7,10 +7,10 @@
 
         <div class="control-group" name="observationCount">
             <label class="label"><wicket:message key="label.criteria_observations"/></label>
-            <span class="value">
-                <div wicket:id="observationResult" class="observationCounter">
+            <span  wicket:id="observationResultContainer" class="value">
+                <div wicket:id="observationResult" class="observation-counter">
                     <label wicket:id="name"/>
-                    <div class="observationCounterResult">
+                    <div class="observation-counter-result">
                         <span class="sum" wicket:id="total"/>
                         <span wicket:enclosure="percentage" class="percentage">(<span wicket:id="percentage"/>)</span>
                     </div>

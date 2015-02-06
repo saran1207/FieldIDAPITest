@@ -756,12 +756,12 @@ span.fieldHolder img {
     box-shadow: inset 0 0 18px #00486D;
 }
 
-.observationCounter {
+.observation-counter {
     width: 55px;
     margin: 5px 10px 15px 0;
     float: left;
 }
-.observationCounter label {
+.observation-counter label {
     width: 100%;
     text-align: center;
     display: block;
@@ -769,10 +769,10 @@ span.fieldHolder img {
     white-space: nowrap;
     overflow: hidden;
 }
-.observationCounterInputContainer {
+.observation-counter-input-container {
     position: relative;
 }
-.observationCounterInputContainer input {
+.observation-counter-input-container input {
     width: 100% !important;
     height: 75px;
     padding: 0 !important;
@@ -788,8 +788,8 @@ span.fieldHolder img {
     color: #444 !important;
     text-indent: 0px;
 }
-.observationCounterInputContainer .increment,
-.observationCounterInputContainer .decrement {
+.observation-counter-input-container .increment,
+.observation-counter-input-container .decrement {
     position: absolute;
     top: 0;
     left: 0;
@@ -801,7 +801,7 @@ span.fieldHolder img {
     background-repeat: no-repeat;
     background-position: 50% 50%;
 }
-.observationCounterInputContainer .decrement {
+.observation-counter-input-container .decrement {
     top: auto;
     bottom: 0;
     background-image: url(../../../../images/arrows/arrow-down.png);
