@@ -25,8 +25,9 @@
  import org.springframework.beans.factory.annotation.Autowired;
 
  import java.util.*;
+ import java.util.stream.Collectors;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
+ @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class EventTypeCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	private Logger logger = Logger.getLogger(EventTypeCrud.class);
@@ -82,7 +83,7 @@ public class EventTypeCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-        QueryBuilder<EventType> query = new QueryBuilder<EventType>(EventType.class, getSecurityFilter());
+        QueryBuilder<EventType> query = new QueryBuilder<>(EventType.class, getSecurityFilter());
         query.addSimpleWhere("id", uniqueId);
         EventType testLoadEventTypeToDetermineType = persistenceManager.find(query);
 
@@ -153,7 +154,13 @@ public class EventTypeCrud extends AbstractCrud {
 		
 		eventType.setModifiedBy(getUser());
 		eventType.setModified(new Date());
-		
+
+		if(isMaster() && containsObservationCountCriteria()) {
+            logger.warn("Failed to save/update EventType with ID " + eventType.getId() + " because ObservationCountCriteria doesn't work with Master Events yet");
+            addActionErrorText("error.noobservationcountcriteriaformasterevent");
+            return ERROR;
+        }
+
 		try {
 			if (eventType.getId() == null) {
 				persistenceManager.save(eventType);
@@ -174,7 +181,35 @@ public class EventTypeCrud extends AbstractCrud {
 		}
 	}
 
-	private void processAssignedToAvailable() {
+     /**
+      * This method simply verifies that the EventType
+      * @return
+      */
+    private boolean containsObservationCountCriteria() {
+        //This monkeying around just needs to happen to satisfy some peculiarities of Streams... just pretend this is
+        //a variable instead of a 1 element array.
+        final boolean[] returnMe = {false};
+
+        if(eventType.getEventForm() != null && eventType.getEventForm().getSections() != null) {
+            eventType.getEventForm().getSections().forEach(criteriaSection -> {
+                //If a Section contains Criteria...
+                if (criteriaSection.getCriteria() != null &&
+                        criteriaSection.getCriteria()
+                                .stream()
+                                        //...which are instances of ObservationCountCriteria...
+                                .filter(criteria -> criteria instanceof ObservationCountCriteria).collect(Collectors.toList()).size() > 0) {
+                    //Set returnMe to true... we want to pass that back.
+                    returnMe[0] = true;
+                }
+            });
+        }
+
+        //If there were no Sections or no criteria, then we just
+
+        return returnMe[0];
+    }
+
+    private void processAssignedToAvailable() {
 		if (assignedToAvailable && getSecurityGuard().isAssignedToEnabled()) {
 			eventType.makeAssignedToAvailable();
 		} else {
@@ -331,7 +366,7 @@ public class EventTypeCrud extends AbstractCrud {
 	@SuppressWarnings("unchecked")
 	public Map getSupportedProofTestTypes() {
 		if (types == null) {
-			types = new HashMap<String, Boolean>();
+			types = new HashMap<>();
 
 			// set up the map of types.
 			for (ProofTestType type : getProofTestTypes()) {
@@ -386,7 +421,7 @@ public class EventTypeCrud extends AbstractCrud {
 
 	public List<TrimmedString> getInfoFields() {
 		if (infoFieldNames == null) {
-			infoFieldNames = new ArrayList<TrimmedString>();
+			infoFieldNames = new ArrayList<>();
 		}
 		return infoFieldNames;
 	}
