@@ -33,7 +33,6 @@ public abstract class EventFormPanel extends Panel {
     private Map<CriteriaSection, Double> sectionScorePercentages;
 
     private Map<CriteriaSection, Map<ObservationCount, Integer>> sectionObservations;
-    private Map<CriteriaSection, Map<ObservationCount, Double>> sectionObservationPercentages;
 
     private WebMarkupContainer criteriaSectionContainer;
     private boolean isEdit;
@@ -72,7 +71,6 @@ public abstract class EventFormPanel extends Panel {
                 sectionContainer.add(getSectionScore("sectionScore", new PropertyModel<CriteriaSection>(item.getModel(), "section")));
                 sectionContainer.add(getSectionScorePercentage("sectionScorePercentage", new PropertyModel<CriteriaSection>(item.getModel(), "section")));
                 sectionContainer.add(getSectionObservations("sectionObservation", new PropertyModel<CriteriaSection>(item.getModel(), "section")));
-                sectionContainer.add(getSectionObservationPercentage("sectionObservationPercentage", new PropertyModel<CriteriaSection>(item.getModel(), "section")));
 
                 sectionContainer.add(new AjaxLink<Void>("hideSectionLink") {
                     @Override
@@ -133,10 +131,6 @@ public abstract class EventFormPanel extends Panel {
         return new Label(id).setVisible(false);
     }
 
-    protected Component getSectionObservationPercentage(String id, IModel<CriteriaSection> criteriaSectionModel) {
-        return new Label(id).setVisible(false);
-    }
-
     protected abstract Panel getCriteriaSectionPanel(Class<? extends AbstractEvent> eventClass, PropertyModel<List<CriteriaResult>> results);
 
     private IChoiceRenderer<AbstractEvent.SectionResults> sectionChoiceRenderer() {
@@ -186,22 +180,17 @@ public abstract class EventFormPanel extends Panel {
 
     protected Map<CriteriaSection, Double> getScorePercentageForSections() {
        if(sectionScorePercentages == null)
-           sectionScorePercentages = new EventFormHelper().getScorePercentageForSections(event.getObject());
+           sectionScorePercentages = eventFormHelper.getScorePercentageForSections(event.getObject());
         return sectionScorePercentages;
     }
 
     protected Map<CriteriaSection, Map<ObservationCount, Integer>> getObservationsForSections() {
         if (sectionObservations == null)
-            sectionObservations = new EventFormHelper().getObservationsForSections(event.getObject());
+            sectionObservations = eventFormHelper.getObservationsForSections(event.getObject());
         return sectionObservations;
     }
 
-    protected Map<CriteriaSection, Map<ObservationCount, Double>> getObservationPercentageForSections() {
-        if (sectionObservationPercentages == null)
-            sectionObservationPercentages = new EventFormHelper().getObservationPercentagesForSections(event.getObject());
-        return sectionObservationPercentages;
+    protected Integer getSectionTotal(AbstractEvent event, CriteriaSection section) {
+        return eventFormHelper.getObservationSectionTotal(event, section);
     }
-
-
-
 }

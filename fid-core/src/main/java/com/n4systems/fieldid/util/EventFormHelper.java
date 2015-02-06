@@ -18,7 +18,6 @@ public class EventFormHelper implements Serializable{
     private Map<AbstractEvent, Map<CriteriaSection, Double>> eventsSectionsScoresPercentageMap = new HashMap<AbstractEvent, Map<CriteriaSection, Double>>();
     private Map<AbstractEvent, Map<ObservationCount, Integer>> eventObservationsMap = Maps.newHashMap();
     private Map<AbstractEvent, Map<CriteriaSection, Map<ObservationCount, Integer>>> eventSectionsObservationsMap = Maps.newHashMap();
-    private Map<AbstractEvent, Map<CriteriaSection, Map<ObservationCount, Double>>> eventSectionsObservationPercentagesMap = Maps.newHashMap();
 
 	public List<CriteriaSection> getAvailableSections(AbstractEvent event) {
 		if (availableSections.get(event) == null) {
@@ -165,7 +164,7 @@ public class EventFormHelper implements Serializable{
         double total = calculateMaxScoreForEvent(event);
         Map<CriteriaSection, Double> sectionScores = getScoresForSections(event);
 
-        Double scoreTotal = getSectionsTotal(sectionScores);
+        Double scoreTotal = getScoreSectionsTotal(sectionScores);
 
         if (total <= 0.0) {
             return 0.0;
@@ -199,17 +198,10 @@ public class EventFormHelper implements Serializable{
     }
 
     public int getObservationCountTotal(AbstractEvent event) {
-        int observationCountTotal = 0;
-        Map<ObservationCount, Integer> formObservationTotals = getFormObservationTotals(event);
-        for (ObservationCount count : formObservationTotals.keySet()) {
-            if (count.isCounted()) {
-                observationCountTotal += formObservationTotals.get(count);
-            }
-        }
-        return observationCountTotal;
+        return calculateObservationCountTotal(getFormObservationTotals(event));
     }
 
-    private Double getSectionsTotal(Map<CriteriaSection, Double> sectionScores) {
+    private Double getScoreSectionsTotal(Map<CriteriaSection, Double> sectionScores) {
         Double scoreTotal = 0.0d;
         if (null != sectionScores && sectionScores.size() > 0 ) {
             for (Map.Entry<CriteriaSection, Double> entry : sectionScores.entrySet())
@@ -264,7 +256,17 @@ public class EventFormHelper implements Serializable{
         return observationsBySection;
     }
 
-    public Map<CriteriaSection, Map<ObservationCount, Double>> getObservationPercentagesForSections(AbstractEvent object) {
-        return null;
+    public Integer getObservationSectionTotal(AbstractEvent event, CriteriaSection section) {
+        return calculateObservationCountTotal(eventSectionsObservationsMap.get(event).get(section));
+    }
+
+    private Integer calculateObservationCountTotal(Map<ObservationCount, Integer> observations) {
+        int observationCountTotal = 0;
+        for (ObservationCount count: observations.keySet()) {
+            if (count.isCounted()) {
+                observationCountTotal += observations.get(count);
+            }
+        }
+        return observationCountTotal;
     }
 }
