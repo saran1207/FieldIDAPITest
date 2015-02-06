@@ -5,6 +5,7 @@ import com.n4systems.model.ObservationCount;
 import com.n4systems.model.ObservationCountCriteria;
 import com.n4systems.model.ObservationCountCriteriaResult;
 import com.n4systems.model.ObservationCountResult;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -35,7 +36,8 @@ public class ObservationCountCriteriaResultPanel extends Panel {
         observationCountResultList = new ArrayList<>();
         observationCountList = ((ObservationCountCriteria)result.getObject().getCriteria()).getObservationCountGroup().getObservationCounts();
 
-        if(result.getObject().getObservationCountResults().size() > 0) {
+        int numObservations = result.getObject().getObservationCountResults().size();
+        if(numObservations > 0) {
             observationCountResultList = result.getObject().getObservationCountResults();
         } else {
             for (ObservationCount count : observationCountList) {
@@ -46,6 +48,8 @@ public class ObservationCountCriteriaResultPanel extends Panel {
             }
             result.getObject().setObservationCountResults(observationCountResultList);
         }
+
+        add(new AttributeAppender("class", "observation-counter-items-" + numObservations).setSeparator(" "));
 
         //I reverse the list because the Event View Page uses CSS that floats these values to the
         //right.  There is no other reason for doing the reverse.
