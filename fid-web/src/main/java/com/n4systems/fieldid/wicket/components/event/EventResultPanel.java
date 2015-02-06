@@ -55,10 +55,13 @@ public class EventResultPanel extends Panel {
                 item.add(new Label("name", new PropertyModel<>(item.getModel(), "name")));
                 item.add(new Label("total", observationTotals.get(item.getModelObject()).toString()));
 
-                double percentage = observationTotals.get(item.getModelObject()) * 1.0d / formObservationTotal;
+                if (formObservationTotal > 0) {
+                    double percentage = observationTotals.get(item.getModelObject()) * 1.0d / formObservationTotal;
 
-                item.add(new FlatLabel("percentage", numberFormat.format(percentage))
-                        .setVisible(item.getModelObject().isCounted() && model.getObject().getEventType().isDisplayObservationPercentage()));
+                    item.add(new FlatLabel("percentage", numberFormat.format(percentage))
+                            .setVisible(item.getModelObject().isCounted() && model.getObject().getEventType().isDisplayObservationPercentage()));
+                } else
+                    item.add(new Label("percentage").setVisible(false));
             }
         });
     }
