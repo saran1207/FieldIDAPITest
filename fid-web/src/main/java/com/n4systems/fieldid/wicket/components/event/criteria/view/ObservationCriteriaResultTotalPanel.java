@@ -24,11 +24,13 @@ public class ObservationCriteriaResultTotalPanel extends Panel {
                 item.add(new Label("name", new PropertyModel<>(item.getModel(), "name")));
                 item.add(new Label("total", sectionObservations.get(item.getModelObject()).toString()));
 
-                double percentage = sectionObservations.get(item.getModelObject()) * 1.0d / sectionTotal;
+                if(sectionTotal > 0) {
+                    double percentage = sectionObservations.get(item.getModelObject()) * 1.0d / sectionTotal;
 
-                item.add(new FlatLabel("percentage", NumberFormat.getPercentInstance().format(percentage))
-                        .setVisible(item.getModelObject().isCounted() && event.getObject().getType().isDisplayObservationPercentage()));
-
+                    item.add(new FlatLabel("percentage", NumberFormat.getPercentInstance().format(percentage))
+                            .setVisible(item.getModelObject().isCounted() && event.getObject().getType().isDisplayObservationPercentage()));
+                } else
+                    item.add(new Label("percentage").setVisible(false));
             }
         });
 
