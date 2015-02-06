@@ -22,7 +22,8 @@ public class ObservationCriteriaResultTotalPanel extends Panel {
             @Override
             protected void populateItem(ListItem<ObservationCount> item) {
                 item.add(new Label("name", new PropertyModel<>(item.getModel(), "name")));
-                item.add(new Label("total", sectionObservations.get(item.getModelObject()).toString()));
+                Integer total = sectionObservations.isEmpty() ? 0 : sectionObservations.get(item.getModelObject());
+                item.add(new Label("total", total.toString()));
 
                 if(sectionTotal > 0) {
                     double percentage = sectionObservations.get(item.getModelObject()) * 1.0d / sectionTotal;
