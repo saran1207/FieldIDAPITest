@@ -71,13 +71,17 @@ public class EventResultCalculator {
         }
 
         if (event.getEventForm().getObservationcountFailCalculationType().equals(ScoreCalculationType.AVERAGE)) {
-            result.failResult = totalFail / totalObservations * 100;
+            if(totalObservations != 0) {
+                result.failResult = totalFail / totalObservations * 100;
+            }
         } else {
             result.failResult = totalFail;
         }
 
         if (event.getEventForm().getObservationcountPassCalculationType().equals(ScoreCalculationType.AVERAGE)) {
-            result.passResult = totalPass / totalObservations * 100;
+            if(totalObservations != 0) {
+                result.passResult = totalPass / totalObservations * 100;
+            }
         } else {
             result.passResult = totalPass;
         }
