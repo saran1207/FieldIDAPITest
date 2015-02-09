@@ -27,21 +27,18 @@ public class EventResultCalculator {
 	}
 
     private EventResult findResultFromObservationCount(AbstractEvent event, ObservationResult observationCountResult) {
-        ScoreCalculationType failCalculationType = event.getType().getEventForm().getObservationcountFailCalculationType();
-        ScoreCalculationType passCalculationType = event.getType().getEventForm().getObservationcountPassCalculationType();
-        if (insideRange(event.getEventForm().getObservationcountFailRange(), observationCountResult.failResult, failCalculationType)) {
+        if (insideRange(event.getEventForm().getObservationcountFailRange(), observationCountResult.failResult)) {
             return EventResult.FAIL;
-        } else if (insideRange(event.getEventForm().getObservationcountPassRange(), observationCountResult.passResult, passCalculationType)) {
+        } else if (insideRange(event.getEventForm().getObservationcountPassRange(), observationCountResult.passResult)) {
             return EventResult.PASS;
         }
         return EventResult.NA;
     }
 
     private EventResult findResultFromScore(AbstractEvent event, Double score) {
-        ScoreCalculationType scoreCalculationType = event.getType().getEventForm().getScoreCalculationType();
-        if (insideRange(event.getEventForm().getFailRange(), score, scoreCalculationType)) {
+        if (insideRange(event.getEventForm().getFailRange(), score)) {
             return EventResult.FAIL;
-        } else if (insideRange(event.getEventForm().getPassRange(), score, scoreCalculationType)) {
+        } else if (insideRange(event.getEventForm().getPassRange(), score)) {
             return EventResult.PASS;
         }
         return EventResult.NA;
@@ -74,13 +71,13 @@ public class EventResultCalculator {
         }
 
         if (event.getEventForm().getObservationcountFailCalculationType().equals(ScoreCalculationType.AVERAGE)) {
-            result.failResult = totalFail / totalObservations;
+            result.failResult = totalFail / totalObservations * 100;
         } else {
             result.failResult = totalFail;
         }
 
         if (event.getEventForm().getObservationcountPassCalculationType().equals(ScoreCalculationType.AVERAGE)) {
-            result.passResult = totalPass / totalObservations;
+            result.passResult = totalPass / totalObservations * 100;
         } else {
             result.passResult = totalPass;
         }
@@ -110,13 +107,9 @@ public class EventResultCalculator {
         return total;
     }
 
-    private boolean insideRange(ResultRange range, Double score, ScoreCalculationType scoreCalculationType) {
+    private boolean insideRange(ResultRange range, Double score) {
         if (score == null) {
             return false;
-        }
-
-        if(scoreCalculationType.equals(ScoreCalculationType.AVERAGE)) {
-            score *= 100;
         }
 
         if (range.getComparator() == ScoreComparator.LE) {
