@@ -8,6 +8,7 @@ import com.n4systems.model.ResultRange;
 import com.n4systems.model.ScoreComparator;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.EnclosureContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RequiredTextField;
@@ -20,7 +21,10 @@ import java.util.Arrays;
 
 public abstract class ScoreResultRangePanel extends Panel {
 
-    public ScoreResultRangePanel(String id, final IModel<ResultRange> model) {
+    Label percentage1;
+    Label percentage2;
+
+    public ScoreResultRangePanel(String id, final IModel<ResultRange> model, boolean isPercentage) {
         super(id, model);
         setOutputMarkupId(true);
 
@@ -55,7 +59,17 @@ public abstract class ScoreResultRangePanel extends Panel {
         ValidationBehavior.addValidationBehaviorToComponent(value2Field);
         EnclosureContainer enclosureContainer = new EnclosureContainer("enclosureContainer", value2Field);
         add(enclosureContainer);
+
+        percentage2 = new Label("percentage2", new FIDLabelModel("label.percent"));
+        percentage2.setVisible(isPercentage);
+
+        percentage1 = new Label("percentage1", new FIDLabelModel("label.percent"));
+        percentage1.setVisible(isPercentage);
+        add(percentage1);
+
         enclosureContainer.add(value2Field);
+        enclosureContainer.add(percentage2);
+
     }
 
     public IChoiceRenderer<ScoreComparator> createComparatorRenderer() {
@@ -70,6 +84,11 @@ public abstract class ScoreResultRangePanel extends Panel {
                 return object.name();
             }
         };
+    }
+
+    public void showPercentage(boolean show) {
+        percentage1.setVisible(show);
+        percentage2.setVisible(show);
     }
 
     protected abstract boolean isValidationRequired();

@@ -58,20 +58,42 @@ public class ScoreResultConfigurationPage extends EventTypePage {
             add(new CheckBox("displayScoreSectionTotals", new PropertyModel<>(eventTypeModel, "displayScoreSectionTotals")));
             add(new CheckBox("displayScorePercentage", new PropertyModel<>(eventTypeModel, "displayScorePercentage")));
             add(useScoreForResult = new CheckBox("useScoreForResult"));
-            add(new DropDownChoice<>("scoreCalculationType", Arrays.asList(ScoreCalculationType.values()), new CalculationChoiceRenderer()));
 
-            add(new ScoreResultRangePanel("failRangePanel", new PropertyModel<>(eventForm, "failRange")){
+            boolean initialPercentage = eventForm.getScoreCalculationType().equals(ScoreCalculationType.AVERAGE);
+
+            ScoreResultRangePanel failRangePanel = new ScoreResultRangePanel("failRangePanel", new PropertyModel<>(eventForm, "failRange"), initialPercentage){
                 @Override
                 protected boolean isValidationRequired() {
                     System.out.println("Checkbox Value: " + useScoreForResult.getModelObject());
                     return useScoreForResult.getModelObject();
                 }
-            });
-            add(new ScoreResultRangePanel("passRangePanel", new PropertyModel<>(eventForm, "passRange")){
+            };
+            add(failRangePanel);
+
+            ScoreResultRangePanel passRangePanel = new ScoreResultRangePanel("passRangePanel", new PropertyModel<>(eventForm, "passRange"), initialPercentage){
                 @Override
                 protected boolean isValidationRequired() {
                     System.out.println("Checkbox Value: " + useScoreForResult.getModelObject());
                     return useScoreForResult.getModelObject();
+                }
+            };
+            add(passRangePanel);
+
+            add(new DropDownChoice<ScoreCalculationType>("scoreCalculationType", Arrays.asList(ScoreCalculationType.values()), new CalculationChoiceRenderer()) {
+                @Override
+                protected boolean wantOnSelectionChangedNotifications() {
+                    return true;
+                }
+
+                @Override
+                protected void onSelectionChanged(ScoreCalculationType type){
+                    if(type == ScoreCalculationType.AVERAGE) {
+                        failRangePanel.showPercentage(true);
+                        passRangePanel.showPercentage(true);
+                    } else {
+                        failRangePanel.showPercentage(false);
+                        passRangePanel.showPercentage(false);
+                    }
                 }
             });
 
