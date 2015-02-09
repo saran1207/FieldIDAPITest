@@ -27,18 +27,21 @@ public class EventResultCalculator {
 	}
 
     private EventResult findResultFromObservationCount(AbstractEvent event, ObservationResult observationCountResult) {
-        if (insideRange(event.getEventForm().getObservationcountFailRange(), observationCountResult.failResult)) {
+        ScoreCalculationType failCalculationType = event.getType().getEventForm().getObservationcountFailCalculationType();
+        ScoreCalculationType passCalculationType = event.getType().getEventForm().getObservationcountPassCalculationType();
+        if (insideRange(event.getEventForm().getObservationcountFailRange(), observationCountResult.failResult, failCalculationType)) {
             return EventResult.FAIL;
-        } else if (insideRange(event.getEventForm().getObservationcountPassRange(), observationCountResult.passResult)) {
+        } else if (insideRange(event.getEventForm().getObservationcountPassRange(), observationCountResult.passResult, passCalculationType)) {
             return EventResult.PASS;
         }
         return EventResult.NA;
     }
 
     private EventResult findResultFromScore(AbstractEvent event, Double score) {
-        if (insideRange(event.getEventForm().getFailRange(), score)) {
+        ScoreCalculationType scoreCalculationType = event.getType().getEventForm().getScoreCalculationType();
+        if (insideRange(event.getEventForm().getFailRange(), score, scoreCalculationType)) {
             return EventResult.FAIL;
-        } else if (insideRange(event.getEventForm().getPassRange(), score)) {
+        } else if (insideRange(event.getEventForm().getPassRange(), score, scoreCalculationType)) {
             return EventResult.PASS;
         }
         return EventResult.NA;
@@ -107,9 +110,13 @@ public class EventResultCalculator {
         return total;
     }
 
-    private boolean insideRange(ResultRange range, Double score) {
+    private boolean insideRange(ResultRange range, Double score, ScoreCalculationType scoreCalculationType) {
         if (score == null) {
             return false;
+        }
+
+        if(scoreCalculationType.equals(ScoreCalculationType.AVERAGE)) {
+            score *= 100;
         }
 
         if (range.getComparator() == ScoreComparator.LE) {
