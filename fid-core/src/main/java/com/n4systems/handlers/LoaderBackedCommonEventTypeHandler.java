@@ -27,23 +27,29 @@ public class LoaderBackedCommonEventTypeHandler implements CommonEventTypeHandle
 		//This is only until we move the page from STRUTS to WICKET
 		Set<ThingEventType> removeList = new HashSet<>();
 
-		for(ThingEventType type:filterCommonEventTypes) {
-			if(type.getEventForm().getObservationCountGroup() != null) {
-				for(CriteriaSection section:type.getEventForm().getSections()) {
-					for(Criteria crit: section.getCriteria()) {
-						if(crit instanceof ObservationCountCriteria) {
-							removeList.add(type);
+		if(!filterCommonEventTypes.isEmpty()) {
+			for (ThingEventType type : filterCommonEventTypes) {
+				if (type.getEventForm().getObservationCountGroup() != null) {
+					for (CriteriaSection section : type.getEventForm().getSections()) {
+						boolean temp = false;
+						for (Criteria crit : section.getCriteria()) {
+							if (crit instanceof ObservationCountCriteria) {
+								removeList.add(type);
+								temp = true;
+								break;
+							}
+						}
+						if (temp) {
 							break;
 						}
 					}
 				}
 			}
-		}
 
-		for(ThingEventType type:removeList) {
-			filterCommonEventTypes.remove(type);
+			for (ThingEventType type : removeList) {
+				filterCommonEventTypes.remove(type);
+			}
 		}
-
 		return filterCommonEventTypes == null ? new HashSet<ThingEventType>() : filterCommonEventTypes;
 	}
 
