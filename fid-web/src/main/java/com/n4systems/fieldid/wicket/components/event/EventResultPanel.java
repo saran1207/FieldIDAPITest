@@ -16,7 +16,6 @@ import org.apache.wicket.model.PropertyModel;
 
 import java.text.NumberFormat;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class EventResultPanel extends Panel {
@@ -52,8 +51,12 @@ public class EventResultPanel extends Panel {
         WebMarkupContainer observationResultContainer;
         add(observationResultContainer = new WebMarkupContainer("observationResultContainer"));
 
-        int numObservations = model.getObject().getType().getEventForm().getObservationCountGroup().getObservationCounts().size();
-        observationResultContainer.add(new AttributeAppender("class", "observation-counter-items-" + numObservations).setSeparator(" "));
+
+        //We only care about this bit of styling when there are actually ObservationCount type criteria present.
+        if(model.getObject().getType().getEventForm().getObservationCountGroup() != null) {
+            int numObservations = model.getObject().getType().getEventForm().getObservationCountGroup().getObservationCounts().size();
+            observationResultContainer.add(new AttributeAppender("class", "observation-counter-items-" + numObservations).setSeparator(" "));
+        }
 
         observationResultContainer.add(new ListView<ObservationCount>("observationResult", new PropertyModel<List<ObservationCount>> (model, "type.eventForm.observationCountGroup.observationCounts")) {
             @Override
