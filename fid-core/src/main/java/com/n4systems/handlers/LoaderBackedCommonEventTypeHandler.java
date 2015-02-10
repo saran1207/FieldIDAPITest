@@ -29,7 +29,7 @@ public class LoaderBackedCommonEventTypeHandler implements CommonEventTypeHandle
 
 		if(!filterCommonEventTypes.isEmpty()) {
 			for (ThingEventType type : filterCommonEventTypes) {
-				if (type.getEventForm().getObservationCountGroup() != null) {
+				if (type.getEventForm() != null && type.getEventForm().getObservationCountGroup() != null) {
 					for (CriteriaSection section : type.getEventForm().getSections()) {
 						boolean temp = false;
 						for (Criteria crit : section.getCriteria()) {
