@@ -21,6 +21,8 @@ public class LoaderBackedCommonEventTypeHandler implements CommonEventTypeHandle
 
 		Set<ThingEventType> filterCommonEventTypes = filterCommonEventTypes(resultSet);
 
+		//TODO - Once this is fixed and we move over from struts to wicket, remember to uncomment out the test "CommonEventTypeHandlerTest.java"
+
 		//We will be removing the event types that have ObservationCountCriteria in the form for multi event
 		//This is only until we move the page from STRUTS to WICKET
 		Set<ThingEventType> removeList = new HashSet<>();
