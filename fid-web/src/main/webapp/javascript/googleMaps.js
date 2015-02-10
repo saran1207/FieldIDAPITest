@@ -465,7 +465,9 @@ var googleMapFactory = (function() {
 		 var icon = '';
 		 if (colour.toUpperCase()=='GREEN') {
 			 icon = prefixed(prefix,'images/marker-images/greenMapIcon.png');
-		 } else if (colour.toUpperCase()=='GRAY') {
+		 } else if (colour.toUpperCase()=='GREEN_A') {
+             icon = prefixed(prefix,'images/marker-images/greenMapIconA.png');
+         } else if (colour.toUpperCase()=='GRAY') {
 			 icon =  prefixed(prefix,'images/marker-images/grayMapIcon.png');
 		 } else if (colour.toUpperCase()=='YELLOW') {
 			 icon =  prefixed(prefix,'images/marker-images/yellowMapIcon.png');
@@ -475,7 +477,7 @@ var googleMapFactory = (function() {
              icon =  prefixed(prefix,'images/marker-images/redMapIcon.png');
          } else if (colour.toUpperCase()=='RED_A') {
              icon =  prefixed(prefix,'images/marker-images/redMapIconA.png');
-         } else if (colour.toUpperCase()=='GRAY') {
+         } else if (colour.toUpperCase()=='BLUE') {
 			 icon =  prefixed(prefix,'images/marker-images/blueMapIcon.png');
 		 }
 		 var image = new google.maps.MarkerImage(
