@@ -69,6 +69,8 @@ public class ObservationCountResultConfigurationPage extends EventTypePage{
 
             DropDownChoice<ObservationCount> observationCountDropDownChoicePass;
             DropDownChoice<ObservationCount> observationCountDropDownChoiceFail;
+            ScoreResultRangePanel passRangePanel;
+            ScoreResultRangePanel failRangePanel;
 
             //Populate depending on whether the eventform has a group associated with it.
             if (eventForm.getObservationCountGroup() == null) {
@@ -114,24 +116,59 @@ public class ObservationCountResultConfigurationPage extends EventTypePage{
             add(new CheckBox("displayScoreSectionTotals", new PropertyModel<>(eventTypeModel, "displayObservationSectionTotals")));
             add(new CheckBox("displayObservationPercentage", new PropertyModel<>(eventTypeModel, "displayObservationPercentage")));
 
-            add(new DropDownChoice<>("observationcountPassCalculationType", Arrays.asList(ScoreCalculationType.values()), new CalculationChoiceRenderer()));
-            add(new DropDownChoice<>("observationcountFailCalculationType", Arrays.asList(ScoreCalculationType.values()), new CalculationChoiceRenderer()));
-
-
-            add(new ScoreResultRangePanel("passRangePanel", new PropertyModel<>(eventForm, "observationcountPassRange")) {
+            boolean passPercentage = eventForm.getObservationcountPassCalculationType().equals(ScoreCalculationType.AVERAGE);
+            passRangePanel = new ScoreResultRangePanel("passRangePanel", new PropertyModel<>(eventForm, "observationcountPassRange"), passPercentage) {
                 @Override
                 protected boolean isValidationRequired() {
                     System.out.println("Checkbox Value: " + useObservationCountForResultCheckbox.getModelObject());
                     return useObservationCountForResultCheckbox.getModelObject();
                 }
-            });
-            add(new ScoreResultRangePanel("failRangePanel", new PropertyModel<>(eventForm, "observationcountFailRange")){
+            };
+            add(passRangePanel);
+
+            boolean failPercentage = eventForm.getObservationcountFailCalculationType().equals(ScoreCalculationType.AVERAGE);
+            failRangePanel = new ScoreResultRangePanel("failRangePanel", new PropertyModel<>(eventForm, "observationcountFailRange"), failPercentage){
                 @Override
                 protected boolean isValidationRequired() {
                     System.out.println("Checkbox Value: " + useObservationCountForResultCheckbox.getModelObject());
                     return useObservationCountForResultCheckbox.getModelObject();
                 }
-            });
+            };
+            add(failRangePanel);
+
+            DropDownChoice<ScoreCalculationType> passCalculationType = new DropDownChoice<ScoreCalculationType>("observationcountPassCalculationType", Arrays.asList(ScoreCalculationType.values()), new CalculationChoiceRenderer()) {
+                @Override
+                protected boolean wantOnSelectionChangedNotifications() {
+                    return true;
+                }
+
+                @Override
+                protected void onSelectionChanged(ScoreCalculationType type){
+                    if(type == ScoreCalculationType.AVERAGE) {
+                        passRangePanel.showPercentage(true);
+                    } else {
+                        passRangePanel.showPercentage(false);
+                    }
+                }
+            };
+            add(passCalculationType);
+
+            DropDownChoice<ScoreCalculationType> failCalculationType = new DropDownChoice<ScoreCalculationType>("observationcountFailCalculationType", Arrays.asList(ScoreCalculationType.values()), new CalculationChoiceRenderer()) {
+                @Override
+                protected boolean wantOnSelectionChangedNotifications() {
+                    return true;
+                }
+
+                @Override
+                protected void onSelectionChanged(ScoreCalculationType type){
+                    if(type == ScoreCalculationType.AVERAGE) {
+                        failRangePanel.showPercentage(true);
+                    } else {
+                        failRangePanel.showPercentage(false);
+                    }
+                }
+            };
+            add(failCalculationType);
 
             add(new NonWicketLink("cancelLink", "eventType.action?uniqueID="+eventTypeId));
             add(new Button("submitButton"));

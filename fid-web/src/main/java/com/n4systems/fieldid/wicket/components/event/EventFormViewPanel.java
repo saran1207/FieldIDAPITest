@@ -50,6 +50,7 @@ public class EventFormViewPanel extends EventFormPanel {
     protected Component getSectionObservations(String id, IModel<CriteriaSection> criteriaSectionModel) {
         return new ObservationCriteriaResultTotalPanel(id, event,
                 getObservationsForSections().get(criteriaSectionModel.getObject()),
-                getSectionTotal(event.getObject(), criteriaSectionModel.getObject()));
+                getSectionTotal(event.getObject(), criteriaSectionModel.getObject()))
+                .setVisible(event.getObject().getType().isDisplayObservationSectionTotals());
     }
 }

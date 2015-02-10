@@ -207,7 +207,11 @@ public class CopyEventFactory {
             ScoreCriteriaResult scoreResult = new ScoreCriteriaResult();
             scoreResult.setScore(((ScoreCriteriaResult) oldResult).getScore());
             return scoreResult;
-        } else if (oldResult instanceof NumberFieldCriteriaResult) {
+        } else if (oldResult instanceof ObservationCountCriteriaResult) {
+			ObservationCountCriteriaResult observationCountCriteriaResult = new ObservationCountCriteriaResult();
+			observationCountCriteriaResult.setObservationCountResults(((ObservationCountCriteriaResult) oldResult).getObservationCountResults());
+			return observationCountCriteriaResult;
+		} else if (oldResult instanceof NumberFieldCriteriaResult) {
         	NumberFieldCriteriaResult numberFieldResult = new NumberFieldCriteriaResult();
         	numberFieldResult.setValue(((NumberFieldCriteriaResult)oldResult).getValue());
             return numberFieldResult;
