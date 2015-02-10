@@ -116,7 +116,7 @@ body {
 						<td>${event.asset.type.name}</td>
 						<td>${event.asset.advancedLocation.freeformLocation}</td>
 						<td>${event.type.name}</td>
-						<td>${event.comments}</td>
+						<td>${event.comments!}</td>
 					</tr>
 				</#list>
 			</table>

@@ -25,11 +25,13 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
 
     public enum MapMarkerColour {
         GREEN("images/marker-images/greenMapIcon.png"),
+        GREEN_A("images/marker-images/greenMapIconA.png"),
         YELLOW("images/marker-images/yellowMapIcon.png"),
         YELLOW_A("images/marker-images/yellowMapIconA.png"),
         RED("images/marker-images/redMapIcon.png"),
         RED_A("images/marker-images/redMapIconA.png"),
-        GRAY("images/marker-images/grayMapIcon.png");
+        GRAY("images/marker-images/grayMapIcon.png"),
+        BLUE("images/marker-images/blueMapIcon.png");
 
         private String imageUrl;
 
