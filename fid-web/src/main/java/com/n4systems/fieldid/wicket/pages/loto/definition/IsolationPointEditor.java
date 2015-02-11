@@ -58,7 +58,7 @@ public class IsolationPointEditor extends Panel {
 
 
     public IsolationPointEditor(String id, ProcedureDefinition procedureDefinition) {
-        super(id, new CompoundPropertyModel(new IsolationPoint()));
+        super(id, new CompoundPropertyModel<>(new IsolationPoint()));
         setOutputMarkupPlaceholderTag(true);
         this.procedureDefinition = procedureDefinition;
 
@@ -79,19 +79,19 @@ public class IsolationPointEditor extends Panel {
         form.add(sourceID = new RequiredTextField("identifier"));
         sourceID.setOutputMarkupId(true);
         sourceID.add(new AttributeModifier("maxlength", Integer.toString(procedureDefinition.getAnnotationType().equals(AnnotationType.ARROW_STYLE) ? 50 : 10)));
-        form.add(electronicIdentifier = new LabelledTextField<String>("electronicIdentifier", "label.electronic_id", new PropertyModel<String>(getDefaultModel(), "electronicIdentifier"))
+        form.add(electronicIdentifier = new LabelledTextField<String>("electronicIdentifier", "label.electronic_id", new PropertyModel<>(getDefaultModel(), "electronicIdentifier"))
                 .add(new TipsyBehavior(new FIDLabelModel("message.isolation_point.electronic_id"), TipsyBehavior.Gravity.N)));
-        form.add(sourceText = new LabelledComboBox<String>("sourceText", "label.source", new PropertyModel(getDefaultModel(), "sourceText")) {
+        form.add(sourceText = new LabelledComboBox<String>("sourceText", "label.source", new PropertyModel<>(getDefaultModel(), "sourceText")) {
             @Override
             protected IModel<List<String>> getChoices() {
-                return getPreConfiguredEnergySources(new PropertyModel(getIsolationPoint(),"sourceType"));
+                return getPreConfiguredEnergySources(new PropertyModel<>(getIsolationPoint(),"sourceType"));
             }
         });
 
-        form.add(deviceComboBox = new LabelledComboBox<String>("device", "label.device", new PropertyModel(getDefaultModel(),"deviceDefinition.freeformDescription")){
+        form.add(deviceComboBox = new LabelledComboBox<String>("device", "label.device", new PropertyModel<>(getDefaultModel(),"deviceDefinition.freeformDescription")){
             @Override
             protected IModel<List<String>> getChoices() {
-                return getPreConfiguredDevices(new PropertyModel(getIsolationPoint(),"sourceType"));
+                return getPreConfiguredDevices(new PropertyModel<>(getIsolationPoint(),"sourceType"));
             }
         });
         deviceComboBox.addBehavior(new UpdateComponentOnChange() {
@@ -112,17 +112,17 @@ public class IsolationPointEditor extends Panel {
 
 
 
-        form.add(lockField = new LabelledTextField<String>("lock", "label.lock", new PropertyModel(getDefaultModel(),"lockDefinition.freeformDescription")));
+        form.add(lockField = new LabelledTextField<String>("lock", "label.lock", new PropertyModel<>(getDefaultModel(),"lockDefinition.freeformDescription")));
 
         //These all needed to change, because they're not proper components.  We need our internally made components so
         //we get more control over what's rendered...
-        form.add(locationField = new LabelledTextField<String>("location", "label.location", new PropertyModel(getDefaultModel(), "location")).required());
-        form.add(checkField = new LabelledTextArea<String>("check", "label.check", new PropertyModel(getDefaultModel(), "check")).setMaxLength(255));
-        form.add(methodField = new LabelledTextArea<String>("method", "label.method", new PropertyModel(getDefaultModel(), "method")));
+        form.add(locationField = new LabelledTextField<String>("location", "label.location", new PropertyModel<>(getDefaultModel(), "location")).required());
+        form.add(checkField = new LabelledTextArea<String>("check", "label.check", new PropertyModel<>(getDefaultModel(), "check")).setMaxLength(255));
+        form.add(methodField = new LabelledTextArea<String>("method", "label.method", new PropertyModel<>(getDefaultModel(), "method")));
         methodField.setMaxLength(255);
         methodField.required();
         methodField.setOutputMarkupId(true);
-        form.add(notesField = new LabelledTextArea<String>("notes", "label.notes", new PropertyModel(getDefaultModel(), "method")).setMaxLength(255).required());
+        form.add(notesField = new LabelledTextArea<String>("notes", "label.notes", new PropertyModel<>(getDefaultModel(), "method")).setMaxLength(255).required());
 
         form.add(imagePanel = getIsolationPointImagePanel(procedureDefinition));
 
@@ -155,8 +155,13 @@ public class IsolationPointEditor extends Panel {
     private Behavior createEditClickBehavior() {
         return new AjaxEventBehavior("onclick") {
             @Override protected void onEvent(AjaxRequestTarget target) {
-                modal.setContent(createImageGallery(FIDModalWindow.CONTENT_ID));
-                modal.show(target);
+                //Apparently, the modal window (which is AJAX wizardry of some sort) actually keeps track of its own
+                //state reliably.  That allows you to prevent double click scenarios like this, by only showing the
+                //modal window if it ISN'T already shown and in use.
+                if(!modal.isShown()) {
+                    modal.setContent(createImageGallery(FIDModalWindow.CONTENT_ID));
+                    modal.show(target);
+                }
             }
         };
     }
