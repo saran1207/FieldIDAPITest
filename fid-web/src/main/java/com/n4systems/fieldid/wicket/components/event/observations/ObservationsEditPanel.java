@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.wicket.components.event.observations;
 
+import com.n4systems.api.validation.validators.StringLengthValidator;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Observation;
 import org.apache.commons.lang.StringUtils;
@@ -8,9 +10,11 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -18,6 +22,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.validation.validator.StringValidator;
 
 import java.util.List;
 
@@ -25,6 +30,8 @@ public abstract class ObservationsEditPanel<T extends Observation> extends Panel
     
     protected IModel<CriteriaResult> criteriaResultModel;
     private String comments;
+    private FIDFeedbackPanel feedbackPanel;
+    private Form form;
 
     public ObservationsEditPanel(String id, final IModel<CriteriaResult> criteriaResultModel,
                                  IModel<List<? extends String>> preconfiguredObservationsModel,
@@ -33,7 +40,11 @@ public abstract class ObservationsEditPanel<T extends Observation> extends Panel
         setOutputMarkupId(true);
         this.criteriaResultModel = criteriaResultModel;
 
-        add(new ListView<String>("preConfiguredObservations", preconfiguredObservationsModel) {
+        add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
+
+        add(form = new Form("form"));
+        form.setMultiPart(true);
+        form.add(new ListView<String>("preConfiguredObservations", preconfiguredObservationsModel) {
             @Override
             protected void populateItem(final ListItem<String> item) {
                 item.add(new AjaxEventBehavior("onclick") {
@@ -62,23 +73,29 @@ public abstract class ObservationsEditPanel<T extends Observation> extends Panel
         });
 
         TextArea<String> commentsArea = new TextArea<String>("comments", new PropertyModel<String>(this, "comments"));
-        add(commentsArea);
+        commentsArea.add(StringValidator.maximumLength(2048));
+        form.add(commentsArea);
         commentsArea.add(new AjaxFormComponentUpdatingBehavior("onblur") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
             }
         });
         
-        add(new AjaxLink("saveButton") {
+        form.add(new AjaxSubmitLink("saveButton") {
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 storeObservations();
                 storeComment(comments);
                 onClose(target);
             }
+
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+                target.add(feedbackPanel);
+            }
         });
 
-        add(new AjaxLink<Void>("clearLink") {
+        form.add(new AjaxLink<Void>("clearLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 getTransientObservations().clear();
@@ -87,7 +104,7 @@ public abstract class ObservationsEditPanel<T extends Observation> extends Panel
             }
         });
 
-        add(new AjaxLink<Void>("cancelLink") {
+        form.add(new AjaxLink<Void>("cancelLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 onClose(target);
