@@ -279,7 +279,7 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             add(schedulesContainer);
 
 
-            add(new SimpleAjaxButton("openSchedulePickerButton", new FIDLabelModel("label.add_a_schedule")) {
+            add(new AjaxLink("openSchedulePickerLink") {
                 { setVisible(event.getObject().isNew() || !event.getObject().isCompleted()); }
                 @Override
                 public void onClick(AjaxRequestTarget target) {
@@ -519,6 +519,7 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
         super.renderHead(response);
         response.renderCSSReference("style/legacy/newCss/event/event_base.css");
         response.renderCSSReference("style/legacy/newCss/event/event_schedule.css");
+        response.renderCSSReference("style/legacy/newCss/component/buttons.css");
     }
 
     @Override
