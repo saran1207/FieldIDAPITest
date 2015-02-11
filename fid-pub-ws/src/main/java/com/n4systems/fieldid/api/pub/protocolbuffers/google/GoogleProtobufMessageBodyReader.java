@@ -4,6 +4,7 @@ package com.n4systems.fieldid.api.pub.protocolbuffers.google;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.Message;
+import org.apache.commons.codec.binary.Base64InputStream;
 
 import javax.json.*;
 import javax.ws.rs.WebApplicationException;
@@ -45,31 +46,28 @@ public class GoogleProtobufMessageBodyReader implements MessageBodyReader<Messag
         return null;
     }
 
-    private static Message parseFromJson(Class<Message> messageClass, InputStream inputStream, int streamLen) throws IOException {
-        JsonReaderFactory factory = Json.createReaderFactory(new HashMap<String, Object>());
+    private static Message parseFromJson(Class<Message> messageClass, InputStream inputStream, @SuppressWarnings("unused") int streamLen) throws IOException {
+        JsonReaderFactory factory = Json.createReaderFactory(new HashMap<>());
         JsonReader reader = factory.createReader(inputStream);
         JsonObject rawObject = reader.readObject();
 
-        Method newBuilder = null;
-        Message.Builder builder = null;
+        Method newBuilder;
+        Message.Builder builder;
 
 
         try {
             newBuilder = messageClass.getMethod("newBuilder");
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        try {
             builder = (GeneratedMessage.Builder) newBuilder.invoke(null);
-        } catch (IllegalAccessException e) {
+            populateMessageFromJsonObject(builder, rawObject);
+
+            return builder.build();
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
+        } catch(NullPointerException e) {
+            /* should never happen, just shutting up warnings */
         }
-
-        populateMessageFromJsonObject(builder, rawObject);
-
-        return builder.build();
+        /* we should never get here */
+        return null;
     }
 
     private static void populateMessageFromJsonObject(Message.Builder builder, JsonObject source) {
@@ -116,18 +114,14 @@ public class GoogleProtobufMessageBodyReader implements MessageBodyReader<Messag
         }
     }
 
-    private static Message parseFromBase64(Class<Message> messageClass, InputStream inputStream, int streamLen) throws IOException {
-        byte streamData[] = new byte[streamLen];
-        final int read = inputStream.read(streamData, 0, streamLen);
+    private static Message parseFromBase64(Class<Message> messageClass, InputStream inputStream, @SuppressWarnings("unused") int streamLen) throws IOException {
 
-        if(read < streamLen) {
-            return null;
-        }
+        InputStream decodedStream = new Base64InputStream(inputStream);
 
-        Method parseFrom = null;
+        Method parseFrom;
         try {
-            parseFrom = messageClass.getMethod("parseFrom", byte[].class);
-            return (Message)parseFrom.invoke(null, streamData);
+            parseFrom = messageClass.getMethod("parseFrom", InputStream.class);
+            return (Message)parseFrom.invoke(null, decodedStream);
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             // can't actually happen
             e.printStackTrace();
