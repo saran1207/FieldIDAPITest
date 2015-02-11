@@ -19,9 +19,11 @@ public class ObservationCriteriaResultTotalPanel extends Panel {
     public ObservationCriteriaResultTotalPanel(String id, IModel<? extends AbstractEvent> event, Map<ObservationCount, Integer> sectionObservations, Integer sectionTotal) {
         super(id);
 
-        int numObservations = event.getObject().getType().getEventForm().getObservationCountGroup().getObservationCounts().size();
-
-        add(new AttributeAppender("class", "observation-counter-items-" + numObservations).setSeparator(" "));
+        //We only care about this bit of styling when there are actually ObservationCount type criteria present.
+        if(event.getObject().getType().getEventForm().getObservationCountGroup() != null) {
+            int numObservations = event.getObject().getType().getEventForm().getObservationCountGroup().getObservationCounts().size();
+            add(new AttributeAppender("class", "observation-counter-items-" + numObservations).setSeparator(" "));
+        }
 
         add(new ListView<ObservationCount>("observationResult", new PropertyModel<List<ObservationCount>>(event, "type.eventForm.observationCountGroup.observationCounts")) {
             @Override

@@ -128,10 +128,10 @@ public class AssetSearchResultsPanel extends SRSResultsPanel<AssetSearchCriteria
                 if (interval30Days.contains(dueDate)) {
                     markerColour = isAction ? GoogleMap.MapMarkerColour.YELLOW_A : GoogleMap.MapMarkerColour.YELLOW;
                 } else {
-                    markerColour = GoogleMap.MapMarkerColour.GREEN;
+                    markerColour = isAction ? GoogleMap.MapMarkerColour.GREEN_A : GoogleMap.MapMarkerColour.GREEN;
                 }
             } else {
-                markerColour = GoogleMap.MapMarkerColour.GREEN;
+                markerColour = isAction ? GoogleMap.MapMarkerColour.GREEN_A : GoogleMap.MapMarkerColour.GREEN;
             }
             return markerColour;
         }

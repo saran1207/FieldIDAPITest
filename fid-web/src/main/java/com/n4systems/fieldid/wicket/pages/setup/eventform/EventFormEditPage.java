@@ -39,12 +39,12 @@ public class EventFormEditPage extends EventTypePage {
         add(topSavePanel = createSavePanel("topSavePanel"));
         add(bottomSavePanel = createSavePanel("bottomSavePanel"));
 
-        criteriaSections = new ArrayList<CriteriaSection>();
+        criteriaSections = new ArrayList<>();
         if (eventTypeModel.getObject().getEventForm() != null) {
             criteriaSections.addAll(eventTypeModel.getObject().getEventForm().getAvailableSections());
         }
 
-        add(criteriaSectionsPanel = new CriteriaSectionsPanel("criteriaSectionsPanel", new PropertyModel<List<CriteriaSection>>(this, "criteriaSections"))
+        add(criteriaSectionsPanel = new CriteriaSectionsPanel("criteriaSectionsPanel", new PropertyModel<>(this, "criteriaSections"))
         {
             @Override
             public void onCriteriaSectionAdded(AjaxRequestTarget target, CriteriaSection section) {
@@ -74,8 +74,13 @@ public class EventFormEditPage extends EventTypePage {
             }
         });
 
+        boolean isMaster = false;
 
-        add(criteriaPanel = new CriteriaPanel("criteriaPanel", new PropertyModel<EventForm>(eventTypeModel, "eventForm")) {
+        if(eventTypeModel.getObject() instanceof ThingEventType) {
+            isMaster = ((ThingEventType)eventTypeModel.getObject()).isMaster();
+        }
+
+        add(criteriaPanel = new CriteriaPanel("criteriaPanel", new PropertyModel<>(eventTypeModel, "eventForm"), isMaster) {
             @Override
             public void onCriteriaAdded(AjaxRequestTarget target, Criteria criteria, int newIndex) {
                 criteria.setTenant(FieldIDSession.get().getSessionUser().getTenant());
@@ -105,7 +110,7 @@ public class EventFormEditPage extends EventTypePage {
         });
         criteriaPanel.setVisible(false);
 
-        add(criteriaDetailsPanel = new CriteriaConfigurationPanel("criteriaDetailsPanel",new Model<Criteria>()) {
+        add(criteriaDetailsPanel = new CriteriaConfigurationPanel("criteriaDetailsPanel",new Model<>()) {
             @Override protected void setPreviouslySelectedScoreGroup(ScoreGroup scoreGroup) {
                 criteriaPanel.setPreviouslySelectedScoreGroup(scoreGroup);
             }
@@ -128,6 +133,10 @@ public class EventFormEditPage extends EventTypePage {
                 updateComponentsForCriteriaSelected(criteriaSections.get(0).getAvailableCriteria().get(0));
             }
         }
+
+        if(eventTypeModel.getObject() instanceof ThingEventType) {
+            System.out.println("Eaaaaasy street.  We can use instanceof to see what this really is...");
+        }
     }
 
     private void updateComponentsForCriteriaSelected(Criteria criteria) {
@@ -137,7 +146,7 @@ public class EventFormEditPage extends EventTypePage {
 
     private void updateComponentStatesForSectionSelected(int index) {
         CriteriaSection criteriaSection = criteriaSections.get(index);
-        updateCriteriaPanel(new Model<CriteriaSection>(criteriaSection));
+        updateCriteriaPanel(new Model<>(criteriaSection));
         criteriaDetailsPanel.setVisible(false);
         if (criteriaSection.getAvailableCriteria().size() > 0) {
             updateComponentsForCriteriaSelected(criteriaSection.getAvailableCriteria().get(0));

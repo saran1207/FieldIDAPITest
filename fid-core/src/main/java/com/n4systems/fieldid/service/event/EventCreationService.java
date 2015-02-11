@@ -98,7 +98,6 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
                 }
             }
 
-
             event = persistenceService.update(event);
 
             restoreTemporarySignatureFiles(event, rememberedSignatureMap);
@@ -291,12 +290,20 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
 
         event.getAttachments().clear();
 
+        //Save any new actions that have been added on edit.
+        for (CriteriaResult result : event.getResults()) {
+            for (Event action : result.getActions()) {
+                if(action.isNew()) {
+                    persistenceService.save(action);
+                }
+            }
+        }
+
         addActionNotifications(event);
         
         event = persistenceService.update(event);
         postUpdateEvent(event, fileData);
         processUploadedFiles(event, attachments);
-
 
         return event;
     }

@@ -102,7 +102,7 @@ public class OAuthFilter implements ContainerRequestFilter, ContainerResponseFil
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
 		UriInfo uriInfo = containerRequestContext.getUriInfo();
 
-		if (pathIsWhitelisted(uriInfo)) {
+		if (pathIsWhitelisted(uriInfo) || containerRequestContext.getMethod().equalsIgnoreCase("OPTIONS")) {
 			return;
 		}
 

@@ -1,14 +1,12 @@
 package com.n4systems.handlers;
 
+import com.n4systems.model.*;
+import com.n4systems.model.eventtype.CommonAssetTypeLoader;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import com.n4systems.model.AssetType;
-import com.n4systems.model.EventType;
-import com.n4systems.model.ThingEventType;
-import com.n4systems.model.eventtype.CommonAssetTypeLoader;
 
 public class LoaderBackedCommonEventTypeHandler implements CommonEventTypeHandler {
 
@@ -22,6 +20,36 @@ public class LoaderBackedCommonEventTypeHandler implements CommonEventTypeHandle
 		List<AssetType> resultSet = getAssetTypes(assetIds);
 
 		Set<ThingEventType> filterCommonEventTypes = filterCommonEventTypes(resultSet);
+
+		//TODO - Once this is fixed and we move over from struts to wicket, remember to uncomment out the test "CommonEventTypeHandlerTest.java"
+
+		//We will be removing the event types that have ObservationCountCriteria in the form for multi event
+		//This is only until we move the page from STRUTS to WICKET
+		Set<ThingEventType> removeList = new HashSet<>();
+
+		if(!filterCommonEventTypes.isEmpty()) {
+			for (ThingEventType type : filterCommonEventTypes) {
+				if (type.getEventForm() != null && type.getEventForm().getObservationCountGroup() != null) {
+					for (CriteriaSection section : type.getEventForm().getSections()) {
+						boolean temp = false;
+						for (Criteria crit : section.getCriteria()) {
+							if (crit instanceof ObservationCountCriteria) {
+								removeList.add(type);
+								temp = true;
+								break;
+							}
+						}
+						if (temp) {
+							break;
+						}
+					}
+				}
+			}
+
+			for (ThingEventType type : removeList) {
+				filterCommonEventTypes.remove(type);
+			}
+		}
 		return filterCommonEventTypes == null ? new HashSet<ThingEventType>() : filterCommonEventTypes;
 	}
 

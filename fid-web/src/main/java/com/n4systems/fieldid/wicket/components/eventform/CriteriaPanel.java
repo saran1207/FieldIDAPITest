@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.components.eventform;
 
 import com.n4systems.fieldid.service.event.ScoreService;
-import com.n4systems.fieldid.utils.Predicate;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressedBehavior;
 import com.n4systems.fieldid.wicket.components.AppendToClassIfCondition;
@@ -34,6 +33,7 @@ import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CriteriaPanel extends SortableListPanel {
 
@@ -47,21 +47,25 @@ public class CriteriaPanel extends SortableListPanel {
     private ScoreGroup previouslySelectedScoreGroup;
     private ObservationCountGroup defaultObservationCountGroup;
     private IModel<EventForm> eventFormModel;
+    private boolean isMasterEvent;
 
     @SpringBean
     private ScoreService scoreService;
 
-    public CriteriaPanel(String id, PropertyModel<EventForm> eventFormModel) {
+    public CriteriaPanel(String id, PropertyModel<EventForm> eventFormModel, boolean isMasterEvent) {
         super(id);
         setOutputMarkupPlaceholderTag(true);
         this.eventFormModel = eventFormModel;
+        this.isMasterEvent = isMasterEvent;
 
         WebMarkupContainer sortableCriteriaContainer = new WebMarkupContainer("sortableCriteriaContainer");
+
+
         sortableCriteriaContainer.add(new ListView<Criteria>("criteria", new PropertyModel<List<Criteria>>(CriteriaPanel.this, "criteriaSection.availableCriteria")) {
             @Override
             protected void populateItem(final ListItem<Criteria> item) {
                 item.setOutputMarkupId(true);
-                item.add(new EditCopyDeleteItemPanel("editCopyDeletePanel", new PropertyModel<String>(item.getModel(), "displayText"), new CriteriaTypeDescriptionModel(item.getModel())) {
+                item.add(new EditCopyDeleteItemPanel("editCopyDeletePanel", new PropertyModel<>(item.getModel(), "displayText"), new CriteriaTypeDescriptionModel(item.getModel())) {
                     { setEditMaximumLength(1000); getTextField().add(new NoBarsValidator()); }
                     @Override
                     protected void onViewLinkClicked(AjaxRequestTarget target) {
@@ -100,12 +104,7 @@ public class CriteriaPanel extends SortableListPanel {
                     }
                 });
 
-                item.add(new AppendToClassIfCondition("selectedCriteria", new Predicate() {
-                    @Override
-                    public boolean evaluate() {
-                        return item.getIndex() == currentlySelectedIndex && !reorderState;
-                    }
-                }));
+                item.add(new AppendToClassIfCondition("selectedCriteria", () -> item.getIndex() == currentlySelectedIndex && !reorderState));
             }
         });
         
@@ -152,16 +151,25 @@ public class CriteriaPanel extends SortableListPanel {
 
         public CriteriaAddForm(String id) {
             super(id);
-            add(new DropDownChoice<CriteriaType>("criteriaType", new PropertyModel<CriteriaType>(this, "criteriaType"), criteriaTypes, new ListableChoiceRenderer<CriteriaType>()).setRequired(true));
+
+            if(isMasterEvent) {
+                //We want to remove the ObservationCountCriteria from this list.  You can't do that as a Master Event.
+                criteriaTypes = criteriaTypes.stream()
+                                             .filter(criteriaType ->
+                                                     !criteriaType.getReportIdentifier().equalsIgnoreCase("observationcount"))
+                                             .collect(Collectors.toList());
+            }
+
+            add(new DropDownChoice<>("criteriaType", new PropertyModel<>(this, "criteriaType"), criteriaTypes, new ListableChoiceRenderer<>()).setRequired(true));
             AjaxButton submitButton;
-            add(addTextField = new RequiredTextField<String>("criteriaName", new PropertyModel<String>(this, "criteriaName")));
+            add(addTextField = new RequiredTextField<>("criteriaName", new PropertyModel<>(this, "criteriaName")));
             addTextField.add(new NoBarsValidator());
             addTextField.setOutputMarkupId(true);
             addTextField.add(new StringValidator.MaximumLengthValidator(1000));
             add(submitButton = new AjaxButton("submitButton") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    Criteria criteria = null;
+                    Criteria criteria;
 
                     try {
                         criteria = criteriaType.getCriteriaClass().newInstance();
