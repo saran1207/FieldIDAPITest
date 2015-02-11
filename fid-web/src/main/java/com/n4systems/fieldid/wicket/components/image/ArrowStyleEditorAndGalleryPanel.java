@@ -1,11 +1,8 @@
 package com.n4systems.fieldid.wicket.components.image;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
-import com.n4systems.fieldid.service.uuid.AtomicLongService;
-import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.common.ImageAnnotation;
-import com.n4systems.model.common.ImageAnnotationType;
 import com.n4systems.model.procedure.AnnotationType;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
@@ -97,8 +94,7 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
             placeholder.setVisible(false);
         }
 
-        //TODO Move this inside the editor... that way when it's created, the behaviour is made... that should also prevent juggling the permissions...
-//        editor.add(ajaxBehavior = createAnnotatingBehaviour());
+
 
         editorAndGalleryContainer.add(editor);
         editor.setOutputMarkupId(true);
@@ -204,7 +200,6 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
                 }
             };
         } else
-            //TODO Return the new panel...
             return null;
     }
 
@@ -222,7 +217,6 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
                 }
             };
         else
-            //TODO How will we handle this?  We simply don't have access to all annotations from the level of a single Annotation...
             return null;
     }
 
