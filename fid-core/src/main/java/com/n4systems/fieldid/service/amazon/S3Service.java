@@ -129,6 +129,16 @@ public class S3Service extends FieldIdPersistenceService {
         copyObject(DEFAULT_BRANDING_LOGO_PATH, createResourcePath(tenantId, BRANDING_LOGO_PATH));
     }
 
+    public byte[] downloadCertificateLogo(Long customerOrgId, boolean isPrimary) throws IOException {
+        byte[] logoData = null;
+        if(isPrimary) {
+            logoData = downloadResource(null, PRIMARY_CERTIFICATE_LOGO_PATH, customerOrgId);
+        } else {
+            logoData = downloadResource(null, SECONDARY_CERTIFICATE_LOGO_PATH, customerOrgId);
+        }
+        return logoData;
+    }
+
     public URL getCustomerLogoURL(Long customerOrgId) {
         URL orgLogoUrl = generateResourceUrl(null, CUSTOMER_LOGO_PATH, customerOrgId);
         return orgLogoUrl;
