@@ -133,10 +133,6 @@ public class EventFormEditPage extends EventTypePage {
                 updateComponentsForCriteriaSelected(criteriaSections.get(0).getAvailableCriteria().get(0));
             }
         }
-
-        if(eventTypeModel.getObject() instanceof ThingEventType) {
-            System.out.println("Eaaaaasy street.  We can use instanceof to see what this really is...");
-        }
     }
 
     private void updateComponentsForCriteriaSelected(Criteria criteria) {
