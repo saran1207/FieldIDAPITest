@@ -2,7 +2,9 @@ package com.n4systems.fieldid.service.event;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.ObservationCount;
+import com.n4systems.model.ObservationCountCriteriaResult;
 import com.n4systems.model.ObservationCountGroup;
+import com.n4systems.util.persistence.QueryBuilder;
 
 import java.util.List;
 
@@ -45,6 +47,13 @@ public class ObservationCountService extends FieldIdPersistenceService {
         group.getObservationCounts().remove(count);
         persistenceService.archive(count);
         saveOrUpdate(group);
+    }
+
+    public ObservationCountCriteriaResult getObservationCountCriteriaResultByMobileId(String mobileId) {
+        QueryBuilder<ObservationCountCriteriaResult> query = createUserSecurityBuilder(ObservationCountCriteriaResult.class);
+        query.addSimpleWhere("mobileId", mobileId);
+
+        return persistenceService.find(query);
     }
 
 }
