@@ -154,33 +154,26 @@
 
         </div>
 
-
-        <wicket:enclosure child="schedulesContainer">
-        <div style="clear:both;">
+        <div wicket:id="schedulesContainer" style="clear:both;">
             <h2><wicket:message key="label.schedules"/></h2>
-
-            <div wicket:id="schedulesContainer">
-                <div class="blockSeparated eventSchedule" wicket:id="schedules">
-                    <div wicket:id="addScheduleDate" class="addScheduleDate"></div>
-                    <div class="addScheduleLabel">
-                        <label wicket:id="addScheduleLabel">[sched label]</label>
-                        <wicket:enclosure>
-                            <div class="inline addScheduleJob">
-                                <wicket:message key="label.on"/>
-                                <span wicket:id="addScheduleJob"/>
-                            </div>
-                        </wicket:enclosure>
-                    </div>
-                    <a wicket:id="removeLink">
-                        <img src="/fieldid/images/small-x.png"/>
-                    </a>
+            <div class="blockSeparated eventSchedule" wicket:id="schedules">
+                <div wicket:id="addScheduleDate" class="addScheduleDate"></div>
+                <div class="addScheduleLabel">
+                    <label wicket:id="addScheduleLabel">[sched label]</label>
+                    <wicket:enclosure>
+                        <div class="inline addScheduleJob">
+                            <wicket:message key="label.on"/>
+                            <span wicket:id="addScheduleJob"/>
+                        </div>
+                    </wicket:enclosure>
                 </div>
+                <a wicket:id="removeLink">
+                    <img src="/fieldid/images/small-x.png"/>
+                </a>
             </div>
-
             <a class="btn-secondary btn-sml" wicket:id="openSchedulePickerLink"><wicket:message key="label.add_a_schedule"/></a>
-
         </div>
-        </wicket:enclosure>
+
 
         <div class="attachments">
 
