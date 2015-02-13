@@ -105,7 +105,7 @@ public class ObservationCountResultConfigurationPage extends EventTypePage{
 
             add(observationCountGroupDropDownChoice);
 
-            add(useObservationCountForResultCheckbox = new CheckBox("useObservationCountForResult", new PropertyModel<>(eventForm, "useObservationCountForResult")) {
+            add(useObservationCountForResultCheckbox = new CheckBox("useObservationCountForResult", new PropertyModel<Boolean>(eventForm, "useObservationCountForResult")) {
                 //Force the CheckBox to notify us when the value changes.  This is important.  Failing to do this makes
                 //the component essentially unaware of its state.
                 @Override
@@ -117,20 +117,18 @@ public class ObservationCountResultConfigurationPage extends EventTypePage{
             add(new CheckBox("displayObservationPercentage", new PropertyModel<>(eventTypeModel, "displayObservationPercentage")));
 
             boolean passPercentage = eventForm.getObservationcountPassCalculationType().equals(ScoreCalculationType.AVERAGE);
-            passRangePanel = new ScoreResultRangePanel("passRangePanel", new PropertyModel<>(eventForm, "observationcountPassRange"), passPercentage) {
+            passRangePanel = new ScoreResultRangePanel("passRangePanel", new PropertyModel<ResultRange>(eventForm, "observationcountPassRange"), passPercentage) {
                 @Override
                 protected boolean isValidationRequired() {
-                    System.out.println("Checkbox Value: " + useObservationCountForResultCheckbox.getModelObject());
                     return useObservationCountForResultCheckbox.getModelObject();
                 }
             };
             add(passRangePanel);
 
             boolean failPercentage = eventForm.getObservationcountFailCalculationType().equals(ScoreCalculationType.AVERAGE);
-            failRangePanel = new ScoreResultRangePanel("failRangePanel", new PropertyModel<>(eventForm, "observationcountFailRange"), failPercentage){
+            failRangePanel = new ScoreResultRangePanel("failRangePanel", new PropertyModel<ResultRange>(eventForm, "observationcountFailRange"), failPercentage){
                 @Override
                 protected boolean isValidationRequired() {
-                    System.out.println("Checkbox Value: " + useObservationCountForResultCheckbox.getModelObject());
                     return useObservationCountForResultCheckbox.getModelObject();
                 }
             };
