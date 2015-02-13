@@ -199,9 +199,6 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
     protected void onSchedulePickComplete(AjaxRequestTarget target) {
         schedules.add(scheduleToAdd);
         scheduleToAdd = createNewOpenEvent();
-        // CAVEAT : shouldn't use enclosures for ajax component - results in javascript noise if component not visible.
-        // see http://jawher.net/2009/09/17/wicket-enclosures-and-ajax-no-no/
-        // use InlineEnclosure instead.
         target.add(schedulesContainer);
     }
 
@@ -279,7 +276,7 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             add(schedulesContainer);
 
 
-            add(new AjaxLink("openSchedulePickerLink") {
+            schedulesContainer.add(new AjaxLink("openSchedulePickerLink") {
                 { setVisible(event.getObject().isNew() || !event.getObject().isCompleted()); }
                 @Override
                 public void onClick(AjaxRequestTarget target) {
