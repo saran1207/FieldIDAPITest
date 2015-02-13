@@ -187,6 +187,8 @@ public class EventHelper {
             	}
             } else if (realResult instanceof ScoreCriteriaResult) {
                 ((ScoreCriteriaResult)realResult).setScore(pm.find(Score.class, formResult.getStateId(), event.getTenant()));
+            } else if (realResult instanceof ObservationCountCriteriaResult) {
+                //Not supported in master and multi events at this time
             }
 
 			// and attach back onto the event

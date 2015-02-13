@@ -20,6 +20,7 @@ public class ApiCriteriaResult extends ApiReadWriteModel {
 	private byte[] signatureValue;
 	private Date dateValue;
 	private Double numberValue;
+    //NOTE: This is not actually the value but the id of the score entity
 	private Long scoreValue;
 	private List<ApiEventSchedule> actions = new ArrayList<>();
 
@@ -118,12 +119,12 @@ public class ApiCriteriaResult extends ApiReadWriteModel {
 	public void setNumberValue(Double numberValue) {
 		this.numberValue = numberValue;
 	}
-
+    //NOTE: This is not actually the value but the id of the score entity
 	public Long getScoreValue() {
 		return scoreValue;
 	}
 
-	public void setScoreValue(Long scoreValue) {
+    public void setScoreValue(Long scoreValue) {
 		this.scoreValue = scoreValue;
 	}
 
