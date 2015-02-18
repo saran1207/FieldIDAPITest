@@ -39,10 +39,6 @@ public class ApiAsset extends ApiReadWriteModelWithOwner {
 	private List<ApiSavedEvent> events;
     private List<ApiProcedure> procedures;
 
-	//This field is used to record whether or not the parent Org/Division of this Asset is in any of the Tenant's users'
-	//Offline collection.
-	private Boolean parentOffline;
-
 	public String getIdentifier() {
 		return identifier;
 	}
@@ -243,11 +239,4 @@ public class ApiAsset extends ApiReadWriteModelWithOwner {
         this.procedures = procedures;
     }
 
-	public Boolean getParentOffline() {
-		return parentOffline;
-	}
-
-	public void setParentOffline(Boolean parentOffline) {
-		this.parentOffline = parentOffline;
-	}
 }

@@ -22,13 +22,11 @@ import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.asset.SmartSearchWhereClause;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
-import com.n4systems.model.offlineprofile.OfflineProfile;
 import com.n4systems.model.offlineprofile.OfflineProfile.SyncDuration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.services.asset.AssetSaveServiceSpring;
-import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -62,7 +60,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
     @Autowired private ApiProcedureResource procedureResource;
     @Autowired private ApiProcedureDefinitionResourceV2 procedureDefinitionResource;
 	@Autowired private OfflineProfileService offlineProfileService;
-
+	@Autowired private S3Service s3Service;
 
 	@GET
 	@Consumes(MediaType.TEXT_PLAIN)
@@ -134,9 +132,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			throw new NotFoundException("Asset", id);
 		}
 
-		List<Long> offlineOrgs = determineOfflineOrgs();
-
-		ApiAsset apiModel = convertToApiAsset(asset, downloadEvents, downloadImageAttachments, SyncDuration.ALL, offlineOrgs);
+		ApiAsset apiModel = convertToApiAsset(asset, downloadEvents, downloadImageAttachments, SyncDuration.ALL);
 		return apiModel;
 	}
 	
@@ -220,24 +216,15 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	}
 	
 	protected List<ApiAsset> convertAllAssetsToApiModels(List<Asset> assets, boolean downloadEvents, boolean downloadImageAttachments, SyncDuration syncDuration) {
-		//We need this later to determine who has a parent that is offline.
-		List<Long> offlineOrgs = determineOfflineOrgs();
-
 		List<ApiAsset> apiAssets = new ArrayList<>();
 		for (Asset asset: assets) {
-			apiAssets.add(convertToApiAsset(asset, downloadEvents, downloadImageAttachments, syncDuration, offlineOrgs));
+			apiAssets.add(convertToApiAsset(asset, downloadEvents, downloadImageAttachments, syncDuration));
 		}
 		return apiAssets;
 	}
 	
-	protected ApiAsset convertToApiAsset(Asset asset, boolean downloadEvents, boolean downloadImageAttachments, SyncDuration syncDuration, List<Long> offlineOrgs) {
+	protected ApiAsset convertToApiAsset(Asset asset, boolean downloadEvents, boolean downloadImageAttachments, SyncDuration syncDuration) {
 		ApiAsset apiAsset = convertEntityToApiModel(asset);
-
-		//Does the Asset's Owner (read: Parent) exist in this collection of offline Orgs?  If so... Parent is offline.
-		//This determination is placed here so we don't bastardize the overridden convertEntityToApiModel call, but is
-		//kept low enough in the chain of calls that every call against ApiAssetResource should result in this field
-		//being added.
-		apiAsset.setParentOffline(offlineOrgs.contains(asset.getOwner().getId()));
 
 		apiAsset.setSchedules(apiEventScheduleResource.findAllSchedules(asset.getId(), syncDuration));
         apiAsset.setProcedures(procedureResource.getOpenAndLockedProcedures(asset.getId()));
@@ -383,7 +370,6 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	private byte[] loadAssetImage(Asset asset) {
 		byte[] image = null;		
 		if(asset.getImageName() != null) {
-			S3Service s3Service = ServiceLocator.getS3Service();
 			try {
 				image = s3Service.downloadAssetProfileMediumImage(asset.getId(), asset.getImageName());
 			} catch (IOException ex) {
@@ -391,16 +377,5 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			}
 		}		
 		return image;
-	}
-
-	private List<Long> determineOfflineOrgs() {
-		List<OfflineProfile> offlineProfiles = offlineProfileService.findAllProfilesForTenant(getCurrentTenant().getId());
-		List<Long> offlineOrgs = new ArrayList<>();
-
-		//Process the Offline Profiles to determine all offline orgs.  This will be important for determining who is or
-		//isn't online.  I wonder if there will be duplicates in there?  Hmmm...
-		offlineProfiles.forEach(offlineProfile -> offlineOrgs.addAll(offlineProfile.getOrganizations()));
-
-		return offlineOrgs;
 	}
 }
