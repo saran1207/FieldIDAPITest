@@ -1,15 +1,14 @@
 package com.n4systems.fieldid.ws.v1.resources.org;
 
-import javax.ws.rs.Path;
-
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
+import com.n4systems.model.AddressInfo;
+import com.n4systems.model.orgs.BaseOrg;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
-import com.n4systems.model.AddressInfo;
-import com.n4systems.model.orgs.BaseOrg;
+import javax.ws.rs.Path;
 
 @Component
 @Path("organization")
@@ -30,7 +29,11 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 		apiOrg.setModified(baseOrg.getModified());
 		apiOrg.setActive(baseOrg.isActive());
 		apiOrg.setName(baseOrg.getName());
-		apiOrg.setImage(loadOrgImage(baseOrg));		
+		if (versionEqualOrGreaterThan(1, 8, 0)) {
+			apiOrg.setImagePath(s3Service.getCustomerLogoPath(baseOrg.getId()));
+		} else {
+			apiOrg.setImage(loadOrgImage(baseOrg));
+		}
 		apiOrg.setAddress(convertAddress(baseOrg.getAddressInfo()));
 		
 		if (baseOrg.getParent() != null) {

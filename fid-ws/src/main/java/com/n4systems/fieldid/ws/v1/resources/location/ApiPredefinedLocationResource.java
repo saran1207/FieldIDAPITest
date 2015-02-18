@@ -24,7 +24,6 @@ public class ApiPredefinedLocationResource extends SetupDataResource<ApiPredefin
 		apiLocation.setName(location.getName());
 		apiLocation.setSearchIds(location.getSearchIds());
 
-        System.out.println("setting owner ID " + location.getOwner());
         if (location.getOwner()!=null) {
             apiLocation.setOwnerId(location.getOwner().getId());
         }

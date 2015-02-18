@@ -151,15 +151,6 @@ public class ApiAssetTypeResource extends SetupDataResource<ApiAssetType, AssetT
                     logger.warn("Unable to download asset type from S3 image for asset: " + type.getId(), ex);
                 }
             }
-
-            if(image == null){
-			    File assetTypeImage = new File(PathHandler.getAssetTypeImageFile(type), type.getImageName());
-			    try {
-				    image = FileUtils.readFileToByteArray(assetTypeImage);
-			    } catch(Exception e) {
-				    logger.warn("Unable to load asset type image at: " + assetTypeImage, e);
-			    }
-            }
 		}
 		return image;
 	}

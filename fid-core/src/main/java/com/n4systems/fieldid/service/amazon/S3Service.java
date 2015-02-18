@@ -139,6 +139,11 @@ public class S3Service extends FieldIdPersistenceService {
         return logoData;
     }
 
+    public String getCustomerLogoPath(Long customerOrgId) {
+        String fullResourcePath = createResourcePath(null, CUSTOMER_LOGO_PATH, customerOrgId);
+        return fullResourcePath;
+    }
+
     public URL getCustomerLogoURL(Long customerOrgId) {
         URL orgLogoUrl = generateResourceUrl(null, CUSTOMER_LOGO_PATH, customerOrgId);
         return orgLogoUrl;
