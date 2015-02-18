@@ -8,6 +8,7 @@ import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventSchedule;
 import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventScheduleResource;
 import com.n4systems.model.*;
 import org.apache.commons.lang.NullArgumentException;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ import java.util.List;
 public class ApiEventFormResultResource extends FieldIdPersistenceService {
 	@Autowired private ApiEventScheduleResource apiEventScheduleResource;
     @Autowired private ObservationCountService observationCountService;
+
+    private static final Logger logger = Logger.getLogger(ApiEventFormResultResource.class);
 	
 	public List<CriteriaResult> convertApiEventFormResults(ApiEventFormResult eventFormResult, EventForm form, AbstractEvent event) {
 		List<CriteriaResult> results = new ArrayList<>();
@@ -163,6 +166,7 @@ public class ApiEventFormResultResource extends FieldIdPersistenceService {
 
                 break;
 			default:
+                logger.error("Unhandled Criteria type: " + result.getCriteria().getCriteriaType().name());
 				throw new InternalErrorException("Unhandled Criteria type: " + criteria.getCriteriaType().name());
 		}
 		result.setMobileId(apiResult.getSid());

@@ -8,6 +8,7 @@ import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventSchedule;
 import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventScheduleResource;
 import com.n4systems.model.*;
 import org.apache.commons.lang.NullArgumentException;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
@@ -17,6 +18,8 @@ public class ApiExistingEventFormResultResource extends FieldIdPersistenceServic
 	@Autowired private ApiEventScheduleResource apiEventScheduleResource;
     @Autowired private ObservationCountService observationCountService;
     private CriteriaResultFactory criteriaResultFactory;
+
+    private static final Logger logger = Logger.getLogger(ApiExistingEventFormResultResource.class);
 
     public ApiExistingEventFormResultResource() {
         criteriaResultFactory = new CriteriaResultFactory();
@@ -195,6 +198,7 @@ public class ApiExistingEventFormResultResource extends FieldIdPersistenceServic
 
                 break;
 			default:
+                logger.error("Unhandled Criteria type: " + result.getCriteria().getCriteriaType().name());
 				throw new InternalErrorException("Unhandled Criteria type: " + result.getCriteria().getCriteriaType().name());
 		}
 		
