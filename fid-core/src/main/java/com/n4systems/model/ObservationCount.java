@@ -20,17 +20,17 @@ public class ObservationCount extends ArchivableEntityWithTenant{
 
     @Column(name="name")
     private @Localized
-    String name;
+    String observationCount;
 
     @Column(name="counted")
     private boolean counted = true;
 
     public String getName() {
-        return name;
+        return observationCount;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.observationCount = name;
     }
 
     public boolean isCounted() {
