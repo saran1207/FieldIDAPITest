@@ -8,6 +8,16 @@ public class ApiMultiAddEvent {
 	private boolean copyAssignedTo;
 	private boolean copyOwner;
 	private boolean copyLocation;
+
+    public boolean isCopyAssetStatus() {
+        return copyAssetStatus;
+    }
+
+    public void setCopyAssetStatus(boolean copyAssetStatus) {
+        this.copyAssetStatus = copyAssetStatus;
+    }
+
+    private boolean copyAssetStatus;
 	
 	public List<ApiMultiAddEventItem> getItems() {
 		return items;

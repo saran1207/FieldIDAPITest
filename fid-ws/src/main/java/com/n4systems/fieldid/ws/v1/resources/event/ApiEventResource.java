@@ -100,6 +100,11 @@ public class ApiEventResource extends FieldIdPersistenceService {
 				BaseOrg owner = event.getAsset().getOwner();
 				apiEvent.setOwnerId(owner != null ? owner.getId() : null);
 			}
+
+            if(multiAddEvent.isCopyAssetStatus()) {
+                //Set the AssetStatus on the event to the AssetStatus from the Asset.
+                apiEvent.setAssetStatusId(event.getAssetStatus().getId());
+            }
 			
 			if(multiAddEvent.isCopyLocation()) {
 				Location location = event.getAsset().getAdvancedLocation();
