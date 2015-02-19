@@ -23,7 +23,7 @@ public class ApiCriteriaResult extends ApiReadWriteModel {
 	private Double numberValue;
     //NOTE: This is not actually the value but the id of the score entity
 	private Long scoreValue;
-    private List<ApiObservationCountResult> observationCountValue;
+    private List<ApiObservationCountResult> observationCountValue = new ArrayList<>();
 	private List<ApiEventSchedule> actions = new ArrayList<>();
 
 	public Long getCriteriaId() {
