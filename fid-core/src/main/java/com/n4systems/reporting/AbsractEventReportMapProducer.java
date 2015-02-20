@@ -287,7 +287,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
                             ((ObservationCountCriteriaResult) result).getObservationCountResults().forEach(observationCountResult -> {
                                 concatenatedObservationCounts.append(observationCountResult.getObservationCount().getName());
                                 concatenatedObservationCounts.append(":");
-                                concatenatedObservationCounts.append(observationCountResult.getObservationCount());
+                                concatenatedObservationCounts.append(observationCountResult.getValue());
                                 concatenatedObservationCounts.append("|");
                             });
 
