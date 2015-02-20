@@ -138,6 +138,7 @@ public class ApiEventFormResultResource extends FieldIdPersistenceService {
                         ObservationCountResult observationCountResult = new ObservationCountResult();
                         observationCountResult.setObservationCount(observationCount); //We'll just put this here...
                         observationCountResult.setValue(apiObservationCountResult.getValue()); //...and take that value.
+                        observationCountResult.setTenant(getCurrentTenant());
 
                         //After all of this, we bold it on to the result, like so:
                         observationCountResults.add(observationCountResult);
