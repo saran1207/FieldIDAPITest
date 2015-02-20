@@ -63,4 +63,10 @@ public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPe
         long checkVersion = formatVersion(major, minor, patch);
         return (mobileVersion >= checkVersion);
     }
+
+    protected boolean versionLessThan(int major, int minor, int patch) {
+        long mobileVersion = getVersionNumber();
+        long checkVersion = formatVersion(major, minor, patch);
+        return (mobileVersion < checkVersion);
+    }
 }

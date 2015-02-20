@@ -10,7 +10,6 @@ public class ApiOrg extends ApiReadonlyModel {
 	private Long divisionId;
 	private byte[] image;
 	private String address;
-	private String imagePath;
 
 	public String getName() {
 		return name;
@@ -66,13 +65,5 @@ public class ApiOrg extends ApiReadonlyModel {
 
 	public String getAddress() {
 		return address;
-	}
-
-	public String getImagePath() {
-		return imagePath;
-	}
-
-	public void setImagePath(String imagePath) {
-		this.imagePath = imagePath;
 	}
 }
