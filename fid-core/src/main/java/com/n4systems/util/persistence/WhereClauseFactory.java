@@ -3,6 +3,11 @@ package com.n4systems.util.persistence;
 import com.n4systems.util.persistence.WhereClause.ChainOp;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class WhereClauseFactory {
 
 	private WhereClauseFactory() {}
@@ -98,5 +103,40 @@ public class WhereClauseFactory {
 			group.addClause(clause);
 		}
 		return group;
+	}
+
+	public static PassthruWhereClause createPassthru(String name, String clause, Map<String, Object> params, ChainOp chainOp) {
+		PassthruWhereClause where = new PassthruWhereClause(name, chainOp, clause);
+		where.getParams().putAll(params);
+		return where;
+	}
+
+	public static PassthruWhereClause createPassthru(String clause, String paramName, Object value) {
+		Map<String, Object> params = new HashMap<>(1);
+		params.put(paramName, value);
+		return createPassthru(paramName, clause, params, null);
+	}
+
+	public static PassthruWhereClause createPassthru(String clause, Object value) {
+		// infer the param name from the clause
+		return createPassthru(clause, parseParameterFromClause(clause), value);
+	}
+
+	private static String parseParameterFromClause(String clause) {
+		Pattern p = Pattern.compile(":(\\w+)", Pattern.CASE_INSENSITIVE);
+		Matcher m = p.matcher(clause);
+		String parameter = null;
+		while (m.find()) {
+			String group = m.group(1);
+			if (parameter == null) {
+				parameter = group;
+			} else if (!parameter.equals(group)) { // allow reuse of the same parameter name
+				throw new IllegalArgumentException("Clause contains more than 1 parameter: " + clause);
+			}
+		}
+		if (parameter == null) {
+			throw new IllegalArgumentException("Clause does not contain a parameter: " + clause);
+		}
+		return parameter;
 	}
 }

@@ -1,10 +1,14 @@
 package com.n4systems.fieldid.util;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.n4systems.model.*;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class EventFormHelper {
+
+public class EventFormHelper implements Serializable{
 
 	private Map<AbstractEvent, List<CriteriaSection>> availableSections = new HashMap<AbstractEvent, List<CriteriaSection>>();
 	private List<CriteriaSection> currentCriteriaSections;
@@ -12,6 +16,8 @@ public class EventFormHelper {
 	private Map<AbstractEvent, Map<CriteriaSection, List<CriteriaResult>>> sections = new HashMap<AbstractEvent, Map<CriteriaSection, List<CriteriaResult>>>();
     private Map<AbstractEvent, Map<CriteriaSection, Double>> eventsSectionsScoresMap = new HashMap<AbstractEvent, Map<CriteriaSection, Double>>();
     private Map<AbstractEvent, Map<CriteriaSection, Double>> eventsSectionsScoresPercentageMap = new HashMap<AbstractEvent, Map<CriteriaSection, Double>>();
+    private Map<AbstractEvent, Map<ObservationCount, Integer>> eventObservationsMap = Maps.newHashMap();
+    private Map<AbstractEvent, Map<CriteriaSection, Map<ObservationCount, Integer>>> eventSectionsObservationsMap = Maps.newHashMap();
 
 	public List<CriteriaSection> getAvailableSections(AbstractEvent event) {
 		if (availableSections.get(event) == null) {
@@ -158,7 +164,7 @@ public class EventFormHelper {
         double total = calculateMaxScoreForEvent(event);
         Map<CriteriaSection, Double> sectionScores = getScoresForSections(event);
 
-        Double scoreTotal = getSectionsTotal(sectionScores);
+        Double scoreTotal = getScoreSectionsTotal(sectionScores);
 
         if (total <= 0.0) {
             return 0.0;
@@ -167,7 +173,35 @@ public class EventFormHelper {
         }
     }
 
-    private Double getSectionsTotal(Map<CriteriaSection, Double> sectionScores) {
+    public Map<ObservationCount, Integer> getFormObservationTotals(AbstractEvent event) {
+        if (!eventObservationsMap.containsKey(event))
+            eventObservationsMap.put(event, calculateObservationTotals(Lists.newArrayList(event.getResults())));
+        return eventObservationsMap.get(event);
+    }
+
+    private Map<ObservationCount, Integer> calculateObservationTotals(List<CriteriaResult> results) {
+        Map<ObservationCount, Integer> formObservationTotals = Maps.newHashMap();
+
+        for (CriteriaResult criteriaResult : results) {
+            if (criteriaResult.getCriteria().getCriteriaType() == CriteriaType.OBSERVATION_COUNT) {
+                for (ObservationCountResult count: ((ObservationCountCriteriaResult) criteriaResult).getObservationCountResults()) {
+                    if (formObservationTotals.containsKey(count.getObservationCount())) {
+                       int countTotal = formObservationTotals.get(count.getObservationCount());
+                       formObservationTotals.replace(count.getObservationCount(), countTotal + count.getValue());
+                    } else {
+                        formObservationTotals.put(count.getObservationCount(), count.getValue());
+                    }
+                }
+            }
+        }
+        return formObservationTotals;
+    }
+
+    public int getObservationCountTotal(AbstractEvent event) {
+        return calculateObservationCountTotal(getFormObservationTotals(event));
+    }
+
+    private Double getScoreSectionsTotal(Map<CriteriaSection, Double> sectionScores) {
         Double scoreTotal = 0.0d;
         if (null != sectionScores && sectionScores.size() > 0 ) {
             for (Map.Entry<CriteriaSection, Double> entry : sectionScores.entrySet())
@@ -207,4 +241,32 @@ public class EventFormHelper {
     }
 
 
+    public Map<CriteriaSection, Map<ObservationCount, Integer>> getObservationsForSections(AbstractEvent event) {
+        if (!eventSectionsObservationsMap.containsKey(event))
+            eventSectionsObservationsMap.put(event, calculateObservationsForSections(event));
+        return eventSectionsObservationsMap.get(event);
+    }
+
+    private Map<CriteriaSection, Map<ObservationCount, Integer>> calculateObservationsForSections(AbstractEvent event) {
+        Map<CriteriaSection, Map<ObservationCount, Integer>> observationsBySection = Maps.newHashMap();
+        Map<CriteriaSection, List<CriteriaResult>> visibleResults = getVisibleResults(event);
+        for (CriteriaSection section: visibleResults.keySet()) {
+            observationsBySection.put(section, calculateObservationTotals(visibleResults.get(section)));
+        }
+        return observationsBySection;
+    }
+
+    public Integer getObservationSectionTotal(AbstractEvent event, CriteriaSection section) {
+        return calculateObservationCountTotal(eventSectionsObservationsMap.get(event).get(section));
+    }
+
+    private Integer calculateObservationCountTotal(Map<ObservationCount, Integer> observations) {
+        int observationCountTotal = 0;
+        for (ObservationCount count: observations.keySet()) {
+            if (count.isCounted()) {
+                observationCountTotal += observations.get(count);
+            }
+        }
+        return observationCountTotal;
+    }
 }

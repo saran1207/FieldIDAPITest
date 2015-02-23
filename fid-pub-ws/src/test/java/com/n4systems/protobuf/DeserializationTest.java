@@ -1,14 +1,11 @@
 package com.n4systems.protobuf;
 
-import com.google.protobuf.Message;
+import com.n4systems.fieldid.api.pub.model.Messages;
 import com.n4systems.fieldid.api.pub.protocolbuffers.google.GoogleProtobufMessageBodyReader;
-import com.n4systems.fieldid.api.pub.serialization.TestMessages;
 import junit.framework.Assert;
 import org.junit.Test;
-import org.springframework.util.MultiValueMap;
 
 import javax.json.Json;
-import javax.json.JsonWriter;
 import javax.json.stream.JsonGenerator;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedHashMap;
@@ -22,7 +19,7 @@ public class DeserializationTest {
         return new GoogleProtobufMessageBodyReader();
     }
 
-    private static void populateTestSimpleMessageBuilder(TestMessages.TestSimpleMessage.Builder builder) {
+    private static void populateTestSimpleMessageBuilder(Messages.TestSimpleMessage.Builder builder) {
         builder.setDoubleField(1.0)
                 .setFloatField(2)
                 .setInt32Field(3)
@@ -39,9 +36,9 @@ public class DeserializationTest {
                 .setStringField("string value");
     }
 
-    private static void populateTestContainerMessageBuilder(TestMessages.TestContainerMessage.Builder builder) {
+    private static void populateTestContainerMessageBuilder(Messages.TestContainerMessage.Builder builder) {
         builder.setInt32Field(1)
-                .setNested(TestMessages.TestNestedMessage.newBuilder()
+                .setNested(Messages.TestNestedMessage.newBuilder()
                         .setStringField("string value").build());
     }
 
@@ -78,7 +75,7 @@ public class DeserializationTest {
         headers.add("Content-Length", Integer.toString(outputStream.size()));
 
 
-        TestMessages.TestSimpleMessage message = (TestMessages.TestSimpleMessage) reader.readFrom((Class) TestMessages.TestSimpleMessage.class, null, null, jsonMediaType, headers, inputStream);
+        Messages.TestSimpleMessage message = (Messages.TestSimpleMessage) reader.readFrom((Class) Messages.TestSimpleMessage.class, null, null, jsonMediaType, headers, inputStream);
 
         Assert.assertEquals(1.0, message.getDoubleField());
         Assert.assertEquals((float)2, message.getFloatField());

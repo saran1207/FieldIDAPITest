@@ -1,16 +1,15 @@
 package com.n4systems.fieldid.actions.event.viewmodel;
 
-import java.text.ParseException;
-
-import com.n4systems.model.*;
-import rfid.web.helper.SessionUser;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.helpers.SessionUserDateConverter;
 import com.n4systems.fieldid.actions.helpers.UserDateConverter;
-import com.n4systems.model.Button;
+import com.n4systems.model.*;
+import rfid.web.helper.SessionUser;
+
+import java.text.ParseException;
 
 public class CriteriaResultWebModelConverter {
+
 
     public CriteriaResultWebModel convertToWebModel(CriteriaResult result, SessionUser user) {
     	UserDateConverter dateConverter = new SessionUserDateConverter(user);
@@ -91,7 +90,31 @@ public class CriteriaResultWebModelConverter {
             criteriaResult = result;
         } else if (CriteriaType.NUMBER_FIELD.equals(type)) {
             criteriaResult =  new NumberFieldCriteriaResult();
-        } else {
+        }/*
+
+            //This piece of code was added to handle OBSERVATION_COUNT criteria type for multi event.
+            //For now, we are not allowing users to perform multi events on events that have that criteria.
+
+            else if (CriteriaType.OBSERVATION_COUNT.equals(type)) {
+            ObservationCountCriteriaResult observationCountCriteriaResult = new ObservationCountCriteriaResult();
+            List<ObservationCountResult> resultList = new ArrayList();
+            QueryBuilder<ObservationCountGroup> builder = new QueryBuilder<>(ObservationCountGroup.class, new TenantOnlySecurityFilter(tenant));
+            builder.addSimpleWhere("name", "Default Observations");
+
+            List<ObservationCount> observationCounts = pm.find(builder).getObservationCounts();
+
+            for(ObservationCount count:observationCounts) {
+                ObservationCountResult temp = new ObservationCountResult();
+                temp.setValue(0);
+                temp.setObservationCount(count);
+                temp.setTenant(tenant);
+
+                resultList.add(temp);
+            }
+
+            observationCountCriteriaResult.setObservationCountResults(resultList);
+            criteriaResult =  observationCountCriteriaResult;
+        }*/ else {
             throw new RuntimeException("Unknown type for web model: " + webModel.getType());
         }
 

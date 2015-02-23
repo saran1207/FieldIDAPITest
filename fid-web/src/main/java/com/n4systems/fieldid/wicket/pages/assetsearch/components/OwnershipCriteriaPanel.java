@@ -16,6 +16,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 public class OwnershipCriteriaPanel<T extends SearchCriteria> extends Panel {
@@ -41,7 +42,10 @@ public class OwnershipCriteriaPanel<T extends SearchCriteria> extends Panel {
         //Location Picker
         final PropertyModel<Location> locationModel = new PropertyModel<Location>(getDefaultModel(), "location");
         final PropertyModel<PredefinedLocation> predefinedLocationModel = new PropertyModel<PredefinedLocation>(getDefaultModel(), "location.predefinedLocation");
-        locationPicker = new OrgLocationPicker("location", ownerModel, predefinedLocationModel){
+
+        BaseOrg temp = ownerModel.getObject();
+
+        locationPicker = new OrgLocationPicker("location", Model.of(temp), predefinedLocationModel){
             @Override
             public String getWatermarkText() {
                 return new FIDLabelModel("message.locationpicker_watermark").getObject();

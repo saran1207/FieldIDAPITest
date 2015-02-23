@@ -17,8 +17,8 @@ public class EventResultCalculatorTest {
     private Button naButton;
     private ButtonGroup passFailNaButtonGroup;
 
-    private ScoreResultRange atLeastTen;
-    private ScoreResultRange atMostFive;
+    private ResultRange atLeastTen;
+    private ResultRange atMostFive;
 
     @Before
     public void setup() {
@@ -129,8 +129,8 @@ public class EventResultCalculatorTest {
         Score score = ScoreBuilder.aScore().value(10d).build();
         ScoreCriteriaResult result = ScoreCriteriaResultBuilder.aScoreCriteriaResult().score(score).criteria(ScoreCriteriaBuilder.aScoreCriteria().build()).build();
 
-        ScoreResultRange failRange = ScoreResultRangeBuilder.aScoreResultRange().between(0d).and(5d).build();
-        ScoreResultRange passRange = ScoreResultRangeBuilder.aScoreResultRange().between(8d).and(10d).build();
+        ResultRange failRange = ScoreResultRangeBuilder.aScoreResultRange().between(0d).and(5d).build();
+        ResultRange passRange = ScoreResultRangeBuilder.aScoreResultRange().between(8d).and(10d).build();
 
         ThingEventType eventType = createEventType(true, ScoreCalculationType.SUM, failRange, passRange);
         Event event = EventBuilder.anEvent().withCriteriaResults(result).ofType(eventType).build();
@@ -198,7 +198,7 @@ public class EventResultCalculatorTest {
         event.setEventForm(event.getType().getEventForm());
     }
 
-    private ThingEventType createEventType(boolean useScore, ScoreCalculationType scoreCalculationType, ScoreResultRange failRange, ScoreResultRange passRange) {
+    private ThingEventType createEventType(boolean useScore, ScoreCalculationType scoreCalculationType, ResultRange failRange, ResultRange passRange) {
         EventForm eventForm = EventFormBuilder.anEventForm().useScore(useScore).scoreCalculationType(scoreCalculationType).failRange(failRange).passRange(passRange).build();
         return EventTypeBuilder.anEventType().withEventForm(eventForm).build();
     }

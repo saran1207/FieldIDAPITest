@@ -4,10 +4,11 @@ import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.setup.score.validator.SecondRangeValueValidator;
+import com.n4systems.model.ResultRange;
 import com.n4systems.model.ScoreComparator;
-import com.n4systems.model.ScoreResultRange;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.EnclosureContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RequiredTextField;
@@ -18,9 +19,12 @@ import org.apache.wicket.model.PropertyModel;
 
 import java.util.Arrays;
 
-public class ScoreResultRangePanel extends Panel {
+public abstract class ScoreResultRangePanel extends Panel {
 
-    public ScoreResultRangePanel(String id, final IModel<ScoreResultRange> model) {
+    Label percentage1;
+    Label percentage2;
+
+    public ScoreResultRangePanel(String id, final IModel<ResultRange> model, boolean isPercentage) {
         super(id, model);
         setOutputMarkupId(true);
 
@@ -45,12 +49,27 @@ public class ScoreResultRangePanel extends Panel {
                 return model.getObject().getComparator().isBinary();
             }
         });
-        value2Field.add(new SecondRangeValueValidator(comparatorModel, value1Field));
+        value2Field.add(new SecondRangeValueValidator(comparatorModel, value1Field) {
+            @Override
+            protected boolean validateMe() {
+                return isValidationRequired();
+            }
+        });
         ValidationBehavior.addValidationBehaviorToComponent(value1Field);
         ValidationBehavior.addValidationBehaviorToComponent(value2Field);
         EnclosureContainer enclosureContainer = new EnclosureContainer("enclosureContainer", value2Field);
         add(enclosureContainer);
+
+        percentage2 = new Label("percentage2", new FIDLabelModel("label.percent"));
+        percentage2.setVisible(isPercentage);
+
+        percentage1 = new Label("percentage1", new FIDLabelModel("label.percent"));
+        percentage1.setVisible(isPercentage);
+        add(percentage1);
+
         enclosureContainer.add(value2Field);
+        enclosureContainer.add(percentage2);
+
     }
 
     public IChoiceRenderer<ScoreComparator> createComparatorRenderer() {
@@ -67,4 +86,10 @@ public class ScoreResultRangePanel extends Panel {
         };
     }
 
+    public void showPercentage(boolean show) {
+        percentage1.setVisible(show);
+        percentage2.setVisible(show);
+    }
+
+    protected abstract boolean isValidationRequired();
 }

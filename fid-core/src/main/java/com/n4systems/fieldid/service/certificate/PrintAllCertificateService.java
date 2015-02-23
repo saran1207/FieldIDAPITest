@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -58,13 +57,10 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
             sortAssetIdsByResultOrder(assetIds,resultOrder);
         }
 		
-		AsyncTask<?> task = asyncService.createTask(new Callable<Void>() {
-			@Override
-			public Void call() throws Exception {
-				generateCertificatePackage(assetIds, null, link, downloadUrl, "printAllAssetCerts");
-				return null;
-			}
-		});
+		AsyncTask<?> task = asyncService.createTask(() -> {
+            generateCertificatePackage(assetIds, null, link, downloadUrl, "printAllAssetCerts");
+            return null;
+        });
 		asyncService.run(task);
 		
 		return link;
@@ -83,12 +79,9 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
         final List<Long> sortedSearchResultsList = reportService.idSearch(criteriaModel);
         final List<Long> sortedSelectedList = sortSelectionBasedOnIndexIn(criteriaModel.getSelection(), sortedSearchResultsList);
 
-        AsyncTask<?> task = asyncService.createTask(new Callable<Void>() {
-			@Override
-			public Void call() throws Exception {
-				generateCertificatePackage(sortedSelectedList, reportType, link, downloadUrl, "printAllEventCerts");
-				return null;
-			}
+        AsyncTask<?> task = asyncService.createTask(() -> {
+            generateCertificatePackage(sortedSelectedList, reportType, link, downloadUrl, "printAllEventCerts");
+            return null;
 		});
 		asyncService.run(task);
 
@@ -112,7 +105,7 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 			
 			int pageNumber = 1;
 			JasperPrint jPrint;
-			List<JasperPrint> printGroup = new ArrayList<JasperPrint>();
+			List<JasperPrint> printGroup = new ArrayList<>();
 			for (Long entityId: entityIds) {
 				
 				if (printGroup.size() == maxCertsPerGroup) {
@@ -127,11 +120,18 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 					printGroup.add(jPrint);
 				}
 			}
-			
-			if (!printGroup.isEmpty()) {
+
+            if (!printGroup.isEmpty()) {
 				zipOut.putNextEntry(new ZipEntry(pdfFileName(link.getName(), pageNumber)));
 				printer.printToPDF(printGroup, zipOut);
-			}
+			} else {
+                if(pageNumber == 1) {
+                    //In this case, the printGroup is empty AND pageNumber was never incremented past one.  This means
+                    //we didn't produce any printed reports.  Something went wrong... that "something" is likely that
+                    //the user tried to print a boatload of unprintable events.
+                    throw new Exception("No reports were printed, likely because they were all non-printable.");
+                }
+            }
 			
 			downloadLinkService.updateState(link, DownloadState.COMPLETED);
 			sendSuccessNotification(link, downloadUrl, templateName);
@@ -144,7 +144,7 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 		}
 	}
 
-	private JasperPrint generateCertificate(EventReportType eventReportType, Long entityId) {
+	private JasperPrint generateCertificate(EventReportType eventReportType, Long entityId) throws Exception {
 		JasperPrint jPrint = null;
 		try {
 			// If eventReportType is null, assume it's an asset certificate
@@ -156,9 +156,16 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 				jPrint = certificateService.generateAssetCertificate(entityId);
 			}
 		} catch (NonPrintableEventType e) {
+            logger.warn("Just tried to print a Non-Printable Event!  Moving on.");
 		} catch (NonPrintableManufacturerCert e) {
+            logger.warn("Tried to print a Non-Printable Manufacturer Certificate!  Moving on.");
 		} catch (ReportException e) {
-			logger.warn("Failed generating certificate, moving on", e);
+            //This exception, after trimming off the non-printable exceptions, seems to be the place we're likely to
+            //fail if the .jasper files aren't present.  Lets just kick back an exception that should result in
+            //early termination of the print run.  This should probably be all or nothing, barring any non-printable
+            //certificates... for those, we'll just omit them from the .zip file and fail their generation silently.
+			logger.error("Failed generating certificate, moving on", e);
+            throw new Exception("Failed to print a PRINTABLE Event or Manufacturer certificate.  This is likely due to a missing or corrupt .jasper file.");
 		}
 		return jPrint;
 	}

@@ -39,6 +39,7 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
+import java.util.stream.Collectors;
 
 //import sun.misc.BASE64Encoder;
 
@@ -52,10 +53,13 @@ public class S3Service extends FieldIdPersistenceService {
     private Integer expirationDays = null;
     public static final String TENANTS_PREFIX = "tenants/";
     public static final String DEFAULT_BRANDING_LOGO_PATH = "common/default_branding_logo.gif";
-    public static final String BRANDING_LOGO_PATH = "/logos/branding_logo.gif";
-    public static final String CUSTOMER_LOGO_PATH = "/logos/customer_logo_%d.gif";
-    public static final String PRIMARY_CERTIFICATE_LOGO_PATH = "/logos/primary_certificate_logo.gif";
-    public static final String SECONDARY_CERTIFICATE_LOGO_PATH = "/logos/secondary_certificate_logo_%d.gif";
+    public static final String CUSTOMER_LOGO_BASE_PATH = "/logos/";
+    public static final String BRANDING_LOGO_PATH = CUSTOMER_LOGO_BASE_PATH + "branding_logo.gif";
+    public static final String CUSTOMER_FILE_PREFIX = "customer_logo_";
+    public static final String CUSTOMER_FILE_EXT = "gif";
+    public static final String CUSTOMER_LOGO_PATH = CUSTOMER_LOGO_BASE_PATH + CUSTOMER_FILE_PREFIX + "%d." + CUSTOMER_FILE_EXT;
+    public static final String PRIMARY_CERTIFICATE_LOGO_PATH = CUSTOMER_LOGO_BASE_PATH + "primary_certificate_logo.gif";
+    public static final String SECONDARY_CERTIFICATE_LOGO_PATH = CUSTOMER_LOGO_BASE_PATH + "secondary_certificate_logo_%d.gif";
     public static final String CRITERIA_RESULT_IMAGE_PATH_ORIG = "/events/%d/criteria_results/%d/criteria_images/%s";
     public static final String CRITERIA_RESULT_IMAGE_PATH_THUMB = "/events/%d/criteria_results/%d/criteria_images/%s.thumbnail";
     public static final String CRITERIA_RESULT_IMAGE_PATH_MEDIUM = "/events/%d/criteria_results/%d/criteria_images/%s.medium";
@@ -127,6 +131,26 @@ public class S3Service extends FieldIdPersistenceService {
 
     public void uploadDefaultBrandingLogo(Long tenantId) {
         copyObject(DEFAULT_BRANDING_LOGO_PATH, createResourcePath(tenantId, BRANDING_LOGO_PATH));
+    }
+
+    public byte[] downloadCertificateLogo(Long customerOrgId, boolean isPrimary) throws IOException {
+        byte[] logoData = null;
+        if(isPrimary) {
+            logoData = downloadResource(null, PRIMARY_CERTIFICATE_LOGO_PATH, customerOrgId);
+        } else {
+            logoData = downloadResource(null, SECONDARY_CERTIFICATE_LOGO_PATH, customerOrgId);
+        }
+        return logoData;
+    }
+
+    public List<S3ObjectSummary> getAllCustomerLogos() {
+        // this path will contain both customer logos as well as branding and cert logos.  Need to filter down to just customers.
+        return findResources(createResourcePath(null, CUSTOMER_LOGO_BASE_PATH), "^.*/" + CUSTOMER_FILE_PREFIX + "\\d+\\." + CUSTOMER_FILE_EXT + "$");
+    }
+
+    public String getCustomerLogoPath(Long customerOrgId) {
+        String fullResourcePath = createResourcePath(null, CUSTOMER_LOGO_PATH, customerOrgId);
+        return fullResourcePath;
     }
 
     public URL getCustomerLogoURL(Long customerOrgId) {
@@ -728,6 +752,13 @@ public class S3Service extends FieldIdPersistenceService {
         return generateResourceUrl(org.getTenant().getId(), attachment.getFileName(), org.getId());
     }
 
+    public String getCriteriaResultImageMediumPath(CriteriaResultImage criteriaResultImage) {
+        return createResourcePath(null, CRITERIA_RESULT_IMAGE_PATH_MEDIUM,
+                criteriaResultImage.getCriteriaResult().getEvent().getId(),
+                criteriaResultImage.getCriteriaResult().getId(),
+                criteriaResultImage.getFileName());
+    }
+
     public byte[] downloadCriteriaResultImageMedium(CriteriaResultImage criteriaResultImage) throws IOException {
         return downloadResource(null, CRITERIA_RESULT_IMAGE_PATH_MEDIUM,
                 criteriaResultImage.getCriteriaResult().getEvent().getId(),
@@ -756,6 +787,22 @@ public class S3Service extends FieldIdPersistenceService {
         putObject(imagePath.getMediumPath(), imageService.generateMedium(data), contentType);
         putObject(imagePath.getThumbnailPath(), imageService.generateThumbnail(data), contentType);
         return imagePath;
+    }
+
+    private List<S3ObjectSummary> findResources(String basePath, String matchingRegex) {
+        List<S3ObjectSummary> resources = getSummariesFromObjectListing(getClient().listObjects(getBucket(), basePath));
+        List<S3ObjectSummary> filteredResources = (matchingRegex != null) ? resources.stream().filter(s -> s.getKey().matches(matchingRegex)).collect(Collectors.toList()) : resources;
+        return filteredResources;
+    }
+
+    private List<S3ObjectSummary> getSummariesFromObjectListing(ObjectListing listing) {
+        List<S3ObjectSummary> paths = listing.getObjectSummaries();
+
+        if (listing.isTruncated()) {
+            paths.addAll(getSummariesFromObjectListing(getClient().listNextBatchOfObjects(listing)));
+        }
+
+        return paths;
     }
 
     private void uploadResource(File file, Long tenantId, String path, Object...pathArgs) {

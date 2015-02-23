@@ -100,6 +100,14 @@ public class ApiEventResource extends FieldIdPersistenceService {
 				BaseOrg owner = event.getAsset().getOwner();
 				apiEvent.setOwnerId(owner != null ? owner.getId() : null);
 			}
+
+            if(multiAddEvent.isCopyAssetStatus() != null && multiAddEvent.isCopyAssetStatus()) {
+                //Set the AssetStatus on the event to the AssetStatus from the Asset.  Obviously, if the Asset or its
+                //Status is missing, we're not going to be updating the event with that data... it doesn't exist!!
+                if(event.getAsset() != null && event.getAsset().getAssetStatus() != null) {
+                    apiEvent.setAssetStatusId(event.getAsset().getAssetStatus().getId());
+                }
+            }
 			
 			if(multiAddEvent.isCopyLocation()) {
 				Location location = event.getAsset().getAdvancedLocation();

@@ -13,7 +13,6 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 import java.util.List;
@@ -31,7 +30,7 @@ public class EventTypeTranslationsPage extends TranslationsPage<EventType> {
 
     @Override
     protected List<String> initExcludedFields() {
-        return Lists.newArrayList("group", "eventTypes", "recommendations", "deficiencies", "scoreGroup", "buttonGroup", "options");
+        return Lists.newArrayList("group", "eventTypes", "recommendations", "deficiencies", "scoreGroup", "buttonGroup", "options", "observationCountGroup", "observationCount");
     }
 
     @Override
@@ -65,6 +64,14 @@ public class EventTypeTranslationsPage extends TranslationsPage<EventType> {
                 }
                 @Override public boolean isVisible() {
                     return entity instanceof ScoreCriteria;
+                }
+            });
+            add(new AjaxLink("observationCountGroups") {
+                @Override public void onClick(AjaxRequestTarget target) {
+                    showLocalizationDialogFor(e, Lists.newArrayList("observationCountGroup"), target);
+                }
+                @Override public boolean isVisible() {
+                    return entity instanceof ObservationCountCriteria;
                 }
             });
             add(new AjaxLink("buttonGroups") {

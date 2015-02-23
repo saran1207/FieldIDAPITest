@@ -1,9 +1,9 @@
 package com.n4systems.model;
 
+import com.n4systems.model.api.Listable;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.n4systems.model.api.Listable;
 
 public enum CriteriaType implements Listable {
 
@@ -15,6 +15,7 @@ public enum CriteriaType implements Listable {
     SIGNATURE("Signature", "signature", SignatureCriteria.class,SignatureCriteriaResult.class),
     DATE_FIELD("Date Field", "datefield", DateFieldCriteria.class,DateFieldCriteriaResult.class),
     SCORE("Score", "score", ScoreCriteria.class, ScoreCriteriaResult.class),
+    OBSERVATION_COUNT("Observation Count", "observationcount", ObservationCountCriteria.class, ObservationCountCriteriaResult.class),
     NUMBER_FIELD("Number Field", "numberfield", NumberFieldCriteria.class, NumberFieldCriteriaResult.class);
 
     private String description;

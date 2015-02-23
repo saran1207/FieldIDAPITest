@@ -49,7 +49,7 @@ label.label {
 }
 
 label.eventFormLabel {
-    width: 50%;
+    width: 370px;
     text-align: left;
     padding-top:10px;
 }
@@ -62,7 +62,7 @@ label.eventFormLabel {
 }
 
 .criteriaEditContainer {
-    width:26%;
+    width: 410px;
     display:block;
     float:left;
 }
@@ -754,4 +754,55 @@ span.fieldHolder img {
 }
 .disabled-overlay .button .mattButton:hover {
     box-shadow: inset 0 0 18px #00486D;
+}
+
+.observation-counter {
+    width: 55px;
+    margin: 5px 10px 15px 0;
+    float: left;
+}
+.observation-counter label {
+    width: 100%;
+    text-align: center;
+    display: block;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.observation-counter-input-container {
+    position: relative;
+}
+.observation-counter-input-container input {
+    width: 100% !important;
+    height: 75px;
+    padding: 0 !important;
+    margin: 0;
+
+    text-align: center;
+    font-size: 1.4em;
+
+    border-radius: 4px;
+    background: #E2E2E2;
+    border: 1px solid #C5C5C5 !important;
+    border-bottom: 1px solid #B6B6B6 !important;
+    color: #444 !important;
+    text-indent: 0px;
+}
+.observation-counter-input-container .increment,
+.observation-counter-input-container .decrement {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 36px;
+    z-index: 2;
+    background-image: url(../../../../images/arrows/arrow-up.png);
+    background-size: 14px auto;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+}
+.observation-counter-input-container .decrement {
+    top: auto;
+    bottom: 0;
+    background-image: url(../../../../images/arrows/arrow-down.png);
 }

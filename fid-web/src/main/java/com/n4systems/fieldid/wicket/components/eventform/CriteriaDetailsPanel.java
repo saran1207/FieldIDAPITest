@@ -59,6 +59,8 @@ public class CriteriaDetailsPanel extends Panel {
             });
         } else if (criteria instanceof NumberFieldCriteria) {
         	add(new NumberFieldDetailsPanel("specificDetailsPanel", new Model<NumberFieldCriteria>((NumberFieldCriteria) criteria)));
+        } else if (criteria instanceof ObservationCountCriteria) {
+            add(new ObservationCountDetailsPanel("specificDetailsPanel", new Model<ObservationCountCriteria>((ObservationCountCriteria) criteria)));
         }
     }
 

@@ -2,11 +2,13 @@ package com.n4systems.fieldid.ws.v1.resources.event;
 
 import com.n4systems.api.conversion.event.CriteriaResultFactory;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.event.ObservationCountService;
 import com.n4systems.fieldid.ws.v1.exceptions.InternalErrorException;
 import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventSchedule;
 import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventScheduleResource;
 import com.n4systems.model.*;
 import org.apache.commons.lang.NullArgumentException;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
@@ -14,7 +16,10 @@ import java.util.stream.Collectors;
 
 public class ApiExistingEventFormResultResource extends FieldIdPersistenceService {
 	@Autowired private ApiEventScheduleResource apiEventScheduleResource;
+    @Autowired private ObservationCountService observationCountService;
     private CriteriaResultFactory criteriaResultFactory;
+
+    private static final Logger logger = Logger.getLogger(ApiExistingEventFormResultResource.class);
 
     public ApiExistingEventFormResultResource() {
         criteriaResultFactory = new CriteriaResultFactory();
@@ -139,7 +144,61 @@ public class ApiExistingEventFormResultResource extends FieldIdPersistenceServic
 			case NUMBER_FIELD:
 				((NumberFieldCriteriaResult) result).setValue(apiResult.getNumberValue());
 				break;
+            case OBSERVATION_COUNT:
+                //NOTE: The assumption here is that we don't need a mobileGUID, since we can more or less get the same
+                //      information by extrapolation.  We know that there can only be one of any given type of
+                //      ObservationCount for an ObservationCountCriteriaResult.  We know that these are tied to
+                //      ObservationCountResult objects, which lack a mobileGUID directly.  However, we can use the ID
+                //      from the ObservationCount and ApiObservationCount objects to determine relationships.
+                result = observationCountService.getObservationCountCriteriaResultByMobileId(apiResult.getSid());
+
+                List<ObservationCountResult> observationCountResults = new ArrayList<>();
+
+                //If we get a null back, this means that these CriteriaResults haven't been recorded yet!!
+                if(result == null) {
+                    //New Entry Mode... this is where we build the data from scratch, more or less.
+
+                    result = new ObservationCountCriteriaResult();
+
+                    apiResult.getObservationCountValue().forEach(apiObservationCountResult -> {
+                        //For each of these objects, we need to process it into the new data structure.  This is made
+                        //easy by the fact that we should just be able to load up the ReadOnly portion of the model
+                        //directly.
+                        ObservationCount observationCount = persistenceService.find(ObservationCount.class, apiObservationCountResult.getObservationCount().getSid());
+
+                        //Now we need to build the result...
+                        ObservationCountResult observationCountResult = new ObservationCountResult();
+                        observationCountResult.setObservationCount(observationCount); //We'll just put this here...
+                        observationCountResult.setValue(apiObservationCountResult.getValue()); //...and take that value.
+
+                        //After all of this, we bold it on to the result, like so:
+                        observationCountResults.add(observationCountResult);
+                    });
+                } else {
+                    //Existing Work Mode... this is where we have to carefully match provided data with existing data.
+                    //We will try to replace the whole list, if that is possible...
+
+                    ((ObservationCountCriteriaResult) result).getObservationCountResults()
+                            .forEach(observationCountResult -> {
+                                //Trust me, it looks like we're processing more than one entry below, but we're not.  Just like
+                                //highlander, there can be only one.
+                                apiResult.getObservationCountValue()
+                                        .stream()
+                                                //Notice how we're filtering in a way that makes it impossible to return more than
+                                                //one result (unless the data is corrupt, in which case this might have problems).
+                                        .filter(apiObservationCountResult -> apiObservationCountResult.getObservationCount().getSid().equals(observationCountResult.getId()))
+                                        .forEach(apiObservationCountResult -> observationCountResult.setValue(apiObservationCountResult.getValue()));
+
+                                observationCountResults.add(observationCountResult);
+                            });
+
+                }
+
+                ((ObservationCountCriteriaResult) result).setObservationCountResults(observationCountResults);
+
+                break;
 			default:
+                logger.error("Unhandled Criteria type: " + result.getCriteria().getCriteriaType().name());
 				throw new InternalErrorException("Unhandled Criteria type: " + result.getCriteria().getCriteriaType().name());
 		}
 		

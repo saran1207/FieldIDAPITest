@@ -62,6 +62,8 @@ import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusFormPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventtypegroup.*;
 import com.n4systems.fieldid.wicket.pages.setup.loto.*;
+import com.n4systems.fieldid.wicket.pages.setup.observationcount.ObservationCountGroupPage;
+import com.n4systems.fieldid.wicket.pages.setup.observationcount.ObservationCountResultConfigurationPage;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.ConfirmArchivePage;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
 import com.n4systems.fieldid.wicket.pages.setup.score.ScoreGroupsPage;
@@ -110,7 +112,9 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/accountPolicy", AccountPolicyPage.class);
         mountPage("setup/security", SecurityPage.class);
         mountPage("setup/scoreGroups", ScoreGroupsPage.class);
+        mountPage("setup/observationCountGroups", ObservationCountGroupPage.class);
         mountPage("setup/scoreResults", ScoreResultConfigurationPage.class);
+        mountPage("setup/observationCounts", ObservationCountResultConfigurationPage.class);
         mountPage("setup/priorityCodes", PriorityCodePage.class);
         mountPage("setup/archivePriorityCode", ConfirmArchivePage.class);
         mountPage("setup/reassignEventTypeGroups", ReassignEventTypeGroupPage.class);

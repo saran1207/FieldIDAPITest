@@ -31,10 +31,18 @@ public class CriteriaCopyUtil {
             newCriteria = copyScoreCriteria((ScoreCriteria) criteria);
 	    } else if (criteria instanceof NumberFieldCriteria) {
 	    	newCriteria = copyNumberFieldCriteria((NumberFieldCriteria)criteria);
-	    }
+	    } else if (criteria instanceof ObservationCountCriteria) {
+            newCriteria = copyObservationCountCriteria((ObservationCountCriteria)criteria);
+        }
 
         copyCommonFields(criteria, newCriteria, existingCriteria);
         return newCriteria;
+    }
+
+    private Criteria copyObservationCountCriteria(ObservationCountCriteria criteria) {
+        ObservationCountCriteria newCrtieria = new ObservationCountCriteria();
+        newCrtieria.setObservationCountGroup(criteria.getObservationCountGroup());
+        return newCrtieria;
     }
 
     private Criteria copyNumberFieldCriteria(NumberFieldCriteria criteria) {

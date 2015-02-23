@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="assettypegroups")
-public class AssetTypeGroup extends EntityWithTenant implements NamedEntity, Listable<Long> {
+public class AssetTypeGroup extends EntityWithTenant implements NamedEntity, Listable<Long>, ApiModelWithName {
 	private static final long serialVersionUID = 1L;
 	
 	@Column(nullable=false, length=40)

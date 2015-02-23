@@ -366,6 +366,10 @@ public class SvgGenerationService extends FieldIdPersistenceService {
 
         File imageFile = PathHandler.getTempFile();
         byte [] bytes = s3Service.downloadProcedureDefinitionImage((ProcedureDefinitionImage) annotation.getImage());
+
+        //convert image to be scaled down to jasper size
+        bytes = imageService.scaleImage(bytes, DEFAULT_JASPER_WIDTH, DEFAULT_JASPER_HEIGHT);
+
         FileUtils.writeByteArrayToFile(imageFile, bytes);
         BufferedImage bufferedImage = ImageIO.read(imageFile);
 

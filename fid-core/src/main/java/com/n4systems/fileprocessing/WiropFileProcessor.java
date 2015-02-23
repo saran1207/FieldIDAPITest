@@ -1,17 +1,5 @@
 package com.n4systems.fileprocessing;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-
 import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.graphing.Chart;
 import com.n4systems.graphing.ChartPoint2D;
@@ -19,6 +7,13 @@ import com.n4systems.graphing.ChartSeries;
 import com.n4systems.graphing.GraphFactory;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.util.DateHelper;
+import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
+
+import java.io.*;
+import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class WiropFileProcessor extends FileProcessor {
 	private final Logger logger = Logger.getLogger(WiropFileProcessor.class);
@@ -101,7 +96,12 @@ public class WiropFileProcessor extends FileProcessor {
 		 */
 		
 		while(!fullHeaderLine.contains(headerSectionEnd)) {
-			fullHeaderLine += reader.readLine();
+			String line = reader.readLine();
+			if(line != null) {
+				fullHeaderLine += line;
+			} else {
+				throw new IOException("End of file has been reached without the '####' delimiter showing up.");
+			}
 		}
 		
 		return fullHeaderLine.split(headerDelim);

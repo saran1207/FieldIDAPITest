@@ -1,15 +1,26 @@
 package com.n4systems.fieldid.ws.v1.resources.org;
 
-import javax.ws.rs.Path;
-
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
+import com.n4systems.fieldid.ws.v1.resources.model.DateParam;
+import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
+import com.n4systems.model.AddressInfo;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClauseFactory;
+import com.n4systems.util.persistence.WhereParameter;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
-import com.n4systems.model.AddressInfo;
-import com.n4systems.model.orgs.BaseOrg;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
 @Path("organization")
@@ -30,7 +41,9 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 		apiOrg.setModified(baseOrg.getModified());
 		apiOrg.setActive(baseOrg.isActive());
 		apiOrg.setName(baseOrg.getName());
-		apiOrg.setImage(loadOrgImage(baseOrg));		
+		if (versionLessThan(1, 8, 0)) {
+			apiOrg.setImage(loadOrgImage(baseOrg));
+		}
 		apiOrg.setAddress(convertAddress(baseOrg.getAddressInfo()));
 		
 		if (baseOrg.getParent() != null) {
@@ -49,6 +62,49 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 			apiOrg.setDivisionId(baseOrg.getDivisionOrg().getId());
 		}
 		return apiOrg;
+	}
+
+	/*
+	Returns list of all customer logos and their corresponding org id.  This is used by mobile
+	as a speed improvement to the synchronization process.
+	 */
+	@GET
+	@Path("images")
+	@Consumes(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Transactional(readOnly = true)
+	public ListResponse<ApiOrgImage> findAllOrgImages(@QueryParam("after") DateParam after) {
+		/*
+		Note: Rather than loading orgs first and fetching images, we fetch ALL customer logo images, parse the id
+		from the filename and then load the org.  This is much faster because we do not know if the org has a logo
+		image until we try and fetch it from S3.  Given 1000 orgs, that would be 1000 GET requests, most of which will 404
+		since the ratio of org images to orgs is very low.
+		 */
+		List<S3ObjectSummary> s3Images = s3Service.getAllCustomerLogos();
+		List<ApiOrgImage> orgImages = new ArrayList<>();
+
+		// parse the id from the org
+		Pattern p = Pattern.compile("^.*/" + s3Service.CUSTOMER_FILE_PREFIX + "(\\d+)\\." + s3Service.CUSTOMER_FILE_EXT + "$");
+		for (S3ObjectSummary image: s3Images) {
+			Matcher m = p.matcher(image.getKey());
+			if (m.matches()) {
+				/*
+				We still need to attempt to load the org as it may be archived (the images are not removed when an org is archived).
+				We can apply date filtering at the same time
+				*/
+				long orgId = Long.parseLong(m.group(1));
+				QueryBuilder<BaseOrg> query = createTenantSecurityBuilder(BaseOrg.class).addWhere(WhereClauseFactory.create("id", orgId));
+				if (after != null) {
+					query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GT, "modified", after));
+				}
+
+				if (persistenceService.exists(query)) {
+					orgImages.add(new ApiOrgImage(orgId, image.getKey()));
+				}
+			}
+		}
+		ListResponse<ApiOrgImage> response = new ListResponse<>(orgImages, 0, 100, orgImages.size());
+		return response;
 	}
 	
 	private byte[] loadOrgImage(BaseOrg baseOrg) {

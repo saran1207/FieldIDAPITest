@@ -7,10 +7,7 @@ import com.n4systems.fieldid.wicket.components.eventform.CriteriaPanel;
 import com.n4systems.fieldid.wicket.components.eventform.CriteriaSectionsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.save.SavePanel;
 import com.n4systems.fieldid.wicket.pages.setup.eventtype.EventTypePage;
-import com.n4systems.model.ButtonGroup;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.ScoreGroup;
+import com.n4systems.model.*;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.model.IModel;
@@ -42,12 +39,12 @@ public class EventFormEditPage extends EventTypePage {
         add(topSavePanel = createSavePanel("topSavePanel"));
         add(bottomSavePanel = createSavePanel("bottomSavePanel"));
 
-        criteriaSections = new ArrayList<CriteriaSection>();
+        criteriaSections = new ArrayList<>();
         if (eventTypeModel.getObject().getEventForm() != null) {
             criteriaSections.addAll(eventTypeModel.getObject().getEventForm().getAvailableSections());
         }
 
-        add(criteriaSectionsPanel = new CriteriaSectionsPanel("criteriaSectionsPanel", new PropertyModel<List<CriteriaSection>>(this, "criteriaSections"))
+        add(criteriaSectionsPanel = new CriteriaSectionsPanel("criteriaSectionsPanel", new PropertyModel<>(this, "criteriaSections"))
         {
             @Override
             public void onCriteriaSectionAdded(AjaxRequestTarget target, CriteriaSection section) {
@@ -77,8 +74,13 @@ public class EventFormEditPage extends EventTypePage {
             }
         });
 
+        boolean isMaster = false;
 
-        add(criteriaPanel = new CriteriaPanel("criteriaPanel") {
+        if(eventTypeModel.getObject() instanceof ThingEventType) {
+            isMaster = ((ThingEventType)eventTypeModel.getObject()).isMaster();
+        }
+
+        add(criteriaPanel = new CriteriaPanel("criteriaPanel", new PropertyModel<>(eventTypeModel, "eventForm"), isMaster) {
             @Override
             public void onCriteriaAdded(AjaxRequestTarget target, Criteria criteria, int newIndex) {
                 criteria.setTenant(FieldIDSession.get().getSessionUser().getTenant());
@@ -103,10 +105,12 @@ public class EventFormEditPage extends EventTypePage {
             protected void onCriteriaListUpdated(AjaxRequestTarget target) {
                 refreshAllComponents(target);
             }
+
+
         });
         criteriaPanel.setVisible(false);
 
-        add(criteriaDetailsPanel = new CriteriaConfigurationPanel("criteriaDetailsPanel",new Model<Criteria>()) {
+        add(criteriaDetailsPanel = new CriteriaConfigurationPanel("criteriaDetailsPanel",new Model<>()) {
             @Override protected void setPreviouslySelectedScoreGroup(ScoreGroup scoreGroup) {
                 criteriaPanel.setPreviouslySelectedScoreGroup(scoreGroup);
             }
@@ -138,7 +142,7 @@ public class EventFormEditPage extends EventTypePage {
 
     private void updateComponentStatesForSectionSelected(int index) {
         CriteriaSection criteriaSection = criteriaSections.get(index);
-        updateCriteriaPanel(new Model<CriteriaSection>(criteriaSection));
+        updateCriteriaPanel(new Model<>(criteriaSection));
         criteriaDetailsPanel.setVisible(false);
         if (criteriaSection.getAvailableCriteria().size() > 0) {
             updateComponentsForCriteriaSelected(criteriaSection.getAvailableCriteria().get(0));

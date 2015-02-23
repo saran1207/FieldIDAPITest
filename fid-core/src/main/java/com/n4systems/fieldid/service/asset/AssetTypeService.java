@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ImageAttachmentException;
 import com.n4systems.exceptions.InvalidQueryException;
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
@@ -23,7 +23,6 @@ import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,13 +33,10 @@ import rfid.ejb.entity.InfoOptionBean;
 
 import javax.persistence.Query;
 import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-public class AssetTypeService extends FieldIdPersistenceService {
+public class AssetTypeService extends CrudService<AssetType> {
 
     private static final Logger logger= Logger.getLogger(AssetTypeService.class);
 
@@ -52,7 +48,11 @@ public class AssetTypeService extends FieldIdPersistenceService {
     @Autowired private ProcedureDefinitionService procedureDefinitionService;
     @Autowired private S3Service s3Service;
 
-    public AssetType getAssetType(Long id) {
+	public AssetTypeService() {
+		super(AssetType.class);
+	}
+
+	public AssetType getAssetType(Long id) {
         return persistenceService.find(AssetType.class, id);
     }
 

@@ -2,13 +2,11 @@ package com.n4systems.fieldid.wicket.components.org;
 
 
 import com.google.common.base.Preconditions;
-import com.n4systems.model.Asset;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.EntityWithTenant;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.PropertyModel;
 
 public class OrgLocationModel extends LoadableDetachableModel<EntityWithTenant> {
 

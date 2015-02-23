@@ -1,10 +1,14 @@
 package com.n4systems.fieldid.service.user;
 
+import com.n4systems.fieldid.service.CrudService;
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.api.Archivable;
+import com.n4systems.model.security.OwnerAndDownWithPrimaryFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
+import com.n4systems.model.user.UserQueryHelper;
 import com.n4systems.util.persistence.*;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,12 +18,16 @@ import java.util.HashSet;
 import java.util.List;
 
 @Transactional
-public class UserGroupService extends FieldIdPersistenceService {
+public class UserGroupService extends CrudService<UserGroup> {
+
+    public UserGroupService() {
+        super(UserGroup.class);
+    }
 
     public Collection<User> findUsersVisibleTo(User user) {
         Collection<User> friends = new HashSet<User>();
         for (UserGroup userGroup : user.getGroups()) {
-            friends.addAll(getUsersInGroup(userGroup));
+            friends.addAll(getUsersInGroup(userGroup, user));
         }
         return friends;
     }
@@ -91,8 +99,30 @@ public class UserGroupService extends FieldIdPersistenceService {
     }
 
     public List<User> getUsersInGroup(UserGroup userGroup) {
+        return getUsersInGroup(userGroup, null);
+    }
+
+    public List<User> getUsersInGroup(UserGroup userGroup, User user) {
         QueryBuilder<User> query = new QueryBuilder<User>(User.class, new TenantOnlySecurityFilter(userGroup.getTenant().getId()));
         query.addWhere(new InElementsParameter<UserGroup>("groups", userGroup));
+        if (user != null) {
+              query.applyFilter(new OwnerAndDownWithPrimaryFilter(user.getOwner()));
+        }
+        return persistenceService.findAll(query);
+    }
+    public List<User> getArchivedUsersInGroup(User user) {
+        List<User> archivedUsers = Lists.newArrayList();
+        for (UserGroup group: user.getGroups()) {
+            archivedUsers.addAll(getArchivedUsersInGroup(group, user));
+        }
+        return archivedUsers;
+    }
+
+    public List<User> getArchivedUsersInGroup(UserGroup userGroup, User user) {
+        QueryBuilder<User> query = new QueryBuilder<User>(User.class, new TenantOnlySecurityFilter(userGroup.getTenant().getId()).setShowArchived(true));
+        query.addWhere(new InElementsParameter<UserGroup>("groups", userGroup));
+        UserQueryHelper.applyArchivedFilter(query);
+        query.applyFilter(new OwnerAndDownWithPrimaryFilter(user.getOwner()));
         return persistenceService.findAll(query);
     }
 

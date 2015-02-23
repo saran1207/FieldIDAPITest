@@ -9,7 +9,6 @@ import com.n4systems.fieldid.wicket.pages.setup.eventtype.EventTypePage;
 import com.n4systems.model.EventForm;
 import com.n4systems.model.EventType;
 import com.n4systems.model.ScoreCalculationType;
-import com.n4systems.model.ScoreResultRange;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -26,6 +25,8 @@ public class ScoreResultConfigurationPage extends EventTypePage {
     private PersistenceService persistenceService;
 
     private EventForm eventForm;
+
+    private CheckBox useScoreForResult;
 
     public ScoreResultConfigurationPage(PageParameters params) {
         super(params);
@@ -51,15 +52,50 @@ public class ScoreResultConfigurationPage extends EventTypePage {
     class ScoreConfigurationForm extends Form<EventForm> {
 
         public ScoreConfigurationForm(String id) {
-            super(id, new CompoundPropertyModel<EventForm>(eventForm));
+            super(id, new CompoundPropertyModel<>(eventForm));
             add(new FIDFeedbackPanel("feedbackPanel"));
 
-            add(new CheckBox("displaySectionTotals", new PropertyModel<Boolean>(eventTypeModel, "displaySectionTotals")));
-            add(new CheckBox("displayScorePercentage", new PropertyModel<Boolean>(eventTypeModel, "displayScorePercentage")));
-            add(new CheckBox("useScoreForResult"));
-            add(new DropDownChoice<ScoreCalculationType>("scoreCalculationType", Arrays.asList(ScoreCalculationType.values()), new CalculationChoiceRenderer()));
-            add(new ScoreResultRangePanel("failRangePanel", new PropertyModel<ScoreResultRange>(eventForm, "failRange")));
-            add(new ScoreResultRangePanel("passRangePanel", new PropertyModel<ScoreResultRange>(eventForm, "passRange")));
+            add(new CheckBox("displayScoreSectionTotals", new PropertyModel<>(eventTypeModel, "displayScoreSectionTotals")));
+            add(new CheckBox("displayScorePercentage", new PropertyModel<>(eventTypeModel, "displayScorePercentage")));
+            add(useScoreForResult = new CheckBox("useScoreForResult"));
+
+            boolean initialPercentage = eventForm.getScoreCalculationType().equals(ScoreCalculationType.AVERAGE);
+
+            ScoreResultRangePanel failRangePanel = new ScoreResultRangePanel("failRangePanel", new PropertyModel<>(eventForm, "failRange"), initialPercentage){
+                @Override
+                protected boolean isValidationRequired() {
+                    System.out.println("Checkbox Value: " + useScoreForResult.getModelObject());
+                    return useScoreForResult.getModelObject();
+                }
+            };
+            add(failRangePanel);
+
+            ScoreResultRangePanel passRangePanel = new ScoreResultRangePanel("passRangePanel", new PropertyModel<>(eventForm, "passRange"), initialPercentage){
+                @Override
+                protected boolean isValidationRequired() {
+                    System.out.println("Checkbox Value: " + useScoreForResult.getModelObject());
+                    return useScoreForResult.getModelObject();
+                }
+            };
+            add(passRangePanel);
+
+            add(new DropDownChoice<ScoreCalculationType>("scoreCalculationType", Arrays.asList(ScoreCalculationType.values()), new CalculationChoiceRenderer()) {
+                @Override
+                protected boolean wantOnSelectionChangedNotifications() {
+                    return true;
+                }
+
+                @Override
+                protected void onSelectionChanged(ScoreCalculationType type){
+                    if(type == ScoreCalculationType.AVERAGE) {
+                        failRangePanel.showPercentage(true);
+                        passRangePanel.showPercentage(true);
+                    } else {
+                        failRangePanel.showPercentage(false);
+                        passRangePanel.showPercentage(false);
+                    }
+                }
+            });
 
             add(new NonWicketLink("cancelLink", "eventType.action?uniqueID="+eventTypeId));
             add(new Button("submitButton"));

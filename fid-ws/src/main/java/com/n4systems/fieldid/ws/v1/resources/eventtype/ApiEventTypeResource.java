@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.ws.v1.resources.eventtype;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.criteria.*;
 import com.n4systems.fieldid.ws.v1.resources.model.DateParam;
@@ -140,13 +141,15 @@ public class ApiEventTypeResource extends SetupDataResource<ApiEventType, EventT
 			UnitOfMeasureCriteria uomCriteria = (UnitOfMeasureCriteria) criteria;
 			Long secondaryUnitId = uomCriteria.getSecondaryUnit() != null ? uomCriteria.getSecondaryUnit().getId() : null;
 			apiCriteria = new ApiUnitOfMeasureCriteria(uomCriteria.getPrimaryUnit().getId(), secondaryUnitId);
+        } else if (criteria instanceof ObservationCountCriteria) {
+            apiCriteria = new ApiObservationCountCriteria(convertObservationCountGroup(((ObservationCountCriteria) criteria).getObservationCountGroup()));
 		} else {
 			throw new IllegalArgumentException("Unsupported Criteria type: " + criteria.getClass().getName());
 		}
 		return apiCriteria;
 	}
 
-	private List<ApiOneClickState> convertStateSet(ButtonGroup buttonGroup) {
+    private List<ApiOneClickState> convertStateSet(ButtonGroup buttonGroup) {
 		List<ApiOneClickState> apiStates = new ArrayList<>();
 		for (Button button : buttonGroup.getButtons()) {
 			ApiOneClickState apiState = new ApiOneClickState();
@@ -176,4 +179,17 @@ public class ApiEventTypeResource extends SetupDataResource<ApiEventType, EventT
 		return apiScores;
 	}
 
+    private List<ApiObservationCount> convertObservationCountGroup(ObservationCountGroup group) {
+        List<ApiObservationCount> apiObservationCounts = Lists.newArrayList();
+        for (ObservationCount count: group.getObservationCounts()) {
+            ApiObservationCount apiCount = new ApiObservationCount();
+            apiCount.setSid(count.getId());
+            apiCount.setModified(count.getModified());
+            apiCount.setName(count.getName());
+            apiCount.setCounted(count.isCounted());
+            apiCount.setActive(count.isActive());
+            apiObservationCounts.add(apiCount);
+        }
+        return apiObservationCounts;
+    }
 }

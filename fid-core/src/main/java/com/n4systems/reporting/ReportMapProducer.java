@@ -56,6 +56,26 @@ public abstract class ReportMapProducer {
 		reportMap.put(key, value);
 	}
 
+	protected InputStream getCertificateLogo(BaseOrg owner) {
+		if (owner == null) return null;
+		try {
+			byte[] logo = s3Service.downloadCertificateLogo(owner.getId(), owner.isPrimary());
+
+			//If the owner does not have an certificate logo, traverse up the parent tree to find one
+			BaseOrg child = owner;
+			while(logo == null && child.getParent() != null) {
+				BaseOrg parent = child.getParent();
+				logo = s3Service.downloadCertificateLogo(parent.getId(), parent.isPrimary());
+				child = parent;
+			}
+
+			return logo != null ? new ByteArrayInputStream(logo) : null;
+		} catch (IOException e) {
+			logger.warn("Unable to download customer logo for report", e);
+			return null;
+		}
+	}
+
     protected InputStream getCustomerLogo(BaseOrg owner) {
         if (owner == null || owner.isInternal()) return null;
         try {

@@ -1,13 +1,13 @@
 package com.n4systems.protobuf;
 
+import com.n4systems.fieldid.api.pub.model.Messages;
 import com.n4systems.fieldid.api.pub.protocolbuffers.google.GoogleProtobufMessageBodyWriter;
-import com.n4systems.fieldid.api.pub.serialization.TestMessages;
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 
 import javax.json.Json;
-import javax.json.JsonReader;
 import javax.json.JsonObject;
+import javax.json.JsonReader;
 import javax.ws.rs.core.MediaType;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -18,7 +18,7 @@ public class SerializationTest {
         return new GoogleProtobufMessageBodyWriter();
     }
 
-    private static void populateTestSimpleMessageBuilder(TestMessages.TestSimpleMessage.Builder builder) {
+    private static void populateTestSimpleMessageBuilder(Messages.TestSimpleMessage.Builder builder) {
         builder.setDoubleField(1.0)
                 .setFloatField(2)
                 .setInt32Field(3)
@@ -35,9 +35,9 @@ public class SerializationTest {
                 .setStringField("string value");
     }
 
-    private static void populateTestContainerMessageBuilder(TestMessages.TestContainerMessage.Builder builder) {
+    private static void populateTestContainerMessageBuilder(Messages.TestContainerMessage.Builder builder) {
         builder.setInt32Field(1)
-                .setNested(TestMessages.TestNestedMessage.newBuilder()
+                .setNested(Messages.TestNestedMessage.newBuilder()
                 .setStringField("string value").build());
     }
 
@@ -48,8 +48,8 @@ public class SerializationTest {
         MediaType jsonMediaType = new MediaType("application", "json");
         MediaType htmlMediaType = new MediaType("text", "html");
 
-        Assert.assertTrue(writer.isWriteable(TestMessages.TestSimpleMessage.class, null, null, jsonMediaType));
-        Assert.assertFalse(writer.isWriteable(TestMessages.TestSimpleMessage.class, null, null, htmlMediaType));
+        Assert.assertTrue(writer.isWriteable(Messages.TestSimpleMessage.class, null, null, jsonMediaType));
+        Assert.assertFalse(writer.isWriteable(Messages.TestSimpleMessage.class, null, null, htmlMediaType));
         Assert.assertFalse(writer.isWriteable(Object.class, null, null, jsonMediaType));
     }
 
@@ -57,9 +57,9 @@ public class SerializationTest {
     public void test_simple_message_json_serialization() throws IOException {
         GoogleProtobufMessageBodyWriter writer = getWriter();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        TestMessages.TestSimpleMessage.Builder builder = TestMessages.TestSimpleMessage.newBuilder();
+		Messages.TestSimpleMessage.Builder builder = Messages.TestSimpleMessage.newBuilder();
         populateTestSimpleMessageBuilder(builder);
-        TestMessages.TestSimpleMessage message = builder.build();
+		Messages.TestSimpleMessage message = builder.build();
         MediaType jsonMediaType = new MediaType("application", "json");
 
         writer.writeTo(message, message.getClass(), null, null, jsonMediaType, null, outputStream);
@@ -89,9 +89,9 @@ public class SerializationTest {
     public void test_nested_message_json_serialization() throws IOException {
         GoogleProtobufMessageBodyWriter writer = getWriter();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        TestMessages.TestContainerMessage.Builder builder = TestMessages.TestContainerMessage.newBuilder();
+		Messages.TestContainerMessage.Builder builder = Messages.TestContainerMessage.newBuilder();
         populateTestContainerMessageBuilder(builder);
-        TestMessages.TestContainerMessage message = builder.build();
+		Messages.TestContainerMessage message = builder.build();
 
         MediaType jsonMediaType = new MediaType("application", "json");
 

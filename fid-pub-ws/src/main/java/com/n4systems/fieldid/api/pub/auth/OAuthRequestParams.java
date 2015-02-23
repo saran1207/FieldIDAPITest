@@ -50,7 +50,7 @@ public class OAuthRequestParams {
 
     public OAuthRequestParams port(int port) {
         this.port = port;
-        hasPort = port != 0;
+        hasPort = port != -1;
         return this;
     }
 

@@ -1,13 +1,13 @@
 package com.n4systems.fieldid.wicket.components.eventform;
 
 import com.n4systems.fieldid.service.event.ScoreService;
-import com.n4systems.fieldid.utils.Predicate;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressedBehavior;
 import com.n4systems.fieldid.wicket.components.AppendToClassIfCondition;
 import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
 import com.n4systems.fieldid.wicket.components.feedback.ContainerFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.eventform.CriteriaTypeDescriptionModel;
 import com.n4systems.fieldid.wicket.util.NoBarsValidator;
 import com.n4systems.model.*;
@@ -25,6 +25,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.StringValidator;
@@ -32,6 +33,7 @@ import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CriteriaPanel extends SortableListPanel {
 
@@ -43,20 +45,27 @@ public class CriteriaPanel extends SortableListPanel {
     private ButtonGroup previouslySelectedButtonGroup;
     private boolean previousSetsResultValue;
     private ScoreGroup previouslySelectedScoreGroup;
+    private ObservationCountGroup defaultObservationCountGroup;
+    private IModel<EventForm> eventFormModel;
+    private boolean isMasterEvent;
 
     @SpringBean
     private ScoreService scoreService;
 
-    public CriteriaPanel(String id) {
+    public CriteriaPanel(String id, PropertyModel<EventForm> eventFormModel, boolean isMasterEvent) {
         super(id);
         setOutputMarkupPlaceholderTag(true);
+        this.eventFormModel = eventFormModel;
+        this.isMasterEvent = isMasterEvent;
 
         WebMarkupContainer sortableCriteriaContainer = new WebMarkupContainer("sortableCriteriaContainer");
+
+
         sortableCriteriaContainer.add(new ListView<Criteria>("criteria", new PropertyModel<List<Criteria>>(CriteriaPanel.this, "criteriaSection.availableCriteria")) {
             @Override
             protected void populateItem(final ListItem<Criteria> item) {
                 item.setOutputMarkupId(true);
-                item.add(new EditCopyDeleteItemPanel("editCopyDeletePanel", new PropertyModel<String>(item.getModel(), "displayText"), new CriteriaTypeDescriptionModel(item.getModel())) {
+                item.add(new EditCopyDeleteItemPanel("editCopyDeletePanel", new PropertyModel<>(item.getModel(), "displayText"), new CriteriaTypeDescriptionModel(item.getModel())) {
                     { setEditMaximumLength(1000); getTextField().add(new NoBarsValidator()); }
                     @Override
                     protected void onViewLinkClicked(AjaxRequestTarget target) {
@@ -95,12 +104,7 @@ public class CriteriaPanel extends SortableListPanel {
                     }
                 });
 
-                item.add(new AppendToClassIfCondition("selectedCriteria", new Predicate() {
-                    @Override
-                    public boolean evaluate() {
-                        return item.getIndex() == currentlySelectedIndex && !reorderState;
-                    }
-                }));
+                item.add(new AppendToClassIfCondition("selectedCriteria", () -> item.getIndex() == currentlySelectedIndex && !reorderState));
             }
         });
         
@@ -147,16 +151,25 @@ public class CriteriaPanel extends SortableListPanel {
 
         public CriteriaAddForm(String id) {
             super(id);
-            add(new DropDownChoice<CriteriaType>("criteriaType", new PropertyModel<CriteriaType>(this, "criteriaType"), criteriaTypes, new ListableChoiceRenderer<CriteriaType>()).setRequired(true));
+
+            if(isMasterEvent) {
+                //We want to remove the ObservationCountCriteria from this list.  You can't do that as a Master Event.
+                criteriaTypes = criteriaTypes.stream()
+                                             .filter(criteriaType ->
+                                                     !criteriaType.getReportIdentifier().equalsIgnoreCase("observationcount"))
+                                             .collect(Collectors.toList());
+            }
+
+            add(new DropDownChoice<>("criteriaType", new PropertyModel<>(this, "criteriaType"), criteriaTypes, new ListableChoiceRenderer<>()).setRequired(true));
             AjaxButton submitButton;
-            add(addTextField = new RequiredTextField<String>("criteriaName", new PropertyModel<String>(this, "criteriaName")));
+            add(addTextField = new RequiredTextField<>("criteriaName", new PropertyModel<>(this, "criteriaName")));
             addTextField.add(new NoBarsValidator());
             addTextField.setOutputMarkupId(true);
             addTextField.add(new StringValidator.MaximumLengthValidator(1000));
             add(submitButton = new AjaxButton("submitButton") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    Criteria criteria = null;
+                    Criteria criteria;
 
                     try {
                         criteria = criteriaType.getCriteriaClass().newInstance();
@@ -174,6 +187,10 @@ public class CriteriaPanel extends SortableListPanel {
                         if (!configureDefaultScoreGroup(target, (ScoreCriteria) criteria)) {
                             return;
                         }
+                    } else if (CriteriaType.OBSERVATION_COUNT.equals(criteriaType)) {
+                        if (!configureDefaultObservationCountGroup(target, (ObservationCountCriteria) criteria)) {
+                            return;
+                        }
                     }
 
                     criteria.setDisplayText(criteriaName);
@@ -185,7 +202,7 @@ public class CriteriaPanel extends SortableListPanel {
                 private boolean configureDefaultStateSet(AjaxRequestTarget target, OneClickCriteria criteria) {
                     ButtonGroup buttonGroup = getDefaultStateSet();
                     if (buttonGroup == null) {
-                        error("You must configure at least one Button Group to use One-Click criteria");
+                        error(new FIDLabelModel("message.event_form.create_one_click").getObject());
                         target.add(feedbackPanel);
                         return false;
                     }
@@ -201,7 +218,7 @@ public class CriteriaPanel extends SortableListPanel {
                 private boolean configureDefaultScoreGroup(AjaxRequestTarget target, ScoreCriteria criteria) {
                     ScoreGroup scoreGroup = getDefaultScoreGroup();
                     if (scoreGroup == null) {
-                        error("You must configure at least one Score Group to use Score criteria");
+                        error(new FIDLabelModel("message.event_form.create_score_group").getObject());
                         target.add(feedbackPanel);
                         return false;
                     }
@@ -209,6 +226,18 @@ public class CriteriaPanel extends SortableListPanel {
                     	criteria.setScoreGroup(previouslySelectedScoreGroup);
                     } else {
                     	criteria.setScoreGroup(scoreGroup);
+                    }
+                    return true;
+                }
+
+                private boolean configureDefaultObservationCountGroup(AjaxRequestTarget target, ObservationCountCriteria criteria) {
+                    defaultObservationCountGroup = getDefaultObservationCountGroup();
+                    if (defaultObservationCountGroup == null) {
+                        error(new FIDLabelModel("message.event_form.create_observation_count_group").getObject());
+                        target.add(feedbackPanel);
+                        return false;
+                    } else {
+                        criteria.setObservationCountGroup(defaultObservationCountGroup);
                     }
                     return true;
                 }
@@ -280,6 +309,15 @@ public class CriteriaPanel extends SortableListPanel {
             return null;
         }
         return scoreGroups.get(0);
+    }
+
+    private ObservationCountGroup getDefaultObservationCountGroup() {
+        //When the user is creating a brand new form.
+        if(eventFormModel.getObject() == null) {
+            return null;
+        } else {
+            return eventFormModel.getObject().getObservationCountGroup();
+        }
     }
 
     private UnitOfMeasure getDefaultUnitOfMeasure() {

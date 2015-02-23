@@ -144,16 +144,21 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
                 BigDecimal latField = (BigDecimal)latitude.getConvertedInput();
                 BigDecimal longField = (BigDecimal)longitude.getConvertedInput();
 
+                //Check for validity of the longitude and latitude values
+                //Longitude: -180 to +180
                 if (null != latField) {
                     if (null == longField) {
-
                         error(new FIDLabelModel("error.longitude").getObject());
+                    }else if(longField.compareTo(BigDecimal.valueOf(180)) == 1 || longField.compareTo(BigDecimal.valueOf(-180)) == -1) {
+                        error(new FIDLabelModel("error.longitude_value").getObject());
                     }
                 }
-
+                //Latitude: -85 to +85
                 if (null != longField) {
                     if (null == latField) {
                         error(new FIDLabelModel("error.latitude").getObject());
+                    } else if(latField.compareTo(BigDecimal.valueOf(85)) == 1 || latField.compareTo(BigDecimal.valueOf(-85)) == -1) {
+                        error(new FIDLabelModel("error.latitude_value").getObject());
                     }
                 }
             }
@@ -194,9 +199,6 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
     protected void onSchedulePickComplete(AjaxRequestTarget target) {
         schedules.add(scheduleToAdd);
         scheduleToAdd = createNewOpenEvent();
-        // CAVEAT : shouldn't use enclosures for ajax component - results in javascript noise if component not visible.
-        // see http://jawher.net/2009/09/17/wicket-enclosures-and-ajax-no-no/
-        // use InlineEnclosure instead.
         target.add(schedulesContainer);
     }
 
@@ -274,7 +276,7 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             add(schedulesContainer);
 
 
-            add(new SimpleAjaxButton("openSchedulePickerButton", new FIDLabelModel("label.add_a_schedule")) {
+            schedulesContainer.add(new AjaxLink("openSchedulePickerLink") {
                 { setVisible(event.getObject().isNew() || !event.getObject().isCompleted()); }
                 @Override
                 public void onClick(AjaxRequestTarget target) {
@@ -514,6 +516,7 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
         super.renderHead(response);
         response.renderCSSReference("style/legacy/newCss/event/event_base.css");
         response.renderCSSReference("style/legacy/newCss/event/event_schedule.css");
+        response.renderCSSReference("style/legacy/newCss/component/buttons.css");
     }
 
     @Override

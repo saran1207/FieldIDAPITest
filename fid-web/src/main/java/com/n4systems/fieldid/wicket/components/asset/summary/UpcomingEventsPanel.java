@@ -21,11 +21,9 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import java.util.Date;
 import java.util.List;
 
 public class UpcomingEventsPanel extends Panel {
@@ -49,12 +47,12 @@ public class UpcomingEventsPanel extends Panel {
 
                 item.add(new EventStateIcon("scheduleIcon", item.getModel()).setRenderBodyOnly(true));
 
-                item.add(new Label("upcomingEventType", schedule.getType().getName()));
-                
-                DayDisplayModel upcomingEventDate = new DayDisplayModel(Model.of(schedule.getDueDate())).includeTime();
-                
+                item.add(new Label("upcomingEventType", new PropertyModel<>(item.getModel(), "type.name")));
+
+                DayDisplayModel upcomingEventDate = new DayDisplayModel(new PropertyModel<>(item.getModel(), "dueDate")).includeTime();
+
                 if (isPastDue(schedule)) {
-                    TimeAgoLabel timeAgoField = new TimeAgoLabel("upcomingEventDate",Model.of(schedule.getDueDate()),dateService.getUserTimeZone());
+                    TimeAgoLabel timeAgoField = new TimeAgoLabel("upcomingEventDate", new PropertyModel<>(item.getModel(), "dueDate"),dateService.getUserTimeZone());
                     item.add(timeAgoField);
                 } else if(dateService.getDaysFromToday(schedule.getDueDate()).equals(0L)) {
                     item.add(new Label("upcomingEventDate", new FIDLabelModel("label.today")));
@@ -64,7 +62,7 @@ public class UpcomingEventsPanel extends Panel {
                 
                 item.add(new Label("onDate", new FIDLabelModel("label.on_date", upcomingEventDate.getObject())));
                 
-                item.add(new OpenActionsCell("openActions", Model.of(schedule), UpcomingEventsPanel.this));
+                item.add(new OpenActionsCell("openActions", item.getModel(), UpcomingEventsPanel.this));
             }
         });
 
@@ -74,12 +72,12 @@ public class UpcomingEventsPanel extends Panel {
                 if(item.getModelObject() != null) {
                     item.add(new ProcedureStateIcon("scheduleIcon", item.getModel()));
 
-                    item.add(new Label("upcomingEventType", item.getModelObject().getType().getProcedureCode()));
+                    item.add(new Label("upcomingEventType", new PropertyModel<>(item.getModel(), "type.procedureCode")));
 
-                    DayDisplayModel upcomingProcedureDate = new DayDisplayModel(new PropertyModel<Date>(item.getModel(), "dueDate")).includeTime();
+                    DayDisplayModel upcomingProcedureDate = new DayDisplayModel(new PropertyModel<>(item.getModel(), "dueDate")).includeTime();
 
                     if (isPastDue(item.getModelObject())) {
-                        TimeAgoLabel timeAgoField = new TimeAgoLabel("upcomingLotoDate", new PropertyModel<Date>(item.getModel(), "dueDate"),dateService.getUserTimeZone());
+                        TimeAgoLabel timeAgoField = new TimeAgoLabel("upcomingLotoDate", new PropertyModel<>(item.getModel(), "dueDate"),dateService.getUserTimeZone());
                         item.add(timeAgoField);
                     } else if(dateService.getDaysFromToday(item.getModelObject().getDueDate()).equals(0L)) {
                         item.add(new Label("upcomingLotoDate", new FIDLabelModel("label.today")));

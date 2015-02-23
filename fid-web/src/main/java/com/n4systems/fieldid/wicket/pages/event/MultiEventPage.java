@@ -375,7 +375,7 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
         final boolean isNew = event.getObject().isNew();
         final boolean isCompleted = event.getObject().isCompleted();
 
-        form.add(new SimpleAjaxButton("openSchedulePickerButton", new FIDLabelModel("label.add_a_schedule")) {
+        form.add(new AjaxLink("openSchedulePickerLink") {
             { setVisible(isNew || !isCompleted); }
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -477,6 +477,7 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
         super.renderHead(response);
         response.renderCSSReference("style/legacy/newCss/event/event_base.css");
         response.renderCSSReference("style/legacy/newCss/event/event_schedule.css");
+        response.renderCSSReference("style/legacy/newCss/component/buttons.css");
     }
 
     @Override

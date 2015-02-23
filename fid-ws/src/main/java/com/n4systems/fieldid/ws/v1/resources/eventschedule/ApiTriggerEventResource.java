@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ApiTriggerEventResource extends ApiResource<ApiTriggerEvent, Event> {
 	private static Logger logger = Logger.getLogger(ApiTriggerEventResource.class);
@@ -24,7 +25,11 @@ public class ApiTriggerEventResource extends ApiResource<ApiTriggerEvent, Event>
 		triggerEvent.setDate(actionEvent.getTriggerEvent().getDate());
 		triggerEvent.setPerformedBy(actionEvent.getTriggerEvent().getPerformedBy().getFullName());
         List<CriteriaResultImage> criteriaImages = actionEvent.getSourceCriteriaResult().getCriteriaImages();
-		triggerEvent.setImages(getImages(criteriaImages));
+		if (versionLessThan(1, 8, 0)) {
+			triggerEvent.setImages(getImages(criteriaImages));
+		} else {
+			triggerEvent.setImagePaths(criteriaImages.stream().map(s3Service::getCriteriaResultImageMediumPath).collect(Collectors.toList()));
+		}
         triggerEvent.setImageComments(getImageComments(criteriaImages));
 		triggerEvent.setCriteria(ActionDescriptionUtil.getDescription(actionEvent.getTriggerEvent(), actionEvent.getSourceCriteriaResult()));
 		

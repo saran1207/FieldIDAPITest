@@ -29,6 +29,8 @@ public class LocalizedFieldSorter {
         add(EventTypeGroup.class, "name");
         add(Score.class, "name");
         add(ScoreGroup.class, "name");
+        add(ObservationCount.class, "observationCount");
+        add(ObservationCountGroup.class, "name");
         add(InfoFieldBean.class, "name");
         add(CriteriaSection.class, "title");
         add(ComboBoxCriteria.class, Lists.newArrayList("displayText","recommendations", "deficiencies", "options"));

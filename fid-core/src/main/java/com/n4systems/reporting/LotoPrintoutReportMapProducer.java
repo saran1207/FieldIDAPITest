@@ -79,7 +79,7 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
             logger.error("There was an exception while attempting to download the static footer Logo for a LOTO Printout!!", e);
         }
 
-        add("logoImage", getCustomerLogo(procDef.getOwner().getPrimaryOrg()));
+        add("logoImage", getCertificateLogo(procDef.getOwner()));
 
         //If it's not long, it's short... or invalid... but we'll pretend that being invalid is impossible.
         List<IsolationPointPrintoutContainer> isolationPoints = convertToIPContainerCollection(procDef.getLockIsolationPoints());

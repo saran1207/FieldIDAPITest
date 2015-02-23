@@ -403,6 +403,8 @@ public abstract class Event<T extends EventType, V extends Event, R extends Enti
         if (getType().getEventForm() != null) {
             if (getType().getEventForm().isUseScoreForResult()) {
                 resultFromCriteriaAvailable = true;
+            } else if (getType().getEventForm().isUseObservationCountForResult()) {
+                resultFromCriteriaAvailable = true;
             } else {
                 for (CriteriaSection criteriaSection : getType().getEventForm().getAvailableSections()) {
                     for (Criteria criteria : criteriaSection.getAvailableCriteria()) {

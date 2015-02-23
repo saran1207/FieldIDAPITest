@@ -4,11 +4,9 @@ package com.n4systems.fieldid.api.pub.protocolbuffers.google;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.Message;
+import org.apache.commons.codec.binary.Base64InputStream;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
-import javax.json.JsonReaderFactory;
+import javax.json.*;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
@@ -48,73 +46,82 @@ public class GoogleProtobufMessageBodyReader implements MessageBodyReader<Messag
         return null;
     }
 
-    private static Message parseFromJson(Class<Message> messageClass, InputStream inputStream, int streamLen) throws IOException {
-        JsonReaderFactory factory = Json.createReaderFactory(new HashMap<String, Object>());
+    private static Message parseFromJson(Class<Message> messageClass, InputStream inputStream, @SuppressWarnings("unused") int streamLen) throws IOException {
+        JsonReaderFactory factory = Json.createReaderFactory(new HashMap<>());
         JsonReader reader = factory.createReader(inputStream);
         JsonObject rawObject = reader.readObject();
 
-        Method newBuilder = null;
-        Message.Builder builder = null;
+        Method newBuilder;
+        Message.Builder builder;
 
 
         try {
             newBuilder = messageClass.getMethod("newBuilder");
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        try {
             builder = (GeneratedMessage.Builder) newBuilder.invoke(null);
-        } catch (IllegalAccessException e) {
+            populateMessageFromJsonObject(builder, rawObject);
+
+            return builder.build();
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
+        } catch(NullPointerException e) {
+            /* should never happen, just shutting up warnings */
         }
-
-        populateMessageFromJsonObject(builder, rawObject);
-
-        return builder.build();
+        /* we should never get here */
+        return null;
     }
 
     private static void populateMessageFromJsonObject(Message.Builder builder, JsonObject source) {
         for(Descriptors.FieldDescriptor descriptor : builder.getDescriptorForType().getFields()) {
-            switch(descriptor.getJavaType()) {
-                case MESSAGE:
-                    populateMessageFromJsonObject(builder.getFieldBuilder(descriptor), source.getJsonObject(GoogleProtobufUtils.getSerializedFieldName(descriptor)));
-                    break;
-                case STRING:
-                    builder.setField(descriptor, source.getString(GoogleProtobufUtils.getSerializedFieldName(descriptor)));
-                    break;
-                case INT:
-                    builder.setField(descriptor, source.getInt(GoogleProtobufUtils.getSerializedFieldName(descriptor)));
-                    break;
-                case LONG:
-                    builder.setField(descriptor, source.getJsonNumber(GoogleProtobufUtils.getSerializedFieldName(descriptor)).longValue());
-                    break;
-                case BOOLEAN:
-                    builder.setField(descriptor, source.getBoolean(GoogleProtobufUtils.getSerializedFieldName(descriptor)));
-                    break;
-                case FLOAT:
-                    builder.setField(descriptor, (float)source.getJsonNumber(GoogleProtobufUtils.getSerializedFieldName(descriptor)).doubleValue());
-                    break;
-                case DOUBLE:
-                    builder.setField(descriptor, source.getJsonNumber(GoogleProtobufUtils.getSerializedFieldName(descriptor)).doubleValue());
-                    break;
-            }
+			String fieldName = GoogleProtobufUtils.getSerializedFieldName(descriptor);
+
+			if (source.get(fieldName) != null) {
+				switch (descriptor.getJavaType()) {
+					case MESSAGE:
+						if (descriptor.isRepeated()) {
+							JsonArray repeatedField = source.getJsonArray(fieldName);
+							for (int i = 0; i < repeatedField.size(); i++) {
+								Message.Builder repeatedFieldBuilder = builder.newBuilderForField(descriptor);
+								populateMessageFromJsonObject(repeatedFieldBuilder, repeatedField.getJsonObject(i));
+								builder.addRepeatedField(descriptor, repeatedFieldBuilder.build());
+							}
+						} else {
+							populateMessageFromJsonObject(builder.getFieldBuilder(descriptor), source.getJsonObject(fieldName));
+						}
+						break;
+					case ENUM:
+						builder.setField(descriptor, descriptor.getEnumType().findValueByName(source.getString(fieldName)));
+						break;
+					case STRING:
+						builder.setField(descriptor, source.getString(fieldName));
+						break;
+					case INT:
+						builder.setField(descriptor, source.getInt(fieldName));
+						break;
+					case LONG:
+						builder.setField(descriptor, source.getJsonNumber(fieldName).longValue());
+						break;
+					case BOOLEAN:
+						builder.setField(descriptor, source.getBoolean(fieldName));
+						break;
+					case FLOAT:
+						builder.setField(descriptor, (float) source.getJsonNumber(fieldName).doubleValue());
+						break;
+					case DOUBLE:
+						builder.setField(descriptor, source.getJsonNumber(fieldName).doubleValue());
+						break;
+				}
+			}
         }
     }
 
-    private static Message parseFromBase64(Class<Message> messageClass, InputStream inputStream, int streamLen) throws IOException {
-        byte streamData[] = new byte[streamLen];
-        final int read = inputStream.read(streamData, 0, streamLen);
+    private static Message parseFromBase64(Class<Message> messageClass, InputStream inputStream, @SuppressWarnings("unused") int streamLen) throws IOException {
 
-        if(read < streamLen) {
-            return null;
-        }
+        InputStream decodedStream = new Base64InputStream(inputStream);
 
-        Method parseFrom = null;
+        Method parseFrom;
         try {
-            parseFrom = messageClass.getMethod("parseFrom", byte[].class);
-            return (Message)parseFrom.invoke(null, streamData);
+            parseFrom = messageClass.getMethod("parseFrom", InputStream.class);
+            return (Message)parseFrom.invoke(null, decodedStream);
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             // can't actually happen
             e.printStackTrace();

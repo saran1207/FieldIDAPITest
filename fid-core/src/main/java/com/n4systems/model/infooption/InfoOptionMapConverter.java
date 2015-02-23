@@ -17,7 +17,9 @@ public class InfoOptionMapConverter {
 	public Map<String, String> toMap(Collection<InfoOptionBean> options) {
 		Map<String, String> optionMap = new LinkedHashMap<String, String>(options.size());
 		for (InfoOptionBean option: options) {
-			optionMap.put(option.getInfoField().getName(), option.getName());
+            if (!option.getInfoField().isRetired()) {
+			    optionMap.put(option.getInfoField().getName(), option.getName());
+            }
 		}
 		return optionMap;
 	}

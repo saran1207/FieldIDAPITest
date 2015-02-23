@@ -25,6 +25,7 @@ public class EditCopyDeleteItemPanel extends Panel {
 
     private static final String DELETE_IMAGE = "images/small-x.png";
     private static final String REORDER_IMAGE = "images/reorder.png";
+    private static final Integer DEFAULT_TEXT_DISPLAY_LIMIT = 23;
 
     private WebMarkupContainer editFormContainer;
     private WebMarkupContainer viewContainer;
@@ -79,7 +80,7 @@ public class EditCopyDeleteItemPanel extends Panel {
                     onViewLinkClicked(target);
             }
         });
-        viewLink.add(new Label("linkLabel", new TrimmedStringModel(titleModel, 23)));
+        viewLink.add(new Label("linkLabel", new TrimmedStringModel(titleModel, getTextDisplayLimit())));
         if (subTitleModel != null) {
             viewLink.add(new Label("subTitle", subTitleModel));
         } else {
@@ -121,9 +122,13 @@ public class EditCopyDeleteItemPanel extends Panel {
 
     protected String getTrimmedString(String str, int limit) {
 		return str != null && str.length() > limit ? str.substring(0,limit)+"..." : str;
-	}	
-    
-	class EditForm extends Form {
+	}
+
+    public int getTextDisplayLimit() {
+        return DEFAULT_TEXT_DISPLAY_LIMIT;
+    }
+
+    class EditForm extends Form {
 
         private IModel<String> stringModel;
 

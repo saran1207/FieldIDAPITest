@@ -702,7 +702,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 		} 
 	}
 
-	public Long getperformedBy() {
+	public Long getPerformedBy() {
 		return (event.getPerformedBy() != null) ? event.getPerformedBy().getId() : null;
 	}
 

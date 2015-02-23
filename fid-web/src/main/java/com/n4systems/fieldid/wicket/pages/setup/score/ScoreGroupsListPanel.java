@@ -76,7 +76,13 @@ public class ScoreGroupsListPanel extends Panel {
                     protected void onFormValidationError(AjaxRequestTarget target) {
                         onValidationError(target);
                     }
+
+                    @Override
+                    public int getTextDisplayLimit() {
+                        return 50;
+                    }
                 });
+
                 item.add(new AppendToClassIfCondition("selectedGroup", new Predicate() {
                     @Override
                     public boolean evaluate() {

@@ -7,8 +7,6 @@ import com.n4systems.model.localization.Translation;
 import com.n4systems.services.localization.LocalizationService;
 import com.n4systems.util.eventform.CriteriaSectionCopyUtil;
 import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClause;
-import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EventFormService extends FieldIdPersistenceService {
 
@@ -43,6 +42,55 @@ public class EventFormService extends FieldIdPersistenceService {
     }
 
     @Transactional
+    public void saveNewEventFormAfterObservationChange(EventForm oldEventForm, List<CriteriaSection> sections, EventType eventType) {
+        EventForm eventForm = new EventForm();
+        eventForm.setTenant(persistenceService.findNonSecure(Tenant.class, securityContext.getUserSecurityFilter().getTenantId()));
+
+        //List<CriteriaSection> original = oldEventForm.getSections();
+        List<CriteriaSection> newCriteriaSections = createCopiesOf(sections);
+
+        eventForm.setSections(convertSectonsToNewObservationCountGroup(newCriteriaSections, oldEventForm.getObservationCountGroup()));
+
+        oldEventForm.setState(Archivable.EntityState.RETIRED);
+        //Scoring
+        eventForm.setScoreCalculationType(oldEventForm.getScoreCalculationType());
+        eventForm.setFailRange(oldEventForm.getFailRange());
+        eventForm.setPassRange(oldEventForm.getPassRange());
+        eventForm.setUseScoreForResult(oldEventForm.isUseScoreForResult());
+        //Observations
+        eventForm.setObservationcountFailCalculationType(oldEventForm.getObservationcountFailCalculationType());
+        eventForm.setObservationcountFailRange(oldEventForm.getObservationcountFailRange());
+        eventForm.setObservationcountPassCalculationType(oldEventForm.getObservationcountPassCalculationType());
+        eventForm.setObservationcountPassRange(oldEventForm.getObservationcountPassRange());
+        eventForm.setObservationCountGroup(oldEventForm.getObservationCountGroup());
+        eventForm.setObservationCountFail(oldEventForm.getObservationCountFail());
+        eventForm.setObservationCountPass(oldEventForm.getObservationCountPass());
+        eventForm.setUseObservationCountForResult(oldEventForm.isUseObservationCountForResult());
+
+        //Save the new form
+        persistenceService.save(eventForm);
+
+        //Attach it to the event type
+        eventType.setEventForm(eventForm);
+        eventType.incrementFormVersion();
+
+        //save the event type
+        persistenceService.update(eventType);
+        restoreTranslations(eventForm);
+    }
+
+    private List<CriteriaSection> convertSectonsToNewObservationCountGroup(List<CriteriaSection> sections, ObservationCountGroup group) {
+        for(CriteriaSection section:sections){
+            for(Criteria criteria:section.getCriteria()){
+                if(criteria instanceof ObservationCountCriteria){
+                    ((ObservationCountCriteria) criteria).setObservationCountGroup(group);
+                }
+            }
+        }
+        return sections;
+    }
+
+    @Transactional
     public void saveNewEventForm(Long eventTypeId, List<CriteriaSection> newCriteriaSections) {
         EventType eventType = persistenceService.find(EventType.class, eventTypeId);
 
@@ -53,10 +101,21 @@ public class EventFormService extends FieldIdPersistenceService {
         EventForm oldEventForm = eventType.getEventForm();
         if (oldEventForm != null) {
             oldEventForm.setState(Archivable.EntityState.RETIRED);
+            //Scoring
             eventForm.setScoreCalculationType(oldEventForm.getScoreCalculationType());
             eventForm.setFailRange(oldEventForm.getFailRange());
             eventForm.setPassRange(oldEventForm.getPassRange());
             eventForm.setUseScoreForResult(oldEventForm.isUseScoreForResult());
+            //Observations
+            eventForm.setObservationcountFailCalculationType(oldEventForm.getObservationcountFailCalculationType());
+            eventForm.setObservationcountFailRange(oldEventForm.getObservationcountFailRange());
+            eventForm.setObservationcountPassCalculationType(oldEventForm.getObservationcountPassCalculationType());
+            eventForm.setObservationcountPassRange(oldEventForm.getObservationcountPassRange());
+            eventForm.setObservationCountGroup(oldEventForm.getObservationCountGroup());
+            eventForm.setObservationCountFail(oldEventForm.getObservationCountFail());
+            eventForm.setObservationCountPass(oldEventForm.getObservationCountPass());
+            eventForm.setUseObservationCountForResult(oldEventForm.isUseObservationCountForResult());
+
             persistenceService.update(oldEventForm);
         }
 

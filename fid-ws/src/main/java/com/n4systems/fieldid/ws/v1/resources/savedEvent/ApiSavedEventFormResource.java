@@ -4,10 +4,12 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.ws.v1.exceptions.InternalErrorException;
 import com.n4systems.fieldid.ws.v1.resources.event.ApiCriteriaResult;
 import com.n4systems.fieldid.ws.v1.resources.event.ApiObservation;
+import com.n4systems.fieldid.ws.v1.resources.event.criteria.ApiObservationCountResult;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiCriteriaSection;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiEventForm;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiEventTypeResource;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.criteria.ApiCriteria;
+import com.n4systems.fieldid.ws.v1.resources.eventtype.criteria.ApiObservationCount;
 import com.n4systems.model.*;
 import com.n4systems.services.signature.SignatureService;
 import org.apache.log4j.Logger;
@@ -139,7 +141,35 @@ public class ApiSavedEventFormResource extends FieldIdPersistenceService{
 				NumberFieldCriteriaResult numberResult = (NumberFieldCriteriaResult)criteriaResult;
 				apiResult.setNumberValue(numberResult.getValue());
 				break;
+            case OBSERVATION_COUNT:
+                ObservationCountCriteriaResult observationCountResultCriteria = (ObservationCountCriteriaResult)criteriaResult;
+
+                List<ApiObservationCountResult> apiObservationCountResultList = new ArrayList<>();
+
+                observationCountResultCriteria.getObservationCountResults().forEach(observationCountResult -> {
+                    //Create the base ApiObservationCountResult object and add the "value" (which is the count)
+                    ApiObservationCountResult apiObservationCountResult = new ApiObservationCountResult();
+                    apiObservationCountResult.setValue(observationCountResult.getValue());
+
+                    //Create the embedded ApiObservationCount object and add the fields from the related JPA Entity
+                    ApiObservationCount apiObservationCount = new ApiObservationCount();
+                    apiObservationCount.setSid(observationCountResult.getObservationCount().getId());
+                    apiObservationCount.setCounted(observationCountResult.getObservationCount().isCounted());
+                    apiObservationCount.setName(observationCountResult.getObservationCount().getName());
+                    apiObservationCount.setModified(observationCountResult.getObservationCount().getModified());
+                    apiObservationCount.setActive(observationCountResult.getObservationCount().isActive());
+
+                    //Attach the ApiObservationCount to the ApiObservationCountResult
+                    apiObservationCountResult.setObservationCount(apiObservationCount);
+
+                    //Add the ApiObservationCountResult to the list
+                    apiObservationCountResultList.add(apiObservationCountResult);
+                });
+
+                apiResult.setObservationCountValue(apiObservationCountResultList);
+                break;
 			default:
+                logger.error("Unhandled Criteria type: " + criteriaResult.getCriteria().getCriteriaType().name());
 				throw new InternalErrorException("Unhandled Criteria type: " + criteriaResult.getCriteria().getCriteriaType().name());	
 		}	
 		

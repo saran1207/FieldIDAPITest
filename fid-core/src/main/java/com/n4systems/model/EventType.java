@@ -16,7 +16,7 @@ import java.util.List;
 @Entity
 @Table(name = "eventtypes")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class EventType<T extends EventType> extends ArchivableEntityWithTenant implements NamedEntity, Listable<Long>, Saveable, SecurityEnhanced<T> {
+public abstract class EventType<T extends EventType> extends ArchivableEntityWithTenant implements NamedEntity, Listable<Long>, Saveable, SecurityEnhanced<T>, ApiModelWithName {
 	private static final long serialVersionUID = 1L;
 	public static final long DEFAULT_FORM_VERSION = 1;
 	
@@ -52,11 +52,17 @@ public abstract class EventType<T extends EventType> extends ArchivableEntityWit
 	@Column(nullable=false)
 	private long formVersion = DEFAULT_FORM_VERSION;
 
-    @Column(nullable=false, name="display_section_totals")
-    private boolean displaySectionTotals;
+    @Column(nullable=false, name="display_score_section_totals")
+    private boolean displayScoreSectionTotals;
 
     @Column(nullable=false, name="display_score_percentage")
     private boolean displayScorePercentage;
+
+    @Column(nullable=false, name="display_observation_section_totals")
+    private boolean displayObservationSectionTotals;
+
+    @Column(nullable=false, name="display_observation_percentage")
+    private boolean displayObservationPercentage;
 
     // Hibernate's implementation of jpql's TYPE(field) operator seems completely busted for at least
     // join table inheritance. This is unfortunately necessary as a workaround so our queries can be able to
@@ -207,12 +213,12 @@ public abstract class EventType<T extends EventType> extends ArchivableEntityWit
         this.eventForm = eventForm;
     }
 
-    public boolean isDisplaySectionTotals() {
-        return displaySectionTotals;
+    public boolean isDisplayScoreSectionTotals() {
+        return displayScoreSectionTotals;
     }
 
-    public void setDisplaySectionTotals(boolean displaySectionTotals) {
-        this.displaySectionTotals = displaySectionTotals;
+    public void setDisplayScoreSectionTotals(boolean displayScoreSectionTotals) {
+        this.displayScoreSectionTotals = displayScoreSectionTotals;
     }
 
     public boolean isDisplayScorePercentage() {
@@ -221,6 +227,22 @@ public abstract class EventType<T extends EventType> extends ArchivableEntityWit
 
     public void setDisplayScorePercentage(boolean displayScorePercentage) {
         this.displayScorePercentage = displayScorePercentage;
+    }
+
+    public boolean isDisplayObservationSectionTotals() {
+        return displayObservationSectionTotals;
+    }
+
+    public void setDisplayObservationSectionTotals(boolean displayObservationSectionTotals) {
+        this.displayObservationSectionTotals = displayObservationSectionTotals;
+    }
+
+    public boolean isDisplayObservationPercentage() {
+        return displayObservationPercentage;
+    }
+
+    public void setDisplayObservationPercentage(boolean displayObservationPercentage) {
+        this.displayObservationPercentage = displayObservationPercentage;
     }
 
     public boolean isThingEventType() {
@@ -238,7 +260,6 @@ public abstract class EventType<T extends EventType> extends ArchivableEntityWit
     public boolean isProcedureAuditEventType() {
         return false;
     }
-
 
     @Deprecated // remove when TYPE() works. See field comment.
     public boolean isActionType() {

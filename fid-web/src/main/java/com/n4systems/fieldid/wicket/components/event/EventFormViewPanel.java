@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.event;
 
+import com.n4systems.fieldid.wicket.components.event.criteria.view.ObservationCriteriaResultTotalPanel;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
@@ -28,7 +29,7 @@ public class EventFormViewPanel extends EventFormPanel {
     @Override
     protected Component getSectionScore(String id, IModel<CriteriaSection> criteriaSectionModel) {
         return new Label(id, Model.of(getScoresForSections().get(criteriaSectionModel.getObject())))
-                .setVisible(event.getObject().getType().isDisplaySectionTotals());
+                .setVisible(event.getObject().getType().isDisplayScoreSectionTotals());
     }
 
     @Override
@@ -43,5 +44,13 @@ public class EventFormViewPanel extends EventFormPanel {
         percentageLabel.setVisible(event.getObject().getType().isDisplayScorePercentage());
 
         return percentageLabel;
+    }
+
+    @Override
+    protected Component getSectionObservations(String id, IModel<CriteriaSection> criteriaSectionModel) {
+        return new ObservationCriteriaResultTotalPanel(id, event,
+                getObservationsForSections().get(criteriaSectionModel.getObject()),
+                getSectionTotal(event.getObject(), criteriaSectionModel.getObject()))
+                .setVisible(event.getObject().getType().isDisplayObservationSectionTotals());
     }
 }

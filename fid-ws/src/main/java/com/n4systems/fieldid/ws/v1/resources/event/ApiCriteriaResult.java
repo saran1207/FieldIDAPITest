@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.ws.v1.resources.event;
 
+import com.n4systems.fieldid.ws.v1.resources.event.criteria.ApiObservationCountResult;
 import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventSchedule;
 import com.n4systems.fieldid.ws.v1.resources.model.ApiReadWriteModel;
 
@@ -20,7 +21,9 @@ public class ApiCriteriaResult extends ApiReadWriteModel {
 	private byte[] signatureValue;
 	private Date dateValue;
 	private Double numberValue;
+    //NOTE: This is not actually the value but the id of the score entity
 	private Long scoreValue;
+    private List<ApiObservationCountResult> observationCountValue = new ArrayList<>();
 	private List<ApiEventSchedule> actions = new ArrayList<>();
 
 	public Long getCriteriaId() {
@@ -118,12 +121,12 @@ public class ApiCriteriaResult extends ApiReadWriteModel {
 	public void setNumberValue(Double numberValue) {
 		this.numberValue = numberValue;
 	}
-
+    //NOTE: This is not actually the value but the id of the score entity
 	public Long getScoreValue() {
 		return scoreValue;
 	}
 
-	public void setScoreValue(Long scoreValue) {
+    public void setScoreValue(Long scoreValue) {
 		this.scoreValue = scoreValue;
 	}
 
@@ -134,4 +137,12 @@ public class ApiCriteriaResult extends ApiReadWriteModel {
 	public List<ApiEventSchedule> getActions() {
 		return actions;
 	}
+
+    public List<ApiObservationCountResult> getObservationCountValue() {
+        return observationCountValue;
+    }
+
+    public void setObservationCountValue(List<ApiObservationCountResult> observationCountValue) {
+        this.observationCountValue = observationCountValue;
+    }
 }

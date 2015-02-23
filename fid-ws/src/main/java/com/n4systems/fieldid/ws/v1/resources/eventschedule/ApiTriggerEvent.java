@@ -10,6 +10,7 @@ public class ApiTriggerEvent {
 	private String criteria;
     private List<String> imageComments;
 	private List<byte[]> images;
+	private List<String> imagePaths;
 	private int imageTotal;
 	
 	public String getName() {
@@ -54,7 +55,15 @@ public class ApiTriggerEvent {
 		if(this.images != null)
 			this.imageTotal = this.images.size();
 	}
-	
+
+	public List<String> getImagePaths() {
+		return imagePaths;
+	}
+
+	public void setImagePaths(List<String> imagePaths) {
+		this.imagePaths = imagePaths;
+	}
+
 	public int getImageTotal() {
 		return imageTotal;
 	}
