@@ -193,7 +193,8 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		logger.info("Created Event on Asset " + apiEvent.getAssetId());
 		logger.info("Event MobileGUID: " + event.getMobileGUID() + " with EventResult: " + event.getEventResult());
 	}
-	
+
+    @Transactional
 	private void updateEvent(ApiEvent apiEvent, ThingEvent existingEvent) {
 		convertApiEvent(apiEvent, existingEvent, true);
 		List<FileAttachment> existingAttachments = new ArrayList<FileAttachment>(existingEvent.getAttachments());
