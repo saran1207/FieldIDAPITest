@@ -295,7 +295,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
                             //at the end of that String that would be nice to get rid of.
                             //This is going to reliably be the last character, so we'll just substring it out to reduce
                             //the operations we're performing on it.  This means remove 2 from the length, not 1.
-                            stateView.setState(concatenatedObservationCounts.substring(0, concatenatedObservationCounts.length() - 2));
+                            stateView.setState(concatenatedObservationCounts.substring(0, concatenatedObservationCounts.length() - 1));
                         }
 
 
