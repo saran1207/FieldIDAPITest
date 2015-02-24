@@ -155,7 +155,7 @@ public class ApiEventFormResultResource extends FieldIdPersistenceService {
                                      .stream()
                                      //Notice how we're filtering in a way that makes it impossible to return more than
                                      //one result (unless the data is corrupt, in which case this might have problems).
-                                     .filter(apiObservationCountResult -> apiObservationCountResult.getObservationCount().getSid().equals(observationCountResult.getId()))
+                                     .filter(apiObservationCountResult -> apiObservationCountResult.getObservationCount().getSid().equals(observationCountResult.getObservationCount().getId()))
                                      .forEach(apiObservationCountResult -> observationCountResult.setValue(apiObservationCountResult.getValue()));
 
                              observationCountResults.add(observationCountResult);

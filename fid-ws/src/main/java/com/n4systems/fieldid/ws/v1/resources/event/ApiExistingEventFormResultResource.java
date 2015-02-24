@@ -10,6 +10,7 @@ import com.n4systems.model.*;
 import org.apache.commons.lang.NullArgumentException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -35,8 +36,11 @@ public class ApiExistingEventFormResultResource extends FieldIdPersistenceServic
      * @param eventFormResult - An ApiEventFormResult object, which needs to be converted to the JPA Model.
      * @param event - An AbstractEvent, which needs to have the contents of the ApiEventFormResult merged into it.
      */
+    @Transactional
 	public void convertApiEventFormResults(ApiEventFormResult eventFormResult, AbstractEvent<?,?> event) {
-        //First, we want to build a list of CriteriaResults that don't exist in the server-side model, but need
+//        event.setEventForm(persistenceService.find(EventForm.class, eventFormResult.getFormId()));
+
+	    //First, we want to build a list of CriteriaResults that don't exist in the server-side model, but need
         //to be added.  This happens when form sections are unhidden when we perform an update.
         //To do that, we first need a list of what results the Server has in the model...
         List<Long> serverSideResults = event.getResults().stream().map(result -> result.getCriteria().getId()).collect(Collectors.toList());
@@ -180,16 +184,18 @@ public class ApiExistingEventFormResultResource extends FieldIdPersistenceServic
 
                     ((ObservationCountCriteriaResult) result).getObservationCountResults()
                             .forEach(observationCountResult -> {
+                                ObservationCountResult newResult = persistenceService.find(ObservationCountResult.class, observationCountResult.getId());
+
                                 //Trust me, it looks like we're processing more than one entry below, but we're not.  Just like
                                 //highlander, there can be only one.
                                 apiResult.getObservationCountValue()
                                         .stream()
                                                 //Notice how we're filtering in a way that makes it impossible to return more than
                                                 //one result (unless the data is corrupt, in which case this might have problems).
-                                        .filter(apiObservationCountResult -> apiObservationCountResult.getObservationCount().getSid().equals(observationCountResult.getId()))
-                                        .forEach(apiObservationCountResult -> observationCountResult.setValue(apiObservationCountResult.getValue()));
+                                        .filter(api -> api.getObservationCount().getSid().equals(observationCountResult.getObservationCount().getId()))
+                                        .forEach(apiObservationCountResult -> newResult.setValue(apiObservationCountResult.getValue()));
 
-                                observationCountResults.add(observationCountResult);
+                                observationCountResults.add(newResult);
                             });
 
                 }
