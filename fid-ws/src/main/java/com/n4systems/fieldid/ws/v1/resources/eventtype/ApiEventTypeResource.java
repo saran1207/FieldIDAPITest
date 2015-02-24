@@ -82,6 +82,7 @@ public class ApiEventTypeResource extends SetupDataResource<ApiEventType, EventT
 		apiEventForm.setActive(eventForm.isActive());
 		apiEventForm.setModified(eventForm.getModified());
 		apiEventForm.setUseScoreForResult(eventForm.isUseScoreForResult());
+        apiEventForm.setUseObservationCountForResult(eventForm.isUseObservationCountForResult());
 
 		for (CriteriaSection section : eventForm.getSections()) {
 			apiEventForm.getSections().add(convertCriteriaSection(section));
