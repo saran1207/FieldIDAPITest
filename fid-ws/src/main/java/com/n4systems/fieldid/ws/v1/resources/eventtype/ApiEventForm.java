@@ -1,13 +1,14 @@
 package com.n4systems.fieldid.ws.v1.resources.eventtype;
 
+import com.n4systems.fieldid.ws.v1.resources.model.ApiReadonlyModel;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.n4systems.fieldid.ws.v1.resources.model.ApiReadonlyModel;
 
 public class ApiEventForm extends ApiReadonlyModel {
 	private List<ApiCriteriaSection> sections = new ArrayList<ApiCriteriaSection>();
 	private boolean useScoreForResult;
+    private Boolean useObservationCountForResult;
 
 	public List<ApiCriteriaSection> getSections() {
 		return sections;
@@ -25,4 +26,11 @@ public class ApiEventForm extends ApiReadonlyModel {
 		this.useScoreForResult = useScoreForResult;
 	}
 
+    public Boolean getUseObservationCountForResult() {
+        return useObservationCountForResult;
+    }
+
+    public void setUseObservationCountForResult(Boolean useObservationCountForResult) {
+        this.useObservationCountForResult = useObservationCountForResult;
+    }
 }
