@@ -155,7 +155,7 @@ public class EventTypeCrud extends AbstractCrud {
 		eventType.setModifiedBy(getUser());
 		eventType.setModified(new Date());
 
-		if(isMaster() && containsObservationCountCriteria()) {
+		if((eventType instanceof ThingEventType) && isMaster() && containsObservationCountCriteria()) {
             logger.warn("Failed to save/update EventType with ID " + eventType.getId() + " because ObservationCountCriteria doesn't work with Master Events yet");
             addActionErrorText("error.noobservationcountcriteriaformasterevent");
             return ERROR;

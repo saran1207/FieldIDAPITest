@@ -12,6 +12,7 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.validation.validator.StringValidator;
 
 public class NewObservationCountPanel extends Panel {
 
@@ -30,6 +31,7 @@ public class NewObservationCountPanel extends Panel {
             add(nameField = new RequiredTextField<String>("name", new PropertyModel<>(model, "name")));
             nameField.add(new NoBarsValidator());
             nameField.add(new NoColonsValidator());
+            nameField.add(new StringValidator.MaximumLengthValidator(10));
 
             add(new DropDownChoice<Boolean>("counted",
                     new PropertyModel<>(model, "counted"),

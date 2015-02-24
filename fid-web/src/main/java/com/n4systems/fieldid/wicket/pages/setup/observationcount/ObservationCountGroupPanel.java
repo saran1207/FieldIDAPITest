@@ -95,6 +95,7 @@ public class ObservationCountGroupPanel extends SortableListPanel {
                 item.add(editCopyDeleteItemPanel = new EditCopyDeleteItemPanel("count", new PropertyModel<String>(item.getModel(), "name"), createSubtitleModel(item.getModel()), false) {
                     {
                         setStoreLabel(new FIDLabelModel("label.save"));
+                        setEditMaximumLength(10);
                     }
 
                     @Override
