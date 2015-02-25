@@ -8,7 +8,7 @@ import java.util.List;
 public class ApiEventForm extends ApiReadonlyModel {
 	private List<ApiCriteriaSection> sections = new ArrayList<ApiCriteriaSection>();
 	private boolean useScoreForResult;
-    private Boolean useObservationCountForResult;
+    private boolean useObservationCountForResult;
 
 	public List<ApiCriteriaSection> getSections() {
 		return sections;
@@ -26,11 +26,11 @@ public class ApiEventForm extends ApiReadonlyModel {
 		this.useScoreForResult = useScoreForResult;
 	}
 
-    public Boolean getUseObservationCountForResult() {
+    public boolean getUseObservationCountForResult() {
         return useObservationCountForResult;
     }
 
-    public void setUseObservationCountForResult(Boolean useObservationCountForResult) {
+    public void setUseObservationCountForResult(boolean useObservationCountForResult) {
         this.useObservationCountForResult = useObservationCountForResult;
     }
 }

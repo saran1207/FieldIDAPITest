@@ -29,7 +29,11 @@ public class ApiSavedEventFormResource extends FieldIdPersistenceService{
 	public ApiEventForm convertToApiEventForm(AbstractEvent event) {
 		if(event.getEventForm() != null) {
 			ApiEventForm apiEventForm = new ApiEventForm();
-			apiEventForm.setSid(event.getEventForm().getId());			
+			apiEventForm.setSid(event.getEventForm().getId());
+            //You probably want to add the flags here... why are they never being set here?!?!??!?!
+            apiEventForm.setUseObservationCountForResult(event.getEventForm().isUseObservationCountForResult());
+            apiEventForm.setUseScoreForResult(event.getEventForm().isUseScoreForResult());
+
 			List<CriteriaSection> sections = event.getEventForm().getAvailableSections();			
 			if(sections != null && sections.size() > 0) {				
 				

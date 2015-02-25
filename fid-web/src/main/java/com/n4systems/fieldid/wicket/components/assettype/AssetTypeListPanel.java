@@ -7,6 +7,7 @@ import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.CopyAssetTypePage;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.EditAssetTypePage;
+import com.n4systems.fieldid.wicket.pages.setup.assettypegroup.ViewAssetTypeGroupPage;
 import com.n4systems.model.AssetType;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -43,12 +44,18 @@ public class AssetTypeListPanel extends Panel {
                 AssetType assetType = item.getModelObject();
                 TimeZone timeZone = FieldIDSession.get().getSessionUser().getTimeZone();
                 Link nameLink;
-                NonWicketLink groupLink;
+                Link groupLink;
 
                 item.add(nameLink = new BookmarkablePageLink<EditAssetTypePage>("nameLink", EditAssetTypePage.class, PageParametersBuilder.uniqueId(assetType.getId())));
                 nameLink.add(new Label("name", new PropertyModel<String>(assetType, "displayName")));
-                item.add(groupLink = new NonWicketLink("groupLink", "assetTypeGroup.action?uniqueID=" + (assetType.getGroup() != null ? assetType.getGroup().getId() : "")));
+                if (assetType.getGroup() != null) {
+                    item.add(groupLink = new BookmarkablePageLink("groupLink", ViewAssetTypeGroupPage.class, PageParametersBuilder.uniqueId(assetType.getGroup().getId())));
+                } else {
+                    item.add(groupLink = new BookmarkablePageLink("groupLink", ViewAssetTypeGroupPage.class));
+                    groupLink.setVisible(false);
+                }
                 groupLink.add(new Label("group", new PropertyModel<String>(assetType, "group.displayName")));
+
                 item.add(new Label("createdBy", new PropertyModel<String>(assetType, "createdBy.displayName")).setVisible(assetType.getCreatedBy() != null ));
                 item.add(new Label("createdDate", new DayDisplayModel(new PropertyModel<Date>(assetType, "created"), true, timeZone)));
                 item.add(new Label("modifiedBy", new PropertyModel<String>(assetType, "modifiedBy.displayName")).setVisible(assetType.getModifiedBy() != null));

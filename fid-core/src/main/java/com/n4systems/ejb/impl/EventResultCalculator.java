@@ -12,7 +12,7 @@ public class EventResultCalculator {
 
         ObservationResult observationCountResult = calculateObservationCount(event);
         event.setFailObservations(observationCountResult.failResult);
-        event.setPassObservations(observationCountResult.failResult);
+        event.setPassObservations(observationCountResult.passResult);
 
         Double score = calculateScore(event);
         event.setScore(score);
