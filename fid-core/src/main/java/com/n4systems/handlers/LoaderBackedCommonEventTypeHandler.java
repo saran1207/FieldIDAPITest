@@ -1,5 +1,7 @@
 package com.n4systems.handlers;
 
+import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.service.event.EventTypeService;
 import com.n4systems.model.*;
 import com.n4systems.model.eventtype.CommonAssetTypeLoader;
 
@@ -12,8 +14,11 @@ public class LoaderBackedCommonEventTypeHandler implements CommonEventTypeHandle
 
 	private final CommonAssetTypeLoader assetTypeIdLoader;
 
-	public LoaderBackedCommonEventTypeHandler(CommonAssetTypeLoader assetTypeIdLoader) {
+    private EventTypeService eventTypeService;
+
+	public LoaderBackedCommonEventTypeHandler(CommonAssetTypeLoader assetTypeIdLoader, EventTypeService eventTypeService) {
 		this.assetTypeIdLoader = assetTypeIdLoader;
+        this.eventTypeService = eventTypeService;
 	}
 
 	public Set<ThingEventType> findCommonEventTypesFor(List<Long> assetIds) {
@@ -29,8 +34,10 @@ public class LoaderBackedCommonEventTypeHandler implements CommonEventTypeHandle
 
 		if(!filterCommonEventTypes.isEmpty()) {
 			for (ThingEventType type : filterCommonEventTypes) {
-				if (type.getEventForm() != null && type.getEventForm().getObservationCountGroup() != null) {
-					for (CriteriaSection section : type.getEventForm().getSections()) {
+                //Added this to fix lazy init on the EventForm sections, this handler should be rewritten to use new services
+                EventForm form = eventTypeService.getEventType(type.getId()).getEventForm();
+				if (form != null && form.getObservationCountGroup() != null) {
+					for (CriteriaSection section : form.getSections()) {
 						boolean temp = false;
 						for (Criteria crit : section.getCriteria()) {
 							if (crit instanceof ObservationCountCriteria) {
