@@ -13,6 +13,7 @@ import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.collection.helpers.CommonAssetValues;
 import com.n4systems.fieldid.collection.helpers.CommonAssetValuesFinder;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.service.event.EventTypeService;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.util.EventFormHelper;
@@ -84,6 +85,9 @@ public class MultiEventAction extends AbstractCrud implements ActionWithCriteria
     @Autowired
     protected UserGroupService userGroupService;
 
+    @Autowired
+    private EventTypeService eventTypeService;
+
     public MultiEventAction(PersistenceManager persistenceManager, UserManager userManager, EventScheduleManager eventScheduleManager) {
 		super(persistenceManager);
 		this.userManager = userManager;
@@ -129,7 +133,7 @@ public class MultiEventAction extends AbstractCrud implements ActionWithCriteria
 	}
 
 	private CommonEventTypeHandler createCommonEventTypeHandler() {
-		return new LoaderBackedCommonEventTypeHandler(new CommonAssetTypeDatabaseLoader(getSecurityFilter(), ConfigContext.getCurrentContext()));
+		return new LoaderBackedCommonEventTypeHandler(new CommonAssetTypeDatabaseLoader(getSecurityFilter(), ConfigContext.getCurrentContext()), eventTypeService);
 	}
 
 	@SkipValidation
