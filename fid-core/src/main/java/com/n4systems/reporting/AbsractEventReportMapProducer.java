@@ -130,9 +130,10 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
             if(getEvent().getType().isDisplayObservationPercentage() && observationCount.isCounted()) {
                 concatenatedTotals.append(" ");
 
-                Double totalPercentage = (count.doubleValue() / overallTotal.doubleValue()) * 100.0d;
-                concatenatedTotals.append("(").append(totalPercentage).append("%)");
+                Double totalPercentage = overallTotal == 0 ? 0 : (count.doubleValue() / overallTotal.doubleValue()) * 100.0d;
+                concatenatedTotals.append("(").append(totalPercentage.intValue()).append("%)");
             }
+            concatenatedTotals.append("|");
         });
 
         if(concatenatedTotals.length() > 0) {
