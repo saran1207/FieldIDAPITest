@@ -135,7 +135,11 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
             }
         });
 
-        add("observationCountTotalScores", concatenatedTotals.substring(0, concatenatedTotals.length() - 1));
+        if(concatenatedTotals.length() > 0) {
+            add("observationCountTotalScores", concatenatedTotals.substring(0, concatenatedTotals.length() - 1));
+        } else {
+            add("observationCountTotalScores", "");
+        }
     }
 
     private List<InspectionImage> createEventImages() {
@@ -404,7 +408,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
             subtotalBuilder.append("|");
         });
 
-        return subtotalBuilder.substring(0, subtotalBuilder.length() - 1);
+        return subtotalBuilder.length() > 0 ? subtotalBuilder.substring(0, subtotalBuilder.length() - 1) : "";
     }
 
     private void populateResultActions(CriteriaStateView stateView, CriteriaResult result) {
