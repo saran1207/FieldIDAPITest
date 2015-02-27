@@ -135,7 +135,11 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
             }
         });
 
-        add("observationCountTotalScores", concatenatedTotals.substring(0, concatenatedTotals.length() - 1));
+        if(concatenatedTotals.length() > 0) {
+            add("observationCountTotalScores", concatenatedTotals.substring(0, concatenatedTotals.length() - 1));
+        } else {
+            add("observationCountTotalScores", "");
+        }
     }
 
     private List<InspectionImage> createEventImages() {
