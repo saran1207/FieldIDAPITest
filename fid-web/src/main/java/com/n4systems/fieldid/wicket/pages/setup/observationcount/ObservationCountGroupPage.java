@@ -134,7 +134,7 @@ public class ObservationCountGroupPage extends FieldIDFrontEndPage {
 
     private void onGroupSelected(IModel<ObservationCountGroup> model, AjaxRequestTarget target) {
         groupsAndObservationsContainer.remove("observationCountGroup");
-        if (observationCountService.isObservationGroupAttachedToEventType(model.getObject().getId())) {
+        if (model.getObject() != null && observationCountService.isObservationGroupAttachedToEventType(model.getObject().getId())) {
             groupsAndObservationsContainer.add(new ObservationCountGroupPanel("observationCountGroup", model));
         } else {
             groupsAndObservationsContainer.add(new EditableObservationCountGroupPanel("observationCountGroup", model));
