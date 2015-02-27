@@ -25,12 +25,12 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -45,7 +45,7 @@ public class ObservationCountGroupPage extends FieldIDFrontEndPage {
     private WebMarkupContainer blankSlate;
     private WebMarkupContainer groupsAndObservationsContainer;
     private FIDFeedbackPanel feedbackPanel;
-    private ObservationCountGroupPanel observationCountGroupPanel;
+    private Panel observationCountGroupPanel;
 
     private int currentlySelectedIndex = -1;
 
@@ -115,6 +115,11 @@ public class ObservationCountGroupPage extends FieldIDFrontEndPage {
                     public int getTextDisplayLimit() {
                         return 50;
                     }
+
+                    @Override
+                    public boolean isDeletable() {
+                        return !observationCountService.isObservationGroupAttachedToEventType(item.getModelObject().getId());
+                    }
                 });
 
                 editCopyDeleteItemPanel.getTextField().add(new NoBarsValidator());
@@ -122,14 +127,18 @@ public class ObservationCountGroupPage extends FieldIDFrontEndPage {
             }
         });
 
-        groupsAndObservationsContainer.add(observationCountGroupPanel = new ObservationCountGroupPanel("observationCountGroup", new Model<ObservationCountGroup>()));
+        groupsAndObservationsContainer.add(observationCountGroupPanel = new EditableObservationCountGroupPanel("observationCountGroup", new Model<ObservationCountGroup>()));
         groupsAndObservationsContainer.add(new NewObservationCountGroupForm("newObservationGroupForm"));
 
     }
 
     private void onGroupSelected(IModel<ObservationCountGroup> model, AjaxRequestTarget target) {
         groupsAndObservationsContainer.remove("observationCountGroup");
-        groupsAndObservationsContainer.add(new ObservationCountGroupPanel("observationCountGroup", model));
+        if (observationCountService.isObservationGroupAttachedToEventType(model.getObject().getId())) {
+            groupsAndObservationsContainer.add(new ObservationCountGroupPanel("observationCountGroup", model));
+        } else {
+            groupsAndObservationsContainer.add(new EditableObservationCountGroupPanel("observationCountGroup", model));
+        }
 
         target.add(groupsAndObservationsContainer);
         target.add(feedbackPanel);

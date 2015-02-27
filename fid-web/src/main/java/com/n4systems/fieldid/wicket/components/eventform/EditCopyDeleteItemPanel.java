@@ -51,7 +51,7 @@ public class EditCopyDeleteItemPanel extends Panel {
         ContextImage deleteImage = new ContextImage("deleteImage", new PropertyModel<String>(this, "deleteImage")) {
             @Override
             public boolean isVisible() {
-                return !isReorderState();
+                return !isReorderState() && isDeletable();
             }
         };
         deleteImage.add(new AjaxEventBehavior("onclick") {
@@ -196,6 +196,10 @@ public class EditCopyDeleteItemPanel extends Panel {
 
     protected boolean isReorderState() {
         return false;
+    }
+
+    public boolean isDeletable() {
+        return true;
     }
 
     public String getDeleteImage() {
