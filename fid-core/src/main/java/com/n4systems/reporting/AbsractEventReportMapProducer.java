@@ -408,7 +408,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
             subtotalBuilder.append("|");
         });
 
-        return subtotalBuilder.substring(0, subtotalBuilder.length() - 1);
+        return subtotalBuilder.length() > 0 ? subtotalBuilder.substring(0, subtotalBuilder.length() - 1) : "";
     }
 
     private void populateResultActions(CriteriaStateView stateView, CriteriaResult result) {
