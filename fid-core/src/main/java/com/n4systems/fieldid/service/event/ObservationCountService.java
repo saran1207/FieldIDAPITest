@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.service.event;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.model.EventType;
 import com.n4systems.model.ObservationCount;
 import com.n4systems.model.ObservationCountCriteriaResult;
 import com.n4systems.model.ObservationCountGroup;
@@ -54,6 +55,17 @@ public class ObservationCountService extends FieldIdPersistenceService {
         query.addSimpleWhere("mobileId", mobileId);
 
         return persistenceService.find(query);
+    }
+
+    public boolean isObservationGroupAttachedToEventType(Long observationGroupId) {
+        QueryBuilder<EventType> query = createUserSecurityBuilder(EventType.class);
+        query.addSimpleWhere("eventForm.observationCountGroup.id", observationGroupId);
+        Long count = persistenceService.count(query);
+        if(count > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

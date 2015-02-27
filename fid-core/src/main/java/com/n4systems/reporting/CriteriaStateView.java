@@ -18,6 +18,7 @@ public class CriteriaStateView implements Serializable {
 	private File stateImage;
     private Double sectionScoreTotal;
     private Double sectionScorePercentage;
+    private String sectionObservationCountSubtotal;
 	private Integer recommendations;
 	private Integer deficiencies;
 	private String compressedRecommendations;
@@ -162,6 +163,14 @@ public class CriteriaStateView implements Serializable {
 
     public void setSectionScorePercentage(Double sectionScorePercentage) {
         this.sectionScorePercentage = sectionScorePercentage;
+    }
+
+    public String getSectionObservationCountSubtotal() {
+        return sectionObservationCountSubtotal;
+    }
+
+    public void setSectionObservationCountSubtotal(String sectionObservationCountSubtotal) {
+        this.sectionObservationCountSubtotal = sectionObservationCountSubtotal;
     }
 
     public String getLabel() {
