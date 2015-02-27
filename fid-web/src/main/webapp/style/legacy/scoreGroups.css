@@ -156,3 +156,18 @@ div.itemLinkTitle a div.subTitle {
     overflow:hidden;
     float:left;
 }
+
+.score.observation-count {
+    padding: 13px;
+    padding-left: 24px;
+}
+
+.score.observation-count label {
+    color: #000000;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.score.observation-count .info {
+    color: #888;
+}
