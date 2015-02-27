@@ -90,6 +90,8 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 
             add("observationCountGroup", observationCountGroup);
         }
+
+
 	}
 
     private List<PriorityCodeListView> createCollectionForActionsByPriorityCode() {
@@ -110,6 +112,30 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
     private void populateTotalsAndPercentages() {
         add("maximumPossibleScore", new EventFormHelper().calculateMaxScoreForEvent(getEvent()));
         add("totalScorePercentage", new EventFormHelper().getEventFormScorePercentage(getEvent()));
+
+        /*
+        The choice of what you should show should be based on the state of EventType.displayObservationPercentage.
+        If true, you should be showing the totals as percentages.  Otherwise, you should just be showing the totals.
+         */
+
+        Map<ObservationCount, Integer> observationCountTotals = new EventFormHelper().getFormObservationTotals(getEvent());
+        Integer overallTotal = new EventFormHelper().getObservationCountTotal(getEvent());
+
+        StringBuilder concatenatedTotals = new StringBuilder();
+
+        observationCountTotals.forEach((ObservationCount observationCount, Integer count) -> {
+            concatenatedTotals.append(observationCount.getName()).append(":");
+
+            concatenatedTotals.append(count);
+            if(getEvent().getType().isDisplayObservationPercentage() && observationCount.isCounted()) {
+                concatenatedTotals.append(" ");
+
+                Double totalPercentage = (count.doubleValue() / overallTotal.doubleValue()) * 100.0d;
+                concatenatedTotals.append("(").append(totalPercentage).append("%)");
+            }
+        });
+
+        add("observationCountTotalScores", concatenatedTotals.substring(0, concatenatedTotals.length() - 1));
     }
 
     private List<InspectionImage> createEventImages() {
@@ -242,6 +268,14 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
         Map<String, Double> sectionScoreMap = convertSectionScoreMapToNameScoreMap(new EventFormHelper().getScoresForSections(getEvent()));
         Map<String, Double> sectionScorePercentageMap = convertSectionScoreMapToNameScoreMap(new EventFormHelper().getScorePercentageForSections(getEvent()));
 
+        /*
+            Below, we calculate the subtotals based on what was configured for the event type.  If we have percentages
+            enabled, we'll show percentages, otherwise we'll show the total count.  We will not show percentages for
+         */
+        Map<CriteriaSection, String> observationCountSubtotals = generateObservationCountSubtotalMap();
+
+
+
         flattenCriteriaResults(resultMap, recommendations, deficiencies, help);
 		//TODO : move criteria view to 
 		// walk the section, and criteria tree and construct report views
@@ -255,6 +289,15 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
                         CriteriaStateView stateView = new CriteriaStateView(section, criteria, recommendations.get(criteria), deficiencies.get(criteria), help.get(criteria));
                         stateView.setSectionScoreTotal(sectionScoreMap.get(stateView.getSection()));
                         stateView.setSectionScorePercentage(sectionScorePercentageMap.get(stateView.getSection()));
+
+                        /*
+                            Unlike above, we'll respect configuration for the event and only output these values if
+                            section subtotals has been enabled for the EventType...
+                         */
+                        if(getEvent().getType().isDisplayObservationSectionTotals()) {
+                            stateView.setSectionObservationCountSubtotal(observationCountSubtotals.get(section));
+                        }
+
                         CriteriaResult result = resultMap.get(criteria);
 
                         if (result instanceof OneClickCriteriaResult) {
@@ -284,21 +327,19 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
                             //a little bit of String manipulation for all ObservationCriteriaResult objects.
                             StringBuilder concatenatedObservationCounts = new StringBuilder();
 
-                            ((ObservationCountCriteriaResult) result).getObservationCountResults().forEach(observationCountResult -> {
-                                concatenatedObservationCounts.append(observationCountResult.getObservationCount().getName());
-                                concatenatedObservationCounts.append(":");
-                                concatenatedObservationCounts.append(observationCountResult.getValue());
-                                concatenatedObservationCounts.append("|");
-                            });
+                            ((ObservationCountCriteriaResult) result).getObservationCountResults().forEach(observationCountResult ->
+                                            //Mash everything together into a StringBuilder
+                                            concatenatedObservationCounts.append(observationCountResult.getObservationCount().getName())
+                                                                         .append(":")
+                                                                         .append(observationCountResult.getValue())
+                                                                         .append("|"));
 
                             //Sweet, so now that we have the String, there's one more bit of work...  There's a pipe
                             //at the end of that String that would be nice to get rid of.
                             //This is going to reliably be the last character, so we'll just substring it out to reduce
-                            //the operations we're performing on it.  This means remove 2 from the length, not 1.
+                            //the operations we're performing on it.
                             stateView.setState(concatenatedObservationCounts.substring(0, concatenatedObservationCounts.length() - 1));
                         }
-
-
 
                         stateView.setType(criteria.getCriteriaType().getReportIdentifier());
                         populateResultImages(stateView, result);
@@ -311,6 +352,60 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 
 		return criteriaViews;
 	}
+
+    private Map<CriteriaSection, String> generateObservationCountSubtotalMap() {
+        //Okay... because of how this thing works, it seems to not actually keep reference to the internal map after
+        //processing... but we need it for the next method call... so we need to make an instance of the form helper.
+        EventFormHelper observationCountScoreKeeper = new EventFormHelper();
+
+        Map<CriteriaSection, Map<ObservationCount, Integer>> criteriaSectionMap = observationCountScoreKeeper.getObservationsForSections(getEvent());
+        Map<CriteriaSection, Integer> sectionTotalMap = new HashMap<>();
+
+        //Sorry that's so ugly!  We're just crunching down the totals into a map that we're going to need when we
+        //generate subtotals, should they be percentage-based.  There shouldn't be much effort in grinding these
+        //numbers, so we'll just do it regardless of whether or not we need them.
+        criteriaSectionMap.keySet()
+                          .forEach(criteriaSection ->
+                                  sectionTotalMap.put(criteriaSection,
+                                          observationCountScoreKeeper.getObservationSectionTotal(getEvent(), criteriaSection)));
+
+        //Now that we have all the data, we can crunch the numbers and return a Map of Strings keyed by CriteriaSections.
+        //We could do String, String... but there's no real benefit to that unless it turns out we can't actually
+        //compare CriteriaSections... I'm pretty sure we can, though.
+        return reduceObservationCountSubtotalsToSimpleMap(criteriaSectionMap, sectionTotalMap);
+    }
+
+    private Map<CriteriaSection, String> reduceObservationCountSubtotalsToSimpleMap(Map<CriteriaSection, Map<ObservationCount, Integer>> complexMap, Map<CriteriaSection, Integer> sectionTotalMap) {
+        Map<CriteriaSection, String> returnMe = new HashMap<>();
+
+        //Use forEach to process the map in as few lines as possible (ie. 1... I couldn't do it in 0 lines)
+        complexMap.forEach((CriteriaSection section, Map<ObservationCount, Integer> subtotalMap) -> returnMe.put(section, calculateAppropriateObservationCountSubtotal(subtotalMap, sectionTotalMap.get(section))));
+
+        return returnMe;
+    }
+
+    private String calculateAppropriateObservationCountSubtotal(Map<ObservationCount, Integer> subtotalMap, Integer sectionTotal) {
+        StringBuilder subtotalBuilder = new StringBuilder();
+
+        subtotalMap.forEach((ObservationCount observationCount, Integer count) -> {
+            subtotalBuilder.append(observationCount.getName()).append(":");
+
+            //Now to determine what to display.
+            //Here, we want the display to look like this: 42
+            subtotalBuilder.append(count);
+            if(getEvent().getType().isDisplayObservationPercentage() && observationCount.isCounted()) {
+                //However if we make it here, we want the display to look like this: 42 (31%)
+                subtotalBuilder.append(" ");
+
+                Double sectionPercentage = (count.doubleValue() / sectionTotal.doubleValue()) * 100.0d;
+                subtotalBuilder.append("(").append(sectionPercentage).append("%)");
+            }
+
+            subtotalBuilder.append("|");
+        });
+
+        return subtotalBuilder.substring(0, subtotalBuilder.length() - 1);
+    }
 
     private void populateResultActions(CriteriaStateView stateView, CriteriaResult result) {
         for (Event action : result.getActions()) {
