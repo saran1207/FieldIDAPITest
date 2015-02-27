@@ -402,7 +402,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
                 //However if we make it here, we want the display to look like this: 42 (31%)
                 subtotalBuilder.append(" ");
 
-                Double sectionPercentage = (count.doubleValue() / sectionTotal.doubleValue()) * 100.0d;
+                Double sectionPercentage = sectionTotal == 0 ? 0 : (count.doubleValue() / sectionTotal.doubleValue()) * 100.0d;
                 subtotalBuilder.append("(").append(sectionPercentage).append("%)");
             }
 
