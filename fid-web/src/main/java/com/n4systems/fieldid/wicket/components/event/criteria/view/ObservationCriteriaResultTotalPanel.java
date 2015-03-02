@@ -25,7 +25,7 @@ public class ObservationCriteriaResultTotalPanel extends Panel {
             add(new AttributeAppender("class", "observation-counter-items-" + numObservations).setSeparator(" "));
         }
 
-        add(new ListView<ObservationCount>("observationResult", new PropertyModel<List<ObservationCount>>(event, "type.eventForm.observationCountGroup.observationCounts")) {
+        add(new ListView<ObservationCount>("observationResult", new PropertyModel<List<ObservationCount>>(event, "eventForm.observationCountGroup.observationCounts")) {
             @Override
             protected void populateItem(ListItem<ObservationCount> item) {
                 item.add(new Label("name", new PropertyModel<>(item.getModel(), "name")));

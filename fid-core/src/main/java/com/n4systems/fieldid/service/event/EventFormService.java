@@ -51,7 +51,7 @@ public class EventFormService extends FieldIdPersistenceService {
 
         eventForm.setSections(convertSectonsToNewObservationCountGroup(newCriteriaSections, oldEventForm.getObservationCountGroup()));
 
-        oldEventForm.setState(Archivable.EntityState.RETIRED);
+        //oldEventForm.setState(Archivable.EntityState.RETIRED);
         //Scoring
         eventForm.setScoreCalculationType(oldEventForm.getScoreCalculationType());
         eventForm.setFailRange(oldEventForm.getFailRange());
@@ -77,6 +77,13 @@ public class EventFormService extends FieldIdPersistenceService {
         //save the event type
         persistenceService.update(eventType);
         restoreTranslations(eventForm);
+
+        //Retire oldForm by fetching it from DB first
+        Long oldId = oldEventForm.getId();
+        EventForm oldDBEventForm = persistenceService.find(EventForm.class, oldId);
+        oldDBEventForm.setState(Archivable.EntityState.RETIRED);
+        persistenceService.update(oldDBEventForm);
+
     }
 
     private List<CriteriaSection> convertSectonsToNewObservationCountGroup(List<CriteriaSection> sections, ObservationCountGroup group) {

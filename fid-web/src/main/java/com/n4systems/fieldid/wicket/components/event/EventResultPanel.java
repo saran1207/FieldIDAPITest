@@ -59,7 +59,7 @@ public class EventResultPanel extends Panel {
             observationResultContainer.add(new AttributeAppender("class", "observation-counter-items-" + numObservations).setSeparator(" "));
         }
 
-        observationResultContainer.add(new ListView<ObservationCount>("observationResult", new PropertyModel<List<ObservationCount>> (model, "type.eventForm.observationCountGroup.observationCounts")) {
+        observationResultContainer.add(new ListView<ObservationCount>("observationResult", new PropertyModel<List<ObservationCount>> (model, "eventForm.observationCountGroup.observationCounts")) {
             @Override
             protected void populateItem(ListItem<ObservationCount> item) {
                 item.add(new Label("name", new PropertyModel<>(item.getModel(), "name")));
