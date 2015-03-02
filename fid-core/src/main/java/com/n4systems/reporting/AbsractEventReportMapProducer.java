@@ -403,7 +403,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
                 subtotalBuilder.append(" ");
 
                 Double sectionPercentage = sectionTotal == 0 ? 0 : (count.doubleValue() / sectionTotal.doubleValue()) * 100.0d;
-                subtotalBuilder.append("(").append(sectionPercentage).append("%)");
+                subtotalBuilder.append("(").append(sectionPercentage.intValue()).append("%)");
             }
 
             subtotalBuilder.append("|");
