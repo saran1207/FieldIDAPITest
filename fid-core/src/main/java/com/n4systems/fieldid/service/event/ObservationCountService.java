@@ -1,11 +1,9 @@
 package com.n4systems.fieldid.service.event;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
-import com.n4systems.model.EventType;
-import com.n4systems.model.ObservationCount;
-import com.n4systems.model.ObservationCountCriteriaResult;
-import com.n4systems.model.ObservationCountGroup;
-import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.model.*;
+import com.n4systems.model.api.Archivable;
+import com.n4systems.util.persistence.*;
 
 import java.util.List;
 
@@ -58,8 +56,14 @@ public class ObservationCountService extends FieldIdPersistenceService {
     }
 
     public boolean isObservationGroupAttachedToEventType(Long observationGroupId) {
-        QueryBuilder<EventType> query = createUserSecurityBuilder(EventType.class);
-        query.addSimpleWhere("eventForm.observationCountGroup.id", observationGroupId);
+        QueryBuilder<EventForm> query = createUserSecurityBuilder(EventForm.class, true);
+        query.addSimpleWhere("observationCountGroup.id", observationGroupId);
+
+        WhereParameterGroup group = new WhereParameterGroup("group");
+        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "active", "state", Archivable.EntityState.ACTIVE, null, WhereClause.ChainOp.OR));
+        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "retired", "state", Archivable.EntityState.RETIRED, null, WhereClause.ChainOp.OR));
+        query.addWhere(group);
+
         Long count = persistenceService.count(query);
         if(count > 0) {
             return true;
