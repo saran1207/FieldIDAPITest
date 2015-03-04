@@ -254,6 +254,20 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
             add(createQuickDateLink("tomorrowLink", 1, scheduledDatePicker, scheduledDateModel));
             add(createEndOfWeekLink("endOfWeekLink", scheduledDatePicker, scheduledDateModel));
             add(createQuickDateLink("in30DaysLink", 30, scheduledDatePicker, scheduledDateModel));
+            add(createMonthLink("in3MonthsLink", 3, scheduledDatePicker, scheduledDateModel));
+        }
+
+        private AjaxLink createMonthLink(String id, final int monthDelay, final DateTimePicker scheduledDatePicker, final IModel<Date> scheduledDateModel) {
+            return new AjaxLink(id) {
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    Date dateToSchedule = DateUtils.addYears(dateService.todayAsDate(), 0);
+                    dateToSchedule = DateUtils.addMonths(dateToSchedule, monthDelay);
+                    scheduledDateModel.setObject(new PlainDate(dateToSchedule));
+                    AddActionForm.this.getModelObject().setAssigneeOrDateUpdated();
+                    target.add(scheduledDatePicker);
+                }
+            };
         }
 
         private AjaxLink createQuickDateLink(String id, final int deltaDays, final DateTimePicker scheduledDatePicker, final IModel<Date> scheduledDateModel) {

@@ -12,7 +12,6 @@ import com.n4systems.fieldid.wicket.model.LocalizeModel;
 import com.n4systems.fieldid.wicket.model.event.PrioritiesForTenantModel;
 import com.n4systems.fieldid.wicket.model.user.AssigneesModel;
 import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
-import com.n4systems.fieldid.wicket.model.user.UsersForTenantModel;
 import com.n4systems.fieldid.wicket.model.user.VisibleUserGroupsModel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.*;
@@ -151,6 +150,7 @@ public class SchedulePickerPanel<T extends Event> extends Panel {
             add(createQuickDateLink("quickLinkToday", 0, 0, 0));
             add(createQuickDateLink("quickLinkTomorrow", 1, 0, 0));
             add(createQuickDateLink("quickLinkNextMonth", 0, 1, 0));
+            add(createQuickDateLink("quickLinkThreeMonth", 0, 3, 0));
             add(createQuickDateLink("quickLinkSixMonths", 0, 6, 0));
             add(createQuickDateLink("quickLinkNextYear", 0, 0, 1));
 
