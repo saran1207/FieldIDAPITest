@@ -19,9 +19,9 @@ public class StartRegularOrMasterEventPage extends FieldIDAuthenticatedPage {
 
         StringValue scheduleIdParam = params.get("scheduleId");
         Long scheduleId = scheduleIdParam.isEmpty() ? null : scheduleIdParam.toLongObject();
-        ThingEventType type = persistenceService.find(ThingEventType.class, eventTypeId);
+        EventType type = persistenceService.find(EventType.class, eventTypeId);
 
-        if (type.isMaster()) {
+        if (type instanceof ThingEventType && ((ThingEventType)type).isMaster()) {
             String strutsAction = String.format("/masterEventAdd.action?assetId=%d&type=%d", assetId, eventTypeId);
             if (scheduleId != null) {
                 strutsAction += "&scheduleId="+scheduleId;
