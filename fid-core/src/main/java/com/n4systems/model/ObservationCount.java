@@ -25,6 +25,20 @@ public class ObservationCount extends ArchivableEntityWithTenant{
     @Column(name="counted")
     private boolean counted = true;
 
+    public ObservationCount() {
+        super(null);
+    }
+
+    public ObservationCount(Tenant tenant) {
+        super(tenant);
+    }
+
+    public ObservationCount(ObservationCount count) {
+        this(count.getTenant());
+        this.observationCount = count.getName();
+        this.counted = count.isCounted();
+    }
+
     public String getName() {
         return observationCount;
     }
