@@ -1,5 +1,6 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
+    <div wicket:id="modal"/>
     <div wicket:enclosure="actionsList" class="dropdown">
         <button class="btn-secondary">Actions</button>
         <ul wicket:id="actionsList" class="pull-right">
@@ -25,7 +26,6 @@
     <div wicket:enclosure="optionsContainer2" class="dropdown">
         <button class="btn-secondary">Print</button>
         <ul wicket:id="optionsContainer2" class="pull-right">
-            <!-- wicket:message key="label.print"/ -->
             <li>
                 <a wicket:id="shortLink">
                     <wicket:container wicket:id="label"/>
