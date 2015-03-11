@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.service.user;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.fieldid.service.org.OrgService;
@@ -12,9 +13,7 @@ import com.n4systems.model.orgs.ExternalOrgFilter;
 import com.n4systems.model.orgs.InternalOrgFilter;
 import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.search.SearchCriteria;
-import com.n4systems.model.security.OpenSecurityFilter;
-import com.n4systems.model.security.SecurityFilter;
-import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.model.security.*;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.model.user.UserQueryHelper;
@@ -338,30 +337,17 @@ public class UserService extends CrudService<User> {
     }
 
     public List<User> getExaminers() {
-        SecurityFilter filter = securityContext.getUserSecurityFilter();
-        SecurityFilter justTenantFilter = securityContext.getTenantSecurityFilter();
-        String queryString = "select ub from " + User.class.getName() + " ub where ub.registered = true and state = 'ACTIVE' and ub.userType != '" + UserType.SYSTEM.toString() + "' and ( "
-                + filter.produceWhereClause(User.class, "ub") + " OR ( " + justTenantFilter.produceWhereClause(User.class, "ub") + " AND ub.owner.customerOrg IS NULL) )";
+        List<User> resultList;
+
+        QueryBuilder<User> builder = createUserQueryBuilder(true, false);
+        builder.applyFilter(new OwnerAndDownWithPrimaryFilter(getCurrentUser().getOwner()));
 
         if (!getCurrentUser().getGroups().isEmpty() && isUserGroupFilteringEnabled()) {
-            queryString += " AND ub in (:visibleUsers) ";
+            resultList = Lists.newArrayList(ThreadLocalInteractionContext.getInstance().getVisibleUsers());
+        } else {
+            resultList = persistenceService.findAll(builder);
         }
-
-        queryString += " ORDER BY ub.firstName, ub.lastName";
-
-        Query query = getEntityManager().createQuery(queryString);
-
-        if (!getCurrentUser().getGroups().isEmpty() && isUserGroupFilteringEnabled()) {
-            Collection<User> visibleUsers = ThreadLocalInteractionContext.getInstance().getVisibleUsers();
-            query.setParameter("visibleUsers", visibleUsers);
-        }
-
-        filter.applyParameters(query, User.class);
-        justTenantFilter.applyParameters(query, User.class);
-
-
-        // get the userlist and filter out users not having the create/edit
-        return Permissions.filterHasOneOf((List<User>) query.getResultList(), Permissions.ALLEVENT);
+        return Permissions.filterHasOneOf(resultList, Permissions.ALLEVENT);
     }
 
     public List<User> search(String term, int threshold) {
