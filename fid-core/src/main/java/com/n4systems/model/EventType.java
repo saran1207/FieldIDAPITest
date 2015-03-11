@@ -70,8 +70,6 @@ public abstract class EventType<T extends EventType> extends ArchivableEntityWit
     @Column(name="action_type")
     private boolean actionType = false;
 
-	private Long legacyEventId;
-
 	public EventType() {
 		this(null);
 	}
@@ -162,15 +160,6 @@ public abstract class EventType<T extends EventType> extends ArchivableEntityWit
 
 	public void setRetired(boolean retired) {
 		this.retired = retired;
-	}
-
-	@AllowSafetyNetworkAccess
-	public Long getLegacyEventId() {
-		return legacyEventId;
-	}
-
-	public void setLegacyEventId(Long legacyEventId) {
-		this.legacyEventId = legacyEventId;
 	}
 	
 	@AllowSafetyNetworkAccess
