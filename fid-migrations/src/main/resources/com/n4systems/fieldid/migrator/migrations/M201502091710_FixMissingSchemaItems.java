@@ -95,7 +95,6 @@ public class M201502091710_FixMissingSchemaItems extends Migration {
 								.addPrimaryKey("projects_id", "resources_id")
 				)
 				.add(AlterTable.named("saved_items")
-								.dropColumn("procedures_id")
 								.addForeignKey("createdby", "users", "id")
 								.addForeignKey("modifiedby", "users", "id")
 				)
