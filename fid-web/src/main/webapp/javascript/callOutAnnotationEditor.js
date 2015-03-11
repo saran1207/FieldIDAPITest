@@ -36,13 +36,14 @@
                 strokeWidth: 2
             }
         },
-        
+
+        //------------------------
         activeAnnotation: {
             x: null,
             y: null,
-            label:  'Label',
-            fill:   '#FFFFFF',
-            stroke: '#EE1C25'
+            label:  null,
+            fill:   null,
+            stroke: null
         },
         annotations: [
             // {
@@ -53,6 +54,7 @@
             //     stroke: '#000000'
             // }
         ]
+        //---------------------
     };
     
     function Plugin(element, params){
@@ -132,6 +134,7 @@
             
             this.renderNote(this.annotations[i]);
         }
+
         
         // Create container for editable annotation
         // contents will be destroyed and recreated during the editing process
@@ -146,8 +149,8 @@
         this.activeAnnotation.width += this.style.bg.padding;
         
         // Check for existing note values
-        if( this.activeAnnotation.x !== null && 
-            this.activeAnnotation.y !== null ){
+        if( this.activeAnnotation.x < 0 &&
+            this.activeAnnotation.y < 0 ){
             this.renderNote(this.activeAnnotation);
         }
         
@@ -175,8 +178,8 @@
     
     Plugin.prototype.updateNoteOnServer = function(){
         var url = new String(this.pluginParams.apiUrl) +
-            '&x='+  this.note.x +
-            '&y='+  this.note.y;
+            '&x='+  this.activeAnnotation.x +
+            '&y='+  this.activeAnnotation.y;
         
         wicketAjaxGet(url, function(){}, function(){});
     };

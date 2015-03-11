@@ -6,18 +6,18 @@ import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
-import java.awt.Dimension;
+import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
@@ -29,13 +29,21 @@ public class CallOutStyleAnnotatedSvg extends Panel {
     private S3Service s3Service;
 
     private ProcedureDefinitionImage image;
-    private List<ImageAnnotation> annotationList;
+    protected List<ImageAnnotation> annotationList;
     private Dimension imageDimensions;
 
     private Double scale = 1.0;
 
     private static String BLANK_SLATE_PATH = "/fieldid/images/loto/label-blank-slate.png";
     private static Dimension BLANK_SLATE_DIMENSIONS = new Dimension(177, 133);
+
+    public CallOutStyleAnnotatedSvg(String id, ImageAnnotation theAnnotation) {
+        super(id);
+        if(theAnnotation != null ) {
+            //annotationList.add(theAnnotation);
+            this.image = (ProcedureDefinitionImage) theAnnotation.getImage();
+        }
+    }
 
     public CallOutStyleAnnotatedSvg(String id, IModel<ProcedureDefinitionImage> imageModel) {
         super(id, imageModel);
@@ -72,13 +80,23 @@ public class CallOutStyleAnnotatedSvg extends Panel {
         add(new AttributeModifier("xmlns:xlink", "http://www.w3.org/1999/xlink"));
         add(new AttributeModifier("version", "1.1"));
         add(new AttributeModifier("viewBox", "0 0 " + imageDimensions.getWidth() + " " + imageDimensions.getHeight()));
-        add(new AttributeModifier("width", imageDimensions.getWidth()));
-        add(new AttributeModifier("height", imageDimensions.getHeight()));
+        //add(new AttributeModifier("width", imageDimensions.getWidth()));
+        //add(new AttributeModifier("height", imageDimensions.getHeight()));
 
-        if (imageUrl != null)
-            add(new WebMarkupContainer("imageElement").add(new AttributeModifier("xlink:href", imageUrl)));
-        else
-            add(new WebMarkupContainer("imageElement").add(new AttributeModifier("xlink:href", BLANK_SLATE_PATH)));
+        WebMarkupContainer imageElement = new WebMarkupContainer("imageElement");
+        if (imageUrl != null) {
+            imageElement.add(new AttributeModifier("xlink:href", imageUrl));
+        } else {
+            imageElement.add(new AttributeModifier("xlink:href", BLANK_SLATE_PATH));
+        }
+
+        //imageElement.remove("height");
+        //imageElement.remove("width");
+
+        imageElement.add(new AttributeAppender("height", imageDimensions.getHeight()));
+        imageElement.add(new AttributeAppender("width", imageDimensions.getWidth()));
+
+        add(imageElement);
 
         if(image != null) {
             add(createAnnotationDefinitionListView());

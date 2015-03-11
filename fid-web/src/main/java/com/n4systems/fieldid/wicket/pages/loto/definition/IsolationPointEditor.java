@@ -6,7 +6,6 @@ import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.image.ArrowStyleEditorAndGalleryPanel;
-import com.n4systems.fieldid.wicket.components.image.IsolationPointImageGallery;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.components.text.LabelledComboBox;
 import com.n4systems.fieldid.wicket.components.text.LabelledTextArea;
@@ -76,7 +75,7 @@ public class IsolationPointEditor extends Panel {
 
         add(form = new Form("form"));
 
-        form.add(sourceID = new RequiredTextField("identifier"));
+        form.add(sourceID = new RequiredTextField("identifier", new PropertyModel<>(getDefaultModel(), "identifier")));
         sourceID.setOutputMarkupId(true);
         sourceID.add(new AttributeModifier("maxlength", Integer.toString(procedureDefinition.getAnnotationType().equals(AnnotationType.ARROW_STYLE) ? 50 : 10)));
         form.add(electronicIdentifier = new LabelledTextField<String>("electronicIdentifier", "label.electronic_id", new PropertyModel<>(getDefaultModel(), "electronicIdentifier"))
@@ -167,21 +166,6 @@ public class IsolationPointEditor extends Panel {
     }
 
     protected Component createImageGallery(String id) {
-        if(procedureDefinition.getAnnotationType().equals(AnnotationType.CALL_OUT_STYLE)) {
-            return new IsolationPointImageGallery(id,procedureDefinition, (IModel<IsolationPoint>) getDefaultModel()) {
-                @Override protected void doneClicked(AjaxRequestTarget target) {
-                    imagePanel.onReloadImage(target);
-                    target.add(imagePanel, sourceID);
-                    modal.close(target);
-                    IsolationPointEditor.this.getDefaultModel().detach();
-                }
-
-                @Override
-                protected boolean isRootForm(boolean form) {
-                    return false;
-                }
-            };
-        } else { //AnnotationType.ARROW_STYLE
             return new ArrowStyleEditorAndGalleryPanel(id,
                                       (IModel<IsolationPoint>)getDefaultModel(),
                                       procedureDefinition.getAnnotationType()) {
@@ -210,7 +194,6 @@ public class IsolationPointEditor extends Panel {
                     return procedureDefinition.getImages();
                 }
             };
-        }
     }
 
     private IModel<String> getTitleModel() {

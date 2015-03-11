@@ -21,6 +21,7 @@ import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -200,7 +201,17 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
                 }
             };
         } else
-            return null;
+            return new CallOutStyleAnnotationEditor("imageEditor"){
+                @Override
+                protected ProcedureDefinitionImage retrieveCurrentImage() {
+                    return currentImage;
+                }
+
+                @Override
+                protected IsolationPoint retrieveIsolationPoint() {
+                    return model.getObject();
+                }
+            };
     }
 
     private Component createEditorPanel(ImageAnnotation annotation) {
@@ -217,7 +228,17 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
                 }
             };
         else
-            return null;
+            return new CallOutStyleAnnotationEditor("imageEditor", annotation){
+                @Override
+                protected ProcedureDefinitionImage retrieveCurrentImage() {
+                    return currentImage;
+                }
+
+                @Override
+                protected IsolationPoint retrieveIsolationPoint() {
+                    return model.getObject();
+                }
+            };
     }
 
     private Component createEditorPanel(ProcedureDefinitionImage image) {
@@ -234,7 +255,17 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
                 }
             };
         else
-            return null;
+            return new CallOutStyleAnnotationEditor("imageEditor", image){
+                @Override
+                protected ProcedureDefinitionImage retrieveCurrentImage() {
+                    return currentImage;
+                }
+
+                @Override
+                protected IsolationPoint retrieveIsolationPoint() {
+                    return model.getObject();
+                }
+            };
     }
 
 
@@ -246,7 +277,11 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
         return new ImageList<ProcedureDefinitionImage>(id, new ListModel<>(displayableImages())) {
             @Override
             protected void createImage(ListItem<ProcedureDefinitionImage> item) {
-                item.add(new ArrowStyleAnnotatedSvg("image", item.getModelObject()).withNoAnnotations());
+                if(annotationType.equals(AnnotationType.ARROW_STYLE)) {
+                    item.add(new ArrowStyleAnnotatedSvg("image", item.getModelObject()).withNoAnnotations());
+                } else {
+                    item.add(new CallOutStyleAnnotatedSvg("image", Model.of(item.getDefaultModel())).withScale(2.0));
+                }
                 item.add(new AjaxEventBehavior("onclick") {
                     @Override
                     protected void onEvent(AjaxRequestTarget target) {
