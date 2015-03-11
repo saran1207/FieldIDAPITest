@@ -23,13 +23,17 @@
 
         <form wicket:id="observationCountGroupForm" class="form">
 
-            <div class="score newScore" wicket:id="newObservationCount"></div>
+            <div class="newScore" wicket:id="newObservationCount"></div>
 
-            <div class="saveLinkContainer">
-                <a wicket:id="saveLink" class="btn-secondary btn-xsml"><wicket:message key="label.save"/></a>
+            <div class="addLinkContainer">
+                <a wicket:id="addLink" class="btn-secondary btn-xsml"><wicket:message key="label.add"/></a>
             </div>
 
         </form>
+
+        <div class="saveLinkContainer">
+            <a wicket:id="saveGroupLink" class="btn-primary btn-sml"><wicket:message key="label.save"/></a>
+        </div>
 
     </div>
 

@@ -82,7 +82,7 @@ public class ObservationCountGroupPage extends FieldIDFrontEndPage {
 
                     @Override
                     protected void onDeleteButtonClicked(AjaxRequestTarget target) {
-                        observationCountService.archive(item.getModelObject());
+                        observationCountService.retireObservationGroup(item.getModelObject());
                         if (item.getIndex() == currentlySelectedIndex) {
                             onGroupSelected(new Model<ObservationCountGroup>(null), target);
                             currentlySelectedIndex = -1;
@@ -116,10 +116,6 @@ public class ObservationCountGroupPage extends FieldIDFrontEndPage {
                         return 50;
                     }
 
-                    @Override
-                    public boolean isDeletable() {
-                        return !observationCountService.isObservationGroupAttachedToEventType(item.getModelObject().getId());
-                    }
                 });
 
                 editCopyDeleteItemPanel.getTextField().add(new NoBarsValidator());
@@ -127,23 +123,26 @@ public class ObservationCountGroupPage extends FieldIDFrontEndPage {
             }
         });
 
-        groupsAndObservationsContainer.add(observationCountGroupPanel = new EditableObservationCountGroupPanel("observationCountGroup", new Model<ObservationCountGroup>()));
+        groupsAndObservationsContainer.add(observationCountGroupPanel = getEditableObservationCountGroupPanel(new Model<ObservationCountGroup>()));
         groupsAndObservationsContainer.add(new NewObservationCountGroupForm("newObservationGroupForm"));
 
     }
 
     private void onGroupSelected(IModel<ObservationCountGroup> model, AjaxRequestTarget target) {
         groupsAndObservationsContainer.remove("observationCountGroup");
-        if (model.getObject() != null && observationCountService.isObservationGroupAttachedToEventType(model.getObject().getId())) {
-            groupsAndObservationsContainer.add(new ObservationCountGroupPanel("observationCountGroup", model));
-        } else {
-            groupsAndObservationsContainer.add(new EditableObservationCountGroupPanel("observationCountGroup", model));
-        }
-
+        groupsAndObservationsContainer.add(getEditableObservationCountGroupPanel(model));
         target.add(groupsAndObservationsContainer);
         target.add(feedbackPanel);
+    }
 
-
+    private EditableObservationCountGroupPanel getEditableObservationCountGroupPanel(IModel<ObservationCountGroup> model) {
+        return new EditableObservationCountGroupPanel("observationCountGroup", model) {
+            @Override
+            protected void onSaveObservationCounts(AjaxRequestTarget target) {
+                info(new FIDLabelModel("message.observation_group_saved").getObject());
+                target.add(groupsAndObservationsContainer, getTopFeedbackPanel());
+            }
+        };
     }
 
     private void onValidationError(AjaxRequestTarget target) {

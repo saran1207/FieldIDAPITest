@@ -49,7 +49,7 @@ public class EventFormService extends FieldIdPersistenceService {
         //List<CriteriaSection> original = oldEventForm.getSections();
         List<CriteriaSection> newCriteriaSections = createCopiesOf(sections);
 
-        eventForm.setSections(convertSectonsToNewObservationCountGroup(newCriteriaSections, oldEventForm.getObservationCountGroup()));
+        eventForm.setSections(convertSectionsToNewObservationCountGroup(newCriteriaSections, oldEventForm.getObservationCountGroup()));
 
         //oldEventForm.setState(Archivable.EntityState.RETIRED);
         //Scoring
@@ -86,7 +86,7 @@ public class EventFormService extends FieldIdPersistenceService {
 
     }
 
-    private List<CriteriaSection> convertSectonsToNewObservationCountGroup(List<CriteriaSection> sections, ObservationCountGroup group) {
+    private List<CriteriaSection> convertSectionsToNewObservationCountGroup(List<CriteriaSection> sections, ObservationCountGroup group) {
         for(CriteriaSection section:sections){
             for(Criteria criteria:section.getCriteria()){
                 if(criteria instanceof ObservationCountCriteria){

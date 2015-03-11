@@ -102,10 +102,13 @@ div.score div.editCopyLinks {
 .scoreGroup .newScore {
     float:left;
     width:auto;
+    font-size: 12px;
+    padding: 5px 0 5px 3px;
 }
 
 .scoreGroup .form {
     padding: 5px 0;
+    float: left;
 }
 
 .scoreGroupName {
@@ -120,10 +123,16 @@ div.score div.editCopyLinks {
     padding: 5px 0 0 5px;
 }
 
-.saveLinkContainer {
+.addLinkContainer {
     display:block;
     float:left;
     margin-left: 35px;
+}
+
+.saveLinkContainer {
+    clear:both;
+    padding: 5px 0 5px 336px;
+    border-top: 1px solid #DDDDDD;
 }
 
 div.reorderLinkSection {

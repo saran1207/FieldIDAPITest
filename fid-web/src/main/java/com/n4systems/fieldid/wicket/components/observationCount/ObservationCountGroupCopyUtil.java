@@ -25,10 +25,9 @@ public class ObservationCountGroupCopyUtil {
     }
 
     private ObservationCount copyObservationCount(ObservationCount observationCount) {
-        ObservationCount newObservationCount = new ObservationCount();
-        newObservationCount.setTenant(observationCount.getTenant());
+        ObservationCount newObservationCount = new ObservationCount(observationCount.getTenant());
         newObservationCount.setName(observationCount.getName());
-        //newObservationCount.setValue(observationCount.getValue());
+        newObservationCount.setCounted(observationCount.isCounted());
         newObservationCount.setState(observationCount.getEntityState());
         return newObservationCount;
     }
