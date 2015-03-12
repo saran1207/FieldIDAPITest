@@ -227,6 +227,7 @@ public class ContentPanel extends Panel {
     protected void doCancel(AjaxRequestTarget target) { }
 
     public void onAnnotationStyleSelected(AjaxRequestTarget target) {
+        editor.setTextLimit(target, procedureDefinitionModel);
         lockList.reloadImageList(target, procedureDefinitionModel);
         unlockList.reloadImageList(target, procedureDefinitionModel);
     }
