@@ -2,18 +2,31 @@ package com.n4systems.fieldid.service.procedure;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.task.AsyncService;
+import com.n4systems.fieldid.service.task.AsyncService.AsyncTask;
+import com.n4systems.fieldid.service.task.DownloadLinkService;
 import com.n4systems.model.LotoPrintout;
 import com.n4systems.model.LotoPrintoutType;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.downloadlink.ContentType;
+import com.n4systems.model.downloadlink.DownloadLink;
+import com.n4systems.model.downloadlink.DownloadState;
+import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.utils.DateTimeDefiner;
+import com.n4systems.reporting.LotoPrintoutReportMapProducer;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.persistence.QueryBuilder;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.util.JRLoader;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -22,8 +35,140 @@ import java.util.zip.ZipInputStream;
  */
 public class LotoReportService extends FieldIdPersistenceService {
 
-    private @Autowired
-    S3Service s3Service;
+    @Autowired
+    private S3Service s3Service;
+
+    @Autowired
+    private AsyncService asyncService;
+
+    @Autowired
+    private SvgGenerationService svgGenerationService;
+
+    @Autowired
+    private DownloadLinkService downloadLinkService;
+
+    private static final Logger log = Logger.getLogger(LotoReportService.class);
+
+    /**
+     * This method kicks off the asynchronous generation of a LOTO Printout (Long Form or Short Form).
+     *
+     * It also takes care of generating an associated DownloadLink entity, which causes a new entry to appear in the
+     * user's "Downloads" page.
+     *
+     * @param procedureDefinition - A ProcedureDefinition entity, representing the LOTO Procedure you want a printout of.
+     * @param type - A LotoPrintoutType enum indicating the type of printout you'd like to generate.
+     * @return An initialized DownloadLink entity, pointing to the Printout in any stage of its generation.
+     */
+    public DownloadLink generateLotoPrintout(ProcedureDefinition procedureDefinition,
+                                             LotoPrintoutType type) {
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+        DownloadLink downloadLink = downloadLinkService.createDownloadLink(procedureDefinition.getProcedureCode() + " "
+                + (type.equals(LotoPrintoutType.LONG) ? "Long":"Short") + " " + formatter.format(new Date()), ContentType.PDF);
+
+        //Lambda Powah!!
+        AsyncTask<?> task = asyncService.createTask(() -> {
+            createPrintout(procedureDefinition, type, downloadLink);
+            //We don't actually have anything to here, but this null return satisfies the requirements of what this
+            //lambda replaces.
+            return null;
+        });
+
+        asyncService.run(task);
+
+        return downloadLink;
+    }
+
+    /**
+     * This method generates LOTO Printouts via an Asynchronous task.  This allows the report to be generated in the
+     * back end while not halting the front end of the client.  Just like all other printouts, these LOTO Printouts will
+     * be found in the user's Downloads page.
+     *
+     * @param procedureDefinition - An initialized ProcedureDefinition representing the one we want a printout of.
+     * @param type - A LotoPrintoutType enum representing the type of printout we want.
+     * @param downloadLink - An initialized DownloadLink entity representing the DB entry for this downloadable file.
+     */
+    private void createPrintout(ProcedureDefinition procedureDefinition,
+                                LotoPrintoutType type,
+                                DownloadLink downloadLink) {
+
+        //First, we want to set the DownloadLink as "In Progress"
+        downloadLink.setState(DownloadState.INPROGRESS);
+
+        downloadLinkService.update(downloadLink);
+
+        try {
+            Map<String, Object> reportMap = new HashMap<>();
+            //Step 1: Load the map with the input streams which build the subreport...
+            reportMap.putAll(getJasperMap(type));
+
+            //...then we need to verify the contents of the map and report on missing subreport components.
+            if(reportMap.get("isolationPointSubreport") == null) {
+                log.warn((type.equals(LotoPrintoutType.LONG) ? "Long":"Short") + " Form Report for ProcedureDefinition with ID " + procedureDefinition.getId() +
+                        " is missing the Isolation Points Subreport... did you expect this?");
+            }
+
+            if(type.equals(LotoPrintoutType.SHORT) && reportMap.get("imageSubreport") == null) {
+                log.warn("Short Form Report for ProcedureDefinition with ID " + procedureDefinition.getId() +
+                         " is missing the Images Subreport... did you expect this?");
+            }
+
+            //Step 2: break apart the Procedure Definition and make a map that we'll process when creating the report.
+            reportMap.putAll(new LotoPrintoutReportMapProducer(procedureDefinition.getProcedureCode() + "Printout",
+                             procedureDefinition,
+                             new DateTimeDefiner("yyyy-MM-dd", TimeZone.getDefault()),
+                             s3Service,
+                             svgGenerationService).produceMap());
+
+            //Step 3: Use the "main" input stream to build the Jasper Report.
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject((InputStream) reportMap.get("main"));
+
+            //Step 4: Fill the report...
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, new JREmptyDataSource());
+
+            //Okay... so the DownloadLink should automagically create its own file.  Excuse my lack of trust that it will
+            //actually do what it says on the tin.
+            FileOutputStream output = new FileOutputStream(downloadLink.getFile());
+
+            //Step 5: Export the report to the downloadFile.
+            JRPdfExporter exporter = new JRPdfExporter();
+            exporter.setParameter(JRExporterParameter.CHARACTER_ENCODING, "UTF-8");
+            exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+            exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, output);
+            exporter.exportReport();
+
+            //Now for the moment of truth... can we close the OutputStream??
+            output.close();
+
+            //If we got this far, it closed successfully.  Lets flip the DownloadLink to COMPLETED and call it a day.
+            downloadLink.setState(DownloadState.COMPLETED);
+            downloadLinkService.update(downloadLink);
+
+            //Aaaand we're done.  We return from here so that we can set the DownloadState to failed, regardless of
+            //the exception we encounter. That effectively makes it so that the end of the method for the happy path is
+            //here and the end of the method for the unhappy path is the bottom of the method.
+            return;
+        } catch (FileNotFoundException fne) {
+            //I want to log this one specially on its own, because I don't entirely trust this file will get generated.
+            //This should be separate, because if the file is not created, this points to an underlying issue like a
+            //full hard drive.
+            log.fatal("The File pointed to by a DownloadLink didn't actually exist!!",
+                      fne);
+        } catch (JRException | IOException e) {
+            //If either of these happen, it was in relation to the actual generation of the report. Again, we should log
+            //this, but both of these exceptions basically have the same flavour of Awful and mean more or less the same
+            //thing: there was a problem that caused the report not to print.  Maybe we couldn't read the Jasper files,
+            //maybe we couldn't load the report... heck, maybe the Jasper files referenced invalid fields/parameters.
+            log.error("Failure in generating a LOTO Printout of Type " + type.getLabel() +
+                      " for Procedure Code " + procedureDefinition.getProcedureCode() +
+                      " with ID " + procedureDefinition.getId(),
+                      e);
+        }
+
+        downloadLink.setState(DownloadState.FAILED);
+        downloadLinkService.update(downloadLink);
+    }
 
     public void updateSelectedLongForm(LotoPrintout printout) {
         resetSelectedLongForm();
@@ -127,31 +272,25 @@ public class LotoReportService extends FieldIdPersistenceService {
         }
     }
 
-    //TODO Make these two into one method... the only differentiating factor is whether or not we statically set as LONG or SHORT
-    public Map<String, InputStream> getLongJasperMap() throws IOException {
-        LotoPrintout printout = getSelectedLongForm();
+    /**
+     * This method retrieves a Map of InputStreams keyed by Strings.  This map represents the main report and all
+     * subreport sections that is to be used for a LOTO Printout.
+     *
+     * @param type - A LotoPrintouType enum indicating the type of Printout you want a map of InputStreams for.
+     * @return A Map of InputStreams keyed by Strings representing the main report and all subreport components.
+     * @throws IOException
+     */
+    public Map<String, InputStream> getJasperMap(LotoPrintoutType type) throws IOException {
+        LotoPrintout printout = type.equals(LotoPrintoutType.LONG) ? getSelectedLongForm() : getSelectedShortForm();
         if(printout == null) {
-            //return the default map...
+            //If we didn't get anything back, they're using the default report... so we grab that.
             printout = new LotoPrintout();
-            printout.setPrintoutType(LotoPrintoutType.LONG);
+            printout.setPrintoutType(type);
             return s3Service.downloadDefaultLotoJasperMap(printout);
         } else {
-            //return the custom map...
             return s3Service.downloadCustomLotoJasperMap(printout);
         }
-    }
 
-    public Map<String, InputStream> getShortJasperMap() throws IOException {
-        LotoPrintout printout = getSelectedShortForm();
-        if(printout == null) {
-            //return the default map...
-            printout = new LotoPrintout();
-            printout.setPrintoutType(LotoPrintoutType.SHORT);
-            return s3Service.downloadDefaultLotoJasperMap(printout);
-        } else {
-            //return the custom map...
-            return s3Service.downloadCustomLotoJasperMap(printout);
-        }
     }
 
     public byte[] getShortJasper() throws IOException {

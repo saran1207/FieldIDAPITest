@@ -319,6 +319,10 @@ public class IsolationPointEditor extends Panel {
         };
     }
 
+    public void setTextLimit(AjaxRequestTarget target, IModel<ProcedureDefinition> model) {
+        sourceID.add(new AttributeModifier("maxlength", Integer.toString(model.getObject().getAnnotationType().equals(AnnotationType.ARROW_STYLE) ? 50 : 10)));
+    }
+
     private IsolationPoint getIsolationPoint() {
         return (IsolationPoint) getDefaultModelObject();
     }
