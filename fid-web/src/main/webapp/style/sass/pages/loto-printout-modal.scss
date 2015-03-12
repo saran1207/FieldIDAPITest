@@ -1,0 +1,38 @@
+.loto-printout-modal {
+  height: 80px;
+
+  .form-actions {
+    margin-top: 100px;
+    padding-top: 15px;
+    border-top: 1px solid #D0DAFD;
+  }
+
+  .report-name {
+    margin: 5px 0 25px 10px;
+    font-size : 1.2em;
+    border: 1px solid #9C9C9C;
+    color: #555555;
+    overflow: hidden;
+    padding: 4px;
+    width: 580px;
+  }
+
+  .eg-color {
+    display: inline;
+    float: none;
+  }
+
+  h3 {
+    font-size: 1.5em;
+    padding-left: 12px;
+  }
+
+  p {
+    padding-left: 10px;
+    padding-top: 10px;
+  }
+
+  input {
+    margin-left: 10px;
+  }
+}
