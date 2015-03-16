@@ -20,12 +20,13 @@ public class M201503131619_AddDefaultLockoutReasons extends Migration {
                 Long tenantId = resultSet.getLong("id");
 
                 String insertStr = "INSERT INTO lockout_reasons (tenant_id, created, modified, name, state) VALUES" +
-                        "(" + tenantId + ", now(), now(), 'Planned Maintenance', 'ACTIVE'), " +
-                        "(" + tenantId + ", now(), now(), 'Planned Repair', 'ACTIVE'), " +
-                        "(" + tenantId + ", now(), now(), 'Adjustments', 'ACTIVE'), " +
-                        "(" + tenantId + ", now(), now(), 'Minor Tool Change', 'ACTIVE'), " +
+                        "(" + tenantId + ", now(), now(), 'Inspection or adjustments', 'ACTIVE'), " +
+                        "(" + tenantId + ", now(), now(), 'Preventive maintenance', 'ACTIVE'), " +
+                        "(" + tenantId + ", now(), now(), 'Repair or servicing', 'ACTIVE'), " +
                         "(" + tenantId + ", now(), now(), 'Troubleshooting', 'ACTIVE'), " +
-                        "(" + tenantId + ", now(), now(), 'Clearing a Jam', 'ACTIVE');";
+                        "(" + tenantId + ", now(), now(), 'Routine set up', 'ACTIVE'), " +
+                        "(" + tenantId + ", now(), now(), 'Clearing a jam', 'ACTIVE'), " +
+                        "(" + tenantId + ", now(), now(), 'Cleaning', 'ACTIVE');";
 
                 PreparedStatement pstmt = conn.prepareStatement(insertStr);
                 pstmt.executeUpdate();
