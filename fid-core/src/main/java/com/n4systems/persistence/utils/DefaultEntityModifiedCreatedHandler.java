@@ -50,7 +50,10 @@ public class DefaultEntityModifiedCreatedHandler implements EntityModifiedCreate
 
     private void onUpdate(AbstractEntity entity, Date time) {
         User user = lookupCurrentUser(entity);
-        if (shouldStoreUserOnEntity(entity)) {
+        if(user == null) {
+            //don't update the modifiedby field
+            logger.warn("Entity persisted without current user set in context", new Exception());
+        } else if (shouldStoreUserOnEntity(entity) && checkTenant(entity, user)) {
             entity.setModifiedBy(user);
         }
         entity.setModified(time);
@@ -69,6 +72,17 @@ public class DefaultEntityModifiedCreatedHandler implements EntityModifiedCreate
             ((HasCreatedModifiedPlatform) entity).setCreatedPlatform(getInteractionContext().getCurrentPlatform());
             ((HasCreatedModifiedPlatform) entity).setCreatedPlatformType(getInteractionContext().getCurrentPlatformType());
         }
+    }
+
+    private boolean checkTenant(AbstractEntity entity, User user) {
+        boolean flag = false;
+        if(entity.getModifiedBy() != null) {
+            flag = (user.getTenant().equals(entity.getModifiedBy().getTenant()));
+            if(flag != true) {
+                logger.warn("Entity tenant and User tenant are not the same!", new Exception());
+            }
+        }
+        return flag;
     }
 
     private User lookupCurrentUser(AbstractEntity entity) {
