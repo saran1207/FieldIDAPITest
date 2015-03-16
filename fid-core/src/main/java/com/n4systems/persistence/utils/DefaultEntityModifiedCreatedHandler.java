@@ -84,22 +84,24 @@ public class DefaultEntityModifiedCreatedHandler implements EntityModifiedCreate
 
     private boolean checkTenant(AbstractEntity entity, User user) {
         boolean flag = false;
-        try {
-            if (entity.getModifiedBy() != null) {
-                flag = (user.getTenant().equals(entity.getModifiedBy().getTenant()));
-                if (flag != true) {
-                    logger.warn("Entity tenant and User tenant are not the same!", new Exception());
+        if(entity.getID() == null) {
+            flag = true;
+        } else {
+            try {
+                if (entity.getModifiedBy() != null) {
+                    flag = (user.getTenant().equals(entity.getModifiedBy().getTenant()));
+                    if (flag != true) {
+                        logger.warn("Entity tenant and User tenant are not the same!", new Exception());
+                    }
                 }
-            }
-        } catch (LazyInitializationException e) {
-            //Check if it's a new entity being saved in the DB
-            if(entity.getID() != null) {
+            } catch (LazyInitializationException e) {
+                //Check if it's a new entity being saved in the DB
                 QueryBuilder<AbstractEntity> queryBuilder = new QueryBuilder<AbstractEntity>(AbstractEntity.class, new OpenSecurityFilter());
                 queryBuilder.addSimpleWhere("id", entity.getID());
                 queryBuilder.addPostFetchPaths("modifiedBy");
                 AbstractEntity fetchedEntity = persistenceService.find(queryBuilder);
 
-                if(fetchedEntity != null && fetchedEntity.getModifiedBy() != null) {
+                if (fetchedEntity != null && fetchedEntity.getModifiedBy() != null) {
                     flag = (user.getTenant().equals(fetchedEntity.getModifiedBy().getTenant()));
                     if (flag != true) {
                         logger.warn("Entity tenant and User tenant are not the same!", new Exception());
@@ -107,7 +109,6 @@ public class DefaultEntityModifiedCreatedHandler implements EntityModifiedCreate
                 }
             }
         }
-
         return flag;
     }
 
