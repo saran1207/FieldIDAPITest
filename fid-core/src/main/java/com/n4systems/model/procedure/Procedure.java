@@ -84,6 +84,10 @@ public class Procedure extends ArchivableEntityWithTenant implements NetworkEnti
     @JoinColumn(name="recurring_event_id")
     private RecurringLotoEvent recurringEvent;
 
+    @ManyToOne
+    @JoinColumn(name = "lockout_reason_id")
+    private LockoutReason lockoutReason;
+
     public List<IsolationPointResult> getLockResults() {
         return lockResults;
     }

@@ -137,6 +137,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/printoutTemplate", PrintoutTemplatePage.class);
         mountPage("setup/lotoSetup", LotoSetupPage.class);
         mountPage("setup/lotoDetailsSetup", LotoDetailsSetupPage.class);
+        mountPage("setup/lockoutReasonsList", LockoutReasonsListPage.class);
+        mountPage("setup/archivedLockoutReasonsList", ArchivedLockoutReasonsListPage.class);
         mountPage("setup/manageDevicePage", ManageDevicePage.class);
         mountPage("setup/enableByAssetType", EnableByAssetTypePage.class);
         mountPage("setup/assetStatusList", AssetStatusListAllPage.class);

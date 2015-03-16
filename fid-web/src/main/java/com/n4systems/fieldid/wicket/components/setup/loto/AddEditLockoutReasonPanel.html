@@ -1,0 +1,19 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+
+    <div wicket:id="feedbackPanel"/>
+    <form wicket:id="form">
+        <fieldset>
+            <legend wicket:id="headerLabel"/>
+            <div class="control-group">
+                <label><wicket:message key="label.name"/></label>
+                <input type="text" wicket:id="name"/>
+            </div>
+            <div class="control-group">
+                <a class="btn-primary" wicket:id="saveLink"><wicket:message key="label.save"/></a>
+                <a class="btn-secondary" wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+            </div>
+        </fieldset>
+    </form>
+</wicket:panel>
+</html>
