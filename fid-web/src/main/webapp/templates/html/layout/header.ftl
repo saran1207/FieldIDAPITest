@@ -206,9 +206,6 @@
 												<li><a href="<@s.url value='/w/setup/assetTypeGroupsList' namespace='/'/>" ><@s.text name="title.asset_type_groups.plural"/></a></li>
 												<li><a href="<@s.url value='/w/setup/assetTypes' namespace='/'/>" ><@s.text name="title.manage_asset_types.plural"/></a></li>
 												<li><a href="<@s.url value='/w/setup/assetStatusList' namespace='/'/>" ><@s.text name="title.manage_asset_statuses.plural"/></a></li>
-                                                <#if securityGuard.isInspectionsEnabled()>
-                                                    <li><a href="<@s.url value='/w/setup/priorityCodes' namespace='/'/>" ><@s.text name="title.manage_priority_code.plural"/></a></li>
-                                                </#if>
 											</ul>
 										</#if>
 									</li>
@@ -265,7 +262,10 @@
                                     <li>
                                         <a href="javascript:void(0)" ><@s.text name="speed.actions"/> » </a>
                                         <ul class="sub_menu">
-                                            <li><a href="<@s.url value='/w/setup/actionEmailCustomization'/>"><@s.text name="title.customize_action_email"/></a></li>
+                                            <li><a href="<@s.url value="/w/setup/actionEmailCustomization" />"><@s.text name="title.customize_action_email"/></a></li>
+                                            <#if securityGuard.isInspectionsEnabled()>
+                                                <li><a href="<@s.url value='/w/setup/priorityCodes' namespace='/'/>" ><@s.text name="title.manage_priority_code.plural"/></a></li>
+                                            </#if>
                                         </ul>
                                     </li>
 								</ul>

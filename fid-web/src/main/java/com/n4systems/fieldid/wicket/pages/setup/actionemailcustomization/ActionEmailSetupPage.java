@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.setup.actionemailcustomization;
 
 import com.n4systems.fieldid.service.ActionEmailCustomizationService;
-import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.text.LabelledTextArea;
 import com.n4systems.fieldid.wicket.components.text.LabelledTextField;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -24,26 +23,19 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  *
  * Created by Jordan Heath on 15-03-13.
  */
-public class ActionEmailCustomizationSetupPage extends FieldIDTemplatePage {
+public class ActionEmailSetupPage extends FieldIDTemplatePage {
     @SpringBean
     private ActionEmailCustomizationService actionEmailCustomizationService;
-
-    private FIDFeedbackPanel feedbackPanel;
 
     private Model<ActionEmailCustomization> actionEmailCustomizationModel;
 
     /**
      * Default constructor... it currently does nothing except look pretty.
      */
-    public ActionEmailCustomizationSetupPage() {
+    public ActionEmailSetupPage() {
         //Do nothing, look pretty.
         ActionEmailCustomization actionEmailCustomization = actionEmailCustomizationService.read();
         actionEmailCustomizationModel = Model.of(actionEmailCustomization);
-    }
-
-    @Override
-    public void onInitialize() {
-        super.onInitialize();
 
         Form customizationForm = new Form("customizationForm") {
             @Override
@@ -60,7 +52,7 @@ public class ActionEmailCustomizationSetupPage extends FieldIDTemplatePage {
                     error("There appears to have been an error when attempting to save your email customization changes.");
                 }
 
-                setResponsePage(new ActionEmailCustomizationSetupPage());
+                setResponsePage(new ActionEmailSetupPage());
             }
         };
 
@@ -77,6 +69,43 @@ public class ActionEmailCustomizationSetupPage extends FieldIDTemplatePage {
 
         add(customizationForm);
     }
+
+//    @Override
+//    public void onInitialize() {
+//        super.onInitialize();
+//
+//        Form customizationForm = new Form("customizationForm") {
+//            @Override
+//            protected void onSubmit() {
+//                ActionEmailCustomization entity;
+//                if(actionEmailCustomizationModel.getObject().getId() == null) {
+//                    entity = actionEmailCustomizationService.save(actionEmailCustomizationModel.getObject());
+//                } else {
+//                    entity = actionEmailCustomizationService.update(actionEmailCustomizationModel.getObject());
+//                }
+//                if(entity != null) {
+//                    info("Action Email Customization successfully saved");
+//                } else {
+//                    error("There appears to have been an error when attempting to save your email customization changes.");
+//                }
+//
+//                setResponsePage(new ActionEmailCustomizationSetupPage());
+//            }
+//        };
+//
+//        LabelledTextField<String> emailSubjectField = new LabelledTextField<>("emailSubjectTextBox", "label.email_subject", new PropertyModel<>(actionEmailCustomizationModel, "emailSubject"));
+//        emailSubjectField.setMaxLength(255);
+//        customizationForm.add(emailSubjectField);
+//
+//        LabelledTextArea<String> subHeadingField = new LabelledTextArea<>("subHeadingTextArea", "label.sub_heading", new PropertyModel<>(actionEmailCustomizationModel, "subHeading"));
+//        subHeadingField.setMaxLength(2048);
+//        customizationForm.add(subHeadingField);
+//
+//        customizationForm.add(new SubmitLink("saveLink"));
+//        customizationForm.add(new BookmarkablePageLink<SettingsPage>("cancelLink", SettingsPage.class));
+//
+//        add(customizationForm);
+//    }
 
     @Override
     protected Component createTitleLabel(String labelId) {
