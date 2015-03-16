@@ -262,6 +262,12 @@
                                     <li>
                                         <a href="<@s.url value="/w/setup/assetTypeGroupTranslations" />" ><@s.text name="title.translations"/></a>
                                     </li>
+                                    <li>
+                                        <a href="javascript:void(0)" ><@s.text name="speed.actions"/> » </a>
+                                        <ul class="sub_menu">
+                                            <li><a href="<@s.url value='/w/setup/actionEmailCustomization'/>"><@s.text name="title.customize_action_email"/></a></li>
+                                        </ul>
+                                    </li>
 								</ul>
 								
 							</li>

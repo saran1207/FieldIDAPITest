@@ -16,10 +16,7 @@ import com.n4systems.ejb.wrapper.AssetManagerEJBContainer;
 import com.n4systems.ejb.wrapper.EventScheduleManagerEJBContainer;
 import com.n4systems.ejb.wrapper.OrderManagerEJBContainer;
 import com.n4systems.ejb.wrapper.ProofTestHandlerEJBContainer;
-import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.service.ReportServiceHelper;
-import com.n4systems.fieldid.service.SecurityContextInitializer;
-import com.n4systems.fieldid.service.SecurityService;
+import com.n4systems.fieldid.service.*;
 import com.n4systems.fieldid.service.admin.AdminSecurityService;
 import com.n4systems.fieldid.service.admin.AdminUserService;
 import com.n4systems.fieldid.service.amazon.S3AttachmentHandler;
@@ -879,6 +876,11 @@ public class FieldIdCoreConfig {
     @Bean
     public LotoReportService lotoReportService() {
         return new LotoReportService();
+    }
+
+    @Bean
+    public ActionEmailCustomizationService actionEmailCustomizationService() {
+        return new ActionEmailCustomizationService();
     }
 
     @Bean

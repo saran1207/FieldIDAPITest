@@ -25,6 +25,7 @@ import com.n4systems.fieldid.wicket.pages.loto.PublishedListAllPage;
 import com.n4systems.fieldid.wicket.pages.org.OrgViewPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
+import com.n4systems.fieldid.wicket.pages.setup.actionemailcustomization.ActionEmailCustomizationSetupPage;
 import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListAllPage;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.AssetTypeListPage;
 import com.n4systems.fieldid.wicket.pages.setup.assettypegroup.AssetTypeGroupListPage;
@@ -287,6 +288,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("securityLink", SecurityPage.class));
         subMenuContainer.add(createLotoSubMenu());
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("translationsLink", AssetTypeGroupTranslationsPage.class));
+        subMenuContainer.add(createActionsSubMenu());
         createSecuritySubMenu(subMenuContainer);
         
         container.add(subMenuContainer);
@@ -301,6 +303,12 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         container.add(new BookmarkablePageLink<PrintoutTemplatePage>("printoutTemplateLink", PrintoutTemplatePage.class));
         container.add(new BookmarkablePageLink<LotoSetupPage>("lotoSetupLink", LotoSetupPage.class));
         container.setVisible(getSecurityGuard().isLotoEnabled());
+        return container;
+    }
+
+    private Component createActionsSubMenu() {
+        WebMarkupContainer container = new WebMarkupContainer("actionsSubMenuContainer");
+        container.add(new BookmarkablePageLink<ActionEmailCustomizationSetupPage>("actionEmailCustomizationLink", ActionEmailCustomizationSetupPage.class));
         return container;
     }
 
