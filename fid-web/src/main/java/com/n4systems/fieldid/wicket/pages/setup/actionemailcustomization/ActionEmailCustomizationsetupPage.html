@@ -1,0 +1,16 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+    <form wicket:id="customizationForm">
+        <fieldset>
+            <div wicket:id="emailSubjectTextBox" />
+
+            <div wicket:id="subHeadingTextArea" />
+        </fieldset>
+        <div>
+            <a class="btn-primary" wicket:id="saveLink"><wicket:message key="label.save"/></a>
+            <wicket:message key="label.or"/>
+            <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+        </div>
+    </form>
+</wicket:extend>
+</html>
