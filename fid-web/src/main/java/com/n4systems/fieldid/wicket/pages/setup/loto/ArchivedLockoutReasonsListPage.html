@@ -1,0 +1,27 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+
+    <div wicket:id="addOrEditModalWindow"/>
+
+    <table wicket:id="listContainer">
+        <tr>
+            <th><wicket:message key="label.lockout_reason" /></th>
+            <th><wicket:message key="label.createdby" /></th>
+            <th><wicket:message key="label.created_on" /></th>
+            <th><wicket:message key="label.modifiedby" /></th>
+            <th><wicket:message key="label.modified_on" /></th>
+            <th>&nbsp;</th>
+        </tr>
+        <tr wicket:id="lockoutReason">
+            <td><span wicket:id="name"/></td>
+            <td><span wicket:id="createdBy"/></td>
+            <td><span wicket:id="created"/></td>
+            <td><span wicket:id="modifiedBy"/></td>
+            <td><span wicket:id="lastModified"/></td>
+            <td>
+                <a class="btn-secondary" wicket:id="unarchive"><wicket:message key="label.unarchive"/></a>
+            </td>
+        </tr>
+    </table>
+</wicket:extend>
+</html>

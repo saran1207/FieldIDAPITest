@@ -324,6 +324,11 @@ public class FieldIdCoreConfig {
     }
 
     @Bean
+    public LockoutReasonService lockoutReasonService() {
+        return new LockoutReasonService();
+    }
+
+    @Bean
     public WarningTemplateService warningTemplateService() {
         return new WarningTemplateService();
     }
