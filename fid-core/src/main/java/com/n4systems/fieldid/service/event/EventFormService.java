@@ -44,7 +44,7 @@ public class EventFormService extends FieldIdPersistenceService {
     @Transactional
     public void saveNewEventFormAfterObservationChange(EventForm oldEventForm, List<CriteriaSection> sections, EventType eventType) {
         EventForm eventForm = new EventForm();
-        eventForm.setTenant(persistenceService.findNonSecure(Tenant.class, securityContext.getUserSecurityFilter().getTenantId()));
+        eventForm.setTenant(oldEventForm.getTenant());
 
         //List<CriteriaSection> original = oldEventForm.getSections();
         List<CriteriaSection> newCriteriaSections = createCopiesOf(sections);
@@ -78,11 +78,10 @@ public class EventFormService extends FieldIdPersistenceService {
         persistenceService.update(eventType);
         restoreTranslations(eventForm);
 
-        //Retire oldForm by fetching it from DB first
-        Long oldId = oldEventForm.getId();
-        EventForm oldDBEventForm = persistenceService.find(EventForm.class, oldId);
-        oldDBEventForm.setState(Archivable.EntityState.RETIRED);
-        persistenceService.update(oldDBEventForm);
+        //Refresh the old form with the database version to clear changes and retire
+        persistenceService.reattach(oldEventForm, true);
+        oldEventForm.retireEntity();
+        persistenceService.update(oldEventForm);
 
     }
 
