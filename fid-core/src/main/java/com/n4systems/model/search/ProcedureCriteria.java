@@ -2,6 +2,7 @@ package com.n4systems.model.search;
 
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.procedure.LockoutReason;
 import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.UnassignedIndicator;
 import com.n4systems.model.user.User;
@@ -67,6 +68,17 @@ public class ProcedureCriteria extends SearchCriteria implements PeopleCriteria 
     @Column(name="workflow_state")
     @Enumerated(EnumType.STRING)
     private ProcedureWorkflowStateCriteria workflowState = ProcedureWorkflowStateCriteria.ALL;
+
+    @Column(name="lockout_reason")
+    private LockoutReason lockoutReason;
+
+    public LockoutReason getLockoutReason() {
+        return lockoutReason;
+    }
+
+    public void setLockoutReason(LockoutReason lockoutReason) {
+        this.lockoutReason = lockoutReason;
+    }
 
     public AssetStatus getAssetStatus() {
         return assetStatus;

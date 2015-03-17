@@ -45,6 +45,8 @@ public class ProcedureSearchService extends SearchService<ProcedureCriteria, Pro
             addSimpleTerm(searchTerms, "workflowState", ProcedureWorkflowState.OPEN);
         }
 
+        addSimpleTerm(searchTerms, "lockoutReason", criteriaModel.getLockoutReason());
+
         addDateRangeTerm(searchTerms, "unlockDate", dateService.calculateFromDate(criteriaModel.getUnlockDateRange()), dateService.calculateInclusiveToDate(criteriaModel.getUnlockDateRange()));
         addDateRangeTerm(searchTerms, "lockDate", dateService.calculateFromDate(criteriaModel.getLockDateRange()), dateService.calculateInclusiveToDate(criteriaModel.getLockDateRange()));
         addDateRangeTerm(searchTerms, "dueDate", dateService.calculateFromDate(criteriaModel.getDueDateRange()), dateService.calculateInclusiveToDate(criteriaModel.getDueDateRange()));

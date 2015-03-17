@@ -104,6 +104,14 @@ public class Procedure extends ArchivableEntityWithTenant implements NetworkEnti
         this.type = type;
     }
 
+    public LockoutReason getLockoutReason() {
+        return lockoutReason;
+    }
+
+    public void setLockoutReason(LockoutReason lockoutReason) {
+        this.lockoutReason = lockoutReason;
+    }
+
     public User getAssignee() {
         return assignee;
     }

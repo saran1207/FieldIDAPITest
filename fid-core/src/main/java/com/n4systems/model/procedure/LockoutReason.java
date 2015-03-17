@@ -23,6 +23,6 @@ public class LockoutReason extends ArchivableEntityWithTenant implements Listabl
 
     @Override
     public String getDisplayName() {
-        return null;
+        return name;
     }
 }
