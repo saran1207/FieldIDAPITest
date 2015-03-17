@@ -51,7 +51,6 @@ public class EventFormService extends FieldIdPersistenceService {
 
         eventForm.setSections(convertSectionsToNewObservationCountGroup(newCriteriaSections, oldEventForm.getObservationCountGroup()));
 
-        //oldEventForm.setState(Archivable.EntityState.RETIRED);
         //Scoring
         eventForm.setScoreCalculationType(oldEventForm.getScoreCalculationType());
         eventForm.setFailRange(oldEventForm.getFailRange());
@@ -79,6 +78,7 @@ public class EventFormService extends FieldIdPersistenceService {
         restoreTranslations(eventForm);
 
         //Refresh the old form with the database version to clear changes and retire
+        persistenceService.clearSession();
         persistenceService.reattach(oldEventForm, true);
         oldEventForm.retireEntity();
         persistenceService.update(oldEventForm);
