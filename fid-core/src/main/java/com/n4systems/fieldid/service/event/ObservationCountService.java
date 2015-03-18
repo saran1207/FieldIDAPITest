@@ -59,7 +59,7 @@ public class ObservationCountService extends FieldIdPersistenceService {
 
         for (EventType eventType: persistenceService.findAll(query)) {
             eventType.getEventForm().setObservationCountGroup(newGroup);
-            eventFormService.saveNewEventFormAfterObservationChange(eventType.getEventForm(), eventType.getEventForm().getSections(), eventType);
+            eventFormService.saveNewEventFormAfterObservationChange(eventType.getId(), eventType.getEventForm());
         }
     }
 

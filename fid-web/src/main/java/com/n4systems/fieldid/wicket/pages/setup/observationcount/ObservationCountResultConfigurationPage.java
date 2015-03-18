@@ -188,13 +188,12 @@ public class ObservationCountResultConfigurationPage extends EventTypePage{
                     persistenceService.update(eventType);
                     persistenceService.update(eventForm);
                 } else {
-                    eventFormService.saveNewEventFormAfterObservationChange(eventForm, eventForm.getSections(), eventType);
+                    eventFormService.saveNewEventFormAfterObservationChange(eventType.getId(), eventForm);
                 }
                 FieldIDSession.get().storeInfoMessageForStruts(new FIDLabelModel("label.observation_config_saved").getObject());
                 throw new RedirectToUrlException("/eventType.action?uniqueID=" + eventTypeId);
             }
         }
-
     }
 
 
