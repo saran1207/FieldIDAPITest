@@ -78,12 +78,29 @@ public class EventToViewConverter implements ModelToViewConverter<ThingEvent, Ev
 		resultView.setDisplayText(result.getCriteria().getDisplayText());
 		resultView.setRecommendation(getRecommendation(result));		
 		resultView.setDeficiencyString(getDeficiency(result));
-        if(criteria instanceof DateFieldCriteria)
+        if (criteria instanceof DateFieldCriteria) {
             setDateFieldResultString(resultView, result);
-        else
+        } else if (criteria instanceof ObservationCountCriteria) {
+            setObservationFieldResultString(resultView, result);
+        } else {
 		    resultView.setResultString(result.getResultString());
+        }
 		return resultView;
 	}
+
+    private void setObservationFieldResultString(CriteriaResultView resultView, CriteriaResult result) {
+        StringBuilder concatenatedObservationCounts = new StringBuilder();
+
+        ((ObservationCountCriteriaResult) result).getObservationCountResults().forEach(observationCountResult ->
+                        //Mash everything together into a StringBuilder
+                        concatenatedObservationCounts.append(observationCountResult.getObservationCount().getName())
+                                                     .append(":")
+                                                     .append(observationCountResult.getValue())
+                                                     .append("|"));
+
+        if (concatenatedObservationCounts.length() > 0)
+            resultView.setResultString(concatenatedObservationCounts.substring(0, concatenatedObservationCounts.length()-1));
+    }
 
     private void setDateFieldResultString(CriteriaResultView resultView, CriteriaResult result) {
         if(!result.getResultString().isEmpty()) {
