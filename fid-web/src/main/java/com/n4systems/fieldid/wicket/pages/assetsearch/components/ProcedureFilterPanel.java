@@ -6,6 +6,8 @@ import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRende
 import com.n4systems.model.procedure.LockoutReason;
 import com.n4systems.model.search.ProcedureCriteria;
 import com.n4systems.model.search.ProcedureWorkflowStateCriteria;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -29,22 +31,20 @@ public class ProcedureFilterPanel extends Panel {
         add(lockoutReasonSelect);
 
         final PropertyModel<ProcedureWorkflowStateCriteria> workflowStateModel = new PropertyModel<ProcedureWorkflowStateCriteria>(model, "workflowState");
-        FidDropDownChoice<ProcedureWorkflowStateCriteria> workflowStateSelect = new FidDropDownChoice<ProcedureWorkflowStateCriteria>("workflowStateSelect", workflowStateModel, Arrays.asList(ProcedureWorkflowStateCriteria.values()), new ListableLabelChoiceRenderer<ProcedureWorkflowStateCriteria>()){
+        FidDropDownChoice<ProcedureWorkflowStateCriteria> workflowStateSelect = new FidDropDownChoice<ProcedureWorkflowStateCriteria>("workflowStateSelect", workflowStateModel, Arrays.asList(ProcedureWorkflowStateCriteria.values()), new ListableLabelChoiceRenderer<ProcedureWorkflowStateCriteria>());
+        workflowStateSelect.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
-            protected void onSelectionChanged(ProcedureWorkflowStateCriteria newSelection) {
-                if(newSelection.equals(ProcedureWorkflowStateCriteria.OPEN)) {
+            protected void onUpdate(AjaxRequestTarget target) {
+                if(workflowStateModel.getObject().equals(ProcedureWorkflowStateCriteria.OPEN)) {
                     lockoutReasonSelect.setVisible(false);
                     model.getObject().setLockoutReason(null);
                 } else {
                     lockoutReasonSelect.setVisible(true);
                 }
+                target.add(lockoutReasonSelect);
             }
+        });
 
-            @Override
-            protected boolean wantOnSelectionChangedNotifications() {
-                return true;
-            }
-        };
         workflowStateSelect.setNullValid(false);
         add(workflowStateSelect);
 
