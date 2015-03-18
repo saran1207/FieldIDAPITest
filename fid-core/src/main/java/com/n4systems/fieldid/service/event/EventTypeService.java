@@ -119,6 +119,11 @@ public class EventTypeService extends FieldIdPersistenceService {
         return commonTypes;
     }
 
+    public void update(EventType type) {
+        persistenceService.update(type);
+    }
+
+    @Deprecated //Do we really need this? Modified date/user should be handled by DefaultEntityModifiedCreatedHandler
     public void update(EventType type, User user) {
         type.setModified(new Date());
         type.setModifiedBy(user);

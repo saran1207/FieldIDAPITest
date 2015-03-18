@@ -185,9 +185,10 @@ public class ObservationCountResultConfigurationPage extends EventTypePage{
                 if (eventType.getEventForm() == null) {
                     eventForm.setTenant(getTenant());
                     eventType.setEventForm(eventForm);
-                    persistenceService.update(eventType);
+                    eventTypeService.update(eventType);
                     persistenceService.update(eventForm);
                 } else {
+                    eventTypeService.update(eventType);
                     eventFormService.saveNewEventFormAfterObservationChange(eventType.getId(), eventForm);
                 }
                 FieldIDSession.get().storeInfoMessageForStruts(new FIDLabelModel("label.observation_config_saved").getObject());
