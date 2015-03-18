@@ -42,29 +42,35 @@ public class EventFormService extends FieldIdPersistenceService {
     }
 
     @Transactional
-    public void saveNewEventFormAfterObservationChange(EventForm oldEventForm, List<CriteriaSection> sections, EventType eventType) {
+    public void saveNewEventFormAfterObservationChange(Long eventTypeId, EventForm updatedForm) {
+        EventType eventType = persistenceService.find(EventType.class, eventTypeId);
+
+        //Retire the old event form
+        EventForm oldEventForm = eventType.getEventForm();
+        oldEventForm.retireEntity();
+        persistenceService.update(oldEventForm);
+
         EventForm eventForm = new EventForm();
-        eventForm.setTenant(oldEventForm.getTenant());
+        eventForm.setTenant(updatedForm.getTenant());
 
-        //List<CriteriaSection> original = oldEventForm.getSections();
-        List<CriteriaSection> newCriteriaSections = createCopiesOf(sections);
+        List<CriteriaSection> newCriteriaSections = createCopiesOf(updatedForm.getSections());
 
-        eventForm.setSections(convertSectionsToNewObservationCountGroup(newCriteriaSections, oldEventForm.getObservationCountGroup()));
+        eventForm.setSections(convertSectionsToNewObservationCountGroup(newCriteriaSections, updatedForm.getObservationCountGroup()));
 
         //Scoring
-        eventForm.setScoreCalculationType(oldEventForm.getScoreCalculationType());
-        eventForm.setFailRange(oldEventForm.getFailRange());
-        eventForm.setPassRange(oldEventForm.getPassRange());
-        eventForm.setUseScoreForResult(oldEventForm.isUseScoreForResult());
+        eventForm.setScoreCalculationType(updatedForm.getScoreCalculationType());
+        eventForm.setFailRange(updatedForm.getFailRange());
+        eventForm.setPassRange(updatedForm.getPassRange());
+        eventForm.setUseScoreForResult(updatedForm.isUseScoreForResult());
         //Observations
-        eventForm.setObservationcountFailCalculationType(oldEventForm.getObservationcountFailCalculationType());
-        eventForm.setObservationcountFailRange(oldEventForm.getObservationcountFailRange());
-        eventForm.setObservationcountPassCalculationType(oldEventForm.getObservationcountPassCalculationType());
-        eventForm.setObservationcountPassRange(oldEventForm.getObservationcountPassRange());
-        eventForm.setObservationCountGroup(oldEventForm.getObservationCountGroup());
-        eventForm.setObservationCountFail(oldEventForm.getObservationCountFail());
-        eventForm.setObservationCountPass(oldEventForm.getObservationCountPass());
-        eventForm.setUseObservationCountForResult(oldEventForm.isUseObservationCountForResult());
+        eventForm.setObservationcountFailCalculationType(updatedForm.getObservationcountFailCalculationType());
+        eventForm.setObservationcountFailRange(updatedForm.getObservationcountFailRange());
+        eventForm.setObservationcountPassCalculationType(updatedForm.getObservationcountPassCalculationType());
+        eventForm.setObservationcountPassRange(updatedForm.getObservationcountPassRange());
+        eventForm.setObservationCountGroup(updatedForm.getObservationCountGroup());
+        eventForm.setObservationCountFail(updatedForm.getObservationCountFail());
+        eventForm.setObservationCountPass(updatedForm.getObservationCountPass());
+        eventForm.setUseObservationCountForResult(updatedForm.isUseObservationCountForResult());
 
         //Save the new form
         persistenceService.save(eventForm);
@@ -73,16 +79,9 @@ public class EventFormService extends FieldIdPersistenceService {
         eventType.setEventForm(eventForm);
         eventType.incrementFormVersion();
 
-        //save the event type
+        //Update the event type the new form
         persistenceService.update(eventType);
         restoreTranslations(eventForm);
-
-        //Refresh the old form with the database version to clear changes and retire
-        persistenceService.clearSession();
-        persistenceService.reattach(oldEventForm, true);
-        oldEventForm.retireEntity();
-        persistenceService.update(oldEventForm);
-
     }
 
     private List<CriteriaSection> convertSectionsToNewObservationCountGroup(List<CriteriaSection> sections, ObservationCountGroup group) {
