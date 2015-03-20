@@ -10,6 +10,7 @@ import com.n4systems.model.SelectCriteriaResult;
 import com.n4systems.model.SignatureCriteriaResult;
 import com.n4systems.model.TextFieldCriteriaResult;
 import com.n4systems.model.UnitOfMeasureCriteriaResult;
+import com.n4systems.model.ObservationCountCriteriaResult;
 
 public class CriteriaResultPopulatorAdaptor implements CriteriaResultPopulator {
 
@@ -62,5 +63,10 @@ public class CriteriaResultPopulatorAdaptor implements CriteriaResultPopulator {
 	public CriteriaResult populate(ScoreCriteriaResult result) {
 		return result;
 	}
+
+    @Override
+    public CriteriaResult populate(ObservationCountCriteriaResult result) {
+        return result;
+    }
 
 }
