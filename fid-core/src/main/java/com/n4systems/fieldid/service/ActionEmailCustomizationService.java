@@ -35,6 +35,7 @@ public class ActionEmailCustomizationService extends FieldIdPersistenceService {
         QueryBuilder<ActionEmailCustomization> query = createTenantSecurityBuilder(ActionEmailCustomization.class);
         //We order by ID here, so that - in the off chance that we somehow end up with two rows - we're going to always
         //deal with the first one.
+        query.addSimpleWhere("tenant.id", getCurrentTenant().getId());
         query.addOrder("id", true);
 
         //Realistically, this should return only one record... but this is a safer bet.  We're not actively doing
