@@ -178,8 +178,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
 
         //If this hasn't been configured yet, that's okay.  We just pull the default values until the user gets around
         //to customizing them or saving the existing values as a real row in the DB.
-        actionEmailCustomizationService.setSecurityContext(securityContext);
-        ActionEmailCustomization customizedValues = actionEmailCustomizationService.read();
+        ActionEmailCustomization customizedValues = actionEmailCustomizationService.readForTennant(assignee.getTenant());
         String subject = customizedValues.getEmailSubject();
         String subHeading = customizedValues.getSubHeading();
         TemplateMailMessage msg = new TemplateMailMessage(subject, ASSIGNEE_TEMPLATE_MULTI);
