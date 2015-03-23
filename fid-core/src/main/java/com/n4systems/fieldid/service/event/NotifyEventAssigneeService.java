@@ -181,7 +181,22 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         ActionEmailCustomization customizedValues = actionEmailCustomizationService.readForTennant(assignee.getTenant());
         String subject = customizedValues.getEmailSubject();
         String subHeading = customizedValues.getSubHeading();
-        TemplateMailMessage msg = new TemplateMailMessage(subject, ASSIGNEE_TEMPLATE_MULTI);
+        TemplateMailMessage msg = new TemplateMailMessage(subject, ASSIGNEE_TEMPLATE_MULTI) {
+            /**
+             * We override this method because we don't care about the configurations for header and footer.  The
+             * footer is now static and the "header" is replaced by a customized "subHeading" which the Tenant can
+             * change on their own without calling to Support.
+             *
+             * We also know that TempalteMaileMessages are ALWAYS HTML, so we can trim all of the logic out of this
+             * method without encountering any problems.
+             *
+             * @return A String representation of the body of the email without those extra header and footer things.
+             */
+            @Override
+            public String getFullBody() {
+                return getBody();
+            }
+        };
 
         Map<Long, String> dueDateStringMap = createDateStringMap(events, assignee);
         Map<Long, String> criteriaImageMap = createCriteriaImageMap(events);
@@ -276,6 +291,13 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
                      .collect(Collectors.toMap(Event::getId, event -> createAttachedImageUrlList(event.getTriggerEvent())));
     }
 
+    /**
+     * This method creates a list of the String representation of URLs for all images attached to the Trigger Event of
+     * an Action Event.  These URLs are used by the Freemarker template as values for "img" tags.
+     *
+     * @param event - An existing Event from the Database which Triggered an Action and has Image Attachments.
+     * @return A List of Strings representing the URLs of all Image Attachments for a Trigger Event.
+     */
     private List<String> createAttachedImageUrlList(Event event) {
         //I wanted to use streams here... I wanted to so badly... but for some weird reason, the compile was kicking up
         //errors due to return types and expected types for some methods... If you see this and can make it work, I will
@@ -284,7 +306,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
 
         for(Object attachment : event.getImageAttachments()) {
             if(attachment instanceof FileAttachment) {
-                urlList.add(s3Service.getFileAttachmentUrl((FileAttachment) attachment).toExternalForm());
+                urlList.add(s3Service.getFileAttachmentUrlForImpliedTenant((FileAttachment) attachment).toExternalForm());
             }
         }
 

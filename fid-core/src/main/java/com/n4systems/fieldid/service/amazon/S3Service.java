@@ -18,6 +18,7 @@ import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.ConfigService;
@@ -1491,6 +1492,22 @@ public class S3Service extends FieldIdPersistenceService {
         String fileName = fileAttachment.getFileName().substring(fileAttachment.getFileName().lastIndexOf('/') + 1);
         URL fileAttachmentUrl = getFileAttachmentUrl(fileAttachment.getMobileId(), fileName);
         return fileAttachmentUrl;
+    }
+
+    /**
+     * When running email notification tasks, we're effectively operating outside of any Tenant or User context, but
+     * occasionally still need to access information specific to a Tenant. Since we can safely assume that we are
+     * working within a Tenant, due to the Tenant implied from the FileAttachment object, we will just use that Tenant
+     * to configure the Tenant Security Filter.
+     *
+     * @param fileAttachment - A FileAttachment entity for which you want the S3 URL.
+     * @return A URL object pointing to the FileAttachment in S3.
+     */
+    public URL getFileAttachmentUrlForImpliedTenant(FileAttachment fileAttachment) {
+        securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(fileAttachment.getTenant()));
+        URL returnMe = getFileAttachmentUrl(fileAttachment);
+        securityContext.reset();
+        return returnMe;
     }
 
     public URL getFileAttachmentUrl(String fileAttachmentUuid, String filename) {

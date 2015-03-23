@@ -232,21 +232,22 @@
                                      what we're doing with the criteria images), this logic will get slightly more
                                      complicated.  I'm using the old logic for now, but we need to add stuff for the
                                      second image source... I don't think they should live in the same map... -->
-                                <#if criteriaImageMap.get(event.id)??>
+                                <#if criteriaImageMap.get(event.id)?? || (event.type.actionEventType?? && attachedImageListMap.get(event.id)??)>
                                     <td width="200" class="image-adjustment">
-                                        <img src="${criteriaImageMap.get(event.id)}" width="148" data-default="placeholder" data-max-width="200" />
-                                    </td>
-                                <td width="400" valign="top" class="pad-the-top-and-bottom">
-                                <#elseif event.type.actionEventType?? && attachedImageListMap.get(event.id)??>
-                                    <td width="200" class="image-adjustment">
-                                        <#list attachedImageListMap.get(event.id) as imageUrl>
-                                            <img src="${imageUrl}" width="148" data-default="placeholder" data-max-width="200" />
+                                        <#if criteriaImageMap.get(event.id)??>
+                                            <img src="${criteriaImageMap.get(event.id)}" width="148" data-default="placeholder" data-max-width="200" />
                                             <br>
-                                        </#list>
+                                        </#if>
+                                        <#if event.type.actionEventType?? && attachedImageListMap.get(event.id)??>
+                                            <#list attachedImageListMap.get(event.id) as imageUrl>
+                                                <img src="${imageUrl}" width="148" data-default="placeholder" data-max-width="200" />
+                                                <br>
+                                            </#list>
+                                        </#if>
                                     </td>
-                                <td width="400" valign="top" class="pad-the-top-and-bottom">
+                                    <td width="400" valign="top" class="pad-the-top-and-bottom">
                                 <#else>
-                                <td width="600" valign="top" class="no-image-adjustment">
+                                    <td width="600" valign="top" class="no-image-adjustment">
                                 </#if>
                                 <br/>
                                 <#if event.type.actionEventType && event.priority??>
@@ -259,14 +260,14 @@
                                     adjusting so that this doesn't look hideous... -->
                                 <p class="information-adjustment information-paragraph">
                                     <#if event.asset??>
-                                        <!-- No owner name?  We had that on the old one... -->
                                         <strong>Asset:</strong> ${event.asset.type.name} / ${event.asset.identifier}<br>
+                                        <!-- Should we also include owner name? -->
                                     </#if>
                                     <#if event.place??>
                                         <strong>Location:</strong> ${event.place.displayName} <br>
                                     </#if>
                                     <strong>Due:</strong> ${dueDateStringMap.get(event.id)}<br>
-                                    <strong>Notes:</strong> ${event.notes} <br>
+                                    <strong>Notes:</strong> ${(event.notes?replace('\n', '<br/>'))!} <br>
                                     <#if event.type.actionEventType>
                                         <strong>Issuing Event:</strong> ${triggeringEventStringMap.get(event.id)}
                                     </#if>
