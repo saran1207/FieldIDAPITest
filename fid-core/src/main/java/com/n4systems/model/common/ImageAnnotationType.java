@@ -5,25 +5,24 @@ import com.n4systems.model.IsolationPointSourceType;
 
 public enum ImageAnnotationType {
 
-    // currently, the annotation types match up with IsolationPointSourceTypes.
-    //  they don't have to, but it's just the only need now.
+    //This enum is similar to IsolationPointSourceTypes we should probably merge them
 
     /*** Colors are also defined in annotated-image.css please update when changing colors!!! ***/
 
-    W("water", "#FFFFFF","#00A650","#FFFFFF","images/loto/water.jpg","images/loto/water-full.png"),
-    V("valve","#231F20","#FFFFFF","#231F20","images/loto/valve.jpg","images/loto/valve-full.png"),
-    S("steam","#FFFFFF","#EF3E36","#FFFFFF","images/loto/steam.jpg","images/loto/steam-full.png"),
-    P("pneumatic","#FFFFFF","#0055A5","#FFFFFF","images/single-event.png","images/loto/pneumatic-full.png"),
-    G("gas", "#A5439A","#FFFFFF","#A5439A","images/loto/gas.jpg","images/loto/gas-full.png"),
-    E("electrical", "#EE1C25","#FFFFFF","#EE1C25","images/setup-wizard-gear.png","images/loto/electrical-full.png"),
-    CP("control-panel","#F78F1E","#FFFFFF",	"#F78F1E","none","images/loto/control-panel-full.png"),
-    M("mechanical", "#808080","#FFFFFF","#808080","none","images/loto/mechanical-full.png"),
-    H("hydraulic", "#000000","#FFFFFF","#000000","none","images/loto/hydraulic-full.png"),
-    C("chemical", "#808080","#808080","#FCF903","none","images/loto/chemical-full.png"),
-    SP("stored-pressure", "#FFFFFF","#000000","#FFFFFF","none","images/loto/stored-pressure-full.png"),
+    W("water",          "#FFFFFF",  "#0000FF",  "#FFFFFF",  "images/loto/water.jpg",        "images/loto/water-full.png"),
+    V("valve",          "#000000",  "#FFFFFF",  "#000000",  "images/loto/valve.jpg",        "images/loto/valve-full.png"),
+    S("steam",          "#FFFFFF",  "#FFFF00",  "#FFFFFF",  "images/loto/steam.jpg",        "images/loto/steam-full.png"),
+    P("pneumatic",      "#FFFFFF",  "#99CCFF",  "#FFFFFF",  "images/single-event.png",      "images/loto/pneumatic-full.png"),
+    G("gas",            "#FFFFFF",  "#009900",  "#FFFFFF",  "images/loto/gas.jpg",          "images/loto/gas-full.png"),
+    E("electrical",     "#FFFFFF",  "#FF0000",  "#FFFFFF",  "images/setup-wizard-gear.png", "images/loto/electrical-full.png"),
+    CP("control-panel", "#000000",  "#FF8000",  "#000000",  "none",                         "images/loto/control-panel-full.png"),
+    M("mechanical",     "#FFFFFF",  "#666666",  "#FFFFFF",  "none",                         "images/loto/mechanical-full.png"),
+    H("hydraulic",      "#FFFFFF",  "#994C00",  "#FFFFFF",  "none",                         "images/loto/hydraulic-full.png"),
+    C("chemical",       "#FFFFFF",  "#660066",  "#FFFFFF",  "none",                         "images/loto/chemical-full.png"),
+    SP("stored-pressure","#FFFFFF", "#000000",  "#FFFFFF",  "none",                         "images/loto/stored-pressure-full.png"),
 
     //TODO This has to be unique for this "Isolation Point" type...
-    N("notes", "#FFFFFF","#099C4F","#FFFFFF","images/loto/note.jpg","images/loto/note-full.png");
+    N("notes", "#000000","#FFFFFF","#000000","images/loto/note.jpg","images/loto/note-full.png");
 
     // in the world of the browser, this is how the annotations are differentiated.
     // i.e. a P type will be rendered as <span class="pneumatic ..."/>

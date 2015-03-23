@@ -104,103 +104,103 @@
 
 /*** Colors are also defined in ImageAnnotationType.java please update when changing colors!!! ***/
 .chemical {
-    color: #808080;
-    background: #808080;
+    color: #FFF;
+    background: #660066;
 }
     .chemical input {
-        color: #fcf903;
+        color: #FFF;
     }
 
 .hydraulic {
-    color: #000000;
-    background: #ffffff;
+    color: #FFF;
+    background: #994C00;
 }
     .hydraulic input{
-        color: #000000;
+        color: #FFF;
     }
 
 .mechanical {
-    color: #808080;
-    background: #ffffff;
+    color: #FFF;
+    background: #666666;
 }
     .mechanical input {
-        color: #808080;
+        color: #FFF;
     }
 
 .control-panel { /*orange w/white bg*/
-	color: #f78f1e;
-	background: #fff;
+	color: #000;
+	background: #FF8000;
 	padding: 2px 2px 2px 6px;
 }
 	.control-panel input {
-		color: #f78f1e;
+		color: #000;
 	}
 	.control-panel .icon {
 		display: none;
 	}
 
 .stored-pressure {/*white w/black bg*/
-	color: #ffffff;
-	background: #000000;
+	color: #FFF;
+	background: #000;
 }
 .electrical input {
-	color: #ffffff;
+	color: #FFF;
 }
 
 .electrical { /*red w/white bg*/
-	color: #ee1c25;
-	background: #fff;
+	color: #FFF;
+	background: #FF0000;
 }
 	.electrical input {
-		color: #ee1c25;
+		color: #FFF;
 	}
 .gas { /*purple w/white bg*/
-	color: #a5439a;
-	background: #fff;
+	color: #FFF;
+	background: #009900;
 }
 	.gas input {
-		color: #a5439a;
+		color: #FFF;
 	}
 .pneumatic, .pneumatic input { /*white w/blue bg*/
-	color: #fff;
-	background: #0055a5;
+	color: #FFF;
+	background: #99CCFF;
 }
 .steam, .steam input { /*white w/lighter red bg*/
-	color: #fff;
-	background: #ef3e36;
+	color: #FFF;
+	background: #FFFF00;
 }
 .valve { /* almost black w/white bg*/
-	color: #231f20;
-	background: #fff;
+	color: #000;
+	background: #FFF;
 }
 	.valve input {
-		color: #231f20;
+		color: #000;
 	}
 .water, .water input { /*white w/green bg*/
-	color: #fff;
-    background: #00a650;
+	color: #FFF;
+    background: #0000FF;
 }
 
 .isolation-point-table .source {
 	background: transparent;
 }
 .isolation-point-table .electrical {
-	color: #ee1c25;
+	color: #FF0000;
 }
 .isolation-point-table .gas {
-	color: #a5439a;
+	color: #009900;
 }
 .isolation-point-table .pneumatic {
-	color: #0055a5;
+	color: #99CCFF;
 }
 .isolation-point-table .steam {
-	color: #ef3e36;
+	color: #FFFF00;
 }
 .isolation-point-table .valve {
-	color: #231f20;
+	color: #FFFFFF;
 }
 .isolation-point-table .water {
-	color: #00a650;
+	color: #0000FF;
 }
 
 
