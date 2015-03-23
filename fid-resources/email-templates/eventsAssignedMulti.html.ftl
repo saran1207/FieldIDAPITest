@@ -306,7 +306,7 @@
                 </tr>
                 <tr>
                     <td width="60%" height="70" valign="middle" style="padding-bottom:20px;">
-                        <span class="footer-font footer-large">Sent to usersemail@company.com by Master Lock Field iD</span>
+                        <span class="footer-font footer-large">Sent to ${userEmail} by Master Lock Field iD</span>
                         <br/>
                         <span class="footer-font footer-small">111 Queen Street East Suite 240<br>Toronto, Ontario, Canada, M5C 1S6</span>
                         <br/>

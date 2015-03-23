@@ -19,7 +19,7 @@ import java.util.List;
 public class ActionEmailCustomizationService extends FieldIdPersistenceService {
     private static final Logger logger = Logger.getLogger(ActionEmailCustomizationService.class);
 
-    public static final String DEFAULT_EMAIL_SUBJECT = "<number> Actions Assigned";
+    public static final String DEFAULT_EMAIL_SUBJECT = "Work Items Assigned";
 
     public static final String DEFAULT_SUB_HEADING = "This is an automated message to notify you that the following actions have been assigned to you or a group you are a member of.";
 
