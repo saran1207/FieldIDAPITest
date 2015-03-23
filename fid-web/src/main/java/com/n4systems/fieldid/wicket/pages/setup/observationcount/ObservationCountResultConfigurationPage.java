@@ -55,9 +55,11 @@ public class ObservationCountResultConfigurationPage extends EventTypePage{
     @Override
     protected void storePageParameters(PageParameters params) {
         super.storePageParameters(params);
-        eventForm = eventTypeModel.getObject().getEventForm();
-        if (eventForm == null) {
-            eventForm = new EventForm();
+        eventForm = new EventForm();
+        if (eventForm != eventTypeModel.getObject().getEventForm()) {
+            eventForm.setTenant(eventTypeModel.getObject().getTenant());
+            eventForm = eventFormService.copyEventFormSettings(eventTypeModel.getObject().getEventForm(), eventForm);
+            eventForm.setSections(eventTypeModel.getObject().getEventForm().getSections());
         }
     }
 
