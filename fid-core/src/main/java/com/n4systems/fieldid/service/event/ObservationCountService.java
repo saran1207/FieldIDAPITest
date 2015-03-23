@@ -58,8 +58,12 @@ public class ObservationCountService extends FieldIdPersistenceService {
         query.addPostFetchPaths("eventForm.sections");
 
         for (EventType eventType: persistenceService.findAll(query)) {
-            eventType.getEventForm().setObservationCountGroup(newGroup);
-            eventFormService.saveNewEventFormAfterObservationChange(eventType.getId(), eventType.getEventForm());
+            EventForm updatedForm = new EventForm();
+            updatedForm.setTenant(eventType.getTenant());
+            updatedForm.setSections(eventType.getEventForm().getSections());
+            updatedForm = eventFormService.copyEventFormSettings(eventType.getEventForm(), updatedForm);
+            updatedForm.setObservationCountGroup(newGroup);
+            eventFormService.saveNewEventFormAfterObservationChange(eventType.getId(), updatedForm);
         }
     }
 

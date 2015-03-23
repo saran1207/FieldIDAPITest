@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.service.event;
 
+import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable;
@@ -91,6 +92,7 @@ public class EventFormService extends FieldIdPersistenceService {
     }
 
     private List<CriteriaSection> convertSectionsToNewObservationCountGroup(List<CriteriaSection> sections, ObservationCountGroup group) {
+        Preconditions.checkArgument(group.isActive());
         for(CriteriaSection section:sections){
             for(Criteria criteria:section.getCriteria()){
                 if(criteria instanceof ObservationCountCriteria){
