@@ -89,6 +89,7 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
     boolean hasDefaultVal = false;
 
     private LocationPicker locationPicker;
+    //private OrgLocationPicker locationPicker;
     private NewOrExistingEventBook newOrExistingEventBook;
 
     @Override
@@ -286,6 +287,90 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
         ownerSection.add(groupedUserPicker = new GroupedUserPicker("assignedTo", new PropertyModel<User>(MultiEventPage.this, "assignedTo"), new GroupedVisibleUsersModel()));
         groupedUserPicker.setVisible(event.getObject().getType().isAssignedToAvailable());
 
+
+        // New Org Picker/ Location Picker combo widget.
+        // If implemented, make sure to update the corresponding the HTML file.
+
+        //-----------------------------------
+        /*
+        final PropertyModel<BaseOrg> ownerModel = new PropertyModel(event,"owner");
+
+        //Owner Picker
+        final OrgLocationPicker picker = new OrgLocationPicker("orgPicker", ownerModel) {
+            @Override
+            protected void onChanged(AjaxRequestTarget target) {
+                if (getTextString() != null && getTextString().equals("")) {
+                    locationPicker.setLocationOwner(null);
+                } else {
+                    locationPicker.setLocationOwner(getOwner());
+                }
+                target.add(schedulesContainer);
+            }
+        }.withAutoUpdate();
+        ownerSection.add(picker);
+
+        // checkbox
+        CheckBox ownerCheckBox = new CheckBox("assetOwnerUpdate", new PropertyModel<Boolean>(MultiEventPage.this, "assetOwnerUpdate")){
+            @Override
+            protected void onSelectionChanged(Boolean newSelection)
+            {
+                if(assetOwnerUpdate) {
+                    picker.setEnabled(!assetOwnerUpdate);
+                    picker.setIconVisible(!assetOwnerUpdate);
+                    picker.setTextEnabled(!assetOwnerUpdate);
+                } else {
+                    picker.setEnabled(!assetOwnerUpdate);
+                    picker.setIconVisible(!assetOwnerUpdate);
+                    picker.setTextEnabled(!assetOwnerUpdate);
+                }
+            }
+            @Override
+            protected boolean wantOnSelectionChangedNotifications()
+            {
+                return true;
+            }
+        };
+        ownerSection.add(ownerCheckBox);
+
+        //Location Picker
+        final PropertyModel<Location> locationModel = new PropertyModel<Location>(event, "advancedLocation");
+        final PropertyModel<PredefinedLocation> predefinedLocationModel = new PropertyModel<PredefinedLocation>(event, "advancedLocation.predefinedLocation");
+
+        BaseOrg temp = ownerModel.getObject();
+
+        locationPicker = new OrgLocationPicker("locationPicker", Model.of(temp), predefinedLocationModel){
+            @Override
+            public String getWatermarkText() {
+                return new FIDLabelModel("message.locationpicker_watermark").getObject();
+            }
+        }.withLocations();
+        ownerSection.add(locationPicker);
+
+        //Freeform Location
+        final TextField<String> freeformLocation = new TextField<String>("freeformLocation", new PropertyModel<String>(locationModel, "freeformLocation"));
+        ownerSection.add(freeformLocation);
+
+        CheckBox locationCheckBox = new CheckBox("locationUpdate", new PropertyModel<Boolean>(MultiEventPage.this, "locationUpdate")){
+            @Override
+            protected void onSelectionChanged(Boolean newSelection)
+            {
+                if(locationUpdate) {
+                    locationPicker.setEnabled(!locationUpdate);
+                    freeformLocation.setEnabled(!locationUpdate);
+                } else {
+                    locationPicker.setEnabled(!locationUpdate);
+                    freeformLocation.setEnabled(!locationUpdate);
+                }
+            }
+            @Override
+            protected boolean wantOnSelectionChangedNotifications()
+            {
+                return true;
+            }
+        };
+        ownerSection.add(locationCheckBox);*/
+
+        //-----------------------------------
         final OrgLocationPicker picker = new OrgLocationPicker("orgPicker", new PropertyModel<BaseOrg>(event, "owner")) {
             @Override
             protected void onChanged(AjaxRequestTarget target) {
@@ -347,6 +432,7 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
         locationPicker.setEnabled(false);
 
         ownerSection.add(locationCheckBox);
+        //-----------------------------------
 
         return ownerSection;
     }

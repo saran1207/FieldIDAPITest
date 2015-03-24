@@ -29,13 +29,15 @@ import com.n4systems.fieldid.wicket.model.user.GroupedVisibleUsersModel;
 import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
-import com.n4systems.fieldid.wicket.pages.assetsearch.components.ModalLocationPicker;
 import com.n4systems.fieldid.wicket.pages.event.QuickEventPage;
 import com.n4systems.fieldid.wicket.pages.identify.components.*;
 import com.n4systems.fieldid.wicket.pages.identify.components.multi.MultiIdentifyStatusDisplayPanel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.*;
 import com.n4systems.model.asset.AssetAttachment;
+import com.n4systems.model.location.Location;
+import com.n4systems.model.location.PredefinedLocation;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.services.asset.AssetSaveServiceSpring;
@@ -143,8 +145,6 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             protected void onValidate() {
                 super.onValidate();
 
-                Asset asset1 = assetModel.getObject();
-
                 BigDecimal latField = (BigDecimal)latitude.getConvertedInput();
                 BigDecimal longField = (BigDecimal)longitude.getConvertedInput();
 
@@ -182,6 +182,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
 
         GpsTextField<BigDecimal> latitude;
         GpsTextField<BigDecimal> longitude;
+        private OrgLocationPicker locationPicker;
 
         public IdentifyOrEditAssetForm(String id, final IModel<Asset> assetModel) {
             super(id, assetModel);
@@ -267,22 +268,35 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
                 }
             });
 
-            final ModalLocationPicker locationPicker = new ModalLocationPicker("locationPicker", ProxyModel.of(assetModel, on(Asset.class).getAdvancedLocation()));
-            setChildFormsToMultipart(locationPicker);
+            final PropertyModel<BaseOrg> ownerModel = new PropertyModel(assetModel,"owner");
+            //Owner Picker
+            add(new OrgLocationPicker("owner", ownerModel) {
+                @Override
+                protected void onChanged(AjaxRequestTarget target) {
+                    if(getTextString() != null && getTextString().equals("")) {
+                        locationPicker.setLocationOwner(null);
+                    } else {
+                        locationPicker.setLocationOwner(getOwner());
+                    }
+                }
+            }.withAutoUpdate());
+
+            //Location Picker
+            final PropertyModel<Location> locationModel = new PropertyModel<Location>(assetModel, "advancedLocation");
+            final PropertyModel<PredefinedLocation> predefinedLocationModel = new PropertyModel<PredefinedLocation>(assetModel, "advancedLocation.predefinedLocation");
+
+            BaseOrg temp = ownerModel.getObject();
+
+            locationPicker = new OrgLocationPicker("location", Model.of(temp), predefinedLocationModel){
+                @Override
+                public String getWatermarkText() {
+                    return new FIDLabelModel("message.locationpicker_watermark").getObject();
+                }
+            }.withLocations();
             add(locationPicker);
 
-            locationPicker.setOwner(assetModel.getObject().getOwner());
-
-            OrgLocationPicker ownerPicker = new OrgLocationPicker("ownerPicker", new PropertyModel(assetModel,"owner")) {
-                @Override protected void onChanged(AjaxRequestTarget target) {
-                    locationPicker.setOwner(getOwner());
-                    autoSchedule(assetModel);
-                    target.add(locationPicker,eventSchedulesPanel);
-                }
-
-                @Override protected void onError(AjaxRequestTarget target, RuntimeException e) { }
-            }.withAutoUpdate();
-            add(ownerPicker.setRequired(true).setLabel(new FIDLabelModel("label.owner")));
+            //Freeform Location
+            add(new TextField<String>("freeformLocation", new PropertyModel<String>(locationModel, "freeformLocation")));
 
             TextField purchaseOrder;
             add(purchaseOrder = new TextField<String>("purchaseOrder", ProxyModel.of(assetModel, on(Asset.class).getPurchaseOrder())));

@@ -15,7 +15,6 @@ import com.n4systems.fieldid.wicket.components.event.book.NewOrExistingEventBook
 import com.n4systems.fieldid.wicket.components.event.prooftest.ProofTestEditPanel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.fileupload.AttachmentsPanel;
-import com.n4systems.fieldid.wicket.components.location.LocationPicker;
 import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRenderer;
@@ -34,6 +33,7 @@ import com.n4systems.model.*;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.location.Location;
+import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 import org.apache.commons.lang.StringUtils;
@@ -47,13 +47,12 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -219,7 +218,9 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
 
     class OuterEventForm extends Form {
 
-        private LocationPicker locationPicker;
+        //private LocationPicker locationPicker;
+        private OrgLocationPicker locationPicker;
+
 		private NewOrExistingEventBook newOrExistingEventBook;
         GpsTextField<BigDecimal> latitude;
         GpsTextField<BigDecimal> longitude;
@@ -240,20 +241,44 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             groupedUserPicker.setNullValid(true);
             groupedUserPicker.setVisible(event.getObject().getType().isAssignedToAvailable());
 
-            ownerSection.add(new OrgLocationPicker("orgPicker", new PropertyModel<BaseOrg>(event, "owner")) {
+            final PropertyModel<BaseOrg> ownerModel = new PropertyModel(event,"owner");
+            //Owner Picker
+            ownerSection.add(new OrgLocationPicker("orgPicker", ownerModel) {
                 @Override
                 protected void onChanged(AjaxRequestTarget target) {
+                    if (getTextString() != null && getTextString().equals("")) {
+                        locationPicker.setLocationOwner(null);
+                    } else {
+                        locationPicker.setLocationOwner(getOwner());
+                    }
+
                     doAutoSchedule();
                     target.add(schedulesContainer);
                     BaseOrg selectedOrg = (BaseOrg) getDefaultModel().getObject();
-                    locationPicker.setOwner(selectedOrg);
-					newOrExistingEventBook.setOwner(selectedOrg);
-					target.add(newOrExistingEventBook);
+                    newOrExistingEventBook.setOwner(selectedOrg);
+                    target.add(newOrExistingEventBook);
                 }
             }.withAutoUpdate());
 
             // checkbox
             ownerSection.add(new CheckBox("assetOwnerUpdate", new PropertyModel<Boolean>(EventPage.this, "assetOwnerUpdate")).add(new UpdateComponentOnChange()));
+
+            //Location Picker
+            final PropertyModel<Location> locationModel = new PropertyModel<Location>(event, "advancedLocation");
+            final PropertyModel<PredefinedLocation> predefinedLocationModel = new PropertyModel<PredefinedLocation>(event, "advancedLocation.predefinedLocation");
+
+            BaseOrg temp = ownerModel.getObject();
+
+            locationPicker = new OrgLocationPicker("locationPicker", Model.of(temp), predefinedLocationModel){
+                @Override
+                public String getWatermarkText() {
+                    return new FIDLabelModel("message.locationpicker_watermark").getObject();
+                }
+            }.withLocations();
+            ownerSection.add(locationPicker);
+
+            //Freeform Location
+            ownerSection.add(new TextField<String>("freeformLocation", new PropertyModel<String>(locationModel, "freeformLocation")));
 
             schedulesContainer = new WebMarkupContainer("schedulesContainer");
             schedulesContainer.setOutputMarkupPlaceholderTag(true);
@@ -326,9 +351,6 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             DropDownChoice<Project> jobSelect = new DropDownChoice<Project>("job", new PropertyModel<Project>(event, "project"), new EventJobsForTenantModel(), new ListableChoiceRenderer<Project>());
             jobSelect.setNullValid(true);
             jobsContainer.add(jobSelect);
-
-            ownerSection.add(locationPicker = new LocationPicker("locationPicker", new PropertyModel<Location>(event, "advancedLocation")).withRelativePosition());
-            locationPicker.setOwner(new PropertyModel<BaseOrg>(event, "owner").getObject());
 
             add(new Comment("comments", new PropertyModel<String>(event, "comments")).addMaxLengthValidation(2500));
 

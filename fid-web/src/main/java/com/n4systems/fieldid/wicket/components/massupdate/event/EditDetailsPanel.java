@@ -5,10 +5,8 @@ import com.n4systems.fieldid.wicket.components.Comment;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
 import com.n4systems.fieldid.wicket.components.IEventBehavior;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.components.location.LocationPicker;
 import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
 import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
-import com.n4systems.fieldid.wicket.components.org.OrgPicker;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.renderer.StatusChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.user.GroupedUserPicker;
@@ -23,7 +21,7 @@ import com.n4systems.model.AssetStatus;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.EventResult;
 import com.n4systems.model.EventStatus;
-import com.n4systems.model.location.Location;
+import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.user.User;
@@ -32,13 +30,11 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
@@ -121,6 +117,7 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 		public MassUpdateEventForm(String id, MassUpdateEventModel massUpdateEventModel) {
 			super(id, new CompoundPropertyModel<MassUpdateEventModel>(massUpdateEventModel));
 
+
 			CheckBox assignedUserCheck = new CheckBox("assignedUserCheck", new PropertyModel<Boolean>(massUpdateEventModel, "select[assignedUser]"));
 			GroupedUserPicker groupedUserPicker = new GroupedUserPicker("assignedTo", 
 					new PropertyModel<User>(massUpdateEventModel, "assignedTo"), new GroupedVisibleUsersModel());
@@ -131,22 +128,27 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 			assignedUserContainer.add(assignedUserCheck);
 			assignedUserContainer.setVisible(FieldIDSession.get().getSecurityGuard().isAssignedToEnabled());
 			assignedUserContainer.add(groupedUserPicker);
-			
+
 			final CheckBox locationCheck = new CheckBox("locationCheck", new PropertyModel<Boolean>(massUpdateEventModel, "select[location]"));
 			locationCheck.setOutputMarkupId(true);
-			final LocationPicker location = new LocationPicker("location", new PropertyModel<Location>(massUpdateEventModel, "event.advancedLocation")){
-				@SuppressWarnings("unchecked")
+
+			//Freeform Location
+			TextField<String> freeformLocation = new TextField<String>("freeformLocation", new PropertyModel<String>(massUpdateEventModel, "event.advancedLocation.freeformLocation"));
+
+			final OrgLocationPicker location = new OrgLocationPicker("location",  Model.of(massUpdateEventModel.getEvent().getOwner()), new PropertyModel<PredefinedLocation>(massUpdateEventModel, "event.advancedLocation.predefinedLocation")){
 				@Override
-				protected void onLocationPicked(AjaxRequestTarget target) {
+				protected void onChanged(AjaxRequestTarget target) {
 					IModel<Boolean> model = (IModel<Boolean>) locationCheck.getDefaultModel();
 					clearAllCheckboxes();
 					model.setObject(true);
 					target.add(locationCheck);
 				}
-			}.withRelativePosition();
-			location.getFreeformLocationField().add(createCheckOnChangeEvent(locationCheck));
+			}.withLocations().withAutoUpdate();
+			freeformLocation.add(createCheckOnChangeEvent(locationCheck));
+
 			add(locationCheck);
 			add(location);
+			add(freeformLocation);
 
 			final CheckBox ownerCheck = new CheckBox("ownerCheck", new PropertyModel<Boolean>(massUpdateEventModel, "select[owner]"));
 			ownerCheck.setOutputMarkupId(true);
@@ -156,16 +158,18 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
             add(new OrgLocationPicker("owner", orgModel) {
                 @Override
                 protected void onChanged(AjaxRequestTarget target) {
+					if(getTextString() != null && getTextString().equals("")) {
+						location.setLocationOwner(null);
+					} else {
+						location.setLocationOwner(getOwner());
+					}
+
                     IModel<Boolean> model = (IModel<Boolean>) ownerCheck.getDefaultModel();
                     clearAllCheckboxes();
                     model.setObject(true);
-                    location.setOwner(orgModel.getObject());
-                    target.add(ownerCheck, locationCheck, location);
+                    target.add(ownerCheck, location);
                 }
-
-
             }.withAutoUpdate());
-
 
             final CheckBox assetOwnerCheck = new CheckBox("assetOwnerCheck", new PropertyModel<Boolean>(massUpdateEventModel, "select[assetOwner]"));
             assetOwnerCheck.setOutputMarkupId(true);

@@ -6,12 +6,17 @@
         <fieldset>
             <div class="control-group limited-edit-asset-picker">
                 <label class="owner">* <wicket:message key="label.owner"/></label>
-                <div wicket:id="ownerPicker"/>
+                <div wicket:id="owner"/>
             </div>
 
             <div class="control-group limited-edit-asset-picker">
                 <label class="location"><wicket:message key="label.location"/></label>
-                <div wicket:id="locationPicker"/>
+                <div wicket:id="location"/>
+            </div>
+
+            <div class="control-group limited-edit-asset-picker">
+                <label for="freeformLocation" class="label freeFormLabel"><wicket:message key="label.freeform_location"/></label>
+                <input wicket:id="freeformLocation" type="text">
             </div>
 
             <div class="control-group">

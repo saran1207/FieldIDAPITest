@@ -100,12 +100,36 @@
     height:102px;
 }
 
+.mainPanel .infoSet.location {
+	height:90px;
+	width: 900px;
+}
+
+.mainPanel .freeformfieldHolder {
+	display: block;
+	float: left;
+	width: 900px;
+	line-height: 18px;
+	padding-left: 30px;
+}
+
+.mainPanel .freeformfieldHolder input {
+	padding-top: 8px;
+	padding-right: 8px;
+	margin-top: 4px;
+	width: 247px;
+}
+
 .mainPanel .fieldHolder {
     display: block;
     float: left;
     padding: 5px 0;
     width: 305px;
     line-height: 18px;
+}
+
+.mainPanel .fieldHolder .location {
+	width: 900px;
 }
 
 .mainPanel .comment textarea {
