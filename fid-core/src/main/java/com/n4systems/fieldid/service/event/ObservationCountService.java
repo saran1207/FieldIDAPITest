@@ -67,4 +67,11 @@ public class ObservationCountService extends FieldIdPersistenceService {
         }
     }
 
+    public boolean isObservationGroupAttachedToEventType(Long observationGroupId) {
+        QueryBuilder<EventForm> query = createUserSecurityBuilder(EventForm.class);
+        query.addSimpleWhere("observationCountGroup.id", observationGroupId);
+
+        return persistenceService.count(query) > 0 ? true: false;
+    }
+
 }
