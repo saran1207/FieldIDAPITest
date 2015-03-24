@@ -6,9 +6,10 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
-import com.n4systems.fieldid.wicket.pages.assetsearch.components.ModalLocationPicker;
-import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.Asset;
+import com.n4systems.model.location.Location;
+import com.n4systems.model.location.PredefinedLocation;
+import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
@@ -21,8 +22,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-
-import static ch.lambdaj.Lambda.on;
 
 public class LimitedEditAsset extends FieldIDTemplatePage {
 
@@ -44,27 +43,41 @@ public class LimitedEditAsset extends FieldIDTemplatePage {
 
     class EditAssetCustomerInformationForm extends Form<Asset> {
 
-        private ModalLocationPicker locationPicker;
-        private OrgLocationPicker ownerPicker;
+
+        private OrgLocationPicker locationPicker;
 
         public EditAssetCustomerInformationForm(String id, final IModel<Asset> model) {
             super(id, model);
 
-            locationPicker = new ModalLocationPicker("locationPicker", ProxyModel.of(model, on(Asset.class).getAdvancedLocation()));
-            add(locationPicker);
-            locationPicker.setOwner(model.getObject().getOwner());
-
-            ownerPicker = new OrgLocationPicker("ownerPicker", new PropertyModel(model, "owner")) {
-                @Override protected void onChanged(AjaxRequestTarget target) {
-                    locationPicker.setOwner(getOwner());
-
-                    target.add(locationPicker);
+            final PropertyModel<BaseOrg> ownerModel = new PropertyModel(model,"owner");
+            //Owner Picker
+            add(new OrgLocationPicker("owner", ownerModel) {
+                @Override
+                protected void onChanged(AjaxRequestTarget target) {
+                    if(getTextString() != null && getTextString().equals("")) {
+                        locationPicker.setLocationOwner(null);
+                    } else {
+                        locationPicker.setLocationOwner(getOwner());
+                    }
                 }
+            }.withAutoUpdate());
 
-                @Override protected void onError(AjaxRequestTarget target, RuntimeException e) { }
-            }.withAutoUpdate();
-            add(ownerPicker.setRequired(true).setLabel(new FIDLabelModel("label.owner")));
+            //Location Picker
+            final PropertyModel<Location> locationModel = new PropertyModel<Location>(model, "advancedLocation");
+            final PropertyModel<PredefinedLocation> predefinedLocationModel = new PropertyModel<PredefinedLocation>(model, "advancedLocation.predefinedLocation");
 
+            BaseOrg temp = ownerModel.getObject();
+
+            locationPicker = new OrgLocationPicker("location", Model.of(temp), predefinedLocationModel){
+                @Override
+                public String getWatermarkText() {
+                    return new FIDLabelModel("message.locationpicker_watermark").getObject();
+                }
+            }.withLocations();
+            add(locationPicker);
+
+            //Freeform Location
+            add(new TextField<String>("freeformLocation", new PropertyModel<String>(locationModel, "freeformLocation")));
 
             add(new TextField<String>("referenceNumber", new PropertyModel<String>(model, "customerRefNumber")));
             add(new TextField<String>("purchaseOrder", new PropertyModel<String>(model, "purchaseOrder")));
