@@ -200,7 +200,6 @@
                 <tr>
                     <td width="100">&nbsp;</td>
                     <td width="600" align="center">
-                        <!-- customized Sub-Heading message.  This needs to go into the map being passed in... -->
                         <p class="size-13-font">${subHeadingMessage}</p>
                     </td>
                     <td width="100">&nbsp;</td>
@@ -217,68 +216,79 @@
                 </tr>
             </table>
 
-        <#list events as event>
-            <!-- This can actually be boiled down to only one table... the way you can make this work is pretty
-                 straight forward.  If there is no image present, you don't include the <td> for the image, then
-                 you switch the class in the second <td> to no-image-adjustment. -->
-            <!-- Should probably consider just removing this containing table... it's not good design and it just
-                 does most of what the table it contains does.-->
-            <table cellpadding="0" cellspacing="0" border="0" align="center" width="600" class="event-border collapse-border">
-                <tr>
-                    <td class="event-background">
-                        <table cellpadding="0" class="collapse-border" cellspacing="0" border="0" align="center" width="600">
-                            <tr>
-                                <!-- Because we're pulling images from a couple sources now (I don't want to touch
-                                     what we're doing with the criteria images), this logic will get slightly more
-                                     complicated.  I'm using the old logic for now, but we need to add stuff for the
-                                     second image source... I don't think they should live in the same map... -->
-                                <#if criteriaImageMap.get(event.id)?? || (event.type.actionEventType?? && attachedImageListMap.get(event.id)??)>
-                                    <td width="200" class="image-adjustment">
-                                        <#if criteriaImageMap.get(event.id)??>
-                                            <img src="${criteriaImageMap.get(event.id)}" width="148" data-default="placeholder" data-max-width="200" />
+            <#list events as event>
+                <!-- This can actually be boiled down to only one table... the way you can make this work is pretty
+                     straight forward.  If there is no image present, you don't include the <td> for the image, then
+                     you switch the class in the second <td> to no-image-adjustment. -->
+                <!-- Should probably consider just removing this containing table... it's not good design and it just
+                     does most of what the table it contains does.-->
+                <table cellpadding="0" cellspacing="0" border="0" align="center" width="600" class="event-border collapse-border">
+                    <tr>
+                        <td class="event-background">
+                            <table cellpadding="0" class="collapse-border" cellspacing="0" border="0" align="center" width="600">
+                                <tr>
+                                    <!-- Because we're pulling images from a couple sources now (I don't want to touch
+                                         what we're doing with the criteria images), this logic will get slightly more
+                                         complicated.  I'm using the old logic for now, but we need to add stuff for the
+                                         second image source... I don't think they should live in the same map... -->
+                                    <#if criteriaImageMap.get(event.id)?? || (event.type.actionEventType?? && attachedImageListMap.get(event.id)??)>
+                                        <td width="200" class="image-adjustment">
+                                            <#if criteriaImageMap.get(event.id)??>
+                                                <img src="${criteriaImageMap.get(event.id)}" width="148" data-default="placeholder" data-max-width="200" />
+                                                <br>
+                                            </#if>
+                                            <#if event.type.actionEventType?? && attachedImageListMap.get(event.id)??>
+                                                <#list attachedImageListMap.get(event.id) as imageUrl>
+                                                    <img src="${imageUrl}" width="148" data-default="placeholder" data-max-width="200" />
+                                                    <br>
+                                                </#list>
+                                            </#if>
+                                        </td>
+                                        <td width="400" valign="top" class="pad-the-top-and-bottom">
+                                    <#else>
+                                        <td width="600" valign="top" class="no-image-adjustment">
+                                    </#if>
+                                    <br/>
+                                    <#if event.type.actionEventType && event.priority??>
+                                        <div class="priority-adjustment">
+                                            <strong class="capitalize-text">${event.priority.name}</strong> PRIORITY
+                                        </div>
+                                    </#if>
+
+                                    <!-- In the event that there is no Priority, we may need to do some further
+                                        adjusting so that this doesn't look hideous... -->
+                                    <p class="information-adjustment information-paragraph">
+                                        <#if event.asset??>
+                                            <!-- Need to provide link to asset so that it opens in the webapp... can we do that? -->
+                                            <!-- This is probably going to need some CSS tuning. -->
+                                            <a target='_blank' href="${assetUrlMap.get(event.asset.id)}" class='link2'><strong>Asset:</strong> ${event.asset.type.name} / ${event.asset.identifier} </a>
                                             <br>
                                         </#if>
-                                        <#if event.type.actionEventType?? && attachedImageListMap.get(event.id)??>
-                                            <#list attachedImageListMap.get(event.id) as imageUrl>
-                                                <img src="${imageUrl}" width="148" data-default="placeholder" data-max-width="200" />
-                                                <br>
-                                            </#list>
+                                        <!-- Okay, so we're looking for this in different places, depending on the type
+                                             of event.  If it's an Action, it's the Trigger Event, otherwise it should
+                                             be in the Event itself. -->
+                                        <#if event.type.actionEventType>
+                                            <#if event.triggerEvent.place??>
+                                                <strong>Location:</strong> ${event.triggerEvent.place.displayName} <br>
+                                            </#if>
+                                        <#else>
+                                            <#if event.place??>
+                                                <strong>Location:</strong> ${event.place.displayName} <br>
+                                            </#if>
                                         </#if>
-                                    </td>
-                                    <td width="400" valign="top" class="pad-the-top-and-bottom">
-                                <#else>
-                                    <td width="600" valign="top" class="no-image-adjustment">
-                                </#if>
-                                <br/>
-                                <#if event.type.actionEventType && event.priority??>
-                                    <div class="priority-adjustment">
-                                        <strong class="capitalize-text">${event.priority.name}</strong> PRIORITY
-                                    </div>
-                                </#if>
-
-                                <!-- In the event that there is no Priority, we may need to do some further
-                                    adjusting so that this doesn't look hideous... -->
-                                <p class="information-adjustment information-paragraph">
-                                    <#if event.asset??>
-                                        <strong>Asset:</strong> ${event.asset.type.name} / ${event.asset.identifier}<br>
-                                        <!-- Should we also include owner name? -->
-                                    </#if>
-                                    <#if event.place??>
-                                        <strong>Location:</strong> ${event.place.displayName} <br>
-                                    </#if>
-                                    <strong>Due:</strong> ${dueDateStringMap.get(event.id)}<br>
-                                    <strong>Notes:</strong> ${(event.notes?replace('\n', '<br/>'))!} <br>
-                                    <#if event.type.actionEventType>
-                                        <strong>Issuing Event:</strong> ${triggeringEventStringMap.get(event.id)}
-                                    </#if>
-                                </p>
-                            </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </#list>
+                                        <strong>Due:</strong> ${dueDateStringMap.get(event.id)}<br>
+                                        <strong>Notes:</strong> ${(event.notes?replace('\n', '<br/>'))!} <br>
+                                        <#if event.type.actionEventType>
+                                            <strong>Issuing Event:</strong> ${triggeringEventStringMap.get(event.id)}
+                                        </#if>
+                                    </p>
+                                </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </#list>
 
             <!-- The rest is basically static content... the System URL is dynamic, but that's it. -->
             <table cellpadding="0" cellspacing="0" border="0" align="center" width="600">

@@ -31,6 +31,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
 
     private static final Logger logger = Logger.getLogger(NotifyEventAssigneeService.class);
     private static final String ASSIGNEE_TEMPLATE_MULTI = "eventsAssignedMulti";
+    private static final String ASSET_URL_SEGMENT = "/fieldid/w/assetSummary?4&uniqueID=";
 
     @Autowired private MailService mailService;
     @Autowired private S3Service s3Service;
@@ -201,6 +202,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         Map<Long, String> dueDateStringMap = createDateStringMap(events, assignee);
         Map<Long, String> criteriaImageMap = createCriteriaImageMap(events);
         Map<Long, String> triggeringEventStringMap = createTriggeringEventStringMap(events);
+        Map<Long, String> assetUrlMap = createAssetUrlMap(events);
         Map<Long, List<String>> attachedImageListMap = createAttachedImageListMap(events);
 
         msg.getTemplateMap().put("systemUrl", SystemUrlUtil.getSystemUrl(events.get(0).getTenant()));
@@ -211,6 +213,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         msg.getTemplateMap().put("criteriaImageMap", criteriaImageMap);
         msg.getTemplateMap().put("attachedImageListMap", attachedImageListMap);
         msg.getTemplateMap().put("triggeringEventStringMap", triggeringEventStringMap);
+        msg.getTemplateMap().put("assetUrlMap", assetUrlMap);
         msg.getTemplateMap().put("userEmail", assignee.getEmailAddress());
         return msg;
     }
@@ -241,6 +244,51 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
             dueDateStringMap.put(event.getId(), dueDateString);
         }
         return dueDateStringMap;
+    }
+
+    /**
+     * This method creates a Map of the String representation of URLs to Assets associated with supplied Events.  These
+     * URLs are used in the Work Notification email to allow links to Assets to be opened directly.  They Map is keyed
+     * by Asset ID so that we're not wasting memory on duplicate entries.
+     *
+     * @param events - A List of Events that a user is to be notified about.  This method will find the ones with Assets.
+     * @return A Map of Asset URLs keyed by Asset ID.
+     */
+    private Map<Long,String> createAssetUrlMap(List<Event> events) {
+        //First, lets grab all of the assets from any ThingEvents...
+        //Warning: this might cause an NPE if the resulting list is empty... but I think it'll be fine.
+        List<Asset> associatedAssets = events.stream()
+                                             //So we filter for ThingEvents...
+                                             .filter(event -> event instanceof ThingEvent)
+                                             //then re-map the list to Assets and pull the Assets off of casted Events...
+                                             .map(event -> ((ThingEvent)event).getAsset())
+                                             //...then collect those Assets back to a Stream.
+                                             .collect(Collectors.toList());
+
+        //Next we're going to pull the Assets from any ActionEvents.  These don't have an asset themselves, but have
+        //Trigger Events that might...
+        associatedAssets.addAll(events.stream()
+                                      //...so we'll filter for any ActionEvents with ThingEvent Trigger Events... EVENT!!!
+                                      .filter(event -> event.isAction() && event.getTriggerEvent() instanceof ThingEvent)
+                                      //We then pull off those assets and - again - re-map to an Asset List.
+                                      .map(event -> ((ThingEvent) event).getAsset())
+                                      .collect(Collectors.toList()));
+
+        //Our implementation of equals should be enough for this to work.  We could have done this earlier, but
+        //would still have wanted to call .distinct() yet again right here.  Now we just grind down the list of
+        //Assets into a map of Asset URLs keyed by Asset ID.  Theoretically, we should be left with unique Assets at
+        //this point, so this should just work.
+        return associatedAssets.stream().distinct().collect(Collectors.toMap(BaseEntity::getId, this::createAssetUrl));
+    }
+
+    /**
+     * This method builds a String representation of a URL to an asset using only the provided Asset itself.
+     *
+     * @param asset - An Asset entity representing an Asset in the system.
+     * @return A String representation of the URL that should allow the user to open the Asset in the app.
+     */
+    private String createAssetUrl(Asset asset) {
+        return SystemUrlUtil.getSystemUrl(asset.getTenant()) + ASSET_URL_SEGMENT + asset.getId().toString();
     }
 
     /**
