@@ -8,6 +8,7 @@ import com.n4systems.util.StringUtils;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "events")
@@ -194,13 +195,11 @@ public abstract class AbstractEvent<T extends EventType, R extends EntityWithTen
     }
 
     public List<FileAttachment> getImageAttachments() {
-		List<FileAttachment> imageAttachments = new ArrayList<FileAttachment>();
-		for (FileAttachment fileAttachment : attachments) {
-			if (fileAttachment.isImage()) {
-				imageAttachments.add(fileAttachment);
-			}
-		}
-		return imageAttachments;
+        //This is way more simple with a stream and theoretically uses less memory.  I'm going to be using this
+        //extensively for the emails, so let's try to minimize memory consumption.
+        return attachments.stream()
+                          .filter(FileAttachment::isImage)
+                          .collect(Collectors.toList());
 	}
 
 	/**

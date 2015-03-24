@@ -1,5 +1,6 @@
 package com.n4systems.model;
 
+//This enum is similar to ImageAnnotationType we should probably merge them
 public enum IsolationPointSourceType {
 
     W("Water"),

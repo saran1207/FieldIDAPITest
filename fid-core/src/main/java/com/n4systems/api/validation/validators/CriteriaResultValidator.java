@@ -2,6 +2,7 @@ package com.n4systems.api.validation.validators;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
 import com.n4systems.api.conversion.event.EventToModelConverter;
 import com.n4systems.api.model.CriteriaResultView;
 import com.n4systems.api.model.ExternalModelView;
@@ -12,9 +13,12 @@ import com.n4systems.model.security.SecurityFilter;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class CriteriaResultValidator extends CollectionValidator<CriteriaResultView, Collection<CriteriaResultView>> {
+
+    private static final String OBSERVATION_INPUT_PATTERN = "^(\\w+:\\d+\\|)+\\w+:\\d+$";
 
 	@Override
 	protected <V extends ExternalModelView> ValidationResult validateElement(
@@ -54,12 +58,36 @@ public class CriteriaResultValidator extends CollectionValidator<CriteriaResultV
 			return validateNumberField((NumberFieldCriteria) criteria, section, value);
 		case SCORE:
 			return validateScoreField((ScoreCriteria)criteria, section, value);
+        case OBSERVATION_COUNT:
+            return validateObservationField((ObservationCountCriteria) criteria, section, value);
 		default :
-			return ValidationResult.fail("unsupported critera " + criteria.getClass().getSimpleName() + " : most likely you have added a criteria type without adding validation");
+			return ValidationResult.fail("unsupported criteria " + criteria.getClass().getSimpleName() + " : most likely you have added a criteria type without adding validation");
 		}
 	}
 
-	private ValidationResult validateScoreField(ScoreCriteria criteria, CriteriaSection section, CriteriaResultView value) {
+    private ValidationResult validateObservationField(ObservationCountCriteria criteria, CriteriaSection section, CriteriaResultView value) {
+        if (value.getResultString().matches(OBSERVATION_INPUT_PATTERN)) {
+
+           List<String> observationNames = criteria.getObservationCountGroup().getObservationCounts().stream().map(observation -> observation.getName()).collect(Collectors.toList());
+
+           Boolean hasValidObservations = Lists.newArrayList(value.getResultString().split("\\|")).stream()
+                                                                                        .map(s -> s.split(":")[0])
+                                                                                        .filter(s -> !observationNames.contains(s))
+                                                                                        .collect(Collectors.toList()).isEmpty();
+           if (hasValidObservations)
+               return ValidationResult.pass();
+           else  {
+               List<String> importObservations = Lists.newArrayList(value.getResultString().split("\\|")).stream()
+                       .map(s -> s.split(":")[0])
+                       .collect(Collectors.toList());
+               return ValidationResult.fail("The observations: " + importObservations +" provided do not match with the observation group: "+ observationNames + " configured for this event type");
+           }
+        } else {
+            return ValidationResult.fail(value.getResultString() + ": is invalid format for Observations");
+        }
+    }
+
+    private ValidationResult validateScoreField(ScoreCriteria criteria, CriteriaSection section, CriteriaResultView value) {
 		List<Score> scores = criteria.getScoreGroup().getScores();
 		List<String> scoreNames = new ArrayList<String>();
 		for (Score score:scores) { 

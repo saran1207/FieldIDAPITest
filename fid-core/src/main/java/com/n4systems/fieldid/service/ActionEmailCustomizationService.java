@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.service;
 
+import com.n4systems.model.Tenant;
 import com.n4systems.model.notificationsettings.ActionEmailCustomization;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.log4j.Logger;
 
@@ -17,9 +19,24 @@ import java.util.List;
 public class ActionEmailCustomizationService extends FieldIdPersistenceService {
     private static final Logger logger = Logger.getLogger(ActionEmailCustomizationService.class);
 
-    public static final String DEFAULT_EMAIL_SUBJECT = "<number> Actions Assigned";
+    public static final String DEFAULT_EMAIL_SUBJECT = "Work Items Assigned";
 
     public static final String DEFAULT_SUB_HEADING = "This is an automated message to notify you that the following actions have been assigned to you or a group you are a member of.";
+
+    /**
+     * This is a method to allow you to read the ActionEmailCustomization for a specified tenant.  This was
+     * built because I was having difficulty with the Email Notification service, given that it runs without a security
+     * context.
+     *
+     * @param tenant - A valid Tenant that exists in the system.  No cheating!
+     * @return The ActionEmailCustomization entity for that Tenant.
+     */
+    public ActionEmailCustomization readForTennant(Tenant tenant) {
+        securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(tenant));
+        ActionEmailCustomization actionEmailCustomization = read();
+        securityContext.reset();
+        return actionEmailCustomization;
+    }
 
     /**
      * This method retrieves what should be the only ActionEmailCustomization entity for the Tenant.  Just in case
@@ -35,6 +52,7 @@ public class ActionEmailCustomizationService extends FieldIdPersistenceService {
         QueryBuilder<ActionEmailCustomization> query = createTenantSecurityBuilder(ActionEmailCustomization.class);
         //We order by ID here, so that - in the off chance that we somehow end up with two rows - we're going to always
         //deal with the first one.
+        query.addSimpleWhere("tenant.id", getCurrentTenant().getId());
         query.addOrder("id", true);
 
         //Realistically, this should return only one record... but this is a safer bet.  We're not actively doing

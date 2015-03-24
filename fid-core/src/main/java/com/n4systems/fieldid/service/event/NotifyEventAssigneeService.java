@@ -1,33 +1,31 @@
 package com.n4systems.fieldid.service.event;
 
-import com.n4systems.fieldid.permissions.SystemSecurityGuard;
+import com.n4systems.fieldid.service.ActionEmailCustomizationService;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.download.SystemUrlUtil;
 import com.n4systems.fieldid.service.mail.MailService;
 import com.n4systems.fieldid.service.tenant.ExtendedFeatureService;
 import com.n4systems.fieldid.service.user.UserGroupService;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.Event;
-import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.WorkflowState;
+import com.n4systems.model.*;
 import com.n4systems.model.notification.AssigneeNotification;
+import com.n4systems.model.notificationsettings.ActionEmailCustomization;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
-import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.util.FieldIdDateFormatter;
 import com.n4systems.util.mail.TemplateMailMessage;
-import com.n4systems.util.persistence.JoinClause;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class NotifyEventAssigneeService extends FieldIdPersistenceService {
 
@@ -38,6 +36,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     @Autowired private S3Service s3Service;
     @Autowired private UserGroupService userGroupService;
     @Autowired private ExtendedFeatureService extendedFeatureService;
+    @Autowired private ActionEmailCustomizationService actionEmailCustomizationService;
 
     @Transactional
     public void sendNotifications() {
@@ -54,7 +53,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     }
 
     private void notifyGroupAssignees() {
-        QueryBuilder<AssigneeNotification> assigneeQuery = new QueryBuilder<AssigneeNotification>(AssigneeNotification.class, new OpenSecurityFilter());
+        QueryBuilder<AssigneeNotification> assigneeQuery = new QueryBuilder<>(AssigneeNotification.class, new OpenSecurityFilter());
         assigneeQuery.addWhere(WhereParameter.Comparator.NOTNULL, "event.assignedGroup", "event.assignedGroup", "");
         assigneeQuery.addSimpleWhere("event.tenant.disabled", false);
 
@@ -68,7 +67,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     }
 
     private void notifyUserAssignees() {
-        QueryBuilder<AssigneeNotification> assigneeQuery = new QueryBuilder<AssigneeNotification>(AssigneeNotification.class, new OpenSecurityFilter());
+        QueryBuilder<AssigneeNotification> assigneeQuery = new QueryBuilder<>(AssigneeNotification.class, new OpenSecurityFilter());
         assigneeQuery.addWhere(WhereParameter.Comparator.NOTNULL, "event.assignee", "event.assignee", "");
         assigneeQuery.addSimpleWhere("event.tenant.disabled", false);
 
@@ -89,7 +88,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     }
 
     private Set<UserGroup> aggregateAssignedGroups(List<AssigneeNotification> assigneeRecords) {
-        Set<UserGroup> assignees = new HashSet<UserGroup>();
+        Set<UserGroup> assignees = new HashSet<>();
         for (AssigneeNotification assigneeRecord : assigneeRecords) {
             if (assigneeRecord.getEvent().getWorkflowState() == WorkflowState.OPEN && assigneeRecord.getEvent().getAssignedGroup() != null) {
                 assignees.add(assigneeRecord.getEvent().getAssignedGroup());
@@ -99,7 +98,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     }
 
     private Set<User> aggregateAssignees(List<AssigneeNotification> assigneeRecords) {
-        Set<User> assignees = new HashSet<User>();
+        Set<User> assignees = new HashSet<>();
         for (AssigneeNotification assigneeRecord : assigneeRecords) {
             if (assigneeRecord.getEvent().getWorkflowState() == WorkflowState.OPEN && assigneeRecord.getEvent().getAssignee() != null) {
                 assignees.add(assigneeRecord.getEvent().getAssignee());
@@ -109,7 +108,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     }
 
     private void sendNotificationsFor(User assignee) {
-        QueryBuilder<Event> assigneeQuery = new QueryBuilder<Event>(AssigneeNotification.class, new OpenSecurityFilter());
+        QueryBuilder<Event> assigneeQuery = new QueryBuilder<>(AssigneeNotification.class, new OpenSecurityFilter());
         assigneeQuery.setSimpleSelect("event");
         assigneeQuery.addSimpleWhere("event.assignee", assignee);
         List<Event> notificationEvents = persistenceService.findAll(assigneeQuery);
@@ -118,7 +117,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     }
 
     private void sendNotificationsFor(UserGroup assignedGroup) {
-        QueryBuilder<Event> assigneeQuery = new QueryBuilder<Event>(AssigneeNotification.class, new OpenSecurityFilter());
+        QueryBuilder<Event> assigneeQuery = new QueryBuilder<>(AssigneeNotification.class, new OpenSecurityFilter());
         assigneeQuery.setSimpleSelect("event");
         assigneeQuery.addSimpleWhere("event.assignedGroup", assignedGroup);
         List<Event> notificationEvents = persistenceService.findAll(assigneeQuery);
@@ -171,32 +170,57 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     }
 
     private TemplateMailMessage createMultiNotifications(List<Event> events, User assignee) {
-        TemplateMailMessage msg = createMailMessage(events, assignee);
-
-        return msg;
+        return createMailMessage(events, assignee);
     }
 
     private TemplateMailMessage createMailMessage(List<Event> events, User assignee) {
-        String subject = "Work Assigned: " + events.size() + " Events";
-        TemplateMailMessage msg = new TemplateMailMessage(subject, ASSIGNEE_TEMPLATE_MULTI);
+
+
+        //If this hasn't been configured yet, that's okay.  We just pull the default values until the user gets around
+        //to customizing them or saving the existing values as a real row in the DB.
+        ActionEmailCustomization customizedValues = actionEmailCustomizationService.readForTennant(assignee.getTenant());
+        String subject = events.size() + " " + customizedValues.getEmailSubject();
+        String subHeading = customizedValues.getSubHeading();
+        TemplateMailMessage msg = new TemplateMailMessage(subject, ASSIGNEE_TEMPLATE_MULTI) {
+            /**
+             * We override this method because we don't care about the configurations for header and footer.  The
+             * footer is now static and the "header" is replaced by a customized "subHeading" which the Tenant can
+             * change on their own without calling to Support.
+             *
+             * We also know that TempalteMaileMessages are ALWAYS HTML, so we can trim all of the logic out of this
+             * method without encountering any problems.
+             *
+             * @return A String representation of the body of the email without those extra header and footer things.
+             */
+            @Override
+            public String getFullBody() {
+                return getBody();
+            }
+        };
 
         Map<Long, String> dueDateStringMap = createDateStringMap(events, assignee);
         Map<Long, String> criteriaImageMap = createCriteriaImageMap(events);
+        Map<Long, String> triggeringEventStringMap = createTriggeringEventStringMap(events);
+        Map<Long, List<String>> attachedImageListMap = createAttachedImageListMap(events);
 
         msg.getTemplateMap().put("systemUrl", SystemUrlUtil.getSystemUrl(events.get(0).getTenant()));
         msg.getTemplateMap().put("events", events);
         msg.getTemplateMap().put("subject", subject);
+        msg.getTemplateMap().put("subHeadingMessage", subHeading);
         msg.getTemplateMap().put("dueDateStringMap", dueDateStringMap);
         msg.getTemplateMap().put("criteriaImageMap", criteriaImageMap);
+        msg.getTemplateMap().put("attachedImageListMap", attachedImageListMap);
+        msg.getTemplateMap().put("triggeringEventStringMap", triggeringEventStringMap);
+        msg.getTemplateMap().put("userEmail", assignee.getEmailAddress());
         return msg;
     }
 
     private Map<Long, String> createCriteriaImageMap(List<Event> events) {
         s3Service.setExpiryInDays(14);
-        Map<Long, String> criteriaImageMap = new HashMap<Long,String>();
+        Map<Long, String> criteriaImageMap = new HashMap<>();
         for (Event event : events) {
             String query = "SELECT DISTINCT cr FROM " + CriteriaResult.class.getName() + " cr, IN(cr.actions) action WHERE action.id = :eventId";
-            Map<String, Object> params = new HashMap<String, Object>();
+            Map<String, Object> params = new HashMap<>();
             params.put("eventId", event.getId());
             List<CriteriaResult> criteriaResults = (List<CriteriaResult>) persistenceService.runQuery(query, params);
             if(criteriaResults.size() > 0 && criteriaResults.get(0).getCriteriaImages().size() > 0) {
@@ -209,7 +233,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     }
 
     private Map<Long, String> createDateStringMap(List<Event> events, User assignee) {
-        Map<Long, String> dueDateStringMap = new HashMap<Long,String>();
+        Map<Long, String> dueDateStringMap = new HashMap<>();
         for (Event event : events) {
             Date dueDate = event.getDueDate();
             boolean showTime = !new PlainDate(dueDate).equals(dueDate);
@@ -219,22 +243,92 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         return dueDateStringMap;
     }
 
+    /**
+     * This method processes the provided List of Events and returns a Map of Strings indexed by Event ID containing
+     * a textual representation of the Triggering Event for any of the provided objects.  If an Event doesn't have a
+     * triggering event, then there is nothing added to the Map for that Event.
+     *
+     * @param events - A List populated with Events.
+     * @return A Map of Strings indexed by Event ID which roughly represent the Triggering Event for any Event which has one.
+     */
+    private Map<Long, String> createTriggeringEventStringMap(List<Event> events) {
+        return events.stream()
+                     .filter(event -> event.getTriggerEvent() != null)
+                     .collect(Collectors.toMap(Event::getID, this::createTriggeringEventString));
+    }
+
+    /**
+     * This method accepts Events, but assumes that they have Triggering Events.  These Events are processed to produce
+     * a String which represents the said Triggering Event.
+     *
+     * @param event - An Event with a Triggering Event.  If you supply an Event without one, the plug comes out of the bottom of the Atlantic Ocean.
+     * @return A String representing the Event's Triggering Event.
+     */
+    private String createTriggeringEventString(Event event) {
+        StringBuilder triggeringEventString = new StringBuilder();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+
+        triggeringEventString.append(dateFormat.format(event.getRelevantDate())).append(" From ");
+        triggeringEventString.append(event.getType().getName()).append(" ");
+        triggeringEventString.append(event.getAdvancedLocation().getFullName());
+
+        if(event.getWorkflowState().equals(WorkflowState.COMPLETED)) {
+            triggeringEventString.append(" > ").append(event.getTriggerEvent().getEventResult().getDisplayName());
+        }
+
+        return triggeringEventString.toString();
+    }
+
+    /**
+     * This method accepts a List of Events and processes it to produce a Map of Image URLs, indexed by Event ID.  This
+     * Map is used by the Email Generator to append images to corresponding Events within the email.
+     *
+     * @param events - A List populated with Events.
+     * @return A Map of Image URLs indexed by Event ID which roughly represent the images associated with Assets associated with the Events.
+     */
+    private Map<Long, List<String>> createAttachedImageListMap(List<Event> events) {
+        return events.stream()
+                     .filter(event -> event.getTriggerEvent() != null && event.getTriggerEvent().getImageAttachments().size() > 0)
+                     .collect(Collectors.toMap(Event::getId, event -> createAttachedImageUrlList(event.getTriggerEvent())));
+    }
+
+    /**
+     * This method creates a list of the String representation of URLs for all images attached to the Trigger Event of
+     * an Action Event.  These URLs are used by the Freemarker template as values for "img" tags.
+     *
+     * @param event - An existing Event from the Database which Triggered an Action and has Image Attachments.
+     * @return A List of Strings representing the URLs of all Image Attachments for a Trigger Event.
+     */
+    private List<String> createAttachedImageUrlList(Event event) {
+        //I wanted to use streams here... I wanted to so badly... but for some weird reason, the compile was kicking up
+        //errors due to return types and expected types for some methods... If you see this and can make it work, I will
+        //buy you a cookie.
+        List<String> urlList = new ArrayList<>();
+
+        for(Object attachment : event.getImageAttachments()) {
+            if(attachment instanceof FileAttachment) {
+                urlList.add(s3Service.getFileAttachmentUrlForImpliedTenant((FileAttachment) attachment).toExternalForm());
+            }
+        }
+
+        return urlList;
+    }
 
     private void removeNotificationsWithoutAssignees() {
-        QueryBuilder<AssigneeNotification> builder = new QueryBuilder<AssigneeNotification>(AssigneeNotification.class, new OpenSecurityFilter());
+        QueryBuilder<AssigneeNotification> builder = new QueryBuilder<>(AssigneeNotification.class, new OpenSecurityFilter());
         builder.addSimpleWhere("event.assignee", null);
         builder.addSimpleWhere("event.assignedGroup", null);
         removeNotifications(builder);
     }
 
     private void removeNotificationsForAssignee(User assignee) {
-        QueryBuilder<AssigneeNotification> builder = new QueryBuilder<AssigneeNotification>(AssigneeNotification.class, new OpenSecurityFilter());
+        QueryBuilder<AssigneeNotification> builder = new QueryBuilder<>(AssigneeNotification.class, new OpenSecurityFilter());
         builder.addSimpleWhere("event.assignee", assignee);
         removeNotifications(builder);
     }
 
     private void removeNotificationsForAssignedGroup(UserGroup assignedGroup) {
-        QueryBuilder<AssigneeNotification> builder = new QueryBuilder<AssigneeNotification>(AssigneeNotification.class, new OpenSecurityFilter());
+        QueryBuilder<AssigneeNotification> builder = new QueryBuilder<>(AssigneeNotification.class, new OpenSecurityFilter());
         builder.addSimpleWhere("event.assignedGroup", assignedGroup);
         removeNotifications(builder);
     }

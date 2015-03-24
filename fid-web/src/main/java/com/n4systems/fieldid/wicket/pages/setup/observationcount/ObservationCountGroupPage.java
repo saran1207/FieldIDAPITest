@@ -116,6 +116,10 @@ public class ObservationCountGroupPage extends FieldIDFrontEndPage {
                         return 50;
                     }
 
+                    @Override
+                    public boolean isDeletable() {
+                        return !observationCountService.isObservationGroupAttachedToEventType(item.getModelObject().getId());
+                    }
                 });
 
                 editCopyDeleteItemPanel.getTextField().add(new NoBarsValidator());
