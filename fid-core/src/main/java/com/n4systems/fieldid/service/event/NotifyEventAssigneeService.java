@@ -23,6 +23,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -32,9 +33,25 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     private static final Logger logger = Logger.getLogger(NotifyEventAssigneeService.class);
     private static final String ASSIGNEE_TEMPLATE_MULTI = "eventsAssignedMulti";
     private static final String ASSET_URL_FRAGMENT = "/fieldid/w/assetSummary?4&uniqueID=";
+
+    //Event Summary Fragments
     private static final String THING_EVENT_SUMMARY_URL_FRAGMENT = "/fieldid/w/thingEventSummary?0&id=";
     private static final String PLACE_EVENT_SUMMARY_URL_FRAGMENT = "/fieldid/w/placeEventSummary?0&id=";
     private static final String PROC_AUDIT_EVENT_SUMMARY_URL_FRAGMENT = "/fieldid/w/procAuditEventSummary?0&id=";
+
+    //Main Perform Event Fragment
+    private static final String PERFORM_EVENT_URL_FRAGMENT = "/fieldid/w/{0}?0&scheduleId={1}&type={2}";
+
+    //Event ID Fragments...
+    private static final String THING_EVENT_ID_FRAGMENT = "&assetId={3}";
+    private static final String PLACE_EVENT_ID_FRAGMENT = "&placeId={3}";
+    private static final String PROCEDURE_AUDIT_ID_FRAGMENT = "&procedureDefinitionId={3}";
+
+    //Perform Event Fragments...
+    private static final String PERFORM_PROCEDURE_AUDIT_FRAGMENT = "performProcedureAuditEvent";
+    private static final String PERFORM_THING_EVENT_FRAGMENT = "performEvent";
+    private static final String PERFORM_PLACE_EVENT_FRAGMENT = "performPlaceEvent";
+
 
     @Autowired private MailService mailService;
     @Autowired private S3Service s3Service;
@@ -208,6 +225,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         Map<Long, String> assetUrlMap = createAssetUrlMap(events);
         Map<Long, String> eventSummaryUrlMap = createEventSummaryUrlMap(events);
         Map<Long, List<String>> attachedImageListMap = createAttachedImageListMap(events);
+        Map<Long, String> performEventUrlMap = createPerformEventUrlMap(events);
 
         msg.getTemplateMap().put("systemUrl", SystemUrlUtil.getSystemUrl(events.get(0).getTenant()));
         msg.getTemplateMap().put("events", events);
@@ -219,6 +237,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         msg.getTemplateMap().put("triggeringEventStringMap", triggeringEventStringMap);
         msg.getTemplateMap().put("assetUrlMap", assetUrlMap);
         msg.getTemplateMap().put("eventSummaryUrlMap", eventSummaryUrlMap);
+        msg.getTemplateMap().put("performEventUrlMap", performEventUrlMap);
         msg.getTemplateMap().put("userEmail", assignee.getEmailAddress());
         return msg;
     }
@@ -401,6 +420,57 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
             returnMe = SystemUrlUtil.getSystemUrl(event.getTenant()) + PROC_AUDIT_EVENT_SUMMARY_URL_FRAGMENT + event.getId().toString();
         }
         return returnMe;
+    }
+
+    /**
+     * This method compiles a Map of URLs to allow the user to perform assigned actions.  These URLs are tailored to the
+     * type of event and keyed by the ID of that event.
+     *
+     * @param events - A List of Events for which "Perform" URLs are required.
+     * @return A Map of Perform Event URLs keyed by Event ID.
+     */
+    private Map<Long, String> createPerformEventUrlMap(List<Event> events) {
+        //This one is simple... we're just collecting the list into a Map and using the function below to make the URLs.
+        return events.stream()
+                     .collect(Collectors.toMap(Event::getId, this::createPerformEventUrl));
+    }
+
+    /**
+     * This method creates a Perform Event URL for a provided event.  This URL is tailored to the type of event and is
+     * used in the Work Notification email to allow users to sign in directly to the mentioned event and perform it.
+     *
+     * @param event - An Event entity that already exists in the Database.
+     * @return A String representation of the Perform Event URL for the provided Event.
+     */
+    private String createPerformEventUrl(Event event) {
+        String performEventUrl = SystemUrlUtil.getSystemUrl(event.getTenant()) + PERFORM_EVENT_URL_FRAGMENT;
+        //FIXME This is probably going to break for Master Events...
+        if(event instanceof ThingEvent) {
+            performEventUrl += THING_EVENT_ID_FRAGMENT;
+            performEventUrl = MessageFormat.format(performEventUrl,
+                                                   PERFORM_THING_EVENT_FRAGMENT,
+                                                   event.getId().toString(),
+                                                   event.getType().getId().toString(),
+                                                   ((ThingEvent)event).getAsset().getId().toString());
+        } else
+        if(event instanceof PlaceEvent) {
+            performEventUrl += PLACE_EVENT_ID_FRAGMENT;
+            performEventUrl = MessageFormat.format(performEventUrl,
+                                                   PERFORM_PLACE_EVENT_FRAGMENT,
+                                                   event.getId().toString(),
+                                                   event.getType().getId().toString(),
+                                                   ((PlaceEvent)event).getPlace().getId());
+        } else
+        if(event instanceof ProcedureAuditEvent) {
+            performEventUrl += PROCEDURE_AUDIT_ID_FRAGMENT;
+            performEventUrl = MessageFormat.format(performEventUrl,
+                                                   PERFORM_PROCEDURE_AUDIT_FRAGMENT,
+                                                   event.getId().toString(),
+                                                   event.getType().getId().toString(),
+                                                   ((ProcedureAuditEvent)event).getProcedureDefinition().getId().toString());
+        }
+
+        return performEventUrl;
     }
 
     private void removeNotificationsWithoutAssignees() {

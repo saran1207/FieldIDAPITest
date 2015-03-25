@@ -184,6 +184,11 @@
         border-radius: 4px;
     }
 
+    .perform-container {
+        padding-top: 25px;
+        padding-bottom: 10px;
+    }
+
     .capitalize-text {
         text-transform: capitalize;
     }
@@ -250,14 +255,15 @@
                                     </#if>
                                     <br/>
                                     <#if event.type.actionEventType && event.priority??>
-                                        <div class="priority-adjustment">
-                                            <strong class="capitalize-text">${event.priority.name}</strong> PRIORITY
+                                        <div class="priority-adjustment capitalize-text">
+                                            <strong>${event.priority.name}</strong> PRIORITY
                                         </div>
                                     </#if>
 
                                     <!-- In the event that there is no Priority, we may need to do some further
                                         adjusting so that this doesn't look hideous... -->
                                     <p class="information-adjustment information-paragraph">
+                                        <strong>Type:</strong> ${event.type.name} <br>
                                         <#if event.asset??>
                                             <!-- Need to provide link to asset so that it opens in the webapp... can we do that? -->
                                             <!-- This is probably going to need some CSS tuning. -->
@@ -287,6 +293,25 @@
                                         </#if>
                                     </p>
                                 </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="event-background">
+                            <table cellpadding="0" cellspacing="0" border="0" align="center" width="600">
+                                <tr>
+                                    <td width="100">&nbsp;</td>
+                                    <td width="400" align="center" class="perform-container">
+                                        <table cellpadding="0" cellspacing="0" border="0" align="center" width="200" height="50">
+                                            <tr>
+                                                <td bgcolor="#51A3FF" align="center" class="login-border" width="200" height="50">
+                                                    <a target='_blank' href="${performEventUrlMap.get(event.id)}" class='link2'>Perform This Event Now</a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td width="100">&nbsp;</td>
                                 </tr>
                             </table>
                         </td>
