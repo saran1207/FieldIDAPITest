@@ -48,6 +48,10 @@ public class ProcedureFilterPanel extends Panel {
         workflowStateSelect.setNullValid(false);
         add(workflowStateSelect);
 
+        if(workflowStateModel.getObject() != null) {
+            lockoutReasonSelect.setVisible(!workflowStateModel.getObject().equals(ProcedureWorkflowStateCriteria.OPEN));
+        }
+
         add( new CollapsiblePanel("dateDetailsCriteriaPanel", new StringResourceModel("label.dates_and_times",this,null)) {
             @Override protected Panel createContainedPanel(String id) {
                 return new ProcedureDateRangeCriteriaPanel(id, model);
