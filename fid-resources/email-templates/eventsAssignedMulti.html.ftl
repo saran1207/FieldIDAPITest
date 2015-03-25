@@ -261,7 +261,7 @@
                                         <#if event.asset??>
                                             <!-- Need to provide link to asset so that it opens in the webapp... can we do that? -->
                                             <!-- This is probably going to need some CSS tuning. -->
-                                            <a target='_blank' href="${assetUrlMap.get(event.asset.id)}" class='link2'><strong>Asset:</strong> ${event.asset.type.name} / ${event.asset.identifier} </a>
+                                            <strong>Asset:</strong>&nbsp;<a target="_blank" href="${assetUrlMap.get(event.asset.id)}">${event.asset.type.name} / ${event.asset.identifier}</a>
                                             <br>
                                         </#if>
                                         <!-- Okay, so we're looking for this in different places, depending on the type
@@ -279,7 +279,11 @@
                                         <strong>Due:</strong> ${dueDateStringMap.get(event.id)}<br>
                                         <strong>Notes:</strong> ${(event.notes?replace('\n', '<br/>'))!} <br>
                                         <#if event.type.actionEventType>
-                                            <strong>Issuing Event:</strong> ${triggeringEventStringMap.get(event.id)}
+                                            <#if eventSummaryUrlMap.get(event.triggerEvent.id)??>
+                                                <strong>Issuing Event:</strong>&nbsp;<a target="_blank" href="${eventSummaryUrlMap.get(event.triggerEvent.id)}">${triggeringEventStringMap.get(event.id)}</a>
+                                            <#else>
+                                                <strong>Issuing Event:</strong>&nbsp;${triggeringEventStringMap.get(event.id)}
+                                            </#if>
                                         </#if>
                                     </p>
                                 </td>

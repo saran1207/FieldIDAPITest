@@ -31,7 +31,10 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
 
     private static final Logger logger = Logger.getLogger(NotifyEventAssigneeService.class);
     private static final String ASSIGNEE_TEMPLATE_MULTI = "eventsAssignedMulti";
-    private static final String ASSET_URL_SEGMENT = "/fieldid/w/assetSummary?4&uniqueID=";
+    private static final String ASSET_URL_FRAGMENT = "/fieldid/w/assetSummary?4&uniqueID=";
+    private static final String THING_EVENT_SUMMARY_URL_FRAGMENT = "/fieldid/w/thingEventSummary?0&id=";
+    private static final String PLACE_EVENT_SUMMARY_URL_FRAGMENT = "/fieldid/w/placeEventSummary?0&id=";
+    private static final String PROC_AUDIT_EVENT_SUMMARY_URL_FRAGMENT = "/fieldid/w/procAuditEventSummary?0&id=";
 
     @Autowired private MailService mailService;
     @Autowired private S3Service s3Service;
@@ -203,6 +206,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         Map<Long, String> criteriaImageMap = createCriteriaImageMap(events);
         Map<Long, String> triggeringEventStringMap = createTriggeringEventStringMap(events);
         Map<Long, String> assetUrlMap = createAssetUrlMap(events);
+        Map<Long, String> eventSummaryUrlMap = createEventSummaryUrlMap(events);
         Map<Long, List<String>> attachedImageListMap = createAttachedImageListMap(events);
 
         msg.getTemplateMap().put("systemUrl", SystemUrlUtil.getSystemUrl(events.get(0).getTenant()));
@@ -214,6 +218,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         msg.getTemplateMap().put("attachedImageListMap", attachedImageListMap);
         msg.getTemplateMap().put("triggeringEventStringMap", triggeringEventStringMap);
         msg.getTemplateMap().put("assetUrlMap", assetUrlMap);
+        msg.getTemplateMap().put("eventSummaryUrlMap", eventSummaryUrlMap);
         msg.getTemplateMap().put("userEmail", assignee.getEmailAddress());
         return msg;
     }
@@ -288,7 +293,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
      * @return A String representation of the URL that should allow the user to open the Asset in the app.
      */
     private String createAssetUrl(Asset asset) {
-        return SystemUrlUtil.getSystemUrl(asset.getTenant()) + ASSET_URL_SEGMENT + asset.getId().toString();
+        return SystemUrlUtil.getSystemUrl(asset.getTenant()) + ASSET_URL_FRAGMENT + asset.getId().toString();
     }
 
     /**
@@ -360,6 +365,42 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         }
 
         return urlList;
+    }
+
+    /**
+     * This method creates a list of URLs to open the Event Summary page for various kinds of Events.  These Events are
+     * the Trigger Event of any Action Events stored within the supplied List.  These URLs are added to the List as
+     * Strings and keyed by the ID of the Trigger Event, so that we avoid wasting space.
+     *
+     * @param events - A List of Events to generate the URL Map from.
+     * @return A Map of String URLs keyed by Trigger Event ID.
+     */
+    private Map<Long, String> createEventSummaryUrlMap(List<Event> events) {
+        return events.stream()
+                     //Poor naming, but we only care about events with trigger events...
+                     .filter(event -> event.getTriggerEvent() != null)
+                     .collect(Collectors.toMap(event -> event.getTriggerEvent().getId(), this::createEventSummaryUrl));
+    }
+
+    /**
+     * This method creates the appropriate URL to view the summary of any kind of event that has a summary page... I
+     * think.  It might also just release the Kraken.
+     *
+     * @param event - An event that you want to get the Event Summary URL for... or maybe you just want to feed it to the Kraken.
+     * @return A String representation of the Event Summary URL... definitely not the Kraken.
+     */
+    private String createEventSummaryUrl(Event event) {
+        String returnMe = null;
+        if(event instanceof ThingEvent) {
+            returnMe = SystemUrlUtil.getSystemUrl(event.getTenant()) + THING_EVENT_SUMMARY_URL_FRAGMENT + event.getId().toString();
+        } else
+        if(event instanceof PlaceEvent) {
+            returnMe = SystemUrlUtil.getSystemUrl(event.getTenant()) + PLACE_EVENT_SUMMARY_URL_FRAGMENT + event.getId().toString();
+        } else
+        if(event instanceof ProcedureAuditEvent) {
+            returnMe = SystemUrlUtil.getSystemUrl(event.getTenant()) + PROC_AUDIT_EVENT_SUMMARY_URL_FRAGMENT + event.getId().toString();
+        }
+        return returnMe;
     }
 
     private void removeNotificationsWithoutAssignees() {
