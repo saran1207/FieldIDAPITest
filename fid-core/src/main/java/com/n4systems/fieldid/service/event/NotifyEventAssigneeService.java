@@ -344,7 +344,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         triggeringEventString.append(event.getType().getName()).append(" ");
         triggeringEventString.append(event.getAdvancedLocation().getFullName());
 
-        if(event.getWorkflowState().equals(WorkflowState.COMPLETED)) {
+        if(event.getTriggerEvent().getWorkflowState().equals(WorkflowState.COMPLETED)) {
             triggeringEventString.append(" > ").append(event.getTriggerEvent().getEventResult().getDisplayName());
         }
 
