@@ -426,7 +426,6 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
 
             event.getObject().setSectionResults(sectionResults);
             onPreSave(event.getObject());
-            onPreSave(event.getObject());
             saveAssignedToIfNecessary();
             saveEventBookIfNecessary();
             if (doPostSubmitValidation()) {

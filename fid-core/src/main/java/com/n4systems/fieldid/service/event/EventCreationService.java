@@ -334,7 +334,7 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
 			if (result instanceof OneClickCriteriaResult) {
 				oneClickResult = (OneClickCriteriaResult)result;
 				if (oneClickResult.getButton() == null) {
-					oneClickResult.setButton(((OneClickCriteria) oneClickResult.getCriteria()).getButtonGroup().getButtons().get(0));
+					oneClickResult.setButton(((OneClickCriteria) oneClickResult.getCriteria()).getButtonGroup().getAvailableButtons().get(0));
 				}
 			}
 		}
