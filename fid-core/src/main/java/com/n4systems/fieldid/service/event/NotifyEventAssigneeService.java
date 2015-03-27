@@ -341,14 +341,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
 
         triggeringEventString.append(dateFormat.format(event.getRelevantDate())).append(" From ");
-        triggeringEventString.append(event.getType().getName()).append(" ");
-        if(event instanceof ThingEvent) {
-            triggeringEventString.append(((ThingEvent) event).getAsset().getType().getDisplayName()).append(">").append(((ThingEvent) event).getAsset().getDisplayName());
-        }
-
-        if(event.getWorkflowState().equals(WorkflowState.COMPLETED)) {
-            triggeringEventString.append(" > ").append(event.getEventResult().getDisplayName());
-        }
+        triggeringEventString.append(event.getType().getName());
 
         return triggeringEventString.toString();
     }
