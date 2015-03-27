@@ -326,7 +326,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     private Map<Long, String> createTriggeringEventStringMap(List<Event> events) {
         return events.stream()
                      .filter(event -> event.getTriggerEvent() != null)
-                     .collect(Collectors.toMap(Event::getID, this::createTriggeringEventString));
+                     .collect(Collectors.toMap(Event::getID, event -> createTriggeringEventString(event.getTriggerEvent())));
     }
 
     /**
@@ -342,10 +342,12 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
 
         triggeringEventString.append(dateFormat.format(event.getRelevantDate())).append(" From ");
         triggeringEventString.append(event.getType().getName()).append(" ");
-        triggeringEventString.append(event.getAdvancedLocation().getFullName());
+        if(event instanceof ThingEvent) {
+            triggeringEventString.append(((ThingEvent) event).getAsset().getType().getDisplayName()).append(">").append(((ThingEvent) event).getAsset().getDisplayName());
+        }
 
-        if(event.getTriggerEvent().getWorkflowState().equals(WorkflowState.COMPLETED)) {
-            triggeringEventString.append(" > ").append(event.getTriggerEvent().getEventResult().getDisplayName());
+        if(event.getWorkflowState().equals(WorkflowState.COMPLETED)) {
+            triggeringEventString.append(" > ").append(event.getEventResult().getDisplayName());
         }
 
         return triggeringEventString.toString();
@@ -411,13 +413,13 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     private String createEventSummaryUrl(Event event) {
         String returnMe = null;
         if(event instanceof ThingEvent) {
-            returnMe = SystemUrlUtil.getSystemUrl(event.getTenant()) + THING_EVENT_SUMMARY_URL_FRAGMENT + event.getId().toString();
+            returnMe = SystemUrlUtil.getSystemUrl(event.getTenant()) + THING_EVENT_SUMMARY_URL_FRAGMENT + event.getTriggerEvent().getId().toString();
         } else
         if(event instanceof PlaceEvent) {
-            returnMe = SystemUrlUtil.getSystemUrl(event.getTenant()) + PLACE_EVENT_SUMMARY_URL_FRAGMENT + event.getId().toString();
+            returnMe = SystemUrlUtil.getSystemUrl(event.getTenant()) + PLACE_EVENT_SUMMARY_URL_FRAGMENT + event.getTriggerEvent().getId().toString();
         } else
         if(event instanceof ProcedureAuditEvent) {
-            returnMe = SystemUrlUtil.getSystemUrl(event.getTenant()) + PROC_AUDIT_EVENT_SUMMARY_URL_FRAGMENT + event.getId().toString();
+            returnMe = SystemUrlUtil.getSystemUrl(event.getTenant()) + PROC_AUDIT_EVENT_SUMMARY_URL_FRAGMENT + event.getTriggerEvent().getId().toString();
         }
         return returnMe;
     }

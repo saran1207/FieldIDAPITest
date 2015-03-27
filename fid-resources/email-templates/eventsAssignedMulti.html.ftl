@@ -214,7 +214,6 @@
                     <#if assignedGroup??>
                         <h1 class="capitalize-text">ASSIGNED TO ${assignedGroup.name}</h1>
                     <#else>
-                        <!-- No name?  That's fine... that makes this job easier. -->
                         <h1>ASSIGNED TO YOU</h1>
                     </#if>
                     </td>
@@ -222,20 +221,11 @@
             </table>
 
             <#list events as event>
-                <!-- This can actually be boiled down to only one table... the way you can make this work is pretty
-                     straight forward.  If there is no image present, you don't include the <td> for the image, then
-                     you switch the class in the second <td> to no-image-adjustment. -->
-                <!-- Should probably consider just removing this containing table... it's not good design and it just
-                     does most of what the table it contains does.-->
                 <table cellpadding="0" cellspacing="0" border="0" align="center" width="600" class="event-border collapse-border">
                     <tr>
                         <td class="event-background">
                             <table cellpadding="0" class="collapse-border" cellspacing="0" border="0" align="center" width="600">
                                 <tr>
-                                    <!-- Because we're pulling images from a couple sources now (I don't want to touch
-                                         what we're doing with the criteria images), this logic will get slightly more
-                                         complicated.  I'm using the old logic for now, but we need to add stuff for the
-                                         second image source... I don't think they should live in the same map... -->
                                     <#if criteriaImageMap.get(event.id)?? || (event.type.actionEventType?? && attachedImageListMap.get(event.id)??)>
                                         <td width="200" class="image-adjustment">
                                             <#if criteriaImageMap.get(event.id)??>
@@ -259,20 +249,14 @@
                                             <strong>${event.priority.name}</strong> PRIORITY
                                         </div>
                                     </#if>
-
-                                    <!-- In the event that there is no Priority, we may need to do some further
-                                        adjusting so that this doesn't look hideous... -->
                                     <p class="information-adjustment information-paragraph">
                                         <strong>Type:</strong> ${event.type.name} <br>
                                         <#if event.asset??>
-                                            <!-- Need to provide link to asset so that it opens in the webapp... can we do that? -->
-                                            <!-- This is probably going to need some CSS tuning. -->
                                             <strong>Asset:</strong>&nbsp;<a target="_blank" href="${assetUrlMap.get(event.asset.id)}">${event.asset.type.name} / ${event.asset.identifier}</a>
                                             <br>
+                                            <strong>Owner:</strong> ${event.asset.owner.displayName}
+                                            <br>
                                         </#if>
-                                        <!-- Okay, so we're looking for this in different places, depending on the type
-                                             of event.  If it's an Action, it's the Trigger Event, otherwise it should
-                                             be in the Event itself. -->
                                         <#if event.type.actionEventType>
                                             <#if event.triggerEvent.place??>
                                                 <strong>Location:</strong> ${event.triggerEvent.place.displayName} <br>
@@ -283,13 +267,16 @@
                                             </#if>
                                         </#if>
                                         <strong>Due:</strong> ${dueDateStringMap.get(event.id)}<br>
-                                        <strong>Notes:</strong> ${(event.notes?replace('\n', '<br/>'))!} <br>
+                                        <#if event.notes??>
+                                            <strong>Notes:</strong> ${(event.notes?replace('\n', '<br/>'))!} <br>
+                                        </#if>
                                         <#if event.type.actionEventType>
                                             <#if eventSummaryUrlMap.get(event.triggerEvent.id)??>
-                                                <strong>Issuing Event:</strong>&nbsp;<a target="_blank" href="${eventSummaryUrlMap.get(event.triggerEvent.id)}">${triggeringEventStringMap.get(event.id)}</a>
+                                                <strong>Issuing Event:</strong>&nbsp;<a target="_blank" href="${eventSummaryUrlMap.get(event.triggerEvent.id)}">${triggeringEventStringMap.get(event.id)}</a><br>
                                             <#else>
-                                                <strong>Issuing Event:</strong>&nbsp;${triggeringEventStringMap.get(event.id)}
+                                                <strong>Issuing Event:</strong>&nbsp;${triggeringEventStringMap.get(event.id)} <br>
                                             </#if>
+                                            <strong>Assigned By:</strong> ${event.modifiedBy.fullName} <br>
                                         </#if>
                                     </p>
                                 </td>
@@ -319,7 +306,6 @@
                 </table>
             </#list>
 
-            <!-- The rest is basically static content... the System URL is dynamic, but that's it. -->
             <table cellpadding="0" cellspacing="0" border="0" align="center" width="600">
                 <tr>
                     <td width="100">&nbsp;</td>
