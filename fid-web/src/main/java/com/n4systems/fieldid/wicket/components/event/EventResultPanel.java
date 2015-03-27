@@ -61,15 +61,16 @@ public class EventResultPanel extends Panel {
         observationResultContainer.add(new ListView<ObservationCount>("observationResult", new PropertyModel<List<ObservationCount>> (model, "eventForm.observationCountGroup.observationCounts")) {
             @Override
             protected void populateItem(ListItem<ObservationCount> item) {
-                item.add(new Label("name", new PropertyModel<>(item.getModel(), "name")));
-                Integer observationTotal = observationTotals.get(item.getModelObject()) != null ? observationTotals.get(item.getModelObject()) : 0;
+                ObservationCount observationCount = item.getModelObject();
+                Integer observationTotal = observationTotals.get(observationCount) != null ? observationTotals.get(observationCount) : 0;
+                item.add(new Label("name", new PropertyModel<>(observationCount, "name")));
                 item.add(new Label("total", observationTotal.toString()));
 
                 if (formObservationTotal > 0) {
                     double percentage = observationTotal * 1.0d / formObservationTotal;
 
                     item.add(new FlatLabel("percentage", numberFormat.format(percentage))
-                            .setVisible(item.getModelObject().isCounted() && model.getObject().getEventType().isDisplayObservationPercentage()));
+                            .setVisible(observationCount.isCounted() && model.getObject().getEventType().isDisplayObservationPercentage()));
                 } else
                     item.add(new Label("percentage").setVisible(false));
             }
