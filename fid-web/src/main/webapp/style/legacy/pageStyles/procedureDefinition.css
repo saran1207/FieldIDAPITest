@@ -365,9 +365,11 @@ h3 {
 }
 
 .isolation-point-editor .title {
-	padding: 25px 130px;
-	background: no-repeat 52px 22px;
+	padding: 20px 130px;
+	background-repeat: no-repeat;
 	margin-top: 55px;
+    background-position: 52px 22px;
+    background-size: 70px 32px;
 }
 .isolation-point-editor .title.electrical {
     background-image: url(/fieldid/images/loto/electrical-full.png);
@@ -389,6 +391,18 @@ h3 {
 }
 .isolation-point-editor .title.water {
 	background-image: url(/fieldid/images/loto/water-full.png);
+}
+.isolation-point-editor .title.chemical {
+    background-image: url(/fieldid/images/loto/chemical-full.png);
+}
+.isolation-point-editor .title.mechanical {
+    background-image: url(/fieldid/images/loto/mechanical-full.png);
+}
+.isolation-point-editor .title.hydraulic {
+    background-image: url(/fieldid/images/loto/hydraulic-full.png);
+}
+.isolation-point-editor .title.stored-pressure {
+    background-image: url(/fieldid/images/loto/stored-pressure-full.png);
 }
 
 /*
