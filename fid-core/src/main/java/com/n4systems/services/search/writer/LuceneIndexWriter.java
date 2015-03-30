@@ -124,7 +124,11 @@ public abstract class LuceneIndexWriter<T extends BaseEntity> extends IndexWrite
             // attempt to parse the string into a more specific type (Double otherwise String).
             // recall all numeric custom attributes are considered double because we won't know at query time so just use widest type of query.
             try {
-                value = Double.parseDouble(strValue);
+                Double dValue = Double.parseDouble(strValue);
+                if (Double.isFinite(dValue))
+                    value = dValue;
+                else
+                    throw new NumberFormatException();
             } catch (NumberFormatException e2) {
                 // fall back to String
                 value = strValue;
