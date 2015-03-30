@@ -37,6 +37,7 @@ public abstract class CallOutStyleAnnotationEditor extends CallOutStyleAnnotated
 
     public CallOutStyleAnnotationEditor(String id, ProcedureDefinitionImage theImage) {
         super(id, Model.of(theImage));
+        withNoAnnotations();
     }
 
     @Override
@@ -100,10 +101,18 @@ public abstract class CallOutStyleAnnotationEditor extends CallOutStyleAnnotated
                 }
 
                 //Hack to move the annotation out of the view box so that it looks "new".
+                /*
                 if(retrieveIsolationPoint().getAnnotation().getX() == 0.0 && retrieveIsolationPoint().getAnnotation().getY() == 0.0) {
                     retrieveIsolationPoint().getAnnotation().setX(-1.0);
                     retrieveIsolationPoint().getAnnotation().setY(-1.0);
                 }
+                */
+
+                /*
+                retrieveIsolationPoint().getAnnotation().setX(retrieveIsolationPoint().getAnnotation().getX());
+                retrieveIsolationPoint().getAnnotation().setY(retrieveIsolationPoint().getAnnotation().getY());
+                */
+
                 retrieveIsolationPoint().getAnnotation().setType(ImageAnnotationType.fromIsolationPointSourceType(retrieveIsolationPoint().getSourceType()));
                 retrieveIsolationPoint().getAnnotation().setText(retrieveIsolationPoint().getIdentifier());
                 retrieveIsolationPoint().getAnnotation().setFill(ImageAnnotationType.fromIsolationPointSourceType(retrieveIsolationPoint().getSourceType()).getBackgroundColor());

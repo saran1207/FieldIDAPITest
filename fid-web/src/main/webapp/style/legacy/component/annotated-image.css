@@ -162,11 +162,11 @@
 		color: #FFF;
 	}
 .pneumatic, .pneumatic input { /*white w/blue bg*/
-	color: #FFF;
+	color: #000;
 	background: #99CCFF;
 }
 .steam, .steam input { /*white w/lighter red bg*/
-	color: #FFF;
+	color: #000;
 	background: #FFFF00;
 }
 .valve { /* almost black w/white bg*/

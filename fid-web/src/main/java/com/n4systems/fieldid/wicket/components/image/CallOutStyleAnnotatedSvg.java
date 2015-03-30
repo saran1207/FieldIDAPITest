@@ -32,6 +32,9 @@ public class CallOutStyleAnnotatedSvg extends Panel {
     protected List<ImageAnnotation> annotationList;
     private Dimension imageDimensions;
 
+    //Flag used when editing annotations in the editor.
+    protected Boolean showAnnotations = true;
+
     private Double scale = 1.0;
 
     private static String BLANK_SLATE_PATH = "/fieldid/images/loto/label-blank-slate.png";
@@ -98,7 +101,7 @@ public class CallOutStyleAnnotatedSvg extends Panel {
 
         add(imageElement);
 
-        if(image != null) {
+        if(image != null && showAnnotations) {
             add(createAnnotationDefinitionListView());
             add(createAnnotationListView());
         } else {
@@ -201,6 +204,11 @@ public class CallOutStyleAnnotatedSvg extends Panel {
 
     public CallOutStyleAnnotatedSvg withScale(Double scale) {
         this.scale = scale;
+        return this;
+    }
+
+    public CallOutStyleAnnotatedSvg withNoAnnotations() {
+        this.showAnnotations = false;
         return this;
     }
 

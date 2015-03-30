@@ -11,8 +11,8 @@ public enum ImageAnnotationType {
 
     W("water",          "#FFFFFF",  "#0000FF",  "#FFFFFF",  "images/loto/water.jpg",        "images/loto/water-full.png"),
     V("valve",          "#000000",  "#FFFFFF",  "#000000",  "images/loto/valve.jpg",        "images/loto/valve-full.png"),
-    S("steam",          "#FFFFFF",  "#FFFF00",  "#FFFFFF",  "images/loto/steam.jpg",        "images/loto/steam-full.png"),
-    P("pneumatic",      "#FFFFFF",  "#99CCFF",  "#FFFFFF",  "images/single-event.png",      "images/loto/pneumatic-full.png"),
+    S("steam",          "#000000",  "#FFFF00",  "#000000",  "images/loto/steam.jpg",        "images/loto/steam-full.png"),
+    P("pneumatic",      "#000000",  "#99CCFF",  "#000000",  "images/single-event.png",      "images/loto/pneumatic-full.png"),
     G("gas",            "#FFFFFF",  "#009900",  "#FFFFFF",  "images/loto/gas.jpg",          "images/loto/gas-full.png"),
     E("electrical",     "#FFFFFF",  "#FF0000",  "#FFFFFF",  "images/setup-wizard-gear.png", "images/loto/electrical-full.png"),
     CP("control-panel", "#000000",  "#FF8000",  "#000000",  "none",                         "images/loto/control-panel-full.png"),

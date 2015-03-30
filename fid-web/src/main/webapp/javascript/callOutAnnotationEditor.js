@@ -149,8 +149,8 @@
         this.activeAnnotation.width += this.style.bg.padding;
         
         // Check for existing note values
-        if( this.activeAnnotation.x < 0 &&
-            this.activeAnnotation.y < 0 ){
+        if( this.activeAnnotation.x > 0 &&
+            this.activeAnnotation.y > 0 ){
             this.renderNote(this.activeAnnotation);
         }
         

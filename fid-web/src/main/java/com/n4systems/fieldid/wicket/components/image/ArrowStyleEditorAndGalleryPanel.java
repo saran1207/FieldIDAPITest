@@ -280,7 +280,7 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
                 if(annotationType.equals(AnnotationType.ARROW_STYLE)) {
                     item.add(new ArrowStyleAnnotatedSvg("image", item.getModelObject()).withNoAnnotations());
                 } else {
-                    item.add(new CallOutStyleAnnotatedSvg("image", Model.of(item.getDefaultModel())).withScale(2.0));
+                    item.add(new CallOutStyleAnnotatedSvg("image", Model.of(item.getDefaultModel())).withNoAnnotations().withScale(2.0));
                 }
                 item.add(new AjaxEventBehavior("onclick") {
                     @Override

@@ -18,6 +18,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -29,6 +30,7 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.*;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.time.Duration;
 
 import java.util.List;
 
@@ -78,6 +80,20 @@ public class IsolationPointEditor extends Panel {
         form.add(sourceID = new RequiredTextField("identifier", new PropertyModel<>(getDefaultModel(), "identifier")));
         sourceID.setOutputMarkupId(true);
         sourceID.add(new AttributeModifier("maxlength", Integer.toString(procedureDefinition.getAnnotationType().equals(AnnotationType.ARROW_STYLE) ? 50 : 10)));
+
+        OnChangeAjaxBehavior onChangeAjaxBehavior = new OnChangeAjaxBehavior()
+        {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target)
+            {
+                ((IModel<IsolationPoint>) getDefaultModel()).getObject().setSourceText(sourceID.getDefaultModelObjectAsString());
+                //target.add(sourceID);
+            }
+        };
+        onChangeAjaxBehavior.setThrottleDelay(Duration.milliseconds(new Long(500)));
+
+        sourceID.add(onChangeAjaxBehavior);
+
         form.add(electronicIdentifier = new LabelledTextField<String>("electronicIdentifier", "label.electronic_id", new PropertyModel<>(getDefaultModel(), "electronicIdentifier"))
                 .add(new TipsyBehavior(new FIDLabelModel("message.isolation_point.electronic_id"), TipsyBehavior.Gravity.N)));
         form.add(sourceText = new LabelledComboBox<String>("sourceText", "label.source", new PropertyModel<>(getDefaultModel(), "sourceText")) {
