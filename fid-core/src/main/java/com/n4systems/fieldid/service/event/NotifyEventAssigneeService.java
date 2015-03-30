@@ -239,6 +239,9 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         msg.getTemplateMap().put("eventSummaryUrlMap", eventSummaryUrlMap);
         msg.getTemplateMap().put("performEventUrlMap", performEventUrlMap);
         msg.getTemplateMap().put("userEmail", assignee.getEmailAddress());
+        //Sort of inverted logic here, but we want to know if the assignee is NOT a person.  If they are NOT a person,
+        //then we want to show them links.
+        msg.getTemplateMap().put("showLinks", !assignee.isPerson());
         return msg;
     }
 

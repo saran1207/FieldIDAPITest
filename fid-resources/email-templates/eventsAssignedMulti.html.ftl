@@ -252,8 +252,13 @@
                                     <p class="information-adjustment information-paragraph">
                                         <strong>Type:</strong> ${event.type.name} <br>
                                         <#if event.asset??>
-                                            <strong>Asset:</strong>&nbsp;<a target="_blank" href="${assetUrlMap.get(event.asset.id)}">${event.asset.type.name} / ${event.asset.identifier}</a>
-                                            <br>
+                                            <strong>Asset:</strong>&nbsp;
+                                                <#if showLinks>
+                                                    <a target="_blank" href="${assetUrlMap.get(event.asset.id)}">${event.asset.type.name} / ${event.asset.identifier}</a>
+                                                <#else>
+                                                    ${event.asset.type.name} / ${event.asset.identifier}
+                                                </#if>
+                                                <br>
                                             <strong>Owner:</strong> ${event.asset.owner.displayName}
                                             <br>
                                         </#if>
@@ -272,7 +277,13 @@
                                         </#if>
                                         <#if event.type.actionEventType>
                                             <#if eventSummaryUrlMap.get(event.triggerEvent.id)??>
-                                                <strong>Issuing Event:</strong>&nbsp;<a target="_blank" href="${eventSummaryUrlMap.get(event.triggerEvent.id)}">${triggeringEventStringMap.get(event.id)}</a><br>
+                                                <strong>Issuing Event:</strong>&nbsp;
+                                                <#if showLinks>
+                                                    <a target="_blank" href="${eventSummaryUrlMap.get(event.triggerEvent.id)}">${triggeringEventStringMap.get(event.id)}</a>
+                                                <#else>
+                                                    ${triggeringEventStringMap.get(event.id)}
+                                                </#if>
+                                                <br>
                                             <#else>
                                                 <strong>Issuing Event:</strong>&nbsp;${triggeringEventStringMap.get(event.id)} <br>
                                             </#if>
@@ -284,43 +295,47 @@
                             </table>
                         </td>
                     </tr>
-                    <tr>
-                        <td class="event-background">
-                            <table cellpadding="0" cellspacing="0" border="0" align="center" width="600">
-                                <tr>
-                                    <td width="100">&nbsp;</td>
-                                    <td width="400" align="center" class="perform-container">
-                                        <table cellpadding="0" cellspacing="0" border="0" align="center" width="200" height="50">
-                                            <tr>
-                                                <td bgcolor="#51A3FF" align="center" class="login-border" width="200" height="50">
-                                                    <a target='_blank' href="${performEventUrlMap.get(event.id)}" class='link2'>Perform This Event Now</a>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                    <td width="100">&nbsp;</td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
+                    <#if showLinks>
+                        <tr>
+                            <td class="event-background">
+                                <table cellpadding="0" cellspacing="0" border="0" align="center" width="600">
+                                    <tr>
+                                        <td width="100">&nbsp;</td>
+                                        <td width="400" align="center" class="perform-container">
+                                            <table cellpadding="0" cellspacing="0" border="0" align="center" width="200" height="50">
+                                                <tr>
+                                                    <td bgcolor="#51A3FF" align="center" class="login-border" width="200" height="50">
+                                                        <a target='_blank' href="${performEventUrlMap.get(event.id)}" class='link2'>Perform This Event Now</a>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td width="100">&nbsp;</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </#if>
                 </table>
             </#list>
 
-            <table cellpadding="0" cellspacing="0" border="0" align="center" width="600">
-                <tr>
-                    <td width="100">&nbsp;</td>
-                    <td width="400" align="center" class="login-container">
-                        <table cellpadding="0" cellspacing="0" border="0" align="center" width="200" height="50">
-                            <tr>
-                                <td bgcolor="#51A3FF" align="center" class="login-border" width="200" height="50">
-                                    <a target='_blank' href="${systemUrl}" class='link2'>Login to Field iD Now</a>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td width="100">&nbsp;</td>
-                </tr>
-            </table>
+            <#if showLinks>
+                <table cellpadding="0" cellspacing="0" border="0" align="center" width="600">
+                    <tr>
+                        <td width="100">&nbsp;</td>
+                        <td width="400" align="center" class="login-container">
+                            <table cellpadding="0" cellspacing="0" border="0" align="center" width="200" height="50">
+                                <tr>
+                                    <td bgcolor="#51A3FF" align="center" class="login-border" width="200" height="50">
+                                        <a target='_blank' href="${systemUrl}" class='link2'>Login to Field iD Now</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td width="100">&nbsp;</td>
+                    </tr>
+                </table>
+            </#if>
 
 
             <table cellpadding="0" cellspacing="0" border="0" align="center" width="600">
