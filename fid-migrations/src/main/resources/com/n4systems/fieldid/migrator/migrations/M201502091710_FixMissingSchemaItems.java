@@ -11,11 +11,10 @@ public class M201502091710_FixMissingSchemaItems extends Migration {
 
 	@Override
 	protected void up(Connection conn) throws Exception {
-
-
-
 		BatchStatementExecutor.create()
-				.add(c -> c.createStatement().execute("UPDATE oneclick_criteria SET button_group_id = NULL WHERE button_group_id not in (select id from button_groups)"))
+				.add("UPDATE oneclick_criteria SET button_group_id = NULL WHERE button_group_id not in (select id from button_groups)")
+				.add("DELETE ct FROM criteria_trends ct LEFT JOIN events e ON e.id = ct.event_id WHERE ct.event_id IS NOT NULL AND e.id IS NULL")
+				.add("DELETE ct FROM criteria_trends ct LEFT JOIN org_base o ON o.id = ct.owner_id WHERE ct.owner_id IS NOT NULL AND o.id IS NULL")
 				.add(DropTable.named("addassethistory_infooption"))
 				.add(DropTable.named("addassethistory"))
 				.add(DropTable.named("jobsites"))

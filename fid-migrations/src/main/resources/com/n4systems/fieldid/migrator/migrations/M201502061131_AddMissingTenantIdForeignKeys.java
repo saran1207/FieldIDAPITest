@@ -27,6 +27,7 @@ public class M201502061131_AddMissingTenantIdForeignKeys extends Migration {
             "criteriasections",
             "dashboard_layouts",
             "eulaacceptances",
+            "eventstatus",
             "eventbooks",
             "events",
             "eventtypegroups",
@@ -56,6 +57,14 @@ public class M201502061131_AddMissingTenantIdForeignKeys extends Migration {
 
     @Override
     protected void up(Connection conn) throws Exception {
+        AlterTable.named("eventstatus")
+                .modifyColumn("createdby", "BIGINT")
+                .modifyColumn("modifiedby", "BIGINT")
+                .modifyColumn("tenant_id", "BIGINT", true)
+                .addForeignKey("createdby", "users", "id")
+                .addForeignKey("modifiedby", "users", "id")
+                .execute(conn);
+
         for (String table: MISSING_FOREIGN_KEY_TABLES) {
             AlterTable.named(table).addForeignKey("tenant_id", "tenants", "id").execute(conn);
         }

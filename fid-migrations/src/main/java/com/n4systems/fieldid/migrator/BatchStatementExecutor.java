@@ -23,6 +23,10 @@ public class BatchStatementExecutor implements ExecutableStatement {
 		return new BatchStatementExecutor(newStatements);
 	}
 
+	public BatchStatementExecutor add(String sql) {
+		return add(c -> c.createStatement().execute(sql));
+	}
+
 	@Override
 	public void execute(Connection conn) throws SQLException {
 		for (ExecutableStatement stmt: statements) {
