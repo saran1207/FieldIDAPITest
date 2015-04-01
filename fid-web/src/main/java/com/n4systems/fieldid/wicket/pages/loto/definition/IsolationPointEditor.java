@@ -86,8 +86,7 @@ public class IsolationPointEditor extends Panel {
             @Override
             protected void onUpdate(AjaxRequestTarget target)
             {
-                ((IModel<IsolationPoint>) getDefaultModel()).getObject().setSourceText(sourceID.getDefaultModelObjectAsString());
-                //target.add(sourceID);
+                ((IModel<IsolationPoint>) getDefaultModel()).getObject().setIdentifier(sourceID.getDefaultModelObjectAsString());
             }
         };
         onChangeAjaxBehavior.setThrottleDelay(Duration.milliseconds(new Long(500)));

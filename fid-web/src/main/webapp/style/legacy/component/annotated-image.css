@@ -80,6 +80,8 @@
 }
 /* energy source icons */
 /* Note: control-panel has no icon. */
+
+/*
 .note.water .icon:before {
 	content: url('/fieldid/images/loto/icon-water.png');
 }
@@ -98,6 +100,7 @@
 .note.electrical .icon:before {
 	content: url('/fieldid/images/loto/icon-electrical.png');
 }
+*/
 
 /* energy sources colors 
 -----------------------------------------------*/
