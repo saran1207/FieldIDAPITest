@@ -279,7 +279,7 @@
             [ (np.x + style.head.length), (np.y - style.head.width) ]
         ];
         arrowHead.setAttributeNS(null, 'points', this.pointsString(points));
-        arrowHead.setAttributeNS(null, 'fill', note.stroke );
+        arrowHead.setAttributeNS(null, 'fill', '#ffffff' );
         note.group.appendChild(arrowHead);
         
         var arrowLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
@@ -287,7 +287,7 @@
         arrowLine.setAttributeNS(null, 'y1', np.y);
         arrowLine.setAttributeNS(null, 'x2', np.x + style.line.length);
         arrowLine.setAttributeNS(null, 'y2', np.y);
-        arrowLine.setAttributeNS(null, 'stroke', note.stroke );
+        arrowLine.setAttributeNS(null, 'stroke', '#ffffff' );
         arrowLine.setAttributeNS(null, 'stroke-width', style.line.width + 'px' );
         note.group.appendChild(arrowLine);
         
