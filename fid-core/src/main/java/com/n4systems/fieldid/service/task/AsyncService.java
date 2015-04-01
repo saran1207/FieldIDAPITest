@@ -50,7 +50,7 @@ public class AsyncService extends FieldIdService {
 	}
 
     public <X> AsyncTask<X> createTaskNoUserContext(Callable<X> callable) {
-        return new AsyncTask<X>(callable, null);
+        return new AsyncTask<X>(callable, null).withNoUserContext();
     }
 
     /**
@@ -94,6 +94,7 @@ public class AsyncService extends FieldIdService {
 		private final Callable<T> callable;
 		private final SecurityFilter tenantSecurityFilter;
 		private final UserSecurityFilter userSecurityFilter;
+        private Boolean hasUserContext = Boolean.TRUE;
 
 		private AsyncTask(Callable<T> callable) {
 			this(callable, securityContext);
@@ -105,14 +106,21 @@ public class AsyncService extends FieldIdService {
 			this.userSecurityFilter = securityContext == null ? null : securityContext.getUserSecurityFilter();
 		}
 
+        private AsyncTask<T> withNoUserContext() {
+            hasUserContext = Boolean.FALSE;
+            return this;
+        }
+
 		@Override
 		public T call() {
 			securityContext.reset();
             try {
 				securityContext.setTenantSecurityFilter(tenantSecurityFilter);
 				securityContext.setUserSecurityFilter(userSecurityFilter);
-				ThreadLocalInteractionContext.getInstance().setCurrentUser(userSecurityFilter.getUser());
-				ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(userSecurityFilter.getUser().getLanguage());
+                if (hasUserContext) {
+                    ThreadLocalInteractionContext.getInstance().setCurrentUser(userSecurityFilter.getUser());
+                    ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(userSecurityFilter.getUser().getLanguage());
+                }
 				return callable.call();
 			} catch (Exception e) {
 				logger.error("Asynchronous task failed", e);
