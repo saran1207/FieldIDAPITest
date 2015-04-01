@@ -28,11 +28,21 @@
 
 	    </div>
 
-		<div class="infoSet">
+		<div class="infoSet location">
 	    	<input type="checkbox" wicket:id="locationCheck" />
-	        <label for="massEventUpdate.location"><wicket:message key="label.location"/></label>
-        	<div wicket:id="location"></div>
-	    </div>
+
+			<span class="fieldHolder location" style="width: 700px">
+				<label for="massEventUpdate.location"><wicket:message key="label.location"/></label>
+        		<div wicket:id="location"></div>
+			</span>
+
+			<span class="freeformfieldHolder">
+				<label><wicket:message key="label.freeform_location"/></label>
+				<div>
+					<input wicket:id="freeformLocation" type="text">
+				</div>
+			</span>
+		</div>
 
         <div class="infoSet">
             <input type="checkbox" wicket:id="performedByCheck" />

@@ -55,6 +55,7 @@
                 <span class="dateQuickLinks">
     				<a href="javascript:void(0);" onclick="allDay();$('dueDate').value = formatDate(new Date(), '${sessionUser.jqueryDateFormat}');">Today</a> |
 					<a href="javascript:void(0);" onclick="allDay();$('dueDate').value = formatDate(addDays(new Date(), 1), '${sessionUser.jqueryDateFormat}');"><@s.text name="label.tomorrow"/></a> |
+					<a href="javascript:void(0);" onclick="allDay();$('dueDate').value = formatDate(addMonths(new Date(), 3), '${sessionUser.jqueryDateFormat}');"><@s.text name="label.in_3_months"/></a> |
 					<a href="javascript:void(0);" onclick="allDay();$('dueDate').value = formatDate(addMonths(new Date(), 6), '${sessionUser.jqueryDateFormat}');"><@s.text name="label.in_6_months"/></a> |
 					<a href="javascript:void(0);" onclick="allDay();$('dueDate').value = formatDate(addYears(new Date(), 1), '${sessionUser.jqueryDateFormat}');"><@s.text name="label.next_year"/></a>
 				</span>

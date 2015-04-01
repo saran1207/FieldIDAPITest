@@ -143,7 +143,8 @@ public class IsolationPointListPanel extends Panel {
 
     private ImageList getImageList(IModel<ProcedureDefinition> model) {
         if (model.getObject().getAnnotationType().equals(AnnotationType.CALL_OUT_STYLE)) {
-            return new ImageList<ProcedureDefinitionImage>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getImages())) {
+            return new ImageList<ProcedureDefinitionImage>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getImages()))
+            {
                 @Override
                 protected void createImage(ListItem<ProcedureDefinitionImage> item) {
                     if (item.getModelObject().getAnnotations().size() > 0) {

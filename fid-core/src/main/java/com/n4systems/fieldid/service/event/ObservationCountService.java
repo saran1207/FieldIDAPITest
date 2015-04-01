@@ -4,10 +4,14 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.util.persistence.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 public class ObservationCountService extends FieldIdPersistenceService {
+
+    @Autowired
+    private EventFormService eventFormService;
 
     public List<ObservationCountGroup> getObservationCountGroups() {
         return persistenceService.findAll(createTenantSecurityBuilder(ObservationCountGroup.class));
@@ -21,30 +25,23 @@ public class ObservationCountService extends FieldIdPersistenceService {
         return persistenceService.saveOrUpdate(group);
     }
 
-    public ObservationCountGroup archive(ObservationCountGroup group) {
-        group.archiveEntity();
-        return persistenceService.update(group);
+    public ObservationCountGroup retireObservationGroup(ObservationCountGroup group) {
+        for (ObservationCount observationCount: group.getObservationCounts()) {
+            observationCount.retireEntity();
+            persistenceService.update(observationCount);
+        }
+        group.retireEntity();
+        return saveOrUpdate(group);
     }
 
-    public ObservationCountGroup unarchive(ObservationCountGroup group) {
-        group.activateEntity();
-        return persistenceService.update(group);
+    public ObservationCountGroup retireObservationGroup(Long id) {
+        ObservationCountGroup group = persistenceService.find(ObservationCountGroup.class, id);
+        return retireObservationGroup(group);
     }
 
     public void addObservationCount(ObservationCountGroup group, ObservationCount count) {
         persistenceService.save(count);
         group.getObservationCounts().add(count);
-        saveOrUpdate(group);
-    }
-
-    public void updateObservationCount(ObservationCountGroup group, ObservationCount count) {
-        persistenceService.update(count);
-        saveOrUpdate(group);
-    }
-
-    public void archiveObservationCount(ObservationCountGroup group, ObservationCount count) {
-        group.getObservationCounts().remove(count);
-        persistenceService.archive(count);
         saveOrUpdate(group);
     }
 
@@ -55,21 +52,26 @@ public class ObservationCountService extends FieldIdPersistenceService {
         return persistenceService.find(query);
     }
 
+    public void updateEventFormsWithNewObservationGroup(Long oldGroupId, ObservationCountGroup newGroup) {
+        QueryBuilder<EventType> query = createUserSecurityBuilder(EventType.class);
+        query.addSimpleWhere("eventForm.observationCountGroup.id", oldGroupId);
+        query.addPostFetchPaths("eventForm.sections");
+
+        for (EventType eventType: persistenceService.findAll(query)) {
+            EventForm updatedForm = new EventForm();
+            updatedForm.setTenant(eventType.getTenant());
+            updatedForm.setSections(eventType.getEventForm().getSections());
+            updatedForm = eventFormService.copyEventFormSettings(eventType.getEventForm(), updatedForm);
+            updatedForm.setObservationCountGroup(newGroup);
+            eventFormService.saveNewEventFormAfterObservationChange(eventType.getId(), updatedForm);
+        }
+    }
+
     public boolean isObservationGroupAttachedToEventType(Long observationGroupId) {
-        QueryBuilder<EventForm> query = createUserSecurityBuilder(EventForm.class, true);
+        QueryBuilder<EventForm> query = createUserSecurityBuilder(EventForm.class);
         query.addSimpleWhere("observationCountGroup.id", observationGroupId);
 
-        WhereParameterGroup group = new WhereParameterGroup("group");
-        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "active", "state", Archivable.EntityState.ACTIVE, null, WhereClause.ChainOp.OR));
-        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "retired", "state", Archivable.EntityState.RETIRED, null, WhereClause.ChainOp.OR));
-        query.addWhere(group);
-
-        Long count = persistenceService.count(query);
-        if(count > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return persistenceService.count(query) > 0 ? true: false;
     }
 
 }

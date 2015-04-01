@@ -2,17 +2,25 @@ package com.n4systems.persistence.utils;
 
 import com.n4systems.fieldid.context.InteractionContext;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
+import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.model.api.HasCreatedModifiedPlatform;
 import com.n4systems.model.parents.AbstractEntity;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
+import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.time.Clock;
 import com.n4systems.util.time.SystemClock;
 import org.apache.log4j.Logger;
+import org.hibernate.LazyInitializationException;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 
 public class DefaultEntityModifiedCreatedHandler implements EntityModifiedCreatedHandler {
     private static final Logger logger = Logger.getLogger(DefaultEntityModifiedCreatedHandler.class);
+
+    @Autowired
+    protected PersistenceService persistenceService;
 
     private InteractionContext interactionContext;
     private Clock clock;
@@ -50,7 +58,10 @@ public class DefaultEntityModifiedCreatedHandler implements EntityModifiedCreate
 
     private void onUpdate(AbstractEntity entity, Date time) {
         User user = lookupCurrentUser(entity);
-        if (shouldStoreUserOnEntity(entity)) {
+        if(user == null) {
+            //don't update the modifiedby field
+            logger.warn("Entity persisted without current user set in context", new Exception());
+        } else if (shouldStoreUserOnEntity(entity) && checkTenant(entity, user)) {
             entity.setModifiedBy(user);
         }
         entity.setModified(time);
@@ -69,6 +80,36 @@ public class DefaultEntityModifiedCreatedHandler implements EntityModifiedCreate
             ((HasCreatedModifiedPlatform) entity).setCreatedPlatform(getInteractionContext().getCurrentPlatform());
             ((HasCreatedModifiedPlatform) entity).setCreatedPlatformType(getInteractionContext().getCurrentPlatformType());
         }
+    }
+
+    private boolean checkTenant(AbstractEntity entity, User user) {
+        boolean flag = false;
+        if(entity.getID() == null) {
+            flag = true;
+        } else {
+            try {
+                if (entity.getModifiedBy() != null) {
+                    flag = (user.getTenant().equals(entity.getModifiedBy().getTenant()));
+                    if (flag != true) {
+                        logger.warn("Entity tenant and User tenant are not the same!", new Exception());
+                    }
+                }
+            } catch (LazyInitializationException e) {
+                //Check if it's a new entity being saved in the DB
+                QueryBuilder<AbstractEntity> queryBuilder = new QueryBuilder<AbstractEntity>(AbstractEntity.class, new OpenSecurityFilter());
+                queryBuilder.addSimpleWhere("id", entity.getID());
+                queryBuilder.addPostFetchPaths("modifiedBy");
+                AbstractEntity fetchedEntity = persistenceService.find(queryBuilder);
+
+                if (fetchedEntity != null && fetchedEntity.getModifiedBy() != null) {
+                    flag = (user.getTenant().equals(fetchedEntity.getModifiedBy().getTenant()));
+                    if (flag != true) {
+                        logger.warn("Entity tenant and User tenant are not the same!", new Exception());
+                    }
+                }
+            }
+        }
+        return flag;
     }
 
     private User lookupCurrentUser(AbstractEntity entity) {

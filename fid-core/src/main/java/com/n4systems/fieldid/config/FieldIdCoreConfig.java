@@ -16,10 +16,7 @@ import com.n4systems.ejb.wrapper.AssetManagerEJBContainer;
 import com.n4systems.ejb.wrapper.EventScheduleManagerEJBContainer;
 import com.n4systems.ejb.wrapper.OrderManagerEJBContainer;
 import com.n4systems.ejb.wrapper.ProofTestHandlerEJBContainer;
-import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.service.ReportServiceHelper;
-import com.n4systems.fieldid.service.SecurityContextInitializer;
-import com.n4systems.fieldid.service.SecurityService;
+import com.n4systems.fieldid.service.*;
 import com.n4systems.fieldid.service.admin.AdminSecurityService;
 import com.n4systems.fieldid.service.admin.AdminUserService;
 import com.n4systems.fieldid.service.amazon.S3AttachmentHandler;
@@ -46,8 +43,8 @@ import com.n4systems.fieldid.service.mixpanel.MixpanelService;
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.org.PlaceService;
-import com.n4systems.fieldid.service.procedure.*;
 import com.n4systems.fieldid.service.predefinedlocation.PredefinedLocationService;
+import com.n4systems.fieldid.service.procedure.*;
 import com.n4systems.fieldid.service.project.ProjectService;
 import com.n4systems.fieldid.service.schedule.AssetTypeScheduleService;
 import com.n4systems.fieldid.service.schedule.MassScheduleService;
@@ -88,6 +85,7 @@ import com.n4systems.services.tenant.TenantCreationService;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.json.ArrowStyleAnnotationJsonRenderer;
+import com.n4systems.util.json.CallOutStyleAnnotationJsonRenderer;
 import com.n4systems.util.json.JsonRenderer;
 import org.apache.lucene.analysis.util.CharArraySet;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -323,6 +321,11 @@ public class FieldIdCoreConfig {
     }
 
     @Bean
+    public LockoutReasonService lockoutReasonService() {
+        return new LockoutReasonService();
+    }
+
+    @Bean
     public WarningTemplateService warningTemplateService() {
         return new WarningTemplateService();
     }
@@ -472,6 +475,11 @@ public class FieldIdCoreConfig {
     @Bean
     public ArrowStyleAnnotationJsonRenderer arrowStyleAnnotationJsonRenderer() {
         return new ArrowStyleAnnotationJsonRenderer();
+    }
+
+    @Bean
+    public CallOutStyleAnnotationJsonRenderer callOutStyleAnnotationJsonRenderer() {
+        return new CallOutStyleAnnotationJsonRenderer();
     }
     
     @Bean
@@ -868,6 +876,11 @@ public class FieldIdCoreConfig {
     @Bean
     public LotoReportService lotoReportService() {
         return new LotoReportService();
+    }
+
+    @Bean
+    public ActionEmailCustomizationService actionEmailCustomizationService() {
+        return new ActionEmailCustomizationService();
     }
 
     @Bean

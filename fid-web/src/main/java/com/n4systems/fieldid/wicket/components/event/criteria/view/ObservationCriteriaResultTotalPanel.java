@@ -20,8 +20,8 @@ public class ObservationCriteriaResultTotalPanel extends Panel {
         super(id);
 
         //We only care about this bit of styling when there are actually ObservationCount type criteria present.
-        if(event.getObject().getType().getEventForm().getObservationCountGroup() != null) {
-            int numObservations = event.getObject().getType().getEventForm().getObservationCountGroup().getObservationCounts().size();
+        if(event.getObject().getEventForm().getObservationCountGroup() != null) {
+            int numObservations = event.getObject().getEventForm().getObservationCountGroup().getObservationCounts().size();
             add(new AttributeAppender("class", "observation-counter-items-" + numObservations).setSeparator(" "));
         }
 

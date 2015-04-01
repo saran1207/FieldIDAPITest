@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Date;
 
+import com.google.common.collect.Lists;
 import com.n4systems.model.*;
 import org.junit.Test;
 
@@ -51,8 +52,14 @@ public class CriteriaResultFactoryTest {
 				result.setImage(new byte[123]);
 				return result;
 			}
-			
-			@Override
+
+            @Override
+            public CriteriaResult populate(ObservationCountCriteriaResult result) {
+                result.setObservationCountResults(Lists.newArrayList());
+                return result;
+            }
+
+            @Override
 			public CriteriaResult populate(TextFieldCriteriaResult result) {
 				result.setValue(result.getClass().getSimpleName());
 				return result;

@@ -2,14 +2,12 @@ package com.n4systems.fieldid.wicket.components.schedule;
 
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
-import com.n4systems.fieldid.wicket.behavior.ConfirmBehavior;
 import com.n4systems.fieldid.wicket.behavior.JChosenBehavior;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.user.AssignedUserOrGroupSelect;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.model.user.AssigneesModel;
 import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
 import com.n4systems.fieldid.wicket.model.user.VisibleUserGroupsModel;
@@ -148,6 +146,7 @@ public class ProcedurePickerPanel extends Panel {
             add(createQuickDateLink("quickLinkToday", 0, 0, 0));
             add(createQuickDateLink("quickLinkTomorrow", 1, 0, 0));
             add(createQuickDateLink("quickLinkNextMonth", 0, 1, 0));
+            add(createQuickDateLink("quickLinkThreeMonth", 0, 3, 0));
             add(createQuickDateLink("quickLinkSixMonths", 0, 6, 0));
             add(createQuickDateLink("quickLinkNextYear", 0, 0, 1));
 

@@ -126,6 +126,10 @@
 
     // Calculate cross-browser mouse positions
     Plugin.prototype.position = function(event){
+        // Offset is updated here because the element may
+        // move if it is -for example- a modal dialog
+        this.elementOffset = $(this.element).offset();
+
         var coords = {}
         // convert from screen to normalized values of 0 - 1.0
         coords.x = (event.pageX - this.elementOffset.left) / this.displayWidth;

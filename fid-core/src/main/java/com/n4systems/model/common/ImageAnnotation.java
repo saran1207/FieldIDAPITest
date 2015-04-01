@@ -27,6 +27,10 @@ public class ImageAnnotation extends EntityWithTenant {
 
     private double y_tail = 0;
 
+    private String fill;
+
+    private String stroke;
+
     @Transient
     private Long tempId;
 
@@ -38,6 +42,15 @@ public class ImageAnnotation extends EntityWithTenant {
         this.y = y;
         this.text = text;
         this.type = type;
+    }
+
+    public ImageAnnotation(double x, double y, String text, ImageAnnotationType type, String fill, String stroke) {
+        this.x = x;
+        this.y = y;
+        this.text = text;
+        this.type = type;
+        this.fill = fill;
+        this.stroke = stroke;
     }
 
     public ImageAnnotation(double x, double y, double x_tail, double y_tail, String text, ImageAnnotationType type) {
@@ -111,6 +124,22 @@ public class ImageAnnotation extends EntityWithTenant {
 
     public void setTempId(Long tempId) {
         this.tempId = tempId;
+    }
+
+    public String getFill() {
+        return fill;
+    }
+
+    public void setFill(String fill) {
+        this.fill = fill;
+    }
+
+    public String getStroke() {
+        return stroke;
+    }
+
+    public void setStroke(String stroke) {
+        this.stroke = stroke;
     }
 
     public boolean hasCoordinates(AnnotationType type) {

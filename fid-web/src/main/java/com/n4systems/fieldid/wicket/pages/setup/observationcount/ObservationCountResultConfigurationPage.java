@@ -55,9 +55,11 @@ public class ObservationCountResultConfigurationPage extends EventTypePage{
     @Override
     protected void storePageParameters(PageParameters params) {
         super.storePageParameters(params);
-        eventForm = eventTypeModel.getObject().getEventForm();
-        if (eventForm == null) {
-            eventForm = new EventForm();
+        eventForm = new EventForm();
+        if (eventTypeModel.getObject().getEventForm() != null) {
+            eventForm.setTenant(eventTypeModel.getObject().getTenant());
+            eventForm = eventFormService.copyEventFormSettings(eventTypeModel.getObject().getEventForm(), eventForm);
+            eventForm.setSections(eventTypeModel.getObject().getEventForm().getSections());
         }
     }
 
@@ -185,16 +187,16 @@ public class ObservationCountResultConfigurationPage extends EventTypePage{
                 if (eventType.getEventForm() == null) {
                     eventForm.setTenant(getTenant());
                     eventType.setEventForm(eventForm);
-                    persistenceService.update(eventType);
+                    eventTypeService.update(eventType);
                     persistenceService.update(eventForm);
                 } else {
-                    eventFormService.saveNewEventFormAfterObservationChange(eventForm, eventForm.getSections(), eventType);
+                    eventTypeService.update(eventType);
+                    eventFormService.saveNewEventFormAfterObservationChange(eventType.getId(), eventForm);
                 }
                 FieldIDSession.get().storeInfoMessageForStruts(new FIDLabelModel("label.observation_config_saved").getObject());
                 throw new RedirectToUrlException("/eventType.action?uniqueID=" + eventTypeId);
             }
         }
-
     }
 
 

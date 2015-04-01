@@ -48,4 +48,20 @@ public class DbUtils {
 			}
 		}
 	}
+
+	public static long executeCount(PreparedStatement stmt) throws SQLException {
+		ResultSet fkCheckRs = null;
+		try {
+			fkCheckRs = stmt.executeQuery();
+			fkCheckRs.next();
+			long result = fkCheckRs.getLong(1);
+			return result;
+		} finally {
+			DbUtils.close(fkCheckRs);
+		}
+	}
+
+	public static boolean executeExists(PreparedStatement stmt) throws SQLException {
+		return executeCount(stmt) > 0;
+	}
 }

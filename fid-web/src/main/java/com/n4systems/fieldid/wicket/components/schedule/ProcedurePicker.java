@@ -20,7 +20,8 @@ public class ProcedurePicker extends DialogModalWindow {
                 updateVisibility();
             }
         });
-        setInitialWidth(370);
+        //setInitialWidth(370);
+        setInitialWidth(400);
         setInitialHeight(400);
 
     }

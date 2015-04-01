@@ -104,10 +104,6 @@ public abstract class Event<T extends EventType, V extends Event, R extends Enti
 		
 	@Enumerated(EnumType.STRING)
 	private EntityState state = EntityState.ACTIVE;
-	
-    @Deprecated
-    @Column(name="schedule_id")
-    private Long scheduleId;
 
     @ManyToOne
     @JoinColumn(name="project_id")
@@ -586,16 +582,6 @@ public abstract class Event<T extends EventType, V extends Event, R extends Enti
 
     public boolean isAction() {
         return getTriggerEvent() != null;
-    }
-
-    @Deprecated
-    public Long getScheduleId() {
-        return scheduleId;
-    }
-
-    @Deprecated
-    public void setScheduleId(Long scheduleId) {
-        this.scheduleId = scheduleId;
     }
 
     public String getModifiedPlatform() {

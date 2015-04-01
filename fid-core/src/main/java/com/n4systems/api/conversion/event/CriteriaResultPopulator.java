@@ -10,6 +10,7 @@ import com.n4systems.model.SelectCriteriaResult;
 import com.n4systems.model.SignatureCriteriaResult;
 import com.n4systems.model.TextFieldCriteriaResult;
 import com.n4systems.model.UnitOfMeasureCriteriaResult;
+import com.n4systems.model.ObservationCountCriteriaResult;
 
 public interface CriteriaResultPopulator {
 
@@ -24,5 +25,6 @@ public interface CriteriaResultPopulator {
 	public CriteriaResult populate(SignatureCriteriaResult result);
 	public CriteriaResult populate(NumberFieldCriteriaResult result);
     public CriteriaResult populate(ScoreCriteriaResult result);
+    public CriteriaResult populate(ObservationCountCriteriaResult result);
 
 }

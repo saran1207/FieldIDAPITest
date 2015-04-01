@@ -101,7 +101,7 @@ public class SearchResult implements Serializable {
         }
 
         private String getDateTime(Number value) {
-            if (value==null) {
+            if (value == null  || value.longValue() == Long.MAX_VALUE || value.longValue() == Long.MIN_VALUE) {
                 return null;
             }
             DateTime dateTime = new DateTime(value.longValue());

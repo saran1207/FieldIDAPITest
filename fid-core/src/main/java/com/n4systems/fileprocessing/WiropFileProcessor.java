@@ -7,6 +7,7 @@ import com.n4systems.graphing.ChartSeries;
 import com.n4systems.graphing.GraphFactory;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.util.DateHelper;
+import com.n4systems.util.UnitHelper;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
@@ -94,7 +95,7 @@ public class WiropFileProcessor extends FileProcessor {
 		 * customer name (first field).  In this case we will have to read more then once.
 		 * We'll detect that we've read the full header by reading until we see the headerSectionEnd.
 		 */
-		
+
 		while(!fullHeaderLine.contains(headerSectionEnd)) {
 			String line = reader.readLine();
 			if(line != null) {
@@ -107,7 +108,7 @@ public class WiropFileProcessor extends FileProcessor {
 		return fullHeaderLine.split(headerDelim);
 	}
 	
-	private ChartSeries createChartSeries(BufferedReader reader) throws IOException { 
+	private ChartSeries createChartSeries(BufferedReader reader) throws IOException {
 		ChartSeries series = new ChartSeries("Load", "lbs");
 		series.setPeakName("Peak Load");
 		
@@ -129,7 +130,7 @@ public class WiropFileProcessor extends FileProcessor {
 		
 		// find our peak load and set it
 		series.setPeak(series.calculatePeakY());
-		
+
 		return series;
 	}
 	
@@ -139,10 +140,12 @@ public class WiropFileProcessor extends FileProcessor {
 		
 		ChartPoint2D point = null;
 		if(matcher.matches()) {
-			
 			load = Double.parseDouble(matcher.group(loadGroup).trim());
 			time = Double.parseDouble(matcher.group(timeGroup).trim());
-			
+
+            //Convert Load to lbs, like should have been done all along...
+            load = UnitHelper.convertKgToLbs(load);
+
 			point = new ChartPoint2D(time, load);
 		}
 		

@@ -44,6 +44,7 @@ import com.n4systems.fieldid.wicket.pages.saveditems.send.ManageSendItemSchedule
 import com.n4systems.fieldid.wicket.pages.search.AdvancedAssetSearchPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
+import com.n4systems.fieldid.wicket.pages.setup.actionemailcustomization.ActionEmailSetupPage;
 import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListAllPage;
 import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListArchivedPage;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.*;
@@ -137,6 +138,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/printoutTemplate", PrintoutTemplatePage.class);
         mountPage("setup/lotoSetup", LotoSetupPage.class);
         mountPage("setup/lotoDetailsSetup", LotoDetailsSetupPage.class);
+        mountPage("setup/lockoutReasonsList", LockoutReasonsListPage.class);
+        mountPage("setup/archivedLockoutReasonsList", ArchivedLockoutReasonsListPage.class);
         mountPage("setup/manageDevicePage", ManageDevicePage.class);
         mountPage("setup/enableByAssetType", EnableByAssetTypePage.class);
         mountPage("setup/assetStatusList", AssetStatusListAllPage.class);
@@ -181,6 +184,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/eventStatusList", EventStatusListPage.class);
         mountPage("setup/eventStatusArchivedList", EventStatusArchivedListPage.class);
         mountPage("setup/eventStatusForm", EventStatusFormPage.class);
+
+        mountPage("setup/actionEmailCustomization", ActionEmailSetupPage.class);
 
 
         mountPage("places", OrgViewPage.class);

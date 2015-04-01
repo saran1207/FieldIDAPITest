@@ -63,6 +63,9 @@ public class LotoSetupPage extends FieldIDTemplatePage {
             }
         });
 
+        add(new BookmarkablePageLink<LockoutReasonsListPage>("lockoutReasonsLink", LockoutReasonsListPage.class));
+
+
     }
 
     private LotoSettings getLotoSettings() {

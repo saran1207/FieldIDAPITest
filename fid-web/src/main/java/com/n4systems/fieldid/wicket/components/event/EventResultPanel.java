@@ -51,25 +51,26 @@ public class EventResultPanel extends Panel {
         WebMarkupContainer observationResultContainer;
         add(observationResultContainer = new WebMarkupContainer("observationResultContainer"));
 
-
         //We only care about this bit of styling when there are actually ObservationCount type criteria present.
-        if(model.getObject().getType().getEventForm() != null &&
-                model.getObject().getType().getEventForm().getObservationCountGroup() != null) {
-            int numObservations = model.getObject().getType().getEventForm().getObservationCountGroup().getObservationCounts().size();
+        if(model.getObject().getEventForm() != null &&
+                model.getObject().getEventForm().getObservationCountGroup() != null) {
+            int numObservations = model.getObject().getEventForm().getObservationCountGroup().getObservationCounts().size();
             observationResultContainer.add(new AttributeAppender("class", "observation-counter-items-" + numObservations).setSeparator(" "));
         }
 
         observationResultContainer.add(new ListView<ObservationCount>("observationResult", new PropertyModel<List<ObservationCount>> (model, "eventForm.observationCountGroup.observationCounts")) {
             @Override
             protected void populateItem(ListItem<ObservationCount> item) {
-                item.add(new Label("name", new PropertyModel<>(item.getModel(), "name")));
-                item.add(new Label("total", observationTotals.get(item.getModelObject()).toString()));
+                ObservationCount observationCount = item.getModelObject();
+                Integer observationTotal = observationTotals.get(observationCount) != null ? observationTotals.get(observationCount) : 0;
+                item.add(new Label("name", new PropertyModel<>(observationCount, "name")));
+                item.add(new Label("total", observationTotal.toString()));
 
                 if (formObservationTotal > 0) {
-                    double percentage = observationTotals.get(item.getModelObject()) * 1.0d / formObservationTotal;
+                    double percentage = observationTotal * 1.0d / formObservationTotal;
 
                     item.add(new FlatLabel("percentage", numberFormat.format(percentage))
-                            .setVisible(item.getModelObject().isCounted() && model.getObject().getEventType().isDisplayObservationPercentage()));
+                            .setVisible(observationCount.isCounted() && model.getObject().getEventType().isDisplayObservationPercentage()));
                 } else
                     item.add(new Label("percentage").setVisible(false));
             }

@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.context;
 
 import com.n4systems.model.PlatformType;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 
 import java.io.Serializable;
@@ -61,6 +62,10 @@ public class ThreadLocalInteractionContext implements InteractionContext, Serial
     @Override
     public String getCurrentPlatform() {
         return platformThreadLocal.get();
+    }
+
+    public BaseOrg getCurrentTenant() {
+        return userThreadLocal.get().getOwner();
     }
 
     public Collection<User> getVisibleUsers() {

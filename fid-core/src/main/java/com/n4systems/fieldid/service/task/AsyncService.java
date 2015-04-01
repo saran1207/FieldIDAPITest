@@ -5,7 +5,6 @@ import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdService;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.UserSecurityFilter;
-import com.n4systems.model.user.User;
 import com.n4systems.services.SecurityContext;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,6 @@ import org.springframework.util.CollectionUtils;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
@@ -52,7 +50,7 @@ public class AsyncService extends FieldIdService {
 	}
 
     public <X> AsyncTask<X> createTaskNoUserContext(Callable<X> callable) {
-        return new AsyncTask<X>(callable, null);
+        return new AsyncTask<X>(callable, null).withNoUserContext();
     }
 
     /**
@@ -96,7 +94,7 @@ public class AsyncService extends FieldIdService {
 		private final Callable<T> callable;
 		private final SecurityFilter tenantSecurityFilter;
 		private final UserSecurityFilter userSecurityFilter;
-        private final Locale locale;
+        private Boolean hasUserContext = Boolean.TRUE;
 
 		private AsyncTask(Callable<T> callable) {
 			this(callable, securityContext);
@@ -106,24 +104,29 @@ public class AsyncService extends FieldIdService {
 			this.callable = callable;
 			this.tenantSecurityFilter = securityContext== null ? null : securityContext.getTenantSecurityFilter();
 			this.userSecurityFilter = securityContext == null ? null : securityContext.getUserSecurityFilter();
-            User user = userSecurityFilter == null ? null :entityManagerFactory.getObject().createEntityManager().find(User.class, userSecurityFilter.getUserId());
-            locale = user == null ? null : user.getLanguage();
 		}
+
+        private AsyncTask<T> withNoUserContext() {
+            hasUserContext = Boolean.FALSE;
+            return this;
+        }
 
 		@Override
 		public T call() {
-            Locale previousLanguage = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
+			securityContext.reset();
             try {
 				securityContext.setTenantSecurityFilter(tenantSecurityFilter);
 				securityContext.setUserSecurityFilter(userSecurityFilter);
-                ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(locale);
+                if (hasUserContext) {
+                    ThreadLocalInteractionContext.getInstance().setCurrentUser(userSecurityFilter.getUser());
+                    ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(userSecurityFilter.getUser().getLanguage());
+                }
 				return callable.call();
 			} catch (Exception e) {
 				logger.error("Asynchronous task failed", e);
 				return null;
 			} finally {
 				securityContext.reset();
-                ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(previousLanguage);
 			}
 		}
 	}

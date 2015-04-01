@@ -6,7 +6,6 @@ import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.image.ArrowStyleEditorAndGalleryPanel;
-import com.n4systems.fieldid.wicket.components.image.IsolationPointImageGallery;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.components.text.LabelledComboBox;
 import com.n4systems.fieldid.wicket.components.text.LabelledTextArea;
@@ -19,6 +18,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -30,6 +30,7 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.*;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.time.Duration;
 
 import java.util.List;
 
@@ -76,9 +77,22 @@ public class IsolationPointEditor extends Panel {
 
         add(form = new Form("form"));
 
-        form.add(sourceID = new RequiredTextField("identifier"));
+        form.add(sourceID = new RequiredTextField("identifier", new PropertyModel<>(getDefaultModel(), "identifier")));
         sourceID.setOutputMarkupId(true);
         sourceID.add(new AttributeModifier("maxlength", Integer.toString(procedureDefinition.getAnnotationType().equals(AnnotationType.ARROW_STYLE) ? 50 : 10)));
+
+        OnChangeAjaxBehavior onChangeAjaxBehavior = new OnChangeAjaxBehavior()
+        {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target)
+            {
+                ((IModel<IsolationPoint>) getDefaultModel()).getObject().setIdentifier(sourceID.getDefaultModelObjectAsString());
+            }
+        };
+        onChangeAjaxBehavior.setThrottleDelay(Duration.milliseconds(new Long(500)));
+
+        sourceID.add(onChangeAjaxBehavior);
+
         form.add(electronicIdentifier = new LabelledTextField<String>("electronicIdentifier", "label.electronic_id", new PropertyModel<>(getDefaultModel(), "electronicIdentifier"))
                 .add(new TipsyBehavior(new FIDLabelModel("message.isolation_point.electronic_id"), TipsyBehavior.Gravity.N)));
         form.add(sourceText = new LabelledComboBox<String>("sourceText", "label.source", new PropertyModel<>(getDefaultModel(), "sourceText")) {
@@ -167,21 +181,6 @@ public class IsolationPointEditor extends Panel {
     }
 
     protected Component createImageGallery(String id) {
-        if(procedureDefinition.getAnnotationType().equals(AnnotationType.CALL_OUT_STYLE)) {
-            return new IsolationPointImageGallery(id,procedureDefinition, (IModel<IsolationPoint>) getDefaultModel()) {
-                @Override protected void doneClicked(AjaxRequestTarget target) {
-                    imagePanel.onReloadImage(target);
-                    target.add(imagePanel, sourceID);
-                    modal.close(target);
-                    IsolationPointEditor.this.getDefaultModel().detach();
-                }
-
-                @Override
-                protected boolean isRootForm(boolean form) {
-                    return false;
-                }
-            };
-        } else { //AnnotationType.ARROW_STYLE
             return new ArrowStyleEditorAndGalleryPanel(id,
                                       (IModel<IsolationPoint>)getDefaultModel(),
                                       procedureDefinition.getAnnotationType()) {
@@ -210,7 +209,6 @@ public class IsolationPointEditor extends Panel {
                     return procedureDefinition.getImages();
                 }
             };
-        }
     }
 
     private IModel<String> getTitleModel() {
@@ -334,6 +332,10 @@ public class IsolationPointEditor extends Panel {
                 return procedureDefinitionService.getPreConfiguredEnergySource(sourceType.getObject());
             }
         };
+    }
+
+    public void setTextLimit(AjaxRequestTarget target, IModel<ProcedureDefinition> model) {
+        sourceID.add(new AttributeModifier("maxlength", Integer.toString(model.getObject().getAnnotationType().equals(AnnotationType.ARROW_STYLE) ? 50 : 10)));
     }
 
     private IsolationPoint getIsolationPoint() {

@@ -2,6 +2,7 @@ package com.n4systems.api.conversion.event;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.ViewToModelConverter;
 import com.n4systems.api.model.CriteriaResultView;
@@ -30,7 +31,7 @@ import static com.google.common.base.Preconditions.*;
 public class EventToModelConverter implements ViewToModelConverter<ThingEvent, EventView> {
 	public static final String UNIT_OF_MEASURE_SEPARATOR = "|";
 	private static final String UNIT_OF_MEASURE_SEPARATOR_REGEX = "\\|";
-	
+
 	private final OrgByNameLoader orgLoader;
 	private final AssetsByIdOwnerTypeLoader assetLoader;
 	private final AssetStatusByNameLoader assetStatusLoader;
@@ -233,10 +234,40 @@ public class EventToModelConverter implements ViewToModelConverter<ThingEvent, E
 				result.setScore(score);
 				return result;
             }
+
+            @Override
+            public CriteriaResult populate(ObservationCountCriteriaResult result) {
+                checkArgument(criteria.getCriteriaType() == CriteriaType.OBSERVATION_COUNT);
+
+                List<ObservationCountResult> observationCountResultList = Lists.newArrayList();
+
+                for (String observationResultStr: criteriaResultView.getResultString().split("\\|")) {
+                    String [] countResultStr = observationResultStr.split(":");
+                    ObservationCountResult countResult = new ObservationCountResult();
+                    countResult.setTenant(type.getTenant());
+                    ObservationCount observationCount = resolveObservationCount(StringUtils.trimToEmpty(countResultStr[0]));
+                    checkArgument(observationCount != null, "Unable to resolve Observation Count");
+                    countResult.setObservationCount(observationCount);
+                    countResult.setValue(Integer.parseInt(countResultStr[1].trim()));
+                    observationCountResultList.add(countResult);
+                }
+                result.setObservationCountResults(observationCountResultList);
+                return result;
+            }
         });
-	} 
-	
-	public List<Recommendation> getRecommendations(CriteriaResultView criteriaResultView) {
+	}
+
+    protected ObservationCount resolveObservationCount(String name) {
+        checkArgument(type.getEventForm().getObservationCountGroup() != null, "The Event Type: " + type.getDisplayName() + " does not have an Observation Group Set");
+        for (ObservationCount count: type.getEventForm().getObservationCountGroup().getObservationCounts()) {
+            if (count.getName().equalsIgnoreCase(name)) {
+                return count;
+            }
+        }
+        return null;
+    }
+
+    public List<Recommendation> getRecommendations(CriteriaResultView criteriaResultView) {
 		List<Recommendation> result = new ArrayList<Recommendation>();
 		String text = StringUtils.trimToEmpty(criteriaResultView.getRecommendationString());
 		if (StringUtils.isNotEmpty(text)) { 

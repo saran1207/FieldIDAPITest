@@ -1,7 +1,10 @@
 package com.n4systems.fieldid.wicket.pages.setup.observationcount;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.event.ObservationCountService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.ajax.ConfirmAjaxCallDecorator;
+import com.n4systems.fieldid.wicket.behavior.ConfirmBehavior;
 import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
 import com.n4systems.fieldid.wicket.components.eventform.EditCopyDeleteItemPanel;
 import com.n4systems.fieldid.wicket.components.eventform.SortableListPanel;
@@ -12,14 +15,20 @@ import com.n4systems.fieldid.wicket.util.NoColonsValidator;
 import com.n4systems.model.ObservationCount;
 import com.n4systems.model.ObservationCountGroup;
 import com.n4systems.model.Score;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.IAjaxCallDecorator;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
@@ -38,12 +47,17 @@ public class EditableObservationCountGroupPanel extends SortableListPanel {
     private Boolean reorderState = false;
 
     private FIDFeedbackPanel feedbackPanel;
+    private WebMarkupContainer sortableObservationCountsContainer;
 
+    private List<ObservationCount> observationCountList;
 
     public EditableObservationCountGroupPanel(String id, IModel<ObservationCountGroup> model) {
         super(id);
         this.observationCountGroupModel = model;
-        setDefaultModel();
+        if(observationCountGroupModel.getObject() != null) {
+            observationCountList= Lists.newArrayList(observationCountGroupModel.getObject().getObservationCounts());
+        }
+
         setOutputMarkupPlaceholderTag(true);
 
         add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
@@ -52,28 +66,21 @@ public class EditableObservationCountGroupPanel extends SortableListPanel {
         add(new WebMarkupContainer("blankInstructions") {
             @Override
             public boolean isVisible() {
-                return !isGroupSelected() && (getObservationCounts() == null || getObservationCounts().size() > 0);
+                return !isGroupSelected() && (observationCountList == null || observationCountList.size() > 0);
             }
         });
 
         add(new TwoStateAjaxLink("reorderScoresButton", "Reorder Scores", "Done Reordering") {
-            List<ObservationCount> observationCounts;  // transient model backing while we are juggling the list around.
             @Override
             protected void onEnterInitialState(AjaxRequestTarget target) {
-                target.add(EditableObservationCountGroupPanel.this);
+                target.add(sortableObservationCountsContainer);
                 sortableBehavior.setDisabled(true);
                 reorderState = false;
-                observationCountGroupModel.getObject().setObservationCounts(observationCounts);
-                observationCountService.saveOrUpdate(observationCountGroupModel.getObject());
-                EditableObservationCountGroupPanel.this.setDefaultModel();
             }
 
             @Override
             protected void onEnterSecondaryState(AjaxRequestTarget target) {
-                target.add(EditableObservationCountGroupPanel.this);
-                observationCounts = new ArrayList<ObservationCount>();
-                observationCounts.addAll(getObservationCounts());
-                EditableObservationCountGroupPanel.this.setDefaultModel(new PropertyModel<List<Score>>(this, "observationCounts"));
+                target.add(sortableObservationCountsContainer);
                 sortableBehavior.setDisabled(false);
                 reorderState = true;
             }
@@ -84,7 +91,8 @@ public class EditableObservationCountGroupPanel extends SortableListPanel {
             }
         });
 
-        WebMarkupContainer sortableObservationCountsContainer = new WebMarkupContainer("sortableObservationCountsContainer");
+        sortableObservationCountsContainer = new WebMarkupContainer("sortableObservationCountsContainer");
+        sortableObservationCountsContainer.setOutputMarkupPlaceholderTag(true);
 
         sortableObservationCountsContainer.add(new ListView<ObservationCount>("countsList", getObservationCountsModel()) {
             @Override
@@ -99,14 +107,13 @@ public class EditableObservationCountGroupPanel extends SortableListPanel {
 
                     @Override
                     protected void onDeleteButtonClicked(AjaxRequestTarget target) {
-                        observationCountService.archiveObservationCount(observationCountGroupModel.getObject(), item.getModelObject());
-                        target.add(EditableObservationCountGroupPanel.this);
+                        observationCountList.remove(item.getModelObject());
+                        target.add(sortableObservationCountsContainer, observationCountGroupForm);
                     }
 
                     @Override
                     protected void onStoreLinkClicked(AjaxRequestTarget target) {
-                        observationCountService.updateObservationCount(observationCountGroupModel.getObject(), item.getModelObject());
-                        target.add(EditableObservationCountGroupPanel.this);
+                        target.add(sortableObservationCountsContainer, observationCountGroupForm);
                     }
 
                     @Override
@@ -137,10 +144,50 @@ public class EditableObservationCountGroupPanel extends SortableListPanel {
         add(observationCountGroupForm = new ObservationCountGroupForm("observationCountGroupForm", model){
             @Override
             public boolean isVisible() {
-                return isGroupSelected() && model.getObject().getObservationCounts().size() < 5;
+                return isGroupSelected() && observationCountList.size() < 5;
+            }
+        });
+
+        add(new AjaxLink<Void>("saveGroupLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                ObservationCountGroup group = observationCountGroupModel.getObject();
+                if (group.getObservationCounts().isEmpty()) {
+                    for (ObservationCount count: observationCountList) {
+                        observationCountService.addObservationCount(group, count);
+                    }
+                } else {//We need to create a new version of the group and retire the old one
+                    ObservationCountGroup newGroup = new ObservationCountGroup();
+                    newGroup.setTenant(group.getTenant());
+                    newGroup.setName(group.getName());
+                    newGroup = observationCountService.saveOrUpdate(newGroup);
+                    for (ObservationCount count: observationCountList) {
+                        if (count.isNew()) {
+                            observationCountService.addObservationCount(newGroup, count);
+                        } else {
+                            ObservationCount newCount = new ObservationCount(count);
+                            observationCountService.addObservationCount(newGroup, newCount);
+                        }
+                    }
+                    observationCountService.retireObservationGroup(group.getId());
+                    observationCountService.updateEventFormsWithNewObservationGroup(group.getId(), newGroup);
+                }
+                onSaveObservationCounts(target);
+            }
+
+            @Override
+            public boolean isVisible() {
+                return isGroupSelected();
+            }
+
+            @Override
+            protected IAjaxCallDecorator getAjaxCallDecorator() {
+                return new ConfirmAjaxCallDecorator(new FIDLabelModel("message.changing_observation_group").getObject());
             }
         });
     }
+
+    protected void onSaveObservationCounts(AjaxRequestTarget target) {}
 
     private IModel<String> createSubtitleModel(IModel<ObservationCount> model) {
         if (model.getObject().isCounted())
@@ -150,31 +197,29 @@ public class EditableObservationCountGroupPanel extends SortableListPanel {
     }
 
     private boolean isGroupSelected() {
-        return getDefaultModel().getObject() != null;
+        return observationCountList != null;
     }
 
-    private IModel<List<ObservationCount>> getObservationCountsModel() {
-        return (IModel<List<ObservationCount>>) getDefaultModel();
-    }
-
-    private List<ObservationCount> getObservationCounts() {
-        return (List<ObservationCount>) getDefaultModel().getObject();
-    }
-
-    private void setDefaultModel() {
-        setDefaultModel(new PropertyModel<List<ObservationCount>>(observationCountGroupModel, "observationCounts"));
+    private LoadableDetachableModel<List<ObservationCount>> getObservationCountsModel() {
+        return new LoadableDetachableModel<List<ObservationCount>>() {
+            @Override
+            protected List<ObservationCount> load() {
+                return observationCountList != null ?
+                        observationCountList: Lists.newArrayList();
+            }
+        };
     }
 
     @Override
     protected int getIndexOfComponent(Component component) {
         ObservationCount count = (ObservationCount) component.getDefaultModelObject();
-        return getObservationCounts().indexOf(count);
+        return observationCountList.indexOf(count);
     }
 
     @Override
     protected void onItemMoving(int oldIndex, int newIndex, AjaxRequestTarget target) {
-        ObservationCount movingCount = getObservationCounts().remove(oldIndex);
-        getObservationCounts().add(newIndex, movingCount);
+        ObservationCount movingCount = observationCountList.remove(oldIndex);
+        observationCountList.add(newIndex, movingCount);
     }
 
     private class ObservationCountGroupForm extends Form<ObservationCountGroup> {
@@ -186,20 +231,18 @@ public class EditableObservationCountGroupPanel extends SortableListPanel {
             super(id, groupModel);
 
             model = groupModel;
-            observationCount = new ObservationCount();
+            observationCount = new ObservationCount(FieldIDSession.get().getTenant());
             setOutputMarkupId(true);
 
             add(new NewObservationCountPanel("newObservationCount", new PropertyModel<ObservationCount>(this, "observationCount")));
 
-            add(new AjaxSubmitLink("saveLink") {
+            add(new AjaxSubmitLink("addLink") {
 
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    observationCount.setTenant(FieldIDSession.get().getTenant());
-                    observationCountService.addObservationCount(getModelObject(), observationCount);
-                    observationCount = new ObservationCount();
-                    groupModel.detach();
-                    target.add(EditableObservationCountGroupPanel.this);
+                    observationCountList.add(new ObservationCount(observationCount));
+                    observationCount = new ObservationCount(FieldIDSession.get().getTenant());
+                    target.add(sortableObservationCountsContainer, observationCountGroupForm);
                 }
 
                 @Override

@@ -226,7 +226,6 @@
                                             <li><a wicket:id="assetTypeGroupsListLink"><wicket:message key="title.asset_type_groups.plural"/></a></li>
                                             <li><a wicket:id="assetTypesList" ><wicket:message key="title.asset_types.plural"/></a></li>
                                             <li><a wicket:id="assetStatusList" ><wicket:message key="title.manage_asset_statuses.plural"/></a></li>
-                                            <li><a wicket:id="priorityCodeListLink" ><wicket:message key="title.manage_priority_code.plural"/></a></li>
                                         </ul>
                                     </li>
                                     <li><a wicket:id="importLink"><wicket:message key="nav.import"/></a>
@@ -264,6 +263,13 @@
                                         </ul>
                                     </li>
                                     <li><a wicket:id="translationsLink"><wicket:message key="title.translations"/></a></li>
+                                    <li class="dropdown-secondary" wicket:id="actionsSubMenuContainer">
+                                        <a href="javascript:void(0)"><wicket:message key="speed.actions"/>&nbsp;</a>
+                                        <ul class="sub_menu">
+                                            <li><a wicket:id="actionEmailCustomizationLink"><wicket:message key="title.customize_action_email"/></a></li>
+                                            <li><a wicket:id="priorityCodeListLink" ><wicket:message key="title.manage_priority_code.plural"/></a></li>
+                                        </ul>
+                                    </li>
                                 </ul>
                             </li>
                         </ul>

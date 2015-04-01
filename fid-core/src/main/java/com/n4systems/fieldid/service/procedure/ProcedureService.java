@@ -6,6 +6,7 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.ProcedureWorkflowState;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.procedure.LockoutReason;
 import com.n4systems.model.procedure.Procedure;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.security.OwnerAndDownFilter;
