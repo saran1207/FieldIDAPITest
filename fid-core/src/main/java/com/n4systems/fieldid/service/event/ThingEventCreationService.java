@@ -206,10 +206,12 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
         if (recurringEvent != null && recurringEvent.getAutoAssign()) {
             nextEvent = eventScheduleService.getNextAvailableSchedule(event);
 
-            if (eventEnum == EventEnum.PERFORM) {
-                nextEvent.setAssignee(event.getPerformedBy());
-            } else if (eventEnum == EventEnum.CLOSE) {
-                nextEvent.setAssignee(event.getAssignee());
+            if (nextEvent != null) {
+                if (eventEnum == EventEnum.PERFORM) {
+                    nextEvent.setAssignee(event.getPerformedBy());
+                } else if (eventEnum == EventEnum.CLOSE) {
+                    nextEvent.setAssignee(event.getAssignee());
+                }
             }
         }
     }
