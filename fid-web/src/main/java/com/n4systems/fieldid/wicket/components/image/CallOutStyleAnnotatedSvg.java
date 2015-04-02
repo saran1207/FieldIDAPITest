@@ -155,13 +155,13 @@ public class CallOutStyleAnnotatedSvg extends Panel {
 
                 if (isWide) {
                     if (textLength <= 6) {
-                        rect.add(new AttributeModifier("width", "10%"));
+                        rect.add(new AttributeModifier("width", "12%"));
                     }  else {
                         rect.add(new AttributeModifier("width", "16%"));
                     }
                 } else {
                     if (textLength <= 6) {
-                        rect.add(new AttributeModifier("width", "17%"));
+                        rect.add(new AttributeModifier("width", "20%"));
                     }  else {
                         rect.add(new AttributeModifier("width", "26%"));
                     }
