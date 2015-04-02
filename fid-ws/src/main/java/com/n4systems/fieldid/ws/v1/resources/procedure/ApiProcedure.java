@@ -14,6 +14,7 @@ public class ApiProcedure extends ApiReadWriteModel {
     private String assetIdentifier;
     private String workflowState;
     private List<ApiIsolationPointResult> lockResults;
+    private String procedureDefinitionId;
 
     public Date getDueDate() {
         return dueDate;
@@ -69,5 +70,13 @@ public class ApiProcedure extends ApiReadWriteModel {
 
     public void setAssetIdentifier(String assetIdentifier) {
         this.assetIdentifier = assetIdentifier;
+    }
+
+    public String getProcedureDefinitionId() {
+        return procedureDefinitionId;
+    }
+
+    public void setProcedureDefinitionId(String procedureDefinitionId) {
+        this.procedureDefinitionId = procedureDefinitionId;
     }
 }
