@@ -319,25 +319,6 @@
                 </table>
             </#list>
 
-            <#if showLinks>
-                <table cellpadding="0" cellspacing="0" border="0" align="center" width="600">
-                    <tr>
-                        <td width="100">&nbsp;</td>
-                        <td width="400" align="center" class="login-container">
-                            <table cellpadding="0" cellspacing="0" border="0" align="center" width="200" height="50">
-                                <tr>
-                                    <td bgcolor="#51A3FF" align="center" class="login-border" width="200" height="50">
-                                        <a target='_blank' href="${systemUrl}" class='link2'>Login to Field iD Now</a>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td width="100">&nbsp;</td>
-                    </tr>
-                </table>
-            </#if>
-
-
             <table cellpadding="0" cellspacing="0" border="0" align="center" width="600">
                 <tr>
                     <td width="100%" colspan="2" style="padding-top:35px;">
