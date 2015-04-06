@@ -116,15 +116,6 @@ public class PriorityCodePage extends FieldIDTemplatePage {
         return new ActionGroup(actionGroupId);
     }
 
-    @Override
-    protected void addBreadCrumbBar(String breadCrumbBarId) {
-        add(new BreadCrumbBar(breadCrumbBarId,
-                new NavigationItem(new FIDLabelModel("label.dashboard"), DashboardPage.class),
-                new NavigationItem(new FIDLabelModel("label.setup_assets_events"), AssetsAndEventsPage.class),
-                new NavigationItem(new FIDLabelModel("label.manage_priority_codes"), PriorityCodePage.class)
-        ));
-    }
-
     private class TitleLabel extends Fragment {
 
         public TitleLabel(String id) {

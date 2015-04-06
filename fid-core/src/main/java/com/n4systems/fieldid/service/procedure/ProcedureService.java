@@ -10,6 +10,7 @@ import com.n4systems.model.procedure.LockoutReason;
 import com.n4systems.model.procedure.Procedure;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.security.OwnerAndDownFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.services.reporting.UpcomingScheduledLotoRecord;
 import com.n4systems.util.persistence.*;
@@ -77,6 +78,23 @@ public class ProcedureService extends FieldIdPersistenceService {
     public List<Procedure> getAllProcedures(Asset asset) {
         QueryBuilder<Procedure> query = createTenantSecurityBuilder(Procedure.class);
         query.addSimpleWhere("asset", asset);
+        return persistenceService.findAll(query);
+    }
+
+    public List<Procedure> getAllOpenProceduresByAssignee(User user) {
+        QueryBuilder<Procedure> query = createTenantSecurityBuilder(Procedure.class);
+
+        query.addSimpleWhere("workflowState", ProcedureWorkflowState.OPEN);
+
+        if (user.getGroups().isEmpty()) {
+            query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignee.id", user.getId()));
+        } else {
+            WhereParameterGroup group = new WhereParameterGroup();
+            group.setChainOperator(WhereClause.ChainOp.AND);
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignee.id", user.getId(), WhereClause.ChainOp.OR));
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.IN, "assignedGroup", user.getGroups(), WhereClause.ChainOp.OR));
+            query.addWhere(group);
+        }
         return persistenceService.findAll(query);
     }
 

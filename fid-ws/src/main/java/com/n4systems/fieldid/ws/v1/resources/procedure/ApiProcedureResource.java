@@ -206,6 +206,7 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
         convertedProcedure.setWorkflowState(procedure.getWorkflowState().name());
         convertedProcedure.setLockResults(convert(procedure.getLockResults()));
         convertedProcedure.setAssetIdentifier(procedure.getAsset().getIdentifier());
+        convertedProcedure.setProcedureDefinitionId(procedure.getType().getMobileId());
         return convertedProcedure;
     }
 
