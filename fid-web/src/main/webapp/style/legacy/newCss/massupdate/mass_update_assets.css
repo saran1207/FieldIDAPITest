@@ -114,10 +114,10 @@
 }
 
 .mainPanel .freeformfieldHolder input {
-	padding-top: 8px;
-	padding-right: 8px;
-	margin-top: 4px;
-	width: 247px;
+    padding: 4px;
+    border: 1px solid #9C9C9C;
+    color: #555555;
+    width: 250px;
 }
 
 .mainPanel .fieldHolder {
