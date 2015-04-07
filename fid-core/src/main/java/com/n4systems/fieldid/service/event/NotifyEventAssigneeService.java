@@ -345,13 +345,9 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
      * @return A String representing the Event's Triggering Event.
      */
     private String createTriggeringEventString(Event event) {
-        StringBuilder triggeringEventString = new StringBuilder();
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
 
-        triggeringEventString.append(dateFormat.format(event.getRelevantDate())).append(" From ");
-        triggeringEventString.append(event.getType().getName());
-
-        return triggeringEventString.toString();
+        return dateFormat.format(event.getRelevantDate()) + " From " + event.getType().getName();
     }
 
     /**
@@ -448,7 +444,9 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     private String createPerformEventUrl(Event event) {
         String performEventUrl = SystemUrlUtil.getSystemUrl(event.getTenant()) + PERFORM_EVENT_URL_FRAGMENT;
         if(event instanceof ThingEvent) {
-            if(((ThingEventType)event.getType()).isMaster()) {
+            if(event.getType() instanceof ThingEventType &&
+               ((ThingEventType)event.getType()).isMaster()) {
+
                 //Master events are a bit different, since they use Struts.  We'll just resassign a completely
                 //different URL here and continue on with our business.
                 performEventUrl = SystemUrlUtil.getSystemUrl(event.getTenant()) + PERFORM_MASTER_EVENT_FRAGMENT;
