@@ -219,7 +219,6 @@
                     </td>
                 </tr>
             </table>
-
             <#list events as event>
                 <table cellpadding="0" cellspacing="0" border="0" align="center" width="600" class="event-border collapse-border">
                     <tr>
@@ -318,7 +317,6 @@
                     </#if>
                 </table>
             </#list>
-
             <table cellpadding="0" cellspacing="0" border="0" align="center" width="600">
                 <tr>
                     <td width="100%" colspan="2" style="padding-top:35px;">
