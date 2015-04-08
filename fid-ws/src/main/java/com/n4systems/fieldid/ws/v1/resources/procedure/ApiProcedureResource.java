@@ -56,7 +56,7 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
             procedure.setWorkflowState(ProcedureWorkflowState.OPEN);
             procedure.setAsset(procedureDefinition.getAsset());
 
-            persistenceService.save(procedureDefinition);
+            persistenceService.save(procedure);
         }
 
 
