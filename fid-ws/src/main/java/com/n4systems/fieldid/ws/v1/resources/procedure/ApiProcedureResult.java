@@ -6,6 +6,7 @@ import java.util.List;
 public class ApiProcedureResult {
 
     private String procedureId;
+    private String procedureDefinitionId;
 
     private List<ApiIsolationPointResult> isolationPointResults;
     private BigDecimal gpsLatitude;
@@ -17,6 +18,14 @@ public class ApiProcedureResult {
 
     public void setProcedureId(String procedureId) {
         this.procedureId = procedureId;
+    }
+
+    public String getProcedureDefinitionId() {
+        return procedureDefinitionId;
+    }
+
+    public void setProcedureDefinitionId(String procedureDefinitionId) {
+        this.procedureDefinitionId = procedureDefinitionId;
     }
 
     public List<ApiIsolationPointResult> getIsolationPointResults() {
