@@ -8,6 +8,7 @@ import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.Asset;
 import com.n4systems.model.GpsLocation;
 import com.n4systems.model.ProcedureWorkflowState;
+import com.n4systems.model.api.Archivable;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.IsolationPointResult;
 import com.n4systems.model.procedure.Procedure;
@@ -55,6 +56,10 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
             procedure.setType(procedureDefinition);
             procedure.setWorkflowState(ProcedureWorkflowState.OPEN);
             procedure.setAsset(procedureDefinition.getAsset());
+            procedure.setTenant(procedureDefinition.getTenant());
+            procedure.setState(Archivable.EntityState.ACTIVE);
+            procedure.setCreated(new Date());
+            procedure.setModified(new Date());
 
             persistenceService.save(procedure);
         }
