@@ -8,9 +8,11 @@ import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.Asset;
 import com.n4systems.model.GpsLocation;
 import com.n4systems.model.ProcedureWorkflowState;
+import com.n4systems.model.api.Archivable;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.IsolationPointResult;
 import com.n4systems.model.procedure.Procedure;
+import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.*;
 import org.apache.log4j.Logger;
@@ -43,6 +45,25 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
         }
 
         Procedure procedure = procedureService.findByMobileId(apiProcedure.getProcedureId(), true);
+
+        //The Mobile app is performing an unscheduled procedure, so we need to create it first.
+        if(procedure == null) {
+            procedure = new Procedure();
+
+            ProcedureDefinition procedureDefinition = procedureDefinitionService.findProcedureDefinitionByMobileId(apiProcedure.getProcedureDefinitionId());
+
+            procedure.setMobileGUID(apiProcedure.getProcedureId());
+            procedure.setType(procedureDefinition);
+            procedure.setWorkflowState(ProcedureWorkflowState.OPEN);
+            procedure.setAsset(procedureDefinition.getAsset());
+            procedure.setTenant(procedureDefinition.getTenant());
+            procedure.setState(Archivable.EntityState.ACTIVE);
+            procedure.setCreated(new Date());
+            procedure.setModified(new Date());
+
+            persistenceService.save(procedure);
+        }
+
 
         if (procedure.getWorkflowState() != ProcedureWorkflowState.OPEN && procedure.getWorkflowState() != ProcedureWorkflowState.CLOSED) {
             throw new IllegalStateException("Attempt to lock procedure that is not in OPEN state. Actual state: " + procedure.getWorkflowState());

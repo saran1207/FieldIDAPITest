@@ -263,11 +263,15 @@
                                         </#if>
                                         <#if event.type.actionEventType>
                                             <#if event.triggerEvent.place??>
-                                                <strong>Location:</strong> ${event.triggerEvent.place.displayName} <br>
+                                                <strong>Location:</strong>&nbsp;
+                                                <a target="_blank" href="${placeSummaryUrlMap.get(event.triggerEvent.place.id)}">${event.triggerEvent.place.displayName}</a>
+                                                <br>
                                             </#if>
                                         <#else>
                                             <#if event.place??>
-                                                <strong>Location:</strong> ${event.place.displayName} <br>
+                                                <strong>Location:</strong>&nbsp;
+                                                <a target="_blank" href="${placeSummaryUrlMap.get(event.place.id)}">${event.place.displayName}</a>
+                                                <br>
                                             </#if>
                                         </#if>
                                         <strong>Due:</strong> ${dueDateStringMap.get(event.id)}<br>
