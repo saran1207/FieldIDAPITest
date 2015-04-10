@@ -11,6 +11,7 @@ public class ApiProcedureResult {
     private List<ApiIsolationPointResult> isolationPointResults;
     private BigDecimal gpsLatitude;
     private BigDecimal gpsLongitude;
+    private String lockoutReason;
 
     public String getProcedureId() {
         return procedureId;
@@ -50,5 +51,13 @@ public class ApiProcedureResult {
 
     public void setGpsLongitude(BigDecimal gpsLongitude) {
         this.gpsLongitude = gpsLongitude;
+    }
+
+    public String getLockoutReason() {
+        return lockoutReason;
+    }
+
+    public void setLockoutReason(String lockoutReason) {
+        this.lockoutReason = lockoutReason;
     }
 }

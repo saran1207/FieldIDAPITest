@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.ws.v1.resources.procedure;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.procedure.LockoutReasonService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
@@ -9,10 +10,7 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.GpsLocation;
 import com.n4systems.model.ProcedureWorkflowState;
 import com.n4systems.model.api.Archivable;
-import com.n4systems.model.procedure.IsolationPoint;
-import com.n4systems.model.procedure.IsolationPointResult;
-import com.n4systems.model.procedure.Procedure;
-import com.n4systems.model.procedure.ProcedureDefinition;
+import com.n4systems.model.procedure.*;
 import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.*;
 import org.apache.log4j.Logger;
@@ -34,6 +32,8 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
     @Autowired private ProcedureService procedureService;
     @Autowired private ProcedureDefinitionService procedureDefinitionService;
     @Autowired private TenantSettingsService tenantSettingsService;
+    @Autowired private LockoutReasonService lockoutReasonService;
+
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
@@ -79,6 +79,15 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
 
         if(getCurrentUser().isUsageBasedUser()) {
             tenantSettingsService.decrementUsageBasedEventCount();
+        }
+
+        List<LockoutReason> lockoutReasons = lockoutReasonService.getActiveLockoutReasons();
+        for(LockoutReason reason:lockoutReasons){
+            if(reason.getName().equals(apiProcedure.getLockoutReason()))
+            {
+                procedure.setLockoutReason(reason);
+                break;
+            }
         }
 
         persistenceService.update(procedure);
