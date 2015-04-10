@@ -10,6 +10,7 @@ import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.model.*;
 import com.n4systems.model.notification.AssigneeNotification;
 import com.n4systems.model.notificationsettings.ActionEmailCustomization;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
@@ -33,6 +34,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     private static final Logger logger = Logger.getLogger(NotifyEventAssigneeService.class);
     private static final String ASSIGNEE_TEMPLATE_MULTI = "eventsAssignedMulti";
     private static final String ASSET_URL_FRAGMENT = "/fieldid/w/assetSummary?4&uniqueID=";
+    private static final String PLACE_SUMMARY_URL_FRAGMENT = "/fieldid/w/placeSummary?0&id=";
 
     //Event Summary Fragments
     private static final String THING_EVENT_SUMMARY_URL_FRAGMENT = "/fieldid/w/thingEventSummary?0&id=";
@@ -231,6 +233,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         Map<Long, String> eventSummaryUrlMap = createEventSummaryUrlMap(events);
         Map<Long, List<String>> attachedImageListMap = createAttachedImageListMap(events);
         Map<Long, String> performEventUrlMap = createPerformEventUrlMap(events);
+        Map<Long, String> placeSummaryUrlMap = createPlaceSummaryUrlMap(events);
 
         msg.getTemplateMap().put("systemUrl", SystemUrlUtil.getSystemUrl(events.get(0).getTenant()));
         msg.getTemplateMap().put("events", events);
@@ -243,6 +246,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         msg.getTemplateMap().put("assetUrlMap", assetUrlMap);
         msg.getTemplateMap().put("eventSummaryUrlMap", eventSummaryUrlMap);
         msg.getTemplateMap().put("performEventUrlMap", performEventUrlMap);
+        msg.getTemplateMap().put("placeSummaryUrlMap", placeSummaryUrlMap);
         msg.getTemplateMap().put("userEmail", assignee.getEmailAddress());
         //Sort of inverted logic here, but we want to know if the assignee is NOT a person.  If they are NOT a person,
         //then we want to show them links.
@@ -422,6 +426,44 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     }
 
     /**
+     * This method generates a Map of Place Summary URLs for all PlaceEvents in the Event List.  This list uses the
+     * PlaceEvent ID as a key.
+     *
+     * @param events - A List of Events for which Place Summary URLs are required.
+     * @return A Map of Place Summary URLs keyed by Event ID.
+     */
+    private Map<Long, String> createPlaceSummaryUrlMap(List<Event> events) {
+        //In all honesty, there isn't much difference between the way this method works and the way
+        //createAssetSummaryUrlMap works.  Just go there for an explanation.  It's about a half dozen methods up from
+        //here.
+        List<BaseOrg> placesToConvert = events.stream()
+                .filter(event -> event instanceof PlaceEvent)
+                .map(event -> ((PlaceEvent) event).getPlace())
+                .collect(Collectors.toList());
+
+        placesToConvert.addAll(events.stream()
+                .filter(event -> event.isAction() && event.getTriggerEvent() instanceof PlaceEvent)
+                .map(event -> ((PlaceEvent) event).getPlace())
+                .collect(Collectors.toList()));
+
+
+        return placesToConvert.stream()
+                              .distinct()
+                              .collect(Collectors.toMap(BaseOrg::getId, this::createPlaceSummaryUrl));
+    }
+
+    /**
+     * This method creates a URL linking to the Place Summary page for the Place associated with the provided
+     * PlaceEvent.
+     *
+     * @param place - A BaseOrg for which you want the Place Summary URL.
+     * @return A String representation of the URL for the Place Summary page related to the Place from the supplied PlaceEvent.
+     */
+    private String createPlaceSummaryUrl(BaseOrg place) {
+        return SystemUrlUtil.getSystemUrl(place.getTenant()) + PLACE_SUMMARY_URL_FRAGMENT + place.getId();
+    }
+
+    /**
      * This method compiles a Map of URLs to allow the user to perform assigned actions.  These URLs are tailored to the
      * type of event and keyed by the ID of that event.
      *
@@ -469,7 +511,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
                                                    PERFORM_PLACE_EVENT_FRAGMENT,
                                                    event.getId().toString(),
                                                    event.getType().getId().toString(),
-                                                   ((PlaceEvent)event).getPlace().getId());
+                                                   ((PlaceEvent)event).getPlace().getId().toString());
         } else
         if(event instanceof ProcedureAuditEvent) {
             performEventUrl += PROCEDURE_AUDIT_ID_FRAGMENT;
