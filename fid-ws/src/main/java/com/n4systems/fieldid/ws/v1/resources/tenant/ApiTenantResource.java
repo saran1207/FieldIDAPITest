@@ -3,9 +3,12 @@ package com.n4systems.fieldid.ws.v1.resources.tenant;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.procedure.LockoutReason;
 import com.n4systems.model.procedure.LotoSettings;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import rfid.ejb.entity.IdentifierCounter;
+
+import java.util.List;
 
 public class ApiTenantResource extends ApiResource<ApiTenant, PrimaryOrg> {
 
@@ -44,6 +47,10 @@ public class ApiTenantResource extends ApiResource<ApiTenant, PrimaryOrg> {
 				apiTenant.setTestingAndVerification(lotoSettings.getTestingAndVerification());
 			}
 		}
+
+		//Populating LOTO lockout reasons for the tenant
+		List<LockoutReason> reasons = persistenceService.findAll(createTenantSecurityBuilder(LockoutReason.class));
+		apiTenant.setLockoutReasonList(reasons);
 
 		apiTenant.setUsingAssignedTo(primaryOrg.hasExtendedFeature(ExtendedFeature.AssignedTo));
 		apiTenant.setUsingJobSites(primaryOrg.hasExtendedFeature(ExtendedFeature.JobSites));

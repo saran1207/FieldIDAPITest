@@ -1,5 +1,9 @@
 package com.n4systems.fieldid.ws.v1.resources.tenant;
 
+import com.n4systems.model.procedure.LockoutReason;
+
+import java.util.List;
+
 public class ApiTenant {
 	private String serialNumberLabel;
 	private String serialNumberFormat;
@@ -17,7 +21,8 @@ public class ApiTenant {
 	private String applicationProcess;
 	private String removalProcess;
 	private String testingAndVerification;
-	
+	private List<LockoutReason> lockoutReasonList;
+
 	public void setSerialNumberLabel(String serialNumberLabel) {
 		this.serialNumberLabel = serialNumberLabel;
 	}
@@ -144,5 +149,13 @@ public class ApiTenant {
 
 	public void setTestingAndVerification(String testingAndVerification) {
 		this.testingAndVerification = testingAndVerification;
+	}
+
+	public List<LockoutReason> getLockoutReasonList() {
+		return lockoutReasonList;
+	}
+
+	public void setLockoutReasonList(List<LockoutReason> lockoutReasonList) {
+		this.lockoutReasonList = lockoutReasonList;
 	}
 }
