@@ -21,14 +21,25 @@ public class WiropFileProcessor extends FileProcessor {
 	private static final String headerDelim = "\\$";
 	private static final String headerDateFormat = "MM/dd/yy";
 	private static final String lineParseRegex = "^\\s*(\\S+)\\s+(\\S+)\\s+(\\S+)\\s*$";
-	private static final String headerSectionEnd = "####";
+	private static final String tstHeaderMarker = "####";
+	private static final String universalHeaderEnd = " 0.00000" + Character.toString((char)9) + " 0.00000" + Character.toString((char)9) + " 0.00000";
 	
 	private static final int loadGroup = 1;
 	private static final int timeGroup = 3;
 	
-	private static final int CUSTOMER_NAME = 0;
-	private static final int SERIAL_NUMBER = 2;
-	private static final int TEST_DATE = 5;
+	private static final int TST_CUSTOMER_NAME = 0;
+	private static final int TST_SERIAL_NUMBER = 2;
+	private static final int TST_TEST_DATE = 5;
+
+	private static final int TXT_CUSTOMER_NAME = 7;
+	private static final int TXT_SERIAL_NUMBER = 0;
+	private static final int TXT_TEST_DATE = 1;
+
+	public enum WiropFileType {
+		TST, TXT
+	}
+
+	private WiropFileType fileType;
 	
 	public void processFile(FileDataContainer fileDataContainer, InputStream file) throws FileProcessingException {
 		Chart chart = fileDataContainer.getChartData();
@@ -53,16 +64,16 @@ public class WiropFileProcessor extends FileProcessor {
 			
 			
 			// populate the data container with our header info
-			fileDataContainer.setIdentifiers(headers[SERIAL_NUMBER].trim());
-			logger.info("Wirop log serial number [" + headers[SERIAL_NUMBER] + "]");
+			fileDataContainer.setIdentifiers(this.fileType.equals(WiropFileType.TST) ? headers[TST_SERIAL_NUMBER].trim() : headers[TXT_SERIAL_NUMBER].trim());
+			logger.info("Wirop log serial number [" + fileDataContainer.getIdentifiers().get(0) + "]");
 			
 			// parse the date ... this step is so stupid ... 
-			Date datePerformed = DateHelper.string2Date(headerDateFormat, headers[TEST_DATE].trim());
+			Date datePerformed = this.fileType.equals(WiropFileType.TST) ? DateHelper.string2Date(headerDateFormat, headers[TST_TEST_DATE].trim()) : DateHelper.string2Date(headerDateFormat, headers[TXT_TEST_DATE].trim());
 			fileDataContainer.setDatePerformed(datePerformed);
-			logger.info("Wirop log test date [" + headers[TEST_DATE] + "]");
+			logger.info("Wirop log test date [" + fileDataContainer.getDatePerformed() + "]");
 			
-			fileDataContainer.setCustomerName(headers[CUSTOMER_NAME].trim());
-			logger.info("Wirop log customer name [" + headers[CUSTOMER_NAME] + "]");
+			fileDataContainer.setCustomerName(this.fileType.equals(WiropFileType.TST) ? headers[TST_CUSTOMER_NAME].trim() : headers[TXT_CUSTOMER_NAME].trim());
+			logger.info("Wirop log customer name [" + fileDataContainer.getCustomerName() + "]");
 			
 			// now to create the chart data and image
 			ChartSeries series = createChartSeries(bRead);
@@ -96,14 +107,16 @@ public class WiropFileProcessor extends FileProcessor {
 		 * We'll detect that we've read the full header by reading until we see the headerSectionEnd.
 		 */
 
-		while(!fullHeaderLine.contains(headerSectionEnd)) {
+		while(!fullHeaderLine.endsWith(universalHeaderEnd)) {
 			String line = reader.readLine();
 			if(line != null) {
 				fullHeaderLine += line;
 			} else {
-				throw new IOException("End of file has been reached without the '####' delimiter showing up.");
+				throw new IOException("End of file has been reached without the universal header end showing up.");
 			}
 		}
+
+		this.fileType = fullHeaderLine.contains(tstHeaderMarker) ? WiropFileType.TST : WiropFileType.TXT;
 		
 		return fullHeaderLine.split(headerDelim);
 	}
