@@ -26,11 +26,13 @@ public class WiropFileProcessor extends FileProcessor {
 	
 	private static final int loadGroup = 1;
 	private static final int timeGroup = 3;
-	
+
+	//Positions of key data in the TST file header...
 	private static final int TST_CUSTOMER_NAME = 0;
 	private static final int TST_SERIAL_NUMBER = 2;
 	private static final int TST_TEST_DATE = 5;
 
+	//Positions of key data in the TXT file header...
 	private static final int TXT_CUSTOMER_NAME = 7;
 	private static final int TXT_SERIAL_NUMBER = 0;
 	private static final int TXT_TEST_DATE = 1;
@@ -61,7 +63,7 @@ public class WiropFileProcessor extends FileProcessor {
 			// the first line of the file is the header line
 			String[] headers = parseHeaders(bRead);
 			
-			
+			//Below, we use the fileType to determine what positions to look for various info at.
 			
 			// populate the data container with our header info
 			fileDataContainer.setIdentifiers(this.fileType.equals(WiropFileType.TST) ? headers[TST_SERIAL_NUMBER].trim() : headers[TXT_SERIAL_NUMBER].trim());
@@ -107,6 +109,8 @@ public class WiropFileProcessor extends FileProcessor {
 		 * We'll detect that we've read the full header by reading until we see the headerSectionEnd.
 		 */
 
+		//We now look for the end of the header line, rather than for the "####" marker.  The reason for this is that
+		//only one of the two file types has that marker, which allows us to tell the difference between them.
 		while(!fullHeaderLine.endsWith(universalHeaderEnd)) {
 			String line = reader.readLine();
 			if(line != null) {
@@ -116,7 +120,10 @@ public class WiropFileProcessor extends FileProcessor {
 			}
 		}
 
+		//We need to record what type of file we're dealing with, since the different formats hold the data we're
+		//looking for at different positions.
 		this.fileType = fullHeaderLine.contains(tstHeaderMarker) ? WiropFileType.TST : WiropFileType.TXT;
+		logger.info("Processing a " + (this.fileType.equals(WiropFileType.TST) ? ".tst" : ".txt") + " file.");
 		
 		return fullHeaderLine.split(headerDelim);
 	}
