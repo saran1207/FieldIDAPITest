@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.service.procedure.SvgGenerationService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.fieldid.ws.v1.resources.assettype.attributevalues.ApiAttributeValueResource;
@@ -42,6 +43,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
     @Autowired private UserService userService;
     @Autowired private ApiAttributeValueResource attrResource;
     @Autowired private S3Service s3Service;
+    @Autowired private SvgGenerationService svgGenerationService;
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
@@ -632,11 +634,32 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
             convertedImage.setAnnotations(convertAnnotations(image.getAnnotations()));
 
             try {
-                convertedImage.setData(s3Service.downloadProcedureDefinitionMediumImage(image));
-            } catch (IOException e) {
-                log.error("IOException downloading procedure def image: " + image.getId(), e);
-            }
+                byte[] imageData = s3Service.downloadProcedureDefinitionImageSvg(image);
+                if(imageData == null) {
+                    if (definition.getAnnotationType().equals(AnnotationType.CALL_OUT_STYLE)) {
+                        svgGenerationService.generateAndUploadAnnotatedSvgs(definition);
+                    } else {
+                        svgGenerationService.generateAndUploadArrowStyleAnnotatedSvgs(definition);
+                    }
 
+                    imageData = s3Service.downloadProcedureDefinitionImageSvg(image);
+
+                    if(imageData == null) {
+                        throw new Exception("Image does not exist...");
+                    }
+
+                    //convertedImage.setData(s3Service.downloadProcedureDefinitionMediumImage(image));
+                    convertedImage.setData(imageData);
+                } else {
+                    convertedImage.setData(imageData);
+                }
+
+            } catch (IOException ioe) {
+                log.error("IOException downloading procedure def image: " + image.getId(), ioe);
+            } catch (Exception e) {
+                log.error("There was a problem while Generating SVGs for ProcDef with ID " + definition.getId(), e);
+                e.printStackTrace();
+            }
             convertedImages.add(convertedImage);
         }
 
@@ -700,7 +723,9 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         apiProcedureDef.setWarnings(procedureDef.getWarnings());
         apiProcedureDef.setActive(procedureDef.isActive());
         apiProcedureDef.setStatus(procedureDef.getPublishedState().getName());
+
         apiProcedureDef.setImages(convertImages(procedureDef, procedureDef.getImages()));
+
         apiProcedureDef.setRejectedReason(procedureDef.getRejectedReason());
 
         apiProcedureDef.setEquipmentBuilding(procedureDef.getBuilding());
