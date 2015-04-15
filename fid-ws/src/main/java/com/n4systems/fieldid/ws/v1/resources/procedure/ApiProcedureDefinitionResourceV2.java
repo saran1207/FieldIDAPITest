@@ -202,7 +202,11 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         procDef.setRevisionNumber(apiProcDef.getRevisionNumber());
         procDef.setProcedureCode(apiProcDef.getProcedureCode());
         procDef.setWarnings(apiProcDef.getWarnings());
-	procDef.setAnnotationType(procedureDefinitionService.getLotoSettings().getAnnotationType());
+
+        //Technically, a situation like this should never happen, but it might be remotely possible that a user is
+        //working on a brand new client that hasn't set their default annotation type yet.  In situations like this,
+        //we'll just cleanly default to Arrow Style annotation types, which are the default.
+	    procDef.setAnnotationType(procedureDefinitionService.getLotoSettings() == null ? AnnotationType.ARROW_STYLE : procedureDefinitionService.getLotoSettings().getAnnotationType());
 
         //Ideally, the client should always be providing the ProcedureType, but this just prevents an error if they
         //happened to forget.
