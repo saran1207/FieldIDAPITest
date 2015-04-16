@@ -1,9 +1,16 @@
 package com.fieldid.jdbc;
 
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
-public class ActiveConnection implements Comparable<ActiveConnection> {
+public class ActiveConnection implements Comparable<ActiveConnection>, Serializable {
 	private final long id;
 	private final long started;
 	private final String threadName;
@@ -58,4 +65,28 @@ public class ActiveConnection implements Comparable<ActiveConnection> {
 		return (int) (id ^ (id >>> 32));
 	}
 
+	@Override
+	public String toString() {
+		ZoneId zone = ZoneId.of("America/Toronto");
+		String dateString = DateTimeFormatter.ISO_LOCAL_DATE_TIME.withZone(zone).format(Instant.ofEpochMilli(started).atZone(ZoneId.systemDefault()));
+
+
+
+		String newLine = System.lineSeparator();
+		StringBuilder sb = new StringBuilder()
+				.append("MySQL ID: ").append(id).append(newLine)
+				.append("Started: ").append(dateString).append(newLine)
+				.append("Thread: ").append(threadName).append(newLine);
+
+		statements.forEach((stmt) -> sb
+				.append(String.format("============================== @ %7d ms ==============================", stmt.getTimestamp())).append(newLine)
+				.append("Stack: [").append(newLine)
+				.append(stmt.getStackTrace()).append(newLine)
+				.append(']').append(newLine)
+				.append("SQL: [").append(newLine)
+				.append(stmt.getSql()).append(newLine)
+				.append(']').append(newLine));
+
+		return sb.toString();
+	}
 }

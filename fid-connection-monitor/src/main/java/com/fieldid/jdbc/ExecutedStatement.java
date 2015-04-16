@@ -1,14 +1,20 @@
 package com.fieldid.jdbc;
 
-public class ExecutedStatement {
+import java.io.Serializable;
+
+public class ExecutedStatement implements Serializable {
 	private final long timestamp;
 	private final String sql;
 	private final String stackTrace;
 
-	public ExecutedStatement(long timestamp, String sql, StackTraceElement[] stackTrace) {
+	public ExecutedStatement(long timestamp, String sql, String stackTrace) {
 		this.timestamp = timestamp;
 		this.sql = sql;
-		this.stackTrace = StackTraceUtils.formatFieldId(stackTrace);
+		this.stackTrace = stackTrace;
+	}
+
+	public ExecutedStatement(long timestamp, String sql, StackTraceElement[] stackTrace) {
+		this(timestamp, sql, StackTraceUtils.formatFieldId(stackTrace));
 	}
 
 	public long getTimestamp() {
@@ -22,4 +28,5 @@ public class ExecutedStatement {
 	public String getStackTrace() {
 		return stackTrace;
 	}
+
 }
