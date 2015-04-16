@@ -3,18 +3,18 @@ package com.n4systems.model;
 //This enum is similar to ImageAnnotationType we should probably merge them
 public enum IsolationPointSourceType {
 
-    W("Water"),
-    V("Valve"),
-    S("Steam"),
-    P("Pneumatic"),
-    G("Gas"),
-    E("Electrical"),
-    CP("Control Panel"),
-    M("Mechanical"),
-    H("Hydraulic"),
     C("Chemical"),
+    CP("Control Panel"),
+    E("Electrical"),
+    G("Gas"),
+    H("Hydraulic"),
+    M("Mechanical"),
+    N("Notes"),
+    P("Pneumatic"),
+    S("Steam"),
     SP("Stored Pressure"),
-    N("Notes");
+    V("Valve"),
+    W("Water");
 
     private final String identifier;
 
