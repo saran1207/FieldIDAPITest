@@ -131,10 +131,10 @@ public class SvgGenerationService extends FieldIdPersistenceService {
         if(bytes == null) {
             //it did not exist on S3, then create it now
             bytes = SerializationUtils.serialize(image);
+        } else {
+            //convert image to be scaled down to jasper size
+            bytes = imageService.scaleImage(bytes, DEFAULT_JASPER_WIDTH, DEFAULT_JASPER_HEIGHT);
         }
-
-        //convert image to be scaled down to jasper size
-        bytes = imageService.scaleImage(bytes, DEFAULT_JASPER_WIDTH, DEFAULT_JASPER_HEIGHT);
 
         FileUtils.writeByteArrayToFile(imageFile, bytes);
         BufferedImage bufferedImage = ImageIO.read(imageFile);
