@@ -90,6 +90,7 @@ public class ProcedureResultsPage extends FieldIDFrontEndPage {
         add(new DateTimeLabel("scheduledForLabel", ProxyModel.of(procedureModel, on(Procedure.class).getDueDate())));
         add(new DateTimeLabel("lockedOnLabel", new UserToUTCDateModel(ProxyModel.of(procedureModel, on(Procedure.class).getLockDate()))));
         add(new DateTimeLabel("unlockedOnLabel", new UserToUTCDateModel(ProxyModel.of(procedureModel, on(Procedure.class).getUnlockDate()))).setVisible(procedureModel.getObject().getUnlockDate() != null));
+        add(new Label("lockoutReason", ProxyModel.of(procedureModel, on(Procedure.class).getLockoutReason().getDisplayName())));
         add(new Label("lockedByLabel", ProxyModel.of(procedureModel, on(Procedure.class).getLockedBy().getFullName())));
         add(new Label("unlockedByLabel", ProxyModel.of(procedureModel, on(Procedure.class).getUnlockedBy().getFullName())).setEscapeModelStrings(procedureModel.getObject().getUnlockedBy() != null));
     }
