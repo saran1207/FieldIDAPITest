@@ -8,8 +8,8 @@ import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import com.n4systems.reporting.PathHandler;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.SerializationUtils;
 import org.w3c.dom.*;
 
 import javax.imageio.ImageIO;
@@ -24,10 +24,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
 
 public class SvgGenerationService extends FieldIdPersistenceService {
 
@@ -130,7 +127,15 @@ public class SvgGenerationService extends FieldIdPersistenceService {
 
         if(bytes == null) {
             //it did not exist on S3, then create it now
-            bytes = SerializationUtils.serialize(image);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(baos);
+            oos.writeObject(image);
+            oos.flush();
+            oos.close();
+
+            InputStream is = new ByteArrayInputStream(baos.toByteArray());
+
+            bytes = IOUtils.toByteArray(is);
         } else {
             //convert image to be scaled down to jasper size
             bytes = imageService.scaleImage(bytes, DEFAULT_JASPER_WIDTH, DEFAULT_JASPER_HEIGHT);
