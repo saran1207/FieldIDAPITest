@@ -52,6 +52,10 @@ public class AlterTable implements ExecutableStatement {
 		return add(new AddPrimaryKey(columns));
 	}
 
+	public AlterTable addIndex(String...columns) {
+		return add(new AddIndex(columns));
+	}
+
 	public AlterTable modifyColumn(String name, String type, boolean notNull, boolean autoIncrement) {
 		return add(new ModifyColumn(name, type, notNull, autoIncrement));
 	}
@@ -168,6 +172,26 @@ public class AlterTable implements ExecutableStatement {
 		@Override
 		public String getDDL() {
 			StringBuilder sql = new StringBuilder("ADD PRIMARY KEY (");
+			sql.append(SQLUtils.escapeNames(columns)).append(')');
+			return sql.toString();
+		}
+	}
+
+	private class AddIndex extends AlterStatement {
+		private final String[] columns;
+
+		public AddIndex(String... columns) {
+			this.columns = columns;
+		}
+
+		@Override
+		public boolean canExecute(Connection conn, String table) throws SQLException {
+			return true;
+		}
+
+		@Override
+		public String getDDL() {
+			StringBuilder sql = new StringBuilder("ADD INDEX (");
 			sql.append(SQLUtils.escapeNames(columns)).append(')');
 			return sql.toString();
 		}

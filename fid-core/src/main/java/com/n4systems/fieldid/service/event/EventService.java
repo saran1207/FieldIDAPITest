@@ -42,6 +42,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.*;
+import java.util.function.BinaryOperator;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -378,21 +380,28 @@ public class EventService extends FieldIdPersistenceService {
         ThingEvent event = persistenceService.find(builder);
     	return event;
     }
-    
+
     public List<ThingEvent> getLastEventOfEachType(Long assetId) {
-		QueryBuilder<ThingEvent> builder = new QueryBuilder<ThingEvent>(ThingEvent.class, securityContext.getUserSecurityFilter(), "i");
+		QueryBuilder<EventIdTypeAndCompletedView> builder = new QueryBuilder<>(ThingEvent.class, securityContext.getUserSecurityFilter());
+        builder.setSelectArgument(new NewObjectSelect(EventIdTypeAndCompletedView.class, "id", "type.id", "completedDate"));
 		builder.addWhere(WhereClauseFactory.create("asset.id", assetId));
         builder.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.COMPLETED));
+        List<EventIdTypeAndCompletedView> allEvents = persistenceService.findAll(builder);
 
-		PassthruWhereClause latestClause = new PassthruWhereClause("latest_event");
-		String maxDateSelect = String.format("SELECT MAX(iSub.completedDate) FROM %s iSub WHERE iSub.state = :iSubState AND iSub.type.state = :iSubState AND iSub.asset.id = :iSubAssetId AND iSub.workflowState = :iSubWorkflowState GROUP BY iSub.type", Event.class.getName());
-		latestClause.setClause(String.format("i.completedDate IN (%s)", maxDateSelect));
-		latestClause.getParams().put("iSubAssetId", assetId);
-		latestClause.getParams().put("iSubState", EntityState.ACTIVE);
-        latestClause.getParams().put("iSubWorkflowState", WorkflowState.COMPLETED);
-        builder.addWhere(latestClause);
+        List<ThingEvent> lastEventsByType = allEvents.stream().collect(
+                Collectors.groupingBy(
+                        // group by event type
+                        EventIdTypeAndCompletedView::getTypeId,
+                        // reduce by the max completed date
+                        Collectors.reducing(BinaryOperator.maxBy(java.util.Comparator.comparing(EventIdTypeAndCompletedView::getCompleted)))
+                )
+        // Returns a Map of event type ids to Optional<EventIdTypeAndCompleted>, extract the values into a new stream
+        ).values().stream()
+                // Map them into full thing events and return a list
+                .map((e) -> persistenceService.find(ThingEvent.class, e.get().getId()))
+                .collect(Collectors.toList());
 
-        return persistenceService.findAll(builder);
+        return lastEventsByType;
 	}
 
     public Event retireEvent(ThingEvent event) {

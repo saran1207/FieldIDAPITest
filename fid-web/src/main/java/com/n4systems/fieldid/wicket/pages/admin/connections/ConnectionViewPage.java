@@ -3,45 +3,47 @@ package com.n4systems.fieldid.wicket.pages.admin.connections;
 import com.fieldid.jdbc.ActiveConnection;
 import com.fieldid.jdbc.ConnectionInterceptor;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.pages.admin.FieldIDAdminPage;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
+import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
+import org.apache.wicket.markup.repeater.data.ListDataProvider;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
+import org.apache.wicket.request.resource.ContentDisposition;
+import org.apache.wicket.util.resource.StringResourceStream;
 import org.apache.wicket.util.time.Duration;
 
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeSet;
 
 public class ConnectionViewPage extends FieldIDAdminPage {
 
+	private final List<ActiveConnection> activeConnections = new ArrayList<>();
 	private boolean autoRefreshEnabled = true;
 
 	public ConnectionViewPage() {
+		refreshConnections();
+
 		add(new FIDFeedbackPanel("feedbackPanel"));
-
-		final FIDModalWindow detailsPanel = new FIDModalWindow("detailsPanel", getDefaultModel(), 1024, 768);
-		add(detailsPanel);
-
-		IModel<String> autoRefreshButtonModel = new AbstractReadOnlyModel<String>() {
+		IModel<String> refreshButtonModel = new AbstractReadOnlyModel<String>() {
 			@Override
 			public String getObject() {
-				return "Auto Refresh: " + (autoRefreshEnabled ? "ON" : "OFF");
+				return autoRefreshEnabled ? "Pause" : "Resume";
 			}
 		};
-
-		add(new Button("autoRefresh", autoRefreshButtonModel)
+		add(new Button("autoRefresh", refreshButtonModel)
 				.add(new AjaxEventBehavior("onclick") {
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
@@ -56,19 +58,22 @@ public class ConnectionViewPage extends FieldIDAdminPage {
 		tableContainer.add(new AbstractAjaxTimerBehavior(Duration.seconds(1)) {
 			@Override
 			protected void onTimer(AjaxRequestTarget target) {
-				if (autoRefreshEnabled)
+				if (autoRefreshEnabled) {
+					refreshConnections();
 					target.add(getComponent());
+				}
 			}
 		});
-
-		tableContainer.add(new DataView<ActiveConnection>("connectionViewTable", new ActiveConnectionDataProvider()) {
+		tableContainer.add(new DataView<ActiveConnection>("connectionViewTable", new ListDataProvider<>(activeConnections)) {
 			@Override
 			protected void populateItem(final Item<ActiveConnection> item) {
-				AjaxLink<ActiveConnection> link = new AjaxLink("details", new PropertyModel<Long>(item.getModel(), "id")) {
+				final AjaxDownloadBehavior download = new AjaxDownloadBehavior(item.getModel());
+				item.add(download);
+
+				AjaxLink<Long> link = new AjaxLink<Long>("details", new PropertyModel<>(item.getModel(), "id")) {
 					@Override
 					public void onClick(AjaxRequestTarget target) {
-						detailsPanel.setContent(new ConnectionViewDetailsPanel(FIDModalWindow.CONTENT_ID, item.getModel()));
-						detailsPanel.show(target);
+						download.initiate(target);
 					}
 				};
 				link.add(new Label("mysqlId", new PropertyModel<Long>(item.getModel(), "id")));
@@ -77,27 +82,37 @@ public class ConnectionViewPage extends FieldIDAdminPage {
 				item.add(new Label("runtime", new PropertyModel<Long>(item.getModel(), "runtime")));
 				item.add(new Label("thread", new PropertyModel<String>(item.getModel(), "threadName")));
 				item.add(new Label("currentStack", new PropertyModel<String>(item.getModel(), "lastExecutedStatement.stackTrace")));
-				item.add(new Label("lastSql", new FormattedStatementModel(new PropertyModel<String>(item.getModel(), "lastExecutedStatement.sql"))));
+				item.add(new Label("lastSql", new FormattedStatementModel(new PropertyModel<>(item.getModel(), "lastExecutedStatement.sql"))));
 			}
 		});
 		add(tableContainer);
 	}
 
-	public class ActiveConnectionDataProvider extends SortableDataProvider<ActiveConnection> {
+	private void refreshConnections() {
+		activeConnections.clear();
+		activeConnections.addAll(new TreeSet<>(ConnectionInterceptor.getConnectionsInUse().values()));
+	}
 
-		@Override
-		public Iterator<? extends ActiveConnection> iterator(int first, int count) {
-			return new TreeSet<ActiveConnection>(ConnectionInterceptor.getConnectionsInUse().values()).iterator();
+	public class AjaxDownloadBehavior extends AbstractAjaxBehavior {
+		private final IModel<ActiveConnection> connection;
+
+		public AjaxDownloadBehavior(IModel<ActiveConnection> connection) {
+			this.connection = connection;
+		}
+
+		public void initiate(AjaxRequestTarget target) {
+			String url = getCallbackUrl().toString();
+			url += (url.contains("?") ? "&" : "?") + '_' + System.currentTimeMillis();
+			// the timeout is needed to let Wicket release the channel
+			target.appendJavaScript("setTimeout(\"window.location.href='" + url + "'\", 100);");
 		}
 
 		@Override
-		public int size() {
-			return ConnectionInterceptor.getConnectionsInUse().size();
-		}
-
-		@Override
-		public IModel<ActiveConnection> model(ActiveConnection activeConnection) {
-			return new ActiveConnectionModel(activeConnection);
+		public void onRequest() {
+			String fileName = "transaction_" + connection.getObject().getId() + ".log";
+			ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(new StringResourceStream(connection.getObject().toString()), fileName);
+			handler.setContentDisposition(ContentDisposition.ATTACHMENT);
+			getComponent().getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
 		}
 	}
 
