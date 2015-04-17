@@ -629,7 +629,6 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
     private List<ApiProcedureDefinitionImage> convertImages(ProcedureDefinition definition, List<ProcedureDefinitionImage> images) {
         List<ApiProcedureDefinitionImage> convertedImages = new ArrayList<ApiProcedureDefinitionImage>();
 
-        int annotationIndex = 0;
         for (ProcedureDefinitionImage image : images) {
 
             ApiProcedureDefinitionImage convertedImage = new ApiProcedureDefinitionImage();
@@ -647,8 +646,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
                         imageData = s3Service.downloadProcedureDefinitionImageSvg(image);
                     } else {
                         svgGenerationService.generateAndUploadArrowStyleAnnotatedSvgs(definition);
-                        imageData = s3Service.downloadProcedureDefinitionImageSvg(image, definition.getUnlockIsolationPoints().get(annotationIndex));
-                        annotationIndex++;
+                        imageData = s3Service.downloadProcedureDefinitionImageSvg(image);
                     }
 
                     if(imageData == null) {
