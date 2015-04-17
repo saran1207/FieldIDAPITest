@@ -9,6 +9,7 @@ import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import com.n4systems.reporting.PathHandler;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.SerializationUtils;
 import org.w3c.dom.*;
 
 import javax.imageio.ImageIO;
@@ -123,7 +124,14 @@ public class SvgGenerationService extends FieldIdPersistenceService {
         Document doc = getDocument();
 
         File imageFile = PathHandler.getTempFile();
+
+        //Not sure why we're fetching the image from S3, when we are trying to build the SVG now.
         byte [] bytes = s3Service.downloadProcedureDefinitionImage(image);
+
+        if(bytes == null) {
+            //it did not exist on S3, then create it now
+            bytes = SerializationUtils.serialize(image);
+        }
 
         //convert image to be scaled down to jasper size
         bytes = imageService.scaleImage(bytes, DEFAULT_JASPER_WIDTH, DEFAULT_JASPER_HEIGHT);
