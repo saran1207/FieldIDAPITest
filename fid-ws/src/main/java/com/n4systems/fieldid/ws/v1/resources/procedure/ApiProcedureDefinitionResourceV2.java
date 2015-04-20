@@ -629,6 +629,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
     private List<ApiProcedureDefinitionImage> convertImages(ProcedureDefinition definition, List<ProcedureDefinitionImage> images) {
         List<ApiProcedureDefinitionImage> convertedImages = new ArrayList<ApiProcedureDefinitionImage>();
 
+        int index = 0;
         for (ProcedureDefinitionImage image : images) {
 
             ApiProcedureDefinitionImage convertedImage = new ApiProcedureDefinitionImage();
@@ -638,25 +639,32 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
             convertedImage.setFileName(image.getFileName());
             convertedImage.setAnnotations(convertAnnotations(image.getAnnotations()));
 
+            byte[] imageData;
             try {
-                byte[] imageData = s3Service.downloadProcedureDefinitionImageSvg(image);
+                if (definition.getAnnotationType().equals(AnnotationType.CALL_OUT_STYLE)) {
+                    imageData = s3Service.downloadProcedureDefinitionImageSvg(image);
+                } else {
+                    imageData = s3Service.downloadProcedureDefinitionArrowImageSvg(image, index);
+                }
+
                 if(imageData == null) {
                     if (definition.getAnnotationType().equals(AnnotationType.CALL_OUT_STYLE)) {
                         svgGenerationService.generateAndUploadAnnotatedSvgs(definition);
                         imageData = s3Service.downloadProcedureDefinitionImageSvg(image);
                     } else {
                         svgGenerationService.generateAndUploadArrowStyleAnnotatedSvgs(definition);
-                        imageData = s3Service.downloadProcedureDefinitionImageSvg(image);
+                        imageData = s3Service.downloadProcedureDefinitionArrowImageSvg(image, index);
+                        index++;
                     }
 
                     if(imageData == null) {
                         throw new Exception("Image does not exist...");
                     }
 
-                    //convertedImage.setData(s3Service.downloadProcedureDefinitionMediumImage(image));
                     convertedImage.setData(imageData);
                 } else {
                     convertedImage.setData(imageData);
+                    index++;
                 }
 
             } catch (IOException ioe) {
