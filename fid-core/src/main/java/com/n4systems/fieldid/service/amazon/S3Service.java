@@ -533,7 +533,7 @@ public class S3Service extends FieldIdPersistenceService {
         return downloadResource(getCurrentTenant().getId(), PROCEDURE_DEFINITION_IMAGE_PATH,
                 image.getProcedureDefinition().getAsset().getId(),
                 image.getProcedureDefinition().getId(),
-                (image.getFileName() + "_" + image.getAnnotations().get(index).getID() + ".svg"));
+                (image.getAnnotations().get(index).getImage().getFileName() + "_" + image.getAnnotations().get(index).getID() + ".svg"));
     }
 
     public byte[] downloadProcedureDefinitionImageSvg(ProcedureDefinitionImage image) throws IOException {
