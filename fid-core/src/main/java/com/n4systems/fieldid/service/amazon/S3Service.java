@@ -551,10 +551,10 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     public byte[] downloadProcedureDefinitionImageSvg(ProcedureDefinition procedureDefinition, String filename, IsolationPoint isolationPoint) throws IOException {
-        return imageService.generateMedium(downloadResource(getCurrentTenant().getId(), PROCEDURE_DEFINITION_IMAGE_PATH,
+        return downloadResource(getCurrentTenant().getId(), PROCEDURE_DEFINITION_IMAGE_PATH,
                 procedureDefinition.getAsset().getId(),
                 procedureDefinition.getId(),
-                (filename + "_" + isolationPoint.getAnnotation().getId() + ".svg")));
+                (filename + "_" + isolationPoint.getAnnotation().getId() + ".svg"));
     }
 
 
