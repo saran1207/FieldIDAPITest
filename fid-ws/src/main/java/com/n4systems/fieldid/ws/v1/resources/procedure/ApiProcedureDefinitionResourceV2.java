@@ -11,6 +11,7 @@ import com.n4systems.fieldid.ws.v1.resources.assettype.attributevalues.ApiAttrib
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.Asset;
 import com.n4systems.model.IsolationPointSourceType;
+import com.n4systems.model.common.EditableImage;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.common.ImageAnnotationType;
 import com.n4systems.model.procedure.*;
@@ -626,13 +627,15 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         return apiIsolationPoints;
     }
 
-    private List<ApiProcedureDefinitionImage> convertImages(ProcedureDefinition definition, List<ProcedureDefinitionImage> images) {
+    private List<ApiProcedureDefinitionImage> convertImages(ProcedureDefinition definition) {
         List<ApiProcedureDefinitionImage> convertedImages = new ArrayList<ApiProcedureDefinitionImage>();
 
-        int index = 0;
-        for (ProcedureDefinitionImage image : images) {
+        List<IsolationPoint> isolationPoints = definition.getUnlockIsolationPoints();
 
+        for(IsolationPoint point:isolationPoints) {
             ApiProcedureDefinitionImage convertedImage = new ApiProcedureDefinitionImage();
+            EditableImage image = point.getAnnotation().getImage();
+
             convertedImage.setSid(image.getMobileGUID());
             convertedImage.setModified(image.getModified());
             convertedImage.setActive(true);
@@ -641,41 +644,32 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
 
             byte[] imageData;
             try {
-                if (definition.getAnnotationType().equals(AnnotationType.CALL_OUT_STYLE)) {
-                    imageData = s3Service.downloadProcedureDefinitionImageSvg(image);
-                } else {
-                    imageData = s3Service.downloadProcedureDefinitionArrowImageSvg(image, index);
-                }
+                imageData = s3Service.downloadProcedureDefinitionImageSvg(definition, image.getFileName(), point);
 
                 if(imageData == null) {
                     if (definition.getAnnotationType().equals(AnnotationType.CALL_OUT_STYLE)) {
                         svgGenerationService.generateAndUploadAnnotatedSvgs(definition);
-                        imageData = s3Service.downloadProcedureDefinitionImageSvg(image);
                     } else {
                         svgGenerationService.generateAndUploadArrowStyleAnnotatedSvgs(definition);
-                        imageData = s3Service.downloadProcedureDefinitionArrowImageSvg(image, index);
-                        index++;
                     }
+
+                    imageData = s3Service.downloadProcedureDefinitionImageSvg(definition, image.getFileName(), point);
 
                     if(imageData == null) {
                         throw new Exception("Image does not exist...");
                     }
-
-                    convertedImage.setData(imageData);
-                } else {
-                    convertedImage.setData(imageData);
-                    index++;
                 }
 
+                convertedImage.setData(imageData);
             } catch (IOException ioe) {
                 log.error("IOException downloading procedure def image: " + image.getId(), ioe);
             } catch (Exception e) {
                 log.error("There was a problem while Generating SVGs for ProcDef with ID " + definition.getId(), e);
                 e.printStackTrace();
             }
+
             convertedImages.add(convertedImage);
         }
-
         return convertedImages;
     }
 
@@ -737,7 +731,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         apiProcedureDef.setActive(procedureDef.isActive());
         apiProcedureDef.setStatus(procedureDef.getPublishedState().getName());
 
-        apiProcedureDef.setImages(convertImages(procedureDef, procedureDef.getImages()));
+        apiProcedureDef.setImages(convertImages(procedureDef));
 
         apiProcedureDef.setRejectedReason(procedureDef.getRejectedReason());
 
