@@ -640,7 +640,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
                 convertedImage.setSid(image.getMobileGUID());
                 convertedImage.setModified(image.getModified());
                 convertedImage.setActive(true);
-                convertedImage.setFileName(image.getFileName());
+                convertedImage.setFileName(Long.toString(point.getID()));
                 convertedImage.setAnnotations(convertAnnotations(image.getAnnotations()));
 
                 byte[] imageData;
