@@ -548,6 +548,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         List<AssigneeNotification> resultList = persistenceService.findAll(builder);
         for (AssigneeNotification o : resultList) {
             o.getEvent().setAssigneeNotification(null);
+            persistenceService.update(o.getEvent());
             persistenceService.remove(o);
         }
     }

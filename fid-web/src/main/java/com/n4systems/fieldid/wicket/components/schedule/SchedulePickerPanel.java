@@ -44,6 +44,8 @@ public class SchedulePickerPanel<T extends Event> extends Panel {
     private ScheduleForm scheduleForm;
     private Label saveScheduleLabel;
 
+    private Boolean assigneeOrDateUpdated;
+
     @SpringBean
     private DateService dateService;
 
@@ -63,6 +65,8 @@ public class SchedulePickerPanel<T extends Event> extends Panel {
         public ScheduleForm(String id, final IModel<T> eventScheduleModel, final IModel<List<? extends EventType>> eventTypeOptions, final IModel<List<Project>> jobsOptions) {
             super(id, eventScheduleModel);
 
+            assigneeOrDateUpdated = eventScheduleModel.getObject().getAssigneeOrDateUpdated();
+
             Date dueDate = eventScheduleModel.getObject().getDueDate();
 
             setDefaultEventType(eventScheduleModel, eventTypeOptions);
@@ -72,7 +76,7 @@ public class SchedulePickerPanel<T extends Event> extends Panel {
             add(dateTimePicker = new DateTimePicker("datePicker", new PropertyModel<Date>(eventScheduleModel, "dueDate"), true) {
                 @Override
                 protected void onDatePicked(AjaxRequestTarget target) {
-                    eventScheduleModel.getObject().setAssigneeOrDateUpdated();
+                    assigneeOrDateUpdated = Boolean.TRUE;
                 }
             });
             dateTimePicker.getDateTextField().setRequired(true);
@@ -124,7 +128,7 @@ public class SchedulePickerPanel<T extends Event> extends Panel {
             assignedUserOrGroupSelect.addBehavior(new UpdateComponentOnChange() {
                 @Override
                 protected void onUpdate(AjaxRequestTarget target) {
-                    eventScheduleModel.getObject().setAssigneeOrDateUpdated();
+                    assigneeOrDateUpdated = Boolean.TRUE;
                 }
             });
 
@@ -133,6 +137,9 @@ public class SchedulePickerPanel<T extends Event> extends Panel {
             AjaxSubmitLink addScheduleButton =  new AjaxSubmitLink("addScheduleButton") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                    if(assigneeOrDateUpdated) {
+                        eventScheduleModel.getObject().setAssigneeOrDateUpdated();
+                    }
                     onPickComplete(target);
                     setDefaultEventType(eventScheduleModel, eventTypeOptions);
                     target.add(feedbackPanel);
@@ -178,6 +185,7 @@ public class SchedulePickerPanel<T extends Event> extends Panel {
                     dateToSchedule = DateUtils.addMonths(dateToSchedule, monthsFromNow);
                     dateToSchedule = DateUtils.addDays(dateToSchedule, daysFromNow);
                     scheduleModel.getObject().setDueDate(dateToSchedule);
+                    assigneeOrDateUpdated = Boolean.TRUE;
                     // We must clear the input in case we have some raw input in the date field that had a validation error.
                     dateTimePicker.clearInput();
                     dateTimePicker.setAllDay(true);

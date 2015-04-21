@@ -348,6 +348,7 @@ public abstract class Event<T extends EventType, V extends Event, R extends Enti
 		if(sendEmailOnUpdate) {
 			assigneeNotification = new AssigneeNotification();
 			assigneeNotification.setEvent(this);
+			setAssigneeNotification(assigneeNotification);
 		}
 		normalizeAssignmentForPersistence();
         setTriggersIntoResultingActions(this);
@@ -362,15 +363,6 @@ public abstract class Event<T extends EventType, V extends Event, R extends Enti
 	@Override
 	protected void onUpdate() {
 		super.onUpdate();
-		//In the event that there's an update, we want email notifications AND there's currently no notification set,
-		//we want to create one.  This method should execute right before an update, so we should be able to rely on
-		//this doing the job...  The only downside here is that if ANY change is made to this event, a notification is
-		//sent.  It's hard to be specific since we don't have access to historic information about the Event (ie. who
-		//it was assigned to before, what the date was before, etc.)
-		if(sendEmailOnUpdate && assigneeNotification == null) {
-			assigneeNotification = new AssigneeNotification();
-			assigneeNotification.setEvent(this);
-		}
 		normalizeAssignmentForPersistence();
         setTriggersIntoResultingActions(this);
 	}

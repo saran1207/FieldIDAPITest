@@ -348,6 +348,8 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
                         AssigneeNotification assigneeNotification = new AssigneeNotification();
                         assigneeNotification.setEvent(action);
                         persistenceService.save(assigneeNotification);
+                        action.setAssigneeNotification(assigneeNotification);
+                        persistenceService.update(action);
                     }
                 }
             }
