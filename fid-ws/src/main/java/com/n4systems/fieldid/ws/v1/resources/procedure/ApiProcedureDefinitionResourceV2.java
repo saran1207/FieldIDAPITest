@@ -633,42 +633,44 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         List<IsolationPoint> isolationPoints = definition.getUnlockIsolationPoints();
 
         for(IsolationPoint point:isolationPoints) {
-            ApiProcedureDefinitionImage convertedImage = new ApiProcedureDefinitionImage();
-            EditableImage image = point.getAnnotation().getImage();
+            if(point.getSourceType() != IsolationPointSourceType.N) {
+                ApiProcedureDefinitionImage convertedImage = new ApiProcedureDefinitionImage();
+                EditableImage image = point.getAnnotation().getImage();
 
-            convertedImage.setSid(image.getMobileGUID());
-            convertedImage.setModified(image.getModified());
-            convertedImage.setActive(true);
-            convertedImage.setFileName(image.getFileName());
-            convertedImage.setAnnotations(convertAnnotations(image.getAnnotations()));
+                convertedImage.setSid(image.getMobileGUID());
+                convertedImage.setModified(image.getModified());
+                convertedImage.setActive(true);
+                convertedImage.setFileName(image.getFileName());
+                convertedImage.setAnnotations(convertAnnotations(image.getAnnotations()));
 
-            byte[] imageData;
-            try {
-                imageData = s3Service.downloadProcedureDefinitionImageSvg(definition, image.getFileName(), point);
-
-                if(imageData == null) {
-                    if (definition.getAnnotationType().equals(AnnotationType.CALL_OUT_STYLE)) {
-                        svgGenerationService.generateAndUploadAnnotatedSvgs(definition);
-                    } else {
-                        svgGenerationService.generateAndUploadArrowStyleAnnotatedSvgs(definition);
-                    }
-
+                byte[] imageData;
+                try {
                     imageData = s3Service.downloadProcedureDefinitionImageSvg(definition, image.getFileName(), point);
 
-                    if(imageData == null) {
-                        throw new Exception("Image does not exist...");
+                    if (imageData == null) {
+                        if (definition.getAnnotationType().equals(AnnotationType.CALL_OUT_STYLE)) {
+                            svgGenerationService.generateAndUploadAnnotatedSvgs(definition);
+                        } else {
+                            svgGenerationService.generateAndUploadArrowStyleAnnotatedSvgs(definition);
+                        }
+
+                        imageData = s3Service.downloadProcedureDefinitionImageSvg(definition, image.getFileName(), point);
+
+                        if (imageData == null) {
+                            throw new Exception("Image does not exist...");
+                        }
                     }
+
+                    convertedImage.setData(imageData);
+                } catch (IOException ioe) {
+                    log.error("IOException downloading procedure def image: " + image.getId(), ioe);
+                } catch (Exception e) {
+                    log.error("There was a problem while Generating SVGs for ProcDef with ID " + definition.getId(), e);
+                    e.printStackTrace();
                 }
 
-                convertedImage.setData(imageData);
-            } catch (IOException ioe) {
-                log.error("IOException downloading procedure def image: " + image.getId(), ioe);
-            } catch (Exception e) {
-                log.error("There was a problem while Generating SVGs for ProcDef with ID " + definition.getId(), e);
-                e.printStackTrace();
+                convertedImages.add(convertedImage);
             }
-
-            convertedImages.add(convertedImage);
         }
         return convertedImages;
     }
