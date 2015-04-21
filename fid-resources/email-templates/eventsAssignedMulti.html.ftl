@@ -290,7 +290,7 @@
                                             <#else>
                                                 <strong>Issuing Event:</strong>&nbsp;${triggeringEventStringMap.get(event.id)} <br>
                                             </#if>
-                                            <strong>Assigned By:</strong> ${event.modifiedBy.fullName} <br>
+                                            <strong>Assigned By:</strong> ${event.modifiedBy.fullName!} <br>
                                         </#if>
                                     </p>
                                 </td>
