@@ -3,21 +3,23 @@ package com.n4systems.fieldid.service.event;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.PlaceEvent;
 import com.n4systems.model.notification.AssigneeNotification;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 public class PlaceEventScheduleService extends FieldIdPersistenceService {
 
-    public PlaceEvent updateSchedule(PlaceEvent schedule){
-        return updateSchedule(schedule, false);
-    }
+    @Autowired
+    private NotifyEventAssigneeService notifyEventAssigneeService;
 
     @Transactional
-    public PlaceEvent updateSchedule(PlaceEvent schedule, boolean dateUpdated) {
-        if(schedule.isSendEmailOnUpdate() && dateUpdated) {
-            AssigneeNotification assigneeNotification = new AssigneeNotification();
-            assigneeNotification.setEvent(schedule);
-            persistenceService.save(assigneeNotification);
-            schedule.setAssigneeNotification(assigneeNotification);
+    public PlaceEvent updateSchedule(PlaceEvent schedule) {
+        if(schedule.isSendEmailOnUpdate() && schedule.getAssigneeOrDateUpdated()) {
+            if(!notifyEventAssigneeService.notificationExists(schedule)) {
+                AssigneeNotification assigneeNotification = new AssigneeNotification();
+                assigneeNotification.setEvent(schedule);
+                persistenceService.save(assigneeNotification);
+                schedule.setAssigneeNotification(assigneeNotification);
+            }
         }
 
         PlaceEvent updatedSchedule = persistenceService.update(schedule);

@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.action;
 
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.service.event.ActionService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
@@ -46,6 +47,9 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
 
     @SpringBean
     private PersistenceService persistenceService;
+
+    @SpringBean
+    private ActionService actionService;
 
     @SpringBean
     private DateService dateService;
@@ -170,7 +174,7 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
                         //The other attributes are already set.
                         getModelObject().setDueDate(scheduledDateModel.getObject());
                         getModelObject().setPriority(priorityCodeModel.getObject());
-                        persistenceService.update(getModelObject());
+                        actionService.update(getModelObject());
                         setResponsePage(new ActionDetailsPage(criteriaResultModel, eventClass, eventModel));
 
                     } else {

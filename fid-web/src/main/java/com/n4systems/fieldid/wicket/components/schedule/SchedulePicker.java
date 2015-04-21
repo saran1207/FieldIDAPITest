@@ -29,7 +29,6 @@ public class SchedulePicker<T extends Event> extends DialogModalWindow {
                 SchedulePicker.this.onPickComplete(target);
             }
         });
-        //setInitialWidth(370);
         setInitialWidth(400);
         setInitialHeight(450);
     }
