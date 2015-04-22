@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.MessagingException;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -66,7 +67,6 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     @Autowired private ExtendedFeatureService extendedFeatureService;
     @Autowired private ActionEmailCustomizationService actionEmailCustomizationService;
 
-    @Transactional
     public void sendNotifications() {
         notifyUserAssignees();
         notifyGroupAssignees();
@@ -90,7 +90,11 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         Set<UserGroup> groups = aggregateAssignedGroups(assigneeRecords);
 
         for (UserGroup assignee : groups) {
-            sendNotificationsFor(assignee);
+            try {
+                sendNotificationsFor(assignee);
+            } catch (Exception e) {
+                logger.error("Failed to send notification for group: " + assignee.getName() + "(" + assignee.getTenant().getName() + ")", e);
+            }
         }
     }
 
@@ -111,7 +115,11 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         Set<User> assignees = aggregateAssignees(assigneeRecords);
 
         for (User assignee : assignees) {
-            sendNotificationsFor(assignee);
+            try {
+                sendNotificationsFor(assignee);
+            } catch (Exception e) {
+                logger.error("Failed to send notification for user: " + assignee.getUserID() + "(" + assignee.getTenant().getName() + ")", e);
+            }
         }
     }
 
@@ -135,7 +143,8 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         return assignees;
     }
 
-    private void sendNotificationsFor(User assignee) {
+    @Transactional
+    private void sendNotificationsFor(User assignee) throws Exception{
         QueryBuilder<Event> assigneeQuery = new QueryBuilder<>(AssigneeNotification.class, new OpenSecurityFilter());
         assigneeQuery.setSimpleSelect("event");
         assigneeQuery.addSimpleWhere("event.assignee", assignee);
@@ -144,7 +153,8 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         removeNotificationsForAssignee(assignee);
     }
 
-    private void sendNotificationsFor(UserGroup assignedGroup) {
+    @Transactional
+    private void sendNotificationsFor(UserGroup assignedGroup) throws Exception {
         QueryBuilder<Event> assigneeQuery = new QueryBuilder<>(AssigneeNotification.class, new OpenSecurityFilter());
         assigneeQuery.setSimpleSelect("event");
         assigneeQuery.addSimpleWhere("event.assignedGroup", assignedGroup);
@@ -153,47 +163,32 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         removeNotificationsForAssignedGroup(assignedGroup);
     }
 
-    private void notifyEventAssignee(List<Event> events, UserGroup assignedGroup) {
-        try {
+    private void notifyEventAssignee(List<Event> events, UserGroup assignedGroup) throws MessagingException {
+        securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(assignedGroup.getTenant()));
 
-            securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(assignedGroup.getTenant()));
+        for (User member : userGroupService.getUsersInGroup(assignedGroup.getId())) {
 
+            if(member.getOwner().getPrimaryOrg().getExtendedFeatures().contains(ExtendedFeature.EmailAlerts)) {
+                // Instead of sending a multi message, since users can define their own date
+                // formats and we want our notification to reflect this, we send an individual email to each member.
+                TemplateMailMessage message = createMultiNotifications(events, member);
 
+                message.getToAddresses().add(member.getEmailAddress());
 
-            for (User member : userGroupService.getUsersInGroup(assignedGroup.getId())) {
-
-                if(member.getOwner().getPrimaryOrg().getExtendedFeatures().contains(ExtendedFeature.EmailAlerts)) {
-                    // Instead of sending a multi message, since users can define their own date
-                    // formats and we want our notification to reflect this, we send an individual email to each member.
-                    TemplateMailMessage message = createMultiNotifications(events, member);
-
-                    message.getToAddresses().add(member.getEmailAddress());
-
-                    message.getTemplateMap().put("assignedGroup", assignedGroup);
-                    mailService.sendMessage(message);
-                }
+                message.getTemplateMap().put("assignedGroup", assignedGroup);
+                mailService.sendMessage(message);
             }
-
-
-        } catch (Exception e) {
-            logger.error("Could not notify assigned group", e);
-        } finally {
-            securityContext.reset();
         }
     }
 
-    private void notifyEventAssignee(List<Event> events, User assignee) {
-        try {
-            if(assignee.getOwner().getPrimaryOrg().getExtendedFeatures().contains(ExtendedFeature.EmailAlerts)) {
-                TemplateMailMessage message = createMultiNotifications(events, assignee);
+    private void notifyEventAssignee(List<Event> events, User assignee) throws MessagingException {
+        if(assignee.getOwner().getPrimaryOrg().getExtendedFeatures().contains(ExtendedFeature.EmailAlerts)) {
+            TemplateMailMessage message = createMultiNotifications(events, assignee);
 
-                message.getToAddresses().add(assignee.getEmailAddress());
-                message.getTemplateMap().put("assignee", assignee);
+            message.getToAddresses().add(assignee.getEmailAddress());
+            message.getTemplateMap().put("assignee", assignee);
 
-                mailService.sendMessage(message);
-            }
-        } catch (Exception e) {
-            logger.error("Could not notify assignee", e);
+            mailService.sendMessage(message);
         }
     }
 
