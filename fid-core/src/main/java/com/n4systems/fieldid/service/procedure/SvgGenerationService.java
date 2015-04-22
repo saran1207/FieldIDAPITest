@@ -9,6 +9,7 @@ import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import com.n4systems.reporting.PathHandler;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.w3c.dom.*;
 
@@ -33,6 +34,8 @@ public class SvgGenerationService extends FieldIdPersistenceService {
 
     @Autowired
     private ImageService imageService;
+
+    private static final Logger logger = Logger.getLogger(SvgGenerationService.class);
 
     public static Integer DEFAULT_JASPER_HEIGHT = 140;
     public static Integer DEFAULT_JASPER_WIDTH = 140;
@@ -62,6 +65,13 @@ public class SvgGenerationService extends FieldIdPersistenceService {
 
     private void uploadSvg(ProcedureDefinition procedureDefinition, File svgFile) {
         s3Service.uploadProcedureDefinitionSvg(procedureDefinition, svgFile);
+        try {
+            if(!svgFile.delete()) {
+                logger.error("The following file was not able to be deleted: " + svgFile.toString());
+            }
+        } catch (SecurityException e) {
+            logger.error("The following file was not able to be deleted: " + svgFile.toString(), e);
+        }
     }
 
     private File exportToSvg(ProcedureDefinitionImage image) throws Exception {
