@@ -640,7 +640,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
                 convertedImage.setSid(image.getMobileGUID());
                 convertedImage.setModified(image.getModified());
                 convertedImage.setActive(true);
-                convertedImage.setFileName(Long.toString(point.getID()));
+                convertedImage.setFileName(Long.toString(point.getID()) + ".svg");
                 convertedImage.setAnnotations(convertAnnotations(image.getAnnotations()));
 
                 byte[] imageData;
