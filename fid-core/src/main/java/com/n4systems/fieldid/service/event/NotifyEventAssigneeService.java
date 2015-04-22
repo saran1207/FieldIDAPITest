@@ -24,7 +24,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.mail.MessagingException;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -67,6 +66,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     @Autowired private ExtendedFeatureService extendedFeatureService;
     @Autowired private ActionEmailCustomizationService actionEmailCustomizationService;
 
+    @Transactional
     public void sendNotifications() {
         notifyUserAssignees();
         notifyGroupAssignees();
@@ -90,11 +90,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         Set<UserGroup> groups = aggregateAssignedGroups(assigneeRecords);
 
         for (UserGroup assignee : groups) {
-            try {
-                sendNotificationsFor(assignee);
-            } catch (Exception e) {
-                logger.error("Failed to send notification for group: " + assignee.getName() + "(" + assignee.getTenant().getName() + ")", e);
-            }
+            sendNotificationsFor(assignee);
         }
     }
 
@@ -115,11 +111,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         Set<User> assignees = aggregateAssignees(assigneeRecords);
 
         for (User assignee : assignees) {
-            try {
-                sendNotificationsFor(assignee);
-            } catch (Exception e) {
-                logger.error("Failed to send notification for user: " + assignee.getUserID() + "(" + assignee.getTenant().getName() + ")", e);
-            }
+            sendNotificationsFor(assignee);
         }
     }
 
@@ -143,8 +135,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         return assignees;
     }
 
-    @Transactional
-    private void sendNotificationsFor(User assignee) throws Exception{
+    private void sendNotificationsFor(User assignee) {
         QueryBuilder<Event> assigneeQuery = new QueryBuilder<>(AssigneeNotification.class, new OpenSecurityFilter());
         assigneeQuery.setSimpleSelect("event");
         assigneeQuery.addSimpleWhere("event.assignee", assignee);
@@ -153,8 +144,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         removeNotificationsForAssignee(assignee);
     }
 
-    @Transactional
-    private void sendNotificationsFor(UserGroup assignedGroup) throws Exception {
+    private void sendNotificationsFor(UserGroup assignedGroup) {
         QueryBuilder<Event> assigneeQuery = new QueryBuilder<>(AssigneeNotification.class, new OpenSecurityFilter());
         assigneeQuery.setSimpleSelect("event");
         assigneeQuery.addSimpleWhere("event.assignedGroup", assignedGroup);
@@ -163,32 +153,47 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         removeNotificationsForAssignedGroup(assignedGroup);
     }
 
-    private void notifyEventAssignee(List<Event> events, UserGroup assignedGroup) throws MessagingException {
-        securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(assignedGroup.getTenant()));
+    private void notifyEventAssignee(List<Event> events, UserGroup assignedGroup) {
+        try {
 
-        for (User member : userGroupService.getUsersInGroup(assignedGroup.getId())) {
+            securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(assignedGroup.getTenant()));
 
-            if(member.getOwner().getPrimaryOrg().getExtendedFeatures().contains(ExtendedFeature.EmailAlerts)) {
-                // Instead of sending a multi message, since users can define their own date
-                // formats and we want our notification to reflect this, we send an individual email to each member.
-                TemplateMailMessage message = createMultiNotifications(events, member);
 
-                message.getToAddresses().add(member.getEmailAddress());
 
-                message.getTemplateMap().put("assignedGroup", assignedGroup);
-                mailService.sendMessage(message);
+            for (User member : userGroupService.getUsersInGroup(assignedGroup.getId())) {
+
+                if(member.getOwner().getPrimaryOrg().getExtendedFeatures().contains(ExtendedFeature.EmailAlerts)) {
+                    // Instead of sending a multi message, since users can define their own date
+                    // formats and we want our notification to reflect this, we send an individual email to each member.
+                    TemplateMailMessage message = createMultiNotifications(events, member);
+
+                    message.getToAddresses().add(member.getEmailAddress());
+
+                    message.getTemplateMap().put("assignedGroup", assignedGroup);
+                    mailService.sendMessage(message);
+                }
             }
+
+
+        } catch (Exception e) {
+            logger.error("Could not notify assigned group", e);
+        } finally {
+            securityContext.reset();
         }
     }
 
-    private void notifyEventAssignee(List<Event> events, User assignee) throws MessagingException {
-        if(assignee.getOwner().getPrimaryOrg().getExtendedFeatures().contains(ExtendedFeature.EmailAlerts)) {
-            TemplateMailMessage message = createMultiNotifications(events, assignee);
+    private void notifyEventAssignee(List<Event> events, User assignee) {
+        try {
+            if(assignee.getOwner().getPrimaryOrg().getExtendedFeatures().contains(ExtendedFeature.EmailAlerts)) {
+                TemplateMailMessage message = createMultiNotifications(events, assignee);
 
-            message.getToAddresses().add(assignee.getEmailAddress());
-            message.getTemplateMap().put("assignee", assignee);
+                message.getToAddresses().add(assignee.getEmailAddress());
+                message.getTemplateMap().put("assignee", assignee);
 
-            mailService.sendMessage(message);
+                mailService.sendMessage(message);
+            }
+        } catch (Exception e) {
+            logger.error("Could not notify assignee", e);
         }
     }
 
@@ -289,21 +294,21 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         //First, lets grab all of the assets from any ThingEvents...
         //Warning: this might cause an NPE if the resulting list is empty... but I think it'll be fine.
         List<Asset> associatedAssets = events.stream()
-                                             //So we filter for ThingEvents...
-                                             .filter(event -> event instanceof ThingEvent)
-                                             //then re-map the list to Assets and pull the Assets off of casted Events...
-                                             .map(event -> ((ThingEvent)event).getAsset())
-                                             //...then collect those Assets back to a Stream.
-                                             .collect(Collectors.toList());
+                //So we filter for ThingEvents...
+                .filter(event -> event instanceof ThingEvent)
+                        //then re-map the list to Assets and pull the Assets off of casted Events...
+                .map(event -> ((ThingEvent)event).getAsset())
+                        //...then collect those Assets back to a Stream.
+                .collect(Collectors.toList());
 
         //Next we're going to pull the Assets from any ActionEvents.  These don't have an asset themselves, but have
         //Trigger Events that might...
         associatedAssets.addAll(events.stream()
-                                      //...so we'll filter for any ActionEvents with ThingEvent Trigger Events... EVENT!!!
-                                      .filter(event -> event.isAction() && event.getTriggerEvent() instanceof ThingEvent)
-                                      //We then pull off those assets and - again - re-map to an Asset List.
-                                      .map(event -> ((ThingEvent) event).getAsset())
-                                      .collect(Collectors.toList()));
+                //...so we'll filter for any ActionEvents with ThingEvent Trigger Events... EVENT!!!
+                .filter(event -> event.isAction() && event.getTriggerEvent() instanceof ThingEvent)
+                        //We then pull off those assets and - again - re-map to an Asset List.
+                .map(event -> ((ThingEvent) event).getAsset())
+                .collect(Collectors.toList()));
 
         //Our implementation of equals should be enough for this to work.  We could have done this earlier, but
         //would still have wanted to call .distinct() yet again right here.  Now we just grind down the list of
@@ -332,8 +337,8 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
      */
     private Map<Long, String> createTriggeringEventStringMap(List<Event> events) {
         return events.stream()
-                     .filter(event -> event.getTriggerEvent() != null)
-                     .collect(Collectors.toMap(Event::getID, event -> createTriggeringEventString(event.getTriggerEvent())));
+                .filter(event -> event.getTriggerEvent() != null)
+                .collect(Collectors.toMap(Event::getID, event -> createTriggeringEventString(event.getTriggerEvent())));
     }
 
     /**
@@ -358,8 +363,8 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
      */
     private Map<Long, List<String>> createAttachedImageListMap(List<Event> events) {
         return events.stream()
-                     .filter(event -> event.getTriggerEvent() != null && event.getTriggerEvent().getImageAttachments().size() > 0)
-                     .collect(Collectors.toMap(Event::getId, event -> createAttachedImageUrlList(event.getTriggerEvent())));
+                .filter(event -> event.getTriggerEvent() != null && event.getTriggerEvent().getImageAttachments().size() > 0)
+                .collect(Collectors.toMap(Event::getId, event -> createAttachedImageUrlList(event.getTriggerEvent())));
     }
 
     /**
@@ -394,9 +399,9 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
      */
     private Map<Long, String> createEventSummaryUrlMap(List<Event> events) {
         return events.stream()
-                     //Poor naming, but we only care about events with trigger events...
-                     .filter(event -> event.getTriggerEvent() != null)
-                     .collect(Collectors.toMap(event -> event.getTriggerEvent().getId(), this::createEventSummaryUrl));
+                //Poor naming, but we only care about events with trigger events...
+                .filter(event -> event.getTriggerEvent() != null)
+                .collect(Collectors.toMap(event -> event.getTriggerEvent().getId(), this::createEventSummaryUrl));
     }
 
     /**
@@ -443,8 +448,8 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
 
 
         return placesToConvert.stream()
-                              .distinct()
-                              .collect(Collectors.toMap(BaseOrg::getId, this::createPlaceSummaryUrl));
+                .distinct()
+                .collect(Collectors.toMap(BaseOrg::getId, this::createPlaceSummaryUrl));
     }
 
     /**
@@ -468,7 +473,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     private Map<Long, String> createPerformEventUrlMap(List<Event> events) {
         //This one is simple... we're just collecting the list into a Map and using the function below to make the URLs.
         return events.stream()
-                     .collect(Collectors.toMap(Event::getId, this::createPerformEventUrl));
+                .collect(Collectors.toMap(Event::getId, this::createPerformEventUrl));
     }
 
     /**
@@ -482,39 +487,39 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         String performEventUrl = SystemUrlUtil.getSystemUrl(event.getTenant()) + PERFORM_EVENT_URL_FRAGMENT;
         if(event instanceof ThingEvent) {
             if(event.getType() instanceof ThingEventType &&
-               ((ThingEventType)event.getType()).isMaster()) {
+                    ((ThingEventType)event.getType()).isMaster()) {
 
                 //Master events are a bit different, since they use Struts.  We'll just resassign a completely
                 //different URL here and continue on with our business.
                 performEventUrl = SystemUrlUtil.getSystemUrl(event.getTenant()) + PERFORM_MASTER_EVENT_FRAGMENT;
                 performEventUrl = MessageFormat.format(performEventUrl,
-                                                       ((ThingEvent)event).getAsset().getId().toString(),
-                                                       event.getType().getId().toString(),
-                                                       event.getId().toString());
+                        ((ThingEvent)event).getAsset().getId().toString(),
+                        event.getType().getId().toString(),
+                        event.getId().toString());
             } else {
                 performEventUrl += THING_EVENT_ID_FRAGMENT;
                 performEventUrl = MessageFormat.format(performEventUrl,
-                                                       PERFORM_THING_EVENT_FRAGMENT,
-                                                       event.getId().toString(),
-                                                       event.getType().getId().toString(),
-                                                       ((ThingEvent) event).getAsset().getId().toString());
+                        PERFORM_THING_EVENT_FRAGMENT,
+                        event.getId().toString(),
+                        event.getType().getId().toString(),
+                        ((ThingEvent) event).getAsset().getId().toString());
             }
         } else
         if(event instanceof PlaceEvent) {
             performEventUrl += PLACE_EVENT_ID_FRAGMENT;
             performEventUrl = MessageFormat.format(performEventUrl,
-                                                   PERFORM_PLACE_EVENT_FRAGMENT,
-                                                   event.getId().toString(),
-                                                   event.getType().getId().toString(),
-                                                   ((PlaceEvent)event).getPlace().getId().toString());
+                    PERFORM_PLACE_EVENT_FRAGMENT,
+                    event.getId().toString(),
+                    event.getType().getId().toString(),
+                    ((PlaceEvent)event).getPlace().getId().toString());
         } else
         if(event instanceof ProcedureAuditEvent) {
             performEventUrl += PROCEDURE_AUDIT_ID_FRAGMENT;
             performEventUrl = MessageFormat.format(performEventUrl,
-                                                   PERFORM_PROCEDURE_AUDIT_FRAGMENT,
-                                                   event.getId().toString(),
-                                                   event.getType().getId().toString(),
-                                                   ((ProcedureAuditEvent)event).getProcedureDefinition().getId().toString());
+                    PERFORM_PROCEDURE_AUDIT_FRAGMENT,
+                    event.getId().toString(),
+                    event.getType().getId().toString(),
+                    ((ProcedureAuditEvent)event).getProcedureDefinition().getId().toString());
         }
 
         return performEventUrl;
