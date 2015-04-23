@@ -529,6 +529,18 @@ public class S3Service extends FieldIdPersistenceService {
                 svgFile.getName());
     }
 
+    public void uploadProcedureDefinitionSvg(ProcedureDefinition procedureDefinition, byte[] fileContents, String fileName) {
+        uploadResource(fileContents,
+                        //This is the MIME type for SVG images.  We can statically place this here since this is the
+                        //only type we're dealing with... you know... because this method is for SVGs.
+                        "image/svg+xml",
+                        procedureDefinition.getTenant().getId(),
+                        PROCEDURE_DEFINITION_IMAGE_PATH,
+                        procedureDefinition.getAsset().getId(),
+                        procedureDefinition.getId(),
+                        fileName);
+    }
+
     public byte[] downloadProcedureDefinitionArrowImageSvg(ProcedureDefinitionImage image, int index) throws IOException {
         return downloadResource(getCurrentTenant().getId(), PROCEDURE_DEFINITION_IMAGE_PATH,
                 image.getProcedureDefinition().getAsset().getId(),

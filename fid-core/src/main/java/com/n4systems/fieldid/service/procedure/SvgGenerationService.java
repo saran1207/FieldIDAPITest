@@ -9,6 +9,7 @@ import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import com.n4systems.reporting.PathHandler;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.w3c.dom.*;
 
@@ -34,6 +35,8 @@ public class SvgGenerationService extends FieldIdPersistenceService {
     @Autowired
     private ImageService imageService;
 
+    private static final Logger logger = Logger.getLogger(SvgGenerationService.class);
+
     public static Integer DEFAULT_JASPER_HEIGHT = 140;
     public static Integer DEFAULT_JASPER_WIDTH = 140;
     private static double DEFAULT_IMAGE_SIZE = 200.0;
@@ -41,8 +44,8 @@ public class SvgGenerationService extends FieldIdPersistenceService {
 
     public void generateAndUploadAnnotatedSvgs(ProcedureDefinition definition) throws Exception {
         for(ProcedureDefinitionImage image: definition.getImages()) {
-            File allAnnotations = exportToSvg(image);
-            uploadSvg(definition, allAnnotations);
+            byte[] allAnnotations = exportToSvg(image);
+            uploadSvg(definition, allAnnotations, image.getFileName());
         }
 
         definition.getUnlockIsolationPoints()
@@ -52,8 +55,8 @@ public class SvgGenerationService extends FieldIdPersistenceService {
                   .filter(isolationPoint -> isolationPoint.getAnnotation() != null)
                   .forEach(isolationPoint -> {
                       try {
-                          File singleAnnotation = exportToSvg(isolationPoint.getAnnotation());
-                          uploadSvg(definition, singleAnnotation);
+                          byte[] singleAnnotation = exportToSvg(isolationPoint.getAnnotation());
+                          uploadSvg(definition, singleAnnotation, isolationPoint.getAnnotation().getImage().getFileName() + "_" + isolationPoint.getAnnotation().getId() + ".svg");
                       } catch (Exception e) {
                           e.printStackTrace();
                       }
@@ -62,24 +65,45 @@ public class SvgGenerationService extends FieldIdPersistenceService {
 
     private void uploadSvg(ProcedureDefinition procedureDefinition, File svgFile) {
         s3Service.uploadProcedureDefinitionSvg(procedureDefinition, svgFile);
+        try {
+            if(!svgFile.delete()) {
+                logger.error("The following file was not able to be deleted: " + svgFile.toString());
+            }
+        } catch (SecurityException e) {
+            logger.error("The following file was not able to be deleted: " + svgFile.toString(), e);
+        }
     }
 
-    private File exportToSvg(ProcedureDefinitionImage image) throws Exception {
-        return exportToSvg(new DOMSource(buildSvg(image)), image.getFileName());
+    private void uploadSvg(ProcedureDefinition procedureDefinition, byte[] fileContents, String fileName) {
+        s3Service.uploadProcedureDefinitionSvg(procedureDefinition, fileContents, fileName);
     }
 
-    private File exportToSvg(ImageAnnotation annotation) throws Exception {
-        return exportToSvg(new DOMSource(buildSvg(annotation)), annotation.getImage().getFileName() + "_" + annotation.getId());
+    private byte[] exportToSvg(ProcedureDefinitionImage image) throws Exception {
+        return exportToSvg(new DOMSource(buildSvg(image)));
     }
 
-    private File exportToSvg(DOMSource source, String filename) throws Exception {
+    private byte[] exportToSvg(ImageAnnotation annotation) throws Exception {
+        return exportToSvg(new DOMSource(buildSvg(annotation)));
+    }
+
+    private byte[] exportToSvg(DOMSource source) throws Exception {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
-        File file = PathHandler.getTempFile(filename + ".svg");
-        file.createNewFile();
-        StreamResult result = new StreamResult(file.getPath());
+
+        //Add system time in millis to ensure that the file name will ALWAYS be unique.
+//        File file = PathHandler.getTempFile(filename + System.currentTimeMillis() + ".svg");
+//        file.createNewFile();
+
+        //This can be empty.  We're writing to it and we can access its internal bytes later... I think.
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+        //We now use the ByteArrayOutputStream to instantiate the StreamResult to work with the DOMSource.
+        StreamResult result = new StreamResult(output);
         transformer.transform(source, result);
-        return file;
+
+        //Well, we're now done with all that hairy business.  We pipe out the byte array to keep this all happening
+        //in memory instead of on disk.
+        return output.toByteArray();
     }
 
     private Document buildSvg(ImageAnnotation annotation) throws Exception{
@@ -365,8 +389,8 @@ public class SvgGenerationService extends FieldIdPersistenceService {
                 .forEach(isolationPoint -> {
                     try {
                         ImageAnnotation annotation = isolationPoint.getAnnotation();
-                        File singleAnnotation = exportToSvg(new DOMSource(generateArrowStyleAnnotatedImage(annotation)), annotation.getImage().getFileName() + "_" + annotation.getId());
-                        uploadSvg(definition, singleAnnotation);
+                        byte[] singleAnnotation = exportToSvg(new DOMSource(generateArrowStyleAnnotatedImage(annotation)));
+                        uploadSvg(definition, singleAnnotation, annotation.getImage().getFileName() + "_" + annotation.getId() + ".svg");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

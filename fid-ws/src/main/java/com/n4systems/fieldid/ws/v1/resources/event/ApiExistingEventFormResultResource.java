@@ -86,6 +86,9 @@ public class ApiExistingEventFormResultResource extends FieldIdPersistenceServic
                                                 .filter(apiCriteriaResult -> !resultsToAdd.containsKey(apiCriteriaResult.getCriteriaId()))
                                                 .forEach(apiCriteriaResult -> apiCriteriaResults.put(apiCriteriaResult.getSid(), apiCriteriaResult)));
 
+        //Create a temp holder for the criteria results that we will be deleting/removing.
+        Set<CriteriaResult> criteriaResults = new HashSet<>();
+
         //We don't use a stream here, because we need to alter the List while processing it.  Streams don't like this.
 		for(CriteriaResult criteriaResult : event.getResults()) {
             ApiCriteriaResult apiCriteriaResult = apiCriteriaResults.get(criteriaResult.getMobileId());
@@ -96,10 +99,15 @@ public class ApiExistingEventFormResultResource extends FieldIdPersistenceServic
             } else {
                 //If it IS null, then that means that the server-side is trying to hold on to results from a hidden
                 //section... we can't allow that.  They must be forcibly removed from the DB and removed from the model
-                //as well.
-                persistenceService.delete(criteriaResult);
-                event.getResults().remove(criteriaResult);
+                //as well.  We will add this to the set and delete afterwards to avoid a ConcurrentModificationException exception.
+                criteriaResults.add(criteriaResult);
             }
+        }
+
+        //Now delete them and remove them from the results
+        for(CriteriaResult result:criteriaResults) {
+            event.getResults().remove(result);
+            persistenceService.delete(result);
         }
 
         //Find all existing CriteriaResults that are results of existing Criteria, but not in the server-side model.
