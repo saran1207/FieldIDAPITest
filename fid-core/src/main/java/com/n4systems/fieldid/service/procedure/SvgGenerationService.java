@@ -56,7 +56,7 @@ public class SvgGenerationService extends FieldIdPersistenceService {
                   .forEach(isolationPoint -> {
                       try {
                           byte[] singleAnnotation = exportToSvg(isolationPoint.getAnnotation());
-                          uploadSvg(definition, singleAnnotation, isolationPoint.getAnnotation().getImage().getFileName() + "_" + isolationPoint.getAnnotation().getId());
+                          uploadSvg(definition, singleAnnotation, isolationPoint.getAnnotation().getImage().getFileName() + "_" + isolationPoint.getAnnotation().getId() + ".svg");
                       } catch (Exception e) {
                           e.printStackTrace();
                       }
@@ -390,7 +390,7 @@ public class SvgGenerationService extends FieldIdPersistenceService {
                     try {
                         ImageAnnotation annotation = isolationPoint.getAnnotation();
                         byte[] singleAnnotation = exportToSvg(new DOMSource(generateArrowStyleAnnotatedImage(annotation)));
-                        uploadSvg(definition, singleAnnotation, annotation.getImage().getFileName() + "_" + annotation.getId());
+                        uploadSvg(definition, singleAnnotation, annotation.getImage().getFileName() + "_" + annotation.getId() + ".svg");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
