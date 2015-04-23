@@ -85,13 +85,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         assigneeQuery.addWhere(WhereParameter.Comparator.NOTNULL, "event.assignedGroup", "event.assignedGroup", "");
         assigneeQuery.addSimpleWhere("event.tenant.disabled", false);
 
-        List<AssigneeNotification> assigneeRecords = persistenceService.findAll(assigneeQuery);
-
-        Set<UserGroup> groups = aggregateAssignedGroups(assigneeRecords);
-
-        for (UserGroup assignee : groups) {
-            sendNotificationsFor(assignee);
-        }
+        aggregateAssignedGroups(persistenceService.findAll(assigneeQuery)).forEach(this::sendNotificationsFor);
     }
 
     private void notifyUserAssignees() {
@@ -106,13 +100,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         //  - org_primary
         //  - org_extendedfeatures
 
-        List<AssigneeNotification> assigneeRecords = persistenceService.findAll(assigneeQuery);
-
-        Set<User> assignees = aggregateAssignees(assigneeRecords);
-
-        for (User assignee : assignees) {
-            sendNotificationsFor(assignee);
-        }
+        aggregateAssignees(persistenceService.findAll(assigneeQuery)).forEach(this::sendNotificationsFor);
     }
 
     private Set<UserGroup> aggregateAssignedGroups(List<AssigneeNotification> assigneeRecords) {
@@ -139,8 +127,20 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         QueryBuilder<Event> assigneeQuery = new QueryBuilder<>(AssigneeNotification.class, new OpenSecurityFilter());
         assigneeQuery.setSimpleSelect("event");
         assigneeQuery.addSimpleWhere("event.assignee", assignee);
-        List<Event> notificationEvents = persistenceService.findAll(assigneeQuery);
-        notifyEventAssignee(notificationEvents, assignee);
+
+        Map<Boolean, List<Event>> notificationMap =
+                persistenceService.findAll(assigneeQuery)
+                                  .stream()
+                                  .collect(Collectors.groupingBy(event -> event.getType().isActionEventType(), Collectors.toList()));
+
+        if(notificationMap.get(Boolean.TRUE).size() > 0) {
+            notifyEventAssignee(notificationMap.get(Boolean.TRUE), assignee);
+        }
+
+        if(notificationMap.get(Boolean.FALSE).size() > 0) {
+            notifyEventAssignee(notificationMap.get(Boolean.FALSE), assignee);
+        }
+
         removeNotificationsForAssignee(assignee);
     }
 
@@ -148,8 +148,20 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         QueryBuilder<Event> assigneeQuery = new QueryBuilder<>(AssigneeNotification.class, new OpenSecurityFilter());
         assigneeQuery.setSimpleSelect("event");
         assigneeQuery.addSimpleWhere("event.assignedGroup", assignedGroup);
-        List<Event> notificationEvents = persistenceService.findAll(assigneeQuery);
-        notifyEventAssignee(notificationEvents, assignedGroup);
+
+        Map<Boolean, List<Event>> notificationMap =
+                persistenceService.findAll(assigneeQuery)
+                                  .stream()
+                                  .collect(Collectors.groupingBy(event -> event.getType().isActionEventType(), Collectors.toList()));
+
+        if(notificationMap.get(Boolean.TRUE).size() > 0) {
+            notifyEventAssignee(notificationMap.get(Boolean.TRUE), assignedGroup);
+        }
+
+        if(notificationMap.get(Boolean.FALSE).size() > 0) {
+            notifyEventAssignee(notificationMap.get(Boolean.FALSE), assignedGroup);
+        }
+
         removeNotificationsForAssignedGroup(assignedGroup);
     }
 
@@ -202,13 +214,21 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     }
 
     private TemplateMailMessage createMailMessage(List<Event> events, User assignee) {
-
-
         //If this hasn't been configured yet, that's okay.  We just pull the default values until the user gets around
         //to customizing them or saving the existing values as a real row in the DB.
         ActionEmailCustomization customizedValues = actionEmailCustomizationService.readForTennant(assignee.getTenant());
+
         String subject = events.size() + " " + customizedValues.getEmailSubject();
         String subHeading = customizedValues.getSubHeading();
+
+        //FIXME This is an ugly hack that you should be punished for.  This needs to be fixed for 2015.3!!!
+        //This is temporary code to create a static subject and subheading for non-action emails.  Only action
+        //emails currently get the fancy customized subject and subheading.  This changes in 2015.3.0
+        if(!events.get(0).getType().isActionEventType()) {
+            subject = "Work Assigned: " + events.size() + " Events";
+            subHeading = "This is an automated email to let you know that you have been assigned work to do.";
+        }
+
         TemplateMailMessage msg = new TemplateMailMessage(subject, ASSIGNEE_TEMPLATE_MULTI) {
             /**
              * We override this method because we don't care about the configurations for header and footer.  The
@@ -227,7 +247,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         };
 
         Map<Long, String> dueDateStringMap = createDateStringMap(events, assignee);
-        Map<Long, String> criteriaImageMap = createCriteriaImageMap(events);
+        Map<Long, List<String>> criteriaImageMap = createCriteriaImageMap(events);
         Map<Long, String> triggeringEventStringMap = createTriggeringEventStringMap(events);
         Map<Long, String> assetUrlMap = createAssetUrlMap(events);
         Map<Long, String> eventSummaryUrlMap = createEventSummaryUrlMap(events);
@@ -254,17 +274,25 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         return msg;
     }
 
-    private Map<Long, String> createCriteriaImageMap(List<Event> events) {
+    private Map<Long, List<String>> createCriteriaImageMap(List<Event> events) {
         s3Service.setExpiryInDays(14);
-        Map<Long, String> criteriaImageMap = new HashMap<>();
+        Map<Long, List<String>> criteriaImageMap = new HashMap<>();
         for (Event event : events) {
             String query = "SELECT DISTINCT cr FROM " + CriteriaResult.class.getName() + " cr, IN(cr.actions) action WHERE action.id = :eventId";
             Map<String, Object> params = new HashMap<>();
             params.put("eventId", event.getId());
             List<CriteriaResult> criteriaResults = (List<CriteriaResult>) persistenceService.runQuery(query, params);
-            if(criteriaResults.size() > 0 && criteriaResults.get(0).getCriteriaImages().size() > 0) {
-                CriteriaResult criteriaResult = criteriaResults.get(0);
-                criteriaImageMap.put(event.getId(), s3Service.getCriteriaResultImageThumbnailURL(criteriaResult.getTenant().getId(), criteriaResult.getCriteriaImages().get(0)).toString());
+
+            if(criteriaResults.size() > 0) {
+                List<String> criteriaImageList = new ArrayList<>();
+
+                //Use .forEach to count through two layers of lists to gather any Criteria Images... if there are any.
+                criteriaResults.forEach(result -> result.getCriteriaImages().forEach(image -> criteriaImageList.add(s3Service.getCriteriaResultImageThumbnailURL(result.getTenant().getId(), image).toString())));
+
+                //Add the list of images to the map IF there are any images in the list.
+                if(criteriaImageList.size() > 0) {
+                    criteriaImageMap.put(event.getId(), criteriaImageList);
+                }
             }
         }
         s3Service.resetExpiryInDays();
