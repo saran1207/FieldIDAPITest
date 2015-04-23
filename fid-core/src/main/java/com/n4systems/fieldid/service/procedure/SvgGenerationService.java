@@ -6,9 +6,6 @@ import com.n4systems.fieldid.service.images.ImageService;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
-import com.n4systems.reporting.PathHandler;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.w3c.dom.*;
@@ -45,7 +42,8 @@ public class SvgGenerationService extends FieldIdPersistenceService {
     public void generateAndUploadAnnotatedSvgs(ProcedureDefinition definition) throws Exception {
         for(ProcedureDefinitionImage image: definition.getImages()) {
             byte[] allAnnotations = exportToSvg(image);
-            uploadSvg(definition, allAnnotations, image.getFileName());
+            //DO NOT forget the ".svg" portion.  It will cause a zombie apocalypse.
+            uploadSvg(definition, allAnnotations, image.getFileName() + ".svg");
         }
 
         definition.getUnlockIsolationPoints()
@@ -90,10 +88,6 @@ public class SvgGenerationService extends FieldIdPersistenceService {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
 
-        //Add system time in millis to ensure that the file name will ALWAYS be unique.
-//        File file = PathHandler.getTempFile(filename + System.currentTimeMillis() + ".svg");
-//        file.createNewFile();
-
         //This can be empty.  We're writing to it and we can access its internal bytes later... I think.
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
@@ -109,14 +103,12 @@ public class SvgGenerationService extends FieldIdPersistenceService {
     private Document buildSvg(ImageAnnotation annotation) throws Exception{
         Document doc = getDocument();
 
-        File imageFile = PathHandler.getTempFile();
         byte [] bytes = s3Service.downloadProcedureDefinitionImage((ProcedureDefinitionImage) annotation.getImage());
 
         //convert image to be scaled down to jasper size
         bytes = imageService.scaleImage(bytes, DEFAULT_JASPER_WIDTH, DEFAULT_JASPER_HEIGHT);
 
-        FileUtils.writeByteArrayToFile(imageFile, bytes);
-        BufferedImage bufferedImage = ImageIO.read(imageFile);
+        BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(bytes));
 
         Integer width = bufferedImage.getWidth();
         Integer height = bufferedImage.getHeight();
@@ -144,29 +136,13 @@ public class SvgGenerationService extends FieldIdPersistenceService {
 
         Document doc = getDocument();
 
-        File imageFile = PathHandler.getTempFile();
-
         //Not sure why we're fetching the image from S3, when we are trying to build the SVG now.
         byte [] bytes = s3Service.downloadProcedureDefinitionImage(image);
 
-        if(bytes == null) {
-            //it did not exist on S3, then create it now
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ObjectOutputStream oos = new ObjectOutputStream(baos);
-            oos.writeObject(image);
-            oos.flush();
-            oos.close();
+        //convert image to be scaled down to jasper size
+        bytes = imageService.scaleImage(bytes, DEFAULT_JASPER_WIDTH, DEFAULT_JASPER_HEIGHT);
 
-            InputStream is = new ByteArrayInputStream(baos.toByteArray());
-
-            bytes = IOUtils.toByteArray(is);
-        } else {
-            //convert image to be scaled down to jasper size
-            bytes = imageService.scaleImage(bytes, DEFAULT_JASPER_WIDTH, DEFAULT_JASPER_HEIGHT);
-        }
-
-        FileUtils.writeByteArrayToFile(imageFile, bytes);
-        BufferedImage bufferedImage = ImageIO.read(imageFile);
+        BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(bytes));
 
         Integer width = bufferedImage.getWidth();
         Integer height = bufferedImage.getHeight();
@@ -401,14 +377,12 @@ public class SvgGenerationService extends FieldIdPersistenceService {
     public Document generateArrowStyleAnnotatedImage(ImageAnnotation annotation) throws Exception{
         Document doc = getDocument();
 
-        File imageFile = PathHandler.getTempFile();
         byte [] bytes = s3Service.downloadProcedureDefinitionImage((ProcedureDefinitionImage) annotation.getImage());
 
         //convert image to be scaled down to jasper size
         bytes = imageService.scaleImage(bytes, DEFAULT_JASPER_WIDTH, DEFAULT_JASPER_HEIGHT);
 
-        FileUtils.writeByteArrayToFile(imageFile, bytes);
-        BufferedImage bufferedImage = ImageIO.read(imageFile);
+        BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(bytes));
 
         Integer width = bufferedImage.getWidth();
         Integer height = bufferedImage.getHeight();

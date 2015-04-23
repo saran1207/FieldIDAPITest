@@ -77,7 +77,7 @@ public class IsolationPointEditor extends Panel {
 
         add(form = new Form("form"));
 
-        form.add(sourceID = new RequiredTextField("identifier", new PropertyModel<>(getDefaultModel(), "identifier")));
+        form.add(sourceID = new RequiredTextField<>("identifier", new PropertyModel<>(getDefaultModel(), "identifier")));
         sourceID.setOutputMarkupId(true);
         sourceID.add(new AttributeModifier("maxlength", Integer.toString(procedureDefinition.getAnnotationType().equals(AnnotationType.ARROW_STYLE) ? 50 : 10)));
 
