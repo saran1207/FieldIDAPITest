@@ -228,8 +228,10 @@
                                     <#if criteriaImageMap.get(event.id)?? || (event.type.actionEventType?? && attachedImageListMap.get(event.id)??)>
                                         <td width="200" class="image-adjustment">
                                             <#if criteriaImageMap.get(event.id)??>
-                                                <img src="${criteriaImageMap.get(event.id)}" width="148" data-default="placeholder" data-max-width="200" />
-                                                <br>
+                                                <#list criteriaImageMap.get(event.id) as imageUrl>
+                                                    <img src="${imageUrl}" width="148" data-default="placeholder" data-max-width="200" />
+                                                    <br>
+                                                </#list>
                                             </#if>
                                             <#if event.type.actionEventType?? && attachedImageListMap.get(event.id)??>
                                                 <#list attachedImageListMap.get(event.id) as imageUrl>
