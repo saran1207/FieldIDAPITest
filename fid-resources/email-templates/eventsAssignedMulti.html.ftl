@@ -233,12 +233,6 @@
                                                     <br>
                                                 </#list>
                                             </#if>
-                                            <#if event.type.actionEventType?? && attachedImageListMap.get(event.id)??>
-                                                <#list attachedImageListMap.get(event.id) as imageUrl>
-                                                    <img src="${imageUrl}" width="148" data-default="placeholder" data-max-width="200" />
-                                                    <br>
-                                                </#list>
-                                            </#if>
                                         </td>
                                         <td width="400" valign="top" class="pad-the-top-and-bottom">
                                     <#else>
