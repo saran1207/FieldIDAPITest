@@ -25,7 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -252,7 +251,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
 
         Map<Long, String> dueDateStringMap = createDateStringMap(events, assignee);
         Map<Long, List<String>> criteriaImageMap = createCriteriaImageMap(events);
-        Map<Long, String> triggeringEventStringMap = createTriggeringEventStringMap(events);
+        Map<Long, String> triggeringEventStringMap = createTriggeringEventStringMap(events, assignee);
         Map<Long, String> assetUrlMap = createAssetUrlMap(events);
         Map<Long, String> eventSummaryUrlMap = createEventSummaryUrlMap(events);
         Map<Long, List<String>> attachedImageListMap = createAttachedImageListMap(events);
@@ -367,10 +366,10 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
      * @param events - A List populated with Events.
      * @return A Map of Strings indexed by Event ID which roughly represent the Triggering Event for any Event which has one.
      */
-    private Map<Long, String> createTriggeringEventStringMap(List<Event> events) {
+    private Map<Long, String> createTriggeringEventStringMap(List<Event> events, User assignee) {
         return events.stream()
                 .filter(event -> event.getTriggerEvent() != null)
-                .collect(Collectors.toMap(Event::getID, event -> createTriggeringEventString(event.getTriggerEvent())));
+                .collect(Collectors.toMap(Event::getID, event -> createTriggeringEventString(event, assignee)));
     }
 
     /**
@@ -380,10 +379,14 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
      * @param event - An Event with a Triggering Event.  If you supply an Event without one, the plug comes out of the bottom of the Atlantic Ocean.
      * @return A String representing the Event's Triggering Event.
      */
-    private String createTriggeringEventString(Event event) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+    private String createTriggeringEventString(Event event, User assignee) {
+        Date completedDate = event.getTriggerEvent().getCompletedDate();
+        String completedDateString = new FieldIdDateFormatter(completedDate,
+                                                              assignee,
+                                                              false,
+                                                              !new PlainDate(completedDate).equals(completedDate)).format();
 
-        return dateFormat.format(event.getRelevantDate()) + " From " + event.getType().getName();
+        return completedDateString + " From " + event.getType().getName();
     }
 
     /**
