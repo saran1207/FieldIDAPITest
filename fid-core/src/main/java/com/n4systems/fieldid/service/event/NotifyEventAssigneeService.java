@@ -133,11 +133,13 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
                                   .stream()
                                   .collect(Collectors.groupingBy(event -> event.getType().isActionEventType(), Collectors.toList()));
 
-        if(notificationMap.get(Boolean.TRUE).size() > 0) {
+        if(notificationMap.get(Boolean.TRUE) != null &&
+                notificationMap.get(Boolean.TRUE).size() > 0) {
             notifyEventAssignee(notificationMap.get(Boolean.TRUE), assignee);
         }
 
-        if(notificationMap.get(Boolean.FALSE).size() > 0) {
+        if(notificationMap.get(Boolean.FALSE) != null &&
+                notificationMap.get(Boolean.FALSE).size() > 0) {
             notifyEventAssignee(notificationMap.get(Boolean.FALSE), assignee);
         }
 
