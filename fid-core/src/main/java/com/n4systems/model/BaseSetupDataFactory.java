@@ -23,7 +23,7 @@ public class BaseSetupDataFactory {
 		identifierCounter.setTenant(tenant);
 		identifierCounter.setCounter(1L);
 		identifierCounter.setDecimalFormat("000000");
-		identifierCounter.setDaysToReset(365L);
+		identifierCounter.setResetAnnually(true);
 		identifierCounter.setLastReset(DateHelper.getFirstDayOfThisYear());
 		return identifierCounter;
 	}

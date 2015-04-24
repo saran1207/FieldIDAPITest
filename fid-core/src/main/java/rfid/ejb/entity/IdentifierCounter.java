@@ -15,11 +15,13 @@ public class IdentifierCounter extends EntityWithTenant implements Saveable {
 	private static final long serialVersionUID = 1L;
 	
 	private Long counter;
+
 	private String decimalFormat;
-	private Long daysToReset;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastReset;
+
+	private Boolean resetAnnually;
 
 	public Long getCounter() {
 		return counter;
@@ -37,14 +39,6 @@ public class IdentifierCounter extends EntityWithTenant implements Saveable {
 		this.decimalFormat = decimalFormat;
 	}
 
-	public Long getDaysToReset() {
-		return daysToReset;
-	}
-
-	public void setDaysToReset(Long daysToReset) {
-		this.daysToReset = daysToReset;
-	}
-
 	public Date getLastReset() {
 		return lastReset;
 	}
@@ -52,4 +46,8 @@ public class IdentifierCounter extends EntityWithTenant implements Saveable {
 	public void setLastReset(Date lastReset) {
 		this.lastReset = lastReset;
 	}
+
+	public Boolean isResetAnnually() { return resetAnnually; }
+
+	public void setResetAnnually(Boolean resetAnnually) { this.resetAnnually = resetAnnually; }
 }

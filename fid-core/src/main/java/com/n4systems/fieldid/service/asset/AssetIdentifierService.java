@@ -6,12 +6,17 @@ import com.n4systems.model.AssetType;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.services.date.DateService;
+import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.commons.lang.StringUtils;
+import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import rfid.ejb.entity.IdentifierCounter;
 
 import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Collection;
 
@@ -19,6 +24,9 @@ public class AssetIdentifierService extends FieldIdPersistenceService {
 
     @Autowired
     private OrgService orgService;
+
+    @Autowired
+    private DateService dateService;
 
     public void updateIdentifierCounter(IdentifierCounter identifierCounter) {
         persistenceService.update(identifierCounter);
@@ -42,6 +50,8 @@ public class AssetIdentifierService extends FieldIdPersistenceService {
     public synchronized String getNextCounterValue(Long tenantId) {
         IdentifierCounter identifierCounter = getIdentifierCounter(tenantId);
 
+        identifierCounter = checkForCounterReset(identifierCounter);
+
         DecimalFormat decimalFormat = new DecimalFormat(identifierCounter.getDecimalFormat());
 
         Long counterValue = identifierCounter.getCounter();
@@ -52,6 +62,17 @@ public class AssetIdentifierService extends FieldIdPersistenceService {
         persistenceService.update(identifierCounter);
 
         return counterValueString;
+    }
+
+    private IdentifierCounter checkForCounterReset(IdentifierCounter identifierCounter) {
+        Integer lastResetYear = identifierCounter.getLastReset().toInstant().atZone(DateTimeZone.UTC.toTimeZone().toZoneId()).toLocalDate().getYear();
+
+        if(lastResetYear < LocalDate.now(getUserTimeZone().toZoneId()).getYear() && identifierCounter.isResetAnnually()) {
+            identifierCounter.setLastReset(DateHelper.getFirstDayOfThisYear());
+            identifierCounter.setCounter(1L);
+            updateIdentifierCounter(identifierCounter);
+        }
+        return identifierCounter;
     }
 
     public String generateIdentifier(AssetType assetType) {
