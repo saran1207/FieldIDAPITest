@@ -254,7 +254,6 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         Map<Long, String> triggeringEventStringMap = createTriggeringEventStringMap(events, assignee);
         Map<Long, String> assetUrlMap = createAssetUrlMap(events);
         Map<Long, String> eventSummaryUrlMap = createEventSummaryUrlMap(events);
-        Map<Long, List<String>> attachedImageListMap = createAttachedImageListMap(events);
         Map<Long, String> performEventUrlMap = createPerformEventUrlMap(events);
         Map<Long, String> placeSummaryUrlMap = createPlaceSummaryUrlMap(events);
 
@@ -264,7 +263,6 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         msg.getTemplateMap().put("subHeadingMessage", subHeading);
         msg.getTemplateMap().put("dueDateStringMap", dueDateStringMap);
         msg.getTemplateMap().put("criteriaImageMap", criteriaImageMap);
-        msg.getTemplateMap().put("attachedImageListMap", attachedImageListMap);
         msg.getTemplateMap().put("triggeringEventStringMap", triggeringEventStringMap);
         msg.getTemplateMap().put("assetUrlMap", assetUrlMap);
         msg.getTemplateMap().put("eventSummaryUrlMap", eventSummaryUrlMap);
@@ -387,41 +385,6 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
                                                               !new PlainDate(completedDate).equals(completedDate)).format();
 
         return completedDateString + " From " + event.getType().getName();
-    }
-
-    /**
-     * This method accepts a List of Events and processes it to produce a Map of Image URLs, indexed by Event ID.  This
-     * Map is used by the Email Generator to append images to corresponding Events within the email.
-     *
-     * @param events - A List populated with Events.
-     * @return A Map of Image URLs indexed by Event ID which roughly represent the images associated with Assets associated with the Events.
-     */
-    private Map<Long, List<String>> createAttachedImageListMap(List<Event> events) {
-        return events.stream()
-                .filter(event -> event.getTriggerEvent() != null && event.getTriggerEvent().getImageAttachments().size() > 0)
-                .collect(Collectors.toMap(Event::getId, event -> createAttachedImageUrlList(event.getTriggerEvent())));
-    }
-
-    /**
-     * This method creates a list of the String representation of URLs for all images attached to the Trigger Event of
-     * an Action Event.  These URLs are used by the Freemarker template as values for "img" tags.
-     *
-     * @param event - An existing Event from the Database which Triggered an Action and has Image Attachments.
-     * @return A List of Strings representing the URLs of all Image Attachments for a Trigger Event.
-     */
-    private List<String> createAttachedImageUrlList(Event event) {
-        //I wanted to use streams here... I wanted to so badly... but for some weird reason, the compile was kicking up
-        //errors due to return types and expected types for some methods... If you see this and can make it work, I will
-        //buy you a cookie.
-        List<String> urlList = new ArrayList<>();
-
-        for(Object attachment : event.getImageAttachments()) {
-            if(attachment instanceof FileAttachment) {
-                urlList.add(s3Service.getFileAttachmentUrlForImpliedTenant((FileAttachment) attachment).toExternalForm());
-            }
-        }
-
-        return urlList;
     }
 
     /**
