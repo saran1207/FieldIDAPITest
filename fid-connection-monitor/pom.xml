@@ -3,11 +3,11 @@
     <parent>
         <artifactId>fieldid-root</artifactId>
         <groupId>com.fieldid</groupId>
-        <version>2015.2.1</version>
+        <version>2015.3.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>fid-connection-monitor</artifactId>
-    <version>2015.2.1</version>
+    <version>2015.3.0</version>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
