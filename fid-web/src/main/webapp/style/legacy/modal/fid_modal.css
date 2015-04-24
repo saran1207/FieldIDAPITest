@@ -20,6 +20,7 @@ div.wicket-modal h3.w_captionText {
     font-size: 14px;
     display:block;
     margin-left:16px;
+    border-bottom: none;
 }
 
 div.wicket-modal div.w_caption {
@@ -73,4 +74,8 @@ div.wicket-modal div.w_right_1 {
 
 div.wicket-modal div.w_content_container {
         min-height: 294px !important;
+}
+
+.fieldid-framework div.wicket-modal div.w_content_container {
+    padding: 10px;
 }

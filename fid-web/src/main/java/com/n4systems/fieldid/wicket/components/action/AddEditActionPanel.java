@@ -1,0 +1,343 @@
+package com.n4systems.fieldid.wicket.components.action;
+
+import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.service.event.ActionService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
+import com.n4systems.fieldid.wicket.components.DateTimePicker;
+import com.n4systems.fieldid.wicket.components.FlatLabel;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
+import com.n4systems.fieldid.wicket.components.user.AssignedUserOrGroupSelect;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.event.PrioritiesForTenantModel;
+import com.n4systems.fieldid.wicket.model.eventtype.ActionTypesForTenantModel;
+import com.n4systems.fieldid.wicket.model.user.AssigneesModel;
+import com.n4systems.fieldid.wicket.model.user.UsersForTenantModel;
+import com.n4systems.fieldid.wicket.model.user.VisibleUserGroupsModel;
+import com.n4systems.fieldid.wicket.util.ProxyModel;
+import com.n4systems.model.*;
+import com.n4systems.model.utils.PlainDate;
+import com.n4systems.services.date.DateService;
+import org.apache.commons.lang.time.DateUtils;
+import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.validation.validator.StringValidator;
+
+import java.util.Calendar;
+import java.util.Date;
+
+import static ch.lambdaj.Lambda.on;
+
+public class AddEditActionPanel extends Panel {
+
+    @SpringBean
+    private ActionService actionService;
+
+    @SpringBean
+    private PersistenceService persistenceService;
+
+    @SpringBean
+    private DateService dateService;
+
+    private boolean editMode = false;
+    private boolean immediateSaveMode;
+    private Class<? extends Event> eventClass;
+
+    public AddEditActionPanel(String id, IModel<CriteriaResult> criteriaResultModel, Class<? extends Event> eventClass, IModel<Event> eventModel, boolean immediateSaveMode) {
+        super(id, criteriaResultModel);
+        this.eventClass = eventClass;
+        this.immediateSaveMode = immediateSaveMode;
+        IModel<Event> actionModel = eventModel;
+        if (actionModel == null) {
+            try {
+                actionModel = Model.of(eventClass.newInstance());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            editMode = true;
+        }
+
+        add(new AddActionForm("addActionForm", actionModel, criteriaResultModel));
+    }
+
+    class AddActionForm extends Form<Event> {
+        public AddActionForm(String id, final IModel<Event> eventModel, final IModel<CriteriaResult> criteriaResultModel) {
+            super(id, eventModel);
+            setOutputMarkupId(true);
+            setMultiPart(true);
+
+            final FIDFeedbackPanel feedbackPanel = new FIDFeedbackPanel("feedbackPanel");
+            add(feedbackPanel);
+
+            //We need to create our own IModel for the DueDate because it is one of the two objects that is being changed
+            //on the fly during the form editing.  We do not want these values to be overwritten if the user cancels the form
+            final IModel<Date> scheduledDateModel = new Model<Date>(){
+                private Date originalDate;
+
+                @Override
+                public Date getObject() {
+                    return originalDate;
+                }
+
+                @Override
+                public void setObject(Date object) {
+                    originalDate = object;
+                }
+            };
+            scheduledDateModel.setObject(eventModel.getObject().getDueDate());
+
+            final DateTimePicker scheduledDatePicker = new DateTimePicker("dueDate", scheduledDateModel) {
+                @Override
+                protected void onDatePicked(AjaxRequestTarget target) {
+                    getModelObject().setAssigneeOrDateUpdated();
+                }
+            }.withMonthsDisplayed(1).withNoAllDayCheckbox();
+            scheduledDatePicker.getDateTextField().setRequired(true);
+
+            add(scheduledDatePicker);
+
+            UsersForTenantModel usersModel = new UsersForTenantModel();
+            VisibleUserGroupsModel userGroupsModel = new VisibleUserGroupsModel();
+            AssignedUserOrGroupSelect assignedUserOrGroupSelect;
+            add(assignedUserOrGroupSelect = new AssignedUserOrGroupSelect("assignee",
+                    ProxyModel.of(eventModel, on(Event.class).getAssignedUserOrGroup()),
+                    usersModel, userGroupsModel,
+                    new AssigneesModel(userGroupsModel, usersModel)));
+            assignedUserOrGroupSelect.setRequired(true);
+            assignedUserOrGroupSelect.addBehavior(new UpdateComponentOnChange() {
+                @Override
+                protected void onUpdate(AjaxRequestTarget target) {
+                    getModelObject().setAssigneeOrDateUpdated();
+                }
+            });
+
+            add(new DropDownChoice<EventType>("type", ProxyModel.of(getModel(), on(Event.class).getType()), new ActionTypesForTenantModel(), new ListableChoiceRenderer<EventType>()).setNullValid(true).setRequired(true));
+
+            addQuickDateLinks(scheduledDatePicker, scheduledDateModel);
+
+            //We need to create our own IModel for the PriorityCode because it is one of the two objects that is being changed
+            //on the fly during the form editing.  We do not want these values to be overwritten if the user cancels the form
+            final IModel<PriorityCode> priorityCodeModel = new Model<PriorityCode>(){
+                private PriorityCode priorityCode;
+
+                @Override
+                public PriorityCode getObject() {
+                    return priorityCode;
+                }
+
+                @Override
+                public void setObject(PriorityCode object) {
+                    priorityCode = object;
+                }
+            };
+            priorityCodeModel.setObject(eventModel.getObject().getPriority());
+
+            final DropDownChoice<PriorityCode> priorityChoice = new DropDownChoice<PriorityCode>("priority", priorityCodeModel, new PrioritiesForTenantModel(), new ListableChoiceRenderer<PriorityCode>());
+            priorityChoice.setRequired(true);
+            priorityChoice.setNullValid(true);
+            priorityChoice.add(new UpdateComponentOnChange() {
+                @Override
+                protected void onUpdate(AjaxRequestTarget target) {
+                    if (getModelObject().isNew()) {
+                        autoScheduleBasedOnPriority(priorityCodeModel, scheduledDateModel);
+                        target.add(scheduledDatePicker);
+                    }
+                }
+            });
+            add(priorityChoice);
+
+            TextArea<String> noteTextArea = new TextArea<String>("notes", ProxyModel.of(getModel(), on(Event.class).getNotes()));
+            add(noteTextArea);
+            noteTextArea.add(new StringValidator.MaximumLengthValidator(500));
+
+            add(new CheckBox("sendEmailOnUpdate", ProxyModel.of(getModel(), on(Event.class).isSendEmailOnUpdate())));
+
+            AjaxSubmitLink submitLink = new AjaxSubmitLink("submitLink") {
+                @Override
+                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                    if (immediateSaveMode) {
+                        //Manually set the DueDate and the PriorityCode because we created our own IModels for them.
+                        //The other attributes are already set.
+                        getModelObject().setDueDate(scheduledDateModel.getObject());
+                        getModelObject().setPriority(priorityCodeModel.getObject());
+                        actionService.update(getModelObject());
+
+                        //setResponsePage(new ActionDetailsPage(criteriaResultModel, eventClass, eventModel));
+                        onShowDetailsPanel(target, eventModel);
+
+                    } else {
+                        Event addedAction = getModelObject();
+
+                        if (!editMode) {
+                            //Manually set the DueDate and the PriorityCode because we created our own IModels for them.
+                            //The other attributes are already set.
+                            addedAction.setDueDate(scheduledDateModel.getObject());
+                            addedAction.setPriority(priorityCodeModel.getObject());
+                            addedAction.setTenant(FieldIDSession.get().getTenant());
+                            criteriaResultModel.getObject().getActions().add(addedAction);
+                        }
+
+                        //Manually set the DueDate and the PriorityCode because we created our own IModels for them.
+                        //The other attributes are already set.
+                        criteriaResultModel.getObject().getActions().get(criteriaResultModel.getObject().getActions().indexOf(addedAction)).setPriority(priorityCodeModel.getObject());
+                        criteriaResultModel.getObject().getActions().get(criteriaResultModel.getObject().getActions().indexOf(addedAction)).setDueDate(scheduledDateModel.getObject());
+                        onShowListPanel(target);
+                    }
+                }
+
+                @Override
+                protected void onError(AjaxRequestTarget target, Form<?> form) {
+                    target.add(AddActionForm.this);
+                }
+            };
+            add(submitLink);
+
+            if (editMode) {
+                submitLink.add(new FlatLabel("saveLabel", new FIDLabelModel("label.save")));
+            } else {
+                submitLink.add(new FlatLabel("saveLabel", new FIDLabelModel("label.create")));
+            }
+
+            add(new AjaxLink("cancelLink") {
+
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    onShowListPanel(target);
+                }
+            });
+
+            AjaxSubmitLink deleteLink = new AjaxSubmitLink("deleteLink") {
+
+                @Override
+                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                    Event deletedAction = getModelObject();
+                    criteriaResultModel.getObject().getActions().remove(deletedAction);
+
+                    if(immediateSaveMode && deletedAction.getId() != null) {
+                        deletedAction.archiveEntity();
+                        persistenceService.update(deletedAction);
+                    }
+
+                    onShowListPanel(target);
+                }
+
+                @Override
+                protected void onError(AjaxRequestTarget target, Form<?> form) {
+                    target.add(AddActionForm.this);
+                }
+            };
+            
+            if(editMode) {
+                deleteLink.add(new Behavior() {
+                    @Override
+                    public void onComponentTag(Component component, ComponentTag tag) {
+                        tag.put("onclick", "if(!confirm('" + new FIDLabelModel("label.confirm_delete_action").getObject() +"')) {return false;} " + tag.getAttribute("onclick"));
+                    }
+                });
+            }
+            deleteLink.setVisible(editMode);
+            add(deleteLink);
+        }
+
+        private void addQuickDateLinks(DateTimePicker scheduledDatePicker, IModel<Date> scheduledDateModel) {
+            add(createQuickDateLink("todayLink", 0, scheduledDatePicker, scheduledDateModel));
+            add(createQuickDateLink("tomorrowLink", 1, scheduledDatePicker, scheduledDateModel));
+            add(createEndOfWeekLink("endOfWeekLink", scheduledDatePicker, scheduledDateModel));
+            add(createQuickDateLink("in30DaysLink", 30, scheduledDatePicker, scheduledDateModel));
+            add(createMonthLink("in3MonthsLink", 3, scheduledDatePicker, scheduledDateModel));
+        }
+
+        private AjaxLink createMonthLink(String id, final int monthDelay, final DateTimePicker scheduledDatePicker, final IModel<Date> scheduledDateModel) {
+            return new AjaxLink(id) {
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    Date dateToSchedule = DateUtils.addYears(dateService.todayAsDate(), 0);
+                    dateToSchedule = DateUtils.addMonths(dateToSchedule, monthDelay);
+                    scheduledDateModel.setObject(new PlainDate(dateToSchedule));
+                    AddActionForm.this.getModelObject().setAssigneeOrDateUpdated();
+                    target.add(scheduledDatePicker);
+                }
+            };
+        }
+
+        private AjaxLink createQuickDateLink(String id, final int deltaDays, final DateTimePicker scheduledDatePicker, final IModel<Date> scheduledDateModel) {
+            return new AjaxLink(id) {
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    Date date = getDaysFromNow(deltaDays);
+                    scheduledDateModel.setObject(new PlainDate(date));
+                    AddActionForm.this.getModelObject().setAssigneeOrDateUpdated();
+                    target.add(scheduledDatePicker);
+                }
+            };
+        }
+
+        private AjaxLink createEndOfWeekLink(String id,final DateTimePicker scheduledDatePicker, final IModel<Date> scheduledDateModel) {
+            return new AjaxLink(id) {
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    Date date = getEndOfWeek();
+                    scheduledDateModel.setObject(new PlainDate(date));
+                    target.add(scheduledDatePicker);
+                }
+            };
+        }
+    }
+
+    private Date getDaysFromNow(int deltaDays) {
+        Date date = dateService.todayAsDate();
+        date = DateUtils.addDays(date, deltaDays);
+        return date;
+    }
+
+    private void autoScheduleBasedOnPriority(IModel<PriorityCode> model, IModel<Date> dateModel) {
+        PriorityCode priority = model.getObject();
+        if (priority != null && priority.getAutoSchedule() != null) {
+            PriorityCodeAutoScheduleType autoSchedule = priority.getAutoSchedule();
+            if (autoSchedule == PriorityCodeAutoScheduleType.END_OF_WEEK) {
+                dateModel.setObject(getEndOfWeek());
+            } else if (autoSchedule == PriorityCodeAutoScheduleType.IN_30_DAYS) {
+                dateModel.setObject(getDaysFromNow(30));
+            } else if (autoSchedule == PriorityCodeAutoScheduleType.TODAY) {
+                dateModel.setObject(getDaysFromNow(0));
+            } else if (autoSchedule == PriorityCodeAutoScheduleType.TOMORROW) {
+                dateModel.setObject(getDaysFromNow(1));
+            } else if (autoSchedule == PriorityCodeAutoScheduleType.CUSTOM && priority.getAutoScheduleCustomDays() != null) {
+                dateModel.setObject(getDaysFromNow(priority.getAutoScheduleCustomDays()));
+            }
+        }
+    }
+
+    private Date getEndOfWeek() {
+        Date date = dateService.todayAsDate();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+            calendar.add(Calendar.WEEK_OF_YEAR, 1);
+        }
+
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+        return calendar.getTime();
+    }
+
+    public void onShowListPanel(AjaxRequestTarget target) {}
+
+    public void onShowDetailsPanel(AjaxRequestTarget target, IModel<Event> eventModel) {}
+
+
+}

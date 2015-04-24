@@ -1,41 +1,49 @@
 package com.n4systems.fieldid.wicket.components.action;
 
+import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.TimeAgoLabel;
 import com.n4systems.fieldid.wicket.components.asset.events.table.EventStateIcon;
-import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Event;
+import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.Date;
 import java.util.List;
 
-public class ActionsListPage extends FieldIDAuthenticatedPage {
+public class ActionsListPanel extends Panel {
+
+    @SpringBean
+    private PersistenceService persistenceService;
 
     protected Class<? extends Event> eventClass;
     protected boolean readOnly = false;
 
-    public ActionsListPage(final IModel<CriteriaResult> criteriaResultModel, Class<? extends Event> eventClass) {
-        this(criteriaResultModel, eventClass, false);
+    public ActionsListPanel(String id, final IModel<CriteriaResult> criteriaResultModel, Class<? extends Event> eventClass) {
+        this(id, criteriaResultModel, eventClass, false);
     }
 
-    public ActionsListPage(final IModel<CriteriaResult> criteriaResultModel, final Class<? extends Event> eventClass, boolean readOnly) {
+    public ActionsListPanel(String id, IModel<CriteriaResult> criteriaResultModel, Class<? extends Event> eventClass, boolean readOnly) {
+        super(id, criteriaResultModel);
         this.eventClass = eventClass;
         this.readOnly = readOnly;
+
         add(new ContextImage("blankSlate", "images/add-action-slate.png") {
-            @Override public boolean isVisible() {
+            @Override
+            public boolean isVisible() {
                 return criteriaResultModel.getObject().getActions().size()==0;
             }
         });
@@ -54,17 +62,7 @@ public class ActionsListPage extends FieldIDAuthenticatedPage {
                 item.add(new AjaxEventBehavior("onclick") {
                     @Override
                     protected void onEvent(AjaxRequestTarget target) {
-                        setResponsePage(new ActionDetailsPage(criteriaResultModel, eventClass, item.getModel()) {
-                            @Override protected boolean isEditable() {
-                                return !isReadOnly();
-                            }
-                            @Override protected boolean isStartable(IModel<CriteriaResult> criteriaResultModel) {
-                                return super.isStartable(criteriaResultModel) && isReadOnly();
-                            }
-                            @Override protected void setActionsListResponsePage(IModel<CriteriaResult> criteriaResultModel) {
-                                ActionsListPage.this.setActionsListResponsePage(criteriaResultModel);
-                            }
-                        });
+                        onShowDetailsPanel(target, item.getModel());
                     }
                 });
             }
@@ -74,38 +72,34 @@ public class ActionsListPage extends FieldIDAuthenticatedPage {
         issueActionSection.setVisible(!isReadOnly());
 
         add(issueActionSection);
-        issueActionSection.add(new Link<Void>("addActionLink") {
+        issueActionSection.add(new AjaxLink<Void>("addActionLink") {
             @Override
-            public void onClick() {
-                setResponsePage(new AddEditActionPage(criteriaResultModel, eventClass));
+            public void onClick(AjaxRequestTarget ajaxRequestTarget) {
+                onAddAction(ajaxRequestTarget);
             }
         });
+
         issueActionSection.add(new AjaxLink("finishedLink") {
-            @Override public void onClick(AjaxRequestTarget target) {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
                 clickFinished(target);
             }
         });
-    }
-
-    protected void clickFinished(AjaxRequestTarget target) {
-        // simulate click on close button.  uggh. workaround with wicket modal dialog.
-        // this code pretty much prevents this page from being used outside a modal window
-        target.appendJavaScript("parent.$('.w_close').click();");
-    }
-
-    protected void setActionsListResponsePage(IModel<CriteriaResult> criteriaResultModel) {
-        setResponsePage(new ActionsListPage(criteriaResultModel, eventClass));
     }
 
     protected boolean isReadOnly() {
         return readOnly || !Permissions.hasAllOf(getCurrentUser(), Permissions.CreateEvent);
     }
 
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        response.renderCSSReference("style/legacy/newCss/component/event_actions.css");
-        response.renderCSSReference("style/legacy/newCss/component/matt_buttons.css");
+    protected void clickFinished(AjaxRequestTarget target) {
+        target.appendJavaScript("parent.$('.w_close').click();");
     }
 
+    private User getCurrentUser() {
+        return persistenceService.find(User.class, FieldIDSession.get().getSessionUser().getUniqueID());
+    }
+
+    public void onAddAction(AjaxRequestTarget ajaxRequestTarget) {}
+
+    public void onShowDetailsPanel(AjaxRequestTarget target, IModel<Event> eventModel) {}
 }

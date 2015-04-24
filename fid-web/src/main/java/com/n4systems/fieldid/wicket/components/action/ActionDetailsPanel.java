@@ -1,42 +1,54 @@
 package com.n4systems.fieldid.wicket.components.action;
 
+import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.DateTimeLabel;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.components.TimeAgoLabel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.UserToUTCDateModel;
-import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.event.PerformEventPage;
+import com.n4systems.fieldid.wicket.pages.event.PerformPlaceEventPage;
+import com.n4systems.fieldid.wicket.pages.event.ThingEventSummaryPage;
+import com.n4systems.fieldid.wicket.pages.org.PlaceSummaryPage;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Event;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
+import com.n4systems.model.user.User;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.Date;
 import java.util.List;
 
-public class ActionDetailsPage extends FieldIDAuthenticatedPage {
+public class ActionDetailsPanel extends Panel {
+
+    @SpringBean
+    private PersistenceService persistenceService;
 
     @SpringBean
     private S3Service s3Service;
 
-    private boolean assetSummaryContext = false;
+    private boolean assetSummaryContext;
     private Class<? extends Event> eventClass;
 
-    public ActionDetailsPage(final IModel<CriteriaResult> criteriaResultModel, final Class<? extends Event> eventClass, final IModel<Event> actionModel) {
+    public ActionDetailsPanel(String id, final IModel<CriteriaResult> criteriaResultModel, final Class<? extends Event> eventClass, final IModel<Event> actionModel, boolean assetSummaryContext) {
+        super(id);
         this.eventClass = eventClass;
+        this.assetSummaryContext = assetSummaryContext;
         add(new Label("priority", new PropertyModel<String>(actionModel, "priority.name")));
         add(new Label("notes", new PropertyModel<String>(actionModel, "notes")));
         if (actionModel.getObject().getAssignee() != null) {
@@ -44,42 +56,39 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
         } else {
             add(new Label("assignee", new PropertyModel<String>(actionModel, "assignedGroup.name")));
         }
-        add(new TimeAgoLabel("dueDate", new PropertyModel<Date>(actionModel, "dueDate"),getCurrentUser().getTimeZone()));
-        Link actionsListLink = new Link("actionsListLink") {
-            @Override public void onClick() {
-                setActionsListResponsePage(criteriaResultModel);
+        add(new TimeAgoLabel("dueDate", new PropertyModel<Date>(actionModel, "dueDate"), getCurrentUser().getTimeZone()));
+        add(new AjaxLink("actionsListLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                onBackToList(target);
             }
 
             @Override
             public boolean isVisible() {
                 return !assetSummaryContext;
             }
-        };
-        add(actionsListLink);
+        });
 
-        AjaxLink startOrViewEventLink = new AjaxLink("startOrViewEventLink") {
+        Link startOrViewEventLink = new Link("startOrViewEventLink") {
             @Override
-            public void onClick(AjaxRequestTarget target) {
-                // TODO: This is awful, but we're in a modal window, so not sure how else we can navigate
-                // setting a response page just loads that page inside the window which is not the expected behavior
-
-                String url = null;
-
+            public void onClick() {
                 Event triggerEvent = actionModel.getObject().getTriggerEvent();
+
                 if (actionModel.getObject().getWorkflowState() == WorkflowState.OPEN) {
+                    Event action = actionModel.getObject();
+                    PageParameters actionParams = new PageParameters().add("type", action.getType().getId()).add("assetId", action.getTarget().getId()).add("scheduleId", action.getId());
+
                     if(triggerEvent.getType().isThingEventType()) {
-                        url = String.format("/fieldid/w/performEvent?type=%d&assetId=%d&scheduleId=%d", actionModel.getObject().getType().getId(), actionModel.getObject().getTarget().getId(), actionModel.getObject().getId());
+                        setResponsePage(PerformEventPage.class, actionParams);
                     } else {
-                        url = String.format("/fieldid/w/performPlaceEvent?type=%d&placeId=%d&scheduleId=%d", actionModel.getObject().getType().getId(), actionModel.getObject().getTarget().getId(), actionModel.getObject().getId());
+                        setResponsePage(PerformPlaceEventPage.class, actionParams);
                     }
                 } else {
                     if(triggerEvent.getType().isThingEventType())
-                        url = String.format("/fieldid/w/thingEventSummary?id=%d", actionModel.getObject().getId());
+                       setResponsePage(ThingEventSummaryPage.class, PageParametersBuilder.id(actionModel.getObject().getId()));
                     else
-                        url = String.format("/fieldid/w/placeEventSummary?id=%d", actionModel.getObject().getId());
+                        setResponsePage(PlaceSummaryPage.class, PageParametersBuilder.id(actionModel.getObject().getId()));
                 }
-
-                target.appendJavaScript("parent.window.location='"+url+"';");
             }
 
             @Override
@@ -93,27 +102,25 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
         IModel<String> startOrViewLabel = actionModel.getObject().getWorkflowState() ==  WorkflowState.OPEN ? new FIDLabelModel("label.start_action") : new FIDLabelModel("label.view_completed_action");
         startOrViewEventLink.add(new Label("startOrViewEventLabel", startOrViewLabel));
 
-        Link editLink = new Link("editLink") {
-            @Override public void onClick() {
-                AddEditActionPage page = new AddEditActionPage(criteriaResultModel, actionModel);
-                page.setImmediateSaveMode(assetSummaryContext);
-                setResponsePage(page);
+        AjaxLink editLink = new AjaxLink("editLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                onEditAction(target, actionModel);
             }
 
             @Override
             public boolean isVisible() {
-                return !assetSummaryContext;
+                return !assetSummaryContext && isEditable();
             }
         };
         add(editLink);
-        editLink.setVisible(isEditable());
 
         add(createIssuingEventSection(criteriaResultModel, actionModel));
     }
 
-    protected void setActionsListResponsePage(IModel<CriteriaResult> criteriaResultModel) {
-        setResponsePage(new ActionsListPage(criteriaResultModel, eventClass));
-    }
+    public void onBackToList(AjaxRequestTarget target) { }
+
+    public void onEditAction(AjaxRequestTarget target, IModel<Event> eventModel) { }
 
     protected boolean isStartable(IModel<CriteriaResult> criteriaResultModel) {
         return criteriaResultModel.getObject().getId() != null;
@@ -145,16 +152,7 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
         return issuingEventSection;
     }
 
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        response.renderCSSReference("style/legacy/newCss/component/event_actions.css");
-        response.renderCSSReference("style/legacy/newCss/component/matt_buttons.css");
+    private User getCurrentUser() {
+        return persistenceService.find(User.class, FieldIDSession.get().getSessionUser().getUniqueID());
     }
-
-    public WebPage setAssetSummaryContext(boolean assetSummaryContext) {
-        this.assetSummaryContext = assetSummaryContext;
-        return this;
-    }
-
 }

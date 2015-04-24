@@ -1,13 +1,10 @@
 package com.n4systems.fieldid.wicket.components.event;
 
-import com.n4systems.fieldid.wicket.components.action.ViewActionsListPage;
+import com.n4systems.fieldid.wicket.components.action.ActionsPanel;
 import com.n4systems.fieldid.wicket.components.event.criteria.factory.CriteriaResultFactory;
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
 import com.n4systems.fieldid.wicket.pages.event.criteriaimage.CriteriaImageViewListPage;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.Deficiency;
-import com.n4systems.model.Observation;
-import com.n4systems.model.Recommendation;
+import com.n4systems.model.*;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -20,6 +17,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 import java.util.List;
@@ -29,11 +27,13 @@ public class CriteriaSectionViewPanel extends Panel {
     private DialogModalWindow criteriaImagesModalWindow;
     private DialogModalWindow actionsWindow;
 
-    public CriteriaSectionViewPanel(String id, IModel<List<CriteriaResult>> results) {
+    public CriteriaSectionViewPanel(String id, IModel<List<CriteriaResult>> results, Class<? extends AbstractEvent> eventClass) {
         super(id);
 
         add(criteriaImagesModalWindow = new DialogModalWindow("imagesModal"));
         add(actionsWindow = new DialogModalWindow("actionsModal"));
+        actionsWindow.setInitialWidth(350);
+        actionsWindow.setInitialHeight(600);
 
         add(new ListView<CriteriaResult>("criteria", results) {
 
@@ -128,15 +128,8 @@ public class CriteriaSectionViewPanel extends Panel {
                 item.add(new AjaxLink<Void>("actions") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        actionsWindow.setPageCreator(new ModalWindow.PageCreator() {
-
-                            @Override
-                            public Page createPage() {
-                                return new ViewActionsListPage(criteriaResultModel, true);
-                            }
-                        });
-                        actionsWindow.setInitialWidth(350);
-                        actionsWindow.setInitialHeight(600);
+                        actionsWindow.setTitle(new Model<String>("Actions"));
+                        actionsWindow.setContent(new ActionsPanel(actionsWindow.getContentId(), item.getModel(), (Class<? extends Event>) eventClass, null, true, false));
                         actionsWindow.show(target);
                     }
 
@@ -155,6 +148,7 @@ public class CriteriaSectionViewPanel extends Panel {
         response.renderJavaScriptReference("javascript/jquery-ui-1.8.13.custom.min.js");
         response.renderCSSReference("style/plugins/jquery-ui-dialog/jquery-ui.custom.css");
         response.renderOnDomReadyJavaScript("$('.observation-dialog').dialog({ autoOpen: false });");
+        response.renderCSSReference("style/legacy/modal/fid_modal.css");
 
     }
 }
