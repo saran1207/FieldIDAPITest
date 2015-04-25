@@ -225,7 +225,7 @@
                         <td class="event-background">
                             <table cellpadding="0" class="collapse-border" cellspacing="0" border="0" align="center" width="600">
                                 <tr>
-                                    <#if criteriaImageMap.get(event.id)?? || (event.type.actionEventType?? && attachedImageListMap.get(event.id)??)>
+                                    <#if criteriaImageMap.get(event.id)??>
                                         <td width="200" class="image-adjustment">
                                             <#if criteriaImageMap.get(event.id)??>
                                                 <#list criteriaImageMap.get(event.id) as imageUrl>
