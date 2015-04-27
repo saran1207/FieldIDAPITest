@@ -127,9 +127,9 @@ public class LotoReportService extends FieldIdPersistenceService {
             //Step 4: Fill the report...
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, new JREmptyDataSource());
 
-            //Okay... so the DownloadLink should automagically create its own file.  Excuse my lack of trust that it will
-            //actually do what it says on the tin.
-            FileOutputStream output = new FileOutputStream(downloadLink.getFile());
+            //Instead of using a file, we now use an empty ByteArrayOutputStream, then peel the byte array out of it
+            //to upload to S3.  This allows us to operate completely file-free.
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
 
             //Step 5: Export the report to the downloadFile.
             JRPdfExporter exporter = new JRPdfExporter();
@@ -141,6 +141,9 @@ public class LotoReportService extends FieldIdPersistenceService {
             //Now for the moment of truth... can we close the OutputStream??
             output.close();
 
+            //Time to pray to the old gods that we can actually upload this as expected.
+            s3Service.uploadGeneratedReport(output.toByteArray(), downloadLink);
+
             //If we got this far, it closed successfully.  Lets flip the DownloadLink to COMPLETED and call it a day.
             downloadLink.setState(DownloadState.COMPLETED);
             downloadLinkService.update(downloadLink);
@@ -149,20 +152,14 @@ public class LotoReportService extends FieldIdPersistenceService {
             //the exception we encounter. That effectively makes it so that the end of the method for the happy path is
             //here and the end of the method for the unhappy path is the bottom of the method.
             return;
-        } catch (FileNotFoundException fne) {
-            //I want to log this one specially on its own, because I don't entirely trust this file will get generated.
-            //This should be separate, because if the file is not created, this points to an underlying issue like a
-            //full hard drive.
-            log.fatal("The File pointed to by a DownloadLink didn't actually exist!!",
-                      fne);
         } catch (JRException | IOException e) {
             //If either of these happen, it was in relation to the actual generation of the report. Again, we should log
             //this, but both of these exceptions basically have the same flavour of Awful and mean more or less the same
             //thing: there was a problem that caused the report not to print.  Maybe we couldn't read the Jasper files,
             //maybe we couldn't load the report... heck, maybe the Jasper files referenced invalid fields/parameters.
             log.error("Failure in generating a LOTO Printout of Type " + type.getLabel() +
-                      " for Procedure Code " + procedureDefinition.getProcedureCode() +
-                      " with ID " + procedureDefinition.getId(),
+                        " for Procedure Code " + procedureDefinition.getProcedureCode() +
+                        " with ID " + procedureDefinition.getId(),
                       e);
         }
 
@@ -261,17 +258,6 @@ public class LotoReportService extends FieldIdPersistenceService {
         return shortFormPrintout;
     }
 
-    public byte[] getLongJapser() throws IOException {
-        LotoPrintout printout = getSelectedLongForm();
-        if(printout == null) {
-            printout = new LotoPrintout();
-            printout.setPrintoutType(LotoPrintoutType.LONG);
-            return s3Service.downloadDefaultLotoPrintout(printout);
-        } else {
-            return s3Service.downloadCustomLotoPrintout(printout);
-        }
-    }
-
     /**
      * This method retrieves a Map of InputStreams keyed by Strings.  This map represents the main report and all
      * subreport sections that is to be used for a LOTO Printout.
@@ -291,18 +277,6 @@ public class LotoReportService extends FieldIdPersistenceService {
             return s3Service.downloadCustomLotoJasperMap(printout);
         }
 
-    }
-
-    public byte[] getShortJasper() throws IOException {
-        LotoPrintout printout = getSelectedShortForm();
-        if(printout == null) {
-            printout = new LotoPrintout();
-            printout.setPrintoutType(LotoPrintoutType.SHORT);
-            return s3Service.downloadDefaultLotoPrintout(printout);
-
-        } else {
-            return s3Service.downloadCustomLotoPrintout(printout);
-        }
     }
 
     @Transactional

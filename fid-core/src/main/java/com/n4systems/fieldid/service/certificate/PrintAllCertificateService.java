@@ -4,6 +4,7 @@ import com.n4systems.exceptions.NonPrintableEventType;
 import com.n4systems.exceptions.NonPrintableManufacturerCert;
 import com.n4systems.exceptions.ReportException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.mail.MailService;
 import com.n4systems.fieldid.service.search.AssetSearchService;
 import com.n4systems.fieldid.service.search.ReportService;
@@ -26,10 +27,10 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -48,6 +49,8 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 
     @Autowired private ReportService reportService;
     @Autowired private AssetSearchService assetSearchService;
+
+	@Autowired private S3Service s3Service;
 	
 	public DownloadLink generateAssetCertificates(AssetSearchCriteria criteria, final String downloadUrl, final DownloadLink link) {
         final List<Long> assetIds = criteria.getSelection().getSelectedIds();
@@ -67,12 +70,7 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 	}
 
     private void sortAssetIdsByResultOrder(List<Long> assetIds, final List<Long> resultOrder) {
-        Collections.sort(assetIds, new Comparator<Long>() {
-            @Override
-            public int compare(Long id1, Long id2) {
-                return new Integer(resultOrder.indexOf(id1)).compareTo(resultOrder.indexOf(id2));
-            }
-        });
+        Collections.sort(assetIds, (id1, id2) -> new Integer(resultOrder.indexOf(id1)).compareTo(resultOrder.indexOf(id2)));
     }
 
     public DownloadLink generateEventCertificates(EventReportCriteria criteriaModel, final EventReportType reportType, final String downloadUrl, final DownloadLink link) {
@@ -100,8 +98,10 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
             downloadLinkService.updateState(link, DownloadState.INPROGRESS);
 			
 			Integer maxCertsPerGroup = configService.getInteger(ConfigEntry.REPORTING_MAX_REPORTS_PER_FILE);
+
+			File theFile = link.getFile();
 			
-			zipOut = new ZipOutputStream(new FileOutputStream(link.getFile()));
+			zipOut = new ZipOutputStream(new FileOutputStream(theFile));
 			
 			int pageNumber = 1;
 			JasperPrint jPrint;
@@ -132,10 +132,15 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
                     throw new Exception("No reports were printed, likely because they were all non-printable.");
                 }
             }
-			
+
+			//Before we update the state of the DownloadLink, we want to shove it up into S3.  Otherwise any attempted
+			//downloads could fail if the file is big enough to present a considerable delay between update of state
+			//and arrival in the cloud.
+			s3Service.uploadGeneratedReport(theFile, link);
+
+			//Now the file is up there... or we at least think it is.  Flip it to completed.
 			downloadLinkService.updateState(link, DownloadState.COMPLETED);
 			sendSuccessNotification(link, downloadUrl, templateName);
-			
 		} catch (Exception e) {
 			downloadLinkService.updateState(link, DownloadState.FAILED);
 			logger.error("Failed generating multi event certificate download", e);
@@ -189,12 +194,7 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 
     private List<Long> sortSelectionBasedOnIndexIn(MultiIdSelection selection, final List<Long> idList) {
         final List<Long> selectedIds = selection.getSelectedIds();
-        Collections.sort(selectedIds, new Comparator<Long>() {
-            @Override
-            public int compare(Long id1, Long id2) {
-                return new Integer(idList.indexOf(id1)).compareTo(idList.indexOf(id2));
-            }
-        });
+        Collections.sort(selectedIds, (id1, id2) -> new Integer(idList.indexOf(id1)).compareTo(idList.indexOf(id2)));
         return selectedIds;
     }
 

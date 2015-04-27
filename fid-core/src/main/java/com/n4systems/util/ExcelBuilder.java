@@ -9,6 +9,7 @@ import org.apache.poi.hssf.usermodel.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -140,7 +141,7 @@ public class ExcelBuilder {
 		}
 		
 		// freeze the title row
-		sheet.createFreezePane( 0, 1, 0, 1 );
+		sheet.createFreezePane(0, 1, 0, 1);
 	}
 	
 	public void addSheetData(String name, TableView table) {
@@ -246,6 +247,14 @@ public class ExcelBuilder {
 			book.write(bookOut);
 		} finally {
 			IOUtils.closeQuietly(bookOut);
+		}
+	}
+
+	public void writeToStream(OutputStream stream) throws IOException {
+		try {
+			book.write(stream);
+		} finally {
+			IOUtils.closeQuietly(stream);
 		}
 	}
 }

@@ -1,9 +1,5 @@
 package com.n4systems.taskscheduling.task;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.n4systems.ejb.SearchPerformer;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.model.downloadlink.DownloadLink;
@@ -21,6 +17,10 @@ import com.n4systems.util.views.ExcelOutputHandler;
 import com.n4systems.util.views.TableView;
 import com.n4systems.util.views.TableViewExcelHandler;
 
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class ExcelReportExportTask extends DownloadTask implements SearchDefiner<TableView> {
 	private static final long serialVersionUID = 1L;
@@ -37,7 +37,7 @@ public class ExcelReportExportTask extends DownloadTask implements SearchDefiner
 	}
 	
 	@Override
-	protected void generateFile(File downloadFile, User user, String downloadName) throws Exception {
+	protected void generateFile(OutputStream fileContents, User user, String downloadName) throws Exception {
 		SecurityFilter filter = user.getSecurityFilter();
 		
 		DateTimeDefiner dateTimeDefiner = new DateTimeDefiner(user);
@@ -64,7 +64,7 @@ public class ExcelReportExportTask extends DownloadTask implements SearchDefiner
 		excelBuilder.createSheet("Report", getColumnTitles(), masterTable);
 		
 		//write the file
-		excelBuilder.writeToFile(downloadFile);		
+		excelBuilder.writeToStream(fileContents);
 	}
 
 	@Override

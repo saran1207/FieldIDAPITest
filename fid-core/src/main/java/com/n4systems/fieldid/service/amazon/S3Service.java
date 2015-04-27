@@ -13,6 +13,7 @@ import com.n4systems.fieldid.version.FieldIdVersion;
 import com.n4systems.model.*;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
+import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.procedure.IsolationPoint;
@@ -64,6 +65,9 @@ public class S3Service extends FieldIdPersistenceService {
     public static final String CRITERIA_RESULT_IMAGE_PATH_ORIG = "/events/%d/criteria_results/%d/criteria_images/%s";
     public static final String CRITERIA_RESULT_IMAGE_PATH_THUMB = "/events/%d/criteria_results/%d/criteria_images/%s.thumbnail";
     public static final String CRITERIA_RESULT_IMAGE_PATH_MEDIUM = "/events/%d/criteria_results/%d/criteria_images/%s.medium";
+
+//    public static final String GENERATED_REPORT_PATH = "/printouts/%d/%s/%s";
+    public static final String GENERATED_REPORT_PATH = "/printouts/%d/%s/%d.%s";
 
     public static final String USER_SIGNATURE_IMAGE_FILE_NAME = "signature.gif";
     public static final String USER_SIGNATURE_PATH = "/users/%d/" + USER_SIGNATURE_IMAGE_FILE_NAME;
@@ -171,6 +175,65 @@ public class S3Service extends FieldIdPersistenceService {
 
     public void uploadCustomerLogo(File file, Long customerOrgId) {
         uploadResource(file, null, CUSTOMER_LOGO_PATH, customerOrgId);
+    }
+
+    /**
+     * This method should shove a generated report file up into the cloud in S3, at a predictable location.  This
+     * predictable part is especially important, because we would eventually like to pull that file back OUT of the
+     * cloud.
+     *
+     * @param file - A File representing the generated report you would like to jam up into S3 with a plunger.
+     * @param downloadLink - A DownloadLink entity, representing the report you're uploading.
+     */
+    public void uploadGeneratedReport(File file, DownloadLink downloadLink) {
+        uploadResource(file,
+                       downloadLink.getTenant().getId(),
+                       GENERATED_REPORT_PATH,
+                       downloadLink.getUser().getId(),
+                       downloadLink.getContentType().getExtension(),
+                       downloadLink.getId(),
+                       downloadLink.getContentType().getExtension());
+    }
+
+    /**
+     * This method moves a generated report up to S3 at a predictable location.  Instead of using a full file, it only
+     * uses a byte array and uses a DownloadLink entity to determine any other important information, such as Content
+     * Type and a unique file name.
+     *
+     * @param fileContents - A byte array representing the contents of the generated report to be uploaded.
+     * @param downloadLink - A DownloadLink entity which represents the file to be uploaded.
+     */
+    public void uploadGeneratedReport(byte[] fileContents, DownloadLink downloadLink) {
+        uploadResource(fileContents,
+                       downloadLink.getContentType().getMimeType(),
+                       downloadLink.getTenant().getId(),
+                       GENERATED_REPORT_PATH,
+                       downloadLink.getUser().getId(),
+                       downloadLink.getContentType().getExtension(),
+                       downloadLink.getId(),
+                       downloadLink.getContentType().getExtension());
+    }
+
+    /**
+     * This method pulls a generated report from S3 as a byte array to be fed to some logic down stream to send the user
+     * the report.  This logic will allow the report to be named by a value in the DownloadLink entity, intead of
+     * forcing us to lock the name to something less readable by the user.
+     *
+     * @param downloadLink - A DownloadLink entity representing a generated report to be pulled from S3.
+     * @return A byte array representing the contents of the desired file.
+     */
+    public byte[] getGeneratedReportByteArray(DownloadLink downloadLink) {
+        try {
+            return downloadResource(downloadLink.getTenant().getId(),
+                                    GENERATED_REPORT_PATH,
+                                    downloadLink.getUser().getId(),
+                                    downloadLink.getContentType().getExtension(),
+                                    downloadLink.getId(),
+                                    downloadLink.getContentType().getExtension());
+        } catch (IOException e) {
+            logger.error("Unable to download file for DownloadLink with ID " + downloadLink.getId(), e);
+            return null;
+        }
     }
 
     public void uploadCustomerLogo(Long customerOrgId, String contentType, byte[] bytes) {
@@ -833,7 +896,8 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     private void uploadResource(File file, Long tenantId, String path, Object...pathArgs) {
-        putObject(createResourcePath(tenantId, path, pathArgs), file);
+        PutObjectResult result = putObject(createResourcePath(tenantId, path, pathArgs), file);
+        logger.debug("Resource Upload Result: " + result.toString());
     }
 
     private void removeResource(Long tenantId, String path, Object...pathArgs) {
@@ -854,9 +918,10 @@ public class S3Service extends FieldIdPersistenceService {
         try {
             S3Object resource = getObject(createResourcePath(tenantId, path, pathArgs));
             resourceInput = resource.getObjectContent();
-            byte[] resourceContent = IOUtils.toByteArray(resourceInput);
-            return resourceContent;
+            return IOUtils.toByteArray(resourceInput);
         } catch (AmazonS3Exception e) {
+            //We should be logging errors when they happen.  Handling things quietly is a bad idea.
+            logger.error("Error processing file contents!!", e);
             return handleAmazonS3Exception(e, (byte[]) null);
         } finally {
             IOUtils.closeQuietly(resourceInput);

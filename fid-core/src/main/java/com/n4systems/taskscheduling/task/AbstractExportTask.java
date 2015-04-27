@@ -21,10 +21,10 @@ public class AbstractExportTask extends DownloadTask {
 	}
 
 	@Override
-	protected void generateFile(File downloadFile, User user, String downloadName) throws Exception {
+	protected void generateFile(OutputStream fileContents, User user, String downloadName) throws Exception {
 		MapWriter mapWriter = null;
 		try {
-			mapWriter = createMapWriter(downloadFile, user);
+			mapWriter = createMapWriter(fileContents, user);
 			exporter.export(mapWriter);
 		} finally {
 			StreamUtils.close(mapWriter);
@@ -34,7 +34,11 @@ public class AbstractExportTask extends DownloadTask {
 	protected OutputStream getFileStream(File downloadFile) throws FileNotFoundException {
 		return new FileOutputStream(downloadFile);
 	}
-	
+
+	protected MapWriter createMapWriter(OutputStream fileContents, User user) throws IOException {
+		return new ExcelMapWriter(fileContents, getDateFormat(user), getTimeZone(user));
+	}
+
 	protected MapWriter createMapWriter(File downloadFile, User user) throws IOException {
 		return new ExcelMapWriter(getFileStream(downloadFile), getDateFormat(user), getTimeZone(user));
 	}

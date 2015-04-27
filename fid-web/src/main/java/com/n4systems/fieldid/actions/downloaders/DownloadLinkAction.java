@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import javax.mail.MessagingException;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ import java.util.List;
 public class DownloadLinkAction extends AbstractDownloadAction {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(DownloadLinkAction.class);
-	
+
 	private Long fileId;
 	private DownloadLink downloadLink;
 	private DownloadLink publicDownloadLink;
@@ -104,7 +105,34 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 			downloadLink.setState(DownloadState.DOWNLOADED);
 			downloadLinkSaver.update(downloadLink); 
 		}
-		return super.doDownload();
+
+		//We did, however, need to snatch a good chunk of that logic.
+		if(!initializeDownload()) {
+			addFlashErrorText("error.file_not_found");
+			return failActionResult;
+		}
+
+		//Instead of making an input stream from a file, we're going to use a byte array...
+		byte[] fileContents = ServiceLocator.getS3Service().getGeneratedReportByteArray(downloadLink);
+
+		if(fileContents == null) {
+			logger.error("DownloadLink with ID " + downloadLink.getId() + " couldn't be downloaded!");
+			addFlashErrorText("error.file_not_found");
+			return failActionResult;
+		}
+
+		//...and we're going to make a ByteArrayInputStream from that byte array!
+		fileStream = new ByteArrayInputStream(fileContents);
+
+		//We'll also want the size of that byte array, since we can't grabt he size of the actual file anymore.  Don't
+		//worry, though, the .size() method from a file returns size in bytes.  Our array is conveniently made up of
+		//bytes... so we'll just get the length of that array and be done with it.
+		fileSize = String.valueOf(fileContents.length);
+
+		//NOTE: The reason we did this was to avoid having to modify a number of other classes which lean on the
+		//		AbstractDownloadAction class.  Because of this, we never call super.doDownload().`
+
+		return successActionResult;
 	}
 	
 	@SkipValidation
@@ -186,19 +214,15 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 				TemplateMailMessage downloadMessage = buildDownloadMessage(email);
 				ServiceLocator.getMailManager().sendMessage(downloadMessage);
 				
-				} catch (MessagingException e) {
-					logger.error("Could not send download message", e);
-					addFlashErrorText("error.problem_sending_email");
-					success=false;
-				} catch (RuntimeException e) {
+				} catch (MessagingException | RuntimeException e) {
 					logger.error("Could not send download message", e);
 					addFlashErrorText("error.problem_sending_email");
 					success=false;
 				}
-				
-				if (success) {
-					addFlashMessageText("label.invitation_sent");
-				}
+
+			if (success) {
+				addFlashMessageText("label.invitation_sent");
+			}
 		}
 		return SUCCESS;
 	}
