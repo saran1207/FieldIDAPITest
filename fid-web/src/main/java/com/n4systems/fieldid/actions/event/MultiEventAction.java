@@ -235,7 +235,7 @@ public class MultiEventAction extends AbstractCrud implements ActionWithCriteria
 		return examiners;
 	}
 
-	public Event getEvent() {
+	public ThingEvent getEvent() {
 		return event;
 	}
 

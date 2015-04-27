@@ -30,7 +30,7 @@ public class WebEventScheduleToEventScheduleBundleConverter {
 		Project scheduleJob;
 		Assignable assignee = null;
         
-		scheduleDate = dateConverter.convertDate(nextSchedule.getDate());
+		scheduleDate = dateConverter.convertDateWithoutTimeZone(nextSchedule.getDate());
 		scheduleType = loaderFactory.createFilteredIdLoader(ThingEventType.class).setId(nextSchedule.getType()).load();
 
         if (nextSchedule.getAssignee() != null) {
