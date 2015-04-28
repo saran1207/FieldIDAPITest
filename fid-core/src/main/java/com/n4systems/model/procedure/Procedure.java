@@ -88,6 +88,15 @@ public class Procedure extends ArchivableEntityWithTenant implements NetworkEnti
     @JoinColumn(name = "lockout_reason_id")
     private LockoutReason lockoutReason;
 
+    @OneToOne(mappedBy = "procedure", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private ProcedureNotification notification;
+
+    @Column(name="send_email_on_update")
+    private Boolean sendEmailOnUpdate = Boolean.TRUE;
+
+    @Transient
+    private Boolean assigneeOrDateChanged = Boolean.FALSE;
+
     public List<IsolationPointResult> getLockResults() {
         return lockResults;
     }
@@ -224,6 +233,11 @@ public class Procedure extends ArchivableEntityWithTenant implements NetworkEnti
     @Override
     protected void onCreate() {
         super.onCreate();
+        if(sendEmailOnUpdate) {
+            notification = new ProcedureNotification();
+            notification.setProcedure(this);
+            setNotification(notification);
+        }
         ensureMobileGuidIsSet();
     }
 
@@ -284,4 +298,27 @@ public class Procedure extends ArchivableEntityWithTenant implements NetworkEnti
         this.recurringEvent = recurringEvent;
     }
 
+    public ProcedureNotification getNotification() {
+        return notification;
+    }
+
+    public void setNotification(ProcedureNotification notification) {
+        this.notification = notification;
+    }
+
+    public Boolean isSendEmailOnUpdate() {
+        return sendEmailOnUpdate;
+    }
+
+    public void setSendEmailOnUpdate(Boolean sendEmailOnUpdate) {
+        this.sendEmailOnUpdate = sendEmailOnUpdate;
+    }
+
+    public Boolean isAssigneeOrDateChanged() {
+        return assigneeOrDateChanged;
+    }
+
+    public void setAssigneeOrDateChanged() {
+        this.assigneeOrDateChanged = Boolean.TRUE;
+    }
 }

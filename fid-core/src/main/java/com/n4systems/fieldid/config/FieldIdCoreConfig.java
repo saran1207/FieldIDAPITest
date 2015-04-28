@@ -155,6 +155,11 @@ public class FieldIdCoreConfig {
     }
 
     @Bean
+    public NotifyProcedureAssigneeService notifyProcedureAssigneeService() {
+        return new NotifyProcedureAssigneeService();
+    }
+
+    @Bean
     public SendSearchService sendSearchService() {
         return new SendSearchService();
     }

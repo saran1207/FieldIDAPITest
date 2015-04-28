@@ -6,15 +6,16 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.ProcedureWorkflowState;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.procedure.LockoutReason;
 import com.n4systems.model.procedure.Procedure;
 import com.n4systems.model.procedure.ProcedureDefinition;
+import com.n4systems.model.procedure.ProcedureNotification;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.services.reporting.UpcomingScheduledLotoRecord;
 import com.n4systems.util.persistence.*;
 import org.apache.commons.lang.time.DateUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ import java.util.Date;
 import java.util.List;
 
 public class ProcedureService extends FieldIdPersistenceService {
+
+    @Autowired NotifyProcedureAssigneeService notifyProcedureAssigneeService;
 
     public boolean hasActiveProcedure(Asset asset) {
         return hasActiveProcedure(asset, null);
@@ -45,6 +48,17 @@ public class ProcedureService extends FieldIdPersistenceService {
     }
 
     public Procedure updateSchedule(Procedure procedure) {
+        if(procedure.isSendEmailOnUpdate() && procedure.isAssigneeOrDateChanged()) {
+            if(!notifyProcedureAssigneeService.notificationExists(procedure)) {
+                ProcedureNotification notification = new ProcedureNotification();
+                notification.setProcedure(procedure);
+                persistenceService.save(notification);
+                procedure.setNotification(notification);
+                System.out.println("It's updating the schedule, don't worry man...");
+            }
+        }
+
+        //Should we update the asset while we're doing this...??
         return persistenceService.update(procedure);
     }
 
