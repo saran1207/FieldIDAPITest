@@ -195,6 +195,7 @@
 
     span.preheader {
         font-size: 1px;
+        color: #ddd;
     }
 
 </style>
