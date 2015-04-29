@@ -116,6 +116,9 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
     @Transient
     private Date lastEventDate;
 
+	@Column(name="last_event_completed_date")
+	private Date lastEventCompletedDate;
+
     
 	public Asset() {
 		this.identified = new PlainDate();
@@ -570,4 +573,12 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
     public void setLastEventDate(Date lastEventDate) {
         this.lastEventDate = lastEventDate;
     }
+
+	public Date getLastEventCompletedDate() {
+		return lastEventCompletedDate;
+	}
+
+	public void setLastEventCompletedDate(Date lastEventCompletedDate) {
+		this.lastEventCompletedDate = lastEventCompletedDate;
+	}
 }

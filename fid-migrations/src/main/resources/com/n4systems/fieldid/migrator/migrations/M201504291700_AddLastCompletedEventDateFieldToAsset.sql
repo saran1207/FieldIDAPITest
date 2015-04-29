@@ -1,0 +1,1 @@
+ALTER TABLE assets ADD COLUMN last_event_completed_date datetime;
