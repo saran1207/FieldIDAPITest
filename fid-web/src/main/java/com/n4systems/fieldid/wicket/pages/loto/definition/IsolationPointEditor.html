@@ -9,10 +9,8 @@
     <div wicket:id="feedbackPanel"/>
 
     <form wicket:id="form">
-        <!-- Replace this stuff with a larger div which will be divided into two smaller divs... allowing a custom
-             form to appear based on whether or not we're editing a note or an Isolation Point... -->
         <div class="column left">
-            <label class="source-id"><wicket:message key="label.source_id"/><input type="text" wicket:id="identifier"/></label>
+            <div wicket:id="identifier" />
             <div wicket:id="sourceText" />
             <div wicket:id="electronicIdentifier" class="tooltip-label"/>
             <div wicket:id="location"/>

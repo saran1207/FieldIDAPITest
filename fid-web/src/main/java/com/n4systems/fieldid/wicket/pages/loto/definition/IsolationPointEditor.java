@@ -26,7 +26,6 @@ import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.*;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -43,7 +42,7 @@ public class IsolationPointEditor extends Panel {
     private FIDModalWindow modal;
     private final ProcedureDefinition procedureDefinition;
     private FIDFeedbackPanel feedbackPanel;
-    private RequiredTextField sourceID;
+    private Component sourceID;
 
     //These components will have their visibility altered by the type of "Isolation Point" being edited...
     //If it's a "Note," then most of these fields will be rendered invisible.
@@ -77,9 +76,8 @@ public class IsolationPointEditor extends Panel {
 
         add(form = new Form("form"));
 
-        form.add(sourceID = new RequiredTextField<>("identifier", new PropertyModel<>(getDefaultModel(), "identifier")));
+        form.add(sourceID = new LabelledTextField<>("identifier", "label.source_id", new PropertyModel<>(getDefaultModel(), "identifier")).required().setMaxLength(procedureDefinition.getAnnotationType().equals(AnnotationType.ARROW_STYLE) ? 50 : 10));
         sourceID.setOutputMarkupId(true);
-        sourceID.add(new AttributeModifier("maxlength", Integer.toString(procedureDefinition.getAnnotationType().equals(AnnotationType.ARROW_STYLE) ? 50 : 10)));
 
         OnChangeAjaxBehavior onChangeAjaxBehavior = new OnChangeAjaxBehavior()
         {
@@ -91,7 +89,8 @@ public class IsolationPointEditor extends Panel {
         };
         onChangeAjaxBehavior.setThrottleDelay(Duration.milliseconds(new Long(500)));
 
-        sourceID.add(onChangeAjaxBehavior);
+        //Just a bit of trickery to get that behaviour stapled to the component.
+        ((LabelledTextField) sourceID).addBehavior(onChangeAjaxBehavior);
 
         form.add(electronicIdentifier = new LabelledTextField<String>("electronicIdentifier", "label.electronic_id", new PropertyModel<>(getDefaultModel(), "electronicIdentifier"))
                 .add(new TipsyBehavior(new FIDLabelModel("message.isolation_point.electronic_id"), TipsyBehavior.Gravity.N)));
