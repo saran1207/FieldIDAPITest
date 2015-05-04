@@ -113,11 +113,11 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
     @Column(name="created_platform_type")
     private PlatformType createdPlatformType;
 
-    @Transient
+	@Column(name="last_event_completed_date")
     private Date lastEventDate;
 
-	@Column(name="last_event_completed_date")
-	private Date lastEventCompletedDate;
+//	@Column(name="last_event_completed_date")
+//	private Date lastEventCompletedDate;
 
     
 	public Asset() {
@@ -571,14 +571,15 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
     }
 
     public void setLastEventDate(Date lastEventDate) {
+		System.out.println("Something is calling Set Last Event Date on an Asset!!!  Stop it!!!");
         this.lastEventDate = lastEventDate;
     }
 
-	public Date getLastEventCompletedDate() {
-		return lastEventCompletedDate;
-	}
-
-	public void setLastEventCompletedDate(Date lastEventCompletedDate) {
-		this.lastEventCompletedDate = lastEventCompletedDate;
-	}
+//	public Date getLastEventCompletedDate() {
+//		return lastEventCompletedDate;
+//	}
+//
+//	public void setLastEventCompletedDate(Date lastEventCompletedDate) {
+//		this.lastEventCompletedDate = lastEventCompletedDate;
+//	}
 }

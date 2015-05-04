@@ -1,25 +1,19 @@
 package com.n4systems.fieldid.service.search;
 
 import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
-import com.n4systems.model.WorkflowState;
-import com.n4systems.model.api.Archivable;
 import com.n4systems.model.location.PredefinedLocationSearchTerm;
 import com.n4systems.model.search.AssetSearchCriteria;
-import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.user.User;
 import com.n4systems.services.reporting.AssetSearchRecord;
 import com.n4systems.services.search.MappedResults;
-import com.n4systems.util.persistence.*;
+import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.search.JoinTerm;
-import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.terms.GpsBoundsTerm;
 import com.n4systems.util.persistence.search.terms.HasGpsTerm;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -95,48 +89,12 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
 	}
 
     @Override
-    protected void addSortTerms(AssetSearchCriteria criteriaModel, QueryBuilder<?> searchBuilder, ColumnMappingView sortColumn, SortDirection sortDirection) {
-        if (criteriaModel.sortingByOrIncludingLastEventDate()) {
-
-            // Adjust the query. We need to insert a subquery to find a derived column: the last event date.
-            QueryBuilder<Event> subQuery = createUserSecurityBuilder(Event.class);
-            subQuery.setMaxSelect("completedDate");
-            subQuery.addSimpleWhere("workflowState", WorkflowState.COMPLETED);
-            subQuery.addSimpleWhere("state", Archivable.EntityState.ACTIVE);
-            NoVariableClause eventMatchesOuterAssetClause = new NoVariableClause("outerAssetClause", WhereParameter.Comparator.EQ, "evt.asset", "obj", WhereClause.ChainOp.AND);
-            eventMatchesOuterAssetClause.setDropAlias(true);
-            subQuery.addWhere(eventMatchesOuterAssetClause);
-            subQuery.setQueryAlias("lastEventDate");
-            subQuery.getFromArgument().setAlias("evt");
-
-
-            if (criteriaModel.sortingByLastEventDate()) {
-                OrderClause orderClause = new OrderClause("lastEventDate", sortDirection.equals(SortDirection.ASC));
-                orderClause.setAlwaysDropAlias(true);
-
-                searchBuilder.getOrderArguments().add(orderClause);
-            } else {
-                super.addSortTerms(criteriaModel, searchBuilder, sortColumn, sortDirection);
-            }
-
-            MultipleSelectClause multiSelect = new MultipleSelectClause();
-            multiSelect.addSimpleSelect("obj");
-            multiSelect.addSubQuery(subQuery);
-
-            searchBuilder.setSelectArgument(multiSelect);
-        } else {
-            super.addSortTerms(criteriaModel, searchBuilder, sortColumn, sortDirection);
-        }
-    }
-
-    @Override
     protected List<Asset> convertResults(AssetSearchCriteria criteriaModel, List results) {
         if (criteriaModel.sortingByOrIncludingLastEventDate() && !results.isEmpty() && results.iterator().next() instanceof Object[]) {
-            List<Asset> convertedResults = new ArrayList<Asset>();
+            List<Asset> convertedResults = new ArrayList<>();
             for (Object result : results) {
                 Object[] objectArray = (Object[]) result;
                 Asset asset = (Asset) objectArray[0];
-                asset.setLastEventDate((Date)objectArray[1]);
                 convertedResults.add(asset);
             }
             return convertedResults;
@@ -150,7 +108,7 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
         int limit = criteria.getMaxItemsBeforeGrouping() + 1;
         query.setLimit(limit);
         List<Asset> queryResults = persistenceService.findAll(query);
-        MappedResults<AssetSearchRecord> searchResult = new MappedResults<AssetSearchRecord>();
+        MappedResults<AssetSearchRecord> searchResult = new MappedResults<>();
         if (queryResults.size()==limit) {
             searchResult.setGroupedResult(queryResults);
         } else {
