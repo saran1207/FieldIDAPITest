@@ -571,15 +571,6 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
     }
 
     public void setLastEventDate(Date lastEventDate) {
-		System.out.println("Something is calling Set Last Event Date on an Asset!!!  Stop it!!!");
         this.lastEventDate = lastEventDate;
     }
-
-//	public Date getLastEventCompletedDate() {
-//		return lastEventCompletedDate;
-//	}
-//
-//	public void setLastEventCompletedDate(Date lastEventCompletedDate) {
-//		this.lastEventCompletedDate = lastEventCompletedDate;
-//	}
 }
