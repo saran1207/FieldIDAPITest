@@ -204,7 +204,7 @@
 <table cellpadding="0" width="100%" cellspacing="0" border="0" id="backgroundTable" class="grey-background">
     <tr>
         <td>
-            <span class="preheader">This is an automated email to let you know that you have been assigned work to do.</span>
+            <span class="preheader">${subHeadingMessage}</span>
             <div align="center">
                 <img align="center" src="http://ce711d17a6fff7097cbb-77686725d730a71bab41d58d2c98ad28.r84.cf2.rackcdn.com/masterlock-fid-logo3.png" class="logo-height">
             </div>
