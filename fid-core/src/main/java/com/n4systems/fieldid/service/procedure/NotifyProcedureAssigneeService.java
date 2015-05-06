@@ -170,7 +170,7 @@ public class NotifyProcedureAssigneeService extends FieldIdPersistenceService {
         //TODO Make some kind of Email Customization thing for this, too!!
 
         String subject = procedures.size() + " Assigned LOTO Procedures";
-        String subHeading = "This is an automated email that Jordan created to be awesome and pump out LOTO Procedure Assignment Notifications!!";
+        String subHeading = "This is an automated email to inform you that you have been assigned a Schedule LOTO Procedure to complete on the associated equipment.";
 
         TemplateMailMessage message = new TemplateMailMessage(subject, PROCEDURE_NOTIFICATION_TEMPLATE) {
             @Override
