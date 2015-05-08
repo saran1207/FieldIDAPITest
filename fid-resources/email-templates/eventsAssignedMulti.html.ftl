@@ -323,6 +323,29 @@
                             </td>
                         </tr>
                     </#if>
+                    <tr>
+                        <td class="event-background">
+                            <table cellpadding="0" cellspacing="0" border="0" align="center" width="600">
+                                <tr>
+                                    <td width="100">&nbsp;</td>
+                                    <td width="400" align="center" class="perform-container">
+                                        <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%" height="50">
+                                            <tr>
+                                                <td align="center" class="login-border" width="100%" height="50">
+                                                    Add to Calendar: <a target="_blank" href="${iCalInvitationUrlMap.get(event.id)}">Outlook&#174; Calendar</a>
+                                                    |
+                                                    <a target="_blank" href="${googleCalendarUrlMap.get(event.id)}">Google Calendar&#153;</a>
+                                                    |
+                                                    <a target="_blank" href="${iCalInvitationUrlMap.get(event.id)}">iCal&#174;</a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td width="100">&nbsp;</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
                 </table>
             </#list>
             <table cellpadding="0" cellspacing="0" border="0" align="center" width="600">
