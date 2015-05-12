@@ -73,10 +73,11 @@ public class ProcedureService extends FieldIdPersistenceService {
         return persistenceService.find(builder);
     }
 
-    public Procedure getOpenProcedure(Asset asset) {
+    public Procedure getOpenProcedureWithDueDate(Asset asset) {
         QueryBuilder<Procedure> query = createTenantSecurityBuilder(Procedure.class);
         query.addSimpleWhere("asset", asset);
         query.addWhere(WhereParameter.Comparator.IN, "workflowState", "workflowState", Arrays.asList(ProcedureWorkflowState.ACTIVE_STATES));
+        query.addWhere(WhereClauseFactory.createNotNull("dueDate"));
         query.setLimit(1);
         return persistenceService.find(query);
     }
