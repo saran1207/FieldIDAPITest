@@ -4,8 +4,9 @@
 	<script type="text/javascript">
 		document.observe("dom:loaded", function(){
 			$('fieldidLogo').setStyle({
-				width: "257px",
-				height: "86px"
+				width: "235px",
+				height: "35px",
+				style: "padding-bottom: 20px"
 			});
 				$('publicLinkContainer').setStyle({
 				display: "block"

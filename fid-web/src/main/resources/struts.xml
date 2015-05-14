@@ -198,8 +198,6 @@
 		<action name="downloadUserSignature" method="doDownload" class="com.n4systems.fieldid.actions.downloaders.DownloadUserSignature" />
 		<action name="downloadExampleUserExport" method="doDownload" class="com.n4systems.fieldid.actions.users.ExampleUserExportAction" />
 
-		<action name="downloadCalendarInvitation" method="doDownload" class="com.n4systems.fieldid.actions.downloaders.DownloadCalendarInvitationAction"/>
-
         <action name="downloadTemporarySignature" method="doDownloadTemporary" class="com.n4systems.fieldid.actions.signature.SignatureAction" />
         <action name="downloadSignature" method="doDownload" class="com.n4systems.fieldid.actions.signature.SignatureAction" />
 
