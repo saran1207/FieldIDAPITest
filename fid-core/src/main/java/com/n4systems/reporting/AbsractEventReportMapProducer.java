@@ -343,7 +343,8 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
                             //at the end of that String that would be nice to get rid of.
                             //This is going to reliably be the last character, so we'll just substring it out to reduce
                             //the operations we're performing on it.
-                            stateView.setState(concatenatedObservationCounts.substring(0, concatenatedObservationCounts.length() - 1));
+                                stateView.setState(concatenatedObservationCounts.substring(0,
+                                        concatenatedObservationCounts.length() > 1 ? concatenatedObservationCounts.length() - 1 : 0));
                         }
 
                         stateView.setType(criteria.getCriteriaType().getReportIdentifier());
