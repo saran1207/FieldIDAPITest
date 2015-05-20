@@ -133,7 +133,7 @@ public class WarningPanel extends Panel implements IEventBehavior {
         } else {
             value = value.endsWith("\n") ? value : value +"\n";
         }
-        model.setObject(value + " • " + warning.getWarning() + "\n");
+        model.setObject(value + " - " + warning.getWarning() + "\n");
     }
 
     private void fireOnChange(AjaxRequestTarget target) {
