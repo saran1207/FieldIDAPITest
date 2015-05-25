@@ -147,9 +147,9 @@ public class IsolationPointListPanel extends Panel {
             {
                 @Override
                 protected void createImage(ListItem<ProcedureDefinitionImage> item) {
-                    if (item.getModelObject().getAnnotations().size() > 0) {
+                    //if (item.getModelObject().getAnnotations().size() > 0) {
                         item.add(new CallOutStyleAnnotatedSvg("image", item.getModel()).withScale(2.0));
-                    }
+                    //}
                 }
             };
         } else {
