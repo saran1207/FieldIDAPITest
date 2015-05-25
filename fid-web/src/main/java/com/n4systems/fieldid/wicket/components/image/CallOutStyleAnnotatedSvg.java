@@ -150,7 +150,7 @@ public class CallOutStyleAnnotatedSvg extends Panel {
                 rect.add(new AttributeModifier("stroke", annotation.getType().getBorderColor()));
                 rect.add(new AttributeModifier("fill", annotation.getType().getBackgroundColor()));
 
-                int textLength = annotation.getText().length();
+                int textLength = annotation.getText() != null ? annotation.getText().length(): 0;
 
                 if (isWide) {
                     if (textLength <= 6) {
