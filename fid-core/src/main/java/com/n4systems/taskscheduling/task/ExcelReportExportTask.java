@@ -6,7 +6,7 @@ import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateTimeDefiner;
-import com.n4systems.util.ExcelBuilder;
+import com.n4systems.util.excel.ExcelXSSFBuilder;
 import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.search.JoinTerm;
 import com.n4systems.util.persistence.search.ResultTransformer;
@@ -60,7 +60,7 @@ public class ExcelReportExportTask extends DownloadTask implements SearchDefiner
 		tableHandler.handle(masterTable);
 		
 		// create an excel builder and add our data
-		ExcelBuilder excelBuilder = new ExcelBuilder(dateTimeDefiner);
+		ExcelXSSFBuilder excelBuilder = new ExcelXSSFBuilder(dateTimeDefiner);
 		excelBuilder.createSheet("Report", getColumnTitles(), masterTable);
 		
 		//write the file

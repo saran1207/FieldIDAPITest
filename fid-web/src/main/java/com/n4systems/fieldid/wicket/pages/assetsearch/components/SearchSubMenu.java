@@ -50,8 +50,6 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
     private Link massUpdateLink;
     private Link massScheduleLink;
 
-    private WebMarkupContainer remainingAssetsWarning;
-
     public SearchSubMenu(String id, final Model<AssetSearchCriteria> searchCriteria) {
         super(id,searchCriteria);
 
@@ -69,10 +67,11 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
         };
         queryForm.setOutputMarkupPlaceholderTag(true);
         queryForm.setVisible(filtersDisabled);
-        queryForm.add(new TextField<String>("query", ProxyModel.of(searchCriteria, on(AssetSearchCriteria.class).getQuery())));
+        queryForm.add(new TextField<>("query", ProxyModel.of(searchCriteria, on(AssetSearchCriteria.class).getQuery())));
         queryForm.add(new AssetSearchHelpPanel("helpPanel"));
         queryForm.add(new Button("submitQueryButton"));
         final LoadableDetachableModel<Long> remainingAssetsIndexModel = remainingAssetsIndexModel();
+        WebMarkupContainer remainingAssetsWarning;
         queryForm.add(remainingAssetsWarning = new WebMarkupContainer("remainingAssetsWarning") {
             @Override
             public boolean isVisible() {
@@ -88,8 +87,8 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
 
         actions = new WebMarkupContainer("actions");
 
-        actions.add(printLink = makeLinkLightBoxed(new MassActionLink<PrintAllCertificatesPage>("printAllCertsLink", PrintAllCertificatesPage.class, searchCriteria)));
-        actions.add(exportLink = makeLinkLightBoxed(new MassActionLink<ExportSearchToExcelPage>("exportToExcelLink", ExportSearchToExcelPage.class, searchCriteria)));
+        actions.add(printLink = makeLinkLightBoxed(new MassActionLink<>("printAllCertsLink", PrintAllCertificatesPage.class, searchCriteria)));
+        actions.add(exportLink = makeLinkLightBoxed(new MassActionLink<>("exportToExcelLink", ExportSearchToExcelPage.class, searchCriteria)));
 
         actions.add(massEventLink = new AssetSearchMassActionLink("massEventLink", "/multiEvent/selectEventType.action?searchContainerKey="+ WebSessionMap.SEARCH_CRITERIA+"&searchId=%s", searchCriteria));
         actions.add(massUpdateLink = new Link("massUpdateLink") {
@@ -178,7 +177,7 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
 
         int selected = criteria.getSelection().getNumSelectedIds();
         boolean rowsSelected = selected > 0;
-        exportLink.setVisible(rowsSelected && (selected < maxExport));
+        exportLink.setVisible(true);
 
         boolean isManufacturerCertificate = FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.ManufacturerCertificate);
 
@@ -188,11 +187,11 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
 
         boolean isInspectionsEnabled = FieldIDSession.get().getTenant().getSettings().isInspectionsEnabled();
 
-        massEventLink.setVisible(sessionUser.hasAccess("createevent") && isInspectionsEnabled);
-        massUpdateLink.setVisible(sessionUser.hasAccess("tag"));
-        massScheduleLink.setVisible(sessionUser.hasAccess("createevent") && isInspectionsEnabled);
+        massEventLink.setVisible(sessionUser.hasAccess("createevent") && isInspectionsEnabled && (selected < maxPrint));
+        massUpdateLink.setVisible(sessionUser.hasAccess("tag") && (selected < maxPrint));
+        massScheduleLink.setVisible(sessionUser.hasAccess("createevent") && isInspectionsEnabled && (selected < maxPrint));
         
-        actions.setVisible(rowsSelected && (selected < maxUpdate) && (massEventLink.isVisible() || massUpdateLink.isVisible() || massScheduleLink.isVisible() || exportLink.isVisible()));
+        actions.setVisible(rowsSelected && (massEventLink.isVisible() || massUpdateLink.isVisible() || massScheduleLink.isVisible() || exportLink.isVisible()));
     }
 
     protected void onSearchSubmit() { }
