@@ -44,10 +44,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -134,18 +131,15 @@ public class SendSearchService extends FieldIdPersistenceService {
     }
 
     private void sendSearchExcel(SearchCriteria criteria, SendSavedItemSchedule schedule) throws MessagingException {
-        File temporaryAttachmentFile = null;
-
+        ByteArrayOutputStream attachmentData = new ByteArrayOutputStream();
         boolean exceptionOnEmptyReport = !schedule.isSendBlankReport();
 
         try {
-            temporaryAttachmentFile = File.createTempFile("excel-export-attachment", getCurrentUser().getTenant().getName()+"."+getCurrentUser().getUserID());
-
             try {
                 if (criteria instanceof AssetSearchCriteria) {
-                    assetExcelExportService.generateFile((AssetSearchCriteria)criteria, temporaryAttachmentFile, false, MAX_RESULTS_FOR_SENT_SEARCH, MAX_RESULTS_FOR_SENT_SEARCH, exceptionOnEmptyReport);
+                    assetExcelExportService.generateFile((AssetSearchCriteria)criteria, attachmentData, false, 0, MAX_RESULTS_FOR_SENT_SEARCH, exceptionOnEmptyReport);
                 } else if (criteria instanceof EventReportCriteria) {
-                    eventExcelExportService.generateFile((EventReportCriteria)criteria, temporaryAttachmentFile, false, MAX_RESULTS_FOR_SENT_SEARCH, MAX_RESULTS_FOR_SENT_SEARCH, exceptionOnEmptyReport);
+                    eventExcelExportService.generateFile((EventReportCriteria)criteria, attachmentData, false, 0, MAX_RESULTS_FOR_SENT_SEARCH, exceptionOnEmptyReport);
                 }
             } catch(EmptyReportException ere) {
                 return;
@@ -153,7 +147,7 @@ public class SendSearchService extends FieldIdPersistenceService {
 
             TemplateMailMessage message = createBasicHtmlMessage("sendSavedItemExcel", criteria, schedule);
 
-            message.getAttachments().put(getReportFileName(schedule), getFileData(temporaryAttachmentFile));
+            message.getAttachments().put(getReportFileName(schedule), attachmentData.toByteArray());
 
             logger.info(LogUtils.prepare("Sending Notification Message to [$0] recipients", message.getToAddresses().size()));
 
@@ -161,15 +155,11 @@ public class SendSearchService extends FieldIdPersistenceService {
 
         } catch (Exception e) {
             logger.error("error creating excel export", e);
-        } finally {
-            if (temporaryAttachmentFile != null) {
-                temporaryAttachmentFile.delete();
-            }
         }
     }
 
     private String getReportFileName(SendSavedItemSchedule schedule) {
-        StringBuffer fileName = new StringBuffer();
+        StringBuilder fileName = new StringBuilder();
         if (schedule.getSavedItem() != null) {
             fileName.append(schedule.getSavedItem().getName());
         } else {
@@ -177,7 +167,7 @@ public class SendSearchService extends FieldIdPersistenceService {
         }
         fileName.append(" - ");
         fileName.append(new SimpleDateFormat(getCurrentUser().getOwner().getPrimaryOrg().getDateFormat()).format(new Date()));
-        fileName.append(".xls");
+        fileName.append(".xlsx");
         return fileName.toString();
     }
 
@@ -198,8 +188,6 @@ public class SendSearchService extends FieldIdPersistenceService {
         if ((rowCount > 0) || (rowCount <= 0 && schedule.isSendBlankReport())) {
             sendHtmlMessage(criteria, results, schedule);
         }
-
-        return;
     }
 
     private void sendHtmlMessage(SearchCriteria criteria, List<RowView> results, SendSavedItemSchedule schedule) throws MessagingException {
@@ -304,17 +292,6 @@ public class SendSearchService extends FieldIdPersistenceService {
 			}
 		}
         return localizationProperties;
-    }
-
-    private byte[] getFileData(File file) throws IOException {
-        byte[] data = null;
-        InputStream in = new FileInputStream(file);
-        try {
-            data = IOUtils.toByteArray(in);
-        } finally {
-            IOUtils.closeQuietly(in);
-        }
-        return data;
     }
 
 }

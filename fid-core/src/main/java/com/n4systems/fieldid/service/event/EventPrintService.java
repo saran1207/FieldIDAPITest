@@ -9,6 +9,7 @@ import com.n4systems.model.search.EventReportCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
+import java.io.OutputStream;
 import java.util.List;
 
 public class EventPrintService extends DownloadService<EventReportCriteria> {
@@ -21,11 +22,11 @@ public class EventPrintService extends DownloadService<EventReportCriteria> {
     }
 
     @Override
-    public void generateFile(EventReportCriteria criteria, File file, boolean useSelection, int resultLimit, int pageSize) throws ReportException {
+    public void generateFile(EventReportCriteria criteria, OutputStream oStream, boolean useSelection, int resultLimit, int pageSize) throws ReportException {
         final List<Long> searchResults = reportService.idSearch(criteria);
         final List<Long> sortedIdList = sortSelectionBasedOnIndexIn(criteria.getSelection(), searchResults);
 
-        new CertificatePrinter().printToPDF(eventSummaryJasperGenerator.generate(criteria, sortedIdList), file);
+        new CertificatePrinter().printToPDF(eventSummaryJasperGenerator.generate(criteria, sortedIdList), oStream);
     }
 
 }

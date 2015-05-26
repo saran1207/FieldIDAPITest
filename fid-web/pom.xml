@@ -258,6 +258,10 @@
 					<artifactId>jaxb-xjc</artifactId>
 					<groupId>com.sun.xml.bind</groupId>
 				</exclusion>
+				<exclusion>
+					<groupId>xmlbeans</groupId>
+					<artifactId>xbean</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>

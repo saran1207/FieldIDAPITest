@@ -15,6 +15,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This is the old ExcelBuilder.  It uses the HSSF library to create the Excel Workbook.  This uses the older
+ * Excel format.
+ *
+ * @deprecated As of May 26, 2015, replaced by
+ * @see com.n4systems.util.excel.ExcelXSSFBuilder
+ */
 public class ExcelBuilder {
 	private static final String EXCEL_DATE_FORMAT  = "m/d/yy";
 	private static final String EXCEL_DATE_TIME_FORMAT = "m/d/yy h:mm";

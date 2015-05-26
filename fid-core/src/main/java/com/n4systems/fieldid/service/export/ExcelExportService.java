@@ -13,17 +13,17 @@ import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateTimeDefiner;
-import com.n4systems.util.ExcelBuilder;
+import com.n4systems.util.excel.ExcelXSSFBuilder;
 import com.n4systems.util.persistence.search.ResultTransformer;
 import com.n4systems.util.views.ExcelOutputHandler;
 import com.n4systems.util.views.TableView;
 import com.n4systems.util.views.TableViewExcelHandler;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.io.OutputStream;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
 public abstract class ExcelExportService<T extends SearchCriteria> extends DownloadService<T> {
@@ -34,11 +34,14 @@ public abstract class ExcelExportService<T extends SearchCriteria> extends Downl
     }
 
     @Override
-    public void generateFile(T criteria, File file, boolean useSelection, int resultLimit, int pageSize) throws ReportException {
-        generateFile(criteria, file, useSelection, resultLimit, pageSize, false);
+    public void generateFile(T criteria, OutputStream oStream, boolean useSelection, int resultLimit, int pageSize) throws ReportException {
+        generateFile(criteria, oStream, useSelection, resultLimit, pageSize, false);
     }
 
-    public void generateFile(T criteria, File file, boolean useSelection, int resultLimit, int pageSize, boolean exceptionOnEmptyReport) throws ReportException {
+
+    //This is done the same as the old way, but uses OutputStreams and goat blood to run.  Yes, you will have to
+    //sacrifice a goat to the Internet Gods if this breaks... it's the only way to fix it!!
+    public void generateFile(T criteria, OutputStream oStream, boolean useSelection, int resultLimit, int pageSize, boolean exceptionOnEmptyReport) throws ReportException {
 		int totalResults = calcTotalResults(useSelection, criteria, resultLimit);
 		if (exceptionOnEmptyReport && totalResults == 0) {
 			throw new EmptyReportException();
@@ -51,7 +54,7 @@ public abstract class ExcelExportService<T extends SearchCriteria> extends Downl
 
         ResultTransformer<TableView> resultTransformer = new ResultTransformerFactory().createResultTransformer(criteria);
 
-		ExcelBuilder excelBuilder = new ExcelBuilder(new DateTimeDefiner(user));
+        ExcelXSSFBuilder excelBuilder = new ExcelXSSFBuilder(new DateTimeDefiner(user));
 		excelBuilder.createSheet(SHEET_NAME);
 		excelBuilder.setSheetTitles(SHEET_NAME, getColumnTitles(criteria));
 
@@ -61,7 +64,7 @@ public abstract class ExcelExportService<T extends SearchCriteria> extends Downl
 		}
 
         try {
-            excelBuilder.writeToFile(file);
+            excelBuilder.writeToStream(oStream);
         } catch (IOException e) {
             throw new ReportException(e);
         }
@@ -96,11 +99,7 @@ public abstract class ExcelExportService<T extends SearchCriteria> extends Downl
 
     private List<String> getColumnTitles(SearchCriteria criteria) {
         final List<ColumnMappingView> columns = criteria.getSortedStaticAndDynamicColumns(true);
-        List<String> columnTitles = new ArrayList<String>();
-        for (ColumnMappingView columnMappingView : columns) {
-            columnTitles.add(columnMappingView.getLocalizedLabel());
-        }
-        return columnTitles;
+        return columns.stream().map(ColumnMappingView::getLocalizedLabel).collect(Collectors.toList());
     }
 
     private ExcelOutputHandler[] createCellHandlers(SearchCriteria criteria, TableGenerationContext exportContextProvider) {

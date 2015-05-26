@@ -20,7 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.OutputStream;
 import java.util.Collections;
 import java.util.List;
 
@@ -67,16 +69,12 @@ public abstract class DownloadService<T extends SearchCriteria> extends FieldIdP
         ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(getCurrentUser().getLanguage());
         SecurityContextInitializer.initSecurityContext(getCurrentUser());
         try {
-			File theFile = downloadLink.getFile();
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-			generateFile(criteria, theFile, true, 0, PAGE_SIZE);
+			generateFile(criteria, outputStream, true, 0, PAGE_SIZE);
 
 			//Upload the file to S3 before we update the state of the DownloadLink...
-			s3Service.uploadGeneratedReport(theFile, downloadLink);
-
-			if(!theFile.delete()) {
-				logger.warn("Unable to delete the file associated with DownloadLink with ID " + downloadLink.getId());
-			}
+			s3Service.uploadGeneratedReport(outputStream.toByteArray(), downloadLink);
 
 			updateDownloadLinkState(downloadLink, DownloadState.COMPLETED);
 
@@ -101,8 +99,8 @@ public abstract class DownloadService<T extends SearchCriteria> extends FieldIdP
 		logger.info(String.format("Download Task Finished [%s]", downloadLink));
 	}
 
-    @Transactional
-    public abstract void generateFile(T criteria, File file, boolean useSelection, int resultLimit, int pageSize) throws ReportException;
+	@Transactional
+	public abstract void generateFile(T criteria, OutputStream oStream, boolean useSelection, int resultLimit, int pageSize) throws ReportException;
 
 	@Transactional
     private void updateDownloadLinkState(DownloadLink downloadLink, DownloadState state) {
