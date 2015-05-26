@@ -305,6 +305,11 @@ public class PersistenceService extends FieldIdService {
     }
 
     @Transactional
+    public Query createSQLQuery (String queryString, Class resultClass) {
+        return em.createNativeQuery(queryString, resultClass);
+    }
+
+    @Transactional
     public Query createQuery (String queryString) {
         return createQuery(queryString, new HashMap<String, Object>());
     }

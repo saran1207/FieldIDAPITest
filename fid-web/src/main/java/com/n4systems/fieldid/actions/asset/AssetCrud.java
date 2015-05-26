@@ -283,6 +283,22 @@ public class AssetCrud extends UploadAttachmentSupport {
 		return SUCCESS;
 	}
 
+	@SkipValidation
+	public String doSmartList() {
+		// if no search param came just show the form.
+		if (search != null && search.length() > 0) {
+			try {
+				assets = assetService.findAssetByIdentifiersForNewSmartSearch(getSecurityFilter(), search, assetType);
+			} catch (Exception e) {
+				logger.error("Failed to look up Assets", e);
+				addActionErrorText("error.failedtoload");
+				return ERROR;
+			}
+		}
+
+		return SUCCESS;
+	}
+
 	private void retrievePagedAssets() {
 		page = getLoaderFactory().createSmartSearchPagedLoader().setSearchText(getSearch()).setAssetType(getAssetTypeId()).setPage(getCurrentPage()).load();
 

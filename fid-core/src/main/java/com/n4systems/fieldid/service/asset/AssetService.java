@@ -417,6 +417,20 @@ public class AssetService extends CrudService<Asset> {
         return asset;
     }
 
+    public List<Asset> findAssetByIdentifiersForNewSmartSearch(SecurityFilter filter, String searchValue, AssetType assetType) {
+        String queryString = "SELECT * FROM assets p WHERE (MATCH (p.identifier, p.rfidNumber, p.customerRefNumber) AGAINST ('" + searchValue + "'))";
+
+        if (assetType != null) {
+            queryString += "AND p.type = " + assetType + " ";
+        }
+
+        queryString += "AND p.TENANT_ID = " + filter.getTenantId() + " AND p.state='ACTIVE' ORDER BY p.created";
+
+        Query query = persistenceService.createSQLQuery(queryString, Asset.class);
+
+        return query.getResultList();
+    }
+
     private void moveRfidFromAssets(Asset asset, User modifiedBy) {
         AssetSaver saver = new AssetSaver();
         saver.setModifiedBy(modifiedBy);
