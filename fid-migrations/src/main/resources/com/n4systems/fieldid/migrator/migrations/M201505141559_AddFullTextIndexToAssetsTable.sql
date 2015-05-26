@@ -1,2 +1,1 @@
-ALTER TABLE ASSETS
-ADD FULLTEXT INDEX 'fulltext' ('identifier' ASC, 'customerRefNumber' ASC, 'rfidNumber' ASC);
+CREATE FULLTEXT INDEX fulltext_idx ON ASSETS (identifier ASC, customerRefNumber ASC, rfidNumber ASC);
