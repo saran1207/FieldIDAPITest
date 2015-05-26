@@ -8,12 +8,9 @@ import com.n4systems.util.views.TableView;
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.util.BitField;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
@@ -316,7 +313,6 @@ public class ExcelXSSFBuilder {
      * This method writes the Workbook out to a file.  This shouldn't be used and is only here to support legacy stuff
      * that still uses a disk file.  That's why this is marked as deprecated.  Please don't use it.
      *
-     * @deprecated May 7, 2015
      * @param stream - A Stream to which you want to write the Excel Workbook.
      * @throws IOException This exception probably happened because the planets are improperly aligned.
      */
