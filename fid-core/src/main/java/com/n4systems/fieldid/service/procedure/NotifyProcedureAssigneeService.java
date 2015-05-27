@@ -220,6 +220,17 @@ public class NotifyProcedureAssigneeService extends FieldIdPersistenceService {
     }
 
     /**
+     * This method removes all notifications associated with the provided Procedure.
+     *
+     * @param procedure - A Procedure for which all notifications must be removed.
+     */
+    public void removeNotificationForProcedure(Procedure procedure) {
+        QueryBuilder<ProcedureNotification> removeQuery = new QueryBuilder<>(ProcedureNotification.class, new OpenSecurityFilter());
+        removeQuery.addSimpleWhere("procedure", procedure);
+        removeNotifications(removeQuery);
+    }
+
+    /**
      * This method removes all Notifications that somehow didn't have assignees.  This can happen from time to time.
      * These notifications were technically never valid or - if they were at one time - their associated User has since
      * flown the coop.

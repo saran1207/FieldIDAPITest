@@ -19,6 +19,7 @@ import com.n4systems.model.utils.PlainDate;
 import com.n4systems.util.FieldIdDateFormatter;
 import com.n4systems.util.mail.TemplateMailMessage;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
@@ -87,6 +88,20 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         QueryBuilder<AssigneeNotification> query = createTenantSecurityBuilder(AssigneeNotification.class);
         query.addSimpleWhere("event.id", event.getId());
         return persistenceService.exists(query);
+    }
+
+    public void removeNotificationsForEvent(ThingEvent event) {
+        QueryBuilder<AssigneeNotification> builder = new QueryBuilder<>(AssigneeNotification.class, new OpenSecurityFilter());
+        builder.addSimpleWhere("event", event);
+        removeNotifications(builder);
+    }
+
+    public void removeNotificationsForEvents(List<Long> eventIds) {
+        if (!eventIds.isEmpty()) {
+            QueryBuilder<AssigneeNotification> builder = new QueryBuilder<>(AssigneeNotification.class, new OpenSecurityFilter());
+            builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "event.id", eventIds));
+            removeNotifications(builder);
+        }
     }
 
     private void notifyGroupAssignees() {
