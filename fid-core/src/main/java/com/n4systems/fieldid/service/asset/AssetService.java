@@ -431,7 +431,7 @@ public class AssetService extends CrudService<Asset> {
 
         //mysql full-text search uses "-" as a word delimiter, so we have to use the old smart search "like" approach.
         if(searchValue.contains("-")) {
-            QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
+            QueryBuilder<Asset> builder =  createUserSecurityBuilder(Asset.class);
 
             WhereParameterGroup group = new WhereParameterGroup("smartsearch");
             group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "identifier", "identifier", searchValue, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
@@ -439,14 +439,21 @@ public class AssetService extends CrudService<Asset> {
             group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "customerRefNumber", "customerRefNumber", searchValue, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
             builder.addWhere(group);
             builder.addOrder("created");
+            builder.addOrder("type");
+            builder.applyFilter(new OwnerAndDownFilter(securityContext.getTenantSecurityFilter().getOwner()));
 
             List<Asset> results = persistenceService.findAll(builder);
             return results;
         } else {
-            String queryString = "SELECT * FROM assets p WHERE (MATCH (p.identifier, p.rfidNumber, p.customerRefNumber) AGAINST ('" + searchValue + "*' IN BOOLEAN MODE))";
-            queryString += "AND p.TENANT_ID = " + securityContext.getTenantSecurityFilter().getTenantId() + " AND p.state='ACTIVE' ORDER BY p.created";
+            String queryString = "SELECT * FROM assets p join org_base o on p.owner_id=o.id WHERE (MATCH (p.identifier, p.rfidNumber, p.customerRefNumber) AGAINST ('" + searchValue + "*' IN BOOLEAN MODE)) ";
 
+            //new security filter if the user is not part of the main org.
+            if(!securityContext.getTenantSecurityFilter().getTenantId().equals(securityContext.getUserSecurityFilter().getOwner().getID())) {
+                queryString += "AND (o.SECONDARY_ID = " + securityContext.getUserSecurityFilter().getOwner().getID() + " OR o.SECONDARY_ID IS NULL) ";
+            }
+            queryString += "AND p.TENANT_ID = " + securityContext.getTenantSecurityFilter().getTenantId() + " AND p.state='ACTIVE' ORDER BY p.created";
             Query query = persistenceService.createSQLQuery(queryString, Asset.class);
+
             return query.getResultList();
         }
 
