@@ -68,6 +68,7 @@ public class S3Service extends FieldIdPersistenceService {
 
 //    public static final String GENERATED_REPORT_PATH = "/printouts/%d/%s/%s";
     public static final String GENERATED_REPORT_PATH = "/printouts/%d/%s/%d.%s";
+    public static final String GENERATED_EXPORT_PATH = "/exports/%d/%s/%d.%s";
 
     public static final String USER_SIGNATURE_IMAGE_FILE_NAME = "signature.gif";
     public static final String USER_SIGNATURE_PATH = "/users/%d/" + USER_SIGNATURE_IMAGE_FILE_NAME;
@@ -215,8 +216,48 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     /**
+     * This method moves a generated Excel Export up to S3 at a predictable location.  This is done by passing a byte
+     * array representative of the file contents and the related DownloadLink entity, which should provide the rest of
+     * the necessary data to construct the path to the file.
+     *
+     * @param fileContents - A byte array representing the contents of a generated Export.
+     * @param downloadLink - A DownloadLink entity representative of the Export.
+     */
+    public void uploadGeneratedExport(byte[] fileContents, DownloadLink downloadLink) {
+        uploadResource(fileContents,
+                       downloadLink.getContentType().getMimeType(),
+                       downloadLink.getTenant().getId(),
+                       GENERATED_EXPORT_PATH,
+                       downloadLink.getUser().getId(),
+                       downloadLink.getContentType().getExtension(),
+                       downloadLink.getId(),
+                       downloadLink.getContentType().getExtension());
+    }
+
+    /**
+     * This method downloads a generated report from S3 as a byte array and passes it to the caller.  This allows us
+     * to handle files in S3 without having to use physical files on disk, thus reducing overall disk I/O.
+     *
+     * @param downloadLink - A DownloadLink entity representing a generated report to be pulled from S3.
+     * @return A byte array representing the contents of the desired file.
+     */
+    public byte[] getGeneratedExportByteArray(DownloadLink downloadLink) {
+        try {
+            return downloadResource(downloadLink.getTenant().getId(),
+                                    GENERATED_EXPORT_PATH,
+                                    downloadLink.getUser().getId(),
+                                    downloadLink.getContentType().getExtension(),
+                                    downloadLink.getId(),
+                                    downloadLink.getContentType().getExtension());
+        } catch (IOException e) {
+            logger.error("Unable to download export file for DownloadLink with ID " + downloadLink.getId(), e);
+            return null;
+        }
+    }
+
+    /**
      * This method pulls a generated report from S3 as a byte array to be fed to some logic down stream to send the user
-     * the report.  This logic will allow the report to be named by a value in the DownloadLink entity, intead of
+     * the report.  This logic will allow the report to be named by a value in the DownloadLink entity, instead of
      * forcing us to lock the name to something less readable by the user.
      *
      * @param downloadLink - A DownloadLink entity representing a generated report to be pulled from S3.

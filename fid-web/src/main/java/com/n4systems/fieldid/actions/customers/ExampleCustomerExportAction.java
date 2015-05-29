@@ -3,10 +3,11 @@ package com.n4systems.fieldid.actions.customers;
 import com.n4systems.api.model.FullExternalOrgView;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exporting.beanutils.ExportMapMarshaller;
-import com.n4systems.exporting.io.ExcelMapWriter;
+import com.n4systems.exporting.io.ExcelXSSFMapWriter;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.fieldid.actions.downloaders.AbstractDownloadAction;
 import com.n4systems.model.downloadlink.ContentType;
+import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.model.utils.StreamUtils;
 import com.n4systems.reporting.PathHandler;
 import org.apache.log4j.Logger;
@@ -84,9 +85,10 @@ public class ExampleCustomerExportAction extends AbstractDownloadAction {
 		
 		MapWriter writer = null;
 		try {
-			writer = new ExcelMapWriter(new FileOutputStream(exampleFile), getPrimaryOrg().getDateFormat(), getCurrentUser().getTimeZone());
+			writer = new ExcelXSSFMapWriter(new DateTimeDefiner(getCurrentUser()));
 			writer.write(marshaler.toBeanMap(createExampleCustomer()));
 			writer.write(marshaler.toBeanMap(createExampleDivision()));
+			((ExcelXSSFMapWriter)writer).writeToStream(new FileOutputStream(exampleFile));
 		} catch (Exception e) {
 			logger.error("Failed generating example customer export", e);
 			return false;

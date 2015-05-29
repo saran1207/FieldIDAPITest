@@ -3,7 +3,7 @@ package com.n4systems.fieldid.actions.autoattribute;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exporting.AutoAttributeExporter;
 import com.n4systems.exporting.Importer;
-import com.n4systems.exporting.io.ExcelMapWriter;
+import com.n4systems.exporting.io.ExcelXSSFMapWriter;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.fieldid.actions.importexport.AbstractImportAction;
@@ -13,6 +13,7 @@ import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.model.downloadlink.DownloadLink;
+import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.model.utils.StreamUtils;
 import com.n4systems.notifiers.notifications.AutoAttributeImportFailureNotification;
 import com.n4systems.notifiers.notifications.AutoAttributeImportSuccessNotification;
@@ -31,6 +32,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("serial")
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
@@ -115,9 +117,9 @@ public class AutoAttributeExportAction extends AbstractImportAction {
 		MapWriter writer = null;
 		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
 		try {
-			writer = new ExcelMapWriter(byteOut, getPrimaryOrg().getDateFormat(), getCurrentUser().getTimeZone());
+			writer = new ExcelXSSFMapWriter(new DateTimeDefiner(getCurrentUser()));
 			exporter.export(writer);
-			
+			((ExcelXSSFMapWriter)writer).writeToStream(byteOut);
 		} catch (Exception e) {
 			logger.error("Failed generating example auto-attribute export", e);
 			return ERROR;
@@ -180,13 +182,9 @@ public class AutoAttributeExportAction extends AbstractImportAction {
 	
 	public List<AssetType> getAssetTypes() {
 		if (assetTypes == null) {
-			assetTypes = new ArrayList<AssetType>();
+			assetTypes = new ArrayList<>();
 			List<AssetType> allAssetTypes = getLoaderFactory().createAssetTypeListLoader().setPostFetchFields("autoAttributeCriteria").load();
-			for(AssetType assetType: allAssetTypes) {
-				if(assetType.getAutoAttributeCriteria()!=null) {
-					assetTypes.add(assetType);
-				}
-			}
+            assetTypes.addAll(allAssetTypes.stream().filter(assetType -> assetType.getAutoAttributeCriteria() != null).collect(Collectors.toList()));
 		}
 		return assetTypes;
 	}

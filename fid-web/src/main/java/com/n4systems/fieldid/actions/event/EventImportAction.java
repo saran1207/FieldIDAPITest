@@ -5,7 +5,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exporting.EventExporter;
 import com.n4systems.exporting.Importer;
 import com.n4systems.exporting.beanutils.*;
-import com.n4systems.exporting.io.ExcelMapWriter;
+import com.n4systems.exporting.io.ExcelXSSFMapWriter;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.fieldid.actions.importexport.AbstractImportAction;
@@ -15,6 +15,7 @@ import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.model.eventschedule.NextEventDateByEventLoader;
 import com.n4systems.model.eventschedule.NextEventDateByEventPassthruLoader;
 import com.n4systems.model.location.Location;
+import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.model.utils.StreamUtils;
 import com.n4systems.notifiers.notifications.EventImportFailureNotification;
 import com.n4systems.notifiers.notifications.EventImportSuccessNotification;
@@ -67,7 +68,7 @@ public class EventImportAction extends AbstractImportAction {
 		MapWriter writer = null;
 		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
 		try {
-			ListLoader<ThingEvent> eventLoader = getLoaderFactory().createPassthruListLoader(Arrays.asList(createExampleEvent()));
+			ListLoader<ThingEvent> eventLoader = getLoaderFactory().createPassthruListLoader(Collections.singletonList(createExampleEvent()));
 			NextEventDateByEventLoader nextDateLoader = new NextEventDateByEventPassthruLoader(createExampleNextDate());
 			
 			// override the serialization handler factory so we can control which fields are output.  (i.e. use different handlers
@@ -81,11 +82,11 @@ public class EventImportAction extends AbstractImportAction {
 					return super.getSerializationHandlerForField(field, annotation);
 				}
 			};
-			EventExporter exporter = new EventExporter(eventLoader, nextDateLoader, new ExportMapMarshaller<EventView>(EventView.class, handlerFactory));
+			EventExporter exporter = new EventExporter(eventLoader, nextDateLoader, new ExportMapMarshaller<>(EventView.class, handlerFactory));
 			
-			writer = new ExcelMapWriter(byteOut, getPrimaryOrg().getDateFormat(), getCurrentUser().getTimeZone());
+			writer = new ExcelXSSFMapWriter(new DateTimeDefiner(getCurrentUser()));
 			exporter.export(writer);
-			
+			((ExcelXSSFMapWriter)writer).writeToStream(byteOut);
 		} catch (Exception e) {
 			logger.error("Failed generating example event export", e);
 			return ERROR;
@@ -138,8 +139,8 @@ public class EventImportAction extends AbstractImportAction {
 						Class<? extends CriteriaResult> resultClass = criterion.getCriteriaType().getResultClass();
 						CriteriaResult result = resultClass.newInstance();
 						result.setCriteria(criterion);				
-						result.setDeficiencies(new ArrayList<Deficiency>()); 
-						result.setRecommendations(new ArrayList<Recommendation>());
+						result.setDeficiencies(new ArrayList<>());
+						result.setRecommendations(new ArrayList<>());
 						result.setTenant(criterion.getTenant());
 						results.add(result);
 					}
