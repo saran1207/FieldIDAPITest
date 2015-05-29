@@ -109,7 +109,9 @@ var autoCompleter = (function() {
 	}
 
 	var render = function(ul, item) {
-		return (item.descClass=='no-results') ?
+		return (item.descClass=='min-characters') ?
+			renderNoResults(ul, item) :
+			(item.descClass=='no-results') ?
 			renderNoResults(ul, item) :
 			(item.descClass=='max-results') ?
 				renderMaxResults(ul,item) :

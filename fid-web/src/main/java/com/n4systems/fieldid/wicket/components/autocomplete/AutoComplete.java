@@ -187,13 +187,22 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
         this.containers = selectors;
         return this;
     }
-    
+
+    //Add text if you want to let the user know that they need a minimum of 3 characters.
+    private AutoCompleteResult createMinLengthJson(String search) {
+        return new AutoCompleteResult("Please Enter at least 3 Characters", "min-characters");
+    }
+
     private AutoCompleteResult createNoResultsJson(String search) {
         return new AutoCompleteResult("No Results Found", "no-results");
     }
 
     private AutoCompleteResult createMaxResultsJson(String term) {
         return new AutoCompleteResult("Search Limit Reached. ", "max-results");
+    }
+
+    public String getTerm() {
+        return term;
     }
 
     protected void startRequest(Request request) {}
@@ -296,22 +305,27 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
                 List<Object> json = new ArrayList<Object>();
 
                 String search = normalizeSearchTerm(term);
-                List<T> choices = getChoices();
 
-                if (choices.size()==0) {
-                    json.add(createNoResultsJson(search));
+                if(term.length() < 3) {
+                    json.add(createMinLengthJson(search));
                 } else {
-                    for (T obj : choices) {
-                        value = createAutocompleteJson(obj, search);
-                        json.add(value);
+
+                    List<T> choices = getChoices();
+
+                    if (choices.size() == 0) {
+                        json.add(createNoResultsJson(search));
+                    } else {
+                        for (T obj : choices) {
+                            value = createAutocompleteJson(obj, search);
+                            json.add(value);
+                        }
                     }
-                }
-                if (choices.size()>=threshold) {
-                    json.add(createMaxResultsJson(term));
-                }
+                    if (choices.size() >= threshold) {
+                        json.add(createMaxResultsJson(term));
+                    }
 
-                new ObjectMapper().writeValue(gen, json);
-
+                    new ObjectMapper().writeValue(gen, json);
+                }
             } catch (IOException e) {
                 throw new WicketRuntimeException(e);
             }

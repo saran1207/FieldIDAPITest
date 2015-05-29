@@ -6,11 +6,15 @@ import com.n4systems.exceptions.*;
 import com.n4systems.fieldid.LegacyMethod;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.CrudService;
+import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.FieldIdService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.event.LastEventDateService;
+import com.n4systems.fieldid.service.event.NotifyEventAssigneeService;
 import com.n4systems.fieldid.service.event.ProcedureAuditEventService;
 import com.n4systems.fieldid.service.mixpanel.MixpanelService;
 import com.n4systems.fieldid.service.org.OrgService;
+import com.n4systems.fieldid.service.procedure.NotifyProcedureAssigneeService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.project.ProjectService;
@@ -20,6 +24,7 @@ import com.n4systems.model.api.Archivable;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.asset.AssetSaver;
 import com.n4systems.model.asset.ScheduleSummaryEntry;
+import com.n4systems.model.asset.SmartSearchWhereClause;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.procedure.Procedure;
@@ -69,6 +74,8 @@ public class AssetService extends CrudService<Asset> {
     @Autowired private ProcedureDefinitionService procedureDefinitionService;
     @Autowired private ProcedureService procedureService;
     @Autowired private ProcedureAuditEventService procedureAuditEventService;
+    @Autowired private NotifyEventAssigneeService notifyEventAssigneeService;
+    @Autowired private NotifyProcedureAssigneeService notifyProcedureAssigneeService;
 
 	private Logger logger = Logger.getLogger(AssetService.class);
 
@@ -417,18 +424,32 @@ public class AssetService extends CrudService<Asset> {
         return asset;
     }
 
-    public List<Asset> findAssetByIdentifiersForNewSmartSearch(SecurityFilter filter, String searchValue, AssetType assetType) {
-        String queryString = "SELECT * FROM assets p WHERE (MATCH (p.identifier, p.rfidNumber, p.customerRefNumber) AGAINST ('" + searchValue + "'))";
-
-        if (assetType != null) {
-            queryString += "AND p.type = " + assetType + " ";
+    public List<Asset> findAssetByIdentifiersForNewSmartSearch(String searchValue) {
+        if(searchValue.length() < 3) {
+            return new ArrayList<Asset>();
         }
 
-        queryString += "AND p.TENANT_ID = " + filter.getTenantId() + " AND p.state='ACTIVE' ORDER BY p.created";
+        //mysql full-text search uses "-" as a word delimiter, so we have to use the old smart search "like" approach.
+        if(searchValue.contains("-")) {
+            QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
 
-        Query query = persistenceService.createSQLQuery(queryString, Asset.class);
+            WhereParameterGroup group = new WhereParameterGroup("smartsearch");
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "identifier", "identifier", searchValue, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "rfidNumber", "rfidNumber", searchValue, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "customerRefNumber", "customerRefNumber", searchValue, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            builder.addWhere(group);
+            builder.addOrder("created");
 
-        return query.getResultList();
+            List<Asset> results = persistenceService.findAll(builder);
+            return results;
+        } else {
+            String queryString = "SELECT * FROM assets p WHERE (MATCH (p.identifier, p.rfidNumber, p.customerRefNumber) AGAINST ('" + searchValue + "*' IN BOOLEAN MODE))";
+            queryString += "AND p.TENANT_ID = " + securityContext.getTenantSecurityFilter().getTenantId() + " AND p.state='ACTIVE' ORDER BY p.created";
+
+            Query query = persistenceService.createSQLQuery(queryString, Asset.class);
+            return query.getResultList();
+        }
+
     }
 
     private void moveRfidFromAssets(Asset asset, User modifiedBy) {
@@ -796,7 +817,7 @@ public class AssetService extends CrudService<Asset> {
         asset.archiveEntity();
         asset.archiveIdentifier();
 
-        archiveEvents(asset, archivedBy);
+        archiveEvents(asset);
         detachFromProjects(asset);
 
         archiveProcedures(asset);
@@ -823,7 +844,8 @@ public class AssetService extends CrudService<Asset> {
             }
 
             for (Procedure procedure: procedureService.getAllProcedures(asset)) {
-                 procedureService.archiveProcedure(procedure);
+                procedureService.archiveProcedure(procedure);
+                notifyProcedureAssigneeService.removeNotificationForProcedure(procedure);
             }
         }
     }
@@ -877,8 +899,10 @@ public class AssetService extends CrudService<Asset> {
         return summary;
     }
 
-    private void archiveEvents(Asset asset, User archivedBy) {
-        EventListArchiver archiver = new EventListArchiver(getEventIdsForAsset(asset));
+    private void archiveEvents(Asset asset) {
+        Set<Long> eventIdsForAsset = getEventIdsForAsset(asset);
+        EventListArchiver archiver = new EventListArchiver(eventIdsForAsset);
+        notifyEventAssigneeService.removeNotificationsForEvents(Lists.newArrayList(eventIdsForAsset));
         archiver.archive(getEntityManager());
     }
 
