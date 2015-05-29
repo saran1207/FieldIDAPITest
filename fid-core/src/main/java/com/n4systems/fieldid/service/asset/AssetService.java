@@ -10,9 +10,11 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.FieldIdService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.event.LastEventDateService;
+import com.n4systems.fieldid.service.event.NotifyEventAssigneeService;
 import com.n4systems.fieldid.service.event.ProcedureAuditEventService;
 import com.n4systems.fieldid.service.mixpanel.MixpanelService;
 import com.n4systems.fieldid.service.org.OrgService;
+import com.n4systems.fieldid.service.procedure.NotifyProcedureAssigneeService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.project.ProjectService;
@@ -72,6 +74,8 @@ public class AssetService extends CrudService<Asset> {
     @Autowired private ProcedureDefinitionService procedureDefinitionService;
     @Autowired private ProcedureService procedureService;
     @Autowired private ProcedureAuditEventService procedureAuditEventService;
+    @Autowired private NotifyEventAssigneeService notifyEventAssigneeService;
+    @Autowired private NotifyProcedureAssigneeService notifyProcedureAssigneeService;
 
 	private Logger logger = Logger.getLogger(AssetService.class);
 
@@ -813,7 +817,7 @@ public class AssetService extends CrudService<Asset> {
         asset.archiveEntity();
         asset.archiveIdentifier();
 
-        archiveEvents(asset, archivedBy);
+        archiveEvents(asset);
         detachFromProjects(asset);
 
         archiveProcedures(asset);
@@ -840,7 +844,8 @@ public class AssetService extends CrudService<Asset> {
             }
 
             for (Procedure procedure: procedureService.getAllProcedures(asset)) {
-                 procedureService.archiveProcedure(procedure);
+                procedureService.archiveProcedure(procedure);
+                notifyProcedureAssigneeService.removeNotificationForProcedure(procedure);
             }
         }
     }
@@ -894,8 +899,10 @@ public class AssetService extends CrudService<Asset> {
         return summary;
     }
 
-    private void archiveEvents(Asset asset, User archivedBy) {
-        EventListArchiver archiver = new EventListArchiver(getEventIdsForAsset(asset));
+    private void archiveEvents(Asset asset) {
+        Set<Long> eventIdsForAsset = getEventIdsForAsset(asset);
+        EventListArchiver archiver = new EventListArchiver(eventIdsForAsset);
+        notifyEventAssigneeService.removeNotificationsForEvents(Lists.newArrayList(eventIdsForAsset));
         archiver.archive(getEntityManager());
     }
 

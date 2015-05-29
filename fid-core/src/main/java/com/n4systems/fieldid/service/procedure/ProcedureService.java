@@ -64,6 +64,7 @@ public class ProcedureService extends FieldIdPersistenceService {
 
     public void deleteSchedule(Procedure procedure) {
         Preconditions.checkArgument(procedure.getWorkflowState().equals(ProcedureWorkflowState.OPEN));
+        notifyProcedureAssigneeService.removeNotificationForProcedure(procedure);
         persistenceService.archive(procedure);
     }
 

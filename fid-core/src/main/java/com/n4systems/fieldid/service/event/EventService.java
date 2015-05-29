@@ -53,6 +53,7 @@ public class EventService extends FieldIdPersistenceService {
     @Autowired private AssetService assetService;
     @Autowired private DateService dateService;
     @Autowired private PriorityCodeService priorityCodeService;
+    @Autowired private NotifyEventAssigneeService notifyEventAssigneeService;
 
     @Transactional(readOnly = true)
     public List<ThingEvent> getThingEventsByType(Long eventTypeId, Date from, Date to) {
@@ -410,6 +411,8 @@ public class EventService extends FieldIdPersistenceService {
             sourceCriteriaResult.getActions().remove(event);
             persistenceService.update(sourceCriteriaResult);
         }
+
+        notifyEventAssigneeService.removeNotificationsForEvent(event);
 
         event.retireEntity();
         event = persistenceService.update(event);
