@@ -216,4 +216,10 @@
 		</action>
 		
 	</package>
+
+	<package name="json" extends="default, json-default" namespace="/json">
+		<action class="com.n4systems.fieldid.actions.asset.SmartListAction" method="doSmartList" name="smartList">
+			<result type="json"/>
+		</action>
+	</package>
 </struts>

@@ -7,6 +7,8 @@
 
     <@n4.includeScript src="jquery.dropdown.js"/>
 
+	<@n4.includeScript src="component/autocompleter.js"/>
+
     <script type="text/javascript" src="//use.typekit.net/usa4tou.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 
