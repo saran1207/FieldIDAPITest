@@ -9,12 +9,15 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.CachingStrategyLink;
 import com.n4systems.fieldid.wicket.components.CustomJavascriptPanel;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
+import com.n4systems.fieldid.wicket.components.asset.AutoCompleteSmartSearch;
 import com.n4systems.fieldid.wicket.components.feedback.TopFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.localization.SelectLanguagePanel;
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.saveditems.SavedItemsDropdown;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ProcedureSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
@@ -44,6 +47,7 @@ import com.n4systems.fieldid.wicket.pages.setup.user.UserGroupsPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UsersListPage;
 import com.n4systems.fieldid.wicket.pages.setup.userregistration.UserRequestListPage;
 import com.n4systems.fieldid.wicket.pages.trends.CriteriaTrendsPage;
+import com.n4systems.model.Asset;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.columns.ReportType;
@@ -64,12 +68,14 @@ import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ContextRelativeResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -100,6 +106,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     @SpringBean
     private S3Service s3Service;
 
+    private Asset smartSearchAsset;
     private Component titleLabel;
 	private Component topTitleLabel;
     private ConfigurationProvider configurationProvider;
@@ -136,6 +143,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             }
         });
 
+
         add(new Header("mainHeader"));
         add(new DebugBar("debugBar"));
         add(new CustomJavascriptPanel("customJsPanel"));
@@ -169,7 +177,6 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         // So subclasses that need to override them can finish their constructors before doing so
         // eg. Labels may require details of entities to be loaded.
         addNavBar("navBar");
-
         add(titleLabel = createTitleLabel("titleLabel"));
         titleLabel.setRenderBodyOnly(true);
 
@@ -289,10 +296,37 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         subMenuContainer.add(createLotoSubMenu());
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("translationsLink", AssetTypeGroupTranslationsPage.class));
         subMenuContainer.add(createActionsSubMenu());
+        subMenuContainer.add(createSmartSearch("smartSearchContainer"));
         createSecuritySubMenu(subMenuContainer);
         
         container.add(subMenuContainer);
         
+        return container;
+    }
+
+    private Component createSmartSearch(String id) {
+        WebMarkupContainer container = new WebMarkupContainer("smartSearchContainer");
+
+        AutoCompleteSmartSearch autoCompleteSearch = (AutoCompleteSmartSearch) new AutoCompleteSmartSearch("autocompletesearch", new PropertyModel<Asset>(this, "smartSearchAsset")) {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target, String hiddenInput, String fieldInput) {
+                setResponsePage(AssetSummaryPage.class, PageParametersBuilder.uniqueId(Long.valueOf(hiddenInput)));
+            }
+        }.withAutoUpdate(true);
+
+        Form<?> form = new Form<Void>("userForm") {
+
+            @Override
+            protected void onSubmit() {
+                redirect("/fieldid/assetInformation.action?useContext=true&usePagination=true&search=" + autoCompleteSearch.getTerm());
+                System.out.println("test");
+            }
+
+        };
+
+        container.add(form);
+
+        form.add(autoCompleteSearch);
         return container;
     }
 
@@ -378,7 +412,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     protected void addNavBar(String navBarId) {
         add(new NavigationBar(navBarId));
     }
-    
+
 	protected ConfigurationProvider getConfigurationProvider() {
 		if (configurationProvider==null) { 
 			configurationProvider = ConfigContext.getCurrentContext(); 
@@ -562,6 +596,8 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             add(new WebMarkupContainer("jobsLinkContainer").setVisible(getSecurityGuard().isProjectsEnabled() && inspectionEnabled));
 
             add(createSetupLinkContainer(sessionUser));
+
+            add(createSmartSearch("smartSearch"));
         }
 
 
