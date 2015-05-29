@@ -425,6 +425,10 @@ public class AssetService extends CrudService<Asset> {
     }
 
     public List<Asset> findAssetByIdentifiersForNewSmartSearch(String searchValue) {
+        return findAssetByIdentifiersForNewSmartSearch(searchValue, securityContext.getTenantSecurityFilter().getTenantId());
+    }
+
+    public List<Asset> findAssetByIdentifiersForNewSmartSearch(String searchValue, Long tenantId) {
         if(searchValue.length() < 3) {
             return new ArrayList<Asset>();
         }
