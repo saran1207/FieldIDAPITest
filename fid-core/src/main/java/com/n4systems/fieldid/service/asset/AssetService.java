@@ -425,6 +425,10 @@ public class AssetService extends CrudService<Asset> {
     }
 
     public List<Asset> findAssetByIdentifiersForNewSmartSearch(String searchValue) {
+        return findAssetByIdentifiersForNewSmartSearch(searchValue, securityContext.getTenantSecurityFilter().getTenantId());
+    }
+
+    public List<Asset> findAssetByIdentifiersForNewSmartSearch(String searchValue, Long tenantId) {
         if(searchValue.length() < 3) {
             return new ArrayList<Asset>();
         }
@@ -444,7 +448,7 @@ public class AssetService extends CrudService<Asset> {
             return results;
         } else {
             String queryString = "SELECT * FROM assets p WHERE (MATCH (p.identifier, p.rfidNumber, p.customerRefNumber) AGAINST ('" + searchValue + "*' IN BOOLEAN MODE))";
-            queryString += "AND p.TENANT_ID = " + securityContext.getTenantSecurityFilter().getTenantId() + " AND p.state='ACTIVE' ORDER BY p.created";
+            queryString += "AND p.TENANT_ID = " + tenantId + " AND p.state='ACTIVE' ORDER BY p.created";
 
             Query query = persistenceService.createSQLQuery(queryString, Asset.class);
             return query.getResultList();

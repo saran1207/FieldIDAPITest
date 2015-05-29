@@ -3,7 +3,6 @@ package com.n4systems.fieldid.actions.asset;
 import com.google.common.collect.Lists;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
-import com.n4systems.fieldid.service.SecurityContextInitializer;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.model.Asset;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,6 @@ public class SmartListAction extends AbstractAction {
 
     public SmartListAction(PersistenceManager persistenceManager) {
         super(persistenceManager);
-        SecurityContextInitializer.initSecurityContext(getCurrentUser());
     }
 
     public String doSmartList() {
@@ -38,7 +36,7 @@ public class SmartListAction extends AbstractAction {
     }
 
     public List<AssetResult> getAssetList() {
-        assetList = assetService.findAssetByIdentifiersForNewSmartSearch(term).stream().map(asset -> new AssetResult(asset)).collect(Collectors.toList());
+        assetList = assetService.findAssetByIdentifiersForNewSmartSearch(term, getTenantId()).stream().map(asset -> new AssetResult(asset)).collect(Collectors.toList());
 
         return assetList;
     }
