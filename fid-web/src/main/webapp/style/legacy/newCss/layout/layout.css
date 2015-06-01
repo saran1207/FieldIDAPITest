@@ -254,18 +254,18 @@ li:hover #menuLoto:after{
 	height: 38px;
 }
 
-#smartSearch input {
+#smartSearch div {
 	font-size: 12px;
 	padding: 5px;
 }
 
-#smartSearch input[type="text"], #smartSearch input.textbox {
+#smartSearch div {
 	width: 230px;
 	border: 1px solid #999;
 	margin: 5px 0;
 }
 
-#smartSearchContainer input.description {
+#smartSearchContainer div.description {
     color: #666;
 }
 
