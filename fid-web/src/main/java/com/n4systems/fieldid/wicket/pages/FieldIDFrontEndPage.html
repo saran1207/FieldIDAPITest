@@ -7,7 +7,6 @@
 
         <script type="text/javascript" src="//use.typekit.net/usa4tou.js"></script>
         <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-        <script src="autocompleter.js"></script>
 
         <link wicket:id="resetCss" type="text/css" href="/fieldid/style/legacy/reset.css" rel="stylesheet" media="all"/>
 
@@ -275,28 +274,21 @@
                             </li>
                         </ul>
                     </div>
-                    <div wicket:id="smartSearchContainer">
+                    <div id="smartSearchContainer">
 
-                        <!--form id="smartSearch" class="js-smart-search" name="assetInformation" onsubmit="return true;" action="/fieldid/assetInformation.action" method="get" -->
-                            <!--input type="hidden" name="useContext" value="true" id="smartSearch_useContext"/>
+                        <form id="smartSearch" class="js-smart-search" name="assetInformation" onsubmit="return true;" action="/fieldid/assetInformation.action" method="get">
+                            <input type="hidden" name="useContext" value="true" id="smartSearch_useContext"/>
                             <input type="hidden" name="usePagination" value="true" id="smartSearch_usePagination"/><span class='fieldHolder'>
-                            <input type="text" name="search" wicket:message="value:label.search" wicket:id="searchText" class="js-search-text js-description"/ -->
-
-
-                        <form wicket:id="userForm">
-                            <div wicket:id = "autocompletesearch"/>
+                            <input type="text" name="search" wicket:message="value:label.search" id="searchText" class="js-search-text js-description"/></span>
                         </form>
 
-                            <!--input wicket:id = "smartText" class="js-search-text js-description"/ > </span -->
-                        <!-- /form -->
-
-                        <!--script type="text/javascript">
+                        <script type="text/javascript">
                             $(document).ready(function() {
                                 $('.js-search-text').bind('focus', clearDescription);
                                 $('.js-search-text').bind('blur', replaceDescription);
                                 $('.js-smart-search').bind('submit', submitSmartSearch);
                             });
-                        </script -->
+                        </script>
                     </div>
                 </div>
             </div>
