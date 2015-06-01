@@ -296,7 +296,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         subMenuContainer.add(createLotoSubMenu());
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("translationsLink", AssetTypeGroupTranslationsPage.class));
         subMenuContainer.add(createActionsSubMenu());
-        subMenuContainer.add(createSmartSearch("smartSearchContainer"));
+        //subMenuContainer.add(createSmartSearch("smartSearchContainer"));
         createSecuritySubMenu(subMenuContainer);
         
         container.add(subMenuContainer);
@@ -310,7 +310,9 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         AutoCompleteSmartSearch autoCompleteSearch = (AutoCompleteSmartSearch) new AutoCompleteSmartSearch("autocompletesearch", new PropertyModel<Asset>(this, "smartSearchAsset")) {
             @Override
             protected void onUpdate(AjaxRequestTarget target, String hiddenInput, String fieldInput) {
-                setResponsePage(AssetSummaryPage.class, PageParametersBuilder.uniqueId(Long.valueOf(hiddenInput)));
+                if(!hiddenInput.equals("")) {
+                    setResponsePage(AssetSummaryPage.class, PageParametersBuilder.uniqueId(Long.valueOf(hiddenInput)));
+                }
             }
         }.withAutoUpdate(true);
 
