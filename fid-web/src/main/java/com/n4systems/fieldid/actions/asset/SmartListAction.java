@@ -5,6 +5,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.model.Asset;
+import com.n4systems.model.security.UserSecurityFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -36,7 +37,10 @@ public class SmartListAction extends AbstractAction {
     }
 
     public List<AssetResult> getAssetList() {
-        assetList = assetService.findAssetByIdentifiersForNewSmartSearch(term, getTenantId()).stream().map(asset -> new AssetResult(asset)).collect(Collectors.toList());
+        assetList = assetService.findAssetByIdentifiersForNewSmartSearch(term, new UserSecurityFilter(getCurrentUser()))
+                                .stream()
+                                .map(asset -> new AssetResult(asset))
+                                .collect(Collectors.toList());
 
         return assetList;
     }
