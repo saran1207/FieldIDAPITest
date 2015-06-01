@@ -1,0 +1,2 @@
+INSERT INTO preconfigured_energy_sources (isolationPointSourceType, source, created, modified) VALUES ('E', 'Electrical 440V', now(), now());
+UPDATE preconfigured_energy_sources set source='Electrical 120V' where source='Electrical 120';

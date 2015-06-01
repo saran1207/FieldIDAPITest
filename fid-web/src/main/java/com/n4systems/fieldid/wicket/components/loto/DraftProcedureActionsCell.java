@@ -51,7 +51,7 @@ public class DraftProcedureActionsCell extends Panel {
         final ProcedureDefinition procedureDefinition = proDef.getObject();
 
         FIDModalWindow modal;
-        add(modal = new FIDModalWindow("modal", getDefaultModel(), 600, 50));
+        add(modal = new FIDModalWindow("modal", getDefaultModel(), 700, 150));
         modal.setTitle(new FIDLabelModel("message.downloadbeinggenerated"));
 
         PageParameters params = new PageParameters();

@@ -113,8 +113,11 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
     @Column(name="created_platform_type")
     private PlatformType createdPlatformType;
 
-    @Transient
+	@Column(name="last_event_completed_date")
     private Date lastEventDate;
+
+//	@Column(name="last_event_completed_date")
+//	private Date lastEventCompletedDate;
 
     
 	public Asset() {

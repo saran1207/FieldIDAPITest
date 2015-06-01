@@ -23,6 +23,10 @@ public class SessionUserDateConverter implements UserDateConverter {
         return DateHelper.string2Date(getDateFormat(), date, getTimeZone());
     }
 
+	public Date convertDateWithoutTimeZone(String date) {
+		return DateHelper.string2Date(getDateFormat(), date, null);
+	}
+
     public Date convertDateWithOptionalTime(String date) {
         Date d = convertDateTime(date);  // it *might* have the time, but not required.  if not, just try to parse date stuff.
         if (d==null) {

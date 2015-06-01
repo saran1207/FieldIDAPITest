@@ -117,7 +117,7 @@ public class UpcomingEventsPanel extends Panel {
 
         @Override
         protected List<Procedure> load() {
-            return Lists.newArrayList(procedureService.getOpenProcedure(asset));
+            return Lists.newArrayList(procedureService.getOpenProcedureWithDueDate(asset));
         }
 
     }

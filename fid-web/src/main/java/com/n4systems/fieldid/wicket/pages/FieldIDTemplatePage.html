@@ -13,6 +13,7 @@
 	<!-- Typekit fonts -->
 	<script type="text/javascript" src="//use.typekit.net/usa4tou.js"></script>
 	<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <script src="autocompleter.js"></script>
 
 
 	<link rel="shortcut icon" href="/fieldid/images/favicon.ico" type="image/x-icon" />
@@ -70,7 +71,7 @@
 	<footer class="footer-global">
 		<div class="content-wrap">
             <span wicket:id="versionLabel"></span>
-			<img src="/fieldid/img/logo-fieldid-powered-by.png" alt="powered by Field ID">
+			<img src="/fieldid/img/powered-by-fieldid.png" alt="powered by Field ID">
 		</div>
         <script wicket:id="footerScript"></script>
 	</footer>
@@ -247,21 +248,11 @@
                     </ul>
                 </li>
             </ul>
-
-            <form class="search js-smart-search" name="assetInformation" onsubmit="return true;" action="/fieldid/assetInformation.action" method="get">
-                <input type="hidden" name="useContext" value="true" id="smartSearch_useContext">
-                <input type="hidden" name="usePagination" value="true" id="smartSearch_usePagination">
-                <input type="text" name="search" class="js-search-text js-description" wicket:message="value:label.search">
-            </form>
-
-            <script type="text/javascript">
-                $(document).ready(function() {
-                    $('.js-search-text').bind('focus', clearDescription);
-                    $('.js-search-text').bind('blur', replaceDescription);
-                    $('.js-smart-search').bind('submit', submitSmartSearch);
-                });
-            </script>
-
+            <div wicket:id="smartSearchContainer" class="search js-smart-search" id="smartSearchContainer">
+                <form wicket:id="userForm">
+                    <div wicket:id = "autocompletesearch" id="smartSearch"/>
+                </form>
+            </div>
         </div><!-- /.content-wrap -->
     </nav><!-- /.nav-main -->
 </wicket:fragment>

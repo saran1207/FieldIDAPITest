@@ -68,9 +68,9 @@ public class AttributesEditPanel extends Panel {
                             @Override
                             protected void onChange(AjaxRequestTarget target) {
                                 performAutoAttributeAdjustments(infoFieldModel);
-                                target.add(AttributesEditPanel.this);
+                                target.add(this);
                             }
-                        });
+                        }.setOutputMarkupId(true));
                         break;
                     case DateField:
                         item.add(new DateAttributeEditor("attributeEditor", infoOptionModel));
@@ -80,9 +80,9 @@ public class AttributesEditPanel extends Panel {
                             @Override
                             protected void onChange(AjaxRequestTarget target) {
                                 performAutoAttributeAdjustments(infoFieldModel);
-                                target.add(AttributesEditPanel.this);
+                                target.add(this);
                             }
-                        });
+                        }.setOutputMarkupId(true));
                         break;
                     case TextField:
                         if (!infoFieldModel.getObject().isUsingUnitOfMeasure()) {

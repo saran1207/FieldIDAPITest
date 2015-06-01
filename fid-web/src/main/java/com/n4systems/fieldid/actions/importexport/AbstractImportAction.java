@@ -1,18 +1,5 @@
 package com.n4systems.fieldid.actions.importexport;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.List;
-import java.util.concurrent.Executor;
-
-import jxl.read.biff.BiffException;
-
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exporting.ImportTaskRegistry;
@@ -21,7 +8,7 @@ import com.n4systems.exporting.ImporterFactory;
 import com.n4systems.exporting.beanutils.InvalidTitleException;
 import com.n4systems.exporting.beanutils.MarshalingException;
 import com.n4systems.exporting.io.EmptyDocumentException;
-import com.n4systems.exporting.io.ExcelMapReader;
+import com.n4systems.exporting.io.ExcelXSSFMapReader;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.notifiers.notifications.ImportFailureNotification;
@@ -29,6 +16,17 @@ import com.n4systems.notifiers.notifications.ImportSuccessNotification;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.ImportTask;
 import com.n4systems.util.ArrayUtils;
+import jxl.read.biff.BiffException;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.List;
+import java.util.concurrent.Executor;
 
 @SuppressWarnings("serial")
 public abstract class AbstractImportAction extends AbstractAction {
@@ -129,7 +127,7 @@ public abstract class AbstractImportAction extends AbstractAction {
 	}
 	
 	private Importer createAndValidateImporter() throws IOException, FileNotFoundException, ParseException, MarshalingException {
-		MapReader mapReader = new ExcelMapReader(new FileInputStream(importDoc), getSessionUser().getTimeZone());
+		MapReader mapReader = new ExcelXSSFMapReader(new FileInputStream(importDoc), getSessionUser().getTimeZone());
 		
 		Importer importer = createImporter(mapReader);
 		

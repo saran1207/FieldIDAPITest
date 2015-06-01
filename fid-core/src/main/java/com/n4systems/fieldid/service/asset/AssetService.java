@@ -6,11 +6,15 @@ import com.n4systems.exceptions.*;
 import com.n4systems.fieldid.LegacyMethod;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.CrudService;
+import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.FieldIdService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.event.LastEventDateService;
+import com.n4systems.fieldid.service.event.NotifyEventAssigneeService;
 import com.n4systems.fieldid.service.event.ProcedureAuditEventService;
 import com.n4systems.fieldid.service.mixpanel.MixpanelService;
 import com.n4systems.fieldid.service.org.OrgService;
+import com.n4systems.fieldid.service.procedure.NotifyProcedureAssigneeService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.project.ProjectService;
@@ -20,14 +24,12 @@ import com.n4systems.model.api.Archivable;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.asset.AssetSaver;
 import com.n4systems.model.asset.ScheduleSummaryEntry;
+import com.n4systems.model.asset.SmartSearchWhereClause;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.procedure.Procedure;
 import com.n4systems.model.procedure.ProcedureDefinition;
-import com.n4systems.model.security.OpenSecurityFilter;
-import com.n4systems.model.security.OwnerAndDownFilter;
-import com.n4systems.model.security.SecurityFilter;
-import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.model.security.*;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.archivers.EventListArchiver;
 import com.n4systems.persistence.utils.PostFetcher;
@@ -69,6 +71,8 @@ public class AssetService extends CrudService<Asset> {
     @Autowired private ProcedureDefinitionService procedureDefinitionService;
     @Autowired private ProcedureService procedureService;
     @Autowired private ProcedureAuditEventService procedureAuditEventService;
+    @Autowired private NotifyEventAssigneeService notifyEventAssigneeService;
+    @Autowired private NotifyProcedureAssigneeService notifyProcedureAssigneeService;
 
 	private Logger logger = Logger.getLogger(AssetService.class);
 
@@ -415,6 +419,44 @@ public class AssetService extends CrudService<Asset> {
         getEntityManager().merge(addAssetHistory);
 
         return asset;
+    }
+
+    public List<Asset> findAssetByIdentifiersForNewSmartSearch(String searchValue) {
+        return findAssetByIdentifiersForNewSmartSearch(searchValue, securityContext.getUserSecurityFilter());
+    }
+
+    public List<Asset> findAssetByIdentifiersForNewSmartSearch(String searchValue, UserSecurityFilter filter) {
+        if(searchValue.length() < 3) {
+            return new ArrayList<Asset>();
+        }
+
+        //mysql full-text search uses "-" as a word delimiter, so we have to use the old smart search "like" approach.
+        if(searchValue.contains("-")) {
+            QueryBuilder<Asset> builder =  new QueryBuilder<Asset>(Asset.class, filter);
+
+            WhereParameterGroup group = new WhereParameterGroup("smartsearch");
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "identifier", "identifier", searchValue, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "rfidNumber", "rfidNumber", searchValue, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "customerRefNumber", "customerRefNumber", searchValue, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            builder.addWhere(group);
+            builder.addOrder("created");
+            builder.addOrder("type");
+
+            List<Asset> results = persistenceService.findAll(builder);
+            return results;
+        } else {
+            String queryString = "SELECT * FROM assets p join org_base o on p.owner_id=o.id WHERE (MATCH (p.identifier, p.rfidNumber, p.customerRefNumber) AGAINST ('" + searchValue + "*' IN BOOLEAN MODE)) ";
+
+            //new security filter if the user is not part of the main org.
+            if(!filter.getTenantId().equals(filter.getOwner().getID())) {
+                queryString += "AND (o.SECONDARY_ID = " + filter.getOwner().getID() + " OR o.SECONDARY_ID IS NULL) ";
+            }
+            queryString += "AND p.TENANT_ID = " + filter.getTenantId() + " AND p.state='ACTIVE' ORDER BY p.created";
+            Query query = persistenceService.createSQLQuery(queryString, Asset.class);
+
+            return query.getResultList();
+        }
+
     }
 
     private void moveRfidFromAssets(Asset asset, User modifiedBy) {
@@ -782,7 +824,7 @@ public class AssetService extends CrudService<Asset> {
         asset.archiveEntity();
         asset.archiveIdentifier();
 
-        archiveEvents(asset, archivedBy);
+        archiveEvents(asset);
         detachFromProjects(asset);
 
         archiveProcedures(asset);
@@ -809,7 +851,8 @@ public class AssetService extends CrudService<Asset> {
             }
 
             for (Procedure procedure: procedureService.getAllProcedures(asset)) {
-                 procedureService.archiveProcedure(procedure);
+                procedureService.archiveProcedure(procedure);
+                notifyProcedureAssigneeService.removeNotificationForProcedure(procedure);
             }
         }
     }
@@ -863,8 +906,10 @@ public class AssetService extends CrudService<Asset> {
         return summary;
     }
 
-    private void archiveEvents(Asset asset, User archivedBy) {
-        EventListArchiver archiver = new EventListArchiver(getEventIdsForAsset(asset));
+    private void archiveEvents(Asset asset) {
+        Set<Long> eventIdsForAsset = getEventIdsForAsset(asset);
+        EventListArchiver archiver = new EventListArchiver(eventIdsForAsset);
+        notifyEventAssigneeService.removeNotificationsForEvents(Lists.newArrayList(eventIdsForAsset));
         archiver.archive(getEntityManager());
     }
 

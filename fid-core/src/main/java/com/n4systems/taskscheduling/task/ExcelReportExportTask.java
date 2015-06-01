@@ -1,16 +1,12 @@
 package com.n4systems.taskscheduling.task;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.n4systems.ejb.SearchPerformer;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateTimeDefiner;
-import com.n4systems.util.ExcelBuilder;
+import com.n4systems.util.excel.ExcelXSSFBuilder;
 import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.search.JoinTerm;
 import com.n4systems.util.persistence.search.ResultTransformer;
@@ -20,6 +16,10 @@ import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 import com.n4systems.util.views.ExcelOutputHandler;
 import com.n4systems.util.views.TableView;
 import com.n4systems.util.views.TableViewExcelHandler;
+
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ExcelReportExportTask extends DownloadTask implements SearchDefiner<TableView> {
@@ -37,7 +37,7 @@ public class ExcelReportExportTask extends DownloadTask implements SearchDefiner
 	}
 	
 	@Override
-	protected void generateFile(File downloadFile, User user, String downloadName) throws Exception {
+	protected void generateFile(OutputStream fileContents, User user, String downloadName) throws Exception {
 		SecurityFilter filter = user.getSecurityFilter();
 		
 		DateTimeDefiner dateTimeDefiner = new DateTimeDefiner(user);
@@ -60,11 +60,11 @@ public class ExcelReportExportTask extends DownloadTask implements SearchDefiner
 		tableHandler.handle(masterTable);
 		
 		// create an excel builder and add our data
-		ExcelBuilder excelBuilder = new ExcelBuilder(dateTimeDefiner);
+		ExcelXSSFBuilder excelBuilder = new ExcelXSSFBuilder(dateTimeDefiner);
 		excelBuilder.createSheet("Report", getColumnTitles(), masterTable);
 		
 		//write the file
-		excelBuilder.writeToFile(downloadFile);		
+		excelBuilder.writeToStream(fileContents);
 	}
 
 	@Override

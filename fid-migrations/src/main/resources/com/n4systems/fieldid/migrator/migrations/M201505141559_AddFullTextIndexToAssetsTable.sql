@@ -1,0 +1,1 @@
+CREATE FULLTEXT INDEX fulltext_idx ON ASSETS (identifier ASC, customerRefNumber ASC, rfidNumber ASC);

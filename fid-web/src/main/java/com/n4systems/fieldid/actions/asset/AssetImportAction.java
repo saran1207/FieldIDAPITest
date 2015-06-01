@@ -3,7 +3,7 @@ package com.n4systems.fieldid.actions.asset;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exporting.AssetExporter;
 import com.n4systems.exporting.Importer;
-import com.n4systems.exporting.io.ExcelMapWriter;
+import com.n4systems.exporting.io.ExcelXSSFMapWriter;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.fieldid.actions.importexport.AbstractImportAction;
@@ -15,6 +15,7 @@ import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
+import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.model.utils.StreamUtils;
 import com.n4systems.notifiers.notifications.AssetImportFailureNotification;
 import com.n4systems.notifiers.notifications.AssetImportSuccessNotification;
@@ -68,8 +69,12 @@ public class AssetImportAction extends AbstractImportAction {
 		MapWriter writer = null;
 		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
 		try {
-			writer = new ExcelMapWriter(byteOut, getPrimaryOrg().getDateFormat(), getCurrentUser().getTimeZone());
+//			writer = new ExcelMapWriter(byteOut, getPrimaryOrg().getDateFormat(), getCurrentUser().getTimeZone());
+			writer = new ExcelXSSFMapWriter(new DateTimeDefiner(getCurrentUser()));
+
 			exporter.export(writer);
+
+			((ExcelXSSFMapWriter)writer).writeToStream(byteOut);
 			
 		} catch (Exception e) {
 			logger.error("Failed generating example asset export", e);
@@ -77,7 +82,8 @@ public class AssetImportAction extends AbstractImportAction {
 		} finally {
 			StreamUtils.close(writer);
 		}
-		
+
+		//TODO Uh.... don't we need to set a filename??
 		byte[] bytes = byteOut.toByteArray();
 		exampleExportFileSize = String.valueOf(bytes.length);
 		exampleExportFileStream = new ByteArrayInputStream(bytes);

@@ -11,13 +11,12 @@ import com.n4systems.services.search.AssetFullTextSearchService;
 import com.n4systems.services.search.MappedResults;
 import com.n4systems.services.search.SearchResults;
 import com.n4systems.services.search.field.AssetIndexField;
-import org.apache.lucene.search.highlight.Formatter;
-import org.apache.lucene.search.highlight.TokenGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
 public class AssetTextOrFilterSearchService extends TextOrFilterSearchService<AssetSearchCriteria, Asset, AssetSearchRecord> {
@@ -28,13 +27,8 @@ public class AssetTextOrFilterSearchService extends TextOrFilterSearchService<As
 
     @Override
     protected List<Long> textIdSearch(AssetSearchCriteria criteria) {
-        SearchResults search = fullTextSearchService.search(criteria.getQuery(), new Formatter() {
-            @Override
-            public String highlightTerm(String s, TokenGroup tokenGroup) {
-                return s;
-            }
-        });
-        List<Long> idList = new ArrayList<Long>();
+        SearchResults search = fullTextSearchService.search(criteria.getQuery(), (s, tokenGroup) -> s);
+        List<Long> idList = new ArrayList<>();
         for (com.n4systems.services.search.SearchResult searchResult : search.getResults()) {
             Long id = Long.valueOf(searchResult.get(AssetIndexField.ID.getField()));
             idList.add(id);
@@ -59,23 +53,13 @@ public class AssetTextOrFilterSearchService extends TextOrFilterSearchService<As
 
     @Override
     protected SearchResult<Asset> textSearch(AssetSearchCriteria criteria, Integer pageNumber, Integer pageSize) {
-        SearchResults search = fullTextSearchService.search(criteria.getQuery(), new Formatter() {
-            @Override
-            public String highlightTerm(String s, TokenGroup tokenGroup) {
-                return s;
-            }
-        }, pageNumber * pageSize, pageSize);
+        SearchResults search = fullTextSearchService.search(criteria.getQuery(), (s, tokenGroup) -> s, pageNumber * pageSize, pageSize);
 
-        List<Asset> assetsList = new ArrayList<Asset>(pageSize);
-        for (com.n4systems.services.search.SearchResult searchResult : search.getResults()) {
-            Long id = Long.valueOf(searchResult.get(AssetIndexField.ID.getField()));
-            Asset asset = persistenceService.find(Asset.class, id);
-            fillInVirtualColumns(asset, criteria);
-            assetsList.add(asset);
-        }
+        List<Long> assetIDs = search.getResults().stream().map(result -> Long.valueOf(result.get(AssetIndexField.ID.getField()))).collect(Collectors.toList());
+        List<Asset> assets = persistenceService.findAllById(Asset.class, assetIDs);
 
-        SearchResult<Asset> result = new SearchResult<Asset>();
-        result.setResults(assetsList);
+        SearchResult<Asset> result = new SearchResult<>();
+        result.setResults(assets);
         result.setTotalResultCount(getResultCount(criteria));
         return result;
     }
@@ -87,11 +71,9 @@ public class AssetTextOrFilterSearchService extends TextOrFilterSearchService<As
         List<Long> currentPageOfSelectedIds = selectedIdList.subList(beginIndex, Math.min(selectedIdList.size(), beginIndex + pageSize));
 
         List<Asset> entities = persistenceService.findAllById(Asset.class, currentPageOfSelectedIds);
-        for (Asset asset: entities) {
-            fillInVirtualColumns(asset, criteriaModel);
-        }
 
-        SearchResult<Asset> searchResult = new SearchResult<Asset>();
+
+        SearchResult<Asset> searchResult = new SearchResult<>();
         searchResult.setResults(entities);
         searchResult.setTotalResultCount(entities.size());
         return searchResult;
@@ -110,12 +92,6 @@ public class AssetTextOrFilterSearchService extends TextOrFilterSearchService<As
     private int getResultCount(SearchCriteria searchCriteria) {
         SearchResults count = fullTextSearchService.count(searchCriteria.getQuery());
         return count.getCount();
-    }
-
-    private void fillInVirtualColumns(Asset asset, AssetSearchCriteria criteria) {
-        if (criteria.sortingByOrIncludingLastEventDate()) {
-            asset.setLastEventDate(lastEventDateService.findLastEventDate(asset));
-        }
     }
 
 }

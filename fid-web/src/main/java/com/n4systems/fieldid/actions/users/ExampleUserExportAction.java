@@ -4,10 +4,11 @@ import com.n4systems.api.model.UserView;
 import com.n4systems.api.validation.validators.YNValidator.YNField;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exporting.beanutils.ExportMapMarshaller;
-import com.n4systems.exporting.io.ExcelMapWriter;
+import com.n4systems.exporting.io.ExcelXSSFMapWriter;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.fieldid.actions.downloaders.AbstractDownloadAction;
 import com.n4systems.model.downloadlink.ContentType;
+import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.model.utils.StreamUtils;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.PasswordComplexityChecker;
@@ -58,12 +59,13 @@ public class ExampleUserExportAction extends AbstractDownloadAction {
 
 	@Override
 	protected boolean initializeDownload() {
-		ExportMapMarshaller<UserView> marshaler = new ExportMapMarshaller<UserView>(UserView.class);
+		ExportMapMarshaller<UserView> marshaler = new ExportMapMarshaller<>(UserView.class);
 		
 		MapWriter writer = null;
 		try {
-			writer = new ExcelMapWriter(new FileOutputStream(exampleFile), getPrimaryOrg().getDateFormat(), getCurrentUser().getTimeZone());
+			writer = new ExcelXSSFMapWriter(new DateTimeDefiner(getCurrentUser()));
 			writer.write(marshaler.toBeanMap(createExampleUser()));
+			((ExcelXSSFMapWriter)writer).writeToStream(new FileOutputStream(exampleFile));
 		} catch (Exception e) {
 			logger.error("Failed generating example user export", e);
 			return false;

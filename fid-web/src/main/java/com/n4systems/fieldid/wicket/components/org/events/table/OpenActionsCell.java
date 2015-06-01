@@ -2,7 +2,7 @@ package com.n4systems.fieldid.wicket.components.org.events.table;
 
 import com.n4systems.fieldid.service.event.PlaceEventScheduleService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.action.ActionDetailsPage;
+import com.n4systems.fieldid.wicket.components.action.ActionsPanel;
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
 import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
 import com.n4systems.fieldid.wicket.model.EntityModel;
@@ -17,7 +17,6 @@ import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Event;
 import com.n4systems.model.PlaceEvent;
 import com.n4systems.model.orgs.BaseOrg;
-import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
@@ -105,14 +104,8 @@ public class OpenActionsCell extends Panel {
 
     private DialogModalWindow createModalWindow(final IModel<PlaceEvent> eventModel, final Panel eventDisplayPanel) {
         DialogModalWindow dialogWindow = new DialogModalWindow("modalWindow");
-        dialogWindow.setPageCreator(new ModalWindow.PageCreator() {
-            @Override
-            public Page createPage() {
-                IModel<Event> entityModel = new EntityModel<Event>(Event.class, eventModel.getObject().getId());
-                return new ActionDetailsPage(new PropertyModel<CriteriaResult>(entityModel, "sourceCriteriaResult"), Event.class, entityModel)
-                        .setAssetSummaryContext(true);
-            }
-        });
+        IModel<Event> entityModel = new EntityModel<Event>(Event.class, eventModel.getObject().getId());
+        dialogWindow.setContent(new ActionsPanel(dialogWindow.getContentId(), new PropertyModel<CriteriaResult>(entityModel, "sourceCriteriaResult"), PlaceEvent.class, entityModel, true, true));
 
         dialogWindow.setWindowClosedCallback(new ModalWindow.WindowClosedCallback() {
             @Override

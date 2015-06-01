@@ -229,6 +229,7 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
 
         public OuterEventForm(String id) {
             super(id);
+            setMultiPart(true);
 
             add(createTargetDetailsPanel(event));
 

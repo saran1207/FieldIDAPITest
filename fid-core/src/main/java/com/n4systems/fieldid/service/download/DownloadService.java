@@ -4,6 +4,7 @@ import com.n4systems.exceptions.ReportException;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.SecurityContextInitializer;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.mail.MailManager;
 import com.n4systems.mail.SMTPMailManager;
@@ -18,13 +19,12 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.concurrent.Callable;
-
 import javax.mail.MessagingException;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.OutputStream;
+import java.util.Collections;
+import java.util.List;
 
 public abstract class DownloadService<T extends SearchCriteria> extends FieldIdPersistenceService {
 
@@ -40,6 +40,8 @@ public abstract class DownloadService<T extends SearchCriteria> extends FieldIdP
     @Autowired
     private AsyncService asyncService;
 
+	@Autowired private S3Service s3Service;
+
     public DownloadService(String templateName, ContentType type) {
         this.templateName = templateName;
         this.type = type;
@@ -49,12 +51,9 @@ public abstract class DownloadService<T extends SearchCriteria> extends FieldIdP
     public DownloadLink startTask(final T criteria, final String linkName, final String downloadUrl) {
         final DownloadLink downloadLink = createDownloadLink(linkName);
 
-        AsyncService.AsyncTask<Void> task = asyncService.createTask(new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                run(criteria, downloadUrl, downloadLink);
-                return null;
-            }
+        AsyncService.AsyncTask<Void> task = asyncService.createTask(() -> {
+            run(criteria, downloadUrl, downloadLink);
+            return null;
         });
 
         asyncService.run(task);
@@ -70,7 +69,12 @@ public abstract class DownloadService<T extends SearchCriteria> extends FieldIdP
         ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(getCurrentUser().getLanguage());
         SecurityContextInitializer.initSecurityContext(getCurrentUser());
         try {
-			generateFile(criteria, downloadLink.getFile(), true, 0, PAGE_SIZE);
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+			generateFile(criteria, outputStream, true, 0, PAGE_SIZE);
+
+			//Upload the file to S3 before we update the state of the DownloadLink...
+			s3Service.uploadGeneratedReport(outputStream.toByteArray(), downloadLink);
 
 			updateDownloadLinkState(downloadLink, DownloadState.COMPLETED);
 
@@ -95,8 +99,8 @@ public abstract class DownloadService<T extends SearchCriteria> extends FieldIdP
 		logger.info(String.format("Download Task Finished [%s]", downloadLink));
 	}
 
-    @Transactional
-    public abstract void generateFile(T criteria, File file, boolean useSelection, int resultLimit, int pageSize) throws ReportException;
+	@Transactional
+	public abstract void generateFile(T criteria, OutputStream oStream, boolean useSelection, int resultLimit, int pageSize) throws ReportException;
 
 	@Transactional
     private void updateDownloadLinkState(DownloadLink downloadLink, DownloadState state) {
@@ -126,12 +130,7 @@ public abstract class DownloadService<T extends SearchCriteria> extends FieldIdP
 
     protected List<Long> sortSelectionBasedOnIndexIn(MultiIdSelection selection, final List<Long> idList) {
         final List<Long> selectedIds = selection.getSelectedIds();
-        Collections.sort(selectedIds, new Comparator<Long>() {
-            @Override
-            public int compare(Long id1, Long id2) {
-                return new Integer(idList.indexOf(id1)).compareTo(idList.indexOf(id2));
-            }
-        });
+        Collections.sort(selectedIds, (id1, id2) -> new Integer(idList.indexOf(id1)).compareTo(idList.indexOf(id2)));
         return selectedIds;
     }
 

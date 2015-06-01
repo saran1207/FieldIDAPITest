@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>fieldid-root</artifactId>
 		<groupId>com.fieldid</groupId>
-		<version>2015.2.1</version>
+		<version>2015.3.0</version>
 	</parent>
 	<artifactId>fid-test-utils</artifactId>
 	<name>Test Utils</name>
@@ -109,7 +109,7 @@
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>1.2.16</version>
+			<version>${log4j.version}</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>jmxri</artifactId>

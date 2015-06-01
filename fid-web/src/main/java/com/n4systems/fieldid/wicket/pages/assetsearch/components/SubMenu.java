@@ -65,9 +65,9 @@ public abstract class SubMenu<T extends SearchCriteria> extends Panel {
     protected void addMattBar() {
         MattBar mattBar = createMattBar();
         buttonsContainer.addOrReplace(mattBar);
-        mattBar.addLink(new Model<String>(""), COLUMNS_ID, "images/col.png", "label.tooltip_columns");
+        mattBar.addLink(new Model<>(""), COLUMNS_ID, "images/col.png", "label.tooltip_columns");
         if (!filtersDisabled) {
-            mattBar.addLink(new Model<String>(""), FILTERS_ID, "images/filter.png", "label.tooltip_filters");
+            mattBar.addLink(new Model<>(""), FILTERS_ID, "images/filter.png", "label.tooltip_filters");
             mattBar.setCurrentState(COLUMNS_ID);
         } else {
             mattBar.setCurrentState(FILTERS_ID);
@@ -84,7 +84,7 @@ public abstract class SubMenu<T extends SearchCriteria> extends Panel {
         return new Label("header", getHeaderModel());
     }
 
-    protected IModel<String> getHeaderModel() { return new Model<String>("title of saveditem"); }
+    protected IModel<String> getHeaderModel() { return new Model<>("title of saveditem"); }
     
 
     private MattBar createMattBar() {
@@ -109,7 +109,7 @@ public abstract class SubMenu<T extends SearchCriteria> extends Panel {
 
     protected <T extends Link> T makeLinkLightBoxed(T link) {
         link.setOutputMarkupId(true);
-        link.add(new AttributeAppender("class", new Model<String>(COLORBOX_CLASS), " "));
+        link.add(new AttributeAppender("class", new Model<>(COLORBOX_CLASS), " "));
         lightBoxLinks.add(link);
         return link;
     }

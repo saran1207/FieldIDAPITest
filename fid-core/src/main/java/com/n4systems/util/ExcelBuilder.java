@@ -9,11 +9,19 @@ import org.apache.poi.hssf.usermodel.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This is the old ExcelBuilder.  It uses the HSSF library to create the Excel Workbook.  This uses the older
+ * Excel format.
+ *
+ * @deprecated As of May 26, 2015, replaced by
+ * @see com.n4systems.util.excel.ExcelXSSFBuilder
+ */
 public class ExcelBuilder {
 	private static final String EXCEL_DATE_FORMAT  = "m/d/yy";
 	private static final String EXCEL_DATE_TIME_FORMAT = "m/d/yy h:mm";
@@ -140,7 +148,7 @@ public class ExcelBuilder {
 		}
 		
 		// freeze the title row
-		sheet.createFreezePane( 0, 1, 0, 1 );
+		sheet.createFreezePane(0, 1, 0, 1);
 	}
 	
 	public void addSheetData(String name, TableView table) {
@@ -246,6 +254,14 @@ public class ExcelBuilder {
 			book.write(bookOut);
 		} finally {
 			IOUtils.closeQuietly(bookOut);
+		}
+	}
+
+	public void writeToStream(OutputStream stream) throws IOException {
+		try {
+			book.write(stream);
+		} finally {
+			IOUtils.closeQuietly(stream);
 		}
 	}
 }

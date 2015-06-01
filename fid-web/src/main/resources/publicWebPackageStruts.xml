@@ -27,6 +27,16 @@
 			</result>
 			<result name="error" type="redirectAction">publicDownloadExpired</result>
 		</action>
+
+		<action name="downloadCalendarInvitation" method="doDownload" class="com.n4systems.fieldid.actions.downloaders.DownloadCalendarInvitationAction">
+			<result name="success" type="stream">
+				<param name="contentType">${contentType}</param>
+				<param name="inputName">fileStream</param>
+				<param name="contentLength">${fileSize}</param>
+				<param name="contentDisposition">inline; filename="${fileName}"</param>
+			</result>
+			<result name="error" type="redirectAction">publicDownloadExpired</result>
+		</action>
 		
 		<action name="publicDownloadExpired" method="doShow" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
 			<result name="success" type="freemarker">/templates/html/public/downloads/downloadExpired.ftl</result>

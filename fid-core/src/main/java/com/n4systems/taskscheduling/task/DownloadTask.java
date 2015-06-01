@@ -1,12 +1,5 @@
 package com.n4systems.taskscheduling.task;
 
-import java.io.File;
-
-import javax.mail.MessagingException;
-
-import org.apache.log4j.Logger;
-
-
 import com.n4systems.mail.MailManager;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.downloadlink.DownloadLinkSaver;
@@ -15,6 +8,11 @@ import com.n4systems.model.user.User;
 import com.n4systems.persistence.savers.Saver;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.TemplateMailMessage;
+import org.apache.log4j.Logger;
+
+import javax.mail.MessagingException;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 
 public abstract class DownloadTask implements Runnable {
 	protected Logger logger = Logger.getLogger(DownloadTask.class); 
@@ -37,7 +35,7 @@ public abstract class DownloadTask implements Runnable {
 		this(downloadLink, downloadUrl, templateName, new DownloadLinkSaver(), ServiceLocator.getMailManager());
 	}
 	
-	abstract protected void generateFile(File downloadFile, User user, String downloadName) throws Exception;
+	abstract protected void generateFile(OutputStream fileContents, User user, String downloadName) throws Exception;
 	
 	public void run() {
 		logger.info(String.format("Download Task Started [%s]", downloadLink));
@@ -45,8 +43,13 @@ public abstract class DownloadTask implements Runnable {
 		updateDownloadLinkState(DownloadState.INPROGRESS);
 		
 		try {
-			generateFile(downloadLink.getFile(), downloadLink.getUser(), downloadLink.getName());
-			
+			ByteArrayOutputStream fileContents = new ByteArrayOutputStream();
+
+			generateFile(fileContents, downloadLink.getUser(), downloadLink.getName());
+
+			//Before we update the DownloadLink state, we're going to want to upload the file to S3.
+			ServiceLocator.getS3Service().uploadGeneratedReport(fileContents.toByteArray(), downloadLink);
+
 			updateDownloadLinkState(DownloadState.COMPLETED);
 	
 			try {

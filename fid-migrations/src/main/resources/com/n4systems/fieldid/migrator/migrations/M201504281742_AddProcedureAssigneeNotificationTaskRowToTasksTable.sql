@@ -1,0 +1,1 @@
+insert into tasks(id,created,modified,classname,cronexpression,taskgroup,enabled) values ("ProcedureAssigneeNotification", now(), now(), "com.n4systems.taskscheduling.task.NotifyProcedureAssigneeTask", "*/5 * * * *", "default", 1);

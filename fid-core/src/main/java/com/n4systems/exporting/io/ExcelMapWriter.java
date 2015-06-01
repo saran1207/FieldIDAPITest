@@ -99,9 +99,4 @@ public class ExcelMapWriter implements MapWriter {
 		this.excelSheetManager = manager;
 		return this;
 	}
-	
-	
-	
-	
-	
 }

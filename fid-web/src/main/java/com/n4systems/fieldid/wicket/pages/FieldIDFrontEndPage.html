@@ -7,6 +7,7 @@
 
         <script type="text/javascript" src="//use.typekit.net/usa4tou.js"></script>
         <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+        <script src="autocompleter.js"></script>
 
         <link wicket:id="resetCss" type="text/css" href="/fieldid/style/legacy/reset.css" rel="stylesheet" media="all"/>
 
@@ -82,7 +83,7 @@
             <div>
                 <p><span wicket:id="versionLabel"></span></p>
             </div>
-            <div class="poweredBy"><a href="http://www.fieldid.com/" target="_blank"><img src="/fieldid/images/poweredByFieldID.png" border="0"/></a></div>	</div>
+            <div class="poweredBy"><a href="http://www.fieldid.com/" target="_blank"><img src="/fieldid/img/powered-by-fieldid.png" border="0"/></a></div>	</div>
         </div>
 
 		<div class="loginLinkSection" style="display:none;">
@@ -274,21 +275,10 @@
                             </li>
                         </ul>
                     </div>
-                    <div id="smartSearchContainer">
-
-                        <form id="smartSearch" class="js-smart-search" name="assetInformation" onsubmit="return true;" action="/fieldid/assetInformation.action" method="get">
-                            <input type="hidden" name="useContext" value="true" id="smartSearch_useContext"/>
-                            <input type="hidden" name="usePagination" value="true" id="smartSearch_usePagination"/><span class='fieldHolder'>
-                            <input type="text" name="search" wicket:message="value:label.search" id="searchText" class="js-search-text js-description"/></span>
+                    <div wicket:id="smartSearchContainer" class="search js-smart-search" id="smartSearchContainer">
+                        <form wicket:id="userForm">
+                            <div wicket:id = "autocompletesearch" id="smartSearch"/>
                         </form>
-
-                        <script type="text/javascript">
-                            $(document).ready(function() {
-                                $('.js-search-text').bind('focus', clearDescription);
-                                $('.js-search-text').bind('blur', replaceDescription);
-                                $('.js-smart-search').bind('submit', submitSmartSearch);
-                            });
-                        </script>
                     </div>
                 </div>
             </div>

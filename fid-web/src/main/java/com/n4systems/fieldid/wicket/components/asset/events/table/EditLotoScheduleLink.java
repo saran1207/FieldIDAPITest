@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components.asset.events.table;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.wicket.components.schedule.ProcedurePicker;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.model.ProcedureWorkflowState;
 import com.n4systems.model.procedure.Procedure;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -39,14 +40,18 @@ public class EditLotoScheduleLink extends Panel {
                 }
             });
 
-            add(new AjaxLink<Void>("deleteLink") {
+            WebMarkupContainer deleteContainer;
+
+            add(deleteContainer = new WebMarkupContainer("deleteContainer"));
+            deleteContainer.setVisible(procedureModel.getObject().getWorkflowState().equals(ProcedureWorkflowState.OPEN));
+            deleteContainer.add(new AjaxLink<Void>("deleteLink") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
                     procedureService.deleteSchedule(procedureModel.getObject());
                     info(new FIDLabelModel("message.loto_deleted").getObject());
                     onProcedureScheduleUpdated(target);
                 }
-            });
+            }.setVisible(procedureModel.getObject().getWorkflowState().equals(ProcedureWorkflowState.OPEN)));
 
         } else {
             add(new WebMarkupContainer("procedurePicker"));

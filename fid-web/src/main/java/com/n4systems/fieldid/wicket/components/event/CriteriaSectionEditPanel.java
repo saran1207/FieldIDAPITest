@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.wicket.components.event;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.action.ActionsListPage;
+import com.n4systems.fieldid.wicket.components.action.ActionsPanel;
 import com.n4systems.fieldid.wicket.components.event.criteria.edit.CriteriaActionButton;
 import com.n4systems.fieldid.wicket.components.event.criteria.factory.CriteriaEditorFactory;
 import com.n4systems.fieldid.wicket.components.event.observations.DeficienciesEditPanel;
@@ -98,6 +98,7 @@ public class CriteriaSectionEditPanel extends Panel {
 
         public CriteriaEditForm(String id, final Class<? extends AbstractEvent> eventClass, IModel<List<CriteriaResult>> results) {
             super(id, results);
+            setMultiPart(true);
 
             add(new ListView<CriteriaResult>("criteria", results) {
                 @Override
@@ -180,16 +181,8 @@ public class CriteriaSectionEditPanel extends Panel {
                         @Override
                         public void onClick(AjaxRequestTarget target) {
                             actionsWindow.setTitle(new Model<String>("Actions"));
-                            FieldIDSession.get().setActionsForCriteria(item.getModelObject(), item.getModelObject().getActions());
-                            actionsWindow.setPageCreator(new ModalWindow.PageCreator() {
-                                @Override
-                                public Page createPage() {
-                                    return new ActionsListPage(item.getModel(), (Class<? extends Event>) eventClass);
-                                }
-
-                                ;
-                            });
-                            actionsWindow.setCloseButtonCallback(createActionsCloseButtonCallback(item));
+                            actionsWindow.setContent(new ActionsPanel(actionsWindow.getContentId(), item.getModel(), (Class<? extends Event>) eventClass, null, false, false));
+                            actionsWindow.setCloseButtonCallback(createActionsCloseButtonCallback());
                             actionsWindow.show(target);
                         }
                     }.setVisible(showAttachmentsAndActions));
@@ -236,12 +229,10 @@ public class CriteriaSectionEditPanel extends Panel {
                 }
 
 
-                private ModalWindow.CloseButtonCallback createActionsCloseButtonCallback(final ListItem<CriteriaResult> item) {
+                private ModalWindow.CloseButtonCallback createActionsCloseButtonCallback() {
                     return new ModalWindow.CloseButtonCallback() {
                         @Override
                         public boolean onCloseButtonClicked(AjaxRequestTarget target) {
-                            List<Event> actionsList = FieldIDSession.get().getActionsList(item.getModelObject());
-                            item.getModelObject().setActions(actionsList);
                             target.add(CriteriaSectionEditPanel.this);
                             return true;
                         }

@@ -38,10 +38,10 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
 
         actions = new WebMarkupContainer("actions");
 
-        actions.add(exportLink = makeLinkLightBoxed(new MassActionLink<ExportReportToExcelPage>("exportToExcelLink", ExportReportToExcelPage.class, model)));
+        actions.add(exportLink = makeLinkLightBoxed(new MassActionLink<>("exportToExcelLink", ExportReportToExcelPage.class, model)));
 
         // note that only one of these mass update links will be shown at a time - depends on the context.
-        actions.add(assignJobLink = new MassActionLink<AssignEventsToJobPage>("assignJobLink", AssignEventsToJobPage.class, model));
+        actions.add(assignJobLink = new MassActionLink<>("assignJobLink", AssignEventsToJobPage.class, model));
 
         actions.add(massEventLink = new Link("massEventLink") {
             @Override
@@ -73,9 +73,9 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
         add(actions);
 
         print = new WebMarkupContainer("print");
-        print.add(makeLinkLightBoxed(new MassActionLink<PrintThisReportPage>("printThisReportLink", PrintThisReportPage.class, model)));
-        print.add(makeLinkLightBoxed(new MassActionLink<PrintInspectionCertPage>("printSelectedPdfReportsLink", PrintInspectionCertPage.class, model)));
-        print.add(makeLinkLightBoxed(new MassActionLink<PrintObservationCertReportPage>("printSelectedObservationReportsLink", PrintObservationCertReportPage.class, model)));
+        print.add(makeLinkLightBoxed(new MassActionLink<>("printThisReportLink", PrintThisReportPage.class, model)));
+        print.add(makeLinkLightBoxed(new MassActionLink<>("printSelectedPdfReportsLink", PrintInspectionCertPage.class, model)));
+        print.add(makeLinkLightBoxed(new MassActionLink<>("printSelectedObservationReportsLink", PrintObservationCertReportPage.class, model)));
         add(print);
         add(new Link("emailLink") {
             @Override public void onClick() {
@@ -99,20 +99,21 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
         super.updateMenuBeforeRender(criteria);
         int selected = criteria.getSelection().getNumSelectedIds();
 
-        exportLink.setVisible(selected > 0 && selected < maxExport);
+        exportLink.setVisible(true);
+
         print.setVisible(selected > 0 && selected < maxPrint && !isSearchForClosed(criteria) && !isSearchForActions(criteria));
         
         SessionUser sessionUser = FieldIDSession.get().getSessionUser();
         boolean searchIncludesSafetyNetwork = model.getObject().isIncludeSafetyNetwork();
         WorkflowStateCriteria state = model.getObject().getWorkflowState();
 
-        massEventLink.setVisible(state == WorkflowStateCriteria.OPEN && sessionUser.hasAccess("editevent"));
-        updateLink.setVisible(state == WorkflowStateCriteria.COMPLETE && sessionUser.hasAccess("editevent"));
-        updateSchedulesLink.setVisible(state == WorkflowStateCriteria.OPEN && sessionUser.hasAccess("editevent"));
+        massEventLink.setVisible(state == WorkflowStateCriteria.OPEN && sessionUser.hasAccess("editevent") && selected < maxPrint);
+        updateLink.setVisible(state == WorkflowStateCriteria.COMPLETE && sessionUser.hasAccess("editevent") && selected < maxPrint);
+        updateSchedulesLink.setVisible(state == WorkflowStateCriteria.OPEN && sessionUser.hasAccess("editevent") && selected < maxPrint);
 
-        assignJobLink.setVisible(FieldIDSession.get().getSecurityGuard().isProjectsEnabled() && sessionUser.hasAccess("createevent") && !searchIncludesSafetyNetwork);
+        assignJobLink.setVisible(FieldIDSession.get().getSecurityGuard().isProjectsEnabled() && sessionUser.hasAccess("createevent") && !searchIncludesSafetyNetwork && (selected < maxPrint));
 
-        actions.setVisible(selected > 0 && selected < maxUpdate && (updateLink.isVisible() || updateSchedulesLink.isVisible() || assignJobLink.isVisible() || exportLink.isVisible()));
+        actions.setVisible(selected > 0 && (updateLink.isVisible() || updateSchedulesLink.isVisible() || assignJobLink.isVisible() || exportLink.isVisible()));
     }
 
     private boolean isSearchForClosed(EventReportCriteria criteria) {

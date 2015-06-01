@@ -15,7 +15,6 @@ import com.n4systems.fieldid.wicket.model.eventtype.ActionTypesForTenantModel;
 import com.n4systems.fieldid.wicket.model.user.AssigneesModel;
 import com.n4systems.fieldid.wicket.model.user.UsersForTenantModel;
 import com.n4systems.fieldid.wicket.model.user.VisibleUserGroupsModel;
-import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.*;
 import com.n4systems.model.utils.PlainDate;
@@ -27,12 +26,11 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -43,42 +41,44 @@ import java.util.Date;
 
 import static ch.lambdaj.Lambda.on;
 
-public class AddEditActionPage extends FieldIDAuthenticatedPage {
-
-    @SpringBean
-    private PersistenceService persistenceService;
+public class AddEditActionPanel extends Panel {
 
     @SpringBean
     private ActionService actionService;
 
     @SpringBean
+    private PersistenceService persistenceService;
+
+    @SpringBean
     private DateService dateService;
 
     private boolean editMode = false;
-    private boolean immediateSaveMode = false;
+    private boolean immediateSaveMode;
     private Class<? extends Event> eventClass;
 
-    public AddEditActionPage(IModel<CriteriaResult> criteriaResultModel, Class<? extends Event> eventClass) {
+    public AddEditActionPanel(String id, IModel<CriteriaResult> criteriaResultModel, Class<? extends Event> eventClass, IModel<Event> eventModel, boolean immediateSaveMode) {
+        super(id, criteriaResultModel);
         this.eventClass = eventClass;
-        Event event = null;
-        try {
-            event = eventClass.newInstance();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        this.immediateSaveMode = immediateSaveMode;
+        IModel<Event> actionModel = eventModel;
+        if (actionModel == null) {
+            try {
+                actionModel = Model.of(eventClass.newInstance());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            editMode = true;
         }
-        add(new AddActionForm("addActionForm", new Model<Event>(event), criteriaResultModel));
-    }
 
-    public AddEditActionPage(IModel<CriteriaResult> criteriaResultModel, IModel<Event> eventModel) {
-        this.eventClass = (Class<Event>) eventModel.getObject().getClass();
-        editMode = true;
-        add(new AddActionForm("addActionForm", eventModel, criteriaResultModel));
+        add(new AddActionForm("addActionForm", actionModel, criteriaResultModel));
     }
 
     class AddActionForm extends Form<Event> {
         public AddActionForm(String id, final IModel<Event> eventModel, final IModel<CriteriaResult> criteriaResultModel) {
             super(id, eventModel);
             setOutputMarkupId(true);
+            setMultiPart(true);
 
             final FIDFeedbackPanel feedbackPanel = new FIDFeedbackPanel("feedbackPanel");
             add(feedbackPanel);
@@ -175,7 +175,9 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
                         getModelObject().setDueDate(scheduledDateModel.getObject());
                         getModelObject().setPriority(priorityCodeModel.getObject());
                         actionService.update(getModelObject());
-                        setResponsePage(new ActionDetailsPage(criteriaResultModel, eventClass, eventModel));
+
+                        //setResponsePage(new ActionDetailsPage(criteriaResultModel, eventClass, eventModel));
+                        onShowDetailsPanel(target, eventModel);
 
                     } else {
                         Event addedAction = getModelObject();
@@ -193,9 +195,7 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
                         //The other attributes are already set.
                         criteriaResultModel.getObject().getActions().get(criteriaResultModel.getObject().getActions().indexOf(addedAction)).setPriority(priorityCodeModel.getObject());
                         criteriaResultModel.getObject().getActions().get(criteriaResultModel.getObject().getActions().indexOf(addedAction)).setDueDate(scheduledDateModel.getObject());
-
-                        FieldIDSession.get().setActionsForCriteria(criteriaResultModel.getObject(), criteriaResultModel.getObject().getActions());
-                        setResponsePage(new ActionsListPage(criteriaResultModel, eventClass));
+                        onShowListPanel(target);
                     }
                 }
 
@@ -212,12 +212,13 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
                 submitLink.add(new FlatLabel("saveLabel", new FIDLabelModel("label.create")));
             }
 
-            Link cancelLink = new  Link("cancelLink") {
-                @Override public void onClick() {
-                    setResponsePage(new ActionsListPage(criteriaResultModel, eventClass));
+            add(new AjaxLink("cancelLink") {
+
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    onShowListPanel(target);
                 }
-            };
-            add(cancelLink);
+            });
 
             AjaxSubmitLink deleteLink = new AjaxSubmitLink("deleteLink") {
 
@@ -226,13 +227,12 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
                     Event deletedAction = getModelObject();
                     criteriaResultModel.getObject().getActions().remove(deletedAction);
 
-                    if(editMode && deletedAction.getId() != null) {
+                    if(immediateSaveMode && deletedAction.getId() != null) {
                         deletedAction.archiveEntity();
                         persistenceService.update(deletedAction);
                     }
 
-                    FieldIDSession.get().setActionsForCriteria(criteriaResultModel.getObject(), criteriaResultModel.getObject().getActions());
-                    setResponsePage(new ActionsListPage(criteriaResultModel, eventClass));
+                    onShowListPanel(target);
                 }
 
                 @Override
@@ -335,18 +335,9 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
         return calendar.getTime();
     }
 
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        response.renderCSSReference("style/legacy/newCss/component/event_actions.css");
-        response.renderCSSReference("style/legacy/newCss/component/matt_buttons.css");
-        
-        //Old CSS file - remove when site is completely moved over to framework styles.
-        response.renderCSSReference("style/legacy/newCss/layout/feedback_errors.css");
-    }
+    public void onShowListPanel(AjaxRequestTarget target) {}
 
-    public void setImmediateSaveMode(boolean immediateSaveMode) {
-        this.immediateSaveMode = immediateSaveMode;
-    }
+    public void onShowDetailsPanel(AjaxRequestTarget target, IModel<Event> eventModel) {}
+
 
 }

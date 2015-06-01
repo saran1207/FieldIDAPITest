@@ -1,25 +1,22 @@
 package com.n4systems.fieldid.actions.downloaders;
 
+import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.util.ContentTypeUtil;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-import javax.activation.FileTypeMap;
-
-import com.n4systems.util.ContentTypeUtil;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.fieldid.actions.api.AbstractAction;
-
 public abstract class AbstractDownloadAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
 	
-	private String failActionResult = ERROR;
-	private String successActionResult = SUCCESS;
-	private InputStream fileStream;
-	private String fileSize;
+	protected String failActionResult = ERROR;
+	protected String successActionResult = SUCCESS;
+	protected InputStream fileStream;
+	protected String fileSize;
 	
 	public AbstractDownloadAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);

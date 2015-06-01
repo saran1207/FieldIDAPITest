@@ -5,7 +5,7 @@ import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
-import com.n4systems.fieldid.wicket.components.action.ActionDetailsPage;
+import com.n4systems.fieldid.wicket.components.action.ActionsPanel;
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
 import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
 import com.n4systems.fieldid.wicket.model.EntityModel;
@@ -113,15 +113,8 @@ public class OpenActionsCell extends Panel {
 
     private DialogModalWindow createModalWindow(final IModel<ThingEvent> eventModel, final Panel eventDisplayPanel) {
         DialogModalWindow dialogWindow = new DialogModalWindow("modalWindow");
-        dialogWindow.setPageCreator(new ModalWindow.PageCreator() {
-            @Override
-            public Page createPage() {
-                IModel<Event> entityModel = new EntityModel<Event>(Event.class, eventModel.getObject().getId());
-                return new ActionDetailsPage(new PropertyModel<CriteriaResult>(entityModel, "sourceCriteriaResult"), ThingEvent.class, entityModel)
-                        .setAssetSummaryContext(true);
-            }
-        });
-
+        IModel<Event> entityModel = new EntityModel<Event>(Event.class, eventModel.getObject().getId());
+        dialogWindow.setContent(new ActionsPanel(dialogWindow.getContentId(), new PropertyModel<CriteriaResult>(entityModel, "sourceCriteriaResult"), ThingEvent.class, entityModel, true, true));
         dialogWindow.setWindowClosedCallback(new ModalWindow.WindowClosedCallback() {
             @Override
             public void onClose(AjaxRequestTarget target) {

@@ -43,7 +43,6 @@ public class CallOutStyleAnnotatedSvg extends Panel {
     public CallOutStyleAnnotatedSvg(String id, ImageAnnotation theAnnotation) {
         super(id);
         if(theAnnotation != null ) {
-            //annotationList.add(theAnnotation);
             this.image = (ProcedureDefinitionImage) theAnnotation.getImage();
         }
     }
@@ -74,6 +73,11 @@ public class CallOutStyleAnnotatedSvg extends Panel {
         if (image != null) {
             imageUrl = s3Service.getProcedureDefinitionImageMediumURL(image);
             imageDimensions = acquireImageDimensions(imageUrl);
+            //In case the image is not found on S3 use the blank slate.
+            if( imageDimensions == null) {
+                imageUrl = null;
+                imageDimensions = BLANK_SLATE_DIMENSIONS;
+            }
         } else {
             imageUrl = null;
             imageDimensions = BLANK_SLATE_DIMENSIONS;
@@ -83,8 +87,6 @@ public class CallOutStyleAnnotatedSvg extends Panel {
         add(new AttributeModifier("xmlns:xlink", "http://www.w3.org/1999/xlink"));
         add(new AttributeModifier("version", "1.1"));
         add(new AttributeModifier("viewBox", "0 0 " + imageDimensions.getWidth() + " " + imageDimensions.getHeight()));
-        //add(new AttributeModifier("width", imageDimensions.getWidth()));
-        //add(new AttributeModifier("height", imageDimensions.getHeight()));
 
         WebMarkupContainer imageElement = new WebMarkupContainer("imageElement");
         if (imageUrl != null) {
@@ -92,9 +94,6 @@ public class CallOutStyleAnnotatedSvg extends Panel {
         } else {
             imageElement.add(new AttributeModifier("xlink:href", BLANK_SLATE_PATH));
         }
-
-        //imageElement.remove("height");
-        //imageElement.remove("width");
 
         imageElement.add(new AttributeAppender("height", imageDimensions.getHeight()));
         imageElement.add(new AttributeAppender("width", imageDimensions.getWidth()));
@@ -151,7 +150,7 @@ public class CallOutStyleAnnotatedSvg extends Panel {
                 rect.add(new AttributeModifier("stroke", annotation.getType().getBorderColor()));
                 rect.add(new AttributeModifier("fill", annotation.getType().getBackgroundColor()));
 
-                int textLength = annotation.getText().length();
+                int textLength = annotation.getText() != null ? annotation.getText().length(): 0;
 
                 if (isWide) {
                     if (textLength <= 6) {

@@ -17,6 +17,8 @@ import com.n4systems.util.ServiceLocator;
  * 
  * @author Jesse Miller
  */
+
+@Deprecated  //This task is no longer necessary since we now check if the counter should be reset we generate an id.
 public class SerialNumberCounterTask extends ScheduledTask {
 	
 	public SerialNumberCounterTask() {
@@ -37,7 +39,7 @@ public class SerialNumberCounterTask extends ScheduledTask {
 				// passed.
 				Calendar nextReset = Calendar.getInstance();
 				nextReset.setTime(identifierCounter.getLastReset());
-				nextReset.add(Calendar.DATE, identifierCounter.getDaysToReset().intValue());
+				//nextReset.add(Calendar.DATE, identifierCounter.getDaysToReset().intValue());
 
 				Calendar today = Calendar.getInstance();
 				if (today.after(nextReset) || today.equals(nextReset)) {

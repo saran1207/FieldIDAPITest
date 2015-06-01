@@ -152,14 +152,6 @@ public class FieldIDSession extends WebSession {
         return concurrentSessionDetected;
     }
 
-    public void setActionsForCriteria(CriteriaResult criteriaResult, List<Event> actions) {
-        actionsList.put(criteriaResult.getCriteria().getId(), actions);
-    }
-
-    public List<Event> getActionsList(CriteriaResult criteriaResult) {
-        return actionsList.get(criteriaResult.getCriteria().getId());
-    }
-
     // Previously Stored Stuff:
     // The issue is that when you have a page that does some transient editing in place before a final commit,
     // and some of that editing is done inside modal windows, there is difficulty editing transient state in a way
