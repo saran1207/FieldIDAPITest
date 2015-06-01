@@ -29,10 +29,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.procedure.Procedure;
 import com.n4systems.model.procedure.ProcedureDefinition;
-import com.n4systems.model.security.OpenSecurityFilter;
-import com.n4systems.model.security.OwnerAndDownFilter;
-import com.n4systems.model.security.SecurityFilter;
-import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.model.security.*;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.archivers.EventListArchiver;
 import com.n4systems.persistence.utils.PostFetcher;
@@ -425,10 +422,10 @@ public class AssetService extends CrudService<Asset> {
     }
 
     public List<Asset> findAssetByIdentifiersForNewSmartSearch(String searchValue) {
-        return findAssetByIdentifiersForNewSmartSearch(searchValue, securityContext.getTenantSecurityFilter().getTenantId());
+        return findAssetByIdentifiersForNewSmartSearch(searchValue, securityContext.getUserSecurityFilter());
     }
 
-    public List<Asset> findAssetByIdentifiersForNewSmartSearch(String searchValue, Long tenantId) {
+    public List<Asset> findAssetByIdentifiersForNewSmartSearch(String searchValue, UserSecurityFilter filter) {
         if(searchValue.length() < 3) {
             return new ArrayList<Asset>();
         }
@@ -444,7 +441,7 @@ public class AssetService extends CrudService<Asset> {
             builder.addWhere(group);
             builder.addOrder("created");
             builder.addOrder("type");
-            builder.applyFilter(new OwnerAndDownFilter(securityContext.getTenantSecurityFilter().getOwner()));
+            builder.applyFilter(new OwnerAndDownFilter(filter.getOwner()));
 
             List<Asset> results = persistenceService.findAll(builder);
             return results;
@@ -452,10 +449,10 @@ public class AssetService extends CrudService<Asset> {
             String queryString = "SELECT * FROM assets p join org_base o on p.owner_id=o.id WHERE (MATCH (p.identifier, p.rfidNumber, p.customerRefNumber) AGAINST ('" + searchValue + "*' IN BOOLEAN MODE)) ";
 
             //new security filter if the user is not part of the main org.
-            if(!securityContext.getTenantSecurityFilter().getTenantId().equals(securityContext.getUserSecurityFilter().getOwner().getID())) {
-                queryString += "AND (o.SECONDARY_ID = " + securityContext.getUserSecurityFilter().getOwner().getID() + " OR o.SECONDARY_ID IS NULL) ";
+            if(!filter.getTenantId().equals(filter.getOwner().getID())) {
+                queryString += "AND (o.SECONDARY_ID = " + filter.getOwner().getID() + " OR o.SECONDARY_ID IS NULL) ";
             }
-            queryString += "AND p.TENANT_ID = " + securityContext.getTenantSecurityFilter().getTenantId() + " AND p.state='ACTIVE' ORDER BY p.created";
+            queryString += "AND p.TENANT_ID = " + filter.getTenantId() + " AND p.state='ACTIVE' ORDER BY p.created";
             Query query = persistenceService.createSQLQuery(queryString, Asset.class);
 
             return query.getResultList();
