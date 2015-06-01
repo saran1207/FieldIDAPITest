@@ -432,7 +432,7 @@ public class AssetService extends CrudService<Asset> {
 
         //mysql full-text search uses "-" as a word delimiter, so we have to use the old smart search "like" approach.
         if(searchValue.contains("-")) {
-            QueryBuilder<Asset> builder =  createUserSecurityBuilder(Asset.class);
+            QueryBuilder<Asset> builder =  new QueryBuilder<Asset>(Asset.class, filter);
 
             WhereParameterGroup group = new WhereParameterGroup("smartsearch");
             group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "identifier", "identifier", searchValue, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
@@ -441,7 +441,6 @@ public class AssetService extends CrudService<Asset> {
             builder.addWhere(group);
             builder.addOrder("created");
             builder.addOrder("type");
-            builder.applyFilter(new OwnerAndDownFilter(filter.getOwner()));
 
             List<Asset> results = persistenceService.findAll(builder);
             return results;
