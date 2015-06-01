@@ -439,8 +439,8 @@ public class AssetService extends CrudService<Asset> {
             group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "rfidNumber", "rfidNumber", searchValue, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
             group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "customerRefNumber", "customerRefNumber", searchValue, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
             builder.addWhere(group);
-            builder.addOrder("created");
-            builder.addOrder("type");
+            builder.addOrder("type", "created");
+            //builder.addOrder("created");
 
             List<Asset> results = persistenceService.findAll(builder);
             return results;
@@ -451,7 +451,7 @@ public class AssetService extends CrudService<Asset> {
             if(!filter.getTenantId().equals(filter.getOwner().getID())) {
                 queryString += "AND (o.SECONDARY_ID = " + filter.getOwner().getID() + " OR o.SECONDARY_ID IS NULL) ";
             }
-            queryString += "AND p.TENANT_ID = " + filter.getTenantId() + " AND p.state='ACTIVE' ORDER BY p.created";
+            queryString += "AND p.TENANT_ID = " + filter.getTenantId() + " AND p.state='ACTIVE' ORDER BY p.type_id, p.created";
             Query query = persistenceService.createSQLQuery(queryString, Asset.class);
 
             return query.getResultList();
