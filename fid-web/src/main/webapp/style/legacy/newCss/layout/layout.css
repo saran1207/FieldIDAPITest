@@ -250,23 +250,38 @@ li:hover #menuLoto:after{
 	right: 14px;
 }
 
-#smartSearch {
+#smartSearchContainer #smartSearch {
 	height: 38px;
 }
 
-#smartSearch div {
+#smartSearchContainer #smartSearch div {
 	font-size: 12px;
 	padding: 5px;
 }
 
-#smartSearch div {
+#smartSearchContainer #smartSearch div {
+	width: 230px;
+	border: 1px solid #999;
+	margin: 5px 0;
+}
+s
+#smartSearchContainer div.description {
+    color: #666;
+}
+
+#smartSearch input[type="text"], #smartSearch input.textbox {
 	width: 230px;
 	border: 1px solid #999;
 	margin: 5px 0;
 }
 
-#smartSearchContainer div.description {
-    color: #666;
+#smartSearchContainer input[type="text"] {
+	height: auto;
+}
+
+#smartSearch input {
+	font-size: 12px;
+	padding: 5px;
 }
 
 .frontPageHeader {
