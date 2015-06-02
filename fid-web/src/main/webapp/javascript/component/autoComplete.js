@@ -128,7 +128,7 @@ var autoCompleter = (function() {
 
 		auto.bind("autocompleteopen", function(event, ui) {
 			var menu = $('.ui-autocomplete:visible');
-			menu.css('width',Math.max(menu.width()+10,100)); // add room because we've styled it with extra padding between description and result columns.
+			menu.css('width',Math.max(menu.width()+10,300)); // add room because we've styled it with extra padding between description and result columns.
 			auto.initialized=true;
 			$('.ui-autocomplete .link').tipsy({gravity: 'n', fade:true, delayIn:355});
 			$('.tipsy').remove();  // make sure all pre-existing tooltips are removed.
