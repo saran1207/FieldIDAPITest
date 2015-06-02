@@ -97,7 +97,7 @@ public class AutoCompleteSmartSearch extends AutoComplete<Asset> {
             Reference = asset.getCustomerRefNumber();
         }
 
-        String description = "ID:" + asset.getDisplayName() + ", RFID:" + Rfid + ", REFERENCE:" + Reference;
+        String description = "ID:" + asset.getDisplayName() + ", RFID:" + Rfid + ", REF:" + Reference;
         return description;
     }
 
