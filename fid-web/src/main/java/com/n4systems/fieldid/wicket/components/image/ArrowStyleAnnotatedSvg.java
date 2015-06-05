@@ -106,6 +106,11 @@ public class ArrowStyleAnnotatedSvg extends Panel {
         if (theImage != null) {
             imageUrl = s3Service.getProcedureDefinitionImageMediumURL(theImage);
             imageDimensions = acquireImageDimensions(imageUrl);
+            //In case the image is not found on S3 use the blank slate.
+            if( imageDimensions == null) {
+                imageUrl = null;
+                imageDimensions = BLANK_SLATE_DIMENSIONS;
+            }
         } else {
             imageUrl = null;
             imageDimensions = BLANK_SLATE_DIMENSIONS;
