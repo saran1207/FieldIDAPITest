@@ -6,7 +6,7 @@ import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.api.validation.Validator;
 import com.n4systems.exporting.beanutils.ExportMapUnmarshaler;
 import com.n4systems.exporting.beanutils.MarshalingException;
-import com.n4systems.exporting.io.ExcelMapReader;
+import com.n4systems.exporting.io.ExcelXSSFMapReader;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.model.utils.StreamUtils;
 import com.n4systems.persistence.Transaction;
@@ -56,7 +56,7 @@ public abstract class AbstractImporter<V extends ExternalModelView> implements I
 	
 	protected List<ValidationResult> validateAllViews(List<V> views) {
 		// your chance here to check the collection at a higher level...field level will be done in validateAllViewFields().
-		return new ArrayList<ValidationResult>();
+		return new ArrayList<>();
 	}
 
 	@Override
@@ -89,7 +89,7 @@ public abstract class AbstractImporter<V extends ExternalModelView> implements I
 	}
 	
 	protected List<ValidationResult> validateAllViewFields() {
-		List<ValidationResult> failedValidationResults = new ArrayList<ValidationResult>();
+		List<ValidationResult> failedValidationResults = new ArrayList<>();
 		for (int i = 0; i < getViews().size(); i++) {
 			failedValidationResults.addAll(validator.validate(getViews().get(i), i + FIRST_DATA_ROW));
 		}
@@ -109,10 +109,10 @@ public abstract class AbstractImporter<V extends ExternalModelView> implements I
 	}
 	
 	protected ExportMapUnmarshaler<V> createMapUnmarshaler() throws IOException, ParseException {
-        if(mapReader instanceof ExcelMapReader)
-            return new ExportMapUnmarshaler<V>(viewClass, mapReader.getTitles(), ((ExcelMapReader)mapReader).getTimeZone());
+        if(mapReader instanceof ExcelXSSFMapReader)
+            return new ExportMapUnmarshaler<>(viewClass, mapReader.getTitles(), ((ExcelXSSFMapReader)mapReader).getTimeZone());
         else
-        	return new ExportMapUnmarshaler<V>(viewClass, mapReader.getTitles(), null);
+        	return new ExportMapUnmarshaler<>(viewClass, mapReader.getTitles(), null);
 	}
 	
 	@Override

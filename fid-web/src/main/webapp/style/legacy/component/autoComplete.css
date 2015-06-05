@@ -15,7 +15,6 @@
     color : #1D4977;
 }
 
-
 .ui-menu.ui-autocomplete.ui-widget {
     opacity:0.96;
     filter:alpha(opacity=96);
@@ -39,7 +38,7 @@
     color: #2f4f4f;
     padding:.3em 0;
     float: left;
-    height:13px;
+    height:16px;
     /*font-style: italic;*/
     font-size:11px;
     text-overflow: ellipsis;
@@ -56,6 +55,10 @@
     padding-left:5px;
     padding-right:0;
     overflow:hidden;
+}
+
+.ui-autocomplete {
+    width:300px;
 }
 
 li .no-results {
