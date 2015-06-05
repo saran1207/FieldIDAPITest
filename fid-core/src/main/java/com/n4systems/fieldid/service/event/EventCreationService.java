@@ -9,6 +9,7 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.model.*;
+import com.n4systems.model.api.Archivable;
 import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.notification.AssigneeNotification;
@@ -81,6 +82,23 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
         preSaveEvent(event, fileData);
 
         if (event.getId() == null) {
+            //If the event was unscheduled, then it's going to immediately be written as a COMPLETE, ACTIVE event.
+            //When this happens, we're going to bypass the painful logic of an AFTER INSERT trigger and simply dump
+            //what we know to be the correct value into the Asset.  I'm under the impression that, from here, it'll
+            //actually get saved.
+            if(event.getWorkflowState().equals(WorkflowState.COMPLETED)
+                    && event.getState().equals(Archivable.EntityState.ACTIVE)
+                    && event.getType().isThingEventType()) {
+                //If the current Last Event Date on the Asset is NOT AFTER the Completed Date on the Event,
+                //Set the Asset's Last Event Date to the Event's Completed Date.
+                if(!((ThingEvent) event).getAsset().getLastEventDate().after(event.getCompletedDate())) {
+                    ((ThingEvent) event).getAsset().setLastEventDate(event.getCompletedDate());
+                }
+
+                //I'm sure I'm violating the rules by doing this... but this is WAY easier than a trigger.
+                Asset asset = assetService.update(((ThingEvent) event).getAsset());
+                ((ThingEvent) event).setAsset(asset);
+            }
             persistenceService.save(event);
         } else {
             // Because the update drops the transient data on the signature criteria result, we
