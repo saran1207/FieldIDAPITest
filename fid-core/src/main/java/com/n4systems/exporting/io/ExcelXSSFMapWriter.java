@@ -163,11 +163,11 @@ public class ExcelXSSFMapWriter implements MapWriter {
 
     private void fillCell(Cell cell, Object value) {
         // this sets the value of the cell based on the Objects type
-        if(value == null) {
-            // for nulls just create an empty text cell
-            cell.setCellValue(new XSSFRichTextString(""));
-
-        } else if(value instanceof Number) {
+//        if(value == null) {
+//            //For nulls, just do nothing... this is really odd...
+//
+//        } else
+        if(value instanceof Number) {
             // POI only accepts double value numbers so we convert any number we have to a double
             cell.setCellValue(((Number)value).doubleValue());
 
@@ -195,7 +195,7 @@ public class ExcelXSSFMapWriter implements MapWriter {
 
             cell.setCellValue(new XSSFRichTextString((String)value));
 
-        } else {
+        } else if (value != null) {
             // default to a toString call
             cell.setCellValue(new XSSFRichTextString(value.toString()));
         }
