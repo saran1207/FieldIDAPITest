@@ -48,8 +48,19 @@ public class AssetMerger {
 		moveEvents(winningAsset, losingAsset);
 		moveSubEvents(winningAsset, losingAsset);
 		archiveLosingAsset(losingAsset);
+		updateLastEventDate(winningAsset, losingAsset);
 
 		return winningAsset;
+	}
+
+	private void updateLastEventDate(Asset winningAsset, Asset losingAsset) {
+		if (winningAsset.getLastEventDate() == null && losingAsset.getLastEventDate() != null) {
+			winningAsset.setLastEventDate(losingAsset.getLastEventDate());
+		} else if (winningAsset.getLastEventDate() != null && losingAsset.getLastEventDate() != null) {
+			if (winningAsset.getLastEventDate().before(losingAsset.getLastEventDate())) {
+				winningAsset.setLastEventDate(losingAsset.getLastEventDate());
+			}
+		}
 	}
 
 	private void guard(Asset winningAsset, Asset losingAsset) {

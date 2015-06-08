@@ -419,7 +419,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     /**
      * This method creates a list of URLs to open the Event Summary page for various kinds of Events.  These Events are
      * the Trigger Event of any Action Events stored within the supplied List.  These URLs are added to the List as
-     * Strings and keyed by the ID of the Trigger Event, so that we avoid wasting space.
+     * Strings and keyed by the ID of Action Event, because if we try to save space we get a duplicate key error.
      *
      * @param events - A List of Events to generate the URL Map from.
      * @return A Map of String URLs keyed by Trigger Event ID.
@@ -428,7 +428,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
         return events.stream()
                 //Poor naming, but we only care about events with trigger events...
                 .filter(event -> event.getTriggerEvent() != null)
-                .collect(Collectors.toMap(event -> event.getTriggerEvent().getId(), this::createEventSummaryUrl));
+                .collect(Collectors.toMap(BaseEntity::getId, this::createEventSummaryUrl));
     }
 
     /**
