@@ -286,7 +286,7 @@
                                             <#if eventSummaryUrlMap.get(event.triggerEvent.id)??>
                                                 <strong>Issuing Event:</strong>&nbsp;
                                                 <#if showLinks>
-                                                    <a target="_blank" href="${eventSummaryUrlMap.get(event.triggerEvent.id)}">${triggeringEventStringMap.get(event.id)}</a>
+                                                    <a target="_blank" href="${eventSummaryUrlMap.get(event.id)}">${triggeringEventStringMap.get(event.id)}</a>
                                                 <#else>
                                                     ${triggeringEventStringMap.get(event.id)}
                                                 </#if>
