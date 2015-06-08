@@ -316,6 +316,8 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             }
         }.withAutoUpdate(true);
 
+        autoCompleteSearch.getAutocompleteField().setMarkupId("searchText");
+
         Form<?> form = new Form<Void>("userForm") {
 
             @Override
