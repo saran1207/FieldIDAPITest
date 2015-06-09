@@ -43,7 +43,9 @@
 }
 
 #templateLink{
+	/*
 	background-image: url(../../../images/large-xls-icon.png);
+	*/
 	background-repeat: no-repeat;
 	background-position: left center;
 	padding-left: 35px;
