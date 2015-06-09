@@ -1,15 +1,5 @@
 package com.n4systems.fieldid.actions.export;
 
-import static com.google.common.base.Preconditions.*;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
@@ -21,6 +11,15 @@ import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.downloadlink.DownloadState;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 @SuppressWarnings("serial")
 @UserPermissionFilter(userRequiresOneOf={Permissions.EditEvent})
@@ -148,7 +147,7 @@ public class ExportAction extends AbstractAction {
 	}
 
 	private String generateFileName() {
-		return reportName = String.format("%s_Events.xls", getEventType().getName());		
+		return reportName = String.format("%s_Events.xlsx", getEventType().getName());
 	}
 
 	public void setLinkId(Long linkId) {
