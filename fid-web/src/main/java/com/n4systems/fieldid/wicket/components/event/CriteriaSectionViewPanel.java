@@ -145,7 +145,7 @@ public class CriteriaSectionViewPanel extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderJavaScriptReference("javascript/jquery-ui-1.8.13.custom.min.js");
+        response.renderJavaScriptReference("javascript/jquery-ui-1.8.20.no-autocomplete.min.js");
         response.renderCSSReference("style/plugins/jquery-ui-dialog/jquery-ui.custom.css");
         response.renderOnDomReadyJavaScript("$('.observation-dialog').dialog({ autoOpen: false });");
         response.renderCSSReference("style/legacy/modal/fid_modal.css");
