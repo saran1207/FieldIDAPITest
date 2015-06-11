@@ -22,18 +22,22 @@ public class ICalAttachmentBuilder implements Builder<byte[]> {
     private Date startDate;
     private Boolean isAllDay = Boolean.FALSE;
     private User assignee;
+    private User currentUser;
 
+    private final static String DEFAULT_ORGANIZER_NAME = "FieldID";
+    private final static String DEFAULT_ORGANIZER_EMAIL = "noreply@fieldid.com";
     private static String LANGUAGE = "en-us";
 
     public static ICalAttachmentBuilder anICalAttachment() {
-        return new ICalAttachmentBuilder("", new Date(), null, Boolean.FALSE);
+        return new ICalAttachmentBuilder("", new Date(), null, null, Boolean.FALSE);
     }
 
-    public ICalAttachmentBuilder(String subject, Date startDate, User assignee, Boolean isAllDay) {
+    public ICalAttachmentBuilder(String subject, Date startDate, User assignee, User currentUser, Boolean isAllDay) {
         this.subject = subject;
         this.startDate = startDate;
         this.isAllDay = isAllDay;
         this.assignee = assignee;
+        this.currentUser = currentUser;
     }
 
     public byte[] build() {
@@ -62,6 +66,14 @@ public class ICalAttachmentBuilder implements Builder<byte[]> {
             event.addAttendee(attendee);
         }
 
+        Organizer organizer;
+        if (currentUser != null) {
+            organizer = new Organizer(currentUser.getDisplayName(), currentUser.getEmailAddress());
+        } else {
+            organizer = new Organizer(DEFAULT_ORGANIZER_NAME, DEFAULT_ORGANIZER_EMAIL);
+        }
+        event.setOrganizer(organizer);
+
         ical.addEvent(event);
 
         ByteArrayOutputStream bOut = new ByteArrayOutputStream();
@@ -76,19 +88,23 @@ public class ICalAttachmentBuilder implements Builder<byte[]> {
     }
 
     public ICalAttachmentBuilder withSubject(String subject) {
-        return new ICalAttachmentBuilder(subject, startDate, assignee, isAllDay);
+        return new ICalAttachmentBuilder(subject, startDate, assignee, currentUser, isAllDay);
     }
 
     public ICalAttachmentBuilder withStartDate(Date startDate) {
-        return new ICalAttachmentBuilder(subject, startDate, assignee, isAllDay);
+        return new ICalAttachmentBuilder(subject, startDate, assignee, currentUser, isAllDay);
     }
 
     public ICalAttachmentBuilder withAllDayEvent(Boolean isAllDay) {
-        return new ICalAttachmentBuilder(subject, startDate, assignee, isAllDay);
+        return new ICalAttachmentBuilder(subject, startDate, assignee, currentUser, isAllDay);
     }
 
     public ICalAttachmentBuilder withAttendee(User attendee) {
-        return new ICalAttachmentBuilder(subject, startDate, attendee, isAllDay);
+        return new ICalAttachmentBuilder(subject, startDate, attendee, currentUser, isAllDay);
+    }
+
+    public ICalAttachmentBuilder withOrganizer(User organizer) {
+        return new ICalAttachmentBuilder(subject, startDate, assignee, organizer, isAllDay);
     }
 
 }
