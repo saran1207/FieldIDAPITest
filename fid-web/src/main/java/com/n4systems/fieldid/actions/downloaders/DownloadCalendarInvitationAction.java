@@ -49,7 +49,6 @@ public class DownloadCalendarInvitationAction extends DownloadAction {
                 .withStartDate(event.getDueDate())
                 .withAllDayEvent(isAllDayEvent(event.getDueDate()))
                 .withAttendee(event.getAssignee())
-                .withOrganizer(getCurrentUser())
                 .build();
 
         try {
