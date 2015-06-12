@@ -39,9 +39,9 @@
     padding:.3em 0;
     float: left;
     height:16px;
-    /*font-style: italic;*/
     font-size:11px;
     text-overflow: ellipsis;
+    white-space: nowrap;
     overflow:hidden;
     text-align:right;
 }
