@@ -72,6 +72,16 @@
 			<url>http://repo.n4systems.net/artifactory/plugins-snapshot</url>
 		</pluginRepository>
 	</pluginRepositories>
+	<distributionManagement>
+		<repository>
+			<id>repo.n4systems.net-releases</id>
+			<url>http://repo.n4systems.net/artifactory/libs-release-local</url>
+		</repository>
+		<snapshotRepository>
+			<id>repo.n4systems.net-snapshots</id>
+			<url>http://repo.n4systems.net/artifactory/libs-snapshot-local</url>
+		</snapshotRepository>
+	</distributionManagement>
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -119,6 +129,18 @@
                 <version>${maven.deploy.plugin.version}</version>
 				<configuration>
 					<uniqueVersion>false</uniqueVersion>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<version>2.1</version>
+			</plugin>
+			<plugin>
+				<artifactId>maven-scm-plugin</artifactId>
+				<version>1.8.1</version>
+				<configuration>
+					<tag>tag_${project.version}</tag>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -169,7 +191,7 @@
         </dependencies>
 	</dependencyManagement>
 	<scm>
-		<connection>scm:svn:https://fieldid.jira.com/svn/WEB</connection>
-		<developerConnection>scm:svn:https://fieldid.jira.com/svn/WEB</developerConnection>
+		<connection>scm:git:git@github.com:Field-ID/web.git</connection>
+		<developerConnection>scm:git:git@github.com:Field-ID/web.git</developerConnection>
 	</scm>
 </project>
