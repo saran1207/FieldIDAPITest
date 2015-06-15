@@ -12,14 +12,7 @@ public class LabelledTextArea<M> extends LabelledComponent<TextArea,M> {
 
     @Override
     protected TextArea<M> createLabelledComponent(String id, IModel<M> model) {
-        TextArea textArea = new TextArea(id, model);
-        textArea.add(new AttributeAppender("maxlength", Integer.toString(getMaxLength())));
-        return textArea;
-    }
-
-    //If you want to change the maxlength size, override this method when creating this object.
-    public int getMaxLength() {
-        return 255;
+        return new TextArea(id, model);
     }
 
     public void setModelValue(String value) {
