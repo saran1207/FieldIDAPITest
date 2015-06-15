@@ -29,11 +29,14 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.validation.validator.StringValidator;
 
 import java.util.Iterator;
 import java.util.List;
 
 public class LotoDetailsSetupPage extends FieldIDTemplatePage {
+
+    private static final int TEXTAREA_MAXLENGTH = 2500;
 
     @SpringBean
     ProcedureDefinitionService procedureDefinitionService;
@@ -78,10 +81,12 @@ public class LotoDetailsSetupPage extends FieldIDTemplatePage {
         add(addTemplateModal = new DialogModalWindow("addTemplateModal").setInitialHeight(500).setInitialWidth(400));
 
 
-
-        form.add(new TextArea<String>("applicationProcess", new PropertyModel<>(customLotoDetailsModel, "applicationProcess")));
-        form.add(new TextArea<String>("removalProcess", new PropertyModel<>(customLotoDetailsModel, "removalProcess")));
-        form.add(new TextArea<String>("testingAndVerification", new PropertyModel<>(customLotoDetailsModel, "testingAndVerification")));
+        form.add(new TextArea<String>("applicationProcess", new PropertyModel<>(customLotoDetailsModel, "applicationProcess"))
+                .add(new StringValidator.MaximumLengthValidator(TEXTAREA_MAXLENGTH)));
+        form.add(new TextArea<String>("removalProcess", new PropertyModel<>(customLotoDetailsModel, "removalProcess"))
+                .add(new StringValidator.MaximumLengthValidator(TEXTAREA_MAXLENGTH)));
+        form.add(new TextArea<String>("testingAndVerification", new PropertyModel<>(customLotoDetailsModel, "testingAndVerification"))
+                .add(new StringValidator.MaximumLengthValidator(TEXTAREA_MAXLENGTH)));
 
 
         form.add(new SubmitLink("saveLink"));

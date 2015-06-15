@@ -22,6 +22,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.validation.validator.StringValidator;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,9 +31,11 @@ import static ch.lambdaj.Lambda.on;
 
 public class DetailsPanel extends Panel {
 
-    private FIDFeedbackPanel feedbackPanel;
+    private static final int TEXTAREA_MAXLENGTH = 2500;
 
-    private @SpringBean ProcedureDefinitionService procedureDefinitionService;
+    @SpringBean
+    private ProcedureDefinitionService procedureDefinitionService;
+    private FIDFeedbackPanel feedbackPanel;
     private boolean isCopyOrRevise;
 
     public DetailsPanel(String id, IModel<ProcedureDefinition> model, boolean isCopyOrRevise) {
@@ -59,26 +62,17 @@ public class DetailsPanel extends Panel {
             add(new WarningPanel("warnings", ProxyModel.of(model, on(ProcedureDefinition.class).getWarnings())).setOutputMarkupId(true));
 
             //Fields for Application Process and Removal Process of lockouts.
-            add(new LabelledTextArea<String>("applicationProcess", "label.lockout_application_process", ProxyModel.of(model, on(ProcedureDefinition.class).getApplicationProcess())){
-                @Override
-                public int getMaxLength() {
-                    return 1024;
-                }
-            });
+            LabelledTextArea<String> applicationProcessTextArea;
+            add(applicationProcessTextArea = new LabelledTextArea<>("applicationProcess", "label.lockout_application_process", ProxyModel.of(model, on(ProcedureDefinition.class).getApplicationProcess())));
+            applicationProcessTextArea.addBehavior(new StringValidator.MaximumLengthValidator(TEXTAREA_MAXLENGTH));
 
-            add(new LabelledTextArea<String>("removalProcess", "label.lockout_removal_process", ProxyModel.of(model, on(ProcedureDefinition.class).getRemovalProcess())){
-                @Override
-                public int getMaxLength() {
-                    return 1024;
-                }
-            });
+            LabelledTextArea<String> removalProcessTextArea;
+            add(removalProcessTextArea = new LabelledTextArea<>("removalProcess", "label.lockout_removal_process", ProxyModel.of(model, on(ProcedureDefinition.class).getRemovalProcess())));
+            removalProcessTextArea.addBehavior(new StringValidator.MaximumLengthValidator(TEXTAREA_MAXLENGTH));
 
-            add(new LabelledTextArea<String>("testingAndVerification", "label.testing_and_verification_detail_panel", ProxyModel.of(model, on(ProcedureDefinition.class).getTestingAndVerification())){
-                @Override
-                public int getMaxLength() {
-                    return 1024;
-                }
-            });
+            LabelledTextArea<String> testingAndVerificationTextArea;
+            add(testingAndVerificationTextArea = new LabelledTextArea<>("testingAndVerification", "label.testing_and_verification_detail_panel", ProxyModel.of(model, on(ProcedureDefinition.class).getTestingAndVerification())));
+            testingAndVerificationTextArea.addBehavior(new StringValidator.MaximumLengthValidator(TEXTAREA_MAXLENGTH));
 
             add(new LabelledAutoCompleteUser("user", "label.developed_by", ProxyModel.of(model, on(ProcedureDefinition.class).getDevelopedBy()), true));
 
