@@ -19,7 +19,7 @@ public class TextAttributeEditor extends Panel {
 
         textField.add(new ValidateIfRequiredValidator<String>(optionBean.getObject().getInfoField()));
 
-        textField.add(new AjaxFormComponentUpdatingBehavior("onblur") {
+        textField.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
             }

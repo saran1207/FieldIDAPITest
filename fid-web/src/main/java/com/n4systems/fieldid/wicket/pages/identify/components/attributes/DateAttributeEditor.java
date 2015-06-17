@@ -35,7 +35,7 @@ public class DateAttributeEditor extends FormComponentPanel<InfoOptionBean> {
 
 
         DateTimePicker picker = new DateTimePicker("datePicker", new UserToUTCDateModel(new PropertyModel<Date>(this, "selectedDate")));
-        add(picker.setIncludeTime(includeTime).withNoAllDayCheckbox());
+        add(picker.setIncludeTime(includeTime).withNoAllDayCheckbox().withoutPerformSetDateOnInitialization());
         ValidationBehavior.addValidationBehaviorToComponent(picker.getDateTextField());
         picker.getDateTextField().add(new ValidateIfRequiredValidator<Date>(infoField));
         picker.getDateTextField().add(new AjaxFormComponentUpdatingBehavior("onchange") {
