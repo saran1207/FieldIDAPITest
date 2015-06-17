@@ -27,8 +27,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -99,10 +98,10 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 			
 			Integer maxCertsPerGroup = configService.getInteger(ConfigEntry.REPORTING_MAX_REPORTS_PER_FILE);
 
-			File theFile = link.getFile();
+            ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
 			
-			zipOut = new ZipOutputStream(new FileOutputStream(theFile));
-			
+			zipOut = new ZipOutputStream(byteOut);
+
 			int pageNumber = 1;
 			JasperPrint jPrint;
 			List<JasperPrint> printGroup = new ArrayList<>();
@@ -133,10 +132,13 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
                 }
             }
 
+            //Finish working on the zipOut only... we'll handle the byte array separately.
+            zipOut.finish();
+
 			//Before we update the state of the DownloadLink, we want to shove it up into S3.  Otherwise any attempted
 			//downloads could fail if the file is big enough to present a considerable delay between update of state
 			//and arrival in the cloud.
-			s3Service.uploadGeneratedReport(theFile, link);
+			s3Service.uploadGeneratedReport(byteOut.toByteArray(), link);
 
 			//Now the file is up there... or we at least think it is.  Flip it to completed.
 			downloadLinkService.updateState(link, DownloadState.COMPLETED);
