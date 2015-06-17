@@ -68,7 +68,7 @@ public class AttributesEditPanel extends Panel {
                             @Override
                             protected void onChange(AjaxRequestTarget target) {
                                 performAutoAttributeAdjustments(infoFieldModel);
-                                target.add(this);
+                                target.add(AttributesEditPanel.this);
                             }
                         }.setOutputMarkupId(true));
                         break;
@@ -80,7 +80,7 @@ public class AttributesEditPanel extends Panel {
                             @Override
                             protected void onChange(AjaxRequestTarget target) {
                                 performAutoAttributeAdjustments(infoFieldModel);
-                                target.add(this);
+                                target.add(AttributesEditPanel.this);
                             }
                         }.setOutputMarkupId(true));
                         break;
