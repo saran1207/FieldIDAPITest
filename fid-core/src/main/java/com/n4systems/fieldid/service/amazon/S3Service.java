@@ -45,6 +45,14 @@ import java.util.stream.Collectors;
 
 //import sun.misc.BASE64Encoder;
 
+/**
+ * This is your one stop shoppe for everything S3 related.  This will upload and download files, plus anything else
+ * we might need to do with S3.
+ *
+ * All methods for sending FILE objects to S3 have been marked deprecated, since S3 tries to be smart about what
+ * is being sent to it.  It attempts to discern your mime type from your file extension, which isn't always ideal.
+ * Methods handling Byte Arrays effectively circumvent this issue by explicitly telling S3 what mime type to expect.
+ */
 @Transactional
 public class S3Service extends FieldIdPersistenceService {
 
@@ -186,6 +194,7 @@ public class S3Service extends FieldIdPersistenceService {
      * @param file - A File representing the generated report you would like to jam up into S3 with a plunger.
      * @param downloadLink - A DownloadLink entity, representing the report you're uploading.
      */
+    @Deprecated
     public void uploadGeneratedReport(File file, DownloadLink downloadLink) {
         uploadResource(file,
                        downloadLink.getTenant().getId(),
@@ -315,6 +324,7 @@ public class S3Service extends FieldIdPersistenceService {
         return logoData;
     }
 
+    @Deprecated
     public void uploadPrimaryOrgCertificateLogo(File file) {
         uploadResource(file, null, PRIMARY_CERTIFICATE_LOGO_PATH);
     }
@@ -323,6 +333,7 @@ public class S3Service extends FieldIdPersistenceService {
         uploadResource(bytes, contentType, null, PRIMARY_CERTIFICATE_LOGO_PATH);
     }
 
+    @Deprecated
     public void uploadSecondaryOrgCertificateLogo(File file, Long secondaryOrgId) {
         uploadResource(file, null, SECONDARY_CERTIFICATE_LOGO_PATH, secondaryOrgId);
     }
@@ -516,6 +527,7 @@ public class S3Service extends FieldIdPersistenceService {
         return fileData;
     }
 
+    @Deprecated
     public void saveLotoPrintout(File file, String path) {
         //path = path + "/";
         putObjectInLotoBucket(path, file);
@@ -623,6 +635,7 @@ public class S3Service extends FieldIdPersistenceService {
 
     }
 
+    @Deprecated
     public void uploadProcedureDefinitionSvg(ProcedureDefinition procedureDefinition, File svgFile) {
 
 
