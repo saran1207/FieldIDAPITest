@@ -138,6 +138,11 @@ public class PublishedListAllPage extends ProceduresAllListPage implements IAjax
             protected FIDFeedbackPanel getErrorFeedbackPanel() {
                 return feedbackPanel;
             }
+
+            @Override
+            protected String getTableStyle() {
+                return super.getTableStyle() + " published_list";
+            }
         });
         procedureDefinitionListPanel.setOutputMarkupPlaceholderTag(true);
     }
