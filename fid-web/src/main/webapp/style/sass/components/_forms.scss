@@ -398,6 +398,27 @@ legend + p {
 	}
 }
 
+// Form overrides for modal windows
+.extra-narrow .form-horizontal,
+.form-horizontal.extra-narrow {
+    label {
+	width: 25%;
+    }
+    input[type="text"],
+    input[type="password"],
+    select,
+    textarea,
+    .input-combo {
+	    width: 65%;
+    }
+    .chzn-container {
+	    width: 65%!important;
+    }
+    .text-block {
+	    margin-left: 30%;
+    }
+}
+
 
 // Compact form controls - shorter widths 
 // ---------------------------------------

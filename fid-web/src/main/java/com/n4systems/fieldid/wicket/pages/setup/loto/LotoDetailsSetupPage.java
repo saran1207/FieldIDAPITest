@@ -117,11 +117,10 @@ public class LotoDetailsSetupPage extends FieldIDTemplatePage {
                         item.add(new LotoWarningsActionCell(id, model) {
                             @Override
                             protected void doEdit(AjaxRequestTarget target) {
-                                addTemplateModal.setContent(inputPanel = new LotoWarningTemplateModalInputPanel(addTemplateModal.getContentId(),
-                                                                                                                thisTemplate) {
+                                addTemplateModal.setContent(inputPanel = new LotoWarningTemplateModalInputPanel(addTemplateModal.getContentId(), Model.of(thisTemplate)) {
                                     @Override
                                     protected void doSave(AjaxRequestTarget target) {
-                                        warningTemplate = saveAction(target, warningTemplate);
+                                        warningTemplateModel.setObject(saveAction(target, warningTemplateModel.getObject()));
                                     }
 
                                     @Override
@@ -149,8 +148,7 @@ public class LotoDetailsSetupPage extends FieldIDTemplatePage {
             protected void doAddAction(AjaxRequestTarget target) {
                 WarningTemplate createMe = new WarningTemplate();
                 createMe.setTenant(getTenant());
-                addTemplateModal.setContent(inputPanel = new LotoWarningTemplateModalInputPanel(addTemplateModal.getContentId(),
-                                                                                                createMe) {
+                addTemplateModal.setContent(inputPanel = new LotoWarningTemplateModalInputPanel(addTemplateModal.getContentId(), Model.of(createMe)) {
                     @Override
                     protected void doCancel(AjaxRequestTarget target) {
                         target.add(addTemplateModal);
@@ -159,7 +157,7 @@ public class LotoDetailsSetupPage extends FieldIDTemplatePage {
 
                     @Override
                     protected void doSave(AjaxRequestTarget target) {
-                        warningTemplate = saveAction(target, warningTemplate);
+                        warningTemplateModel.setObject(saveAction(target, warningTemplateModel.getObject()));
                     }
                 });
                 target.add(inputPanel);
