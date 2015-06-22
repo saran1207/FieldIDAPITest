@@ -87,7 +87,6 @@ public class S3ServiceTest extends FieldIdServiceTest {
         Date expires =  new DateTime().plusDays(expiryDays).toDate();
 
         expect(configService.getString(ConfigEntry.AMAZON_S3_BUCKET)).andReturn(bucket);
-        expect(configService.getString(ConfigEntry.AMAZON_S3_ENDPOINT)).andReturn(bucket);
         replay(configService);
 
         expect(s3client.generatePresignedUrl(bucket, S3Service.TENANTS_PREFIX + myTenantId + S3Service.BRANDING_LOGO_PATH, expires, HttpMethod.GET)).andReturn(expectedUrl);

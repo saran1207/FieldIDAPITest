@@ -38,7 +38,6 @@ import javax.activation.MimetypesFileTypeMap;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -1057,16 +1056,12 @@ public class S3Service extends FieldIdPersistenceService {
 
     private URL generatePresignedUrl(String path, Date expires, HttpMethod method) {
         URL url = null;
-        URL fieldidUrl = url;
         try {
             url = getClient().generatePresignedUrl(getBucket(), path, expires, method);
-            fieldidUrl = new URL(url.getProtocol(), getEndpoint(), url.getPort(), url.getFile());
         } catch(AmazonServiceException ase){
             //just ignore the exception, its probably caused by resource not existing
-        } catch(MalformedURLException e){
-            logger.warn("Issue with setting the S3 endpoint in URL: " + e);
         }
-        return fieldidUrl;
+        return url;
     }
 
     private AmazonS3Client getClient() {
@@ -1081,11 +1076,6 @@ public class S3Service extends FieldIdPersistenceService {
     private String getBucket() {
         String bucket = configService.getString(ConfigEntry.AMAZON_S3_BUCKET);
         return bucket;
-    }
-
-    private String getEndpoint() {
-        String endpoint = configService.getString(ConfigEntry.AMAZON_S3_ENDPOINT);
-        return endpoint;
     }
 
     private String getAccessKey() {
