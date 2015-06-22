@@ -98,6 +98,7 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
     private String latVal = "";
     private String longVal = "";
     boolean hasDefaultVal = false;
+    boolean isAutoScheduled = false;
 
     @Override
     protected void onInitialize() {
@@ -132,40 +133,12 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             }
         }
         OuterEventForm form;
-        add(form = new OuterEventForm("outerEventForm"){
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected void onValidate() {
-                super.onValidate();
-
-                BigDecimal latField = (BigDecimal)latitude.getConvertedInput();
-                BigDecimal longField = (BigDecimal)longitude.getConvertedInput();
-
-                //Check for validity of the longitude and latitude values
-                //Longitude: -180 to +180
-                if (null != latField) {
-                    if (null == longField) {
-                        error(new FIDLabelModel("error.longitude").getObject());
-                    }else if(longField.compareTo(BigDecimal.valueOf(180)) == 1 || longField.compareTo(BigDecimal.valueOf(-180)) == -1) {
-                        error(new FIDLabelModel("error.longitude_value").getObject());
-                    }
-                }
-                //Latitude: -85 to +85
-                if (null != longField) {
-                    if (null == latField) {
-                        error(new FIDLabelModel("error.latitude").getObject());
-                    } else if(latField.compareTo(BigDecimal.valueOf(85)) == 1 || latField.compareTo(BigDecimal.valueOf(-85)) == -1) {
-                        error(new FIDLabelModel("error.latitude_value").getObject());
-                    }
-                }
-            }
-        });
+        add(form = new OuterEventForm("outerEventForm"));
 
         if (event.getObject().isAction()) {
             form.add(new AttributeAppender("class", "event-form-column-left"));
         }
+
 
         WebMarkupContainer actionsColumn;
         add(actionsColumn = new WebMarkupContainer("actionsColumn"));
@@ -405,8 +378,30 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
         }
 
         @Override
-        protected void onSubmit() {
-            // SUGGESTION DD : put this in a form validator instead of onSubmit.
+        protected void onValidate() {
+            super.onValidate();
+
+            BigDecimal latField = (BigDecimal)latitude.getConvertedInput();
+            BigDecimal longField = (BigDecimal)longitude.getConvertedInput();
+
+            //Check for validity of the longitude and latitude values
+            //Longitude: -180 to +180
+            if (null != latField) {
+                if (null == longField) {
+                    error(new FIDLabelModel("error.longitude").getObject());
+                }else if(longField.compareTo(BigDecimal.valueOf(180)) == 1 || longField.compareTo(BigDecimal.valueOf(-180)) == -1) {
+                    error(new FIDLabelModel("error.longitude_value").getObject());
+                }
+            }
+            //Latitude: -85 to +85
+            if (null != longField) {
+                if (null == latField) {
+                    error(new FIDLabelModel("error.latitude").getObject());
+                } else if(latField.compareTo(BigDecimal.valueOf(85)) == 1 || latField.compareTo(BigDecimal.valueOf(-85)) == -1) {
+                    error(new FIDLabelModel("error.latitude_value").getObject());
+                }
+            }
+
             if (event.getObject().getOwner()==null) {
                 error(getString("error.event_owner_null"));
                 return;
@@ -417,35 +412,51 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
                 return;
             }
 
-
             if (targetAlreadyArchived(event.getObject())) {
                 error(getString("error.asset_has_been_archived"));
                 return;
             }
 
-            boolean flag = getAssetOwnerUpdate();
+            if (event instanceof Event) {
+                Event masterEvent = (Event) event.getObject();
+                if (masterEvent.getBook() != null && masterEvent.getBook().getId() == null && StringUtils.isBlank(masterEvent.getBook().getName())) {
+                    error(new FIDLabelModel("error.event_book_title_required").getObject());
+                }
 
+                if (masterEvent.getOwner() == null) {
+                    error(new FIDLabelModel("error.event_book_title_required").getObject());
+                }
+            }
+
+            if (event.getObject().containsUnfilledScoreCriteria()) {
+                error(new FIDLabelModel("error.scores.required").getObject());
+            }
+        }
+
+        @Override
+        protected void onSubmit() {
             event.getObject().setSectionResults(sectionResults);
             onPreSave(event.getObject());
             saveAssignedToIfNecessary();
             saveEventBookIfNecessary();
-            if (doPostSubmitValidation()) {
-                AbstractEvent savedEvent = doSave();
-                FieldIDSession.get().info(new FIDLabelModel("message.eventsaved").getObject());
-                if(savedEvent.getType().isActionEventType()) {
-                    if( ((Event)savedEvent).getTriggerEvent().getType().isThingEventType() )
-                        setResponsePage(ThingEventSummaryPage.class, PageParametersBuilder.id(savedEvent.getId()));
-                    else
-                        setResponsePage(PlaceEventSummaryPage.class, PageParametersBuilder.id(savedEvent.getId()));
-                } else if (savedEvent.getType().isPlaceEventType()) {
-                    setResponsePage(PlaceEventSummaryPage.class, PageParametersBuilder.id(savedEvent.getId()));
-                } else if (savedEvent.getType().isProcedureAuditEventType()) {
-                    setResponsePage(ProcedureAuditEventSummaryPage.class, PageParametersBuilder.id(savedEvent.getId()));
-                } else {
+
+            AbstractEvent savedEvent = doSave();
+            FieldIDSession.get().info(new FIDLabelModel("message.eventsaved").getObject());
+            if(savedEvent.getType().isActionEventType()) {
+                if( ((Event)savedEvent).getTriggerEvent().getType().isThingEventType() )
                     setResponsePage(ThingEventSummaryPage.class, PageParametersBuilder.id(savedEvent.getId()));
-                }
+                else
+                    setResponsePage(PlaceEventSummaryPage.class, PageParametersBuilder.id(savedEvent.getId()));
+            } else if (savedEvent.getType().isPlaceEventType()) {
+                setResponsePage(PlaceEventSummaryPage.class, PageParametersBuilder.id(savedEvent.getId()));
+            } else if (savedEvent.getType().isProcedureAuditEventType()) {
+                setResponsePage(ProcedureAuditEventSummaryPage.class, PageParametersBuilder.id(savedEvent.getId()));
+            } else {
+                setResponsePage(ThingEventSummaryPage.class, PageParametersBuilder.id(savedEvent.getId()));
             }
+
         }
+
     }
 
 
@@ -507,31 +518,6 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
     protected abstract void retireEvent(T event);
     protected abstract void gotoSummaryPage(T event);
     protected void onPreSave(T event) { }
-
-    private boolean doPostSubmitValidation() {
-        if (event instanceof Event) {
-            Event masterEvent = (Event) event.getObject();
-            if (masterEvent.getBook() != null && masterEvent.getBook().getId() == null && StringUtils.isBlank(masterEvent.getBook().getName())) {
-                error(new FIDLabelModel("error.event_book_title_required").getObject());
-                return false;
-            }
-
-            if (masterEvent.getOwner() == null) {
-                error(new FIDLabelModel("error.event_book_title_required").getObject());
-                return false;
-            }
-
-
-        }
-
-        if (event.getObject().containsUnfilledScoreCriteria()) {
-            error(new FIDLabelModel("error.scores.required").getObject());
-            return false;
-        }
-
-
-        return true;
-    }
 
     @Override
     public void renderHead(IHeaderResponse response) {
