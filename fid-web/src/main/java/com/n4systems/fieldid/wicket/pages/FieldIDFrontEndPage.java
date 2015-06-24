@@ -27,6 +27,7 @@ import com.n4systems.fieldid.wicket.pages.loto.ProcedureWaitingApprovalsPage;
 import com.n4systems.fieldid.wicket.pages.loto.PublishedListAllPage;
 import com.n4systems.fieldid.wicket.pages.org.OrgViewPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
+import com.n4systems.fieldid.wicket.pages.search.SmartSearchListPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.actionemailcustomization.ActionEmailSetupPage;
 import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListAllPage;
@@ -319,18 +320,15 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         autoCompleteSearch.getAutocompleteField().setMarkupId("searchText");
 
         Form<?> form = new Form<Void>("userForm") {
-
             @Override
             protected void onSubmit() {
-                redirect("/fieldid/assetInformation.action?useContext=true&usePagination=true&search=" + autoCompleteSearch.getTerm());
-                System.out.println("test");
+                setResponsePage(SmartSearchListPage.class, PageParametersBuilder.param("searchTerm", autoCompleteSearch.getAutocompleteField().getConvertedInput()));
             }
-
         };
 
         container.add(form);
-
         form.add(autoCompleteSearch);
+
         return container;
     }
 
