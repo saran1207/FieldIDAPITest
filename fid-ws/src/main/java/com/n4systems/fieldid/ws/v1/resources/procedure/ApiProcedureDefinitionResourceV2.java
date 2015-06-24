@@ -628,7 +628,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
     }
 
     private List<ApiProcedureDefinitionImage> convertImages(ProcedureDefinition definition) {
-        List<ApiProcedureDefinitionImage> convertedImages = new ArrayList<ApiProcedureDefinitionImage>();
+        List<ApiProcedureDefinitionImage> convertedImages = new ArrayList<>();
 
         List<IsolationPoint> isolationPoints = definition.getUnlockIsolationPoints();
 
@@ -663,10 +663,9 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
 
                     convertedImage.setData(imageData);
                 } catch (IOException ioe) {
-                    log.error("IOException downloading procedure def image: " + image.getId(), ioe);
+                    log.warn("IOException downloading procedure def image: " + image.getId(), ioe);
                 } catch (Exception e) {
-                    log.error("There was a problem while Generating SVGs for ProcDef with ID " + definition.getId(), e);
-                    e.printStackTrace();
+                    log.warn("There was a problem while Generating SVGs for ProcDef with ID " + definition.getId(), e);
                 }
 
                 convertedImages.add(convertedImage);
