@@ -5,7 +5,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exporting.beanutils.ExportMapMarshaller;
 import com.n4systems.exporting.io.ExcelXSSFMapWriter;
 import com.n4systems.exporting.io.MapWriter;
-import com.n4systems.fieldid.actions.downloaders.AbstractDownloadAction;
+import com.n4systems.fieldid.actions.downloaders.AbstractLegacyDownloadAction;
 import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.model.utils.StreamUtils;
@@ -17,7 +17,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 @SuppressWarnings("serial")
-public class ExampleCustomerExportAction extends AbstractDownloadAction {
+public class ExampleCustomerExportAction extends AbstractLegacyDownloadAction {
 	private Logger logger = Logger.getLogger(ExampleCustomerExportAction.class);
 	
 	private File exampleFile = PathHandler.getTempFile();

@@ -1,15 +1,15 @@
 package com.n4systems.fieldid.actions.downloaders;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.AssetType;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.ServiceLocator;
 
-public class DownloadAssetTypeImage extends AbstractDownloadAction {
+import java.io.File;
+import java.io.FileNotFoundException;
+
+public class DownloadAssetTypeImage extends AbstractLegacyDownloadAction {
 	private static final long serialVersionUID = 1L;
 	
 	protected Long uniqueID;
