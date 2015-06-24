@@ -148,6 +148,26 @@ public class S3Service extends FieldIdPersistenceService {
         return logoData;
     }
 
+    /**
+     * This method is used to check whether or not a Ceritificate Logo exists.  This helps eliminate log entries which
+     * result from trying to download resources that don't exist.  It's typically a bad idea to check if something
+     * exists by trying to download it.
+     *
+     * Typically, if a resource isn't found with this method, it means it never existed... you should only worry if
+     * this is returning false when you know damn well the file exists.  That would totally be cause for alarm.
+     *
+     * @param customerOrgId - A Long representing the ID of the Customer Org.
+     * @param isPrimary - A boolean value indicating whether (true) or not (false) the Customer Org is the Primary Org.
+     * @return A boolean value indicating whether (true) or not (false) the Logo exists in S3.
+     */
+    public boolean isCertificateLogoExists(Long customerOrgId, boolean isPrimary) {
+        if(isPrimary) {
+            return resourceExists(null, PRIMARY_CERTIFICATE_LOGO_PATH, customerOrgId);
+        } else {
+            return resourceExists(null, SECONDARY_CERTIFICATE_LOGO_PATH, customerOrgId);
+        }
+    }
+
     public List<S3ObjectSummary> getAllCustomerLogos() {
         // this path will contain both customer logos as well as branding and cert logos.  Need to filter down to just customers.
         return findResources(createResourcePath(null, CUSTOMER_LOGO_BASE_PATH), "^.*/" + CUSTOMER_FILE_PREFIX + "\\d+\\." + CUSTOMER_FILE_EXT + "$");
