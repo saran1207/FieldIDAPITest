@@ -42,14 +42,8 @@ public class ProcedureListPanel extends Panel {
         table.add(new AttributeAppender("class", getTableStyle()).setSeparator(" "));
     }
 
-    private IModel<String> getTableStyle() {
-        return  new Model<String>() {
-            @Override
-            public String getObject() {
-                String  attribute = "no_paging";
-                return attribute;
-            }
-        };
+    protected String getTableStyle() {
+        return  "no_paging";
     }
 
     private List<IColumn<? extends ProcedureDefinition>> getProceduresTableColumns() {
@@ -74,6 +68,8 @@ public class ProcedureListPanel extends Panel {
                 item.add(new Label(componentId, createLabelModel(rowModel))).add(new AttributeAppender("class", new Model<String>("revision-number"), ""));
             }
         });
+
+        columns.add(new PropertyColumn<ProcedureDefinition>(new FIDLabelModel("label.reference#"), "asset.customerRefNumber", "asset.customerRefNumber"));
 
         columns.add(new ProcedureAssetColumn(new FIDLabelModel("label.equipment_#"),"equipmentNumber", "equipmentNumber"));
 

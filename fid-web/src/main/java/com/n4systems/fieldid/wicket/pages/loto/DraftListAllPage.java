@@ -1,9 +1,11 @@
 package com.n4systems.fieldid.wicket.pages.loto;
 
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.loto.ProcedureDateColumn;
 import com.n4systems.fieldid.wicket.components.loto.ProcedureListPanel;
 import com.n4systems.fieldid.wicket.components.loto.PublishedProcedureActionsColumn;
 import com.n4systems.fieldid.wicket.data.ProcedureDefinitionDataProvider;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
@@ -127,6 +129,7 @@ public class DraftListAllPage extends ProceduresAllListPage implements IAjaxIndi
         add(procedureDefinitionListPanel = new ProcedureListPanel("procedureDefinitionListPanel", dataProvider) {
             @Override
             protected void addCustomColumns(List<IColumn<? extends ProcedureDefinition>> columns) {
+                columns.add(new ProcedureDateColumn(new FIDLabelModel("label.modified"), "modified", "modified"));
             }
 
             @Override
@@ -139,6 +142,11 @@ public class DraftListAllPage extends ProceduresAllListPage implements IAjaxIndi
                 return feedbackPanel;
             }
 
+
+            @Override
+            protected String getTableStyle() {
+                return super.getTableStyle() + " drafts_list";
+            }
         });
         procedureDefinitionListPanel.setOutputMarkupPlaceholderTag(true);
 

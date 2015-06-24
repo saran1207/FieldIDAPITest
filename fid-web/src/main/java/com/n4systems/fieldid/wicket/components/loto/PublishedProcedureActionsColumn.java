@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components.loto;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.markup.repeater.Item;
@@ -32,6 +33,7 @@ public class PublishedProcedureActionsColumn extends AbstractColumn<ProcedureDef
         } else {
             cellItem.add(new PreviouslyPublishedProcedureActionsCell(componentId, rowModel, procedureListPanel));
         }
+        cellItem.add(new AttributeAppender("class", "actions"));
     }
 
 }

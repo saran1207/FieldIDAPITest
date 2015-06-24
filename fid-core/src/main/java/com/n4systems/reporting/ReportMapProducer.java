@@ -59,13 +59,23 @@ public abstract class ReportMapProducer {
 	protected InputStream getCertificateLogo(BaseOrg owner) {
 		if (owner == null) return null;
 		try {
-			byte[] logo = s3Service.downloadCertificateLogo(owner.getId(), owner.isPrimary());
+			byte[] logo = null;
+
+			//Check if the logo exists before trying to grab it.  That keeps S3Service from dumping erroneous error
+			//messages into the logs... we should save those for when there's a legitimate problem, no?
+			if(s3Service.isCertificateLogoExists(owner.getId(), owner.isPrimary())) {
+				logo = s3Service.downloadCertificateLogo(owner.getId(), owner.isPrimary());
+			}
 
 			//If the owner does not have an certificate logo, traverse up the parent tree to find one
 			BaseOrg child = owner;
 			while(logo == null && child.getParent() != null) {
 				BaseOrg parent = child.getParent();
-				logo = s3Service.downloadCertificateLogo(parent.getId(), parent.isPrimary());
+
+				//Again, check to make sure it exists before you try to download it.
+				if(s3Service.isCertificateLogoExists(parent.getId(), parent.isPrimary())) {
+					logo = s3Service.downloadCertificateLogo(parent.getId(), parent.isPrimary());
+				}
 				child = parent;
 			}
 
@@ -79,7 +89,13 @@ public abstract class ReportMapProducer {
     protected InputStream getCustomerLogo(BaseOrg owner) {
         if (owner == null || owner.isInternal()) return null;
         try {
-            byte[] logo = s3Service.downloadCustomerLogo(owner.getCustomerOrg().getId());
+            byte[] logo = null;
+
+			//Check to make sure the customer Logo exists before we try to download it... otherwise we get extra error
+			//messages in the log.
+			if(s3Service.customerLogoExists(owner.getCustomerOrg().getId())) {
+				logo = s3Service.downloadCustomerLogo(owner.getCustomerOrg().getId());
+			}
             return logo != null ? new ByteArrayInputStream(logo) : null;
         } catch (IOException e) {
             logger.warn("Unable to download customer logo for report", e);

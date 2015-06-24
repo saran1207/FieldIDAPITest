@@ -31,7 +31,7 @@ public abstract class LockoutReasonsPage extends FieldIDTemplatePage {
 
     protected LockoutReasonsPage() {
         super();
-        add(addOrEditModalWindow = new DialogModalWindow("addOrEditModalWindow"));
+        add(addOrEditModalWindow = new DialogModalWindow("addOrEditModalWindow").setInitialHeight(400).setInitialWidth(400));
         addOrEditModalWindow.setContent(getAddEditPanel(addOrEditModalWindow.getContentId(), Model.of(new LockoutReason())));
     }
 

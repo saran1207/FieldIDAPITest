@@ -1,13 +1,13 @@
 package com.n4systems.fieldid.actions.downloaders;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.reporting.PathHandler;
 
-public class DownloadAssetTypeAttachedFile extends AbstractDownloadAction {
+import java.io.File;
+import java.io.FileNotFoundException;
+
+public class DownloadAssetTypeAttachedFile extends AbstractLegacyDownloadAction {
 	private static final long serialVersionUID = 1L;
 	
 	protected Long assetTypeId;

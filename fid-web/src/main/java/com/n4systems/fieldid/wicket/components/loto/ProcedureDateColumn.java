@@ -20,7 +20,7 @@ public class ProcedureDateColumn extends PropertyColumn<ProcedureDefinition> {
 
     @Override
     public void populateItem(Item<ICellPopulator<ProcedureDefinition>> item, String id, IModel<ProcedureDefinition> procedureModel) {
-        item.add(new ProcedureDateCell(id, procedureModel))
-                .add(new AttributeAppender("class", new Model<String>("created"), ""));
+        item.add(new ProcedureDateCell(id, procedureModel, getPropertyExpression()))
+                .add(new AttributeAppender("class", new Model<String>("date"), ""));
     }
 }

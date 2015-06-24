@@ -38,7 +38,6 @@ import javax.activation.MimetypesFileTypeMap;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -147,6 +146,26 @@ public class S3Service extends FieldIdPersistenceService {
             logoData = downloadResource(null, SECONDARY_CERTIFICATE_LOGO_PATH, customerOrgId);
         }
         return logoData;
+    }
+
+    /**
+     * This method is used to check whether or not a Ceritificate Logo exists.  This helps eliminate log entries which
+     * result from trying to download resources that don't exist.  It's typically a bad idea to check if something
+     * exists by trying to download it.
+     *
+     * Typically, if a resource isn't found with this method, it means it never existed... you should only worry if
+     * this is returning false when you know damn well the file exists.  That would totally be cause for alarm.
+     *
+     * @param customerOrgId - A Long representing the ID of the Customer Org.
+     * @param isPrimary - A boolean value indicating whether (true) or not (false) the Customer Org is the Primary Org.
+     * @return A boolean value indicating whether (true) or not (false) the Logo exists in S3.
+     */
+    public boolean isCertificateLogoExists(Long customerOrgId, boolean isPrimary) {
+        if(isPrimary) {
+            return resourceExists(null, PRIMARY_CERTIFICATE_LOGO_PATH, customerOrgId);
+        } else {
+            return resourceExists(null, SECONDARY_CERTIFICATE_LOGO_PATH, customerOrgId);
+        }
     }
 
     public List<S3ObjectSummary> getAllCustomerLogos() {
@@ -1057,16 +1076,12 @@ public class S3Service extends FieldIdPersistenceService {
 
     private URL generatePresignedUrl(String path, Date expires, HttpMethod method) {
         URL url = null;
-        URL fieldidUrl = url;
         try {
             url = getClient().generatePresignedUrl(getBucket(), path, expires, method);
-            fieldidUrl = new URL(url.getProtocol(), getEndpoint(), url.getPort(), url.getFile());
         } catch(AmazonServiceException ase){
             //just ignore the exception, its probably caused by resource not existing
-        } catch(MalformedURLException e){
-            logger.warn("Issue with setting the S3 endpoint in URL: " + e);
         }
-        return fieldidUrl;
+        return url;
     }
 
     private AmazonS3Client getClient() {
@@ -1081,11 +1096,6 @@ public class S3Service extends FieldIdPersistenceService {
     private String getBucket() {
         String bucket = configService.getString(ConfigEntry.AMAZON_S3_BUCKET);
         return bucket;
-    }
-
-    private String getEndpoint() {
-        String endpoint = configService.getString(ConfigEntry.AMAZON_S3_ENDPOINT);
-        return endpoint;
     }
 
     private String getAccessKey() {

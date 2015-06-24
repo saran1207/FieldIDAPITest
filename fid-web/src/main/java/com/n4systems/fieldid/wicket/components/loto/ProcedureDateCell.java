@@ -7,15 +7,17 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
+
+import java.util.Date;
 
 /**
  * Created by rrana on 2014-04-10.
  */
 public class ProcedureDateCell extends Panel {
 
-    public ProcedureDateCell(String id, IModel<? extends ProcedureDefinition> procedureModel) {
+    public ProcedureDateCell(String id, IModel<? extends ProcedureDefinition> procedureModel, String property) {
         super(id);
-        ProcedureDefinition procedure = procedureModel.getObject();
-        add(new Label("createdDate", new DayDisplayModel(Model.of(procedure.getCreated())).withTimeZone(FieldIDSession.get().getSessionUser().getTimeZone())));
+        add(new Label("createdDate", new DayDisplayModel(new PropertyModel<>(procedureModel, property)).withTimeZone(FieldIDSession.get().getSessionUser().getTimeZone())));
     }
 }

@@ -1,22 +1,23 @@
 package com.n4systems.fieldid.actions.downloaders;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.Asset;
-import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.ServiceLocator;
+import org.apache.log4j.Logger;
 
-public class DownloadAssetImage extends AbstractDownloadAction {
+import java.io.IOException;
+
+public class DownloadAssetImage extends AbstractS3DownloadAction {
 	private static final long serialVersionUID = 1L;
 	
 	protected Long uniqueID;
 	private Asset asset;
     private S3Service s3Service = ServiceLocator.getS3Service();
-	
-	public DownloadAssetImage(PersistenceManager persistenceManager) {
+
+    private static final Logger logger = Logger.getLogger(DownloadAssetImage.class);
+
+    public DownloadAssetImage(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 	}
 	
@@ -37,15 +38,17 @@ public class DownloadAssetImage extends AbstractDownloadAction {
 	}
 
 	@Override
-	protected String onFileNotFoundException(FileNotFoundException e) {
-		addActionError(getText("error.noassetimage"));
-		return MISSING;
-	}
+    protected byte[] getFileBytes() {
+        try {
+            return s3Service.downloadAssetProfileOriginalImage(asset.getId(), asset.getImageName());
+        } catch (IOException e) {
+            logger.error("Asset Image named " + asset.getImageName() + " for Asset with ID " + asset.getId() + " is missing.", e);
+            addActionError(getText("error.noassetimage"));
+            setFailActionResult(MISSING);
+            return null;
 
-	@Override
-	public File getFile() {
-        return s3Service.downloadAssetProfileImageFile(asset.getId(), asset.getImageName());
-	}
+        }
+    }
 
 	@Override
 	public String getFileName() {
