@@ -21,7 +21,7 @@ ${action.setPageType('customer', 'divisions')!}
 	<#if (page.totalPages > 1 ) >
 		<#include '../common/_pagination.ftl' />
 	</#if>
-	<table id="divisionList" class="list">
+	<table id="divisionList" class="list clearBoth">
 		<tr>
 			<th><@s.text name="label.name" /></th>
 			<th><@s.text name="label.division_id" /></th>
