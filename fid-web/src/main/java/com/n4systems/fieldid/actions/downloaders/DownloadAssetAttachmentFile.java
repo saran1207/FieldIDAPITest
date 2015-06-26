@@ -1,17 +1,13 @@
 package com.n4systems.fieldid.actions.downloaders;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.asset.AssetAttachment;
-import com.n4systems.reporting.PathHandler;
 import org.apache.log4j.Logger;
 
+import java.io.IOException;
 
-public class DownloadAssetAttachmentFile extends AbstractDownloadAction {
+
+public class DownloadAssetAttachmentFile extends AbstractS3DownloadAction {
     private static final long serialVersionUID = 1L;
     private static final Logger logger = Logger.getLogger(DownloadAssetAttachmentFile.class);
 
@@ -39,22 +35,16 @@ public class DownloadAssetAttachmentFile extends AbstractDownloadAction {
 		return true;
 	}
 
-	@Override
-	protected String onFileNotFoundException(FileNotFoundException e) {
-		addActionError(getText("error.no_asset_attached_file", attachment.getFileName()));
-		return MISSING;
-	}
-
-	@Override
-	public File getFile() {
-        if(attachment.isRemote()){
-            File assetAttachmentFile = s3Service.downloadAssetAttachment(attachment);
-            return assetAttachmentFile;
+    protected byte[] getFileBytes() {
+        try {
+            return s3Service.downloadAssetAttachmentBytes(attachment);
+        } catch (IOException e) {
+            logger.error("Asset Attachment File with ID " + attachment.getId() + " not found!!", e);
+            addActionError(getText("error.no_asset_attached_file", attachment.getFileName()));
+            setFailActionResult(MISSING);
+            return null;
         }
-        else {
-            return PathHandler.getAssetAttachmentFile(attachment);
-        }
-	}
+    }
 
 	@Override
 	public String getFileName() {

@@ -7,20 +7,20 @@ public class SelectCriteriaBuilder extends CriteriaBuilder<SelectCriteria> {
 
     private String[] options;
 
-	public SelectCriteriaBuilder(String text, boolean retired) {
-        super(text, retired);
+	public SelectCriteriaBuilder(String text, boolean retired, boolean required) {
+        super(text, retired, required);
     }
 
     public SelectCriteriaBuilder(String text) {
-        super(text, false);
+        super(text, false, false);
     }
 
     public static SelectCriteriaBuilder aSelectCriteria() {
-        return new SelectCriteriaBuilder(null, false);
+        return new SelectCriteriaBuilder(null, false, false);
     }
 
     public SelectCriteriaBuilder withDisplayText(String text) {
-        return makeBuilder(new SelectCriteriaBuilder(text, retired));
+        return makeBuilder(new SelectCriteriaBuilder(text, retired, required));
     }
     
     public SelectCriteriaBuilder withOptions(String... options) { 

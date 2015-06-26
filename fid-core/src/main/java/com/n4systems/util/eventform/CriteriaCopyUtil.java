@@ -84,6 +84,7 @@ public class CriteriaCopyUtil {
         newCriteria.setModified(criteria.getModified());
         newCriteria.setModifiedBy(criteria.getModifiedBy());
         newCriteria.setCreated(criteria.getCreated());
+        newCriteria.setRequired(criteria.isRequired());
         if (existingCriteria != null) {
             newCriteria.setDisplayText(findUnusedNameBasedOn(criteria.getDisplayText(), existingCriteria));
         } else {

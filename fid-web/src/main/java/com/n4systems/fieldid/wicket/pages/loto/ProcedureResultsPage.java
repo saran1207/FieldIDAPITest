@@ -120,7 +120,7 @@ public class ProcedureResultsPage extends FieldIDFrontEndPage {
     }
 
     private Component createTimelinePanel(String id, IModel<List<IsolationPointResult>> results, final ProcedureWorkflowState state) {
-        return new TimelinePanel<IsolationPointResult>(id, results, new IsolationPointResultTimePointProvider(state));
+        return new TimelinePanel<>(id, results, new IsolationPointResultTimePointProvider(state));
     }
 
     private Component createLockingResultsSelector() {
@@ -203,8 +203,12 @@ public class ProcedureResultsPage extends FieldIDFrontEndPage {
         response.renderJavaScriptReference("javascript/jquery.annotate.js");
         response.renderJavaScriptReference("javascript/displayAnnotations.js");
 
-        JsonElement convertedIsolationAnnotations = serializeImageAnnotations(procedureModel.getObject().getLockResults());
-        response.renderJavaScript("var isolationAnnotations = " + convertedIsolationAnnotations.toString()+";", null);
+        procedureModel.getObject().getType().getLockIsolationPoints();
+
+        JsonElement convertedIsolationLockAnnotations = serializeImageAnnotations(procedureModel.getObject().getLockResults());
+        response.renderJavaScript("var isolationLockAnnotations = " + convertedIsolationLockAnnotations.toString()+";", null);
+        JsonElement convertedIsolationUnlockAnnotations = serializeImageAnnotations(procedureModel.getObject().getUnlockResults());
+        response.renderJavaScript("var isolationUnlockAnnotations = " + convertedIsolationUnlockAnnotations.toString()+";", null);
         response.renderJavaScript("unlockingState = " + currentTimelineDisplay.equals(ProcedureWorkflowState.UNLOCKED) + ";", null);
     }
 

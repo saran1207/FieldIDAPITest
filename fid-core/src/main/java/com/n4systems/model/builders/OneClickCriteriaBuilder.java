@@ -7,30 +7,30 @@ public class OneClickCriteriaBuilder extends CriteriaBuilder<OneClickCriteria> {
 	private final boolean principal;
     private final ButtonGroup buttonGroup;
 	
-	public OneClickCriteriaBuilder(String text, boolean retired, boolean principal, ButtonGroup buttonGroup) {
-        super(text, retired);
+	public OneClickCriteriaBuilder(String text, boolean retired, boolean required, boolean principal, ButtonGroup buttonGroup) {
+        super(text, retired, required);
 		this.principal = principal;
         this.buttonGroup = buttonGroup;
 	}
 	
 	public static OneClickCriteriaBuilder aCriteria() {
-		return new OneClickCriteriaBuilder("text", false, false, null);
+		return new OneClickCriteriaBuilder("text", false, false, false, null);
 	}
 
 	public OneClickCriteriaBuilder withDisplayText(String text) {
-		return makeBuilder(new OneClickCriteriaBuilder(text, retired, principal, buttonGroup));
+		return makeBuilder(new OneClickCriteriaBuilder(text, retired, required, principal, buttonGroup));
 	}
 
 	public OneClickCriteriaBuilder withRetired(boolean retired) {
-		return makeBuilder(new OneClickCriteriaBuilder(text, retired, principal, buttonGroup));
+		return makeBuilder(new OneClickCriteriaBuilder(text, retired, required, principal, buttonGroup));
 	}
 
 	public OneClickCriteriaBuilder withPrincipal(boolean principal) {
-		return makeBuilder(new OneClickCriteriaBuilder(text, retired, principal, buttonGroup));
+		return makeBuilder(new OneClickCriteriaBuilder(text, retired, required, principal, buttonGroup));
 	}
 
 	public OneClickCriteriaBuilder withButtonGroup(ButtonGroup buttonGroup) {
-		return makeBuilder(new OneClickCriteriaBuilder(text, retired, principal, buttonGroup));
+		return makeBuilder(new OneClickCriteriaBuilder(text, retired, required, principal, buttonGroup));
 	}
 	
 	@Override

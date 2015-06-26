@@ -42,6 +42,7 @@ import com.n4systems.fieldid.wicket.pages.saveditems.send.EditSendSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.ManageSendItemSchedulesPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedAssetSearchPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
+import com.n4systems.fieldid.wicket.pages.search.SmartSearchListPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.actionemailcustomization.ActionEmailSetupPage;
 import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListAllPage;
@@ -210,6 +211,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("publishedListAllPage", PublishedListAllPage.class);
         mountPage("draftListAllPage", DraftListAllPage.class);
         mountPage("previouslyPublishedListAllPage", PreviouslyPublishedListAllPage.class);
+
+        mountPage("smartSearch", SmartSearchListPage.class);
 
         mountPage("procedureAuditListPage", ProcedureAuditListPage.class);
 

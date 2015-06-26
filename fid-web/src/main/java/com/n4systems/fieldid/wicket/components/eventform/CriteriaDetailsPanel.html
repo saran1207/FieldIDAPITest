@@ -1,3 +1,4 @@
+<html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 
     <div class="criteria-header">
@@ -5,8 +6,12 @@
         <img wicket:id="tooltip"/>
     </div>
 
-    <div wicket:id="specificDetailsPanel">
-        
+    <div wicket:id="specificDetailsPanel"/>
+
+    <div class="required-check">
+        <input type="checkbox" wicket:id="required" />
+        <label wicket:for="required"><wicket:message key="label.required" /></label>
     </div>
 
 </wicket:panel>
+</html>

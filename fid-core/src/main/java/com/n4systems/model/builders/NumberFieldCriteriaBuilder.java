@@ -5,15 +5,15 @@ import com.n4systems.model.NumberFieldCriteria;
 public class NumberFieldCriteriaBuilder extends CriteriaBuilder<NumberFieldCriteria> {
 
 	public NumberFieldCriteriaBuilder() {
-		this("aNumberField", false);
+		this("aNumberField", false, false);
 	}
 	
-	public NumberFieldCriteriaBuilder(String text, boolean retired) {
-		super(text, retired);
+	public NumberFieldCriteriaBuilder(String text, boolean retired, boolean required) {
+		super(text, retired, required);
 	}
 	
 	public NumberFieldCriteriaBuilder(String text) {
-		super(text, false);
+		super(text, false, false);
 	}
 
 
@@ -24,11 +24,11 @@ public class NumberFieldCriteriaBuilder extends CriteriaBuilder<NumberFieldCrite
 	}
 	
 	public static NumberFieldCriteriaBuilder aNumberFieldCriteria() {
-		return new NumberFieldCriteriaBuilder(null, false);
+		return new NumberFieldCriteriaBuilder(null, false, false);
 	}
 
 	public NumberFieldCriteriaBuilder withDisplayText(String text) {
-		return makeBuilder(new NumberFieldCriteriaBuilder(text, retired));
+		return makeBuilder(new NumberFieldCriteriaBuilder(text, retired, required));
 	}
 	
 }

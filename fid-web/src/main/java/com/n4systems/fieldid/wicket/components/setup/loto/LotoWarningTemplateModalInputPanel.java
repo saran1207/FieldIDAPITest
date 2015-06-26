@@ -51,6 +51,7 @@ public class LotoWarningTemplateModalInputPanel extends Panel {
         nameField.setOutputMarkupId(true);
 
         form.add(warningArea = new TextArea<>("warning", new PropertyModel<>(warningTemplateModel, "warning")));
+        warningArea.setRequired(true);
         warningArea.setOutputMarkupId(true);
 
         form.add(new AjaxSubmitLink("submit") {

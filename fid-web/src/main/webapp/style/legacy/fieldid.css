@@ -530,7 +530,7 @@ h2 a {
     margin: 5px 0px;
     border-collapse: collapse;
     border-bottom: 1px solid #CACACA;
-    emtpty-cells: show;
+    empty-cells: show;
     background-color: #fff;
 }
 

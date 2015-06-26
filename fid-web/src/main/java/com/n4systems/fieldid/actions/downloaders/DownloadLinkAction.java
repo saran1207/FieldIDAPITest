@@ -18,14 +18,11 @@ import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import javax.mail.MessagingException;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class DownloadLinkAction extends AbstractDownloadAction {
+public class DownloadLinkAction extends AbstractS3DownloadAction {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(DownloadLinkAction.class);
 
@@ -75,13 +72,6 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 		return false;
 	
 	}
-
-	@Override
-	protected String onFileNotFoundException(FileNotFoundException e) {
-		logger.warn(String.format("Could not open file [%s], requested by download [%s]", getFile(), downloadLink));
-		addFlashErrorText("error.download_failed");
-		return ERROR;
-	}
 	
 	@Override
 	public String getFileName() {
@@ -93,10 +83,10 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 		return downloadLink.getContentType().getMimeType();
 	}
 	
-	@Override
-	public File getFile() {
-		return downloadLink.getFile();
-	}
+//	@Override
+//	public File getFile() {
+//		return downloadLink.getFile();
+//	}
 	
 	@SkipValidation
 	public String doDownload() {
@@ -106,33 +96,7 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 			downloadLinkSaver.update(downloadLink); 
 		}
 
-		//We did, however, need to snatch a good chunk of that logic.
-		if(!initializeDownload()) {
-			addFlashErrorText("error.file_not_found");
-			return failActionResult;
-		}
-
-		//Instead of making an input stream from a file, we're going to use a byte array...
-		byte[] fileContents = ServiceLocator.getS3Service().getGeneratedReportByteArray(downloadLink);
-
-		if(fileContents == null) {
-			logger.error("DownloadLink with ID " + downloadLink.getId() + " couldn't be downloaded!");
-			addFlashErrorText("error.file_not_found");
-			return failActionResult;
-		}
-
-		//...and we're going to make a ByteArrayInputStream from that byte array!
-		fileStream = new ByteArrayInputStream(fileContents);
-
-		//We'll also want the size of that byte array, since we can't grabt he size of the actual file anymore.  Don't
-		//worry, though, the .size() method from a file returns size in bytes.  Our array is conveniently made up of
-		//bytes... so we'll just get the length of that array and be done with it.
-		fileSize = String.valueOf(fileContents.length);
-
-		//NOTE: The reason we did this was to avoid having to modify a number of other classes which lean on the
-		//		AbstractDownloadAction class.  Because of this, we never call super.doDownload().`
-
-		return successActionResult;
+		return super.doDownload();
 	}
 	
 	@SkipValidation
@@ -364,5 +328,21 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 	public void setMessage(String message) {
 		this.message = message;
 	}
+
+    /**
+     * This method will get the Byte Array for the DownloadLink, and will make sure that it appropriately grabs the
+     * link for Public or non-Public download files, by checking for which one is null.  It will attempt to grab the
+     * @return An array of Bytes representing the file in S3.
+     */
+    protected byte[] getFileBytes() {
+        byte[] returnMe = ServiceLocator.getS3Service().getGeneratedReportByteArray(downloadLink == null? publicDownloadLink : downloadLink);
+
+        if(returnMe == null) {
+            addFlashErrorText("error.file_not_found");
+            logger.error("DownloadLink with ID " + (downloadLink == null ? publicDownloadLink.getId() : downloadLink.getId()));
+        }
+
+        return returnMe;
+    }
 
 }

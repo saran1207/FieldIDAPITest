@@ -282,8 +282,9 @@
 					
 				</ul>
 			</div>
+
 		   	<div id="smartSearchContainer">
-				<@s.form method="get" action="assetInformation" namespace="/" id="smartSearch" theme="fieldid" >
+				<@s.form onsubmit="var string=jQuery('#searchText').val(); return redirect('/fieldid/w/smartSearch?searchTerm='+string);" id="smartSearch" theme="fieldid" >
 					<@s.hidden name="useContext" value="true"/>
 					<@s.hidden name="usePagination" value="true"/>
 					<@s.textfield name="search" id="searchText" value="${action.getText('label.search')}" cssClass="description"/>

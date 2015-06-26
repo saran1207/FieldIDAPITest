@@ -421,6 +421,64 @@ public class AssetService extends CrudService<Asset> {
         return asset;
     }
 
+    public ThingEvent findNextScheduledEventByAsset(Long assetId) {
+        ThingEvent schedule = null;
+
+        QueryBuilder<ThingEvent> query = new QueryBuilder<ThingEvent>(ThingEvent.class, new OpenSecurityFilter());
+        query.addSimpleWhere("asset.id", assetId);
+        query.addWhere(Comparator.EQ, "workflowState", "workflowState", WorkflowState.OPEN);
+
+        query.addOrder("dueDate");
+
+        List<ThingEvent> schedules = persistenceService.findAll(query);
+
+        if (!schedules.isEmpty()) {
+            schedule = schedules.get(0);
+        }
+
+        return schedule;
+    }
+
+    public int findExactAssetSizeByIdentifiersForNewSmartSearch(String searchValue) {
+        return findExactAssetSizeByIdentifiersForNewSmartSearch(searchValue, securityContext.getUserSecurityFilter());
+    }
+
+    public int findExactAssetSizeByIdentifiersForNewSmartSearch(String searchValue, UserSecurityFilter filter) {
+
+        QueryBuilder<Asset> builder =  new QueryBuilder<Asset>(Asset.class, filter);
+
+        WhereParameterGroup group = new WhereParameterGroup("smartsearch");
+        group.addClause(WhereClauseFactory.create(Comparator.EQ, "identifier", "identifier", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
+        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "rfidNumber", "rfidNumber", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
+        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "customerRefNumber", "customerRefNumber", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
+        builder.addWhere(group);
+        builder.addOrder("type", "created");
+        //builder.addOrder("created");
+
+        int results = persistenceService.count(builder).intValue();
+        return results;
+    }
+
+    public List<Asset> findExactAssetByIdentifiersForNewSmartSearch(String searchValue) {
+        return findExactAssetByIdentifiersForNewSmartSearch(searchValue, securityContext.getUserSecurityFilter());
+    }
+
+    public List<Asset> findExactAssetByIdentifiersForNewSmartSearch(String searchValue, UserSecurityFilter filter) {
+
+        QueryBuilder<Asset> builder =  new QueryBuilder<Asset>(Asset.class, filter);
+
+        WhereParameterGroup group = new WhereParameterGroup("smartsearch");
+        group.addClause(WhereClauseFactory.create(Comparator.EQ, "identifier", "identifier", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
+        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "rfidNumber", "rfidNumber", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
+        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "customerRefNumber", "customerRefNumber", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
+        builder.addWhere(group);
+        builder.addOrder("type", "created");
+        //builder.addOrder("created");
+
+        List<Asset> results = persistenceService.findAll(builder);
+        return results;
+    }
+
     public List<Asset> findAssetByIdentifiersForNewSmartSearch(String searchValue) {
         return findAssetByIdentifiersForNewSmartSearch(searchValue, securityContext.getUserSecurityFilter());
     }
