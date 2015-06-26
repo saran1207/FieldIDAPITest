@@ -26,8 +26,12 @@ public class SecurityContext {
 		this.userSecurityFilter = userSecurityFilter;
 	}
 
+	public boolean hasTenantSecurityFilter() {
+		return tenantSecurityFilter != null;
+	}
+
 	public SecurityFilter getTenantSecurityFilter() {
-		if (tenantSecurityFilter == null) {
+		if (!hasTenantSecurityFilter()) {
 			throw new SecurityException("TenantSecurityFilter not set in SecurityContext");
 		}
 		return tenantSecurityFilter;

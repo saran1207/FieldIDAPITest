@@ -16,7 +16,8 @@
         <module>fid-connection-monitor</module>
         <module>fid-index-validator</module>
         <module>fid-pub-ws</module>
-    </modules>
+		<module>fid-mobile-ws</module>
+	</modules>
     <properties>
         <hibernate.version>3.6.0.Final</hibernate.version>
         <spring.version>4.0.2.RELEASE</spring.version>
