@@ -37,6 +37,9 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
 	@IndexColumn(name="orderidx")
 	private @Localized List<String> deficiencies = new ArrayList<String>();
 
+	@Column(nullable=false)
+	private boolean required = false;
+
     @Transient
     private Long oldId;
 	
@@ -86,7 +89,18 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
         this.instructions = instructions;
     }
 
-    @Override
+	public boolean isRequired() {
+		return required;
+	}
+
+	public void setRequired(boolean required) {
+		this.required = required;
+	}
+
+	public void setRequired() {
+		this.required = true;
+	}
+	@Override
 	public int hashCode() {
 		/*
 		 * Since Critera is used as a Map Key in some places, we're using the id of the object 

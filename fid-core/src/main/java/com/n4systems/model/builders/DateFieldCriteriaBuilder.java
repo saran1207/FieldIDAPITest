@@ -6,15 +6,15 @@ public class DateFieldCriteriaBuilder extends CriteriaBuilder<DateFieldCriteria>
 	
 
 	public DateFieldCriteriaBuilder() {
-        this("aDateField", false);
+        this("aDateField", false, false);
 	}
 	
-	public DateFieldCriteriaBuilder(String text, boolean retired) {
-		super(text, retired);
+	public DateFieldCriteriaBuilder(String text, boolean retired, boolean required) {
+		super(text, retired, required);
 	}
 
 	public DateFieldCriteriaBuilder(String text) {
-		super(text, false);
+		super(text, false, false);
 	}
 
 	@Override
@@ -24,11 +24,11 @@ public class DateFieldCriteriaBuilder extends CriteriaBuilder<DateFieldCriteria>
 	}
 
 	public static DateFieldCriteriaBuilder aDateFieldCriteria() {
-		return new DateFieldCriteriaBuilder(null, false);
+		return new DateFieldCriteriaBuilder(null, false, false);
 	}
 	
 	public DateFieldCriteriaBuilder withDisplayText(String text) {
-		return makeBuilder(new DateFieldCriteriaBuilder(text, retired));
+		return makeBuilder(new DateFieldCriteriaBuilder(text, retired, required));
 	}
 
 }

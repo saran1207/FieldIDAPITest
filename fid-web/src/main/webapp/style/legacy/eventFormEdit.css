@@ -363,20 +363,20 @@ div.unitDescriptor {
     width: 120px;
 }
 
-.dateFieldConfiguration {
+.dateFieldConfiguration, .required-check {
 	padding : 20px 10px;
 	clear: both;
 	float: none;
 }
 
-.dateFieldConfiguration input {
+.dateFieldConfiguration input, .required-check input {
 	clear: left;
 	display: block;
 	float: left;
 	text-align: right;
 }
 
-.dateFieldConfiguration label {
+.dateFieldConfiguration label, .required-check label {
 	clear: right;
 	float: left;
 	margin-left: 10px;
