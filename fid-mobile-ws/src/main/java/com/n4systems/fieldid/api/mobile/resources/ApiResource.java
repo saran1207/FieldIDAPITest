@@ -1,13 +1,17 @@
 package com.n4systems.fieldid.api.mobile.resources;
 
 import com.n4systems.fieldid.api.mobile.exceptions.NotFoundException;
+import com.n4systems.fieldid.api.mobile.filters.RequestContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.parents.EntityWithTenant;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
+import javax.servlet.ServletRequest;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,8 +20,8 @@ import java.util.stream.Collectors;
 @Component
 public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPersistenceService {
 
-    @Context
-    private HttpHeaders headers;
+    @Autowired
+    private RequestContext requestContext;
 
 	protected abstract A convertEntityToApiModel(E entityModel);
 
@@ -38,7 +42,19 @@ public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPe
     }
 
     protected String getVersionString() {
-        return headers.getHeaderString("X-APPINFO-APPVERSION");
+        return requestContext.getContext().getHeaderString("X-APPINFO-APPVERSION");
+    }
+
+    public ServletRequest getObject() {
+        return currentRequestAttributes().getRequest();
+    }
+
+    private static ServletRequestAttributes currentRequestAttributes() {
+        RequestAttributes requestAttr = RequestContextHolder.currentRequestAttributes();
+        if (!(requestAttr instanceof ServletRequestAttributes)) {
+            throw new IllegalStateException("Current request is not a servlet request");
+        }
+        return (ServletRequestAttributes) requestAttr;
     }
 
     protected long getVersionNumber() {
