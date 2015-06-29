@@ -42,7 +42,7 @@ import rfid.web.helper.SessionUser;
 import java.util.List;
 
 @SuppressWarnings("serial")
-public class DashboardPage extends FieldIDFrontEndPage {
+public class DashboardPage extends FieldIDTemplatePage {
     
     @SpringBean
     private DashboardService dashboardService;

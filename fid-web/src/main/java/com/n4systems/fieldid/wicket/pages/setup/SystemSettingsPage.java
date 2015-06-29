@@ -8,7 +8,7 @@ import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.renderer.DateFormatSampleChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder;
-import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.tenant.SystemSettings;
 import com.n4systems.util.ConfigurationProvider;
@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("serial")
-public class SystemSettingsPage extends FieldIDFrontEndPage {
+public class SystemSettingsPage extends FieldIDTemplatePage {
 
     @SpringBean
     private SystemSettingsService systemSettingsService;

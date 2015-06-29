@@ -3,7 +3,7 @@ package com.n4systems.fieldid.wicket;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.user.UserLimitService;
-import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.model.user.User;
 import com.n4systems.services.ConfigService;
@@ -17,7 +17,7 @@ import java.net.URL;
 
 import static org.easymock.EasyMock.*;
 
-public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldIDFrontEndPage> extends WicketPageTest<T,F,FieldIdWicketTestContext> {
+public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldIDTemplatePage> extends WicketPageTest<T,F,FieldIdWicketTestContext> {
 
 	protected ConfigurationProvider configurationProvider = createMock(ConfigurationProvider.class);
 	private ConfigService configService;
@@ -46,8 +46,8 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
 	@Override
 	public F createFixture(IFixtureFactory<F> factory) {
 		F fixture = factory.createFixture("id");
-		if (fixture instanceof FieldIDFrontEndPage) {
-			FieldIDFrontEndPage fieldIdPage = fixture;
+		if (fixture instanceof FieldIDTemplatePage) {
+            FieldIDTemplatePage fieldIdPage = fixture;
 			fieldIdPage.setConfigurationProvider(configurationProvider);
 		}
 		return fixture;
