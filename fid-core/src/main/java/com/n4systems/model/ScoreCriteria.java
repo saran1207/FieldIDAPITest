@@ -17,6 +17,11 @@ public class ScoreCriteria extends Criteria {
     @JoinColumn(name="group_id")
     private ScoreGroup scoreGroup;
 
+    public ScoreCriteria() {
+        super();
+        setRequired(true);
+    }
+
     @Override
     public CriteriaType getCriteriaType() {
         return CriteriaType.SCORE;
