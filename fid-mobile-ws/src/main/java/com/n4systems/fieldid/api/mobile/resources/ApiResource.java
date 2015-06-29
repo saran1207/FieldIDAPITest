@@ -4,10 +4,10 @@ import com.n4systems.fieldid.api.mobile.exceptions.NotFoundException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.parents.EntityWithTenant;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 @Component
 public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPersistenceService {
 
-    @Autowired
-    private HttpServletRequest request;
+    @Context
+    private HttpHeaders headers;
 
 	protected abstract A convertEntityToApiModel(E entityModel);
 
@@ -38,7 +38,7 @@ public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPe
     }
 
     protected String getVersionString() {
-        return request.getHeader("X-APPINFO-APPVERSION");
+        return headers.getHeaderString("X-APPINFO-APPVERSION");
     }
 
     protected long getVersionNumber() {
