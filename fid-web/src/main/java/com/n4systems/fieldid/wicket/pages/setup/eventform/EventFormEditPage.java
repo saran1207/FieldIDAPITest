@@ -92,6 +92,7 @@ public class EventFormEditPage extends EventTypePage {
             @Override
             protected void onCriteriaSelected(AjaxRequestTarget target, Criteria criteria) {
                 updateComponentsForCriteriaSelected(criteria);
+                criteriaDetailsPanel.redrawSettingsPanel(target);
                 refreshAllComponents(target);
             }
 

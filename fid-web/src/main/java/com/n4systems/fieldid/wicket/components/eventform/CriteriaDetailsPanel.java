@@ -13,10 +13,12 @@ import org.apache.wicket.model.StringResourceModel;
 
 public class CriteriaDetailsPanel extends Panel {
 
+    private CheckBox requiredCheckBox;
+
     public CriteriaDetailsPanel(String id, IModel<Criteria> criteriaModel) {
         super(id, criteriaModel);
         add(new TooltipImage("tooltip", new StringResourceModel("label.tooltip.criteria_settings", this, null)));
-        add(new CheckBox("required", new PropertyModel<Boolean>(criteriaModel, "required")) {
+        add(requiredCheckBox = new CheckBox("required", new PropertyModel<Boolean>(criteriaModel, "required")) {
             {
                 setOutputMarkupId(true);
                 add(new UpdateComponentOnChange());
@@ -71,6 +73,8 @@ public class CriteriaDetailsPanel extends Panel {
         } else if (criteria instanceof ObservationCountCriteria) {
             add(new ObservationCountDetailsPanel("specificDetailsPanel", new Model<ObservationCountCriteria>((ObservationCountCriteria) criteria)));
         }
+
+        requiredCheckBox.setVisible(isRequiredCriteria(criteria));
     }
 
     protected void onStateSetSelected(ButtonGroup buttonGroup) { }
@@ -78,4 +82,8 @@ public class CriteriaDetailsPanel extends Panel {
     protected void onSetsResultSelected(boolean setsResult) { }
     
     protected void onScoreGroupSelected(ScoreGroup scoreGroup) { }
+
+    private boolean isRequiredCriteria(Criteria criteria) {
+        return !(criteria instanceof ObservationCountCriteria) && !(criteria instanceof OneClickCriteria);
+    }
 }

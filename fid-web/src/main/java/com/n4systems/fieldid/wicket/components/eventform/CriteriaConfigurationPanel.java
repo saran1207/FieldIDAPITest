@@ -99,4 +99,8 @@ public class CriteriaConfigurationPanel extends Panel {
         settings.setDefaultModelObject(criteria);
         instructions.setDefaultModelObject(criteria);
     }
+
+    public void redrawSettingsPanel(AjaxRequestTarget target) {
+        target.add(settings);
+    }
 }
