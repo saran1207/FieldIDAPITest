@@ -16,7 +16,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 //@RunWith(FieldIdWicketTestRunner.class)
-public class BasicPageTest extends FieldIdPageTest<BasicPageHarness, FieldIDFrontEndPage> implements IFixtureFactory<FieldIDFrontEndPage> {
+public class BasicPageTest extends FieldIdPageTest<BasicPageHarness, FieldIDTemplatePage> implements IFixtureFactory<FieldIDTemplatePage> {
 
 
     @Override
@@ -95,8 +95,8 @@ public class BasicPageTest extends FieldIdPageTest<BasicPageHarness, FieldIDFron
     }
 
 	@Override
-	public FieldIDFrontEndPage createFixture(String id) {
-		return new FieldIDFrontEndPage(configurationProvider);
+	public FieldIDTemplatePage createFixture(String id) {
+		return new FieldIDTemplatePage(configurationProvider);
 	}
 
 	@Override
