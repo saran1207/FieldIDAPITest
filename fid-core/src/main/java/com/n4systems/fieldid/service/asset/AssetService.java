@@ -6,9 +6,8 @@ import com.n4systems.exceptions.*;
 import com.n4systems.fieldid.LegacyMethod;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.CrudService;
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
-import com.n4systems.fieldid.service.FieldIdService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.event.LastEventDateService;
 import com.n4systems.fieldid.service.event.NotifyEventAssigneeService;
 import com.n4systems.fieldid.service.event.ProcedureAuditEventService;
@@ -24,7 +23,6 @@ import com.n4systems.model.api.Archivable;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.asset.AssetSaver;
 import com.n4systems.model.asset.ScheduleSummaryEntry;
-import com.n4systems.model.asset.SmartSearchWhereClause;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.procedure.Procedure;
@@ -55,6 +53,7 @@ import rfid.ejb.entity.InfoOptionBean;
 
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import java.io.IOException;
 import java.util.*;
 
 @Transactional
@@ -73,6 +72,7 @@ public class AssetService extends CrudService<Asset> {
     @Autowired private ProcedureAuditEventService procedureAuditEventService;
     @Autowired private NotifyEventAssigneeService notifyEventAssigneeService;
     @Autowired private NotifyProcedureAssigneeService notifyProcedureAssigneeService;
+    @Autowired private S3Service s3Service;
 
 	private Logger logger = Logger.getLogger(AssetService.class);
 
@@ -699,7 +699,7 @@ public class AssetService extends CrudService<Asset> {
             builder.addWhere(group);
         }
 
-        builder.setLimit(threshold*4);
+        builder.setLimit(threshold * 4);
         List<Asset> results = persistenceService.findAll(builder);
         return new PrioritizedList<Asset>(results, threshold);
     }
@@ -983,5 +983,25 @@ public class AssetService extends CrudService<Asset> {
         for (Project project : asset.getProjects()) {
             projectService.detachAsset(asset, project);
         }
+    }
+
+    public List<Asset> findByMobileId(List<String> mobileIds) {
+        QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
+        builder.addWhere(WhereClauseFactory.create(Comparator.IN, "mobileGUID", mobileIds));
+
+        List<Asset> assets = persistenceService.findAll(builder);
+        return assets;
+    }
+
+    public byte[] loadAssetProfileImage(Asset asset) {
+        byte[] image = null;
+        if(asset.getImageName() != null) {
+            try {
+                image = s3Service.downloadAssetProfileMediumImage(asset.getId(), asset.getImageName());
+            } catch (IOException ex) {
+                logger.warn("Unable to load asset image for asset: " + asset.getIdentifier(), ex);
+            }
+        }
+        return image;
     }
 }
