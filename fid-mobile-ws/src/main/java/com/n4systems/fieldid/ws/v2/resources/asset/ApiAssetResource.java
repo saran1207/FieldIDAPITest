@@ -24,10 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.Date;
 import java.util.List;
@@ -60,12 +57,12 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			@QueryParam("assetTypeGroup") Long assetTypeGroup,
 			@QueryParam("identifiedFrom") Date identifiedFrom,
 			@QueryParam("identifiedTo") Date identifiedTo,
-			@QueryParam("orderByField") String orderByField,
-			@QueryParam("orderByDirection") String orderByDirection) {
+			@QueryParam("orderByField") @DefaultValue("identified") String orderByField,
+			@QueryParam("orderByDirection") @DefaultValue("DESC") String orderByDirection) {
 
 
 		QueryBuilder<ApiModelHeader> builder;
-		if (assetIds != null) {
+		if (assetIds != null && assetIds.size() > 0) {
 			builder = new QueryBuilder<>(Asset.class, securityContext.getUserSecurityFilter());
 			builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "mobileGUID", assetIds));
 		} else {
@@ -85,7 +82,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		return apiAssets;
 	}
 
-	private QueryBuilder<ApiModelHeader> createAssetSearchQuery(@QueryParam("rfidNumber") String rfidNumber, @QueryParam("identifier") String identifier, @QueryParam("referenceNumber") String referenceNumber, @QueryParam("assignedTo") Long assignedTo, @QueryParam("owner") Long owner, @QueryParam("location") String location, @QueryParam("predefinedLocationId") Long predefinedLocationId, @QueryParam("orderNumber") String orderNumber, @QueryParam("purchaseOrder") String purchaseOrder, @QueryParam("assetStatus") Long assetStatus, @QueryParam("assetType") Long assetType, @QueryParam("assetTypeGroup") Long assetTypeGroup, @QueryParam("identifiedFrom") Date identifiedFrom, @QueryParam("identifiedTo") Date identifiedTo, @QueryParam("orderByField") String orderByField, @QueryParam("orderByDirection") String orderByDirection) {
+	private QueryBuilder<ApiModelHeader> createAssetSearchQuery(String rfidNumber, String identifier, String referenceNumber, Long assignedTo, Long owner, String location, Long predefinedLocationId, String orderNumber, String purchaseOrder, Long assetStatus, Long assetType, Long assetTypeGroup, Date identifiedFrom, Date identifiedTo, String orderByField, String orderByDirection) {
 		AssetSearchCriteria searchCriteria = new AssetSearchCriteria();
 
 		searchCriteria.setRfidNumber(rfidNumber);
@@ -137,20 +134,12 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			searchCriteria.setDateRange(dateRange);
 		}
 
-		// Sort column and ascending.
-		String orderBy = "identified";
-		boolean ascending = false;
-
-		if(orderByField != null) {
-			orderBy = orderByField.equals("name") ? "type.name" : orderByField;
-		}
-
-		if(orderByDirection != null) {
-			ascending = orderByDirection.equals("ASC");
+		if (orderByField.equals("name")) {
+			orderByField = "type.name";
 		}
 
 		QueryBuilder<ApiModelHeader> queryBuilder = assetSearchService.augmentSearchBuilder(searchCriteria, new QueryBuilder<>(Asset.class, securityContext.getUserSecurityFilter()), false);
-		queryBuilder.addOrder(orderBy, ascending);
+		queryBuilder.addOrder(orderByField, orderByDirection.equals("ASC"));
 		queryBuilder.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, "mobileGUID", "modified"));
 		return queryBuilder;
 	}
