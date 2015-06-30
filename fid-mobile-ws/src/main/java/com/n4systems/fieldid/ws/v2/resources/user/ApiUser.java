@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.ws.v2.resources.user;
 
-import com.n4systems.fieldid.ws.v2.offlineprofile.ApiOfflineProfile;
+import com.n4systems.fieldid.ws.v2.resources.offlineprofile.ApiOfflineProfile;
 import com.n4systems.fieldid.ws.v2.resources.model.ApiReadonlyModelWithOwner;
 import com.n4systems.fieldid.ws.v2.resources.tenant.ApiTenant;
 import com.n4systems.security.UserType;

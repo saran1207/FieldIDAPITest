@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.ws.v2.offlineprofile;
+package com.n4systems.fieldid.ws.v2.resources.offlineprofile;
 
 import com.n4systems.model.offlineprofile.OfflineProfile.SyncDuration;
 

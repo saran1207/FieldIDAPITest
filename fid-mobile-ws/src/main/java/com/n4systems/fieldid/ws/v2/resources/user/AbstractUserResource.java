@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.ws.v2.resources.user;
 
-import com.n4systems.fieldid.ws.v2.offlineprofile.ApiOfflineProfileResource;
+import com.n4systems.fieldid.ws.v2.resources.offlineprofile.ApiOfflineProfileResource;
 import com.n4systems.fieldid.ws.v2.resources.SetupDataResource;
 import com.n4systems.fieldid.ws.v2.resources.tenant.ApiTenantResource;
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;

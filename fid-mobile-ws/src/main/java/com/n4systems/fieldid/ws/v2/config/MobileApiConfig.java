@@ -1,16 +1,17 @@
 package com.n4systems.fieldid.ws.v2.config;
 
-import com.n4systems.fieldid.ws.v2.resources.asset.ApiAssetResource;
-import com.n4systems.fieldid.ws.v2.resources.asset.ApiSubAssetResource;
-import com.n4systems.fieldid.ws.v2.resources.asset.attributevalues.ApiAttributeValueResource;
-import com.n4systems.fieldid.ws.v2.resources.authentication.AuthenticationResource;
-import com.n4systems.fieldid.ws.v2.resources.tenant.ApiTenantResource;
-import com.n4systems.fieldid.ws.v2.resources.user.ApiPersonResource;
-import com.n4systems.fieldid.ws.v2.resources.user.ApiUserResource;
 import com.n4systems.fieldid.config.FieldIdCoreConfig;
 import com.n4systems.fieldid.config.FieldIdDownloadConfig;
 import com.n4systems.fieldid.config.FieldIdEntityRemovalConfig;
 import com.n4systems.fieldid.ws.v2.filters.*;
+import com.n4systems.fieldid.ws.v2.resources.asset.ApiAssetResource;
+import com.n4systems.fieldid.ws.v2.resources.asset.ApiSubAssetResource;
+import com.n4systems.fieldid.ws.v2.resources.asset.attributevalues.ApiAttributeValueResource;
+import com.n4systems.fieldid.ws.v2.resources.authentication.AuthenticationResource;
+import com.n4systems.fieldid.ws.v2.resources.offlineprofile.ApiOfflineProfileResource;
+import com.n4systems.fieldid.ws.v2.resources.tenant.ApiTenantResource;
+import com.n4systems.fieldid.ws.v2.resources.user.ApiPersonResource;
+import com.n4systems.fieldid.ws.v2.resources.user.ApiUserResource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -78,6 +79,12 @@ public class MobileApiConfig {
 	@Scope("request")
 	public AuthenticationResource authenticationResource() {
 		return new AuthenticationResource();
+	}
+
+	@Bean
+	@Scope("request")
+	public ApiOfflineProfileResource apiOfflineProfileResource() {
+		return new ApiOfflineProfileResource();
 	}
 
 	@Bean
