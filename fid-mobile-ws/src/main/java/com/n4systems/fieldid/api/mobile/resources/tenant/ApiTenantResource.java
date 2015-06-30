@@ -17,6 +17,10 @@ public class ApiTenantResource extends ApiResource<ApiTenant, PrimaryOrg> {
 	@Override
 	public ApiTenant convertEntityToApiModel(PrimaryOrg primaryOrg) {
 		ApiTenant apiTenant = new ApiTenant();
+		apiTenant.setSid(primaryOrg.getTenant().getMobileId());
+		apiTenant.setName(primaryOrg.getTenant().getName());
+		apiTenant.setActive(!primaryOrg.getTenant().isDisabled());
+		apiTenant.setModified(primaryOrg.getTenant().getSettings().getModified());
 		apiTenant.setSerialNumberLabel(primaryOrg.getIdentifierLabel());
 		apiTenant.setSerialNumberFormat(primaryOrg.getIdentifierFormat());
 

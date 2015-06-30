@@ -1,0 +1,3 @@
+ALTER TABLE tenants ADD COLUMN mobileId VARCHAR(36);
+UPDATE tenants SET mobileId = uuid();
+ALTER TABLE tenants MODIFY COLUMN mobileId VARCHAR(36) NOT NULL UNIQUE;

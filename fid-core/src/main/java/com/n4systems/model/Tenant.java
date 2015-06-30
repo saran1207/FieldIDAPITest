@@ -12,6 +12,7 @@ import com.n4systems.util.HashCode;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Table(name="tenants")
@@ -42,12 +43,33 @@ public class Tenant extends BaseEntity implements Listable<Long>, NamedEntity, S
 
     @Column(name="asset_indexer_started")
     private boolean assetIndexerStarted;
-	
+
+	@Column(nullable=false, unique=true)
+	private String mobileId;
+
 	public Tenant() {}
 	
 	public Tenant(Long id, String name) {
 		super(id);
 		setName(name);
+	}
+
+	@Override
+	protected void onCreate() {
+		super.onCreate();
+		ensureMobileId();
+	}
+
+	@Override
+	protected void onUpdate() {
+		super.onUpdate();
+		ensureMobileId();
+	}
+
+	private void ensureMobileId() {
+		if (mobileId == null) {
+			mobileId = UUID.randomUUID().toString();
+		}
 	}
 	
 	public String getDisplayName() {
@@ -124,4 +146,12 @@ public class Tenant extends BaseEntity implements Listable<Long>, NamedEntity, S
     public void setAssetIndexerStarted(boolean assetIndexerStarted) {
         this.assetIndexerStarted = assetIndexerStarted;
     }
+
+	public String getMobileId() {
+		return mobileId;
+	}
+
+	public void setMobileId(String mobileId) {
+		this.mobileId = mobileId;
+	}
 }

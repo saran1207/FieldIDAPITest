@@ -30,7 +30,7 @@ public class AlterTable implements ExecutableStatement {
 		return table;
 	}
 
-	private AlterTable add(AlterStatement statement) {
+	public AlterTable add(AlterStatement statement) {
 		AlterStatement[] newStatements = Arrays.copyOf(statements, statements.length + 1);
 		newStatements[newStatements.length - 1] = statement;
 		return new AlterTable(table, newStatements);
@@ -66,6 +66,10 @@ public class AlterTable implements ExecutableStatement {
 
 	public AlterTable modifyColumn(String name, String type) {
 		return modifyColumn(name, type, false, false);
+	}
+
+	public AlterTable addColumn(String name, String type, boolean notNull, boolean autoIncrement, boolean unique) {
+		return add(new AddColumn(name, type, notNull, autoIncrement, unique));
 	}
 
 	@Override
@@ -236,6 +240,32 @@ public class AlterTable implements ExecutableStatement {
 		@Override
 		public String getDDL() {
 			return "MODIFY COLUMN " + SQLUtils.escapeNames(name) + ' ' + type + (notNull ? " NOT NULL" : "") + (autoIncrement ? " AUTO_INCREMENT" : "");
+		}
+	}
+
+	private class AddColumn extends AlterStatement {
+		private final String name;
+		private final String type;
+		private final boolean notNull;
+		private final boolean autoIncrement;
+		private final boolean unique;
+
+		private AddColumn(String name, String type, boolean notNull, boolean autoIncrement, boolean unique) {
+			this.name = name;
+			this.type = type;
+			this.notNull = notNull;
+			this.autoIncrement = autoIncrement;
+			this.unique = unique;
+		}
+
+		@Override
+		public boolean canExecute(Connection conn, String table) throws SQLException {
+			return DDLUtils.columnExists(conn, table, name);
+		}
+
+		@Override
+		public String getDDL() {
+			return "ADD COLUMN " + SQLUtils.escapeNames(name) + ' ' + type + (notNull ? " NOT NULL" : "") + (autoIncrement ? " AUTO_INCREMENT" : "") + (unique ? " UNIQUE" : "");
 		}
 	}
 }

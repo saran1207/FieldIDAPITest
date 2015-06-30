@@ -1,10 +1,12 @@
 package com.n4systems.fieldid.api.mobile.resources.tenant;
 
+import com.n4systems.fieldid.api.mobile.resources.model.ApiReadWriteModel;
 import com.n4systems.fieldid.api.mobile.resources.procedure.ApiLockoutReason;
 
 import java.util.List;
 
-public class ApiTenant {
+public class ApiTenant extends ApiReadWriteModel {
+	private String name;
 	private String serialNumberLabel;
 	private String serialNumberFormat;
 	private String serialNumberDecimalFormat;
@@ -22,6 +24,14 @@ public class ApiTenant {
 	private String removalProcess;
 	private String testingAndVerification;
 	private List<ApiLockoutReason> lockoutReasonList;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public void setSerialNumberLabel(String serialNumberLabel) {
 		this.serialNumberLabel = serialNumberLabel;

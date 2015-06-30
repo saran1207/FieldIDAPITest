@@ -18,8 +18,8 @@ public class ServerInformationResponseFilter extends FieldIdService implements C
 
 	@Override
 	public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) throws IOException {
-		if (securityContext.hasTenantSecurityFilter()) {
-			responseContext.getHeaders().add("X-TENANT", securityContext.getTenantSecurityFilter().getTenantId());
+		if (securityContext.hasUserSecurityFilter()) {
+			responseContext.getHeaders().add("X-TENANT", securityContext.getUserSecurityFilter().getUser().getTenant().getMobileId());
 		}
 		responseContext.getHeaders().add("X-Timestamp", new Date().getTime());
 		responseContext.getHeaders().add("Server", "Field ID/" + FieldIdVersion.getVersion());

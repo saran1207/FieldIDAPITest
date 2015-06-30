@@ -12,7 +12,7 @@ public class SecurityContext {
 	private SecurityFilter tenantSecurityFilter;
 
 	public UserSecurityFilter getUserSecurityFilter() {
-		if (userSecurityFilter == null) {
+		if (!hasUserSecurityFilter()) {
 			throw new SecurityException("UserSecurityFilter not set in SecurityContext");
 		}
 		return userSecurityFilter;
@@ -28,6 +28,10 @@ public class SecurityContext {
 
 	public boolean hasTenantSecurityFilter() {
 		return tenantSecurityFilter != null;
+	}
+
+	public boolean hasUserSecurityFilter() {
+		return userSecurityFilter != null;
 	}
 
 	public SecurityFilter getTenantSecurityFilter() {
