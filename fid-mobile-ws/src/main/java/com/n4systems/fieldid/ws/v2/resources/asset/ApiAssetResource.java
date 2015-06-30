@@ -69,6 +69,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			builder = createAssetSearchQuery(rfidNumber, identifier, referenceNumber, assignedTo, owner, location, predefinedLocationId, orderNumber, purchaseOrder, assetStatus, assetType, assetTypeGroup, identifiedFrom, identifiedTo, orderByField, orderByDirection);
 		}
 
+		builder.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, "mobileGUID", "modified"));
 		List<ApiModelHeader> results = persistenceService.findAll(builder);
 		return results;
 	}
@@ -140,7 +141,6 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 
 		QueryBuilder<ApiModelHeader> queryBuilder = assetSearchService.augmentSearchBuilder(searchCriteria, new QueryBuilder<>(Asset.class, securityContext.getUserSecurityFilter()), false);
 		queryBuilder.addOrder(orderByField, orderByDirection.equals("ASC"));
-		queryBuilder.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, "mobileGUID", "modified"));
 		return queryBuilder;
 	}
 
