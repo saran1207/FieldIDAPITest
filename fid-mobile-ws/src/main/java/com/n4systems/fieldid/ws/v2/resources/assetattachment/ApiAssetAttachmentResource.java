@@ -64,9 +64,8 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 		apiAttachment.setModified(attachment.getModified());
 		apiAttachment.setAssetId(attachment.getAsset().getMobileGUID());
 		apiAttachment.setComments(attachment.getComments());
-        apiAttachment.setUrl(s3Service.getAssetAttachmentUrl(attachment));
+		apiAttachment.setUrl(s3Service.getAssetAttachmentUrl(attachment));
 		apiAttachment.setMimeType(mimeType);
-		apiAttachment.setFileName(attachment.getFileName());
 		return apiAttachment;
 	}
 

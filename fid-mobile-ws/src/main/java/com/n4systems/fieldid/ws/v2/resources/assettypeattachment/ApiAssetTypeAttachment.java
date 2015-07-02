@@ -5,17 +5,18 @@ import com.n4systems.fieldid.ws.v2.resources.model.ApiReadWriteModel;
 import java.net.URL;
 
 public class ApiAssetTypeAttachment extends ApiReadWriteModel {
-	private String assetTypeId;
+	private Long assetTypeId;
 	private String comments;
 	private byte[] data;
 	private URL url;
 	private String mimeType;
+	private String fileName;
 
-	public String getAssetTypeId() {
+	public Long getAssetTypeId() {
 		return assetTypeId;
 	}
 
-	public void setAssetTypeId(String assetTypeId) {
+	public void setAssetTypeId(Long assetTypeId) {
 		this.assetTypeId = assetTypeId;
 	}
 
@@ -49,5 +50,13 @@ public class ApiAssetTypeAttachment extends ApiReadWriteModel {
 
 	public void setMimeType(String mimeType) {
 		this.mimeType = mimeType;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 }
