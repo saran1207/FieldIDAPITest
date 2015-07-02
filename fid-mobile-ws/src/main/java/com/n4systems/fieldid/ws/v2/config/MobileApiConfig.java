@@ -7,6 +7,7 @@ import com.n4systems.fieldid.ws.v2.filters.*;
 import com.n4systems.fieldid.ws.v2.resources.asset.ApiAssetResource;
 import com.n4systems.fieldid.ws.v2.resources.asset.ApiSubAssetResource;
 import com.n4systems.fieldid.ws.v2.resources.asset.attributevalues.ApiAttributeValueResource;
+import com.n4systems.fieldid.ws.v2.resources.assetattachment.ApiAssetAttachmentResource;
 import com.n4systems.fieldid.ws.v2.resources.authentication.AuthenticationResource;
 import com.n4systems.fieldid.ws.v2.resources.offlineprofile.ApiOfflineProfileResource;
 import com.n4systems.fieldid.ws.v2.resources.tenant.ApiTenantResource;
@@ -105,4 +106,9 @@ public class MobileApiConfig {
 		return new ApiUserResource();
 	}
 
+	@Bean
+	@Scope("request")
+	public ApiAssetAttachmentResource apiAssetAttachmentResource() {
+		return new ApiAssetAttachmentResource();
+	}
 }

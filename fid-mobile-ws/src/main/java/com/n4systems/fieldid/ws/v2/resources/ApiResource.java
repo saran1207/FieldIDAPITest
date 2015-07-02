@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.ws.v2.resources;
 
+import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.ws.v2.exceptions.NotFoundException;
 import com.n4systems.fieldid.ws.v2.filters.RequestContext;
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.parents.EntityWithTenant;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPe
 	}
 
     protected <M, R> List<R> convertAllEntitiesToApiModels(List<M> entityModels, Function<M, R> converter) {
-        return entityModels.stream().map(converter).collect(Collectors.toList());
+        return entityModels.stream().map(converter).filter(r -> r != null).collect(Collectors.toList());
     }
 
     protected <T extends EntityWithTenant> T findEntity(Class<T> entityClass, Long id) {

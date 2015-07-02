@@ -39,6 +39,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	@Autowired private AssetSearchService assetSearchService;
 
 	@GET
+	@Path("query")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
 	public List<ApiModelHeader> queryAssets(
@@ -75,7 +76,6 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	}
 
 	@GET
-	@Path("details")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
 	public List<ApiAsset> findAll(@QueryParam("id") List<String> assetIds) {

@@ -1397,15 +1397,17 @@ public class S3Service extends FieldIdPersistenceService {
         return fullResourcePath;
     }
 
+    public String getAssetAttachmentContentType(AssetAttachment assetAttachment) {
+        ObjectMetadata meta = getObjectMetadata(getAssetAttachmentPath(assetAttachment.getAsset().getMobileGUID(), assetAttachment.getMobileId(), assetAttachment.getFileName()));
+        return (meta != null) ? meta.getContentType() : null;
+    }
+
     public URL getAssetAttachmentUrl(AssetAttachment assetAttachment){
         URL assetAttachmentUrl = getAssetAttachmentUrl(assetAttachment.getAsset().getMobileGUID(), assetAttachment.getMobileId(), assetAttachment.getFileName());
         return assetAttachmentUrl;
     }
 
     public URL getAssetAttachmentUrl(String assetUuid, String assetAttachmentUuid, String assetAttachmentFilename) {
-        Assert.hasLength(assetUuid);
-        Assert.hasLength(assetAttachmentUuid);
-        Assert.hasLength(assetAttachmentFilename);
         Date expires = new DateTime().plusDays(getExpiryInDays()).toDate();
         assetAttachmentFilename = assetAttachmentFilename.substring(assetAttachmentFilename.lastIndexOf('/') + 1);
         String fullResourcePath = getAssetAttachmentPath(assetUuid, assetAttachmentUuid, assetAttachmentFilename);
@@ -1611,8 +1613,6 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     public byte[] downloadAssetProofTestChartBytes(String assetUuid, String eventUuid) throws IOException {
-        Assert.hasLength(assetUuid);
-        Assert.hasLength(eventUuid);
         return downloadResource(null, ASSET_PROOFTESTS_CHART_PATH, assetUuid, eventUuid);
     }
 
@@ -1623,11 +1623,13 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     public String getFileAttachmentPath(String fileAttachmentUuid, String filename){
-        Assert.hasLength(fileAttachmentUuid);
-        Assert.hasLength(filename);
-        Assert.doesNotContain(filename, "/");
         String fileAttachmentsUploadPath = createResourcePath(null, FILE_ATTACHMENT_PATH, fileAttachmentUuid, filename);
         return fileAttachmentsUploadPath;
+    }
+
+    public String getFileAttachmentContentType(FileAttachment fileAttachment){
+        ObjectMetadata meta = getObjectMetadata(getFileAttachmentPath(fileAttachment));
+        return (meta != null) ? meta.getContentType() : null;
     }
 
     public URL getFileAttachmentUrl(FileAttachment fileAttachment){
@@ -1653,9 +1655,6 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     public URL getFileAttachmentUrl(String fileAttachmentUuid, String filename) {
-        Assert.hasLength(fileAttachmentUuid);
-        Assert.hasLength(filename);
-        Assert.doesNotContain(filename, "/");
         Date expires = new DateTime().plusDays(getExpiryInDays()).toDate();
         filename = filename.substring(filename.lastIndexOf('/') + 1);
         String fullResourcePath = getFileAttachmentPath(fileAttachmentUuid, filename);
