@@ -10,6 +10,7 @@ public class ApiAssetAttachment extends ApiReadWriteModel {
 	private byte[] data;
     private URL url;
 	private String mimeType;
+	private String fileName;
 
 	public String getAssetId() {
 		return assetId;
@@ -49,5 +50,13 @@ public class ApiAssetAttachment extends ApiReadWriteModel {
 
 	public void setMimeType(String mimeType) {
 		this.mimeType = mimeType;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 }

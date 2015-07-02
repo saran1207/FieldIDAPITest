@@ -42,7 +42,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	@Path("query")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
-	public List<ApiModelHeader> queryAssets(
+	public List<ApiModelHeader> query(
 			@QueryParam("id") List<String> assetIds,
 			@QueryParam("rfidNumber") String rfidNumber,
 			@QueryParam("identifier") String identifier,

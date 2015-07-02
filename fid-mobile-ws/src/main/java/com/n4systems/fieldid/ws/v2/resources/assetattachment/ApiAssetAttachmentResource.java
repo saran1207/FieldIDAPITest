@@ -30,7 +30,7 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 	@Path("query")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
-	public List<ApiModelHeader> findAllForAsset(@QueryParam("assetId") List<String> assetIds, @QueryParam("id") List<String> attachmentIds) {
+	public List<ApiModelHeader> query(@QueryParam("assetId") List<String> assetIds, @QueryParam("id") List<String> attachmentIds) {
 		QueryBuilder<ApiModelHeader> queryBuilder = new QueryBuilder<>(AssetAttachment.class, securityContext.getUserSecurityFilter());
 		queryBuilder.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, "mobileId", "modified"));
 
@@ -46,7 +46,7 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
-	public List<ApiAssetAttachment> findAllForAsset(@QueryParam("id") List<String> attachmentIds) {
+	public List<ApiAssetAttachment> findAll(@QueryParam("id") List<String> attachmentIds) {
 		QueryBuilder<AssetAttachment> queryBuilder = createUserSecurityBuilder(AssetAttachment.class);
 		queryBuilder.addWhere(WhereClauseFactory.create(Comparator.IN, "mobileId", attachmentIds));
 		List<ApiAssetAttachment> apiAttachment = convertAllEntitiesToApiModels(persistenceService.findAll(queryBuilder));
@@ -66,6 +66,7 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 		apiAttachment.setComments(attachment.getComments());
         apiAttachment.setUrl(s3Service.getAssetAttachmentUrl(attachment));
 		apiAttachment.setMimeType(mimeType);
+		apiAttachment.setFileName(attachment.getFileName());
 		return apiAttachment;
 	}
 
