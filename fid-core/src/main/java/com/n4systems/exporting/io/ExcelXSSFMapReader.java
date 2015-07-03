@@ -2,10 +2,8 @@ package com.n4systems.exporting.io;
 
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.MapUtils;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.DateUtil;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.log4j.Logger;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.IOException;
@@ -28,6 +26,8 @@ public class ExcelXSSFMapReader implements MapReader {
     private Sheet sheet;
     private String[] titles;
     private int currentRow = 0;
+
+    private static final Logger logger = Logger.getLogger(ExcelXSSFMapReader.class);
 
     public ExcelXSSFMapReader(InputStream in, TimeZone timeZone) throws IOException {
         this.timeZone = timeZone;
@@ -150,8 +150,16 @@ public class ExcelXSSFMapReader implements MapReader {
                     //Looks like it's a date, so we'll delocalize the date and drop it into the list.
                     return DateHelper.delocalizeDate(cell.getDateCellValue(), timeZone);
                 } else {
-                    //It's not a Date, so it MUST be another Numeric value.
-                    return cell.getNumericCellValue();
+                    //It's not a Date, so it MUST be another Numeric value.  We read these as Strings to preserve
+                    //formatting where possible.  There are also edge cases where a String value is perceived as a
+                    //number because there are no non-numeric characters present.
+                    DataFormatter dataFormatter = new DataFormatter(true);
+
+                    //NOTE: If the user wants to preserve leading or trailing zeros, they must explicitly set the cell
+                    //      type to "Text."  This is an issue with Excel, not our code.  Internally, Excel will convert
+                    //      values it perceives as numeric to be truly numeric.  This effectively removes leading and
+                    //      trailing zeros, because they are meaningless in any mathematical or numeric sense.
+                    return dataFormatter.formatCellValue(cell);
                 }
             case Cell.CELL_TYPE_STRING:
                 return cell.getStringCellValue();
