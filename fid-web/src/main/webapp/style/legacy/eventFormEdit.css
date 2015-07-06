@@ -363,20 +363,20 @@ div.unitDescriptor {
     width: 120px;
 }
 
-.dateFieldConfiguration, .required-check {
+.dateFieldConfiguration, .labelled-checkbox {
 	padding : 20px 10px;
 	clear: both;
 	float: none;
 }
 
-.dateFieldConfiguration input, .required-check input {
+.dateFieldConfiguration input, .labelled-checkbox input {
 	clear: left;
 	display: block;
 	float: left;
 	text-align: right;
 }
 
-.dateFieldConfiguration label, .required-check label {
+.dateFieldConfiguration label, .labelled-checkbox label {
 	clear: right;
 	float: left;
 	margin-left: 10px;

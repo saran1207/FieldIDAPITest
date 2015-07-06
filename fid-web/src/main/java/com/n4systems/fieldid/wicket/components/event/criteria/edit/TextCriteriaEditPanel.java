@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.event.criteria.edit;
 
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.model.TextFieldCriteriaResult;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -14,6 +15,12 @@ public class TextCriteriaEditPanel extends Panel {
 
         TextField<String> textField = new TextField<String>("textField", new PropertyModel<String>(resultModel, "value"));
         textField.add(new UpdateComponentOnChange());
+
+        if(resultModel.getObject().getCriteria().isRequired()) {
+            textField.setRequired(true);
+            textField.add(new AttributeAppender("required", "true").setSeparator(" "));
+        }
+
         add(textField);
     }
 

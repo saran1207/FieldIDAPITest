@@ -193,6 +193,12 @@ public class CriteriaPanel extends SortableListPanel {
                         }
                     }
 
+                    if(getCriteriaSection().isRequired()) {
+                        if (!(criteria instanceof ObservationCountCriteria) && !(criteria instanceof OneClickCriteria)) {
+                            criteria.setRequired();
+                        }
+                    }
+
                     criteria.setDisplayText(criteriaName);
                     criteriaName = null;
                     getCriteriaSection().getCriteria().add(criteria);

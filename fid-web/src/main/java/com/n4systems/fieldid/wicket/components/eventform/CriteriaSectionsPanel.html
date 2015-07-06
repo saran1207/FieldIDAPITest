@@ -25,8 +25,14 @@
     </div>
 
     <wicket:fragment wicket:id="optionalFlagPanel">
-        <input type="checkbox" wicket:id="optionalCheck">
-        <label class="subTitle"><wicket:message key="label.optional_section"/></label>
+        <div class="labelled-checkbox">
+            <input type="checkbox" wicket:id="optionalCheck">
+            <label class="subTitle"><wicket:message key="label.optional_section"/></label>
+        </div>
+        <div class="labelled-checkbox">
+            <input type="checkbox" wicket:id="requiredCheck">
+            <label class="subTitle"><wicket:message key="label.set_all_criteria_as_required"/></label>
+        </div>
     </wicket:fragment>
 
 </wicket:panel>
