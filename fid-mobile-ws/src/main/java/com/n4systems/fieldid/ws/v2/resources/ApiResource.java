@@ -5,6 +5,8 @@ import com.n4systems.fieldid.ws.v2.exceptions.NotFoundException;
 import com.n4systems.fieldid.ws.v2.filters.RequestContext;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.util.persistence.NewObjectSelect;
+import com.n4systems.util.persistence.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
@@ -24,7 +26,7 @@ public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPe
     @Autowired
     private RequestContext requestContext;
 
-	protected abstract A convertEntityToApiModel(E entityModel);
+    protected abstract A convertEntityToApiModel(E entityModel);
 
 	protected List<A> convertAllEntitiesToApiModels(List<E> entityModels) {
         return convertAllEntitiesToApiModels(entityModels, this::convertEntityToApiModel);
@@ -89,4 +91,11 @@ public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPe
         long checkVersion = formatVersion(major, minor, patch);
         return (mobileVersion < checkVersion);
     }
+
+    protected QueryBuilder<ApiModelHeader> createModelHeaderQueryBuilder(Class<?> tableClass, String sidField, String modifiedByField) {
+        QueryBuilder<ApiModelHeader> queryBuilder = new QueryBuilder<>(tableClass, securityContext.getUserSecurityFilter());
+        queryBuilder.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, sidField, modifiedByField));
+        return queryBuilder;
+    }
+
 }

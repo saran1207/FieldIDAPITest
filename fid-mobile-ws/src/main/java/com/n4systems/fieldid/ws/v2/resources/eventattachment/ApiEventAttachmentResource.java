@@ -1,15 +1,15 @@
-package com.n4systems.fieldid.ws.v2.resources.assettypeattachment;
+package com.n4systems.fieldid.ws.v2.resources.eventattachment;
 
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.ws.v2.resources.ApiModelHeader;
 import com.n4systems.fieldid.ws.v2.resources.ApiResource;
-import com.n4systems.model.AssetType;
 import com.n4systems.model.FileAttachment;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.util.persistence.JoinClause;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.util.persistence.WhereParameter.Comparator;
+import com.n4systems.util.persistence.WhereParameter;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,12 +25,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-@Path("assetTypeAttachment")
-public class ApiAssetTypeAttachmentResource extends ApiResource<ApiAssetTypeAttachment, FileAttachment> {
-	private static final Logger logger = Logger.getLogger(ApiAssetTypeAttachmentResource.class);
-
-	@Autowired
-	private S3Service s3Service;
+@Path("eventAttachment")
+public class ApiEventAttachmentResource extends ApiResource<ApiEventAttachment, FileAttachment> {
+	private static Logger logger = Logger.getLogger(ApiEventAttachmentResource.class);
+    @Autowired
+    protected S3Service s3Service;
 
 	@GET
 	@Path("query")
@@ -43,60 +42,61 @@ public class ApiAssetTypeAttachmentResource extends ApiResource<ApiAssetTypeAtta
 	}
 
 	@GET
-	@Path("query/assetType")
+	@Path("query/event")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
-	public List<ApiModelHeader> queryAssetType(@QueryParam("assetTypeIds") List<Long> assetTypeIds) {
-		if (assetTypeIds.isEmpty()) return new ArrayList<>();
-		List<ApiModelHeader> headers = convertAllEntitiesToApiModels(findAttachmentsByAssetTypes(assetTypeIds), a -> new ApiModelHeader(a.getMobileId(), a.getModified()));
+	public List<ApiModelHeader> queryEvent(@QueryParam("eventIds") List<String> eventIds) {
+		if (eventIds.isEmpty()) return new ArrayList<>();
+		List<ApiModelHeader> headers = convertAllEntitiesToApiModels(findAttachmentsByEvents(eventIds), a -> new ApiModelHeader(a.getMobileId(), a.getModified()));
 		return headers;
 	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
-	public List<ApiAssetTypeAttachment> findAll(@QueryParam("id") List<String> attachmentIds) {
+	public List<ApiEventAttachment> findAll(@QueryParam("id") List<String> attachmentIds) {
 		if (attachmentIds.isEmpty()) return new ArrayList<>();
 
 		List<FileAttachment> attachments = findAttachmentsByMobileIds(attachmentIds);
-		List<ApiAssetTypeAttachment> apiAttachments = convertAllEntitiesToApiModels(attachments, att -> {
-			ApiAssetTypeAttachment apiAtt = convertEntityToApiModel(att);
+		List<ApiEventAttachment> apiAttachments = convertAllEntitiesToApiModels(attachments, att -> {
+			ApiEventAttachment apiAtt = convertEntityToApiModel(att);
 			if (apiAtt == null) return null;
 
-			apiAtt.setAssetTypeId(findAssetTypeIdForAttachment(att));
+			apiAtt.setEventSid(findEventIdForAttachment(att));
 			return apiAtt;
 		});
 		return apiAttachments;
 	}
 
-	private List<FileAttachment> findAttachmentsByAssetTypes(List<Long> assetTypeIds) {
-		QueryBuilder<AssetType> query = createUserSecurityBuilder(AssetType.class, true).addWhere(WhereClauseFactory.create(Comparator.IN, "id", assetTypeIds));
+	private List<FileAttachment> findAttachmentsByEvents(List<String> eventIds) {
+		QueryBuilder<ThingEvent> query = createUserSecurityBuilder(ThingEvent.class, true).addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "mobileGUID", eventIds));
 		List<FileAttachment> attachments = persistenceService.findAll(query)
 				.stream()
-				.map(AssetType::getAttachments)
+				.map(ThingEvent::getAttachments)
 				.flatMap(List::stream)
 				.collect(Collectors.toList());
 		return attachments;
 	}
 
 	private List<FileAttachment> findAttachmentsByMobileIds(List<String> ids) {
-		QueryBuilder<FileAttachment> query = createUserSecurityBuilder(FileAttachment.class).addWhere(WhereClauseFactory.create(Comparator.IN, "mobileId", ids));
+		QueryBuilder<FileAttachment> query = createUserSecurityBuilder(FileAttachment.class).addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "mobileId", ids));
 		List<FileAttachment> attachments = persistenceService.findAll(query);
 		return attachments;
 	}
 
-	private Long findAssetTypeIdForAttachment(FileAttachment attachment) {
-		QueryBuilder<AssetType> query = createUserSecurityBuilder(AssetType.class, true);
+	private String findEventIdForAttachment(FileAttachment attachment) {
+		QueryBuilder<ThingEvent> query = createUserSecurityBuilder(ThingEvent.class, true);
 		query.addJoin(new JoinClause(JoinClause.JoinType.INNER, "attachments", "att", false));
 		query.addWhere(WhereClauseFactory.createPassthru("att = :attachment", attachment));
-		AssetType assetType = persistenceService.find(query);
-		return (assetType != null) ? assetType.getId() : null;
+		ThingEvent event = persistenceService.find(query);
+		return (event != null) ? event.getMobileGUID() : null;
 	}
 
+
 	@Override
-	protected ApiAssetTypeAttachment convertEntityToApiModel(FileAttachment attachment) {
+	protected ApiEventAttachment convertEntityToApiModel(FileAttachment attachment) {
 		try {
-			ApiAssetTypeAttachment apiAttachment = new ApiAssetTypeAttachment();
+			ApiEventAttachment apiAttachment = new ApiEventAttachment();
 			apiAttachment.setSid(attachment.getMobileId());
 			apiAttachment.setActive(true);
 			apiAttachment.setModified(attachment.getModified());
@@ -105,9 +105,8 @@ public class ApiAssetTypeAttachmentResource extends ApiResource<ApiAssetTypeAtta
 			apiAttachment.setMimeType(s3Service.getFileAttachmentContentType(attachment));
 			return apiAttachment;
 		} catch (AmazonS3Exception ex) {
-			logger.warn("Unable to load asset type attachment information", ex);
+			logger.warn("Unable to load event attachment information", ex);
 			return null;
 		}
 	}
 }
-

@@ -4,7 +4,6 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.ws.v2.resources.ApiModelHeader;
 import com.n4systems.fieldid.ws.v2.resources.ApiResource;
 import com.n4systems.model.asset.AssetAttachment;
-import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -17,6 +16,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -30,23 +30,36 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 	@Path("query")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
-	public List<ApiModelHeader> query(@QueryParam("assetId") List<String> assetIds, @QueryParam("id") List<String> attachmentIds) {
-		QueryBuilder<ApiModelHeader> queryBuilder = new QueryBuilder<>(AssetAttachment.class, securityContext.getUserSecurityFilter());
-		queryBuilder.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, "mobileId", "modified"));
+	public List<ApiModelHeader> query(@QueryParam("id") List<String> attachmentIds) {
+		if (attachmentIds.isEmpty()) return new ArrayList<>();
 
-		if (attachmentIds != null && attachmentIds.size() > 0) {
-			queryBuilder.addWhere(WhereClauseFactory.create(Comparator.IN, "mobileId", attachmentIds));
-		} else {
-			queryBuilder.addWhere(WhereClauseFactory.create(Comparator.IN, "asset.mobileGUID", assetIds));
-		}
+		List<ApiModelHeader> headers = persistenceService.findAll(
+				createModelHeaderQueryBuilder(AssetAttachment.class, "mobileId", "modified")
+						.addWhere(WhereClauseFactory.create(Comparator.IN, "mobileId", attachmentIds))
+		);
+		return headers;
+	}
 
-		return persistenceService.findAll(queryBuilder);
+	@GET
+	@Path("query/asset")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Transactional(readOnly = true)
+	public List<ApiModelHeader> queryAsset(@QueryParam("assetId") List<String> assetIds) {
+		if (assetIds.isEmpty()) return new ArrayList<>();
+
+		List<ApiModelHeader> headers = persistenceService.findAll(
+				createModelHeaderQueryBuilder(AssetAttachment.class, "mobileId", "modified")
+						.addWhere(WhereClauseFactory.create(Comparator.IN, "asset.mobileGUID", assetIds))
+		);
+		return headers;
 	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
 	public List<ApiAssetAttachment> findAll(@QueryParam("id") List<String> attachmentIds) {
+		if (attachmentIds.isEmpty()) return new ArrayList<>();
+
 		QueryBuilder<AssetAttachment> queryBuilder = createUserSecurityBuilder(AssetAttachment.class);
 		queryBuilder.addWhere(WhereClauseFactory.create(Comparator.IN, "mobileId", attachmentIds));
 		List<ApiAssetAttachment> apiAttachment = convertAllEntitiesToApiModels(persistenceService.findAll(queryBuilder));

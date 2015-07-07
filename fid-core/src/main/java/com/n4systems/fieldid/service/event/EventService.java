@@ -252,14 +252,14 @@ public class EventService extends FieldIdPersistenceService {
 		QueryBuilder<EventCompletenessReportRecord> builder = new QueryBuilder<EventCompletenessReportRecord>(ThingEvent.class, securityContext.getUserSecurityFilter());
 
         NewObjectSelect select = new NewObjectSelect(EventCompletenessReportRecord.class);
-		List<String> args = Lists.newArrayList("COUNT(*)", QueryBuilder.defaultAlias+ ".workflowState");
+		List<String> args = Lists.newArrayList("COUNT(*)", QueryBuilder.defaultAlias + ".workflowState");
 		args.addAll(reportServiceHelper.getSelectConstructorArgsForGranularity(granularity, "dueDate"));
 		select.setConstructorArgs(args);
 		builder.setSelectArgument(select);
 		
-		builder.addWhere(whereFromTo(fromDate,toDate,"dueDate"));
+		builder.addWhere(whereFromTo(fromDate, toDate, "dueDate"));
         Date sampleDate = fromDate;
-        builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity,"dueDate", null, sampleDate));
+        builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity, "dueDate", null, sampleDate));
         builder.addGroupBy("workflowState");
 		builder.applyFilter(new OwnerAndDownFilter(org));
 
@@ -404,6 +404,37 @@ public class EventService extends FieldIdPersistenceService {
 
         return lastEventsByType;
 	}
+
+    public List<LastEventForTypeView> getLastEventOfEachType(List<String> assetMobileGuids) {
+		// Start by finding all the events for all the assets
+        QueryBuilder<LastEventForTypeView> builder = new QueryBuilder<>(ThingEvent.class, securityContext.getUserSecurityFilter());
+        builder.setSelectArgument(new NewObjectSelect(LastEventForTypeView.class, "mobileGUID", "asset.id", "modified", "type.id", "completedDate"));
+        builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "asset.mobileGUID", assetMobileGuids));
+        builder.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.COMPLETED));
+        List<LastEventForTypeView> allEvents = persistenceService.findAll(builder);
+
+		List<LastEventForTypeView> lastEventsByType = allEvents
+			.stream()
+			.collect(
+					Collectors.groupingBy(
+							// group by the asset
+							LastEventForTypeView::getAssetId,
+							Collectors.groupingBy(
+									// then by event type
+									LastEventForTypeView::getTypeId,
+									// reduce by the max completed date
+									Collectors.reducing(BinaryOperator.maxBy(java.util.Comparator.comparing(LastEventForTypeView::getCompleted)))
+							)
+					)
+			) // We now have a grouping like this Map<asset_id, Map<type_id, Optional<LastEventForTypeView>>>
+			.values()
+			.stream()
+			// Extract the views from each map and unwrap the Optional
+			.flatMap(typeMap -> typeMap.values().stream().map(Optional::get))
+			.collect(Collectors.toList());
+
+        return lastEventsByType;
+    }
 
     public Event retireEvent(ThingEvent event) {
         if(event.isAction()) {

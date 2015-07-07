@@ -5,10 +5,11 @@ import com.n4systems.fieldid.config.FieldIdDownloadConfig;
 import com.n4systems.fieldid.config.FieldIdEntityRemovalConfig;
 import com.n4systems.fieldid.ws.v2.filters.*;
 import com.n4systems.fieldid.ws.v2.resources.asset.ApiAssetResource;
-import com.n4systems.fieldid.ws.v2.resources.asset.ApiSubAssetResource;
 import com.n4systems.fieldid.ws.v2.resources.asset.attributevalues.ApiAttributeValueResource;
 import com.n4systems.fieldid.ws.v2.resources.assetattachment.ApiAssetAttachmentResource;
 import com.n4systems.fieldid.ws.v2.resources.authentication.AuthenticationResource;
+import com.n4systems.fieldid.ws.v2.resources.event.ApiEventResource;
+import com.n4systems.fieldid.ws.v2.resources.eventattachment.ApiEventAttachmentResource;
 import com.n4systems.fieldid.ws.v2.resources.offlineprofile.ApiOfflineProfileResource;
 import com.n4systems.fieldid.ws.v2.resources.tenant.ApiTenantResource;
 import com.n4systems.fieldid.ws.v2.resources.user.ApiPersonResource;
@@ -72,12 +73,6 @@ public class MobileApiConfig {
 
 	@Bean
 	@Scope("request")
-	public ApiSubAssetResource apiSubAssetResource() {
-		return new ApiSubAssetResource();
-	}
-
-	@Bean
-	@Scope("request")
 	public AuthenticationResource authenticationResource() {
 		return new AuthenticationResource();
 	}
@@ -110,5 +105,17 @@ public class MobileApiConfig {
 	@Scope("request")
 	public ApiAssetAttachmentResource apiAssetAttachmentResource() {
 		return new ApiAssetAttachmentResource();
+	}
+
+	@Bean
+	@Scope("request")
+	public ApiEventResource apiEventResource() {
+		return new ApiEventResource();
+	}
+
+	@Bean
+	@Scope("request")
+	public ApiEventAttachmentResource apiEventAttachmentResource() {
+		return new ApiEventAttachmentResource();
 	}
 }

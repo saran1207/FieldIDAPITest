@@ -5,10 +5,7 @@ import com.n4systems.fieldid.service.search.AssetSearchService;
 import com.n4systems.fieldid.ws.v2.resources.ApiModelHeader;
 import com.n4systems.fieldid.ws.v2.resources.ApiResource;
 import com.n4systems.fieldid.ws.v2.resources.asset.attributevalues.ApiAttributeValueResource;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AssetTypeGroup;
+import com.n4systems.model.*;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
@@ -26,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -34,7 +32,6 @@ import java.util.List;
 public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	
 	@Autowired private AssetService assetService;
-	@Autowired private ApiSubAssetResource apiSubAssetResource;
 	@Autowired private ApiAttributeValueResource apiAttributeValueResource;
 	@Autowired private AssetSearchService assetSearchService;
 
@@ -42,8 +39,21 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	@Path("query")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
-	public List<ApiModelHeader> query(
-			@QueryParam("id") List<String> assetIds,
+	public List<ApiModelHeader> query(@QueryParam("id") List<String> assetIds) {
+		if (assetIds.isEmpty()) return new ArrayList<>();
+
+		List<ApiModelHeader> results = persistenceService.findAll(
+				createModelHeaderQueryBuilder(Asset.class, "mobileGUID", "modified")
+						.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "mobileGUID", assetIds))
+		);
+		return results;
+	}
+
+	@GET
+	@Path("query/search")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Transactional(readOnly = true)
+	public List<ApiModelHeader> querySearch(
 			@QueryParam("rfidNumber") String rfidNumber,
 			@QueryParam("identifier") String identifier,
 			@QueryParam("referenceNumber") String referenceNumber,
@@ -61,17 +71,10 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			@QueryParam("orderByField") @DefaultValue("identified") String orderByField,
 			@QueryParam("orderByDirection") @DefaultValue("DESC") String orderByDirection) {
 
-
-		QueryBuilder<ApiModelHeader> builder;
-		if (assetIds != null && assetIds.size() > 0) {
-			builder = new QueryBuilder<>(Asset.class, securityContext.getUserSecurityFilter());
-			builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "mobileGUID", assetIds));
-		} else {
-			builder = createAssetSearchQuery(rfidNumber, identifier, referenceNumber, assignedTo, owner, location, predefinedLocationId, orderNumber, purchaseOrder, assetStatus, assetType, assetTypeGroup, identifiedFrom, identifiedTo, orderByField, orderByDirection);
-		}
-
-		builder.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, "mobileGUID", "modified"));
-		List<ApiModelHeader> results = persistenceService.findAll(builder);
+		List<ApiModelHeader> results = persistenceService.findAll(
+				createAssetSearchQuery(rfidNumber, identifier, referenceNumber, assignedTo, owner, location, predefinedLocationId, orderNumber, purchaseOrder, assetStatus, assetType, assetTypeGroup, identifiedFrom, identifiedTo, orderByField, orderByDirection)
+						.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, "mobileGUID", "modified"))
+		);
 		return results;
 	}
 
@@ -79,6 +82,8 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
 	public List<ApiAsset> findAll(@QueryParam("id") List<String> assetIds) {
+		if (assetIds.isEmpty()) return new ArrayList<>();
+
 		List<ApiAsset> apiAssets = convertAllEntitiesToApiModels(assetService.findByMobileId(assetIds));
 		return apiAssets;
 	}
@@ -161,8 +166,8 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		apiAsset.setTypeId(asset.getType().getId());
 		apiAsset.setOrderNumber(asset.getNonIntergrationOrderNumber());
 		apiAsset.setImage(assetService.loadAssetProfileImage(asset));
-		apiAsset.setMasterAsset(apiSubAssetResource.findMasterAsset(asset));
-		apiAsset.setSubAssets(apiSubAssetResource.findAndConvertSubAssets(asset));
+		apiAsset.setMasterAsset(findMasterAsset(asset));
+		apiAsset.setSubAssets(findAndConvertSubAssets(asset));
 		
 		if (asset.getAssetStatus() != null) {
 			apiAsset.setAssetStatusId(asset.getAssetStatus().getId());
@@ -196,6 +201,40 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		apiAsset.setAttributeValues(apiAttributeValueResource.convertInfoOptions(asset.getInfoOptions()));
 		
 		return apiAsset;
+	}
+
+	public ApiSubAsset findMasterAsset(Asset asset) {
+		QueryBuilder<SubAsset> query = new QueryBuilder<SubAsset>(SubAsset.class);
+		query.addWhere(WhereClauseFactory.create("asset", asset));
+		SubAsset subAsset = persistenceService.find(query); // Assumes that there will be only one MasterAsset for this one.
+		ApiSubAsset apiSubAsset = subAsset != null ? convertToApiSubAsset(subAsset.getMasterAsset()) : null;
+		return apiSubAsset;
+	}
+
+	public List<ApiSubAsset> findAndConvertSubAssets(Asset asset) {
+		List<ApiSubAsset> apiSubAssets = new ArrayList<ApiSubAsset>();
+		List<SubAsset> subAssets = findSubAssets(asset);
+
+		for(SubAsset subAsset: subAssets) {
+			ApiSubAsset apiSubAsset = convertToApiSubAsset(subAsset.getAsset());
+			apiSubAssets.add(apiSubAsset);
+		}
+
+		return apiSubAssets;
+	}
+
+	public List<SubAsset> findSubAssets(Asset asset) {
+		QueryBuilder<SubAsset> query = new QueryBuilder<SubAsset>(SubAsset.class);
+		query.addWhere(WhereClauseFactory.create("masterAsset", asset));
+		return persistenceService.findAll(query);
+	}
+
+	private ApiSubAsset convertToApiSubAsset(Asset asset) {
+		ApiSubAsset apiSubAsset = new ApiSubAsset();
+		apiSubAsset.setSid(asset.getMobileGUID());
+		apiSubAsset.setType(asset.getType().getName());
+		apiSubAsset.setIdentifier(asset.getIdentifier());
+		return apiSubAsset;
 	}
 
 }
