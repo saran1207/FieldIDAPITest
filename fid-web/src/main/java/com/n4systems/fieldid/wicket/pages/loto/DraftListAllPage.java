@@ -129,7 +129,7 @@ public class DraftListAllPage extends ProceduresAllListPage implements IAjaxIndi
         add(procedureDefinitionListPanel = new ProcedureListPanel("procedureDefinitionListPanel", dataProvider) {
             @Override
             protected void addCustomColumns(List<IColumn<? extends ProcedureDefinition>> columns) {
-                columns.add(new ProcedureDateColumn(new FIDLabelModel("label.modified"), "modified", "modified"));
+                columns.add(new ProcedureDateColumn(new FIDLabelModel("label.modified"), "modified", "modified", true));
             }
 
             @Override
