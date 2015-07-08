@@ -17,7 +17,11 @@ import java.util.Date;
 public class ProcedureDateCell extends Panel {
 
     public ProcedureDateCell(String id, IModel<? extends ProcedureDefinition> procedureModel, String property) {
+        this(id, procedureModel, property, false);
+    }
+
+    public ProcedureDateCell(String id, IModel<? extends ProcedureDefinition> procedureModel, String property, boolean includeTime) {
         super(id);
-        add(new Label("createdDate", new DayDisplayModel(new PropertyModel<>(procedureModel, property)).withTimeZone(FieldIDSession.get().getSessionUser().getTimeZone())));
+        add(new Label("createdDate", new DayDisplayModel(new PropertyModel<>(procedureModel, property), includeTime, FieldIDSession.get().getSessionUser().getTimeZone())));
     }
 }
