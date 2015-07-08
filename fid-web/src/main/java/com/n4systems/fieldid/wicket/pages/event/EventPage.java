@@ -461,7 +461,10 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
                                }
                            } else if (criteriaResult instanceof UnitOfMeasureCriteriaResult) {
                                if (StringUtils.isEmpty(((UnitOfMeasureCriteriaResult) criteriaResult).getPrimaryValue())) {
-                                   error(getCriteriaErrorMessage(REQUIRED_CHOICE, criteriaResult, sectionResult));
+                                   error(getCriteriaErrorMessage(REQUIRED_INPUT, criteriaResult, sectionResult));
+                               } else if (((UnitOfMeasureCriteria)criteriaResult.getCriteria()).getSecondaryUnit() != null
+                                       && StringUtils.isEmpty(((UnitOfMeasureCriteriaResult) criteriaResult).getSecondaryValue())) {
+                                   error(getCriteriaErrorMessage(REQUIRED_INPUT, criteriaResult, sectionResult));
                                }
                            } else if (criteriaResult instanceof SignatureCriteriaResult) {
                                if (!((SignatureCriteriaResult) criteriaResult).hasImageInMemoryOrTemporaryFile()) {
