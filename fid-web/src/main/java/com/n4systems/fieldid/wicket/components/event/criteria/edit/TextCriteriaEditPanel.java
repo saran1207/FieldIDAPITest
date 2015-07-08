@@ -16,11 +16,6 @@ public class TextCriteriaEditPanel extends Panel {
         TextField<String> textField = new TextField<String>("textField", new PropertyModel<String>(resultModel, "value"));
         textField.add(new UpdateComponentOnChange());
 
-        if(resultModel.getObject().getCriteria().isRequired()) {
-            textField.setRequired(true);
-            textField.add(new AttributeAppender("required", "true").setSeparator(" "));
-        }
-
         add(textField);
     }
 
