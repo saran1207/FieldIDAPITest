@@ -364,7 +364,7 @@ div.unitDescriptor {
 }
 
 .dateFieldConfiguration, .labelled-checkbox {
-	padding : 20px 10px;
+	padding : 10px;
 	clear: both;
 	float: none;
 }
