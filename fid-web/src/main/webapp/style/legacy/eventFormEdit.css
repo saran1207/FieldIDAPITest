@@ -75,7 +75,7 @@ div.criteriaSections div.itemLinkTitle {
 div.criteriaSections div.itemLinkTitle a {
     padding-top: 10px;
     padding-bottom: 10px;
-    text-decoration: none;
+    text-decoration: underline;
     color: #000000;
     width: 100%;
     display:block;
