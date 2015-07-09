@@ -10,6 +10,7 @@ import com.n4systems.fieldid.ws.v2.resources.assetattachment.ApiAssetAttachmentR
 import com.n4systems.fieldid.ws.v2.resources.authentication.AuthenticationResource;
 import com.n4systems.fieldid.ws.v2.resources.event.ApiEventResource;
 import com.n4systems.fieldid.ws.v2.resources.eventattachment.ApiEventAttachmentResource;
+import com.n4systems.fieldid.ws.v2.resources.eventhistory.ApiEventHistoryResource;
 import com.n4systems.fieldid.ws.v2.resources.offlineprofile.ApiOfflineProfileResource;
 import com.n4systems.fieldid.ws.v2.resources.tenant.ApiTenantResource;
 import com.n4systems.fieldid.ws.v2.resources.user.ApiPersonResource;
@@ -117,5 +118,11 @@ public class MobileApiConfig {
 	@Scope("request")
 	public ApiEventAttachmentResource apiEventAttachmentResource() {
 		return new ApiEventAttachmentResource();
+	}
+
+	@Bean
+	@Scope("request")
+	public ApiEventHistoryResource ApiEventHistoryResource() {
+		return new ApiEventHistoryResource();
 	}
 }
