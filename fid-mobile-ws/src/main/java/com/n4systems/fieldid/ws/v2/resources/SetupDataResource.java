@@ -30,18 +30,8 @@ public abstract class SetupDataResource<A, E extends AbstractEntity> extends Api
 			builder.addWhere(WhereClauseFactory.create(Comparator.GT, "modified", after));
 		}
 		builder.addOrder("id");
-        addTermsToBuilder(builder);
 		return builder;
 	}
-
-	protected QueryBuilder<E> createFindSingleBuilder(String id) {
-		QueryBuilder<E> builder = createTenantSecurityBuilder(entityClass, true);
-		builder.addWhere(WhereClauseFactory.create("id", Long.valueOf(id)));
-        addTermsToBuilder(builder);
-		return builder;
-	}
-
-    protected void addTermsToBuilder(QueryBuilder<E> builder) {}
 	
 	@GET
 	@Consumes(MediaType.TEXT_PLAIN)
@@ -52,33 +42,12 @@ public abstract class SetupDataResource<A, E extends AbstractEntity> extends Api
 			@DefaultValue("0") @QueryParam("page") int page,
 			@DefaultValue("500") @QueryParam("pageSize") int pageSize) {
 
-		ListResponse<A> response = getApiPage(after, page, pageSize);
-		return response;
-	}
-
-	protected ListResponse<A> getApiPage(DateParam after, int page, int pageSize) {
 		QueryBuilder<E> builder = createFindAllBuilder(after);
 		List<E> entityModels = persistenceService.findAll(builder, page, pageSize);
 		Long total = persistenceService.count(builder);
 
 		List<A> apiModels = convertAllEntitiesToApiModels(entityModels);
-		return new ListResponse<A>(apiModels, page, pageSize, total);
-	}
-
-	@GET
-	@Path("{id}")
-	@Consumes(MediaType.TEXT_PLAIN)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional(readOnly = true)
-	public A find(@PathParam("id") String id) {
-		QueryBuilder<E> builder = createFindSingleBuilder(id);
-		E entityModel = persistenceService.find(builder);
-		if (entityModel == null) {
-			throw new NotFoundException("Resource not found at [" + id + "]");
-		}
-		
-		A apiModel = convertEntityToApiModel(entityModel);
-		return apiModel;
+		return new ListResponse<>(apiModels, page, pageSize, total);
 	}
 	
 }

@@ -7,17 +7,14 @@ import com.n4systems.fieldid.ws.v2.resources.model.DateParam;
 import com.n4systems.fieldid.ws.v2.resources.model.ListResponse;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.util.persistence.WhereParameter;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.Path;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -26,12 +23,48 @@ import java.util.regex.Pattern;
 @Component
 @Path("organization")
 public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
+	private static Logger logger = Logger.getLogger(ApiOrgResource.class);
 
     @Autowired
     private S3Service s3Service;
 
 	public ApiOrgResource() {
 		super(BaseOrg.class, true);
+	}
+
+	@Override
+	public ListResponse<ApiOrg> findAll(DateParam after, @DefaultValue("0") int page, @DefaultValue("500") int pageSize) {
+		ListResponse<ApiOrg> apiOrgs = super.findAll(after, page, pageSize);
+		attachOrgImages(apiOrgs.getList());
+		return apiOrgs;
+	}
+
+	public void attachOrgImages(List<ApiOrg> orgs) {
+		/*
+		Note: Rather than checking each org for an image, we fetch ALL customer logo images, parse the id
+		from the filename and then match up the org.  This is much faster because we do not know if the org has a logo
+		image until we try and fetch it from S3.  Given 1000 orgs, that would be 1000 GET requests, most of which will 404
+		since the ratio of org images to orgs is very low.
+		 */
+		List<S3ObjectSummary> s3Images = s3Service.getAllCustomerLogos();
+
+		// parse the id from the org
+		Pattern p = Pattern.compile("^.*/" + S3Service.CUSTOMER_FILE_PREFIX + "(\\d+)\\." + S3Service.CUSTOMER_FILE_EXT + "$");
+		for (S3ObjectSummary image: s3Images) {
+			Matcher m = p.matcher(image.getKey());
+			if (m.matches()) {
+				long orgId = Long.parseLong(m.group(1));
+				ApiOrg apiOrg = orgs.stream().filter(o -> o.getSid().equals(orgId)).findFirst().orElse(null);
+
+				if (apiOrg != null) {
+					try {
+						apiOrg.setImage(s3Service.downloadCustomerLogo(orgId));
+					} catch (IOException e) {
+						logger.warn(e);
+					}
+				}
+			}
+		}
 	}
 
 	@Override
@@ -59,49 +92,6 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 			apiOrg.setDivisionId(baseOrg.getDivisionOrg().getId());
 		}
 		return apiOrg;
-	}
-
-	/*
-	Returns list of all customer logos and their corresponding org id.  This is used by mobile
-	as a speed improvement to the synchronization process.
-	 */
-	@GET
-	@Path("images")
-	@Consumes(MediaType.TEXT_PLAIN)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional(readOnly = true)
-	public ListResponse<ApiOrgImage> findAllOrgImages(@QueryParam("after") DateParam after) {
-		/*
-		Note: Rather than loading orgs first and fetching images, we fetch ALL customer logo images, parse the id
-		from the filename and then load the org.  This is much faster because we do not know if the org has a logo
-		image until we try and fetch it from S3.  Given 1000 orgs, that would be 1000 GET requests, most of which will 404
-		since the ratio of org images to orgs is very low.
-		 */
-		List<S3ObjectSummary> s3Images = s3Service.getAllCustomerLogos();
-		List<ApiOrgImage> orgImages = new ArrayList<>();
-
-		// parse the id from the org
-		Pattern p = Pattern.compile("^.*/" + S3Service.CUSTOMER_FILE_PREFIX + "(\\d+)\\." + S3Service.CUSTOMER_FILE_EXT + "$");
-		for (S3ObjectSummary image: s3Images) {
-			Matcher m = p.matcher(image.getKey());
-			if (m.matches()) {
-				/*
-				We still need to attempt to load the org as it may be archived (the images are not removed when an org is archived).
-				We can apply date filtering at the same time
-				*/
-				long orgId = Long.parseLong(m.group(1));
-				QueryBuilder<BaseOrg> query = createTenantSecurityBuilder(BaseOrg.class).addWhere(WhereClauseFactory.create("id", orgId));
-				if (after != null) {
-					query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GT, "modified", after));
-				}
-
-				if (persistenceService.exists(query)) {
-					orgImages.add(new ApiOrgImage(orgId, s3Service.getCustomerLogoURL(orgId)));
-				}
-			}
-		}
-		ListResponse<ApiOrgImage> response = new ListResponse<>(orgImages, 0, 100, orgImages.size());
-		return response;
 	}
 
 	private String convertAddress(AddressInfo addressInfo) {

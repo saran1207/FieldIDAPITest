@@ -9,6 +9,7 @@ public class ApiOrg extends ApiReadonlyModel {
 	private Long customerId;
 	private Long divisionId;
 	private String address;
+	private byte[] image;
 
 	public String getName() {
 		return name;
@@ -56,5 +57,13 @@ public class ApiOrg extends ApiReadonlyModel {
 
 	public String getAddress() {
 		return address;
+	}
+
+	public byte[] getImage() {
+		return image;
+	}
+
+	public void setImage(byte[] image) {
+		this.image = image;
 	}
 }

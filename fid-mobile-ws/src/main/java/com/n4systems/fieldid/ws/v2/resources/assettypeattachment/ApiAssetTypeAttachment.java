@@ -7,7 +7,6 @@ import java.net.URL;
 public class ApiAssetTypeAttachment extends ApiReadWriteModel {
 	private Long assetTypeId;
 	private String comments;
-	private byte[] data;
 	private URL url;
 	private String mimeType;
 	private String fileName;
@@ -26,14 +25,6 @@ public class ApiAssetTypeAttachment extends ApiReadWriteModel {
 
 	public void setComments(String comments) {
 		this.comments = comments;
-	}
-
-	public byte[] getData() {
-		return data;
-	}
-
-	public void setData(byte[] data) {
-		this.data = data;
 	}
 
 	public URL getUrl() {
