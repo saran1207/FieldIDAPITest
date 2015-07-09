@@ -2,7 +2,6 @@ package com.n4systems.fieldid.viewhelpers.handlers;
 
 import com.n4systems.fieldid.service.download.TableGenerationContext;
 import com.n4systems.fieldid.service.download.WebOutputHandler;
-import com.n4systems.util.DateHelper;
 import com.n4systems.util.FieldIdDateFormatter;
 import com.n4systems.util.time.DateUtil;
 
@@ -25,7 +24,7 @@ public class LastEventDateOutputHandler extends WebOutputHandler {
     public String handleWeb(Long entityId, Object value) {
         String cellString = "";
         if(value instanceof Date) {
-            value = DateHelper.localizeDate((Date) value, contextProvider.getTimeZone());
+//            value = DateHelper.localizeDate((Date) value, contextProvider.getTimeZone());
             cellString = new FieldIdDateFormatter(((Date)value), contextProvider, true, !DateUtil.isMidnight((Date) value)).format();
         }
 

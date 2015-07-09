@@ -16,16 +16,11 @@ import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.EventScheduleServiceImpl;
 import com.n4systems.services.signature.SignatureService;
 import com.n4systems.tools.FileDataContainer;
-import com.n4systems.util.ContentTypeUtil;
 import com.n4systems.util.ServiceLocator;
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import rfid.ejb.entity.InfoOptionBean;
 
 import javax.persistence.EntityManager;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.*;
 
@@ -58,7 +53,9 @@ public class ManagerBackedEventSaver implements EventSaver {
 
 		setOrderForSubEvents(parameterObject.event);
 
-        Date completedDate = parameterObject.event.getDate();
+//        Date completedDate = parameterObject.event.getDate() == null ? null : DateHelper.delocalizeDate(parameterObject.event.getDate(), persistenceManager.find(User.class, parameterObject.userId).getTimeZone());
+
+		Date completedDate = parameterObject.event.getDate();
 
         //findOrCreateSchedule(parameterObject.event, parameterObject.scheduleId);
 
@@ -71,6 +68,8 @@ public class ManagerBackedEventSaver implements EventSaver {
         parameterObject.event.setDate(completedDate);
 
         parameterObject.event.setWorkflowState(WorkflowState.COMPLETED);
+
+		parameterObject.event.setCompletedDate(completedDate);
 
         Map<Long, byte[]> rememberedSignatureImages = collectSignatureImageData(parameterObject.event);
 
@@ -236,6 +235,9 @@ public class ManagerBackedEventSaver implements EventSaver {
 		assignedToUpdates(event, asset);
 		gpsUpdates(event, asset);
 		
+		//Here, we need to update the asset and all of its sub-assets.
+		updateLastEventDate(event, asset);
+		
 		try {
 			legacyAssetManager.update(asset, modifiedBy);
 		} catch (SubAssetUniquenessException e) {
@@ -243,6 +245,18 @@ public class ManagerBackedEventSaver implements EventSaver {
 			throw new RuntimeException(e);
 		}
 
+	}
+
+	private void updateLastEventDate(ThingEvent event, Asset asset) {
+		//So first we update the last event date on the Asset...
+		if(event.getCompletedDate() != null &&
+				(asset.getLastEventDate() == null || event.getCompletedDate().after(asset.getLastEventDate()))) {
+			asset.setLastEventDate(event.getCompletedDate());
+		}
+
+		//FIXME If it turns out SubAssets need their Last Event Date set then we have some more work to do.
+		//You'll need to read up all SubAssets as full assets to update their Last Event Date, then save each asset
+		//individually.
 	}
 
 	private void assignedToUpdates(Event event, Asset asset) {
