@@ -33,13 +33,23 @@ public class DateAttributeEditor extends FormComponentPanel<InfoOptionBean> {
             } catch(NumberFormatException e) { }
         }
 
+
         DateTimePicker picker = new DateTimePicker("datePicker", new UserToUTCDateModel(new PropertyModel<Date>(this, "selectedDate")));
-        add(picker.setIncludeTime(includeTime).withNoAllDayCheckbox());
+        add(picker.setIncludeTime(includeTime).withNoAllDayCheckbox().withoutPerformSetDateOnInitialization());
         ValidationBehavior.addValidationBehaviorToComponent(picker.getDateTextField());
         picker.getDateTextField().add(new ValidateIfRequiredValidator<Date>(infoField));
         picker.getDateTextField().add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
+                InfoOptionBean option = getModel().getObject();
+                if (option.isStaticData()) {
+                    throw new IllegalStateException("Attempt to edit static option -- not allowed");
+                }
+                if (selectedDate == null) {
+                    option.setName(null);
+                } else {
+                    option.setName(selectedDate.getTime() + "");
+                }
             }
         });
     }
