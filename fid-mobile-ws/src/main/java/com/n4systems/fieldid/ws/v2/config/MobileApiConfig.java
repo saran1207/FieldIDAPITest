@@ -12,6 +12,7 @@ import com.n4systems.fieldid.ws.v2.resources.event.ApiEventResource;
 import com.n4systems.fieldid.ws.v2.resources.eventattachment.ApiEventAttachmentResource;
 import com.n4systems.fieldid.ws.v2.resources.eventhistory.ApiEventHistoryResource;
 import com.n4systems.fieldid.ws.v2.resources.offlineprofile.ApiOfflineProfileResource;
+import com.n4systems.fieldid.ws.v2.resources.org.ApiOrgResource;
 import com.n4systems.fieldid.ws.v2.resources.tenant.ApiTenantResource;
 import com.n4systems.fieldid.ws.v2.resources.user.ApiPersonResource;
 import com.n4systems.fieldid.ws.v2.resources.user.ApiUserResource;
@@ -122,7 +123,13 @@ public class MobileApiConfig {
 
 	@Bean
 	@Scope("request")
-	public ApiEventHistoryResource ApiEventHistoryResource() {
+	public ApiEventHistoryResource apiEventHistoryResource() {
 		return new ApiEventHistoryResource();
+	}
+
+	@Bean
+	@Scope("request")
+	public ApiOrgResource apiOrgResource() {
+		return new ApiOrgResource();
 	}
 }
