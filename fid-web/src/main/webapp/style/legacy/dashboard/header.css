@@ -1,5 +1,9 @@
 .headerPanel {
     padding-bottom: 15px;
+    color: #666666;
+    font-size: 30px;
+    font-family: "proxima-nova";
+    font-weight: 200;
 }
 
 .selectLayout {
@@ -28,20 +32,25 @@
     margin-right: 5px;
 }
 
+.menuButton {
+    padding-bottom: 10px;
+}
+
 .downArrow {
     vertical-align: middle;
     margin-left: 3px;
 }
 
 .layoutList {
-    margin-left: 132px;
-    padding: 10px;
+    margin-left: 0px;
+    margin-top: 60px;
+    padding: 25px;
     border: 1px solid #DDDDDD;
     box-shadow:5px 0 2px -5px #CCCCCC, -5px 0 2px -5px #CCCCCC, 0 2px 5px 0 #CCCCCC;
-    width: 220px;
+    width: 385px;
     position: absolute;
     top: 30px;
-    background: white;
+    background: black;
     z-index: 10;
 }
 
@@ -50,9 +59,14 @@
 }
 
 .layoutItem {
-    line-height: 30px;
+    line-height: 50px;
 }
 
+.manageDashboard a {
+    color: green;
+    font-size: 1.2em;
+    text-decoration: none;
+}
 
 .layoutItem a {
     color: #777;
@@ -62,5 +76,5 @@
 
 .printIcon {
     float:left;
-    padding:5px 10px 0 0;
+    padding:15px 20px 0 0;
 }

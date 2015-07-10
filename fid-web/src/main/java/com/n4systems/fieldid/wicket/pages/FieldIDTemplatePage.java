@@ -109,6 +109,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
     private TopFeedbackPanel topFeedbackPanel;
     private ModalWindow languageSelectionModalWindow;
     private final SelectLanguagePanel selectLanguagePanel;
+    protected boolean showTitle = true;
 
     public FieldIDTemplatePage() {
         this(null, null);
@@ -169,8 +170,10 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         addNavBar("navBar");
         addBreadCrumbBar("breadCrumbBar");
 
+
         add(titleLabel = createTitleLabel("titleLabel"));
         titleLabel.setRenderBodyOnly(true);
+        titleLabel.setVisible(isShowTitle());
 
         add(topTitleLabel = useTopTitleLabel() ? createTopTitleLabel("topTitleLabel") : createTitleLabel("topTitleLabel"));
         topTitleLabel.setRenderBodyOnly(true);
@@ -589,6 +592,14 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         lotoLinkContainer.setVisible(getSecurityGuard().isLotoEnabled());
 
         return lotoLinkContainer;
+    }
+
+    public boolean isShowTitle() {
+        return showTitle;
+    }
+
+    public void setShowTitle(boolean showTitle) {
+        this.showTitle = showTitle;
     }
 
     static class StaticImage extends WebComponent {

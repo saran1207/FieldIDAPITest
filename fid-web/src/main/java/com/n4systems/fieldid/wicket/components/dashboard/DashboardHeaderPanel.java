@@ -17,6 +17,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -27,36 +28,60 @@ public class DashboardHeaderPanel extends Panel {
     @SpringBean
     private DashboardService dashboardService;
 
+    ContextImage menuImage;
+    ContextImage hideMenuImage;
 
     public DashboardHeaderPanel(String id) {
         super(id);
 
         add(new ContextImage("printIcon", "images/print-icon.png"));
 
+        menuImage = new ContextImage("menuButton", "images/menu_button_16.png");
+        add(menuImage);
+
+
+        hideMenuImage = new ContextImage("hideMenuImage", "images/collapse-menu.png");
+        add(hideMenuImage);
+
         add(new Label("name", new PropertyModel<DashboardLayout>(new CurrentLayoutModel(), "name")));
+
+
 
         ListView<DashboardLayout> layoutListView = new ListView<DashboardLayout>("layoutList", createDashboardLayoutsModel()) {
             @Override
             protected void populateItem(ListItem<DashboardLayout> item) {
                 final DashboardLayout layout = item.getModelObject();
-                Link<Void> selectLink = new Link<Void>("link") {
-                    @Override
-                    public void onClick() {
-                        DashboardLayout selectedLayout = dashboardService.findLayout();
-                        selectedLayout.setSelected(false);
-                        layout.setSelected(true);
-                        dashboardService.saveLayout(selectedLayout);
-                        dashboardService.saveLayout(layout);
-                        setResponsePage(DashboardPage.class);
-                    }
-                };
-                item.add(selectLink);
-                selectLink.add(new Label("name", new PropertyModel<DashboardLayout>(layout, "name")));
+                if (!layout.getName().equals("Manage Dashboards")) {
+                    Link<Void> selectLink = new Link<Void>("link") {
+                        @Override
+                        public void onClick() {
+                            DashboardLayout selectedLayout = dashboardService.findLayout();
+                            selectedLayout.setSelected(false);
+                            layout.setSelected(true);
+                            dashboardService.saveLayout(selectedLayout);
+                            dashboardService.saveLayout(layout);
+                            setResponsePage(DashboardPage.class);
+                        }
+                    };
+                    item.add(selectLink);
+                    selectLink.add(new Label("name", new PropertyModel<DashboardLayout>(layout, "name")));
+                } else {
+                    AjaxLink selectLink = new AjaxLink<Void>("link") {
+                        @Override
+                        public void onClick(AjaxRequestTarget target) {
+                            onManageDashboard(target);
+                        }
+                    };
+                    item.add(selectLink);
+                    selectLink.add(new Label("name", new PropertyModel<DashboardLayout>(layout, "name")));
+                    item.add(new AttributeAppender("class", new Model<String>(" manageDashboard"), ""));
+                }
             }
         };
 
         layoutListView.setOutputMarkupPlaceholderTag(true);
         add(layoutListView);
+
 
         HiddenField<Long> layoutCount;
         add(layoutCount = new HiddenField<Long>("layoutCount", createDashboardLayoutCountModel()));
@@ -72,6 +97,8 @@ public class DashboardHeaderPanel extends Panel {
         addWidgetsLink.setMarkupId("addWidgetsLink");
         addWidgetsLink.add(new AttributeAppender("title", new FIDLabelModel("label.tooltip.add_new_widget")));
 
+
+        /*
         AjaxLink manageDashboardLink;
         add(manageDashboardLink = new AjaxLink<Void>("manageDashboardLink") {
             @Override
@@ -80,6 +107,8 @@ public class DashboardHeaderPanel extends Panel {
             }
         });
         manageDashboardLink.add(new AttributeAppender("title", new FIDLabelModel("label.tooltip.manage_dashboard")));
+        //manageDashboardLink.add(new ContextImage("menuButton", "images/menu_button_16.png"));
+        */
 
     }
 
@@ -101,7 +130,14 @@ public class DashboardHeaderPanel extends Panel {
         return new LoadableDetachableModel<List<DashboardLayout>>() {
             @Override
             protected List<DashboardLayout> load() {
-                return dashboardService.findDashboardLayouts(true);
+                List<DashboardLayout> list = dashboardService.findDashboardLayouts(true);
+
+                //Add the manage dashboards link to the list of layouts.
+                DashboardLayout manageLink = new DashboardLayout();
+                manageLink.setName("Manage Dashboards");
+                list.add(manageLink);
+
+                return list;
             }
         };
     }
@@ -110,7 +146,9 @@ public class DashboardHeaderPanel extends Panel {
         return new LoadableDetachableModel<Long>() {
             @Override
             protected Long load() {
+
                 return dashboardService.countDashboardLayouts();
+
             }
         };
     }

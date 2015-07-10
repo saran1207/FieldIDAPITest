@@ -73,6 +73,7 @@ public class DashboardPage extends FieldIDTemplatePage {
     	super(configProvider);
 
         currentLayoutModel = new CurrentLayoutModel();
+        setShowTitle(false);
 
         add(content = addContent("content"));
     }
@@ -345,7 +346,8 @@ public class DashboardPage extends FieldIDTemplatePage {
 
     @Override
     protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("label.dashboard"));
+        //return new Label(labelId, new FIDLabelModel("label.dashboard"));
+        return new Label(labelId, "");
     }
 
     protected void redirectToSetupWizardIfNecessary() {

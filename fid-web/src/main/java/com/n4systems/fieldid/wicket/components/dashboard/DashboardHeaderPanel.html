@@ -7,10 +7,29 @@
 <wicket:panel>
 
     <div class="selectLayout">
-        <h2><wicket:message key="label.dashboard"/> /
+        <h2>
+
+            <a class="tipsy-tooltip" id="layoutListLink" href="javascript:void(0);">
+                <img id="menuButton" wicket:id="menuButton" class="menuButton">
+                <img id="hideMenuImage" wicket:id="hideMenuImage" style="display: none" class="menuButton">
+            </a>
+
+            <span wicket:id="name"/>
+
+            <!--
+            <a class="tipsy-tooltip" wicket:id="manageDashboardLink">
+                <img class="menuButton" wicket:id="menuButton"/>
+            </a>
+            -->
+
+
+            <!--
             <a id="layoutListLink" href="javascript:void(0);">
                 <span wicket:id="name"/><img id="downArrow" class="downArrow" src="/fieldid/images/down-arrow.png">
             </a>
+            -->
+
+
         </h2>
     </div>
 
@@ -19,8 +38,8 @@
 
     <div class="configureLayout">
         <img class="printIcon" wicket:id="printIcon" onclick="window.print();"/>
-        <a class="tipsy-tooltip mattButton" wicket:id="addWidgetsLink"><wicket:message key="label.widgets"/></a>
-        <a class="tipsy-tooltip mattButton" wicket:id="manageDashboardLink"><wicket:message key="label.dashboards"/></a>
+
+        <a class="tipsy-tooltip btn-secondary" wicket:id="addWidgetsLink"><wicket:message key="label.widgets"/></a>
     </div>
 
     <div id="layoutList" class="layoutList" style="display: none">
