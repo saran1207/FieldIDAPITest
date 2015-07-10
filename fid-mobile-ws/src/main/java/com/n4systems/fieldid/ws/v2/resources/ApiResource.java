@@ -1,19 +1,13 @@
 package com.n4systems.fieldid.ws.v2.resources;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
-import com.n4systems.fieldid.ws.v2.exceptions.NotFoundException;
 import com.n4systems.fieldid.ws.v2.filters.RequestContext;
 import com.n4systems.model.parents.AbstractEntity;
-import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.ServletRequest;
 import java.util.List;
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -36,14 +30,6 @@ public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPe
         return entityModels.stream().map(converter).filter(r -> r != null).collect(Collectors.toList());
     }
 
-    protected <T extends EntityWithTenant> T findEntity(Class<T> entityClass, Long id) {
-        T entity = persistenceService.findUsingTenantOnlySecurityWithArchived(entityClass, id);
-        if (entity == null) {
-            throw new NotFoundException(entityClass.getSimpleName(), id);
-        }
-        return entity;
-    }
-
     private long formatVersion(int major, int minor, int patch) {
         return (major * 10000) + (minor * 100) + patch;
     }
@@ -52,17 +38,6 @@ public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPe
         return requestContext.getContext().getHeaderString("X-APPINFO-APPVERSION");
     }
 
-    public ServletRequest getObject() {
-        return currentRequestAttributes().getRequest();
-    }
-
-    private static ServletRequestAttributes currentRequestAttributes() {
-        RequestAttributes requestAttr = RequestContextHolder.currentRequestAttributes();
-        if (!(requestAttr instanceof ServletRequestAttributes)) {
-            throw new IllegalStateException("Current request is not a servlet request");
-        }
-        return (ServletRequestAttributes) requestAttr;
-    }
 
     protected long getVersionNumber() {
         long version = 0;
@@ -80,12 +55,14 @@ public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPe
         return version;
     }
 
+	@SuppressWarnings("unused")
     protected boolean versionEqualOrGreaterThan(int major, int minor, int patch) {
         long mobileVersion = getVersionNumber();
         long checkVersion = formatVersion(major, minor, patch);
         return (mobileVersion >= checkVersion);
     }
 
+	@SuppressWarnings("unused")
     protected boolean versionLessThan(int major, int minor, int patch) {
         long mobileVersion = getVersionNumber();
         long checkVersion = formatVersion(major, minor, patch);

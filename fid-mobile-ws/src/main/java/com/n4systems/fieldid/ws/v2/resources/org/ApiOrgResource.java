@@ -3,21 +3,14 @@ package com.n4systems.fieldid.ws.v2.resources.org;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.ws.v2.resources.SetupDataResource;
-import com.n4systems.fieldid.ws.v2.resources.model.DateParam;
-import com.n4systems.fieldid.ws.v2.resources.model.ListResponse;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.orgs.BaseOrg;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -36,17 +29,8 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 		super(BaseOrg.class, true);
 	}
 
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional(readOnly = true)
 	@Override
-	public ListResponse<ApiOrg> findAll(DateParam after, @DefaultValue("0") int page, @DefaultValue("500") int pageSize) {
-		ListResponse<ApiOrg> apiOrgs = super.findAll(after, page, pageSize);
-		attachOrgImages(apiOrgs.getList());
-		return apiOrgs;
-	}
-
-	public void attachOrgImages(List<ApiOrg> orgs) {
+	protected void postConvertAll(List<ApiOrg> orgs) {
 		/*
 		Note: Rather than checking each org for an image, we fetch ALL customer logo images, parse the id
 		from the filename and then match up the org.  This is much faster because we do not know if the org has a logo

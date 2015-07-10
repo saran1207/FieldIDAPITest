@@ -9,7 +9,10 @@ import com.n4systems.util.persistence.WhereParameter.Comparator;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.ws.rs.*;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.Date;
 import java.util.List;
@@ -32,6 +35,8 @@ public abstract class SetupDataResource<A, E extends AbstractEntity> extends Api
 		builder.addOrder("id");
 		return builder;
 	}
+
+	protected void postConvertAll(List<A> apiModels) {}
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -46,6 +51,7 @@ public abstract class SetupDataResource<A, E extends AbstractEntity> extends Api
 		Long total = persistenceService.count(builder);
 
 		List<A> apiModels = convertAllEntitiesToApiModels(entityModels);
+		postConvertAll(apiModels);
 		return new ListResponse<>(apiModels, page, pageSize, total);
 	}
 	
