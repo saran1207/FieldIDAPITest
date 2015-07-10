@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.event;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.action.ActionsPanel;
 import com.n4systems.fieldid.wicket.components.event.criteria.edit.CriteriaActionButton;
 import com.n4systems.fieldid.wicket.components.event.criteria.factory.CriteriaEditorFactory;
@@ -107,7 +108,12 @@ public class CriteriaSectionEditPanel extends Panel {
 
                     item.add(createCriteriaHelpTooltip(item, criteriaResult));
 
-                    item.add(new Label("criteriaName", new PropertyModel<String>(item.getModel(), "criteria.displayText")));
+                    if (criteriaResult.getCriteria().isRequired()) {
+                        item.add(new FlatLabel("requiredIndicatior", "*"));
+                    } else {
+                        item.add(new FlatLabel("requiredIndicatior"));
+                    }
+                    item.add(new FlatLabel("criteriaName", new PropertyModel<String>(item.getModel(), "criteria.displayText")));
                     item.add(CriteriaEditorFactory.createEditorFor("criteriaEditor", item.getModel()));
                     item.add(new CriteriaActionButton("recommendationsButton", "images/rec-icon.png", criteriaResult.getRecommendations().size(), "label.recommendations", "mattButtonMiddle") {
                         @Override
