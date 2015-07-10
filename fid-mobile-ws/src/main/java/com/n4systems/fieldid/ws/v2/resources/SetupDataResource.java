@@ -34,7 +34,6 @@ public abstract class SetupDataResource<A, E extends AbstractEntity> extends Api
 	}
 	
 	@GET
-	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
 	public ListResponse<A> findAll(

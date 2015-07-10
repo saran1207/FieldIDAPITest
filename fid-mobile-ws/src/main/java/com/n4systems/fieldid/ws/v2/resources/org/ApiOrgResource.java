@@ -11,9 +11,13 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -32,6 +36,9 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 		super(BaseOrg.class, true);
 	}
 
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Transactional(readOnly = true)
 	@Override
 	public ListResponse<ApiOrg> findAll(DateParam after, @DefaultValue("0") int page, @DefaultValue("500") int pageSize) {
 		ListResponse<ApiOrg> apiOrgs = super.findAll(after, page, pageSize);
