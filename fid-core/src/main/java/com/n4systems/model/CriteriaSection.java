@@ -29,6 +29,8 @@ public class CriteriaSection extends EntityWithTenant implements Listable<Long>,
 
     private boolean optional = false;
 
+	private boolean required = false;
+
     @Transient
     private Long oldId;
 	
@@ -102,7 +104,20 @@ public class CriteriaSection extends EntityWithTenant implements Listable<Long>,
         this.optional = optional;
     }
 
-    @Override
+	public boolean isRequired() {
+		return required;
+	}
+
+	public void setRequired(boolean required) {
+		this.required = required;
+		if (required) {
+			criteria.stream()
+					.filter(c -> !(c instanceof OneClickCriteria) && !(c instanceof ObservationCountCriteria))
+					.forEach(c -> c.setRequired(required));
+		}
+	}
+
+	@Override
 	public String toString() {
 		return "CriteriaSection [" + title + "]";
 	}
@@ -118,7 +133,7 @@ public class CriteriaSection extends EntityWithTenant implements Listable<Long>,
         return availableCriteria;
     }
 
-    public Long getOldId() {
+	public Long getOldId() {
         return oldId;
     }
 

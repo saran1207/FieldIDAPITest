@@ -181,7 +181,7 @@ public class ExcelXSSFMapWriter implements MapWriter {
             if (value instanceof NonConvertingDateTime) {
                 cell.setCellValue((Date)value);
             } else {
-                cell.setCellValue(DateHelper.convertToUserTimeZone((Date) value, dateTimeDefiner.getTimeZone()));
+                cell.setCellValue(DateHelper.localizeDate((Date) value, dateTimeDefiner.getTimeZone()));
             }
 
             // override the default style for dates

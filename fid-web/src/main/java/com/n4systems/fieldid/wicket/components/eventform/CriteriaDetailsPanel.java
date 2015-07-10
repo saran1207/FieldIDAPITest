@@ -4,6 +4,7 @@ import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.TooltipImage;
 import com.n4systems.fieldid.wicket.components.eventform.details.*;
 import com.n4systems.model.*;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -14,6 +15,7 @@ import org.apache.wicket.model.StringResourceModel;
 public class CriteriaDetailsPanel extends Panel {
 
     private CheckBox requiredCheckBox;
+    private WebMarkupContainer scoreRequiredLabel;
 
     public CriteriaDetailsPanel(String id, IModel<Criteria> criteriaModel) {
         super(id, criteriaModel);
@@ -25,6 +27,9 @@ public class CriteriaDetailsPanel extends Panel {
             }
         });
         setOutputMarkupPlaceholderTag(true);
+        add(scoreRequiredLabel = new WebMarkupContainer("scoreRequired"));
+        scoreRequiredLabel.setOutputMarkupPlaceholderTag(true);
+        scoreRequiredLabel.setVisible(false);
     }
 
     @Override
@@ -74,7 +79,13 @@ public class CriteriaDetailsPanel extends Panel {
             add(new ObservationCountDetailsPanel("specificDetailsPanel", new Model<ObservationCountCriteria>((ObservationCountCriteria) criteria)));
         }
 
-        requiredCheckBox.setVisible(isRequiredCriteria(criteria));
+        if (criteria instanceof ScoreCriteria) {
+            requiredCheckBox.setVisible(false);
+            scoreRequiredLabel.setVisible(true);
+        } else {
+            requiredCheckBox.setVisible(isRequiredCriteria(criteria));
+            scoreRequiredLabel.setVisible(false);
+        }
     }
 
     protected void onStateSetSelected(ButtonGroup buttonGroup) { }

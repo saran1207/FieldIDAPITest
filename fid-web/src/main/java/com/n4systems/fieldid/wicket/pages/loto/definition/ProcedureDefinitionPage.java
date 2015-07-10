@@ -48,6 +48,8 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
     private IModel<ProcedureDefinition> model;
     private boolean isCopyOrRevise = false;
 
+    private static final String DIRTY_SOLUTION_EVENT = "dirtySolutionEvent";
+
     enum ProcedureDefinitionSection { Details, Content, Publish };
 
     private Navigation navigation;
@@ -126,6 +128,7 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
         add(form = new ProcedureDefinitionFormContainer("formSections", model));
 
         add(new AttributeAppender("class", Model.of("procedure-definition")));
+
     }
 
     @Override
@@ -150,6 +153,8 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
         response.renderCSSReference("style/legacy/pageStyles/procedureDefinition.css");
         response.renderJavaScriptReference("javascript/procedureDefinitionPage.js");
         response.renderCSSReference("style/legacy/newCss/component/matt_buttons.css");
+        response.renderJavaScriptReference("javascript/donotleavebehaviour.js");
+        response.renderOnDomReadyJavaScript("initWindowDirty();");
     }
 
     private void sectionChanged(AjaxRequestTarget target) {

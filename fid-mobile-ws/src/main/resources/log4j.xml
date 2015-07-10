@@ -8,7 +8,7 @@
 		</layout>
 	</appender>
     <appender name="API_LOG" class="org.apache.log4j.FileAppender">
-        <param name="File" value="/var/fieldid/logs/pub-api.log" />
+        <param name="File" value="/var/fieldid/logs/mobile-api.log" />
         <param name="Append" value="true" />
         <layout class="com.n4systems.fieldid.log.JSONEventLayoutV1">
             <param name="ConversionPattern" value="%D [%t] (%T:%U) %-5p %c - %m%n" />

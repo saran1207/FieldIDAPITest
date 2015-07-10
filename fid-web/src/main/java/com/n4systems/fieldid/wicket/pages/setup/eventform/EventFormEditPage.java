@@ -72,6 +72,11 @@ public class EventFormEditPage extends EventTypePage {
                 criteriaDetailsPanel.setVisible(false);
                 refreshAllComponents(target);
             }
+
+            @Override
+            protected void onAllSectionCriteriaRequired(AjaxRequestTarget target) {
+                criteriaDetailsPanel.redrawSettingsPanel(target);
+            }
         });
 
         boolean isMaster = false;

@@ -17,12 +17,15 @@ import com.n4systems.services.reporting.WorkSummaryRecord;
 import com.n4systems.test.TestMock;
 import com.n4systems.test.TestTarget;
 import com.n4systems.util.persistence.QueryBuilder;
+import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
-import java.util.Map;
+import java.time.Month;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static junit.framework.Assert.assertEquals;
 import static org.easymock.EasyMock.*;
@@ -60,7 +63,7 @@ public class EventServiceTest extends FieldIdServiceTest {
 
         expect(securityContext.getUserSecurityFilter()).andReturn(securityFilter);
         replay(securityContext);
-        expect(persistenceService.findAll(anyObject(QueryBuilder.class))).andReturn(data);
+        expect(persistenceService.findAll((QueryBuilder<WorkSummaryRecord>) anyObject(QueryBuilder.class))).andReturn(data);
         replay(persistenceService);
 
         Map<LocalDate, Long> result = eventService.getMontlyWorkSummary(dayInMonth, user, org, assetType, eventType);
@@ -73,6 +76,32 @@ public class EventServiceTest extends FieldIdServiceTest {
             assertEquals(expected,value);
         }
     }
+
+    @Test
+    public void test_getLastEventOfEachType() {
+        Date jan_15_2015 = new LocalDate(getTimeZone()).withYear(2015).withMonthOfYear(DateTimeConstants.JANUARY).withDayOfMonth(15).toDate();
+        Date jan_10_2015 = new LocalDate(getTimeZone()).withYear(2015).withMonthOfYear(DateTimeConstants.JANUARY).withDayOfMonth(10).toDate();
+
+        List<LastEventForTypeView> allEvents = Arrays.asList(
+            new LastEventForTypeView("A", 1L, new Date(), 1L, jan_15_2015),
+            new LastEventForTypeView("B", 1L, new Date(), 1L, jan_10_2015),
+            new LastEventForTypeView("C", 1L, new Date(), 2L, jan_10_2015),
+            new LastEventForTypeView("D", 2L, new Date(), 1L, jan_10_2015),
+            new LastEventForTypeView("E", 2L, new Date(), 2L, jan_10_2015)
+        );
+
+        expect(securityContext.getUserSecurityFilter()).andReturn(securityFilter);
+        replay(securityContext);
+
+        expect(persistenceService.findAll((QueryBuilder<LastEventForTypeView>) anyObject(QueryBuilder.class))).andReturn(allEvents);
+        replay(persistenceService);
+
+
+        List<LastEventForTypeView> lastEvents = eventService.getLastEventOfEachType(Arrays.asList("a", "b", "c"));
+
+        assertEquals(Arrays.asList(allEvents.get(0), allEvents.get(2), allEvents.get(3), allEvents.get(4)), lastEvents);
+    }
+
 
     private Long getExpectedValueForDate(LocalDate date, List<WorkSummaryRecord> data) {
         for (WorkSummaryRecord record:data) {

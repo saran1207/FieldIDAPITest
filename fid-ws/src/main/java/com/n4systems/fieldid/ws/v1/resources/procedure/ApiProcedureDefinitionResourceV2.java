@@ -21,6 +21,7 @@ import com.n4systems.util.persistence.WhereParameter.Comparator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.*;
@@ -109,11 +110,19 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
             @PathParam("assetId") String assetId,
             @DefaultValue("0") @QueryParam("page") int page,
             @DefaultValue("100") @QueryParam("pageSize") int pageSize) {
-        QueryBuilder<ProcedureDefinition> builder = createUserSecurityBuilder(ProcedureDefinition.class);
-        builder.addWhere(WhereClauseFactory.create(Comparator.EQ, "asset.mobileGUID", assetId));
-        List<ApiProcedureDefinitionV2> procs = convertAllProcedureDefinitionsToApiModels(persistenceService.findAll(builder, page, pageSize));
-
-        return new ListResponse<>(procs, page, pageSize, persistenceService.count(builder));
+        List<ApiProcedureDefinitionV2> procs = new ArrayList<>();
+        Long total = 0L;
+        try {
+            QueryBuilder<ProcedureDefinition> builder = createUserSecurityBuilder(ProcedureDefinition.class);
+            builder.addWhere(WhereClauseFactory.create(Comparator.EQ, "asset.mobileGUID", assetId));
+            procs.addAll(convertAllProcedureDefinitionsToApiModels(persistenceService.findAll(builder, page, pageSize)));
+            total = persistenceService.count(builder);
+        } catch (TransactionException e) {
+            // This can happen when we are unable to find an S3 image while converting the procedure.
+            // Mostly occurs during development when pointing at stage (database and s3 bucket are often out of sync).
+            log.warn("Transaction failure while finding procedure definitions", e);
+        }
+        return new ListResponse<>(procs, page, pageSize, total);
     }
 
     @GET
@@ -123,12 +132,19 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
     @Transactional(readOnly = true)
     public ListResponse<ApiProcedureDefinitionV2> findAll(
             @QueryParam("id") List<String> assetIds) {
-        QueryBuilder<ProcedureDefinition> builder = createUserSecurityBuilder(ProcedureDefinition.class);
-        builder.addWhere(WhereClauseFactory.create(Comparator.IN, "asset.mobileGUID", assetIds));
 
-        List<ProcedureDefinition> procs = persistenceService.findAll(builder);
-        List<ApiProcedureDefinitionV2> apiProcs = convertAllProcedureDefinitionsToApiModels(procs);
+        List<ApiProcedureDefinitionV2> apiProcs = new ArrayList<>();
+        try {
+            QueryBuilder<ProcedureDefinition> builder = createUserSecurityBuilder(ProcedureDefinition.class);
+            builder.addWhere(WhereClauseFactory.create(Comparator.IN, "asset.mobileGUID", assetIds));
 
+            List<ProcedureDefinition> procs = persistenceService.findAll(builder);
+            apiProcs.addAll(convertAllProcedureDefinitionsToApiModels(procs));
+        } catch (TransactionException e) {
+            // This can happen when we are unable to find an S3 image while converting the procedure.
+            // Mostly occurs during development when pointing at stage (database and s3 bucket are often out of sync).
+            log.warn("Transaction failure while finding procedure definitions", e);
+        }
         return new ListResponse<>(apiProcs, 0, apiProcs.size(), apiProcs.size());
     }
 

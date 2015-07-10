@@ -16,7 +16,7 @@ function annotateLockingImages() {
     $('span.note').remove();
     $('.timelineContainer div.media-image').each(
         function(index, element) {
-            var currentAnnotation = select[index];
+            var currentAnnotation = isolationLockAnnotations[index];
             $(element).addAnnotations(
                 function(annotation) {
                     return createLabel(annotation);

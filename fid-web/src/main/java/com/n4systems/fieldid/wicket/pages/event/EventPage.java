@@ -191,7 +191,8 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
 
     class OuterEventForm extends Form {
 
-        //private LocationPicker locationPicker;
+        public static final String REQUIRED_INPUT = "error.event_form_criteria_required_input";
+        public static final String REQUIRED_CHOICE = "error.event_form_criteria_required_choice";
         private OrgLocationPicker locationPicker;
 
 		private NewOrExistingEventBook newOrExistingEventBook;
@@ -428,9 +429,53 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
                 }
             }
 
-            if (event.getObject().containsUnfilledScoreCriteria()) {
-                error(new FIDLabelModel("error.scores.required").getObject());
-            }
+           List<AbstractEvent.SectionResults> results =  event.getObject().getSectionResults();
+
+           for(AbstractEvent.SectionResults sectionResult: results) {
+               if(!sectionResult.disabled) {
+                   for (CriteriaResult criteriaResult: sectionResult.results) {
+                       if (criteriaResult.getCriteria().isRequired()) {
+                           if (criteriaResult instanceof TextFieldCriteriaResult) {
+                               if (StringUtils.isEmpty(((TextFieldCriteriaResult) criteriaResult).getValue())){
+                                   error(getCriteriaErrorMessage(REQUIRED_INPUT, criteriaResult, sectionResult));
+                               }
+                           } else if (criteriaResult instanceof NumberFieldCriteriaResult) {
+                               if (((NumberFieldCriteriaResult) criteriaResult).getValue() == null) {
+                                   error(getCriteriaErrorMessage(REQUIRED_INPUT, criteriaResult, sectionResult));
+                               }
+                           } else if (criteriaResult instanceof DateFieldCriteriaResult) {
+                               if (((DateFieldCriteriaResult) criteriaResult).getValue() == null) {
+                                   error(getCriteriaErrorMessage(REQUIRED_CHOICE, criteriaResult, sectionResult));
+                               }
+                           } else if (criteriaResult instanceof SelectCriteriaResult) {
+                               if (StringUtils.isEmpty(((SelectCriteriaResult) criteriaResult).getValue())) {
+                                   error(getCriteriaErrorMessage(REQUIRED_CHOICE, criteriaResult, sectionResult));
+                               }
+                           } else if (criteriaResult instanceof ComboBoxCriteriaResult) {
+                               if (StringUtils.isEmpty(((ComboBoxCriteriaResult) criteriaResult).getValue())) {
+                                   error(getCriteriaErrorMessage(REQUIRED_CHOICE, criteriaResult, sectionResult));
+                               }
+                           } else if (criteriaResult instanceof ScoreCriteriaResult) {
+                               if (((ScoreCriteriaResult) criteriaResult).getScore() == null) {
+                                   error(getCriteriaErrorMessage(REQUIRED_CHOICE, criteriaResult, sectionResult));
+                               }
+                           } else if (criteriaResult instanceof UnitOfMeasureCriteriaResult) {
+                               if (StringUtils.isEmpty((criteriaResult).getResultString())) {
+                                   error(getCriteriaErrorMessage(REQUIRED_INPUT, criteriaResult, sectionResult));
+                               }
+                           } else if (criteriaResult instanceof SignatureCriteriaResult) {
+                               if (!((SignatureCriteriaResult) criteriaResult).hasImageInMemoryOrTemporaryFile()) {
+                                   error(getCriteriaErrorMessage(REQUIRED_INPUT, criteriaResult, sectionResult));
+                               }
+                           }
+                       }
+                   }
+               }
+           }
+        }
+
+        private String getCriteriaErrorMessage(String key, CriteriaResult criteriaResult, AbstractEvent.SectionResults sectionResult) {
+            return new FIDLabelModel(key, criteriaResult.getCriteria().getDisplayName(), sectionResult.section.getDisplayName()).getObject();
         }
 
         @Override

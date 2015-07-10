@@ -18,7 +18,6 @@ import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.signature.SignatureService;
 import com.n4systems.tools.FileDataContainer;
-import com.n4systems.util.DateHelper;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -94,7 +93,7 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
                 //Asset's Last Event Date to the Event's Completed Date... if there is a Last Event Date at all.
                 if(((ThingEvent) event).getAsset().getLastEventDate() == null
                         || !((ThingEvent) event).getAsset().getLastEventDate().after(event.getCompletedDate())) {
-                    ((ThingEvent) event).getAsset().setLastEventDate(DateHelper.delocalizeDate(event.getCompletedDate(), getCurrentUser().getTimeZone()));
+                    ((ThingEvent) event).getAsset().setLastEventDate(event.getCompletedDate());
                 }
 
                 //I'm sure I'm violating the rules by doing this... but this is WAY easier than a trigger.
