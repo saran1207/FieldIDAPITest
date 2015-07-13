@@ -331,7 +331,25 @@ public class DashboardPage extends FieldIDTemplatePage {
         }
     }
 
-    private void removeWidgetFromColumn(int columnIndex, int widgetIndex) {    	
+    public void removeWidget(WidgetDefinition widgetDefinition, AjaxRequestTarget target) {
+        boolean flag = false;
+        for(DashboardColumn col: currentLayoutModel.getObject().getColumns()) {
+            for(WidgetDefinition def: col.getWidgets()) {
+                if(def.equals(widgetDefinition)) {
+                    col.getWidgets().remove(def);
+                    flag = true;
+                    break;
+                }
+            }
+            if(flag) {
+                break;
+            }
+        }
+        closeConfigWindow(target);
+        saveAndRepaintDashboard(target);
+    }
+
+    private void removeWidgetFromColumn(int columnIndex, int widgetIndex) {
         currentLayoutModel.getObject().getColumns().get(columnIndex).getWidgets().remove(widgetIndex);
     }
 
@@ -346,8 +364,7 @@ public class DashboardPage extends FieldIDTemplatePage {
 
     @Override
     protected Label createTitleLabel(String labelId) {
-        //return new Label(labelId, new FIDLabelModel("label.dashboard"));
-        return new Label(labelId, "");
+        return new Label(labelId, new FIDLabelModel("label.dashboard"));
     }
 
     protected void redirectToSetupWizardIfNecessary() {

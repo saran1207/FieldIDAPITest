@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.widgets.config;
 
+import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.LockedoutProceduresWidgetConfiguration;
 import org.apache.wicket.model.IModel;
 
@@ -8,8 +9,8 @@ import org.apache.wicket.model.IModel;
  */
 public class AssetsLockedOutConfigPanel extends OrgDateWidgetConfigPanel<LockedoutProceduresWidgetConfiguration> {
 
-    public AssetsLockedOutConfigPanel(String id, final IModel<LockedoutProceduresWidgetConfiguration> configModel) {
-        super(id, configModel, false);
+    public AssetsLockedOutConfigPanel(String id, final IModel<LockedoutProceduresWidgetConfiguration> configModel, IModel<WidgetDefinition<LockedoutProceduresWidgetConfiguration>> def) {
+        super(id, configModel, false, def);
     }
 
 }

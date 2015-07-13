@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.widgets.config;
 
 import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
 import com.n4systems.fieldid.wicket.util.EnumDropDownChoiceRenderer;
+import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.chart.RangeType;
@@ -17,16 +18,16 @@ public abstract class OrgDateWidgetConfigPanel<T extends WidgetConfiguration> ex
     private IModel<T> configModel;
     protected Component orgPicker;
     protected DropDownChoice<RangeType> dateRangeSelect;
-    
-    public OrgDateWidgetConfigPanel(String id, final IModel<T> configModel) {
-        super(id, configModel);
+
+    public OrgDateWidgetConfigPanel(String id, final IModel<T> configModel, IModel<WidgetDefinition<T>> def) {
+        super(id, configModel, def);
         this.configModel = configModel;       
         addConfigElement(orgPicker = createOrgPicker("picker", configModel));
 		addConfigElement(dateRangeSelect = createDateRangeSelect()); 
     }
 
-    public OrgDateWidgetConfigPanel(String id, final IModel<T> configModel, boolean isProceduresConfig) {
-        super(id, configModel);
+    public OrgDateWidgetConfigPanel(String id, final IModel<T> configModel, boolean isProceduresConfig, IModel<WidgetDefinition<T>> def) {
+        super(id, configModel, def);
         this.configModel = configModel;
         if(isProceduresConfig) {
             addConfigElement(dateRangeSelect = createDateRangeSelect());

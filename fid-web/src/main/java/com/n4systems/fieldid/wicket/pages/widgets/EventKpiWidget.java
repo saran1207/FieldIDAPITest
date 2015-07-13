@@ -73,7 +73,7 @@ public class EventKpiWidget extends Widget<EventKPIWidgetConfiguration> implemen
     public Component createConfigPanel(String id) {
 		EventKPIWidgetConfiguration configCopy = getConfig().copy();
 		IModel<EventKPIWidgetConfiguration> configModel = new Model<EventKPIWidgetConfiguration>(configCopy);
-		return new EventKPIConfigPanel(id, configModel);        
+		return new EventKPIConfigPanel(id, configModel, getWidgetDefinition());
 	}
 	
 	@Override

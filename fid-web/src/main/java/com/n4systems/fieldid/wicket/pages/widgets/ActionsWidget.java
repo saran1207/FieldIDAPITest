@@ -67,7 +67,7 @@ public class ActionsWidget extends ChartWidget<String,ActionsWidgetConfiguration
 
     @Override
     public Component createConfigPanel(String id) {
-		return new ActionsConfigPanel(id, getConfigModel());
+		return new ActionsConfigPanel(id, getConfigModel(), getWidgetDefinition());
 	}
 
 	@Override

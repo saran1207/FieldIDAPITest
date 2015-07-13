@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.widgets.config;
 
 import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
+import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.EventKPIWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.chart.RangeType;
@@ -31,8 +32,8 @@ public class EventKPIConfigPanel extends WidgetConfigPanel<EventKPIWidgetConfigu
     private AjaxButton addOrgButton;
 	private DropDownChoice<RangeType> dateRange;
 
-    public EventKPIConfigPanel(String id, final IModel<EventKPIWidgetConfiguration> configModel) {
-        super(id, configModel);
+    public EventKPIConfigPanel(String id, final IModel<EventKPIWidgetConfiguration> configModel, IModel<WidgetDefinition<EventKPIWidgetConfiguration>> def) {
+        super(id, configModel, def);
         this.configModel = configModel;
 
         orgsListContainer = new WebMarkupContainer("orgsListContainer");

@@ -51,7 +51,7 @@ public class UpcomingProcedureAuditsWidget extends ChartWidget<LocalDate,Upcomin
 
     @Override
     public Component createConfigPanel(String id) {
-        return new UpcomingProcedureAuditsConfigPanel(id,getConfigModel());
+        return new UpcomingProcedureAuditsConfigPanel(id,getConfigModel(), getWidgetDefinition());
     }
 
     @Override
