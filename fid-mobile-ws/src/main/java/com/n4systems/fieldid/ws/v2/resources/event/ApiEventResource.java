@@ -183,8 +183,11 @@ public class ApiEventResource extends ApiResource<ApiEvent, ThingEvent> {
 		apiEvent.setDueDate(event.getDueDate());
 		apiEvent.setDate(event.getDate());
 		apiEvent.setOwnerId(event.getOwner().getId());
-		apiEvent.setPerformedById(event.getPerformedBy().getId());
 		apiEvent.setPrintable(event.isPrintable());
+
+		if (event.getPerformedBy() != null) {
+			apiEvent.setPerformedById(event.getPerformedBy().getId());
+		}
 
 		if (!event.getGpsLocation().isEmpty()) {
 			apiEvent.setGpsLatitude(event.getGpsLocation().getLatitude());

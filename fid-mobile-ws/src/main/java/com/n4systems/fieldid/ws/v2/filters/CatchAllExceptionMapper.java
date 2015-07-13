@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.ws.v2.filters;
 
 import com.n4systems.fieldid.service.SecurityContextInitializer;
+import com.n4systems.util.ExceptionHelper;
 import org.apache.log4j.Logger;
 
 import javax.ws.rs.WebApplicationException;
@@ -8,6 +9,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 @Provider
 public class CatchAllExceptionMapper implements ExceptionMapper<Throwable> {
@@ -49,7 +52,9 @@ public class CatchAllExceptionMapper implements ExceptionMapper<Throwable> {
 			status = 500;
 		}
 
-		JsonErrorResponse resp = new JsonErrorResponse(status, exception.getMessage());
+		JsonErrorResponse resp = new JsonErrorResponse(status, ExceptionHelper.toString(exception));
 		return Response.status(status).type(MediaType.APPLICATION_JSON).entity(resp).build();
 	}
+
+
 }
