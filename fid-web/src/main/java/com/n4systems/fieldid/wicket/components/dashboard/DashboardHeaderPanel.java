@@ -39,13 +39,10 @@ public class DashboardHeaderPanel extends Panel {
         menuImage = new ContextImage("menuButton", "images/menu_button_16.png");
         add(menuImage);
 
-
         hideMenuImage = new ContextImage("hideMenuImage", "images/collapse-menu.png");
         add(hideMenuImage);
 
         add(new Label("name", new PropertyModel<DashboardLayout>(new CurrentLayoutModel(), "name")));
-
-
 
         ListView<DashboardLayout> layoutListView = new ListView<DashboardLayout>("layoutList", createDashboardLayoutsModel()) {
             @Override
@@ -96,20 +93,6 @@ public class DashboardHeaderPanel extends Panel {
         });
         addWidgetsLink.setMarkupId("addWidgetsLink");
         addWidgetsLink.add(new AttributeAppender("title", new FIDLabelModel("label.tooltip.add_new_widget")));
-
-
-        /*
-        AjaxLink manageDashboardLink;
-        add(manageDashboardLink = new AjaxLink<Void>("manageDashboardLink") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                onManageDashboard(target);
-            }
-        });
-        manageDashboardLink.add(new AttributeAppender("title", new FIDLabelModel("label.tooltip.manage_dashboard")));
-        //manageDashboardLink.add(new ContextImage("menuButton", "images/menu_button_16.png"));
-        */
-
     }
 
     @Override

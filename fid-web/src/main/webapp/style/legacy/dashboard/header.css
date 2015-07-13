@@ -1,9 +1,5 @@
 .headerPanel {
     padding-bottom: 15px;
-    color: #666666;
-    font-size: 30px;
-    font-family: "proxima-nova";
-    font-weight: 200;
 }
 
 .selectLayout {
@@ -11,7 +7,10 @@
 }
 
 .selectLayout h2{
-    font-size: 2em;
+    color: #666666;
+    font-size: 30px;
+    font-family: "proxima-nova";
+    font-weight: 200;
 }
 
 .selectLayout h2 a{
@@ -32,26 +31,23 @@
     margin-right: 5px;
 }
 
-.menuButton {
-    padding-bottom: 10px;
-}
-
 .downArrow {
     vertical-align: middle;
     margin-left: 3px;
 }
 
 .layoutList {
-    margin-left: 0px;
-    margin-top: 60px;
+    margin-left: 12px;
+    margin-top: 50px;
     padding: 25px;
     border: 1px solid #DDDDDD;
     box-shadow:5px 0 2px -5px #CCCCCC, -5px 0 2px -5px #CCCCCC, 0 2px 5px 0 #CCCCCC;
-    width: 500px;
+    width: 330px;
     position: absolute;
     top: 30px;
     background: black;
     z-index: 10;
+    height: 100%;
 }
 
 .layoutList label {

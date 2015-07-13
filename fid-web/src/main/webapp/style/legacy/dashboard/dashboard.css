@@ -47,10 +47,18 @@
 }
 
 .widget .widget-content {
-    padding: 12px 20px;
+    padding: 40px 20px 20px 20px;
     margin: 0 0.1em 0.1em 0.1em;
     font-size: 11px;
     color: #666;
+}
+
+.widget .widget-content .legend div{
+    top: -30px;
+}
+
+.widget .widget-content .legend table{
+    top: -30px;
 }
 
 .widget-header .widget-subtitle {
@@ -58,7 +66,7 @@
     color : #585858;
     font-style : italic;
     font-weight : normal;
-    padding-left: inherit;
+    padding-left: 25px;
 }
 
 .widget-header .widget-subtitle.additional {
@@ -116,7 +124,7 @@
 
 img.widget-drag-image {
     display:block;
-    padding-left:230px;
+    padding-left:290px;
     padding-bottom:4px;
 }
 
@@ -126,7 +134,7 @@ img.widget-drag-image {
     float:right;
     width:800px;
     padding:2px 10px 12px 0;
-}
+}Å
 
 .addWidgetForm select {
     padding:3px;
@@ -141,7 +149,7 @@ img.widget-drag-image {
 }
 
 .flotChart { 
-	height : 200px;
+	height : 240px;
 }
 
 .legendColorBox, .legendLabel {
