@@ -189,7 +189,7 @@ public class ApiEventResource extends ApiResource<ApiEvent, ThingEvent> {
 			apiEvent.setPerformedById(event.getPerformedBy().getId());
 		}
 
-		if (!event.getGpsLocation().isEmpty()) {
+		if (event.getGpsLocation() != null && !event.getGpsLocation().isEmpty()) {
 			apiEvent.setGpsLatitude(event.getGpsLocation().getLatitude());
 			apiEvent.setGpsLongitude(event.getGpsLocation().getLongitude());
 		}
