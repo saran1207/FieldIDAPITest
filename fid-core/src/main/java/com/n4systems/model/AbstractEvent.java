@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public abstract class AbstractEvent<T extends EventType, R extends EntityWithTenant> extends EntityWithTenant implements HasFileAttachments {
 	private static final long serialVersionUID = 1L;
 
-	@Column(length=2500)
+	@Column(length=5000)
 	private String comments;
 
     @ManyToOne(targetEntity = EventType.class)
