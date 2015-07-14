@@ -39,13 +39,14 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	@Path("query")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
-	public List<ApiModelHeader> query(@QueryParam("id") List<String> assetIds) {
+	public List<ApiAssetModelHeader> query(@QueryParam("id") List<String> assetIds) {
 		if (assetIds.isEmpty()) return new ArrayList<>();
 
-		List<ApiModelHeader> results = persistenceService.findAll(
-				createModelHeaderQueryBuilder(Asset.class, "mobileGUID", "modified")
-						.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "mobileGUID", assetIds))
-		);
+		QueryBuilder<ApiAssetModelHeader> query = new QueryBuilder<>(Asset.class, securityContext.getUserSecurityFilter());
+		query.setSelectArgument(new NewObjectSelect(ApiAssetModelHeader.class, "mobileGUID", "modified", "identifier"));
+		query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "mobileGUID", assetIds));
+
+		List<ApiAssetModelHeader> results = persistenceService.findAll(query);
 		return results;
 	}
 
@@ -53,7 +54,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	@Path("query/search")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
-	public List<ApiModelHeader> querySearch(
+	public List<ApiAssetModelHeader> querySearch(
 			@QueryParam("rfidNumber") String rfidNumber,
 			@QueryParam("identifier") String identifier,
 			@QueryParam("referenceNumber") String referenceNumber,
@@ -71,10 +72,11 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			@QueryParam("orderByField") @DefaultValue("identified") String orderByField,
 			@QueryParam("orderByDirection") @DefaultValue("DESC") String orderByDirection) {
 
-		List<ApiModelHeader> results = persistenceService.findAll(
-				createAssetSearchQuery(rfidNumber, identifier, referenceNumber, assignedTo, owner, location, predefinedLocationId, orderNumber, purchaseOrder, assetStatus, assetType, assetTypeGroup, identifiedFrom, identifiedTo, orderByField, orderByDirection)
-						.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, "mobileGUID", "modified"))
-		);
+		List<ApiAssetModelHeader> results = persistenceService.findAll(createAssetSearchQuery(
+				rfidNumber, identifier, referenceNumber, assignedTo,
+				owner, location, predefinedLocationId, orderNumber, purchaseOrder,
+				assetStatus, assetType, assetTypeGroup, identifiedFrom, identifiedTo,
+				orderByField, orderByDirection));
 		return results;
 	}
 
@@ -88,7 +90,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		return apiAssets;
 	}
 
-	private QueryBuilder<ApiModelHeader> createAssetSearchQuery(String rfidNumber, String identifier, String referenceNumber, Long assignedTo, Long owner, String location, Long predefinedLocationId, String orderNumber, String purchaseOrder, Long assetStatus, Long assetType, Long assetTypeGroup, Date identifiedFrom, Date identifiedTo, String orderByField, String orderByDirection) {
+	private QueryBuilder<ApiAssetModelHeader> createAssetSearchQuery(String rfidNumber, String identifier, String referenceNumber, Long assignedTo, Long owner, String location, Long predefinedLocationId, String orderNumber, String purchaseOrder, Long assetStatus, Long assetType, Long assetTypeGroup, Date identifiedFrom, Date identifiedTo, String orderByField, String orderByDirection) {
 		AssetSearchCriteria searchCriteria = new AssetSearchCriteria();
 
 		searchCriteria.setRfidNumber(rfidNumber);
@@ -144,7 +146,8 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			orderByField = "type.name";
 		}
 
-		QueryBuilder<ApiModelHeader> queryBuilder = assetSearchService.augmentSearchBuilder(searchCriteria, new QueryBuilder<>(Asset.class, securityContext.getUserSecurityFilter()), false);
+		QueryBuilder<ApiAssetModelHeader> queryBuilder = assetSearchService.augmentSearchBuilder(searchCriteria, new QueryBuilder<>(Asset.class, securityContext.getUserSecurityFilter()), false);
+		queryBuilder.setSelectArgument(new NewObjectSelect(ApiAssetModelHeader.class, "mobileGUID", "modified", "identifier"));
 		queryBuilder.addOrder(orderByField, orderByDirection.equals("ASC"));
 		return queryBuilder;
 	}
