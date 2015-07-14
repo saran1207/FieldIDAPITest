@@ -11,10 +11,12 @@
     -webkit-box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
     box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
     border:1px solid #CCC;*/
-    background:#FFF;
-    padding: 14px;
+
+    /*background:#FFF; */
+    padding: 0px;
     float: left;
     width: 1400px;
+    background-color: #f8f8f8;
 }
 
 #pageFooter {
@@ -26,9 +28,10 @@
 }
 
 .column {
-    width: 680px;
+    width: 700px;
     float: left;
     padding-bottom: 100px;
+    padding-left: 10px;
 }
 
 .widget {

@@ -1,9 +1,10 @@
 .headerPanel {
-    padding-bottom: 15px;
+    padding-bottom: 35px;
+    background-color: #f8f8f8;
 }
 
 .selectLayout {
-    width: 860px;
+    width: 1400px;
 }
 
 .selectLayout h2{
@@ -16,6 +17,7 @@
 .selectLayout h2 a{
     text-decoration:none;
     color: #999;
+    padding-right: 10px;
 }
 
 .headerPanel, .selectLayout, .configureLayout{
@@ -25,6 +27,8 @@
 .configureLayout {
     position:absolute;
     right: 0;
+    background-color: #f8f8f8;
+    padding-top: 5px;
 }
 
 .configureLayout a.mattButton {
@@ -37,8 +41,8 @@
 }
 
 .layoutList {
-    margin-left: 12px;
-    margin-top: 50px;
+    margin-left: 9px;
+    margin-top: 56px;
     padding: 25px;
     border: 1px solid #DDDDDD;
     box-shadow:5px 0 2px -5px #CCCCCC, -5px 0 2px -5px #CCCCCC, 0 2px 5px 0 #CCCCCC;
