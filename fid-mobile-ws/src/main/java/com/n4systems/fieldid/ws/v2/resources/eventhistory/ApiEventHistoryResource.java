@@ -2,6 +2,7 @@ package com.n4systems.fieldid.ws.v2.resources.eventhistory;
 
 import com.n4systems.fieldid.ws.v2.resources.ApiModelHeader;
 import com.n4systems.fieldid.ws.v2.resources.ApiResource;
+import com.n4systems.fieldid.ws.v2.resources.ApiSortedModelHeader;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -33,7 +34,6 @@ public class ApiEventHistoryResource extends ApiResource<ApiEventHistory, ThingE
 				createModelHeaderQueryBuilder(ThingEvent.class, "mobileGUID", "modified")
 						.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.COMPLETED))
 						.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "mobileGUID", eventIds))
-						.addOrder("completedDate", false)
 		);
 		return headers;
 	}
@@ -42,14 +42,13 @@ public class ApiEventHistoryResource extends ApiResource<ApiEventHistory, ThingE
 	@Path("query/asset")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
-	public List<ApiModelHeader> queryAsset(@QueryParam("assetId") List<String> assetIds) {
+	public List<ApiSortedModelHeader> queryAsset(@QueryParam("assetId") List<String> assetIds) {
 		if (assetIds.isEmpty()) return new ArrayList<>();
 
-		List<ApiModelHeader> headers = persistenceService.findAll(
-				createModelHeaderQueryBuilder(ThingEvent.class, "mobileGUID", "modified")
+		List<ApiSortedModelHeader> headers = persistenceService.findAll(
+				createModelHeaderQueryBuilder(ThingEvent.class, "mobileGUID", "modified", "completedDate", false)
 						.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.COMPLETED))
 						.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "asset.mobileGUID", assetIds))
-						.addOrder("completedDate", false)
 		);
 		return headers;
 	}

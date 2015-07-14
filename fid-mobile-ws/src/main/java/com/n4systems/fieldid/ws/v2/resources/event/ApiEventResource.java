@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.ws.v2.resources.ApiModelHeader;
 import com.n4systems.fieldid.ws.v2.resources.ApiResource;
+import com.n4systems.fieldid.ws.v2.resources.ApiSortedModelHeader;
 import com.n4systems.model.*;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.offlineprofile.OfflineProfile.SyncDuration;
@@ -74,10 +75,10 @@ public class ApiEventResource extends ApiResource<ApiEvent, ThingEvent> {
 	@Path("query/open")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
-	public List<ApiModelHeader> queryOpen(@QueryParam("assetId") List<String> assetIds, @DefaultValue("YEAR") @QueryParam("syncDuration") SyncDuration syncDuration) {
+	public List<ApiSortedModelHeader> queryOpen(@QueryParam("assetId") List<String> assetIds, @DefaultValue("YEAR") @QueryParam("syncDuration") SyncDuration syncDuration) {
 		if (assetIds.isEmpty()) return new ArrayList<>();
 
-		List<ApiModelHeader> headers = findAllOpenEventHeaders(assetIds, syncDuration);
+		List<ApiSortedModelHeader> headers = findAllOpenEventHeaders(assetIds, syncDuration);
 		return headers;
 	}
 
@@ -98,9 +99,9 @@ public class ApiEventResource extends ApiResource<ApiEvent, ThingEvent> {
 	@Path("query/assigned")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
-	public List<ApiModelHeader> queryAssigned(@QueryParam("startDate") Date startDate, @QueryParam("endDate") Date endDate) {
-		List<ApiModelHeader> headers = persistenceService.findAll(
-				prepareAssignedEventsQuery(createModelHeaderQueryBuilder(ThingEvent.class, "mobileGUID", "modified"), startDate, endDate, getCurrentUser())
+	public List<ApiSortedModelHeader> queryAssigned(@QueryParam("startDate") Date startDate, @QueryParam("endDate") Date endDate) {
+		List<ApiSortedModelHeader> headers = persistenceService.findAll(
+				prepareAssignedEventsQuery(createModelHeaderQueryBuilder(ThingEvent.class, "mobileGUID", "modified", "dueDate", true), startDate, endDate, getCurrentUser())
 		);
 		return headers;
 	}
@@ -143,7 +144,6 @@ public class ApiEventResource extends ApiResource<ApiEvent, ThingEvent> {
 
 	private <T> QueryBuilder<T> prepareAssignedEventsQuery(QueryBuilder<T> query, @QueryParam("startDate") Date startDate, @QueryParam("endDate") Date endDate, User user) {
 		query
-				.addOrder("dueDate")
 				.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "workflowState", WorkflowState.OPEN))
 				.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GE, "startDate", "dueDate", startDate))
 				.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.LT, "endDate", "dueDate", endDate));	//excludes end date.
@@ -161,8 +161,8 @@ public class ApiEventResource extends ApiResource<ApiEvent, ThingEvent> {
 		return query;
 	}
 
-	public List<ApiModelHeader> findAllOpenEventHeaders(List<String> assetIds, SyncDuration syncDuration) {
-		QueryBuilder<ApiModelHeader> query = createModelHeaderQueryBuilder(ThingEvent.class, "mobileGUID", "modified")
+	public List<ApiSortedModelHeader> findAllOpenEventHeaders(List<String> assetIds, SyncDuration syncDuration) {
+		QueryBuilder<ApiSortedModelHeader> query = createModelHeaderQueryBuilder(ThingEvent.class, "mobileGUID", "modified", "dueDate", true)
 				.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.OPEN))
 				.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "asset.mobileGUID", assetIds));
 

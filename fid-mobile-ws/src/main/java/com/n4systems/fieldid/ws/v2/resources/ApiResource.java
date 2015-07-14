@@ -75,4 +75,11 @@ public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPe
         return queryBuilder;
     }
 
+	protected QueryBuilder<ApiSortedModelHeader> createModelHeaderQueryBuilder(Class<?> tableClass, String sidField, String modifiedByField, String sortField, boolean ascending) {
+		QueryBuilder<ApiSortedModelHeader> queryBuilder = new QueryBuilder<>(tableClass, securityContext.getUserSecurityFilter());
+		queryBuilder.setSelectArgument(new NewObjectSelect(ApiSortedModelHeader.class, sidField, modifiedByField, sortField));
+		queryBuilder.setOrder(sortField, ascending);
+		return queryBuilder;
+	}
+
 }

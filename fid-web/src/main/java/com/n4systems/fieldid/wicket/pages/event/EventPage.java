@@ -327,7 +327,7 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             jobSelect.setNullValid(true);
             jobsContainer.add(jobSelect);
 
-            add(new Comment("comments", new PropertyModel<String>(event, "comments")).addMaxLengthValidation(2500));
+            add(new Comment("comments", new PropertyModel<String>(event, "comments")).addMaxLengthValidation(5000));
 
             add(createPostEventPanel(event));
 
