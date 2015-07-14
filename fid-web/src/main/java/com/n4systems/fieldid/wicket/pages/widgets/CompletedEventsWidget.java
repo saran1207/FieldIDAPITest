@@ -35,6 +35,7 @@ public class CompletedEventsWidget extends ChartWidget<LocalDate, CompletedEvent
     @Override
     protected FlotOptions<LocalDate> createOptions() {
     	FlotOptions<LocalDate> options = super.createOptions();
+		options.legend.margin = -35;
     	return options;
     }
     

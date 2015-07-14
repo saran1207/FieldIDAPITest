@@ -72,6 +72,11 @@
 .layoutItem a {
     font-size: 1.2em;
     text-decoration: none;
+    display: block;
+}
+
+.layoutItem a:hover {
+    background-color: #add8e6;
 }
 
 .printIcon {

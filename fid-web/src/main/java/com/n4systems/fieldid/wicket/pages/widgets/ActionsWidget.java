@@ -93,6 +93,8 @@ public class ActionsWidget extends ChartWidget<String,ActionsWidgetConfiguration
         options.series = new FlotOptions.Series();
         options.series.stack = true;
         options.xaxis.tickDecimals = 0L;
+        options.legend.position = "ne";
+        options.legend.margin = -38;
         return options;
 	}
 	

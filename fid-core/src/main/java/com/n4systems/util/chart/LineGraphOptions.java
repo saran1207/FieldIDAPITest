@@ -19,7 +19,7 @@ public class LineGraphOptions<X> extends FlotOptions<X> {
 				
 		pan.interactive = true;		
 		
-		legend.position = "nw";
+		legend.position = "ne";
 		
 		series.shadowSize = 0;
 	}
