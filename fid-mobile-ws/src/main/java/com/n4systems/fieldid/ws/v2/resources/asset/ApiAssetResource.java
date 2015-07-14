@@ -39,14 +39,14 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	@Path("query")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
-	public List<ApiAssetModelHeader> query(@QueryParam("id") List<String> assetIds) {
+	public List<ApiModelHeader> query(@QueryParam("id") List<String> assetIds) {
 		if (assetIds.isEmpty()) return new ArrayList<>();
 
-		QueryBuilder<ApiAssetModelHeader> query = new QueryBuilder<>(Asset.class, securityContext.getUserSecurityFilter());
-		query.setSelectArgument(new NewObjectSelect(ApiAssetModelHeader.class, "mobileGUID", "modified", "identifier"));
+		QueryBuilder<ApiModelHeader> query = new QueryBuilder<>(Asset.class, securityContext.getUserSecurityFilter());
+		query.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, "mobileGUID", "modified"));
 		query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "mobileGUID", assetIds));
-
-		List<ApiAssetModelHeader> results = persistenceService.findAll(query);
+		query.addOrder("modified", false);
+		List<ApiModelHeader> results = persistenceService.findAll(query);
 		return results;
 	}
 
@@ -147,7 +147,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		}
 
 		QueryBuilder<ApiAssetModelHeader> queryBuilder = assetSearchService.augmentSearchBuilder(searchCriteria, new QueryBuilder<>(Asset.class, securityContext.getUserSecurityFilter()), false);
-		queryBuilder.setSelectArgument(new NewObjectSelect(ApiAssetModelHeader.class, "mobileGUID", "modified", "identifier"));
+		queryBuilder.setSelectArgument(new NewObjectSelect(ApiAssetModelHeader.class, "mobileGUID", "modified", orderByField, "identifier"));
 		queryBuilder.addOrder(orderByField, orderByDirection.equals("ASC"));
 		return queryBuilder;
 	}

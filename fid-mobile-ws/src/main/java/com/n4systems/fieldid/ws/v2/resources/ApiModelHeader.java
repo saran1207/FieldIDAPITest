@@ -4,10 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class ApiModelHeader implements Serializable {
-	private String sid;
-	private Date modified;
-
-	public ApiModelHeader() {}
+	private final String sid;
+	private final Date modified;
 
 	public ApiModelHeader(String sid, Date modified) {
 		this.sid = sid;
@@ -18,15 +16,7 @@ public class ApiModelHeader implements Serializable {
 		return sid;
 	}
 
-	public void setSid(String sid) {
-		this.sid = sid;
-	}
-
 	public Date getModified() {
 		return modified;
-	}
-
-	public void setModified(Date modified) {
-		this.modified = modified;
 	}
 }
