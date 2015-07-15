@@ -28,6 +28,7 @@ public class DashboardHeaderPanel extends Panel {
     @SpringBean
     private DashboardService dashboardService;
 
+    private static final String MANAGE_DASHBOARDS = "Manage Dashboards";
     ContextImage menuImage;
     ContextImage hideMenuImage;
 
@@ -48,7 +49,7 @@ public class DashboardHeaderPanel extends Panel {
             @Override
             protected void populateItem(ListItem<DashboardLayout> item) {
                 final DashboardLayout layout = item.getModelObject();
-                if (!layout.getName().equals("Manage Dashboards")) {
+                if (!layout.getName().equals(MANAGE_DASHBOARDS)) {
                     Link<Void> selectLink = new Link<Void>("link") {
                         @Override
                         public void onClick() {
@@ -117,7 +118,7 @@ public class DashboardHeaderPanel extends Panel {
 
                 //Add the manage dashboards link to the list of layouts.
                 DashboardLayout manageLink = new DashboardLayout();
-                manageLink.setName("Manage Dashboards");
+                manageLink.setName(MANAGE_DASHBOARDS);
                 list.add(manageLink);
 
                 return list;
