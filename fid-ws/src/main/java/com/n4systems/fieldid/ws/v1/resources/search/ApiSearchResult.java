@@ -19,6 +19,7 @@ public class ApiSearchResult extends ApiReadWriteModel {
 	private Date nextEventDate;
 	private byte[] image;
 	private Date identified;
+	private boolean hasProcedures;
 
 	public String getAssetTypeName() {
 		return assetTypeName;
@@ -130,5 +131,13 @@ public class ApiSearchResult extends ApiReadWriteModel {
 
 	public void setIdentified(Date identified) {
 		this.identified = identified;
+	}
+
+	public boolean isHasProcedures() {
+		return hasProcedures;
+	}
+
+	public void setHasProcedures(boolean hasProcedures) {
+		this.hasProcedures = hasProcedures;
 	}
 }
