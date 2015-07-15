@@ -151,6 +151,10 @@ img.widget-drag-image {
     border-radius: 0px;
 }
 
+.no-border .page-header {
+    border-bottom: none;
+}
+
 .flotChart { 
 	height : 240px;
 }
