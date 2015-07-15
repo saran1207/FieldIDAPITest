@@ -1,7 +1,7 @@
 var layoutListShown = false;
 
 function showList() {
-    if ($('#layoutCount').val() >= 1) {
+    if ($('#layoutCount').val() >= 0) {
         jQuery('#layoutList').slideDown(100);
         $('#menuButton').hide();
         $('#hideMenuImage').show();
