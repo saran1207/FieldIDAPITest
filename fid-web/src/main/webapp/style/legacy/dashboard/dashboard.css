@@ -69,7 +69,7 @@
     color : #585858;
     font-style : italic;
     font-weight : normal;
-    padding-left: 25px;
+    float: left;
 }
 
 .widget-header .widget-subtitle.additional {
