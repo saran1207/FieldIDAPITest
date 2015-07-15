@@ -229,6 +229,7 @@ div.buttonsLabel {
     padding: 65px 0 25px;
     text-align: center;
     color: #666;
+    border-bottom: none;
 }
 .blank-slate h3 em {
     color: #E28500;
