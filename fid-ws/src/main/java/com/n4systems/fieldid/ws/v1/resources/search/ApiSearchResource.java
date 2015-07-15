@@ -9,11 +9,13 @@ import com.n4systems.model.*;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.procedure.Procedure;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.chart.RangeType;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClauseFactory;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -158,6 +160,8 @@ public class ApiSearchResource extends ApiResource<ApiSearchResult, Asset> {
 		if (openEvent != null) {
 			apiResult.setNextEventDate(openEvent.getDueDate());
 		}
+
+		apiResult.setHasProcedures(persistenceService.exists(createUserSecurityBuilder(Procedure.class).addWhere(WhereClauseFactory.create("asset", asset))));
 		
 		return apiResult;
 	}
