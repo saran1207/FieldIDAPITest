@@ -358,6 +358,11 @@ public class DashboardPage extends FieldIDTemplatePage {
     }
 
     @Override
+    protected String getMainCss() {
+        return "no-border";
+    }
+
+    @Override
     protected boolean useLegacyCss() {
         return false;
     }

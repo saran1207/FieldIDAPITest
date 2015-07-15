@@ -69,7 +69,7 @@
     color : #585858;
     font-style : italic;
     font-weight : normal;
-    padding-left: 25px;
+    float: left;
 }
 
 .widget-header .widget-subtitle.additional {
@@ -151,6 +151,10 @@ img.widget-drag-image {
     border-radius: 0px;
 }
 
+.no-border .page-header {
+    border-bottom: none;
+}
+
 .flotChart { 
 	height : 240px;
 }
@@ -225,6 +229,7 @@ div.buttonsLabel {
     padding: 65px 0 25px;
     text-align: center;
     color: #666;
+    border-bottom: none;
 }
 .blank-slate h3 em {
     color: #E28500;
