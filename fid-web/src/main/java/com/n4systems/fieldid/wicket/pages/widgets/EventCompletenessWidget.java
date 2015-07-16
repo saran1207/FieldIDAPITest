@@ -66,6 +66,7 @@ public class EventCompletenessWidget extends ChartWidget<LocalDate,EventComplete
         options.xaxis.monthNames = FlotOptions.MONTH_NAMES;
 
 		options.legend.margin = -38;
+		options.legend.marginX = -5;
 
 		return options;
 	}

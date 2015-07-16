@@ -84,7 +84,7 @@ public class DashboardPage extends FieldIDTemplatePage {
 
         JavascriptPackageResourceIE.renderJavaScriptReference(response, "javascript/flot/excanvas.min.js");
 
-        response.renderJavaScriptReference("javascript/flot/jquery.flot.min.js");
+        response.renderJavaScriptReference("javascript/flot/jquery.flot.js");
         response.renderJavaScriptReference("javascript/flot/jquery.flot.stack.min.js");
         response.renderJavaScriptReference("javascript/flot/jquery.flot.navigate.min.js");
         response.renderJavaScriptReference("javascript/flot/jquery.flot.symbol.min.js");
