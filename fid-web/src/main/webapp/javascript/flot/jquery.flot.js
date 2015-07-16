@@ -50,7 +50,6 @@
                     container: null, // container (as jQuery object) to put legend in, null means default on top of graph
                     position: "ne", // position of default legend container within plot
                     margin: 5, // distance from grid edge to default legend container within plot
-                    marginX: 5, //New margin added for the legend
                     backgroundColor: null, // null means auto-detect
                     backgroundOpacity: 0.85 // set to 0 to avoid background
                 },
@@ -2211,9 +2210,6 @@
                 var pos = "",
                     p = options.legend.position,
                     m = options.legend.margin;
-                    mx = options.legend.marginX;
-                if (mx[0] == null)
-                    mx = [mx,mx];
                 if (m[0] == null)
                     m = [m, m];
                 if (p.charAt(0) == "n")
@@ -2221,7 +2217,7 @@
                 else if (p.charAt(0) == "s")
                     pos += 'bottom:' + (m[1] + plotOffset.bottom) + 'px;';
                 if (p.charAt(1) == "e")
-                    pos += 'right:' + (mx[0] + plotOffset.right) + 'px;';
+                    pos += 'right:' + (m[0] + plotOffset.right) + 'px;';
                 else if (p.charAt(1) == "w")
                     pos += 'left:' + (m[0] + plotOffset.left) + 'px;';
                 var legend = $('<div class="legend">' + table.replace('style="', 'style="position:absolute;' + pos +';') + '</div>').appendTo(placeholder);

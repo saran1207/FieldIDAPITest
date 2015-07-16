@@ -95,7 +95,6 @@ public class ActionsWidget extends ChartWidget<String,ActionsWidgetConfiguration
         options.xaxis.tickDecimals = 0L;
         options.legend.position = "ne";
         options.legend.margin = -38;
-        options.legend.marginX = -5;
         return options;
 	}
 	

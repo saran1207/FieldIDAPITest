@@ -35,7 +35,6 @@ public class ProceduresPublishedWidget extends ChartWidget<LocalDate, Procedures
     protected FlotOptions<LocalDate> createOptions() {
         FlotOptions<LocalDate> options = super.createOptions();
         options.legend.margin = -38;
-        options.legend.marginX = -5;
         return options;
     }
 

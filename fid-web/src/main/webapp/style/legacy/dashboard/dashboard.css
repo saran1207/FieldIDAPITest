@@ -62,7 +62,7 @@
 
 .widget .widget-content .legend table{
     top: -30px;
-    right: 0px;
+    right: 0px !important;
 }
 
 .widget-header .widget-subtitle {
