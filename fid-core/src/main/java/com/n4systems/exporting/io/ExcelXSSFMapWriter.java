@@ -151,9 +151,10 @@ public class ExcelXSSFMapWriter implements MapWriter {
     }
 
     private void writeRow(Map<String, Object> rowMap) {
+
         //Create a row... this handy-dandy method (getPhysicalNumberOfRows()) allows us to figure out how many rows
         //there are without externally tracking them...... which makes generating new rows super easy.
-        Row row = sheet.createRow(sheet.getPhysicalNumberOfRows()); //  +\- 1??
+        Row row = sheet.createRow(sheet.getPhysicalNumberOfRows()); //  +\- 1??s
 
         //Now use .forEach and a Lambda to spit out the values into the sheet.  Null values get written as blanks, so
         //it's okay if we don't find a title value in the map.  It would, however, be problematic to find that we don't
@@ -163,10 +164,6 @@ public class ExcelXSSFMapWriter implements MapWriter {
 
     private void fillCell(Cell cell, Object value) {
         // this sets the value of the cell based on the Objects type
-//        if(value == null) {
-//            //For nulls, just do nothing... this is really odd...
-//
-//        } else
         if(value instanceof Number) {
             // POI only accepts double value numbers so we convert any number we have to a double
             cell.setCellValue(((Number)value).doubleValue());
