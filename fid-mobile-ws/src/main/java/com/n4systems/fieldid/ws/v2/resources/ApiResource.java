@@ -22,8 +22,10 @@ public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPe
 
     protected abstract A convertEntityToApiModel(E entityModel);
 
+	protected List<A> postConvertAllEntitiesToApiModels(List<A> apiModels) { return apiModels; }
+
 	protected List<A> convertAllEntitiesToApiModels(List<E> entityModels) {
-        return convertAllEntitiesToApiModels(entityModels, this::convertEntityToApiModel);
+        return postConvertAllEntitiesToApiModels(convertAllEntitiesToApiModels(entityModels, this::convertEntityToApiModel));
 	}
 
     protected <M, R> List<R> convertAllEntitiesToApiModels(List<M> entityModels, Function<M, R> converter) {
@@ -80,6 +82,10 @@ public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPe
 		queryBuilder.setSelectArgument(new NewObjectSelect(ApiSortedModelHeader.class, sidField, modifiedByField, sortField));
 		queryBuilder.setOrder(sortField, ascending);
 		return queryBuilder;
+	}
+
+	protected <T, A extends ApiKey<T>> List<T> unwrapKeys(List<A> keys) {
+		return keys.stream().map(a -> a.getSid()).collect(Collectors.toList());
 	}
 
 }

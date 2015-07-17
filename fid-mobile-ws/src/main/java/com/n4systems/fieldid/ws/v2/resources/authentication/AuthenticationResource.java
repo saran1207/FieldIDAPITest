@@ -3,12 +3,10 @@ package com.n4systems.fieldid.ws.v2.resources.authentication;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.admin.AdminUserService;
 import com.n4systems.fieldid.service.user.UserService;
-import com.n4systems.fieldid.ws.v2.resources.user.ApiUser;
-import com.n4systems.fieldid.ws.v2.resources.user.ApiUserResource;
+import com.n4systems.fieldid.ws.v2.resources.setupdata.user.ApiUserResource;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.model.user.User;
-import com.n4systems.services.SecurityContext;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,15 +21,15 @@ public class AuthenticationResource extends FieldIdPersistenceService {
 	private static Logger logger = Logger.getLogger(AuthenticationResource.class);
 
 	@Autowired protected UserService userService;
-	@Autowired protected ApiUserResource apiUserResource;
-	@Autowired protected SecurityContext securityContext;
 	@Autowired protected AdminUserService adminUserService;
+	@Autowired protected ApiUserResource apiUserResource;
+	@Autowired protected ApiTenantConverter apiTenantConverter;
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
-	public ApiUser authenticate(
+	public ApiAuthResponse authenticate(
 			@FormParam("tenant") String tenantName,
 			@FormParam("user") String userId, 
 			@FormParam("password") String password) {
@@ -54,7 +52,7 @@ public class AuthenticationResource extends FieldIdPersistenceService {
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
-	public ApiUser authenticate(
+	public ApiAuthResponse authenticate(
 			@FormParam("tenant") String tenantName,
 			@FormParam("passcode") String passcode) {
 		
@@ -68,16 +66,18 @@ public class AuthenticationResource extends FieldIdPersistenceService {
 		return authenticateUser(user);
 	}
 	
-	private ApiUser authenticateUser(User user) {
+	private ApiAuthResponse authenticateUser(User user) {
 		if (user == null) {
 			throw new ForbiddenException();
 		}
 		
 		securityContext.setUserSecurityFilter(new UserSecurityFilter(user));
 		securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(user.getTenant().getId()));
-		
-		ApiUser apiUser = apiUserResource.convertEntityToApiModel(user);
-		return apiUser;
+
+		ApiAuthResponse authResponse = new ApiAuthResponse();
+		authResponse.setUser(apiUserResource.convertEntityToApiModel(user));
+		authResponse.setTenant(apiTenantConverter.convertEntityToApiModel(user.getOwner().getPrimaryOrg()));
+		return authResponse;
 	}
 	
 }
