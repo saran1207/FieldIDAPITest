@@ -6,7 +6,7 @@
 
 <wicket:panel>
 
-    <div class="select-layout">
+    <div class="selectLayout">
         <h2>
 
             <a class="tipsy-tooltip" id="layoutListLink" href="javascript:void(0);">
@@ -21,14 +21,14 @@
     <input type="hidden" wicket:id="layoutCount"/>
 
 
-    <div class="configure-layout">
-        <img class="print-icon" wicket:id="printIcon" onclick="window.print();"/>
+    <div class="configureLayout">
+        <img class="printIcon" wicket:id="printIcon" onclick="window.print();"/>
 
         <a class="tipsy-tooltip btn-secondary" wicket:id="addWidgetsLink"><wicket:message key="label.widgets"/></a>
     </div>
 
-    <div id="layoutList" class="layout-list" style="display: none">
-        <div class="layout-item" wicket:id="layoutList">
+    <div id="layoutList" class="layoutList" style="display: none">
+        <div class="layoutItem" wicket:id="layoutList">
             <a wicket:id="link"><span wicket:id="name"/></a>
         </div>
     </div>

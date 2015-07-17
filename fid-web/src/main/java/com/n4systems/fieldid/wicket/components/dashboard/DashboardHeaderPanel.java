@@ -72,7 +72,7 @@ public class DashboardHeaderPanel extends Panel {
                     };
                     item.add(selectLink);
                     selectLink.add(new Label("name", new PropertyModel<DashboardLayout>(layout, "name")));
-                    item.add(new AttributeAppender("class", new Model<String>(" manage-dashboard"), ""));
+                    item.add(new AttributeAppender("class", new Model<String>(" manageDashboard"), ""));
                 }
             }
         };
@@ -99,6 +99,8 @@ public class DashboardHeaderPanel extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         response.renderJavaScriptReference("javascript/dashboard_layout_list.js");
+        response.renderCSSReference("style/legacy/dashboard/header.css");
+        response.renderCSSReference("style/legacy/tipsy/tipsy.css");
         response.renderJavaScriptReference("javascript/tipsy/jquery.tipsy.js");
         // CAVEAT : https://github.com/jaz303/tipsy/issues/19
         // after ajax call, tipsy tooltips will remain around so need to remove them explicitly.
