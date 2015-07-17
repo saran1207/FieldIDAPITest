@@ -53,7 +53,7 @@ var chartWidgetFactory = (function() {
 		};
 					
 		function showTooltip(x, y, contents) {
-		    $('<div id="tooltip" class="chartTooltip">' + contents + '</div>').css( {
+		    $('<div id="tooltip" class="chart-tool-tip">' + contents + '</div>').css( {
 		        top: y + 5,
 		        left: x + 5
 		    }).appendTo("body").fadeIn(200);
