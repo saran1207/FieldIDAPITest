@@ -31,7 +31,7 @@ public abstract class SetupDataResource<A, E extends AbstractEntity, K extends A
 		this.allowArchived = allowArchived;
 	}
 
-	protected void addTermsToQuery(QueryBuilder<?> query) {}
+	protected void addTermsToLatestQuery(QueryBuilder<?> query) {}
 
 	@GET
 	@Path("query")
@@ -43,14 +43,13 @@ public abstract class SetupDataResource<A, E extends AbstractEntity, K extends A
 		QueryBuilder<ApiModelHeader> query = new QueryBuilder<>(entityClass, securityContext.getUserSecurityFilter(allowArchived));
 		query.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, idField, "modified"));
 		query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, idField, unwrapKeys(ids)));
-		addTermsToQuery(query);
 
 		List<ApiModelHeader> results = persistenceService.findAll(query);
 		return results;
 	}
 
 	@GET
-	@Path("query/since")
+	@Path("query/latest")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
 	public List<ApiModelHeader> query(@QueryParam("since") DateParam since) {
@@ -60,7 +59,7 @@ public abstract class SetupDataResource<A, E extends AbstractEntity, K extends A
 		if (since != null) {
 			query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GT, "modified", since));
 		}
-		addTermsToQuery(query);
+		addTermsToLatestQuery(query);
 
 		List<ApiModelHeader> results = persistenceService.findAll(query);
 		return results;
@@ -74,7 +73,6 @@ public abstract class SetupDataResource<A, E extends AbstractEntity, K extends A
 
 		QueryBuilder<E> query = createTenantSecurityBuilder(entityClass, allowArchived);
 		query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, idField, unwrapKeys(ids)));
-		addTermsToQuery(query);
 
 		List<E> entityModels = persistenceService.findAll(query);
 		List<A> apiModels = convertAllEntitiesToApiModels(entityModels);

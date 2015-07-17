@@ -12,8 +12,9 @@ public abstract class SelectClause implements ClauseArgument {
 		return distinct;
 	}
 
-	public void setDistinct(boolean distinct) {
+	public SelectClause setDistinct(boolean distinct) {
 		this.distinct = distinct;
+		return this;
 	}
 	
 	public String getClause(FromTable table) throws InvalidQueryException {

@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.ws.v2.resources.setupdata.eventtype.criteria;
+package com.n4systems.fieldid.ws.v2.resources.setupdata.eventform.criteria;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.EventResult;

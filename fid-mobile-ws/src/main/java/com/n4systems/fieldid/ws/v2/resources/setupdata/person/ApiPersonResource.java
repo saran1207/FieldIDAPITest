@@ -19,7 +19,7 @@ public class ApiPersonResource extends SetupDataResourceReadOnly<ApiPerson, User
     }
 
     @Override
-    protected void addTermsToQuery(QueryBuilder<?> query) {
+    protected void addTermsToLatestQuery(QueryBuilder<?> query) {
         query.addWhere(WhereClauseFactory.create("registered", true));
 		query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.NE, "userType", UserType.SYSTEM));
     }

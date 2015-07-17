@@ -15,7 +15,7 @@ public class ApiEventType extends ApiReadonlyModel {
 	private boolean master;
 	private boolean assignedToAvailable;
 	private List<String> attributes = new ArrayList<>();
-	private ApiEventForm form;
+	private Long formId;
 	private boolean action;
 
 	public String getName() {
@@ -82,14 +82,14 @@ public class ApiEventType extends ApiReadonlyModel {
 		this.attributes = attributes;
 	}
 
-	public ApiEventForm getForm() {
-		return form;
+	public Long getFormId() {
+		return formId;
 	}
 
-	public void setForm(ApiEventForm form) {
-		this.form = form;
+	public void setFormId(Long formId) {
+		this.formId = formId;
 	}
-	
+
 	public boolean isHasPrintOut() {
 		return hasPrintOut;
 	}

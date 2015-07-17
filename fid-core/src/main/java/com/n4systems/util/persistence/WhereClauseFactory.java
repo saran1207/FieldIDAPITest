@@ -1,5 +1,6 @@
 package com.n4systems.util.persistence;
 
+import com.n4systems.util.MapUtils;
 import com.n4systems.util.persistence.WhereClause.ChainOp;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
@@ -122,6 +123,10 @@ public class WhereClauseFactory {
 		return createPassthru(clause, parseParameterFromClause(clause), value);
 	}
 
+	public static PassthruWhereClause createPassthru(String clause) {
+		return createPassthru(clause, clause, new HashMap<>(), ChainOp.AND);
+	}
+
 	private static String parseParameterFromClause(String clause) {
 		Pattern p = Pattern.compile(":(\\w+)", Pattern.CASE_INSENSITIVE);
 		Matcher m = p.matcher(clause);
@@ -139,4 +144,13 @@ public class WhereClauseFactory {
 		}
 		return parameter;
 	}
+
+	public static SubSelectExistsClause createNotExists(String name, QueryBuilder<?> subQuery) {
+		return new SubSelectExistsClause(name, subQuery, false);
+	}
+
+	public static SubSelectExistsClause createExists(String name, QueryBuilder<?> subQuery) {
+		return new SubSelectExistsClause(name, subQuery, true);
+	}
+
 }

@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.ws.v2.resources.setupdata.eventtype;
+package com.n4systems.fieldid.ws.v2.resources.setupdata.eventform;
 
 import com.n4systems.fieldid.ws.v2.resources.model.ApiReadonlyModel;
 

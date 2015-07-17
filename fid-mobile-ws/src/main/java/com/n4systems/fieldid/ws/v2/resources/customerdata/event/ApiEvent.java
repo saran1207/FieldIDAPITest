@@ -4,6 +4,7 @@ import com.n4systems.fieldid.ws.v2.resources.model.ApiReadWriteModelWithOwner;
 import com.n4systems.model.WorkflowState;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,12 +30,13 @@ public class ApiEvent extends ApiReadWriteModelWithOwner {
 	private BigDecimal gpsLatitude;
 	private BigDecimal gpsLongitude;
 	private String eventScheduleId;
-	private ApiEventFormResult form;
+	private Long formId;
 	private List<ApiEvent> subEvents;
 	private boolean action;
 	private Long priorityId;
 	private String notes;
 	private ApiTriggerEvent triggerEventInfo;
+	private List<ApiCriteriaResult> results = new ArrayList<>();
 
 	public WorkflowState getWorkflowState() {
 		return workflowState;
@@ -204,14 +206,14 @@ public class ApiEvent extends ApiReadWriteModelWithOwner {
 		this.eventScheduleId = eventScheduleId;
 	}
 
-	public ApiEventFormResult getForm() {
-		return form;
+	public Long getFormId() {
+		return formId;
 	}
 
-	public void setForm(ApiEventFormResult form) {
-		this.form = form;
+	public void setFormId(Long eventFormId) {
+		this.formId = formId;
 	}
-	
+
 	public List<ApiEvent> getSubEvents() {
 		return subEvents;
 	}
@@ -250,5 +252,13 @@ public class ApiEvent extends ApiReadWriteModelWithOwner {
 
 	public void setTriggerEventInfo(ApiTriggerEvent triggerEventInfo) {
 		this.triggerEventInfo = triggerEventInfo;
+	}
+
+	public List<ApiCriteriaResult> getResults() {
+		return results;
+	}
+
+	public void setResults(List<ApiCriteriaResult> results) {
+		this.results = results;
 	}
 }

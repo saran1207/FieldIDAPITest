@@ -1,7 +1,7 @@
-package com.n4systems.fieldid.ws.v2.resources.setupdata.eventtype;
+package com.n4systems.fieldid.ws.v2.resources.setupdata.eventform;
 
 import com.n4systems.fieldid.ws.v2.resources.model.ApiReadonlyModel;
-import com.n4systems.fieldid.ws.v2.resources.setupdata.eventtype.criteria.ApiCriteria;
+import com.n4systems.fieldid.ws.v2.resources.setupdata.eventform.criteria.ApiCriteria;
 
 import java.util.ArrayList;
 import java.util.List;

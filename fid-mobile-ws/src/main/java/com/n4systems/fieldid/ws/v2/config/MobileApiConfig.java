@@ -9,6 +9,7 @@ import com.n4systems.fieldid.ws.v2.resources.authentication.AuthenticationResour
 import com.n4systems.fieldid.ws.v2.resources.customerdata.asset.ApiAssetResource;
 import com.n4systems.fieldid.ws.v2.resources.customerdata.asset.attributevalues.ApiAttributeValueConverter;
 import com.n4systems.fieldid.ws.v2.resources.customerdata.assetattachment.ApiAssetAttachmentResource;
+import com.n4systems.fieldid.ws.v2.resources.customerdata.event.ApiCriteriaResultConverter;
 import com.n4systems.fieldid.ws.v2.resources.customerdata.event.ApiEventResource;
 import com.n4systems.fieldid.ws.v2.resources.customerdata.eventattachment.ApiEventAttachmentResource;
 import com.n4systems.fieldid.ws.v2.resources.customerdata.eventhistory.ApiEventHistoryResource;
@@ -19,6 +20,8 @@ import com.n4systems.fieldid.ws.v2.resources.setupdata.autoattribute.ApiAutoAttr
 import com.n4systems.fieldid.ws.v2.resources.setupdata.autoattribute.ApiAutoAttributeDefinitionResource;
 import com.n4systems.fieldid.ws.v2.resources.setupdata.commenttemplate.ApiCommentTemplateResource;
 import com.n4systems.fieldid.ws.v2.resources.setupdata.eventbook.ApiEventBookResource;
+import com.n4systems.fieldid.ws.v2.resources.setupdata.eventform.ApiEventFormResource;
+import com.n4systems.fieldid.ws.v2.resources.setupdata.eventform.criteria.ApiCriteriaConverter;
 import com.n4systems.fieldid.ws.v2.resources.setupdata.eventstatus.ApiEventStatusResource;
 import com.n4systems.fieldid.ws.v2.resources.setupdata.eventtype.ApiEventTypeResource;
 import com.n4systems.fieldid.ws.v2.resources.setupdata.location.ApiPredefinedLocationResource;
@@ -74,9 +77,23 @@ public class MobileApiConfig {
 	}
 
 	@Bean
-	@Scope("request")
 	public ApiAttributeValueConverter apiAttributeValueConverter() {
 		return new ApiAttributeValueConverter();
+	}
+
+	@Bean
+	public ApiTenantConverter apiTenantResource() {
+		return new ApiTenantConverter();
+	}
+
+	@Bean
+	public ApiCriteriaConverter apiCriteriaConverter() {
+		return new ApiCriteriaConverter();
+	}
+
+	@Bean
+	public ApiCriteriaResultConverter apiCriteriaResultConverter() {
+		return new ApiCriteriaResultConverter();
 	}
 
 	@Bean
@@ -95,12 +112,6 @@ public class MobileApiConfig {
 	@Scope("request")
 	public ApiOfflineProfileResource apiOfflineProfileResource() {
 		return new ApiOfflineProfileResource();
-	}
-
-	@Bean
-	@Scope("request")
-	public ApiTenantConverter apiTenantResource() {
-		return new ApiTenantConverter();
 	}
 
 	@Bean
@@ -215,5 +226,11 @@ public class MobileApiConfig {
 	@Scope("request")
 	public ApiEventBookResource apiEventBookResource() {
 		return new ApiEventBookResource();
+	}
+
+	@Bean
+	@Scope("request")
+	public ApiEventFormResource apiEventFormResource() {
+		return new ApiEventFormResource();
 	}
 }
