@@ -94,7 +94,6 @@ public class DashboardPage extends FieldIDTemplatePage {
         response.renderCSSReference("style/legacy/dashboard/widgetconfig.css");
         response.renderCSSReference("style/plugins/chosen/chosen.css");
         response.renderCSSReference("style/legacy/newCss/component/matt_buttons.css");
-        response.renderCSSReference("style/legacy/newCss/component/buttons.css");
     }
 
     private WebMarkupContainer addContent(String id) {
