@@ -16,6 +16,7 @@ import com.n4systems.fieldid.ws.v2.resources.customerdata.eventhistory.ApiEventH
 import com.n4systems.fieldid.ws.v2.resources.offlineprofile.ApiOfflineProfileResource;
 import com.n4systems.fieldid.ws.v2.resources.setupdata.assetstatus.ApiAssetStatusResource;
 import com.n4systems.fieldid.ws.v2.resources.setupdata.assettype.ApiAssetTypeResource;
+import com.n4systems.fieldid.ws.v2.resources.setupdata.assettypeattachment.ApiAssetTypeAttachmentResource;
 import com.n4systems.fieldid.ws.v2.resources.setupdata.autoattribute.ApiAutoAttributeCriteriaResource;
 import com.n4systems.fieldid.ws.v2.resources.setupdata.autoattribute.ApiAutoAttributeDefinitionResource;
 import com.n4systems.fieldid.ws.v2.resources.setupdata.commenttemplate.ApiCommentTemplateResource;
@@ -77,21 +78,25 @@ public class MobileApiConfig {
 	}
 
 	@Bean
+	@Scope("request")
 	public ApiAttributeValueConverter apiAttributeValueConverter() {
 		return new ApiAttributeValueConverter();
 	}
 
 	@Bean
+	@Scope("request")
 	public ApiTenantConverter apiTenantResource() {
 		return new ApiTenantConverter();
 	}
 
 	@Bean
+	@Scope("request")
 	public ApiCriteriaConverter apiCriteriaConverter() {
 		return new ApiCriteriaConverter();
 	}
 
 	@Bean
+	@Scope("request")
 	public ApiCriteriaResultConverter apiCriteriaResultConverter() {
 		return new ApiCriteriaResultConverter();
 	}
@@ -233,4 +238,11 @@ public class MobileApiConfig {
 	public ApiEventFormResource apiEventFormResource() {
 		return new ApiEventFormResource();
 	}
+
+	@Bean
+	@Scope("request")
+	public ApiAssetTypeAttachmentResource apiAssetTypeAttachmentResource() {
+		return new ApiAssetTypeAttachmentResource();
+	}
+
 }

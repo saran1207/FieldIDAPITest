@@ -6,7 +6,6 @@ import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.function.Function;
@@ -14,7 +13,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-@Component
 public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPersistenceService {
 
     @Autowired
@@ -85,7 +83,7 @@ public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPe
 	}
 
 	protected <T, A extends ApiKey<T>> List<T> unwrapKeys(List<A> keys) {
-		return keys.stream().map(a -> a.getSid()).collect(Collectors.toList());
+		return keys.stream().map(ApiKey::getSid).collect(Collectors.toList());
 	}
 
 }

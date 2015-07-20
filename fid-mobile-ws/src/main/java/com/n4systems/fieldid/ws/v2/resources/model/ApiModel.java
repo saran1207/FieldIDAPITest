@@ -1,18 +1,21 @@
 package com.n4systems.fieldid.ws.v2.resources.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.n4systems.fieldid.ws.v2.resources.ApiKey;
+
 import java.util.Date;
 
-
-public class ApiReadWriteModel extends ApiModel<String> {
-	private String sid;
+@JsonIgnoreProperties(ignoreUnknown = true)
+public abstract class ApiModel<T> implements ApiKey<T> {
+	private T sid;
 	private Date modified;
 	private boolean active;
 
-	public String getSid() {
+	public T getSid() {
 		return sid;
 	}
 
-	public void setSid(String sid) {
+	public void setSid(T sid) {
 		this.sid = sid;
 	}
 

@@ -3,6 +3,7 @@ package com.n4systems.fieldid.ws.v2.resources.setupdata;
 import com.n4systems.fieldid.ws.v2.resources.ApiKey;
 import com.n4systems.fieldid.ws.v2.resources.ApiModelHeader;
 import com.n4systems.fieldid.ws.v2.resources.ApiResource;
+import com.n4systems.fieldid.ws.v2.resources.model.ApiModel;
 import com.n4systems.fieldid.ws.v2.resources.model.DateParam;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.util.persistence.NewObjectSelect;
@@ -19,10 +20,10 @@ import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class SetupDataResource<A, E extends AbstractEntity, K extends ApiKey> extends ApiResource<A, E> {
+public abstract class SetupDataResource<A extends ApiModel, E extends AbstractEntity, K extends ApiKey> extends ApiResource<A, E> {
 
-	private final Class<E> entityClass;
 	private final String idField;
+	private final Class<E> entityClass;
 	private final boolean allowArchived;
 
 	protected SetupDataResource(String idField, Class<E> entityClass, boolean allowArchived) {
@@ -52,7 +53,7 @@ public abstract class SetupDataResource<A, E extends AbstractEntity, K extends A
 	@Path("query/latest")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
-	public List<ApiModelHeader> query(@QueryParam("since") DateParam since) {
+	public List<ApiModelHeader> queryLatest(@QueryParam("since") DateParam since) {
 		QueryBuilder<ApiModelHeader> query = new QueryBuilder<>(entityClass, securityContext.getUserSecurityFilter(allowArchived));
 		query.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, idField, "modified"));
 

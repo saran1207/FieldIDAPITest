@@ -18,7 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
-@Path("organization")
+@Path("org")
 public class ApiOrgResource extends SetupDataResourceReadOnly<ApiOrg, BaseOrg> {
 	private static Logger logger = Logger.getLogger(ApiOrgResource.class);
 
