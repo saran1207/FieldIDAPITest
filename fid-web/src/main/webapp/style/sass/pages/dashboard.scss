@@ -247,6 +247,8 @@ div.buttons-label {
 
     .select-layout {
         width: 1400px;
+        padding-left: 15px;
+        padding-top: 15px;
 
         h2 {
             color: #666666;
@@ -273,7 +275,8 @@ div.buttons-label {
     position:absolute;
     right: 0;
     background-color: #f8f8f8;
-    padding-top: 5px;
+    padding-top: 15px;
+    padding-right: 15px;
 
     a.mattButton {
         margin-right: 5px;
@@ -332,5 +335,5 @@ div.buttons-label {
 
 .print-icon {
     float:left;
-    padding:15px 20px 0 0;
+    padding:10px 20px 0 0;
 }
