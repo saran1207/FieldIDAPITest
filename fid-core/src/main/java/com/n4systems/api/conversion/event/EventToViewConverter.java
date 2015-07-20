@@ -117,11 +117,19 @@ public class EventToViewConverter implements ModelToViewConverter<ThingEvent, Ev
     }
 
     private String getDeficiency(CriteriaResult result) {
-		return result.getDeficiencies().size() > 0 ? result.getDeficiencies().get(0).getText() : "";
+		StringBuilder deficiencyConcatenation = new StringBuilder("");
+
+		result.getDeficiencies().forEach(deficiency -> deficiencyConcatenation.append(deficiency.getText()).append("\n"));
+
+		return deficiencyConcatenation.toString();
 	}
 
 	private String getRecommendation(CriteriaResult result) {
-		return result.getRecommendations().size() > 0 ? result.getRecommendations().get(0).getText() : "";
+		StringBuilder recommendationConcatenation = new StringBuilder("");
+
+		result.getRecommendations().forEach(recommendation -> recommendationConcatenation.append(recommendation.getText()).append("\n"));
+
+		return recommendationConcatenation.toString();
 	}
 
 	protected void convertDirectFields(Event model, EventView view) {

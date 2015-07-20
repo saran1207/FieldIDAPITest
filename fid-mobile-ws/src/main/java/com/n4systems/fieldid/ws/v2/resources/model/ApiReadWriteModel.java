@@ -2,7 +2,8 @@ package com.n4systems.fieldid.ws.v2.resources.model;
 
 import java.util.Date;
 
-public class ApiReadWriteModel {
+
+public class ApiReadWriteModel extends ApiModel<String> {
 	private String sid;
 	private Date modified;
 	private boolean active;

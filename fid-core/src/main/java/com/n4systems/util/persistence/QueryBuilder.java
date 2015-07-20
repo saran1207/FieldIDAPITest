@@ -130,8 +130,9 @@ public class QueryBuilder<E> {
 	/**
 	 * Sets the alias on the TableClause
 	 */
-	public void setTableAlias(String alias) {
+	public QueryBuilder<E> setTableAlias(String alias) {
 		fromArgument.setAlias(alias);
+		return this;
 	}
 	
 	/**

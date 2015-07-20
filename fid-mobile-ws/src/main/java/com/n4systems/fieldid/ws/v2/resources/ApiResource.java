@@ -6,7 +6,6 @@ import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.function.Function;
@@ -14,7 +13,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-@Component
 public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPersistenceService {
 
     @Autowired
@@ -22,8 +20,10 @@ public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPe
 
     protected abstract A convertEntityToApiModel(E entityModel);
 
+	protected List<A> postConvertAllEntitiesToApiModels(List<A> apiModels) { return apiModels; }
+
 	protected List<A> convertAllEntitiesToApiModels(List<E> entityModels) {
-        return convertAllEntitiesToApiModels(entityModels, this::convertEntityToApiModel);
+        return postConvertAllEntitiesToApiModels(convertAllEntitiesToApiModels(entityModels, this::convertEntityToApiModel));
 	}
 
     protected <M, R> List<R> convertAllEntitiesToApiModels(List<M> entityModels, Function<M, R> converter) {
@@ -80,6 +80,10 @@ public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPe
 		queryBuilder.setSelectArgument(new NewObjectSelect(ApiSortedModelHeader.class, sidField, modifiedByField, sortField));
 		queryBuilder.setOrder(sortField, ascending);
 		return queryBuilder;
+	}
+
+	protected <T, A extends ApiKey<T>> List<T> unwrapKeys(List<A> keys) {
+		return keys.stream().map(ApiKey::getSid).collect(Collectors.toList());
 	}
 
 }
