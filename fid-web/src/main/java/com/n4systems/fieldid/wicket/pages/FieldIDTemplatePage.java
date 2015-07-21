@@ -445,6 +445,9 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         if(!getMainCss().isEmpty())
             response.renderOnDomReadyJavaScript("$('main[role=\"main\"]').addClass('"+getMainCss()+"');");
 
+        if(!getWrapperCss().isEmpty())
+            response.renderOnDomReadyJavaScript("$('wrapper[role=\"wrapper\"]').addClass('"+getWrapperCss()+"');");
+
         String headerScript = configService.getString(ConfigEntry.HEADER_SCRIPT, getTenantId());
 
         if (headerScript != null && !headerScript.isEmpty()) {
@@ -616,6 +619,10 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
     }
 
     protected String getMainCss() {
+        return "";
+    }
+
+    protected String getWrapperCss() {
         return "";
     }
 }

@@ -361,6 +361,11 @@ public class DashboardPage extends FieldIDTemplatePage {
     }
 
     @Override
+    protected String getWrapperCss() {
+        return "dashboard-color";
+    }
+
+    @Override
     protected boolean useLegacyCss() {
         return false;
     }

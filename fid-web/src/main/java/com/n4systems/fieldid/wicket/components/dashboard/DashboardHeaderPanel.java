@@ -112,7 +112,7 @@ public class DashboardHeaderPanel extends Panel {
         return new LoadableDetachableModel<List<DashboardLayout>>() {
             @Override
             protected List<DashboardLayout> load() {
-                List<DashboardLayout> list = dashboardService.findDashboardLayouts(true);
+                List<DashboardLayout> list = dashboardService.findDashboardLayouts(false);
 
                 //Add the manage dashboards link to the list of layouts.
                 DashboardLayout manageLink = new DashboardLayout();

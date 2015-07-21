@@ -2,7 +2,8 @@
     padding: 0px;
     float: left;
     width: 1400px;
-    background-color: #f8f8f8;
+    background-color: #f3f3f3;
+    min-height: 500px;
 }
 
 .column {
@@ -146,6 +147,12 @@ img.widget-drag-image {
     padding-bottom:4px;
 }
 
+.dashboard-color {
+    #wrapper {
+        background-color: #f3f3f3;
+    }
+}
+
 .no-border {
     .page-header {
     border-bottom: none;
@@ -210,7 +217,7 @@ div.buttons-label {
 
 .blank-slate {
     text-align: center;
-    min-height: 350px;
+    min-height: 1000px;
 
     h3 {
         font-size: 42px;
@@ -243,7 +250,7 @@ div.buttons-label {
 
 .header-panel {
     padding-bottom: 35px;
-    background-color: #f8f8f8;
+    background-color: #f3f3f3;
 
     .select-layout {
         width: 1400px;
@@ -274,7 +281,7 @@ div.buttons-label {
 .configure-layout {
     position:absolute;
     right: 0;
-    background-color: #f8f8f8;
+    background-color: #f3f3f3;
     padding-top: 15px;
     padding-right: 15px;
 
@@ -291,16 +298,15 @@ div.buttons-label {
 
 .layout-list {
     margin-left: 9px;
-    margin-top: 56px;
-    padding: 25px;
+    margin-top: 71px;
     border: 1px solid #DDDDDD;
-    box-shadow:5px 0 2px -5px #CCCCCC, -5px 0 2px -5px #CCCCCC, 0 2px 5px 0 #CCCCCC;
     width: 330px;
     position: absolute;
     top: 30px;
-    background: black;
+    background: white;
     z-index: 10;
     height: 100%;
+    opacity: 0.97;
 }
 
 .layout-list label {
@@ -314,10 +320,13 @@ div.buttons-label {
         font-size: 1.2em;
         text-decoration: none;
         display: block;
+        color: #333;
+        font-weight: 200;
+        padding-left: 40px;
     }
 
     a:hover {
-        background-color: #add8e6;
+        background-color: cornflowerblue;
     }
 
 }
@@ -330,6 +339,7 @@ div.buttons-label {
         color: green;
         font-size: 1.2em;
         text-decoration: none;
+        padding-left: 0px;
     }
 }
 

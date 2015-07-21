@@ -35,40 +35,41 @@
 </head>
 
 <body class="fieldid-framework">
-	<div class="wrapper"><!-- creates a wrapper for the sticky footer -->
-		
-		<div wicket:id="debugBar"/>
-		<div wicket:id="languageSelectionModalWindow"/>
+    <wrapper class="" role="wrapper">
+        <div id=wrapper class="wrapper"><!-- creates a wrapper for the sticky footer -->
 
-		<header class="global-header js-page-header" wicket:id="mainHeader"/>
-		
-		<main class="" role="main">
-			
-			<header class="page-header">
+            <div wicket:id="debugBar"/>
+            <div wicket:id="languageSelectionModalWindow"/>
 
-                <div wicket:id="topFeedbackPanel" class="feedback-panel" />
+            <header class="global-header js-page-header" wicket:id="mainHeader"/>
 
-                <nav wicket:id="breadCrumbBar" class="breadcrumb"/>
+            <main class="" role="main">
 
-                <h1 wicket:enclosure="titleLabel" class="js-title-label"><span wicket:id="titleLabel"/></h1>
+                <header class="page-header">
 
-                <a wicket:id="backToLink" class="btn-secondary btn-back btn-sml"><span wicket:id="backToLinkLabel"/></a>
+                    <div wicket:id="topFeedbackPanel" class="feedback-panel" />
 
-                <div wicket:id="subHeader" class="page-sub-header"/>
+                    <nav wicket:id="breadCrumbBar" class="breadcrumb"/>
 
-                <nav wicket:id="navBar" class="nav-tabs"/>
+                    <h1 wicket:enclosure="titleLabel" class="js-title-label"><span wicket:id="titleLabel"/></h1>
 
-                <div wicket:id="actionGroup" class="action-group"/>
+                    <a wicket:id="backToLink" class="btn-secondary btn-back btn-sml"><span wicket:id="backToLinkLabel"/></a>
 
-			</header>
+                    <div wicket:id="subHeader" class="page-sub-header"/>
 
-            <div class="page-content">
-                <wicket:child></wicket:child>
-            </div>
-		</main>
+                    <nav wicket:id="navBar" class="nav-tabs"/>
 
-	</div><!-- cls .wrapper-->
+                    <div wicket:id="actionGroup" class="action-group"/>
 
+                </header>
+
+                <div class="page-content">
+                    <wicket:child></wicket:child>
+                </div>
+            </main>
+
+        </div><!-- cls .wrapper-->
+    </wrapper>
 	<footer class="footer-global">
 		<div class="content-wrap">
             <span wicket:id="versionLabel"></span>

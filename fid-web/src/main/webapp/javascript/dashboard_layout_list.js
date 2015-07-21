@@ -2,7 +2,8 @@ var layoutListShown = false;
 
 function showList() {
     if ($('#layoutCount').val() >= 0) {
-        jQuery('#layoutList').slideDown(100);
+        //jQuery('#layoutList').slideDown(100);
+        $("#layoutList").toggle("slide");
         $('#menuButton').hide();
         $('#hideMenuImage').show();
         layoutListShown = true;
@@ -10,7 +11,8 @@ function showList() {
 }
 
 function hideList() {
-    jQuery('#layoutList').fadeOut();
+    //jQuery('#layoutList').fadeOut();
+    $("#layoutList").toggle("slide");
     $('#menuButton').show();
     $('#hideMenuImage').hide();
     layoutListShown = false;
@@ -26,7 +28,7 @@ function toggleList() {
 
 function listenForLayoutListClick() {
     jQuery('#layoutListLink').click(toggleList);
-    jQuery('#layoutList').mouseleave(hideList);
+    //jQuery('#layoutList').mouseleave(hideList);
     if ($('#layoutCount').val() <= 1) {
         $('#downArrow').hide();
     }
