@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.ws.v2.resources.setupdata.eventform.criteria;
 
-import com.n4systems.fieldid.ws.v2.resources.model.ApiReadonlyModel;
+import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel;
 
-public class ApiOneClickState extends ApiReadonlyModel {
+public class ApiOneClickState extends ApiReadOnlyModel {
 	private String displayText;
 	private String buttonName;
 	private ApiEventStatus status;

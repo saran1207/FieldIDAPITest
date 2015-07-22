@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.ws.v2.resources.setupdata.procedure.warningtemplates;
 
-import com.n4systems.fieldid.ws.v2.resources.model.ApiReadonlyModel;
+import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel;
 
-public class ApiWarningTemplate extends ApiReadonlyModel {
+public class ApiWarningTemplate extends ApiReadOnlyModel {
     private String name;
     private String warning;
 

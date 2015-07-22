@@ -1,11 +1,11 @@
 package com.n4systems.fieldid.ws.v2.resources.setupdata.eventform;
 
-import com.n4systems.fieldid.ws.v2.resources.model.ApiReadonlyModel;
+import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ApiEventForm extends ApiReadonlyModel {
+public class ApiEventForm extends ApiReadOnlyModel {
 	private List<ApiCriteriaSection> sections = new ArrayList<>();
 	private boolean useScoreForResult;
     private boolean useObservationCountForResult;

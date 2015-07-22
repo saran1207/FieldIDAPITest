@@ -2,7 +2,7 @@ package com.n4systems.fieldid.ws.v2.resources.setupdata.assettypeattachment;
 
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.n4systems.fieldid.service.amazon.S3Service;
-import com.n4systems.fieldid.ws.v2.resources.setupdata.SetupDataResourceReadWrite;
+import com.n4systems.fieldid.ws.v2.resources.setupdata.SetupDataResourceReadOnly;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.util.persistence.*;
@@ -16,14 +16,14 @@ import java.util.List;
 
 @Component
 @Path("assetTypeAttachment")
-public class ApiAssetTypeAttachmentResource extends SetupDataResourceReadWrite<ApiAssetTypeAttachment, FileAttachment> {
+public class ApiAssetTypeAttachmentResource extends SetupDataResourceReadOnly<ApiAssetTypeAttachment, FileAttachment> {
 	private static final Logger logger = Logger.getLogger(ApiAssetTypeAttachmentResource.class);
 
 	@Autowired
 	private S3Service s3Service;
 
 	public ApiAssetTypeAttachmentResource() {
-		super("mobileId", FileAttachment.class, false);
+		super(FileAttachment.class, false);
 	}
 
 	@Override
@@ -41,10 +41,10 @@ public class ApiAssetTypeAttachmentResource extends SetupDataResourceReadWrite<A
 		return apiModels;
 	}
 
-	private Long findAssetTypeIdForAttachment(String mobileId) {
+	private Long findAssetTypeIdForAttachment(Long id) {
 		QueryBuilder<AssetType> query = createUserSecurityBuilder(AssetType.class, true);
 		query.addJoin(new JoinClause(JoinClause.JoinType.INNER, "attachments", "att", false));
-		query.addWhere(WhereClauseFactory.createPassthru("att.mobileId = :attachment", mobileId));
+		query.addWhere(WhereClauseFactory.createPassthru("att.id = :attachment", id));
 		AssetType assetType = persistenceService.find(query);
 		return (assetType != null) ? assetType.getId() : null;
 	}
@@ -52,7 +52,7 @@ public class ApiAssetTypeAttachmentResource extends SetupDataResourceReadWrite<A
 	@Override
 	protected ApiAssetTypeAttachment convertEntityToApiModel(FileAttachment attachment) {
 		ApiAssetTypeAttachment apiAttachment = new ApiAssetTypeAttachment();
-		apiAttachment.setSid(attachment.getMobileId());
+		apiAttachment.setSid(attachment.getId());
 		apiAttachment.setActive(true);
 		apiAttachment.setModified(attachment.getModified());
 		apiAttachment.setComments(attachment.getComments());

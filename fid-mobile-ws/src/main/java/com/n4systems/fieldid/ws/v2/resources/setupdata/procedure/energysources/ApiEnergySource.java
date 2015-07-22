@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.ws.v2.resources.setupdata.procedure.energysources;
 
-import com.n4systems.fieldid.ws.v2.resources.model.ApiReadonlyModel;
+import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel;
 
-public class ApiEnergySource extends ApiReadonlyModel {
+public class ApiEnergySource extends ApiReadOnlyModel {
     private String isolationPointSourceType;
     private String source;
 

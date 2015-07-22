@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.ws.v2.resources.customerdata.proceduredefinition;
 
-import com.n4systems.fieldid.ws.v2.resources.model.ApiReadonlyModel;
+import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel;
 
-public class ApiIsolationPoint extends ApiReadonlyModel {
+public class ApiIsolationPoint extends ApiReadOnlyModel {
     private String electronicIdentifier;
     private String identifier;
     private String source;

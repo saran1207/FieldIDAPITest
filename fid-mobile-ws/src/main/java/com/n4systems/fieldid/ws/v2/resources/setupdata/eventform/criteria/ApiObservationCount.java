@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.ws.v2.resources.setupdata.eventform.criteria;
 
-import com.n4systems.fieldid.ws.v2.resources.model.ApiReadonlyModel;
+import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel;
 
-public class ApiObservationCount extends ApiReadonlyModel {
+public class ApiObservationCount extends ApiReadOnlyModel {
 
     private String name;
     private Boolean isCounted;

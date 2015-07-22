@@ -1,11 +1,11 @@
 package com.n4systems.fieldid.ws.v2.resources.setupdata.location;
 
-import com.n4systems.fieldid.ws.v2.resources.model.ApiReadonlyModel;
+import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ApiPredefinedLocation extends ApiReadonlyModel {
+public class ApiPredefinedLocation extends ApiReadOnlyModel {
 	private String name;
 	private String levelName;
 	private Long parentId;

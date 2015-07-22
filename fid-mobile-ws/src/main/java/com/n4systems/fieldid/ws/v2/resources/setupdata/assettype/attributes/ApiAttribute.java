@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.ws.v2.resources.setupdata.assettype.attributes;
 
-import com.n4systems.fieldid.ws.v2.resources.model.ApiReadonlyModel;
+import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel;
 
-public abstract class ApiAttribute extends ApiReadonlyModel {
+public abstract class ApiAttribute extends ApiReadOnlyModel {
 	private String name;
 	private String type;
 	private Long weight;

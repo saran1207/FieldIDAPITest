@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.ws.v2.resources.customerdata.proceduredefinition;
 
-import com.n4systems.fieldid.ws.v2.resources.model.ApiReadonlyModel;
+import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel;
 
-public class ApiImageAnnotation extends ApiReadonlyModel {
+public class ApiImageAnnotation extends ApiReadOnlyModel {
     private String imageId;
     private String text;
     private String annotationType;
