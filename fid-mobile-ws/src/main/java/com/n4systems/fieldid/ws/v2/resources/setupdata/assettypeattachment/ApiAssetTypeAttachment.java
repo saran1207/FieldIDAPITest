@@ -5,7 +5,7 @@ import com.n4systems.fieldid.ws.v2.resources.model.ApiReadWriteModel;
 public class ApiAssetTypeAttachment extends ApiReadWriteModel {
 	private Long assetTypeId;
 	private String comments;
-	private byte[] data;
+	private byte[] file;
 	private String mimeType;
 	private String fileName;
 
@@ -25,12 +25,12 @@ public class ApiAssetTypeAttachment extends ApiReadWriteModel {
 		this.comments = comments;
 	}
 
-	public byte[] getData() {
-		return data;
+	public byte[] getFile() {
+		return file;
 	}
 
-	public void setData(byte[] data) {
-		this.data = data;
+	public void setFile(byte[] file) {
+		this.file = file;
 	}
 
 	public String getMimeType() {

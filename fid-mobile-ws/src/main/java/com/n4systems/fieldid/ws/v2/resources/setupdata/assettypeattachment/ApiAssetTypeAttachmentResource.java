@@ -58,7 +58,7 @@ public class ApiAssetTypeAttachmentResource extends SetupDataResourceReadWrite<A
 		apiAttachment.setComments(attachment.getComments());
 		try {
 			apiAttachment.setMimeType(s3Service.getFileAttachmentContentType(attachment));
-			apiAttachment.setData(s3Service.downloadFileAttachmentBytes(attachment));
+			apiAttachment.setFile(s3Service.downloadFileAttachmentBytes(attachment));
 		} catch (IOException | AmazonS3Exception ex) {
 			logger.warn("Unable to load asset type attachment information", ex);
 		}
