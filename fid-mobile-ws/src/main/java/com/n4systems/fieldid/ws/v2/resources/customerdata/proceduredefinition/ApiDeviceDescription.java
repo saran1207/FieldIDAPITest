@@ -1,11 +1,11 @@
 package com.n4systems.fieldid.ws.v2.resources.customerdata.proceduredefinition;
 
 import com.n4systems.fieldid.ws.v2.resources.customerdata.asset.attributevalues.ApiAttributeValue;
-import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel2;
+import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel;
 
 import java.util.List;
 
-public class ApiDeviceDescription extends ApiReadOnlyModel2 {
+public class ApiDeviceDescription extends ApiReadOnlyModel {
 
     private String freeformDescription;
     private Long assetTypeSid;

@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.ws.v2.resources.customerdata.event;
 
-import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel2;
+import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel;
 
-public class ApiObservationCount extends ApiReadOnlyModel2 {
+public class ApiObservationCount extends ApiReadOnlyModel {
 
     private String name;
     private Boolean isCounted;

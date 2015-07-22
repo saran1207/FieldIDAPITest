@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.ws.v2.resources.setupdata.eventform.criteria;
 
-import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel2;
+import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel;
 
-public class ApiScore extends ApiReadOnlyModel2 {
+public class ApiScore extends ApiReadOnlyModel {
 	private String name;
 	private Double value;
 	private boolean notApplicable = false;

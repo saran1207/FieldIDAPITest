@@ -1,12 +1,12 @@
 package com.n4systems.fieldid.ws.v2.resources.setupdata.assettype;
 
 import com.n4systems.fieldid.ws.v2.resources.setupdata.assettype.attributes.ApiAttribute;
-import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel2;
+import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ApiAssetType extends ApiReadOnlyModel2 {
+public class ApiAssetType extends ApiReadOnlyModel {
 	private String name;
 	private String warnings;
 	private String instructions;

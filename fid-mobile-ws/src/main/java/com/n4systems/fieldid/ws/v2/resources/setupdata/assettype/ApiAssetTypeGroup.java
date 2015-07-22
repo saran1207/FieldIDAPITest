@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.ws.v2.resources.setupdata.assettype;
 
-import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel2;
+import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel;
 
-public class ApiAssetTypeGroup extends ApiReadOnlyModel2 {
+public class ApiAssetTypeGroup extends ApiReadOnlyModel {
 	private String name;
 	private Long weight;
     private boolean lotoLock;
