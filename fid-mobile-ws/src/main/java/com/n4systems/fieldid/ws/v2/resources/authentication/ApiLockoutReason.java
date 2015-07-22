@@ -1,10 +1,7 @@
 package com.n4systems.fieldid.ws.v2.resources.authentication;
 
-/**
- * Created by rrana on 2015-04-10.
- */
+//TODO: Move to setup data
 public class ApiLockoutReason {
-
     private String name;
 
     public String getName() {

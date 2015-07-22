@@ -2,12 +2,10 @@ package com.n4systems.fieldid.ws.v2.resources.setupdata.assettypeattachment;
 
 import com.n4systems.fieldid.ws.v2.resources.model.ApiReadWriteModel;
 
-import java.net.URL;
-
 public class ApiAssetTypeAttachment extends ApiReadWriteModel {
 	private Long assetTypeId;
 	private String comments;
-	private URL url;
+	private byte[] data;
 	private String mimeType;
 	private String fileName;
 
@@ -27,12 +25,12 @@ public class ApiAssetTypeAttachment extends ApiReadWriteModel {
 		this.comments = comments;
 	}
 
-	public URL getUrl() {
-		return url;
+	public byte[] getData() {
+		return data;
 	}
 
-	public void setUrl(URL url) {
-		this.url = url;
+	public void setData(byte[] data) {
+		this.data = data;
 	}
 
 	public String getMimeType() {

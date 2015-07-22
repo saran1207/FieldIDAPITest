@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.Path;
+import java.io.IOException;
 import java.util.List;
 
 @Component
@@ -50,19 +51,19 @@ public class ApiAssetTypeAttachmentResource extends SetupDataResourceReadWrite<A
 
 	@Override
 	protected ApiAssetTypeAttachment convertEntityToApiModel(FileAttachment attachment) {
+		ApiAssetTypeAttachment apiAttachment = new ApiAssetTypeAttachment();
+		apiAttachment.setSid(attachment.getMobileId());
+		apiAttachment.setActive(true);
+		apiAttachment.setModified(attachment.getModified());
+		apiAttachment.setComments(attachment.getComments());
 		try {
-			ApiAssetTypeAttachment apiAttachment = new ApiAssetTypeAttachment();
-			apiAttachment.setSid(attachment.getMobileId());
-			apiAttachment.setActive(true);
-			apiAttachment.setModified(attachment.getModified());
-			apiAttachment.setComments(attachment.getComments());
-			apiAttachment.setUrl(s3Service.getFileAttachmentUrl(attachment));
 			apiAttachment.setMimeType(s3Service.getFileAttachmentContentType(attachment));
-			return apiAttachment;
-		} catch (AmazonS3Exception ex) {
+			apiAttachment.setData(s3Service.downloadFileAttachmentBytes(attachment));
+		} catch (IOException | AmazonS3Exception ex) {
 			logger.warn("Unable to load asset type attachment information", ex);
-			return null;
 		}
+		return apiAttachment;
+
 	}
 }
 
