@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.ws.v2.resources.setupdata.org;
 
-import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel;
+import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel2;
 
-public class ApiOrg extends ApiReadOnlyModel {
+public class ApiOrg extends ApiReadOnlyModel2 {
 	private String name;
 	private Long parentId;
 	private Long secondaryId;

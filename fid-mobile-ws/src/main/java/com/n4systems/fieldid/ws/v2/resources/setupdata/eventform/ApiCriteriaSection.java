@@ -1,12 +1,12 @@
 package com.n4systems.fieldid.ws.v2.resources.setupdata.eventform;
 
-import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel;
+import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel2;
 import com.n4systems.fieldid.ws.v2.resources.setupdata.eventform.criteria.ApiCriteria;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ApiCriteriaSection extends ApiReadOnlyModel {
+public class ApiCriteriaSection extends ApiReadOnlyModel2 {
 	private String title;
     private Boolean optional;
 	private List<ApiCriteria> criteria = new ArrayList<>();

@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.ws.v2.resources.setupdata.prioritycode;
 
-import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModelWithName;
+import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModelWithName2;
 
-public class ApiPriorityCode extends ApiReadOnlyModelWithName {
+public class ApiPriorityCode extends ApiReadOnlyModelWithName2 {
     private String autoScheduleType;
     private Integer autoScheduleCustomDays;
 

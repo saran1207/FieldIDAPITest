@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.ws.v2.resources.setupdata.procedure.preconfigureddevices;
 
-import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel;
+import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel2;
 
-public class ApiPreconfiguredDevice extends ApiReadOnlyModel {
+public class ApiPreconfiguredDevice extends ApiReadOnlyModel2 {
 
     private String isolationPointSourceType;
     private String device;

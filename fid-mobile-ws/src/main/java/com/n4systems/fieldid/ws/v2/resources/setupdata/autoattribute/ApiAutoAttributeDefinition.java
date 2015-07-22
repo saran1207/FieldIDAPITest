@@ -1,12 +1,12 @@
 package com.n4systems.fieldid.ws.v2.resources.setupdata.autoattribute;
 
 import com.n4systems.fieldid.ws.v2.resources.customerdata.asset.attributevalues.ApiAttributeValue;
-import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel;
+import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel2;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ApiAutoAttributeDefinition extends ApiReadOnlyModel {
+public class ApiAutoAttributeDefinition extends ApiReadOnlyModel2 {
 	private long criteriaId;
 	private List<Long> inputs = new ArrayList<Long>();
 	private List<ApiAttributeValue> outputs = new ArrayList<>();

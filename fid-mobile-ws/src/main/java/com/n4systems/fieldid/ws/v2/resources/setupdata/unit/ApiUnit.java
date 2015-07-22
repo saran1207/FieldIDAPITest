@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.ws.v2.resources.setupdata.unit;
 
-import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel;
+import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel2;
 
-public class ApiUnit extends ApiReadOnlyModel {
+public class ApiUnit extends ApiReadOnlyModel2 {
 	private String name;
 	private String shortName;
 	private boolean selectable;

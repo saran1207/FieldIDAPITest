@@ -1,11 +1,11 @@
 package com.n4systems.fieldid.ws.v2.resources.setupdata.eventtype;
 
-import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel;
+import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel2;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ApiEventType extends ApiReadOnlyModel {
+public class ApiEventType extends ApiReadOnlyModel2 {
 	private String name;
 	private String groupName;
 	private String description;

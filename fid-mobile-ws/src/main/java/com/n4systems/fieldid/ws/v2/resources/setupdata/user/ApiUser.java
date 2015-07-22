@@ -1,12 +1,12 @@
 package com.n4systems.fieldid.ws.v2.resources.setupdata.user;
 
-import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModelWithOwner;
+import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModelWithOwner2;
 import com.n4systems.fieldid.ws.v2.resources.offlineprofile.ApiOfflineProfile;
 import com.n4systems.security.UserType;
 
 import java.util.List;
 
-public class ApiUser extends ApiReadOnlyModelWithOwner {
+public class ApiUser extends ApiReadOnlyModelWithOwner2 {
 	private String userId;
 	private String name;
 	private String authKey;

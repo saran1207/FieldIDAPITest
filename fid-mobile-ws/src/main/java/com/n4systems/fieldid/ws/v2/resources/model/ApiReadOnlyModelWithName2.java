@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.ws.v2.resources.model;
 
-public class ApiReadonlyModelWithName extends ApiReadonlyModel{
+public class ApiReadOnlyModelWithName2 extends ApiReadOnlyModel2 {
 	private String name;
 
 	public String getName() {

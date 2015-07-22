@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.ws.v2.resources.setupdata.procedure.isolationpointsourcetypes;
 
-import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel;
+import com.n4systems.fieldid.ws.v2.resources.model.ApiReadOnlyModel2;
 
-public class ApiIsolationPointSourceType extends ApiReadOnlyModel {
+public class ApiIsolationPointSourceType extends ApiReadOnlyModel2 {
 	private String source;
 	private String sourceText;
 
