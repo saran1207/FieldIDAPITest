@@ -46,7 +46,6 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		QueryBuilder<ApiModelHeader> query = new QueryBuilder<>(Asset.class, securityContext.getUserSecurityFilter());
 		query.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, "mobileGUID", "modified"));
 		query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "mobileGUID", unwrapKeys(assetIds)));
-		query.addOrder("modified", false);
 		List<ApiModelHeader> results = persistenceService.findAll(query);
 		return results;
 	}

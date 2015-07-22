@@ -82,8 +82,8 @@ public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPe
 		return queryBuilder;
 	}
 
-	protected <T, A extends ApiKey<T>> List<T> unwrapKeys(List<A> keys) {
-		return keys.stream().map(ApiKey::getSid).collect(Collectors.toList());
+	protected <T, K extends ApiKey<T>> List<T> unwrapKeys(List<K> keys) {
+		return ApiKey.unwrap(keys);
 	}
 
 }

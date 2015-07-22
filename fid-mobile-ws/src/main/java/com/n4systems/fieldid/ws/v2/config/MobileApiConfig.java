@@ -13,6 +13,8 @@ import com.n4systems.fieldid.ws.v2.resources.customerdata.event.ApiCriteriaResul
 import com.n4systems.fieldid.ws.v2.resources.customerdata.event.ApiEventResource;
 import com.n4systems.fieldid.ws.v2.resources.customerdata.eventattachment.ApiEventAttachmentResource;
 import com.n4systems.fieldid.ws.v2.resources.customerdata.eventhistory.ApiEventHistoryResource;
+import com.n4systems.fieldid.ws.v2.resources.customerdata.procedure.ApiProcedureResource;
+import com.n4systems.fieldid.ws.v2.resources.customerdata.proceduredefinition.ApiProcedureDefinitionResource;
 import com.n4systems.fieldid.ws.v2.resources.offlineprofile.ApiOfflineProfileResource;
 import com.n4systems.fieldid.ws.v2.resources.setupdata.assetstatus.ApiAssetStatusResource;
 import com.n4systems.fieldid.ws.v2.resources.setupdata.assettype.ApiAssetTypeResource;
@@ -29,6 +31,10 @@ import com.n4systems.fieldid.ws.v2.resources.setupdata.location.ApiPredefinedLoc
 import com.n4systems.fieldid.ws.v2.resources.setupdata.org.ApiOrgResource;
 import com.n4systems.fieldid.ws.v2.resources.setupdata.person.ApiPersonResource;
 import com.n4systems.fieldid.ws.v2.resources.setupdata.prioritycode.ApiPriorityCodeResource;
+import com.n4systems.fieldid.ws.v2.resources.setupdata.procedure.energysources.ApiEnergySourceResource;
+import com.n4systems.fieldid.ws.v2.resources.setupdata.procedure.isolationpointsourcetypes.ApiIsolationPointSourceTypeResource;
+import com.n4systems.fieldid.ws.v2.resources.setupdata.procedure.preconfigureddevices.ApiPreconfiguredDeviceResource;
+import com.n4systems.fieldid.ws.v2.resources.setupdata.procedure.warningtemplates.ApiWarningTemplateResource;
 import com.n4systems.fieldid.ws.v2.resources.setupdata.unit.ApiUnitResource;
 import com.n4systems.fieldid.ws.v2.resources.setupdata.user.ApiUserResource;
 import com.n4systems.fieldid.ws.v2.resources.setupdata.usergroup.ApiUserGroupResource;
@@ -245,4 +251,39 @@ public class MobileApiConfig {
 		return new ApiAssetTypeAttachmentResource();
 	}
 
+	@Bean
+	@Scope("request")
+	public ApiPreconfiguredDeviceResource apiPreconfiguredDeviceResource() {
+		return new ApiPreconfiguredDeviceResource();
+	}
+
+	@Bean
+	@Scope("request")
+	public ApiIsolationPointSourceTypeResource apiIsolationPointSourceTypeResource() {
+		return new ApiIsolationPointSourceTypeResource();
+	}
+
+	@Bean
+	@Scope("request")
+	public ApiEnergySourceResource apiEnergySourceResource() {
+		return new ApiEnergySourceResource();
+	}
+
+	@Bean
+	@Scope("request")
+	public ApiWarningTemplateResource apiWarningTemplateResource() {
+		return new ApiWarningTemplateResource();
+	}
+
+	@Bean
+	@Scope("request")
+	public ApiProcedureResource apiProcedureResource() {
+		return new ApiProcedureResource();
+	}
+
+	@Bean
+	@Scope("request")
+	public ApiProcedureDefinitionResource apiProcedureDefinitionResource() {
+		return new ApiProcedureDefinitionResource();
+	}
 }

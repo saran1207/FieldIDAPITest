@@ -1,6 +1,5 @@
 package com.n4systems.util.persistence;
 
-import com.n4systems.util.MapUtils;
 import com.n4systems.util.persistence.WhereClause.ChainOp;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
@@ -153,4 +152,7 @@ public class WhereClauseFactory {
 		return new SubSelectExistsClause(name, subQuery, true);
 	}
 
+	public static TypeClause createTypeIn(String name, Class<?>...types) {
+		return new TypeClause(name, types);
+	}
 }
