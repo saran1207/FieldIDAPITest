@@ -297,12 +297,11 @@ div.buttons-label {
 }
 
 .layout-list {
-    margin-left: 9px;
-    margin-top: 71px;
     border: 1px solid #DDDDDD;
     width: 330px;
     position: absolute;
-    top: 30px;
+    top: 101px;
+    left: 10px;
     background: white;
     z-index: 10;
     height: 100%;
@@ -326,7 +325,7 @@ div.buttons-label {
     }
 
     a:hover {
-        background-color: cornflowerblue;
+        background-color: #D6DDE8;
     }
 
 }
