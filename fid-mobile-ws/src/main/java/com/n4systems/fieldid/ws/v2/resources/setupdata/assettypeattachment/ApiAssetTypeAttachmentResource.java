@@ -56,7 +56,9 @@ public class ApiAssetTypeAttachmentResource extends SetupDataResourceReadOnly<Ap
 		apiAttachment.setActive(true);
 		apiAttachment.setModified(attachment.getModified());
 		apiAttachment.setComments(attachment.getComments());
+		apiAttachment.setFileName(attachment.getDisplayFileName());
 		try {
+
 			apiAttachment.setMimeType(s3Service.getFileAttachmentContentType(attachment));
 			apiAttachment.setFile(s3Service.downloadFileAttachmentBytes(attachment));
 		} catch (IOException | AmazonS3Exception ex) {
