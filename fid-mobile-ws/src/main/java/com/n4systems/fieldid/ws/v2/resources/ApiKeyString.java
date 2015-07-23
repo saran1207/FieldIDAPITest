@@ -4,7 +4,7 @@ public class ApiKeyString implements ApiKey<String> {
 	private final String sid;
 
 	public ApiKeyString(String param) {
-		String[] parts = param.split("|");
+		String[] parts = param.split("\\|");
 		sid = parts[0];
 	}
 
