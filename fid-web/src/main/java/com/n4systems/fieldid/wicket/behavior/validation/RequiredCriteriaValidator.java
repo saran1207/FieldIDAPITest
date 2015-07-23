@@ -49,7 +49,7 @@ public class RequiredCriteriaValidator {
                                 errors.add(getCriteriaErrorMessage(REQUIRED_INPUT, criteriaResult, sectionResult));
                             }
                         } else if (criteriaResult instanceof SignatureCriteriaResult) {
-                            if (!((SignatureCriteriaResult) criteriaResult).hasImageInMemoryOrTemporaryFile()) {
+                            if (!((SignatureCriteriaResult) criteriaResult).isSigned()) {
                                 errors.add(getCriteriaErrorMessage(REQUIRED_INPUT, criteriaResult, sectionResult));
                             }
                         }
