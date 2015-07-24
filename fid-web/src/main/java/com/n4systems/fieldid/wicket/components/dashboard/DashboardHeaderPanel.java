@@ -38,10 +38,34 @@ public class DashboardHeaderPanel extends Panel {
         add(new ContextImage("printIcon", "images/print-icon.png"));
 
         menuImage = new ContextImage("menuButton", "images/menu_button_16.png");
-        add(menuImage);
+        menuImage.setMarkupId("menuButton");
+        menuImage.setOutputMarkupPlaceholderTag(true);
 
         hideMenuImage = new ContextImage("hideMenuImage", "images/collapse-menu.png");
-        add(hideMenuImage);
+        hideMenuImage.setMarkupId("hideMenuImage");
+        hideMenuImage.setOutputMarkupPlaceholderTag(true);
+
+        AjaxLink sidePanel = new AjaxLink("layoutListLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                if(menuImage.isVisible()) {
+                    target.appendJavaScript("showList()");
+                    menuImage.setVisible(false);
+                    hideMenuImage.setVisible(true);
+                    target.add(menuImage, hideMenuImage);
+                } else {
+                    target.appendJavaScript("hideList()");
+                    menuImage.setVisible(true);
+                    hideMenuImage.setVisible(false);
+                    target.add(menuImage, hideMenuImage);
+                }
+            }
+        };
+        sidePanel.setMarkupId("layoutListLink");
+
+        sidePanel.add(menuImage);
+        sidePanel.add(hideMenuImage);
+        add(sidePanel);
 
         add(new Label("name", new PropertyModel<DashboardLayout>(new CurrentLayoutModel(), "name")));
 
