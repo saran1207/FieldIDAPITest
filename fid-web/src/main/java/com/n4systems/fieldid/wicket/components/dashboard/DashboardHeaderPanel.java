@@ -29,8 +29,8 @@ public class DashboardHeaderPanel extends Panel {
     private DashboardService dashboardService;
 
     private static final String MANAGE_DASHBOARDS = "Manage Dashboards";
-    ContextImage menuImage;
-    ContextImage hideMenuImage;
+    public ContextImage menuImage;
+    public ContextImage hideMenuImage;
 
     public DashboardHeaderPanel(String id) {
         super(id);

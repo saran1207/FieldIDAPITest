@@ -105,6 +105,10 @@ public class DashboardPage extends FieldIDTemplatePage {
             @Override
             protected void onManageDashboard(AjaxRequestTarget target) {
 
+                target.appendJavaScript("showList()");
+                menuImage.setVisible(true);
+                hideMenuImage.setVisible(false);
+
                 if (activeDashboardWindow ) {
                     return;
                 }
@@ -122,7 +126,6 @@ public class DashboardPage extends FieldIDTemplatePage {
                         configurationWindow.close(target);
                         activeDashboardWindow = false;
                     }
-
                 });
 
                     configurationWindow.show(target);
@@ -157,7 +160,6 @@ public class DashboardPage extends FieldIDTemplatePage {
                 }
 
                 target.add(headerPanel);
-                target.appendJavaScript("listenForLayoutListClick()");
             }
         });
 
