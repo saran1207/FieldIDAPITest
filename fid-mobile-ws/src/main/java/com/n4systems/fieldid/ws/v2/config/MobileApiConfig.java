@@ -11,6 +11,7 @@ import com.n4systems.fieldid.ws.v2.resources.customerdata.asset.attributevalues.
 import com.n4systems.fieldid.ws.v2.resources.customerdata.assetattachment.ApiAssetAttachmentResource;
 import com.n4systems.fieldid.ws.v2.resources.customerdata.event.ApiCriteriaResultConverter;
 import com.n4systems.fieldid.ws.v2.resources.customerdata.event.ApiEventResource;
+import com.n4systems.fieldid.ws.v2.resources.customerdata.event.ApiEventToModelConverter;
 import com.n4systems.fieldid.ws.v2.resources.customerdata.eventattachment.ApiEventAttachmentResource;
 import com.n4systems.fieldid.ws.v2.resources.customerdata.eventhistory.ApiEventHistoryResource;
 import com.n4systems.fieldid.ws.v2.resources.customerdata.procedure.ApiProcedureResource;
@@ -19,8 +20,7 @@ import com.n4systems.fieldid.ws.v2.resources.offlineprofile.ApiOfflineProfileRes
 import com.n4systems.fieldid.ws.v2.resources.setupdata.assetstatus.ApiAssetStatusResource;
 import com.n4systems.fieldid.ws.v2.resources.setupdata.assettype.ApiAssetTypeResource;
 import com.n4systems.fieldid.ws.v2.resources.setupdata.assettypeattachment.ApiAssetTypeAttachmentResource;
-import com.n4systems.fieldid.ws.v2.resources.setupdata.autoattribute.ApiAutoAttributeCriteriaResource;
-import com.n4systems.fieldid.ws.v2.resources.setupdata.autoattribute.ApiAutoAttributeDefinitionResource;
+import com.n4systems.fieldid.ws.v2.resources.setupdata.autoattribute.ApiAutoAttributeResource;
 import com.n4systems.fieldid.ws.v2.resources.setupdata.commenttemplate.ApiCommentTemplateResource;
 import com.n4systems.fieldid.ws.v2.resources.setupdata.eventbook.ApiEventBookResource;
 import com.n4systems.fieldid.ws.v2.resources.setupdata.eventform.ApiEventFormResource;
@@ -87,6 +87,12 @@ public class MobileApiConfig {
 	@Scope("request")
 	public ApiAttributeValueConverter apiAttributeValueConverter() {
 		return new ApiAttributeValueConverter();
+	}
+
+	@Bean
+	@Scope("request")
+	public ApiEventToModelConverter apiEventToModelConverter() {
+		return new ApiEventToModelConverter();
 	}
 
 	@Bean
@@ -177,18 +183,6 @@ public class MobileApiConfig {
 	@Scope("request")
 	public ApiAssetStatusResource apiAssetStatusResource() {
 		return new ApiAssetStatusResource();
-	}
-
-	@Bean
-	@Scope("request")
-	public ApiAutoAttributeCriteriaResource apiAutoAttributeCriteriaResource() {
-		return new ApiAutoAttributeCriteriaResource();
-	}
-
-	@Bean
-	@Scope("request")
-	public ApiAutoAttributeDefinitionResource apiAutoAttributeDefinitionResource() {
-		return new ApiAutoAttributeDefinitionResource();
 	}
 
 	@Bean
@@ -285,5 +279,11 @@ public class MobileApiConfig {
 	@Scope("request")
 	public ApiProcedureDefinitionResource apiProcedureDefinitionResource() {
 		return new ApiProcedureDefinitionResource();
+	}
+
+	@Bean
+	@Scope("request")
+	public ApiAutoAttributeResource apiAutoAttributeResource() {
+		return new ApiAutoAttributeResource();
 	}
 }

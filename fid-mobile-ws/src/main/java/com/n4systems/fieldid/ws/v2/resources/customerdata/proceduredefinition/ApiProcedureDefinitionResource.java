@@ -149,7 +149,6 @@ public class ApiProcedureDefinitionResource extends ApiResource<ApiProcedureDefi
 	 * @return A Response object containing only the Status of the request (204 for success, 400 or 409 for error).
 	 */
 	@DELETE
-	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public Response deleteDraftProcedureDefinition(@QueryParam("procDefSid") String procDefSid) {
