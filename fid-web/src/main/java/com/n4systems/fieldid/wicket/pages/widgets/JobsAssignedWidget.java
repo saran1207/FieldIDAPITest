@@ -1,21 +1,5 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
-import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.request.resource.CssPackageResource;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.EnclosureContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
-
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.dashboard.subcomponents.LinkToJob;
 import com.n4systems.fieldid.wicket.components.table.SimpleDataTable;
@@ -25,6 +9,20 @@ import com.n4systems.fieldid.wicket.pages.widgets.config.WidgetConfigPanel;
 import com.n4systems.model.Project;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.WidgetConfiguration;
+import org.apache.wicket.Component;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
+import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.EnclosureContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class JobsAssignedWidget extends Widget<WidgetConfiguration> {
 
@@ -81,7 +79,7 @@ public class JobsAssignedWidget extends Widget<WidgetConfiguration> {
 	@Override
     public Component createConfigPanel(String id) {
 		IModel<WidgetConfiguration> configModel = new Model<WidgetConfiguration>(getWidgetDefinition().getObject().getConfig());		
-		return new WidgetConfigPanel<WidgetConfiguration>(id, configModel);
+		return new WidgetConfigPanel<WidgetConfiguration>(id, configModel, getWidgetDefinition());
 	}
 
 }

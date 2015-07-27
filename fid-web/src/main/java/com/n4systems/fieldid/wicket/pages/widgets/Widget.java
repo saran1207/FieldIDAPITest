@@ -69,8 +69,8 @@ public abstract class Widget<W extends WidgetConfiguration> extends Panel {
     }
 	
 	private void addButtons() {
-        add(removeButton = new ContextImage("removeButton", "images/dashboard/x.png"));
-        add(configureButton = new ContextImage("configureButton", "images/dashboard/config.png"));
+        removeButton = new ContextImage("removeButton", "images/dashboard/x.png");
+        add(configureButton = new ContextImage("configureButton", "images/settings.png"));
     }
 
 	public Widget<W> setRemoveBehaviour(AjaxEventBehavior behaviour) {

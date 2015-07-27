@@ -67,7 +67,7 @@ public class ActionsWidget extends ChartWidget<String,ActionsWidgetConfiguration
 
     @Override
     public Component createConfigPanel(String id) {
-		return new ActionsConfigPanel(id, getConfigModel());
+		return new ActionsConfigPanel(id, getConfigModel(), getWidgetDefinition());
 	}
 
 	@Override
@@ -93,6 +93,8 @@ public class ActionsWidget extends ChartWidget<String,ActionsWidgetConfiguration
         options.series = new FlotOptions.Series();
         options.series.stack = true;
         options.xaxis.tickDecimals = 0L;
+        options.legend.position = "ne";
+        options.legend.margin = -38;
         return options;
 	}
 	

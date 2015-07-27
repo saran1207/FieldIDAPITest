@@ -6,25 +6,29 @@
 
 <wicket:panel>
 
-    <div class="selectLayout">
-        <h2><wicket:message key="label.dashboard"/> /
-            <a id="layoutListLink" href="javascript:void(0);">
-                <span wicket:id="name"/><img id="downArrow" class="downArrow" src="/fieldid/images/down-arrow.png">
+    <div class="select-layout">
+        <h2>
+
+            <a class="tipsy-tooltip" id="layoutListLink" wicket:id="layoutListLink" href="javascript:void(0);">
+                <img id="menuButton" wicket:id="menuButton" class="menuButton">
+                <img id="hideMenuImage" wicket:id="hideMenuImage" style="display: none" class="menuButton">
             </a>
+
+            <span wicket:id="name"/>
         </h2>
     </div>
 
     <input type="hidden" wicket:id="layoutCount"/>
 
 
-    <div class="configureLayout">
-        <img class="printIcon" wicket:id="printIcon" onclick="window.print();"/>
-        <a class="tipsy-tooltip mattButton" wicket:id="addWidgetsLink"><wicket:message key="label.widgets"/></a>
-        <a class="tipsy-tooltip mattButton" wicket:id="manageDashboardLink"><wicket:message key="label.dashboards"/></a>
+    <div class="configure-layout">
+        <img class="print-icon" wicket:id="printIcon" onclick="window.print();"/>
+
+        <a class="tipsy-tooltip btn-secondary" wicket:id="addWidgetsLink"><wicket:message key="label.widgets"/></a>
     </div>
 
-    <div id="layoutList" class="layoutList" style="display: none">
-        <div class="layoutItem" wicket:id="layoutList">
+    <div id="layoutList" class="layout-list" style="display: none">
+        <div class="layout-item" wicket:id="layoutList">
             <a wicket:id="link"><span wicket:id="name"/></a>
         </div>
     </div>

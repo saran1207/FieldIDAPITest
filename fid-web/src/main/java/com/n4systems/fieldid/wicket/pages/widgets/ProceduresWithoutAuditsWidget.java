@@ -75,7 +75,7 @@ public class ProceduresWithoutAuditsWidget extends Widget<ProceduresWithoutAudit
     @Override
     public Component createConfigPanel(String id) {
         IModel<ProceduresWithoutAuditsWidgetConfiguration> configModel = new Model<ProceduresWithoutAuditsWidgetConfiguration>(getWidgetDefinition().getObject().getConfig());
-        return new ProceduresWithoutAuditsConfigPanel(id,configModel);
+        return new ProceduresWithoutAuditsConfigPanel(id,configModel, getWidgetDefinition());
     }
 
     @Override

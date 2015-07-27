@@ -82,11 +82,14 @@ public class LotoDetailsSetupPage extends FieldIDTemplatePage {
 
 
         form.add(new TextArea<String>("applicationProcess", new PropertyModel<>(customLotoDetailsModel, "applicationProcess"))
-                .add(new StringValidator.MaximumLengthValidator(TEXTAREA_MAXLENGTH)));
+                .add(new StringValidator.MaximumLengthValidator(TEXTAREA_MAXLENGTH))
+                .setLabel(new FIDLabelModel("label.lockout_application_process")));
         form.add(new TextArea<String>("removalProcess", new PropertyModel<>(customLotoDetailsModel, "removalProcess"))
-                .add(new StringValidator.MaximumLengthValidator(TEXTAREA_MAXLENGTH)));
+                .add(new StringValidator.MaximumLengthValidator(TEXTAREA_MAXLENGTH))
+                .setLabel(new FIDLabelModel("label.lockout_removal_process")));
         form.add(new TextArea<String>("testingAndVerification", new PropertyModel<>(customLotoDetailsModel, "testingAndVerification"))
-                .add(new StringValidator.MaximumLengthValidator(TEXTAREA_MAXLENGTH)));
+                .add(new StringValidator.MaximumLengthValidator(TEXTAREA_MAXLENGTH))
+                .setLabel(new FIDLabelModel("label.testing_and_verification_detail_panel")));
 
 
         form.add(new SubmitLink("saveLink"));

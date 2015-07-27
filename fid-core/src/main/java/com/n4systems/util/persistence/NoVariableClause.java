@@ -1,9 +1,9 @@
 package com.n4systems.util.persistence;
 
-import javax.persistence.Query;
-
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+
+import javax.persistence.Query;
 
 
 public class NoVariableClause implements WhereClause<String> {
@@ -14,8 +14,9 @@ public class NoVariableClause implements WhereClause<String> {
 	private String left;
 	private String right;
 	private ChainOp op;
-    private boolean dropAlias;
-	
+    private boolean noAliasLeft = false;
+	private boolean noAliasRight = false;
+
 	public NoVariableClause(String name, Comparator comparator, String left, String right, ChainOp op) {
 		this.name = name;
 		this.comparator = comparator;
@@ -40,9 +41,9 @@ public class NoVariableClause implements WhereClause<String> {
 	
 	@Override
 	public String getClause(FromTable table) throws InvalidQueryException {
-		String comparison = table.prepareField(left, dropAlias)
+		String comparison = table.prepareField(left, noAliasLeft)
                 + " " + comparator.getOperator()
-                + " " + table.prepareField(right, dropAlias);
+                + " " + table.prepareField(right, noAliasRight);
 		return comparison;
 	}
 
@@ -54,7 +55,13 @@ public class NoVariableClause implements WhereClause<String> {
 		return null;
 	}
 
-    public void setDropAlias(boolean dropAlias) {
-        this.dropAlias = dropAlias;
-    }
+    public NoVariableClause setNoAliasLeft(boolean noAliasLeft) {
+		this.noAliasLeft = noAliasLeft;
+		return this;
+	}
+
+	public NoVariableClause setNoAliasRight(boolean noAliasRight) {
+		this.noAliasRight = noAliasRight;
+		return this;
+	}
 }

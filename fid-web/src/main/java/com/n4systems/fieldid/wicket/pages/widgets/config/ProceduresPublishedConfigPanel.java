@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.widgets.config;
 
+import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.ProceduresPublishedWidgetConfiguration;
 import org.apache.wicket.model.IModel;
 
@@ -8,8 +9,8 @@ import org.apache.wicket.model.IModel;
  */
 public class ProceduresPublishedConfigPanel extends OrgDateWidgetConfigPanel<ProceduresPublishedWidgetConfiguration> {
 
-    public ProceduresPublishedConfigPanel(String id, final IModel<ProceduresPublishedWidgetConfiguration> configModel) {
-        super(id, configModel, true);
+    public ProceduresPublishedConfigPanel(String id, final IModel<ProceduresPublishedWidgetConfiguration> configModel, IModel<WidgetDefinition<ProceduresPublishedWidgetConfiguration>> def) {
+        super(id, configModel, true, def);
     }
 
 }

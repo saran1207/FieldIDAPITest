@@ -128,7 +128,11 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
         ImagePrintoutContainer returnMe = new ImagePrintoutContainer();
 
         try {
-            byte[] imageData = s3Service.downloadProcedureDefinitionImageSvg(image);
+            byte[] imageData = null;
+            //Always regerate SVGs for drafts in case annotations have changed
+            if(!procDef.getPublishedState().equals(PublishedState.DRAFT)) {
+                imageData = s3Service.downloadProcedureDefinitionImageSvg(image);
+            }
 
             if(imageData == null) {
                 //This might just mean that we haven't generated the SVGs yet... so we'll do that now.
@@ -212,7 +216,13 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
             try {
                 ProcedureDefinitionImage theImage = optionalImage.get();
                 if (theImage == null) throw new NoSuchElementException("The image was empty... that's still bad news.");
-                byte[] imageData = s3Service.downloadProcedureDefinitionImageSvg(theImage, isolationPoint);
+
+                byte[] imageData = null;
+                //Always regerate SVGs for drafts in case annotations have changed
+                if(!procDef.getPublishedState().equals(PublishedState.DRAFT)) {
+                    imageData = s3Service.downloadProcedureDefinitionImageSvg(theImage, isolationPoint);
+                }
+
                 if (imageData == null) {
                     //It's possible this image was only null because the SVG doesn't exist yet... so we're going to try
                     //to fix that... then we're going to try again.  If it's still bad the second time, we're going to throw

@@ -109,6 +109,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
     private TopFeedbackPanel topFeedbackPanel;
     private ModalWindow languageSelectionModalWindow;
     private final SelectLanguagePanel selectLanguagePanel;
+    protected boolean showTitle = true;
 
     public FieldIDTemplatePage() {
         this(null, null);
@@ -169,8 +170,10 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         addNavBar("navBar");
         addBreadCrumbBar("breadCrumbBar");
 
+
         add(titleLabel = createTitleLabel("titleLabel"));
         titleLabel.setRenderBodyOnly(true);
+        titleLabel.setVisible(isShowTitle());
 
         add(topTitleLabel = useTopTitleLabel() ? createTopTitleLabel("topTitleLabel") : createTitleLabel("topTitleLabel"));
         topTitleLabel.setRenderBodyOnly(true);
@@ -442,6 +445,9 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         if(!getMainCss().isEmpty())
             response.renderOnDomReadyJavaScript("$('main[role=\"main\"]').addClass('"+getMainCss()+"');");
 
+        if(!getWrapperCss().isEmpty())
+            response.renderOnDomReadyJavaScript("$('wrapper[role=\"wrapper\"]').addClass('"+getWrapperCss()+"');");
+
         String headerScript = configService.getString(ConfigEntry.HEADER_SCRIPT, getTenantId());
 
         if (headerScript != null && !headerScript.isEmpty()) {
@@ -591,6 +597,14 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         return lotoLinkContainer;
     }
 
+    public boolean isShowTitle() {
+        return showTitle;
+    }
+
+    public void setShowTitle(boolean showTitle) {
+        this.showTitle = showTitle;
+    }
+
     static class StaticImage extends WebComponent {
         public StaticImage(String id, IModel<String> urlModel) {
             super( id, urlModel );
@@ -605,6 +619,10 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
     }
 
     protected String getMainCss() {
+        return "";
+    }
+
+    protected String getWrapperCss() {
         return "";
     }
 }

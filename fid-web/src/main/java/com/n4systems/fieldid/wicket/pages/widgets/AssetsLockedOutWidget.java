@@ -79,7 +79,7 @@ public class AssetsLockedOutWidget extends Widget<LockedoutProceduresWidgetConfi
     @Override
     public Component createConfigPanel(String id) {
         IModel<LockedoutProceduresWidgetConfiguration> configModel = new Model<LockedoutProceduresWidgetConfiguration>(getWidgetDefinition().getObject().getConfig());
-        return new AssetsLockedOutConfigPanel(id, configModel);
+        return new AssetsLockedOutConfigPanel(id, configModel, getWidgetDefinition());
     }
 
     @Override

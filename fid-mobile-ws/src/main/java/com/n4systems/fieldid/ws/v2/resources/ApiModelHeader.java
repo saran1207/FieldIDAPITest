@@ -3,30 +3,35 @@ package com.n4systems.fieldid.ws.v2.resources;
 import java.io.Serializable;
 import java.util.Date;
 
-public class ApiModelHeader implements Serializable {
-	private String sid;
-	private Date modified;
+public class ApiModelHeader<T> implements Serializable {
+	private final T sid;
+	private final Date modified;
 
-	public ApiModelHeader() {}
-
-	public ApiModelHeader(String sid, Date modified) {
+	public ApiModelHeader(T sid, Date modified) {
 		this.sid = sid;
 		this.modified = modified;
 	}
 
-	public String getSid() {
+	public T getSid() {
 		return sid;
-	}
-
-	public void setSid(String sid) {
-		this.sid = sid;
 	}
 
 	public Date getModified() {
 		return modified;
 	}
 
-	public void setModified(Date modified) {
-		this.modified = modified;
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		ApiModelHeader<?> that = (ApiModelHeader<?>) o;
+
+		return sid.equals(that.sid);
+	}
+
+	@Override
+	public int hashCode() {
+		return sid.hashCode();
 	}
 }

@@ -22,6 +22,10 @@ public class SecurityContext {
         return new UserSecurityFilter(getUserSecurityFilter()).setShowArchived(true);
     }
 
+	public UserSecurityFilter getUserSecurityFilter(boolean withArchived) {
+		return withArchived ? getUserSecurityFilterWithArchived() : getUserSecurityFilter();
+	}
+
 	public void setUserSecurityFilter(UserSecurityFilter userSecurityFilter) {
 		this.userSecurityFilter = userSecurityFilter;
 	}
@@ -43,6 +47,10 @@ public class SecurityContext {
 	
 	public SecurityFilter getTenantSecurityFilterWithArchived() {
 		return new TenantOnlySecurityFilter(getTenantSecurityFilter()).setShowArchived(true);
+	}
+
+	public SecurityFilter getTenantSecurityFilter(boolean withArchived) {
+		return withArchived ? getTenantSecurityFilterWithArchived() : getTenantSecurityFilter();
 	}
 
 	public void setTenantSecurityFilter(SecurityFilter tenantSecurityFilter) {

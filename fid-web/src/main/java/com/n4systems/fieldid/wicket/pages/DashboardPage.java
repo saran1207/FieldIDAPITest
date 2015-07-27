@@ -73,6 +73,7 @@ public class DashboardPage extends FieldIDTemplatePage {
     	super(configProvider);
 
         currentLayoutModel = new CurrentLayoutModel();
+        setShowTitle(false);
 
         add(content = addContent("content"));
     }
@@ -83,18 +84,16 @@ public class DashboardPage extends FieldIDTemplatePage {
 
         JavascriptPackageResourceIE.renderJavaScriptReference(response, "javascript/flot/excanvas.min.js");
 
-        response.renderJavaScriptReference("javascript/flot/jquery.flot.min.js");
+        response.renderJavaScriptReference("javascript/flot/jquery.flot.js");
         response.renderJavaScriptReference("javascript/flot/jquery.flot.stack.min.js");
         response.renderJavaScriptReference("javascript/flot/jquery.flot.navigate.min.js");
         response.renderJavaScriptReference("javascript/flot/jquery.flot.symbol.min.js");
         response.renderJavaScriptReference("javascript/dashboard.js");
         response.renderJavaScriptReference("javascript/widget.js");
 
-        response.renderCSSReference("style/legacy/dashboard/dashboard.css");
         response.renderCSSReference("style/legacy/dashboard/widgetconfig.css");
         response.renderCSSReference("style/plugins/chosen/chosen.css");
         response.renderCSSReference("style/legacy/newCss/component/matt_buttons.css");
-        response.renderCSSReference("style/legacy/newCss/component/buttons.css");
     }
 
     private WebMarkupContainer addContent(String id) {
@@ -105,6 +104,10 @@ public class DashboardPage extends FieldIDTemplatePage {
         add(headerPanel = new DashboardHeaderPanel("headerPanel") {
             @Override
             protected void onManageDashboard(AjaxRequestTarget target) {
+
+                target.appendJavaScript("showList()");
+                menuImage.setVisible(true);
+                hideMenuImage.setVisible(false);
 
                 if (activeDashboardWindow ) {
                     return;
@@ -123,7 +126,6 @@ public class DashboardPage extends FieldIDTemplatePage {
                         configurationWindow.close(target);
                         activeDashboardWindow = false;
                     }
-
                 });
 
                     configurationWindow.show(target);
@@ -158,7 +160,6 @@ public class DashboardPage extends FieldIDTemplatePage {
                 }
 
                 target.add(headerPanel);
-                target.appendJavaScript("listenForLayoutListClick()");
             }
         });
 
@@ -330,12 +331,40 @@ public class DashboardPage extends FieldIDTemplatePage {
         }
     }
 
-    private void removeWidgetFromColumn(int columnIndex, int widgetIndex) {    	
+    public void removeWidget(WidgetDefinition widgetDefinition, AjaxRequestTarget target) {
+        boolean flag = false;
+        for(DashboardColumn col: currentLayoutModel.getObject().getColumns()) {
+            for(WidgetDefinition def: col.getWidgets()) {
+                if(def.equals(widgetDefinition)) {
+                    col.getWidgets().remove(def);
+                    flag = true;
+                    break;
+                }
+            }
+            if(flag) {
+                break;
+            }
+        }
+        closeConfigWindow(target);
+        saveAndRepaintDashboard(target);
+    }
+
+    private void removeWidgetFromColumn(int columnIndex, int widgetIndex) {
         currentLayoutModel.getObject().getColumns().get(columnIndex).getWidgets().remove(widgetIndex);
     }
 
     private void addWidgetToColumn(WidgetDefinition widgetToAdd, int columnIndex, int widgetIndex) {
         currentLayoutModel.getObject().getColumns().get(columnIndex).getWidgets().add(widgetIndex, widgetToAdd);
+    }
+
+    @Override
+    protected String getMainCss() {
+        return "no-border";
+    }
+
+    @Override
+    protected String getWrapperCss() {
+        return "dashboard-color";
     }
 
     @Override

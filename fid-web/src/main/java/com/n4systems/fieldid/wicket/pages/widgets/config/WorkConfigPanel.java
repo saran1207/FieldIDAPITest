@@ -10,7 +10,7 @@ import com.n4systems.fieldid.wicket.model.user.GroupedVisibleUsersModel;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.EventType;
-import com.n4systems.model.ThingEventType;
+import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.WorkWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
@@ -21,8 +21,8 @@ import org.apache.wicket.model.PropertyModel;
 
 public class WorkConfigPanel extends WidgetConfigPanel<WorkWidgetConfiguration> {
 
-    public WorkConfigPanel(String id, final IModel<WorkWidgetConfiguration> configModel) {
-        super(id, configModel);
+    public WorkConfigPanel(String id, final IModel<WorkWidgetConfiguration> configModel, IModel<WidgetDefinition<WorkWidgetConfiguration>> def) {
+        super(id, configModel, def);
 
         addConfigElement(new OrgLocationPicker("org", new PropertyModel<BaseOrg>(configModel, "org")));
         addConfigElement(new GroupedUserPicker("user", new PropertyModel<User>(configModel, "user"), new GroupedVisibleUsersModel(), false).setNullValid(true));

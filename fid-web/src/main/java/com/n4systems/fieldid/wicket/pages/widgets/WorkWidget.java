@@ -30,7 +30,7 @@ public class WorkWidget extends Widget<WorkWidgetConfiguration> {
 	@Override
     public Component createConfigPanel(String id) {
 		IModel<WorkWidgetConfiguration> configModel = new Model<WorkWidgetConfiguration>(getWidgetDefinition().getObject().getConfig());
-		return new WorkConfigPanel(id, configModel);
+		return new WorkConfigPanel(id, configModel, getWidgetDefinition());
 	}
 
     @Override

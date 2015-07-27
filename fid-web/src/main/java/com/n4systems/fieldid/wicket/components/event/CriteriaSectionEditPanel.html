@@ -5,7 +5,10 @@
 
         <div class="infoSet" name="criteria" wicket:id="criteria">
             <div class="tooltip"><img wicket:id="tooltip"/></div>
-            <label class="label eventFormLabel" name="criteriaName" wicket:id="criteriaName"></label>
+            <label class="label eventFormLabel">
+                <span wicket:id="requiredIndicatior"/>
+                <span wicket:id="criteriaName"/>
+            </label>
 
             <div wicket:id="criteriaEditor" class="criteriaEditContainer" name="criteriaContainer">
 

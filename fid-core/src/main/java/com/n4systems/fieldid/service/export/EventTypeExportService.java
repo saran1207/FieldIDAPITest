@@ -133,12 +133,9 @@ public class EventTypeExportService extends FieldIdPersistenceService {
 		List<ThingEvent> events = eventService.getThingEventsByType(eventTypeId, from, to);
 		EventView view;
 
-        log.info("Writing " + events.size() + " events to the sheet!!");
-
         //Why isn't this a stream, man?!  Because it kicks out exceptions.  Streams don't like that because it tastes
         //purple when an exception is encountered.
 		for (ThingEvent event:events) {
-            log.info("Writing a line...");
 			view = converter.toView(event);
 			excelMapWriter.write(exportMapMarshaller.toBeanMap(view));
 		}			

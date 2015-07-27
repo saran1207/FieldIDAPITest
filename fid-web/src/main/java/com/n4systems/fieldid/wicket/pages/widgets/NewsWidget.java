@@ -55,7 +55,7 @@ public class NewsWidget extends Widget<WidgetConfiguration> {
 	@Override
     public Component createConfigPanel(String id) {
 		IModel<WidgetConfiguration> configModel = new Model<WidgetConfiguration>(getWidgetDefinition().getObject().getConfig());		
-		return new WidgetConfigPanel<WidgetConfiguration>(id, configModel);
+		return new WidgetConfigPanel<WidgetConfiguration>(id, configModel, getWidgetDefinition());
 	}
 
 }

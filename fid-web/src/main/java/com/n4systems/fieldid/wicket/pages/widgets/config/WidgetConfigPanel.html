@@ -16,7 +16,9 @@
 	            <wicket:child/>
 			
                 <div class="actionsRow">
-                    <input type="submit" wicket:id="saveButton" wicket:message="value:label.save">
+                    <input type="submit" wicket:id="saveButton" id="saveButton" wicket:message="value:label.save">
+                    <wicket:message key="label.or"/>
+                    <input type="submit" wicket:id="removeLink" id="removeLink" wicket:message="value:label.remove">
                     <wicket:message key="label.or"/>
                     <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
                 </div>

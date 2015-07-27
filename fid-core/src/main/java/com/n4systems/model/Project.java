@@ -25,10 +25,10 @@ public class Project extends EntityWithOwner implements NamedEntity, Listable<Lo
 	@Column( nullable=false, length=255 )
 	private String name;
 	
-	@Column(nullable=true, length=2000)
+	@Column(nullable=true, length=1000)
 	private String description;
 	
-	@Column(nullable=true, length=2000)
+	@Column(nullable=true, length=1000)
 	private String workPerformed;
 		
 	@Column(nullable=true, length=255)

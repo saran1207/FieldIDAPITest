@@ -6,6 +6,7 @@ import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.EventStatusService;
 import com.n4systems.fieldid.wicket.behavior.DisableButtonBeforeSubmit;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
+import com.n4systems.fieldid.wicket.behavior.validation.RequiredCriteriaValidator;
 import com.n4systems.fieldid.wicket.components.*;
 import com.n4systems.fieldid.wicket.components.event.CriteriaSectionEditPanel;
 import com.n4systems.fieldid.wicket.components.event.EventFormEditPanel;
@@ -235,7 +236,21 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
 
         @Override
         protected void onSubmit() {
-            // SUGGESTION DD : put this in a form validator instead of onSubmit.
+
+            event.getObject().setSectionResults(sectionResults);
+            onPreSave(event.getObject());
+            onPreSave(event.getObject());
+            saveAssignedToIfNecessary();
+            saveEventBookIfNecessary();
+
+            List<ThingEvent> savedEvent = doSave();
+            setResponsePage(new CompletedMassEventPage(savedEvent));
+        }
+
+        @Override
+        protected void onValidate() {
+            super.onValidate();
+
             if (event.getObject().getOwner()==null) {
                 error(getString("error.event_owner_null"));
                 return;
@@ -246,21 +261,25 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
                 return;
             }
 
-
             if (targetAlreadyArchived(event.getObject())) {
                 error(getString("error.asset_has_been_archived"));
                 return;
             }
 
-            event.getObject().setSectionResults(sectionResults);
-            onPreSave(event.getObject());
-            onPreSave(event.getObject());
-            saveAssignedToIfNecessary();
-            saveEventBookIfNecessary();
-            if (doPostSubmitValidation()) {
-                List<ThingEvent> savedEvent = doSave();
-                setResponsePage(new CompletedMassEventPage(savedEvent));
+            if (event instanceof Event) {
+                Event masterEvent = (Event) event.getObject();
+                if (masterEvent.getBook() != null && masterEvent.getBook().getId() == null && StringUtils.isBlank(masterEvent.getBook().getName())) {
+                    error(new FIDLabelModel("error.event_book_title_required").getObject());
+                }
+
+                if (masterEvent.getOwner() == null) {
+                    error(new FIDLabelModel("error.event_book_title_required").getObject());
+                }
             }
+
+            List<AbstractEvent.SectionResults> results =  event.getObject().getSectionResults();
+
+            RequiredCriteriaValidator.validate(results).stream().forEach(message-> error(message));
         }
     }
 
@@ -534,29 +553,6 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
 
     protected abstract List<ThingEvent> doSave();
     protected void onPreSave(T event) { }
-
-    private boolean doPostSubmitValidation() {
-        if (event instanceof Event) {
-            Event masterEvent = (Event) event.getObject();
-            if (masterEvent.getBook() != null && masterEvent.getBook().getId() == null && StringUtils.isBlank(masterEvent.getBook().getName())) {
-                error(new FIDLabelModel("error.event_book_title_required").getObject());
-                return false;
-            }
-
-            if (masterEvent.getOwner() == null) {
-                error(new FIDLabelModel("error.event_book_title_required").getObject());
-                return false;
-            }
-
-        }
-
-        if (event.getObject().containsUnfilledScoreCriteria()) {
-            error(new FIDLabelModel("error.scores.required").getObject());
-            return false;
-        }
-
-        return true;
-    }
 
     @Override
     public void renderHead(IHeaderResponse response) {
