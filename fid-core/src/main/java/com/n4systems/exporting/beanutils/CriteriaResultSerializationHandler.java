@@ -1,16 +1,16 @@
 package com.n4systems.exporting.beanutils;
 
+import com.n4systems.api.model.CriteriaResultView;
+
 import java.lang.reflect.Field;
 import java.util.Map;
 
-import com.n4systems.api.model.CriteriaResultView;
-
 public class CriteriaResultSerializationHandler extends FilteredCriteriaResultSerializationHandler {
 
-	public static final String RECOMMENDATIONS_SUFFIX = ":R";
-	public static final String DEFICIENCIES_SUFFIX = ":D";
-	private static final String RECOMMENDATION_FORMAT = "%1$s:%2$s"+RECOMMENDATIONS_SUFFIX;
-	private static final String DEFICIENCY_FORMAT = "%1$s:%2$s"+DEFICIENCIES_SUFFIX;
+	public static final String RECOMMENDATIONS_SUFFIX = SEPARATOR + "R";
+	public static final String DEFICIENCIES_SUFFIX = SEPARATOR + "D";
+	public static final String RECOMMENDATION_FORMAT = CRITERIA_FORMAT + RECOMMENDATIONS_SUFFIX;
+	public static final String DEFICIENCY_FORMAT = CRITERIA_FORMAT + DEFICIENCIES_SUFFIX;
 	
 	public CriteriaResultSerializationHandler(Field field) {
 		super(field);

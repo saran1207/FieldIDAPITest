@@ -1,19 +1,22 @@
 package com.n4systems.exporting.beanutils;
 
+import com.n4systems.api.model.CriteriaResultView;
+import org.apache.commons.lang.Validate;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.commons.lang.Validate;
-
-import com.n4systems.api.model.CriteriaResultView;
+import java.util.regex.Pattern;
 
 public class FilteredCriteriaResultSerializationHandler extends CollectionSerializationHandler<CriteriaResultView> {
 
-	private static final String SEPARATOR = ":";
-	private static final String CRITERIA_FORMAT = "%1$s:%2$s";
+	//Instead of using escapes in this String, where it is used for unmarshalling, we call Pattern.quote
+    //This is because using escapes in the String would effectively break the marshalling process.  This is the
+    //only way to win.
+	public static final String SEPARATOR = "||";
+	public static final String CRITERIA_FORMAT = "%1$s" + SEPARATOR + "%2$s";
 	
 	public FilteredCriteriaResultSerializationHandler(Field field) {
 		super(field);
@@ -21,12 +24,12 @@ public class FilteredCriteriaResultSerializationHandler extends CollectionSerial
 
 	@Override
 	public boolean handlesField(String title) {
-		return (title!=null && title.indexOf(SEPARATOR)!=-1);
+		return (title!=null && title.contains(SEPARATOR));
 	}
 	
 	@Override
 	protected Map<String, Object> marshalObject(CriteriaResultView value) {		
-		Map<String,Object> result = new HashMap<String,Object>();
+		Map<String,Object> result = new HashMap<>();
 		String criteriaKey = String.format(CRITERIA_FORMAT,  value.getSection(), value.getDisplayText());
 		result.put(criteriaKey, value.getResultString());		
 		return result;		
@@ -77,7 +80,7 @@ public class FilteredCriteriaResultSerializationHandler extends CollectionSerial
 
 	@Override
 	protected Collection<CriteriaResultView> createCollection() {
-		return new ArrayList<CriteriaResultView>();
+		return new ArrayList<>();
 	}
 
 
@@ -86,7 +89,7 @@ public class FilteredCriteriaResultSerializationHandler extends CollectionSerial
 		//  Motor:Brakes       <-- result  (i.e. column would contain values like "pass", "fail" etc..
 		//  Motor:Brakes:R     <-- recommendation
 		//  Motor:Brakes:D	   <-- deficiency
-		R, D, RESULT;	// note : result is default value...doesn't have to be specified in column title. 
+		R, D, RESULT    // note : result is default value...doesn't have to be specified in column title.
 	}
 	
 	class ParsedCriteria { 
@@ -96,7 +99,9 @@ public class FilteredCriteriaResultSerializationHandler extends CollectionSerial
 		
 		public ParsedCriteria(String title) {
 			Validate.notNull(title);
-			String[] split = title.split(SEPARATOR);
+            //We use Pattern.quote here, because we can't use escapes on the SEPARATOR constant if we want to also
+            //use that same constant during the marshalling process.
+			String[] split = title.split(Pattern.quote(SEPARATOR));
 			Validate.isTrue(split.length>=2);	// need at least section & criteria. 
 			section = split[0];
 			criteria = split[1];

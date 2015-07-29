@@ -1,14 +1,13 @@
 package com.n4systems.exporting.beanutils;
 
-import static org.junit.Assert.assertEquals;
+import com.google.common.collect.Lists;
+import com.n4systems.api.conversion.event.CriteriaResultViewBuilder;
+import org.junit.Test;
 
 import java.util.Date;
 import java.util.Map;
 
-import org.junit.Test;
-
-import com.google.common.collect.Lists;
-import com.n4systems.api.conversion.event.CriteriaResultViewBuilder;
+import static org.junit.Assert.assertEquals;
 public class CriteriaResultSerializationHandlerTest {
 	private final Date testDate = new Date();
 	private TestExportBean bean = new TestExportBean("mytype", null, 42, testDate, Lists.newArrayList(new Integer(123), new Integer(456)));
@@ -23,9 +22,9 @@ public class CriteriaResultSerializationHandlerTest {
 		
 		assertEquals(3, values.size());
 		
-		assertEquals("Pass", values.get("aSection:text") );
-		assertEquals("deficiency", values.get("aSection:text:D") );
-		assertEquals("recommendation", values.get("aSection:text:R") );
+		assertEquals("Pass", values.get("aSection||text") );
+		assertEquals("deficiency", values.get("aSection||text||D") );
+		assertEquals("recommendation", values.get("aSection||text||R") );
 	}
 	
 	
@@ -33,9 +32,9 @@ public class CriteriaResultSerializationHandlerTest {
 	public void test_unmarshal() throws MarshalingException, SecurityException, NoSuchFieldException {
 		CriteriaResultSerializationHandler testHandler = new CriteriaResultSerializationHandler(TestExportBean.class.getDeclaredField("results"));
 		
-		testHandler.unmarshal(bean, "section:criteria", "hello");
-		testHandler.unmarshal(bean, "section:criteria:R", "rec");
-		testHandler.unmarshal(bean, "section:criteria:D", "def");
+		testHandler.unmarshal(bean, "section||criteria", "hello");
+		testHandler.unmarshal(bean, "section||criteria||R", "rec");
+		testHandler.unmarshal(bean, "section||criteria||D", "def");
 
 		System.out.println(bean.getResults());
 		assertEquals("def", bean.getResults().get(0).getDeficiencyString());
@@ -47,7 +46,7 @@ public class CriteriaResultSerializationHandlerTest {
 	public void test_unmarshal_exception_invalid_suffix() throws MarshalingException, SecurityException, NoSuchFieldException {
 		CriteriaResultSerializationHandler testHandler = new CriteriaResultSerializationHandler(TestExportBean.class.getDeclaredField("results"));
 		
-		testHandler.unmarshal(bean, "section:criteria:XXXX", "def");	// can't recognize title. should barf.
+		testHandler.unmarshal(bean, "section||criteria||XXXX", "def");	// can't recognize title. should barf.
 
 	}	
 	
