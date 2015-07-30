@@ -11,6 +11,7 @@ public class ApiCriteria extends ApiReadOnlyModel {
 	private String instructions;
 	private List<String> recommendations = new ArrayList<>();
 	private List<String> deficiencies = new ArrayList<>();
+	private Boolean required;
 
 	protected ApiCriteria(String criteriaType) {
 		this.criteriaType = criteriaType;
@@ -54,5 +55,13 @@ public class ApiCriteria extends ApiReadOnlyModel {
 
 	public void setDeficiencies(List<String> deficiencies) {
 		this.deficiencies = deficiencies;
+	}
+
+	public Boolean getRequired() {
+		return required;
+	}
+
+	public void setRequired(Boolean required) {
+		this.required = required;
 	}
 }
