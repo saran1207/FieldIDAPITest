@@ -2,7 +2,7 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.components;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.search.results.MassActionLink;
-import com.n4systems.fieldid.wicket.pages.massevent.SelectMassEventPage;
+import com.n4systems.fieldid.wicket.pages.massevent.SelectMassOpenEventPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.AssignEventsToJobPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateOpenEventsPage;
@@ -46,7 +46,7 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
         actions.add(massEventLink = new Link("massEventLink") {
             @Override
             public void onClick() {
-                setResponsePage(new SelectMassEventPage(model));
+                setResponsePage(new SelectMassOpenEventPage(model));
             }
         });
 

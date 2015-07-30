@@ -1,0 +1,22 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+
+    <div class="info">
+        <wicket:message key="message.select_event_type_to_perform"/>
+    </div>
+
+    <table class="comfortable">
+        <tr>
+            <th><wicket:message key="label.eventtype"/></th>
+            <th><wicket:message key="label.number_of_events"/></th>
+            <th>&nbsp;</th>
+        </tr>
+        <tr wicket:id="eventType">
+            <td><label wicket:id="name"/></td>
+            <td><label wicket:id="count"/></td>
+            <td><a wicket:id="performEvents"><wicket:message key="label.perform_these_events"/></a></td>
+        </tr>
+    </table>
+
+</wicket:extend>
+</html>

@@ -1,22 +1,20 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
 
-    <div class="info">
-        <wicket:message key="message.select_event_type_to_perform"/>
-    </div>
+    <div wicket:id="feedbackPanel"/>
 
-    <table class="comfortable">
-        <tr>
-            <th><wicket:message key="label.eventtype"/></th>
-            <th><wicket:message key="label.number_of_events"/></th>
-            <th>&nbsp;</th>
-        </tr>
-        <tr wicket:id="eventType">
-            <td><label wicket:id="name"/></td>
-            <td><label wicket:id="count"/></td>
-            <td><a wicket:id="performEvents"><wicket:message key="label.perform_these_events"/></a></td>
-        </tr>
-    </table>
+    <form wicket:id="form">
+        <div class="info" wicket:id="selectMessage"/>
+        <select wicket:id="eventType"/>
+        <div class="form-actions">
+            <a class="btn-primary" wicket:id="submitLink"><wicket:message key="label.continue"/></a>
+            <a class="btn-secondary" wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+        </div>
+    </form>
+
+    <div class="info" wicket:id="noCommonEventTypesMessage">
+        <wicket:message key="error.no_common_event_types"/>
+    </div>
 
 </wicket:extend>
 </html>

@@ -1,13 +1,16 @@
 package com.n4systems.fieldid.wicket.pages.massevent;
 
 import com.n4systems.fieldid.service.event.massevent.MassEventService;
+import com.n4systems.fieldid.service.search.SavedAssetSearchService;
 import com.n4systems.fieldid.service.search.SavedReportService;
+import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
 import com.n4systems.fieldid.wicket.pages.event.ThingEventSummaryPage;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.search.EventReportCriteria;
@@ -26,8 +29,6 @@ import java.util.List;
 
 public class CompletedMassEventPage extends FieldIDTemplatePage {
 
-    private IModel<EventReportCriteria> criteriaModel;
-
     private List<ThingEvent> events;
 
     @SpringBean
@@ -36,8 +37,10 @@ public class CompletedMassEventPage extends FieldIDTemplatePage {
     @SpringBean
     private SavedReportService savedReportService;
 
-    public CompletedMassEventPage(List<ThingEvent> events) {
-        this.criteriaModel = criteriaModel;
+    @SpringBean
+    private SavedAssetSearchService savedAssetSearchService;
+
+    public CompletedMassEventPage(List<ThingEvent> events, Boolean isFromSearch) {
         this.events = events;
 
         add(new ListView<ThingEvent>("events", events) {
@@ -54,13 +57,23 @@ public class CompletedMassEventPage extends FieldIDTemplatePage {
                 item.add(new BookmarkablePageLink<ThingEventSummaryPage>("eventSummaryLink", ThingEventSummaryPage.class, PageParametersBuilder.id(item.getModelObject().getId())));
             }
         });
-
-        add(new Link<Void>("backToReport") {
+        Link backToLink;
+        add(backToLink = new Link<Void>("backToReport") {
             @Override
             public void onClick() {
-                setResponsePage(new ReportPage(savedReportService.retrieveLastSearch()));
+                if(isFromSearch) {
+                    setResponsePage(new SearchPage(savedAssetSearchService.retrieveLastSearch()));
+                } else {
+                    setResponsePage(new ReportPage(savedReportService.retrieveLastSearch()));
+                }
             }
         });
+
+        if(isFromSearch) {
+            backToLink.add(new FlatLabel("backToLabel", new FIDLabelModel("label.search_results")));
+        } else {
+            backToLink.add(new FlatLabel("backToLabel", new FIDLabelModel("label.reporting_results")));
+        }
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.pages.event;
+package com.n4systems.fieldid.wicket.pages.massevent;
 
 import com.n4systems.ejb.impl.EventScheduleBundle;
 import com.n4systems.fieldid.service.event.ThingEventCreationService;

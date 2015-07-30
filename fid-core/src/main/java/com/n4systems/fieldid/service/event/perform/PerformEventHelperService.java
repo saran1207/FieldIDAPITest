@@ -19,6 +19,10 @@ public abstract class PerformEventHelperService<T extends Event, V extends Event
         this.eventTypeClass = eventTypeClass;
     }
 
+    public T createEvent(Long assetId, Long typeId) {
+        return createEvent(null, assetId, typeId);
+    }
+
     public T createEvent(Long scheduleId, Long assetId, Long typeId) {
         try {
             T event;
