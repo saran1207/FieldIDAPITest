@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.pages.event;
+package com.n4systems.fieldid.wicket.pages.massevent;
 
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
@@ -25,7 +25,6 @@ import com.n4systems.fieldid.wicket.model.UserToUTCDateModel;
 import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
 import com.n4systems.fieldid.wicket.model.user.GroupedVisibleUsersModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.massevent.CompletedMassEventPage;
 import com.n4systems.model.*;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.event.AssignedToUpdate;
@@ -86,8 +85,7 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
     private Boolean assetOwnerUpdate = true;
     private Boolean locationUpdate = true;
     private Boolean autoSchedule;
-
-    boolean hasDefaultVal = false;
+    private Boolean isFromSearch;
 
     private LocationPicker locationPicker;
     //private OrgLocationPicker locationPicker;
@@ -244,7 +242,7 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
             saveEventBookIfNecessary();
 
             List<ThingEvent> savedEvent = doSave();
-            setResponsePage(new CompletedMassEventPage(savedEvent));
+            setResponsePage(new CompletedMassEventPage(savedEvent, isFromSearch));
         }
 
         @Override
@@ -298,6 +296,11 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
     protected abstract ProofTestEditPanel createProofTestEditPanel(String id);
     protected abstract Component createCancelLink(String id);
     protected abstract boolean targetAlreadyArchived(T event);
+
+
+    protected void setIsFromSearch(Boolean isFromSearch) {
+        this.isFromSearch = isFromSearch;
+    }
 
     protected Component createOwnerSection(IModel<T> event) {
         ownerSection = new WebMarkupContainer("ownerSection");

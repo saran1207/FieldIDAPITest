@@ -1,21 +1,24 @@
 package com.n4systems.fieldid.wicket.pages.massevent;
 
 import com.n4systems.fieldid.service.event.massevent.MassEventService;
-import com.n4systems.fieldid.service.event.massevent.SelectedEventTypeCount;
+import com.n4systems.fieldid.wicket.components.eventtype.GroupedEventTypePicker;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
-import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
-import com.n4systems.fieldid.wicket.pages.event.PerformMultiEventPage;
-import com.n4systems.model.ThingEvent;
-import com.n4systems.model.search.EventReportCriteria;
+import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
+import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEventType;
+import com.n4systems.model.search.AssetSearchCriteria;
+import com.n4systems.util.selection.MultiIdSelection;
 import org.apache.wicket.Component;
-import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
@@ -25,37 +28,44 @@ public class SelectMassEventPage extends FieldIDTemplatePage {
     @SpringBean
     private MassEventService massEventService;
 
-    private IModel<EventReportCriteria> criteriaModel;
+    private IModel<AssetSearchCriteria> criteriaModel;
+    private IModel<EventType> eventTypeModel;
 
-    public SelectMassEventPage(IModel<EventReportCriteria> criteriaModel) {
+    public SelectMassEventPage(IModel<AssetSearchCriteria> criteriaModel) {
         this.criteriaModel = criteriaModel;
-        final List<Long> eventIds = criteriaModel.getObject().getSelection().getSelectedIds();
+        this.eventTypeModel = Model.of(new ThingEventType());
 
-        List<SelectedEventTypeCount> eventTypeCounts = massEventService.countSelectedEventTypes(eventIds);
-        final IModel<EventReportCriteria> criteriaModelToSend = criteriaModel;
+        add(new FIDFeedbackPanel("feedbackPanel"));
 
-        if(eventTypeCounts.size() == 1) {
-            //TODO redirect to perform mass events page
-            List<ThingEvent> openEvents = massEventService.getSelectedEventsById(eventIds);
-            throw new RestartResponseException(new PerformMultiEventPage(openEvents, criteriaModelToSend, false));
-        } else {
-            add(new ListView<SelectedEventTypeCount>("eventType", eventTypeCounts) {
+        MultiIdSelection selectedAssetIds = criteriaModel.getObject().getSelection();
 
-                @Override
-                protected void populateItem(final ListItem<SelectedEventTypeCount> item) {
-                    item.add(new Label("name", new PropertyModel<String>(item.getModel(), "type.displayName")));
-                    item.add(new Label("count", new PropertyModel<Long>(item.getModel(), "count")));
-                    item.add(new Link("performEvents") {
-                        @Override
-                        public void onClick() {
-                            //TODO setresponse page to perform mass events page
-                            List<ThingEvent> openEvents = massEventService.getSelectedEventsById(eventIds, item.getModelObject().type);
-                            throw new RestartResponseException(new PerformMultiEventPage(openEvents, criteriaModelToSend, true));
-                        }
-                    });
-                }
-            });
-        }
+        Form form;
+        add(form = new Form<Void>("form"));
+
+        form.add(new Label("selectMessage",
+                new FIDLabelModel("message.select_event_type_to_perform_on_assets", selectedAssetIds.getNumSelectedIds())));
+
+        List<EventType> commonEventTypes = massEventService.getCommonEventTypesForAssets(selectedAssetIds.getSelectedIds());
+
+        form.add(new GroupedEventTypePicker("eventType", eventTypeModel, new ListModel(commonEventTypes)).setRequired(true));
+
+        form.add(new SubmitLink("submitLink") {
+            @Override
+            public void onSubmit() {
+                setResponsePage(new SelectSchedulesPage(criteriaModel, eventTypeModel));
+            }
+        });
+
+        form.add(new Link("cancelLink") {
+            @Override
+            public void onClick() {
+                setResponsePage(new SearchPage(criteriaModel.getObject()));
+            }
+        });
+
+        form.setVisible(!commonEventTypes.isEmpty());
+
+        add(new WebMarkupContainer("noCommonEventTypesMessage").setVisible(commonEventTypes.isEmpty()));
     }
 
     @Override
@@ -68,8 +78,9 @@ public class SelectMassEventPage extends FieldIDTemplatePage {
         return new Link(linkId) {
             @Override
             public void onClick() {
-               setResponsePage(new ReportPage(criteriaModel.getObject()));
+                setResponsePage(new SearchPage(criteriaModel.getObject()));
             }
-        }.add(new Label(linkLabelId, new FIDLabelModel("label.back_to_x", new FIDLabelModel("label.reporting_results").getObject())));
+        }.add(new Label(linkLabelId, new FIDLabelModel("label.back_to_x", new FIDLabelModel("label.search_results").getObject())));
     }
+
 }

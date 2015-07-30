@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.pages.event;
+package com.n4systems.fieldid.wicket.pages.massevent;
 
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
@@ -7,16 +7,12 @@ import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.perform.PerformThingEventHelperService;
 import com.n4systems.fieldid.utils.CopyEventFactory;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
-import com.n4systems.fieldid.wicket.pages.massevent.SelectMassEventPage;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.ThingEvent;
-import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.tools.FileDataContainer;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -40,16 +36,12 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
     private PerformThingEventHelperService thingEventHelperService;
 
     private List<ThingEvent> selectedEventList;
-    private IModel<EventReportCriteria> criteriaModel;
-    private boolean backToSelectPage;
 
     ThingEvent thingEvent;
 
-    public PerformMultiEventPage(List<ThingEvent> selectedEventList, IModel<EventReportCriteria> criteriaModel, boolean backToSelectPage) {
-
+    public PerformMultiEventPage(List<ThingEvent> selectedEventList, boolean isFromSearch) {
         this.selectedEventList = selectedEventList;
-        this.criteriaModel = criteriaModel;
-        this.backToSelectPage = backToSelectPage;
+        setIsFromSearch(isFromSearch);
 
         try {
             thingEvent =  CopyEventFactory.copyEvent(thingEventHelperService.createEvent(selectedEventList.get(0).getId(), selectedEventList.get(0).getAsset().getId(), selectedEventList.get(0).getType().getId()));
@@ -74,14 +66,12 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
         return new Link(id) {
             @Override
             public void onClick() {
-                if(backToSelectPage) {
-                    setResponsePage(new SelectMassEventPage(criteriaModel));
-                } else {
-                    setResponsePage(new ReportPage(criteriaModel.getObject()));
-                }
+                onCancel();
             }
         };
     }
+
+    public void onCancel() {}
 
     @Override
     protected List<ThingEvent> doSave() {
@@ -93,7 +83,12 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
 
         for(ThingEvent originalEventFromList:selectedEventList){
 
-            ThingEvent originalEvent = thingEventHelperService.createEventFromOpenEvent(originalEventFromList.getId());
+            ThingEvent originalEvent;
+            if(originalEventFromList.isNew())
+                originalEvent = originalEventFromList;
+            else {
+                originalEvent = thingEventHelperService.createEventFromOpenEvent(originalEventFromList.getId());
+            }
 
             copyMassEventInfo(originalEvent);
 

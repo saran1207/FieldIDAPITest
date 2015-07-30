@@ -55,8 +55,16 @@ public class  EventScheduleService extends FieldIdPersistenceService {
 
     @Transactional
     public List<ThingEvent> getAvailableSchedulesFor(Asset asset) {
+        return getAvailableSchedulesForAsset(asset, null);
+    }
+
+    @Transactional
+    public List<ThingEvent> getAvailableSchedulesForAsset(Asset asset, EventType eventType) {
         QueryBuilder<ThingEvent> query = createUserSecurityBuilder(ThingEvent.class);
-        query.addSimpleWhere("asset", asset).addWhere(Comparator.EQ, "workflowState", "workflowState", WorkflowState.OPEN);
+        query.addSimpleWhere("asset", asset);
+        query.addWhere(Comparator.EQ, "workflowState", "workflowState", WorkflowState.OPEN);
+        if(eventType != null)
+            query.addSimpleWhere("type.id", eventType.getId());
         query.addOrder("dueDate");
 
         return persistenceService.findAll(query);

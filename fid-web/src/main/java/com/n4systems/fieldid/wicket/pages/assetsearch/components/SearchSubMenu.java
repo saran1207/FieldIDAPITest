@@ -1,13 +1,12 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.components;
 
-import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.DisableOnClick;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
-import com.n4systems.fieldid.wicket.components.assetsearch.AssetSearchMassActionLink;
 import com.n4systems.fieldid.wicket.components.search.results.MassActionLink;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.pages.massevent.SelectMassEventPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.print.ExportSearchToExcelPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintAllCertificatesPage;
@@ -90,7 +89,12 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
         actions.add(printLink = makeLinkLightBoxed(new MassActionLink<>("printAllCertsLink", PrintAllCertificatesPage.class, searchCriteria)));
         actions.add(exportLink = makeLinkLightBoxed(new MassActionLink<>("exportToExcelLink", ExportSearchToExcelPage.class, searchCriteria)));
 
-        actions.add(massEventLink = new AssetSearchMassActionLink("massEventLink", "/multiEvent/selectEventType.action?searchContainerKey="+ WebSessionMap.SEARCH_CRITERIA+"&searchId=%s", searchCriteria));
+        actions.add(massEventLink = new Link("massEventLink") {
+            @Override
+            public void onClick() {
+                setResponsePage(new SelectMassEventPage(searchCriteria));
+            }
+        });
         actions.add(massUpdateLink = new Link("massUpdateLink") {
             @Override public void onClick() {
                 setResponsePage(new MassUpdateAssetsPage(searchCriteria));
