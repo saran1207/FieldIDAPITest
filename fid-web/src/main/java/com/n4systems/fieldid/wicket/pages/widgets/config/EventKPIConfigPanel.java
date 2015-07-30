@@ -77,12 +77,16 @@ public class EventKPIConfigPanel extends WidgetConfigPanel<EventKPIWidgetConfigu
             }
 
             @Override
-            public boolean isEnabled() {
-                return orgToAdd != null;
+            protected void onConfigure() {
+                super.onConfigure();
+                setVisible(orgToAdd != null);
             }
+
         });
         addOrgButton.setOutputMarkupId(true);
-        
+        addOrgButton.setOutputMarkupPlaceholderTag(true);
+        addOrgButton.setVisibilityAllowed(true);
+
         addConfigElement(dateRange = createDateRangeSelect());
         
     }
