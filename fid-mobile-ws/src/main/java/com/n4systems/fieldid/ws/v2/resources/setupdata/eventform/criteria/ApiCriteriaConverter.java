@@ -17,6 +17,7 @@ public class ApiCriteriaConverter {
 		apiCriteria.getRecommendations().addAll(criteria.getRecommendations());
 		apiCriteria.getDeficiencies().addAll(criteria.getDeficiencies());
 		apiCriteria.setInstructions(criteria.getInstructions());
+		apiCriteria.setRequired(criteria.isRequired());
 
 		return apiCriteria;
 	}

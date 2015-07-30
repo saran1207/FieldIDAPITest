@@ -2,6 +2,7 @@ package com.n4systems.fieldid.ws.v1.resources.search;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.event.EventScheduleService;
+import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.search.AssetSearchService;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
@@ -9,13 +10,11 @@ import com.n4systems.model.*;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.procedure.Procedure;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.chart.RangeType;
 import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClauseFactory;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,6 +34,7 @@ public class ApiSearchResource extends ApiResource<ApiSearchResult, Asset> {
 	@Autowired private AssetSearchService assetSearchService;
 	@Autowired private EventScheduleService eventScheduleService;
 	@Autowired private S3Service s3service;
+	@Autowired private ProcedureService procedureService;
 	
 	@GET
 	@Consumes(MediaType.TEXT_PLAIN)
@@ -161,7 +161,7 @@ public class ApiSearchResource extends ApiResource<ApiSearchResult, Asset> {
 			apiResult.setNextEventDate(openEvent.getDueDate());
 		}
 
-		apiResult.setHasProcedures(persistenceService.exists(createUserSecurityBuilder(Procedure.class).addWhere(WhereClauseFactory.create("asset", asset))));
+		apiResult.setHasProcedures(procedureService.hasActiveProcedure(asset));
 		
 		return apiResult;
 	}
