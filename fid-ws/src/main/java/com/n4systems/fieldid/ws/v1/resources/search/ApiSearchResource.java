@@ -161,7 +161,7 @@ public class ApiSearchResource extends ApiResource<ApiSearchResult, Asset> {
 			apiResult.setNextEventDate(openEvent.getDueDate());
 		}
 
-		apiResult.setHasProcedures(procedureService.hasActiveProcedure(asset));
+		apiResult.setHasProcedures(procedureService.hasProcedure(asset));
 		
 		return apiResult;
 	}
