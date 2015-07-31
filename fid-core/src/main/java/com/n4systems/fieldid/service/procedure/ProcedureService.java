@@ -27,12 +27,6 @@ public class ProcedureService extends FieldIdPersistenceService {
 
     @Autowired NotifyProcedureAssigneeService notifyProcedureAssigneeService;
 
-    public boolean hasProcedure(Asset asset) {
-        QueryBuilder<Procedure> query = createTenantSecurityBuilder(Procedure.class);
-        query.addSimpleWhere("asset", asset);
-        return persistenceService.exists(query);
-    }
-
     public boolean hasActiveProcedure(Asset asset) {
         return hasActiveProcedure(asset, null);
     }
