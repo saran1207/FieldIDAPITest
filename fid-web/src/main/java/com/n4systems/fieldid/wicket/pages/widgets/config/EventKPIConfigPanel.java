@@ -53,8 +53,9 @@ public class EventKPIConfigPanel extends WidgetConfigPanel<EventKPIWidgetConfigu
         addConfigElement(orgPicker = new OrgLocationPicker("picker", new PropertyModel<BaseOrg>(this, "orgToAdd")) {
             @Override
             protected void onChanged(AjaxRequestTarget target) {
-                orgToAdd = getOwner();
+                orgToAdd = getWidgetOwner();
                 target.add(addOrgButton);
+                target.add(this);
             }
         }.withAutoUpdate());
         orgPicker.setOutputMarkupId(true);
@@ -110,6 +111,7 @@ public class EventKPIConfigPanel extends WidgetConfigPanel<EventKPIWidgetConfigu
         return new AjaxEventBehavior("onclick") {
             @Override
             protected void onEvent(AjaxRequestTarget target) {
+                //orgPicker.getModel().detach();
                 orgsListModel.getObject().remove(item.getIndex());
                 target.add(orgsListContainer);
             }

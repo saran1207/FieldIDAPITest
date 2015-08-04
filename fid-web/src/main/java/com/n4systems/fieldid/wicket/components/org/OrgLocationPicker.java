@@ -237,6 +237,10 @@ public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
         input=null;
     }
 
+    public BaseOrg getWidgetOwner() {
+        return (BaseOrg) model.getObject();
+    }
+
     public BaseOrg getOwner() {
         return model.getOrg();
     }
