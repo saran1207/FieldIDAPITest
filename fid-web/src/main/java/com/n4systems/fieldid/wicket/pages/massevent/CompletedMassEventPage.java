@@ -13,14 +13,12 @@ import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
 import com.n4systems.fieldid.wicket.pages.event.ThingEventSummaryPage;
 import com.n4systems.model.ThingEvent;
-import com.n4systems.model.search.EventReportCriteria;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -40,7 +38,7 @@ public class CompletedMassEventPage extends FieldIDTemplatePage {
     @SpringBean
     private SavedAssetSearchService savedAssetSearchService;
 
-    public CompletedMassEventPage(List<ThingEvent> events, Boolean isFromSearch) {
+    public CompletedMassEventPage(List<ThingEvent> events, MultiEventPage.MassEventOrigin massEventOrigin) {
         this.events = events;
 
         add(new ListView<ThingEvent>("events", events) {
@@ -61,18 +59,22 @@ public class CompletedMassEventPage extends FieldIDTemplatePage {
         add(backToLink = new Link<Void>("backToReport") {
             @Override
             public void onClick() {
-                if(isFromSearch) {
+                if (massEventOrigin.equals(MultiEventPage.MassEventOrigin.SEARCH)) {
                     setResponsePage(new SearchPage(savedAssetSearchService.retrieveLastSearch()));
-                } else {
+                } else if (massEventOrigin.equals(MultiEventPage.MassEventOrigin.REPORTING)) {
                     setResponsePage(new ReportPage(savedReportService.retrieveLastSearch()));
+                } else {
+                    redirect("/startEvent.action");
                 }
             }
         });
 
-        if(isFromSearch) {
+        if (massEventOrigin.equals(MultiEventPage.MassEventOrigin.SEARCH)) {
             backToLink.add(new FlatLabel("backToLabel", new FIDLabelModel("label.search_results")));
-        } else {
+        } else if (massEventOrigin.equals(MultiEventPage.MassEventOrigin.REPORTING)) {
             backToLink.add(new FlatLabel("backToLabel", new FIDLabelModel("label.reporting_results")));
+        } else {
+            backToLink.add(new FlatLabel("backToLabel", new FIDLabelModel("label.startevent")));
         }
     }
 

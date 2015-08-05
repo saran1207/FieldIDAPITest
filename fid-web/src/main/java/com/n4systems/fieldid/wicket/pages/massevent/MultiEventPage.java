@@ -85,11 +85,14 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
     private Boolean assetOwnerUpdate = true;
     private Boolean locationUpdate = true;
     private Boolean autoSchedule;
-    private Boolean isFromSearch;
+
+    private MassEventOrigin massEventOrigin;
 
     private LocationPicker locationPicker;
     //private OrgLocationPicker locationPicker;
     private NewOrExistingEventBook newOrExistingEventBook;
+
+    protected enum MassEventOrigin { START_EVENT, SEARCH, REPORTING };
 
     @Override
     protected void onInitialize() {
@@ -196,6 +199,10 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
         return autoSchedule;
     }
 
+    public void setMassEventOrigin(MassEventOrigin massEventOrigin) {
+        this.massEventOrigin = massEventOrigin;
+    }
+
     class OuterEventForm extends Form {
 
         public OuterEventForm(String id) {
@@ -242,7 +249,7 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
             saveEventBookIfNecessary();
 
             List<ThingEvent> savedEvent = doSave();
-            setResponsePage(new CompletedMassEventPage(savedEvent, isFromSearch));
+            setResponsePage(new CompletedMassEventPage(savedEvent, massEventOrigin));
         }
 
         @Override
@@ -297,10 +304,6 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
     protected abstract Component createCancelLink(String id);
     protected abstract boolean targetAlreadyArchived(T event);
 
-
-    protected void setIsFromSearch(Boolean isFromSearch) {
-        this.isFromSearch = isFromSearch;
-    }
 
     protected Component createOwnerSection(IModel<T> event) {
         ownerSection = new WebMarkupContainer("ownerSection");

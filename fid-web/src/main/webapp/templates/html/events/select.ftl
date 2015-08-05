@@ -27,7 +27,7 @@
 			</p>
 		</div>
 		<div class="eventAction">	
-			<button onclick="redirect('<@s.url action="assetSelection"/>')" ><@s.text name="label.select_your_assets_now"/></button>
+			<button onclick="redirect('<@s.url value="/w/selectAssets" />')" ><@s.text name="label.select_your_assets_now"/></button>
 		</div>
 	</div>
 </div>

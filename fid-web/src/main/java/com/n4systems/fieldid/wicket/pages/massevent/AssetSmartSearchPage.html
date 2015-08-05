@@ -1,0 +1,75 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+    <form wicket:id="form">
+        <fieldset>
+            <input type="text" wicket:id="query"/> <a class="btn-primary" wicket:id="submitLink"><wicket:message key="label.search"/></a>
+        </fieldset>
+    </form>
+
+
+    <table wicket:id="resultsList">
+        <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th><wicket:message key="label.assettype"/></th>
+                <th><label wicket:id="identifierLabel"/></th>
+                <th><wicket:message key="label.rfidnumber"/></th>
+                <th><wicket:message key="label.reference_number"/></th>
+                <th><wicket:message key="label.owner"/></th>
+                <th><wicket:message key="label.assetstatus"/></th>
+                <th><wicket:message key="label.nextscheduleddate"/></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr wicket:id="asset">
+                <td><a class="btn-secondary" wicket:id="selectLink"><wicket:message key="label.select"/></a></td>
+                <td><label wicket:id="assetType"/></td>
+                <td><label wicket:id="identifier"/></td>
+                <td><label wicket:id="rfid"/></td>
+                <td><label wicket:id="reference"/></td>
+                <td><label wicket:id="owner"/></td>
+                <td><label wicket:id="assetStatus"/></td>
+                <td><label wicket:id="nextScheduledDate"/></td>
+            </tr>
+            <tr wicket:id="noAssetsMessage">
+                <td colspan="8"><wicket:message key="message.emptyassetlist"/></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="text-center">
+        <a class="btn-secondary" wicket:id="performEventLink"><wicket:message key="label.perform_event"/></a>
+    </div>
+
+    <label wicket:id="numberOfAssetsSelected"/>
+
+    <table wicket:id="selectedList">
+        <thead>
+        <tr>
+            <th><wicket:message key="label.assettype"/></th>
+            <th><label wicket:id="identifierLabel"/></th>
+            <th><wicket:message key="label.rfidnumber"/></th>
+            <th><wicket:message key="label.reference_number"/></th>
+            <th><wicket:message key="label.owner"/></th>
+            <th><wicket:message key="label.assetstatus"/></th>
+            <th><wicket:message key="label.nextscheduleddate"/></th>
+            <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr wicket:id="asset">
+            <td wicket:id="assetType"/>
+            <td wicket:id="identifier"/>
+            <td wicket:id="rfid"/>
+            <td wicket:id="reference"/>
+            <td wicket:id="owner"/>
+            <td wicket:id="assetStatus"/>
+            <td wicket:id="nextScheduledDate"/>
+            <td><a class="btn-secondary" wicket:id="removeLink"><wicket:message key="label.remove"/></a></td>
+        </tr>
+        </tbody>
+    </table>
+
+
+</wicket:extend>
+</html>

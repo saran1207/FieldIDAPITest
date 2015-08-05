@@ -24,10 +24,7 @@ import com.n4systems.fieldid.wicket.pages.loto.*;
 import com.n4systems.fieldid.wicket.pages.loto.copy.CopyProceduresList;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPrintPage;
-import com.n4systems.fieldid.wicket.pages.massevent.CompletedMassEventPage;
-import com.n4systems.fieldid.wicket.pages.massevent.SelectMassEventPage;
-import com.n4systems.fieldid.wicket.pages.massevent.SelectMassOpenEventPage;
-import com.n4systems.fieldid.wicket.pages.massevent.SelectSchedulesPage;
+import com.n4systems.fieldid.wicket.pages.massevent.*;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateOpenEventsPage;
@@ -244,6 +241,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("eventMassUpdate", MassUpdateEventsPage.class);
         mountPage("openEventMassUpdate", MassUpdateOpenEventsPage.class);
 
+        mountPage("selectAssets", AssetSmartSearchPage.class);
         mountPage("selectMassOpenEventType", SelectMassOpenEventPage.class);
         mountPage("selectMassEventType", SelectMassEventPage.class);
         mountPage("selectSchedule", SelectSchedulesPage.class);
