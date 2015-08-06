@@ -4,11 +4,14 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.IdentifierLabel;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
+import com.n4systems.services.ConfigService;
+import com.n4systems.util.ConfigEntry;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -21,6 +24,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
@@ -35,20 +39,28 @@ public class AssetSmartSearchPage extends FieldIDTemplatePage {
     @SpringBean
     private AssetService assetService;
 
+    @SpringBean
+    private ConfigService configService;
+
     private Form<Void> form;
     private String query;
 
+    private FIDFeedbackPanel feedbackPanel;
     private WebMarkupContainer resultList;
     private WebMarkupContainer selectedList;
+    private WebMarkupContainer blankSlate;
     private Label numberOfAssetsSelected;
     private Link performEventLink;
     private TextField queryField;
-
     private List<Asset> selectedAssetsList;
+    private Long massActionLimit;
+
 
     public AssetSmartSearchPage() {
 
         selectedAssetsList = Lists.newArrayList();
+
+        add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
 
         add(form = new Form<>("form"));
 
@@ -58,7 +70,7 @@ public class AssetSmartSearchPage extends FieldIDTemplatePage {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 resultList.setVisible(true);
-                target.add(resultList);
+                target.add(resultList, feedbackPanel, getTopFeedbackPanel(), blankSlate);
                 target.appendJavaScript("$('#" + queryField.getMarkupId() + "').val('');");
             }
 
@@ -67,6 +79,14 @@ public class AssetSmartSearchPage extends FieldIDTemplatePage {
 
             }
         });
+
+        add(blankSlate = new WebMarkupContainer("blankSlate") {
+            @Override
+            public boolean isVisible() {
+                return selectedAssetsList.isEmpty() && !resultList.isVisible();
+            }
+        });
+        blankSlate.setOutputMarkupPlaceholderTag(true);
 
         add(resultList = new WebMarkupContainer("resultsList"));
         resultList.setOutputMarkupPlaceholderTag(true);
@@ -91,14 +111,20 @@ public class AssetSmartSearchPage extends FieldIDTemplatePage {
                 item.add(new AjaxLink<Void>("selectLink") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        if (!selectedAssetsList.contains(asset)) {
-                            selectedAssetsList.add(asset);
-                            info(new FIDLabelModel("message.asset_added").getObject());
-                            resultList.setVisible(false);
+                        if (selectedAssetsList.size() < getMassActionLimit()) {
+                            if (!selectedAssetsList.contains(asset)) {
+                                selectedAssetsList.add(asset);
+                                info(new FIDLabelModel("message.asset_added").getObject());
+                                resultList.setVisible(false);
+                                target.add(resultList, performEventLink, numberOfAssetsSelected, selectedList, getTopFeedbackPanel(), feedbackPanel, blankSlate);
+                            } else {
+                                error(new FIDLabelModel("message.asset_already_added").getObject());
+                                target.add(feedbackPanel, getTopFeedbackPanel());
+                            }
                         } else {
-                            info(new FIDLabelModel("message.asset_already_added").getObject());
+                            error(new FIDLabelModel("error.asset_limit_reached", getMassActionLimit()).getObject());
+                            target.add(feedbackPanel, getTopFeedbackPanel());
                         }
-                        target.add(resultList, performEventLink, numberOfAssetsSelected, selectedList, getTopFeedbackPanel());
                     }
                 });
             }
@@ -166,7 +192,7 @@ public class AssetSmartSearchPage extends FieldIDTemplatePage {
                         if (selectedAssetsList.contains(asset))
                             selectedAssetsList.remove(asset);
                         info(new FIDLabelModel("message.asset_remove").getObject());
-                        target.add(performEventLink, numberOfAssetsSelected, selectedList, getTopFeedbackPanel());
+                        target.add(performEventLink, numberOfAssetsSelected, selectedList, getTopFeedbackPanel(), blankSlate);
                     }
                 });
             }
@@ -225,5 +251,12 @@ public class AssetSmartSearchPage extends FieldIDTemplatePage {
                 redirect("/startEvent.action");
             }
         }.add(new Label(linkLabelId, new FIDLabelModel("label.back_to_x", new FIDLabelModel("label.startevent").getObject())));
+    }
+
+    private Long getMassActionLimit() {
+        if (massActionLimit == null) {
+            massActionLimit = configService.getLong(ConfigEntry.MASS_ACTIONS_LIMIT, getTenantId());
+        }
+        return massActionLimit;
     }
 }

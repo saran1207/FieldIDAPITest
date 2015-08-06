@@ -1,11 +1,17 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
+
+    <div wicket:id="feedbackPanel"/>
+
     <form wicket:id="form">
         <fieldset>
             <input type="text" wicket:id="query"/> <a class="btn-primary" wicket:id="submitLink"><wicket:message key="label.search"/></a>
         </fieldset>
     </form>
 
+    <div class="info" wicket:id="blankSlate">
+        <wicket:message key="instructions.how_to_select_multiple_assets"/>
+    </div>
 
     <table wicket:id="resultsList">
         <thead>
