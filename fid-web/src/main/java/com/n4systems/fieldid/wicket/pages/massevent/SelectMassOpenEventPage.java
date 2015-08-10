@@ -34,7 +34,7 @@ public class SelectMassOpenEventPage extends FieldIDTemplatePage {
 
         if(eventTypeCounts.size() == 1) {
             List<ThingEvent> openEvents = massEventService.getSelectedEventsById(eventIds);
-            setResponsePage(new PerformMultiEventPage(openEvents, MultiEventPage.MassEventOrigin.REPORTING) {
+            throw new RestartResponseException(new PerformMultiEventPage(openEvents, MultiEventPage.MassEventOrigin.REPORTING) {
                 @Override
                 public void onCancel() {
                     setResponsePage(new ReportPage(criteriaModel.getObject()));
