@@ -39,9 +39,9 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
 
     ThingEvent thingEvent;
 
-    public PerformMultiEventPage(List<ThingEvent> selectedEventList, boolean isFromSearch) {
+    public PerformMultiEventPage(List<ThingEvent> selectedEventList, MassEventOrigin massEventOrigin) {
         this.selectedEventList = selectedEventList;
-        setIsFromSearch(isFromSearch);
+        setMassEventOrigin(massEventOrigin);
 
         try {
             thingEvent =  CopyEventFactory.copyEvent(thingEventHelperService.createEvent(selectedEventList.get(0).getId(), selectedEventList.get(0).getAsset().getId(), selectedEventList.get(0).getType().getId()));

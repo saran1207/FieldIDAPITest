@@ -46,19 +46,33 @@ public class SelectSchedulesPage extends FieldIDTemplatePage {
     private PerformThingEventHelperService eventHelperService;
 
     private IModel<AssetSearchCriteria> criteriaModel;
+    private IModel<EventType> eventTypeModel;
+
+    private List<Long> selectedAssetIds;
+
+    public SelectSchedulesPage(List<Long> selectedAssetIds, IModel<EventType> eventTypeModel) {
+        this.criteriaModel = null;
+        this.eventTypeModel = eventTypeModel;
+        this.selectedAssetIds = selectedAssetIds;
+    }
+
 
     public SelectSchedulesPage(IModel<AssetSearchCriteria> criteriaModel, IModel<EventType> eventTypeModel) {
         this.criteriaModel = criteriaModel;
+        this.eventTypeModel = eventTypeModel;
+        selectedAssetIds = criteriaModel.getObject().getSelection().getSelectedIds();
+    }
 
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
         add(new Label("message", new FIDLabelModel("message.found_multiple_schedules", eventTypeModel.getObject().getDisplayName())));
-
-        MultiIdSelection selectedAssetIds = criteriaModel.getObject().getSelection();
 
         boolean hasSchedules = false;
 
         List<AssetWithSchedules> assetsWithSchedulesList = Lists.newArrayList();
 
-        for (Asset asset: assetService.getAssets(selectedAssetIds.getSelectedIds())) {
+        for (Asset asset: assetService.getAssets(selectedAssetIds)) {
             AssetWithSchedules assetWithSchedules = new AssetWithSchedules();
             assetWithSchedules.asset = asset;
             assetWithSchedules.schedules = eventScheduleService.getAvailableSchedulesForAsset(asset, eventTypeModel.getObject());
@@ -70,10 +84,14 @@ public class SelectSchedulesPage extends FieldIDTemplatePage {
         }
 
         if (!hasSchedules) {
-            throw new RestartResponseException(new PerformMultiEventPage(getSelectedEventsList(assetsWithSchedulesList, eventTypeModel), true) {
+            throw new RestartResponseException(new PerformMultiEventPage(getSelectedEventsList(assetsWithSchedulesList, eventTypeModel), getMassEventOrigin()) {
                 @Override
                 public void onCancel() {
-                    setResponsePage(new SelectMassEventPage(criteriaModel));
+                    if (criteriaModel == null) {
+                        setResponsePage(new SelectMassEventPage(selectedAssetIds));
+                    } else {
+                        setResponsePage(new SelectMassEventPage(criteriaModel));
+                    }
                 }
             });
         }
@@ -118,10 +136,14 @@ public class SelectSchedulesPage extends FieldIDTemplatePage {
             @Override
             public void onSubmit() {
                 List<ThingEvent> selectedEventList = getSelectedEventsList(assetsWithSchedulesList, eventTypeModel);
-                setResponsePage(new PerformMultiEventPage(selectedEventList, true) {
+                setResponsePage(new PerformMultiEventPage(selectedEventList, getMassEventOrigin()) {
                     @Override
                     public void onCancel() {
-                        setResponsePage(new SelectSchedulesPage(criteriaModel, eventTypeModel));
+                        if (criteriaModel == null) {
+                            setResponsePage(new SelectSchedulesPage(selectedAssetIds, eventTypeModel));
+                        } else {
+                            setResponsePage(new SelectSchedulesPage(criteriaModel, eventTypeModel));
+                        }
                     }
                 });
             }
@@ -130,7 +152,11 @@ public class SelectSchedulesPage extends FieldIDTemplatePage {
         form.add(new Link("cancelLink") {
             @Override
             public void onClick() {
-                setResponsePage(new SearchPage(criteriaModel.getObject()));
+                if(criteriaModel == null) {
+                    redirect("/startEvent.action");
+                } else {
+                    setResponsePage(new SearchPage(criteriaModel.getObject()));
+                }
             }
         });
 
@@ -159,6 +185,13 @@ public class SelectSchedulesPage extends FieldIDTemplatePage {
         return selectedEventList;
     }
 
+    public MultiEventPage.MassEventOrigin getMassEventOrigin() {
+        if(criteriaModel == null)
+            return MultiEventPage.MassEventOrigin.START_EVENT;
+        else
+            return MultiEventPage.MassEventOrigin.SEARCH;
+    }
+
     private class AssetWithSchedules implements Serializable {
         protected Asset asset;
         protected ThingEvent selectedEvent;
@@ -172,11 +205,21 @@ public class SelectSchedulesPage extends FieldIDTemplatePage {
 
     @Override
     protected Component createBackToLink(String linkId, String linkLabelId) {
-        return new Link(linkId) {
-            @Override
-            public void onClick() {
-                setResponsePage(new SearchPage(criteriaModel.getObject()));
-            }
-        }.add(new Label(linkLabelId, new FIDLabelModel("label.back_to_x", new FIDLabelModel("label.search_results").getObject())));
+        if(criteriaModel == null) {
+            return new Link(linkId) {
+                @Override
+                public void onClick() {
+                    redirect("/startEvent.action");
+                }
+            }.add(new Label(linkLabelId, new FIDLabelModel("label.back_to_x", new FIDLabelModel("label.startevent").getObject())));
+        } else {
+            return new Link(linkId) {
+                @Override
+                public void onClick() {
+                    setResponsePage(new SearchPage(criteriaModel.getObject()));
+                }
+            }.add(new Label(linkLabelId, new FIDLabelModel("label.back_to_x", new FIDLabelModel("label.search_results").getObject())));
+        }
     }
+
 }
