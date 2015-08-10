@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class ProcedureListPanel extends Panel {
 
-    public static final int PROCEDURES_PER_PAGE = 200;
+    public static final int PROCEDURES_PER_PAGE = 500;
     @SpringBean
     private ProcedureDefinitionService procedureDefinitionService;
 
