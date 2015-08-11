@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.wicket.components.reporting.results;
 
+import com.n4systems.exceptions.ReportException;
 import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.service.certificate.CertificateService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
@@ -18,7 +20,9 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.model.security.SecurityLevel;
+import com.n4systems.reporting.EventReportType;
 import com.n4systems.util.views.RowView;
+import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -27,15 +31,32 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.IRequestCycle;
+import org.apache.wicket.request.UrlEncoder;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
+import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.file.Files;
+import org.apache.wicket.util.resource.FileResourceStream;
+import org.apache.wicket.util.resource.IResourceStream;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 public class EventActionsCell extends Panel {
+
+    private static final Logger logger = Logger.getLogger(EventActionsCell.class);
 
     @SpringBean
     private AssetService assetService;
 
     @SpringBean
     private EventService eventService;
+
+    @SpringBean
+    private CertificateService certificateService;
 
     public EventActionsCell(String id, IModel<RowView> rowModel) {
         super(id);
@@ -128,8 +149,26 @@ public class EventActionsCell extends Panel {
 
         BookmarkablePageLink viewLink = new BookmarkablePageLink<ThingEventSummaryPage>("viewLink", ThingEventSummaryPage.class, PageParametersBuilder.id(event.getID()));
 
+        //TODO This is another Struts Action that needs to be converted to Wicket.
         NonWicketLink editLink = new NonWicketLink("editLink", "selectEventEdit.action?uniqueID="+eventId);
-        NonWicketLink printReportLink = new NonWicketLink("printReportLink", "file/downloadEventCert.action?uniqueID="+eventId + "&reportType=INSPECTION_CERT");
+
+        Link printReportLink = new Link("printReportLink") {
+            @Override
+            public void onClick() {
+                File report = null;
+                try {
+                    report = generateCert(eventId);
+
+                    handleDownload(report, createReportName(event));
+                } catch (IOException | ReportException e) {
+                    if(report != null) Files.remove(report);
+                    logger.error("There was an error when generating a Certificate for Event with ID " + eventId, e);
+                    getPage().error("Error!  Certificate could not be generated!!");
+                }
+            }
+        };
+
+        printReportLink.setOutputMarkupId(true);
 
         BookmarkablePageLink startEventLink = new BookmarkablePageLink("startEventLink", QuickEventPage.class, PageParametersBuilder.id(event.getAsset().getId()));
         BookmarkablePageLink viewAssetLink = new BookmarkablePageLink<Void>("viewAssetLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(event.getAsset().getId()));
@@ -151,6 +190,25 @@ public class EventActionsCell extends Panel {
         completeEventActionsList.add(editAssetLink);
 
         return completeEventActionsList;
+    }
+
+    private String createReportName(ThingEvent event) {
+        final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+
+        return EventReportType.INSPECTION_CERT.getReportNamePrefix() + "-" + dateFormatter.format(event.getDate()) + ".pdf";
+    }
+
+    private File generateCert(Long eventId) throws IOException, ReportException {
+        byte[] contents = certificateService.generateEventCertificatePdf(EventReportType.INSPECTION_CERT, eventId);
+
+        File tempFile = File.createTempFile("temp-file", ".tmp");
+
+        FileOutputStream fos = new FileOutputStream(tempFile);
+
+        fos.write(contents);
+        fos.close();
+
+        return tempFile;
     }
 
     private WebMarkupContainer createSafetyNetworkActionsList(ThingEvent event, boolean localEvent) {
@@ -177,4 +235,20 @@ public class EventActionsCell extends Panel {
         return safetyNetworkActionsList;
     }
 
+    private void handleDownload(File certificate, String fileName) {
+        fileName = UrlEncoder.QUERY_INSTANCE.encode(fileName, getRequest().getCharset());
+
+        IResourceStream resourceStream = new FileResourceStream(new org.apache.wicket.util.file.File(certificate));
+
+        getRequestCycle().scheduleRequestHandlerAfterCurrent(
+                new ResourceStreamRequestHandler(resourceStream) {
+                    @Override
+                    public void respond(IRequestCycle requestCycle) {
+                        super.respond(requestCycle);
+
+                        Files.remove(certificate);
+                    }
+                }.setFileName(fileName).setContentDisposition(ContentDisposition.ATTACHMENT)
+        );
+    }
 }
