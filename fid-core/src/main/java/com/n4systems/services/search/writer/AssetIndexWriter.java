@@ -1,22 +1,18 @@
 package com.n4systems.services.search.writer;
 
 import com.google.common.base.Preconditions;
-import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.services.search.field.AssetIndexField;
 import com.n4systems.services.search.field.IndexField;
 import org.apache.lucene.document.Document;
-import org.springframework.beans.factory.annotation.Autowired;
 import rfid.ejb.entity.InfoOptionBean;
 
 import javax.persistence.EntityManager;
 import java.io.IOException;
 
 public class AssetIndexWriter extends LuceneIndexWriter<Asset> {
-
-    private @Autowired EventService eventService;
 
     public AssetIndexWriter() {
         super(Asset.class);

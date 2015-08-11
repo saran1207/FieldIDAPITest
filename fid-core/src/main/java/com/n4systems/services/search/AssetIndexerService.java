@@ -56,7 +56,7 @@ public class AssetIndexerService extends FieldIdPersistenceService {
         long startTime = System.currentTimeMillis();
 		logger.info(getClass().getSimpleName() +": Running");
 
-        QueryBuilder<IndexQueueItem> query = new QueryBuilder<IndexQueueItem>(IndexQueueItem.class);
+        QueryBuilder<IndexQueueItem> query = new QueryBuilder<>(IndexQueueItem.class);
         query.setLimit(configService.getInteger(ConfigEntry.ASSET_INDEX_SIZE));
 
         List<IndexQueueItem> items = persistenceService.findAll(query);
@@ -64,20 +64,23 @@ public class AssetIndexerService extends FieldIdPersistenceService {
 		for (IndexQueueItem item : items) {
 			try {
                 processIndexQueueItem(item);
-                persistenceService.deleteAny(item);
             } catch (EntityNotFoundException nfe) {
-                logger.warn(getClass().getSimpleName() + " could not find " + item.getType() + ":" + item.getItemId()
-                            + ", so this index queue row is being deleted.", nfe);
-
                 //If we're hitting an Entity Not Found exception, this means that the Asset, AssetType, whatever has
                 //been deleted or retired or never actually existed.  Point is, this data is bad and just causes us to
-                //fill the logs with garbage if we don't clear it out.
-                persistenceService.deleteAny(item);
+                //fill the table with garbage if we don't clear it out.
+                logger.warn(getClass().getSimpleName() + " could not find " + item.getType() + ":" + item.getItemId()
+                            + ", so this index queue row is being deleted.", nfe);
 			} catch (Exception e) {
-                //If we hit here, there's some other kind of exception that happened.  This wasn't expected, so we'll
-                //log it and we'll KEEP THAT ROW.  We might be able to process it later after fixing other issues.
+                //If we hit here, there's some other kind of exception that happened.  The original thought was to leave
+                //the row in the table and solve other issues with the data so that it can be processed.  Unfortunately,
+                //this can cause us to fill the table up with rows that simply can't be processed.  Given that our
+                //indexer uses pages only 50 rows deep, we can't allow for bad data.
 				logger.warn(getClass().getSimpleName() +": Failed for " + item.getType() + ":" + item.getItemId(), e);
-			}
+			} finally {
+                //We always delete the row, no matter what.  This ensures that we don't clog up the index_queue_items
+                //table.
+                persistenceService.deleteAny(item);
+            }
 		}
 		logger.info(getClass().getSimpleName() +": Completed " + (System.currentTimeMillis() - startTime) + "ms");
 	}
@@ -120,7 +123,7 @@ public class AssetIndexerService extends FieldIdPersistenceService {
 	}
 
     private TenantOnlySecurityFilter createTenantFilter(HasTenant hasTenantEntity) {
-		return new TenantOnlySecurityFilter(hasTenantEntity.getTenant());
+		return new TenantOnlySecurityFilter(hasTenantEntity.getTenant()).setShowArchived(true);
 	}
 
 	private void indexAsset(Asset asset) {
@@ -173,7 +176,7 @@ public class AssetIndexerService extends FieldIdPersistenceService {
 	}
 
 	private void reindexByTenant(Tenant tenant) {
-        assetIndexWriter.reindexItems(tenant, new QueryBuilder<>(Asset.class, new TenantOnlySecurityFilter(tenant)));
+        assetIndexWriter.reindexItems(tenant, new QueryBuilder<>(Asset.class, new TenantOnlySecurityFilter(tenant).setShowArchived(true)));
 	}
 
     public void indexTenant(String tenantName) {
