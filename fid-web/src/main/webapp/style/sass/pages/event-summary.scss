@@ -67,8 +67,9 @@
   p.def-selected, p.rec-selected, p.def-repaired-on-site, p.def-repaired {
     background-position: left center;
     background-repeat: no-repeat;
-    padding-left: 45px;
-    height: 32px;
+    margin-top: 5px;
+    padding: 10px 10px 10px 45px;
+    border: 2px solid #E8EDFF;
 
     span {
       vertical-align: sub;
