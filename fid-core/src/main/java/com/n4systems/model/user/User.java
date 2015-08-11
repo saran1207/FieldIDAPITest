@@ -55,7 +55,6 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
     private boolean displayLastRunSearches = true;
     private boolean resetEmailSent = false;
 
-
     private Locale language;
 
     @OneToOne(optional = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)

@@ -57,19 +57,16 @@ public class UserFormPermissionsPanel extends Panel {
         });
     }
 
-    @Override
-    public boolean isVisible() {
-        return !userModel.getObject().isReadOnly();
-    }
-
     private List<Permission> getPermissionsList(IModel<User> userModel) {
        permissions = Lists.newArrayList();
         int[] permissionList;
         User user = userModel.getObject();
         BitField permField = new BitField(user.isNew() ? 0 : user.getPermissions());
 
-        if(user.isLiteUser() || user.isUsageBasedUser())
+        if (user.isLiteUser() || user.isUsageBasedUser())
             permissionList =  Permissions.getVisibleLiteUserPermissions();
+        else if (user.isReadOnly())
+            permissionList = Permissions.getVisibleReadOnlyPermissions();
         else
             permissionList =  Permissions.getVisibleSystemUserPermissions();
 

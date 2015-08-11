@@ -452,6 +452,9 @@ public class UserService extends CrudService<User> {
 		BitField perms = BitField.create(permissions);
 		switch (type) {
 			case SYSTEM:
+                // System and Admin users have full permissions
+                perms.set(Permissions.ALL);
+                break;
 			case ADMIN:
 				// System and Admin users have full permissions
 				perms.set(Permissions.ALL);
@@ -460,11 +463,16 @@ public class UserService extends CrudService<User> {
 				// Full users can have any permission
 				break;
 			case LITE:
+                // lite and usage based users can only have create and edit events
+                perms.retain(Permissions.CreateEvent, Permissions.EditEvent);
+                break;
 			case USAGE_BASED:
 				// lite and usage based users can only have create and edit events
 				perms.retain(Permissions.CreateEvent, Permissions.EditEvent);
 				break;
 			case READONLY:
+                perms.retain(Permissions.EditAssetDetails);
+                break;
 			case PERSON:
 				// Readonly and Persons have no permissions
 				perms.clearAll();
