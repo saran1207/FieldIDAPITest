@@ -1246,6 +1246,11 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
 
 
     public void archiveProcedureDefinition(ProcedureDefinition procedureDefinition) {
+        //first remove any recurring schedules for this procedure definition
+        for(RecurringLotoEvent event:recurringScheduleService.getRecurringLotoEvents(procedureDefinition.getAsset())) {
+            recurringScheduleService.purgeRecurringEvent(event);
+        }
+
         procedureDefinition.archiveEntity();
         persistenceService.update(procedureDefinition);
     }
