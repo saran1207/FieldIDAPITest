@@ -1,0 +1,1 @@
+update procedures set state='ARCHIVED' where asset_id in (select id from assets where state='ARCHIVED');
