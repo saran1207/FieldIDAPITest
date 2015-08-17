@@ -136,13 +136,8 @@ public abstract class EventPage<T extends Event> extends FieldIDTemplatePage {
         OuterEventForm form;
         add(form = new OuterEventForm("outerEventForm"));
 
-        if (event.getObject().isAction()) {
-            form.add(new AttributeAppender("class", "event-form-column-left"));
-        }
-
-
         WebMarkupContainer actionsColumn;
-        add(actionsColumn = new WebMarkupContainer("actionsColumn"));
+        form.add(actionsColumn = new WebMarkupContainer("actionsColumn"));
         actionsColumn.setVisible(event.getObject().isAction());
 
         actionsColumn.add(new Label("priority", new PropertyModel<String>(event, "priority.name")));

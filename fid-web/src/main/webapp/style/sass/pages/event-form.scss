@@ -25,6 +25,14 @@ fieldset {
         margin-top: 15px;
       }
     }
+    .action-details {
+      label {
+        img {
+          margin-right: 5px;
+          vertical-align: middle;
+        }
+      }
+    }
 
     .event-book {
       display: inline;
@@ -150,7 +158,6 @@ fieldset {
 
       label {
         display:inline-block;
-        vertical-align: top;
         font-size: small;
         vertical-align: super;
         font-weight: $regular;

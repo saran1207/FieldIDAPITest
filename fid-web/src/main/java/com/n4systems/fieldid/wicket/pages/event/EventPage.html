@@ -8,6 +8,35 @@
         <div class="column-left">
             <fieldset class="display-horizontal narrow" wicket:id="targetDetailsPanel"/>
 
+            <fieldset wicket:id="actionsColumn" class="display-horizontal narrow action-details">
+                <legend><wicket:message key="label.corrective_action"/></legend>
+
+                <div class="control-group">
+                    <label class="label"><img src="/fieldid/images/action/icon-priority.png"><wicket:message key="label.priority"/></label>
+                    <div class="value"><span wicket:id="priority"/></div>
+                </div>
+
+                <div class="control-group">
+                    <label class="label"><img src="/fieldid/images/action/icon-notes.png"><wicket:message key="label.notes"/></label>
+                    <div class="value"><span wicket:id="notes"></span></div>
+                </div>
+
+                <div class="control-group">
+                    <label class="label"><img src="/fieldid/images/action/icon-due.png"><wicket:message key="label.due_date"/></label>
+                    <div class="value"><span wicket:id="dueDate"></span></div>
+                </div>
+
+                <div class="control-group">
+                    <label class="label"><img src="/fieldid/images/action/icon-assignee.png"><wicket:message key="label.assignee"/></label>
+                    <div class="value"><span wicket:id="assignee"></span></div>
+                </div>
+
+                <div wicket:id="criteriaResultImage" class="actionImage">
+                    <img wicket:id="image"/>
+                </div>
+
+            </fieldset>
+
             <fieldset class="form-horizontal narrow">
 
                 <legend><wicket:message key="label.details"/></legend>
@@ -167,64 +196,7 @@
         </div>
     </form>
 
-    <fieldset wicket:id="schedulePicker"></fieldset>
-
-    <fieldset wicket:id="actionsColumn" class="event-form-column-right">
-        <legend><wicket:message key="label.corrective_action"/></legend>
-
-        <div class="actionDetail">
-
-            <div class="detailSectionIcon">
-                <img src="/fieldid/images/action/icon-priority.png">
-            </div>
-
-            <div class="actionMessage">
-                <span wicket:id="priority"></span>
-            </div>
-
-        </div>
-
-        <div class="actionDetail">
-
-            <div class="detailSectionIcon">
-                <img src="/fieldid/images/action/icon-notes.png">
-            </div>
-
-            <div class="actionMessage">
-                <span wicket:id="notes"></span>
-            </div>
-
-        </div>
-
-        <div class="actionDetail">
-
-            <div class="detailSectionIcon">
-                <img src="/fieldid/images/action/icon-due.png">
-            </div>
-
-            <div class="actionMessage">
-                <span wicket:id="dueDate"></span>
-            </div>
-
-        </div>
-
-        <div class="actionDetail">
-
-            <div class="detailSectionIcon">
-                <img src="/fieldid/images/action/icon-assignee.png">
-            </div>
-
-            <div class="actionMessage">
-                <span wicket:id="assignee"></span>
-            </div>
-
-        </div>
-
-        <div wicket:id="criteriaResultImage" class="actionImage">
-            <img wicket:id="image"/>
-        </div>
-
-    </fieldset>
+    <div wicket:id="schedulePicker"></div>
 
 </wicket:extend>
 </html>
