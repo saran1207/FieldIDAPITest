@@ -1,3 +1,4 @@
+<html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 
     <div wicket:id="removeExistingProofTestPanel">
@@ -6,10 +7,10 @@
 
     <div wicket:id="proofTestDetailsPanel">
         <select wicket:id="proofTestType"/>
-        <label class="label proof-test-label" wicket:id="proofTestTypeLabel"/>
+        <label class="label" wicket:id="proofTestTypeLabel"/>
 
 
-        <div class="proofTestUpload" wicket:id="uploadedProofTestContainer" style="clear:both; padding-bottom:15px;">
+        <div class="proof-test-upload" wicket:id="uploadedProofTestContainer">
             <input type="file" wicket:id="fileUpload">
         </div>
 
@@ -28,3 +29,4 @@
     </div>
 
 </wicket:panel>
+</html>

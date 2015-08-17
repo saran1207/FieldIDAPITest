@@ -368,11 +368,6 @@ public class DashboardPage extends FieldIDTemplatePage {
     }
 
     @Override
-    protected boolean useLegacyCss() {
-        return false;
-    }
-
-    @Override
     protected Label createTitleLabel(String labelId) {
         return new Label(labelId, new FIDLabelModel("label.dashboard"));
     }

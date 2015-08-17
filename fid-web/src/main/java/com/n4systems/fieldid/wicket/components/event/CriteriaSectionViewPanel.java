@@ -30,6 +30,7 @@ public class CriteriaSectionViewPanel extends Panel {
     public CriteriaSectionViewPanel(String id, IModel<List<CriteriaResult>> results, Class<? extends AbstractEvent> eventClass) {
         super(id);
 
+        add(new AttributeAppender("class", "display-horizontal"));
         add(criteriaImagesModalWindow = new DialogModalWindow("imagesModal"));
         add(actionsWindow = new DialogModalWindow("actionsModal"));
         actionsWindow.setInitialWidth(350);

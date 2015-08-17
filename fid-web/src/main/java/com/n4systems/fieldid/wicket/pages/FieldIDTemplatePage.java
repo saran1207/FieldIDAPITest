@@ -144,8 +144,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         add(new CustomJavascriptPanel("customJsPanel"));
         add(new GoogleAnalyticsContainer("googleAnalyticsScripts"));
 
-        // TODO DD : refactor this...override
-        addCssContainers();
+        add(new WebMarkupContainer("metaIE").add(new AttributeAppender("content", getMetaIE())));
 
         add(topFeedbackPanel = new TopFeedbackPanel("topFeedbackPanel"));
         add(new Label("versionLabel", FieldIdVersion.getVersion()));
@@ -194,21 +193,6 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
     	TenantSettings settings = getTenant().getSettings();
 		return settings.getSupportUrl()==null ? DEFAULT_SUPPORT_URL :settings.getSupportUrl();
 	}
-
-	private void addCssContainers() {
-        add(new WebMarkupContainer("metaIE").add(new AttributeAppender("content", getMetaIE())));
-
-        WebMarkupContainer newCss = new WebMarkupContainer("newCss") {
-            { setRenderBodyOnly(true); }
-
-            @Override public boolean isVisible() {
-                return !useLegacyCss();
-            }
-        };
-        newCss.add(new CachingStrategyLink("layoutCss"));
-        newCss.add(new CachingStrategyLink("feedbackErrorsCss"));
-        add(newCss);
-    }
 
     protected IModel<String> getMetaIE() {
         return Model.of("IE=Edge");
@@ -484,12 +468,6 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         	super.onBeforeRender();  // note : call super at END of override.  see wicket docs.
         }
     	
-    }
-
-    // Ideally these will both be unneeded by all pages, After we convert to layout.css from site_wide.css and fieldid.css
-    // (both site_wide and fieldid have accumulated a ton of irrelevant stuff that may be used only on one page and breaks new pages).
-    protected boolean useLegacyCss() {
-        return true;
     }
 
     public TopFeedbackPanel getTopFeedbackPanel() {

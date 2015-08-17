@@ -14,6 +14,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -78,7 +79,7 @@ public class EditEventPage extends ThingEventPage {
 
     @Override
     protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("title.edit_event"));
+        return new Label(labelId, new FIDLabelModel("title.edit_event", event.getObject().getType().getDisplayName()));
     }
 
 }

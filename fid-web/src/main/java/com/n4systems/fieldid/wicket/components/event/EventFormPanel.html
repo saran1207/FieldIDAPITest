@@ -2,7 +2,7 @@
 <wicket:panel>
 
     <h2>
-        <span id="formTitle" class="formTitle">
+        <span id="formTitle" class="form-title">
             <wicket:message key="label.eventform"/>
         </span>
 
@@ -20,8 +20,8 @@
 
     </h2>
 
-    <h3>
-        <span class="eventSectionIndex pagination" wicket:id="topSectionPager"></span>
+    <h3 class="event-section-index">
+        <span class="pagination" wicket:id="topSectionPager"></span>
     </h3>
 
     <div wicket:id="criteriaSectionsContainer">
@@ -30,12 +30,12 @@
 
         <div wicket:id="sectionContainer" class="section-container">
 
-            <h3><a wicket:id="hideSectionLink" class="mattButton"><wicket:message key="label.hide_section"/></a></h3>
+            <h3><a wicket:id="hideSectionLink" class="btn-secondary"><wicket:message key="label.hide_section"/></a></h3>
             <h3 class="event-section-title">
                 <span class="eventSectionTitle" wicket:id="sectionName"></span>
             </h3>
 
-            <div class="display-horizontal" name="criteriaPanel" wicket:id="criteriaPanel"/>
+            <div name="criteriaPanel" wicket:id="criteriaPanel"/>
 
             <div class="display-horizontal" name="sectionScore" wicket:enclosure="sectionScore">
                 <div class="control-group" name="score">
@@ -60,7 +60,7 @@
                     <wicket:message key="label.section"/>&nbsp;<span class="strong" wicket:id="name"/>&nbsp;<wicket:message key="label.is_hidden"/>
                 </div>
                 <div class="button">
-                    <a wicket:id="restoreLink" class="mattButton blueButton"><wicket:message key="label.restore_section"/></a>
+                    <a wicket:id="restoreLink" class="btn-primary"><wicket:message key="label.restore_section"/></a>
                 </div>
             </div>
         </div>
@@ -70,8 +70,8 @@
 
     </div>
 
-    <h3>
-        <span class="eventSectionIndex pagination" wicket:id="bottomSectionPager"></span>
+    <h3 class="event-section-index">
+        <span class="pagination" wicket:id="bottomSectionPager"></span>
     </h3>
 
 </wicket:panel>

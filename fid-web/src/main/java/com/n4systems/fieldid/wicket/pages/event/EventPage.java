@@ -28,7 +28,7 @@ import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
 import com.n4systems.fieldid.wicket.model.user.GroupedVisibleUsersModel;
-import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.*;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
@@ -66,7 +66,7 @@ import java.util.List;
 
 import static ch.lambdaj.Lambda.on;
 
-public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
+public abstract class EventPage<T extends Event> extends FieldIDTemplatePage {
 
     @SpringBean
     protected EventService eventService;
@@ -281,8 +281,6 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
                 }
             });
 
-            add(new Label("eventTypeName", new PropertyModel<String>(event, "type.name")));
-
             WebMarkupContainer proofTestContainer = new WebMarkupContainer("proofTestContainer");
 
             if (event.getObject().getType().isThingEventType()) {
@@ -295,7 +293,7 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             add(proofTestContainer);
 
             PropertyModel<User> performedByModel = new PropertyModel<User>(event, "performedBy");
-            DropDownChoice<User> performedBy = new DropDownChoice<User>("performedBy", performedByModel, new ExaminersModel(performedByModel), new ListableChoiceRenderer<User>());
+            DropDownChoice<User> performedBy = new FidDropDownChoice<User>("performedBy", performedByModel, new ExaminersModel(performedByModel), new ListableChoiceRenderer<User>());
             DateTimePicker datePerformedPicker = new DateTimePicker("datePerformed", new UserToUTCDateModel(new PropertyModel<Date>(event, "date")), true).withNoAllDayCheckbox();
             datePerformedPicker.addToDateField(createUpdateAutoschedulesOnChangeBehavior());
 
@@ -320,7 +318,7 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             add(jobsContainer);
             jobsContainer.setVisible(getSessionUser().getOrganization().getPrimaryOrg().getExtendedFeatures().contains(ExtendedFeature.Projects));
             jobsContainer.setVisible(isJobsContainerVisible());
-            DropDownChoice<Project> jobSelect = new DropDownChoice<Project>("job", new PropertyModel<Project>(event, "project"), new EventJobsForTenantModel(), new ListableChoiceRenderer<Project>());
+            DropDownChoice<Project> jobSelect = new FidDropDownChoice<Project>("job", new PropertyModel<Project>(event, "project"), new EventJobsForTenantModel(), new ListableChoiceRenderer<Project>());
             jobSelect.setNullValid(true);
             jobsContainer.add(jobSelect);
 
@@ -329,13 +327,13 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             add(createPostEventPanel(event));
 
             Event masterEvent = event.getObject();
-            DropDownChoice resultSelect = new DropDownChoice<EventResult>("eventResult", new PropertyModel<EventResult>(EventPage.this, "eventResult"), EventResult.getValidEventResults(), new ListableLabelChoiceRenderer<EventResult>());
+            DropDownChoice resultSelect = new FidDropDownChoice<EventResult>("eventResult", new PropertyModel<EventResult>(EventPage.this, "eventResult"), EventResult.getValidEventResults(), new ListableLabelChoiceRenderer<EventResult>());
             resultSelect.add(new UpdateComponentOnChange());
             resultSelect.setNullValid(masterEvent.isResultFromCriteriaAvailable());
             add(resultSelect);
 
             List<EventStatus> eventStatuses = eventStatusService.getActiveStatuses();
-            DropDownChoice workflowStateSelect = new DropDownChoice<EventStatus>("eventStatus", new PropertyModel<EventStatus>(event, "eventStatus"), eventStatuses, new ListableLabelChoiceRenderer<EventStatus>());
+            DropDownChoice workflowStateSelect = new FidDropDownChoice<EventStatus>("eventStatus", new PropertyModel<EventStatus>(event, "eventStatus"), eventStatuses, new ListableLabelChoiceRenderer<EventStatus>());
             workflowStateSelect.add(new UpdateComponentOnChange());
             workflowStateSelect.setNullValid(true);
             add(workflowStateSelect);
@@ -368,9 +366,9 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             gpsContainer.setVisible(event.getObject().getGpsLocation() !=null);
             gpsContainer.setVisible(FieldIDSession.get().getTenant().getSettings().isGpsCapture());
 
-            Button saveButton = new Button("saveButton");
-            saveButton.add(new DisableButtonBeforeSubmit());
-            add(saveButton);
+            SubmitLink submitLink = new SubmitLink("submitLink");
+            submitLink.add(new DisableButtonBeforeSubmit());
+            add(submitLink);
             add(createCancelLink("cancelLink"));
             add(createDeleteLink("deleteLink"));
         }
@@ -520,14 +518,6 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/legacy/newCss/event/event_base.css");
-        response.renderCSSReference("style/legacy/newCss/event/event_schedule.css");
-        response.renderCSSReference("style/legacy/newCss/component/buttons.css");
-    }
-
-    @Override
-    protected boolean useLegacyCss() {
-        return false;
     }
 
     protected void doAutoSchedule() { }

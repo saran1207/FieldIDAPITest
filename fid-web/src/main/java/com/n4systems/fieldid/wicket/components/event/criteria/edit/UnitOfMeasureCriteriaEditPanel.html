@@ -1,21 +1,15 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 
-        <div class="textCriteriaContainer unitOfMeasureCriteriaContainer">
+        <div class="textCriteriaContainer unit-of-measure-container">
 
-            <span class="fieldHolder">
-                <input type="text" wicket:id="primaryUnit" class="criteriaUnitOfMeasureField" maxlength="255">
-            </span>
+            <input type="text" wicket:id="primaryUnit" class="criteriaUnitOfMeasureField" maxlength="255">
 
-            <div class="unitOfMeasureName" wicket:id="primaryUnitLabel"></div>
-
-            <div style="clear:both"></div>
+            <div class="unit-of-measure-name" wicket:id="primaryUnitLabel"></div>
 
             <div wicket:id="secondaryUnitContainer">
-                <span class="fieldHolder">
-                    <input type="text" wicket:id="secondaryUnit" class="criteriaUnitOfMeasureField" maxlength="255">
-                </span>
-                <div class="unitOfMeasureName" wicket:id="secondaryUnitLabel"></div>
+                <input type="text" wicket:id="secondaryUnit" class="criteriaUnitOfMeasureField" maxlength="255">
+                <div class="unit-of-measure-name" wicket:id="secondaryUnitLabel"></div>
             </div>
 
         </div>

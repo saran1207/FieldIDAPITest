@@ -15,6 +15,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.event.criteriaimage.CriteriaImageListPage;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.CriteriaResult;
+import com.n4systems.model.CriteriaType;
 import com.n4systems.model.Event;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import org.apache.wicket.Component;
@@ -41,7 +42,7 @@ public class CriteriaSectionEditPanel extends Panel {
 
     private IModel<List<CriteriaResult>> results;
     private DialogModalWindow criteriaImagesModalWindow;
-    private FIDModalWindow criteriaModalWindow;
+    private DialogModalWindow criteriaModalWindow;
     private DialogModalWindow actionsWindow;
     private WebMarkupContainer instructionsViewer;
     private Popup popup;
@@ -55,6 +56,7 @@ public class CriteriaSectionEditPanel extends Panel {
 
     public CriteriaSectionEditPanel(String id, final Class<? extends AbstractEvent> eventClass, IModel<List<CriteriaResult>> results, boolean showActionButtons, boolean showAttachmentsAndActions) {
         super(id);
+        add(new AttributeAppender("class", "form-horizontal"));
         this.showActionButtons = showActionButtons;
         this.showAttachmentsAndActions = showAttachmentsAndActions;
         setOutputMarkupPlaceholderTag(true);
@@ -69,7 +71,7 @@ public class CriteriaSectionEditPanel extends Panel {
             }
         });
 
-        add(criteriaModalWindow = new FIDModalWindow("observationWindow"));
+        add(criteriaModalWindow = new DialogModalWindow("observationWindow"));
         criteriaModalWindow.setCloseButtonCallback(new ModalWindow.CloseButtonCallback() {
             @Override
             public boolean onCloseButtonClicked(AjaxRequestTarget target) {
@@ -115,7 +117,7 @@ public class CriteriaSectionEditPanel extends Panel {
                     }
                     item.add(new FlatLabel("criteriaName", new PropertyModel<String>(item.getModel(), "criteria.displayText")));
                     item.add(CriteriaEditorFactory.createEditorFor("criteriaEditor", item.getModel()));
-                    item.add(new CriteriaActionButton("recommendationsButton", "images/rec-icon.png", criteriaResult.getRecommendations().size(), "label.recommendations", "mattButtonMiddle") {
+                    item.add(new CriteriaActionButton("recommendationsButton", "images/rec-icon.png", criteriaResult.getRecommendations().size(), "label.recommendations", "btn-secondary") {
                         @Override
                         public void onClick(AjaxRequestTarget target) {
                             criteriaModalWindow.setTitle(new FIDLabelModel("label.recommendations"));
@@ -129,7 +131,7 @@ public class CriteriaSectionEditPanel extends Panel {
                             criteriaModalWindow.show(target);
                         }
                     });
-                    item.add(new CriteriaActionButton("deficienciesButton", "images/def-icon.png", criteriaResult.getDeficiencies().size(), "label.deficiencies", "mattButtonLeft") {
+                    item.add(new CriteriaActionButton("deficienciesButton", "images/def-icon.png", criteriaResult.getDeficiencies().size(), "label.deficiencies", "btn-secondary") {
                         @Override
                         public void onClick(AjaxRequestTarget target) {
                             criteriaModalWindow.setTitle(new FIDLabelModel("label.deficiencies"));
@@ -144,7 +146,7 @@ public class CriteriaSectionEditPanel extends Panel {
                         }
                     });
 
-                    item.add(new CriteriaActionButton("criteriaImageButton", "images/camera-icon.png", criteriaResult.getCriteriaImages().size(), "label.images", "mattButtonMiddle") {
+                    item.add(new CriteriaActionButton("criteriaImageButton", "images/camera-icon.png", criteriaResult.getCriteriaImages().size(), "label.images", "btn-secondary") {
                         @Override
                         public void onClick(AjaxRequestTarget target) {
                             criteriaImagesModalWindow.setTitle(new FIDLabelModel("label.images"));
@@ -183,7 +185,7 @@ public class CriteriaSectionEditPanel extends Panel {
 
                     }.setVisible(showAttachmentsAndActions));
 
-                    item.add(new CriteriaActionButton("actionsLink", "images/action-icon.png", criteriaResult.getActions().size(), "label.actions", "mattButtonRight") {
+                    item.add(new CriteriaActionButton("actionsLink", "images/action-icon.png", criteriaResult.getActions().size(), "label.actions", "btn-secondary") {
                         @Override
                         public void onClick(AjaxRequestTarget target) {
                             actionsWindow.setTitle(new Model<String>("Actions"));
@@ -193,7 +195,7 @@ public class CriteriaSectionEditPanel extends Panel {
                         }
                     }.setVisible(showAttachmentsAndActions));
 
-                    item.add(new CriteriaActionButton("showActionsButton", "images/icon-expand.png", null, "label.add_action", "mattButton") {
+                    item.add(new CriteriaActionButton("showActionsButton", "images/icon-expand.png", null, "label.add_action", "btn-secondary") {
                         @Override
                         public void onClick(AjaxRequestTarget target) {
                             showActions(item);
