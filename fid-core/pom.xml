@@ -247,7 +247,7 @@
         <dependency>
         	<groupId>net.sf.jasperreports</groupId>
         	<artifactId>jasperreports</artifactId>
-        	<version>4.1.2</version>
+        	<version>6.1.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.poi</groupId>
@@ -258,7 +258,13 @@
         <dependency>
         	<groupId>net.sf.jasperreports</groupId>
         	<artifactId>jasperreports-fonts</artifactId>
-        	<version>4.0.0</version>
+        	<version>6.0.0</version>
+        </dependency>
+        <!-- We need to add this because the new version of Jasper doesn't have it... -->
+        <dependency>
+            <groupId>eclipse</groupId>
+            <artifactId>jdtcore</artifactId>
+            <version>3.1.0</version>
         </dependency>
         <dependency>
 		    <groupId>joda-time</groupId>
