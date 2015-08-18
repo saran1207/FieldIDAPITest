@@ -42,7 +42,7 @@ public class Comment extends Panel implements IEventBehavior {
         text = new TextArea<String>("commentText", model);
 		text.setLabel(new FIDLabelModel("label.comments"));
         text.setOutputMarkupId(true);
-        select = new DropDownChoice<CommentTemplate>("commentSelect", new PropertyModel<CommentTemplate>(this,"comment"), commentsModel);
+        select = new FidDropDownChoice<CommentTemplate>("commentSelect", new PropertyModel<CommentTemplate>(this,"comment"), commentsModel);
 		select.setNullValid(true);
 		select.add(new AjaxFormComponentUpdatingBehavior("onchange") {
 			@Override protected void onUpdate(AjaxRequestTarget target) {
