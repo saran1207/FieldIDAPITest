@@ -1,10 +1,14 @@
 package com.n4systems.model;
 
+import com.n4systems.model.location.Location;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.user.User;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * This is the JPA entity which represents rows in the assignment_escalation_rules table.
@@ -15,49 +19,82 @@ import java.util.Date;
 @Table(name="assignment_escalation_rules")
 public class AssignmentEscalationRule extends ArchivableEntityWithTenant {
 
-    @ManyToOne
+    @ManyToOne(optional=false)
     @JoinColumn(name = "escalate_to_user_id")
     private User escalateToUser;
 
-    @ManyToOne
+    @ManyToOne(optional=true)
     @JoinColumn(name = "reassign_user_id")
     private User reassignUser;
 
-    @Column(name="notify_assignee")
-    private boolean notifyAssignee;
+    @Column(name = "overdue_quantity")
+    private Long overdueQuantity;
 
-    @Column(name="overdue_quantity")
-    private int overdueQuantity;
-
-    //TODO Should this be an enum?  Probably... you lazy pirate...
-    @Column(name="overdue_unit")
-    private String overdueUnit;
-
-    //This may look a little bit strange, but we only care about the event_id here.  We use this along with the
-    //event_family to pull the appropriate event from the table.  This allows us to more quickly pull up the
-    //Escalation Rule, since we're not also immediately querying for the Event as well.
-    @Column(name="event_id")
-    private Long eventId;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name="event_family")
-    private EventFamily eventFamily;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="event_due_date")
-    private Date eventDueDate;
-
-    @Column(name="rule_has_run")
-    private boolean ruleHasRun;
-
-    @Column(name="subject_text")
+    @Column(name = "subject_text")
     private String subjectText;
 
-    @Column(name="custom_message_text")
+    @Column(name = "custom_message_text")
     private String customMessageText;
 
-    @Column(name="additional_emails")
-    private String additionalEmails;
+    @Column(name = "additional_emails")
+    private String additionalEmails; //This one actually gets broken apart into an array of Strings, but is held as a String.
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type")
+    private Type type;
+
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "event_type_group_id")
+    private EventTypeGroup eventTypeGroup;
+
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "event_type_id")
+    private EventType eventType;
+
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "asset_status_id")
+    private AssetStatus assetStatus;
+
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "asset_type_id")
+    private AssetType assetType;
+
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "asset_type_group_id")
+    private AssetTypeGroup assetTypeGroup;
+
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "assigned_to_id")
+    private User assignedTo;
+
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "assignee_id")
+    private User assignee;
+
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "owner_id")
+    private BaseOrg owner;
+
+    @Embedded
+    private Location location;
+
+    @Column(name = "freeform_location")
+    private String freeformLocation;
+
+    @Column(name = "rfid_number")
+    private String rfidNumber;
+
+    @Column(name = "serial_number")
+    private String serialNumber;
+
+    @Column(name = "reference_number")
+    private String referenceNumber;
+
+    @Column(name = "order_number")
+    private String orderNumber;
+
+    @Column(name = "purchase_order")
+    private String purchaseOrder;
 
     public User getEscalateToUser() {
         return escalateToUser;
@@ -75,60 +112,12 @@ public class AssignmentEscalationRule extends ArchivableEntityWithTenant {
         this.reassignUser = reassignUser;
     }
 
-    public boolean isNotifyAssignee() {
-        return notifyAssignee;
-    }
-
-    public void setNotifyAssignee(boolean notifyAssignee) {
-        this.notifyAssignee = notifyAssignee;
-    }
-
-    public int getOverdueQuantity() {
+    public Long getOverdueQuantity() {
         return overdueQuantity;
     }
 
-    public void setOverdueQuantity(int overdueQuantity) {
+    public void setOverdueQuantity(Long overdueQuantity) {
         this.overdueQuantity = overdueQuantity;
-    }
-
-    public String getOverdueUnit() {
-        return overdueUnit;
-    }
-
-    public void setOverdueUnit(String overdueUnit) {
-        this.overdueUnit = overdueUnit;
-    }
-
-    public Long getEventId() {
-        return eventId;
-    }
-
-    public void setEventId(Long eventId) {
-        this.eventId = eventId;
-    }
-
-    public EventFamily getEventFamily() {
-        return eventFamily;
-    }
-
-    public void setEventFamily(EventFamily eventFamily) {
-        this.eventFamily = eventFamily;
-    }
-
-    public Date getEventDueDate() {
-        return eventDueDate;
-    }
-
-    public void setEventDueDate(Date eventDueDate) {
-        this.eventDueDate = eventDueDate;
-    }
-
-    public boolean isRuleHasRun() {
-        return ruleHasRun;
-    }
-
-    public void setRuleHasRun(boolean ruleHasRun) {
-        this.ruleHasRun = ruleHasRun;
     }
 
     public String getSubjectText() {
@@ -155,17 +144,164 @@ public class AssignmentEscalationRule extends ArchivableEntityWithTenant {
         this.additionalEmails = additionalEmails;
     }
 
-    public enum EventFamily {
-        PROCEDURE_AUDIT(ProcedureAuditEvent.class), THING_EVENT(ThingEvent.class), PLACE_EVENT(PlaceEvent.class);
+    public Type getType() {
+        return type;
+    }
 
-        private Class clazz;
+    public void setType(Type type) {
+        this.type = type;
+    }
 
-        private EventFamily(Class clazz) {
-            this.clazz = clazz;
+    public EventTypeGroup getEventTypeGroup() {
+        return eventTypeGroup;
+    }
+
+    public void setEventTypeGroup(EventTypeGroup eventTypeGroup) {
+        this.eventTypeGroup = eventTypeGroup;
+    }
+
+    public EventType getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(EventType eventType) {
+        this.eventType = eventType;
+    }
+
+    public AssetStatus getAssetStatus() {
+        return assetStatus;
+    }
+
+    public void setAssetStatus(AssetStatus assetStatus) {
+        this.assetStatus = assetStatus;
+    }
+
+    public AssetType getAssetType() {
+        return assetType;
+    }
+
+    public void setAssetType(AssetType assetType) {
+        this.assetType = assetType;
+    }
+
+    public AssetTypeGroup getAssetTypeGroup() {
+        return assetTypeGroup;
+    }
+
+    public void setAssetTypeGroup(AssetTypeGroup assetTypeGroup) {
+        this.assetTypeGroup = assetTypeGroup;
+    }
+
+    public User getAssignee() {
+        return assignee;
+    }
+
+    public void setAssignee(User assignee) {
+        this.assignee = assignee;
+    }
+
+    public BaseOrg getOwner() {
+        return owner;
+    }
+
+    public void setOwner(BaseOrg owner) {
+        this.owner = owner;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public String getFreeformLocation() {
+        return freeformLocation;
+    }
+
+    public void setFreeformLocation(String freeformLocation) {
+        this.freeformLocation = freeformLocation;
+    }
+
+    public String getRfidNumber() {
+        return rfidNumber;
+    }
+
+    public void setRfidNumber(String rfidNumber) {
+        this.rfidNumber = rfidNumber;
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
+    public String getReferenceNumber() {
+        return referenceNumber;
+    }
+
+    public void setReferenceNumber(String referenceNumber) {
+        this.referenceNumber = referenceNumber;
+    }
+
+    public String getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+
+    public String getPurchaseOrder() {
+        return purchaseOrder;
+    }
+
+    public void setPurchaseOrder(String purchaseOrder) {
+        this.purchaseOrder = purchaseOrder;
+    }
+
+    public List<String> getAdditionalEmailsList() {
+        if(additionalEmails != null) {
+            //If additional emails isn't null, we'll process a list.  Otherwise, we're going to provide null, indicating
+            //that there's nothing in the field.  Pretty simpe.
+            if (!additionalEmails.isEmpty()) {
+                return Arrays.asList(additionalEmails.split("\\|"));
+            } else {
+                return new ArrayList<>();
+            }
         }
 
-        public Class getEventFamilyClass() {
-            return clazz;
-        }
+        return null;
+    }
+
+    public void addAdditionalEmail(String email) {
+        if(!additionalEmails.endsWith("|")) additionalEmails += "|";
+        additionalEmails += email + "|";
+    }
+
+    public boolean removeEmail(String email) {
+        List<String> emailList = Arrays.asList(additionalEmails.split("\\|"));
+        boolean result = emailList.remove(email);
+
+        additionalEmails = "";
+        emailList.forEach(emailAddress -> additionalEmails += emailAddress + "|");
+
+        return result;
+    }
+
+    public User getAssignedTo() {
+        return assignedTo;
+    }
+
+    public void setAssignedTo(User assignedTo) {
+        this.assignedTo = assignedTo;
+    }
+
+    public enum Type {
+        EVENT, ACTION
     }
 }
