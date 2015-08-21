@@ -34,7 +34,7 @@ public class ApiSubAssetResource extends FieldIdPersistenceService {
 			Asset asset = assetService.findByMobileId(assetSid);
 			
 			if(masterAsset != null && asset != null){
-				QueryBuilder<SubAsset> query = new QueryBuilder<SubAsset>(SubAsset.class);
+				QueryBuilder<SubAsset> query = new QueryBuilder<>(SubAsset.class);
 				query.addWhere(WhereClauseFactory.create("masterAsset", masterAsset));
 				query.addWhere(WhereClauseFactory.create("asset", asset));
 				if(!persistenceService.exists(query)) {
@@ -65,7 +65,7 @@ public class ApiSubAssetResource extends FieldIdPersistenceService {
 			Asset asset = assetService.findByMobileId(assetSid);
 			
 			if(masterAsset != null && asset != null) {
-				QueryBuilder<SubAsset> query = new QueryBuilder<SubAsset>(SubAsset.class);
+				QueryBuilder<SubAsset> query = new QueryBuilder<>(SubAsset.class);
 				query.addWhere(WhereClauseFactory.create("masterAsset", masterAsset));
 				query.addWhere(WhereClauseFactory.create("asset", asset));
 				SubAsset subAsset = persistenceService.find(query);
@@ -81,17 +81,48 @@ public class ApiSubAssetResource extends FieldIdPersistenceService {
 			}
 		}
 	}
+
+    /**
+     * In a situation where you can't determine the ID of the MasterAsset to a SubAsset, but you need to break that link
+     * so you can link that SubAsset to a different Master Asset?  We have you covered!!
+     * @param subAssetSid The SID of a subasset that you want to break out from the Master/Sub Asset Relationship.
+     */
+    @DELETE
+    @Path("{subAssetSid}")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Transactional
+    public void breakSubAssetLink(@PathParam("subAssetSid") String subAssetSid) {
+        logger.info("breakSubAssetLink for subAssetSid: " + subAssetSid);
+        if(subAssetSid != null && !subAssetSid.isEmpty()) {
+            Asset subAsset = assetService.findByMobileId(subAssetSid);
+
+            if(subAsset != null) {
+                QueryBuilder<SubAsset> query = new QueryBuilder<>(SubAsset.class);
+                query.addWhere(WhereClauseFactory.create("asset", subAsset));
+                SubAsset breakMe = persistenceService.find(query);
+
+                if(breakMe != null) {
+                    persistenceService.delete(breakMe);
+                    logger.info("SubAsset deleted for SubAssetSid: " + subAssetSid);
+                } else {
+                    logger.warn("Failed to find SubAsset with SubAssetSid: " + subAssetSid);
+                }
+            } else {
+                logger.error("Failed to find Asset for SubAssetId: " + subAssetSid);
+                throw new NotFoundException("SubAsset", subAssetSid);
+            }
+        }
+    }
 	
 	public ApiSubAsset findMasterAsset(Asset asset) {
-		QueryBuilder<SubAsset> query = new QueryBuilder<SubAsset>(SubAsset.class);
+		QueryBuilder<SubAsset> query = new QueryBuilder<>(SubAsset.class);
 		query.addWhere(WhereClauseFactory.create("asset", asset));
 		SubAsset subAsset = persistenceService.find(query); // Assumes that there will be only one MasterAsset for this one.
-		ApiSubAsset apiSubAsset = subAsset != null ? convertToApiSubAsset(subAsset.getMasterAsset()) : null;
-		return apiSubAsset;
+        return subAsset != null ? convertToApiSubAsset(subAsset.getMasterAsset()) : null;
 	}
 	
 	public List<ApiSubAsset> findAndConvertSubAssets(Asset asset) {
-		List<ApiSubAsset> apiSubAssets = new ArrayList<ApiSubAsset>();		
+		List<ApiSubAsset> apiSubAssets = new ArrayList<>();
 		List<SubAsset> subAssets = findSubAssets(asset);
 		
 		for(SubAsset subAsset: subAssets) {
@@ -103,7 +134,7 @@ public class ApiSubAssetResource extends FieldIdPersistenceService {
 	}
 	
 	public List<SubAsset> findSubAssets(Asset asset) {
-		QueryBuilder<SubAsset> query = new QueryBuilder<SubAsset>(SubAsset.class);
+		QueryBuilder<SubAsset> query = new QueryBuilder<>(SubAsset.class);
 		query.addWhere(WhereClauseFactory.create("masterAsset", asset));
 		return persistenceService.findAll(query);
 	}
