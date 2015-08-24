@@ -12,9 +12,11 @@ import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.event.CloseEventPage;
+import com.n4systems.fieldid.wicket.pages.event.EditEventPage;
 import com.n4systems.fieldid.wicket.pages.event.QuickEventPage;
 import com.n4systems.fieldid.wicket.pages.event.ThingEventSummaryPage;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
+import com.n4systems.fieldid.wicket.pages.masterevent.EditMasterEventPage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunLastReportPage;
 import com.n4systems.model.Asset;
 import com.n4systems.model.ThingEvent;
@@ -149,8 +151,12 @@ public class EventActionsCell extends Panel {
 
         BookmarkablePageLink viewLink = new BookmarkablePageLink<ThingEventSummaryPage>("viewLink", ThingEventSummaryPage.class, PageParametersBuilder.id(event.getID()));
 
-        //TODO This is another Struts Action that needs to be converted to Wicket.
-        NonWicketLink editLink = new NonWicketLink("editLink", "selectEventEdit.action?uniqueID="+eventId);
+        BookmarkablePageLink editLink;
+        if (event.getThingType().isMaster()) {
+            add(editLink = new BookmarkablePageLink<EditEventPage>("editLink", EditMasterEventPage.class, PageParametersBuilder.uniqueId(event.getId())));
+        } else {
+            add(editLink = new BookmarkablePageLink<EditEventPage>("editLink", EditEventPage.class, PageParametersBuilder.uniqueId(event.getId())));
+        }
 
         Link printReportLink = new Link("printReportLink") {
             @Override

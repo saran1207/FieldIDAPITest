@@ -1,0 +1,16 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+
+    <section>
+        <h3 class="grey-text"><wicket:message key="label.linked_events"/></h3>
+        <ul wicket:id="listContainer" class="list-table">
+            <li wicket:id="subEvent" class="sub-event">
+                <p><span wicket:id="assetType"/> <span class="grey-text">(<span wicket:id="identifier"/>)</span></p>
+                <a wicket:id="editSubEventLink"><span wicket:id="eventType"/></a>
+                <a class="delete-link pull-right" wicket:id="deleteSubEventLink"><span class="icon-trash-1"/></a>
+            </li>
+        </ul>
+    </section>
+
+</wicket:panel>
+</html>

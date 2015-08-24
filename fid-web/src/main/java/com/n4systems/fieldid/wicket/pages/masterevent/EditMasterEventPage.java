@@ -1,32 +1,42 @@
-package com.n4systems.fieldid.wicket.pages.event;
+package com.n4systems.fieldid.wicket.pages.masterevent;
 
 import com.n4systems.fieldid.service.event.EventCriteriaEditService;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventResult;
-import com.n4systems.model.ThingEvent;
+import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
+import com.n4systems.model.*;
 import com.n4systems.persistence.utils.PostFetcher;
 import com.n4systems.tools.FileDataContainer;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.ArrayList;
 
-public class EditEventPage extends ThingEventPage {
+public class EditMasterEventPage extends MasterEventPage {
 
     @SpringBean
     private EventCriteriaEditService criteriaEditService;
 
     private long uniqueId;
 
-    public EditEventPage(PageParameters parameters) {
+    public EditMasterEventPage(PageParameters parameters) {
         uniqueId = parameters.get("uniqueID").toLong();
         event = Model.of(loadExistingEvent());
+        event.getObject().setResultFromCriteriaAvailable();
+        if(event.getObject().isResultFromCriteriaAvailable()) {
+            setEventResult(EventResult.VOID);
+        } else {
+            setEventResult(event.getObject().getEventResult());
+        }
+        fileAttachments = new ArrayList<>(event.getObject().getAttachments());
+    }
+
+    public EditMasterEventPage(IModel<ThingEvent> masterEvent) {
+        event = masterEvent;
         event.getObject().setResultFromCriteriaAvailable();
         if(event.getObject().isResultFromCriteriaAvailable()) {
             setEventResult(EventResult.VOID);
@@ -47,36 +57,43 @@ public class EditEventPage extends ThingEventPage {
 
     @Override
     protected Component createCancelLink(String id) {
-        return new BookmarkablePageLink<ThingEventSummaryPage>(id, ThingEventSummaryPage.class, PageParametersBuilder.id(uniqueId));
+        return new Link(id) {
+            @Override public void onClick() {
+                setResponsePage(new AssetSummaryPage(event.getObject().getAsset()));
+            }
+        };
     }
 
     @Override
-    protected ThingEvent doSave() {
+    protected AbstractEvent doSave() {
         saveEventBookIfNecessary();
+        event.getObject().setEventResult(getEventResult());
 
-        ThingEvent editedEvent = event.getObject();
-        editedEvent.setEventResult(getEventResult());
-        criteriaEditService.storeCriteriaChanges(editedEvent);
-        editedEvent.storeTransientCriteriaResults();
+        criteriaEditService.storeCriteriaChanges(event.getObject());
+        event.getObject().storeTransientCriteriaResults();
+
+        event.getObject().getSubEvents().stream().forEach(subEvent -> criteriaEditService.storeCriteriaChanges(subEvent));
+        event.getObject().getSubEvents().stream().forEach(subEvent -> subEvent.storeTransientCriteriaResults());
 
         boolean assetOwnerUpdate = getAssetOwnerUpdate();
 
         if (assetOwnerUpdate) {
-            eventCreationService.updateAssetOwner(editedEvent);
+            eventCreationService.updateAssetOwner(event.getObject());
 
         }
 
         FileDataContainer fileDataContainer = null;
-        if(proofTestEditPanel != null) {
+        if (event.getObject().getType().isThingEventType()) {
             fileDataContainer = proofTestEditPanel.getFileDataContainer();
         }
 
-        return eventCreationService.updateEvent(editedEvent, fileDataContainer, fileAttachments);
+        Event savedEvent = eventCreationService.updateEvent(event.getObject(), fileDataContainer, fileAttachments);
+
+        return savedEvent;
     }
 
     @Override
     protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("title.edit_event", event.getObject().getType().getDisplayName()));
+        return new Label(labelId, new FIDLabelModel("title.perform_master_event", event.getObject().getType().getDisplayName()));
     }
-
 }

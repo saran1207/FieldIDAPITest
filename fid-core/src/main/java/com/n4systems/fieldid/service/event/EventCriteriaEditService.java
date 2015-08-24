@@ -18,8 +18,6 @@ public class EventCriteriaEditService extends FieldIdPersistenceService {
     }
 
     public void storeCriteriaChanges(AbstractEvent event) {
-        event.getResults(); //Uh... what?
-
         List<AbstractEvent.SectionResults> sectionResults = event.getSectionResults();
         for (AbstractEvent.SectionResults sectionResult : sectionResults) {
             for (CriteriaResult result : sectionResult.results) {

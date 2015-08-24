@@ -1,0 +1,47 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+
+    <div wicket:id="feedbackPanel"></div>
+
+    <form wicket:id="outerEventForm" class="event-details">
+
+        <div class="column-left">
+            <fieldset class="display-horizontal narrow" wicket:id="targetDetailsPanel"/>
+        </div>
+
+        <div class="column-wide">
+            <div wicket:id="eventFormPanel" class="event-form"/>
+
+            <fieldset class="form-horizontal narrow">
+                <legend><wicket:message key="label.posteventinformation"/></legend>
+
+                <div class="control-group" wicket:id="comments"></div>
+
+            </fieldset>
+
+            <fieldset  wicket:enclosure="attachmentsPanel" class="attachments form-horizontal">
+                <legend><wicket:message key="label.attachments"/></legend>
+                <div class="control-group">
+                    <p><wicket:message key="message.attachment"/></p>
+                    <div wicket:id="attachmentsPanel" class="attachmentsForm"></div>
+                </div>
+            </fieldset>
+        </div>
+
+        <div class="clear pull-right">
+            <input wicket:id="saveButton" class="btn-primary" type="button" wicket:message="value:label.continue"/>
+            <wicket:message key="label.or"/>
+            <a wicket:id="cancelLink">
+                <wicket:message key="label.cancel"/>
+            </a>
+            <wicket:enclosure>
+                <wicket:message key="label.or"/>
+                <a wicket:id="deleteLink">
+                    <wicket:message key="label.delete"/>
+                </a>
+            </wicket:enclosure>
+        </div>
+    </form>
+
+</wicket:extend>
+</html>

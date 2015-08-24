@@ -153,17 +153,15 @@
             <fieldset class="form-horizontal narrow" wicket:id="schedulesContainer">
                 <legend><wicket:message key="label.schedules"/></legend>
                 <div class="control-group">
-                    <div wicket:id="schedules">
-                        <div wicket:id="addScheduleDate" class="addScheduleDate"></div>
-                        <div class="addScheduleLabel">
-                            <label wicket:id="addScheduleLabel">[sched label]</label>
+                    <div wicket:id="schedules" class="schedule">
+                        <span class="date" wicket:id="addScheduleDate"></span>
+                        <label class="detail">
+                            <span wicket:id="addScheduleLabel"/>
                             <wicket:enclosure>
-                                <div class="inline addScheduleJob">
-                                    <wicket:message key="label.on"/>
-                                    <span wicket:id="addScheduleJob"/>
-                                </div>
+                                <wicket:message key="label.on"/>
+                                <span wicket:id="addScheduleJob"/>
                             </wicket:enclosure>
-                        </div>
+                        </label>
                         <a wicket:id="removeLink">
                             <img src="/fieldid/images/small-x.png"/>
                         </a>
@@ -182,7 +180,7 @@
         </div>
 
         <div class="clear pull-right">
-            <a wicket:id="submitLink" class="btn-primary"> <wicket:message key="label.save" /></a>
+            <input wicket:id="saveButton" type="submit" class="btn-primary" wicket:message="value:hbutton.save">
             <wicket:message key="label.or"/>
             <a wicket:id="cancelLink">
                 <wicket:message key="label.cancel"/>

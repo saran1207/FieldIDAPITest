@@ -1,0 +1,19 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+
+    <div wicket:id="subEventModal"/>
+
+    <div class="dropdown">
+        <a class="btn-secondary" href="#"><wicket:message key="label.start_linked_event"/></a>
+        <ul class="pull-right">
+            <li>
+                <a class="grey-text" href="#"><wicket:message key="message.select_linked_asset"/></a>
+            </li>
+            <li wicket:id="linkedAsset">
+                <a wicket:id="selectAssetLink"><span wicket:id="assetType"/>&nbsp;<span class="grey-text">(<span wicket:id="identifier"/>)</span></a>
+            </li>
+        </ul>
+    </div>
+
+</wicket:panel>
+</html>

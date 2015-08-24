@@ -305,6 +305,19 @@ fieldset {
           margin-top: 5px;
         }
       }
+
+      .schedule {
+        padding: 10px;
+
+        .date {
+          display: inline-block;
+          width: 100px;
+        }
+
+        .detail {
+          text-align: left;
+        }
+      }
     }
   }
 }
@@ -439,4 +452,15 @@ fieldset {
   .button {
     margin-top: 10px;
   }
+}
+
+/* =====================================
+
+    Sub events Modal
+
+   =====================================
+*/
+
+.sub-event .delete-link {
+  margin-top: -10px;
 }
