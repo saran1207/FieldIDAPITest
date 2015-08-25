@@ -5,6 +5,7 @@ import com.n4systems.fieldid.service.event.EventTypeService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.DisableButtonBeforeSubmit;
 import com.n4systems.fieldid.wicket.behavior.JavaScriptAlertConfirmBehavior;
+import com.n4systems.fieldid.wicket.behavior.validation.RequiredCriteriaValidator;
 import com.n4systems.fieldid.wicket.components.Comment;
 import com.n4systems.fieldid.wicket.components.event.EventFormEditPanel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
@@ -85,7 +86,9 @@ public abstract class SubEventPage extends FieldIDTemplatePage {
 
         @Override
         protected void onValidate() {
-            super.onValidate();
+            List<AbstractEvent.SectionResults> results =  event.getObject().getSectionResults();
+
+            RequiredCriteriaValidator.validate(results).stream().forEach(message -> error(message));
         }
 
         @Override

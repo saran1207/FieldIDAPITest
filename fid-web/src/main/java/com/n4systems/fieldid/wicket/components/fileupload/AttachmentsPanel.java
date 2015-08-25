@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.fileupload;
 
+import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.model.FileNameModel;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.reporting.PathHandler;
@@ -51,7 +52,8 @@ public class AttachmentsPanel extends Panel {
                 @Override
                 protected void populateItem(final ListItem<FileAttachment> item) {
                     item.add(new Label("fileName", new FileNameModel(new PropertyModel<String>(item.getModel(), "fileName"))));
-                    item.add(new TextArea<String>("comments", new PropertyModel<String>(item.getModel(), "comments")));
+                    item.add(new TextArea<String>("comments", new PropertyModel<String>(item.getModel(), "comments"))
+                            .add(new UpdateComponentOnChange()));
                     item.add(new AjaxLink<Void>("removeLink") {
                         @Override
                         public void onClick(AjaxRequestTarget target) {

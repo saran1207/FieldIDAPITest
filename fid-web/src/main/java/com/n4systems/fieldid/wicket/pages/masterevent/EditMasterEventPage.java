@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.masterevent;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.event.EventCriteriaEditService;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
@@ -32,7 +33,7 @@ public class EditMasterEventPage extends MasterEventPage {
         } else {
             setEventResult(event.getObject().getEventResult());
         }
-        fileAttachments = new ArrayList<>(event.getObject().getAttachments());
+        fileAttachments = event.getObject().getAttachments() == null ? Lists.newArrayList() : event.getObject().getAttachments();
     }
 
     public EditMasterEventPage(IModel<ThingEvent> masterEvent) {
@@ -43,7 +44,7 @@ public class EditMasterEventPage extends MasterEventPage {
         } else {
             setEventResult(event.getObject().getEventResult());
         }
-        fileAttachments = new ArrayList<>(event.getObject().getAttachments());
+        fileAttachments = event.getObject().getAttachments() == null ? Lists.newArrayList() : event.getObject().getAttachments();
     }
 
     protected ThingEvent loadExistingEvent() {
@@ -87,9 +88,7 @@ public class EditMasterEventPage extends MasterEventPage {
             fileDataContainer = proofTestEditPanel.getFileDataContainer();
         }
 
-        Event savedEvent = eventCreationService.updateEvent(event.getObject(), fileDataContainer, fileAttachments);
-
-        return savedEvent;
+        return eventCreationService.updateEvent(event.getObject(), fileDataContainer, fileAttachments);
     }
 
     @Override

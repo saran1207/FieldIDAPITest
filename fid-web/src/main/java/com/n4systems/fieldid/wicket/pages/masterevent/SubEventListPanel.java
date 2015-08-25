@@ -39,6 +39,7 @@ public class SubEventListPanel extends Panel {
                 item.add(new Link<Void>("editSubEventLink") {
                     @Override
                     public void onClick() {
+                        onEditSubEvent(masterEventModel);
                         setResponsePage(new EditSubEventPage(masterEventModel, item.getModel()));
                     }
                 }.add(new FlatLabel("eventType", new PropertyModel<String>(subEvent, "type.displayName"))));
@@ -47,11 +48,16 @@ public class SubEventListPanel extends Panel {
                     public void onClick(AjaxRequestTarget target) {
                         masterEventModel.getObject().getSubEvents().remove(subEvent);
                         target.add(listContainer);
+                        onDeleteSubEvent(target);
                     }
                 });
             }
         });
     }
+
+    protected void onEditSubEvent(IModel<ThingEvent> masterEventModel) {}
+
+    protected void onDeleteSubEvent(AjaxRequestTarget target) {}
 
     public LoadableDetachableModel<List<SubEvent>> getSubEventListModel() {
         return new LoadableDetachableModel<List<SubEvent>>() {

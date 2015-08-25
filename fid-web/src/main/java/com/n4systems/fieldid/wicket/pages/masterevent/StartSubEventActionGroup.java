@@ -37,14 +37,26 @@ public class StartSubEventActionGroup extends Panel {
                 item.add(new AjaxLink<Void>("selectAssetLink") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        modalWindow.setContent(new SelectSubEventPanel(modalWindow.getContentId(), model, subAsset.getAsset()));
+                        modalWindow.setContent(new SelectSubEventPanel(modalWindow.getContentId(), model, subAsset.getAsset()) {
+                            @Override
+                            protected void onPerformSubEvent(IModel<ThingEvent> model) {
+                                StartSubEventActionGroup.this.onPerformSubEvent(model);
+                            }
+                        });
                         modalWindow.show(target);
                     }
                 }.add(new FlatLabel("assetType", new PropertyModel<String>(subAsset, "asset.type.displayName")))
                  .add(new FlatLabel("identifier", new PropertyModel<String>(subAsset, "asset.identifier"))));
             }
+
+            @Override
+            public boolean isVisible() {
+                return getViewSize() > 0;
+            }
         });
     }
+
+    protected void onPerformSubEvent(IModel<ThingEvent> masterEventModel) {}
 
     private LoadableDetachableModel<List<SubAsset>> getSubAssetsListModel(Asset asset) {
         return new LoadableDetachableModel<List<SubAsset>>() {

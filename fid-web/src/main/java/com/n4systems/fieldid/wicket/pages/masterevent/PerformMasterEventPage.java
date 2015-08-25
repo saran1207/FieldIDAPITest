@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.masterevent;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.event.perform.PerformThingEventHelperService;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
@@ -13,8 +14,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import java.util.ArrayList;
-
 public class PerformMasterEventPage extends MasterEventPage {
 
     @SpringBean
@@ -26,7 +25,7 @@ public class PerformMasterEventPage extends MasterEventPage {
             event = Model.of(thingEvent);
 
             setEventResult(event.getObject().getEventResult());
-            fileAttachments = new ArrayList<FileAttachment>();
+            fileAttachments = Lists.newArrayList();
 
             doAutoSchedule();
         } catch (Exception e) {
@@ -37,7 +36,9 @@ public class PerformMasterEventPage extends MasterEventPage {
     public PerformMasterEventPage(IModel<ThingEvent> thingEvent) {
         event = thingEvent;
         setEventResult(event.getObject().getEventResult());
-        fileAttachments = new ArrayList<FileAttachment>();
+        fileAttachments = event.getObject().getAttachments() == null ?
+                Lists.newArrayList() : Lists.newArrayList(event.getObject().getAttachments());
+        event.getObject().getAttachments().clear();
     }
 
     public PerformMasterEventPage(PageParameters parameters) {

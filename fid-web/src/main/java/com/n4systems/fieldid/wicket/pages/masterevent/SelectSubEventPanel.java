@@ -18,8 +18,8 @@ public class SelectSubEventPanel extends Panel {
     @SpringBean
     private AssociatedEventTypesService associatedEventTypesService;
 
-    public SelectSubEventPanel(String id, IModel<ThingEvent> model, Asset asset) {
-        super(id, model);
+    public SelectSubEventPanel(String id, IModel<ThingEvent> masterEventModel, Asset asset) {
+        super(id, masterEventModel);
 
         add(new Label("headerLabel", new FIDLabelModel("label.select_event_type_for", asset.getType().getDisplayName().toUpperCase())));
         add(new ListView<AssociatedEventType>("eventType", associatedEventTypesService.getAssociatedEventTypes(asset.getType())) {
@@ -30,10 +30,13 @@ public class SelectSubEventPanel extends Panel {
                 item.add(new Link<Void>("selectEventTypeLink") {
                     @Override
                     public void onClick() {
-                        setResponsePage(new PerformSubEventPage(model, asset.getId(), eventType.getId()));
+                        onPerformSubEvent(masterEventModel);
+                        setResponsePage(new PerformSubEventPage(masterEventModel, asset.getId(), eventType.getId()));
                     }
                 }.add(new FlatLabel("name", new PropertyModel<String>(eventType, "displayName"))));
             }
         });
     }
+
+    protected void onPerformSubEvent(IModel<ThingEvent> masterEventModel) {};
 }
