@@ -1,0 +1,2 @@
+INSERT INTO tasks (id, created, modified, classname, cronexpression, taskgroup, enabled)
+values ("AssignmentEscalationRuleTask", now(), now(), "com.n4systems.taskscheduling.task.AssignmentEscalationRuleTask", "0 * * * *", "default", 1);

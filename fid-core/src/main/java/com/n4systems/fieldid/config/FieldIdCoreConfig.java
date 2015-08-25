@@ -29,6 +29,7 @@ import com.n4systems.fieldid.service.attachment.FlavourFactory;
 import com.n4systems.fieldid.service.attachment.ImageFlavour;
 import com.n4systems.fieldid.service.certificate.CertificateService;
 import com.n4systems.fieldid.service.certificate.PrintAllCertificateService;
+import com.n4systems.fieldid.service.escalationrule.AssignmentEscalationRuleService;
 import com.n4systems.fieldid.service.event.*;
 import com.n4systems.fieldid.service.event.massevent.MassEventService;
 import com.n4systems.fieldid.service.event.perform.PerformPlaceEventHelperService;
@@ -308,6 +309,16 @@ public class FieldIdCoreConfig {
     @Bean
     public ReportService reportService() {
         return new ReportService();
+    }
+
+    @Bean
+    public AssignmentEscalationRuleService assignmentEscalationRuleService() {
+        return new AssignmentEscalationRuleService();
+    }
+
+    @Bean
+    public AssignmentEscalationRuleProcessingService assignmentEscalationRuleProcessingService() {
+        return new AssignmentEscalationRuleProcessingService();
     }
 
     @Bean

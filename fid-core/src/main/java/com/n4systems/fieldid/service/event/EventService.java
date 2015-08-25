@@ -715,7 +715,7 @@ public class EventService extends FieldIdPersistenceService {
     }
 
     public List<ThingEvent> getAutoEventSchedules(Asset asset) {
-        List<ThingEvent> schedules = new ArrayList<ThingEvent>();
+        List<ThingEvent> schedules = new ArrayList<>();
 
         if (asset.getType() == null) {
             return schedules;
@@ -737,6 +737,16 @@ public class EventService extends FieldIdPersistenceService {
             }
         }
         return schedules;
+    }
+
+    public boolean isEventDataCurrent(Long eventId, Date eventModDate) {
+        QueryBuilder<Event> modDateQuery = createTenantSecurityBuilder(Event.class);
+        modDateQuery.addSimpleWhere("id", eventId);
+        modDateQuery.setSimpleSelect("modified");
+
+        Date currentModDate = modDateQuery.getSingleResult(getEntityManager()).getModified();
+
+        return eventModDate.equals(currentModDate);
     }
 }
 
