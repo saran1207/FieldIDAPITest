@@ -913,9 +913,4 @@ public class FieldIdCoreConfig {
     public ObservationCountService observationCountService() {
         return new ObservationCountService();
     }
-
-    @Bean
-    public AssignmentEscalationRuleService assignmentEscalationRuleService() {
-        return new AssignmentEscalationRuleService();
-    }
 }
