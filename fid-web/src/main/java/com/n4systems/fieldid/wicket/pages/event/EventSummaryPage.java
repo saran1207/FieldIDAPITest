@@ -5,8 +5,9 @@ import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
+import com.n4systems.fieldid.wicket.pages.masterevent.EditMasterEventPage;
 import com.n4systems.model.Event;
-import org.apache.wicket.AttributeModifier;
+import com.n4systems.model.ThingEventType;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -96,7 +97,11 @@ public abstract class EventSummaryPage extends FieldIDTemplatePage {
             super(id, "viewEventsActionGroup", EventSummaryPage.this);
 
             if(eventSummaryType.equals(EventSummaryType.THING_EVENT)) {
-                add(new NonWicketLink("editLink", "selectEventEdit.action?uniqueID=" + uniqueId, new AttributeModifier("class", "btn-secondary")));
+                if (((ThingEventType) getEvent().getType()).isMaster()) {
+                    add(new BookmarkablePageLink<EditEventPage>("editLink", EditMasterEventPage.class, PageParametersBuilder.uniqueId(getEvent().getId())));
+                } else {
+                    add(new BookmarkablePageLink<EditEventPage>("editLink", EditEventPage.class, PageParametersBuilder.uniqueId(getEvent().getId())));
+                }
             } else if (eventSummaryType.equals(EventSummaryType.PROCEDURE_AUDIT_EVENT)) {
                 add(new BookmarkablePageLink<EditProcedureAuditEventPage>("editLink", EditProcedureAuditEventPage.class, PageParametersBuilder.uniqueId(uniqueId)));
             } else {

@@ -1,12 +1,10 @@
 package com.n4systems.fieldid.wicket.pages.event;
 
 import com.n4systems.fieldid.service.event.EventCriteriaEditService;
-import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventResult;
-import com.n4systems.model.FileAttachment;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.persistence.utils.PostFetcher;
 import com.n4systems.tools.FileDataContainer;
@@ -14,7 +12,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -22,8 +19,8 @@ import java.util.ArrayList;
 
 public class EditEventPage extends ThingEventPage {
 
-    @SpringBean private EventService eventService;
-    @SpringBean private EventCriteriaEditService criteriaEditService;
+    @SpringBean
+    private EventCriteriaEditService criteriaEditService;
 
     private long uniqueId;
 

@@ -312,6 +312,16 @@ public class FieldIdCoreConfig {
     }
 
     @Bean
+    public AssignmentEscalationRuleService assignmentEscalationRuleService() {
+        return new AssignmentEscalationRuleService();
+    }
+
+    @Bean
+    public AssignmentEscalationRuleProcessingService assignmentEscalationRuleProcessingService() {
+        return new AssignmentEscalationRuleProcessingService();
+    }
+
+    @Bean
     public ProcedureSearchService procedureSearchService() {
         return new ProcedureSearchService();
     }

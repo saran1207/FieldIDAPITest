@@ -5,9 +5,8 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.EventStatusService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.behavior.DisableButtonBeforeSubmit;
-import com.n4systems.fieldid.wicket.behavior.JavaScriptAlertConfirmBehavior;
-import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
+import com.n4systems.fieldid.wicket.behavior.*;
+import com.n4systems.fieldid.wicket.behavior.validation.DisableNavigationConfirmationBehavior;
 import com.n4systems.fieldid.wicket.behavior.validation.RequiredCriteriaValidator;
 import com.n4systems.fieldid.wicket.components.*;
 import com.n4systems.fieldid.wicket.components.event.EventFormEditPanel;
@@ -41,14 +40,13 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -159,7 +157,7 @@ public abstract class EventPage<T extends Event> extends FieldIDTemplatePage {
             }
         });
 
-
+        add(new ConfirmNavigationBehavior(new FIDLabelModel("message.confirm_navigation")));
     }
 
     protected abstract SchedulePicker<T> createSchedulePicker();
@@ -254,8 +252,8 @@ public abstract class EventPage<T extends Event> extends FieldIDTemplatePage {
                 @Override
                 protected void populateItem(final ListItem<Event> item) {
                     item.add(new Label("addScheduleDate", new DayDisplayModel(new PropertyModel<Date>(item.getModel(), "dueDate"))));
-                    item.add(new Label("addScheduleLabel", new PropertyModel<Object>(item.getModel(), "eventType.name")));
-                    item.add(new FlatLabel("addScheduleJob", new PropertyModel<Object>(item.getModel(), "project.name")));
+                    item.add(new FlatLabel("addScheduleLabel", new PropertyModel<String>(item.getModel(), "eventType.displayName")));
+                    item.add(new FlatLabel("addScheduleJob", new PropertyModel<String>(item.getModel(), "project.displayName")));
                     item.add(new AjaxLink<Void>("removeLink") {
                         @Override
                         public void onClick(AjaxRequestTarget target) {
@@ -358,12 +356,13 @@ public abstract class EventPage<T extends Event> extends FieldIDTemplatePage {
             add(gpsContainer);
 
             gpsContainer.setOutputMarkupId(true);
-            gpsContainer.setVisible(event.getObject().getGpsLocation() !=null);
+            gpsContainer.setVisible(event.getObject().getGpsLocation() != null);
             gpsContainer.setVisible(FieldIDSession.get().getTenant().getSettings().isGpsCapture());
 
-            SubmitLink submitLink = new SubmitLink("submitLink");
-            submitLink.add(new DisableButtonBeforeSubmit());
-            add(submitLink);
+            Button saveButton = new Button("saveButton");
+            saveButton.add(new DisableNavigationConfirmationBehavior());
+            saveButton.add(new DisableButtonBeforeSubmit());
+            add(saveButton);
             add(createCancelLink("cancelLink"));
             add(createDeleteLink("deleteLink"));
         }
@@ -445,11 +444,8 @@ public abstract class EventPage<T extends Event> extends FieldIDTemplatePage {
             } else {
                 setResponsePage(ThingEventSummaryPage.class, PageParametersBuilder.id(savedEvent.getId()));
             }
-
         }
-
     }
-
 
     protected Behavior createUpdateAutoschedulesOnChangeBehavior() {
         return new UpdateComponentOnChange() {

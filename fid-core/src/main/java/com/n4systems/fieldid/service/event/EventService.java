@@ -284,21 +284,30 @@ public class EventService extends FieldIdPersistenceService {
                 ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(language);
             }
             event = persistenceService.find(clazz, eventId);
-            if(showHiddenSections) {
+            if (showHiddenSections) {
                 new EditExistingEventTransientResultPopulator().populateTransientCriteriaResultsForEvent(event);
             } else {
                 new ExistingEventTransientCriteriaResultPopulator().populateTransientCriteriaResultsForEvent(event);
             }
+
+            if(clazz.equals(ThingEvent.class)) {
+                populateSubEventTransientResults((ThingEvent)event);
+            }
+
         } finally {
             if (withLocalization) {
                 ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(previousLanguage);
             }
         }
-
-
         return event;
     }
-    
+
+    private void populateSubEventTransientResults(ThingEvent event) {
+        if (event.getThingType().isMaster()) {
+            event.getSubEvents().stream().forEach(subEvent -> new EditExistingEventTransientResultPopulator().populateTransientCriteriaResultsForEvent(subEvent));
+        }
+    }
+
     public List<Event> getEventsByNetworkId(Long networkId) {
         return getEventsByNetworkId(networkId, null, null, null);
     }
@@ -416,17 +425,17 @@ public class EventService extends FieldIdPersistenceService {
 		List<LastEventForTypeView> lastEventsByType = allEvents
 			.stream()
 			.collect(
-					Collectors.groupingBy(
-							// group by the asset
-							LastEventForTypeView::getAssetId,
-							Collectors.groupingBy(
-									// then by event type
-									LastEventForTypeView::getTypeId,
-									// reduce by the max completed date
-									Collectors.reducing(BinaryOperator.maxBy(java.util.Comparator.comparing(LastEventForTypeView::getCompleted)))
-							)
-					)
-			) // We now have a grouping like this Map<asset_id, Map<type_id, Optional<LastEventForTypeView>>>
+                    Collectors.groupingBy(
+                            // group by the asset
+                            LastEventForTypeView::getAssetId,
+                            Collectors.groupingBy(
+                                    // then by event type
+                                    LastEventForTypeView::getTypeId,
+                                    // reduce by the max completed date
+                                    Collectors.reducing(BinaryOperator.maxBy(java.util.Comparator.comparing(LastEventForTypeView::getCompleted)))
+                            )
+                    )
+            ) // We now have a grouping like this Map<asset_id, Map<type_id, Optional<LastEventForTypeView>>>
 			.values()
 			.stream()
 			// Extract the views from each map and unwrap the Optional
@@ -706,7 +715,7 @@ public class EventService extends FieldIdPersistenceService {
     }
 
     public List<ThingEvent> getAutoEventSchedules(Asset asset) {
-        List<ThingEvent> schedules = new ArrayList<ThingEvent>();
+        List<ThingEvent> schedules = new ArrayList<>();
 
         if (asset.getType() == null) {
             return schedules;
@@ -728,6 +737,16 @@ public class EventService extends FieldIdPersistenceService {
             }
         }
         return schedules;
+    }
+
+    public boolean isEventDataCurrent(Long eventId, Date eventModDate) {
+        QueryBuilder<Event> modDateQuery = createTenantSecurityBuilder(Event.class);
+        modDateQuery.addSimpleWhere("id", eventId);
+        modDateQuery.setSimpleSelect("modified");
+
+        Date currentModDate = modDateQuery.getSingleResult(getEntityManager()).getModified();
+
+        return eventModDate.equals(currentModDate);
     }
 }
 

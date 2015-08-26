@@ -334,4 +334,8 @@ public class AssignmentEscalationRule extends ArchivableEntityWithTenant {
     public enum Type {
         EVENT, ACTION
     }
+
+    public boolean requiresThingEvent() {
+        return assetStatus != null || assetType != null || assetTypeGroup != null || rfidNumber != null || serialNumber != null || purchaseOrder != null || referenceNumber != null || freeformLocation != null || location != null || assignedTo != null;
+    }
 }
