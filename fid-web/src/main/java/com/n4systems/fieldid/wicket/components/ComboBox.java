@@ -7,7 +7,7 @@ import org.apache.wicket.model.IModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ComboBox extends FidDropDownChoice<String> {
+public class ComboBox extends DropDownChoice<String> {
 
     private boolean nullAlwaysValid;
     
