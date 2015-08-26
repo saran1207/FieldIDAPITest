@@ -3,14 +3,12 @@ package com.n4systems.fieldid.service.escalationrule;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
-import com.n4systems.model.AssignmentEscalationRule;
-import com.n4systems.model.api.Archivable;
 import com.n4systems.fieldid.service.download.SystemUrlUtil;
 import com.n4systems.model.*;
+import com.n4systems.model.api.Archivable;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.EventSearchType;
-import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.model.search.WorkflowStateCriteria;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
@@ -24,8 +22,6 @@ import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.search.SortDirection;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
-
-import java.util.List;
 
 import javax.persistence.Query;
 import java.util.Date;
@@ -416,28 +412,6 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
             logger.error("Couldn't reset Escalation Rules for Event with ID " + eventId, e);
             return false;
         }
-    }
-
-    /**
-     * This method provides a quick and dirty way to grab every single active rule in the DB.  In order for a rule to
-     * be truly considered active, it must pass two tests: 1) The Tenant must NOT be disabled.   2) The RULE must not be
-     * ARCHIVED.  If both of those tests pass, you'll see the rule in this resulting list.
-     *
-     * @return A List populated with all ACTIVE AssignmentEscalationRules from all ACTIVE Tenants.
-     */
-    public List<AssignmentEscalationRule> getAllActiveRules() {
-        //The Open Security Filter should allow us to break out of being restricted by tenant, but should still hide
-        //rows in the ARCHIVED state.
-        QueryBuilder<AssignmentEscalationRule> query = new QueryBuilder<>(AssignmentEscalationRule.class, new OpenSecurityFilter());
-
-        //Don't grab rows from disabled tenants.  These rules are also effectively disabled.
-        query.addSimpleWhere("tenant.disabled", false);
-
-        //Ordering by tenants may not be entirely necessary, but it will allow us to limit how much we're monkeying with
-        //the SecurityFilter... in theory, anyways.
-        query.addOrder("tenant.eventId", true);
-
-        return persistenceService.findAll(query);
     }
 
     /**
