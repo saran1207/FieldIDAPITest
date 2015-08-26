@@ -152,7 +152,8 @@ public class EventActionsCell extends Panel {
         BookmarkablePageLink viewLink = new BookmarkablePageLink<ThingEventSummaryPage>("viewLink", ThingEventSummaryPage.class, PageParametersBuilder.id(event.getID()));
 
         BookmarkablePageLink editLink;
-        if (event.getThingType().isMaster()) {
+
+        if (!event.getType().isActionEventType() && event.getThingType().isMaster()) {
             add(editLink = new BookmarkablePageLink<EditEventPage>("editLink", EditMasterEventPage.class, PageParametersBuilder.uniqueId(event.getId())));
         } else {
             add(editLink = new BookmarkablePageLink<EditEventPage>("editLink", EditEventPage.class, PageParametersBuilder.uniqueId(event.getId())));

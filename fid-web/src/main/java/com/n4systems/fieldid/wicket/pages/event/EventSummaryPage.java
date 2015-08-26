@@ -97,7 +97,7 @@ public abstract class EventSummaryPage extends FieldIDTemplatePage {
             super(id, "viewEventsActionGroup", EventSummaryPage.this);
 
             if(eventSummaryType.equals(EventSummaryType.THING_EVENT)) {
-                if (((ThingEventType) getEvent().getType()).isMaster()) {
+                if (!getEvent().getType().isActionEventType() && ((ThingEventType) getEvent().getType()).isMaster()) {
                     add(new BookmarkablePageLink<EditEventPage>("editLink", EditMasterEventPage.class, PageParametersBuilder.uniqueId(getEvent().getId())));
                 } else {
                     add(new BookmarkablePageLink<EditEventPage>("editLink", EditEventPage.class, PageParametersBuilder.uniqueId(getEvent().getId())));

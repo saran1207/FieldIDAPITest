@@ -93,6 +93,6 @@ public class EditMasterEventPage extends MasterEventPage {
 
     @Override
     protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("title.perform_master_event", event.getObject().getType().getDisplayName()));
+        return new Label(labelId, new FIDLabelModel("title.edit_master_event", event.getObject().getType().getDisplayName()));
     }
 }

@@ -130,7 +130,8 @@ public class CriteriaSectionViewPanel extends Panel {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         actionsWindow.setTitle(new Model<String>("Actions"));
-                        actionsWindow.setContent(new ActionsPanel(actionsWindow.getContentId(), item.getModel(), (Class<? extends Event>) eventClass, null, true, false));
+                        Class<? extends Event> actionEventClass = eventClass.equals(SubEvent.class) ? ThingEvent.class : (Class<? extends Event>) eventClass;
+                        actionsWindow.setContent(new ActionsPanel(actionsWindow.getContentId(), item.getModel(), actionEventClass, null, true, false));
                         actionsWindow.show(target);
                     }
 

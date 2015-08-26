@@ -8,15 +8,11 @@ import com.n4systems.fieldid.wicket.components.event.criteria.factory.CriteriaEd
 import com.n4systems.fieldid.wicket.components.event.observations.DeficienciesEditPanel;
 import com.n4systems.fieldid.wicket.components.event.observations.RecommendationsEditPanel;
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
-import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.components.popup.Popup;
 import com.n4systems.fieldid.wicket.components.richText.RichTextDisplay;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.event.criteriaimage.CriteriaImageListPage;
-import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.CriteriaType;
-import com.n4systems.model.Event;
+import com.n4systems.model.*;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
@@ -26,7 +22,6 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -189,7 +184,8 @@ public class CriteriaSectionEditPanel extends Panel {
                         @Override
                         public void onClick(AjaxRequestTarget target) {
                             actionsWindow.setTitle(new Model<String>("Actions"));
-                            actionsWindow.setContent(new ActionsPanel(actionsWindow.getContentId(), item.getModel(), (Class<? extends Event>) eventClass, null, false, false));
+                            Class<? extends Event> actionEventClass = eventClass.equals(SubEvent.class) ? ThingEvent.class : (Class<? extends Event>) eventClass;
+                            actionsWindow.setContent(new ActionsPanel(actionsWindow.getContentId(), item.getModel(), actionEventClass, null, false, false));
                             actionsWindow.setCloseButtonCallback(createActionsCloseButtonCallback());
                             actionsWindow.show(target);
                         }

@@ -122,8 +122,6 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
             restoreTemporarySignatureFiles(event, rememberedSignatureMap);
             restoreCriteriaImages(event, rememberedCriteriaImages);
 
-            event.setTriggersIntoResultingActions(event);
-
             event = persistenceService.update(event);
         }
 
@@ -318,8 +316,19 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
             }
         }
 
+        for (SubEvent subEvent: event.getSubEvents()) {
+            for (CriteriaResult result: subEvent.getResults()) {
+                for (Event action : result.getActions()) {
+                    if(action.isNew()) {
+                        persistenceService.save(action);
+                    }
+                }
+
+            }
+        }
+
         addActionNotifications(event);
-        
+
         event = persistenceService.update(event);
         postUpdateEvent(event, fileData);
         processUploadedFiles(event, attachments);
@@ -369,6 +378,22 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
                         persistenceService.save(assigneeNotification);
                         action.setAssigneeNotification(assigneeNotification);
                         persistenceService.update(action);
+                    }
+                }
+            }
+        }
+
+        for (SubEvent subEvent: event.getSubEvents()) {
+            for (CriteriaResult result : subEvent.getResults()) {
+                for (Event action : result.getActions()) {
+                    if(action.isSendEmailOnUpdate() && action.getAssigneeOrDateUpdated()) {
+                        if(!notifyEventAssigneeService.notificationExists(action)) {
+                            AssigneeNotification assigneeNotification = new AssigneeNotification();
+                            assigneeNotification.setEvent(action);
+                            persistenceService.save(assigneeNotification);
+                            action.setAssigneeNotification(assigneeNotification);
+                            persistenceService.update(action);
+                        }
                     }
                 }
             }

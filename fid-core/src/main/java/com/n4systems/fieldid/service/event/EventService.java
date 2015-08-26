@@ -290,7 +290,7 @@ public class EventService extends FieldIdPersistenceService {
                 new ExistingEventTransientCriteriaResultPopulator().populateTransientCriteriaResultsForEvent(event);
             }
 
-            if(clazz.equals(ThingEvent.class)) {
+            if(clazz.equals(ThingEvent.class) && !event.getType().isActionEventType()) {
                 populateSubEventTransientResults((ThingEvent)event);
             }
 
