@@ -2,8 +2,12 @@ package com.n4systems.fieldid.service.escalationrule;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.AssignmentEscalationRule;
+import com.n4systems.model.api.Archivable;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.EventSearchType;
+import com.n4systems.util.persistence.QueryBuilder;
+
+import java.util.List;
 
 /**
  * This class provides access to the assignment_escalation_rules table and the associated Events affected by those
@@ -13,6 +17,72 @@ import com.n4systems.model.search.EventSearchType;
  */
 public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
 
+    public List<AssignmentEscalationRule> getAllActiveRules() {
+        QueryBuilder<AssignmentEscalationRule> builder = createUserSecurityBuilder(AssignmentEscalationRule.class);
+        return persistenceService.findAll(builder);
+    }
+
+    public boolean isNameUnique(String name) {
+        QueryBuilder<AssignmentEscalationRule> builder = createUserSecurityBuilder(AssignmentEscalationRule.class);
+        builder.addSimpleWhere("ruleName", name);
+        return persistenceService.exists(builder);
+    }
+
+    public void archiveRule(AssignmentEscalationRule rule) {
+        rule.setState(Archivable.EntityState.ARCHIVED);
+        updateRule(rule);
+    }
+
+    public void updateRule(AssignmentEscalationRule rule, Long oldDateRange) {
+        if(oldDateRange == rule.getOverdueQuantity()) {
+            persistenceService.update(rule);
+        } else {
+            //We need to version it now because the date range has changed
+            AssignmentEscalationRule newRule = copyRule(rule);
+            saveRule(newRule);
+
+            //We need to archive this one
+            rule.setOverdueQuantity(oldDateRange);
+            archiveRule(rule);
+        }
+    }
+
+    public AssignmentEscalationRule copyRule(AssignmentEscalationRule oldRule) {
+        AssignmentEscalationRule returnMe = new AssignmentEscalationRule();
+
+        returnMe.setType(oldRule.getType());
+        returnMe.setEventTypeGroup(oldRule.getEventTypeGroup());
+        returnMe.setEventType(oldRule.getEventType());
+        returnMe.setAssetStatus(oldRule.getAssetStatus());
+        returnMe.setAssetTypeGroup(oldRule.getAssetTypeGroup());
+        returnMe.setAssignedTo(oldRule.getAssignedTo());
+        returnMe.setAssignee(oldRule.getAssignee());
+        returnMe.setOwner(oldRule.getOwner());
+        returnMe.setLocation(oldRule.getLocation());
+        returnMe.setRfidNumber(oldRule.getRfidNumber());
+
+        returnMe.setSerialNumber(oldRule.getSerialNumber());
+
+        returnMe.setReferenceNumber(oldRule.getReferenceNumber());
+        returnMe.setOrderNumber(oldRule.getOrderNumber());
+        returnMe.setPurchaseOrder(oldRule.getPurchaseOrder());
+
+        returnMe.setTenant(getCurrentTenant());
+        returnMe.setOwner(getCurrentUser().getOwner());
+        returnMe.setCreatedBy(getCurrentUser());
+
+        //Rule info
+        returnMe.setRuleName(oldRule.getRuleName());
+        returnMe.setOverdueQuantity(oldRule.getOverdueQuantity());
+        returnMe.setEscalateToUser(oldRule.getEscalateToUser());
+        returnMe.setReassignUser(oldRule.getReassignUser());
+        returnMe.setNotifyAssignee(oldRule.getNotifyAssignee());
+        returnMe.setAdditionalEmails(oldRule.getAdditionalEmails());
+        returnMe.setSubjectText(oldRule.getSubjectText());
+        returnMe.setCustomMessageText(oldRule.getCustomMessageText());
+
+        return returnMe;
+    }
     /**
      * This method simply grabs the AssignmentEscalationRule object by its provided id.
      *
@@ -79,6 +149,10 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
         returnMe.setReferenceNumber(criteria.getReferenceNumber());
         returnMe.setOrderNumber(criteria.getOrderNumber());
         returnMe.setPurchaseOrder(criteria.getPurchaseOrder());
+
+        returnMe.setTenant(getCurrentTenant());
+        returnMe.setOwner(getCurrentUser().getOwner());
+        returnMe.setCreatedBy(getCurrentUser());
 
         return returnMe;
     }

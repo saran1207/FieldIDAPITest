@@ -16,6 +16,7 @@ import com.n4systems.fieldid.wicket.pages.admin.tenants.TenantUserListPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.*;
+import com.n4systems.fieldid.wicket.pages.escalationrules.ManageEscalationRules;
 import com.n4systems.fieldid.wicket.pages.event.*;
 import com.n4systems.fieldid.wicket.pages.event.criteriaimage.CriteriaImageViewListPage;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
@@ -255,6 +256,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("manageSavedItems", ManageSavedItemsPage.class);
         mountPage("shareSavedItem", ShareSavedItemPage.class);
         mountPage("editSavedItem", EditSavedItemPage.class);
+
+        mountPage("manageEscalationRules", ManageEscalationRules.class);
 
         mountPage("runLastSearch", RunLastSearchPage.class);
         mountPage("runLastReport", RunLastReportPage.class);
