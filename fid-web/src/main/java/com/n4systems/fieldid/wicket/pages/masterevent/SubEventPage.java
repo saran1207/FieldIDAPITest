@@ -3,8 +3,10 @@ package com.n4systems.fieldid.wicket.pages.masterevent;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventTypeService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.ConfirmNavigationBehavior;
 import com.n4systems.fieldid.wicket.behavior.DisableButtonBeforeSubmit;
 import com.n4systems.fieldid.wicket.behavior.JavaScriptAlertConfirmBehavior;
+import com.n4systems.fieldid.wicket.behavior.validation.DisableNavigationConfirmationBehavior;
 import com.n4systems.fieldid.wicket.behavior.validation.RequiredCriteriaValidator;
 import com.n4systems.fieldid.wicket.components.Comment;
 import com.n4systems.fieldid.wicket.components.event.EventFormEditPanel;
@@ -15,10 +17,14 @@ import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.event.target.AssetDetailsPanel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.*;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -48,6 +54,7 @@ public abstract class SubEventPage extends FieldIDTemplatePage {
 
         add(new OuterEventForm("outerEventForm"));
 
+        add(new ConfirmNavigationBehavior(new FIDLabelModel("message.confirm_navigation")));
     }
 
     class OuterEventForm extends Form {
@@ -68,6 +75,7 @@ public abstract class SubEventPage extends FieldIDTemplatePage {
             add(new AttachmentsPanel("attachmentsPanel", new PropertyModel<List<FileAttachment>>(SubEventPage.this, "fileAttachments")).setVisible(false));
 
             Button saveButton = new Button("saveButton");
+            saveButton.add(new DisableNavigationConfirmationBehavior());
             saveButton.add(new DisableButtonBeforeSubmit());
             add(saveButton);
 

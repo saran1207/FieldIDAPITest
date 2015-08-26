@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.masterevent;
 
+import com.n4systems.fieldid.wicket.behavior.validation.DisableNavigationConfirmationBehavior;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.ThingEvent;
@@ -42,7 +43,8 @@ public class SubEventListPanel extends Panel {
                         onEditSubEvent(masterEventModel);
                         setResponsePage(new EditSubEventPage(masterEventModel, item.getModel()));
                     }
-                }.add(new FlatLabel("eventType", new PropertyModel<String>(subEvent, "type.displayName"))));
+                }.add(new FlatLabel("eventType", new PropertyModel<String>(subEvent, "type.displayName")))
+                .add(new DisableNavigationConfirmationBehavior()));
                 item.add(new AjaxLink<Void>("deleteSubEventLink") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {

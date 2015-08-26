@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.masterevent;
 
 import com.n4systems.fieldid.service.event.AssociatedEventTypesService;
+import com.n4systems.fieldid.wicket.behavior.validation.DisableNavigationConfirmationBehavior;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.*;
@@ -33,7 +34,8 @@ public class SelectSubEventPanel extends Panel {
                         onPerformSubEvent(masterEventModel);
                         setResponsePage(new PerformSubEventPage(masterEventModel, asset.getId(), eventType.getId()));
                     }
-                }.add(new FlatLabel("name", new PropertyModel<String>(eventType, "displayName"))));
+                }.add(new FlatLabel("name", new PropertyModel<String>(eventType, "displayName")))
+                .add(new DisableNavigationConfirmationBehavior()));
             }
         });
     }

@@ -5,9 +5,8 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.EventStatusService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.behavior.DisableButtonBeforeSubmit;
-import com.n4systems.fieldid.wicket.behavior.JavaScriptAlertConfirmBehavior;
-import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
+import com.n4systems.fieldid.wicket.behavior.*;
+import com.n4systems.fieldid.wicket.behavior.validation.DisableNavigationConfirmationBehavior;
 import com.n4systems.fieldid.wicket.behavior.validation.RequiredCriteriaValidator;
 import com.n4systems.fieldid.wicket.components.*;
 import com.n4systems.fieldid.wicket.components.event.EventFormEditPanel;
@@ -158,6 +157,7 @@ public abstract class EventPage<T extends Event> extends FieldIDTemplatePage {
             }
         });
 
+        add(new ConfirmNavigationBehavior(new FIDLabelModel("message.confirm_navigation")));
     }
 
     protected abstract SchedulePicker<T> createSchedulePicker();
@@ -360,6 +360,7 @@ public abstract class EventPage<T extends Event> extends FieldIDTemplatePage {
             gpsContainer.setVisible(FieldIDSession.get().getTenant().getSettings().isGpsCapture());
 
             Button saveButton = new Button("saveButton");
+            saveButton.add(new DisableNavigationConfirmationBehavior());
             saveButton.add(new DisableButtonBeforeSubmit());
             add(saveButton);
             add(createCancelLink("cancelLink"));
