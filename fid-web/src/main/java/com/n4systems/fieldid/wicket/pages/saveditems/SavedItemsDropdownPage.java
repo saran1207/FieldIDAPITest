@@ -69,6 +69,7 @@ public class SavedItemsDropdownPage extends FieldIDAuthenticatedPage {
 
         add(new WebMarkupContainer("blankSlateContainer").setVisible(savedReportModel.getObject().isEmpty()));
         add(new NonWicketLink("manageSavedItemsLink", "w/manageSavedItems"));
+        add(new NonWicketLink("manageEscalationRulesLink", "w/manageEscalationRules"));
     }
 
     private void addSavedItemLinkTo(WebMarkupContainer container, IModel<String> nameModel, String imageUrl, String linkUrl) {

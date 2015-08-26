@@ -1,0 +1,44 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+    <table class="list" style="clear:both;">
+
+        <thead>
+        <tr>
+            <th>
+                <wicket:message key="label.rule_name"/>
+            </th>
+            <th>
+                <wicket:message key="label.datemodified"/>
+            </th>
+            <th>
+                <wicket:message key="label.type"/>
+            </th>
+            <th>
+            </th>
+        </tr>
+        </thead>
+
+        <tbody wicket:id="itemsListContainer">
+        <tr wicket:id="itemsList">
+            <td wicket:id="firstColumn">
+                <span wicket:id="ruleName"/>
+            </td>
+            <wicket:enclosure child="modifiedDate">
+                <td>
+                    <span wicket:id="modifiedDate"/>
+                </td>
+                <td>
+                    <span wicket:id="type"/>
+                </td>
+                <td>
+                    <a wicket:id="editLink"><wicket:message key="label.edit"/></a> |
+                    <a wicket:id="deleteLink"><wicket:message key="label.delete"/></a>
+                </td>
+            </wicket:enclosure>
+        </tr>
+        </tbody>
+
+    </table>
+
+</wicket:extend>
+</html>

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.download.SystemUrlUtil;
 import com.n4systems.model.*;
+import com.n4systems.model.api.Archivable;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.EventSearchType;
@@ -39,6 +40,72 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
     private static final String RULE_RESET_BY_EVENT_ID_SQL = "UPDATE escalation_rule_execution_queue SET rule_has_run = 0 WHERE event_id = :eventId";
     private static final String CLEAR_RULES_FOR_EVENT_SQL = "DELETE FROM escalation_rule_execution_queue WHERE event_id = :eventId";
 
+    public List<AssignmentEscalationRule> getAllActiveRules() {
+        QueryBuilder<AssignmentEscalationRule> builder = createUserSecurityBuilder(AssignmentEscalationRule.class);
+        return persistenceService.findAll(builder);
+    }
+
+    public boolean isNameUnique(String name) {
+        QueryBuilder<AssignmentEscalationRule> builder = createUserSecurityBuilder(AssignmentEscalationRule.class);
+        builder.addSimpleWhere("ruleName", name);
+        return persistenceService.exists(builder);
+    }
+
+    public void archiveRule(AssignmentEscalationRule rule) {
+        rule.setState(Archivable.EntityState.ARCHIVED);
+        updateRule(rule);
+    }
+
+    public void updateRule(AssignmentEscalationRule rule, Long oldDateRange) {
+        if(oldDateRange == rule.getOverdueQuantity()) {
+            persistenceService.update(rule);
+        } else {
+            //We need to version it now because the date range has changed
+            AssignmentEscalationRule newRule = copyRule(rule);
+            saveRule(newRule);
+
+            //We need to archive this one
+            rule.setOverdueQuantity(oldDateRange);
+            archiveRule(rule);
+        }
+    }
+
+    public AssignmentEscalationRule copyRule(AssignmentEscalationRule oldRule) {
+        AssignmentEscalationRule returnMe = new AssignmentEscalationRule();
+
+        returnMe.setType(oldRule.getType());
+        returnMe.setEventTypeGroup(oldRule.getEventTypeGroup());
+        returnMe.setEventType(oldRule.getEventType());
+        returnMe.setAssetStatus(oldRule.getAssetStatus());
+        returnMe.setAssetTypeGroup(oldRule.getAssetTypeGroup());
+        returnMe.setAssignedTo(oldRule.getAssignedTo());
+        returnMe.setAssignee(oldRule.getAssignee());
+        returnMe.setOwner(oldRule.getOwner());
+        returnMe.setLocation(oldRule.getLocation());
+        returnMe.setRfidNumber(oldRule.getRfidNumber());
+
+        returnMe.setSerialNumber(oldRule.getSerialNumber());
+
+        returnMe.setReferenceNumber(oldRule.getReferenceNumber());
+        returnMe.setOrderNumber(oldRule.getOrderNumber());
+        returnMe.setPurchaseOrder(oldRule.getPurchaseOrder());
+
+        returnMe.setTenant(getCurrentTenant());
+        returnMe.setOwner(getCurrentUser().getOwner());
+        returnMe.setCreatedBy(getCurrentUser());
+
+        //Rule info
+        returnMe.setRuleName(oldRule.getRuleName());
+        returnMe.setOverdueQuantity(oldRule.getOverdueQuantity());
+        returnMe.setEscalateToUser(oldRule.getEscalateToUser());
+        returnMe.setReassignUser(oldRule.getReassignUser());
+        returnMe.setNotifyAssignee(oldRule.getNotifyAssignee());
+        returnMe.setAdditionalEmails(oldRule.getAdditionalEmails());
+        returnMe.setSubjectText(oldRule.getSubjectText());
+        returnMe.setCustomMessageText(oldRule.getCustomMessageText());
+
+        return returnMe;
+    }
     private static final Logger logger = Logger.getLogger(AssignmentEscalationRuleService.class);
 
     /**
@@ -109,6 +176,10 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
         returnMe.setReferenceNumber(criteria.getReferenceNumber());
         returnMe.setOrderNumber(criteria.getOrderNumber());
         returnMe.setPurchaseOrder(criteria.getPurchaseOrder());
+
+        returnMe.setTenant(getCurrentTenant());
+        returnMe.setOwner(getCurrentUser().getOwner());
+        returnMe.setCreatedBy(getCurrentUser());
 
         return returnMe;
     }
@@ -341,28 +412,6 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
             logger.error("Couldn't reset Escalation Rules for Event with ID " + eventId, e);
             return false;
         }
-    }
-
-    /**
-     * This method provides a quick and dirty way to grab every single active rule in the DB.  In order for a rule to
-     * be truly considered active, it must pass two tests: 1) The Tenant must NOT be disabled.   2) The RULE must not be
-     * ARCHIVED.  If both of those tests pass, you'll see the rule in this resulting list.
-     *
-     * @return A List populated with all ACTIVE AssignmentEscalationRules from all ACTIVE Tenants.
-     */
-    public List<AssignmentEscalationRule> getAllActiveRules() {
-        //The Open Security Filter should allow us to break out of being restricted by tenant, but should still hide
-        //rows in the ARCHIVED state.
-        QueryBuilder<AssignmentEscalationRule> query = new QueryBuilder<>(AssignmentEscalationRule.class, new OpenSecurityFilter());
-
-        //Don't grab rows from disabled tenants.  These rules are also effectively disabled.
-        query.addSimpleWhere("tenant.disabled", false);
-
-        //Ordering by tenants may not be entirely necessary, but it will allow us to limit how much we're monkeying with
-        //the SecurityFilter... in theory, anyways.
-        query.addOrder("tenant.eventId", true);
-
-        return persistenceService.findAll(query);
     }
 
     /**

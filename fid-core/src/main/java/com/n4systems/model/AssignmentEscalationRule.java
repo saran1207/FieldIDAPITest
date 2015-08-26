@@ -4,6 +4,7 @@ import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.user.User;
+import javolution.io.Struct;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -19,9 +20,15 @@ import java.util.List;
 @Table(name="assignment_escalation_rules")
 public class AssignmentEscalationRule extends ArchivableEntityWithTenant {
 
+    @Column(name = "rule_name")
+    private String ruleName;
+
     @ManyToOne(optional=false)
     @JoinColumn(name = "escalate_to_user_id")
     private User escalateToUser;
+
+    @Column(name = "notifyAssignee")
+    private Boolean notifyAssignee = false;
 
     @ManyToOne(optional=true)
     @JoinColumn(name = "reassign_user_id")
@@ -96,12 +103,28 @@ public class AssignmentEscalationRule extends ArchivableEntityWithTenant {
     @Column(name = "purchase_order")
     private String purchaseOrder;
 
+    public String getRuleName() {
+        return ruleName;
+    }
+
+    public void setRuleName(String ruleName) {
+        this.ruleName = ruleName;
+    }
+
     public User getEscalateToUser() {
         return escalateToUser;
     }
 
     public void setEscalateToUser(User escalateToUser) {
         this.escalateToUser = escalateToUser;
+    }
+
+    public Boolean getNotifyAssignee() {
+        return notifyAssignee;
+    }
+
+    public void setNotifyAssignee(Boolean notifyAssignee) {
+        this.notifyAssignee = notifyAssignee;
     }
 
     public User getReassignUser() {
@@ -279,8 +302,15 @@ public class AssignmentEscalationRule extends ArchivableEntityWithTenant {
     }
 
     public void addAdditionalEmail(String email) {
-        if(!additionalEmails.endsWith("|")) additionalEmails += "|";
-        additionalEmails += email + "|";
+        if(additionalEmails == null) {
+            additionalEmails = "";
+            additionalEmails += email;
+        } else {
+            if (!additionalEmails.endsWith("|")) {
+                additionalEmails += "|";
+            }
+            additionalEmails += email + "|";
+        }
     }
 
     public boolean removeEmail(String email) {

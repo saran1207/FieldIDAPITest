@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+
+<wicket:extend>
+
+    <form wicket:id="saveRuleForm" class="crudForm bigForm pageSection">
+
+        <div wicket:id="feedbackPanel"></div>
+
+        <div class="contentSection">
+            <div class="infoSet">
+                <label>Name *</label>
+                <span class="fieldHolder">
+                    <input type="text" wicket:id="name">
+                </span>
+            </div>
+
+            <div class="infoSet">
+                <label>Overdue By *</label>
+                <span class="fieldHolder">
+                    <select wicket:id="localDateRange"/>
+                </span>
+            </div>
+
+            <div class="infoSet" style="overflow: visible">
+                <label>Escalate To *</label>
+                <span class="fieldHolder">
+                    <div wicket:id="escalate"></div>
+                </span>
+            </div>
+
+
+            <div class="infoSet" style="overflow: visible">
+                <label>Reassign To</label>
+                <span class="fieldHolder">
+                    <div wicket:id="reassign"></div>
+                </span>
+            </div>
+
+
+            <div class="infoSet">
+                <label>Notify Assignee</label>
+                <span class="fieldHolder">
+                    <input type="checkbox" wicket:id="notifyAssignee"/>
+                </span>
+            </div>
+
+            <div class="infoSet">
+                <label>Additional Emails</label>
+                <span class="fieldHolder">
+                    <div wicket:id="emailAddressesContainer">
+                        <div class="emailAddress" wicket:id="emailAddresses">
+                            <input type="text" wicket:id="address"> <a wicket:id="deleteLink"><wicket:message key="label.delete"/></a>
+                        </div>
+                        <div class="addLinkContainer">
+                            <a wicket:id="addEmailAddressLink"><wicket:message key="label.add"/></a>
+                        </div>
+                    </div>
+                </span>
+            </div>
+
+            <div class="infoSet">
+                <label>Subject *</label>
+                <span class="fieldHolder">
+                    <input type="text" class="subject" wicket:id="subject"/>
+                </span>
+            </div>
+
+            <div class="infoSet">
+                <label>Message</label>
+                <span class="fieldHolder">
+                    <textarea wicket:id="message"></textarea>
+                </span>
+            </div>
+
+            <div class="formAction">
+                <input wicket:id="submitButton" type="submit" wicket:message="value:label.create_escalation"/>
+                <wicket:message key="label.or"/>
+                <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+            </div>
+
+        </div>
+
+    </form>
+
+</wicket:extend>
+
+</html>

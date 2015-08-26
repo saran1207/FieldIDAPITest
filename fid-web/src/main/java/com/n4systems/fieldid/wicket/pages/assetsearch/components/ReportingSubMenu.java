@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.components;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.search.results.MassActionLink;
+import com.n4systems.fieldid.wicket.pages.escalationrules.CreateRulePage;
 import com.n4systems.fieldid.wicket.pages.massevent.SelectMassOpenEventPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.AssignEventsToJobPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
@@ -63,6 +64,14 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
                 setResponsePage(new MassUpdateOpenEventsPage(model));
             }
         });
+
+        Link escalationRuleLink = new Link("createRule") {
+            @Override public void onClick() {
+                setResponsePage(new CreateRulePage(model.getObject()));
+            }
+        };
+        escalationRuleLink.setVisible(model.getObject().getWorkflowState().equals(WorkflowStateCriteria.OPEN));
+        add(escalationRuleLink);
 
         add(new Link("summaryReportLink") {
             @Override public void onClick() {
