@@ -200,7 +200,6 @@ fieldset {
   .expand-actions .expand-button {
     display:none;
   }
-
 }
 
 .observation-box {
@@ -208,52 +207,69 @@ fieldset {
   margin-left: auto;
   margin-right: auto;
   width: 470px;
+
+  p, .observation-actions {
+    margin-left: 10px;
+  }
+
+  .observation-comment {
+    padding-top: 10px;
+    width:440px;
+
+    span textarea {
+      width: 400px;
+      height: 200px;
+      padding: 4px;
+      border:1px solid #9C9C9C;
+      color:#555555;
+    }
+
+    label{
+      display: block;
+      font-weight: bold;
+      padding-bottom: 10px;
+    }
+  }
+
+  .observation-actions {
+    padding: 10px;
+
+    .observation-actions-text {
+      display: inline;
+    }
+  }
+
+  .observation-text {
+    margin-top: 5px;
+    width: 380px;
+    border: 2px solid #E8EDFF;
+    padding: 10px 10px 10px 40px;
+    background-image: url("../images/addObservation.gif");
+    background-repeat: no-repeat;
+    background-position: top left;
+  }
+
+  .rec-selected {
+    border-color: #ff9f40;
+    background-image: url(../images/recommendation.gif);
+  }
+
+  .rec-selected:hover {
+    border-color: #e08c38;
+  }
+
+  .def-selected {
+    border-color: #ff4f4f;
+    background-image: url(../images/deficient.gif);
+  }
+
+  .def-selected:hover  {
+    border-color: #de4545;
+  }
 }
 
-.observation-box p, .observation-actions {
-  margin-left: 10px;
-}
 
-.observation-box h1 {
-  padding-left: 10px;
-}
 
-.observation-text {
-  margin-top: 5px;
-  width: 380px;
-  border: 2px solid #E8EDFF;
-  padding: 10px 10px 10px 40px;
-  background-image: url("../images/addObservation.gif");
-  background-repeat: no-repeat;
-  background-position: top left;
-}
-
-.observation-comment {
-  padding-top: 10px;
-  width:440px;
-}
-
-.observation-comment span textarea{
-  width: 400px;
-  height: 200px;
-  padding: 4px;
-  border:1px solid #9C9C9C;
-  color:#555555;
-}
-
-.observation-comment label{
-  display: block;
-  font-weight: bold;
-  padding-bottom: 10px;
-}
-
-.observation-actions {
-  padding: 10px;
-}
-
-.observation-actions-text {
-  display: inline;
-}
 
 .column-wide {
 
