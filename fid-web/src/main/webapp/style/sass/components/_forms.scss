@@ -48,6 +48,16 @@ input:focus {
 	outline: none;
 	border-color: $gray-dark;
 }
+select.combo-box {
+  background: rgba(0, 0, 0, 0) url("plugins/chosen/chosen-sprite.png") no-repeat scroll 275px 1px;
+  border-color: #c7c7c9;
+  border-radius: 0;
+  box-shadow: none;
+  height: 29px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
 
 // checkboxes & radio boxes
 // input inside of the label

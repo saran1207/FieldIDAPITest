@@ -19,3 +19,11 @@
 form.filters {
 	overflow: scroll;
 }
+
+/*target Internet Explorer 9 and Internet Explorer 10:*/
+@media screen and (min-width:0\0) {
+  select.combo-box {
+	background:none;
+	padding: 5px;
+  }
+}
