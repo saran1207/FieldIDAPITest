@@ -478,6 +478,10 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
     private boolean doesRuleApply(AssignmentEscalationRule rule, Event event) {
         //Make sure we have fail if the Rule is for an Action and we have an Event, or vice versa.
 
+        if(!event.getWorkflowState().equals(WorkflowState.OPEN)) {
+            return false;
+        }
+
         AssignmentEscalationRule.Type eventType = event.getType().isActionEventType() ? AssignmentEscalationRule.Type.ACTION : AssignmentEscalationRule.Type.EVENT;
 
         if(rule.getType() != null && !rule.getType().equals(eventType)) {

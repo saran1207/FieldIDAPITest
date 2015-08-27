@@ -1,10 +1,15 @@
 package com.n4systems.fieldid.service.event;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.escalationrule.AssignmentEscalationRuleService;
 import com.n4systems.model.ProcedureAuditEvent;
+import com.n4systems.model.WorkflowState;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 public class ProcedureAuditScheduleService extends FieldIdPersistenceService {
+
+    @Autowired private AssignmentEscalationRuleService ruleService;
 
     @Transactional
     public Long createSchedule(ProcedureAuditEvent schedule) {
@@ -12,6 +17,10 @@ public class ProcedureAuditScheduleService extends FieldIdPersistenceService {
         //Update procedure def to notify mobile of change
         schedule.getProcedureDefinition().touch();
         persistenceService.update(schedule.getProcedureDefinition());
+
+        schedule = persistenceService.find(ProcedureAuditEvent.class, id);
+        ruleService.createApplicableQueueItems(schedule);
+
         return id;
     }
 
@@ -21,6 +30,12 @@ public class ProcedureAuditScheduleService extends FieldIdPersistenceService {
         //Update procedure def to notify mobile of change
         schedule.getProcedureDefinition().touch();
         persistenceService.update(schedule.getProcedureDefinition());
+
+        ruleService.clearEscalationRulesForEvent(updatedSchedule.getId());
+        if(updatedSchedule.getWorkflowState().equals(WorkflowState.OPEN)) {
+            ruleService.createApplicableQueueItems(updatedSchedule);
+        }
+
         return updatedSchedule;
     }
 
@@ -30,6 +45,9 @@ public class ProcedureAuditScheduleService extends FieldIdPersistenceService {
         schedule = persistenceService.update(schedule);
         schedule.getProcedureDefinition().touch();
         persistenceService.update(schedule.getProcedureDefinition());
+
+        ruleService.clearEscalationRulesForEvent(schedule.getId());
+
         return schedule;
     }
 

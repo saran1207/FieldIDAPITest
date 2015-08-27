@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.service.event;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.escalationrule.AssignmentEscalationRuleService;
 import com.n4systems.model.*;
 import com.n4systems.model.notification.AssigneeNotification;
 import com.n4systems.model.orgs.BaseOrg;
@@ -19,6 +20,8 @@ public class  EventScheduleService extends FieldIdPersistenceService {
 
     @Autowired
     private NotifyEventAssigneeService notifyEventAssigneeService;
+
+    @Autowired private AssignmentEscalationRuleService ruleService;
 
 	@Transactional(readOnly = true)
 	public ThingEvent getNextEventSchedule(Long assetId, Long eventTypeId) {
@@ -124,6 +127,11 @@ public class  EventScheduleService extends FieldIdPersistenceService {
         updatedSchedule.getAsset().touch();
         persistenceService.update(updatedSchedule.getAsset());
 
+        ruleService.clearEscalationRulesForEvent(schedule.getId());
+        if(schedule.getWorkflowState().equals(WorkflowState.OPEN)) {
+            ruleService.createApplicableQueueItems(schedule);
+        }
+
 
         return updatedSchedule;
     }
@@ -135,6 +143,12 @@ public class  EventScheduleService extends FieldIdPersistenceService {
         //Update the asset to notify mobile of change
         openEvent.getAsset().touch();
         persistenceService.update(openEvent.getAsset());
+
+        //That's all done, so now we update the event.
+        if(openEvent.getWorkflowState().equals(WorkflowState.OPEN)) {
+            ruleService.createApplicableQueueItems(openEvent);
+        }
+
         return id;
     }
 }

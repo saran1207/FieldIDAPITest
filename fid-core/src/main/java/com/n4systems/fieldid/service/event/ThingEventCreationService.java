@@ -9,17 +9,10 @@ import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.*;
 import com.n4systems.model.user.User;
-import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.FileDataContainer;
-import com.n4systems.util.ContentTypeUtil;
 import com.n4systems.util.ServiceLocator;
-import org.apache.commons.io.FileUtils;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 
 public class ThingEventCreationService extends EventCreationService<ThingEvent, Asset> {
@@ -47,6 +40,29 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
         }
 
         return eventResult;
+    }
+
+    /**
+     * This Override has to be made to step around problems with Java 8u20, which has problems with class resolution and
+     * experiences an AssertionError when trying to determine what T is a SubClass of.  While this problem is not
+     * present in later versions of Java 8, we are using Java 8u20 on the production server... I don't want to risk
+     * making things explode.
+     *
+     * @param event - A ThingEvent that you want to update.
+     * @param fileData - A FileDataContainer containing file data.
+     * @param attachments - A List of FileAttachment objects to
+     * @return A set of training wheels that we had to introduce to handhold Java through this fault.
+     */
+    @Override
+    public ThingEvent updateEvent(ThingEvent event, FileDataContainer fileData, List<FileAttachment> attachments) {
+        ThingEvent trainingWheels = super.updateEvent(event, fileData, attachments);
+
+        ruleService.clearEscalationRulesForEvent(trainingWheels.getId());
+        if(trainingWheels.getWorkflowState().equals(WorkflowState.OPEN)) {
+            ruleService.createApplicableQueueItems(trainingWheels);
+        }
+
+        return trainingWheels;
     }
 
     @Override
