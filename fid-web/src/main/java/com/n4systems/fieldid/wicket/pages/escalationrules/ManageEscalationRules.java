@@ -10,7 +10,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
-import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.model.AssignmentEscalationRule;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -36,7 +36,7 @@ import java.util.List;
 /**
  * Created by rrana on 2015-08-17.
  */
-public class ManageEscalationRules extends FieldIDFrontEndPage {
+public class ManageEscalationRules extends FieldIDTemplatePage {
 
     private static final String HIGHLIGHT_REORDER_JS = "$('.list').delegate('tr', 'mousedown', function(event) { if(event.which==1) $(this).css('background-color','#eee'); } );";
     private static final String UNHIGHLIGHT_REORDER_JS = "$('.list').delegate('tr', 'mouseup', function(event) { if(event.which==1) $(this).css('background-color', '#fff' ); } );";

@@ -385,6 +385,10 @@ legend + p {
 			text-align: left;
 		}
 	}
+
+  	.emailAddress,.addLinkContainer {
+	  padding-left: 195px;
+	}
 }
 
 // Form overrides for narrow styles - TODO
@@ -478,6 +482,9 @@ legend + p {
 		font-weight: $semi-bold;
 	}
 }
+
+
+
 
 //--------
 

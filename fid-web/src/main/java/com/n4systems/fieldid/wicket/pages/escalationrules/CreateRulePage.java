@@ -14,9 +14,11 @@ import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.AssignmentEscalationRule;
 import com.n4systems.model.search.EventReportCriteria;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -80,7 +82,7 @@ public class CreateRulePage extends FieldIDTemplatePage {
             AssignedUserOrGroupSelect assignedUserOrGroupSelect;
 
             add(assignedUserOrGroupSelect = new AssignedUserOrGroupSelect("escalate",
-                    ProxyModel.of(rule, on(AssignmentEscalationRule.class).getEscalateToUser()),
+                    ProxyModel.of(rule, on(AssignmentEscalationRule.class).getEscalateUserOrGroup()),
                     usersModel, userGroupsModel,
                     new AssigneesModel(userGroupsModel, usersModel)));
             assignedUserOrGroupSelect.setRequired(true);
@@ -89,7 +91,7 @@ public class CreateRulePage extends FieldIDTemplatePage {
 
             AssignedUserOrGroupSelect reassignTo;
             add(reassignTo = new AssignedUserOrGroupSelect("reassign",
-                    ProxyModel.of(rule, on(AssignmentEscalationRule.class).getReassignUser()),
+                    ProxyModel.of(rule, on(AssignmentEscalationRule.class).getReassignUserOrGroup()),
                     usersModel, userGroupsModel,
                     new AssigneesModel(userGroupsModel, usersModel)));
 
@@ -207,6 +209,11 @@ public class CreateRulePage extends FieldIDTemplatePage {
         if (rule != null && rule.getAdditionalEmailsList() == null) {
             rule.addAdditionalEmail("");
         }
+    }
+
+    @Override
+    protected Component createTitleLabel(String labelId) {
+        return new Label(labelId, new FIDLabelModel("title.create_rule"));
     }
 
 }
