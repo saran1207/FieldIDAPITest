@@ -3,7 +3,9 @@ package com.n4systems.model;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
+import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserGroup;
 import javolution.io.Struct;
 
 import javax.persistence.*;
@@ -23,9 +25,13 @@ public class AssignmentEscalationRule extends ArchivableEntityWithTenant {
     @Column(name = "rule_name")
     private String ruleName;
 
-    @ManyToOne(optional=false)
+    @ManyToOne(optional=true)
     @JoinColumn(name = "escalate_to_user_id")
     private User escalateToUser;
+
+    @ManyToOne(optional=true)
+    @JoinColumn(name = "escalate_to_user_group_id")
+    private UserGroup escalateToUserGroup;
 
     @Column(name = "notifyAssignee")
     private Boolean notifyAssignee = false;
@@ -33,6 +39,10 @@ public class AssignmentEscalationRule extends ArchivableEntityWithTenant {
     @ManyToOne(optional=true)
     @JoinColumn(name = "reassign_user_id")
     private User reassignUser;
+
+    @ManyToOne(optional=true)
+    @JoinColumn(name = "reassign_user_group_id")
+    private UserGroup reassignUserGroup;
 
     @Column(name = "overdue_quantity")
     private Long overdueQuantity;
@@ -117,6 +127,7 @@ public class AssignmentEscalationRule extends ArchivableEntityWithTenant {
 
     public void setEscalateToUser(User escalateToUser) {
         this.escalateToUser = escalateToUser;
+        this.escalateToUserGroup = null;
     }
 
     public Boolean getNotifyAssignee() {
@@ -133,6 +144,7 @@ public class AssignmentEscalationRule extends ArchivableEntityWithTenant {
 
     public void setReassignUser(User reassignUser) {
         this.reassignUser = reassignUser;
+        this.reassignUserGroup = null;
     }
 
     public Long getOverdueQuantity() {
@@ -287,12 +299,62 @@ public class AssignmentEscalationRule extends ArchivableEntityWithTenant {
         this.purchaseOrder = purchaseOrder;
     }
 
+    public UserGroup getEscalateToUserGroup() {
+        return escalateToUserGroup;
+    }
+
+    public void setEscalateToUserGroup(UserGroup escalateToUserGroup) {
+        this.escalateToUserGroup = escalateToUserGroup;
+        this.escalateToUser = null;
+    }
+
+    @Transient
+    public Assignable getEscalateUserOrGroup() {
+        return escalateToUser != null ?  escalateToUser : escalateToUserGroup;
+    }
+
+    public void setEscalateUserOrGroup(Assignable assignee) {
+        if (assignee instanceof User) {
+            setEscalateToUser((User) assignee);
+        } else if (assignee instanceof UserGroup) {
+            setEscalateToUserGroup((UserGroup) assignee);
+        } else if (assignee == null) {
+            this.escalateToUser = null;
+            this.escalateToUserGroup = null;
+        }
+    }
+
+    public UserGroup getReassignToUserGroup() {
+        return reassignUserGroup;
+    }
+
+    public void setReassignToUserGroup(UserGroup escalateToUserGroup) {
+        this.reassignUserGroup = escalateToUserGroup;
+        this.reassignUser = null;
+    }
+
+    @Transient
+    public Assignable getReassignUserOrGroup() {
+        return reassignUser != null ?  reassignUser : reassignUserGroup;
+    }
+
+    public void setReassignUserOrGroup(Assignable assignee) {
+        if (assignee instanceof User) {
+            setReassignUser((User) assignee);
+        } else if (assignee instanceof UserGroup) {
+            setReassignToUserGroup((UserGroup) assignee);
+        } else if (assignee == null) {
+            this.reassignUser = null;
+            this.reassignUserGroup = null;
+        }
+    }
+
     public List<String> getAdditionalEmailsList() {
         if(additionalEmails != null) {
             //If additional emails isn't null, we'll process a list.  Otherwise, we're going to provide null, indicating
             //that there's nothing in the field.  Pretty simpe.
             if (!additionalEmails.isEmpty()) {
-                return Arrays.asList(additionalEmails.split("\\|"));
+                return new ArrayList<>(Arrays.asList(additionalEmails.split("\\|")));
             } else {
                 return new ArrayList<>();
             }

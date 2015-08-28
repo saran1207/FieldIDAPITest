@@ -18,9 +18,7 @@ public class AssignmentEscalationRuleTask extends ScheduledTask {
 
     @Override
     protected void runTask() throws Exception {
-        logger.info("Someone is definitely executing me!!");
         long startTime = System.currentTimeMillis();
         ServiceLocator.getAssignmentEscalationRuleProcessingService().processQueue();
-        System.out.println("Finished executing in " + (System.currentTimeMillis() - startTime) + " millis");
     }
 }
