@@ -4,16 +4,16 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.EventStatusService;
+import com.n4systems.fieldid.wicket.behavior.ConfirmNavigationBehavior;
 import com.n4systems.fieldid.wicket.behavior.DisableButtonBeforeSubmit;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
+import com.n4systems.fieldid.wicket.behavior.validation.DisableNavigationConfirmationBehavior;
 import com.n4systems.fieldid.wicket.behavior.validation.RequiredCriteriaValidator;
 import com.n4systems.fieldid.wicket.components.*;
 import com.n4systems.fieldid.wicket.components.event.CriteriaSectionEditPanel;
 import com.n4systems.fieldid.wicket.components.event.EventFormEditPanel;
 import com.n4systems.fieldid.wicket.components.event.book.NewOrExistingEventBook;
-import com.n4systems.fieldid.wicket.components.event.prooftest.ProofTestEditPanel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.components.location.LocationPicker;
 import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRenderer;
@@ -24,30 +24,30 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.UserToUTCDateModel;
 import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
 import com.n4systems.fieldid.wicket.model.user.GroupedVisibleUsersModel;
-import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.model.*;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.location.Location;
+import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -55,7 +55,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPage {
+public abstract class MultiEventPage<T extends Event> extends FieldIDTemplatePage {
 
     @SpringBean
     protected EventService eventService;
@@ -88,8 +88,8 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
 
     private MassEventOrigin massEventOrigin;
 
-    private LocationPicker locationPicker;
-    //private OrgLocationPicker locationPicker;
+    private OrgLocationPicker ownerPicker;
+    private OrgLocationPicker locationPicker;
     private NewOrExistingEventBook newOrExistingEventBook;
 
     protected enum MassEventOrigin { START_EVENT, SEARCH, REPORTING };
@@ -123,8 +123,8 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
         }
 
         WebMarkupContainer actionsColumn;
-        add(actionsColumn = new WebMarkupContainer("actionsColumn"));
-        actionsColumn.setVisible(event.getObject().isAction());
+        form.add(actionsColumn = new WebMarkupContainer("actionsColumn"));
+        actionsColumn.setVisible(event.getObject().getType().isActionEventType());
 
         actionsColumn.add(new Label("priority", new PropertyModel<String>(event, "priority.name")));
         actionsColumn.add(new Label("notes", new PropertyModel<String>(event, "notes")));
@@ -145,6 +145,7 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
             }
         });
 
+        add(new ConfirmNavigationBehavior(new FIDLabelModel("message.confirm_navigation")));
     }
 
     protected abstract SchedulePicker<T> createSchedulePicker();
@@ -234,6 +235,7 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
             //Continue/Back To Step 1 links
 
             Button saveButton = new Button("saveButton");
+            saveButton.add(new DisableNavigationConfirmationBehavior());
             saveButton.add(new DisableButtonBeforeSubmit());
             add(saveButton);
             add(createCancelLink("cancelLink"));
@@ -288,7 +290,6 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
         }
     }
 
-
     protected Behavior createUpdateAutoschedulesOnChangeBehavior() {
         return new UpdateComponentOnChange() {
             @Override
@@ -299,8 +300,6 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
     }
 
     protected abstract Component createPostEventPanel(IModel<T> event);
-    protected abstract boolean supportsProofTests();
-    protected abstract ProofTestEditPanel createProofTestEditPanel(String id);
     protected abstract Component createCancelLink(String id);
     protected abstract boolean targetAlreadyArchived(T event);
 
@@ -312,16 +311,10 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
         ownerSection.add(groupedUserPicker = new GroupedUserPicker("assignedTo", new PropertyModel<User>(MultiEventPage.this, "assignedTo"), new GroupedVisibleUsersModel()));
         groupedUserPicker.setVisible(event.getObject().getType().isAssignedToAvailable());
 
-
-        // New Org Picker/ Location Picker combo widget.
-        // If implemented, make sure to update the corresponding the HTML file.
-
-        //-----------------------------------
-        /*
         final PropertyModel<BaseOrg> ownerModel = new PropertyModel(event,"owner");
 
         //Owner Picker
-        final OrgLocationPicker picker = new OrgLocationPicker("orgPicker", ownerModel) {
+        ownerPicker = new OrgLocationPicker("orgPicker", ownerModel) {
             @Override
             protected void onChanged(AjaxRequestTarget target) {
                 if (getTextString() != null && getTextString().equals("")) {
@@ -332,29 +325,24 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
                 target.add(schedulesContainer);
             }
         }.withAutoUpdate();
-        ownerSection.add(picker);
+
+        ownerPicker.setEnabled(!assetOwnerUpdate);
+        ownerPicker.setIconVisible(!assetOwnerUpdate);
+        ownerPicker.setTextEnabled(!assetOwnerUpdate);
+        ownerPicker.setOutputMarkupId(true);
+        ownerSection.add(ownerPicker);
 
         // checkbox
-        CheckBox ownerCheckBox = new CheckBox("assetOwnerUpdate", new PropertyModel<Boolean>(MultiEventPage.this, "assetOwnerUpdate")){
+        AjaxCheckBox ownerCheckBox = new AjaxCheckBox("assetOwnerUpdate", new PropertyModel<Boolean>(MultiEventPage.this, "assetOwnerUpdate")) {
             @Override
-            protected void onSelectionChanged(Boolean newSelection)
-            {
-                if(assetOwnerUpdate) {
-                    picker.setEnabled(!assetOwnerUpdate);
-                    picker.setIconVisible(!assetOwnerUpdate);
-                    picker.setTextEnabled(!assetOwnerUpdate);
-                } else {
-                    picker.setEnabled(!assetOwnerUpdate);
-                    picker.setIconVisible(!assetOwnerUpdate);
-                    picker.setTextEnabled(!assetOwnerUpdate);
-                }
-            }
-            @Override
-            protected boolean wantOnSelectionChangedNotifications()
-            {
-                return true;
+            protected void onUpdate(AjaxRequestTarget target) {
+                ownerPicker.setEnabled(!assetOwnerUpdate);
+                ownerPicker.setIconVisible(!assetOwnerUpdate);
+                ownerPicker.setTextEnabled(!assetOwnerUpdate);
+                target.add(ownerPicker);
             }
         };
+
         ownerSection.add(ownerCheckBox);
 
         //Location Picker
@@ -369,95 +357,29 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
                 return new FIDLabelModel("message.locationpicker_watermark").getObject();
             }
         }.withLocations();
+        locationPicker.setEnabled(!locationUpdate);
+        locationPicker.setIconVisible(!locationUpdate);
+        locationPicker.setTextEnabled(!locationUpdate);
+        locationPicker.setOutputMarkupId(true);
         ownerSection.add(locationPicker);
 
-        //Freeform Location
         final TextField<String> freeformLocation = new TextField<String>("freeformLocation", new PropertyModel<String>(locationModel, "freeformLocation"));
+        freeformLocation.setEnabled(!locationUpdate);
+        freeformLocation.setOutputMarkupId(true);
         ownerSection.add(freeformLocation);
 
-        CheckBox locationCheckBox = new CheckBox("locationUpdate", new PropertyModel<Boolean>(MultiEventPage.this, "locationUpdate")){
+        AjaxCheckBox locationCheckBox = new AjaxCheckBox("locationUpdate", new PropertyModel<Boolean>(MultiEventPage.this, "locationUpdate")) {
             @Override
-            protected void onSelectionChanged(Boolean newSelection)
-            {
-                if(locationUpdate) {
-                    locationPicker.setEnabled(!locationUpdate);
-                    freeformLocation.setEnabled(!locationUpdate);
-                } else {
-                    locationPicker.setEnabled(!locationUpdate);
-                    freeformLocation.setEnabled(!locationUpdate);
-                }
-            }
-            @Override
-            protected boolean wantOnSelectionChangedNotifications()
-            {
-                return true;
+            protected void onUpdate(AjaxRequestTarget target) {
+                locationPicker.setEnabled(!locationUpdate);
+                locationPicker.setIconVisible(!locationUpdate);
+                locationPicker.setTextEnabled(!locationUpdate);
+                freeformLocation.setEnabled(!locationUpdate);
+                target.add(locationPicker, freeformLocation);
+
             }
         };
-        ownerSection.add(locationCheckBox);*/
-
-        //-----------------------------------
-        final OrgLocationPicker picker = new OrgLocationPicker("orgPicker", new PropertyModel<BaseOrg>(event, "owner")) {
-            @Override
-            protected void onChanged(AjaxRequestTarget target) {
-                target.add(schedulesContainer);
-                BaseOrg selectedOrg = (BaseOrg) getDefaultModel().getObject();
-                locationPicker.setOwner(selectedOrg);
-                target.add(locationPicker);
-            }
-        }.withAutoUpdate();
-
-        ownerSection.add(picker);
-
-        // checkbox
-        CheckBox ownerCheckBox = new CheckBox("assetOwnerUpdate", new PropertyModel<Boolean>(MultiEventPage.this, "assetOwnerUpdate")){
-            @Override
-            protected void onSelectionChanged(Boolean newSelection)
-            {
-                if(assetOwnerUpdate) {
-                    picker.setEnabled(!assetOwnerUpdate);
-                    picker.setIconVisible(!assetOwnerUpdate);
-                    picker.setTextEnabled(!assetOwnerUpdate);
-                } else {
-                    picker.setEnabled(!assetOwnerUpdate);
-                    picker.setIconVisible(!assetOwnerUpdate);
-                    picker.setTextEnabled(!assetOwnerUpdate);
-                }
-            }
-            @Override
-            protected boolean wantOnSelectionChangedNotifications()
-            {
-                return true;
-            }
-        };
-        picker.setEnabled(false);
-        picker.setIconVisible(false);
-        picker.setTextEnabled(false);
-
-        ownerSection.add(ownerCheckBox);
-
-        ownerSection.add(locationPicker = new LocationPicker("locationPicker", new PropertyModel<Location>(event, "advancedLocation")).withRelativePosition());
-        locationPicker.setOwner(new PropertyModel<BaseOrg>(event, "owner").getObject());
-
-        CheckBox locationCheckBox = new CheckBox("locationUpdate", new PropertyModel<Boolean>(MultiEventPage.this, "locationUpdate")){
-            @Override
-            protected void onSelectionChanged(Boolean newSelection)
-            {
-                if(locationUpdate) {
-                    locationPicker.setEnabled(!locationUpdate);
-                } else {
-                    locationPicker.setEnabled(!locationUpdate);
-                }
-            }
-            @Override
-            protected boolean wantOnSelectionChangedNotifications()
-            {
-                return true;
-            }
-        };
-        locationPicker.setEnabled(false);
-
         ownerSection.add(locationCheckBox);
-        //-----------------------------------
 
         return ownerSection;
     }
@@ -486,7 +408,7 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
         final boolean isNew = event.getObject().isNew();
         final boolean isCompleted = event.getObject().isCompleted();
 
-        form.add(new AjaxLink("openSchedulePickerLink") {
+        schedulesContainer.add(new AjaxLink("openSchedulePickerLink") {
             { setVisible(isNew || !isCompleted); }
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -498,7 +420,7 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
 
     protected void createEventTypeDetailsSection(IModel<T> event, OuterEventForm form) {
         PropertyModel<User> performedByModel = new PropertyModel<User>(event, "performedBy");
-        DropDownChoice<User> performedBy = new DropDownChoice<User>("performedBy", performedByModel, new ExaminersModel(performedByModel), new ListableChoiceRenderer<User>());
+        DropDownChoice<User> performedBy = new FidDropDownChoice<User>("performedBy", performedByModel, new ExaminersModel(performedByModel), new ListableChoiceRenderer<User>());
         DateTimePicker datePerformedPicker = new DateTimePicker("datePerformed", new UserToUTCDateModel(new PropertyModel<Date>(event, "date")), true).withNoAllDayCheckbox();
         datePerformedPicker.addToDateField(createUpdateAutoschedulesOnChangeBehavior());
 
@@ -518,13 +440,13 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
 
     protected void createResultSection(IModel<T> event, OuterEventForm form) {
         Event masterEvent = event.getObject();
-        DropDownChoice resultSelect = new DropDownChoice<EventResult>("eventResult", new PropertyModel<EventResult>(MultiEventPage.this, "eventResult"), EventResult.getValidEventResults(), new ListableLabelChoiceRenderer<EventResult>());
+        DropDownChoice resultSelect = new FidDropDownChoice<EventResult>("eventResult", new PropertyModel<EventResult>(MultiEventPage.this, "eventResult"), EventResult.getValidEventResults(), new ListableLabelChoiceRenderer<EventResult>());
         resultSelect.add(new UpdateComponentOnChange());
         resultSelect.setNullValid(masterEvent.isResultFromCriteriaAvailable());
         form.add(resultSelect);
 
         List<EventStatus> eventStatuses = eventStatusService.getActiveStatuses();
-        DropDownChoice workflowStateSelect = new DropDownChoice<EventStatus>("eventStatus", new PropertyModel<EventStatus>(event, "eventStatus"), eventStatuses, new ListableLabelChoiceRenderer<EventStatus>());
+        DropDownChoice workflowStateSelect = new FidDropDownChoice<EventStatus>("eventStatus", new PropertyModel<EventStatus>(event, "eventStatus"), eventStatuses, new ListableLabelChoiceRenderer<EventStatus>());
         workflowStateSelect.add(new UpdateComponentOnChange());
         workflowStateSelect.setNullValid(true);
         form.add(workflowStateSelect);
@@ -559,21 +481,6 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
 
     protected abstract List<ThingEvent> doSave();
     protected void onPreSave(T event) { }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        response.renderCSSReference("style/legacy/newCss/event/event_base.css");
-        response.renderCSSReference("style/legacy/newCss/event/event_schedule.css");
-        response.renderCSSReference("style/legacy/newCss/component/buttons.css");
-    }
-
-    @Override
-    protected boolean useLegacyCss() {
-        return false;
-    }
-
-    protected void doAutoSchedule() { }
 
     public EventResult getEventResult() {
         return eventResult;

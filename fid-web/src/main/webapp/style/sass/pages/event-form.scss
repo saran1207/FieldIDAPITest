@@ -11,10 +11,18 @@ fieldset {
       width: 275px;
     }
 
-    input[type="text"], .org-location {
+    input[type="text"] {
       margin: 5px 0;
     }
-    
+
+    .org-location input[type="text"]{
+      margin: 5px 0 0 5px;
+    }
+
+    .org-location .entypo-search {
+      margin: 10px 0 0 4px;
+    }
+
     .datepicker-container {
       display: inline;
     }

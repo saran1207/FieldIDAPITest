@@ -73,15 +73,17 @@
             <fieldset class="form-horizontal narrow" wicket:id="ownerSection">
 
                 <legend><wicket:message key="label.owner"/></legend>
+                <!-- This is needed for styling, since the assignedTo is not always displayed -->
+                <div class="control-group"/>
 
                 <div class="control-group assignedTo" wicket:enclosure="assignedTo">
                     <label class="label"><wicket:message key="label.assignedto"/></label>
-                    <select wicket:id="assignedTo" class="popup"></select>
+                    <select wicket:id="assignedTo" class="popup"/>
                 </div>
 
                 <div class="control-group org-picker-container">
                     <label class="label">* <wicket:message key="label.owner"/></label>
-                    <div wicket:id="orgPicker"></div>
+                    <div wicket:id="orgPicker"/>
                 </div>
 
                 <div class="control-group update-asset-owner">
@@ -162,9 +164,7 @@
                                 <span wicket:id="addScheduleJob"/>
                             </wicket:enclosure>
                         </label>
-                        <a wicket:id="removeLink">
-                            <img src="/fieldid/images/small-x.png"/>
-                        </a>
+                        <a wicket:id="removeLink"><img src="/fieldid/images/small-x.png"/></a>
                     </div>
                     <a class="btn-secondary btn-sml" wicket:id="openSchedulePickerLink"><wicket:message key="label.add_a_schedule"/></a>
                 </div>

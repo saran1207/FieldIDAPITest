@@ -11,45 +11,47 @@
         <div wicket:id="feedbackPanel"></div>
 
         <div class="contentSection">
-            <div class="infoSet">
-                <label>Name *</label>
+            <div class="form-horizontal">
+                <label class="label">Name *</label>
                 <span class="fieldHolder">
                     <input type="text" wicket:id="name">
                 </span>
             </div>
 
-            <div class="infoSet">
-                <label>Overdue By *</label>
+            <div class="form-horizontal">
+                <label class="label">Overdue By *</label>
                 <span class="fieldHolder">
                     <select wicket:id="localDateRange"/>
                 </span>
             </div>
 
-            <div class="infoSet" style="overflow: visible">
-                <label>Escalate To *</label>
+            <div class="form-horizontal" style="overflow: visible">
+                <label class="label">Escalate To *</label>
                 <span class="fieldHolder">
-                    <div wicket:id="escalate"></div>
+                    <div style="display: inline-block" wicket:id="escalate"></div>
                 </span>
             </div>
 
 
-            <div class="infoSet" style="overflow: visible">
-                <label>Reassign To</label>
+            <div class="form-horizontal" style="overflow: visible">
+                <label class="label">Reassign To</label>
                 <span class="fieldHolder">
-                    <div wicket:id="reassign"></div>
+                    <div style="display: inline-block" wicket:id="reassign"></div>
                 </span>
             </div>
 
 
-            <div class="infoSet">
-                <label>Notify Assignee</label>
+            <div class="form-horizontal">
+                <label class="label">Notify Assignee</label>
                 <span class="fieldHolder">
-                    <input type="checkbox" wicket:id="notifyAssignee"/>
+                    <div style="display: inline-block">
+                        <input type="checkbox" wicket:id="notifyAssignee"/>
+                    </div>
                 </span>
             </div>
 
-            <div class="infoSet">
-                <label>Additional Emails</label>
+            <div class="form-horizontal">
+                <label class="label">Additional Emails</label>
                 <span class="fieldHolder">
                     <div wicket:id="emailAddressesContainer">
                         <div class="emailAddress" wicket:id="emailAddresses">
@@ -62,21 +64,21 @@
                 </span>
             </div>
 
-            <div class="infoSet">
-                <label>Subject *</label>
+            <div class="form-horizontal">
+                <label class="label">Subject *</label>
                 <span class="fieldHolder">
                     <input type="text" class="subject" wicket:id="subject"/>
                 </span>
             </div>
 
-            <div class="infoSet">
-                <label>Message</label>
+            <div class="form-horizontal">
+                <label class="label">Message</label>
                 <span class="fieldHolder">
                     <textarea wicket:id="message"></textarea>
                 </span>
             </div>
 
-            <div class="formAction">
+            <div style="padding-left: 194px;padding-top: 20px;" class="form-horizontal formAction">
                 <input wicket:id="submitButton" type="submit" wicket:message="value:label.save_escalation"/>
                 <wicket:message key="label.or"/>
                 <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
