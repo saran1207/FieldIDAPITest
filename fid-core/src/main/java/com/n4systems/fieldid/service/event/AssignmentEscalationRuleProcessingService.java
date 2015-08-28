@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -59,16 +58,15 @@ public class AssignmentEscalationRuleProcessingService extends FieldIdPersistenc
      */
     @Transactional
     public void processQueue() {
-        logger.info("Starting AssignmentEscalationRuleProcessingService run.");
 
         //Step 1: Get a list of ALL expired Queue items.  These have already been sorted by Tenant ID to make things
         //        easier and potentially stop us from skipping all over the place with the Security Context.  I just
         //        find that silly.
+
         List<EscalationRuleExecutionQueueItem> queueItems = ruleService.getQueueItemsForProcessing();
 
         processItems(queueItems);
 
-        logger.info("Done running AssignmentEscalationRuleProcessingService!!  Did I actually do anything?");
     }
 
     /**
@@ -99,10 +97,9 @@ public class AssignmentEscalationRuleProcessingService extends FieldIdPersistenc
 
                 ruleService.updateQueueItem(item);
             } catch (IOException e) {
-                logger.error(MessageFormat.format(JSON_PROCESSING_ERROR, item.getRule().getId()), e);
+//                logger.error(MessageFormat.format(JSON_PROCESSING_ERROR, item.getRule().getId()), e);
             } catch (MessagingException e) {
-                logger.error(MessageFormat.format(MAIL_SERVICE_ERROR, item.getRule().getId()), e);
-                e.printStackTrace();
+//                logger.error(MessageFormat.format(MAIL_SERVICE_ERROR, item.getRule().getId()), e);
             }
         }
     }
