@@ -16,6 +16,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -120,6 +121,12 @@ public class AssetTypeAttachmentsPanel extends Panel {
 
         add(existingAttachmentsContainer);
         add(new UploadAttachmentForm("uploadAttachmentForm"));
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.renderJavaScriptReference("javascript/mimeLookup.js");
+        response.renderJavaScriptReference("javascript/jquery/attachments/jquery.xdomainrequest.min.js");
     }
 
     class UploadAttachmentForm extends Form {
