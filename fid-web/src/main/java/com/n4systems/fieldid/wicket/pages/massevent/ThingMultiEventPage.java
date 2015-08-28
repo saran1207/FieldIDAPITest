@@ -45,30 +45,6 @@ public abstract class ThingMultiEventPage extends MultiEventPage<ThingEvent> {
         return openEvent;
     }
 
-    @Override
-    protected boolean supportsProofTests() {
-        ThingEvent event = this.event.getObject();
-        return event.getThingType().getSupportedProofTests().size()>0 && event.getOwner().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.ProofTestIntegration);
-    }
-
-    protected void doAutoSchedule() {
-        ThingEvent e = event.getObject();
-
-        if (null == e.getDate()) {
-            return;
-        }
-
-        AssetTypeSchedule schedule = e.getAsset().getType().getSchedule(e.getType(), e.getOwner());
-        schedules.clear();
-        if (schedule != null) {
-            ThingEvent eventSchedule = new ThingEvent();
-            eventSchedule.setAsset(e.getAsset());
-            eventSchedule.setType(e.getType());
-            eventSchedule.setDueDate(schedule.getNextDate(e.getDate()));
-            schedules.add(eventSchedule);
-        }
-    }
-
     protected List<EventScheduleBundle<Asset>> createEventScheduleBundles(Asset asset) {
         List<EventScheduleBundle<Asset>> scheduleBundles = new ArrayList<EventScheduleBundle<Asset>>();
 
@@ -90,11 +66,6 @@ public abstract class ThingMultiEventPage extends MultiEventPage<ThingEvent> {
         }
 
         return scheduleBundles;
-    }
-
-    @Override
-    protected ProofTestEditPanel createProofTestEditPanel(String componentId) {
-        return new ProofTestEditPanel("proofTest", event.getObject().getThingType(), proofTestInfo);
     }
 
     @Override
