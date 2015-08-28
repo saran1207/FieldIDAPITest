@@ -1,7 +1,9 @@
 package com.n4systems.fieldid.service.event;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.escalationrule.AssignmentEscalationRuleService;
 import com.n4systems.model.PlaceEvent;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.model.notification.AssigneeNotification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,6 +12,9 @@ public class PlaceEventScheduleService extends FieldIdPersistenceService {
 
     @Autowired
     private NotifyEventAssigneeService notifyEventAssigneeService;
+
+    @Autowired
+    AssignmentEscalationRuleService ruleService;
 
     @Transactional
     public PlaceEvent updateSchedule(PlaceEvent schedule) {
@@ -26,6 +31,11 @@ public class PlaceEventScheduleService extends FieldIdPersistenceService {
         //Update org to notify mobile of change
         updatedSchedule.getPlace().touch();
         persistenceService.update(updatedSchedule.getPlace());
+
+        ruleService.clearEscalationRulesForEvent(updatedSchedule.getId());
+        if(updatedSchedule.getWorkflowState().equals(WorkflowState.OPEN)) {
+            ruleService.createApplicableQueueItems(updatedSchedule);
+        }
         return updatedSchedule;
     }
 
@@ -35,6 +45,9 @@ public class PlaceEventScheduleService extends FieldIdPersistenceService {
         //Update org to notify mobile of change
         schedule.getPlace().touch();
         persistenceService.update(schedule.getPlace());
+
+        PlaceEvent event = persistenceService.find(PlaceEvent.class, id);
+        ruleService.createApplicableQueueItems(event);
         return id;
     }
 
@@ -44,6 +57,9 @@ public class PlaceEventScheduleService extends FieldIdPersistenceService {
         schedule = persistenceService.update(schedule);
         schedule.getPlace().touch();
         persistenceService.update(schedule.getPlace());
+
+        ruleService.clearEscalationRulesForEvent(schedule.getId());
+
         return schedule;
     }
 

@@ -55,7 +55,6 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
             setEventResult(event.getObject().getEventResult());
             fileAttachments = new ArrayList<FileAttachment>();
 
-            //doAutoSchedule();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

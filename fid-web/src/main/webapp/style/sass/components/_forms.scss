@@ -185,8 +185,7 @@ input[type=text].input-xsml {
 // ------------------------------------
 input:disabled,
 textarea:disabled {
-	border: none;
-	background: $white;
+	background: $gray-light;
 	color: $gray-darkest;
 	padding: 0;
 }

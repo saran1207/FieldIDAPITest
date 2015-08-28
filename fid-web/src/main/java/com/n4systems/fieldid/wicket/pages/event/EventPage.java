@@ -349,7 +349,6 @@ public abstract class EventPage<T extends Event> extends FieldIDTemplatePage {
                 longitude.add(new SimpleAttributeModifier("value", (null == longVal) ? "" : longVal));
             }
 
-
             gpsContainer.add(latitude);
             gpsContainer.add(longitude);
 

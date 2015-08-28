@@ -7,6 +7,7 @@ import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.service.escalationrule.AssignmentEscalationRuleService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable;
@@ -39,6 +40,7 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
     @Autowired protected EventService eventService;
     @Autowired protected SignatureService signatureService;
     @Autowired protected NotifyEventAssigneeService notifyEventAssigneeService;
+    @Autowired protected AssignmentEscalationRuleService ruleService;
 
     @Transactional
     public T createEventWithSchedules(T event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle<V>> schedules) {
@@ -113,7 +115,14 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
 
             for (CriteriaResult result : event.getResults()) {
                 for (Event action : result.getActions()) {
-                    persistenceService.save(action);
+                    Long id = persistenceService.save(action);
+
+                    //Make sure that we clear and create rules for any open Actions.
+                    if(action.getWorkflowState().equals(WorkflowState.OPEN)) {
+                        Event savedAction = persistenceService.find(Event.class, id);
+                        ruleService.clearEscalationRulesForEvent(id);
+                        ruleService.createApplicableQueueItems(savedAction);
+                    }
                 }
             }
 
@@ -311,7 +320,19 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
         for (CriteriaResult result : event.getResults()) {
             for (Event action : result.getActions()) {
                 if(action.isNew()) {
-                    persistenceService.save(action);
+                    Long id = persistenceService.save(action);
+
+                    if(action.getWorkflowState().equals(WorkflowState.OPEN)) {
+                        //Once the Action has been successfully saved, we want to create any necessary Queue Items if it
+                        //is OPEN.
+                        Event newAction = persistenceService.find(Event.class, id);
+                        ruleService.createApplicableQueueItems(newAction);
+                    }
+                } else {
+                    //Since Actions may have been changed since they were added, we'll make sure that we update the
+                    //queue for them... just to be safe.
+                    ruleService.clearEscalationRulesForEvent(action.getId());
+                    ruleService.createApplicableQueueItems(action);
                 }
             }
         }
@@ -330,6 +351,23 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
         addActionNotifications(event);
 
         event = persistenceService.update(event);
+
+        //Since things have changed in the Event, we may have invalidated one or more rules. Either way, the chances
+        //that the JSON stored in the Queue for this event being out of date is pretty high, so we're going to want
+        //to update the JSON, anyways.  Best way to do that is to delete everything and start again.  We'll do this
+        //after the event saves successfully... otherwise there's not much point in doing this work... it would be for
+        //an event not found in the DB.
+
+        //FIXME This is where the problem is and it's ONLY in Java 8u20.
+        //When we move away from 8u20, you can remove the updateEvent overrides from the following classes and
+        //uncomment the two lines below:
+        // - PlaceEventCreationService
+        // - ThingEventCreationService
+        // - ProcedureAuditEventCreationService
+
+//        ruleService.clearEscalationRulesForEvent(trainingWheels.getId());
+//        ruleService.createApplicableQueueItems(trainingWheels);
+
         postUpdateEvent(event, fileData);
         processUploadedFiles(event, attachments);
 
