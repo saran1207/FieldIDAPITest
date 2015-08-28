@@ -739,14 +739,30 @@ public class EventService extends FieldIdPersistenceService {
         return schedules;
     }
 
+    private static final String EVENT_MOD_DATE_SQL = "SELECT modified FROM events WHERE id = :id";
+
+    /**
+     * Break the rules and query a table with raw SQL, because we only want the modified date from a single table,
+     * rather than enact a join across multiple tables.  This date is compared against a date provided in the
+     * eventModDate parameter to determine whether or not the cached Event data is current.  If not, we'll need to
+     * refresh the cached data.
+     *
+     * This method is only used by the back-end during processing of Escalation Rules.
+     *
+     * @param eventId - A Long representing the ID of the Event you want the modified date for.
+     * @param eventModDate - A Date representing the modified date you're hoping the Event still has.
+     * @return A boolean result indicating whether (true) or not (false) the event has been modified since the provided Date.
+     */
     public boolean isEventDataCurrent(Long eventId, Date eventModDate) {
-        QueryBuilder<Event> modDateQuery = createTenantSecurityBuilder(Event.class);
-        modDateQuery.addSimpleWhere("id", eventId);
-        modDateQuery.setSimpleSelect("modified");
+        //The problem here is that we're using a query builder.  These are fantastic if you want to get back all of
+        //the data.  We care only about the modified field on an Event, so the best way to do this is going to be via
+        //handcrafted SQL.  The interest here is in making a fast query.  We're operating in essentially tenant-agnostic
+        //mode, anyways.
+        Date currentModDate = (Date)getEntityManager().createNativeQuery(EVENT_MOD_DATE_SQL)
+                                                      .setParameter("id", eventId)
+                                                      .getSingleResult();
 
-        Date currentModDate = modDateQuery.getSingleResult(getEntityManager()).getModified();
-
-        return eventModDate.equals(currentModDate);
+        return currentModDate.equals(eventModDate);
     }
 }
 

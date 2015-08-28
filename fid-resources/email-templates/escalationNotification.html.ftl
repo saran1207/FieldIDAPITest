@@ -221,8 +221,10 @@
                     <td width="100%" colspan="3" align="center" class="pad-the-top-big">
 					<#if assignedGroupName??>
                         <h1 class="capitalize-text">ASSIGNED TO ${assignedGroupName}</h1>
-					<#else>
+					<#elseif assigneeName??>
                         <h1>ASSIGNED TO ${assigneeName}</h1>
+					<#else>
+						<h1>UNASSIGNED</h1>
 					</#if>
                     </td>
                 </tr>
@@ -306,7 +308,7 @@
                                         <table cellpadding="0" cellspacing="0" border="0" align="center" width="200" height="50">
                                             <tr>
                                                 <td bgcolor="#51A3FF" align="center" class="login-border" width="200" height="50">
-                                                    <a target='_blank' href="${performEventUrlMap.get(event.id)}" class='link2'>Perform This Event Now</a>
+                                                    <a target='_blank' href="${performEventURL}" class='link2'>Perform This Event Now</a>
                                                 </td>
                                             </tr>
                                         </table>

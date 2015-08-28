@@ -21,6 +21,8 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
 import rfid.web.helper.SessionUser;
 
+import java.util.List;
+
 
 public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
 
@@ -67,7 +69,7 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
 
         Link escalationRuleLink = new Link("createRule") {
             @Override public void onClick() {
-                setResponsePage(new CreateRulePage(model.getObject()));
+                setResponsePage(new CreateRulePage(model.getObject(), getResultIdList()));
             }
         };
         escalationRuleLink.setVisible(model.getObject().getWorkflowState().equals(WorkflowStateCriteria.OPEN));
@@ -102,6 +104,8 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
 
         initializeLimits();
     }
+
+    protected abstract List<Long> getResultIdList();
 
     @Override
     protected void updateMenuBeforeRender(EventReportCriteria criteria) {

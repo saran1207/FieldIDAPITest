@@ -6,7 +6,6 @@ import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
-import javolution.io.Struct;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -130,7 +129,7 @@ public class AssignmentEscalationRule extends ArchivableEntityWithTenant {
         this.escalateToUserGroup = null;
     }
 
-    public Boolean getNotifyAssignee() {
+    public Boolean isNotifyAssignee() {
         return notifyAssignee;
     }
 

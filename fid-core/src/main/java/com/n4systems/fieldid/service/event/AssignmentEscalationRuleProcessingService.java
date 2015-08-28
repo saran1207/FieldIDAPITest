@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.service.event;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.escalationrule.AssignmentEscalationRuleService;
@@ -16,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
-import java.util.HashMap;
+import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -58,15 +57,12 @@ public class AssignmentEscalationRuleProcessingService extends FieldIdPersistenc
      */
     @Transactional
     public void processQueue() {
-
-        //Step 1: Get a list of ALL expired Queue items.  These have already been sorted by Tenant ID to make things
-        //        easier and potentially stop us from skipping all over the place with the Security Context.  I just
-        //        find that silly.
-
+        //Get a list of ALL expired Queue items.  These have already been sorted by Tenant ID to make things
+        //easier and potentially stop us from skipping all over the place with the Security Context.  I just
+        //find that silly.
         List<EscalationRuleExecutionQueueItem> queueItems = ruleService.getQueueItemsForProcessing();
 
         processItems(queueItems);
-
     }
 
     /**
@@ -97,9 +93,10 @@ public class AssignmentEscalationRuleProcessingService extends FieldIdPersistenc
 
                 ruleService.updateQueueItem(item);
             } catch (IOException e) {
-//                logger.error(MessageFormat.format(JSON_PROCESSING_ERROR, item.getRule().getId()), e);
+                logger.error(MessageFormat.format(JSON_PROCESSING_ERROR, item.getRule().getId()), e);
             } catch (MessagingException e) {
-//                logger.error(MessageFormat.format(MAIL_SERVICE_ERROR, item.getRule().getId()), e);
+                logger.error(MessageFormat.format(MAIL_SERVICE_ERROR, item.getRule().getId()), e);
+                e.printStackTrace();
             }
         }
     }
@@ -118,7 +115,11 @@ public class AssignmentEscalationRuleProcessingService extends FieldIdPersistenc
         if(item.getRule().getReassignUser() != null) {
             event = persistenceService.find(Event.class, item.getEventId());
             event.setAssignee(item.getRule().getReassignUser());
-            persistenceService.update(event);
+            event = persistenceService.update(event);
+        } else if(item.getRule().getReassignToUserGroup() != null) {
+            event = persistenceService.find(Event.class, item.getEventId());
+            event.setAssignedGroup(item.getRule().getReassignToUserGroup());
+            event = persistenceService.update(event);
         }
 
         //Do this later after we make any other necessary changes to the event that may change the display, such
@@ -142,15 +143,15 @@ public class AssignmentEscalationRuleProcessingService extends FieldIdPersistenc
      * @return A TemplateMailMessage populated with values from the Queue Item.
      * @throws IOException if the JSON couldn't be properly unmarshalled into a list or if Skynet has gone live.
      */
+    @SuppressWarnings("unchecked") //'cuz I know better than Java
     private TemplateMailMessage createMailMessage(EscalationRuleExecutionQueueItem item) throws IOException {
         //We'll need to convert that JSON to a list.  This could potentially cause an IO Exception and we'll
         //have to bail out, never marking that item as processed.
         ObjectMapper unmarshaller = new ObjectMapper();
         Map<String, Object> mailContents =
-                unmarshaller.readValue(item.getMapJson(),
-                        new TypeReference<HashMap<String,String>>(){});
+                unmarshaller.readValue(item.getMapJson(), Map.class);
 
-        mailContents.put("messageBody", item.getRule().getCustomMessageText());
+        mailContents.put("messageBody", item.getRule().getCustomMessageText() == null ? "" : item.getRule().getCustomMessageText());
 
         TemplateMailMessage msg = new TemplateMailMessage(item.getRule().getSubjectText(),
                                                           ESCALATION_NOTIFICATION_TEMPLATE) {
@@ -168,7 +169,17 @@ public class AssignmentEscalationRuleProcessingService extends FieldIdPersistenc
         };
 
         msg.getToAddresses().add(item.getRule().getEscalateToUser().getEmailAddress());
-        msg.setCcAddresses(new HashSet<>(item.getRule().getAdditionalEmailsList()));
+        if(item.getRule().getAdditionalEmails() != null && !item.getRule().getAdditionalEmails().isEmpty()) {
+            msg.setCcAddresses(new HashSet<>(item.getRule().getAdditionalEmailsList()));
+        }
+
+        if(item.getRule().isNotifyAssignee()) {
+            if(mailContents.get("assigneeEmail") != null) {
+                msg.getToAddresses().add((String)mailContents.get("assigneeEmail"));
+            } else if(mailContents.get("assignedGroupEmails") != null) {
+                msg.getToAddresses().addAll((List<String>)mailContents.get("assignedGroupEmails"));
+            }
+        }
 
         msg.getTemplateMap().putAll(mailContents);
 
