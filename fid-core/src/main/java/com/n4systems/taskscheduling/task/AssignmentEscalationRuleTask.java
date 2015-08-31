@@ -18,7 +18,6 @@ public class AssignmentEscalationRuleTask extends ScheduledTask {
 
     @Override
     protected void runTask() throws Exception {
-        long startTime = System.currentTimeMillis();
         ServiceLocator.getAssignmentEscalationRuleProcessingService().processQueue();
     }
 }

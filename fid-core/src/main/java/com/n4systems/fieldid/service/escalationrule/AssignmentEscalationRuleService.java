@@ -592,6 +592,7 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
      *
      * @param eventId - A Long representing the ID of an Event which has one or more Queue Items for processing.
      */
+    @Transactional
     public void clearEscalationRulesForEvent(Long eventId) {
         Query deleteQuery = getEntityManager().createNativeQuery(CLEAR_RULES_FOR_EVENT_SQL);
         deleteQuery.setParameter("eventId", eventId);
