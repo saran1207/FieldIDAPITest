@@ -20,6 +20,7 @@ import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.EmailTextField;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
@@ -60,7 +61,7 @@ public class UserFormIdentifiersPanel extends Panel {
                 new PropertyModel<List<UserGroup>>(user, "groups"),
                 userGroupService.getActiveUserGroups(),
                 new ListableChoiceRenderer<UserGroup>()).setVisible(!user.getObject().isPerson()));
-        add(new RequiredTextField<String>("email", new PropertyModel<String>(user, "emailAddress")));
+        add(new EmailTextField("email", new PropertyModel<String>(user, "emailAddress")).setRequired(true));
         add(new RequiredTextField<String>("firstname", new PropertyModel<String>(user, "firstName")));
         add(new RequiredTextField<String>("lastname", new PropertyModel<String>(user, "lastName")));
         add(new TextField<String>("initials", new PropertyModel<String>(user, "initials")));

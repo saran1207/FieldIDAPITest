@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.service.escalationrule;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.download.SystemUrlUtil;
@@ -14,7 +14,6 @@ import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.model.utils.PlainDate;
-import com.n4systems.util.FieldIdDateFormatter;
 import com.n4systems.util.mail.EventUrlUtil;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
@@ -22,8 +21,12 @@ import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.search.SortDirection;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -37,8 +40,12 @@ import java.util.stream.Collectors;
  * Created by Jordan Heath on 2015-08-18.
  */
 public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
+    private static final Logger logger = Logger.getLogger(AssignmentEscalationRuleService.class);
     private static final String RULE_RESET_BY_EVENT_ID_SQL = "UPDATE escalation_rule_execution_queue SET rule_has_run = 0 WHERE event_id = :eventId";
     private static final String CLEAR_RULES_FOR_EVENT_SQL = "DELETE FROM escalation_rule_execution_queue WHERE event_id = :eventId";
+
+    private static final SimpleDateFormat DATETIME_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
+    private static final SimpleDateFormat ALL_DAY_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
 
     public List<AssignmentEscalationRule> getAllActiveRules() {
         QueryBuilder<AssignmentEscalationRule> builder = createUserSecurityBuilder(AssignmentEscalationRule.class);
@@ -57,56 +64,16 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
     }
 
     public void updateRule(AssignmentEscalationRule rule, Long oldDateRange) {
-        if(oldDateRange == rule.getOverdueQuantity()) {
-            persistenceService.update(rule);
-        } else {
-            //We need to version it now because the date range has changed
-            AssignmentEscalationRule newRule = copyRule(rule);
-            saveRule(newRule);
+        //To make things as simple as possible, we will simply update the existing Queue items.  This allows us to
+        //avoid running the search that backs the rule, which can take a significant amount of time to run compared to
+        //this update which SHOULD be rather quick.
+        rule = persistenceService.update(rule);
+        if(oldDateRange.longValue() != rule.getOverdueQuantity().longValue()) {
+            long difference = oldDateRange - rule.getOverdueQuantity();
 
-            //We need to archive this one
-            rule.setOverdueQuantity(oldDateRange);
-            archiveRule(rule);
+            updateNotificationDateInQueue(rule, difference);
         }
     }
-
-    public AssignmentEscalationRule copyRule(AssignmentEscalationRule oldRule) {
-        AssignmentEscalationRule returnMe = new AssignmentEscalationRule();
-
-        returnMe.setType(oldRule.getType());
-        returnMe.setEventTypeGroup(oldRule.getEventTypeGroup());
-        returnMe.setEventType(oldRule.getEventType());
-        returnMe.setAssetStatus(oldRule.getAssetStatus());
-        returnMe.setAssetTypeGroup(oldRule.getAssetTypeGroup());
-        returnMe.setAssignedTo(oldRule.getAssignedTo());
-        returnMe.setAssignee(oldRule.getAssignee());
-        returnMe.setOwner(oldRule.getOwner());
-        returnMe.setLocation(oldRule.getLocation());
-        returnMe.setRfidNumber(oldRule.getRfidNumber());
-
-        returnMe.setSerialNumber(oldRule.getSerialNumber());
-
-        returnMe.setReferenceNumber(oldRule.getReferenceNumber());
-        returnMe.setOrderNumber(oldRule.getOrderNumber());
-        returnMe.setPurchaseOrder(oldRule.getPurchaseOrder());
-
-        returnMe.setTenant(getCurrentTenant());
-        returnMe.setOwner(getCurrentUser().getOwner());
-        returnMe.setCreatedBy(getCurrentUser());
-
-        //Rule info
-        returnMe.setRuleName(oldRule.getRuleName());
-        returnMe.setOverdueQuantity(oldRule.getOverdueQuantity());
-        returnMe.setEscalateToUser(oldRule.getEscalateToUser());
-        returnMe.setReassignUser(oldRule.getReassignUser());
-        returnMe.setNotifyAssignee(oldRule.getNotifyAssignee());
-        returnMe.setAdditionalEmails(oldRule.getAdditionalEmails());
-        returnMe.setSubjectText(oldRule.getSubjectText());
-        returnMe.setCustomMessageText(oldRule.getCustomMessageText());
-
-        return returnMe;
-    }
-    private static final Logger logger = Logger.getLogger(AssignmentEscalationRuleService.class);
 
     /**
      * This method simply grabs the AssignmentEscalationRule object by its provided eventId.
@@ -197,8 +164,36 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
      * @param eventIdList - A List populated with Longs, representing the ID of all Events initially affected.
      * @param rule - An AssignmentEscalationRule representing the Rule which affects the provided Events.
      */
+    @Transactional
     public void initializeRule(List<Long> eventIdList, AssignmentEscalationRule rule) {
         eventIdList.forEach(eventId -> writeQueueItem(eventId, rule));
+    }
+
+    /**
+     * Update the NotificationDate on all Queue Items for the given Rule.  We don't need to know a terrible amount, only
+     * if the queue items are related to the rule.  We'll also update ones that have already fired, just in case they
+     * get reset later.
+     *
+     * The updated time is applied by adding the difference between the old and new Overdue Quantities to the Notify
+     * Date field on the Queue Item.
+     *
+     * @param rule - An AssignmentEscalationRule that has had its
+     * @param difference - A long value representing the difference between the old and new Overdue amounts.
+     */
+    private void updateNotificationDateInQueue(AssignmentEscalationRule rule, long difference) {
+        QueryBuilder<EscalationRuleExecutionQueueItem> query = createUserSecurityBuilder(EscalationRuleExecutionQueueItem.class);
+        query.addSimpleWhere("rule", rule);
+
+        List<EscalationRuleExecutionQueueItem> results = persistenceService.findAll(query);
+
+        results.forEach(queueItem -> {
+            Date correctedDate = new Date(queueItem.getNotifyDate().getTime() + difference);
+            queueItem.setNotifyDate(correctedDate);
+
+            //Set the rule as not having run, so it can run again... this may not be ideal, but we'll see.
+            queueItem.setRuleHasRun(false);
+            persistenceService.update(queueItem);
+        });
     }
 
     /**
@@ -214,18 +209,31 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
 
         Event event = persistenceService.find(Event.class, eventId);
 
-        Long timeChanger = event.getDueDate().getTime();
-        timeChanger += rule.getOverdueQuantity();
+        //At this point, we double check that we don't have what amounts to shitty data.
+        //Event should:
+        // - be in OPEN workflow state
+        // - must HAVE a DueDate
+        // - DueDate must be after NOW
+        // - I think that's it.
 
-        queueItem.setNotifyDate(new Date(timeChanger));
+        if(event.getWorkflowState().equals(WorkflowState.OPEN) &&
+                event.getDueDate() != null &&
+                event.getDueDate().after(new Date(System.currentTimeMillis()))) {
+            Long timeChanger = event.getDueDate().getTime();
+            timeChanger += rule.getOverdueQuantity();
 
-        queueItem.setEventId(eventId);
-        queueItem.setEventModDate(event.getModified());
-        queueItem.setRuleHasRun(false);
+            queueItem.setNotifyDate(new Date(timeChanger));
 
-        queueItem.setMapJson(generateEventMapJSON(event));
+            queueItem.setEventId(eventId);
+            queueItem.setEventModDate(event.getModified());
+            queueItem.setRuleHasRun(false);
 
-        persistenceService.save(queueItem);
+            queueItem.setRule(rule);
+
+            queueItem.setMapJson(generateEventMapJSON(event));
+
+            persistenceService.save(queueItem);
+        }
     }
 
     /**
@@ -240,15 +248,20 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
         Map<String, Object> eventMap = createMap(event);
 
         ObjectMapper jsonMaker = new ObjectMapper();
-        String json = null;
+        jsonMaker.enableDefaultTyping(ObjectMapper.DefaultTyping.JAVA_LANG_OBJECT);
+        StringWriter json = new StringWriter();
 
         try {
-            json = jsonMaker.writeValueAsString(eventMap);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            JsonGenerator generator = jsonMaker.getFactory().createGenerator(json);
+
+            jsonMaker.writeValue(generator, eventMap);
+
+            return json.toString();
+        } catch (IOException e) {
+            logger.error("Unable to create JSON for Event with ID " + event.getId());
         }
 
-        return json;
+        return null;
     }
 
     /**
@@ -264,18 +277,18 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
         //Essential Fields - No matter the Event Type, we need these.
         returnMe.put("systemUrl", SystemUrlUtil.getSystemUrl(event.getTenant()));
         returnMe.put("dueDate", createDueDateString(event));
-        returnMe.put("performEventURL", event.getType().isActionEventType() ? null : EventUrlUtil.createPerformEventUrl(event));
+        returnMe.put("performEventURL", EventUrlUtil.createPerformEventUrl(event));
         returnMe.put("eventSummaryURL", EventUrlUtil.createEventSummaryUrl(event));
         returnMe.put("isThingEvent", event.getType().isThingEventType());
         returnMe.put("isPlaceEvent", event.getType().isPlaceEventType());
         returnMe.put("isAuditEvent", event.getType().isProcedureAuditEventType());
         returnMe.put("isAction", event.getType().isActionEventType());
         returnMe.put("assigneeEmail", event.getAssignee() != null ? event.getAssignee().getEmailAddress() : null);
-        returnMe.put("assigneeName", event.getAssignee().getDisplayName());
+        returnMe.put("assigneeName", event.getAssignee() != null ? event.getAssignee().getDisplayName() : null);
         returnMe.put("assignedGroupEmails", event.getAssignedGroup() != null ? createEmailList(event.getAssignedGroup()) : null);
         returnMe.put("assignedGroupName", event.getAssignedGroup() != null ? event.getAssignedGroup().getDisplayName() : null);
         returnMe.put("eventType", event.getType().getDisplayName());
-        returnMe.put("showLinks", !event.getAssignee().isPerson()); //Not sure if this one is entirely necessary, but it might be.
+        returnMe.put("showLinks", (event.getAssignee() != null && !event.getAssignee().isPerson()) || event.getAssignedGroup() != null); //Not sure if this one is entirely necessary, but it might be.
 
 
 
@@ -316,6 +329,13 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
         return returnMe;
     }
 
+    /**
+     * This method converts a UserGroup into a list of email addresses for use in creating the Escalation Notification
+     * email.
+     *
+     * @param assignedGroup - A UserGroup representing the group assigned to the Event.
+     * @return A List of Strings representing the group members' collective email addresses.
+     */
     private List<String> createEmailList(UserGroup assignedGroup) {
         return assignedGroup.getMembers()
                             .stream()
@@ -333,7 +353,12 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
     private String createDueDateString(Event event) {
         Date dueDate = event.getDueDate();
         boolean showTime = !new PlainDate(dueDate).equals(dueDate);
-        return new FieldIdDateFormatter(dueDate, event.getAssignee(), false, showTime).format();
+
+        if(showTime) {
+            return DATETIME_FORMAT.format(event.getDueDate());
+        } else {
+            return ALL_DAY_DATE_FORMAT.format(event.getDueDate());
+        }
     }
 
     /**
@@ -397,6 +422,8 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
      * You will typically want to call this method when you have edited the due date of the Event in question.  This
      * can impact rule execution in such a way that one or more escalation rules may need to be reset, so they can be
      * executed the next time the Event isn't completed in time.
+     *
+     * TODO We may not need this anymore... if that's the case, delete it.
      *
      * @param eventId - A Long representing the ID of the Event for which you want to reset all rules.
      * @return True if the reset was successful (ie. the Query didn't explode) and False if there was any kind of problem.
@@ -471,6 +498,8 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
      *
      * This method is used during stream processing of a query for all active Rules for a given tenant.
      *
+     * I know... it's hideous.
+     *
      * @param rule - An AssignmentEscalationRule entity representing an ACTIVE Rule.
      * @param event - An Event entity representing the Event for which we want to determine if the Rule applies.
      * @return A boolean response indicating whether (true) or not (false) the Rule applies to the Event.
@@ -527,7 +556,7 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
                 return false;
             }
 
-            if((rule.getFreeformLocation() != null || rule.getLocation() != null) && event.getAdvancedLocation() == null) {
+            if((rule.getFreeformLocation() != null || rule.getLocation() != null) && event.getAdvancedLocation() != null) {
                 return false;
             } else {
                 if(rule.getFreeformLocation() != null && !rule.getFreeformLocation().equalsIgnoreCase(((ThingEvent) event).getAsset().getAdvancedLocation().getFreeformLocation())) {

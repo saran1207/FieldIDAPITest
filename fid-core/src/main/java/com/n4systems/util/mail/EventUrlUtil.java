@@ -139,13 +139,13 @@ public class EventUrlUtil {
     public static String createEventSummaryUrl(Event event) {
         String returnMe = null;
         if(event instanceof ThingEvent) {
-            returnMe = SystemUrlUtil.getSystemUrl(event.getTenant()) + THING_EVENT_SUMMARY_URL_FRAGMENT + event.getTriggerEvent().getId().toString();
+            returnMe = SystemUrlUtil.getSystemUrl(event.getTenant()) + THING_EVENT_SUMMARY_URL_FRAGMENT + event.getId().toString();
         } else
         if(event instanceof PlaceEvent) {
-            returnMe = SystemUrlUtil.getSystemUrl(event.getTenant()) + PLACE_EVENT_SUMMARY_URL_FRAGMENT + event.getTriggerEvent().getId().toString();
+            returnMe = SystemUrlUtil.getSystemUrl(event.getTenant()) + PLACE_EVENT_SUMMARY_URL_FRAGMENT + event.getId().toString();
         } else
         if(event instanceof ProcedureAuditEvent) {
-            returnMe = SystemUrlUtil.getSystemUrl(event.getTenant()) + PROC_AUDIT_EVENT_SUMMARY_URL_FRAGMENT + event.getTriggerEvent().getId().toString();
+            returnMe = SystemUrlUtil.getSystemUrl(event.getTenant()) + PROC_AUDIT_EVENT_SUMMARY_URL_FRAGMENT + event.getId().toString();
         }
         return returnMe;
     }

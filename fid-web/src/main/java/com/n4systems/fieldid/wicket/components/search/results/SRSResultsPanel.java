@@ -214,4 +214,9 @@ public abstract class SRSResultsPanel<T extends SearchCriteria, S extends HasGps
         response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false", GoogleMap.GOOGLE_MAP_API_ID);
         response.renderJavaScriptReference("javascript/googleMaps.js", GoogleMap.GOOGLE_MAPS_JS_ID);
     }
+
+    @SuppressWarnings("unchecked") //Shhhhh... it's a secret.
+    public List<Long> getAllSearchResultIds() {
+        return provider.getIdList();
+    }
 }

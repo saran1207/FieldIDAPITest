@@ -23,6 +23,8 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.util.List;
+
 public class ReportPage extends AbstractSearchPage<EventReportCriteria> {
 
     private @SpringBean SavedReportService savedReportService;
@@ -70,6 +72,9 @@ public class ReportPage extends AbstractSearchPage<EventReportCriteria> {
             }
             @Override protected IModel<String> getHeaderModel() {
                 return new PropertyModel<String>(savedItem, "name");
+            }
+            @Override protected List<Long> getResultIdList() {
+                return ((ReportResultsPanel) resultsPanel).getAllSearchResultIds();
             }
         };
     }

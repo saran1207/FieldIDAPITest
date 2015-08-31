@@ -37,6 +37,7 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
     protected SavedItem<T> savedItem;
     protected T searchCriteria;
     protected Component searchMenu;
+    protected Component resultsPanel;
     protected boolean showLeftPanel;
 
     @SpringBean
@@ -62,7 +63,7 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
 
     private void addComponents() {
         Model<T> criteriaModel = new Model<T>(searchCriteria);
-        Component resultsPanel = createResultsPanel(RESULTS_PANEL_ID, criteriaModel, isShowBlankSlate());
+        resultsPanel = createResultsPanel(RESULTS_PANEL_ID, criteriaModel, isShowBlankSlate());
         add(resultsPanel);
 
         final Component searchConfigPanel = createCriteriaPanel(FieldIDFrontEndPage.LEFT_PANEL_ID, criteriaModel);

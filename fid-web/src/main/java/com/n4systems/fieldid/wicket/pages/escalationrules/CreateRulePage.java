@@ -46,10 +46,12 @@ public class CreateRulePage extends FieldIDTemplatePage {
     protected FIDFeedbackPanel feedbackPanel;
 
     private List<String> emailList;
+    private List<Long> idList;
 
-    public CreateRulePage(EventReportCriteria criteria) {
+    public CreateRulePage(EventReportCriteria criteria, List<Long> idList) {
         reportCriteria = criteria;
         rule = assignmentEscalationRuleService.createRule(reportCriteria);
+        this.idList = idList;
         add(new SaveRuleForm("saveRuleForm", null));
     }
 
@@ -164,6 +166,9 @@ public class CreateRulePage extends FieldIDTemplatePage {
             //rule.setOverdueQuantity(RulesDateRange.valueOf(overdueBy.getValue()).getMilliValue());
             if(validateFields()) {
                 assignmentEscalationRuleService.saveRule(rule);
+
+                //New rule, so now we call this to create the rows for Escalation notifications.
+                assignmentEscalationRuleService.initializeRule(idList, rule);
                 setResponsePage(new ManageEscalationRules());
             }
         }
