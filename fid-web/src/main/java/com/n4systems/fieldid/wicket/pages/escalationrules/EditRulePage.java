@@ -2,7 +2,6 @@ package com.n4systems.fieldid.wicket.pages.escalationrules;
 
 import com.n4systems.fieldid.service.escalationrule.AssignmentEscalationRuleService;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
-import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.user.AssignedUserOrGroupSelect;
@@ -28,6 +27,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.StringValidator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static ch.lambdaj.Lambda.on;
@@ -64,8 +64,6 @@ public class EditRulePage extends FieldIDTemplatePage {
 
         public SaveRuleForm(String id, Long savedItemId) {
             super(id);
-
-            addBlankEmailIfEmptyAddressList(rule);
 
             add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
 
@@ -107,19 +105,24 @@ public class EditRulePage extends FieldIDTemplatePage {
             add(emailAddressesContainer);
 
             emailList = rule.getAdditionalEmailsList();
+            if(emailList == null) {
+                emailList = new ArrayList<>();
+                emailList.add("");
+            }
 
             emailAddressesContainer.add(new ListView<String>("emailAddresses", new PropertyModel<List<String>>(EditRulePage.this, "emailList")) {
                 @Override
                 protected void populateItem(final ListItem<String> item) {
-                    TextField<String> addressField = new TextField<String>("address", item.getModel());
+                    EmailTextField addressField = new EmailTextField("address", item.getModel());
                     addressField.add(new UpdateComponentOnChange() {
                         @Override
                         protected void onUpdate(AjaxRequestTarget target) {
                             target.add(feedbackPanel);
                         }
                     });
-                    ValidationBehavior.addValidationBehaviorToComponent(addressField);
-                    addressField.add(new StringValidator.MaximumLengthValidator(255));
+                    //ValidationBehavior.addValidationBehaviorToComponent(addressField);
+                    //addressField.add(new StringValidator.MaximumLengthValidator(255));
+                    addressField.setRequired(true);
                     item.add(addressField);
                     item.add(new AjaxLink("deleteLink") {
                         @Override
