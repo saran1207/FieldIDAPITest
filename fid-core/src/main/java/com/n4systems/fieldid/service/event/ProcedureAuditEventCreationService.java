@@ -43,6 +43,22 @@ public class ProcedureAuditEventCreationService extends EventCreationService<Pro
         return trainingWheels;
     }
 
+    /**
+     * This override was necessary because of some strange problems with Java 8u20.  Since production uses this version
+     * of Java, it's better to play safe than be sorry on deployment night.
+     */
+    @Override
+    public ProcedureAuditEvent createEventWithSchedules(ProcedureAuditEvent event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle<ProcedureDefinition>> schedules) {
+        event = super.createEventWithSchedules(event, scheduleId, fileData, uploadedFiles, schedules);
+
+        ruleService.clearEscalationRulesForEvent(event.getId());
+        if(event.getWorkflowState().equals(WorkflowState.OPEN)) {
+            ruleService.createApplicableQueueItems(event);
+        }
+
+        return event;
+    }
+
     @Override
     protected void preUpdateEvent(ProcedureAuditEvent event, FileDataContainer fileData) {
     }

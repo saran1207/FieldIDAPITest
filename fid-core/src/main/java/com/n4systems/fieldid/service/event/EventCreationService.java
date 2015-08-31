@@ -43,6 +43,7 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
     @Autowired protected AssignmentEscalationRuleService ruleService;
 
     @Transactional
+    @SuppressWarnings("unchecked")
     public T createEventWithSchedules(T event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle<V>> schedules) {
         T savedEvent = createEvent(event, scheduleId, fileData, uploadedFiles);
         for (EventScheduleBundle<V> eventScheduleBundle : schedules) {

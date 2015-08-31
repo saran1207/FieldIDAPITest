@@ -56,6 +56,22 @@ public class PlaceEventCreationService extends EventCreationService<PlaceEvent, 
         return trainingWheels;
     }
 
+    /**
+     * See above.  The only reason for this Override is because of some weird issue with Java 8u20, which at the time
+     * of writing this was the Java version in Production.  Best not to take chances with this.
+     */
+    @Override
+    public PlaceEvent createEventWithSchedules(PlaceEvent event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle<BaseOrg>> schedules) {
+        event = super.createEventWithSchedules(event, scheduleId, fileData, uploadedFiles, schedules);
+
+        ruleService.clearEscalationRulesForEvent(event.getId());
+        if(event.getWorkflowState().equals(WorkflowState.OPEN)) {
+            ruleService.createApplicableQueueItems(event);
+        }
+
+        return event;
+    }
+
     @Override
     protected void doSaveSchedule(PlaceEvent openEvent) {
         nextEventScheduleService.createNextSchedule(openEvent);
