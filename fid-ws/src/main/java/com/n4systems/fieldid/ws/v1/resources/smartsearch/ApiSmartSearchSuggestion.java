@@ -7,13 +7,15 @@ public class ApiSmartSearchSuggestion {
 	private String customerRefNumber;
 	private Integer fieldLength;
     private String rfidNumber;
+    private String ownerName;
 
-    public ApiSmartSearchSuggestion(String sid, String type, String identifier, String rfidNumber,String customerRefNumber, Integer fieldLength) {
+    public ApiSmartSearchSuggestion(String sid, String type, String identifier, String rfidNumber,String customerRefNumber, String ownerName, Integer fieldLength) {
 		this.sid = sid;
 		this.type = type;
 		this.identifier = identifier;
         this.rfidNumber = rfidNumber;
 		this.customerRefNumber = customerRefNumber;
+        this.ownerName = ownerName;
 		this.fieldLength = fieldLength;
 	}
 
@@ -53,7 +55,15 @@ public class ApiSmartSearchSuggestion {
 		this.customerRefNumber = customerRefNumber;
 	}
 
-	public Integer getFieldLength() {
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public Integer getFieldLength() {
 		return fieldLength;
 	}
 

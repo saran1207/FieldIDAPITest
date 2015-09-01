@@ -6,6 +6,8 @@ import com.n4systems.model.location.PredefinedLocationLevels;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.Path;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @Path("location")
@@ -40,4 +42,12 @@ public class ApiPredefinedLocationResource extends SetupDataResourceReadOnly<Api
 		return apiLocation;
 	}
 
+    @Override
+    protected List<ApiPredefinedLocation> convertAllEntitiesToApiModels(List<PredefinedLocation> entityModels) {
+        return super.convertAllEntitiesToApiModels(entityModels)
+                    .stream()
+                    .sorted((location1, location2) ->
+                                Integer.compare(location1.getSearchIds().size(), location2.getSearchIds().size()))
+                    .collect(Collectors.toList());
+    }
 }
