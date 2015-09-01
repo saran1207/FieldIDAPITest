@@ -11,6 +11,7 @@ import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.utils.AssetEvent;
 import com.n4systems.tools.FileDataContainer;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;

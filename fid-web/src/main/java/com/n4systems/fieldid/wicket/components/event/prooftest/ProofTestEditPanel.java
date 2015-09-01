@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.event.prooftest;
 
 import com.n4systems.exceptions.ProcessingProofTestException;
+import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fileprocessing.ProofTestType;
@@ -90,7 +91,7 @@ public class ProofTestEditPanel extends FormComponentPanel<ThingEventProofTest> 
             final List<ProofTestType> proofTestTypes = new ArrayList<ProofTestType>(eventType.getSupportedProofTests());
 
             final boolean multipleProofTypes = proofTestTypes.size() > 1;
-            DropDownChoice<ProofTestType> typeSelect = new DropDownChoice<ProofTestType>("proofTestType", new PropertyModel<ProofTestType>(proofTestModel, "proofTestType"), proofTestTypes, new ListableLabelChoiceRenderer<ProofTestType>()) {
+            DropDownChoice<ProofTestType> typeSelect = new FidDropDownChoice<ProofTestType>("proofTestType", new PropertyModel<ProofTestType>(proofTestModel, "proofTestType"), proofTestTypes, new ListableLabelChoiceRenderer<ProofTestType>()) {
                 @Override public boolean isVisible() {
                     return multipleProofTypes;
                 }

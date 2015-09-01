@@ -6,26 +6,35 @@
     </div>
 
     <div wicket:id="proofTestDetailsPanel">
-        <select wicket:id="proofTestType"/>
+        <div class="control-group">
+            <label class="label">&nbsp;</label>
+            <select wicket:id="proofTestType"/>
+        </div>
         <label class="label" wicket:id="proofTestTypeLabel"/>
 
-
-        <div class="proof-test-upload" wicket:id="uploadedProofTestContainer">
+        <div class="proof-test-upload control-group" wicket:id="uploadedProofTestContainer">
+            <label class="label">&nbsp;</label>
             <input type="file" wicket:id="fileUpload">
         </div>
 
-        <div class="proofTestManual" wicket:id="otherProofTestContainer" style="clear:both; padding-bottom:15px;">
+        <section class="proof-test-manual" wicket:id="otherProofTestContainer" >
 
-            <label class="label"><wicket:message key="label.peakload"/></label>
-            <input type="text" wicket:id="peakLoad" class="textbox">
+            <div class="control-group">
+                <label class="label"><wicket:message key="label.peakload"/></label>
+                <input type="text" wicket:id="peakLoad" class="textbox">
+            </div>
 
-            <label class="label"><wicket:message key="label.duration"/></label>
-            <input type="text" wicket:id="duration" class="textbox">
+            <div class="control-group">
+                <label class="label"><wicket:message key="label.duration"/></label>
+                <input type="text" wicket:id="duration" class="textbox">
+            </div>
 
-            <label class="label"><wicket:message key="label.peakloadduration"/></label>
-            <input type="text" wicket:id="peakLoadDuration" class="textbox">
+            <div class="control-group">
+                <label class="label"><wicket:message key="label.peakloadduration"/></label>
+                <input type="text" wicket:id="peakLoadDuration" class="textbox">
+            </div>
 
-        </div>
+        </section>
     </div>
 
 </wicket:panel>

@@ -2,6 +2,7 @@ package com.n4systems.tools;
 
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.graphing.Chart;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.*;
 
@@ -36,7 +37,6 @@ public class FileDataContainer {
 	public FileDataContainer() {
 		chartData = Chart.newInstance();
 	}
-
 
 	public byte[] getChart() {
 		return chart;
@@ -172,6 +172,13 @@ public class FileDataContainer {
 
 	public void setPeakLoadDuration(String peakLoadDuration) {
 		this.peakLoadDuration = peakLoadDuration;
+	}
+
+	public Boolean isEmpty() {
+		return StringUtils.isEmpty(peakLoad)
+				&& StringUtils.isEmpty(testDuration)
+				&& StringUtils.isEmpty(peakLoadDuration)
+				&& fileData == null;
 	}
 	
 }
