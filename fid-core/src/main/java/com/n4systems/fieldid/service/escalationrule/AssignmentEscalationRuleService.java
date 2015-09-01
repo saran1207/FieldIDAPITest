@@ -337,6 +337,8 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
      * @return A List of Strings representing the group members' collective email addresses.
      */
     private List<String> createEmailList(UserGroup assignedGroup) {
+        //Ensure we reload this value.
+        assignedGroup = persistenceService.find(UserGroup.class, assignedGroup.getId());
         return assignedGroup.getMembers()
                             .stream()
                             .map(User::getEmailAddress)
@@ -498,6 +500,8 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
      *
      * This method is used during stream processing of a query for all active Rules for a given tenant.
      *
+     * If it wasn't for the fact that it's total overkill, DROOLS would be pretty damn usefull here.
+     *
      * I know... it's hideous.
      *
      * @param rule - An AssignmentEscalationRule entity representing an ACTIVE Rule.
@@ -556,17 +560,12 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
                 return false;
             }
 
-            if((rule.getFreeformLocation() != null || rule.getLocation() != null) && event.getAdvancedLocation() != null) {
+            if(rule.getFreeformLocation() != null && !((ThingEvent)event).getAsset().getAdvancedLocation().isBlank() && !((ThingEvent)event).getAsset().getAdvancedLocation().getFreeformLocation().equalsIgnoreCase(rule.getFreeformLocation())) {
                 return false;
-            } else {
-                if(rule.getFreeformLocation() != null && !rule.getFreeformLocation().equalsIgnoreCase(((ThingEvent) event).getAsset().getAdvancedLocation().getFreeformLocation())) {
-                    return false;
-                }
+            }
 
-                if(rule.getLocation() != null && !rule.getLocation().getPredefinedLocation().equals(((ThingEvent)event).getAsset().getAdvancedLocation().getPredefinedLocation()))
-                {
-                    return false;
-                }
+            if(rule.getLocation() != null && !((ThingEvent)event).getAsset().getAdvancedLocation().isBlank() && !rule.getLocation().getPredefinedLocation().equals(((ThingEvent) event).getAsset().getAdvancedLocation().getPredefinedLocation())) {
+                return false;
             }
         }
 
