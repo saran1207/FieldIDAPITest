@@ -564,7 +564,7 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
                 return false;
             }
 
-            if(rule.getLocation() != null && !((ThingEvent)event).getAsset().getAdvancedLocation().isBlank() && !rule.getLocation().getPredefinedLocation().equals(((ThingEvent) event).getAsset().getAdvancedLocation().getPredefinedLocation())) {
+            if(!rule.getLocation().isBlank() && !((ThingEvent)event).getAsset().getAdvancedLocation().isBlank() && !rule.getLocation().getPredefinedLocation().equals(((ThingEvent) event).getAsset().getAdvancedLocation().getPredefinedLocation())) {
                 return false;
             }
         }
