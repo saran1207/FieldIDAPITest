@@ -252,6 +252,10 @@
 		input[type="text"] {
 			text-overflow: ellipsis;
 		}
+	  	input:disabled, textarea:disabled {
+		  background: #FFFFFF none repeat scroll 0 0;
+		  border: none;
+		}
 		.timezone {
 			label {
 				float: left;
