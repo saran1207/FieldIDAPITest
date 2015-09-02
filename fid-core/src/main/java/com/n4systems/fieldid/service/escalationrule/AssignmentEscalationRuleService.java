@@ -47,22 +47,48 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
     private static final SimpleDateFormat DATETIME_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
     private static final SimpleDateFormat ALL_DAY_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
 
+    /**
+     * This method returns all of the ACTIVE rules for the current user.
+     *
+     * @return A list of AssignmentEscalationRule objects that are active for the current user.
+     */
     public List<AssignmentEscalationRule> getAllActiveRules() {
         QueryBuilder<AssignmentEscalationRule> builder = createUserSecurityBuilder(AssignmentEscalationRule.class);
+        builder.addSimpleWhere("createdBy", getCurrentUser());
         return persistenceService.findAll(builder);
     }
 
+    /**
+     * This method checks the uniqueness of the rule name for the current user.
+     *
+     * @param name - A string representing the name of the rule that we are checking uniqueness of.
+     * @return A boolean determining whether or not the name exists (true if it exists, false otherwise).
+     */
     public boolean isNameUnique(String name) {
         QueryBuilder<AssignmentEscalationRule> builder = createUserSecurityBuilder(AssignmentEscalationRule.class);
+        builder.addSimpleWhere("createdBy", getCurrentUser());
         builder.addSimpleWhere("ruleName", name);
         return persistenceService.exists(builder);
     }
 
+    /**
+     * This method archives the AssignmentEscalationRule object (soft deletes the rules).
+     *
+     * @param rule - the AssignmentEscalationRule object that will be updated
+     *
+     */
     public void archiveRule(AssignmentEscalationRule rule) {
         rule.setState(Archivable.EntityState.ARCHIVED);
         updateRule(rule);
     }
 
+    /**
+     * This method updates the AssignmentEscalationRule object and, if necessary, the email jobs that need to run associated with this rule.
+     *
+     * @param rule - the AssignmentEscalationRule object that will be updated
+     * @param oldDateRange - A Long representing the old date that the user had selected in milliseconds.
+     *
+     */
     public void updateRule(AssignmentEscalationRule rule, Long oldDateRange) {
         //To make things as simple as possible, we will simply update the existing Queue items.  This allows us to
         //avoid running the search that backs the rule, which can take a significant amount of time to run compared to
@@ -552,7 +578,7 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
                 return false;
             }
 
-            if(rule.getOrderNumber() != null && !rule.getOrderNumber().equalsIgnoreCase(((ThingEvent)event).getAsset().getOrderNumber())) {
+            if (rule.getOrderNumber() != null && !rule.getOrderNumber().equalsIgnoreCase(((ThingEvent)event).getAsset().getOrderNumber())) {
                 return false;
             }
 
