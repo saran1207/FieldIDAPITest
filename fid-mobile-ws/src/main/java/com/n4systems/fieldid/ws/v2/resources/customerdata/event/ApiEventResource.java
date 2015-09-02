@@ -8,6 +8,7 @@ import com.n4systems.fieldid.ws.v2.resources.ApiKeyString;
 import com.n4systems.fieldid.ws.v2.resources.ApiModelHeader;
 import com.n4systems.fieldid.ws.v2.resources.ApiResource;
 import com.n4systems.fieldid.ws.v2.resources.ApiSortedModelHeader;
+import com.n4systems.fieldid.ws.v2.resources.model.DateParam;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.model.offlineprofile.OfflineProfile.SyncDuration;
@@ -106,7 +107,7 @@ public class ApiEventResource extends ApiResource<ApiEvent, ThingEvent> {
 	@Transactional(readOnly = true)
 	public List<ApiSortedModelHeader> queryAssigned(@QueryParam("startDate") Date startDate, @QueryParam("endDate") Date endDate) {
 		List<ApiSortedModelHeader> headers = persistenceService.findAll(
-				prepareAssignedEventsQuery(createModelHeaderQueryBuilder(ThingEvent.class, "mobileGUID", "modified", "dueDate", true), startDate, endDate, getCurrentUser())
+				prepareAssignedEventsQuery(createModelHeaderQueryBuilder(ThingEvent.class, "mobileGUID", "modified", "dueDate", true), (DateParam)startDate, (DateParam)endDate, getCurrentUser())
 		);
 		return headers;
 	}
@@ -128,7 +129,7 @@ public class ApiEventResource extends ApiResource<ApiEvent, ThingEvent> {
 			Date startDate = new DateTime(year, month + 1, i, 0, 0).toDate();
 			Date endDate = new DateTime(year, month + 1, i, 0, 0).plusDays(1).toDate();
 
-			QueryBuilder<ThingEvent> query = prepareAssignedEventsQuery(createUserSecurityBuilder(ThingEvent.class), startDate, endDate, getCurrentUser());
+			QueryBuilder<ThingEvent> query = prepareAssignedEventsQuery(createUserSecurityBuilder(ThingEvent.class), (DateParam)startDate, (DateParam)endDate, getCurrentUser());
 			Long count = persistenceService.count(query);
 			counts.add(count);
 		}
@@ -147,7 +148,7 @@ public class ApiEventResource extends ApiResource<ApiEvent, ThingEvent> {
 		return apiAttachment;
 	}
 
-	private <T> QueryBuilder<T> prepareAssignedEventsQuery(QueryBuilder<T> query, @QueryParam("startDate") Date startDate, @QueryParam("endDate") Date endDate, User user) {
+	private <T> QueryBuilder<T> prepareAssignedEventsQuery(QueryBuilder<T> query, @QueryParam("startDate") DateParam startDate, @QueryParam("endDate") DateParam endDate, User user) {
 		query
 				.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "workflowState", WorkflowState.OPEN))
 				.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GE, "startDate", "dueDate", startDate))
