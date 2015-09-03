@@ -127,9 +127,9 @@ public class  EventScheduleService extends FieldIdPersistenceService {
         updatedSchedule.getAsset().touch();
         persistenceService.update(updatedSchedule.getAsset());
 
-        ruleService.clearEscalationRulesForEvent(schedule.getId());
-        if(schedule.getWorkflowState().equals(WorkflowState.OPEN)) {
-            ruleService.createApplicableQueueItems(schedule);
+        ruleService.clearEscalationRulesForEvent(updatedSchedule.getId());
+        if(updatedSchedule.getWorkflowState().equals(WorkflowState.OPEN)) {
+            ruleService.createApplicableQueueItems(updatedSchedule);
         }
 
 

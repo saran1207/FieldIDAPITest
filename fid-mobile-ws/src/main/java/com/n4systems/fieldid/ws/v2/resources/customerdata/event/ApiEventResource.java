@@ -8,6 +8,7 @@ import com.n4systems.fieldid.ws.v2.resources.ApiKeyString;
 import com.n4systems.fieldid.ws.v2.resources.ApiModelHeader;
 import com.n4systems.fieldid.ws.v2.resources.ApiResource;
 import com.n4systems.fieldid.ws.v2.resources.ApiSortedModelHeader;
+import com.n4systems.fieldid.ws.v2.resources.model.DateParam;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.model.offlineprofile.OfflineProfile.SyncDuration;
@@ -104,7 +105,7 @@ public class ApiEventResource extends ApiResource<ApiEvent, ThingEvent> {
 	@Path("query/assigned")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
-	public List<ApiSortedModelHeader> queryAssigned(@QueryParam("startDate") Date startDate, @QueryParam("endDate") Date endDate) {
+	public List<ApiSortedModelHeader> queryAssigned(@QueryParam("startDate") DateParam startDate, @QueryParam("endDate") DateParam endDate) {
 		List<ApiSortedModelHeader> headers = persistenceService.findAll(
 				prepareAssignedEventsQuery(createModelHeaderQueryBuilder(ThingEvent.class, "mobileGUID", "modified", "dueDate", true), startDate, endDate, getCurrentUser())
 		);
