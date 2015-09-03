@@ -8,6 +8,7 @@ import com.n4systems.model.EscalationRuleExecutionQueueItem;
 import com.n4systems.model.Event;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.util.mail.TemplateMailMessage;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * This class is fired off by the AssignmentEscalationRuleTask and is responsible for notifying users referenced in any
@@ -168,9 +170,20 @@ public class AssignmentEscalationRuleProcessingService extends FieldIdPersistenc
             }
         };
 
-        msg.getToAddresses().add(item.getRule().getEscalateToUser().getEmailAddress());
+        if(item.getRule().getEscalateToUser() != null) {
+            msg.getToAddresses().add(item.getRule().getEscalateToUser().getEmailAddress());
+        }
+
+        if(item.getRule().getEscalateToUserGroup() != null) {
+            msg.getToAddresses().addAll(item.getRule().getEscalateToUserGroup()
+                                .getMembers()
+                                .stream()
+                                .map(User::getEmailAddress)
+                                .collect(Collectors.toList()));
+        }
+
         if(item.getRule().getAdditionalEmails() != null && !item.getRule().getAdditionalEmails().isEmpty()) {
-            msg.setCcAddresses(new HashSet<>(item.getRule().getAdditionalEmailsList()));
+            msg.getCcAddresses().addAll(item.getRule().getAdditionalEmailsList());
         }
 
         if(item.getRule().isNotifyAssignee()) {
