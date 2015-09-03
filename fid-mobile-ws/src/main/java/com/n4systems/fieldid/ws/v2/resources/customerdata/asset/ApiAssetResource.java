@@ -7,6 +7,7 @@ import com.n4systems.fieldid.ws.v2.resources.ApiModelHeader;
 import com.n4systems.fieldid.ws.v2.resources.ApiResource;
 import com.n4systems.fieldid.ws.v2.resources.customerdata.asset.attributevalues.ApiAttributeValueConverter;
 import com.n4systems.model.*;
+import com.n4systems.model.asset.SmartSearchWhereClause;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
@@ -81,6 +82,15 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	}
 
 	@GET
+	@Path("query/smartSearch")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Transactional(readOnly = true)
+	public List<ApiAssetModelHeader> querySmartSearch(@QueryParam("searchText") String searchText) {
+		List<ApiAssetModelHeader> results = persistenceService.findAll(createAssetSmartSearchQuery(searchText));
+		return results;
+	}
+
+	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
 	public List<ApiAsset> findAll(@QueryParam("id") List<ApiKeyString> assetIds) {
@@ -149,6 +159,15 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		QueryBuilder<ApiAssetModelHeader> queryBuilder = assetSearchService.augmentSearchBuilder(searchCriteria, new QueryBuilder<>(Asset.class, securityContext.getUserSecurityFilter()), false);
 		queryBuilder.setSelectArgument(new NewObjectSelect(ApiAssetModelHeader.class, "mobileGUID", "modified", orderByField, "identifier"));
 		queryBuilder.addOrder(orderByField, orderByDirection.equals("ASC"));
+		return queryBuilder;
+	}
+
+
+	private QueryBuilder<ApiAssetModelHeader> createAssetSmartSearchQuery(String searchText) {
+		QueryBuilder<ApiAssetModelHeader> queryBuilder = new QueryBuilder<>(ApiAssetModelHeader.class, securityContext.getUserSecurityFilter());
+		queryBuilder.addOrder("created");
+		queryBuilder.addWhere(new SmartSearchWhereClause(searchText, true, true, true));
+
 		return queryBuilder;
 	}
 
