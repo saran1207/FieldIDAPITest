@@ -44,8 +44,8 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
     private static final String RULE_RESET_BY_EVENT_ID_SQL = "UPDATE escalation_rule_execution_queue SET rule_has_run = 0 WHERE event_id = :eventId";
     private static final String CLEAR_RULES_FOR_EVENT_SQL = "DELETE FROM escalation_rule_execution_queue WHERE event_id = :eventId";
 
-    private static final SimpleDateFormat DATETIME_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
-    private static final SimpleDateFormat ALL_DAY_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
+    private static final SimpleDateFormat DATETIME_FORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+    private static final SimpleDateFormat ALL_DAY_DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd");
 
     /**
      * This method returns all of the ACTIVE rules for the current user.
