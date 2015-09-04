@@ -164,7 +164,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 
 
 	private QueryBuilder<ApiAssetModelHeader> createAssetSmartSearchQuery(String searchText) {
-		QueryBuilder<ApiAssetModelHeader> queryBuilder = new QueryBuilder<>(ApiAssetModelHeader.class, securityContext.getUserSecurityFilter());
+		QueryBuilder<ApiAssetModelHeader> queryBuilder = new QueryBuilder<>(Asset.class, securityContext.getUserSecurityFilter());
 		queryBuilder.setSelectArgument(new NewObjectSelect(ApiAssetModelHeader.class, "mobileGUID", "modified", "created", "identifier"));
 		queryBuilder.addOrder("created");
 		queryBuilder.addWhere(new SmartSearchWhereClause(searchText, true, true, true));
