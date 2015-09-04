@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.wicket.pages.escalationrules;
 
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.escalationrule.AssignmentEscalationRuleService;
+import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
@@ -12,7 +14,9 @@ import com.n4systems.fieldid.wicket.model.user.VisibleUserGroupsModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.AssignmentEscalationRule;
+import com.n4systems.model.PlatformType;
 import com.n4systems.model.search.EventReportCriteria;
+import com.n4systems.model.user.User;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -28,6 +32,7 @@ import org.apache.wicket.validation.validator.StringValidator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import static ch.lambdaj.Lambda.on;
 
@@ -37,6 +42,9 @@ import static ch.lambdaj.Lambda.on;
 public class CreateRulePage extends FieldIDTemplatePage {
 
     public static final String NEW_RULE_NAME = "New Rule";
+
+    @SpringBean
+    private AsyncService asyncService;
 
     @SpringBean
     AssignmentEscalationRuleService assignmentEscalationRuleService;
@@ -88,7 +96,6 @@ public class CreateRulePage extends FieldIDTemplatePage {
             assignedUserOrGroupSelect.setRequired(true);
 
             //Reassign To
-
             AssignedUserOrGroupSelect reassignTo;
             add(reassignTo = new AssignedUserOrGroupSelect("reassign",
                     ProxyModel.of(rule, on(AssignmentEscalationRule.class).getReassignUserOrGroup()),
@@ -117,15 +124,12 @@ public class CreateRulePage extends FieldIDTemplatePage {
                             target.add(feedbackPanel);
                         }
                     });
-                    //ValidationBehavior.addValidationBehaviorToComponent(addressField);
-                    //addressField.add(new StringValidator.MaximumLengthValidator(255));
                     addressField.setRequired(true);
                     item.add(addressField);
                     item.add(new AjaxLink("deleteLink") {
                         @Override
                         public void onClick(AjaxRequestTarget target) {
                             emailList.remove(item.getIndex());
-                            //emailList = rule.getAdditionalEmailsList();
                             target.add(emailAddressesContainer);
                         }
                     });
@@ -135,7 +139,6 @@ public class CreateRulePage extends FieldIDTemplatePage {
             emailAddressesContainer.add(new AjaxLink("addEmailAddressLink") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
-                    //rule.addAdditionalEmail("Enter Email");
                     emailList.add("");
                     target.add(emailAddressesContainer);
                 }
@@ -162,12 +165,28 @@ public class CreateRulePage extends FieldIDTemplatePage {
 
         @Override
         protected void onSubmit() {
-            //rule.setOverdueQuantity(RulesDateRange.valueOf(overdueBy.getValue()).getMilliValue());
             if(validateFields()) {
                 assignmentEscalationRuleService.saveRule(rule);
 
-                //New rule, so now we call this to create the rows for Escalation notifications.
-                assignmentEscalationRuleService.initializeRule(idList, rule);
+                final User modifiedBy = getCurrentUser();
+                final String currentPlatform = ThreadLocalInteractionContext.getInstance().getCurrentPlatform();
+                final PlatformType platformType = ThreadLocalInteractionContext.getInstance().getCurrentPlatformType();
+
+                AsyncService.AsyncTask<Void> task = asyncService.createTask(new Callable<Void>() {
+                    @Override
+                    public Void call() throws Exception {
+                        ThreadLocalInteractionContext.getInstance().setCurrentUser(modifiedBy);
+                        ThreadLocalInteractionContext.getInstance().setCurrentPlatform(currentPlatform);
+                        ThreadLocalInteractionContext.getInstance().setCurrentPlatformType(platformType);
+
+                        //New rule, so now we call this to create the rows for Escalation notifications.
+                        assignmentEscalationRuleService.initializeRule(idList, rule);
+
+                        ThreadLocalInteractionContext.getInstance().clear();
+                        return null;
+                    }
+                });
+                asyncService.run(task);
                 setResponsePage(new ManageEscalationRules());
             }
         }

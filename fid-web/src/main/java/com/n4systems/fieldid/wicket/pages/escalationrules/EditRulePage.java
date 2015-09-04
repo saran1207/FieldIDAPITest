@@ -119,15 +119,12 @@ public class EditRulePage extends FieldIDTemplatePage {
                             target.add(feedbackPanel);
                         }
                     });
-                    //ValidationBehavior.addValidationBehaviorToComponent(addressField);
-                    //addressField.add(new StringValidator.MaximumLengthValidator(255));
                     addressField.setRequired(true);
                     item.add(addressField);
                     item.add(new AjaxLink("deleteLink") {
                         @Override
                         public void onClick(AjaxRequestTarget target) {
                             emailList.remove(item.getIndex());
-                            //emailList = rule.getAdditionalEmailsList();
                             target.add(emailAddressesContainer);
                         }
                     });
@@ -137,7 +134,6 @@ public class EditRulePage extends FieldIDTemplatePage {
             emailAddressesContainer.add(new AjaxLink("addEmailAddressLink") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
-                    //rule.addAdditionalEmail("Enter Email");
                     emailList.add("");
                     target.add(emailAddressesContainer);
                 }
@@ -151,9 +147,6 @@ public class EditRulePage extends FieldIDTemplatePage {
             add(messageTextArea = new TextArea<String>("message", new PropertyModel<String>(rule, "customMessageText")));
             messageTextArea.add(new StringValidator.MaximumLengthValidator(1024));
 
-
-
-
             add(new Link("cancelLink") {
                 @Override public void onClick() {
                     setResponsePage(new ManageEscalationRules());
@@ -164,7 +157,6 @@ public class EditRulePage extends FieldIDTemplatePage {
 
         @Override
         protected void onSubmit() {
-            //rule.setOverdueQuantity(RulesDateRange.valueOf(overdueBy.getValue()).getMilliValue());
             if(validateFields()) {
                 assignmentEscalationRuleService.updateRule(rule, oldDateRange);
                 setResponsePage(new ManageEscalationRules());
@@ -199,14 +191,6 @@ public class EditRulePage extends FieldIDTemplatePage {
         @Override
         public String getIdValue(Long object, int index) {
             return RulesDateRange.getLabelFor(object);
-        }
-    }
-
-
-    private void addBlankEmailIfEmptyAddressList(AssignmentEscalationRule rule) {
-        // We want to see a blank field for an extra email address to send to if there aren't any yet
-        if (rule != null && rule.getAdditionalEmailsList() == null) {
-            rule.addAdditionalEmail("");
         }
     }
 
