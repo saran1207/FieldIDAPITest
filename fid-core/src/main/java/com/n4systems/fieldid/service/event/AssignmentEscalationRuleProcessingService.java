@@ -7,9 +7,11 @@ import com.n4systems.fieldid.service.mail.MailService;
 import com.n4systems.model.EscalationRuleExecutionQueueItem;
 import com.n4systems.model.Event;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.util.mail.TemplateMailMessage;
+import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.mail.MessagingException;
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -115,11 +116,17 @@ public class AssignmentEscalationRuleProcessingService extends FieldIdPersistenc
         Event event = null;
 
         if(item.getRule().getReassignUser() != null) {
-            event = persistenceService.find(Event.class, item.getEventId());
+            QueryBuilder<Event> query = new QueryBuilder<>(Event.class, new OpenSecurityFilter());
+            query.addSimpleWhere("id", item.getEventId());
+
+            event = persistenceService.find(query);
             event.setAssignee(item.getRule().getReassignUser());
             event = persistenceService.update(event);
         } else if(item.getRule().getReassignToUserGroup() != null) {
-            event = persistenceService.find(Event.class, item.getEventId());
+            QueryBuilder<Event> query = new QueryBuilder<>(Event.class, new OpenSecurityFilter());
+            query.addSimpleWhere("id", item.getEventId());
+
+            event = persistenceService.find(query);
             event.setAssignedGroup(item.getRule().getReassignToUserGroup());
             event = persistenceService.update(event);
         }
@@ -129,7 +136,9 @@ public class AssignmentEscalationRuleProcessingService extends FieldIdPersistenc
         //up the event again (since we'll already have done that).  We'll just recreate the map from the new data.
         if(event != null || !eventService.isEventDataCurrent(item.getEventId(), item.getEventModDate())) {
             if(event == null) {
-                event = persistenceService.find(Event.class, item.getEventId());
+                QueryBuilder<Event> query = new QueryBuilder<>(Event.class, new OpenSecurityFilter());
+                query.addSimpleWhere("id", item.getEventId());
+                event = persistenceService.find(query);
             }
             item.setMapJson(ruleService.generateEventMapJSON(event));
         }

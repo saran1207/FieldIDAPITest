@@ -20,15 +20,14 @@ public class StartRegularOrMasterEventPage extends FieldIDAuthenticatedPage {
         StringValue scheduleIdParam = params.get("scheduleId");
         Long scheduleId = scheduleIdParam.isEmpty() ? null : scheduleIdParam.toLongObject();
         EventType type = persistenceService.find(EventType.class, eventTypeId);
+        PageParameters nextParams = new PageParameters().add("assetId", assetId).add("type", eventTypeId);
 
         if (type instanceof ThingEventType && ((ThingEventType)type).isMaster()) {
-            PageParameters nextParams = new PageParameters().add("assetId", assetId).add("type", eventTypeId);
             if (scheduleId != null) {
                 nextParams.add("scheduleId", scheduleId);
             }
             setResponsePage(PerformMasterEventPage.class, nextParams);
         } else {
-            PageParameters nextParams = new PageParameters().add("assetId", assetId).add("type", eventTypeId);
             if (scheduleId != null) {
                 nextParams.add("scheduleId", scheduleId);
             }
