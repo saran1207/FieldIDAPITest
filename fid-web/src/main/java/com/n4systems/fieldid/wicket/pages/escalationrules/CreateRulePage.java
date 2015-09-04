@@ -105,7 +105,6 @@ public class CreateRulePage extends FieldIDTemplatePage {
             emailList = rule.getAdditionalEmailsList();
             if(emailList == null) {
                 emailList = new ArrayList<>();
-                emailList.add("");
             }
 
             emailAddressesContainer.add(new ListView<String>("emailAddresses", new PropertyModel<List<String>>(CreateRulePage.this, "emailList")) {
@@ -184,16 +183,9 @@ public class CreateRulePage extends FieldIDTemplatePage {
             valid = false;
         }
 
-        //First make sure there is at least 1 email.
-        if(emailList.isEmpty()) {
-            //make them add at least one email address
-            error("Please add at least one email address to notify.");
-            valid = false;
-        } else {
-            //tie the emailList object into the hibernate object.
-            for(String email:emailList) {
-                rule.setAdditionalEmails(email);
-            }
+        //tie the emailList object into the hibernate object.
+        for(String email:emailList) {
+            rule.setAdditionalEmails(email);
         }
 
         return valid;
@@ -208,14 +200,6 @@ public class CreateRulePage extends FieldIDTemplatePage {
         @Override
         public String getIdValue(Long object, int index) {
             return RulesDateRange.getLabelFor(object);
-        }
-    }
-
-
-    private void addBlankEmailIfEmptyAddressList(AssignmentEscalationRule rule) {
-        // We want to see a blank field for an extra email address to send to if there aren't any yet
-        if (rule != null && rule.getAdditionalEmailsList() != null && rule.getAdditionalEmailsList().isEmpty()) {
-            rule.addAdditionalEmail("");
         }
     }
 
