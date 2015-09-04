@@ -159,6 +159,7 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
         returnMe.setEventTypeGroup(criteria.getEventTypeGroup());
         returnMe.setEventType(criteria.getEventType());
         returnMe.setAssetStatus(criteria.getAssetStatus());
+        returnMe.setAssetType(criteria.getAssetType());
         returnMe.setAssetTypeGroup(criteria.getAssetTypeGroup());
         returnMe.setAssignedTo(criteria.getAssignedTo());
         returnMe.setAssignee(criteria.getAssignee());
