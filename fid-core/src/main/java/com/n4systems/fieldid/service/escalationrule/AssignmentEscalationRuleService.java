@@ -364,7 +364,10 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
      */
     private List<String> createEmailList(UserGroup assignedGroup) {
         //Ensure we reload this value.
-        assignedGroup = persistenceService.find(UserGroup.class, assignedGroup.getId());
+        QueryBuilder<UserGroup> query = new QueryBuilder<>(UserGroup.class, new OpenSecurityFilter());
+        query.addSimpleWhere("id", assignedGroup.getId());
+        assignedGroup = persistenceService.find(query);
+
         return assignedGroup.getMembers()
                             .stream()
                             .map(User::getEmailAddress)
