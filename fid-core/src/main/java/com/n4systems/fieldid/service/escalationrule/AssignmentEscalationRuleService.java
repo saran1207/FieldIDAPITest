@@ -14,6 +14,7 @@ import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.model.utils.PlainDate;
+import com.n4systems.util.DateHelper;
 import com.n4systems.util.mail.EventUrlUtil;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
@@ -27,10 +28,7 @@ import javax.persistence.Query;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -243,9 +241,15 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
         // - DueDate must be after NOW
         // - I think that's it.
 
+
+        //Convert current system time from UTC to the rule creator's time zone.
+        Date currentTime = new Date(System.currentTimeMillis());
+        TimeZone userTimeZone = rule.getCreatedBy().getTimeZone();
+        Date currentTimeInUsersTimeZone = DateHelper.convertToUserTimeZone(currentTime, userTimeZone);
+
         if(event.getWorkflowState().equals(WorkflowState.OPEN) &&
                 event.getDueDate() != null &&
-                event.getDueDate().after(new Date(System.currentTimeMillis()))) {
+                event.getDueDate().after(currentTimeInUsersTimeZone)) {
             Long timeChanger = event.getDueDate().getTime();
             timeChanger += rule.getOverdueQuantity();
 
