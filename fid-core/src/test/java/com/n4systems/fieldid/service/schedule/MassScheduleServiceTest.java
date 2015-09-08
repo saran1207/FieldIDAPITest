@@ -3,6 +3,7 @@ package com.n4systems.fieldid.service.schedule;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.junit.FieldIdServiceTest;
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.service.escalationrule.AssignmentEscalationRuleService;
 import com.n4systems.model.*;
 import com.n4systems.model.asset.ScheduleSummaryEntry;
 import com.n4systems.model.builders.*;
@@ -25,6 +26,7 @@ public class MassScheduleServiceTest extends FieldIdServiceTest {
     private @TestMock ScheduleService scheduleService;
     private @TestMock PersistenceService persistenceService;
     private @TestMock SecurityContext securityContext;
+    private @TestMock AssignmentEscalationRuleService ruleService;
     private Asset asset1;
     private Asset asset2;
     private Asset asset3;
@@ -104,6 +106,7 @@ public class MassScheduleServiceTest extends FieldIdServiceTest {
         replay(securityContext);
         replay(scheduleService);
         replay(persistenceService);
+        replay(ruleService);
 
         massScheduleService.performSchedules(schedules,  true);
 
