@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.service.schedule;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.escalationrule.AssignmentEscalationRuleService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.ThingEvent;
@@ -14,6 +15,9 @@ public class MassScheduleService extends FieldIdPersistenceService {
 
     @Autowired
     protected ScheduleService scheduleService;
+
+    @Autowired
+    protected AssignmentEscalationRuleService ruleService;
 
     public void performSchedules(List<ScheduleSummaryEntry> schedules, boolean duplicateDetection) {
         for (ScheduleSummaryEntry schedule : schedules) {
@@ -42,7 +46,10 @@ public class MassScheduleService extends FieldIdPersistenceService {
                 newSchedule.setTenant(getCurrentTenant());
                 newSchedule.setOwner(asset.getOwner());
                 newSchedule.setAssignedUserOrGroup(eventSchedule.getAssignedUserOrGroup());
-                persistenceService.save(newSchedule);
+                Long id = persistenceService.save(newSchedule);
+                newSchedule = persistenceService.find(ThingEvent.class, id);
+
+                ruleService.createApplicableQueueItems(newSchedule);
             }
         }
     }
