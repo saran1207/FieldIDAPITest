@@ -28,6 +28,8 @@ import javax.persistence.Query;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -44,6 +46,10 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
 
     private static final SimpleDateFormat DATETIME_FORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm");
     private static final SimpleDateFormat ALL_DAY_DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd");
+
+    private static final SimpleDateFormat ZONE_AGNOSTIC_DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
+    private static final long easternOffset = (long) TimeZone.getTimeZone("Canada/Eastern").getRawOffset();
 
     /**
      * This method returns all of the ACTIVE rules for the current user.
@@ -241,7 +247,6 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
         // - DueDate must be after NOW
         // - I think that's it.
 
-
         //Convert current system time from UTC to the rule creator's time zone.
         Date currentTime = new Date(System.currentTimeMillis());
         TimeZone userTimeZone = rule.getCreatedBy().getTimeZone();
@@ -250,11 +255,34 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
         if(event.getWorkflowState().equals(WorkflowState.OPEN) &&
                 event.getDueDate() != null &&
                 event.getDueDate().after(currentTimeInUsersTimeZone)) {
+
+            //Dates and Times are hard.  Thank goodness for Java 8's Time API.
+
+            //1) First, we shift the time by the OverDue amount.  This is going to happen the same no matter what,
+            //  because the amount you're overdue by is TimeZone agnostic.  1 hour always equals 1 hour.
             Long timeChanger = event.getDueDate().getTime();
             timeChanger += rule.getOverdueQuantity();
+            Date overdueApplied = new Date(timeChanger);
 
-            queueItem.setNotifyDate(new Date(timeChanger));
+            //2) The user doesn't realize there's no TimeZone attached to the Due Date.  So we need to simulate that
+            //  by creating this ZonedDateTime object without actually shifting the time.  No problem.
+            ZonedDateTime zonedDateTime = ZonedDateTime.of(
+                    LocalDateTime.parse(ZONE_AGNOSTIC_DATE_TIME_FORMAT.format(overdueApplied)),
+                    event.getCreatedBy().getTimeZone().toZoneId()
+            );
 
+            //3) Now that we've shifted the time without changing it to the user's TimeZone, we need to shift it to
+            //  the server's TimeZone and properly offset the time.  This will cause the server to send it's
+            //  notifications and do its work at the time that equates to the desired time in the user's TimeZone.
+            zonedDateTime = zonedDateTime.withZoneSameInstant(TimeZone.getDefault().toZoneId());
+
+            //4) We have now shifted the timezone of the provided DateTime data.  It is sufficiently corrected to
+            //  write to the DB.  However, to do this, we need to convert it back down to a Date so we can lose
+            //  reference to the TZ again.
+            overdueApplied = Date.from(zonedDateTime.toInstant());
+            queueItem.setNotifyDate(overdueApplied);
+
+            //...and do everything else as normal.
             queueItem.setEventId(eventId);
             queueItem.setEventModDate(event.getModified());
             queueItem.setRuleHasRun(false);
