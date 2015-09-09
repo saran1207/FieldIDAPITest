@@ -99,7 +99,6 @@ public class AssignmentEscalationRuleProcessingService extends FieldIdPersistenc
                 logger.error(MessageFormat.format(JSON_PROCESSING_ERROR, item.getRule().getId()), e);
             } catch (MessagingException e) {
                 logger.error(MessageFormat.format(MAIL_SERVICE_ERROR, item.getRule().getId()), e);
-                e.printStackTrace();
             }
         }
     }

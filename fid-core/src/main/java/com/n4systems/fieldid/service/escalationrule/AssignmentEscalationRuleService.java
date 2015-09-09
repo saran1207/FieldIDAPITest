@@ -21,7 +21,6 @@ import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.search.SortDirection;
 import org.apache.log4j.Logger;
-import org.hibernate.HibernateException;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
@@ -41,8 +40,8 @@ import java.util.stream.Collectors;
  */
 public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
     private static final Logger logger = Logger.getLogger(AssignmentEscalationRuleService.class);
-    private static final String RULE_RESET_BY_EVENT_ID_SQL = "UPDATE escalation_rule_execution_queue SET rule_has_run = 0 WHERE event_id = :eventId";
     private static final String CLEAR_RULES_FOR_EVENT_SQL = "DELETE FROM escalation_rule_execution_queue WHERE event_id = :eventId";
+    private static final String CLEAR_QUEUE_ITEMS_FOR_RULE_SQL = "DELETE FROM escalation_rule_execution_queue WHERE rule_id = :ruleId";
 
     private static final SimpleDateFormat DATETIME_FORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm");
     private static final SimpleDateFormat ALL_DAY_DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd");
@@ -76,14 +75,19 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
     }
 
     /**
-     * This method archives the AssignmentEscalationRule object (soft deletes the rules).
+     * This method archives the AssignmentEscalationRule object (soft deletes the rules).  It does, however,
+     * permanently delete rows in the escalation_rule_processing_queue, because failing to do so would either cause
+     * an exception when we try to process those rows, or would lead to rows that simply sit in the table and slow down
+     * subsequent queries.
      *
      * @param rule - the AssignmentEscalationRule object that will be updated
      *
      */
+    @Transactional
     public void archiveRule(AssignmentEscalationRule rule) {
         rule.setState(Archivable.EntityState.ARCHIVED);
         updateRule(rule);
+        clearQueueItemsForRule(rule.getId());
     }
 
     /**
@@ -472,40 +476,6 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
     }
 
     /**
-     * This method accepts the ID of an event and resets all of the Event's rules.  This is achieved through raw SQL to
-     * limit joins to other tables and decrease database load.  It is up to you to ensure you provide the right ID.
-     *
-     * Supplying the wrong ID may reset rules on a different event... or it may not reset anything.  This method will
-     * return true if the query ran successfully, which does not necessarily reflect that rules were reset for a given
-     * Event.  It only reflects that the query ran successfully, which can also mean that there were no rows in the
-     * linker entity for your Event.  As long as your event meets the criteria of the Escalation Rule itself, rows
-     * will be created in this table when your Event blows past the related due date... so no rows simply means that
-     * the given event has not had any escalation rules act on it yet.  In other words, the person these events are
-     * assigned to is DOING THEIR JOB!!
-     *
-     * You will typically want to call this method when you have edited the due date of the Event in question.  This
-     * can impact rule execution in such a way that one or more escalation rules may need to be reset, so they can be
-     * executed the next time the Event isn't completed in time.
-     *
-     * TODO We may not need this anymore... if that's the case, delete it.
-     *
-     * @param eventId - A Long representing the ID of the Event for which you want to reset all rules.
-     * @return True if the reset was successful (ie. the Query didn't explode) and False if there was any kind of problem.
-     */
-    public boolean resetRulesForEvent(Long eventId) {
-        try {
-            Query resetQuery = getEntityManager().createNativeQuery(RULE_RESET_BY_EVENT_ID_SQL);
-            resetQuery.setParameter("eventId", eventId);
-            int resetRules = resetQuery.executeUpdate();
-            logger.debug("Reset " + resetRules + " Rules for Event with ID " + eventId);
-            return true;
-        } catch (HibernateException e) {
-            logger.error("Couldn't reset Escalation Rules for Event with ID " + eventId, e);
-            return false;
-        }
-    }
-
-    /**
      * WARNING: There is no security on this method!  It is used by a backend process so it needs to be Tenant agnostic.
      *
      * This will return a list of all EscalationRuleExecutionQueueItems that are up for processing and - likely - for
@@ -562,7 +532,7 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
      *
      * This method is used during stream processing of a query for all active Rules for a given tenant.
      *
-     * If it wasn't for the fact that it's total overkill, DROOLS would be pretty damn usefull here.
+     * If it wasn't for the fact that it's total overkill, DROOLS would be pretty damn useful here.
      *
      * I know... it's hideous.
      *
@@ -665,6 +635,21 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
 
         int queueItemsDeleted = deleteQuery.executeUpdate();
 
-        logger.debug("A total of " + queueItemsDeleted + " Queue Items for Event with ID " + eventId);
+        logger.debug("A total of " + queueItemsDeleted + " Queue Items for Event with ID " + eventId + " were deleted.");
+    }
+
+    /**
+     * This method clears away all Queue Items for a given Rule ID.  This is to be used only when a Rule is being
+     * archived, in order to clean up the table and prevent any rows from failing during execution.
+     *
+     * @param ruleId - A Long representing the ID of a Rule which may have active Queue Items that need to be cleared.
+     */
+    private void clearQueueItemsForRule(Long ruleId) {
+        Query deleteQuery = getEntityManager().createNativeQuery(CLEAR_QUEUE_ITEMS_FOR_RULE_SQL);
+        deleteQuery.setParameter("ruleId", ruleId);
+
+        int queueItemsDeleted = deleteQuery.executeUpdate();
+
+        logger.debug("A total of " + queueItemsDeleted + " Queue Items for Rule with ID " + ruleId + " were deleted.");
     }
 }
