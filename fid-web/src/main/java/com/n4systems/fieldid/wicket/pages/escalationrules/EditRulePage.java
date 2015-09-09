@@ -175,8 +175,9 @@ public class EditRulePage extends FieldIDTemplatePage {
         }
 
         //tie the emailList object into the hibernate object.
-        for(String email:emailList) {
-            rule.setAdditionalEmails(email);
+        rule.setAdditionalEmails(null);
+        for (String email : emailList) {
+            rule.addAdditionalEmail(email);
         }
 
         return valid;
