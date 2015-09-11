@@ -129,8 +129,8 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
 
         try {
             byte[] imageData = null;
-            //Always regerate SVGs for drafts in case annotations have changed
-            if(!procDef.getPublishedState().equals(PublishedState.DRAFT)) {
+            //Always regenerate SVGs for drafts in case annotations have changed
+            if(!procDef.getPublishedState().equals(PublishedState.DRAFT) && !procDef.getPublishedState().equals(PublishedState.WAITING_FOR_APPROVAL)) {
                 imageData = s3Service.downloadProcedureDefinitionImageSvg(image);
             }
 
@@ -218,8 +218,8 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
                 if (theImage == null) throw new NoSuchElementException("The image was empty... that's still bad news.");
 
                 byte[] imageData = null;
-                //Always regerate SVGs for drafts in case annotations have changed
-                if(!procDef.getPublishedState().equals(PublishedState.DRAFT)) {
+                //Always regenerate SVGs for drafts in case annotations have changed
+                if(!procDef.getPublishedState().equals(PublishedState.DRAFT) && !procDef.getPublishedState().equals(PublishedState.WAITING_FOR_APPROVAL)) {
                     imageData = s3Service.downloadProcedureDefinitionImageSvg(theImage, isolationPoint);
                 }
 
