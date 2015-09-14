@@ -329,6 +329,7 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDTemplatePag
         ownerPicker.setEnabled(!assetOwnerUpdate);
         ownerPicker.setIconVisible(!assetOwnerUpdate);
         ownerPicker.setTextEnabled(!assetOwnerUpdate);
+        ownerPicker.setEmptyString();
         ownerPicker.setOutputMarkupId(true);
         ownerSection.add(ownerPicker);
 
@@ -339,6 +340,9 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDTemplatePag
                 ownerPicker.setEnabled(!assetOwnerUpdate);
                 ownerPicker.setIconVisible(!assetOwnerUpdate);
                 ownerPicker.setTextEnabled(!assetOwnerUpdate);
+                if(assetOwnerUpdate) {
+                    ownerPicker.setEmptyString();
+                }
                 target.add(ownerPicker);
             }
         };
