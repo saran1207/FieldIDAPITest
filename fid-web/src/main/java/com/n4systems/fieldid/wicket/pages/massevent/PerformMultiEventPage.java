@@ -7,7 +7,6 @@ import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.perform.PerformThingEventHelperService;
 import com.n4systems.fieldid.utils.CopyEventFactory;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.model.FileAttachment;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.tools.FileDataContainer;
 import org.apache.wicket.Component;
@@ -49,11 +48,12 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
             //Do not display any default owner/location
             thingEvent.setAdvancedLocation(null);
             thingEvent.setOwner(getCurrentUser().getOwner().getPrimaryOrg());
+            thingEvent.setPrintable(thingEvent.getType().isPrintable());
 
             event = Model.of(thingEvent);
 
             setEventResult(event.getObject().getEventResult());
-            fileAttachments = new ArrayList<FileAttachment>();
+            fileAttachments = new ArrayList<>();
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -107,6 +107,9 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
         ThingEvent genericEvent = event.getObject();
 
         CopyEventFactory.copyEventForMassEvents(originalEvent, genericEvent);
+
+        originalEvent.setPrintable(event.getObject().isPrintable());
+
         if(getAssetOwnerUpdate()) {
             originalEvent.setOwner(originalEvent.getAsset().getOwner());
         } else {
