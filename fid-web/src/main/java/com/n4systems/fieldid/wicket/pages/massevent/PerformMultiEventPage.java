@@ -107,10 +107,14 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
         ThingEvent genericEvent = event.getObject();
 
         CopyEventFactory.copyEventForMassEvents(originalEvent, genericEvent);
-        if(!getAssetOwnerUpdate()){
+        if(getAssetOwnerUpdate()) {
+            originalEvent.setOwner(originalEvent.getAsset().getOwner());
+        } else {
             originalEvent.setOwner(genericEvent.getOwner());
         }
-        if(!getLocationUpdate()){
+        if(getLocationUpdate()) {
+            originalEvent.setAdvancedLocation(originalEvent.getAsset().getAdvancedLocation());
+        } else {
             originalEvent.setAdvancedLocation(genericEvent.getAdvancedLocation());
         }
     }
