@@ -2,7 +2,6 @@ package com.n4systems.fieldid.wicket.pages.massevent;
 
 import com.n4systems.ejb.impl.EventScheduleBundle;
 import com.n4systems.fieldid.service.event.ThingEventCreationService;
-import com.n4systems.fieldid.wicket.components.event.prooftest.ProofTestEditPanel;
 import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForAssetTypeModel;
 import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
