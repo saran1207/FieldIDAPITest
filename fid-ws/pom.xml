@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>fieldid-root</artifactId>
 		<groupId>com.fieldid</groupId>
-		<version>2015.5.1-SNAPSHOT</version>
+		<version>2015.5.1</version>
 	</parent>
 	<artifactId>fid-ws</artifactId>
 	<dependencies>
