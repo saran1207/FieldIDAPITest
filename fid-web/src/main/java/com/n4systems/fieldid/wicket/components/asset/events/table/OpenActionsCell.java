@@ -1,10 +1,8 @@
 package com.n4systems.fieldid.wicket.components.asset.events.table;
 
-import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.action.ActionsPanel;
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
 import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
@@ -20,8 +18,6 @@ import com.n4systems.fieldid.wicket.pages.event.CloseEventPage;
 import com.n4systems.fieldid.wicket.pages.event.PerformEventPage;
 import com.n4systems.fieldid.wicket.pages.masterevent.PerformMasterEventPage;
 import com.n4systems.model.*;
-import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
@@ -67,7 +63,7 @@ public class OpenActionsCell extends Panel {
         PageParameters nextParams = new PageParameters().add("assetId", schedule.getTarget().getId())
                                                         .add("type", schedule.getType().getId())
                                                         .add("scheduleId", schedule.getId());
-        if (schedule.getThingType().isMaster()) {
+        if ((schedule.getEventType() instanceof ThingEventType) && schedule.getThingType().isMaster()) {
             add(new BookmarkablePageLink<PerformMasterEventPage>("startLink", PerformMasterEventPage.class, nextParams));
         } else {
             add(new BookmarkablePageLink<PerformEventPage>("startLink", PerformEventPage.class, nextParams));

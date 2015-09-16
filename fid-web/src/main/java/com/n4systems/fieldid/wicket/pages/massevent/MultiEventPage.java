@@ -41,8 +41,8 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -52,7 +52,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public abstract class MultiEventPage<T extends Event> extends FieldIDTemplatePage {
@@ -94,6 +93,7 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDTemplatePag
 
     protected enum MassEventOrigin { START_EVENT, SEARCH, REPORTING };
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void onInitialize() {
         super.onInitialize();
@@ -130,13 +130,13 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDTemplatePag
         actionsColumn.add(new Label("notes", new PropertyModel<String>(event, "notes")));
 
         if (event.getObject().getDueDate() != null) {
-            actionsColumn.add(new TimeAgoLabel("dueDate", new PropertyModel<Date>(event, "dueDate"),getCurrentUser().getTimeZone()));
+            actionsColumn.add(new TimeAgoLabel("dueDate", new PropertyModel<>(event, "dueDate"),getCurrentUser().getTimeZone()));
         } else {
             actionsColumn.add(new Label("dueDate"));
         }
         actionsColumn.add(new Label("assignee", new PropertyModel<String>(event, "assignedUserOrGroup.assignToDisplayName")));
 
-        actionsColumn.add(new ListView<CriteriaResultImage>("criteriaResultImage", new PropertyModel<List<? extends CriteriaResultImage>>(event, "sourceCriteriaResult.criteriaImages")) {
+        actionsColumn.add(new ListView<CriteriaResultImage>("criteriaResultImage", new PropertyModel<>(event, "sourceCriteriaResult.criteriaImages")) {
 
             @Override
             protected void populateItem(ListItem<CriteriaResultImage> item) {
@@ -254,6 +254,7 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDTemplatePag
             setResponsePage(new CompletedMassEventPage(savedEvent, massEventOrigin));
         }
 
+        @SuppressWarnings("unchecked")
         @Override
         protected void onValidate() {
             super.onValidate();
@@ -274,7 +275,7 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDTemplatePag
             }
 
             if (event instanceof Event) {
-                Event masterEvent = (Event) event.getObject();
+                Event masterEvent = event.getObject();
                 if (masterEvent.getBook() != null && masterEvent.getBook().getId() == null && StringUtils.isBlank(masterEvent.getBook().getName())) {
                     error(new FIDLabelModel("error.event_book_title_required").getObject());
                 }
@@ -286,7 +287,7 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDTemplatePag
 
             List<AbstractEvent.SectionResults> results =  event.getObject().getSectionResults();
 
-            RequiredCriteriaValidator.validate(results).stream().forEach(message-> error(message));
+            RequiredCriteriaValidator.validate(results).stream().forEach(this::error);
         }
     }
 
@@ -303,12 +304,12 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDTemplatePag
     protected abstract Component createCancelLink(String id);
     protected abstract boolean targetAlreadyArchived(T event);
 
-
+    @SuppressWarnings("unchecked")
     protected Component createOwnerSection(IModel<T> event) {
         ownerSection = new WebMarkupContainer("ownerSection");
 
         GroupedUserPicker groupedUserPicker;
-        ownerSection.add(groupedUserPicker = new GroupedUserPicker("assignedTo", new PropertyModel<User>(MultiEventPage.this, "assignedTo"), new GroupedVisibleUsersModel()));
+        ownerSection.add(groupedUserPicker = new GroupedUserPicker("assignedTo", new PropertyModel<>(MultiEventPage.this, "assignedTo"), new GroupedVisibleUsersModel()));
         groupedUserPicker.setVisible(event.getObject().getType().isAssignedToAvailable());
 
         final PropertyModel<BaseOrg> ownerModel = new PropertyModel(event,"owner");
@@ -329,16 +330,20 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDTemplatePag
         ownerPicker.setEnabled(!assetOwnerUpdate);
         ownerPicker.setIconVisible(!assetOwnerUpdate);
         ownerPicker.setTextEnabled(!assetOwnerUpdate);
+        ownerPicker.setEmptyString();
         ownerPicker.setOutputMarkupId(true);
         ownerSection.add(ownerPicker);
 
         // checkbox
-        AjaxCheckBox ownerCheckBox = new AjaxCheckBox("assetOwnerUpdate", new PropertyModel<Boolean>(MultiEventPage.this, "assetOwnerUpdate")) {
+        AjaxCheckBox ownerCheckBox = new AjaxCheckBox("assetOwnerUpdate", new PropertyModel<>(MultiEventPage.this, "assetOwnerUpdate")) {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 ownerPicker.setEnabled(!assetOwnerUpdate);
                 ownerPicker.setIconVisible(!assetOwnerUpdate);
                 ownerPicker.setTextEnabled(!assetOwnerUpdate);
+                if(assetOwnerUpdate) {
+                    ownerPicker.setEmptyString();
+                }
                 target.add(ownerPicker);
             }
         };
@@ -346,8 +351,8 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDTemplatePag
         ownerSection.add(ownerCheckBox);
 
         //Location Picker
-        final PropertyModel<Location> locationModel = new PropertyModel<Location>(event, "advancedLocation");
-        final PropertyModel<PredefinedLocation> predefinedLocationModel = new PropertyModel<PredefinedLocation>(event, "advancedLocation.predefinedLocation");
+        final PropertyModel<Location> locationModel = new PropertyModel<>(event, "advancedLocation");
+        final PropertyModel<PredefinedLocation> predefinedLocationModel = new PropertyModel<>(event, "advancedLocation.predefinedLocation");
 
         BaseOrg temp = ownerModel.getObject();
 
@@ -363,12 +368,12 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDTemplatePag
         locationPicker.setOutputMarkupId(true);
         ownerSection.add(locationPicker);
 
-        final TextField<String> freeformLocation = new TextField<String>("freeformLocation", new PropertyModel<String>(locationModel, "freeformLocation"));
+        final TextField<String> freeformLocation = new TextField<>("freeformLocation", new PropertyModel<>(locationModel, "freeformLocation"));
         freeformLocation.setEnabled(!locationUpdate);
         freeformLocation.setOutputMarkupId(true);
         ownerSection.add(freeformLocation);
 
-        AjaxCheckBox locationCheckBox = new AjaxCheckBox("locationUpdate", new PropertyModel<Boolean>(MultiEventPage.this, "locationUpdate")) {
+        AjaxCheckBox locationCheckBox = new AjaxCheckBox("locationUpdate", new PropertyModel<>(MultiEventPage.this, "locationUpdate")) {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 locationPicker.setEnabled(!locationUpdate);
@@ -391,9 +396,9 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDTemplatePag
         schedulesContainer.add(new ListView<Event>("schedules", new PropertyModel<List<Event>>(MultiEventPage.this, "schedules")) {
             @Override
             protected void populateItem(final ListItem<Event> item) {
-                item.add(new Label("addScheduleDate", new DayDisplayModel(new PropertyModel<Date>(item.getModel(), "dueDate"))));
-                item.add(new Label("addScheduleLabel", new PropertyModel<Object>(item.getModel(), "eventType.name")));
-                item.add(new FlatLabel("addScheduleJob", new PropertyModel<Object>(item.getModel(), "project.name")));
+                item.add(new Label("addScheduleDate", new DayDisplayModel(new PropertyModel<>(item.getModel(), "dueDate"))));
+                item.add(new Label("addScheduleLabel", new PropertyModel<>(item.getModel(), "eventType.name")));
+                item.add(new FlatLabel("addScheduleJob", new PropertyModel<>(item.getModel(), "project.name")));
                 item.add(new AjaxLink<Void>("removeLink") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
@@ -419,9 +424,9 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDTemplatePag
     }
 
     protected void createEventTypeDetailsSection(IModel<T> event, OuterEventForm form) {
-        PropertyModel<User> performedByModel = new PropertyModel<User>(event, "performedBy");
-        DropDownChoice<User> performedBy = new FidDropDownChoice<User>("performedBy", performedByModel, new ExaminersModel(performedByModel), new ListableChoiceRenderer<User>());
-        DateTimePicker datePerformedPicker = new DateTimePicker("datePerformed", new UserToUTCDateModel(new PropertyModel<Date>(event, "date")), true).withNoAllDayCheckbox();
+        PropertyModel<User> performedByModel = new PropertyModel<>(event, "performedBy");
+        DropDownChoice<User> performedBy = new FidDropDownChoice<>("performedBy", performedByModel, new ExaminersModel(performedByModel), new ListableChoiceRenderer<>());
+        DateTimePicker datePerformedPicker = new DateTimePicker("datePerformed", new UserToUTCDateModel(new PropertyModel<>(event, "date")), true).withNoAllDayCheckbox();
         datePerformedPicker.addToDateField(createUpdateAutoschedulesOnChangeBehavior());
 
         form.add(datePerformedPicker);
@@ -430,7 +435,7 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDTemplatePag
 
     protected void createEventFormSection(IModel<T> event, OuterEventForm form2) {
         EventForm form = event.getObject().getEventForm();
-        form2.add(new EventFormEditPanel("eventFormPanel", event, new PropertyModel<List<AbstractEvent.SectionResults>>(MultiEventPage.this, "sectionResults"), isActionButtonsVisible()){
+        form2.add(new EventFormEditPanel("eventFormPanel", event, new PropertyModel<>(MultiEventPage.this, "sectionResults"), isActionButtonsVisible()){
             @Override
             protected Panel getCriteriaSectionPanel(Class<? extends AbstractEvent> eventClass, PropertyModel<List<CriteriaResult>> results) {
                 return new CriteriaSectionEditPanel("criteriaPanel", eventClass, results, isActionButtonsVisible(), isAttachmentAndActionVisible());
@@ -440,26 +445,29 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDTemplatePag
 
     protected void createResultSection(IModel<T> event, OuterEventForm form) {
         Event masterEvent = event.getObject();
-        DropDownChoice resultSelect = new FidDropDownChoice<EventResult>("eventResult", new PropertyModel<EventResult>(MultiEventPage.this, "eventResult"), EventResult.getValidEventResults(), new ListableLabelChoiceRenderer<EventResult>());
+        DropDownChoice resultSelect = new FidDropDownChoice<>("eventResult", new PropertyModel<>(MultiEventPage.this, "eventResult"), EventResult.getValidEventResults(), new ListableLabelChoiceRenderer<>());
         resultSelect.add(new UpdateComponentOnChange());
         resultSelect.setNullValid(masterEvent.isResultFromCriteriaAvailable());
         form.add(resultSelect);
 
         List<EventStatus> eventStatuses = eventStatusService.getActiveStatuses();
-        DropDownChoice workflowStateSelect = new FidDropDownChoice<EventStatus>("eventStatus", new PropertyModel<EventStatus>(event, "eventStatus"), eventStatuses, new ListableLabelChoiceRenderer<EventStatus>());
+        DropDownChoice workflowStateSelect = new FidDropDownChoice<>("eventStatus", new PropertyModel<>(event, "eventStatus"), eventStatuses, new ListableLabelChoiceRenderer<>());
         workflowStateSelect.add(new UpdateComponentOnChange());
         workflowStateSelect.setNullValid(true);
         form.add(workflowStateSelect);
     }
 
     protected void createPostEventInformationSection(IModel<T> event, OuterEventForm form) {
-        form.add(new Comment("comments", new PropertyModel<String>(event, "comments")).addMaxLengthValidation(2500));
+        form.add(new Comment("comments", new PropertyModel<>(event, "comments")).addMaxLengthValidation(2500));
+
+        form.add(new CheckBox("printable", new PropertyModel<>(event, "printable")).add(new UpdateComponentOnChange()));
+
         form.add(createPostEventPanel(event));
     }
 
     protected void createAutoScheudlesSection(IModel<T> event, OuterEventForm form) {
 
-        CheckBox autoScheduleCheckBox = new CheckBox("autoSchedule", new PropertyModel<Boolean>(MultiEventPage.this, "autoSchedule"));
+        CheckBox autoScheduleCheckBox = new CheckBox("autoSchedule", new PropertyModel<>(MultiEventPage.this, "autoSchedule"));
         form.add(autoScheduleCheckBox);
 
     }
