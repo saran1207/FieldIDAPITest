@@ -291,7 +291,6 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		event.setTenant(getCurrentTenant());
 		event.setMobileGUID(apiEvent.getSid());
 
-        //FIXME This should not be here, it's set by the service in the back end.
 		event.setModified(apiEvent.getModified());
         if(apiEvent.getModifiedById() != null) {
             event.setModifiedBy(persistenceService.findUsingTenantOnlySecurityWithArchived(User.class, apiEvent.getModifiedById()));
@@ -299,7 +298,6 @@ public class ApiEventResource extends FieldIdPersistenceService {
 
 		event.setComments(apiEvent.getComments());
 
-        //FIXME Should we not be grabbing ThingEventType.class?????
 		event.setType(persistenceService.find(EventType.class, apiEvent.getTypeId()));
 		
 		if(event.getTarget() == null) { // In the case of MultiEvent, we set event.asset much early on.
