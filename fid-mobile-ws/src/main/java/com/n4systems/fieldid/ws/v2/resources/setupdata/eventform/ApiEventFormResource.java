@@ -2,7 +2,6 @@ package com.n4systems.fieldid.ws.v2.resources.setupdata.eventform;
 
 import com.n4systems.fieldid.ws.v2.resources.ApiKeyString;
 import com.n4systems.fieldid.ws.v2.resources.ApiModelHeader;
-import com.n4systems.fieldid.ws.v2.resources.model.DateParam;
 import com.n4systems.fieldid.ws.v2.resources.setupdata.SetupDataResourceReadOnly;
 import com.n4systems.fieldid.ws.v2.resources.setupdata.eventform.criteria.ApiCriteriaConverter;
 import com.n4systems.model.AbstractEvent;
@@ -78,6 +77,36 @@ public class ApiEventFormResource extends SetupDataResourceReadOnly<ApiEventForm
 		apiEventForm.setUseScoreForResult(eventForm.isUseScoreForResult());
 		apiEventForm.setUseObservationCountForResult(eventForm.isUseObservationCountForResult());
 		apiEventForm.getSections().addAll(eventForm.getSections().stream().map(this::convertCriteriaSection).collect(Collectors.toList()));
+
+        //Set the Score pass/fail ranges.
+        apiEventForm.setScoreCalculationType(eventForm.getScoreCalculationType().name());
+        if(eventForm.getPassRange() != null) {
+            apiEventForm.getScorePassRange().setComparator(eventForm.getPassRange().getComparator().name());
+            apiEventForm.getScorePassRange().setValue1(eventForm.getPassRange().getValue1());
+            apiEventForm.getScorePassRange().setValue2(eventForm.getPassRange().getValue2());
+        }
+
+        if(eventForm.getFailRange() != null) {
+            apiEventForm.getScoreFailRange().setComparator(eventForm.getFailRange().getComparator().name());
+            apiEventForm.getScoreFailRange().setValue1(eventForm.getFailRange().getValue1());
+            apiEventForm.getScoreFailRange().setValue2(eventForm.getFailRange().getValue2());
+        }
+
+        //Set the Observation pass/fail ranges.
+        apiEventForm.setObservationPassCalculationType(eventForm.getObservationcountPassCalculationType().name());
+        if(eventForm.getObservationcountPassRange() != null) {
+            apiEventForm.getObservationPassRange().setComparator(eventForm.getObservationcountPassRange().getComparator().name());
+            apiEventForm.getObservationPassRange().setValue1(eventForm.getObservationcountPassRange().getValue1());
+            apiEventForm.getObservationPassRange().setValue2(eventForm.getObservationcountPassRange().getValue2());
+        }
+
+        apiEventForm.setObservationFailCalcaulationType(eventForm.getObservationcountFailCalculationType().name());
+        if(eventForm.getObservationcountFailRange() != null) {
+            apiEventForm.getObservationFailRange().setComparator(eventForm.getObservationcountFailRange().getComparator().name());
+            apiEventForm.getObservationFailRange().setValue1(eventForm.getObservationcountFailRange().getValue1());
+            apiEventForm.getObservationFailRange().setValue2(eventForm.getObservationcountFailRange().getValue2());
+        }
+
 		return apiEventForm;
 	}
 
