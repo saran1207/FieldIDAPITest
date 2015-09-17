@@ -3,13 +3,7 @@ package com.n4systems.model.columns;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.parents.AbstractEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "column_mappings")
@@ -41,9 +35,11 @@ public abstract class ColumnMapping extends AbstractEntity implements Comparable
     private String name;
 
     @Column(name="required_extended_feature")
+    @Enumerated(EnumType.STRING)
     private ExtendedFeature requiredExtendedFeature;
 
     @Column(name="excluded_by_extended_feature")
+    @Enumerated(EnumType.STRING)
     private ExtendedFeature excludedByExtendedFeature;
 
     @ManyToOne

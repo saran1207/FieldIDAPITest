@@ -1,15 +1,13 @@
 package com.n4systems.model.event;
 
-import java.io.Serializable;
+import com.n4systems.model.user.User;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import javax.persistence.Embeddable;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
-
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
-import com.n4systems.model.user.User;
+import java.io.Serializable;
 
 @Embeddable
 public class AssignedToUpdate implements Serializable{
@@ -34,7 +32,7 @@ public class AssignedToUpdate implements Serializable{
 	
 	private Boolean assignmentApplyed;
 
-	private AssignedToUpdate() {
+	protected AssignedToUpdate() {
 		this(null, null);
 	}
 	
