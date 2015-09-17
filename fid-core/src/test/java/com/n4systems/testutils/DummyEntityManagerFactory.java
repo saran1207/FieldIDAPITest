@@ -1,13 +1,9 @@
 package com.n4systems.testutils;
 
-import java.util.Map;
-
-import javax.persistence.Cache;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceUnitUtil;
+import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.metamodel.Metamodel;
+import java.util.Map;
 
 public class DummyEntityManagerFactory implements EntityManagerFactory {
 
@@ -27,6 +23,16 @@ public class DummyEntityManagerFactory implements EntityManagerFactory {
     @Override
     public EntityManager createEntityManager(Map arg0) {
         return new DummyEntityManager();
+    }
+
+    @Override
+    public EntityManager createEntityManager(SynchronizationType synchronizationType) {
+        return null;
+    }
+
+    @Override
+    public EntityManager createEntityManager(SynchronizationType synchronizationType, Map map) {
+        return null;
     }
 
     @Override
@@ -52,6 +58,21 @@ public class DummyEntityManagerFactory implements EntityManagerFactory {
     @Override
     public PersistenceUnitUtil getPersistenceUnitUtil() {
         return null;
+    }
+
+    @Override
+    public void addNamedQuery(String s, Query query) {
+
+    }
+
+    @Override
+    public <T> T unwrap(Class<T> aClass) {
+        return null;
+    }
+
+    @Override
+    public <T> void addNamedEntityGraph(String s, EntityGraph<T> entityGraph) {
+
     }
 
     @Override

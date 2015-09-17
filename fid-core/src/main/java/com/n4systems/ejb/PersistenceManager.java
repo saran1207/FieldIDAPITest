@@ -1,17 +1,5 @@
 package com.n4systems.ejb;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.persistence.EntityManager;
-
-import org.hibernate.collection.AbstractPersistentCollection;
-import org.hibernate.stat.Statistics;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.BaseEntity;
@@ -27,6 +15,12 @@ import com.n4systems.model.user.User;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
+import org.hibernate.collection.internal.AbstractPersistentCollection;
+import org.hibernate.stat.Statistics;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import java.util.*;
 
 @Transactional
 public interface PersistenceManager {
