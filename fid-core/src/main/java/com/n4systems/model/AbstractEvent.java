@@ -31,6 +31,7 @@ public abstract class AbstractEvent<T extends EventType, R extends EntityWithTen
 	private Set<CriteriaResult> results = new HashSet<CriteriaResult>();
 	
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+    @JoinTable(name="events_fileattachments", joinColumns = @JoinColumn(name="events_id"), inverseJoinColumns = @JoinColumn(name="attachments_id"))
 	private List<FileAttachment> attachments = new ArrayList<FileAttachment>();
 
     @ElementCollection(fetch = FetchType.LAZY)
