@@ -930,10 +930,17 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     public InputStream openCriteriaResultImageMedium(CriteriaResultImage criteriaResultImage) throws IOException {
-        return new ByteArrayInputStream(downloadResource(null, CRITERIA_RESULT_IMAGE_PATH_MEDIUM,
-                criteriaResultImage.getCriteriaResult().getEvent().getId(),
-                criteriaResultImage.getCriteriaResult().getId(),
-                criteriaResultImage.getFileName()));
+        byte[] imageContents = downloadResource(null,
+                                                CRITERIA_RESULT_IMAGE_PATH_MEDIUM,
+                                                criteriaResultImage.getCriteriaResult().getEvent().getId(),
+                                                criteriaResultImage.getCriteriaResult().getId(),
+                                                criteriaResultImage.getFileName());
+
+        if(imageContents != null) {
+            return new ByteArrayInputStream(imageContents);
+        } else {
+            return null;
+        }
     }
 
     public S3ImagePath uploadImage(byte[] data, String contentType, String path, Long tenantId) {
