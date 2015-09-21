@@ -27,6 +27,7 @@ import com.n4systems.fieldid.wicket.pages.loto.ProcedureWaitingApprovalsPage;
 import com.n4systems.fieldid.wicket.pages.loto.PublishedListAllPage;
 import com.n4systems.fieldid.wicket.pages.org.OrgViewPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
+import com.n4systems.fieldid.wicket.pages.search.SmartSearchListPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.actionemailcustomization.ActionEmailSetupPage;
 import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListAllPage;
@@ -108,6 +109,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
     private TopFeedbackPanel topFeedbackPanel;
     private ModalWindow languageSelectionModalWindow;
     private final SelectLanguagePanel selectLanguagePanel;
+    protected boolean showTitle = true;
 
     public FieldIDTemplatePage() {
         this(null, null);
@@ -142,8 +144,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         add(new CustomJavascriptPanel("customJsPanel"));
         add(new GoogleAnalyticsContainer("googleAnalyticsScripts"));
 
-        // TODO DD : refactor this...override
-        addCssContainers();
+        add(new WebMarkupContainer("metaIE").add(new AttributeAppender("content", getMetaIE())));
 
         add(topFeedbackPanel = new TopFeedbackPanel("topFeedbackPanel"));
         add(new Label("versionLabel", FieldIdVersion.getVersion()));
@@ -168,8 +169,10 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         addNavBar("navBar");
         addBreadCrumbBar("breadCrumbBar");
 
+
         add(titleLabel = createTitleLabel("titleLabel"));
         titleLabel.setRenderBodyOnly(true);
+        titleLabel.setVisible(isShowTitle());
 
         add(topTitleLabel = useTopTitleLabel() ? createTopTitleLabel("topTitleLabel") : createTitleLabel("topTitleLabel"));
         topTitleLabel.setRenderBodyOnly(true);
@@ -190,21 +193,6 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
     	TenantSettings settings = getTenant().getSettings();
 		return settings.getSupportUrl()==null ? DEFAULT_SUPPORT_URL :settings.getSupportUrl();
 	}
-
-	private void addCssContainers() {
-        add(new WebMarkupContainer("metaIE").add(new AttributeAppender("content", getMetaIE())));
-
-        WebMarkupContainer newCss = new WebMarkupContainer("newCss") {
-            { setRenderBodyOnly(true); }
-
-            @Override public boolean isVisible() {
-                return !useLegacyCss();
-            }
-        };
-        newCss.add(new CachingStrategyLink("layoutCss"));
-        newCss.add(new CachingStrategyLink("feedbackErrorsCss"));
-        add(newCss);
-    }
 
     protected IModel<String> getMetaIE() {
         return Model.of("IE=Edge");
@@ -345,13 +333,10 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         autoCompleteSearch.getAutocompleteField().setMarkupId("searchText");
 
         Form<?> form = new Form<Void>("userForm") {
-
             @Override
             protected void onSubmit() {
-                redirect("/fieldid/assetInformation.action?useContext=true&usePagination=true&search=" + autoCompleteSearch.getTerm());
-                System.out.println("test");
+                setResponsePage(SmartSearchListPage.class, PageParametersBuilder.param("searchTerm", autoCompleteSearch.getAutocompleteField().getConvertedInput()));
             }
-
         };
 
         container.add(form);
@@ -444,6 +429,9 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         if(!getMainCss().isEmpty())
             response.renderOnDomReadyJavaScript("$('main[role=\"main\"]').addClass('"+getMainCss()+"');");
 
+        if(!getWrapperCss().isEmpty())
+            response.renderOnDomReadyJavaScript("$('wrapper[role=\"wrapper\"]').addClass('"+getWrapperCss()+"');");
+
         String headerScript = configService.getString(ConfigEntry.HEADER_SCRIPT, getTenantId());
 
         if (headerScript != null && !headerScript.isEmpty()) {
@@ -480,12 +468,6 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         	super.onBeforeRender();  // note : call super at END of override.  see wicket docs.
         }
     	
-    }
-
-    // Ideally these will both be unneeded by all pages, After we convert to layout.css from site_wide.css and fieldid.css
-    // (both site_wide and fieldid have accumulated a ton of irrelevant stuff that may be used only on one page and breaks new pages).
-    protected boolean useLegacyCss() {
-        return true;
     }
 
     public TopFeedbackPanel getTopFeedbackPanel() {
@@ -593,6 +575,14 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         return lotoLinkContainer;
     }
 
+    public boolean isShowTitle() {
+        return showTitle;
+    }
+
+    public void setShowTitle(boolean showTitle) {
+        this.showTitle = showTitle;
+    }
+
     static class StaticImage extends WebComponent {
         public StaticImage(String id, IModel<String> urlModel) {
             super( id, urlModel );
@@ -607,6 +597,10 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
     }
 
     protected String getMainCss() {
+        return "";
+    }
+
+    protected String getWrapperCss() {
         return "";
     }
 }

@@ -28,12 +28,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.Query;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 @Transactional
 public class AssetIndexerService extends FieldIdPersistenceService {
@@ -56,18 +56,31 @@ public class AssetIndexerService extends FieldIdPersistenceService {
         long startTime = System.currentTimeMillis();
 		logger.info(getClass().getSimpleName() +": Running");
 
-        QueryBuilder<IndexQueueItem> query = new QueryBuilder<IndexQueueItem>(IndexQueueItem.class);
+        QueryBuilder<IndexQueueItem> query = new QueryBuilder<>(IndexQueueItem.class);
         query.setLimit(configService.getInteger(ConfigEntry.ASSET_INDEX_SIZE));
 
         List<IndexQueueItem> items = persistenceService.findAll(query);
 		logger.info(getClass().getSimpleName() + " queue length = " + items.size());
 		for (IndexQueueItem item : items) {
 			try {
-				processIndexQueueItem(item);
-				persistenceService.deleteAny(item);
+                processIndexQueueItem(item);
+            } catch (EntityNotFoundException nfe) {
+                //If we're hitting an Entity Not Found exception, this means that the Asset, AssetType, whatever has
+                //been deleted or retired or never actually existed.  Point is, this data is bad and just causes us to
+                //fill the table with garbage if we don't clear it out.
+                logger.warn(getClass().getSimpleName() + " could not find " + item.getType() + ":" + item.getItemId()
+                            + ", so this index queue row is being deleted.", nfe);
 			} catch (Exception e) {
+                //If we hit here, there's some other kind of exception that happened.  The original thought was to leave
+                //the row in the table and solve other issues with the data so that it can be processed.  Unfortunately,
+                //this can cause us to fill the table up with rows that simply can't be processed.  Given that our
+                //indexer uses pages only 50 rows deep, we can't allow for bad data.
 				logger.warn(getClass().getSimpleName() +": Failed for " + item.getType() + ":" + item.getItemId(), e);
-			}
+			} finally {
+                //We always delete the row, no matter what.  This ensures that we don't clog up the index_queue_items
+                //table.
+                persistenceService.deleteAny(item);
+            }
 		}
 		logger.info(getClass().getSimpleName() +": Completed " + (System.currentTimeMillis() - startTime) + "ms");
 	}
@@ -110,7 +123,7 @@ public class AssetIndexerService extends FieldIdPersistenceService {
 	}
 
     private TenantOnlySecurityFilter createTenantFilter(HasTenant hasTenantEntity) {
-		return new TenantOnlySecurityFilter(hasTenantEntity.getTenant());
+		return new TenantOnlySecurityFilter(hasTenantEntity.getTenant()).setShowArchived(true);
 	}
 
 	private void indexAsset(Asset asset) {
@@ -163,11 +176,11 @@ public class AssetIndexerService extends FieldIdPersistenceService {
 	}
 
 	private void reindexByTenant(Tenant tenant) {
-        assetIndexWriter.reindexItems(tenant, new QueryBuilder<Asset>(Asset.class, new TenantOnlySecurityFilter(tenant)));
+        assetIndexWriter.reindexItems(tenant, new QueryBuilder<>(Asset.class, new TenantOnlySecurityFilter(tenant).setShowArchived(true)));
 	}
 
     public void indexTenant(String tenantName) {
-		QueryBuilder<Tenant> builder = new QueryBuilder<Tenant>(Tenant.class, new OpenSecurityFilter());
+		QueryBuilder<Tenant> builder = new QueryBuilder<>(Tenant.class, new OpenSecurityFilter());
 		builder.addSimpleWhere("name", tenantName);
 		Tenant tenant = persistenceService.find(builder);
 
@@ -176,16 +189,13 @@ public class AssetIndexerService extends FieldIdPersistenceService {
 
     public long asynchronouslyIndexAssets(final Tenant tenant) {
         TenantOnlySecurityFilter filter = new TenantOnlySecurityFilter(tenant).setShowArchived(true);
-        final QueryBuilder<Asset> assetQueryBuilder = new QueryBuilder<Asset>(Asset.class, filter);
+        final QueryBuilder<Asset> assetQueryBuilder = new QueryBuilder<>(Asset.class, filter);
 
         final Long count = persistenceService.count(assetQueryBuilder);
 
-        AsyncService.AsyncTask<Void> task = asyncService.createTaskNoUserContext(new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                indexTenantsPerAssets(tenant, assetQueryBuilder, count);
-                return null;
-            }
+        AsyncService.AsyncTask<Void> task = asyncService.createTaskNoUserContext(() -> {
+            indexTenantsPerAssets(tenant, assetQueryBuilder, count);
+            return null;
         });
 
         asyncService.run(task);
@@ -197,7 +207,8 @@ public class AssetIndexerService extends FieldIdPersistenceService {
         // I believe we need to include archived here, but maybe not?
         // the triggers for sure will dump records with archived assets into the queue table
 
-        int numPages = (int) Math.ceil(count / PAGE_SIZE_FOR_TENANT_INSERTING);
+        //It's probably a good idea to make sure the numbers in the Ceiling operation are actually Doubles...
+        int numPages = (int) Math.ceil(((double)count) / ((double) PAGE_SIZE_FOR_TENANT_INSERTING));
 
         for (int i = 0; i < numPages; i++) {
             EntityManager em = ((JpaTransactionManager) transactionManager).getEntityManagerFactory().createEntityManager();
@@ -225,7 +236,7 @@ public class AssetIndexerService extends FieldIdPersistenceService {
     }
 
     private boolean creationIndexItemAlreadyExists(EntityManager em, Long assetId) {
-        QueryBuilder<IndexQueueItem> existsBuilder = new QueryBuilder<IndexQueueItem>(IndexQueueItem.class, new OpenSecurityFilter());
+        QueryBuilder<IndexQueueItem> existsBuilder = new QueryBuilder<>(IndexQueueItem.class, new OpenSecurityFilter());
 
         existsBuilder.addSimpleWhere("type", IndexQueueItem.IndexQueueItemType.ASSET_INSERT);
         existsBuilder.addSimpleWhere("id", assetId);
@@ -272,7 +283,7 @@ public class AssetIndexerService extends FieldIdPersistenceService {
 
 
     public Long countRemainingIndexItemsForTenant() {
-        QueryBuilder<IndexQueueItem> query = new QueryBuilder<IndexQueueItem>(IndexQueueItem.class, new OpenSecurityFilter());
+        QueryBuilder<IndexQueueItem> query = new QueryBuilder<>(IndexQueueItem.class, new OpenSecurityFilter());
         query.addSimpleWhere("tenant", getCurrentTenant());
         return persistenceService.count(query);
     }

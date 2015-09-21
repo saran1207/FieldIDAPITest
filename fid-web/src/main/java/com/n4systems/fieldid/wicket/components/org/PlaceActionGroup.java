@@ -24,7 +24,6 @@ import com.n4systems.util.collections.PrioritizedList;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -91,11 +90,8 @@ public class PlaceActionGroup extends Panel {
             }
         });
         scheduleLink.setVisible(canCreateEvents &&
-                                FieldIDSession.get().getSecurityGuard().isInspectionsEnabled());
-
-        if (!hasAssociatedEvents()) {
-            scheduleLink.add(new AttributeAppender("class", "disabled").setSeparator(" "));
-        }
+                                FieldIDSession.get().getSecurityGuard().isInspectionsEnabled() &&
+                                hasAssociatedEvents());
 
         add(eventsContainer = new WebMarkupContainer("eventsContainer"));
         eventsContainer.setOutputMarkupPlaceholderTag(true);
@@ -127,9 +123,7 @@ public class PlaceActionGroup extends Panel {
             }
         });
 
-        if (!hasEvents()) {
-            eventsContainer.add(new AttributeAppender("class", "disabled").setSeparator(" "));
-        }
+        eventsContainer.setVisible(hasEvents());
 
         Component mergeLink;
         Link archiveLink;

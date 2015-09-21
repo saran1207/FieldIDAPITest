@@ -170,8 +170,10 @@ public class ViewUserPage extends FieldIDTemplatePage{
         User user = userModel.getObject();
         BitField permField = new BitField(user.isNew() ? 0 : user.getPermissions());
 
-        if(user.isLiteUser() || user.isUsageBasedUser())
-            permissionList =  Permissions.getVisibleLiteUserPermissions();
+        if (user.isLiteUser() || user.isUsageBasedUser())
+            permissionList = Permissions.getVisibleLiteUserPermissions();
+        else if (user.isReadOnly())
+            permissionList = Permissions.getVisibleReadOnlyPermissions();
         else
             permissionList =  Permissions.getVisibleSystemUserPermissions();
 

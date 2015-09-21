@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.service.event;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.escalationrule.AssignmentEscalationRuleService;
 import com.n4systems.model.*;
 import com.n4systems.model.notification.AssigneeNotification;
 import com.n4systems.model.orgs.BaseOrg;
@@ -19,6 +20,8 @@ public class  EventScheduleService extends FieldIdPersistenceService {
 
     @Autowired
     private NotifyEventAssigneeService notifyEventAssigneeService;
+
+    @Autowired private AssignmentEscalationRuleService ruleService;
 
 	@Transactional(readOnly = true)
 	public ThingEvent getNextEventSchedule(Long assetId, Long eventTypeId) {
@@ -55,8 +58,16 @@ public class  EventScheduleService extends FieldIdPersistenceService {
 
     @Transactional
     public List<ThingEvent> getAvailableSchedulesFor(Asset asset) {
+        return getAvailableSchedulesForAsset(asset, null);
+    }
+
+    @Transactional
+    public List<ThingEvent> getAvailableSchedulesForAsset(Asset asset, EventType eventType) {
         QueryBuilder<ThingEvent> query = createUserSecurityBuilder(ThingEvent.class);
-        query.addSimpleWhere("asset", asset).addWhere(Comparator.EQ, "workflowState", "workflowState", WorkflowState.OPEN);
+        query.addSimpleWhere("asset", asset);
+        query.addWhere(Comparator.EQ, "workflowState", "workflowState", WorkflowState.OPEN);
+        if(eventType != null)
+            query.addSimpleWhere("type.id", eventType.getId());
         query.addOrder("dueDate");
 
         return persistenceService.findAll(query);
@@ -116,6 +127,11 @@ public class  EventScheduleService extends FieldIdPersistenceService {
         updatedSchedule.getAsset().touch();
         persistenceService.update(updatedSchedule.getAsset());
 
+        ruleService.clearEscalationRulesForEvent(updatedSchedule.getId());
+        if(updatedSchedule.getWorkflowState().equals(WorkflowState.OPEN)) {
+            ruleService.createApplicableQueueItems(updatedSchedule);
+        }
+
 
         return updatedSchedule;
     }
@@ -127,6 +143,12 @@ public class  EventScheduleService extends FieldIdPersistenceService {
         //Update the asset to notify mobile of change
         openEvent.getAsset().touch();
         persistenceService.update(openEvent.getAsset());
+
+        //That's all done, so now we update the event.
+        if(openEvent.getWorkflowState().equals(WorkflowState.OPEN)) {
+            ruleService.createApplicableQueueItems(openEvent);
+        }
+
         return id;
     }
 }

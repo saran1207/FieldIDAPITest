@@ -1,0 +1,1 @@
+update recurring_loto_events set state='ARCHIVED' where procedure_definition_id in (select id from procedure_definitions where state='ARCHIVED');

@@ -15,13 +15,13 @@ public enum PermissionType {
 	CreateEvent("label.createevent_permission",Permissions.CreateEvent),         
 	EditEvent("label.editevent_permission",Permissions.EditEvent),           
 	ManageJobs("label.managejobs_permission",Permissions.ManageJobs),
-	ManageSafetyNetwork("label.managesafetynetwork_permission",Permissions.ManageSafetyNetwork), 
+	ManageSafetyNetwork("label.managesafetynetwork_permission",Permissions.ManageSafetyNetwork),
+	EditAssetDetails("label.editassetdetails_permission", Permissions.EditAssetDetails),
 	// composite permissions....
 	ADMIN(Integer.MAX_VALUE-1),	// set all bits. 
 	SYSTEM(Integer.MAX_VALUE-1),// 
 	CUSTOMER(0), 
-	ALLEVENT(CreateEvent.getValue(), EditEvent.getValue() ),
-	;		
+	ALLEVENT(CreateEvent.getValue(), EditEvent.getValue() );
 		
 	private int value;
 	private String label;

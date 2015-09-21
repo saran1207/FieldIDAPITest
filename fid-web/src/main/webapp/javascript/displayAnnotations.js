@@ -16,7 +16,7 @@ function annotateLockingImages() {
     $('span.note').remove();
     $('.timelineContainer div.media-image').each(
         function(index, element) {
-            var currentAnnotation = isolationAnnotations[index];
+            var currentAnnotation = isolationLockAnnotations[index];
             $(element).addAnnotations(
                 function(annotation) {
                     return createLabel(annotation);
@@ -28,7 +28,7 @@ function annotateUnlockingImages() {
     $('span.note').remove();
     $('.timelineContainer div.media-image').each(
         function(index, element) {
-            var currentAnnotation = isolationAnnotations[isolationAnnotations.length - 1 - index];
+            var currentAnnotation = isolationUnlockAnnotations[index];
             $(element).addAnnotations(
                 function(annotation) {
                     return createLabel(annotation);

@@ -1,12 +1,10 @@
 package com.n4systems.fieldid.wicket.pages.event;
 
 import com.n4systems.fieldid.service.event.EventCriteriaEditService;
-import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventResult;
-import com.n4systems.model.FileAttachment;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.persistence.utils.PostFetcher;
 import com.n4systems.tools.FileDataContainer;
@@ -21,8 +19,8 @@ import java.util.ArrayList;
 
 public class EditEventPage extends ThingEventPage {
 
-    @SpringBean private EventService eventService;
-    @SpringBean private EventCriteriaEditService criteriaEditService;
+    @SpringBean
+    private EventCriteriaEditService criteriaEditService;
 
     private long uniqueId;
 
@@ -78,7 +76,7 @@ public class EditEventPage extends ThingEventPage {
 
     @Override
     protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("title.edit_event"));
+        return new Label(labelId, new FIDLabelModel("title.edit_event", event.getObject().getType().getDisplayName()));
     }
 
 }

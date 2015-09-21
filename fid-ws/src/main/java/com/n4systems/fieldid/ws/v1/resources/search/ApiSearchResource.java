@@ -2,6 +2,7 @@ package com.n4systems.fieldid.ws.v1.resources.search;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.event.EventScheduleService;
+import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.search.AssetSearchService;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
@@ -33,6 +34,7 @@ public class ApiSearchResource extends ApiResource<ApiSearchResult, Asset> {
 	@Autowired private AssetSearchService assetSearchService;
 	@Autowired private EventScheduleService eventScheduleService;
 	@Autowired private S3Service s3service;
+	@Autowired private ProcedureDefinitionService procedureDefinitionService;
 	
 	@GET
 	@Consumes(MediaType.TEXT_PLAIN)
@@ -158,6 +160,8 @@ public class ApiSearchResource extends ApiResource<ApiSearchResult, Asset> {
 		if (openEvent != null) {
 			apiResult.setNextEventDate(openEvent.getDueDate());
 		}
+
+		apiResult.setHasProcedures(procedureDefinitionService.hasActiveProcedureDefinitions(asset));
 		
 		return apiResult;
 	}

@@ -2,7 +2,8 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.components;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.search.results.MassActionLink;
-import com.n4systems.fieldid.wicket.pages.massevent.SelectMassEventPage;
+import com.n4systems.fieldid.wicket.pages.escalationrules.CreateRulePage;
+import com.n4systems.fieldid.wicket.pages.massevent.SelectMassOpenEventPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.AssignEventsToJobPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateOpenEventsPage;
@@ -19,6 +20,8 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
 import rfid.web.helper.SessionUser;
+
+import java.util.List;
 
 
 public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
@@ -46,7 +49,7 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
         actions.add(massEventLink = new Link("massEventLink") {
             @Override
             public void onClick() {
-                setResponsePage(new SelectMassEventPage(model));
+                setResponsePage(new SelectMassOpenEventPage(model));
             }
         });
 
@@ -63,6 +66,14 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
                 setResponsePage(new MassUpdateOpenEventsPage(model));
             }
         });
+
+        Link escalationRuleLink = new Link("createRule") {
+            @Override public void onClick() {
+                setResponsePage(new CreateRulePage(model.getObject(), getResultIdList()));
+            }
+        };
+        escalationRuleLink.setVisible(model.getObject().getWorkflowState().equals(WorkflowStateCriteria.OPEN));
+        add(escalationRuleLink);
 
         add(new Link("summaryReportLink") {
             @Override public void onClick() {
@@ -93,6 +104,8 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
 
         initializeLimits();
     }
+
+    protected abstract List<Long> getResultIdList();
 
     @Override
     protected void updateMenuBeforeRender(EventReportCriteria criteria) {

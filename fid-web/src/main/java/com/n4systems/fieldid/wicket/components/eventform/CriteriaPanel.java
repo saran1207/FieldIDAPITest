@@ -9,7 +9,7 @@ import com.n4systems.fieldid.wicket.components.feedback.ContainerFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.eventform.CriteriaTypeDescriptionModel;
-import com.n4systems.fieldid.wicket.util.NoBarsValidator;
+import com.n4systems.fieldid.wicket.util.NoDoubleBarsValidator;
 import com.n4systems.model.*;
 import com.n4systems.model.stateset.StateSetLoader;
 import com.n4systems.util.eventform.CriteriaCopyUtil;
@@ -66,7 +66,7 @@ public class CriteriaPanel extends SortableListPanel {
             protected void populateItem(final ListItem<Criteria> item) {
                 item.setOutputMarkupId(true);
                 item.add(new EditCopyDeleteItemPanel("editCopyDeletePanel", new PropertyModel<>(item.getModel(), "displayText"), new CriteriaTypeDescriptionModel(item.getModel())) {
-                    { setEditMaximumLength(1000); getTextField().add(new NoBarsValidator()); }
+                    { setEditMaximumLength(1000); getTextField().add(new NoDoubleBarsValidator()); }
                     @Override
                     protected void onViewLinkClicked(AjaxRequestTarget target) {
                         currentlySelectedIndex = item.getIndex();
@@ -163,7 +163,7 @@ public class CriteriaPanel extends SortableListPanel {
             add(new DropDownChoice<>("criteriaType", new PropertyModel<>(this, "criteriaType"), criteriaTypes, new ListableChoiceRenderer<>()).setRequired(true));
             AjaxButton submitButton;
             add(addTextField = new RequiredTextField<>("criteriaName", new PropertyModel<>(this, "criteriaName")));
-            addTextField.add(new NoBarsValidator());
+            addTextField.add(new NoDoubleBarsValidator());
             addTextField.setOutputMarkupId(true);
             addTextField.add(new StringValidator.MaximumLengthValidator(1000));
             add(submitButton = new AjaxButton("submitButton") {
@@ -190,6 +190,12 @@ public class CriteriaPanel extends SortableListPanel {
                     } else if (CriteriaType.OBSERVATION_COUNT.equals(criteriaType)) {
                         if (!configureDefaultObservationCountGroup(target, (ObservationCountCriteria) criteria)) {
                             return;
+                        }
+                    }
+
+                    if(getCriteriaSection().isRequired()) {
+                        if (!(criteria instanceof ObservationCountCriteria) && !(criteria instanceof OneClickCriteria)) {
+                            criteria.setRequired();
                         }
                     }
 

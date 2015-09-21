@@ -51,7 +51,7 @@ public class UpcomingScheduledEventsWidget extends ChartWidget<LocalDate,Upcomin
 
 	@Override
     public Component createConfigPanel(String id) {
-		return new UpcomingEventsConfigPanel(id,getConfigModel());
+		return new UpcomingEventsConfigPanel(id,getConfigModel(), getWidgetDefinition());
 	}
 	
 	@Override

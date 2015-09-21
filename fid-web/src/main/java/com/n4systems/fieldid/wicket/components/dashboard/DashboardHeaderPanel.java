@@ -17,6 +17,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -27,11 +28,44 @@ public class DashboardHeaderPanel extends Panel {
     @SpringBean
     private DashboardService dashboardService;
 
+    private static final String MANAGE_DASHBOARDS = "Manage Dashboards";
+    public ContextImage menuImage;
+    public ContextImage hideMenuImage;
 
     public DashboardHeaderPanel(String id) {
         super(id);
 
         add(new ContextImage("printIcon", "images/print-icon.png"));
+
+        menuImage = new ContextImage("menuButton", "images/menu_button_16.png");
+        menuImage.setMarkupId("menuButton");
+        menuImage.setOutputMarkupPlaceholderTag(true);
+
+        hideMenuImage = new ContextImage("hideMenuImage", "images/collapse-menu.png");
+        hideMenuImage.setMarkupId("hideMenuImage");
+        hideMenuImage.setOutputMarkupPlaceholderTag(true);
+
+        AjaxLink sidePanel = new AjaxLink("layoutListLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                if(menuImage.isVisible()) {
+                    target.appendJavaScript("showList()");
+                    menuImage.setVisible(false);
+                    hideMenuImage.setVisible(true);
+                    target.add(menuImage, hideMenuImage);
+                } else {
+                    target.appendJavaScript("hideList()");
+                    menuImage.setVisible(true);
+                    hideMenuImage.setVisible(false);
+                    target.add(menuImage, hideMenuImage);
+                }
+            }
+        };
+        sidePanel.setMarkupId("layoutListLink");
+
+        sidePanel.add(menuImage);
+        sidePanel.add(hideMenuImage);
+        add(sidePanel);
 
         add(new Label("name", new PropertyModel<DashboardLayout>(new CurrentLayoutModel(), "name")));
 
@@ -39,24 +73,37 @@ public class DashboardHeaderPanel extends Panel {
             @Override
             protected void populateItem(ListItem<DashboardLayout> item) {
                 final DashboardLayout layout = item.getModelObject();
-                Link<Void> selectLink = new Link<Void>("link") {
-                    @Override
-                    public void onClick() {
-                        DashboardLayout selectedLayout = dashboardService.findLayout();
-                        selectedLayout.setSelected(false);
-                        layout.setSelected(true);
-                        dashboardService.saveLayout(selectedLayout);
-                        dashboardService.saveLayout(layout);
-                        setResponsePage(DashboardPage.class);
-                    }
-                };
-                item.add(selectLink);
-                selectLink.add(new Label("name", new PropertyModel<DashboardLayout>(layout, "name")));
+                if (!layout.getName().equals(MANAGE_DASHBOARDS)) {
+                    Link<Void> selectLink = new Link<Void>("link") {
+                        @Override
+                        public void onClick() {
+                            DashboardLayout selectedLayout = dashboardService.findLayout();
+                            selectedLayout.setSelected(false);
+                            layout.setSelected(true);
+                            dashboardService.saveLayout(selectedLayout);
+                            dashboardService.saveLayout(layout);
+                            setResponsePage(DashboardPage.class);
+                        }
+                    };
+                    item.add(selectLink);
+                    selectLink.add(new Label("name", new PropertyModel<DashboardLayout>(layout, "name")));
+                } else {
+                    AjaxLink selectLink = new AjaxLink<Void>("link") {
+                        @Override
+                        public void onClick(AjaxRequestTarget target) {
+                            onManageDashboard(target);
+                        }
+                    };
+                    item.add(selectLink);
+                    selectLink.add(new Label("name", new PropertyModel<DashboardLayout>(layout, "name")));
+                    item.add(new AttributeAppender("class", new Model<String>(" manage-dashboard"), ""));
+                }
             }
         };
 
         layoutListView.setOutputMarkupPlaceholderTag(true);
         add(layoutListView);
+
 
         HiddenField<Long> layoutCount;
         add(layoutCount = new HiddenField<Long>("layoutCount", createDashboardLayoutCountModel()));
@@ -71,23 +118,11 @@ public class DashboardHeaderPanel extends Panel {
         });
         addWidgetsLink.setMarkupId("addWidgetsLink");
         addWidgetsLink.add(new AttributeAppender("title", new FIDLabelModel("label.tooltip.add_new_widget")));
-
-        AjaxLink manageDashboardLink;
-        add(manageDashboardLink = new AjaxLink<Void>("manageDashboardLink") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                onManageDashboard(target);
-            }
-        });
-        manageDashboardLink.add(new AttributeAppender("title", new FIDLabelModel("label.tooltip.manage_dashboard")));
-
     }
 
     @Override
     public void renderHead(IHeaderResponse response) {
         response.renderJavaScriptReference("javascript/dashboard_layout_list.js");
-        response.renderCSSReference("style/legacy/dashboard/header.css");
-        response.renderCSSReference("style/legacy/tipsy/tipsy.css");
         response.renderJavaScriptReference("javascript/tipsy/jquery.tipsy.js");
         // CAVEAT : https://github.com/jaz303/tipsy/issues/19
         // after ajax call, tipsy tooltips will remain around so need to remove them explicitly.
@@ -101,7 +136,14 @@ public class DashboardHeaderPanel extends Panel {
         return new LoadableDetachableModel<List<DashboardLayout>>() {
             @Override
             protected List<DashboardLayout> load() {
-                return dashboardService.findDashboardLayouts(true);
+                List<DashboardLayout> list = dashboardService.findDashboardLayouts(false);
+
+                //Add the manage dashboards link to the list of layouts.
+                DashboardLayout manageLink = new DashboardLayout();
+                manageLink.setName(MANAGE_DASHBOARDS);
+                list.add(manageLink);
+
+                return list;
             }
         };
     }
@@ -110,7 +152,9 @@ public class DashboardHeaderPanel extends Panel {
         return new LoadableDetachableModel<Long>() {
             @Override
             protected Long load() {
+
                 return dashboardService.countDashboardLayouts();
+
             }
         };
     }

@@ -59,9 +59,4 @@ public abstract class CriteriaActionButton extends Panel {
     }
 
     protected abstract void onClick(AjaxRequestTarget target);
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        response.renderCSSReference("style/legacy/newCss/component/matt_buttons.css");
-    }
 }

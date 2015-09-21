@@ -6,6 +6,7 @@ import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.OneClickCriteriaResult;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -29,6 +30,8 @@ public class OneClickCriteriaEditPanel extends Panel {
     public OneClickCriteriaEditPanel(String id, final IModel<OneClickCriteriaResult> result) {
         super(id);
         this.result = result;
+
+        add(new AttributeAppender("class", "one-click").setSeparator(" "));
         
         buttons = ((OneClickCriteria)result.getObject().getCriteria()).getButtonGroup().getAvailableButtons();
 

@@ -61,6 +61,10 @@ label.eventFormLabel {
     margin-top:4px;
 }
 
+.recDefButtons .btn-secondary, .expandButton .btn-secondary {
+    padding: 3px 5px 0;
+}
+
 .criteriaEditContainer {
     width: 410px;
     display:block;
@@ -141,13 +145,18 @@ textarea.comments {
 }
 
 .eventSectionIndex {
-	float:right;
 	font-size: 1em;
 	vertical-align : middle;
 	font-size : 11px;
 	color : #666666;
 }
 
+.eventSectionIndex .pagination {
+    float:right;
+}
+.eventSectionIndex .pagination label{
+    vertical-align: super;
+}
 .eventSectionIndex a img {
 	vertical-align:middle;
 }
@@ -219,7 +228,7 @@ textarea.comments {
 
 .observationsActionsText {
     font-size: 12px;
-    margin-left: 50px;
+    display: inline;
     padding: 7px;
 }
 
@@ -331,6 +340,7 @@ a.clearSignatureLink {
 	float: left;
 	width: 100%;
     border-bottom: 1px solid #dddddd;
+    overflow: visible;
 }
 
 span.orgPicker {
@@ -523,7 +533,7 @@ span.fieldHolder img {
     padding: 0;
 }
 
-.event-actions {
+.criteriaEditForm .event-actions {
     display:none;
 }
 

@@ -97,10 +97,4 @@ public abstract class PlacePage extends FieldIDTemplatePage {
     protected BaseOrg getOrg() {
         return orgModel.getObject();
     }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        response.renderCSSReference("style/pages/places.css");
-    }
 }

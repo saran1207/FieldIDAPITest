@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.event.post;
 
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
+import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.assetstatus.AssetStatusesForTenantModel;
 import com.n4systems.model.AssetStatus;
@@ -14,7 +15,7 @@ public class PostThingEventPanel extends Panel {
 
     public PostThingEventPanel(String id, IModel<ThingEvent> event) {
         super(id);
-        DropDownChoice assetStatus = new DropDownChoice<AssetStatus>("assetStatus", new PropertyModel<AssetStatus>(event, "assetStatus"), new AssetStatusesForTenantModel(), new ListableChoiceRenderer<AssetStatus>());
+        DropDownChoice assetStatus = new FidDropDownChoice("assetStatus", new PropertyModel<AssetStatus>(event, "assetStatus"), new AssetStatusesForTenantModel(), new ListableChoiceRenderer<AssetStatus>());
         assetStatus.add(new UpdateComponentOnChange());
         assetStatus.setNullValid(true);
         add(assetStatus);

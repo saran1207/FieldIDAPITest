@@ -70,21 +70,19 @@ public class PerformEventPage extends ThingEventPage {
         }
 
         if (event.getObject().getType().isThingEventType()) {
-            Asset asset =  ((ThingEvent)event.getObject()).getAsset();
+            Asset asset =  event.getObject().getAsset();
 
             if (null != asset && null != event.getObject().getGpsLocation() && null != event.getObject().getGpsLocation().getLatitude() && null != event.getObject().getGpsLocation().getLongitude()) {
                asset.setGpsLocation(new GpsLocation(event.getObject().getGpsLocation().getLatitude(), event.getObject().getGpsLocation().getLongitude()));
             }
          }
 
-        Event savedEvent = eventCreationService.createEventWithSchedules(event.getObject(), 0L, fileDataContainer, fileAttachments, createEventScheduleBundles());
-
-        return savedEvent;
+        return eventCreationService.createEventWithSchedules(event.getObject(), 0L, fileDataContainer, fileAttachments, createEventScheduleBundles());
     }
 
     @Override
     protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("title.perform_event"));
+        return new Label(labelId, new FIDLabelModel("title.perform_event", event.getObject().getType().getDisplayName()));
     }
 
 }

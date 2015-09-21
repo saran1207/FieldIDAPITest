@@ -115,7 +115,12 @@ public class HeaderPanel extends Panel {
         if (FieldIDSession.get().getSessionUser().hasAccess("editevent") && !FieldIDSession.get().getSessionUser().isReadOnlyUser())
             add(new BookmarkablePageLink<Void>("editAssetLink", IdentifyOrEditAssetPage.class, PageParametersBuilder.id(asset.getId())));
         else
-            add(new BookmarkablePageLink<Void>("editAssetLink", LimitedEditAsset.class, PageParametersBuilder.id(asset.getId())));
+            add(new BookmarkablePageLink<Void>("editAssetLink", LimitedEditAsset.class, PageParametersBuilder.id(asset.getId())) {
+                @Override
+                public boolean isVisible() {
+                    return FieldIDSession.get().getSessionUser().hasAccess("editassetdetails");
+                }
+            });
         // Necessary for localization stuff to not break on this page.
         final IModel<Set<EventType>> assocEventTypesModel = new LocalizeModel<Set<EventType>>(new PropertyModel<Set<EventType>>(asset.getType(), "associatedEventTypes"));
         boolean hasAssociatedEventTypes = new LocalizeAround<Boolean>(new Callable<Boolean>() {

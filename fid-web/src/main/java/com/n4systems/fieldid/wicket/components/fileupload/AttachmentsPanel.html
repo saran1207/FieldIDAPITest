@@ -1,16 +1,14 @@
+<html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 
     <form wicket:id="uploadForm">
 
-        <div wicket:id="attachedFilesContainer">
+        <div wicket:id="attachedFilesContainer" class="attached-files-container">
 
-            <div wicket:id="attachedFiles" class="attachedFile">
-                <img src="/fieldid/images/attachment-icon.png" class="attachmentImage"> <div wicket:id="fileName" class="fileName"></div> <a wicket:id="removeLink" class="removeLink"><wicket:message key="label.remove"/></a>
-                <br/>
-                <textarea wicket:id="comments"/>
-                <br/>
+            <div wicket:id="attachedFiles" class="attached-file">
+                <span wicket:id="fileName" class="filename"></span> <a wicket:id="removeLink" class="removeLink"><wicket:message key="label.remove"/></a>
+                <textarea class="comments" wicket:id="comments"/>
             </div>
-
         </div>
 
         <input wicket:id="file" type="file"/>
@@ -20,3 +18,4 @@
     </form>
 
 </wicket:panel>
+</html>

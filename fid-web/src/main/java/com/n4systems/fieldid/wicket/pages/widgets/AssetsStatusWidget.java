@@ -58,7 +58,7 @@ public class AssetsStatusWidget extends ChartWidget<String,AssetsStatusWidgetCon
 	
 	@Override
     public Component createConfigPanel(String id) {
-		return new AssetsStatusConfigPanel(id,getConfigModel());
+		return new AssetsStatusConfigPanel(id,getConfigModel(), getWidgetDefinition());
 	}
 
 	@Override

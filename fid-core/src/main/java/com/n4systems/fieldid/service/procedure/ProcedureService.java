@@ -207,4 +207,12 @@ public class ProcedureService extends FieldIdPersistenceService {
 
         return filteredList;
     }
+
+    public List<Procedure> findByMobileId(List<String> mobileIds) {
+        QueryBuilder<Procedure> builder = createUserSecurityBuilder(Procedure.class);
+        builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "mobileGUID", mobileIds));
+
+        List<Procedure> procedures = persistenceService.findAll(builder);
+        return procedures;
+    }
 }

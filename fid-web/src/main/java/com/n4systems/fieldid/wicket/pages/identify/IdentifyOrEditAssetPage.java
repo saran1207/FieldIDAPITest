@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetIdentifierService;
 import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.service.escalationrule.AssignmentEscalationRuleService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.user.UserGroupService;
@@ -83,6 +84,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
     @SpringBean private PersistenceService persistenceService;
     @SpringBean private OrgService orgService;
     @SpringBean private UserGroupService userGroupService;
+    @SpringBean private AssignmentEscalationRuleService ruleService;
 
     EventSchedulesPanel eventSchedulesPanel;
     AttributesEditPanel attributesEditPanel;
@@ -543,7 +545,10 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             copiedEvent.setTenant(getTenant());
             copiedEvent.setOwner(asset.getOwner());
 
-            persistenceService.save(copiedEvent);
+            Long id = persistenceService.save(copiedEvent);
+            copiedEvent = persistenceService.find(ThingEvent.class, id);
+
+            ruleService.createApplicableQueueItems(copiedEvent);
         }
     }
 

@@ -1,10 +1,8 @@
 package com.n4systems.fieldid.wicket.components.asset.events.table;
 
-import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.action.ActionsPanel;
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
 import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
@@ -17,16 +15,18 @@ import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.event.CloseEventPage;
+import com.n4systems.fieldid.wicket.pages.event.PerformEventPage;
+import com.n4systems.fieldid.wicket.pages.masterevent.PerformMasterEventPage;
 import com.n4systems.model.*;
-import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
@@ -60,8 +60,14 @@ public class OpenActionsCell extends Panel {
         
         final ThingEvent schedule = eventModel.getObject();
 
-        String startAction = "selectEventAdd.action?scheduleId=" + schedule.getId() + "&assetId=" + schedule.getAsset().getId() + "&type=" + schedule.getType().getId();
-        add(new NonWicketLink("startLink", startAction, new AttributeModifier("class", "mattButtonLeft")));
+        PageParameters nextParams = new PageParameters().add("assetId", schedule.getTarget().getId())
+                                                        .add("type", schedule.getType().getId())
+                                                        .add("scheduleId", schedule.getId());
+        if ((schedule.getEventType() instanceof ThingEventType) && schedule.getThingType().isMaster()) {
+            add(new BookmarkablePageLink<PerformMasterEventPage>("startLink", PerformMasterEventPage.class, nextParams));
+        } else {
+            add(new BookmarkablePageLink<PerformEventPage>("startLink", PerformEventPage.class, nextParams));
+        }
 
         add(new Link("closeLink") {
             @Override

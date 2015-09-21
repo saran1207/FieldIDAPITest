@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>fieldid-root</artifactId>
 		<groupId>com.fieldid</groupId>
-        <version>2015.3.0</version>
+        <version>2015.6.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>fid-core</artifactId>
 	<name>Core Lib</name>
@@ -43,12 +43,17 @@
             <artifactId>biweekly</artifactId>
             <version>0.4.0</version>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>javassist</groupId>-->
+            <!--<artifactId>javassist</artifactId>-->
+            <!--<version>3.12.0.GA-FID</version>-->
+        <!--</dependency>-->
         <dependency>
-            <groupId>javassist</groupId>
+            <groupId>org.javassist</groupId>
             <artifactId>javassist</artifactId>
-            <version>3.12.0.GA-FID</version>
+            <version>3.20.0-GA</version>
         </dependency>
-		<dependency>
+        <dependency>
 			<groupId>com.fieldid</groupId>
 			<artifactId>fid-cert-data</artifactId>
 		</dependency>
@@ -57,6 +62,11 @@
 			<artifactId>fid-test-utils</artifactId>
 			<scope>test</scope>
 		</dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-java8</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
         <dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
@@ -115,7 +125,6 @@
 			<artifactId>xstream</artifactId>
 			<version>1.3.1</version>
 		</dependency>
-        <!-- Stopped making updates here -->
 		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
@@ -247,7 +256,7 @@
         <dependency>
         	<groupId>net.sf.jasperreports</groupId>
         	<artifactId>jasperreports</artifactId>
-        	<version>4.1.2</version>
+        	<version>6.1.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.poi</groupId>
@@ -258,7 +267,13 @@
         <dependency>
         	<groupId>net.sf.jasperreports</groupId>
         	<artifactId>jasperreports-fonts</artifactId>
-        	<version>4.0.0</version>
+        	<version>6.0.0</version>
+        </dependency>
+        <!-- We need to add this because the new version of Jasper doesn't have it... -->
+        <dependency>
+            <groupId>eclipse</groupId>
+            <artifactId>jdtcore</artifactId>
+            <version>3.1.0</version>
         </dependency>
         <dependency>
 		    <groupId>joda-time</groupId>

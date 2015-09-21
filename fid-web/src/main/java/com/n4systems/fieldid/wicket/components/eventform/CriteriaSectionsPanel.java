@@ -101,7 +101,7 @@ public class CriteriaSectionsPanel extends SortableListPanel {
 
                     @Override
                     protected Component createOptionalPanel(String id) {
-                       return new OptionalFlagPanel(id, new PropertyModel<Boolean>(item.getModel(), "optional"));
+                       return new OptionalFlagPanel(id, item.getModel());
                     }
                 });
 
@@ -194,10 +194,18 @@ public class CriteriaSectionsPanel extends SortableListPanel {
 
     protected void onCurrentCriteriaSectionDeleted(AjaxRequestTarget target) { }
 
+    protected void onAllSectionCriteriaRequired(AjaxRequestTarget target) { }
+
     private class OptionalFlagPanel extends Fragment {
-        public OptionalFlagPanel(String id, IModel<Boolean> model) {
+        public OptionalFlagPanel(String id, IModel<CriteriaSection> model) {
             super(id, "optionalFlagPanel", CriteriaSectionsPanel.this, model);
-            add(new CheckBox("optionalCheck", model).add(new UpdateComponentOnChange()));
+            add(new CheckBox("optionalCheck", new PropertyModel<>(model, "optional")).add(new UpdateComponentOnChange()));
+            add(new CheckBox("requiredCheck", new PropertyModel<>(model, "required")).add(new UpdateComponentOnChange() {
+                @Override
+                protected void onUpdate(AjaxRequestTarget target) {
+                    onAllSectionCriteriaRequired(target);
+                }
+            }));
         }
     }
 

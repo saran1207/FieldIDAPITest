@@ -65,12 +65,14 @@ public class EventCompletenessWidget extends ChartWidget<LocalDate,EventComplete
         options.xaxis.timeformat = "%y/%m";
         options.xaxis.monthNames = FlotOptions.MONTH_NAMES;
 
+		options.legend.margin = -38;
+
 		return options;
 	}
 
 	@Override
     public Component createConfigPanel(String id) {
-		return new EventCompletenessConfigPanel(id,getConfigModel());
+		return new EventCompletenessConfigPanel(id,getConfigModel(), getWidgetDefinition());
 	}
 	
 	@Override

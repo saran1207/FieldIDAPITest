@@ -17,6 +17,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -27,10 +28,11 @@ public class LimitedEditAsset extends FieldIDTemplatePage {
 
     @SpringBean
     private PersistenceService persistenceService;
+    private Asset asset;
 
     public LimitedEditAsset(PageParameters params) {
         Long id = params.get("id").toLongObject();
-        Asset asset = persistenceService.find(Asset.class, id);
+        asset = persistenceService.find(Asset.class, id);
 
         add(new EditAssetCustomerInformationForm("editCustomerInformationForm", Model.of(asset)));
     }
@@ -40,9 +42,7 @@ public class LimitedEditAsset extends FieldIDTemplatePage {
         return new Label(labelId, new FIDLabelModel("label.edit_asset"));
     }
 
-
     class EditAssetCustomerInformationForm extends Form<Asset> {
-
 
         private OrgLocationPicker locationPicker;
 
@@ -94,4 +94,13 @@ public class LimitedEditAsset extends FieldIDTemplatePage {
         }
     }
 
+    @Override
+    protected Component createBackToLink(String linkId, String linkLabelId) {
+        return new Link<Void>(linkId) {
+            @Override
+            public void onClick() {
+                setResponsePage(new AssetSummaryPage(asset));
+            }
+        }.add(new Label(linkLabelId, new FIDLabelModel("label.back_to_x", new FIDLabelModel("label.assetsummary").getObject())));
+    }
 }

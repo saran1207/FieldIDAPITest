@@ -15,7 +15,7 @@ public class RecommendationsEditPanel extends ObservationsEditPanel<Recommendati
     public RecommendationsEditPanel(String id, final IModel<CriteriaResult> criteriaResultModel) {
         super(id, criteriaResultModel,
                 new PropertyModel<List<? extends String>>(criteriaResultModel, "criteria.recommendations"),
-                "recSelected");
+                "rec-selected recSelected");
 
         transientRecommendations = new ArrayList<Recommendation>(criteriaResultModel.getObject().getRecommendations());
     }

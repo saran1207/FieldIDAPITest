@@ -227,12 +227,19 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         }
     }
 
-    public List<ProcedureDefinition> getActiveProcedureDefinitionsForAsset(Asset asset) {
+    private QueryBuilder<ProcedureDefinition> createActiveProcedureDefinitionQuery(Asset asset) {
         QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
         query.addSimpleWhere("asset", asset);
         query.addWhere(WhereParameter.Comparator.IN, "publishedState", "publishedState", Arrays.asList(PublishedState.ACTIVE_STATES));
+        return query;
+    }
 
-        return persistenceService.findAll(query);
+    public boolean hasActiveProcedureDefinitions(Asset asset) {
+        return persistenceService.exists(createActiveProcedureDefinitionQuery(asset));
+    }
+
+    public List<ProcedureDefinition> getActiveProcedureDefinitionsForAsset(Asset asset) {
+        return persistenceService.findAll(createActiveProcedureDefinitionQuery(asset));
     }
 
     public List<ProcedureDefinition> getPreviouslyPublishedProceduresForAsset(Asset asset) {
@@ -1239,6 +1246,11 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
 
 
     public void archiveProcedureDefinition(ProcedureDefinition procedureDefinition) {
+        //first remove any recurring schedules for this procedure definition
+        for(RecurringLotoEvent event:recurringScheduleService.getRecurringLotoEvents(procedureDefinition.getAsset())) {
+            recurringScheduleService.purgeRecurringEvent(event);
+        }
+
         procedureDefinition.archiveEntity();
         persistenceService.update(procedureDefinition);
     }

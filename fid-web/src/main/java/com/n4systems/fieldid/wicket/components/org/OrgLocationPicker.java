@@ -63,6 +63,10 @@ public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
         return ((TextField) text).getRawInput();
     }
 
+    public void setEmptyString(){
+        input = "";
+    }
+
     public OrgLocationPicker(String id, OrgLocationModel model) {
         super(id,model);
         this.model = model;
@@ -235,6 +239,10 @@ public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
 
     public void resetInput() {
         input=null;
+    }
+
+    public BaseOrg getWidgetOwner() {
+        return (BaseOrg) model.getObject();
     }
 
     public BaseOrg getOwner() {

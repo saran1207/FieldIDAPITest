@@ -1,14 +1,16 @@
 package com.n4systems.fieldid.service.event.massevent;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
-import com.n4systems.model.EventType;
-import com.n4systems.model.ThingEvent;
+import com.n4systems.model.*;
 import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
 
 import java.util.List;
+import java.util.Set;
 
 public class MassEventService extends FieldIdPersistenceService {
 
@@ -31,6 +33,28 @@ public class MassEventService extends FieldIdPersistenceService {
         if (type != null)
             query.addSimpleWhere("type", type);
         return persistenceService.findAll(query);
+    }
+
+    public List<EventType> getCommonEventTypesForAssets(List<Long> assetIds) {
+        QueryBuilder<AssetType> query = new QueryBuilder<AssetType>(Asset.class, securityContext.getUserSecurityFilter());
+
+        query.addWhere(WhereParameter.Comparator.IN, "assetIds", "id", assetIds);
+        query.addPostFetchPaths("eventTypes");
+        query.setSimpleSelect("type", true);
+
+        List<AssetType> assetTypeList = persistenceService.findAll(query);
+
+        Set<ThingEventType> commonEventTypes = Sets.newHashSet();
+
+        for (AssetType assetType : assetTypeList) {
+            if(commonEventTypes.isEmpty()) {
+                commonEventTypes.addAll(assetType.getAllEventTypesExcludingActions());
+            } else {
+                commonEventTypes.retainAll(assetType.getAllEventTypesExcludingActions());
+            }
+        }
+
+        return Lists.newArrayList(commonEventTypes);
     }
 
 }

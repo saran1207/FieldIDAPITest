@@ -20,6 +20,7 @@ import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.ProcedureWorkflowState;
 import com.n4systems.model.common.ImageAnnotation;
+import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.IsolationPointResult;
 import com.n4systems.model.procedure.Procedure;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
@@ -120,7 +121,7 @@ public class ProcedureResultsPage extends FieldIDFrontEndPage {
     }
 
     private Component createTimelinePanel(String id, IModel<List<IsolationPointResult>> results, final ProcedureWorkflowState state) {
-        return new TimelinePanel<IsolationPointResult>(id, results, new IsolationPointResultTimePointProvider(state));
+        return new TimelinePanel<>(id, results, new IsolationPointResultTimePointProvider(state));
     }
 
     private Component createLockingResultsSelector() {
@@ -203,8 +204,14 @@ public class ProcedureResultsPage extends FieldIDFrontEndPage {
         response.renderJavaScriptReference("javascript/jquery.annotate.js");
         response.renderJavaScriptReference("javascript/displayAnnotations.js");
 
-        JsonElement convertedIsolationAnnotations = serializeImageAnnotations(procedureModel.getObject().getLockResults());
-        response.renderJavaScript("var isolationAnnotations = " + convertedIsolationAnnotations.toString()+";", null);
+        procedureModel.getObject().getType().getLockIsolationPoints();
+
+//        JsonElement convertedIsolationLockAnnotations = serializeImageAnnotations(procedureModel.getObject().getLockResults());
+        JsonElement convertedIsolationLockAnnotations = serializeImageAnnotations(procedureModel.getObject().getType().getLockIsolationPoints());
+        response.renderJavaScript("var isolationLockAnnotations = " + convertedIsolationLockAnnotations.toString()+";", null);
+//        JsonElement convertedIsolationUnlockAnnotations = serializeImageAnnotations(procedureModel.getObject().getUnlockResults());
+        JsonElement convertedIsolationUnlockAnnotations = serializeImageAnnotations(procedureModel.getObject().getType().getUnlockIsolationPoints());
+        response.renderJavaScript("var isolationUnlockAnnotations = " + convertedIsolationUnlockAnnotations.toString()+";", null);
         response.renderJavaScript("unlockingState = " + currentTimelineDisplay.equals(ProcedureWorkflowState.UNLOCKED) + ";", null);
     }
 
@@ -213,21 +220,18 @@ public class ProcedureResultsPage extends FieldIDFrontEndPage {
         response.renderJavaScriptReference("javascript/jquery-1.7.2.js");
     }
 
-    protected JsonElement serializeImageAnnotations(List<IsolationPointResult> results) {
+    protected JsonElement serializeImageAnnotations(List<IsolationPoint> isolationPoints) {
         JsonArray points = new JsonArray();
 
-        for (IsolationPointResult result : results) {
-            ImageAnnotation annotation = result.getIsolationPoint().getAnnotation();
-            if (annotation != null && annotation.getImage() != null) {
-                JsonObject point = new JsonObject();
-                point.addProperty("x", annotation.getX());
-                point.addProperty("y", annotation.getY());
-                String escapedText = StringEscapeUtils.escapeJavaScript(annotation.getText());
-                point.addProperty("text", escapedText);
-                point.addProperty("cssStyle", annotation.getType().getCssClass());
-                points.add(point);
-            }
-        }
+        isolationPoints.forEach(isolationPoint -> {
+            JsonObject point = new JsonObject();
+            point.addProperty("x", isolationPoint.getAnnotation().getX());
+            point.addProperty("y", isolationPoint.getAnnotation().getY());
+            String escapedText = StringEscapeUtils.escapeJavaScript(isolationPoint.getAnnotation().getText());
+            point.addProperty("text", escapedText);
+            point.addProperty("cssStyle", isolationPoint.getAnnotation().getType().getCssClass());
+            points.add(point);
+        });
 
         return points;
     }

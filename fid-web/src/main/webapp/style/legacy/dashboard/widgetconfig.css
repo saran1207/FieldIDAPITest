@@ -95,6 +95,7 @@
 .orgPickerContainer {
     display:block;
     float:left;
+    padding-right: 5px;
 }
 
 .orgSelector {
@@ -152,4 +153,8 @@
 
 .upcomingScheduledEventsConfig {
 	max-height : 250px;
+}
+
+.widgetadd {
+    padding: 4.5px 8px !important;
 }

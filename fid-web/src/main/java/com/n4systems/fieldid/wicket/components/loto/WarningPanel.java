@@ -14,6 +14,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.validation.validator.StringValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,8 @@ import java.util.List;
  * Created by Jordan Heath on 14-11-25.
  */
 public class WarningPanel extends Panel implements IEventBehavior {
+
+    private static final int TEXTAREA_MAXLENGTH = 2000;
 
     @SpringBean
     private WarningTemplateService warningTemplateService;
@@ -59,7 +62,8 @@ public class WarningPanel extends Panel implements IEventBehavior {
         onChangeBehaviours.add(this);
 
         if(choices.size() > 1) {
-            text = new LabelledTextArea<>("warningsText", " ", model);
+            text = new LabelledTextArea<String>("warningsText", " ", model);
+            text.add(new StringValidator.MaximumLengthValidator(TEXTAREA_MAXLENGTH));
             //In order to prettify this component, we want to bring these two closer together.  BUT we don't want to do
             //this when there are no WarningTemplates.  This is a quick and easy minor adjustment.
             text.add(new AttributeAppender("style", Model.of("margin-top: -12px"), "; "));

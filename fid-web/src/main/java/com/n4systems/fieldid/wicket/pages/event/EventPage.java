@@ -5,9 +5,9 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.EventStatusService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.behavior.DisableButtonBeforeSubmit;
-import com.n4systems.fieldid.wicket.behavior.JavaScriptAlertConfirmBehavior;
-import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
+import com.n4systems.fieldid.wicket.behavior.*;
+import com.n4systems.fieldid.wicket.behavior.validation.DisableNavigationConfirmationBehavior;
+import com.n4systems.fieldid.wicket.behavior.validation.RequiredCriteriaValidator;
 import com.n4systems.fieldid.wicket.components.*;
 import com.n4systems.fieldid.wicket.components.event.EventFormEditPanel;
 import com.n4systems.fieldid.wicket.components.event.attributes.AttributesEditPanel;
@@ -27,7 +27,7 @@ import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
 import com.n4systems.fieldid.wicket.model.user.GroupedVisibleUsersModel;
-import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.*;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
@@ -40,14 +40,13 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -65,7 +64,7 @@ import java.util.List;
 
 import static ch.lambdaj.Lambda.on;
 
-public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
+public abstract class EventPage<T extends Event> extends FieldIDTemplatePage {
 
     @SpringBean
     protected EventService eventService;
@@ -98,6 +97,7 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
     private String latVal = "";
     private String longVal = "";
     boolean hasDefaultVal = false;
+    boolean isAutoScheduled = false;
 
     @Override
     protected void onInitialize() {
@@ -132,43 +132,10 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             }
         }
         OuterEventForm form;
-        add(form = new OuterEventForm("outerEventForm"){
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected void onValidate() {
-                super.onValidate();
-
-                BigDecimal latField = (BigDecimal)latitude.getConvertedInput();
-                BigDecimal longField = (BigDecimal)longitude.getConvertedInput();
-
-                //Check for validity of the longitude and latitude values
-                //Longitude: -180 to +180
-                if (null != latField) {
-                    if (null == longField) {
-                        error(new FIDLabelModel("error.longitude").getObject());
-                    }else if(longField.compareTo(BigDecimal.valueOf(180)) == 1 || longField.compareTo(BigDecimal.valueOf(-180)) == -1) {
-                        error(new FIDLabelModel("error.longitude_value").getObject());
-                    }
-                }
-                //Latitude: -85 to +85
-                if (null != longField) {
-                    if (null == latField) {
-                        error(new FIDLabelModel("error.latitude").getObject());
-                    } else if(latField.compareTo(BigDecimal.valueOf(85)) == 1 || latField.compareTo(BigDecimal.valueOf(-85)) == -1) {
-                        error(new FIDLabelModel("error.latitude_value").getObject());
-                    }
-                }
-            }
-        });
-
-        if (event.getObject().isAction()) {
-            form.add(new AttributeAppender("class", "event-form-column-left"));
-        }
+        add(form = new OuterEventForm("outerEventForm"));
 
         WebMarkupContainer actionsColumn;
-        add(actionsColumn = new WebMarkupContainer("actionsColumn"));
+        form.add(actionsColumn = new WebMarkupContainer("actionsColumn"));
         actionsColumn.setVisible(event.getObject().isAction());
 
         actionsColumn.add(new Label("priority", new PropertyModel<String>(event, "priority.name")));
@@ -190,7 +157,7 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             }
         });
 
-
+        add(new ConfirmNavigationBehavior(new FIDLabelModel("message.confirm_navigation")));
     }
 
     protected abstract SchedulePicker<T> createSchedulePicker();
@@ -218,14 +185,11 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
 
     class OuterEventForm extends Form {
 
-        //private LocationPicker locationPicker;
         private OrgLocationPicker locationPicker;
 
 		private NewOrExistingEventBook newOrExistingEventBook;
         GpsTextField<BigDecimal> latitude;
         GpsTextField<BigDecimal> longitude;
-
-
 
         public OuterEventForm(String id) {
             super(id);
@@ -288,8 +252,8 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
                 @Override
                 protected void populateItem(final ListItem<Event> item) {
                     item.add(new Label("addScheduleDate", new DayDisplayModel(new PropertyModel<Date>(item.getModel(), "dueDate"))));
-                    item.add(new Label("addScheduleLabel", new PropertyModel<Object>(item.getModel(), "eventType.name")));
-                    item.add(new FlatLabel("addScheduleJob", new PropertyModel<Object>(item.getModel(), "project.name")));
+                    item.add(new FlatLabel("addScheduleLabel", new PropertyModel<String>(item.getModel(), "eventType.displayName")));
+                    item.add(new FlatLabel("addScheduleJob", new PropertyModel<String>(item.getModel(), "project.displayName")));
                     item.add(new AjaxLink<Void>("removeLink") {
                         @Override
                         public void onClick(AjaxRequestTarget target) {
@@ -310,8 +274,6 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
                 }
             });
 
-            add(new Label("eventTypeName", new PropertyModel<String>(event, "type.name")));
-
             WebMarkupContainer proofTestContainer = new WebMarkupContainer("proofTestContainer");
 
             if (event.getObject().getType().isThingEventType()) {
@@ -324,7 +286,7 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             add(proofTestContainer);
 
             PropertyModel<User> performedByModel = new PropertyModel<User>(event, "performedBy");
-            DropDownChoice<User> performedBy = new DropDownChoice<User>("performedBy", performedByModel, new ExaminersModel(performedByModel), new ListableChoiceRenderer<User>());
+            DropDownChoice<User> performedBy = new FidDropDownChoice<User>("performedBy", performedByModel, new ExaminersModel(performedByModel), new ListableChoiceRenderer<User>());
             DateTimePicker datePerformedPicker = new DateTimePicker("datePerformed", new UserToUTCDateModel(new PropertyModel<Date>(event, "date")), true).withNoAllDayCheckbox();
             datePerformedPicker.addToDateField(createUpdateAutoschedulesOnChangeBehavior());
 
@@ -349,22 +311,22 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             add(jobsContainer);
             jobsContainer.setVisible(getSessionUser().getOrganization().getPrimaryOrg().getExtendedFeatures().contains(ExtendedFeature.Projects));
             jobsContainer.setVisible(isJobsContainerVisible());
-            DropDownChoice<Project> jobSelect = new DropDownChoice<Project>("job", new PropertyModel<Project>(event, "project"), new EventJobsForTenantModel(), new ListableChoiceRenderer<Project>());
+            DropDownChoice<Project> jobSelect = new FidDropDownChoice<Project>("job", new PropertyModel<Project>(event, "project"), new EventJobsForTenantModel(), new ListableChoiceRenderer<Project>());
             jobSelect.setNullValid(true);
             jobsContainer.add(jobSelect);
 
-            add(new Comment("comments", new PropertyModel<String>(event, "comments")).addMaxLengthValidation(2500));
+            add(new Comment("comments", new PropertyModel<String>(event, "comments")).addMaxLengthValidation(5000));
 
             add(createPostEventPanel(event));
 
             Event masterEvent = event.getObject();
-            DropDownChoice resultSelect = new DropDownChoice<EventResult>("eventResult", new PropertyModel<EventResult>(EventPage.this, "eventResult"), EventResult.getValidEventResults(), new ListableLabelChoiceRenderer<EventResult>());
+            DropDownChoice resultSelect = new FidDropDownChoice<EventResult>("eventResult", new PropertyModel<EventResult>(EventPage.this, "eventResult"), EventResult.getValidEventResults(), new ListableLabelChoiceRenderer<EventResult>());
             resultSelect.add(new UpdateComponentOnChange());
             resultSelect.setNullValid(masterEvent.isResultFromCriteriaAvailable());
             add(resultSelect);
 
             List<EventStatus> eventStatuses = eventStatusService.getActiveStatuses();
-            DropDownChoice workflowStateSelect = new DropDownChoice<EventStatus>("eventStatus", new PropertyModel<EventStatus>(event, "eventStatus"), eventStatuses, new ListableLabelChoiceRenderer<EventStatus>());
+            DropDownChoice workflowStateSelect = new FidDropDownChoice<EventStatus>("eventStatus", new PropertyModel<EventStatus>(event, "eventStatus"), eventStatuses, new ListableLabelChoiceRenderer<EventStatus>());
             workflowStateSelect.add(new UpdateComponentOnChange());
             workflowStateSelect.setNullValid(true);
             add(workflowStateSelect);
@@ -387,17 +349,17 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
                 longitude.add(new SimpleAttributeModifier("value", (null == longVal) ? "" : longVal));
             }
 
-
             gpsContainer.add(latitude);
             gpsContainer.add(longitude);
 
             add(gpsContainer);
 
             gpsContainer.setOutputMarkupId(true);
-            gpsContainer.setVisible(event.getObject().getGpsLocation() !=null);
+            gpsContainer.setVisible(event.getObject().getGpsLocation() != null);
             gpsContainer.setVisible(FieldIDSession.get().getTenant().getSettings().isGpsCapture());
 
             Button saveButton = new Button("saveButton");
+            saveButton.add(new DisableNavigationConfirmationBehavior());
             saveButton.add(new DisableButtonBeforeSubmit());
             add(saveButton);
             add(createCancelLink("cancelLink"));
@@ -405,8 +367,30 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
         }
 
         @Override
-        protected void onSubmit() {
-            // SUGGESTION DD : put this in a form validator instead of onSubmit.
+        protected void onValidate() {
+            super.onValidate();
+
+            BigDecimal latField = (BigDecimal)latitude.getConvertedInput();
+            BigDecimal longField = (BigDecimal)longitude.getConvertedInput();
+
+            //Check for validity of the longitude and latitude values
+            //Longitude: -180 to +180
+            if (null != latField) {
+                if (null == longField) {
+                    error(new FIDLabelModel("error.longitude").getObject());
+                }else if(longField.compareTo(BigDecimal.valueOf(180)) == 1 || longField.compareTo(BigDecimal.valueOf(-180)) == -1) {
+                    error(new FIDLabelModel("error.longitude_value").getObject());
+                }
+            }
+            //Latitude: -85 to +85
+            if (null != longField) {
+                if (null == latField) {
+                    error(new FIDLabelModel("error.latitude").getObject());
+                } else if(latField.compareTo(BigDecimal.valueOf(85)) == 1 || latField.compareTo(BigDecimal.valueOf(-85)) == -1) {
+                    error(new FIDLabelModel("error.latitude_value").getObject());
+                }
+            }
+
             if (event.getObject().getOwner()==null) {
                 error(getString("error.event_owner_null"));
                 return;
@@ -417,37 +401,50 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
                 return;
             }
 
-
             if (targetAlreadyArchived(event.getObject())) {
                 error(getString("error.asset_has_been_archived"));
                 return;
             }
 
-            boolean flag = getAssetOwnerUpdate();
+            if (event instanceof Event) {
+                Event masterEvent = (Event) event.getObject();
+                if (masterEvent.getBook() != null && masterEvent.getBook().getId() == null && StringUtils.isBlank(masterEvent.getBook().getName())) {
+                    error(new FIDLabelModel("error.event_book_title_required").getObject());
+                }
 
+                if (masterEvent.getOwner() == null) {
+                    error(new FIDLabelModel("error.event_book_title_required").getObject());
+                }
+            }
+
+           List<AbstractEvent.SectionResults> results =  event.getObject().getSectionResults();
+
+           RequiredCriteriaValidator.validate(results).stream().forEach(message -> error(message));
+        }
+
+        @Override
+        protected void onSubmit() {
             event.getObject().setSectionResults(sectionResults);
             onPreSave(event.getObject());
             saveAssignedToIfNecessary();
             saveEventBookIfNecessary();
-            if (doPostSubmitValidation()) {
-                AbstractEvent savedEvent = doSave();
-                FieldIDSession.get().info(new FIDLabelModel("message.eventsaved").getObject());
-                if(savedEvent.getType().isActionEventType()) {
-                    if( ((Event)savedEvent).getTriggerEvent().getType().isThingEventType() )
-                        setResponsePage(ThingEventSummaryPage.class, PageParametersBuilder.id(savedEvent.getId()));
-                    else
-                        setResponsePage(PlaceEventSummaryPage.class, PageParametersBuilder.id(savedEvent.getId()));
-                } else if (savedEvent.getType().isPlaceEventType()) {
-                    setResponsePage(PlaceEventSummaryPage.class, PageParametersBuilder.id(savedEvent.getId()));
-                } else if (savedEvent.getType().isProcedureAuditEventType()) {
-                    setResponsePage(ProcedureAuditEventSummaryPage.class, PageParametersBuilder.id(savedEvent.getId()));
-                } else {
+
+            AbstractEvent savedEvent = doSave();
+            FieldIDSession.get().info(new FIDLabelModel("message.eventsaved").getObject());
+            if(savedEvent.getType().isActionEventType()) {
+                if( ((Event)savedEvent).getTriggerEvent().getType().isThingEventType() )
                     setResponsePage(ThingEventSummaryPage.class, PageParametersBuilder.id(savedEvent.getId()));
-                }
+                else
+                    setResponsePage(PlaceEventSummaryPage.class, PageParametersBuilder.id(savedEvent.getId()));
+            } else if (savedEvent.getType().isPlaceEventType()) {
+                setResponsePage(PlaceEventSummaryPage.class, PageParametersBuilder.id(savedEvent.getId()));
+            } else if (savedEvent.getType().isProcedureAuditEventType()) {
+                setResponsePage(ProcedureAuditEventSummaryPage.class, PageParametersBuilder.id(savedEvent.getId()));
+            } else {
+                setResponsePage(ThingEventSummaryPage.class, PageParametersBuilder.id(savedEvent.getId()));
             }
         }
     }
-
 
     protected Behavior createUpdateAutoschedulesOnChangeBehavior() {
         return new UpdateComponentOnChange() {
@@ -508,42 +505,9 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
     protected abstract void gotoSummaryPage(T event);
     protected void onPreSave(T event) { }
 
-    private boolean doPostSubmitValidation() {
-        if (event instanceof Event) {
-            Event masterEvent = (Event) event.getObject();
-            if (masterEvent.getBook() != null && masterEvent.getBook().getId() == null && StringUtils.isBlank(masterEvent.getBook().getName())) {
-                error(new FIDLabelModel("error.event_book_title_required").getObject());
-                return false;
-            }
-
-            if (masterEvent.getOwner() == null) {
-                error(new FIDLabelModel("error.event_book_title_required").getObject());
-                return false;
-            }
-
-
-        }
-
-        if (event.getObject().containsUnfilledScoreCriteria()) {
-            error(new FIDLabelModel("error.scores.required").getObject());
-            return false;
-        }
-
-
-        return true;
-    }
-
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/legacy/newCss/event/event_base.css");
-        response.renderCSSReference("style/legacy/newCss/event/event_schedule.css");
-        response.renderCSSReference("style/legacy/newCss/component/buttons.css");
-    }
-
-    @Override
-    protected boolean useLegacyCss() {
-        return false;
     }
 
     protected void doAutoSchedule() { }

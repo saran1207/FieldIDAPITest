@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.junit.FieldIdServiceTest;
 import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
@@ -45,7 +44,6 @@ import static org.junit.Assert.*;
 public class AssetIndexWriterTest extends FieldIdServiceTest {
 
     private @TestTarget AssetIndexWriter assetIndexWriter;
-    private @TestMock EventService eventService;
     private @TestMock SearchParserService searchParserService;
     private @TestMock AnalyzerFactory analyzerFactory;
     private @TestMock PersistenceService persistenceService;

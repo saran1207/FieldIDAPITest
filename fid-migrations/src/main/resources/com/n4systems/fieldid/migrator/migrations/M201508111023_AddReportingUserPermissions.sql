@@ -1,0 +1,1 @@
+UPDATE users SET permissions = 256 WHERE usertype = 'READONLY';

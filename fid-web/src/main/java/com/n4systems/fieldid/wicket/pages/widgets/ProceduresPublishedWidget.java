@@ -34,6 +34,7 @@ public class ProceduresPublishedWidget extends ChartWidget<LocalDate, Procedures
     @Override
     protected FlotOptions<LocalDate> createOptions() {
         FlotOptions<LocalDate> options = super.createOptions();
+        options.legend.margin = -38;
         return options;
     }
 
@@ -55,7 +56,7 @@ public class ProceduresPublishedWidget extends ChartWidget<LocalDate, Procedures
 
     @Override
     public Component createConfigPanel(String id) {
-        return new ProceduresPublishedConfigPanel(id,getConfigModel());
+        return new ProceduresPublishedConfigPanel(id,getConfigModel(), getWidgetDefinition());
     }
 
     @Override

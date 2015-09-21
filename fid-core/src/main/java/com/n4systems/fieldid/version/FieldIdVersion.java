@@ -14,9 +14,7 @@ public class FieldIdVersion {
             Properties props = new Properties();
             props.load(FieldIdVersion.class.getResourceAsStream("/com/package.properties"));
             version = props.getProperty("app.versionnumber");
-            logger.info("Field ID Version: " + version);
         } catch (Exception e) {
-        	logger.warn("Unable to load Field ID version", e);
             version = "UNKNOWN";
         }
 	}

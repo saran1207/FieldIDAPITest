@@ -54,6 +54,7 @@ public class PublishPanel extends Panel {
             add(new Label("message", Model.of("are you sure you want to publish this?")));
             add(new AjaxLink("cancel") {
                 @Override public void onClick(AjaxRequestTarget target) {
+                    target.prependJavaScript("undirty();");
                     doCancel(target);
                 }
             });
@@ -68,7 +69,8 @@ public class PublishPanel extends Panel {
                 public void onError() {
                     doCancel(null);
                 }
-            }.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.save"), TipsyBehavior.Gravity.N)));
+            }.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.save"), TipsyBehavior.Gravity.N)))
+            .add(new AttributeAppender("onclick", "undirty();"));
 
             final boolean isWaitingForApproval = model.getObject().getPublishedState() == PublishedState.WAITING_FOR_APPROVAL && procedureDefinitionService.canCurrentUserApprove();
 
@@ -98,6 +100,7 @@ public class PublishPanel extends Panel {
             };
 
             submitLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.publish"), TipsyBehavior.Gravity.N));
+            submitLink.add(new AttributeAppender("onclick", "undirty();"));
 
             if (procedureDefinitionService.isProcedureApprovalRequiredForCurrentUser()) {
                 submitLink.add(new FlatLabel("submitLabel", new FIDLabelModel("label.submit_for_approval")));

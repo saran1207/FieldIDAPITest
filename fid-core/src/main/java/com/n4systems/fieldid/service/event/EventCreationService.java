@@ -7,6 +7,7 @@ import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.service.escalationrule.AssignmentEscalationRuleService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable;
@@ -18,7 +19,6 @@ import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.signature.SignatureService;
 import com.n4systems.tools.FileDataContainer;
-import com.n4systems.util.DateHelper;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,8 +40,10 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
     @Autowired protected EventService eventService;
     @Autowired protected SignatureService signatureService;
     @Autowired protected NotifyEventAssigneeService notifyEventAssigneeService;
+    @Autowired protected AssignmentEscalationRuleService ruleService;
 
     @Transactional
+    @SuppressWarnings("unchecked")
     public T createEventWithSchedules(T event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle<V>> schedules) {
         T savedEvent = createEvent(event, scheduleId, fileData, uploadedFiles);
         for (EventScheduleBundle<V> eventScheduleBundle : schedules) {
@@ -94,7 +96,7 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
                 //Asset's Last Event Date to the Event's Completed Date... if there is a Last Event Date at all.
                 if(((ThingEvent) event).getAsset().getLastEventDate() == null
                         || !((ThingEvent) event).getAsset().getLastEventDate().after(event.getCompletedDate())) {
-                    ((ThingEvent) event).getAsset().setLastEventDate(DateHelper.delocalizeDate(event.getCompletedDate(), getCurrentUser().getTimeZone()));
+                    ((ThingEvent) event).getAsset().setLastEventDate(event.getCompletedDate());
                 }
 
                 //I'm sure I'm violating the rules by doing this... but this is WAY easier than a trigger.
@@ -114,7 +116,14 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
 
             for (CriteriaResult result : event.getResults()) {
                 for (Event action : result.getActions()) {
-                    persistenceService.save(action);
+                    Long id = persistenceService.save(action);
+
+                    //Make sure that we clear and create rules for any open Actions.
+                    if(action.getWorkflowState().equals(WorkflowState.OPEN)) {
+                        Event savedAction = persistenceService.find(Event.class, id);
+                        ruleService.clearEscalationRulesForEvent(id);
+                        ruleService.createApplicableQueueItems(savedAction);
+                    }
                 }
             }
 
@@ -122,8 +131,6 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
 
             restoreTemporarySignatureFiles(event, rememberedSignatureMap);
             restoreCriteriaImages(event, rememberedCriteriaImages);
-
-            event.setTriggersIntoResultingActions(event);
 
             event = persistenceService.update(event);
         }
@@ -314,14 +321,54 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
         for (CriteriaResult result : event.getResults()) {
             for (Event action : result.getActions()) {
                 if(action.isNew()) {
-                    persistenceService.save(action);
+                    Long id = persistenceService.save(action);
+
+                    if(action.getWorkflowState().equals(WorkflowState.OPEN)) {
+                        //Once the Action has been successfully saved, we want to create any necessary Queue Items if it
+                        //is OPEN.
+                        Event newAction = persistenceService.find(Event.class, id);
+                        ruleService.createApplicableQueueItems(newAction);
+                    }
+                } else {
+                    //Since Actions may have been changed since they were added, we'll make sure that we update the
+                    //queue for them... just to be safe.
+                    ruleService.clearEscalationRulesForEvent(action.getId());
+                    ruleService.createApplicableQueueItems(action);
                 }
             }
         }
 
+        for (SubEvent subEvent: event.getSubEvents()) {
+            for (CriteriaResult result: subEvent.getResults()) {
+                for (Event action : result.getActions()) {
+                    if(action.isNew()) {
+                        persistenceService.save(action);
+                    }
+                }
+
+            }
+        }
+
         addActionNotifications(event);
-        
+
         event = persistenceService.update(event);
+
+        //Since things have changed in the Event, we may have invalidated one or more rules. Either way, the chances
+        //that the JSON stored in the Queue for this event being out of date is pretty high, so we're going to want
+        //to update the JSON, anyways.  Best way to do that is to delete everything and start again.  We'll do this
+        //after the event saves successfully... otherwise there's not much point in doing this work... it would be for
+        //an event not found in the DB.
+
+        //FIXME This is where the problem is and it's ONLY in Java 8u20.
+        //When we move away from 8u20, you can remove the updateEvent overrides from the following classes and
+        //uncomment the two lines below:
+        // - PlaceEventCreationService
+        // - ThingEventCreationService
+        // - ProcedureAuditEventCreationService
+
+//        ruleService.clearEscalationRulesForEvent(trainingWheels.getId());
+//        ruleService.createApplicableQueueItems(trainingWheels);
+
         postUpdateEvent(event, fileData);
         processUploadedFiles(event, attachments);
 
@@ -370,6 +417,22 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
                         persistenceService.save(assigneeNotification);
                         action.setAssigneeNotification(assigneeNotification);
                         persistenceService.update(action);
+                    }
+                }
+            }
+        }
+
+        for (SubEvent subEvent: event.getSubEvents()) {
+            for (CriteriaResult result : subEvent.getResults()) {
+                for (Event action : result.getActions()) {
+                    if(action.isSendEmailOnUpdate() && action.getAssigneeOrDateUpdated()) {
+                        if(!notifyEventAssigneeService.notificationExists(action)) {
+                            AssigneeNotification assigneeNotification = new AssigneeNotification();
+                            assigneeNotification.setEvent(action);
+                            persistenceService.save(assigneeNotification);
+                            action.setAssigneeNotification(assigneeNotification);
+                            persistenceService.update(action);
+                        }
                     }
                 }
             }

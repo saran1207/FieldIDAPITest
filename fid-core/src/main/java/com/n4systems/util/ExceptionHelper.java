@@ -1,5 +1,8 @@
 package com.n4systems.util;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 public class ExceptionHelper {
 	/**
 	 * Checks to see if a Throwable is, or is caused by a Class. This method is recursive, please be careful.
@@ -22,5 +25,13 @@ public class ExceptionHelper {
 				return causeContains(t.getCause(), clazz);
 			}
 		}
+	}
+
+	public static String toString(Throwable t) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(baos);
+		t.printStackTrace(ps);
+		ps.close();
+		return baos.toString();
 	}
 }

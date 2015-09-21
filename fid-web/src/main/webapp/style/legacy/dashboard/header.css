@@ -1,18 +1,23 @@
 .headerPanel {
-    padding-bottom: 15px;
+    padding-bottom: 35px;
+    background-color: #f8f8f8;
 }
 
 .selectLayout {
-    width: 860px;
+    width: 1400px;
 }
 
 .selectLayout h2{
-    font-size: 2em;
+    color: #666666;
+    font-size: 30px;
+    font-family: "proxima-nova";
+    font-weight: 200;
 }
 
 .selectLayout h2 a{
     text-decoration:none;
     color: #999;
+    padding-right: 10px;
 }
 
 .headerPanel, .selectLayout, .configureLayout{
@@ -22,6 +27,8 @@
 .configureLayout {
     position:absolute;
     right: 0;
+    background-color: #f8f8f8;
+    padding-top: 5px;
 }
 
 .configureLayout a.mattButton {
@@ -34,15 +41,17 @@
 }
 
 .layoutList {
-    margin-left: 132px;
-    padding: 10px;
+    margin-left: 9px;
+    margin-top: 56px;
+    padding: 25px;
     border: 1px solid #DDDDDD;
     box-shadow:5px 0 2px -5px #CCCCCC, -5px 0 2px -5px #CCCCCC, 0 2px 5px 0 #CCCCCC;
-    width: 220px;
+    width: 330px;
     position: absolute;
     top: 30px;
-    background: white;
+    background: black;
     z-index: 10;
+    height: 100%;
 }
 
 .layoutList label {
@@ -50,17 +59,31 @@
 }
 
 .layoutItem {
-    line-height: 30px;
+    line-height: 50px;
 }
 
+.manageDashboard {
+    text-align: center;
+    padding-top: 20px;
+}
 
-.layoutItem a {
-    color: #777;
+.manageDashboard a {
+    color: green;
     font-size: 1.2em;
     text-decoration: none;
 }
 
+.layoutItem a {
+    font-size: 1.2em;
+    text-decoration: none;
+    display: block;
+}
+
+.layoutItem a:hover {
+    background-color: #add8e6;
+}
+
 .printIcon {
     float:left;
-    padding:5px 10px 0 0;
+    padding:15px 20px 0 0;
 }

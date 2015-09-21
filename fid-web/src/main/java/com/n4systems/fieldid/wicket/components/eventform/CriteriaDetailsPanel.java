@@ -1,19 +1,35 @@
 package com.n4systems.fieldid.wicket.components.eventform;
 
+import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.TooltipImage;
 import com.n4systems.fieldid.wicket.components.eventform.details.*;
 import com.n4systems.model.*;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 
 public class CriteriaDetailsPanel extends Panel {
 
+    private CheckBox requiredCheckBox;
+    private WebMarkupContainer scoreRequiredLabel;
+
     public CriteriaDetailsPanel(String id, IModel<Criteria> criteriaModel) {
         super(id, criteriaModel);
         add(new TooltipImage("tooltip", new StringResourceModel("label.tooltip.criteria_settings", this, null)));
+        add(requiredCheckBox = new CheckBox("required", new PropertyModel<Boolean>(criteriaModel, "required")) {
+            {
+                setOutputMarkupId(true);
+                add(new UpdateComponentOnChange());
+            }
+        });
         setOutputMarkupPlaceholderTag(true);
+        add(scoreRequiredLabel = new WebMarkupContainer("scoreRequired"));
+        scoreRequiredLabel.setOutputMarkupPlaceholderTag(true);
+        scoreRequiredLabel.setVisible(false);
     }
 
     @Override
@@ -62,6 +78,14 @@ public class CriteriaDetailsPanel extends Panel {
         } else if (criteria instanceof ObservationCountCriteria) {
             add(new ObservationCountDetailsPanel("specificDetailsPanel", new Model<ObservationCountCriteria>((ObservationCountCriteria) criteria)));
         }
+
+        if (criteria instanceof ScoreCriteria) {
+            requiredCheckBox.setVisible(false);
+            scoreRequiredLabel.setVisible(true);
+        } else {
+            requiredCheckBox.setVisible(isRequiredCriteria(criteria));
+            scoreRequiredLabel.setVisible(false);
+        }
     }
 
     protected void onStateSetSelected(ButtonGroup buttonGroup) { }
@@ -69,4 +93,8 @@ public class CriteriaDetailsPanel extends Panel {
     protected void onSetsResultSelected(boolean setsResult) { }
     
     protected void onScoreGroupSelected(ScoreGroup scoreGroup) { }
+
+    private boolean isRequiredCriteria(Criteria criteria) {
+        return !(criteria instanceof ObservationCountCriteria) && !(criteria instanceof OneClickCriteria);
+    }
 }

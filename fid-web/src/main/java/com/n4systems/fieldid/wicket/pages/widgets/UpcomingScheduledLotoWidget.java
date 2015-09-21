@@ -46,7 +46,7 @@ public class UpcomingScheduledLotoWidget extends ChartWidget<LocalDate, Upcoming
 
 	@Override
     public Component createConfigPanel(String id) {
-		return new UpcomingLotoConfigPanel(id, getConfigModel());
+		return new UpcomingLotoConfigPanel(id, getConfigModel(), getWidgetDefinition());
 	}
 	
 	@Override

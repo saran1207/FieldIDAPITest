@@ -1,17 +1,20 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 
-    <form wicket:id="criteriaEditForm" name="criteriaEditForm">
+    <form wicket:id="criteriaEditForm" name="criteriaEditForm" class="criteria-edit-form criteriaEditForm">
 
-        <div class="infoSet" name="criteria" wicket:id="criteria">
+        <div class="control-group infoSet" name="criteria" wicket:id="criteria">
             <div class="tooltip"><img wicket:id="tooltip"/></div>
-            <label class="label eventFormLabel" name="criteriaName" wicket:id="criteriaName"></label>
+            <label class="label eventFormLabel">
+                <span wicket:id="requiredIndicatior"/>
+                <span wicket:id="criteriaName"/>
+            </label>
 
-            <div wicket:id="criteriaEditor" class="criteriaEditContainer" name="criteriaContainer">
+            <div wicket:id="criteriaEditor" class="criteria-edit-container criteriaEditContainer" name="criteriaContainer">
 
             </div>
 
-            <div class="recDefButtons event-actions" name="actionButtons">
+            <div class="recDefButtons rec-def-buttons event-actions button-group" name="actionButtons">
 
                 <a wicket:id="deficienciesButton" name="deficienciesButton"/>
 
@@ -22,7 +25,7 @@
                 <a wicket:id="actionsLink" name="actionsLink"/>
 
             </div>
-            <div class="expand-button" name="expand-button">
+            <div class="expand-button expandButton" name="expand-button">
                 <div wicket:id="showActionsButton" name="showActionsButton"/>
             </div>
 

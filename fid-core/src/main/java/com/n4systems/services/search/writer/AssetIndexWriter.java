@@ -1,24 +1,18 @@
 package com.n4systems.services.search.writer;
 
 import com.google.common.base.Preconditions;
-import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.services.search.field.AssetIndexField;
 import com.n4systems.services.search.field.IndexField;
 import org.apache.lucene.document.Document;
-import org.springframework.beans.factory.annotation.Autowired;
 import rfid.ejb.entity.InfoOptionBean;
 
 import javax.persistence.EntityManager;
 import java.io.IOException;
-import java.util.Date;
 
 public class AssetIndexWriter extends LuceneIndexWriter<Asset> {
-
-    private @Autowired EventService eventService;
 
     public AssetIndexWriter() {
         super(Asset.class);
@@ -65,7 +59,7 @@ public class AssetIndexWriter extends LuceneIndexWriter<Asset> {
         addField(doc, AssetIndexField.COMMENTS, asset.getComments());
         addField(doc, AssetIndexField.IDENTIFIED, asset.getIdentified());
         addField(doc, AssetIndexField.ORDER, asset.getOrderNumber());
-        addField(doc, AssetIndexField.LAST_EVENT_DATE, calculateLastEventDate(em, asset));
+        addField(doc, AssetIndexField.LAST_EVENT_DATE, asset.getLastEventDate());
         addField(doc, AssetIndexField.LOCATION, asset.getAdvancedLocation().getFullName());
 
         addUserField(doc, AssetIndexField.CREATED_BY.getField(), asset.getCreatedBy());
@@ -91,11 +85,6 @@ public class AssetIndexWriter extends LuceneIndexWriter<Asset> {
         addAllField(AssetIndexField.ALL, doc);
 
         return doc;
-    }
-
-    private Date calculateLastEventDate(EntityManager em, Asset asset) {
-        Event lastEvent = eventService.getLastCompletedDateEvent(em, asset);
-        return lastEvent == null ? null : lastEvent.getCompletedDate();
     }
 
 }

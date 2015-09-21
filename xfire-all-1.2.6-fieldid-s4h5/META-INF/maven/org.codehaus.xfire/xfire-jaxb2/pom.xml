@@ -1,0 +1,99 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <artifactId>xfire-parent</artifactId>
+    <groupId>org.codehaus.xfire</groupId>
+    <version>1.2.6</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>xfire-jaxb2</artifactId>
+  <name>XFire Jaxb 2.0 Support</name>
+  <version>1.2.6</version>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>generate-test-sources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <tasks>
+                <taskdef classname="com.sun.tools.xjc.XJCTask" classpathref="maven.test.classpath" name="xjc" />
+                <mkdir dir="${project.build.directory}/generated-source" />
+                <xjc target="${project.build.directory}/generated-source">
+                  <schema includes="enum.xsd" dir="${basedir}/src/test-schemas" />
+                  <schema includes="inheritance2.xsd" dir="${basedir}/src/test-schemas" />
+                  <schema includes="picture.xsd" dir="${basedir}/src/test-schemas" />
+                  <schema includes="WeatherForecast.xsd" dir="${basedir}/src/test-schemas" />
+                </xjc>
+              </tasks>
+              <testSourceRoot>${project.build.directory}/generated-source</testSourceRoot>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>1.0</version>
+        <executions>
+          <execution>
+            <id>add-test-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-test-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>${project.build.directory}/generated-source</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>org.codehaus.xfire</groupId>
+      <artifactId>xfire-aegis</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.xfire</groupId>
+      <artifactId>xfire-java5</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.xfire</groupId>
+      <artifactId>xfire-annotations</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-xjc</artifactId>
+      <version>2.0.1</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>jsr173</artifactId>
+          <groupId>javax.xml</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>javax.xml.ws</groupId>
+      <artifactId>jaxws-api</artifactId>
+      <version>2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.xfire</groupId>
+      <artifactId>xfire-core</artifactId>
+    </dependency>
+  </dependencies>
+</project>

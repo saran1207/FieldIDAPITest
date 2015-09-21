@@ -252,14 +252,14 @@ public class EventService extends FieldIdPersistenceService {
 		QueryBuilder<EventCompletenessReportRecord> builder = new QueryBuilder<EventCompletenessReportRecord>(ThingEvent.class, securityContext.getUserSecurityFilter());
 
         NewObjectSelect select = new NewObjectSelect(EventCompletenessReportRecord.class);
-		List<String> args = Lists.newArrayList("COUNT(*)", QueryBuilder.defaultAlias+ ".workflowState");
+		List<String> args = Lists.newArrayList("COUNT(*)", QueryBuilder.defaultAlias + ".workflowState");
 		args.addAll(reportServiceHelper.getSelectConstructorArgsForGranularity(granularity, "dueDate"));
 		select.setConstructorArgs(args);
 		builder.setSelectArgument(select);
 		
-		builder.addWhere(whereFromTo(fromDate,toDate,"dueDate"));
+		builder.addWhere(whereFromTo(fromDate, toDate, "dueDate"));
         Date sampleDate = fromDate;
-        builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity,"dueDate", null, sampleDate));
+        builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity, "dueDate", null, sampleDate));
         builder.addGroupBy("workflowState");
 		builder.applyFilter(new OwnerAndDownFilter(org));
 
@@ -284,21 +284,30 @@ public class EventService extends FieldIdPersistenceService {
                 ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(language);
             }
             event = persistenceService.find(clazz, eventId);
-            if(showHiddenSections) {
+            if (showHiddenSections) {
                 new EditExistingEventTransientResultPopulator().populateTransientCriteriaResultsForEvent(event);
             } else {
                 new ExistingEventTransientCriteriaResultPopulator().populateTransientCriteriaResultsForEvent(event);
             }
+
+            if(clazz.equals(ThingEvent.class) && !event.getType().isActionEventType()) {
+                populateSubEventTransientResults((ThingEvent)event);
+            }
+
         } finally {
             if (withLocalization) {
                 ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(previousLanguage);
             }
         }
-
-
         return event;
     }
-    
+
+    private void populateSubEventTransientResults(ThingEvent event) {
+        if (event.getThingType().isMaster()) {
+            event.getSubEvents().stream().forEach(subEvent -> new EditExistingEventTransientResultPopulator().populateTransientCriteriaResultsForEvent(subEvent));
+        }
+    }
+
     public List<Event> getEventsByNetworkId(Long networkId) {
         return getEventsByNetworkId(networkId, null, null, null);
     }
@@ -404,6 +413,37 @@ public class EventService extends FieldIdPersistenceService {
 
         return lastEventsByType;
 	}
+
+    public List<LastEventForTypeView> getLastEventOfEachType(List<String> assetMobileGuids) {
+		// Start by finding all the events for all the assets
+        QueryBuilder<LastEventForTypeView> builder = new QueryBuilder<>(ThingEvent.class, securityContext.getUserSecurityFilter());
+        builder.setSelectArgument(new NewObjectSelect(LastEventForTypeView.class, "mobileGUID", "asset.id", "modified", "type.id", "completedDate"));
+        builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "asset.mobileGUID", assetMobileGuids));
+        builder.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.COMPLETED));
+        List<LastEventForTypeView> allEvents = persistenceService.findAll(builder);
+
+		List<LastEventForTypeView> lastEventsByType = allEvents
+			.stream()
+			.collect(
+                    Collectors.groupingBy(
+                            // group by the asset
+                            LastEventForTypeView::getAssetId,
+                            Collectors.groupingBy(
+                                    // then by event type
+                                    LastEventForTypeView::getTypeId,
+                                    // reduce by the max completed date
+                                    Collectors.reducing(BinaryOperator.maxBy(java.util.Comparator.comparing(LastEventForTypeView::getCompleted)))
+                            )
+                    )
+            ) // We now have a grouping like this Map<asset_id, Map<type_id, Optional<LastEventForTypeView>>>
+			.values()
+			.stream()
+			// Extract the views from each map and unwrap the Optional
+			.flatMap(typeMap -> typeMap.values().stream().map(Optional::get))
+			.collect(Collectors.toList());
+
+        return lastEventsByType;
+    }
 
     public Event retireEvent(ThingEvent event) {
         if(event.isAction()) {
@@ -675,7 +715,7 @@ public class EventService extends FieldIdPersistenceService {
     }
 
     public List<ThingEvent> getAutoEventSchedules(Asset asset) {
-        List<ThingEvent> schedules = new ArrayList<ThingEvent>();
+        List<ThingEvent> schedules = new ArrayList<>();
 
         if (asset.getType() == null) {
             return schedules;
@@ -697,6 +737,32 @@ public class EventService extends FieldIdPersistenceService {
             }
         }
         return schedules;
+    }
+
+    private static final String EVENT_MOD_DATE_SQL = "SELECT modified FROM events WHERE id = :id";
+
+    /**
+     * Break the rules and query a table with raw SQL, because we only want the modified date from a single table,
+     * rather than enact a join across multiple tables.  This date is compared against a date provided in the
+     * eventModDate parameter to determine whether or not the cached Event data is current.  If not, we'll need to
+     * refresh the cached data.
+     *
+     * This method is only used by the back-end during processing of Escalation Rules.
+     *
+     * @param eventId - A Long representing the ID of the Event you want the modified date for.
+     * @param eventModDate - A Date representing the modified date you're hoping the Event still has.
+     * @return A boolean result indicating whether (true) or not (false) the event has been modified since the provided Date.
+     */
+    public boolean isEventDataCurrent(Long eventId, Date eventModDate) {
+        //The problem here is that we're using a query builder.  These are fantastic if you want to get back all of
+        //the data.  We care only about the modified field on an Event, so the best way to do this is going to be via
+        //handcrafted SQL.  The interest here is in making a fast query.  We're operating in essentially tenant-agnostic
+        //mode, anyways.
+        Date currentModDate = (Date)getEntityManager().createNativeQuery(EVENT_MOD_DATE_SQL)
+                                                      .setParameter("id", eventId)
+                                                      .getSingleResult();
+
+        return currentModDate.equals(eventModDate);
     }
 }
 

@@ -1,20 +1,18 @@
 package com.n4systems.fieldid.wicket.components.event;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.action.ActionsPanel;
 import com.n4systems.fieldid.wicket.components.event.criteria.edit.CriteriaActionButton;
 import com.n4systems.fieldid.wicket.components.event.criteria.factory.CriteriaEditorFactory;
 import com.n4systems.fieldid.wicket.components.event.observations.DeficienciesEditPanel;
 import com.n4systems.fieldid.wicket.components.event.observations.RecommendationsEditPanel;
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
-import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.components.popup.Popup;
 import com.n4systems.fieldid.wicket.components.richText.RichTextDisplay;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.event.criteriaimage.CriteriaImageListPage;
-import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.Event;
+import com.n4systems.model.*;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
@@ -24,7 +22,6 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -40,7 +37,7 @@ public class CriteriaSectionEditPanel extends Panel {
 
     private IModel<List<CriteriaResult>> results;
     private DialogModalWindow criteriaImagesModalWindow;
-    private FIDModalWindow criteriaModalWindow;
+    private DialogModalWindow criteriaModalWindow;
     private DialogModalWindow actionsWindow;
     private WebMarkupContainer instructionsViewer;
     private Popup popup;
@@ -54,6 +51,7 @@ public class CriteriaSectionEditPanel extends Panel {
 
     public CriteriaSectionEditPanel(String id, final Class<? extends AbstractEvent> eventClass, IModel<List<CriteriaResult>> results, boolean showActionButtons, boolean showAttachmentsAndActions) {
         super(id);
+        add(new AttributeAppender("class", "form-horizontal"));
         this.showActionButtons = showActionButtons;
         this.showAttachmentsAndActions = showAttachmentsAndActions;
         setOutputMarkupPlaceholderTag(true);
@@ -68,7 +66,7 @@ public class CriteriaSectionEditPanel extends Panel {
             }
         });
 
-        add(criteriaModalWindow = new FIDModalWindow("observationWindow"));
+        add(criteriaModalWindow = new DialogModalWindow("observationWindow"));
         criteriaModalWindow.setCloseButtonCallback(new ModalWindow.CloseButtonCallback() {
             @Override
             public boolean onCloseButtonClicked(AjaxRequestTarget target) {
@@ -107,9 +105,14 @@ public class CriteriaSectionEditPanel extends Panel {
 
                     item.add(createCriteriaHelpTooltip(item, criteriaResult));
 
-                    item.add(new Label("criteriaName", new PropertyModel<String>(item.getModel(), "criteria.displayText")));
+                    if (criteriaResult.getCriteria().isRequired()) {
+                        item.add(new FlatLabel("requiredIndicatior", "*"));
+                    } else {
+                        item.add(new FlatLabel("requiredIndicatior"));
+                    }
+                    item.add(new FlatLabel("criteriaName", new PropertyModel<String>(item.getModel(), "criteria.displayText")));
                     item.add(CriteriaEditorFactory.createEditorFor("criteriaEditor", item.getModel()));
-                    item.add(new CriteriaActionButton("recommendationsButton", "images/rec-icon.png", criteriaResult.getRecommendations().size(), "label.recommendations", "mattButtonMiddle") {
+                    item.add(new CriteriaActionButton("recommendationsButton", "images/rec-icon.png", criteriaResult.getRecommendations().size(), "label.recommendations", "btn-secondary") {
                         @Override
                         public void onClick(AjaxRequestTarget target) {
                             criteriaModalWindow.setTitle(new FIDLabelModel("label.recommendations"));
@@ -123,7 +126,7 @@ public class CriteriaSectionEditPanel extends Panel {
                             criteriaModalWindow.show(target);
                         }
                     });
-                    item.add(new CriteriaActionButton("deficienciesButton", "images/def-icon.png", criteriaResult.getDeficiencies().size(), "label.deficiencies", "mattButtonLeft") {
+                    item.add(new CriteriaActionButton("deficienciesButton", "images/def-icon.png", criteriaResult.getDeficiencies().size(), "label.deficiencies", "btn-secondary") {
                         @Override
                         public void onClick(AjaxRequestTarget target) {
                             criteriaModalWindow.setTitle(new FIDLabelModel("label.deficiencies"));
@@ -138,7 +141,7 @@ public class CriteriaSectionEditPanel extends Panel {
                         }
                     });
 
-                    item.add(new CriteriaActionButton("criteriaImageButton", "images/camera-icon.png", criteriaResult.getCriteriaImages().size(), "label.images", "mattButtonMiddle") {
+                    item.add(new CriteriaActionButton("criteriaImageButton", "images/camera-icon.png", criteriaResult.getCriteriaImages().size(), "label.images", "btn-secondary") {
                         @Override
                         public void onClick(AjaxRequestTarget target) {
                             criteriaImagesModalWindow.setTitle(new FIDLabelModel("label.images"));
@@ -177,17 +180,18 @@ public class CriteriaSectionEditPanel extends Panel {
 
                     }.setVisible(showAttachmentsAndActions));
 
-                    item.add(new CriteriaActionButton("actionsLink", "images/action-icon.png", criteriaResult.getActions().size(), "label.actions", "mattButtonRight") {
+                    item.add(new CriteriaActionButton("actionsLink", "images/action-icon.png", criteriaResult.getActions().size(), "label.actions", "btn-secondary") {
                         @Override
                         public void onClick(AjaxRequestTarget target) {
                             actionsWindow.setTitle(new Model<String>("Actions"));
-                            actionsWindow.setContent(new ActionsPanel(actionsWindow.getContentId(), item.getModel(), (Class<? extends Event>) eventClass, null, false, false));
+                            Class<? extends Event> actionEventClass = eventClass.equals(SubEvent.class) ? ThingEvent.class : (Class<? extends Event>) eventClass;
+                            actionsWindow.setContent(new ActionsPanel(actionsWindow.getContentId(), item.getModel(), actionEventClass, null, false, false));
                             actionsWindow.setCloseButtonCallback(createActionsCloseButtonCallback());
                             actionsWindow.show(target);
                         }
                     }.setVisible(showAttachmentsAndActions));
 
-                    item.add(new CriteriaActionButton("showActionsButton", "images/icon-expand.png", null, "label.add_action", "mattButton") {
+                    item.add(new CriteriaActionButton("showActionsButton", "images/icon-expand.png", null, "label.add_action", "btn-secondary") {
                         @Override
                         public void onClick(AjaxRequestTarget target) {
                             showActions(item);

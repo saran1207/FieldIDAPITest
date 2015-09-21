@@ -13,14 +13,20 @@ import org.apache.wicket.model.Model;
  */
 public class ProcedureDateColumn extends PropertyColumn<ProcedureDefinition> {
 
+    private boolean includeTime;
 
     public ProcedureDateColumn(IModel<String> displayModel, String sortProperty, String propertyExpression) {
+        this(displayModel, sortProperty, propertyExpression, false);
+    }
+
+    public ProcedureDateColumn(IModel<String> displayModel, String sortProperty, String propertyExpression, boolean includeTime) {
         super(displayModel, sortProperty, propertyExpression);
+        this.includeTime = includeTime;
     }
 
     @Override
     public void populateItem(Item<ICellPopulator<ProcedureDefinition>> item, String id, IModel<ProcedureDefinition> procedureModel) {
-        item.add(new ProcedureDateCell(id, procedureModel))
-                .add(new AttributeAppender("class", new Model<String>("created"), ""));
+        item.add(new ProcedureDateCell(id, procedureModel, getPropertyExpression(), includeTime))
+                .add(new AttributeAppender("class", new Model<String>("date"), ""));
     }
 }

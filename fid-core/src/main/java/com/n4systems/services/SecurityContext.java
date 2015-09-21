@@ -12,7 +12,7 @@ public class SecurityContext {
 	private SecurityFilter tenantSecurityFilter;
 
 	public UserSecurityFilter getUserSecurityFilter() {
-		if (userSecurityFilter == null) {
+		if (!hasUserSecurityFilter()) {
 			throw new SecurityException("UserSecurityFilter not set in SecurityContext");
 		}
 		return userSecurityFilter;
@@ -22,12 +22,24 @@ public class SecurityContext {
         return new UserSecurityFilter(getUserSecurityFilter()).setShowArchived(true);
     }
 
+	public UserSecurityFilter getUserSecurityFilter(boolean withArchived) {
+		return withArchived ? getUserSecurityFilterWithArchived() : getUserSecurityFilter();
+	}
+
 	public void setUserSecurityFilter(UserSecurityFilter userSecurityFilter) {
 		this.userSecurityFilter = userSecurityFilter;
 	}
 
+	public boolean hasTenantSecurityFilter() {
+		return tenantSecurityFilter != null;
+	}
+
+	public boolean hasUserSecurityFilter() {
+		return userSecurityFilter != null;
+	}
+
 	public SecurityFilter getTenantSecurityFilter() {
-		if (tenantSecurityFilter == null) {
+		if (!hasTenantSecurityFilter()) {
 			throw new SecurityException("TenantSecurityFilter not set in SecurityContext");
 		}
 		return tenantSecurityFilter;
@@ -35,6 +47,10 @@ public class SecurityContext {
 	
 	public SecurityFilter getTenantSecurityFilterWithArchived() {
 		return new TenantOnlySecurityFilter(getTenantSecurityFilter()).setShowArchived(true);
+	}
+
+	public SecurityFilter getTenantSecurityFilter(boolean withArchived) {
+		return withArchived ? getTenantSecurityFilterWithArchived() : getTenantSecurityFilter();
 	}
 
 	public void setTenantSecurityFilter(SecurityFilter tenantSecurityFilter) {

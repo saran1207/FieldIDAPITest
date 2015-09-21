@@ -37,13 +37,12 @@ public class ApiSmartSearchResource extends FieldIdPersistenceService {
 		List<ApiSmartSearchSuggestion> suggestions = mergeSuggestions(identifierSuggestions, refNumberSuggestions);
         List<ApiSmartSearchSuggestion> fullSuggestions = mergeSuggestions(suggestions, rfidNumberSuggestions);
 
-		ListResponse<ApiSmartSearchSuggestion> response = new ListResponse<ApiSmartSearchSuggestion>(fullSuggestions, 0, MaxResults, fullSuggestions.size());
-		return response;
+        return new ListResponse<>(fullSuggestions, 0, MaxResults, fullSuggestions.size());
 	}
 	
 	private List<ApiSmartSearchSuggestion> loadSuggestions(String field, String searchText) {
-		QueryBuilder<ApiSmartSearchSuggestion> builder = new QueryBuilder<ApiSmartSearchSuggestion>(Asset.class, securityContext.getUserSecurityFilter());
-		builder.setSelectArgument(new NewObjectSelect(ApiSmartSearchSuggestion.class, "mobileGUID", "type.name", "identifier", "rfidNumber" ,"customerRefNumber", "length(" + field + ")"));
+		QueryBuilder<ApiSmartSearchSuggestion> builder = new QueryBuilder<>(Asset.class, securityContext.getUserSecurityFilter());
+		builder.setSelectArgument(new NewObjectSelect(ApiSmartSearchSuggestion.class, "mobileGUID", "type.name", "identifier", "rfidNumber" ,"customerRefNumber", "owner.name", "length(" + field + ")"));
 		
 		builder.addWhere(WhereClauseFactory.create(Comparator.LIKE, field, searchText, SearchOptions, ChainOp.AND));
 		
@@ -52,21 +51,15 @@ public class ApiSmartSearchResource extends FieldIdPersistenceService {
 		lengthOrder.setAlwaysDropAlias(true);
 		builder.getOrderArguments().add(lengthOrder);
 		builder.getOrderArguments().add(new OrderClause(field, true));
-		
-		List<ApiSmartSearchSuggestion> suggestions = persistenceService.findAll(builder, 0, MaxResults);
-		return suggestions;
+
+        return persistenceService.findAll(builder, 0, MaxResults);
 	}
 
 	private List<ApiSmartSearchSuggestion> mergeSuggestions(List<ApiSmartSearchSuggestion> identifierSuggestions, List<ApiSmartSearchSuggestion> refNumberSuggestions) {
-		List<ApiSmartSearchSuggestion> combinedSuggestions = new ArrayList<ApiSmartSearchSuggestion>(identifierSuggestions);
+		List<ApiSmartSearchSuggestion> combinedSuggestions = new ArrayList<>(identifierSuggestions);
 		combinedSuggestions.addAll(refNumberSuggestions);
 		
-		Collections.sort(combinedSuggestions, new java.util.Comparator<ApiSmartSearchSuggestion>() {
-			@Override
-			public int compare(ApiSmartSearchSuggestion ss1, ApiSmartSearchSuggestion ss2) {
-				return ss1.getFieldLength().compareTo(ss2.getFieldLength());
-			}
-		});
+		Collections.sort(combinedSuggestions, (ss1, ss2) -> ss1.getFieldLength().compareTo(ss2.getFieldLength()));
 		
 		for(int i = combinedSuggestions.size() - 1; i > 0; i--) {
 			ApiSmartSearchSuggestion current = combinedSuggestions.get(i);

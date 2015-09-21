@@ -68,7 +68,7 @@ public class AttributesEditPanel extends Panel {
                             @Override
                             protected void onChange(AjaxRequestTarget target) {
                                 performAutoAttributeAdjustments(infoFieldModel);
-                                target.add(this);
+                                target.add(AttributesEditPanel.this);
                             }
                         }.setOutputMarkupId(true));
                         break;
@@ -80,7 +80,7 @@ public class AttributesEditPanel extends Panel {
                             @Override
                             protected void onChange(AjaxRequestTarget target) {
                                 performAutoAttributeAdjustments(infoFieldModel);
-                                target.add(this);
+                                target.add(AttributesEditPanel.this);
                             }
                         }.setOutputMarkupId(true));
                         break;
@@ -203,7 +203,7 @@ public class AttributesEditPanel extends Panel {
         }
 
         List<InfoOptionBean> outputs = template.getOutputs();
-        List<AttributeNameValuePair> newAttributesList = new ArrayList<AttributeNameValuePair>(infoOptions.size());
+        List<AttributeNameValuePair> newAttributesList = new ArrayList<>(infoOptions.size());
 
         for (InfoOptionBean infoOption : allInfoOptions) {
             boolean foundInOutput = false;
@@ -213,8 +213,18 @@ public class AttributesEditPanel extends Panel {
                     if (output.isStaticData()) {
                         newAttributesList.add(createNVP(output));
                     } else {
-                        infoOption.setName(output.getName());
-                        newAttributesList.add(createNVP(infoOption));
+						// WEB-5786: if the old option was static & new one is dynamic we need to create a new dynamic option, otherwise we will be overwriting the static option value
+                        if (infoOption.isStaticData()) {
+							InfoOptionBean newOption = new InfoOptionBean();
+							newOption.setStaticData(false);
+							newOption.setWeight(0L);
+							newOption.setInfoField(output.getInfoField());
+							newOption.setName(output.getName());
+							newAttributesList.add(createNVP(newOption));
+                        } else {
+							infoOption.setName(output.getName());
+							newAttributesList.add(createNVP(infoOption));
+						}
                     }
                     break;
                 }

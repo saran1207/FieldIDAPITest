@@ -4,10 +4,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.fieldid.service.remover.EventFrequenciesRemovalService;
 import com.n4systems.fieldid.service.remover.ScheduleListRemovalService;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AssociatedEventType;
-import com.n4systems.model.EventType;
-import com.n4systems.model.ThingEventType;
+import com.n4systems.model.*;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +22,14 @@ public class AssociatedEventTypesService extends FieldIdPersistenceService {
 
     @Autowired
     private AssetTypeService assetTypeService;
+
+	public List<AssociatedEventType> getAssociatedEventTypes(AssetType assetType) {
+		return getAssociatedEventTypes(assetType, null);
+	}
+
+	public List<AssociatedEventType> getAssociatedEventTypes(EventType eventType) {
+		return getAssociatedEventTypes(null, eventType);
+	}
 
     @Transactional
     public List<AssociatedEventType> getAssociatedEventTypes(AssetType assetType, EventType eventType) {

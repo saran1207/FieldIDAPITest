@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.widgets.config;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.pages.DashboardPage;
+import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -26,6 +27,14 @@ public class WidgetConfigPanel<T extends WidgetConfiguration> extends Panel {
     private PersistenceService persistenceService;
 
     private ConfigForm configForm;
+    private WidgetDefinition definition;
+
+    public WidgetConfigPanel(String id, IModel<T> configModel, IModel<WidgetDefinition<T>> def) {
+        super(id);
+        super.add(new AttributeAppender("class", new Model<String>("widgetConfiguration"), " "));
+        super.add(configForm = new ConfigForm("configForm", configModel));
+        definition = def.getObject();
+    }
 
     public WidgetConfigPanel(String id, IModel<T> configModel) {
         super(id);
@@ -58,6 +67,12 @@ public class WidgetConfigPanel<T extends WidgetConfiguration> extends Panel {
                 @Override
                 protected void onError(AjaxRequestTarget target, Form<?> form) {
                     target.add(feedbackPanel);
+                }
+            });
+            add(new AjaxLink("removeLink") {
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    ((DashboardPage)getPage()).removeWidget(definition, target);
                 }
             });
             add(new AjaxLink("cancelLink") {

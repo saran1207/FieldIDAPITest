@@ -1,0 +1,1 @@
+UPDATE criteria c INNER JOIN score_criteria s on c.id = s.id SET required = TRUE;

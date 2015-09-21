@@ -5,7 +5,7 @@
              version="1.0">
 
     <persistence-unit name="fieldid" transaction-type="RESOURCE_LOCAL">
-        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <non-jta-data-source>java:/comp/env/jdbc/fieldid</non-jta-data-source>
         <properties>
             <property name="hibernate.archive.autodetection" value="class" />
@@ -19,10 +19,10 @@
             <property name="hibernate.cache.region.factory_class" value="net.sf.ehcache.hibernate.SingletonEhCacheRegionFactory"/>
             <property name="hibernate.generate_statistics" value="true" /-->
 
-            <!--
-            <property name="hibernate.show_sql" value="true" />
-            <property name="hibernate.format_sql" value="true" />
+            <!--<property name="hibernate.show_sql" value="true" />-->
+            <!--<property name="hibernate.format_sql" value="true" />-->
 
+            <!--
             <property name="hibernate.transaction.factory_class" value="org.hibernate.transaction.JDBCTransactionFactory"/>
             <property name="hibernate.generate_statistics" value="true" />
             -->
@@ -51,7 +51,7 @@
 
 
     <persistence-unit name="fieldid-test" transaction-type="RESOURCE_LOCAL">
-        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <properties>
             <property name="hibernate.archive.autodetection" value="class" />
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />

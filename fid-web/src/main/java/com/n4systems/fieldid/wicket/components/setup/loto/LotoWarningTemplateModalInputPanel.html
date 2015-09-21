@@ -1,17 +1,23 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-    <h3><wicket:message key="label.add_new_warning_template"/></h3>
-    <br/>
-    <br/>
-    <form wicket:id="templateForm" class="crudForm">
-        <div wicket:id="feedbackPanel"/>
-        <div wicket:id="name"/>
-        <div wicket:id="warning"/>
+    <div wicket:id="feedbackPanel"/>
 
-        <div class="formAction">
-            <a wicket:id="submit" type="submit" class="btn-primary"><wicket:message key="label.save"/></a>
-            <wicket:message key="label.or"/>
-            <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
-        </div>
+    <form class="form-horizontal extra-narrow" wicket:id="templateForm">
+        <fieldset>
+            <legend><wicket:message key="label.add_new_warning_template"/></legend>
+            <div class="control-group">
+                <label><wicket:message key="label.name"/></label>
+                <input type="text" wicket:id="name"/>
+            </div>
+            <div class="control-group">
+                <label><wicket:message key="label.warning"/></label>
+                <textarea wicket:id="warning"/>
+            </div>
+
+            <div class="control-group">
+                <a wicket:id="submit" type="submit" class="btn-primary"><wicket:message key="label.save"/></a>
+                <a wicket:id="cancelLink" class="btn-secondary"><wicket:message key="label.cancel"/></a>
+            </div>
+        </fieldset>
     </form></wicket:panel>
 </html>

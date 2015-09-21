@@ -1,17 +1,17 @@
-.page-procedureListPage td.procedure-code {   width: 14%; }
-.page-procedureListPage td.revision-number {  width: 63px; }
-.page-procedureListPage td.equipment-number { width: 111px; }
-.page-procedureListPage td.equipment-loc {    width: 220px; }
-.page-procedureListPage td.building {     min-width: 137px; }
-.page-procedureListPage td.developed-by { min-width: 137px; }
-.page-procedureListPage td.created {      min-width: 76px; }
+.page-procedure-list-page td.procedure-code {   width: 14%; }
+.page-procedure-list-page td.revision-number {  width: 63px; }
+.page-procedure-list-page td.equipment-number { width: 111px; }
+.page-procedure-list-page td.equipment-loc {    width: 160px; }
+.page-procedure-list-page td.building {     min-width: 137px; }
+.page-procedure-list-page td.developed-by { min-width: 137px; }
+.page-procedure-list-page td.date {      min-width: 76px; }
 
-.page-procedureListPage td {
+.page-procedure-list-page td {
   line-height: 1.35em;
 }
 
-.page-procedureListPage td.overdue {  background-color: #E68269;}
-.page-procedureListPage td.sevenDays {  background-color: #FFFF99;}
+.page-procedure-list-page td.overdue {  background-color: #E68269;}
+.page-procedure-list-page td.sevenDays {  background-color: #FFFF99;}
 
 .procedure-text-search {
   margin-bottom: 14px;
@@ -21,4 +21,12 @@
 .procedure-search-loading {
   padding-top: 9px;
   padding-right: 10px;
+}
+
+.published_list .actions {
+  width: 177px;
+}
+
+.drafts_list .actions {
+  width: 160px;
 }

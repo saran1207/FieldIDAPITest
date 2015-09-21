@@ -7,9 +7,9 @@
 <wicket:extend>
 
     <div wicket:id="configWindow"></div>
-    <div wicket:id="headerPanel" class="headerPanel"></div>
+    <div wicket:id="headerPanel" class="header-panel"></div>
 
-    <div class="dashboardContent" wicket:id="content">
+    <div class="dashboard-content" wicket:id="content">
         <div wicket:id="columnsContainer">
             <div class="column" wicket:id="sortableColumn">
                 <div wicket:id="widgets">
@@ -27,8 +27,10 @@
         </div>
 
 		<div class="blank-slate" wicket:id="blankSlate">
-			<h3><wicket:message key="blank.slate.header" /> <em><wicket:message key="blank.slate.header.dashboard" /></em></h3>
-            <a wicket:id="selectWidgets" class="btn btn-gray btn-lrg"><wicket:message key="blank.slate.button" /></a>
+            <div>
+                <h3><wicket:message key="blank.slate.header" /> <em><wicket:message key="blank.slate.header.dashboard" /></em></h3>
+                <a wicket:id="selectWidgets" class="btn btn-gray btn-lrg btn-secondary"><wicket:message key="blank.slate.button" /></a>
+            </div>
 		</div>
 		
 	</div>

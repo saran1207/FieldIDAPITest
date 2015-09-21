@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 @Path("procedure")
@@ -69,7 +70,7 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
             throw new IllegalStateException("Attempt to lock procedure that is not in OPEN state. Actual state: " + procedure.getWorkflowState());
         }
 
-        List<IsolationPointResult> convertedResults = convertToEntity(apiProcedure.getIsolationPointResults());
+        List<IsolationPointResult> convertedResults = convertToEntity(apiProcedure.getIsolationPointResults().stream().sorted((result1, result2) -> result1.getCheckCheckTime().compareTo(result2.getCheckCheckTime())).collect(Collectors.toList()));
         procedure.setLockResults(convertedResults);
         procedure.setLockedBy(getCurrentUser());
         procedure.setLockDate(convertedResults.get(convertedResults.size() - 1).getCheckCheckTime());
@@ -109,7 +110,7 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
             return;
         }
 
-        List<IsolationPointResult> convertedResults = convertToEntity(apiProcedure.getIsolationPointResults());
+        List<IsolationPointResult> convertedResults = convertToEntity(apiProcedure.getIsolationPointResults().stream().sorted((result1, result2) -> result1.getCheckCheckTime().compareTo(result2.getCheckCheckTime())).collect(Collectors.toList()));
         procedure.setUnlockResults(convertedResults);
         procedure.setUnlockedBy(getCurrentUser());
         procedure.setUnlockDate(convertedResults.get(convertedResults.size() - 1).getCheckCheckTime());

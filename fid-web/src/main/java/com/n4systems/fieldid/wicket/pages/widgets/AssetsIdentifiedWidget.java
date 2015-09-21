@@ -51,7 +51,7 @@ public class AssetsIdentifiedWidget extends ChartWidget<LocalDate,AssetsIdentifi
 
 	@Override
     public Component createConfigPanel(String id) {
-		return new AssetsIdentifiedConfigPanel(id, getConfigModel());        
+		return new AssetsIdentifiedConfigPanel(id, getConfigModel(), getWidgetDefinition());
 	}
 
 	@Override

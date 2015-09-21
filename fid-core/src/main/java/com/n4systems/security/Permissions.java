@@ -20,6 +20,7 @@ public class Permissions {
 	public static final int EditEvent           = 1<<5;
 	public static final int ManageJobs			= 1<<6;
 	public static final int ManageSafetyNetwork = 1<<7;
+	public static final int EditAssetDetails    = 1<<8;
 
 	// Composite permissions
 	public static final int NO_PERMISSIONS 		= 0;
@@ -36,7 +37,7 @@ public class Permissions {
 
 	private static final int[] visibleLiteUserPermissions = { CreateEvent, EditEvent };
 	
-	private static final int[] visibleReadOnlyPermissions = {};
+	private static final int[] visibleReadOnlyPermissions = { EditAssetDetails };
 
 	
 	/**
@@ -69,6 +70,8 @@ public class Permissions {
 			return ManageJobs;
 		} else if (safeName.equals("managesafetynetwork")) {
 			return ManageSafetyNetwork;
+		} else if (safeName.equals("editassetdetails")) {
+			return EditAssetDetails;
 		} else {
 			throw new InvalidPermission("Unknown permission name [" + permissionName + "]");
 		}

@@ -16,6 +16,7 @@ import com.n4systems.fieldid.wicket.pages.admin.tenants.TenantUserListPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.*;
+import com.n4systems.fieldid.wicket.pages.escalationrules.ManageEscalationRules;
 import com.n4systems.fieldid.wicket.pages.event.*;
 import com.n4systems.fieldid.wicket.pages.event.criteriaimage.CriteriaImageViewListPage;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
@@ -24,11 +25,11 @@ import com.n4systems.fieldid.wicket.pages.loto.*;
 import com.n4systems.fieldid.wicket.pages.loto.copy.CopyProceduresList;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPrintPage;
-import com.n4systems.fieldid.wicket.pages.massevent.CompletedMassEventPage;
-import com.n4systems.fieldid.wicket.pages.massevent.SelectMassEventPage;
+import com.n4systems.fieldid.wicket.pages.massevent.*;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateOpenEventsPage;
+import com.n4systems.fieldid.wicket.pages.masterevent.*;
 import com.n4systems.fieldid.wicket.pages.org.*;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunLastReportPage;
@@ -42,6 +43,7 @@ import com.n4systems.fieldid.wicket.pages.saveditems.send.EditSendSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.ManageSendItemSchedulesPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedAssetSearchPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
+import com.n4systems.fieldid.wicket.pages.search.SmartSearchListPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.actionemailcustomization.ActionEmailSetupPage;
 import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListAllPage;
@@ -211,6 +213,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("draftListAllPage", DraftListAllPage.class);
         mountPage("previouslyPublishedListAllPage", PreviouslyPublishedListAllPage.class);
 
+        mountPage("smartSearch", SmartSearchListPage.class);
+
         mountPage("procedureAuditListPage", ProcedureAuditListPage.class);
 
         mountPage("quickEvent", QuickEventPage.class);
@@ -220,6 +224,11 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("thingEventSummary", ThingEventSummaryPage.class);
         mountPage("placeEventSummary", PlaceEventSummaryPage.class);
         mountPage("procedureAuditEventSummary", ProcedureAuditEventSummaryPage.class);
+
+        mountPage("performMasterEvent", PerformMasterEventPage.class);
+        mountPage("performSubEvent", PerformSubEventPage.class);
+        mountPage("editMasterEvent", EditMasterEventPage.class);
+        mountPage("editSubEvent", EditSubEventPage.class);
 
         mountPage("performPlaceEvent", PerformPlaceEventPage.class);
         mountPage("editPlaceEvent", EditPlaceEventPage.class);
@@ -239,7 +248,10 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("eventMassUpdate", MassUpdateEventsPage.class);
         mountPage("openEventMassUpdate", MassUpdateOpenEventsPage.class);
 
+        mountPage("selectAssets", AssetSmartSearchPage.class);
+        mountPage("selectMassOpenEventType", SelectMassOpenEventPage.class);
         mountPage("selectMassEventType", SelectMassEventPage.class);
+        mountPage("selectSchedule", SelectSchedulesPage.class);
         mountPage("completedMassEvent", CompletedMassEventPage.class);
 
         mountPage("savedReport", RunReportPage.class);
@@ -250,6 +262,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("manageSavedItems", ManageSavedItemsPage.class);
         mountPage("shareSavedItem", ShareSavedItemPage.class);
         mountPage("editSavedItem", EditSavedItemPage.class);
+
+        mountPage("manageEscalationRules", ManageEscalationRules.class);
 
         mountPage("runLastSearch", RunLastSearchPage.class);
         mountPage("runLastReport", RunLastReportPage.class);

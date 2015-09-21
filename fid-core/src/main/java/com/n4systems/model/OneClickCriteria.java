@@ -33,4 +33,6 @@ public class OneClickCriteria extends Criteria {
     public CriteriaType getCriteriaType() {
         return CriteriaType.ONE_CLICK;
     }
+
+
 }

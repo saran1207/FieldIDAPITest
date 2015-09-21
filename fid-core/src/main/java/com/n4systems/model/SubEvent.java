@@ -82,7 +82,18 @@ public class SubEvent extends AbstractEvent<ThingEventType, Asset> implements Se
 
     @Override
     protected void copyDataIntoResultingAction(AbstractEvent<?,?> event) {
-        AssetEvent action = (AssetEvent) event;
+        ThingEvent action = (ThingEvent) event;
         action.setAsset(getAsset());
+        action.setOwner(getAsset().getOwner());
+    }
+
+    @Override
+    protected void onCreate() {
+        super.onCreate();
+        for (CriteriaResult result : getResults()) {
+            for (Event action : result.getActions()) {
+                copyDataIntoResultingAction(action);
+            }
+        }
     }
 }

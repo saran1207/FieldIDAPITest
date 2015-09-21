@@ -122,6 +122,10 @@ public class WhereClauseFactory {
 		return createPassthru(clause, parseParameterFromClause(clause), value);
 	}
 
+	public static PassthruWhereClause createPassthru(String clause) {
+		return createPassthru(clause, clause, new HashMap<>(), ChainOp.AND);
+	}
+
 	private static String parseParameterFromClause(String clause) {
 		Pattern p = Pattern.compile(":(\\w+)", Pattern.CASE_INSENSITIVE);
 		Matcher m = p.matcher(clause);
@@ -138,5 +142,17 @@ public class WhereClauseFactory {
 			throw new IllegalArgumentException("Clause does not contain a parameter: " + clause);
 		}
 		return parameter;
+	}
+
+	public static SubSelectExistsClause createNotExists(String name, QueryBuilder<?> subQuery) {
+		return new SubSelectExistsClause(name, subQuery, false);
+	}
+
+	public static SubSelectExistsClause createExists(String name, QueryBuilder<?> subQuery) {
+		return new SubSelectExistsClause(name, subQuery, true);
+	}
+
+	public static TypeClause createTypeIn(String name, Class<?>...types) {
+		return new TypeClause(name, types);
 	}
 }

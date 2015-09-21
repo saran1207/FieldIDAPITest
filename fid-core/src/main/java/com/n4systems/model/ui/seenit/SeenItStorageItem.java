@@ -1,14 +1,13 @@
 package com.n4systems.model.ui.seenit;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.*;
-
 import com.n4systems.model.api.UnsecuredEntity;
 import com.n4systems.model.parents.AbstractEntity;
-import org.hibernate.annotations.CollectionOfElements;
-import org.hibernate.annotations.IndexColumn;
+
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+//Swapped for OrderColumn due to deprecation.  If this is somehow broken by this change... you know what to do.
+//import org.hibernate.annotations.IndexColumn;
 
 @Entity
 @Table(name="seenitstorageitem")
@@ -22,7 +21,7 @@ public class SeenItStorageItem extends AbstractEntity implements UnsecuredEntity
     @ElementCollection(fetch=FetchType.EAGER)
     @JoinTable(name="seenitstorageitem_itemsseen", joinColumns = @JoinColumn(name="seenitstorageitem_id"))
 	@Enumerated(EnumType.STRING)
-    @IndexColumn(name="id")
+    @OrderColumn(name="id")
 	private Set<SeenItItem> itemsSeen = new HashSet<>();
 	
 	public SeenItStorageItem() {

@@ -1,29 +1,29 @@
+<html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 
-    <h2><span wicket:id="assetTypeName"/> <wicket:message key="label.summary"/></h2>
+    <legend><span wicket:id="assetTypeName"/> <wicket:message key="label.summary"/></legend>
 
-    <div class="infoSet">
+    <div class="control-group">
         <label class="label"><wicket:message key="label.description"/></label>
-                <span class="fieldHolder" wicket:id="description">
-                </span>
+        <span class="value" wicket:id="description"/>
     </div>
 
-    <div class="infoSet">
+    <div class="control-group">
         <label class="label"><span wicket:id="identifierLabel"/></label>
-                <span class="fieldHolder">
-                    <a wicket:id="summaryLink"><span wicket:id="identifier"></span></a>
-                </span>
+        <span class="value">
+            <a wicket:id="summaryLink"><span wicket:id="identifier"></span></a>
+        </span>
     </div>
 
-    <div class="infoSet">
+    <div class="control-group clear">
         <label class="label"><wicket:message key="label.rfidnumber"/></label>
-                <span class="fieldHolder" wicket:id="rfidNumber">
-                </span>
+        <span class="value" wicket:id="rfidNumber"/>
     </div>
 
-    <div class="infoSet">
+    <div class="control-group">
         <label class="label"><wicket:message key="label.reference_number"/></label>
-                <span class="fieldHolder" wicket:id="referenceNumber"> </span>
+        <span class="value" wicket:id="referenceNumber"/>
     </div>
 
 </wicket:panel>
+</html>

@@ -31,8 +31,7 @@ public abstract class LockoutReasonsPage extends FieldIDTemplatePage {
 
     protected LockoutReasonsPage() {
         super();
-        add(addOrEditModalWindow = new DialogModalWindow("addOrEditModalWindow"));
-        addOrEditModalWindow.setContent(getAddEditPanel(addOrEditModalWindow.getContentId(), Model.of(new LockoutReason())));
+        add(addOrEditModalWindow = new DialogModalWindow("addOrEditModalWindow").setInitialHeight(400).setInitialWidth(400));
     }
 
     protected void redrawList(AjaxRequestTarget target) {
@@ -64,6 +63,7 @@ public abstract class LockoutReasonsPage extends FieldIDTemplatePage {
         return new LockoutReasonActionPanel(actionGroupId) {
             @Override
             protected void onAddClicked(AjaxRequestTarget target) {
+                addOrEditModalWindow.setContent(getAddEditPanel(addOrEditModalWindow.getContentId(), Model.of(new LockoutReason())));
                 addOrEditModalWindow.show(target);
             }
         };
@@ -75,7 +75,6 @@ public abstract class LockoutReasonsPage extends FieldIDTemplatePage {
             protected void onSaveLockoutReason(AjaxRequestTarget target) {
                 redrawList(target);
                 addOrEditModalWindow.close(target);
-                addOrEditModalWindow.setContent(getAddEditPanel(addOrEditModalWindow.getContentId(), Model.of(new LockoutReason())));
             }
 
             @Override

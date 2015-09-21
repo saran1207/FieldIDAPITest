@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.widgets.config;
 
 import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
+import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.EventKPIWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.chart.RangeType;
@@ -31,8 +32,8 @@ public class EventKPIConfigPanel extends WidgetConfigPanel<EventKPIWidgetConfigu
     private AjaxButton addOrgButton;
 	private DropDownChoice<RangeType> dateRange;
 
-    public EventKPIConfigPanel(String id, final IModel<EventKPIWidgetConfiguration> configModel) {
-        super(id, configModel);
+    public EventKPIConfigPanel(String id, final IModel<EventKPIWidgetConfiguration> configModel, IModel<WidgetDefinition<EventKPIWidgetConfiguration>> def) {
+        super(id, configModel, def);
         this.configModel = configModel;
 
         orgsListContainer = new WebMarkupContainer("orgsListContainer");
@@ -52,8 +53,9 @@ public class EventKPIConfigPanel extends WidgetConfigPanel<EventKPIWidgetConfigu
         addConfigElement(orgPicker = new OrgLocationPicker("picker", new PropertyModel<BaseOrg>(this, "orgToAdd")) {
             @Override
             protected void onChanged(AjaxRequestTarget target) {
-                orgToAdd = getOwner();
+                orgToAdd = getWidgetOwner();
                 target.add(addOrgButton);
+                target.add(this);
             }
         }.withAutoUpdate());
         orgPicker.setOutputMarkupId(true);
@@ -76,12 +78,16 @@ public class EventKPIConfigPanel extends WidgetConfigPanel<EventKPIWidgetConfigu
             }
 
             @Override
-            public boolean isEnabled() {
-                return orgToAdd != null;
+            protected void onConfigure() {
+                super.onConfigure();
+                setVisible(orgToAdd != null);
             }
+
         });
         addOrgButton.setOutputMarkupId(true);
-        
+        addOrgButton.setOutputMarkupPlaceholderTag(true);
+        addOrgButton.setVisibilityAllowed(true);
+
         addConfigElement(dateRange = createDateRangeSelect());
         
     }
@@ -105,6 +111,7 @@ public class EventKPIConfigPanel extends WidgetConfigPanel<EventKPIWidgetConfigu
         return new AjaxEventBehavior("onclick") {
             @Override
             protected void onEvent(AjaxRequestTarget target) {
+                //orgPicker.getModel().detach();
                 orgsListModel.getObject().remove(item.getIndex());
                 target.add(orgsListContainer);
             }

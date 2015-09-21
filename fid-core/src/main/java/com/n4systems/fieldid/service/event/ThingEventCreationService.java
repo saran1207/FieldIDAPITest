@@ -9,17 +9,10 @@ import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.*;
 import com.n4systems.model.user.User;
-import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.FileDataContainer;
-import com.n4systems.util.ContentTypeUtil;
 import com.n4systems.util.ServiceLocator;
-import org.apache.commons.io.FileUtils;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 
 public class ThingEventCreationService extends EventCreationService<ThingEvent, Asset> {
@@ -49,6 +42,45 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
         return eventResult;
     }
 
+    /**
+     * This Override has to be made to step around problems with Java 8u20, which has problems with class resolution and
+     * experiences an AssertionError when trying to determine what T is a SubClass of.  While this problem is not
+     * present in later versions of Java 8, we are using Java 8u20 on the production server... I don't want to risk
+     * making things explode.
+     *
+     * @param event - A ThingEvent that you want to update.
+     * @param fileData - A FileDataContainer containing file data.
+     * @param attachments - A List of FileAttachment objects to
+     * @return A set of training wheels that we had to introduce to handhold Java through this fault.
+     */
+    @Override
+    public ThingEvent updateEvent(ThingEvent event, FileDataContainer fileData, List<FileAttachment> attachments) {
+        ThingEvent trainingWheels = super.updateEvent(event, fileData, attachments);
+
+        ruleService.clearEscalationRulesForEvent(trainingWheels.getId());
+        if(trainingWheels.getWorkflowState().equals(WorkflowState.OPEN)) {
+            ruleService.createApplicableQueueItems(trainingWheels);
+        }
+
+        return trainingWheels;
+    }
+
+    /**
+     * This override was necessary because of a problem with Java 8u20 which prevents a successful compile due to Class
+     * resolution issues.  This workaround will no longer be necessary if we move to a more recent version of Java.
+     */
+    @Override
+    public ThingEvent createEventWithSchedules(ThingEvent event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle<Asset>> schedules) {
+        event = super.createEventWithSchedules(event, scheduleId, fileData, uploadedFiles, schedules);
+
+        ruleService.clearEscalationRulesForEvent(event.getId());
+        if(event.getWorkflowState().equals(WorkflowState.OPEN)) {
+            ruleService.createApplicableQueueItems(event);
+        }
+
+        return event;
+    }
+
     @Override
     protected void preSaveEvent(ThingEvent event, FileDataContainer fileData) {
         setProofTestData(event, fileData);
@@ -64,7 +96,7 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
     }
 
     private void setProofTestData(ThingEvent event, FileDataContainer fileData) {
-        if (fileData == null || fileData.getFileType() == null) {
+        if (fileData == null || fileData.getFileType() == null || fileData.isEmpty()) {
             event.setProofTestInfo(null); //this is needed for events that do not have prooftests
             return;
         }

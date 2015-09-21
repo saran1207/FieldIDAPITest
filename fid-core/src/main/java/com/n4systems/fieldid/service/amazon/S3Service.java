@@ -38,13 +38,20 @@ import javax.activation.MimetypesFileTypeMap;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
 //import sun.misc.BASE64Encoder;
 
+/**
+ * This is your one stop shoppe for everything S3 related.  This will upload and download files, plus anything else
+ * we might need to do with S3.
+ *
+ * All methods for sending FILE objects to S3 have been marked deprecated, since S3 tries to be smart about what
+ * is being sent to it.  It attempts to discern your mime type from your file extension, which isn't always ideal.
+ * Methods handling Byte Arrays effectively circumvent this issue by explicitly telling S3 what mime type to expect.
+ */
 @Transactional
 public class S3Service extends FieldIdPersistenceService {
 
@@ -149,6 +156,26 @@ public class S3Service extends FieldIdPersistenceService {
         return logoData;
     }
 
+    /**
+     * This method is used to check whether or not a Ceritificate Logo exists.  This helps eliminate log entries which
+     * result from trying to download resources that don't exist.  It's typically a bad idea to check if something
+     * exists by trying to download it.
+     *
+     * Typically, if a resource isn't found with this method, it means it never existed... you should only worry if
+     * this is returning false when you know damn well the file exists.  That would totally be cause for alarm.
+     *
+     * @param customerOrgId - A Long representing the ID of the Customer Org.
+     * @param isPrimary - A boolean value indicating whether (true) or not (false) the Customer Org is the Primary Org.
+     * @return A boolean value indicating whether (true) or not (false) the Logo exists in S3.
+     */
+    public boolean isCertificateLogoExists(Long customerOrgId, boolean isPrimary) {
+        if(isPrimary) {
+            return resourceExists(null, PRIMARY_CERTIFICATE_LOGO_PATH, customerOrgId);
+        } else {
+            return resourceExists(null, SECONDARY_CERTIFICATE_LOGO_PATH, customerOrgId);
+        }
+    }
+
     public List<S3ObjectSummary> getAllCustomerLogos() {
         // this path will contain both customer logos as well as branding and cert logos.  Need to filter down to just customers.
         return findResources(createResourcePath(null, CUSTOMER_LOGO_BASE_PATH), "^.*/" + CUSTOMER_FILE_PREFIX + "\\d+\\." + CUSTOMER_FILE_EXT + "$");
@@ -186,6 +213,7 @@ public class S3Service extends FieldIdPersistenceService {
      * @param file - A File representing the generated report you would like to jam up into S3 with a plunger.
      * @param downloadLink - A DownloadLink entity, representing the report you're uploading.
      */
+    @Deprecated
     public void uploadGeneratedReport(File file, DownloadLink downloadLink) {
         uploadResource(file,
                        downloadLink.getTenant().getId(),
@@ -315,6 +343,7 @@ public class S3Service extends FieldIdPersistenceService {
         return logoData;
     }
 
+    @Deprecated
     public void uploadPrimaryOrgCertificateLogo(File file) {
         uploadResource(file, null, PRIMARY_CERTIFICATE_LOGO_PATH);
     }
@@ -323,6 +352,7 @@ public class S3Service extends FieldIdPersistenceService {
         uploadResource(bytes, contentType, null, PRIMARY_CERTIFICATE_LOGO_PATH);
     }
 
+    @Deprecated
     public void uploadSecondaryOrgCertificateLogo(File file, Long secondaryOrgId) {
         uploadResource(file, null, SECONDARY_CERTIFICATE_LOGO_PATH, secondaryOrgId);
     }
@@ -516,6 +546,7 @@ public class S3Service extends FieldIdPersistenceService {
         return fileData;
     }
 
+    @Deprecated
     public void saveLotoPrintout(File file, String path) {
         //path = path + "/";
         putObjectInLotoBucket(path, file);
@@ -623,6 +654,7 @@ public class S3Service extends FieldIdPersistenceService {
 
     }
 
+    @Deprecated
     public void uploadProcedureDefinitionSvg(ProcedureDefinition procedureDefinition, File svgFile) {
 
 
@@ -1057,16 +1089,12 @@ public class S3Service extends FieldIdPersistenceService {
 
     private URL generatePresignedUrl(String path, Date expires, HttpMethod method) {
         URL url = null;
-        URL fieldidUrl = url;
         try {
             url = getClient().generatePresignedUrl(getBucket(), path, expires, method);
-            fieldidUrl = new URL(url.getProtocol(), getEndpoint(), url.getPort(), url.getFile());
         } catch(AmazonServiceException ase){
             //just ignore the exception, its probably caused by resource not existing
-        } catch(MalformedURLException e){
-            logger.warn("Issue with setting the S3 endpoint in URL: " + e);
         }
-        return fieldidUrl;
+        return url;
     }
 
     private AmazonS3Client getClient() {
@@ -1081,11 +1109,6 @@ public class S3Service extends FieldIdPersistenceService {
     private String getBucket() {
         String bucket = configService.getString(ConfigEntry.AMAZON_S3_BUCKET);
         return bucket;
-    }
-
-    private String getEndpoint() {
-        String endpoint = configService.getString(ConfigEntry.AMAZON_S3_ENDPOINT);
-        return endpoint;
     }
 
     private String getAccessKey() {
@@ -1387,15 +1410,17 @@ public class S3Service extends FieldIdPersistenceService {
         return fullResourcePath;
     }
 
+    public String getAssetAttachmentContentType(AssetAttachment assetAttachment) {
+        ObjectMetadata meta = getObjectMetadata(getAssetAttachmentPath(assetAttachment.getAsset().getMobileGUID(), assetAttachment.getMobileId(), assetAttachment.getFileName()));
+        return (meta != null) ? meta.getContentType() : null;
+    }
+
     public URL getAssetAttachmentUrl(AssetAttachment assetAttachment){
         URL assetAttachmentUrl = getAssetAttachmentUrl(assetAttachment.getAsset().getMobileGUID(), assetAttachment.getMobileId(), assetAttachment.getFileName());
         return assetAttachmentUrl;
     }
 
     public URL getAssetAttachmentUrl(String assetUuid, String assetAttachmentUuid, String assetAttachmentFilename) {
-        Assert.hasLength(assetUuid);
-        Assert.hasLength(assetAttachmentUuid);
-        Assert.hasLength(assetAttachmentFilename);
         Date expires = new DateTime().plusDays(getExpiryInDays()).toDate();
         assetAttachmentFilename = assetAttachmentFilename.substring(assetAttachmentFilename.lastIndexOf('/') + 1);
         String fullResourcePath = getAssetAttachmentPath(assetUuid, assetAttachmentUuid, assetAttachmentFilename);
@@ -1601,8 +1626,6 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     public byte[] downloadAssetProofTestChartBytes(String assetUuid, String eventUuid) throws IOException {
-        Assert.hasLength(assetUuid);
-        Assert.hasLength(eventUuid);
         return downloadResource(null, ASSET_PROOFTESTS_CHART_PATH, assetUuid, eventUuid);
     }
 
@@ -1613,11 +1636,13 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     public String getFileAttachmentPath(String fileAttachmentUuid, String filename){
-        Assert.hasLength(fileAttachmentUuid);
-        Assert.hasLength(filename);
-        Assert.doesNotContain(filename, "/");
         String fileAttachmentsUploadPath = createResourcePath(null, FILE_ATTACHMENT_PATH, fileAttachmentUuid, filename);
         return fileAttachmentsUploadPath;
+    }
+
+    public String getFileAttachmentContentType(FileAttachment fileAttachment){
+        ObjectMetadata meta = getObjectMetadata(getFileAttachmentPath(fileAttachment));
+        return (meta != null) ? meta.getContentType() : null;
     }
 
     public URL getFileAttachmentUrl(FileAttachment fileAttachment){
@@ -1643,9 +1668,6 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     public URL getFileAttachmentUrl(String fileAttachmentUuid, String filename) {
-        Assert.hasLength(fileAttachmentUuid);
-        Assert.hasLength(filename);
-        Assert.doesNotContain(filename, "/");
         Date expires = new DateTime().plusDays(getExpiryInDays()).toDate();
         filename = filename.substring(filename.lastIndexOf('/') + 1);
         String fullResourcePath = getFileAttachmentPath(fileAttachmentUuid, filename);

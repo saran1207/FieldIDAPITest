@@ -288,7 +288,7 @@ public class ExcelXSSFBuilder {
             if (value instanceof NonConvertingDateTime) {
                 cell.setCellValue((Date)value);
             } else {
-                cell.setCellValue(DateHelper.convertToUserTimeZone((Date) value, dateTimeDefinition.getTimeZone()));
+                cell.setCellValue(DateHelper.localizeDate((Date) value, dateTimeDefinition.getTimeZone()));
             }
 
             // override the default style for dates

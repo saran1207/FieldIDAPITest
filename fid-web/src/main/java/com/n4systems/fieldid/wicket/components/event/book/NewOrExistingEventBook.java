@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.event.book;
 
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
+import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.eventbook.EventBooksForTenantModel;
 import com.n4systems.model.EventBook;
@@ -31,7 +32,7 @@ public class NewOrExistingEventBook extends FormComponentPanel<EventBook> {
 
 		eventBooksForTenantModel = new EventBooksForTenantModel().setOpenBooksOnly(true);
         existingEventBook = eventBook.getObject();
-        existingBookSelect = new DropDownChoice<EventBook>("existingEventBook", new PropertyModel<EventBook>(this, "existingEventBook"), eventBooksForTenantModel, new ListableChoiceRenderer<EventBook>());
+        existingBookSelect = new FidDropDownChoice<EventBook>("existingEventBook", new PropertyModel<EventBook>(this, "existingEventBook"), eventBooksForTenantModel, new ListableChoiceRenderer<EventBook>());
         existingBookSelect.setNullValid(true);
         existingBookSelect.add(new UpdateComponentOnChange());
         add(existingBookSelect);

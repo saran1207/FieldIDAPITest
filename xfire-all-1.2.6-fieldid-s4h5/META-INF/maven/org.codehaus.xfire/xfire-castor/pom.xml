@@ -1,0 +1,71 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <artifactId>xfire-parent</artifactId>
+    <groupId>org.codehaus.xfire</groupId>
+    <version>1.2.6</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>xfire-castor</artifactId>
+  <name>XFire Castor Support</name>
+  <version>1.2.6</version>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>generate-test-sources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <tasks>
+                <delete dir="${project.build.directory}/generated-test" />
+                <mkdir dir="${project.build.directory}/generated-test" />
+                <taskdef classname="org.exolab.castor.tools.ant.taskdefs.CastorSourceGenTask" classpathref="maven.test.classpath" name="castor-srcgen" />
+                <castor-srcgen types="j2" warnings="false" file="${basedir}/src/test-schemas/WeatherForecast.xsd" todir="${project.build.directory}/generated-test" package="net.webservicex" />
+              </tasks>
+              <testSourceRoot>${project.build.directory}/generated-test</testSourceRoot>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>org.codehaus.xfire</groupId>
+      <artifactId>xfire-aegis</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>castor</groupId>
+      <artifactId>castor</artifactId>
+      <version>1.0M4</version>
+    </dependency>
+    <dependency>
+      <groupId>xerces</groupId>
+      <artifactId>xercesImpl</artifactId>
+      <version>2.7.1</version>
+    </dependency>
+    <dependency>
+      <groupId>stax</groupId>
+      <artifactId>stax</artifactId>
+      <version>1.1.2-dev</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>xmlbeans-jsr173-api</artifactId>
+          <groupId>xmlbeans</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.xfire</groupId>
+      <artifactId>xfire-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>stax-utils</groupId>
+      <artifactId>stax-utils</artifactId>
+      <version>snapshot-20040917</version>
+    </dependency>
+  </dependencies>
+</project>

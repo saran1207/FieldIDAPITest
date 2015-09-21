@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
+<beans>
+
+  <bean id="xfire.xmlbeansServiceFactory"
+    class="org.codehaus.xfire.service.binding.ObjectServiceFactory"
+    scope="singleton">
+    <constructor-arg index="0" ref="xfire.transportManager" />
+    <constructor-arg index="1" ref="xfire.xmlbeansBindingProvider" />
+    <property name="wsdlBuilderFactory" ref="xfire.xmlbeansWSDLBuilderFactory"/>
+  </bean>
+  
+  <bean id="xfire.xmlbeansBindingProvider"
+    class="org.codehaus.xfire.aegis.AegisBindingProvider"
+    scope="singleton">
+    <constructor-arg index="0" ref="xfire.xmlbeansTypeRegistry" />
+  </bean>
+  
+  <bean id="xfire.xmlbeansTypeRegistry"
+    class="org.codehaus.xfire.xmlbeans.XmlBeansTypeRegistry"
+    scope="singleton"/>
+    
+  <bean id="xfire.xmlbeansWSDLBuilderFactory"
+    class="org.codehaus.xfire.xmlbeans.XmlBeansWSDLBuilderFactory"/>
+</beans>

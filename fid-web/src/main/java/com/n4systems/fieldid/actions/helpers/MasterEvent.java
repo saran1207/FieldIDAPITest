@@ -149,9 +149,9 @@ public class MasterEvent {
 		subEvent.setCreated(event.getCreated());
 		subEvent.setModified(event.getModified());
 		subEvent.setModifiedBy(event.getModifiedBy());
-        subEvent.setEventForm(event.getEventForm());
-        subEvent.setEditable(event.isEditable());
-        subEvent.setEventStatus(event.getEventStatus());
+		subEvent.setEventForm(event.getEventForm());
+		subEvent.setEditable(event.isEditable());
+		subEvent.setEventStatus(event.getEventStatus());
 
 		return subEvent;
 	}

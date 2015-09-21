@@ -2,13 +2,13 @@
 <wicket:panel>
     <div wicket:id="feedbackPanel"/>
 
-    <form wicket:id="form" class="observationBox">
+    <form wicket:id="form" class="observation-box observationBox">
 
-        <p class="observationText" wicket:id="preConfiguredObservations">
+        <p class="observation-text observationText" wicket:id="preConfiguredObservations">
             <span wicket:id="observationName"></span>
         </p>
 
-        <p class="observationComment">
+        <p class="observation-comment observationComment">
 
             <label><wicket:message key="label.comments"/></label>
 
@@ -18,9 +18,9 @@
 
         </p>
 
-        <div class="observationActions">
-            <a wicket:id="saveButton" class="mattButton"><wicket:message key="label.store"/></a>
-            <div class="observationsActionsText">
+        <div class="observation-actions observationActions">
+            <a wicket:id="saveButton" class="btn-primary"><wicket:message key="label.store"/></a>
+            <div class="observation-actions-text observationsActionsText">
                 <wicket:message key="label.or"/>
                 <a wicket:id="clearLink"><wicket:message key="label.clear"/></a>
                 <wicket:message key="label.or"/>

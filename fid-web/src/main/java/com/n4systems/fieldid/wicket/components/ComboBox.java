@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components;
 
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.model.IModel;
@@ -15,6 +16,7 @@ public class ComboBox extends DropDownChoice<String> {
 
     public ComboBox(String id, IModel<String> stringIModel, IModel<? extends List<? extends String>> choices) {
         super(id, stringIModel, choices);
+        add(new AttributeAppender("class", "combo-box").setSeparator(" "));
     }
     @Override
     protected String convertChoiceIdToChoice(String id) {

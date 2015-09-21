@@ -155,7 +155,7 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
 
     }
 
-    private <E> QueryBuilder<E> augmentSearchBuilder(T criteriaModel, QueryBuilder<E> searchBuilder, boolean includeGps) {
+    public <E> QueryBuilder<E> augmentSearchBuilder(T criteriaModel, QueryBuilder<E> searchBuilder, boolean includeGps) {
 
         addSortJoinTerms(searchBuilder, criteriaModel);
 

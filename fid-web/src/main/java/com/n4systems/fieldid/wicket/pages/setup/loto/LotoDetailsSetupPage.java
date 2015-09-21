@@ -29,11 +29,14 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.validation.validator.StringValidator;
 
 import java.util.Iterator;
 import java.util.List;
 
 public class LotoDetailsSetupPage extends FieldIDTemplatePage {
+
+    private static final int TEXTAREA_MAXLENGTH = 2500;
 
     @SpringBean
     ProcedureDefinitionService procedureDefinitionService;
@@ -78,10 +81,15 @@ public class LotoDetailsSetupPage extends FieldIDTemplatePage {
         add(addTemplateModal = new DialogModalWindow("addTemplateModal").setInitialHeight(500).setInitialWidth(400));
 
 
-
-        form.add(new TextArea<String>("applicationProcess", new PropertyModel<>(customLotoDetailsModel, "applicationProcess")));
-        form.add(new TextArea<String>("removalProcess", new PropertyModel<>(customLotoDetailsModel, "removalProcess")));
-        form.add(new TextArea<String>("testingAndVerification", new PropertyModel<>(customLotoDetailsModel, "testingAndVerification")));
+        form.add(new TextArea<String>("applicationProcess", new PropertyModel<>(customLotoDetailsModel, "applicationProcess"))
+                .add(new StringValidator.MaximumLengthValidator(TEXTAREA_MAXLENGTH))
+                .setLabel(new FIDLabelModel("label.lockout_application_process")));
+        form.add(new TextArea<String>("removalProcess", new PropertyModel<>(customLotoDetailsModel, "removalProcess"))
+                .add(new StringValidator.MaximumLengthValidator(TEXTAREA_MAXLENGTH))
+                .setLabel(new FIDLabelModel("label.lockout_removal_process")));
+        form.add(new TextArea<String>("testingAndVerification", new PropertyModel<>(customLotoDetailsModel, "testingAndVerification"))
+                .add(new StringValidator.MaximumLengthValidator(TEXTAREA_MAXLENGTH))
+                .setLabel(new FIDLabelModel("label.testing_and_verification_detail_panel")));
 
 
         form.add(new SubmitLink("saveLink"));
@@ -112,11 +120,10 @@ public class LotoDetailsSetupPage extends FieldIDTemplatePage {
                         item.add(new LotoWarningsActionCell(id, model) {
                             @Override
                             protected void doEdit(AjaxRequestTarget target) {
-                                addTemplateModal.setContent(inputPanel = new LotoWarningTemplateModalInputPanel(addTemplateModal.getContentId(),
-                                                                                                                thisTemplate) {
+                                addTemplateModal.setContent(inputPanel = new LotoWarningTemplateModalInputPanel(addTemplateModal.getContentId(), Model.of(thisTemplate)) {
                                     @Override
                                     protected void doSave(AjaxRequestTarget target) {
-                                        warningTemplate = saveAction(target, warningTemplate);
+                                        warningTemplateModel.setObject(saveAction(target, warningTemplateModel.getObject()));
                                     }
 
                                     @Override
@@ -144,8 +151,7 @@ public class LotoDetailsSetupPage extends FieldIDTemplatePage {
             protected void doAddAction(AjaxRequestTarget target) {
                 WarningTemplate createMe = new WarningTemplate();
                 createMe.setTenant(getTenant());
-                addTemplateModal.setContent(inputPanel = new LotoWarningTemplateModalInputPanel(addTemplateModal.getContentId(),
-                                                                                                createMe) {
+                addTemplateModal.setContent(inputPanel = new LotoWarningTemplateModalInputPanel(addTemplateModal.getContentId(), Model.of(createMe)) {
                     @Override
                     protected void doCancel(AjaxRequestTarget target) {
                         target.add(addTemplateModal);
@@ -154,7 +160,7 @@ public class LotoDetailsSetupPage extends FieldIDTemplatePage {
 
                     @Override
                     protected void doSave(AjaxRequestTarget target) {
-                        warningTemplate = saveAction(target, warningTemplate);
+                        warningTemplateModel.setObject(saveAction(target, warningTemplateModel.getObject()));
                     }
                 });
                 target.add(inputPanel);

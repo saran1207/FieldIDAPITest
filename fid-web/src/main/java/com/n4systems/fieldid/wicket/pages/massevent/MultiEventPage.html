@@ -1,0 +1,172 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+
+<div wicket:id="feedbackPanel"></div>
+
+<form wicket:id="outerEventForm" class="event-details">
+
+    <div class="column-left">
+        <fieldset class="form-horizontal narrow">
+
+            <legend><span wicket:id="eventTypeName"/> <wicket:message key="label.details"/></legend>
+
+            <div class="control-group">
+                <label class="label"><wicket:message key="label.performed_by"/></label>
+                <select wicket:id="performedBy"/>
+            </div>
+
+            <div class="control-group">
+                <label class="label"><wicket:message key="label.date_performed"/></label>
+                <div wicket:id="datePerformed" class="datepicker-container"/>
+            </div>
+
+        </fieldset>
+
+        <fieldset wicket:id="actionsColumn" class="display-horizontal narrow action-details">
+            <legend><wicket:message key="label.corrective_action"/></legend>
+
+            <div class="control-group">
+                <label class="label"><img src="/fieldid/images/action/icon-priority.png"><wicket:message key="label.priority"/></label>
+                <div class="value"><span wicket:id="priority"/></div>
+            </div>
+
+            <div class="control-group">
+                <label class="label"><img src="/fieldid/images/action/icon-notes.png"><wicket:message key="label.notes"/></label>
+                <div class="value"><span wicket:id="notes"></span></div>
+            </div>
+
+            <div class="control-group">
+                <label class="label"><img src="/fieldid/images/action/icon-due.png"><wicket:message key="label.due_date"/></label>
+                <div class="value"><span wicket:id="dueDate"></span></div>
+            </div>
+
+            <div class="control-group">
+                <label class="label"><img src="/fieldid/images/action/icon-assignee.png"><wicket:message key="label.assignee"/></label>
+                <div class="value"><span wicket:id="assignee"></span></div>
+            </div>
+
+            <div wicket:id="criteriaResultImage" class="actionImage">
+                <img wicket:id="image"/>
+            </div>
+
+        </fieldset>
+
+        <fieldset class="form-horizontal narrow" wicket:id="ownerSection">
+
+            <legend><wicket:message key="label.owner"/></legend>
+            <!-- This is needed for styling, since the assignedTo is not always displayed -->
+            <div class="control-group"/>
+
+            <div class="control-group" wicket:enclosure="assignedTo">
+                <label class="label"><wicket:message key="label.assignedto"/></label>
+                <select wicket:id="assignedTo" class="popup"></select>
+            </div>
+
+            <div class="control-group org-picker-container">
+                <label class="label"><wicket:message key="label.owner"/></label>
+                <div wicket:id="orgPicker"/>
+            </div>
+
+            <div class="control-group update-asset-owner">
+                <label class="label">&nbsp;</label>
+                <input type="checkbox" wicket:id="assetOwnerUpdate">
+                <span><wicket:message key="label.use_existing_values_from_assets"/></span>
+            </div>
+
+            <div class="control-group org-picker-container">
+                <label class="label"><wicket:message key="label.location"/></label>
+                <span wicket:id="locationPicker"/>
+            </div>
+
+            <div class="control-group">
+                <label wicket:for="freeformLocation" class="label freeFormLabel"><wicket:message key="label.freeform_location"/></label>
+                <input wicket:id="freeformLocation" type="text">
+            </div>
+
+            <div class="control-group update-asset-owner">
+                <label class="label">&nbsp;</label>
+                <input type="checkbox" wicket:id="locationUpdate">
+                <span><wicket:message key="label.use_existing_values_from_assets"/></span>
+            </div>
+
+        </fieldset>
+    </div>
+
+    <div class="column-wide">
+        <div wicket:id="eventFormPanel" class="event-form"/>
+
+        <fieldset class="form-horizontal narrow">
+            <legend><wicket:message key="label.result"/></legend>
+
+            <div class="control-group">
+                <label class="label"><wicket:message key="label.result"/></label>
+                <select wicket:id="eventResult"/>
+            </div>
+            <div class="control-group">
+                <label class="label"><wicket:message key="label.event_status"/></label>
+                <select wicket:id="eventStatus"/>
+            </div>
+        </fieldset>
+
+        <fieldset class="form-horizontal narrow">
+            <legend><wicket:message key="label.posteventinformation"/></legend>
+
+            <div class="control-group" wicket:id="comments"></div>
+
+            <div class="control-group">
+                <label class="label"><wicket:message key="label.printable"/></label>
+                <input type="checkbox" wicket:id="printable">
+                <wicket:message key="label.printableexplination"/>
+            </div>
+
+            <div class="control-group" wicket:id="postEventPanel"></div>
+
+        </fieldset>
+
+        <fieldset class="form-horizontal narrow">
+            <legend><wicket:message key="label.auto_schedule"/></legend>
+
+            <div class="control-group">
+                <label class="label"><wicket:message key="label.autoschedule"/></label>
+                <input type="checkbox" wicket:id="autoSchedule">
+                <wicket:message key="label.autoscheduleexplanation"/>
+            </div>
+
+        </fieldset>
+
+        <fieldset class="form-horizontal narrow" wicket:id="schedulesContainer">
+            <legend><wicket:message key="label.schedules"/></legend>
+            <div class="control-group">
+                <div class="schedule" wicket:id="schedules">
+                    <span class="date" wicket:id="addScheduleDate"/>
+                    <label class="detail">
+                        <span wicket:id="addScheduleLabel"/>
+                        <wicket:enclosure>
+                            <div class="inline addScheduleJob">
+                                <wicket:message key="label.on"/>
+                                <span wicket:id="addScheduleJob"/>
+                            </div>
+                        </wicket:enclosure>
+                    </label>
+                    <a wicket:id="removeLink"><img src="/fieldid/images/small-x.png"/></a>
+                </div>
+
+                <a class="btn-secondary btn-sml" wicket:id="openSchedulePickerLink"><wicket:message key="label.add_a_schedule"/></a>
+            </div>
+        </fieldset>
+
+        <div class="clear pull-right">
+            <input class="btn-primary" type="submit" wicket:id="saveButton" wicket:message="value:hbutton.save">
+            <wicket:message key="label.or"/>
+            <a wicket:id="cancelLink">
+                <wicket:message key="label.cancel"/>
+            </a>
+        </div>
+    </div>
+
+</form>
+
+<div wicket:id="schedulePicker"></div>
+
+</wicket:extend>
+</html>

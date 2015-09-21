@@ -60,14 +60,16 @@ public abstract class ThingEventPage extends EventPage<ThingEvent> {
             return;
         }
 
-        AssetTypeSchedule schedule = e.getAsset().getType().getSchedule(e.getType(), e.getOwner());
-        schedules.clear();
-        if (schedule != null) {
-            ThingEvent eventSchedule = new ThingEvent();
-            eventSchedule.setAsset(e.getAsset());
-            eventSchedule.setType(e.getType());
-            eventSchedule.setDueDate(schedule.getNextDate(e.getDate()));
-            schedules.add(eventSchedule);
+        if(!isAutoScheduled) {
+            AssetTypeSchedule schedule = e.getAsset().getType().getSchedule(e.getType(), e.getOwner());
+            if (schedule != null) {
+                ThingEvent eventSchedule = new ThingEvent();
+                eventSchedule.setAsset(e.getAsset());
+                eventSchedule.setType(e.getType());
+                eventSchedule.setDueDate(schedule.getNextDate(e.getDate()));
+                schedules.add(eventSchedule);
+            }
+            isAutoScheduled = true;
         }
     }
 

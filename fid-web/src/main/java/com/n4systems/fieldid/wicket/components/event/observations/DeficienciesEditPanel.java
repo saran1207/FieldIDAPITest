@@ -15,7 +15,7 @@ public class DeficienciesEditPanel extends ObservationsEditPanel<Deficiency> {
     public DeficienciesEditPanel(String id, final IModel<CriteriaResult> criteriaResultModel) {
         super(id, criteriaResultModel,
                 new PropertyModel<List<? extends String>>(criteriaResultModel, "criteria.deficiencies"),
-                "defSelected");
+                "def-selected defSelected");
         
         transientDeficiencies = new ArrayList<Deficiency>(criteriaResultModel.getObject().getDeficiencies());
     }

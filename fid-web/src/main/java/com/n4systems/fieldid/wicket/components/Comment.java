@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.comment.CommentService;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.commenttemplate.CommentTemplate;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -39,8 +40,9 @@ public class Comment extends Panel implements IEventBehavior {
         CommentsModel commentsModel = new CommentsModel();
 
         text = new TextArea<String>("commentText", model);
+		text.setLabel(new FIDLabelModel("label.comments"));
         text.setOutputMarkupId(true);
-        select = new DropDownChoice<CommentTemplate>("commentSelect", new PropertyModel<CommentTemplate>(this,"comment"), commentsModel);
+        select = new FidDropDownChoice<CommentTemplate>("commentSelect", new PropertyModel<CommentTemplate>(this,"comment"), commentsModel);
 		select.setNullValid(true);
 		select.add(new AjaxFormComponentUpdatingBehavior("onchange") {
 			@Override protected void onUpdate(AjaxRequestTarget target) {
@@ -65,7 +67,7 @@ public class Comment extends Panel implements IEventBehavior {
 		} else { 
 			value = value.endsWith("\n") ? value : value+"\n";
 		}
-		model.setObject(value + comment.getComment()+"\n");
+		model.setObject(value + comment.getComment() + "\n");
 	}
 	
 	public void addChangeBehavior(IEventBehavior onChangeBehavior) {
