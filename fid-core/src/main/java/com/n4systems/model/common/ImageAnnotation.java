@@ -31,6 +31,9 @@ public class ImageAnnotation extends EntityWithTenant {
 
     private String stroke;
 
+    @Column(name="render_annotation")
+    private boolean renderAnnotation;
+
     @Transient
     private Long tempId;
 
@@ -147,5 +150,13 @@ public class ImageAnnotation extends EntityWithTenant {
             return x != 0 && y != 0;
         else
             return x != 0 && y != 0 && x_tail != 0 && y_tail != 0;
+    }
+
+    public boolean isRenderAnnotation() {
+        return renderAnnotation;
+    }
+
+    public void setRenderAnnotation(boolean renderAnnotation) {
+        this.renderAnnotation = renderAnnotation;
     }
 }
