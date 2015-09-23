@@ -119,6 +119,10 @@
                     <artifactId>javax.mail</artifactId>
                     <groupId>mail</groupId>
                 </exclusion>
+                <exclusion>
+                    <groupId>org.jboss.logging</groupId>
+                    <artifactId>jboss-logging</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
