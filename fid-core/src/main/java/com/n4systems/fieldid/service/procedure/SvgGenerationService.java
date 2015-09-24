@@ -23,6 +23,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.stream.Collectors;
 
 public class SvgGenerationService extends FieldIdPersistenceService {
 
@@ -34,10 +35,10 @@ public class SvgGenerationService extends FieldIdPersistenceService {
 
     private static final Logger logger = Logger.getLogger(SvgGenerationService.class);
 
-    public static Integer DEFAULT_JASPER_HEIGHT = 140;
-    public static Integer DEFAULT_JASPER_WIDTH = 140;
-    private static double DEFAULT_IMAGE_SIZE = 200.0;
-    private static double DEFAULT_STROKE_WIDTH = 5.0;
+    public static final Integer DEFAULT_JASPER_HEIGHT = 140;
+    public static final Integer DEFAULT_JASPER_WIDTH = 140;
+    private static final double DEFAULT_IMAGE_SIZE = 200.0;
+    private static final double DEFAULT_STROKE_WIDTH = 5.0;
 
     public void generateAndUploadAnnotatedSvgs(ProcedureDefinition definition) throws Exception {
         for(ProcedureDefinitionImage image: definition.getImages()) {
@@ -59,17 +60,6 @@ public class SvgGenerationService extends FieldIdPersistenceService {
                           e.printStackTrace();
                       }
                   });
-    }
-
-    private void uploadSvg(ProcedureDefinition procedureDefinition, File svgFile) {
-        s3Service.uploadProcedureDefinitionSvg(procedureDefinition, svgFile);
-        try {
-            if(!svgFile.delete()) {
-                logger.error("The following file was not able to be deleted: " + svgFile.toString());
-            }
-        } catch (SecurityException e) {
-            logger.error("The following file was not able to be deleted: " + svgFile.toString(), e);
-        }
     }
 
     private void uploadSvg(ProcedureDefinition procedureDefinition, byte[] fileContents, String fileName) {
@@ -117,17 +107,26 @@ public class SvgGenerationService extends FieldIdPersistenceService {
 
         doc.appendChild(svg);
 
-        Element defs = doc.createElement("defs");
+        //This part only matters if the annotation is supposed to be rendered.  If it's not supposed to be rendered,
+        //we don't add the Annotation definition or element.
+        if(annotation.isRenderAnnotation()) {
 
-        svg.appendChild(defs);
+            Element defs = doc.createElement("defs");
 
-        defs.appendChild(createAnnotationDefinition(doc, annotation, width, height));
+            svg.appendChild(defs);
 
-        Element imageElement = createImageElement(doc, bytes, height, width);
+            defs.appendChild(createAnnotationDefinition(doc, annotation, width, height));
+        }
 
-        svg.appendChild(imageElement);
 
-        svg.appendChild(createAnnotation(doc, annotation, height, width));
+            Element imageElement = createImageElement(doc, bytes, height, width);
+
+            svg.appendChild(imageElement);
+
+        //Again... no render annotation?  No do this step.
+        if(annotation.isRenderAnnotation()) {
+            svg.appendChild(createAnnotation(doc, annotation, height, width));
+        }
 
         return doc;
     }
@@ -155,7 +154,9 @@ public class SvgGenerationService extends FieldIdPersistenceService {
 
         svg.appendChild(defs);
 
-        for(ImageAnnotation annotation: image.getAnnotations()) {
+        //Ensure we only add annotations that are supposed to render.... presumably we could have some that are NOT
+        //supposed to render mixed in.
+        for(ImageAnnotation annotation: image.getAnnotations().stream().filter(ImageAnnotation::isRenderAnnotation).collect(Collectors.toList())) {
             defs.appendChild(createAnnotationDefinition(doc, annotation, width, height));
         }
 
@@ -163,7 +164,8 @@ public class SvgGenerationService extends FieldIdPersistenceService {
 
         svg.appendChild(imageElement);
 
-        for(ImageAnnotation annotation: image.getAnnotations()) {
+        //Again, only annotations that are supposed to render.
+        for(ImageAnnotation annotation: image.getAnnotations().stream().filter(ImageAnnotation::isRenderAnnotation).collect(Collectors.toList())) {
             svg.appendChild(createAnnotation(doc, annotation, height, width));
         }
 
@@ -389,11 +391,15 @@ public class SvgGenerationService extends FieldIdPersistenceService {
 
         Element svg = createSvgElement(doc, width, height);
 
-        svg.appendChild(createArrowMarkerDefinition(doc));
+        if(annotation.isRenderAnnotation()) {
+            svg.appendChild(createArrowMarkerDefinition(doc));
+        }
 
         svg.appendChild(createImageElement(doc, bytes));
 
-        svg.appendChild(createArrowAnnotation(doc, annotation, height, width));
+        if(annotation.isRenderAnnotation()) {
+            svg.appendChild(createArrowAnnotation(doc, annotation, height, width));
+        }
 
         doc.appendChild(svg);
 
