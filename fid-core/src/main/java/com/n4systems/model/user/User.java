@@ -69,6 +69,10 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
     @JoinColumn(name = "lastRunProceduresId")
     private ProcedureCriteria lastRunProcedures;
 
+	@OneToOne(optional = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "lastRunProcedureDefsId")
+	private ProcedureCriteria lastRunProcedureDefs;
+
 	@Column(nullable = false, unique = true)
 	private String authKey;
 	
