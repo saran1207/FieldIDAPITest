@@ -2,6 +2,7 @@ package com.n4systems.reporting;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.procedure.SvgGenerationService;
+import com.n4systems.model.Asset;
 import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.procedure.*;
 import com.n4systems.reporting.data.ImagePrintoutContainer;
@@ -10,6 +11,7 @@ import com.n4systems.util.DateTimeDefinition;
 import org.apache.log4j.Logger;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -90,6 +92,18 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
         List<ImagePrintoutContainer> allImages = convertToImageContainerCollection(procDef.getImages());
 
         add("allImages", allImages);
+
+        add("assetProfileImage", getAssetProfileImage(procDef.getAsset()));
+    }
+
+    private File getAssetProfileImage(Asset asset) {
+        if (asset.getImageName() != null && s3Service.assetProfileImageExists(asset.getId(), asset.getImageName())) {
+            return s3Service.downloadAssetProfileImageMediumFile(asset.getId(), asset.getImageName());
+        } else if (asset.getType().hasImage() && s3Service.assetTypeProfileImageExists(asset.getType())) {
+            return s3Service.downloadAssetTypeProfileImage(asset.getType());
+        } else {
+            return null;
+        }
     }
 
     private String countIsolationPoints(List<IsolationPoint> lockIsolationPoints) {
