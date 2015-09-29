@@ -96,12 +96,17 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
         add("assetProfileImage", getAssetProfileImage(procDef.getAsset()));
     }
 
-    private File getAssetProfileImage(Asset asset) {
-        if (asset.getImageName() != null && s3Service.assetProfileImageExists(asset.getId(), asset.getImageName())) {
-            return s3Service.downloadAssetProfileImageMediumFile(asset.getId(), asset.getImageName());
-        } else if (asset.getType().hasImage() && s3Service.assetTypeProfileImageExists(asset.getType())) {
-            return s3Service.downloadAssetTypeProfileImage(asset.getType());
-        } else {
+    private ByteArrayInputStream getAssetProfileImage(Asset asset) {
+        try {
+            if (asset.getImageName() != null && s3Service.assetProfileImageExists(asset.getId(), asset.getImageName())) {
+                return new ByteArrayInputStream(s3Service.downloadAssetProfileMediumImage(asset.getId(), asset.getImageName()));
+            } else if (asset.getType().hasImage() && s3Service.assetTypeProfileImageExists(asset.getType())) {
+                    return new ByteArrayInputStream(s3Service.downloadAssetTypeProfileImageBytes(asset.getType()));
+            } else {
+                return null;
+            }
+        } catch (IOException e) {
+            logger.error("Failed to download Profile Image", e);
             return null;
         }
     }
