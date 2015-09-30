@@ -210,7 +210,7 @@ public class ApiEvent extends ApiReadWriteModelWithOwner {
 		return formId;
 	}
 
-	public void setFormId(Long eventFormId) {
+	public void setFormId(Long formId) {
 		this.formId = formId;
 	}
 
