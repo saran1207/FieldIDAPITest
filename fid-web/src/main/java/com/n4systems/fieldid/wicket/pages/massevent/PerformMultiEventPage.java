@@ -99,8 +99,13 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
             //save the event
             persistenceService.save(originalEvent);
 
-            originalEvent.storeTransientCriteriaResults();
+            if(event.getObject().getPerformedBy() == null) {
+                event.getObject().setPerformedBy(getCurrentUser());
+            }
 
+            if(originalEvent.getSectionResults() != null) {
+                originalEvent.storeTransientCriteriaResults();
+            }
             copyMassEventInfo(originalEvent);
 
             ThingEvent savedEvent = eventCreationService.createMultiEventWithSchedules(originalEvent, 0L, fileDataContainer, fileAttachments, createEventScheduleBundles(originalEvent.getAsset()));
