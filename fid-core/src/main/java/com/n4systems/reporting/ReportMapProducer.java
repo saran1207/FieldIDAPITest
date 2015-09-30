@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class ReportMapProducer {
-    private static Logger logger = Logger.getLogger(AbsractEventReportMapProducer.class);
+    protected static Logger logger = Logger.getLogger(AbsractEventReportMapProducer.class);
 
     protected final S3Service s3Service;
 	protected final DateTimeDefinition dateTimeDefinition;

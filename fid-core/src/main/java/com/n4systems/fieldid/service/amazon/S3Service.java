@@ -399,21 +399,37 @@ public class S3Service extends FieldIdPersistenceService {
         return imageData;
     }
 
-    public File downloadAssetProfileImageFile(Long assetId, String imageName){
+    private File downloadAssetProfileImageFile(byte[] assetProfileImageBytes, Long assetId, String imageName){
         File assetProfileImage = null;
         try {
-            byte[] assetProfileImageBytes = downloadAssetProfileOriginalImage(assetId, imageName);
             assetProfileImage = PathHandler.getUserFile(getCurrentUser(), imageName);
             FileOutputStream assetProfileImageFos = new FileOutputStream(assetProfileImage);
             assetProfileImageFos.write(assetProfileImageBytes);
-        }
-        catch(FileNotFoundException e) {
+            assetProfileImageFos.close();
+        } catch(FileNotFoundException e) {
             logger.warn("Unable to write to temp image file at: " + assetProfileImage, e);
-        }
-        catch(IOException e) {
-            logger.warn("Unable to download asset profile image from S3: " + assetId, e);
+        } catch(IOException e) {
+            logger.warn("Unable to write asset profile image to: " + assetProfileImage.getAbsolutePath(), e);
         }
         return assetProfileImage;
+    }
+
+    public File downloadAssetProfileImageFile(Long assetId, String imageName){
+        try {
+            return downloadAssetProfileImageFile(downloadAssetProfileOriginalImage(assetId, imageName), assetId, imageName);
+        } catch(IOException e) {
+            logger.warn("Unable to download asset profile image from S3: " + assetId, e);
+            return null;
+        }
+    }
+
+    public File downloadAssetProfileImageMediumFile(Long assetId, String imageName){
+        try {
+            return downloadAssetProfileImageFile(downloadAssetProfileMediumImage(assetId, imageName), assetId, imageName);
+        } catch(IOException e) {
+            logger.warn("Unable to download asset profile image from S3: " + assetId, e);
+            return null;
+        }
     }
 
     public byte[] downloadAssetProfileMediumImage(Long assetId, String imageName) throws IOException {
@@ -945,10 +961,17 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     public InputStream openCriteriaResultImageMedium(CriteriaResultImage criteriaResultImage) throws IOException {
-        return new ByteArrayInputStream(downloadResource(null, CRITERIA_RESULT_IMAGE_PATH_MEDIUM,
-                criteriaResultImage.getCriteriaResult().getEvent().getId(),
-                criteriaResultImage.getCriteriaResult().getId(),
-                criteriaResultImage.getFileName()));
+        byte[] imageContents = downloadResource(null,
+                                                CRITERIA_RESULT_IMAGE_PATH_MEDIUM,
+                                                criteriaResultImage.getCriteriaResult().getEvent().getId(),
+                                                criteriaResultImage.getCriteriaResult().getId(),
+                                                criteriaResultImage.getFileName());
+
+        if(imageContents != null) {
+            return new ByteArrayInputStream(imageContents);
+        } else {
+            return null;
+        }
     }
 
     public S3ImagePath uploadImage(byte[] data, String contentType, String path, Long tenantId) {

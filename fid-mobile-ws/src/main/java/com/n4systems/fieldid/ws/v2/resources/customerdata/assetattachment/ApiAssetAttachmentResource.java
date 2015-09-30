@@ -80,6 +80,8 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 		apiAttachment.setComments(attachment.getComments());
 		apiAttachment.setUrl(s3Service.getAssetAttachmentUrl(attachment));
 		apiAttachment.setMimeType(mimeType);
+        apiAttachment.setFileName(attachment.getFileName());
+
 		return apiAttachment;
 	}
 
