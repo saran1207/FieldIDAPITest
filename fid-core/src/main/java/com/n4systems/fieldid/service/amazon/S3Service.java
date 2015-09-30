@@ -754,6 +754,21 @@ public class S3Service extends FieldIdPersistenceService {
                 image.getFileName());
     }
 
+    public void finalizeMultiCriteriaResultImageUpload(CriteriaResultImage criteriaResultImage) {
+        copyTemporaryCriteriaImageToFinal(criteriaResultImage, CRITERIA_RESULT_IMAGE_TEMP, CRITERIA_RESULT_IMAGE_PATH_ORIG);
+        copyTemporaryCriteriaImageToFinal(criteriaResultImage, CRITERIA_RESULT_MEDIUM_IMAGE_TEMP, CRITERIA_RESULT_IMAGE_PATH_MEDIUM);
+        copyTemporaryCriteriaImageToFinal(criteriaResultImage, CRITERIA_RESULT_THUMB_IMAGE_TEMP, CRITERIA_RESULT_IMAGE_PATH_THUMB);
+    }
+
+    public void removeTempAfterMassUpload(CriteriaResultImage criteriaResultImage) {
+        Long tenantId = criteriaResultImage.getCriteriaResult().getTenant().getId();
+        String tempFileName = criteriaResultImage.getTempFileName();
+
+        removeResource(tenantId, CRITERIA_RESULT_IMAGE_TEMP, tempFileName);
+        removeResource(tenantId, CRITERIA_RESULT_MEDIUM_IMAGE_TEMP, tempFileName);
+        removeResource(tenantId, CRITERIA_RESULT_THUMB_IMAGE_TEMP, tempFileName);
+    }
+
     public void finalizeCriteriaResultImageUpload(CriteriaResultImage criteriaResultImage) {
         Long tenantId = criteriaResultImage.getCriteriaResult().getTenant().getId();
         String tempFileName = criteriaResultImage.getTempFileName();

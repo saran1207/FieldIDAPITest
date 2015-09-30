@@ -60,9 +60,113 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
         return savedEvent;
     }
 
+    @Transactional
+    @SuppressWarnings("unchecked")
+    public T createMultiEventWithSchedules(T event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle<V>> schedules) {
+        T savedEvent = createMultiEvent(event, scheduleId, fileData, uploadedFiles);
+        for (EventScheduleBundle<V> eventScheduleBundle : schedules) {
+            T openEvent = createEvent();
+            openEvent.setTenant(eventScheduleBundle.getTarget().getTenant());
+            setTargetFromScheduleBundle(openEvent, eventScheduleBundle);
+            openEvent.setType(eventScheduleBundle.getType());
+            openEvent.setOwner(eventScheduleBundle.getTarget().getOwner());
+            openEvent.setProject(eventScheduleBundle.getJob());
+            openEvent.setDueDate(eventScheduleBundle.getScheduledDate());
+            openEvent.setAssignedUserOrGroup(eventScheduleBundle.getAssginee());
+            doSaveSchedule(openEvent);
+        }
+        return savedEvent;
+    }
+
     protected abstract T createEvent();
     protected abstract void setTargetFromScheduleBundle(T event, EventScheduleBundle<V> bundle);
     protected void doSaveSchedule(T openEvent) {}
+
+    @Transactional
+    public T createMultiEvent(T event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) {
+        defaultOneClickResultsWithNullState(event.getResults());
+
+        EventResult calculatedEventResult = calculateEventResultAndScore(event);
+
+        if (event.getEventResult() == null || event.getEventResult() == EventResult.VOID) {
+            event.setEventResult(calculatedEventResult);
+        }
+
+        User user = getCurrentUser();
+
+        event.setWorkflowState(WorkflowState.COMPLETED);
+
+        Date completedDate = event.getDate();
+
+        event.setDate(completedDate);
+
+        preSaveEvent(event, fileData);
+
+        if (event.getId() == null) {
+            //If the event was unscheduled, then it's going to immediately be written as a COMPLETE, ACTIVE event.
+            //When this happens, we're going to bypass the painful logic of an AFTER INSERT trigger and simply dump
+            //what we know to be the correct value into the Asset.  I'm under the impression that, from here, it'll
+            //actually get saved.
+            if(event.getWorkflowState().equals(WorkflowState.COMPLETED)
+                    && event.getState().equals(Archivable.EntityState.ACTIVE)
+                    && event.getType().isThingEventType()) {
+                //If the current Last Event Date on the Asset is NOT AFTER the Completed Date on the Event, set the
+                //Asset's Last Event Date to the Event's Completed Date... if there is a Last Event Date at all.
+                if(((ThingEvent) event).getAsset().getLastEventDate() == null
+                        || !((ThingEvent) event).getAsset().getLastEventDate().after(event.getCompletedDate())) {
+                    ((ThingEvent) event).getAsset().setLastEventDate(event.getCompletedDate());
+                }
+
+                //I'm sure I'm violating the rules by doing this... but this is WAY easier than a trigger.
+                Asset asset = assetService.update(((ThingEvent) event).getAsset());
+                ((ThingEvent) event).setAsset(asset);
+            }
+            persistenceService.save(event);
+        } else {
+            // Because the update drops the transient data on the signature criteria result, we
+            // must remember the file names in a map before we call update. We must call update before saving
+            // the file, because we have to get IDs for our signature criteria results so we know the path to save them at.
+            // Perhaps it would be better to pass transient signature data in a separate parameter
+            Map<Long, String> rememberedSignatureMap = rememberTemporarySignatureFiles(event);
+            Map<Long, List<String>> rememberedCriteriaImages = rememberCriteriaImages(event);
+
+            event.setTriggersIntoResultingActions(event);
+
+            for (CriteriaResult result : event.getResults()) {
+                for (Event action : result.getActions()) {
+                    action.setTenant(event.getTenant());
+                    action.setOwner(event.getOwner());
+                    ((ThingEvent) action).setAsset(((ThingEvent) event).getAsset());
+
+                    persistenceService.save(action);
+                }
+            }
+            event = persistenceService.update(event);
+
+            restoreTemporarySignatureFiles(event, rememberedSignatureMap);
+            restoreCriteriaImages(event, rememberedCriteriaImages);
+
+            event = persistenceService.update(event);
+        }
+
+        setAllTriggersForActions(event);
+
+        postSaveEvent(event, fileData);
+
+        // writeSignatureImagesToDisk MUST be called after persistenceManager.save(parameterObject.event, parameterObject.userId) as an
+        // event id is required to build the save path
+        writeSignatureImagesToDisk(event);
+        saveMultiCriteriaResultImages(event);
+
+        processUploadedFiles(event, uploadedFiles);
+
+        if(user.isUsageBasedUser()) {
+            int eventCount = event.getSubEvents().size() + 1;
+            tenantSettingsService.decrementUsageBasedEventCount(eventCount);
+        }
+
+        return event;
+    }
 
     @Transactional
     public T createEvent(T event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) {
@@ -378,6 +482,24 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
     protected abstract void preUpdateEvent(T event, FileDataContainer fileData);
     protected abstract void postUpdateEvent(T event, FileDataContainer fileData);
 
+    private void saveMultiCriteriaResultImages(T event) {
+        saveMultiCriteriaResultImages(event.getResults());
+        for (SubEvent subEvent: event.getSubEvents()) {
+            saveMultiCriteriaResultImages(subEvent.getResults());
+        }
+    }
+
+    private void saveMultiCriteriaResultImages(Collection<CriteriaResult> results) {
+
+        for (CriteriaResult result: results) {
+            for (CriteriaResultImage criteriaResultImage: result.getCriteriaImages()) {
+                if (criteriaResultImage.getTempFileName() != null) {
+                    s3Service.finalizeMultiCriteriaResultImageUpload(criteriaResultImage);
+                }
+            }
+        }
+    }
+
     private void saveCriteriaResultImages(T event) {
 		saveCriteriaResultImages(event.getResults());
 		for (SubEvent subEvent: event.getSubEvents()) {
@@ -386,6 +508,7 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
 	}
 
 	private void saveCriteriaResultImages(Collection<CriteriaResult> results) {
+
 		for (CriteriaResult result: results) {
 			for (CriteriaResultImage criteriaResultImage: result.getCriteriaImages()) {
                 if (criteriaResultImage.getTempFileName() != null) {

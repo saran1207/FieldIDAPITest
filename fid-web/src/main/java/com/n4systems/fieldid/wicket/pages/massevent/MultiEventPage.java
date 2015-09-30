@@ -504,6 +504,8 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDTemplatePag
 
     public boolean isActionButtonsVisible() { return true; }
 
-    public boolean isAttachmentAndActionVisible() { return false; }
+    public boolean isAttachmentAndActionVisible() {
+        return true;
+    }
 
 }

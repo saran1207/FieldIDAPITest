@@ -2,12 +2,16 @@ package com.n4systems.fieldid.wicket.pages.massevent;
 
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.service.escalationrule.AssignmentEscalationRuleService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.perform.PerformThingEventHelperService;
 import com.n4systems.fieldid.utils.CopyEventFactory;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.model.CriteriaResult;
+import com.n4systems.model.Event;
 import com.n4systems.model.ThingEvent;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.tools.FileDataContainer;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
@@ -30,6 +34,8 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
     private EventScheduleService eventScheduleService;
     @SpringBean
     private AssetService assetService;
+    @SpringBean
+    protected AssignmentEscalationRuleService ruleService;
 
     @SpringBean
     private PerformThingEventHelperService thingEventHelperService;
@@ -76,6 +82,7 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
     protected List<ThingEvent> doSave() {
         event.getObject().storeTransientCriteriaResults();
         event.getObject().setEventResult(getEventResult());
+        event.getObject().setWorkflowState(WorkflowState.CLOSED);
 
         FileDataContainer fileDataContainer = null;
         List<ThingEvent> finalList = new ArrayList<ThingEvent>();
@@ -89,9 +96,25 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
                 originalEvent = thingEventHelperService.createEventFromOpenEvent(originalEventFromList.getId());
             }
 
+            //save the event
+            persistenceService.save(originalEvent);
+
+            originalEvent.storeTransientCriteriaResults();
+
             copyMassEventInfo(originalEvent);
 
-            ThingEvent savedEvent = eventCreationService.createEventWithSchedules(originalEvent, 0L, fileDataContainer, fileAttachments, createEventScheduleBundles(originalEvent.getAsset()));
+            ThingEvent savedEvent = eventCreationService.createMultiEventWithSchedules(originalEvent, 0L, fileDataContainer, fileAttachments, createEventScheduleBundles(originalEvent.getAsset()));
+
+            for (CriteriaResult result : savedEvent.getResults()) {
+                for (Event action : result.getActions()) {
+                    //Make sure that we clear and create rules for any open Actions.
+                    if(action.getWorkflowState().equals(WorkflowState.OPEN)) {
+                        ruleService.clearEscalationRulesForEvent(action.getId());
+                        ruleService.createApplicableQueueItems(action);
+                    }
+                }
+            }
+
             finalList.add(savedEvent);
         }
         return finalList;
@@ -107,6 +130,12 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
         ThingEvent genericEvent = event.getObject();
 
         CopyEventFactory.copyEventForMassEvents(originalEvent, genericEvent);
+
+        for (CriteriaResult result : originalEvent.getResults()) {
+            for (Event action : result.getActions()) {
+                ((ThingEvent)action).setAsset(originalEvent.getAsset());
+            }
+        }
 
         originalEvent.setPrintable(event.getObject().isPrintable());
 

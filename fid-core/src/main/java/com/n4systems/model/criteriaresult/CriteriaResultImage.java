@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Table(name = "criteriaresult_images")
 public class CriteriaResultImage extends BaseEntity {
 
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, cascade = CascadeType.ALL)
 	@JoinColumn(name="criteriaresult_id")
 	private CriteriaResult criteriaResult;
 
