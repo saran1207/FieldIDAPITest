@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.setup.eventtype;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.asset.AssetStatusService;
 import com.n4systems.fieldid.service.event.EventTypeRulesService;
+import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
@@ -55,7 +56,7 @@ public class RulesPage extends EventTypePage {
                 form.add(new FidDropDownChoice<AssetStatus>("selectStatus",
                         new PropertyModel<AssetStatus>(item.getModel(), "assetStatus"),
                         getAssetStatuses(),
-                        new ListableChoiceRenderer<AssetStatus>()).setNullValid(true));
+                        new ListableChoiceRenderer<AssetStatus>()).setNullValid(true).add(new UpdateComponentOnChange()));
 
                 AjaxLink editLink;
 
