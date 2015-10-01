@@ -19,14 +19,18 @@ import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilde
 import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.param;
 import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.uniqueId;
 
-public class EventTypePage extends FieldIDTemplatePage {
+/* This should not be used, it was created to maintain the styling on the EventFormEditPage
+ * since the styling does not fit with the new template
+ */
+@Deprecated
+public class LegacyEventTypePage extends FieldIDFrontEndPage {
 
     protected Long eventTypeId;
     protected IModel<EventType> eventTypeModel;
     @SpringBean
     protected EventTypeService eventTypeService;
 
-    public EventTypePage(PageParameters params) {
+    public LegacyEventTypePage(PageParameters params) {
         super(params);
     }
 

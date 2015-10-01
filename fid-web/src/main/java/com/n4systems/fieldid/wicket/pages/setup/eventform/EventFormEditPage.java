@@ -7,6 +7,7 @@ import com.n4systems.fieldid.wicket.components.eventform.CriteriaPanel;
 import com.n4systems.fieldid.wicket.components.eventform.CriteriaSectionsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.save.SavePanel;
 import com.n4systems.fieldid.wicket.pages.setup.eventtype.EventTypePage;
+import com.n4systems.fieldid.wicket.pages.setup.eventtype.LegacyEventTypePage;
 import com.n4systems.model.*;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -19,7 +20,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventFormEditPage extends EventTypePage {
+public class EventFormEditPage extends LegacyEventTypePage {
 
     @SpringBean
     private EventFormService eventFormService;

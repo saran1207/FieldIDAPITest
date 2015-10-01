@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.setup.score.result;
 
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -79,7 +80,7 @@ public class ScoreResultConfigurationPage extends EventTypePage {
             };
             add(passRangePanel);
 
-            add(new DropDownChoice<ScoreCalculationType>("scoreCalculationType", Arrays.asList(ScoreCalculationType.values()), new CalculationChoiceRenderer()) {
+            add(new FidDropDownChoice<ScoreCalculationType>("scoreCalculationType", Arrays.asList(ScoreCalculationType.values()), new CalculationChoiceRenderer()) {
                 @Override
                 protected boolean wantOnSelectionChangedNotifications() {
                     return true;

@@ -913,4 +913,9 @@ public class FieldIdCoreConfig {
     public ObservationCountService observationCountService() {
         return new ObservationCountService();
     }
+
+    @Bean
+    public EventTypeRulesService eventTypeRulesService() {
+        return new EventTypeRulesService();
+    }
 }
