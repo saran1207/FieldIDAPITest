@@ -16,7 +16,6 @@ import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 import java.awt.*;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 
@@ -64,7 +63,7 @@ public class ArrowStyleAnnotatedSvg extends Panel {
     /**
      * This is the main constructor for the SvgImageDisplayPanel.  Since the S3 Service requires a full
      * ProcedureDefinitionImage to be able to acquire a URL for the image, the easiest solution is to just pass in
-     * the whole image.  In addition to the image, we also need to be provided the ImageAnnotation object representing
+     * the whole image.  In addition to the image, we also need to be provided  the ImageAnnotation object representing
      * the Annotation to be generated on top of the image.
      *
      * @param id - The <b>String</b> representation of the Wicket ID for the SvgImageDisplayPanel instance.

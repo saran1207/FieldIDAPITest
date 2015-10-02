@@ -12,6 +12,7 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -35,7 +36,7 @@ import java.util.List;
  *
  * Created by Jordan Heath on 14-12-05.
  */
-public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
+public abstract class AnnotationEditorAndGalleryPanel extends Panel {
 
     @SpringBean
     private S3Service s3Service;
@@ -51,15 +52,27 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
     private IModel<IsolationPoint> model;
     private AnnotationType annotationType;
     private ProcedureDefinitionImage currentImage;
+    private boolean renderAnnotation = true;
+    private AjaxCheckBox checkbox;
 
-//    private ArrowStyleAnnotatingBehaviour ajaxBehavior;
+    private final static Logger logger = Logger.getLogger(AnnotationEditorAndGalleryPanel.class);
 
-    private final static Logger logger = Logger.getLogger(ArrowStyleEditorAndGalleryPanel.class);
-
-    public ArrowStyleEditorAndGalleryPanel(String id, IModel<IsolationPoint> model, AnnotationType annotationType) {
+    public AnnotationEditorAndGalleryPanel(String id, IModel<IsolationPoint> model, AnnotationType annotationType) {
         super(id, model);
         this.model = model;
         this.currentImage = (model.getObject().getAnnotation() == null ? null : (ProcedureDefinitionImage) model.getObject().getAnnotation().getImage());
+        //If the Annotation is currently null, set this value to true... otherwise, follow what the annotation says.
+        //We'll worry about linking the two up further along... this just helps handle situations where the Annotation
+        //may not yet exist.
+        if(model.getObject().getAnnotation() == null) {
+            this.renderAnnotation = true;
+        } else {
+            this.renderAnnotation = model.getObject().getAnnotation().isRenderAnnotation();
+        }
+
+
+
+        this.renderAnnotation = (model.getObject().getAnnotation() == null || model.getObject().getAnnotation().isRenderAnnotation());
         this.annotationType = annotationType;
     }
 
@@ -136,6 +149,38 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
                 doDone(target);
             }
         });
+
+
+        tinyForm.add(checkbox = new AjaxCheckBox("renderAnnotationCheckbox", Model.of(renderAnnotation)) {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                //When this value gets changed, we need to swap the renderAnnotation value.
+                renderAnnotation = !renderAnnotation;
+
+                //If the annotation exists, we drop this value into the Annotation as well.  If it doesn't exist
+                //yet, this value will be set when we swap images for the first time.  That should basically cover
+                //any time we have to set the value.  Which is why we have to use this instead of a value from within
+                //the actual annotation itself.  This value has to be IN the annotation since we need this value when we
+                //generate any applicable images.
+                if(model.getObject().getAnnotation() != null) {
+                    model.getObject().getAnnotation().setRenderAnnotation(renderAnnotation);
+                }
+
+                //We also need to swap the editor panel, because... you know... it's not right anymore.
+                if (currentImage == null) {
+                    swapEditorPanel(target, createEditorPanel().setVisible(false));
+                    placeholder.setVisible(true);
+                } else {
+                    //I can't really imagine what case we'd have where there's a current image but no annotation... but
+                    //I'll pretend like it could happen, anyways.
+                    if (model.getObject().getAnnotation() == null) {
+                        swapEditorPanel(target, createEditorPanel(currentImage));
+                    } else {
+                        swapEditorPanel(target, createEditorPanel(model.getObject().getAnnotation()));
+                    }
+                }
+            }
+        });
     }
 
 
@@ -149,6 +194,7 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
         //Oh, we should probably set this as the image for the annotation, no?
         if(model.getObject().getAnnotation() == null) {
             model.getObject().setAnnotation(new ImageAnnotation());
+            model.getObject().getAnnotation().setRenderAnnotation(renderAnnotation);
         }
         model.getObject().getAnnotation().setImage(currentImage);
 
@@ -188,84 +234,111 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
     }
 
     private Component createEditorPanel() {
-        if(annotationType.equals(AnnotationType.ARROW_STYLE)) {
-            return new ArrowStyleAnnotationEditor("imageEditor"){
+        if(renderAnnotation) {
+            if (annotationType.equals(AnnotationType.ARROW_STYLE)) {
+                return new ArrowStyleAnnotationEditor("imageEditor") {
+                    @Override
+                    protected ProcedureDefinitionImage retrieveCurrentImage() {
+                        return currentImage;
+                    }
+
+                    @Override
+                    protected IsolationPoint retrieveIsolationPoint() {
+                        return model.getObject();
+                    }
+                };
+            } else
+                return new CallOutStyleAnnotationEditor("imageEditor") {
+                    @Override
+                    protected ProcedureDefinitionImage retrieveCurrentImage() {
+                        return currentImage;
+                    }
+
+                    @Override
+                    protected IsolationPoint retrieveIsolationPoint() {
+                        return model.getObject();
+                    }
+                };
+        } else {
+            return new NonAnnotatedSvg("imageEditor") {
                 @Override
                 protected ProcedureDefinitionImage retrieveCurrentImage() {
                     return currentImage;
                 }
-
-                @Override
-                protected IsolationPoint retrieveIsolationPoint() {
-                    return model.getObject();
-                }
             };
-        } else
-            return new CallOutStyleAnnotationEditor("imageEditor"){
-                @Override
-                protected ProcedureDefinitionImage retrieveCurrentImage() {
-                    return currentImage;
-                }
-
-                @Override
-                protected IsolationPoint retrieveIsolationPoint() {
-                    return model.getObject();
-                }
-            };
+        }
     }
 
     private Component createEditorPanel(ImageAnnotation annotation) {
-        if(annotationType.equals(AnnotationType.ARROW_STYLE))
-            return new ArrowStyleAnnotationEditor("imageEditor", annotation){
+        if(renderAnnotation) {
+            if (annotationType.equals(AnnotationType.ARROW_STYLE))
+                return new ArrowStyleAnnotationEditor("imageEditor", annotation) {
+                    @Override
+                    protected ProcedureDefinitionImage retrieveCurrentImage() {
+                        return currentImage;
+                    }
+
+                    @Override
+                    protected IsolationPoint retrieveIsolationPoint() {
+                        return model.getObject();
+                    }
+                };
+            else
+                return new CallOutStyleAnnotationEditor("imageEditor", annotation) {
+                    @Override
+                    protected ProcedureDefinitionImage retrieveCurrentImage() {
+                        return currentImage;
+                    }
+
+                    @Override
+                    protected IsolationPoint retrieveIsolationPoint() {
+                        return model.getObject();
+                    }
+                };
+        } else {
+            return new NonAnnotatedSvg("imageEditor", annotation) {
                 @Override
                 protected ProcedureDefinitionImage retrieveCurrentImage() {
                     return currentImage;
                 }
-
-                @Override
-                protected IsolationPoint retrieveIsolationPoint() {
-                    return model.getObject();
-                }
             };
-        else
-            return new CallOutStyleAnnotationEditor("imageEditor", annotation){
-                @Override
-                protected ProcedureDefinitionImage retrieveCurrentImage() {
-                    return currentImage;
-                }
-
-                @Override
-                protected IsolationPoint retrieveIsolationPoint() {
-                    return model.getObject();
-                }
-            };
+        }
     }
 
     private Component createEditorPanel(ProcedureDefinitionImage image) {
-        if(annotationType.equals(AnnotationType.ARROW_STYLE))
-            return new ArrowStyleAnnotationEditor("imageEditor", image) {
+        if(renderAnnotation) {
+            if (annotationType.equals(AnnotationType.ARROW_STYLE))
+                return new ArrowStyleAnnotationEditor("imageEditor", image) {
+                    @Override
+                    protected ProcedureDefinitionImage retrieveCurrentImage() {
+                        return currentImage;
+                    }
+
+                    @Override
+                    protected IsolationPoint retrieveIsolationPoint() {
+                        return model.getObject();
+                    }
+                };
+            else
+                return new CallOutStyleAnnotationEditor("imageEditor", image) {
+                    @Override
+                    protected ProcedureDefinitionImage retrieveCurrentImage() {
+                        return currentImage;
+                    }
+
+                    @Override
+                    protected IsolationPoint retrieveIsolationPoint() {
+                        return model.getObject();
+                    }
+                };
+        } else {
+            return new NonAnnotatedSvg("imageEditor", image) {
                 @Override
                 protected ProcedureDefinitionImage retrieveCurrentImage() {
                     return currentImage;
                 }
-
-                @Override
-                protected IsolationPoint retrieveIsolationPoint() {
-                    return model.getObject();
-                }
             };
-        else
-            return new CallOutStyleAnnotationEditor("imageEditor", image){
-                @Override
-                protected ProcedureDefinitionImage retrieveCurrentImage() {
-                    return currentImage;
-                }
-
-                @Override
-                protected IsolationPoint retrieveIsolationPoint() {
-                    return model.getObject();
-                }
-            };
+        }
     }
 
 
@@ -305,4 +378,6 @@ public abstract class ArrowStyleEditorAndGalleryPanel extends Panel {
     protected abstract ProcedureDefinitionImage createImage(String clientFileName);
 
     protected abstract List<ProcedureDefinitionImage> displayableImages();
+
+//    protected abstract boolean renderAnnotation();
 }

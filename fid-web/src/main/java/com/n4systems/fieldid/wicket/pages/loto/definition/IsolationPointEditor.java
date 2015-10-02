@@ -5,7 +5,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.components.image.ArrowStyleEditorAndGalleryPanel;
+import com.n4systems.fieldid.wicket.components.image.AnnotationEditorAndGalleryPanel;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.components.text.LabelledComboBox;
 import com.n4systems.fieldid.wicket.components.text.LabelledTextArea;
@@ -22,6 +22,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxCallDecorator;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
@@ -57,6 +58,8 @@ public class IsolationPointEditor extends Panel {
     private LabelledTextArea methodField;  //This may actually be the "notes" field, depending on context...
     private Component notesField;
     private LabelledComboBox<String> deviceComboBox;
+//    private boolean renderAnnotation;
+    private AjaxCheckBox checkbox;
 
 
     public IsolationPointEditor(String id, ProcedureDefinition procedureDefinition) {
@@ -164,6 +167,12 @@ public class IsolationPointEditor extends Panel {
             }
         });
 
+//        form.add(checkbox = new AjaxCheckBox("renderAnnotationCheckbox", Model.of(renderAnnotation)) {
+//            @Override
+//            protected void onUpdate(AjaxRequestTarget target) {
+//                renderAnnotation = !renderAnnotation;
+//            }
+//        });
     }
 
     private IsolationPointImagePanel getIsolationPointImagePanel(ProcedureDefinition procedureDefinition) {
@@ -187,8 +196,9 @@ public class IsolationPointEditor extends Panel {
         };
     }
 
+    @SuppressWarnings("unchecked")
     protected Component createImageGallery(String id) {
-            return new ArrowStyleEditorAndGalleryPanel(id,
+            return new AnnotationEditorAndGalleryPanel(id,
                                       (IModel<IsolationPoint>)getDefaultModel(),
                                       procedureDefinition.getAnnotationType()) {
 
@@ -215,6 +225,11 @@ public class IsolationPointEditor extends Panel {
                 protected List<ProcedureDefinitionImage> displayableImages() {
                     return procedureDefinition.getImages();
                 }
+
+//                @Override
+//                protected boolean renderAnnotation() {
+//                    return renderAnnotation;
+//                }
             };
     }
 
