@@ -4,7 +4,6 @@ import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.model.RecurringAssetTypeEvent;
 import com.n4systems.model.RecurringPlaceEvent;
 import com.n4systems.model.procedure.RecurringLotoEvent;
-import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.taskscheduling.ScheduledTask;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.time.MethodTimer;
@@ -33,7 +32,6 @@ public class RecurringSchedulesTask extends ScheduledTask {
         List<RecurringAssetTypeEvent> recurringAssetTypeEventList = getRecurringScheduleService().getRecurringAssetTypeEvents();
         for(RecurringAssetTypeEvent event: recurringAssetTypeEventList) {
             for (LocalDateTime dateTime : getRecurringScheduleService().getBoundedScheduledTimesIterator(event.getRecurrence())) {
-                ServiceLocator.getSecurityContext().setTenantSecurityFilter(new TenantOnlySecurityFilter(event.getTenant()));
                 getRecurringScheduleService().scheduleAnEventFor(event, dateTime);
             }
         }
@@ -41,14 +39,12 @@ public class RecurringSchedulesTask extends ScheduledTask {
         List<RecurringPlaceEvent> recurringPlaceEventList = getRecurringScheduleService().getAllRecurringPlaceEvents();
         for(RecurringPlaceEvent event: recurringPlaceEventList) {
             for (LocalDateTime dateTime : getRecurringScheduleService().getBoundedScheduledTimesIterator(event.getRecurrence())) {
-                ServiceLocator.getSecurityContext().setTenantSecurityFilter(new TenantOnlySecurityFilter(event.getTenant()));
                 getRecurringScheduleService().scheduleAPlaceEventFor(event, dateTime);
             }
         }
 
         List<RecurringLotoEvent> recurringLotoEventList = getRecurringScheduleService().getAllRecurringLotoEvents();
         for(RecurringLotoEvent event: recurringLotoEventList) {
-            ServiceLocator.getSecurityContext().setTenantSecurityFilter(new TenantOnlySecurityFilter(event.getTenant()));
             if(event.isRecurringLockout()) {
                 for (LocalDateTime dateTime : getRecurringScheduleService().getBoundedScheduledTimesIterator(event.getRecurrence())) {
                     getRecurringScheduleService().scheduleALotoEventFor(event, dateTime);
@@ -58,8 +54,6 @@ public class RecurringSchedulesTask extends ScheduledTask {
                     getRecurringScheduleService().scheduleAnAuditEventFor(event, dateTime);
             }
         }
-
-        ServiceLocator.getSecurityContext().reset();
 
         timer.stop();
     }
