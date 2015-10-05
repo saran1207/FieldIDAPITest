@@ -242,7 +242,10 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
     private void writeQueueItem(Long eventId, AssignmentEscalationRule rule) {
         EscalationRuleExecutionQueueItem queueItem = new EscalationRuleExecutionQueueItem();
 
-        Event event = persistenceService.find(Event.class, eventId);
+        QueryBuilder<Event> eventQuery = new QueryBuilder<>(Event.class, new OpenSecurityFilter());
+        eventQuery.addSimpleWhere("id", eventId);
+
+        Event event = persistenceService.find(eventQuery);
 
         //At this point, we double check that we don't have what amounts to shitty data.
         //Event should:
