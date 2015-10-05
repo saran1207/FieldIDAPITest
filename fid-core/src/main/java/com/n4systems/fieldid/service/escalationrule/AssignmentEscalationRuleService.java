@@ -216,8 +216,9 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
      * @param difference - A long value representing the difference between the old and new Overdue amounts.
      */
     private void updateNotificationDateInQueue(AssignmentEscalationRule rule, long difference) {
-        QueryBuilder<EscalationRuleExecutionQueueItem> query = createTenantSecurityBuilder(EscalationRuleExecutionQueueItem.class);
+        QueryBuilder<EscalationRuleExecutionQueueItem> query = new QueryBuilder<>(EscalationRuleExecutionQueueItem.class, new OpenSecurityFilter());
         query.addSimpleWhere("rule", rule);
+        query.addSimpleWhere("tenant.id", rule.getTenant().getId());
 
         List<EscalationRuleExecutionQueueItem> results = persistenceService.findAll(query);
 
@@ -242,8 +243,9 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
     private void writeQueueItem(Long eventId, AssignmentEscalationRule rule) {
         EscalationRuleExecutionQueueItem queueItem = new EscalationRuleExecutionQueueItem();
 
-        QueryBuilder<Event> eventQuery = createTenantSecurityBuilder(Event.class);
+        QueryBuilder<Event> eventQuery = new QueryBuilder<>(Event.class, new OpenSecurityFilter());
         eventQuery.addSimpleWhere("id", eventId);
+        eventQuery.addSimpleWhere("tenant.id", rule.getTenant().getId());
 
         Event event = persistenceService.find(eventQuery);
 
@@ -521,7 +523,7 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
      * @param event - An Event for which QueueItems may need to be created.
      */
     public void createApplicableQueueItems(Event event) {
-        QueryBuilder<AssignmentEscalationRule> ruleQuery = createTenantSecurityBuilder(AssignmentEscalationRule.class);
+        QueryBuilder<AssignmentEscalationRule> ruleQuery = new QueryBuilder<>(AssignmentEscalationRule.class, new OpenSecurityFilter());
 
         persistenceService.findAll(ruleQuery)
                           .stream()
