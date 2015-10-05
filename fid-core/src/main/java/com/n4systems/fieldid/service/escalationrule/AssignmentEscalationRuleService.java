@@ -275,7 +275,7 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
             //  by creating this ZonedDateTime object without actually shifting the time.  No problem.
             ZonedDateTime zonedDateTime = ZonedDateTime.of(
                     LocalDateTime.parse(ZONE_AGNOSTIC_DATE_TIME_FORMAT.format(overdueApplied)),
-                    event.getCreatedBy().getTimeZone().toZoneId()
+                    rule.getCreatedBy().getTimeZone().toZoneId()
             );
 
             //3) Now that we've shifted the time without changing it to the user's TimeZone, we need to shift it to

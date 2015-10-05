@@ -46,8 +46,7 @@ public class PlaceEventScheduleService extends FieldIdPersistenceService {
         schedule.getPlace().touch();
         persistenceService.update(schedule.getPlace());
 
-        PlaceEvent event = persistenceService.find(PlaceEvent.class, id);
-        ruleService.createApplicableQueueItems(event);
+        ruleService.createApplicableQueueItems(schedule);
         return id;
     }
 
