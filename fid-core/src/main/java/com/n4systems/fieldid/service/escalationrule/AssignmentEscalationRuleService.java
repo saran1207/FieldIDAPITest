@@ -56,7 +56,7 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
      * @return A list of AssignmentEscalationRule objects that are active for the current user.
      */
     public List<AssignmentEscalationRule> getAllActiveRules() {
-        QueryBuilder<AssignmentEscalationRule> builder = createUserSecurityBuilder(AssignmentEscalationRule.class);
+        QueryBuilder<AssignmentEscalationRule> builder = createTenantSecurityBuilder(AssignmentEscalationRule.class);
         builder.addSimpleWhere("createdBy", getCurrentUser());
         return persistenceService.findAll(builder);
     }
@@ -68,7 +68,7 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
      * @return A boolean determining whether or not the name exists (true if it exists, false otherwise).
      */
     public boolean isNameUnique(String name) {
-        QueryBuilder<AssignmentEscalationRule> builder = createUserSecurityBuilder(AssignmentEscalationRule.class);
+        QueryBuilder<AssignmentEscalationRule> builder = createTenantSecurityBuilder(AssignmentEscalationRule.class);
         builder.addSimpleWhere("createdBy", getCurrentUser());
         builder.addSimpleWhere("ruleName", name);
         return persistenceService.exists(builder);
@@ -216,7 +216,7 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
      * @param difference - A long value representing the difference between the old and new Overdue amounts.
      */
     private void updateNotificationDateInQueue(AssignmentEscalationRule rule, long difference) {
-        QueryBuilder<EscalationRuleExecutionQueueItem> query = createUserSecurityBuilder(EscalationRuleExecutionQueueItem.class);
+        QueryBuilder<EscalationRuleExecutionQueueItem> query = createTenantSecurityBuilder(EscalationRuleExecutionQueueItem.class);
         query.addSimpleWhere("rule", rule);
 
         List<EscalationRuleExecutionQueueItem> results = persistenceService.findAll(query);
@@ -242,7 +242,7 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
     private void writeQueueItem(Long eventId, AssignmentEscalationRule rule) {
         EscalationRuleExecutionQueueItem queueItem = new EscalationRuleExecutionQueueItem();
 
-        QueryBuilder<Event> eventQuery = new QueryBuilder<>(Event.class, new OpenSecurityFilter());
+        QueryBuilder<Event> eventQuery = createTenantSecurityBuilder(Event.class);
         eventQuery.addSimpleWhere("id", eventId);
 
         Event event = persistenceService.find(eventQuery);
@@ -521,8 +521,7 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
      * @param event - An Event for which QueueItems may need to be created.
      */
     public void createApplicableQueueItems(Event event) {
-        QueryBuilder<AssignmentEscalationRule> ruleQuery = new QueryBuilder<>(AssignmentEscalationRule.class, new OpenSecurityFilter());
-        ruleQuery.addSimpleWhere("tenant.id", event.getTenant().getId());
+        QueryBuilder<AssignmentEscalationRule> ruleQuery = createTenantSecurityBuilder(AssignmentEscalationRule.class);
 
         persistenceService.findAll(ruleQuery)
                           .stream()
