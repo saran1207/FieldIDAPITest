@@ -518,7 +518,8 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
      * @param event - An Event for which QueueItems may need to be created.
      */
     public void createApplicableQueueItems(Event event) {
-        QueryBuilder<AssignmentEscalationRule> ruleQuery = createTenantSecurityBuilder(AssignmentEscalationRule.class);
+        QueryBuilder<AssignmentEscalationRule> ruleQuery = new QueryBuilder<>(AssignmentEscalationRule.class, new OpenSecurityFilter());
+        ruleQuery.addSimpleWhere("tenant.id", event.getTenant().getId());
 
         persistenceService.findAll(ruleQuery)
                           .stream()
