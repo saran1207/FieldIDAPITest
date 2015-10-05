@@ -18,7 +18,6 @@ public class ProcedureAuditScheduleService extends FieldIdPersistenceService {
         schedule.getProcedureDefinition().touch();
         persistenceService.update(schedule.getProcedureDefinition());
 
-        schedule = persistenceService.find(ProcedureAuditEvent.class, id);
         ruleService.createApplicableQueueItems(schedule);
 
         return id;
