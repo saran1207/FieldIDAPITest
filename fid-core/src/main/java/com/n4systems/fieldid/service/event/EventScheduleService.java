@@ -138,17 +138,23 @@ public class  EventScheduleService extends FieldIdPersistenceService {
 
     @Transactional
     public Long createSchedule(ThingEvent openEvent) {
-        openEvent.setOwner(openEvent.getAsset().getOwner());
-        Long id = persistenceService.save(openEvent);
-        //Update the asset to notify mobile of change
-        openEvent.getAsset().touch();
-        persistenceService.update(openEvent.getAsset());
+        try {
+            openEvent.setOwner(openEvent.getAsset().getOwner());
+            Long id = persistenceService.save(openEvent);
+            //Update the asset to notify mobile of change
+            openEvent.getAsset().touch();
+            persistenceService.update(openEvent.getAsset());
 
-        //That's all done, so now we update the event.
-        if(openEvent.getWorkflowState().equals(WorkflowState.OPEN)) {
-            ruleService.createApplicableQueueItems(openEvent);
+            //That's all done, so now we update the event.
+            if(openEvent.getWorkflowState().equals(WorkflowState.OPEN)) {
+                ruleService.createApplicableQueueItems(openEvent);
+            }
+
+            return id;
+        } catch (Exception e) {
+            logger.error("Failed to schedule: " + openEvent.toString());
+            e.printStackTrace();
+            return null;
         }
-
-        return id;
     }
 }

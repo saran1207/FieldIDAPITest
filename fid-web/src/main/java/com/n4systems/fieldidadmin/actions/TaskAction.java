@@ -41,6 +41,7 @@ public class TaskAction extends AbstractAdminAction {
         TaskConfig conf = configLoader.load();
         try {
             ScheduledTask task = (ScheduledTask) Class.forName(conf.getClassName()).newInstance();
+			task.setConfigId(configId);
             task.run();
             addActionMessage("Task run successful");
         } catch (Exception e) {
