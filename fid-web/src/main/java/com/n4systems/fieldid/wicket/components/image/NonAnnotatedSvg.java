@@ -24,7 +24,7 @@ import java.util.Iterator;
  *
  * Created by Jordan Heath on 2015-09-24.
  */
-public abstract class NonAnnotatedSvg extends Panel {
+public class NonAnnotatedSvg extends Panel {
     @SpringBean
     protected S3Service s3Service;
 
@@ -119,6 +119,4 @@ public abstract class NonAnnotatedSvg extends Panel {
             return null;
         }
     }
-
-    protected abstract ProcedureDefinitionImage retrieveCurrentImage();
 }

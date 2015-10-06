@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components.image;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.common.ImageAnnotation;
+import com.n4systems.model.common.ImageAnnotationType;
 import com.n4systems.model.procedure.AnnotationType;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
@@ -63,7 +64,7 @@ public abstract class AnnotationEditorAndGalleryPanel extends Panel {
         this.currentImage = (model.getObject().getAnnotation() == null ? null : (ProcedureDefinitionImage) model.getObject().getAnnotation().getImage());
         //If the Annotation is currently null, set this value to true... otherwise, follow what the annotation says.
         //We'll worry about linking the two up further along... this just helps handle situations where the Annotation
-        //may not yet exist.
+        //may not yet exist.  NOTE: IntelliJ will tell you it can "simplify" this logic... it is LYING.
         if(model.getObject().getAnnotation() == null) {
             this.renderAnnotation = true;
         } else {
@@ -195,6 +196,10 @@ public abstract class AnnotationEditorAndGalleryPanel extends Panel {
         if(model.getObject().getAnnotation() == null) {
             model.getObject().setAnnotation(new ImageAnnotation());
             model.getObject().getAnnotation().setRenderAnnotation(renderAnnotation);
+            model.getObject().getAnnotation().setTenant(model.getObject().getTenant());
+            model.getObject().getAnnotation().setX(0.0);
+            model.getObject().getAnnotation().setY(0.0);
+            model.getObject().getAnnotation().setType(ImageAnnotationType.fromIsolationPointSourceType(model.getObject().getSourceType()));
         }
         model.getObject().getAnnotation().setImage(currentImage);
 
@@ -260,12 +265,7 @@ public abstract class AnnotationEditorAndGalleryPanel extends Panel {
                     }
                 };
         } else {
-            return new NonAnnotatedSvg("imageEditor") {
-                @Override
-                protected ProcedureDefinitionImage retrieveCurrentImage() {
-                    return currentImage;
-                }
-            };
+            return new NonAnnotatedSvg("imageEditor");
         }
     }
 
@@ -296,12 +296,7 @@ public abstract class AnnotationEditorAndGalleryPanel extends Panel {
                     }
                 };
         } else {
-            return new NonAnnotatedSvg("imageEditor", annotation) {
-                @Override
-                protected ProcedureDefinitionImage retrieveCurrentImage() {
-                    return currentImage;
-                }
-            };
+            return new NonAnnotatedSvg("imageEditor", annotation);
         }
     }
 
@@ -332,12 +327,7 @@ public abstract class AnnotationEditorAndGalleryPanel extends Panel {
                     }
                 };
         } else {
-            return new NonAnnotatedSvg("imageEditor", image) {
-                @Override
-                protected ProcedureDefinitionImage retrieveCurrentImage() {
-                    return currentImage;
-                }
-            };
+            return new NonAnnotatedSvg("imageEditor", image);
         }
     }
 
