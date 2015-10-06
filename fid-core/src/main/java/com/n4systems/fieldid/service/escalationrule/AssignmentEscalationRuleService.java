@@ -201,7 +201,10 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
      */
     @Transactional
     public void initializeRule(List<Long> eventIdList, AssignmentEscalationRule rule) {
-        eventIdList.forEach(eventId -> writeQueueItem(eventId, rule));
+        eventIdList.forEach(eventId ->  {
+            Event event = persistenceService.find(Event.class, eventId);
+            writeQueueItem(event, rule);
+        });
     }
 
     /**
@@ -233,21 +236,15 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
     }
 
     /**
-     * This method takes an Event ID and an AssignmentEscalationRule and will generate the appropriate Queue row for the
-     * Escalation Rule.  If the event passes its due date without being completed, then these Queue rows will be
-     * processed and acted upon.
+     * This method takes an Event entity and an AssignmentEscalationRule and will generate the appropriate Queue row
+     * for the Escalation Rule.  If the event passes its due date without being completed, then these Queue rows will
+     * be processed and acted upon.
      *
-     * @param eventId - A Long representing the ID of the Event.
+     * @param event - An Event entity for which we want to write a Queue Item for a particular rule.
      * @param rule - An AssignmentEscalationRule entity, representing the rule which applies to the Event.
      */
-    private void writeQueueItem(Long eventId, AssignmentEscalationRule rule) {
+    private void writeQueueItem(Event event, AssignmentEscalationRule rule) {
         EscalationRuleExecutionQueueItem queueItem = new EscalationRuleExecutionQueueItem();
-
-        QueryBuilder<Event> eventQuery = new QueryBuilder<>(Event.class, new OpenSecurityFilter());
-        eventQuery.addSimpleWhere("id", eventId);
-        eventQuery.addSimpleWhere("tenant.id", rule.getTenant().getId());
-
-        Event event = persistenceService.find(eventQuery);
 
         //At this point, we double check that we don't have what amounts to shitty data.
         //Event should:
@@ -292,7 +289,7 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
             queueItem.setNotifyDate(overdueApplied);
 
             //...and do everything else as normal.
-            queueItem.setEventId(eventId);
+            queueItem.setEventId(event.getId());
             queueItem.setEventModDate(event.getModified());
             queueItem.setRuleHasRun(false);
 
@@ -528,7 +525,7 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
         persistenceService.findAll(ruleQuery)
                           .stream()
                           .filter(rule -> doesRuleApply(rule, event))
-                          .forEach(rule -> writeQueueItem(event.getId(), rule));
+                          .forEach(rule -> writeQueueItem(event, rule));
     }
 
     /**
