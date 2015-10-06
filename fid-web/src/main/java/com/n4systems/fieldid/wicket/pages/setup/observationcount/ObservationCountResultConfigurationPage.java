@@ -172,7 +172,7 @@ public class ObservationCountResultConfigurationPage extends EventTypePage{
             add(failCalculationType);
 
             add(new NonWicketLink("cancelLink", "eventType.action?uniqueID="+eventTypeId));
-            add(new Button("submitButton"));
+            add(new SubmitLink("submitLink"));
         }
 
         @Override

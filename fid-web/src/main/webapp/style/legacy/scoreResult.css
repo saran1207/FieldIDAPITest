@@ -1,59 +1,86 @@
-.scoreResultConfig {
+.result-config {
     padding:10px;
     font-size: 12px;
 }
 
-.scoreResultConfig select {
-    padding: 3px;
-}
-
-.scoreResultConfig .leftColumn {
+.result-config .leftColumn {
     width: 33%;
     display:block;
     float:left;
-    padding:8px 5px 1px 0;
     text-align:right;
     clear:both;
 }
 
-.scoreResultConfig .rightColumn {
+.observation-result-config .leftColumn {
+    padding:3px 5px 1px 0;
+}
+
+.score-result-config .leftColumn {
+    padding:8px 5px 1px 0;
+}
+
+.result-config .rightColumn {
     width: 63%;
     display:block;
     float:left;
     padding:3px;
 }
 
-.scoreResultConfig .rowContainer {
-    display:block;
-    overflow:hidden;
+.observation-result-config .rightColumn {
+    padding:3px;
+}
+
+.score-result-config .rightColumn {
+    padding:0 3px;
+}
+
+.result-config .rowContainer {
+    display:inline-block;
+    width: 100%;
+    overflow:visible;
     padding-top:8px;
     padding-bottom:8px;
 }
 
-.scoreResultConfig .passText {
+.result-config .passText {
     color:#00aa00;
     font-weight:bold;
 }
 
-.scoreResultConfig .failText {
+.result-config .failText {
     color:#aa0000;
     font-weight:bold;
 }
 
-.scoreResultConfig .totalTypeSection {
-    border-bottom:1px solid #ccc;
-    display:block;
-    overflow:hidden;
+.result-config .totalTypeSection {
+    display:inline-block;
+    overflow:visible;
     padding-bottom:20px;
+    width: 100%;
 }
 
-.scoreResultConfig input[type="text"] {
+.result-config .totalTypeSection .leftColumn {
+    padding:8px 5px 1px 0;
+}
+
+.result-config input[type="text"] {
     padding: 4px;
-    border: 1px solid #9C9C9C;
     color: #555555;
     width: 100px;
+    vertical-align: bottom;
+
 }
 
-.scoreResultConfig input[type="checkbox"] {
+.result-config input[type="checkbox"] {
     margin-top:4px;
 }
+
+.result-config .leftColumn .chzn-single span {
+    text-align: left;
+}
+
+.result-config .formAction {
+    margin-left: 130px;
+    margin-top: 40px;
+}
+

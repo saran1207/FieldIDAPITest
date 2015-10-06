@@ -1,7 +1,7 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
 
-    <form wicket:id="observationCountConfigurationForm" class="scoreResultConfig">
+    <form wicket:id="observationCountConfigurationForm" class="result-config observation-result-config">
 
         <div wicket:id="feedbackPanel"></div>
 
@@ -49,8 +49,8 @@
                 <wicket:message key="label.set_the_result_to"/>
                 <span class="failText"><wicket:message key="label.fail"/></span>
                 <wicket:message key="label.if"/>
-                <select wicket:id="observationCountFail"></select>
-                <select wicket:id="observationcountFailCalculationType"></select>
+                <select wicket:id="observationCountFail" style="width: 100px"/>
+                <select wicket:id="observationcountFailCalculationType" style="width: 100px"/>
                 <wicket:message key="label.is"/>
             </div>
 
@@ -64,8 +64,8 @@
                 <wicket:message key="label.set_the_result_to"/>
                 <span class="passText"><wicket:message key="label.pass"/></span>
                 <wicket:message key="label.if"/>
-                <select wicket:id="observationCountPass"></select>
-                <select wicket:id="observationcountPassCalculationType"></select>
+                <select wicket:id="observationCountPass" style="width: 100px"/>
+                <select wicket:id="observationcountPassCalculationType" style="width: 100px"/>
                 <wicket:message key="label.is"/>
             </div>
 
@@ -74,8 +74,8 @@
             </div>
         </div>
 
-        <div class="formAction">
-            <input type="submit" wicket:id="submitButton" wicket:message="value:label.save"> <wicket:message key="label.or"/> <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+        <div class="formAction clear">
+            <a class="btn-primary" wicket:id="submitLink"><wicket:message key="label.save"/></a> <wicket:message key="label.or"/> <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
         </div>
 
     </form>
