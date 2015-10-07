@@ -14,6 +14,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.text.DateFormat;
@@ -46,8 +47,8 @@ public class LastEventPanel extends Panel {
             }
             
             add(new Label("lastEventDate", new DayDisplayModel(Model.of(lastEvent.getDate())).includeTime().withTimeZone(FieldIDSession.get().getSessionUser().getTimeZone())));
-            add(new Label("lastEventType", lastEvent.getType().getName()));
-            add(new Label("performedBy", lastEvent.getPerformedBy().getDisplayName()));
+            add(new Label("lastEventType", new PropertyModel<String>(lastEvent, "type.displayName")));
+            add(new Label("performedBy", new PropertyModel<String>(lastEvent, "performedBy.displayName")));
             add(new EventActionsCell("actions", Model.of(lastEvent)));
 
         }
