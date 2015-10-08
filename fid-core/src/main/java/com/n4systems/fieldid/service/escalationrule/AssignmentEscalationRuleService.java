@@ -56,7 +56,7 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
      * @return A list of AssignmentEscalationRule objects that are active for the current user.
      */
     public List<AssignmentEscalationRule> getAllActiveRules() {
-        QueryBuilder<AssignmentEscalationRule> builder = createUserSecurityBuilder(AssignmentEscalationRule.class);
+        QueryBuilder<AssignmentEscalationRule> builder = createTenantSecurityBuilder(AssignmentEscalationRule.class);
         builder.addSimpleWhere("createdBy", getCurrentUser());
         return persistenceService.findAll(builder);
     }
@@ -68,7 +68,7 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
      * @return A boolean determining whether or not the name exists (true if it exists, false otherwise).
      */
     public boolean isNameUnique(String name) {
-        QueryBuilder<AssignmentEscalationRule> builder = createUserSecurityBuilder(AssignmentEscalationRule.class);
+        QueryBuilder<AssignmentEscalationRule> builder = createTenantSecurityBuilder(AssignmentEscalationRule.class);
         builder.addSimpleWhere("createdBy", getCurrentUser());
         builder.addSimpleWhere("ruleName", name);
         return persistenceService.exists(builder);
@@ -201,7 +201,10 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
      */
     @Transactional
     public void initializeRule(List<Long> eventIdList, AssignmentEscalationRule rule) {
-        eventIdList.forEach(eventId -> writeQueueItem(eventId, rule));
+        eventIdList.forEach(eventId ->  {
+            Event event = persistenceService.find(Event.class, eventId);
+            writeQueueItem(event, rule);
+        });
     }
 
     /**
@@ -216,8 +219,9 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
      * @param difference - A long value representing the difference between the old and new Overdue amounts.
      */
     private void updateNotificationDateInQueue(AssignmentEscalationRule rule, long difference) {
-        QueryBuilder<EscalationRuleExecutionQueueItem> query = createUserSecurityBuilder(EscalationRuleExecutionQueueItem.class);
+        QueryBuilder<EscalationRuleExecutionQueueItem> query = new QueryBuilder<>(EscalationRuleExecutionQueueItem.class, new OpenSecurityFilter());
         query.addSimpleWhere("rule", rule);
+        query.addSimpleWhere("tenant.id", rule.getTenant().getId());
 
         List<EscalationRuleExecutionQueueItem> results = persistenceService.findAll(query);
 
@@ -232,17 +236,15 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
     }
 
     /**
-     * This method takes an Event ID and an AssignmentEscalationRule and will generate the appropriate Queue row for the
-     * Escalation Rule.  If the event passes its due date without being completed, then these Queue rows will be
-     * processed and acted upon.
+     * This method takes an Event entity and an AssignmentEscalationRule and will generate the appropriate Queue row
+     * for the Escalation Rule.  If the event passes its due date without being completed, then these Queue rows will
+     * be processed and acted upon.
      *
-     * @param eventId - A Long representing the ID of the Event.
+     * @param event - An Event entity for which we want to write a Queue Item for a particular rule.
      * @param rule - An AssignmentEscalationRule entity, representing the rule which applies to the Event.
      */
-    private void writeQueueItem(Long eventId, AssignmentEscalationRule rule) {
+    private void writeQueueItem(Event event, AssignmentEscalationRule rule) {
         EscalationRuleExecutionQueueItem queueItem = new EscalationRuleExecutionQueueItem();
-
-        Event event = persistenceService.find(Event.class, eventId);
 
         //At this point, we double check that we don't have what amounts to shitty data.
         //Event should:
@@ -272,7 +274,7 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
             //  by creating this ZonedDateTime object without actually shifting the time.  No problem.
             ZonedDateTime zonedDateTime = ZonedDateTime.of(
                     LocalDateTime.parse(ZONE_AGNOSTIC_DATE_TIME_FORMAT.format(overdueApplied)),
-                    event.getCreatedBy().getTimeZone().toZoneId()
+                    rule.getCreatedBy().getTimeZone().toZoneId()
             );
 
             //3) Now that we've shifted the time without changing it to the user's TimeZone, we need to shift it to
@@ -287,7 +289,7 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
             queueItem.setNotifyDate(overdueApplied);
 
             //...and do everything else as normal.
-            queueItem.setEventId(eventId);
+            queueItem.setEventId(event.getId());
             queueItem.setEventModDate(event.getModified());
             queueItem.setRuleHasRun(false);
 
@@ -518,12 +520,13 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
      * @param event - An Event for which QueueItems may need to be created.
      */
     public void createApplicableQueueItems(Event event) {
-        QueryBuilder<AssignmentEscalationRule> ruleQuery = createTenantSecurityBuilder(AssignmentEscalationRule.class);
+        QueryBuilder<AssignmentEscalationRule> ruleQuery = new QueryBuilder<>(AssignmentEscalationRule.class, new OpenSecurityFilter());
+        ruleQuery.addSimpleWhere("tenant.id", event.getTenant().getId());
 
         persistenceService.findAll(ruleQuery)
                           .stream()
                           .filter(rule -> doesRuleApply(rule, event))
-                          .forEach(rule -> writeQueueItem(event.getId(), rule));
+                          .forEach(rule -> writeQueueItem(event, rule));
     }
 
     /**
