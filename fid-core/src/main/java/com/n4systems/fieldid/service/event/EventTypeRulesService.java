@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.service.event;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.*;
@@ -39,6 +40,7 @@ public class EventTypeRulesService extends FieldIdPersistenceService {
     }
 
     public EventTypeRule saveOrUpdateRule(EventTypeRule rule) {
+        Preconditions.checkArgument(rule.getAssetStatus().getId() != -1);
         return persistenceService.saveOrUpdate(rule);
     }
 

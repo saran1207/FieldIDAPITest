@@ -50,7 +50,7 @@ public class EventTypePage extends FieldIDTemplatePage {
                 aNavItem().label("nav.event_form").page(EventFormEditPage.class).params(uniqueId(eventTypeId)).build(),
                 aNavItem().label("nav.observations").page(ObservationCountResultConfigurationPage.class).params(uniqueId(eventTypeId)).build(),
                 aNavItem().label("nav.scoring").page(ScoreResultConfigurationPage.class).params(uniqueId(eventTypeId)).build(),
-                aNavItem().label("nav.rules").page(RulesPage.class).params(uniqueId(eventTypeId)).build(),
+                aNavItem().label("nav.rules").page(RulesPage.class).params(uniqueId(eventTypeId)).cond(eventTypeModel.getObject().isThingEventType()).build(),
                 aNavItem().label("nav.asset_type_associations").page("selectAssetTypes.action").params(param("eventTypeId", eventTypeId)).cond(eventTypeModel.getObject().isThingEventType()).build()));
     }
 
