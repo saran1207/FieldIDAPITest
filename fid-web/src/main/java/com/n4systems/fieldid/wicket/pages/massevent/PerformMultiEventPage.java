@@ -55,6 +55,7 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
             thingEvent.setAdvancedLocation(null);
             thingEvent.setOwner(getCurrentUser().getOwner().getPrimaryOrg());
             thingEvent.setPrintable(thingEvent.getType().isPrintable());
+            thingEvent.setInitialResultBasedOnScoreOrOneClicksBeingAvailable();
 
             event = Model.of(thingEvent);
 
