@@ -49,11 +49,16 @@ public class EventTypeRulesService extends FieldIdPersistenceService {
         persistenceService.remove(rule);
     }
 
-
     public static AssetStatus getNoChangeStatus() {
         AssetStatus noChangeAssetStatus = AssetStatusBuilder.anAssetStatus().named("No Change").createObject();
         noChangeAssetStatus.setId(-1L);
         return noChangeAssetStatus;
+    }
+
+    public void deleteRules(AssetStatus assetStatus) {
+        QueryBuilder<EventTypeRule> query = createTenantSecurityBuilder(EventTypeRule.class);
+        query.addSimpleWhere("assetStatus", assetStatus);
+        persistenceService.findAll(query).stream().forEach(rule -> persistenceService.remove(rule));
     }
 
 }
