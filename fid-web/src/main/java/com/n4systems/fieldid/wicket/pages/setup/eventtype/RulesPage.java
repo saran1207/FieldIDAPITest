@@ -79,7 +79,7 @@ public class RulesPage extends EventTypePage {
 
                         if (rule.getAssetStatus()!= null && rule.getAssetStatus().getId() == -1 && rulesService.exists(rule.getEventType(), rule.getResult())) {
                             rulesService.deleteRule(rule.getEventType(), rule.getResult());
-                        } else {
+                        } else if (rule.getAssetStatus()!= null && rule.getAssetStatus().getId() != -1){
                             if (rule.isNew()) {
                                 rule.setTenant(getTenant());
                             }

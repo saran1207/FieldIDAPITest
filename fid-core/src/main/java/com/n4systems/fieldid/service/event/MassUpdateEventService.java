@@ -2,11 +2,9 @@ package com.n4systems.fieldid.service.event;
 
 import com.google.common.collect.Sets;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.mail.MailService;
-import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventAudit;
-import com.n4systems.model.ThingEvent;
+import com.n4systems.model.*;
 import com.n4systems.model.user.User;
 import com.n4systems.util.mail.MailMessage;
 import org.apache.log4j.Logger;
@@ -21,7 +19,11 @@ public class MassUpdateEventService extends FieldIdPersistenceService{
     @Autowired
     private MailService mailService;
 
+    @Autowired
+    private EventTypeRulesService eventTypeRulesService;
 
+    @Autowired
+    private AssetService assetService;
 
     private Logger logger = Logger.getLogger(MassUpdateEventService.class);
 
@@ -97,6 +99,14 @@ public class MassUpdateEventService extends FieldIdPersistenceService{
                 if (updateKey.equals("eventResult")) {
                     audit.setResult(eventChanges.getEventResult().getDisplayName());
                     changeTarget.setEventResult(eventChanges.getEventResult());
+
+                    if (eventTypeRulesService.exists(changeTarget.getType(), changeTarget.getEventResult())) {
+                        EventTypeRule rule = eventTypeRulesService.getRule(changeTarget.getType(), changeTarget.getEventResult());
+                        changeTarget.setAssetStatus(rule.getAssetStatus());
+                        Asset asset = changeTarget.getAsset();
+                        asset.setAssetStatus(rule.getAssetStatus());
+                        persistenceService.update(asset);
+                    }
                 }
 
                 if (updateKey.equals("comments")) {
