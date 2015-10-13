@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.service.search;
 
 import com.n4systems.model.Asset;
+import com.n4systems.model.api.Archivable;
 import com.n4systems.model.location.PredefinedLocationSearchTerm;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
@@ -62,6 +63,7 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
         if(status != null && !status.equals(AssetLockoutTagoutStatus.ALL)) {
             QueryBuilder<ProcedureDefinition> subQuery = createUserSecurityBuilder(ProcedureDefinition.class);
             subQuery.setSimpleSelect("asset.id", true);
+            subQuery.addSimpleWhere("state", Archivable.EntityState.ACTIVE);
             subQuery.addWhere(WhereParameter.Comparator.IN, "publishedState", "publishedState", Arrays.asList(PublishedState.ACTIVE_STATES));
             if (status.equals(AssetLockoutTagoutStatus.WITHPROCEDURES))
                 search.add(new SubSelectInTerm("id", subQuery));
