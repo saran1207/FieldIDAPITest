@@ -246,7 +246,6 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDTemplatePag
 
             event.getObject().setSectionResults(sectionResults);
             onPreSave(event.getObject());
-            onPreSave(event.getObject());
             saveAssignedToIfNecessary();
             saveEventBookIfNecessary();
 
