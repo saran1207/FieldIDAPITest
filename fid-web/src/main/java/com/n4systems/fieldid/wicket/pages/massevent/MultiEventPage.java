@@ -425,7 +425,19 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDTemplatePag
 
     protected void createEventTypeDetailsSection(IModel<T> event, OuterEventForm form) {
         PropertyModel<User> performedByModel = new PropertyModel<>(event, "performedBy");
-        DropDownChoice<User> performedBy = new FidDropDownChoice<>("performedBy", performedByModel, new ExaminersModel(performedByModel), new ListableChoiceRenderer<>());
+        //We should be using new ListableChoiceRenderer<User>() here but there is seems to be a hibernate proxy problem :(
+        DropDownChoice<User> performedBy = new FidDropDownChoice<>("performedBy", performedByModel, new ExaminersModel(performedByModel), new IChoiceRenderer<User>() {
+            @Override
+            public Object getDisplayValue(User object) {
+                return object.getDisplayName();
+            }
+
+            @Override
+            public String getIdValue(User object, int index) {
+                return object.getID() + "";
+            }
+        });
+
         DateTimePicker datePerformedPicker = new DateTimePicker("datePerformed", new UserToUTCDateModel(new PropertyModel<>(event, "date")), true).withNoAllDayCheckbox();
         datePerformedPicker.addToDateField(createUpdateAutoschedulesOnChangeBehavior());
 
