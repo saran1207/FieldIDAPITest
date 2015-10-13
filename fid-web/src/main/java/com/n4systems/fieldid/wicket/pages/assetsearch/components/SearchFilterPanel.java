@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.components;
 
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.DateRangePicker;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.search.AssetSearchCriteria;
@@ -52,7 +53,7 @@ public class SearchFilterPanel extends Panel {
 				return new LockoutTagoutCriteriaPanel(id, model);
 			}
 		};
-		//p4.setVisible(FieldIDSession.get().getSecurityGuard().isLotoEnabled());
+		p4.setVisible(FieldIDSession.get().getSecurityGuard().isLotoEnabled());
 		add(p4);
 
 		CollapsiblePanel p5 = new CollapsiblePanel("orderDetailsCriteriaPanel", new StringResourceModel("label.orderdetails",this,null)) {
