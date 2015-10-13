@@ -286,7 +286,18 @@ public abstract class EventPage<T extends Event> extends FieldIDTemplatePage {
             add(proofTestContainer);
 
             PropertyModel<User> performedByModel = new PropertyModel<User>(event, "performedBy");
-            DropDownChoice<User> performedBy = new FidDropDownChoice<User>("performedBy", performedByModel, new ExaminersModel(performedByModel), new ListableChoiceRenderer<User>());
+            //We should be using new ListableChoiceRenderer<User>() here but there is seems to be a hibernate proxy problem :(
+            DropDownChoice<User> performedBy = new FidDropDownChoice<User>("performedBy", performedByModel, new ExaminersModel(performedByModel), new IChoiceRenderer<User>() {
+                @Override
+                public Object getDisplayValue(User object) {
+                    return object.getDisplayName();
+                }
+
+                @Override
+                public String getIdValue(User object, int index) {
+                    return object.getID() + "";
+                }
+            });
             DateTimePicker datePerformedPicker = new DateTimePicker("datePerformed", new UserToUTCDateModel(new PropertyModel<Date>(event, "date")), true).withNoAllDayCheckbox();
             datePerformedPicker.addToDateField(createUpdateAutoschedulesOnChangeBehavior());
 
