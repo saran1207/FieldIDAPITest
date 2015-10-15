@@ -137,4 +137,9 @@ public class SerializableSecurityGuard implements SystemSecurityGuard, Serializa
         return primaryOrg.hasExtendedFeature(ExtendedFeature.UserGroupFiltering);
     }
 
+	@Override
+	public boolean isLotoAssetSearchEnabled() {
+		return primaryOrg.hasExtendedFeature(ExtendedFeature.LotoAssetSearch);
+	}
+
 }
