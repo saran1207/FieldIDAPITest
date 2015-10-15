@@ -6,7 +6,6 @@ import com.n4systems.model.api.Retirable;
 import com.n4systems.model.parents.EntityWithOwner;
 import com.n4systems.model.user.User;
 import com.n4systems.util.DateHelper;
-import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
 import java.util.*;
@@ -53,20 +52,21 @@ public class Project extends EntityWithOwner implements NamedEntity, Listable<Lo
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "projects_assets", joinColumns = @JoinColumn(name="projects_id"), inverseJoinColumns = @JoinColumn(name="asset_id"))
-    @IndexColumn(name="orderidx")
-    private List<Asset> assets = new ArrayList<Asset>();
+    @OrderColumn(name="orderidx")
+    private List<Asset> assets = new ArrayList<>();
     
     @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-    private List<FileAttachment> notes = new ArrayList<FileAttachment>();
+    private List<FileAttachment> notes = new ArrayList<>();
     
     //@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="project")
     //private Set<EventSchedule> schedules = new HashSet<EventSchedule>();
 
     @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="project")
-    private Set<Event> events = new HashSet<Event>();
+    private Set<Event> events = new HashSet<>();
     
     @ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-    private Set<User> resources = new HashSet<User>();
+    @JoinTable(name = "projects_users", joinColumns = @JoinColumn(name="projects_id"), inverseJoinColumns = @JoinColumn(name = "resources_id"))
+    private Set<User> resources = new HashSet<>();
     
     private boolean retired;
     
