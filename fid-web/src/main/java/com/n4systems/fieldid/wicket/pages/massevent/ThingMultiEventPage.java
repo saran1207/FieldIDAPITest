@@ -75,7 +75,7 @@ public abstract class ThingMultiEventPage extends MultiEventPage<ThingEvent> {
     @Override
     protected void onPreSave(ThingEvent event) {
         //if prooftest is null, then no need to "save" it
-        if(proofTestInfo.getObject().getProofTestType() == null){
+        if(proofTestInfo.getObject() == null || proofTestInfo.getObject().getProofTestType() == null){
             event.setProofTestInfo(null);
             return;
         }

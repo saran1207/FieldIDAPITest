@@ -62,10 +62,10 @@ public class CopyEventFactory {
 			copyTo.setPerformedBy(copyFrom.getPerformedBy());
 		}
 
-		copyTo.setDate( ( copyFrom.getDate() != null ) ? new Date( copyFrom.getDate().getTime() ) : null );
+		copyTo.setDate((copyFrom.getDate() != null) ? new Date(copyFrom.getDate().getTime()) : null);
 		copyTo.setSectionResults(copyFrom.getSectionResults());
 		copyTo.setEventResult(copyFrom.getEventResult());
-		copyTo.setSubEvents( copySubEvents( copyFrom.getSubEvents() ) );
+		copyTo.setSubEvents(copySubEvents(copyFrom.getSubEvents()));
 		copyTo.setEventForm(copyFrom.getEventForm());
 		copyTo.setEventStatus(copyFrom.getEventStatus());
 		copyTo.setWorkflowState(copyFrom.getWorkflowState());
@@ -285,6 +285,7 @@ public class CopyEventFactory {
             SignatureCriteriaResult signatureResult = new SignatureCriteriaResult();
             signatureResult.setSigned(((SignatureCriteriaResult) oldResult).isSigned());
             signatureResult.setImage(((SignatureCriteriaResult) oldResult).getImage());
+			signatureResult.setTemporaryFileId(((SignatureCriteriaResult) oldResult).getTemporaryFileId());
             return signatureResult;
         } else if (oldResult instanceof DateFieldCriteriaResult) {
         	DateFieldCriteriaResult dateFieldResult = new DateFieldCriteriaResult();
