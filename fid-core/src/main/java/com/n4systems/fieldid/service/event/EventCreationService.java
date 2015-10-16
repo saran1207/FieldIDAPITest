@@ -171,6 +171,9 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
     @Transactional
     public T createEvent(T event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) {
         defaultOneClickResultsWithNullState(event.getResults());
+        if(event.getSubEvents() != null) {
+            event.getSubEvents().forEach(subEvent -> defaultOneClickResultsWithNullState(subEvent.getResults()));
+        }
 
         EventResult calculatedEventResult = calculateEventResultAndScore(event);
 
