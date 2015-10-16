@@ -22,6 +22,7 @@ public class PerformSubEventPage extends SubEventPage {
         this.event = Model.of(createSubEvent(subAsset, subEventType));
     }
 
+    @SuppressWarnings("unchecked")
     protected SubEvent createSubEvent(Asset subAsset, EventType subEventType) {
         SubEvent subEvent = new SubEvent();
         subEvent.setAsset(subAsset);
