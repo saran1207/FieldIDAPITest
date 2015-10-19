@@ -71,6 +71,7 @@
 
 		//My Saved items overrides
 		.saved-items {
+		  	overflow-y: scroll;
 			#mySavedItemsLink {
 				padding-left: 10px;
 				color: $red;
