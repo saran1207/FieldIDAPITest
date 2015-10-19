@@ -2,20 +2,20 @@ package com.n4systems.fieldid.service.search;
 
 import com.n4systems.model.Asset;
 import com.n4systems.model.location.PredefinedLocationSearchTerm;
-import com.n4systems.model.procedure.ProcedureDefinition;
-import com.n4systems.model.procedure.PublishedState;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.user.User;
 import com.n4systems.services.reporting.AssetSearchRecord;
 import com.n4systems.services.search.MappedResults;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.util.persistence.search.AssetLockoutTagoutStatus;
 import com.n4systems.util.persistence.search.JoinTerm;
-import com.n4systems.util.persistence.search.terms.*;
+import com.n4systems.util.persistence.search.terms.GpsBoundsTerm;
+import com.n4systems.util.persistence.search.terms.HasGpsTerm;
+import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -54,18 +54,17 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
             addGpsLocationTerm(search, criteriaModel);
         }
 
-        //TODO Use criteria model to set search term.
-        //addHasProcedureTerm(search, crtieriaModel.getHasProcedureDef?);
+        addHasProcedureTerm(search, criteriaModel.getAssetLockoutTagoutStatus());
     }
 
-    private void addHasProcedureTerm(List<SearchTermDefiner> search, boolean hasProcedures) {
-        QueryBuilder<ProcedureDefinition> subQuery = createUserSecurityBuilder(ProcedureDefinition.class);
-        subQuery.setSimpleSelect("asset.id", true);
-        subQuery.addWhere(WhereParameter.Comparator.IN, "publishedState", "publishedState", Arrays.asList(PublishedState.ACTIVE_STATES));
-        if (hasProcedures)
-            search.add(new SubSelectInTerm("id", subQuery));
-        else
-            search.add(new SubSelectNotInTerm("id", subQuery));
+    private void addHasProcedureTerm(List<SearchTermDefiner> search, AssetLockoutTagoutStatus status) {
+        if(status != null && status.equals(AssetLockoutTagoutStatus.WITHPROCEDURES)) {
+            addSimpleTerm(search, "activeProcedureDefinitionCount", new Long(0), WhereParameter.Comparator.GT);
+        } else if (status != null && status.equals(AssetLockoutTagoutStatus.WITHOUTPROCEDURES)) {
+            addSimpleTerm(search, "activeProcedureDefinitionCount", new Long(0), WhereParameter.Comparator.EQ);
+        } else if (status != null && status.equals(AssetLockoutTagoutStatus.ALL)) {
+            addSimpleTerm(search, "activeProcedureDefinitionCount", new Long(-1), WhereParameter.Comparator.GT);
+        }
     }
 
     private void addHasGpsTerm(List<SearchTermDefiner> search, AssetSearchCriteria criteriaModel) {

@@ -97,6 +97,8 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
                 originalEvent = thingEventHelperService.createEventFromOpenEvent(originalEventFromList.getId());
             }
 
+            originalEvent.setProofTestInfo(event.getObject().getProofTestInfo());
+
             //save the event
             persistenceService.save(originalEvent);
 

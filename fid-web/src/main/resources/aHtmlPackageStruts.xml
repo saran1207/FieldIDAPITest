@@ -18,7 +18,7 @@
 
 		<action name="exportEvents" method="doExport" class="com.n4systems.fieldid.actions.export.ExportAction">
 			<result name="success" type="freemarker">/templates/aHtml/download/exportEventdownloadNotificationLightBox.ftl</result>
-			<result name="error" type="freemarker">/templates/aHtml/download/exportEventdownloadNotificationLightBox.ftl</result>
+			<result name="error" type="freemarker">/templates/aHtml/download/error.ftl</result>
 		</action>
 
 		<action name="customerExport" method="doExport" class="com.n4systems.fieldid.actions.customers.CustomerCrud">

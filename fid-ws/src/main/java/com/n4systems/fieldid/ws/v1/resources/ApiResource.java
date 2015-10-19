@@ -52,6 +52,15 @@ public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPe
                 int minor = Integer.parseInt(m.group(2));
                 int patch = Integer.parseInt(m.group(3));
                 version = formatVersion(major, minor, patch);
+            } else {
+				// Some legacy mobile versions send <major>.<minor> and are missing the patch.
+				p = Pattern.compile("^(\\d+)\\.(\\d+)$");
+				m = p.matcher(verStr);
+				if (m.matches()) {
+					int major = Integer.parseInt(m.group(1));
+					int minor = Integer.parseInt(m.group(2));
+					version = formatVersion(major, minor, 0);
+				}
             }
         }
         return version;

@@ -7,6 +7,7 @@ import com.n4systems.model.location.Location;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.chart.RangeType;
+import com.n4systems.util.persistence.search.AssetLockoutTagoutStatus;
 import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
@@ -63,6 +64,18 @@ public class AssetSearchCriteria extends SearchCriteria {
 
     @Column
     private Boolean hasGps;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="assetLockoutTagoutStatus")
+    private AssetLockoutTagoutStatus assetLockoutTagoutStatus;
+
+    public AssetLockoutTagoutStatus getAssetLockoutTagoutStatus() {
+        return assetLockoutTagoutStatus;
+    }
+
+    public void setAssetLockoutTagoutStatus(AssetLockoutTagoutStatus assetLockoutTagoutStatus) {
+        this.assetLockoutTagoutStatus = assetLockoutTagoutStatus;
+    }
 
     public GpsBounds getBounds() {
         return bounds;

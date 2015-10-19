@@ -1,7 +1,10 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.components;
 
-import java.util.List;
-
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.DateRangePicker;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.search.AssetSearchCriteria;
+import com.n4systems.model.utils.DateRange;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -9,10 +12,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 
-import com.n4systems.fieldid.wicket.components.DateRangePicker;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.search.AssetSearchCriteria;
-import com.n4systems.model.utils.DateRange;
+import java.util.List;
 
 
 
@@ -46,21 +46,30 @@ public class SearchFilterPanel extends Panel {
 			}
 		};
 	  	add(p3);
-	  	
-		CollapsiblePanel p4 = new CollapsiblePanel("orderDetailsCriteriaPanel", new StringResourceModel("label.orderdetails",this,null)) {
+
+		CollapsiblePanel p4 = new CollapsiblePanel("lockoutTagoutCriteriaPanel", new StringResourceModel("label.lockout_tagout", this, null)) {
+			@Override
+			protected Panel createContainedPanel(String id) {
+				return new LockoutTagoutCriteriaPanel(id, model);
+			}
+		};
+		p4.setVisible(FieldIDSession.get().getSecurityGuard().isLotoEnabled());
+		add(p4);
+
+		CollapsiblePanel p5 = new CollapsiblePanel("orderDetailsCriteriaPanel", new StringResourceModel("label.orderdetails",this,null)) {
 			@Override protected Panel createContainedPanel(String id) {
 				return new OrderDetailsCriteriaPanel(id);
 			}
 		};
-        p4.setHideWhenContainedPanelInvisible(true);
-	  	add(p4);
+        p5.setHideWhenContainedPanelInvisible(true);
+	  	add(p5);
 
-		CollapsiblePanel p5 = new CollapsiblePanel("dateRangePicker", new StringResourceModel("label.daterange",this,null)) {
+		CollapsiblePanel p6 = new CollapsiblePanel("dateRangePicker", new StringResourceModel("label.daterange",this,null)) {
 			@Override 	protected Panel createContainedPanel(String id) {
 				return new DateRangePicker(id,new PropertyModel<DateRange>(model, "dateRange"));
 			}			
 		};
-	  	add(p5);		  	  			
+	  	add(p6);
 	}
 
 	@Override

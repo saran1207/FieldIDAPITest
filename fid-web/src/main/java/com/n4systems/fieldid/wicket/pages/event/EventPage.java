@@ -5,7 +5,10 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.EventStatusService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.behavior.*;
+import com.n4systems.fieldid.wicket.behavior.ConfirmNavigationBehavior;
+import com.n4systems.fieldid.wicket.behavior.DisableButtonBeforeSubmit;
+import com.n4systems.fieldid.wicket.behavior.JavaScriptAlertConfirmBehavior;
+import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.behavior.validation.DisableNavigationConfirmationBehavior;
 import com.n4systems.fieldid.wicket.behavior.validation.RequiredCriteriaValidator;
 import com.n4systems.fieldid.wicket.components.*;
@@ -45,8 +48,8 @@ import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -99,6 +102,7 @@ public abstract class EventPage<T extends Event> extends FieldIDTemplatePage {
     boolean hasDefaultVal = false;
     boolean isAutoScheduled = false;
 
+    @SuppressWarnings("unchecked") //These warnings are my pet peeve.
     @Override
     protected void onInitialize() {
         super.onInitialize();
@@ -286,7 +290,18 @@ public abstract class EventPage<T extends Event> extends FieldIDTemplatePage {
             add(proofTestContainer);
 
             PropertyModel<User> performedByModel = new PropertyModel<User>(event, "performedBy");
-            DropDownChoice<User> performedBy = new FidDropDownChoice<User>("performedBy", performedByModel, new ExaminersModel(performedByModel), new ListableChoiceRenderer<User>());
+            //We should be using new ListableChoiceRenderer<User>() here but there is seems to be a hibernate proxy problem :(
+            DropDownChoice<User> performedBy = new FidDropDownChoice<User>("performedBy", performedByModel, new ExaminersModel(performedByModel), new IChoiceRenderer<User>() {
+                @Override
+                public Object getDisplayValue(User object) {
+                    return object.getDisplayName();
+                }
+
+                @Override
+                public String getIdValue(User object, int index) {
+                    return object.getID() + "";
+                }
+            });
             DateTimePicker datePerformedPicker = new DateTimePicker("datePerformed", new UserToUTCDateModel(new PropertyModel<Date>(event, "date")), true).withNoAllDayCheckbox();
             datePerformedPicker.addToDateField(createUpdateAutoschedulesOnChangeBehavior());
 
@@ -366,6 +381,7 @@ public abstract class EventPage<T extends Event> extends FieldIDTemplatePage {
             add(createDeleteLink("deleteLink"));
         }
 
+        @SuppressWarnings("unchecked")
         @Override
         protected void onValidate() {
             super.onValidate();
@@ -419,7 +435,7 @@ public abstract class EventPage<T extends Event> extends FieldIDTemplatePage {
 
            List<AbstractEvent.SectionResults> results =  event.getObject().getSectionResults();
 
-           RequiredCriteriaValidator.validate(results).stream().forEach(message -> error(message));
+           RequiredCriteriaValidator.validate(results).stream().forEach(this::error);
         }
 
         @Override

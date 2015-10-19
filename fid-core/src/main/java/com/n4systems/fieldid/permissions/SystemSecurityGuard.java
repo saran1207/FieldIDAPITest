@@ -32,4 +32,5 @@ public interface SystemSecurityGuard {
     public boolean isAdvancedEventSearchEnabled();
     public boolean isCriteriaTrendsEnabled();
     public boolean isUserGroupFilteringEnabled();
+	public boolean isLotoAssetSearchEnabled();
 }
