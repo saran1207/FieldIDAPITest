@@ -117,6 +117,9 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 	@Temporal(TemporalType.TIMESTAMP)
     private Date lastEventDate;
 
+	@Column(name="active_procedure_definition_count")
+	private Long activeProcedureDefinitionCount;
+
 //	@Column(name="last_event_completed_date")
 //	private Date lastEventCompletedDate;
 
@@ -574,4 +577,12 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
     public void setLastEventDate(Date lastEventDate) {
         this.lastEventDate = lastEventDate;
     }
+
+	public Long getActiveProcedureDefinitionCount() {
+		return activeProcedureDefinitionCount;
+	}
+
+	public void setActiveProcedureDefinitionCount(Long activeProcedureDefinitionCount) {
+		this.activeProcedureDefinitionCount = activeProcedureDefinitionCount;
+	}
 }

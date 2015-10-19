@@ -901,6 +901,16 @@ public class AssetService extends CrudService<Asset> {
         }
     }
 
+    public void decreaseProcedureCount(Asset asset) {
+        asset.setActiveProcedureDefinitionCount(asset.getActiveProcedureDefinitionCount()-1);
+        persistenceService.update(asset);
+    }
+
+    public void increaseProcedureCount(Asset asset) {
+        asset.setActiveProcedureDefinitionCount(asset.getActiveProcedureDefinitionCount()+1);
+        persistenceService.update(asset);
+    }
+
     private void archiveProcedures(Asset asset) {
         if(asset.getType().hasProcedures()) {
 

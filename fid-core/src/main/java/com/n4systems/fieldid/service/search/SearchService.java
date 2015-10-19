@@ -18,6 +18,7 @@ import com.n4systems.services.search.MappedResults;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.WhereClause;
+import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.search.JoinTerm;
 import com.n4systems.util.persistence.search.ResultTransformer;
 import com.n4systems.util.persistence.search.SortDirection;
@@ -308,6 +309,12 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
     protected <T> void addSimpleTerm(List<SearchTermDefiner> terms, String field, T value) {
         if (value != null) {
             terms.add(new SimpleTerm<T>(field, value));
+        }
+    }
+
+    protected <T> void addSimpleTerm(List<SearchTermDefiner> terms, String field, T value, WhereParameter.Comparator comparator) {
+        if (value != null) {
+            terms.add(new SimpleTerm<T>(field, value, comparator));
         }
     }
 
