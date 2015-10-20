@@ -147,6 +147,7 @@ public abstract class AnnotationEditorAndGalleryPanel extends Panel {
         add(new AjaxLink<Void>("done") {
             @Override
             public void onClick(AjaxRequestTarget target) {
+                model.getObject().getAnnotation().setImage(currentImage);
                 doDone(target);
             }
         });

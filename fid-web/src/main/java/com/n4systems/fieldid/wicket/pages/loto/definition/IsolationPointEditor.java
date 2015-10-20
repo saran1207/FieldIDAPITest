@@ -225,11 +225,6 @@ public class IsolationPointEditor extends Panel {
                 protected List<ProcedureDefinitionImage> displayableImages() {
                     return procedureDefinition.getImages();
                 }
-
-//                @Override
-//                protected boolean renderAnnotation() {
-//                    return renderAnnotation;
-//                }
             };
     }
 
