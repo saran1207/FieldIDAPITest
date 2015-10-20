@@ -8,11 +8,11 @@
             </div>
             <div wicket:id="imageGallery"/>
         </div>
-        <form wicket:id="uploadForm">
-            <input type="file" wicket:id="fileUpload" class="add-image"/>
-            <input type="checkbox" wicket:id="renderAnnotationCheckbox"><wicket:message key="label.render_annotation"/><br>
-        </form>
         <span wicket:id="instructions" class="instructions"/>
+        <form wicket:id="uploadForm">
+            <input type="checkbox" wicket:id="renderAnnotationCheckbox" class="annotate-image-checkbox"><wicket:message key="label.render_annotation"/><br>
+            <input type="file" wicket:id="fileUpload" class="add-image"/>
+        </form>
         <a wicket:id="done" class="mattButton done">
             <wicket:message key="label.done"/>
         </a>

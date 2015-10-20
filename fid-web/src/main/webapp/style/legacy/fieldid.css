@@ -2758,9 +2758,11 @@ inputsWithLegend .legend span {
     float: right;
 }
 .arrow-style-annotation-panel .add-image {
-    position: absolute;
-    bottom: 40px;
-    left: 10px;
+    margin-left: 10px;
+}
+.arrow-style-annotation-panel .annotate-image-checkbox {
+    margin-left:10px;
+    margin-bottom: 5px;
 }
 .arrow-style-annotation-panel .indicator {
     position: absolute;
