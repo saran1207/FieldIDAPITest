@@ -109,7 +109,7 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
             //actually get saved.
             if(event.getWorkflowState().equals(WorkflowState.COMPLETED)
                     && event.getState().equals(Archivable.EntityState.ACTIVE)
-                    && event.getType().isThingEventType()) {
+                    & event.getType().isThingEventType()) {
                 //If the current Last Event Date on the Asset is NOT AFTER the Completed Date on the Event, set the
                 //Asset's Last Event Date to the Event's Completed Date... if there is a Last Event Date at all.
                 if(((ThingEvent) event).getAsset().getLastEventDate() == null
