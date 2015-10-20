@@ -282,6 +282,8 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
                     } else {
                         locationPicker.setLocationOwner(getOwner());
                     }
+                    autoSchedule(assetModel);
+                    target.add(eventSchedulesPanel);
                 }
             }.withAutoUpdate());
 
