@@ -380,6 +380,9 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
 
         entityAnnotation.setTenant(getCurrentTenant());
 
+        //Always set this to false.
+        entityAnnotation.setRenderAnnotation(false);
+
         //We have to set the image later...
 //        entityAnnotation.setImage(image);
 

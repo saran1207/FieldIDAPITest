@@ -357,6 +357,9 @@ public class ApiProcedureDefinitionResource extends ApiResource<ApiProcedureDefi
 
 		entityAnnotation.setTenant(getCurrentTenant());
 
+        //Set this to false all the time on mobile:
+        entityAnnotation.setRenderAnnotation(false);
+
 		//We have to set the image later...
 //        entityAnnotation.setImage(image);
 
