@@ -22,7 +22,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxCallDecorator;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
@@ -58,8 +57,6 @@ public class IsolationPointEditor extends Panel {
     private LabelledTextArea methodField;  //This may actually be the "notes" field, depending on context...
     private Component notesField;
     private LabelledComboBox<String> deviceComboBox;
-//    private boolean renderAnnotation;
-    private AjaxCheckBox checkbox;
 
 
     public IsolationPointEditor(String id, ProcedureDefinition procedureDefinition) {
@@ -86,6 +83,7 @@ public class IsolationPointEditor extends Panel {
 
         OnChangeAjaxBehavior onChangeAjaxBehavior = new OnChangeAjaxBehavior()
         {
+            @SuppressWarnings("unchecked")
             @Override
             protected void onUpdate(AjaxRequestTarget target)
             {
@@ -166,13 +164,6 @@ public class IsolationPointEditor extends Panel {
                 closeEditor(target);
             }
         });
-
-//        form.add(checkbox = new AjaxCheckBox("renderAnnotationCheckbox", Model.of(renderAnnotation)) {
-//            @Override
-//            protected void onUpdate(AjaxRequestTarget target) {
-//                renderAnnotation = !renderAnnotation;
-//            }
-//        });
     }
 
     private IsolationPointImagePanel getIsolationPointImagePanel(ProcedureDefinition procedureDefinition) {

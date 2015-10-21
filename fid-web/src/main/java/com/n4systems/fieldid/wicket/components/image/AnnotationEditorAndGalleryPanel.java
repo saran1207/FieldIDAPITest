@@ -193,7 +193,8 @@ public abstract class AnnotationEditorAndGalleryPanel extends Panel {
     private void switchToLastCarouselImage(AjaxRequestTarget target) {
         currentImage = displayableImages().get(displayableImages().size() - 1);
 
-        //Oh, we should probably set this as the image for the annotation, no?
+        //In the event that the Annotation is null, we'll probably want one.  This is more prevalent when we're using
+        //non-annotated IP images.
         if(model.getObject().getAnnotation() == null) {
             model.getObject().setAnnotation(new ImageAnnotation());
             model.getObject().getAnnotation().setRenderAnnotation(renderAnnotation);
@@ -202,6 +203,7 @@ public abstract class AnnotationEditorAndGalleryPanel extends Panel {
             model.getObject().getAnnotation().setY(0.0);
             model.getObject().getAnnotation().setType(ImageAnnotationType.fromIsolationPointSourceType(model.getObject().getSourceType()));
         }
+        //Oh, we should probably set this as the image for the annotation, no?
         model.getObject().getAnnotation().setImage(currentImage);
 
         //If you're switching the image, then your annotation should no longer be shown... right?

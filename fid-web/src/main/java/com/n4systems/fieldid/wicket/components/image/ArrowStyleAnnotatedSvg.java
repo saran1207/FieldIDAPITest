@@ -49,13 +49,15 @@ public class ArrowStyleAnnotatedSvg extends Panel {
      * the whole image.  In addition to the image, we also need to be provided the ImageAnnotation object representing
      * the Annotation to be generated on top of the image.
      *
+     * NOTE: If hasCoordinates returns false, but isRenderAnnotation also returns false, we add the image anyways.
+     *
      * @param id - The <b>String</b> representation of the Wicket ID for the SvgImageDisplayPanel instance.
      * @param theAnnotation - The <b>ImageAnnotation</b> representing the Annotation to be drawn over the image.
      */
     public ArrowStyleAnnotatedSvg(String id, ImageAnnotation theAnnotation) {
         super(id);
         this.theAnnotation = theAnnotation;
-        if(theAnnotation != null && theAnnotation.hasCoordinates(AnnotationType.ARROW_STYLE)) {
+        if(theAnnotation != null && (theAnnotation.hasCoordinates(AnnotationType.ARROW_STYLE) || !theAnnotation.isRenderAnnotation())) {
             this.theImage = (ProcedureDefinitionImage) theAnnotation.getImage();
         }
     }
@@ -66,13 +68,15 @@ public class ArrowStyleAnnotatedSvg extends Panel {
      * the whole image.  In addition to the image, we also need to be provided  the ImageAnnotation object representing
      * the Annotation to be generated on top of the image.
      *
+     * NOTE: If hasCoordinates returns false, but isRenderAnnotation also returns false, we add the image anyways.
+     *
      * @param id - The <b>String</b> representation of the Wicket ID for the SvgImageDisplayPanel instance.
      * @param theAnnotation - The <b>ImageAnnotation</b> representing the Annotation to be drawn over the image.
      */
     public ArrowStyleAnnotatedSvg(String id, IModel<ImageAnnotation> theAnnotation) {
         super(id);
         this.theAnnotation = theAnnotation.getObject();
-        if (theAnnotation.getObject() != null && theAnnotation.getObject().hasCoordinates(AnnotationType.ARROW_STYLE)) {
+        if (theAnnotation.getObject() != null && (theAnnotation.getObject().hasCoordinates(AnnotationType.ARROW_STYLE) || !theAnnotation.getObject().isRenderAnnotation())) {
             this.theImage = (ProcedureDefinitionImage) theAnnotation.getObject().getImage();
         }
     }
