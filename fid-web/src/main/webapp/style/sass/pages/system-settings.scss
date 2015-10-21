@@ -1,0 +1,45 @@
+.extended-options {
+
+  label {
+    text-align: left;
+    width: 230px;
+    padding-left: 10px;
+  }
+
+  p {
+    padding-left: 25px;
+  }
+
+}
+
+.gps-options {
+
+  label {
+    text-align: left;
+    width: 230px;
+    padding-left: 10px;
+  }
+
+}
+
+.identifier-legend {
+
+  .legend-column {
+
+    width : 40%;
+    float : right;
+    display : block;
+    border: 1px solid #ccc;
+    background-color : #eee;
+    margin-top : 10px;
+    margin-bottom: 10px;
+    margin-right: 250px;
+
+    div {
+      float: left;
+      display : block;
+      padding: 10px;
+    }
+  }
+
+}

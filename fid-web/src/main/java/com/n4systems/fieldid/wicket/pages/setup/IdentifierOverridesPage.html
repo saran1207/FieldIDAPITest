@@ -1,32 +1,28 @@
+<html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
 
-<wicket:message key="label.identifier_overrides_desc"/>
+<p><wicket:message key="label.identifier_overrides_desc"/></p>
 <form wicket:id="identifierOverridesForm" class="crudForm pageSection largeForm">
-    <div wicket:id="feedbackPanel">
-    </div>
-		<div class="sectionContent">
-		
-	        <div class="extendedOption">
-	           <table class="list">
-	               <tr>
-	                   <th><wicket:message key="label.override"/></th>
-	                   <th><wicket:message key="label.assettype"/></th>
-	                   <th><wicket:message key="label.label"/></th>
-	                   <th><wicket:message key="label.auto_generated_format"/></th>
-	               </tr>
-	               <tr wicket:id="assetTypeOverrides">
-	                   <td><input type="checkbox" wicket:id="override"/></td>
-	                   <td><span wicket:id="assetTypeName"></span></td>
-	                   <td><input type="text" wicket:id="identifierLabel"/></td>
-	                   <td><input type="text" wicket:id="identifierFormat"/></td>
-	               </tr>
-	           </table>
-			</div>
-          
-		<div class="formAction">
-			<input wicket:id="submitButton" type="submit" wicket:message="value:label.save"/> <wicket:message key="label.or"/> <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
-        </div>
-    </div>
+    <div wicket:id="feedbackPanel"/>
+    <table class="list borders comfortable">
+	   	<tr>
+		   	<th><wicket:message key="label.override"/></th>
+		   	<th><wicket:message key="label.assettype"/></th>
+		   	<th><wicket:message key="label.label"/></th>
+		   	<th><wicket:message key="label.auto_generated_format"/></th>
+	   	</tr>
+	   	<tr wicket:id="assetTypeOverrides">
+		   	<td><input type="checkbox" wicket:id="override"/></td>
+		   	<td><span wicket:id="assetTypeName"></span></td>
+		   	<td><input type="text" wicket:id="identifierLabel"/></td>
+		   	<td><input type="text" wicket:id="identifierFormat"/></td>
+		</tr>
+    </table>
+
+	<div class="formAction">
+		<a class="btn-primary" wicket:id="submitButton"><wicket:message key="label.save"/></a> <wicket:message key="label.or"/> <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+	</div>
 </form>
 
 </wicket:extend>
+</html>

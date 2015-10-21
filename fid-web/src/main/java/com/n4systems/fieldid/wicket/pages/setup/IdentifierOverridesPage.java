@@ -9,6 +9,7 @@ import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.AssetTypesForTenantModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.model.AssetType;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -27,7 +28,7 @@ import org.apache.wicket.validation.validator.StringValidator;
 import java.util.List;
 
 @SuppressWarnings("serial")
-public class IdentifierOverridesPage extends FieldIDFrontEndPage {
+public class IdentifierOverridesPage extends FieldIDTemplatePage {
 
     @SpringBean
     private SystemSettingsService systemSettingsService;
