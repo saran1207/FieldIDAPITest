@@ -128,7 +128,8 @@ public class IsolationPointListPanel extends Panel {
         }
 
         item.add(new AjaxLink("edit") {
-            @Override public void onClick(AjaxRequestTarget target) {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
                 doEdit(target, isolationPoint);
             }
         });
@@ -155,7 +156,11 @@ public class IsolationPointListPanel extends Panel {
                 @Override
                 protected void createImage(ListItem<IsolationPoint> item) {
                     if(item.getModelObject().getAnnotation() != null) {
-                        item.add(new ArrowStyleAnnotatedSvg("image", item.getModelObject().getAnnotation()).withScale(2.0));
+                        if(item.getModelObject().getAnnotation().isRenderAnnotation()) {
+                            item.add(new ArrowStyleAnnotatedSvg("image", item.getModelObject().getAnnotation()).withScale(2.0));
+                        } else {
+                            item.add(new ArrowStyleAnnotatedSvg("image", item.getModelObject().getAnnotation()).withScale(2.0).withNoAnnotations());
+                        }
                     } else {
                         item.add(new EmptyPanel("image").setVisible(false));
                         item.setVisible(false);
