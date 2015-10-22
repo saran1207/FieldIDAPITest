@@ -1,3 +1,202 @@
 .manage-comment-template-edit-remove {
   width: 88px;
 }
+
+.organizations {
+  background-image: url("../images/settings-manage-organizations-icon.png");
+}
+
+.system-config{
+  background-image: url("../images/settings-system-settings-icon.png");
+}
+
+.branding {
+  background-image: url("../images/branding-icon.png");
+}
+
+.fieldid-plan {
+  background-image: url("../images/plan-icon.png");
+}
+
+.customers {
+  background-image: url("../images/owner-add-owner-icon.png");
+}
+
+.users{
+  background-image: url("../images/owner-manager-users-icon.png");
+}
+
+.user-registrations{
+  background-image: url("../images/owner-user-registration-icon.png");
+}
+
+.locations{
+  background-image: url("../images/owner-predefined-locations-icon.png");
+}
+
+.event-type-group{
+  background-image: url("../images/event-type-group-icon.png");
+}
+
+.event-types{
+  background-image: url("../images/event-types-icon.png");
+}
+
+.eventbooks{
+  background-image: url("../images/event-books-icon.png");
+}
+
+.asset-type-groups{
+  background-image: url("../images/asset-type-groups-icon.png");
+}
+
+.asset-types{
+  background-image: url("../images/asset-types-icon.png");
+}
+
+.event-status-list{
+  background-image: url("../images/asset-statuses-icon.png");
+}
+
+.asset-status-list{
+  background-image: url("../images/asset-statuses-icon.png");
+}
+
+.auto-attribute-criteria{
+  background-image: url("../images/templates-auto-attributes-icon.png");
+}
+
+.comment-template{
+  background-image: url("../images/templates-comment-templates-icon.png");
+}
+
+.asset-columns-layout{
+  background-image: url("../images/asset-column-icon.png");
+}
+
+.password-policy-layout{
+  background-image: url("../images/password-policy.png");
+}
+
+.account-policy-layout{
+  background-image: url("../images/account-policy.png");
+}
+
+.event-columns-layout{
+  background-image: url("../images/reporting-column-icon.png");
+}
+
+.schedule-columns-layout{
+  background-image: url("../images/schedules-column-icon.png");
+}
+
+.asset-code-mapping{
+  background-image: url("../images/templates-product-code-mappings-icon.png");
+}
+.sign-in {
+  background-image: url("../images/widgets-portal-url.png");
+}
+
+.embedded-code {
+  background-image: url("../images/widgets-embedded.png");
+}
+
+.import {
+  /*
+  background-image: url(../../../images/xls-icon.png);
+  */
+}
+
+.setup-wizard {
+  background-image: url("../images/setup-wizard-checkmark.png")
+}
+
+.setup-list{
+  margin-bottom: 30px;
+  fieldset {
+    legend {
+      border-bottom: none;
+    }
+  }
+}
+
+.setup-option {
+  background-repeat: no-repeat;
+  background-position: left 5.5px;
+  margin-left: 30px;
+  padding-left: 50px;
+  margin-top: 20px;
+
+  h1{
+    font-size: 14px;
+  }
+
+  p{
+    font-size: 13px;
+    line-height: 14px;
+  }
+
+  h1, p {
+    padding: 5px;
+  }
+
+  a{
+    color: black;
+  }
+}
+
+.widget {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid black;
+  font-family: "courier";
+}
+
+fieldset {
+  border: 1px solid #CACACA;
+  padding: 3px;
+  font-size: 13px;
+  margin-top: 15px;
+
+  legend {
+    padding: 6px;
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  p {
+    padding-left: 10px;
+    padding-bottom: 6px;
+    width: 80%;
+  }
+}
+
+.import-info {
+  background-color: #EEEEEE;
+  border: 1px solid #CACACA;
+
+  .setup-option {
+    margin-top: 5px;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 13px;
+    line-height: 14px;
+    margin-left: 30px;
+    margin-bottom: 10px;
+  }
+
+}
+
+.import-action {
+  font-size: 13px;
+  line-height: 14px;
+  margin-left: 10px;
+  margin-bottom: 6px;
+
+  select {
+    margin-right: 5px;
+  }
+
+}

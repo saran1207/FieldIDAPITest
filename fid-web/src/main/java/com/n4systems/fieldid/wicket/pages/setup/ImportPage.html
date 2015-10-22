@@ -1,9 +1,10 @@
+<html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
 
-<div class="setupList">
+<div class="setup-list">
 
-	<div class="importInfo">
-		<div class="setupOption import">
+	<div class="import-info">
+		<div class="setup-option import">
 			<h1><wicket:message key="label.import_your_data" /></h1>
 		</div>
 		<p><wicket:message key="label.import_your_data_msg1" /></p>
@@ -14,7 +15,7 @@
 		<legend><wicket:message key="label.import_owners" /></legend>
 		<p><wicket:message key="label.import_owners_msg" /></p>
         <form wicket:id="importOwnersForm">
-            <div class="importAction">
+            <div class="import-action">
                 <button wicket:id="importOwnersButton"><wicket:message key="label.start_import"/></button>
             </div>
         </form>
@@ -25,7 +26,7 @@
 		<p><wicket:message key="label.import_assets_msg" /></p>
 		
 		<form wicket:id="importAssetsForm">
-            <div class="importAction">
+            <div class="import-action">
                 <button wicket:id="importAssetsButton"><wicket:message key="label.start_import"/></button>
             </div>
         </form>
@@ -36,7 +37,7 @@
 		<p><wicket:message key="label.import_events_msg" /></p>
 
         <form wicket:id="importEventsForm">
-            <div class="importAction">
+            <div class="import-action">
                 <button wicket:id="importEventsButton"><wicket:message key="label.start_import"/></button>
             </div>
         </form>
@@ -47,7 +48,7 @@
 		<p><wicket:message key="label.import_auto_attributes_msg" /></p>
 
         <form wicket:id="importAutoAttributesForm">
-            <div class="importAction">
+            <div class="import-action">
                 <button wicket:id="startImportButton"><wicket:message key="label.start_import" /></button>
             </div>
         </form>
@@ -57,7 +58,7 @@
 		<legend><wicket:message key="label.import_users" /></legend>
 		<p><wicket:message key="label.import_users_msg" /></p>
         <form wicket:id="importUsersForm">
-            <div class="importAction">
+            <div class="import-action">
                 <button wicket:id="importUsersButton"><wicket:message key="label.start_import"/></button>
             </div>
         </form>
@@ -67,3 +68,4 @@
 </div>
 
 </wicket:extend>
+</html>
