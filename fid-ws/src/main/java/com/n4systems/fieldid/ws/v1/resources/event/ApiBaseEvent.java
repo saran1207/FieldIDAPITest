@@ -1,13 +1,12 @@
 package com.n4systems.fieldid.ws.v1.resources.event;
 
+import com.n4systems.fieldid.ws.v1.resources.model.ApiReadWriteModelWithOwner;
+
 import java.util.Date;
 import java.util.List;
 
-import com.n4systems.fieldid.ws.v1.resources.model.ApiReadWriteModelWithOwner;
-
 public class ApiBaseEvent extends ApiReadWriteModelWithOwner{
 	private Long typeId;
-	private String assetId;
 	private Date date;
 	private String status;
 	private Long eventStatusId;
@@ -15,7 +14,6 @@ public class ApiBaseEvent extends ApiReadWriteModelWithOwner{
 	private Long performedById;
 	private Long modifiedById;
 	private String eventBookId;
-	private Long assetStatusId;
 	private Long predefinedLocationId;
 	private String freeformLocation;
 	private boolean printable;
@@ -28,14 +26,6 @@ public class ApiBaseEvent extends ApiReadWriteModelWithOwner{
 
 	public void setTypeId(Long typeId) {
 		this.typeId = typeId;
-	}
-
-	public String getAssetId() {
-		return assetId;
-	}
-
-	public void setAssetId(String assetId) {
-		this.assetId = assetId;
 	}
 
 	public Date getDate() {
@@ -76,14 +66,6 @@ public class ApiBaseEvent extends ApiReadWriteModelWithOwner{
 
 	public void setEventBookId(String eventBookId) {
 		this.eventBookId = eventBookId;
-	}
-
-	public Long getAssetStatusId() {
-		return assetStatusId;
-	}
-
-	public void setAssetStatusId(Long assetStatusId) {
-		this.assetStatusId = assetStatusId;
 	}
 
 	public Long getPredefinedLocationId() {

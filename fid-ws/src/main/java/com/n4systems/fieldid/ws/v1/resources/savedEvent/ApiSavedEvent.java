@@ -1,11 +1,11 @@
 package com.n4systems.fieldid.ws.v1.resources.savedEvent;
 
-import java.util.List;
-
-import com.n4systems.fieldid.ws.v1.resources.event.ApiBaseEvent;
+import com.n4systems.fieldid.ws.v1.resources.event.ApiBaseThingEvent;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiEventForm;
 
-public class ApiSavedEvent extends ApiBaseEvent{
+import java.util.List;
+
+public class ApiSavedEvent extends ApiBaseThingEvent {
 	private ApiEventForm form;
 	private List<ApiSavedEvent> subEvents;
 	
