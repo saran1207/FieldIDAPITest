@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-@Path("eventType")
+@Path("placeEventType")
 public class ApiPlaceEventTypeResource extends SetupDataResource<ApiEventType, PlaceEventType> {
 
 	public ApiPlaceEventTypeResource() {
