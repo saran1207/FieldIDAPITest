@@ -3,6 +3,7 @@ package com.n4systems.fieldid.ws.v1.resources.org;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
+import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiPlaceEventHistoryResource;
 import com.n4systems.fieldid.ws.v1.resources.model.DateParam;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedPlaceEventResource;
@@ -30,6 +31,9 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 
     @Autowired
     private S3Service s3Service;
+
+    @Autowired
+    private ApiPlaceEventHistoryResource eventHistoryResource;
 
     //TODO Need to make use of this.
     @Autowired
@@ -66,6 +70,9 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 		if (baseOrg.getDivisionOrg() != null) {
 			apiOrg.setDivisionId(baseOrg.getDivisionOrg().getId());
 		}
+
+        apiOrg.setEventHistory(eventHistoryResource.findAllEventHistory(baseOrg.getId()));
+
 		return apiOrg;
 	}
 

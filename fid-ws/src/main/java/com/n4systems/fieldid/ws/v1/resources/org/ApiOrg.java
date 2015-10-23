@@ -1,6 +1,9 @@
 package com.n4systems.fieldid.ws.v1.resources.org;
 
+import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiPlaceEventHistory;
 import com.n4systems.fieldid.ws.v1.resources.model.ApiReadonlyModel;
+
+import java.util.List;
 
 public class ApiOrg extends ApiReadonlyModel {
 	private String name;
@@ -10,6 +13,7 @@ public class ApiOrg extends ApiReadonlyModel {
 	private Long divisionId;
 	private byte[] image;
 	private String address;
+    private List<ApiPlaceEventHistory> eventHistory;
 
 	public String getName() {
 		return name;
@@ -66,4 +70,12 @@ public class ApiOrg extends ApiReadonlyModel {
 	public String getAddress() {
 		return address;
 	}
+
+    public List<ApiPlaceEventHistory> getEventHistory() {
+        return eventHistory;
+    }
+
+    public void setEventHistory(List<ApiPlaceEventHistory> eventHistory) {
+        this.eventHistory = eventHistory;
+    }
 }
