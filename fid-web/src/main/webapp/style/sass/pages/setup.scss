@@ -151,26 +151,26 @@
   border: 1px solid black;
   font-family: "courier";
 }
+.import-setup {
+  fieldset {
+    border: 1px solid #CACACA;
+    padding: 3px;
+    font-size: 13px;
+    margin-top: 15px;
 
-fieldset {
-  border: 1px solid #CACACA;
-  padding: 3px;
-  font-size: 13px;
-  margin-top: 15px;
+    legend {
+      padding: 6px;
+      font-weight: bold;
+      font-size: 14px;
+    }
 
-  legend {
-    padding: 6px;
-    font-weight: bold;
-    font-size: 14px;
-  }
-
-  p {
-    padding-left: 10px;
-    padding-bottom: 6px;
-    width: 80%;
+    p {
+      padding-left: 10px;
+      padding-bottom: 6px;
+      width: 80%;
+    }
   }
 }
-
 .import-info {
   background-color: #EEEEEE;
   border: 1px solid #CACACA;
