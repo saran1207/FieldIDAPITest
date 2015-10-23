@@ -5,7 +5,7 @@ package com.n4systems.fieldid.ws.v1.resources.event;
  *
  * Created by Jordan Heath on 2015-10-22.
  */
-public class ApiBaseThingEvent extends ApiBaseEvent {
+public abstract class ApiBaseThingEvent extends ApiBaseEvent {
     private String assetId;
     private Long assetStatusId;
 

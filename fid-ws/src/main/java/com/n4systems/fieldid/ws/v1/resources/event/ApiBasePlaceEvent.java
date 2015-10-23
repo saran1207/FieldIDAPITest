@@ -6,14 +6,14 @@ package com.n4systems.fieldid.ws.v1.resources.event;
  *
  * Created by Jordan Heath on 2015-10-22.
  */
-public class ApiBasePlaceEvent extends ApiBaseEvent {
-    private String placeId;
+public abstract class ApiBasePlaceEvent extends ApiBaseEvent {
+    private Long placeId;
 
-    public String getPlaceId() {
+    public Long getPlaceId() {
         return placeId;
     }
 
-    public void setPlaceId(String placeId) {
+    public void setPlaceId(Long placeId) {
         this.placeId = placeId;
     }
 }
