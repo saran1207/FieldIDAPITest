@@ -44,8 +44,7 @@ public class PlaceService extends FieldIdPersistenceService {
      * (most likely you'll want to merge this and OrgService???)
      */
 
-    @Deprecated //only for testing
-    public List<PlaceEventType> getEventTypesFor(BaseOrg org) {
+    public List<PlaceEventType> getAllEventTypes() {
         QueryBuilder<PlaceEventType> query = createUserSecurityBuilder(PlaceEventType.class);
         query.addOrder("name");
         return persistenceService.findAll(query);

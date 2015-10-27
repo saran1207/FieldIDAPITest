@@ -39,6 +39,10 @@ public class ApiPlaceEventTypeResource extends SetupDataResource<ApiEventType, P
 		return new ListResponse<>(apiModels, page, pageSize, placeEventTypes.size());
 	}
 
+    public ApiEventType convertToApiPlaceEvent(PlaceEventType type) {
+        return convertEntityToApiModel(type);
+    }
+
 	@Override
 	protected ApiEventType convertEntityToApiModel(PlaceEventType eventType) {
 		ApiEventType apiEventType = new ApiEventType();
