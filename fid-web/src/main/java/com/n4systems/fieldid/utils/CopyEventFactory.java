@@ -53,8 +53,12 @@ public class CopyEventFactory {
 		return newEvent;
 	}
 
-    public static void copyEventForMassEvents(ThingEvent copyTo, ThingEvent copyFrom) {
-		copyAbstractEventWithOutEntity(copyTo, copyFrom);
+    public static void copyEventForMassEvents(ThingEvent copyTo, ThingEvent copyFrom, boolean exists) {
+		if(exists) {
+			copyAbstractEvent(copyTo, copyFrom);
+		} else {
+			copyAbstractEventWithOutEntity(copyTo, copyFrom);
+		}
         copyTo.setAssetStatus(copyFrom.getAssetStatus());
 
 		//CHECK THE ORIGINAL MODEL
@@ -297,7 +301,15 @@ public class CopyEventFactory {
             return scoreResult;
         } else if (oldResult instanceof ObservationCountCriteriaResult) {
 			ObservationCountCriteriaResult observationCountCriteriaResult = new ObservationCountCriteriaResult();
-			observationCountCriteriaResult.setObservationCountResults(((ObservationCountCriteriaResult) oldResult).getObservationCountResults());
+			List<ObservationCountResult> finalList = new ArrayList<>();
+			for(ObservationCountResult old:(((ObservationCountCriteriaResult) oldResult).getObservationCountResults())) {
+				ObservationCountResult temp = new ObservationCountResult();
+				temp.setObservationCount(old.getObservationCount());
+				temp.setValue(old.getValue());
+				temp.setTenant(old.getTenant());
+				finalList.add(temp);
+			}
+			observationCountCriteriaResult.setObservationCountResults(finalList);
 			return observationCountCriteriaResult;
 		} else if (oldResult instanceof NumberFieldCriteriaResult) {
         	NumberFieldCriteriaResult numberFieldResult = new NumberFieldCriteriaResult();

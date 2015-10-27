@@ -90,17 +90,19 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
 
         for(ThingEvent originalEventFromList:selectedEventList){
 
+            boolean exists = false;
             ThingEvent originalEvent;
             if(originalEventFromList.isNew())
                 originalEvent = originalEventFromList;
             else {
                 originalEvent = thingEventHelperService.createEventFromOpenEvent(originalEventFromList.getId());
+                exists = true;
             }
 
             originalEvent.setProofTestInfo(event.getObject().getProofTestInfo());
 
             //save the event
-            persistenceService.save(originalEvent);
+            //persistenceService.save(originalEvent);
 
             if(event.getObject().getPerformedBy() == null) {
                 event.getObject().setPerformedBy(getCurrentUser());
@@ -109,19 +111,9 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
             if(originalEvent.getSectionResults() != null) {
                 originalEvent.storeTransientCriteriaResults();
             }
-            copyMassEventInfo(originalEvent);
+            copyMassEventInfo(originalEvent, exists);
 
-            ThingEvent savedEvent = eventCreationService.createMultiEventWithSchedules(originalEvent, 0L, fileDataContainer, fileAttachments, createEventScheduleBundles(originalEvent.getAsset()));
-
-            for (CriteriaResult result : savedEvent.getResults()) {
-                for (Event action : result.getActions()) {
-                    //Make sure that we clear and create rules for any open Actions.
-                    if(action.getWorkflowState().equals(WorkflowState.OPEN)) {
-                        ruleService.clearEscalationRulesForEvent(action.getId());
-                        ruleService.createApplicableQueueItems(action);
-                    }
-                }
-            }
+            ThingEvent savedEvent = eventCreationService.createEventWithSchedules(originalEvent, 0L, fileDataContainer, fileAttachments, createEventScheduleBundles(originalEvent.getAsset()));
 
             finalList.add(savedEvent);
         }
@@ -133,15 +125,16 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
         return new Label(labelId, new FIDLabelModel("label.preform_mass_event"));
     }
 
-    protected void copyMassEventInfo(ThingEvent originalEvent){
+    protected void copyMassEventInfo(ThingEvent originalEvent, boolean exists){
 
         ThingEvent genericEvent = event.getObject();
 
-        CopyEventFactory.copyEventForMassEvents(originalEvent, genericEvent);
+        CopyEventFactory.copyEventForMassEvents(originalEvent, genericEvent, exists);
 
         for (CriteriaResult result : originalEvent.getResults()) {
             for (Event action : result.getActions()) {
                 ((ThingEvent)action).setAsset(originalEvent.getAsset());
+                action.setTenant(originalEvent.getTenant());
             }
         }
 

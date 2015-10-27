@@ -86,6 +86,10 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
     public T createMultiEvent(T event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) {
         defaultOneClickResultsWithNullState(event.getResults());
 
+        if(event.getSubEvents() != null) {
+            event.getSubEvents().forEach(subEvent -> defaultOneClickResultsWithNullState(subEvent.getResults()));
+        }
+
         EventResult calculatedEventResult = calculateEventResultAndScore(event);
 
         if (event.getEventResult() == null || event.getEventResult() == EventResult.VOID) {
@@ -132,6 +136,9 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
 
             event.setTriggersIntoResultingActions(event);
 
+            event = persistenceService.update(event);
+
+            /*
             for (CriteriaResult result : event.getResults()) {
                 for (Event action : result.getActions()) {
                     action.setTenant(event.getTenant());
@@ -139,9 +146,25 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
                     ((ThingEvent) action).setAsset(((ThingEvent) event).getAsset());
 
                     persistenceService.save(action);
+
+                    if(action.getWorkflowState().equals(WorkflowState.OPEN)) {
+                        ruleService.clearEscalationRulesForEvent(action.getId());
+                        ruleService.createApplicableQueueItems(action);
+                    }
                 }
             }
-            event = persistenceService.update(event);
+            */
+
+            for (CriteriaResult result : event.getResults()) {
+                for (Event action : result.getActions()) {
+                    //Make sure that we clear and create rules for any open Actions.
+                    if(action.getWorkflowState().equals(WorkflowState.OPEN)) {
+                        ruleService.clearEscalationRulesForEvent(action.getId());
+                        ruleService.createApplicableQueueItems(action);
+                    }
+                }
+            }
+
 
             restoreTemporarySignatureFiles(event, rememberedSignatureMap);
             restoreCriteriaImages(event, rememberedCriteriaImages);
@@ -152,6 +175,8 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
         setAllTriggersForActions(event);
 
         postSaveEvent(event, fileData);
+
+        event = persistenceService.update(event);
 
         // writeSignatureImagesToDisk MUST be called after persistenceManager.save(parameterObject.event, parameterObject.userId) as an
         // event id is required to build the save path
@@ -164,6 +189,7 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
             int eventCount = event.getSubEvents().size() + 1;
             tenantSettingsService.decrementUsageBasedEventCount(eventCount);
         }
+
 
         return event;
     }
@@ -181,7 +207,7 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
             event.setEventResult(calculatedEventResult);
         }
 
-        User user = getCurrentUser();
+        //User user = getCurrentUser();
 
         event.setWorkflowState(WorkflowState.COMPLETED);
 
@@ -223,18 +249,13 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
 
             for (CriteriaResult result : event.getResults()) {
                 for (Event action : result.getActions()) {
-                    Long id = persistenceService.save(action);
-
                     //Make sure that we clear and create rules for any open Actions.
                     if(action.getWorkflowState().equals(WorkflowState.OPEN)) {
-                        Event savedAction = persistenceService.find(Event.class, id);
-                        ruleService.clearEscalationRulesForEvent(id);
-                        ruleService.createApplicableQueueItems(savedAction);
+                        ruleService.clearEscalationRulesForEvent(action.getId());
+                        ruleService.createApplicableQueueItems(action);
                     }
                 }
             }
-
-            event = persistenceService.update(event);
 
             restoreTemporarySignatureFiles(event, rememberedSignatureMap);
             restoreCriteriaImages(event, rememberedCriteriaImages);
@@ -253,7 +274,7 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
 
         processUploadedFiles(event, uploadedFiles);
 
-        if(user.isUsageBasedUser()) {
+        if(getCurrentUser().isUsageBasedUser()) {
             int eventCount = event.getSubEvents().size() + 1;
             tenantSettingsService.decrementUsageBasedEventCount(eventCount);
         }
