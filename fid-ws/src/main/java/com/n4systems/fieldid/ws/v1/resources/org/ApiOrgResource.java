@@ -4,6 +4,7 @@ import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
 import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiPlaceEventHistoryResource;
+import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiPlaceEventTypeResource;
 import com.n4systems.fieldid.ws.v1.resources.model.DateParam;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedPlaceEventResource;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Component
 @Path("organization")
@@ -34,6 +36,9 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 
     @Autowired
     private ApiPlaceEventHistoryResource eventHistoryResource;
+
+    @Autowired
+    private ApiPlaceEventTypeResource eventTypeResource;
 
     //TODO Need to make use of this.
     @Autowired
@@ -72,6 +77,7 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 		}
 
         apiOrg.setEventHistory(eventHistoryResource.findAllEventHistory(baseOrg.getId()));
+        apiOrg.setEventTypes(baseOrg.getEventTypes().stream().map(eventTypeResource::convertToApiPlaceEvent).collect(Collectors.toList()));
 
 		return apiOrg;
 	}
