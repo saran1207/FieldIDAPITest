@@ -136,10 +136,11 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
 
         for (CriteriaResult result : originalEvent.getResults()) {
             for (Event action : result.getActions()) {
-                ((ThingEvent)action).setAsset(originalEvent.getAsset());
                 action.setTenant(originalEvent.getTenant());
             }
         }
+
+        originalEvent.setTriggersIntoResultingActions(originalEvent);
 
         originalEvent.setPrintable(event.getObject().isPrintable());
 
