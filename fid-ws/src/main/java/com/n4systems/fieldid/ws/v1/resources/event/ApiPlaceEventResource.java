@@ -16,12 +16,10 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.ByteArrayInputStream;
@@ -33,6 +31,8 @@ import java.util.List;
 /**
  * Created by jheath on 2015-10-23.
  */
+@Component
+@Path("placeevent")
 public class ApiPlaceEventResource extends FieldIdPersistenceService {
     private static final Logger logger = Logger.getLogger(ApiPlaceEventResource.class);
 
