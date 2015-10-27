@@ -51,6 +51,9 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
         try {
             thingEvent =  CopyEventFactory.copyEvent(thingEventHelperService.createEvent(selectedEventList.get(0).getId(), selectedEventList.get(0).getAsset().getId(), selectedEventList.get(0).getType().getId()));
 
+            //This generic event should not have any id's associated to it when copying it over to the original events.
+            thingEvent.setId(null);
+            thingEvent.setMobileGUID(null);
             //Do not display any default owner/location
             thingEvent.setAdvancedLocation(null);
             thingEvent.setOwner(getCurrentUser().getOwner().getPrimaryOrg());
@@ -96,7 +99,7 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
                 originalEvent = originalEventFromList;
             else {
                 originalEvent = thingEventHelperService.createEventFromOpenEvent(originalEventFromList.getId());
-                exists = true;
+                //exists = true;
             }
 
             originalEvent.setProofTestInfo(event.getObject().getProofTestInfo());
