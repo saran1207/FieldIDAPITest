@@ -3,6 +3,7 @@ package com.n4systems.fieldid.ws.v1.resources.org;
 import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiPlaceEventHistory;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiEventType;
 import com.n4systems.fieldid.ws.v1.resources.model.ApiReadonlyModel;
+import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedPlaceEvent;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class ApiOrg extends ApiReadonlyModel {
 	private String address;
     private List<ApiPlaceEventHistory> eventHistory;
     private List<ApiEventType> eventTypes;
+    private List<ApiSavedPlaceEvent> events;
 
 	public String getName() {
 		return name;
@@ -87,5 +89,13 @@ public class ApiOrg extends ApiReadonlyModel {
 
     public void setEventTypes(List<ApiEventType> eventTypes) {
         this.eventTypes = eventTypes;
+    }
+
+    public List<ApiSavedPlaceEvent> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<ApiSavedPlaceEvent> events) {
+        this.events = events;
     }
 }
