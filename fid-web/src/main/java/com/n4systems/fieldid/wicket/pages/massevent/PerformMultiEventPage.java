@@ -104,9 +104,6 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
 
             originalEvent.setProofTestInfo(event.getObject().getProofTestInfo());
 
-            //save the event
-            //persistenceService.save(originalEvent);
-
             if(event.getObject().getPerformedBy() == null) {
                 event.getObject().setPerformedBy(getCurrentUser());
             }
@@ -116,10 +113,13 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
             }
             copyMassEventInfo(originalEvent, exists);
 
-            ThingEvent savedEvent = eventCreationService.createEventWithSchedules(originalEvent, 0L, fileDataContainer, fileAttachments, createEventScheduleBundles(originalEvent.getAsset()));
+            ThingEvent savedEvent = eventCreationService.createEventWithSchedules(originalEvent, 0L, fileDataContainer, fileAttachments, createEventScheduleBundles(originalEvent.getAsset()), false);
 
             finalList.add(savedEvent);
         }
+
+        eventCreationService.cleanUpMultiEventCriteriaImages(event.getObject().getResults());
+
         return finalList;
     }
 
