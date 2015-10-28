@@ -69,6 +69,12 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
     protected void doSaveSchedule(T openEvent) {}
 
     @Transactional
+    public T createEvent(T event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) {
+        return createEvent(event, scheduleId, fileData, uploadedFiles, true);
+    }
+
+
+        @Transactional
     public T createEvent(T event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, Boolean cleanUpCriteriaImages) {
         defaultOneClickResultsWithNullState(event.getResults());
         if(event.getSubEvents() != null) {
