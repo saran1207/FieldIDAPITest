@@ -23,6 +23,7 @@ import javax.persistence.EntityManager;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ManagerBackedEventSaver implements EventSaver {
 	private final Logger logger = Logger.getLogger(ManagerBackedEventSaver.class);
@@ -299,13 +300,15 @@ public class ManagerBackedEventSaver implements EventSaver {
 	 *            on.
 	 */
 	private void updateDeficiencies(Set<CriteriaResult> results) {
-		// walk through the results and deficiencies and update them if needed.
-		for (CriteriaResult result : results) {
+		// walk through the results and deficiencies and update them.
+		results.stream().map(result -> {
 			CriteriaResult originalResult = persistenceManager.find(CriteriaResult.class, result.getId());
 			originalResult.setDeficiencies(result.getDeficiencies());
 			originalResult.setRecommendations(result.getRecommendations());
-			persistenceManager.update(originalResult);
-		}
+			return originalResult;
+		})
+		//This has to happen in two steps to avoid a ConcurrentModificationException, because Hibernate 5 is picky.
+		.collect(Collectors.toList()).forEach(persistenceManager::update);
 	}
 	
 	
