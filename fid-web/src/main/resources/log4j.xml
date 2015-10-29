@@ -123,13 +123,13 @@
 		<priority value="INFO" />
 	</category>
 	<category name="org.hibernate">
-		<priority value="DEBUG" />
+		<priority value="WARN" />
 	</category>
 	<category name="org.hibernate.engine.loading.CollectionLoadContext">
-		<priority value="DEBUG" />
+		<priority value="ERROR" />
 	</category>
 	<category name="org.hibernate.jdbc.AbstractBatcher">
-		<priority value="DEBUG" />
+		<priority value="ERROR" />
 	</category>
 	<category name="net.sf.jasperreports">
 		<priority value="INFO" />
