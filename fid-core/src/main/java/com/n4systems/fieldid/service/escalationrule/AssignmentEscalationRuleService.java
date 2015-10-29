@@ -522,7 +522,7 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
      */
     public void createApplicableQueueItems(Event event) {
         QueryBuilder<AssignmentEscalationRule> ruleQuery = new QueryBuilder<>(AssignmentEscalationRule.class, new OpenSecurityFilter());
-        ruleQuery.addSimpleWhere("tenant.id", event.getTenant().getId());
+        ruleQuery.addSimpleWhere("tenant.id", getCurrentTenant().getId());
 
         persistenceService.findAll(ruleQuery)
                           .stream()
