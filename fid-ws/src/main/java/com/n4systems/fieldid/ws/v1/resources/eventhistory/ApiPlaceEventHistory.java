@@ -11,7 +11,7 @@ public class ApiPlaceEventHistory {
     private Long eventTypeId;
     private String eventTypeName;
     private Date eventDate;
-    private String performedBy;
+    private Long performedBy;
     private String status;
     private boolean printable;
 
@@ -55,11 +55,11 @@ public class ApiPlaceEventHistory {
         this.eventDate = eventDate;
     }
 
-    public String getPerformedBy() {
+    public Long getPerformedBy() {
         return performedBy;
     }
 
-    public void setPerformedBy(String performedBy) {
+    public void setPerformedBy(Long performedBy) {
         this.performedBy = performedBy;
     }
 

@@ -30,6 +30,17 @@ public class ApiPlaceEventHistoryResource extends ApiResource<ApiPlaceEventHisto
 
     @Override
     protected ApiPlaceEventHistory convertEntityToApiModel(PlaceEvent entityModel) {
-        return null;
+        ApiPlaceEventHistory history = new ApiPlaceEventHistory();
+
+        history.setPlaceId(entityModel.getPlace().getId());
+        history.setEventId(entityModel.getMobileGUID());
+        history.setEventTypeId(entityModel.getType().getId());
+        history.setEventTypeName(entityModel.getEventType().getName());
+        history.setEventDate(entityModel.getDate());
+        history.setPerformedBy(entityModel.getPerformedBy().getId());
+        history.setStatus(entityModel.getEventResult().getDisplayName());
+        history.setPrintable(entityModel.isPrintable());
+
+        return history;
     }
 }
