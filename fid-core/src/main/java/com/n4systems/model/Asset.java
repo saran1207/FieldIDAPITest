@@ -579,7 +579,11 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
     }
 
 	public Long getActiveProcedureDefinitionCount() {
-		return activeProcedureDefinitionCount;
+		if(activeProcedureDefinitionCount == null) {
+			return new Long(0);
+		} else {
+			return activeProcedureDefinitionCount;
+		}
 	}
 
 	public void setActiveProcedureDefinitionCount(Long activeProcedureDefinitionCount) {
