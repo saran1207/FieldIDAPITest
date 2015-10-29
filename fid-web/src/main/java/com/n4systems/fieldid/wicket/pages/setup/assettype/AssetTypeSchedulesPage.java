@@ -51,9 +51,6 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
     private AssetTypeService assetTypeService;
 
     @SpringBean
-    private AssetTypeScheduleService assetTypeScheduleService;
-
-    @SpringBean
     private AssociatedEventTypesService associatedEventTypesService;
 
     private WebMarkupContainer schedules;
@@ -100,7 +97,6 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
                         assetType.getSchedules().remove(schedule.getObject());
                         assetType.touch();
                         assetTypeService.update(assetType);
-                        assetTypeScheduleService.delete(assetTypeScheduleService.getSchedule(schedule.getObject().getId()));
                         frequencyList.detachModels();
                         target.add(schedules, filterActions);
                     }
@@ -245,7 +241,6 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
         return new FrequencyFormPanel(frequencyModalWindow.getContentId(), assetTypeModel) {
             @Override
             protected void onSaveSchedule(AjaxRequestTarget target, AssetTypeSchedule schedule) {
-                assetTypeScheduleService.createSchedule(schedule);
                 AssetType assetType = assetTypeModel.getObject();
                 assetType.getSchedules().add(schedule);
                 assetType.touch();

@@ -62,7 +62,7 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
     private @Localized String manufactureCertificateText;
 	private boolean hasManufactureCertificate;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "assetType")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "assetType", orphanRemoval = true)
     private Set<AssetTypeSchedule> schedules = new HashSet<AssetTypeSchedule>();
 
 	@OneToMany(mappedBy = "assetInfo", targetEntity = InfoFieldBean.class, cascade = CascadeType.ALL)
