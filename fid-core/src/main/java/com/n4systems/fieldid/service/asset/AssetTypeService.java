@@ -27,6 +27,7 @@ import org.apache.log4j.Logger;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.transaction.annotation.Transactional;
 import rfid.ejb.entity.AssetCodeMapping;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
@@ -144,7 +145,8 @@ public class AssetTypeService extends CrudService<AssetType> {
         // NOTE that two things happens here.  a RecurringAssetTypeEvent is saved AND some events are initially created.
         // the first part is quick but the second part is done asynchronously because it can be slow.
         AsyncService.AsyncTask<Void> task = asyncService.createTask(new Callable<Void>() {
-            @Override public Void call() throws Exception {
+            @Override
+            public Void call() throws Exception {
                 scheduleInitialEvents(recurringEvent);
                 return null;
             }
@@ -414,4 +416,22 @@ public class AssetTypeService extends CrudService<AssetType> {
         }
 
     }
+
+    @Transactional
+    public AssetType addAssetTypeSchedule(AssetType assetType, AssetTypeSchedule schedule) {
+        persistenceService.save(schedule);
+        assetType.getSchedules().add(schedule);
+        assetType.touch();
+        return update(assetType);
+    }
+
+    @Transactional
+    public AssetType removeAssetTypeSchedule(AssetType assetType, AssetTypeSchedule schedule) {
+        AssetTypeSchedule scheduleToBeRemoved = persistenceService.find(AssetTypeSchedule.class, schedule.getId());
+        assetType.getSchedules().remove(schedule);
+        persistenceService.remove(scheduleToBeRemoved);
+        assetType.touch();
+        return update(assetType);
+    }
+
 }
