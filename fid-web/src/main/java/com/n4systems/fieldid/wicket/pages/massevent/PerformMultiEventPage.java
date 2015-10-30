@@ -93,13 +93,11 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
 
         for(ThingEvent originalEventFromList:selectedEventList){
 
-            boolean exists = false;
             ThingEvent originalEvent;
             if(originalEventFromList.isNew())
                 originalEvent = originalEventFromList;
             else {
                 originalEvent = thingEventHelperService.createEventFromOpenEvent(originalEventFromList.getId());
-                //exists = true;
             }
 
             originalEvent.setProofTestInfo(event.getObject().getProofTestInfo());
@@ -111,7 +109,7 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
             if(originalEvent.getSectionResults() != null) {
                 originalEvent.storeTransientCriteriaResults();
             }
-            copyMassEventInfo(originalEvent, exists);
+            copyMassEventInfo(originalEvent);
 
             ThingEvent savedEvent = eventCreationService.createEventWithSchedules(originalEvent, 0L, fileDataContainer, fileAttachments, createEventScheduleBundles(originalEvent.getAsset()), false);
 
@@ -128,11 +126,11 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
         return new Label(labelId, new FIDLabelModel("label.preform_mass_event"));
     }
 
-    protected void copyMassEventInfo(ThingEvent originalEvent, boolean exists){
+    protected void copyMassEventInfo(ThingEvent originalEvent){
 
         ThingEvent genericEvent = event.getObject();
 
-        CopyEventFactory.copyEventForMassEvents(originalEvent, genericEvent, exists);
+        CopyEventFactory.copyEventForMassEvents(originalEvent, genericEvent);
 
         for (CriteriaResult result : originalEvent.getResults()) {
             for (Event action : result.getActions()) {

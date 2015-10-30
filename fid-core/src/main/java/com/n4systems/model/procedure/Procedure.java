@@ -68,12 +68,12 @@ public class Procedure extends ArchivableEntityWithTenant implements NetworkEnti
     private GpsLocation gpsLocation;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @IndexColumn(name="orderIdx")
+    @OrderColumn(name="orderIdx")
     @JoinTable(name="procedures_lock_results", joinColumns = @JoinColumn(name = "procedure_id"), inverseJoinColumns = @JoinColumn(name = "isolation_point_result_id"))
     private List<IsolationPointResult> lockResults;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @IndexColumn(name="orderIdx")
+    @OrderColumn(name="orderIdx")
     @JoinTable(name="procedures_unlock_results", joinColumns = @JoinColumn(name = "procedure_id"), inverseJoinColumns = @JoinColumn(name = "isolation_point_result_id"))
     private List<IsolationPointResult> unlockResults;
 

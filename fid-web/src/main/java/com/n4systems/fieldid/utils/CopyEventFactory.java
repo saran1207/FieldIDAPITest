@@ -53,12 +53,8 @@ public class CopyEventFactory {
 		return newEvent;
 	}
 
-    public static void copyEventForMassEvents(ThingEvent copyTo, ThingEvent copyFrom, boolean exists) {
-		if(exists) {
-			copyAbstractEvent(copyTo, copyFrom);
-		} else {
-			copyAbstractEventWithOutEntity(copyTo, copyFrom);
-		}
+    public static void copyEventForMassEvents(ThingEvent copyTo, ThingEvent copyFrom) {
+		copyAbstractEventWithOutEntity(copyTo, copyFrom);
         copyTo.setAssetStatus(copyFrom.getAssetStatus());
 
 		//CHECK THE ORIGINAL MODEL

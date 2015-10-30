@@ -118,7 +118,7 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
     private Date lastEventDate;
 
 	@Column(name="active_procedure_definition_count")
-	private Long activeProcedureDefinitionCount;
+	private Long activeProcedureDefinitionCount = new Long(-1);
 
 //	@Column(name="last_event_completed_date")
 //	private Date lastEventCompletedDate;
@@ -579,7 +579,7 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
     }
 
 	public Long getActiveProcedureDefinitionCount() {
-		return activeProcedureDefinitionCount;
+			return activeProcedureDefinitionCount;
 	}
 
 	public void setActiveProcedureDefinitionCount(Long activeProcedureDefinitionCount) {

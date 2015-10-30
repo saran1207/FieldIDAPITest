@@ -907,8 +907,37 @@ public class AssetService extends CrudService<Asset> {
     }
 
     public void increaseProcedureCount(Asset asset) {
-        asset.setActiveProcedureDefinitionCount(asset.getActiveProcedureDefinitionCount()+1);
+        long count = asset.getActiveProcedureDefinitionCount();
+        if(count == -1 || count == 0) {
+            asset.setActiveProcedureDefinitionCount(new Long(1));
+        } else {
+            asset.setActiveProcedureDefinitionCount(count + 1);
+        }
         persistenceService.update(asset);
+    }
+
+    public void updateActiveProcedureCount(AssetType assetType) {
+        List<Asset> allActiveAssetsOfType = findActiveAssetsByAssetType(assetType);
+
+        for(Asset asset:allActiveAssetsOfType) {
+            //If it was "turned off", we have to turn it "on"
+            if (asset.getActiveProcedureDefinitionCount() == -1) {
+                asset.setActiveProcedureDefinitionCount(new Long(0));
+                persistenceService.update(asset);
+            } //If it was turned "on" but didn't have any procedures authored, then reset it to -1
+            else if (asset.getActiveProcedureDefinitionCount() == 0) {
+                asset.setActiveProcedureDefinitionCount(new Long(-1));
+                persistenceService.update(asset);
+            }
+        }
+    }
+
+    private List<Asset> findActiveAssetsByAssetType(AssetType assetType) {
+        QueryBuilder<Asset> query = createTenantSecurityBuilder(Asset.class);
+        query.addSimpleWhere("state", Archivable.EntityState.ACTIVE);
+        query.addSimpleWhere("type", assetType);
+
+        return persistenceService.findAll(query);
     }
 
     private void archiveProcedures(Asset asset) {
