@@ -275,17 +275,23 @@ public abstract class AnnotationEditorAndGalleryPanel extends Panel {
     private Component createEditorPanel(ImageAnnotation annotation) {
         if(renderAnnotation) {
             if (annotationType.equals(AnnotationType.ARROW_STYLE))
-                return new ArrowStyleAnnotationEditor("imageEditor", annotation) {
-                    @Override
-                    protected ProcedureDefinitionImage retrieveCurrentImage() {
-                        return currentImage;
-                    }
+                if(annotation.hasCoordinates(AnnotationType.ARROW_STYLE)) {
+                    return new ArrowStyleAnnotationEditor("imageEditor", annotation) {
+                        @Override
+                        protected ProcedureDefinitionImage retrieveCurrentImage() {
+                            return currentImage;
+                        }
 
-                    @Override
-                    protected IsolationPoint retrieveIsolationPoint() {
-                        return model.getObject();
-                    }
-                };
+                        @Override
+                        protected IsolationPoint retrieveIsolationPoint() {
+                            return model.getObject();
+                        }
+                    };
+                } else {
+                    //System basically takes a shit if you don't have Annotation coordinates, so we build the editor
+                    //panel from an Image, which negates the need for coordinates.  Sure hope this works!!
+                    return createEditorPanel(currentImage);
+                }
             else
                 return new CallOutStyleAnnotationEditor("imageEditor", annotation) {
                     @Override
