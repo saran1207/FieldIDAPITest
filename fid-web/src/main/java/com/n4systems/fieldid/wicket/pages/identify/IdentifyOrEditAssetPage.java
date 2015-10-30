@@ -525,6 +525,15 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
         asset.setTenant(getTenant());
         asset.setInfoOptions(new HashSet<InfoOptionBean>(enteredInfoOptions));
 
+        //Find out and set it's procedureCount
+        //-1 if the AssetType of this procedure IS NOT LOTO enabled.
+        //0 if the AssetType of this asset IS LOTO enabled.
+        if(asset.getType().hasProcedures()) {
+            asset.setActiveProcedureDefinitionCount(new Long(0));
+        } else {
+            asset.setActiveProcedureDefinitionCount(new Long(-1));
+        }
+
         if (asset.isNew()) {
             asset.setIdentifiedBy(getCurrentUser());
             createdOrEditedAsset = assetSaveService.createWithHistory(asset, attachments, assetImageBytes, assetImageFileName);
@@ -561,7 +570,14 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
         String clientFileName = assetImagePanel.getClientFileName();
         List<Long> createdAssetIds = new ArrayList<Long>();
 
-
+        //Find out and set it's procedureCount
+        //-1 if the AssetType of this procedure IS NOT LOTO enabled.
+        //0 if the AssetType of this asset IS LOTO enabled.
+        if(assetToCreate.getType().hasProcedures()) {
+            assetToCreate.setActiveProcedureDefinitionCount(new Long(0));
+        } else {
+            assetToCreate.setActiveProcedureDefinitionCount(new Long(-1));
+        }
 
         for (MultipleAssetConfiguration.AssetConfiguration assetConfig : assetConfigs) {
             assetToCreate.reset();
@@ -571,7 +587,6 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             assetToCreate.setIdentifier(assetConfig.getIdentifier());
             assetToCreate.setRfidNumber(assetConfig.getRfidNumber());
             assetToCreate.setCustomerRefNumber(assetConfig.getCustomerRefNumber());
-
 
             //since multiple assets can't have the same GUID, we reset them here
             assetToCreate.setMobileGUID(null);
