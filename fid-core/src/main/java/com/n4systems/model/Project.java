@@ -56,11 +56,9 @@ public class Project extends EntityWithOwner implements NamedEntity, Listable<Lo
     private List<Asset> assets = new ArrayList<>();
     
     @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@JoinTable(name = "projects_fileattachments", joinColumns = @JoinColumn(name="projects_id"), inverseJoinColumns = @JoinColumn(name="notes_id"))
     private List<FileAttachment> notes = new ArrayList<>();
     
-    //@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="project")
-    //private Set<EventSchedule> schedules = new HashSet<EventSchedule>();
-
     @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="project")
     private Set<Event> events = new HashSet<>();
     
@@ -83,7 +81,6 @@ public class Project extends EntityWithOwner implements NamedEntity, Listable<Lo
 		super.onUpdate();
 		trimNames();
 	}
-	
 
 	private void trimNames() {
 		name = (name != null) ? name.trim() : null;
