@@ -17,7 +17,7 @@ public class UserGroup extends ArchivableEntityWithTenant implements Listable<Lo
     @Column(name = "group_id", length = 255)
     private String groupId;
 
-    @ManyToMany(mappedBy = "groups")
+    @ManyToMany
     @JoinTable(name = "users_user_groups", joinColumns = @JoinColumn(name="user_group_id"), inverseJoinColumns = @JoinColumn(name="user_id"))
     private Collection<User> members = new ArrayList<>();
 
