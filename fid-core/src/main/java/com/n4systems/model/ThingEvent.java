@@ -17,7 +17,7 @@ import java.util.*;
 
 @Entity
 @Table(name="thing_events")
-@PrimaryKeyJoinColumn(name="id", referencedColumnName="event_id")
+@PrimaryKeyJoinColumn(name="id")
 public class ThingEvent extends Event<ThingEventType,ThingEvent,Asset> implements AssetEvent, NetworkEntity<ThingEvent> {
 
     public static final SecurityDefiner createSecurityDefiner() {
