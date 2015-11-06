@@ -6,7 +6,6 @@ import com.n4systems.fieldid.wicket.components.eventform.CriteriaConfigurationPa
 import com.n4systems.fieldid.wicket.components.eventform.CriteriaPanel;
 import com.n4systems.fieldid.wicket.components.eventform.CriteriaSectionsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.save.SavePanel;
-import com.n4systems.fieldid.wicket.pages.setup.eventtype.EventTypePage;
 import com.n4systems.fieldid.wicket.pages.setup.eventtype.LegacyEventTypePage;
 import com.n4systems.model.*;
 import org.apache.wicket.ajax.AjaxRequestTarget;

@@ -3,7 +3,6 @@ package com.n4systems.fieldid.ws.v1.resources.eventschedule;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
-import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.fieldid.ws.v1.resources.asset.ApiAssetLink;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;

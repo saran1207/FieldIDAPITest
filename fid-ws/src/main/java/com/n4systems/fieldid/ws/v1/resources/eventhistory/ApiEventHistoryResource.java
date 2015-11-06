@@ -40,3 +40,4 @@ public class ApiEventHistoryResource extends ApiResource<ApiEventHistory, ThingE
 		return apiEventHistory;
 	}
 }
+

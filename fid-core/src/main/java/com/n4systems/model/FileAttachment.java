@@ -1,17 +1,14 @@
 package com.n4systems.model;
 
-import javax.activation.FileTypeMap;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
-
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.user.User;
 import com.n4systems.util.ContentTypeUtil;
 import org.springframework.util.StringUtils;
 
+import javax.activation.FileTypeMap;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.UUID;
 
 @Entity

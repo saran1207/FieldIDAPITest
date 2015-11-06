@@ -3,7 +3,6 @@ package com.n4systems.fieldid.wicket.pages.setup.assettype;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.fieldid.service.event.AssociatedEventTypesService;
-import com.n4systems.fieldid.service.schedule.AssetTypeScheduleService;
 import com.n4systems.fieldid.wicket.components.DisplayRecurrenceTimeModel;
 import com.n4systems.fieldid.wicket.components.assettype.AssetTypeRecurrenceFormPanel;
 import com.n4systems.fieldid.wicket.components.assettype.FrequencyFormPanel;

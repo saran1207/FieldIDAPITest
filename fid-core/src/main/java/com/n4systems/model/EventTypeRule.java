@@ -1,7 +1,6 @@
 package com.n4systems.model;
 
 import com.n4systems.fieldid.service.event.EventTypeRulesService;
-import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.parents.EntityWithTenant;
 
 import javax.persistence.*;

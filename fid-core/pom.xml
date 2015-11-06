@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>fieldid-root</artifactId>
 		<groupId>com.fieldid</groupId>
-        <version>2015.6.0-SNAPSHOT</version>
+        <version>2015.6.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>fid-core</artifactId>
 	<name>Core Lib</name>

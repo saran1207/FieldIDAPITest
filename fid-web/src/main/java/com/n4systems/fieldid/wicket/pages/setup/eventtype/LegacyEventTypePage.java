@@ -4,7 +4,6 @@ import com.n4systems.fieldid.service.event.EventTypeService;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
 import com.n4systems.fieldid.wicket.pages.setup.observationcount.ObservationCountResultConfigurationPage;
 import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigurationPage;

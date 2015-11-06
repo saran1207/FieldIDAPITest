@@ -1,11 +1,11 @@
 package com.n4systems.fieldid.migrator.migrations;
 
-        import com.n4systems.fieldid.migrator.DbUtils;
-        import com.n4systems.fieldid.migrator.Migration;
+import com.n4systems.fieldid.migrator.DbUtils;
+import com.n4systems.fieldid.migrator.Migration;
 
-        import java.sql.Connection;
-        import java.sql.PreparedStatement;
-        import java.sql.ResultSet;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 /**
  * Created by rrana on 2015-10-13.

@@ -1,7 +1,6 @@
 package com.n4systems.util.persistence.search.terms;
 
 import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.SubSelectInClause;
 import com.n4systems.util.persistence.SubSelectNotInClause;
 import com.n4systems.util.persistence.WhereClause;
 

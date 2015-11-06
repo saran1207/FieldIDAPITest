@@ -3,7 +3,10 @@ package com.n4systems.fieldid.service.event;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
-import com.n4systems.model.*;
+import com.n4systems.model.AssetStatus;
+import com.n4systems.model.EventResult;
+import com.n4systems.model.EventType;
+import com.n4systems.model.EventTypeRule;
 import com.n4systems.model.builders.AssetStatusBuilder;
 import com.n4systems.util.persistence.QueryBuilder;
 
