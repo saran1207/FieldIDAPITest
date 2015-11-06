@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.setup.loto;
 
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -28,6 +29,9 @@ public class EnableByAssetTypePage extends FieldIDTemplatePage {
     @SpringBean
     private AssetTypeService assetTypeService;
 
+    @SpringBean
+    private AssetService assetService;
+
     private IModel<List<AssetType>> assetTypesList;
     private Form<Void> form;
 
@@ -46,6 +50,7 @@ public class EnableByAssetTypePage extends FieldIDTemplatePage {
                 for(AssetType assetType: updatedAssetTypes) {
                     if(assetType.hasProcedures() != existingAssetTypes.get(index).hasProcedures()) {
                         assetTypeService.update(assetType);
+                        assetService.updateActiveProcedureCount(assetType);
                     }
                     index++;
                 }

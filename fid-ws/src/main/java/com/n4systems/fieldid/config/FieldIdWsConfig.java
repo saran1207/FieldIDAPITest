@@ -15,15 +15,18 @@ import com.n4systems.fieldid.ws.v1.resources.commenttemplate.ApiCommentTemplateR
 import com.n4systems.fieldid.ws.v1.resources.event.ApiEventFormResultResource;
 import com.n4systems.fieldid.ws.v1.resources.event.ApiEventResource;
 import com.n4systems.fieldid.ws.v1.resources.event.ApiExistingEventFormResultResource;
+import com.n4systems.fieldid.ws.v1.resources.event.ApiPlaceEventResource;
 import com.n4systems.fieldid.ws.v1.resources.event.actions.prioritycode.ApiPriorityCodeResource;
 import com.n4systems.fieldid.ws.v1.resources.event.criteria.ApiCriteriaImagesResource;
 import com.n4systems.fieldid.ws.v1.resources.eventattachment.ApiEventAttachmentResource;
 import com.n4systems.fieldid.ws.v1.resources.eventbook.ApiEventBookResource;
 import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiEventHistoryResource;
+import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiPlaceEventHistoryResource;
 import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventScheduleResource;
 import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiTriggerEventResource;
 import com.n4systems.fieldid.ws.v1.resources.eventstatus.ApiEventStatusResource;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiEventTypeResource;
+import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiPlaceEventTypeResource;
 import com.n4systems.fieldid.ws.v1.resources.hello.ApiHelloResource;
 import com.n4systems.fieldid.ws.v1.resources.location.ApiPredefinedLocationResource;
 import com.n4systems.fieldid.ws.v1.resources.logging.ApiLoggingResource;
@@ -32,6 +35,7 @@ import com.n4systems.fieldid.ws.v1.resources.org.ApiOrgResource;
 import com.n4systems.fieldid.ws.v1.resources.procedure.*;
 import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedEventFormResource;
 import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedEventResource;
+import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedPlaceEventResource;
 import com.n4systems.fieldid.ws.v1.resources.search.ApiSearchResource;
 import com.n4systems.fieldid.ws.v1.resources.smartsearch.ApiSmartSearchResource;
 import com.n4systems.fieldid.ws.v1.resources.synchronization.ApiSynchronizationResource;
@@ -207,6 +211,16 @@ public class FieldIdWsConfig {
 	public ApiSavedEventResource apiSavedEventResource() {
 		return new ApiSavedEventResource();
 	}
+
+    @Bean
+    public ApiSavedPlaceEventResource apiSavedPlaceEventResource() {
+        return new ApiSavedPlaceEventResource();
+    }
+
+    @Bean
+    public ApiPlaceEventResource apiPlaceEventResource() {
+        return new ApiPlaceEventResource();
+    }
 	
 	@Bean
 	public ApiSavedEventFormResource apiSavedEventFormResource() {
@@ -277,4 +291,14 @@ public class FieldIdWsConfig {
 	public ApiEnergySourceResource apiEnergySourceResource() {
 		return new ApiEnergySourceResource();
 	}
+
+    @Bean
+    public ApiPlaceEventHistoryResource apiPlaceEventHistoryResource() {
+        return new ApiPlaceEventHistoryResource();
+    }
+
+    @Bean
+    public ApiPlaceEventTypeResource apiPlaceEventTypeResource() {
+        return new ApiPlaceEventTypeResource();
+    }
 }

@@ -6,7 +6,6 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.action.ActionsPanel;
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
 import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
-import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.eventtype.ActionTypesForTenantModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForAssetTypeModel;
@@ -25,6 +24,7 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -119,7 +119,7 @@ public class OpenActionsCell extends Panel {
 
     private DialogModalWindow createModalWindow(final IModel<ThingEvent> eventModel, final Panel eventDisplayPanel) {
         DialogModalWindow dialogWindow = new DialogModalWindow("modalWindow");
-        IModel<Event> entityModel = new EntityModel<Event>(Event.class, eventModel.getObject().getId());
+        IModel<Event> entityModel = Model.of((Event)eventModel.getObject());
         dialogWindow.setContent(new ActionsPanel(dialogWindow.getContentId(), new PropertyModel<CriteriaResult>(entityModel, "sourceCriteriaResult"), ThingEvent.class, entityModel, true, true));
         dialogWindow.setWindowClosedCallback(new ModalWindow.WindowClosedCallback() {
             @Override

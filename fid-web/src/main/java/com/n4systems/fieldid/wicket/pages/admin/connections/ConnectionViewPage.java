@@ -30,10 +30,11 @@ import java.util.TreeSet;
 
 public class ConnectionViewPage extends FieldIDAdminPage {
 
-	private final List<ActiveConnection> activeConnections = new ArrayList<>();
+	private transient List<ActiveConnection> activeConnections;
 	private boolean autoRefreshEnabled = true;
 
 	public ConnectionViewPage() {
+		activeConnections = new ArrayList<>();
 		refreshConnections();
 
 		add(new FIDFeedbackPanel("feedbackPanel"));

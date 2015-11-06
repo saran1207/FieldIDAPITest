@@ -10,8 +10,7 @@ import com.n4systems.persistence.localization.Localized;
 import com.n4systems.services.localization.LocalizationService;
 import com.n4systems.util.ServiceLocator;
 import org.apache.log4j.Logger;
-import org.hibernate.EntityMode;
-import org.hibernate.event.*;
+import org.hibernate.event.spi.*;
 import org.hibernate.persister.entity.EntityPersister;
 import org.hibernate.type.Type;
 import org.reflections.ReflectionUtils;
@@ -83,8 +82,8 @@ public class LocalizationListener implements PostLoadEventListener, PreUpdateEve
     }
 
     private void setTranslatedValue(EntityPersister persister, Saveable entity, int index, Object translation) {
-        entity.setUntranslatedValue(persister.getPropertyNames()[index], persister.getPropertyValue(entity, index, EntityMode.POJO));
-        persister.setPropertyValue(entity, index, translation, EntityMode.POJO);
+        entity.setUntranslatedValue(persister.getPropertyNames()[index], persister.getPropertyValue(entity, index));
+        persister.setPropertyValue(entity, index, translation);
     }
 
     private List<LocalizedProperty> getLocalizedProperties(Object entity, EntityPersister persister) throws Exception {

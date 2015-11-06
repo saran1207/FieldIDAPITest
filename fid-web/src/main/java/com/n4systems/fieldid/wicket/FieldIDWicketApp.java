@@ -62,6 +62,7 @@ import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusArchivedListPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusFormPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventtype.RulesPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventtypegroup.*;
 import com.n4systems.fieldid.wicket.pages.setup.loto.*;
 import com.n4systems.fieldid.wicket.pages.setup.observationcount.ObservationCountGroupPage;
@@ -157,6 +158,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/addCommentTemplate", AddCommentTemplatePage.class);
         mountPage("setup/commentTemplateList", CommentTemplateListPage.class);
         mountPage("setup/editCommentTemplate", EditCommentTemplatePage.class);
+        mountPage("setup/eventTypeRules", RulesPage.class);
 
         mountPage("setup/assetStatusArchivedList", AssetStatusListArchivedPage.class);
 

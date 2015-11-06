@@ -17,6 +17,7 @@ import org.jsoup.nodes.Document;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -434,11 +435,17 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
     private void populateResultImages(CriteriaStateView stateView, CriteriaResult result) {
         for (CriteriaResultImage resultImage: result.getCriteriaImages()) {
             try {
-                CriteriaResultImageView criteriaResultImageView = new CriteriaResultImageView();
-                criteriaResultImageView.setComments(resultImage.getComments());
-                criteriaResultImageView.setImage(s3Service.openCriteriaResultImageMedium(resultImage));
-                criteriaResultImageView.setImageUrl(s3Service.getCriteriaResultImageMediumURL(resultImage));
-                stateView.getCriteriaImages().add(criteriaResultImageView);
+                InputStream imageContents = s3Service.openCriteriaResultImageMedium(resultImage);
+
+                if(imageContents != null) {
+                    CriteriaResultImageView criteriaResultImageView = new CriteriaResultImageView();
+                    criteriaResultImageView.setComments(resultImage.getComments());
+                    criteriaResultImageView.setImage(imageContents);
+                    criteriaResultImageView.setImageUrl(s3Service.getCriteriaResultImageMediumURL(resultImage));
+                    stateView.getCriteriaImages().add(criteriaResultImageView);
+                } else {
+                    logger.warn("Image could not be located in S3 for CriteriaResultImage with ID " + resultImage.getId());
+                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

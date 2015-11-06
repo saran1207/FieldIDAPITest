@@ -5,7 +5,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.components.image.ArrowStyleEditorAndGalleryPanel;
+import com.n4systems.fieldid.wicket.components.image.AnnotationEditorAndGalleryPanel;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.components.text.LabelledComboBox;
 import com.n4systems.fieldid.wicket.components.text.LabelledTextArea;
@@ -73,7 +73,7 @@ public class IsolationPointEditor extends Panel {
         titleContainer.add(new Label("title", getTitleModel()));
         add(titleContainer);
 
-        add(modal = new FIDModalWindow("modal", getDefaultModel(), 835, 500));
+        add(modal = new FIDModalWindow("modal", getDefaultModel(), 835, 525));
         modal.setTitle(new StringResourceModel("label.isolation_point_images", this, null));
 
         add(form = new Form("form"));
@@ -83,6 +83,7 @@ public class IsolationPointEditor extends Panel {
 
         OnChangeAjaxBehavior onChangeAjaxBehavior = new OnChangeAjaxBehavior()
         {
+            @SuppressWarnings("unchecked")
             @Override
             protected void onUpdate(AjaxRequestTarget target)
             {
@@ -163,7 +164,6 @@ public class IsolationPointEditor extends Panel {
                 closeEditor(target);
             }
         });
-
     }
 
     private IsolationPointImagePanel getIsolationPointImagePanel(ProcedureDefinition procedureDefinition) {
@@ -187,8 +187,9 @@ public class IsolationPointEditor extends Panel {
         };
     }
 
+    @SuppressWarnings("unchecked")
     protected Component createImageGallery(String id) {
-            return new ArrowStyleEditorAndGalleryPanel(id,
+            return new AnnotationEditorAndGalleryPanel(id,
                                       (IModel<IsolationPoint>)getDefaultModel(),
                                       procedureDefinition.getAnnotationType()) {
 

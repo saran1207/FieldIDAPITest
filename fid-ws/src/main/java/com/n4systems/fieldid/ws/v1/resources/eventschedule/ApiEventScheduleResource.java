@@ -129,8 +129,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Thin
 				logger.warn("Failed Deleting Event Schedule. Inative Event " + eventScheduleId);
 			}
 		} else {
-			logger.error("Failed Deleting Event Schedule. Unable to find Event " + eventScheduleId);
-        	throw new NotFoundException("Event",eventScheduleId);
+			logger.warn("Failed Deleting Event Schedule. Unable to find Event " + eventScheduleId);
 		}
 	}
 

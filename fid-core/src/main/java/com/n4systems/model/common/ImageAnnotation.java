@@ -31,6 +31,10 @@ public class ImageAnnotation extends EntityWithTenant {
 
     private String stroke;
 
+    //We want this to default to true when we create a new Annotation... by default, boolean values initialize as false.
+    @Column(name="render_annotation")
+    private boolean renderAnnotation = true;
+
     @Transient
     private Long tempId;
 
@@ -147,5 +151,13 @@ public class ImageAnnotation extends EntityWithTenant {
             return x != 0 && y != 0;
         else
             return x != 0 && y != 0 && x_tail != 0 && y_tail != 0;
+    }
+
+    public boolean isRenderAnnotation() {
+        return renderAnnotation;
+    }
+
+    public void setRenderAnnotation(boolean renderAnnotation) {
+        this.renderAnnotation = renderAnnotation;
     }
 }

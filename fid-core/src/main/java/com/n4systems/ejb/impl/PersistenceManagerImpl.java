@@ -1,28 +1,5 @@
 package com.n4systems.ejb.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-
-import org.apache.log4j.Logger;
-import org.hibernate.LockMode;
-import org.hibernate.Session;
-import org.hibernate.collection.AbstractPersistentCollection;
-import org.hibernate.exception.ConstraintViolationException;
-import org.hibernate.impl.SessionImpl;
-import org.hibernate.stat.Statistics;
-
 import com.n4systems.ejb.PerformSearchRequiringTransaction;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.EntityStillReferencedException;
@@ -50,6 +27,20 @@ import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.SelectClause;
 import com.n4systems.util.persistence.search.BaseSearchDefiner;
+import org.apache.log4j.Logger;
+import org.hibernate.LockMode;
+import org.hibernate.Session;
+import org.hibernate.collection.internal.AbstractPersistentCollection;
+import org.hibernate.exception.ConstraintViolationException;
+import org.hibernate.internal.SessionImpl;
+import org.hibernate.stat.Statistics;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class PersistenceManagerImpl implements PersistenceManager {
 	private Logger logger = Logger.getLogger(PersistenceManagerImpl.class);

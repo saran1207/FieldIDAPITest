@@ -11,10 +11,7 @@ import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
-import com.n4systems.fieldid.wicket.pages.event.CloseEventPage;
-import com.n4systems.fieldid.wicket.pages.event.EditEventPage;
-import com.n4systems.fieldid.wicket.pages.event.QuickEventPage;
-import com.n4systems.fieldid.wicket.pages.event.ThingEventSummaryPage;
+import com.n4systems.fieldid.wicket.pages.event.*;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
 import com.n4systems.fieldid.wicket.pages.masterevent.EditMasterEventPage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunLastReportPage;
@@ -36,6 +33,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.IRequestCycle;
 import org.apache.wicket.request.UrlEncoder;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.file.Files;
@@ -107,7 +105,10 @@ public class EventActionsCell extends Panel {
             }
         };
 
-        NonWicketLink startEventLink = new NonWicketLink("startEventLink", "selectEventAdd.action?scheduleId=" + event.getId() + "&type=" + event.getType().getId() + "&assetId=" + event.getAsset().getId());
+        BookmarkablePageLink startEventLink = new BookmarkablePageLink<Void>("startEventLink", StartRegularOrMasterEventPage.class,
+                new PageParameters().add("type", event.getType().getId()).add("assetId", event.getAsset().getId()));
+
+
         BookmarkablePageLink viewSchedulesLink = new BookmarkablePageLink("viewLink", AssetEventsPage.class, PageParametersBuilder.uniqueId(event.getAsset().getId()));
 
         AjaxLink deleteScheduleLink = new AjaxLink<Void>("deleteScheduleLink") {

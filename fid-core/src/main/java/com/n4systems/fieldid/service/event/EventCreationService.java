@@ -43,9 +43,13 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
     @Autowired protected AssignmentEscalationRuleService ruleService;
 
     @Transactional
-    @SuppressWarnings("unchecked")
     public T createEventWithSchedules(T event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle<V>> schedules) {
-        T savedEvent = createEvent(event, scheduleId, fileData, uploadedFiles);
+        return createEventWithSchedules(event, scheduleId, fileData, uploadedFiles, schedules, true);
+    }
+
+    @Transactional
+    public T createEventWithSchedules(T event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle<V>> schedules, Boolean cleanUpCriteriaImages) {
+        T savedEvent = createEvent(event, scheduleId, fileData, uploadedFiles, cleanUpCriteriaImages);
         for (EventScheduleBundle<V> eventScheduleBundle : schedules) {
             T openEvent = createEvent();
             openEvent.setTenant(eventScheduleBundle.getTarget().getTenant());
@@ -66,15 +70,22 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
 
     @Transactional
     public T createEvent(T event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) {
+        return createEvent(event, scheduleId, fileData, uploadedFiles, true);
+    }
+
+
+        @Transactional
+    public T createEvent(T event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, Boolean cleanUpCriteriaImages) {
         defaultOneClickResultsWithNullState(event.getResults());
+        if(event.getSubEvents() != null) {
+            event.getSubEvents().forEach(subEvent -> defaultOneClickResultsWithNullState(subEvent.getResults()));
+        }
 
         EventResult calculatedEventResult = calculateEventResultAndScore(event);
 
         if (event.getEventResult() == null || event.getEventResult() == EventResult.VOID) {
             event.setEventResult(calculatedEventResult);
         }
-
-        User user = getCurrentUser();
 
         event.setWorkflowState(WorkflowState.COMPLETED);
 
@@ -116,18 +127,13 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
 
             for (CriteriaResult result : event.getResults()) {
                 for (Event action : result.getActions()) {
-                    Long id = persistenceService.save(action);
-
                     //Make sure that we clear and create rules for any open Actions.
                     if(action.getWorkflowState().equals(WorkflowState.OPEN)) {
-                        Event savedAction = persistenceService.find(Event.class, id);
-                        ruleService.clearEscalationRulesForEvent(id);
-                        ruleService.createApplicableQueueItems(savedAction);
+                        ruleService.clearEscalationRulesForEvent(action.getId());
+                        ruleService.createApplicableQueueItems(action);
                     }
                 }
             }
-
-            event = persistenceService.update(event);
 
             restoreTemporarySignatureFiles(event, rememberedSignatureMap);
             restoreCriteriaImages(event, rememberedCriteriaImages);
@@ -142,11 +148,11 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
         // writeSignatureImagesToDisk MUST be called after persistenceManager.save(parameterObject.event, parameterObject.userId) as an
         // event id is required to build the save path
         writeSignatureImagesToDisk(event);
-		saveCriteriaResultImages(event);
+		saveCriteriaResultImages(event, cleanUpCriteriaImages);
 
         processUploadedFiles(event, uploadedFiles);
 
-        if(user.isUsageBasedUser()) {
+        if(getCurrentUser().isUsageBasedUser()) {
             int eventCount = event.getSubEvents().size() + 1;
             tenantSettingsService.decrementUsageBasedEventCount(eventCount);
         }
@@ -312,7 +318,7 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
         preUpdateEvent(event, fileData);
 
         writeSignatureImagesToDisk(event);
-        saveCriteriaResultImages(event);
+        saveCriteriaResultImages(event, true);
         setAllTriggersForActions(event);
 
         event.getAttachments().clear();
@@ -378,22 +384,37 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
     protected abstract void preUpdateEvent(T event, FileDataContainer fileData);
     protected abstract void postUpdateEvent(T event, FileDataContainer fileData);
 
-    private void saveCriteriaResultImages(T event) {
-		saveCriteriaResultImages(event.getResults());
+    private void saveCriteriaResultImages(T event, Boolean cleanUpCriteriaImages) {
+		saveCriteriaResultImages(event.getResults(), cleanUpCriteriaImages);
 		for (SubEvent subEvent: event.getSubEvents()) {
-			saveCriteriaResultImages(subEvent.getResults());
+			saveCriteriaResultImages(subEvent.getResults(), cleanUpCriteriaImages);
 		}
 	}
 
-	private void saveCriteriaResultImages(Collection<CriteriaResult> results) {
+	private void saveCriteriaResultImages(Collection<CriteriaResult> results, Boolean cleanUpCriteriaImages) {
+
 		for (CriteriaResult result: results) {
 			for (CriteriaResultImage criteriaResultImage: result.getCriteriaImages()) {
                 if (criteriaResultImage.getTempFileName() != null) {
-				    s3Service.finalizeCriteriaResultImageUpload(criteriaResultImage);
+                    if (cleanUpCriteriaImages) {
+				        s3Service.finalizeCriteriaResultImageUpload(criteriaResultImage);
+                    } else {
+                        s3Service.finalizeMultiCriteriaResultImageUpload(criteriaResultImage);
+                    }
                 }
 			}
 		}
 	}
+
+    public void cleanUpMultiEventCriteriaImages(Collection<CriteriaResult> results) {
+        for (CriteriaResult result: results) {
+            for (CriteriaResultImage criteriaResultImage: result.getCriteriaImages()) {
+                if (criteriaResultImage.getTempFileName() != null) {
+                    s3Service.removeTempAfterMassUpload(criteriaResultImage);
+                }
+            }
+        }
+    }
 
 	private void defaultOneClickResultsWithNullState(Collection<CriteriaResult> results) {
 		for (CriteriaResult result: results) {

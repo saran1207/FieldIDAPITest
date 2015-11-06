@@ -2,7 +2,6 @@ package com.n4systems.fieldid.wicket.pages.massevent;
 
 import com.n4systems.ejb.impl.EventScheduleBundle;
 import com.n4systems.fieldid.service.event.ThingEventCreationService;
-import com.n4systems.fieldid.wicket.components.event.prooftest.ProofTestEditPanel;
 import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForAssetTypeModel;
 import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
@@ -76,7 +75,8 @@ public abstract class ThingMultiEventPage extends MultiEventPage<ThingEvent> {
     @Override
     protected void onPreSave(ThingEvent event) {
         //if prooftest is null, then no need to "save" it
-        if(proofTestInfo.getObject().getProofTestType() == null){
+        if(proofTestInfo.getObject() == null || proofTestInfo.getObject().getProofTestType() == null){
+            event.setProofTestInfo(null);
             return;
         }
 

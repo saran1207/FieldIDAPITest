@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.utils;
 
 import com.n4systems.model.*;
+import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.utils.AssetEvent;
 
@@ -19,7 +20,10 @@ public class CopyEventFactory {
 		newEvent.setAssignedTo(event.getAssignedTo());
 		newEvent.setOwner( event.getOwner() );
 		newEvent.setBook( event.getBook() );
-		newEvent.setPerformedBy( event.getPerformedBy() );
+		//CHECK THE ORIGINAL MODEL
+		if (!(event.getPerformedBy() == null)) {
+			newEvent.setPerformedBy(event.getPerformedBy());
+		}
 		newEvent.setAdvancedLocation(event.getAdvancedLocation());
 		newEvent.setPrintable( event.isPrintable() );
 		if( event.isRetired() ) {
@@ -50,19 +54,23 @@ public class CopyEventFactory {
 	}
 
     public static void copyEventForMassEvents(ThingEvent copyTo, ThingEvent copyFrom) {
-        copyAbstractEventWithOutEntity(copyTo, copyFrom);
-
+		copyAbstractEventWithOutEntity(copyTo, copyFrom);
         copyTo.setAssetStatus(copyFrom.getAssetStatus());
-        copyTo.setPerformedBy( copyFrom.getPerformedBy() );
-        copyTo.setDate( ( copyFrom.getDate() != null ) ? new Date( copyFrom.getDate().getTime() ) : null );
-        copyTo.setSectionResults(copyFrom.getSectionResults());
-        copyTo.setEventResult(copyFrom.getEventResult());
-        copyTo.setSubEvents( copySubEvents( copyFrom.getSubEvents() ) );
-        copyTo.setEventForm(copyFrom.getEventForm());
-        copyTo.setEventStatus(copyFrom.getEventStatus());
-        copyTo.setWorkflowState(copyFrom.getWorkflowState());
-        copyTo.setDueDate(copyFrom.getDueDate());
-        copyTo.setProject(copyFrom.getProject());
+
+		//CHECK THE ORIGINAL MODEL
+		if (!(copyFrom.getPerformedBy() == null)) {
+			copyTo.setPerformedBy(copyFrom.getPerformedBy());
+		}
+
+		copyTo.setDate((copyFrom.getDate() != null) ? new Date(copyFrom.getDate().getTime()) : null);
+		copyTo.setSectionResults(copyFrom.getSectionResults());
+		copyTo.setEventResult(copyFrom.getEventResult());
+		copyTo.setSubEvents(copySubEvents(copyFrom.getSubEvents()));
+		copyTo.setEventForm(copyFrom.getEventForm());
+		copyTo.setEventStatus(copyFrom.getEventStatus());
+		copyTo.setWorkflowState(copyFrom.getWorkflowState());
+		copyTo.setDueDate(copyFrom.getDueDate());
+		copyTo.setProject(copyFrom.getProject());
     }
 
 	protected static List<SubEvent> copySubEvents( List<SubEvent> oldSubEvents) {
@@ -99,8 +107,6 @@ public class CopyEventFactory {
 
 
     protected static void copyAbstractEventWithOutEntity( AbstractEvent newEvent, AbstractEvent originalEvent) {
-        //copyEntity(newEvent, originalEvent);
-
         newEvent.setType( originalEvent.getType() );
         newEvent.setComments( originalEvent.getComments() );
         newEvent.setEventForm( originalEvent.getEventForm() );
@@ -108,7 +114,7 @@ public class CopyEventFactory {
         newEvent.setAttachments( copyFileAttachments( originalEvent.getAttachments() ) );
         newEvent.setInfoOptionMap( new HashMap<String, String>( originalEvent.getInfoOptionMap() ) );
 
-        newEvent.setCriteriaResults( copyCriteriaResults( originalEvent.getResults(), newEvent) );
+        newEvent.setCriteriaResults( copyCriteriaResultsWithOutId(originalEvent.getResults(), newEvent) );
         newEvent.setEditable(originalEvent.isEditable());
         newEvent.setEventStatus(originalEvent.getEventStatus());
     }
@@ -151,7 +157,61 @@ public class CopyEventFactory {
 		newEntity.setModifiedBy( oldEntity.getModifiedBy() );
 		newEntity.setTenant( oldEntity.getTenant() );
 	}
-	
+
+	protected static Set<CriteriaResult> copyCriteriaResultsWithOutId( Set<CriteriaResult> oldResults, AbstractEvent newEvent) {
+		Set<CriteriaResult> newResults = new HashSet<CriteriaResult>();
+
+		for( CriteriaResult oldResult : oldResults ) {
+			CriteriaResult newResult = createBasicCopy(oldResult);
+
+			newResult.setCreated( oldResult.getCreated());
+			newResult.setModified( oldResult.getModified());
+			newResult.setModifiedBy( oldResult.getModifiedBy() );
+			newResult.setTenant( oldResult.getTenant() );
+
+			newResult.setCriteria( oldResult.getCriteria() );
+			newResult.setEvent(newEvent);
+			newResult.setRecommendations( copyRecommendations( oldResult.getRecommendations() ) );
+			newResult.setDeficiencies( copyDeficiencies( oldResult.getDeficiencies() ) );
+
+			//Copying Actions
+			List<Event> actions = oldResult.getActions();
+			List<Event> copyActions = new ArrayList<>();
+			for(Event action:actions) {
+				ThingEvent event = new ThingEvent();
+				event.setDueDate(action.getDueDate());
+				event.setAssignedUserOrGroup(action.getAssignedUserOrGroup());
+				event.setType(action.getType());
+				event.setPriority(action.getPriority());
+				event.setNotes(action.getNotes());
+				event.setSendEmailOnUpdate(action.isSendEmailOnUpdate());
+				event.setWorkflowState(WorkflowState.OPEN);
+				copyActions.add(event);
+			}
+			newResult.setActions(copyActions);
+
+			//Copying Images
+			List<CriteriaResultImage> images = oldResult.getCriteriaImages();
+			List<CriteriaResultImage> copyList = new ArrayList<>();
+			for(CriteriaResultImage image:images) {
+				CriteriaResultImage temp = new CriteriaResultImage();
+				temp.setTempFileName(image.getTempFileName());
+				temp.setMd5sum(image.getMd5sum());
+				temp.setFileName(image.getFileName());
+				temp.setCriteriaResult(newResult);
+				temp.setComments(image.getComments());
+				temp.setContentType(image.getContentType());
+				copyList.add(temp);
+			}
+			newResult.setCriteriaImages(copyList);
+
+			newResults.add( newResult );
+		}
+
+		return newResults;
+	}
+
+
 	protected static Set<CriteriaResult> copyCriteriaResults( Set<CriteriaResult> oldResults, AbstractEvent newEvent) {
 		Set<CriteriaResult> newResults = new HashSet<CriteriaResult>();
 		
@@ -162,11 +222,38 @@ public class CopyEventFactory {
 			newResult.setEvent(newEvent);
 			newResult.setRecommendations( copyRecommendations( oldResult.getRecommendations() ) );
 			newResult.setDeficiencies( copyDeficiencies( oldResult.getDeficiencies() ) );
-            newResult.setActions( oldResult.getActions() );
-            newResult.setCriteriaImages( oldResult.getCriteriaImages() );
-			
+
+			//Copying Actions
+			List<Event> actions = oldResult.getActions();
+			List<Event> copyActions = new ArrayList<>();
+			for(Event action:actions) {
+				ThingEvent event = new ThingEvent();
+				event.setDueDate(action.getDueDate());
+				event.setAssignedUserOrGroup(action.getAssignedUserOrGroup());
+				event.setType(action.getType());
+				event.setPriority(action.getPriority());
+				event.setNotes(action.getNotes());
+				event.setSendEmailOnUpdate(action.isSendEmailOnUpdate());
+				copyActions.add(event);
+			}
+			newResult.setActions(copyActions);
+
+			//Copying Images
+			List<CriteriaResultImage> images = oldResult.getCriteriaImages();
+			List<CriteriaResultImage> copyList = new ArrayList<>();
+			for(CriteriaResultImage image:images) {
+				CriteriaResultImage temp = new CriteriaResultImage();
+				temp.setTempFileName(image.getTempFileName());
+				temp.setMd5sum(image.getMd5sum());
+				temp.setFileName(image.getFileName());
+				temp.setCriteriaResult(newResult);
+				temp.setComments(image.getComments());
+				temp.setContentType(image.getContentType());
+				copyList.add(temp);
+			}
+			newResult.setCriteriaImages(copyList);
+
 			newResults.add( newResult );
-			
 		}
 
 		return newResults;
@@ -198,6 +285,7 @@ public class CopyEventFactory {
             SignatureCriteriaResult signatureResult = new SignatureCriteriaResult();
             signatureResult.setSigned(((SignatureCriteriaResult) oldResult).isSigned());
             signatureResult.setImage(((SignatureCriteriaResult) oldResult).getImage());
+			signatureResult.setTemporaryFileId(((SignatureCriteriaResult) oldResult).getTemporaryFileId());
             return signatureResult;
         } else if (oldResult instanceof DateFieldCriteriaResult) {
         	DateFieldCriteriaResult dateFieldResult = new DateFieldCriteriaResult();
@@ -209,7 +297,15 @@ public class CopyEventFactory {
             return scoreResult;
         } else if (oldResult instanceof ObservationCountCriteriaResult) {
 			ObservationCountCriteriaResult observationCountCriteriaResult = new ObservationCountCriteriaResult();
-			observationCountCriteriaResult.setObservationCountResults(((ObservationCountCriteriaResult) oldResult).getObservationCountResults());
+			List<ObservationCountResult> finalList = new ArrayList<>();
+			for(ObservationCountResult old:(((ObservationCountCriteriaResult) oldResult).getObservationCountResults())) {
+				ObservationCountResult temp = new ObservationCountResult();
+				temp.setObservationCount(old.getObservationCount());
+				temp.setValue(old.getValue());
+				temp.setTenant(old.getTenant());
+				finalList.add(temp);
+			}
+			observationCountCriteriaResult.setObservationCountResults(finalList);
 			return observationCountCriteriaResult;
 		} else if (oldResult instanceof NumberFieldCriteriaResult) {
         	NumberFieldCriteriaResult numberFieldResult = new NumberFieldCriteriaResult();

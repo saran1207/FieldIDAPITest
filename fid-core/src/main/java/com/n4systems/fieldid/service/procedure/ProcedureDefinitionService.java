@@ -7,6 +7,7 @@ import com.n4systems.exceptions.loto.AnnotatedImageGenerationException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.service.uuid.AtomicLongService;
@@ -49,6 +50,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     @Autowired private AtomicLongService atomicLongService;
     @Autowired private RecurringScheduleService recurringScheduleService;
     @Autowired private SvgGenerationService svgGenerationService;
+    @Autowired private AssetService assetService;
 
 
     public Boolean hasPublishedProcedureDefinition(Asset asset) {
@@ -149,6 +151,10 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
             procedureDefinition.setFamilyId(generateFamilyId(procedureDefinition.getAsset()));
         }
 
+        //increase the count if it's a newly created procedure definition
+        if(procedureDefinition.getID() == null) {
+            assetService.increaseProcedureCount(procedureDefinition.getAsset());
+        }
         persistenceService.saveOrUpdate(procedureDefinition);
         for (ProcedureDefinitionImage image:procedureDefinition.getImages()) {
             s3Service.finalizeProcedureDefinitionImageUpload(image);
@@ -174,6 +180,10 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
       procedureDefinition.setRejectedDate(dateService.nowUTC().toDate());
       procedureDefinition.setRejectedReason(rejectedReason);
       persistenceService.update(procedureDefinition);
+      //increase the count if it's a newly created procedure definition
+      if(procedureDefinition.getID() == null) {
+          assetService.increaseProcedureCount(procedureDefinition.getAsset());
+      }
 
     }
 
@@ -764,10 +774,15 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
                 previousDefinition.setPublishedState(PublishedState.PREVIOUSLY_PUBLISHED);
                 previousDefinition.setRetireDate(dateService.nowUTC().toDate());
                 persistenceService.update(previousDefinition);
+                assetService.decreaseProcedureCount(previousDefinition.getAsset());
             }
             definition.setPublishedState(PublishedState.PUBLISHED);
             definition.setOriginDate(dateService.nowUTC().toDate());
             persistenceService.update(definition);
+            //increase the count if it's a newly created procedure definition
+            if(definition.getID() == null) {
+                assetService.increaseProcedureCount(definition.getAsset());
+            }
         } catch (Exception e) {
             logger.error("Failed to generate annotated svgs for Procedure Definition:" + definition.getId());
             throw new AnnotatedImageGenerationException(e);
@@ -822,6 +837,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         definition.setUnpublishedDate(dateService.nowUTC().toDate());
         definition.setUnpublishedBy(getCurrentUser());
         persistenceService.update(definition);
+        assetService.decreaseProcedureCount(definition.getAsset());
     }
 
     public boolean isCurrentUserAuthor(ProcedureDefinition definition) {
@@ -1253,6 +1269,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
 
         procedureDefinition.archiveEntity();
         persistenceService.update(procedureDefinition);
+        assetService.decreaseProcedureCount(procedureDefinition.getAsset());
     }
 
     public boolean hasMainProcedureType(Asset asset){

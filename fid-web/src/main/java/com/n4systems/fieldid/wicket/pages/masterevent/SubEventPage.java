@@ -17,14 +17,10 @@ import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.event.target.AssetDetailsPanel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.*;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -64,15 +60,15 @@ public abstract class SubEventPage extends FieldIDTemplatePage {
 
             add(new AssetDetailsPanel("targetDetailsPanel", ProxyModel.of(event, on(SubEvent.class).getAsset())));
 
-            add(new Comment("comments", new PropertyModel<String>(event, "comments")).addMaxLengthValidation(5000));
+            add(new Comment("comments", new PropertyModel<>(event, "comments")).addMaxLengthValidation(5000));
 
             EventForm form = event.getObject().getEventForm();
             add(new EventFormEditPanel("eventFormPanel",
                     event,
-                    new PropertyModel<List<AbstractEvent.SectionResults>>(SubEventPage.this, "sectionResults"),
+                    new PropertyModel<>(SubEventPage.this, "sectionResults"),
                     isActionButtonsVisible()).setVisible(form != null && form.getAvailableSections().size() > 0));
             //TODO set to visible once EventCreationService can save sub event attachments
-            add(new AttachmentsPanel("attachmentsPanel", new PropertyModel<List<FileAttachment>>(SubEventPage.this, "fileAttachments")).setVisible(false));
+            add(new AttachmentsPanel("attachmentsPanel", new PropertyModel<>(SubEventPage.this, "fileAttachments")).setVisible(false));
 
             Button saveButton = new Button("saveButton");
             saveButton.add(new DisableNavigationConfirmationBehavior());
@@ -96,7 +92,7 @@ public abstract class SubEventPage extends FieldIDTemplatePage {
         protected void onValidate() {
             List<AbstractEvent.SectionResults> results =  event.getObject().getSectionResults();
 
-            RequiredCriteriaValidator.validate(results).stream().forEach(message -> error(message));
+            RequiredCriteriaValidator.validate(results).stream().forEach(this::error);
         }
 
         @Override

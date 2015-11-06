@@ -20,6 +20,8 @@ public class ApiCriteriaResultConverter extends FieldIdPersistenceService {
 	public ApiCriteriaResult convert(CriteriaResult criteriaResult, Long eventId) {
 		ApiCriteriaResult apiResult = new ApiCriteriaResult();
 
+        //Return the opposite of the retured value... so if the criteria IS retired, then the result is NOT active.
+        apiResult.setActive(!criteriaResult.getCriteria().isRetired());
 		apiResult.setSid(criteriaResult.getMobileId());
 		apiResult.setCriteriaId(criteriaResult.getCriteria().getId());
 		apiResult.setRecommendations(criteriaResult.getRecommendations().stream().map(this::convertObservation).collect(Collectors.toList()));
@@ -31,23 +33,28 @@ public class ApiCriteriaResultConverter extends FieldIdPersistenceService {
 				if(oneClickResult.getButton() != null){
 					apiResult.setOneClickValue(oneClickResult.getButton().getId());
 				}
+                apiResult.setType("ONECLICK");
 				break;
 			case TEXT_FIELD:
 				TextFieldCriteriaResult textFieldResult = (TextFieldCriteriaResult)criteriaResult;
 				apiResult.setTextValue(textFieldResult.getValue());
+                apiResult.setType("TEXTFIELD");
 				break;
 			case COMBO_BOX:
 				ComboBoxCriteriaResult comboResult = (ComboBoxCriteriaResult)criteriaResult;
 				apiResult.setComboBoxValue(comboResult.getValue());
+                apiResult.setType("COMBOBOX");
 				break;
 			case SELECT:
 				SelectCriteriaResult selectResult = (SelectCriteriaResult)criteriaResult;
 				apiResult.setSelectValue(selectResult.getValue());
-				break;
+                apiResult.setType("SELECTBOX");
+                break;
 			case UNIT_OF_MEASURE:
 				UnitOfMeasureCriteriaResult uomResult = (UnitOfMeasureCriteriaResult)criteriaResult;
 				apiResult.setUnitOfMeasurePrimaryValue(uomResult.getPrimaryValue());
 				apiResult.setUnitOfMeasureSecondaryValue(uomResult.getSecondaryValue());
+                apiResult.setType("UNITOFMEASURE");
 				break;
 			case SIGNATURE:
 				SignatureCriteriaResult signatureResult = (SignatureCriteriaResult)criteriaResult;
@@ -59,18 +66,22 @@ public class ApiCriteriaResultConverter extends FieldIdPersistenceService {
 						logger.warn("Failed loading signature image for event: " + eventId, ex);
 					}
 				}
+                apiResult.setType("SIGNATURE");
 				break;
 			case DATE_FIELD:
 				DateFieldCriteriaResult dateResult = (DateFieldCriteriaResult)criteriaResult;
 				apiResult.setDateValue(dateResult.getValue());
+                apiResult.setType("DATEFIELD");
 				break;
 			case SCORE:
 				ScoreCriteriaResult scoreResult = (ScoreCriteriaResult)criteriaResult;
 				apiResult.setScoreValue(scoreResult.getScore().getId());
+                apiResult.setType("SCORE");
 				break;
 			case NUMBER_FIELD:
 				NumberFieldCriteriaResult numberResult = (NumberFieldCriteriaResult)criteriaResult;
 				apiResult.setNumberValue(numberResult.getValue());
+                apiResult.setType("NUMBERFIELD");
 				break;
 			case OBSERVATION_COUNT:
 				ObservationCountCriteriaResult observationCountResultCriteria = (ObservationCountCriteriaResult)criteriaResult;
@@ -98,6 +109,7 @@ public class ApiCriteriaResultConverter extends FieldIdPersistenceService {
 				});
 
 				apiResult.setObservationCountValue(apiObservationCountResultList);
+                apiResult.setType("OBSERVATION_COUNT");
 				break;
 			default:
 				throw new InternalServerErrorException("Unhandled Criteria type: " + criteriaResult.getCriteria().getCriteriaType().name());

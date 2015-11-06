@@ -90,7 +90,7 @@ public class FilterPanel extends Panel {
         typeFilterOptions.setOutputMarkupPlaceholderTag(true);
         typeFilterOptions.setVisible(false);
 
-        typeFilterOptions.add(new FidDropDownChoice<EventType>("eventTypeSelect", placeService.getEventTypesFor(orgModel.getObject())));
+        typeFilterOptions.add(new FidDropDownChoice<EventType>("eventTypeSelect", placeService.getAllEventTypes()));
 
         add(new AjaxCheckBox("openCheckbox", new PropertyModel<Boolean>(this, "open")) {
             @Override

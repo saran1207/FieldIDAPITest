@@ -23,6 +23,7 @@ public class ApiCriteriaResult extends ApiReadWriteModel {
     //NOTE: This is not actually the value but the id of the score entity
 	private Long scoreValue;
     private List<ApiObservationCountResult> observationCountValue = new ArrayList<>();
+    private String type;
 
 	public Long getCriteriaId() {
 		return criteriaId;
@@ -134,5 +135,13 @@ public class ApiCriteriaResult extends ApiReadWriteModel {
 
     public void setObservationCountValue(List<ApiObservationCountResult> observationCountValue) {
         this.observationCountValue = observationCountValue;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

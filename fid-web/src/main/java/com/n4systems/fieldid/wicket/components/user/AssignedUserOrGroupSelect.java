@@ -27,9 +27,24 @@ public class AssignedUserOrGroupSelect extends Panel {
 
         super(id);
 
+        //We should be using new ListableChoiceRenderer<Assignable>() here but there is seems to be a hibernate proxy problem :(
+        IChoiceRenderer<Assignable> wrappedRenderer = new IChoiceRenderer<Assignable>() {
+            @Override
+            public Object getDisplayValue(Assignable object) {
+                return object.getDisplayName();
+            }
+
+            @Override
+            public String getIdValue(Assignable object, int index) {
+                if(object.getId() == null) {
+                    return ((User)object).getId() + "";
+                } else
+                return object.getId() + "";
+            }
+        };
+
         IChoiceRenderer<Assignable> unassignedOrAssigneeRenderer =
-                new BlankOptionChoiceRenderer<Assignable>(new FIDLabelModel("label.unassigned"),
-                        new ListableChoiceRenderer<Assignable>(), UnassignedIndicator.UNASSIGNED);
+                new BlankOptionChoiceRenderer<Assignable>(new FIDLabelModel("label.unassigned"), wrappedRenderer, UnassignedIndicator.UNASSIGNED);
 
         if (!userGroupsModel.getObject().isEmpty()) {
             add(new GroupedDropDownChoice<Assignable, Class>("assigneeSelect", assigneeModel, assigneesModel, unassignedOrAssigneeRenderer) {

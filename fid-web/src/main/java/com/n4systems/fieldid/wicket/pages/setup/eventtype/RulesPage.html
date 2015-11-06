@@ -1,0 +1,28 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+
+    <div wicket:id="feedbackPanel"/>
+
+    <table class="list">
+        <tr>
+            <th><wicket:message key="label.event_result_is"/></th>
+            <th><wicket:message key="label.assetstatus"/></th>
+            <th>&nbsp;</th>
+        </tr>
+        <tr wicket:id="result">
+                <td><label wicket:id="resultLabel"/></td>
+                <td>
+                    <label wicket:id="statusLabel"/>
+                    <form wicket:id="form">
+                        <select wicket:id="selectStatus"/>
+                        <a class="btn-secondary" wicket:id="saveLink"><wicket:message key="label.save"/></a>
+                    </form>
+                </td>
+                <td>
+                    <a class="btn-secondary" wicket:id="editLink"><wicket:message key="label.edit"/></a>
+                </td>
+        </tr>
+    </table>
+
+</wicket:extend>
+</html>

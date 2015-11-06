@@ -4,129 +4,141 @@
 <form wicket:id="systemSettingsForm" class="crudForm pageSection largeForm">
     <div wicket:id="feedbackPanel">
     </div>
-		<div class="sectionContent">
-		
-            <h2><wicket:message key="label.dateformat_heading"/></h2>
-            <div class="dateFormat padded">
-				<label class="labelDescription" wicket:for="dateFormat">
-					<wicket:message key="label.preferred_date_format" />
-				</label>
-	    		<select wicket:id="dateFormat"/>
-			</div>			
+		<fieldset class="sectionContent">
 
-            <h2><wicket:message key="label.extendedOptions_heading"/></h2>
-			<div class="extendedOption separatedField labelDescription">
-				<label>
+			<fieldset class="form">
+				<legend><wicket:message key="label.dateformat_heading"/></legend>
+				<div class="control-group">
+					<label class="labelDescription" wicket:for="dateFormat">
+						<wicket:message key="label.preferred_date_format" />
+					</label>
+					<select wicket:id="dateFormat"/>
+				</div>
+			</fieldset>
+
+			<fieldset class="form-horizontal extended-options">
+				<legend><wicket:message key="label.extendedOptions_heading"/></legend>
+				<div class="control-group">
 					<input type="checkbox" wicket:id="assignedTo" />
-					<wicket:message key="label.enable_asset_assignment"/>
-				</label>
-				<p><wicket:message key="label.enable_asset_assignment_desc"/></p>				
-			</div>
-			
-			<div class="extendedOption separatedField labelDescription">
-				<label>
+					<label class="label">
+						<wicket:message key="label.enable_asset_assignment"/>
+					</label>
+					<p><wicket:message key="label.enable_asset_assignment_desc"/></p>
+				</div>
+
+				<div class="control-group">
 					<input type="checkbox" wicket:id="proofTestIntegration" />
-					<span><wicket:message key="label.enable_proof_test_integration"/></span>
-				</label>
-				<p><wicket:message key="label.enable_proof_test_integration_desc"/></p>				
-			</div>
+					<label class="label">
+						<wicket:message key="label.enable_proof_test_integration"/>
+					</label>
+					<p><wicket:message key="label.enable_proof_test_integration_desc"/></p>
+				</div>
 
-			<div class="extendedOption separatedField labelDescription">
-				<label>
+				<div class="control-group">
 					<input type="checkbox" wicket:id="manufacturerCertificate"/>
-					<span><wicket:message key="label.enable_manufacturer_certificate"/></span>
-				</label>
-				<p><wicket:message key="label.manufacturer_certificate_field_description"/></p>				
-			</div>
-			
-			<div wicket:id="orderDetailsOption" class="extendedOption labelDescription">
-				<label>
-					<input type="checkbox" wicket:id="orderDetails"/>
-					<span><wicket:message key="label.enable_order_details"/></span>
-				</label>
-				<p><wicket:message key="label.order_details_field_description"/></p>				
-			</div>
+					<label class="label">
+						<wicket:message key="label.enable_manufacturer_certificate"/>
+					</label>
+					<p><wicket:message key="label.manufacturer_certificate_field_description"/></p>
+				</div>
 
-            <h2><wicket:message key="label.captureGPS_heading"/></h2>
-            <div class="checkboxWithImageAndText">            
-	            <img wicket:id="gpsLogo"/>
-	            <span class="labelDescription"><wicket:message key="label.captureGPS"/></span>
-				<input wicket:id="gpsCapture" type="checkbox"/>
-				<label wicket:f="gpsCapture">
-					<wicket:message key="label.gps_capture" />
-				</label>
-			</div>
-			
- 			<h2><wicket:message key="label.support_url_header"/></h2>
-            <div  class="labelledInput padded">
-                <label wicket:f="identifierLabel">
-                    <wicket:message key="label.support_url" />
-                </label>
-           		<input type="text" wicket:id="supportUrl" />
-            </div>
-            <div  class="labelledInput padded">
-                <label wicket:f="identifierLabel">
-                    <wicket:message key="label.logout_url" />
-                </label>
-                <input type="text" wicket:id="logoutUrl" />
-            </div>
+				<div wicket:id="orderDetailsOption" class="extendedOption labelDescription">
+					<label>
+						<input type="checkbox" wicket:id="orderDetails"/>
+						<span><wicket:message key="label.enable_order_details"/></span>
+					</label>
+					<p><wicket:message key="label.order_details_field_description"/></p>
+				</div>
+			</fieldset>
 
-            <h2><wicket:message key="label.identifierFormat_heading"/></h2>
-            <div>
-            	<span class="inputsWithLegend"> 
-					<span class="legend"> 
-						<div> 
-							<b><wicket:message key="heading.auto_generated_format"/></b><br>
-							<wicket:message key="label.auto_generated_format1"/><br>
-							<wicket:message key="label.auto_generated_format2"/><br>
-							<wicket:message key="label.auto_generated_format3"/><br>
-							<wicket:message key="label.auto_generated_format4"/><br>
-							<wicket:message key="label.auto_generated_format5"/><br>
-							<wicket:message key="label.auto_generated_format6"/><br>
-							<wicket:message key="label.auto_generated_format7"/><br>
-							<wicket:message key="label.auto_generated_format8"/><br>
-							<wicket:message key="label.auto_generated_format9"/><br>
-						</div>      
-						<div> 
-							<b><wicket:message key="heading.auto_generated_format_examples"/></b><br>
-							<wicket:message key="label.auto_generated_format_example1"/><br>
-							<wicket:message key="label.auto_generated_format_example2"/><br>
-							<wicket:message key="label.auto_generated_format_example3"/><br>
+			<fieldset class="form-horizontal gps-options">
+				<legend><wicket:message key="label.captureGPS_heading"/></legend>
+				<div class="control-group">
+					<figure>
+						<img wicket:id="gpsLogo"/>
+						<figcaption class="labelDescription"><wicket:message key="label.captureGPS"/></figcaption>
+						<input wicket:id="gpsCapture" type="checkbox"/>
+						<label class="label" wicket:for="gpsCapture">
+							<wicket:message key="label.gps_capture" />
+						</label>
+					</figure>
+				</div>
+			</fieldset>
+
+			<fieldset class="form-horizontal">
+				<legend><wicket:message key="label.support_url_header"/></legend>
+				<div class="control-group">
+					<label class="label" wicket:for="supportUrl">
+						<wicket:message key="label.support_url" />
+					</label>
+					<input type="text" wicket:id="supportUrl" />
+				</div>
+				<div  class="labelledInput padded">
+					<label class="label" wicket:for="logoutUrl">
+						<wicket:message key="label.logout_url" />
+					</label>
+					<input type="text" wicket:id="logoutUrl" />
+				</div>
+			</fieldset>
+
+			<fieldset class="form-horizontal">
+				<legend><wicket:message key="label.identifierFormat_heading"/></legend>
+				<div class="control-group">
+					<span class="identifier-legend">
+						<span class="legend-column">
+							<div>
+								<b><wicket:message key="heading.auto_generated_format"/></b><br>
+								<wicket:message key="label.auto_generated_format1"/><br>
+								<wicket:message key="label.auto_generated_format2"/><br>
+								<wicket:message key="label.auto_generated_format3"/><br>
+								<wicket:message key="label.auto_generated_format4"/><br>
+								<wicket:message key="label.auto_generated_format5"/><br>
+								<wicket:message key="label.auto_generated_format6"/><br>
+								<wicket:message key="label.auto_generated_format7"/><br>
+								<wicket:message key="label.auto_generated_format8"/><br>
+								<wicket:message key="label.auto_generated_format9"/><br>
+							</div>
+							<div>
+								<b><wicket:message key="heading.auto_generated_format_examples"/></b><br>
+								<wicket:message key="label.auto_generated_format_example1"/><br>
+								<wicket:message key="label.auto_generated_format_example2"/><br>
+								<wicket:message key="label.auto_generated_format_example3"/><br>
+							</div>
+						</span>
+
+						<div class="control-group">
+							<p class="labelDescription"><wicket:message key="label.identifierFormat_desc" /></p>
+							<label class="label" wicket:for="identifierLabel">
+								<wicket:message key="label.label" />
+							</label>
+							<input type="text" wicket:id="identifierLabel" />
 						</div>
-					</span>      	            	
-            	
-		            <div  class="labelledInput">
-			            <div class="labelDescription"><wicket:message key="label.identifierFormat_desc" /></div>
-		                <label wicket:f="identifierLabel">
-		                    <wicket:message key="label.label" />
-		                </label>
-		           		<input type="text" wicket:id="identifierLabel" />
-		            </div>
-		
-		            <div  class="labelledInput">
-		                <label wicket:f="identifierFormat">
-		                    <wicket:message key="label.auto_generated_format" />
-		                </label>
-		               	<input type="text" wicket:id="identifierFormat" />
-		            </div>
-				            
-		            <div  class="labelledInput">
-		                <label>&nbsp;</label>
-		               	<a wicket:id="overrides"><wicket:message key="label.identifier_overrides"/></a>
-		            </div>		            
-				</span>	      
-				            
-			</div>
+
+						<div class="control-group">
+							<label class="label" wicket:for="identifierFormat">
+								<wicket:message key="label.auto_generated_format" />
+							</label>
+							<input type="text" wicket:id="identifierFormat" />
+						</div>
+
+						<div class="control-group">
+							<label>&nbsp;</label>
+							<a wicket:id="overrides"><wicket:message key="label.identifier_overrides"/></a>
+						</div>
+					</span>
+
+				</div>
+			</fieldset>
 
 			<div class="actions">
 		        <div class="formAction">
-					<input wicket:id="submitButton" type="submit" wicket:message="value:hbutton.apply_settings"/> 
+					<a class="btn-primary" wicket:id="submitButton"><wicket:message key="hbutton.apply_settings"/></a>
 					<wicket:message key="label.or"/> 
 					<a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
 		        </div>
 			</div>
 				        
-    </div>
+    </fieldset>
 </form>
 
 </wicket:extend>

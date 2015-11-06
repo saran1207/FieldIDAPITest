@@ -1,18 +1,5 @@
 package com.n4systems.ejb.wrapper;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.persistence.EntityManager;
-
-import com.n4systems.model.api.NetworkEntity;
-import org.hibernate.collection.AbstractPersistentCollection;
-import org.hibernate.stat.Statistics;
-
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
 import com.n4systems.exceptions.EntityStillReferencedException;
@@ -20,6 +7,7 @@ import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.NamedEntity;
+import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
@@ -32,6 +20,11 @@ import com.n4systems.persistence.TransactionManager;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
+import org.hibernate.collection.internal.AbstractPersistentCollection;
+import org.hibernate.stat.Statistics;
+
+import javax.persistence.EntityManager;
+import java.util.*;
 
 public class PersistenceManagerEJBContainer extends EJBTransactionEmulator<PersistenceManager> implements PersistenceManager {
 

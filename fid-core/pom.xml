@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>fieldid-root</artifactId>
 		<groupId>com.fieldid</groupId>
-        <version>2015.5.2</version>
+        <version>2015.6.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>fid-core</artifactId>
 	<name>Core Lib</name>
@@ -43,12 +43,17 @@
             <artifactId>biweekly</artifactId>
             <version>0.4.0</version>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>javassist</groupId>-->
+            <!--<artifactId>javassist</artifactId>-->
+            <!--<version>3.12.0.GA-FID</version>-->
+        <!--</dependency>-->
         <dependency>
-            <groupId>javassist</groupId>
+            <groupId>org.javassist</groupId>
             <artifactId>javassist</artifactId>
-            <version>3.12.0.GA-FID</version>
+            <version>3.20.0-GA</version>
         </dependency>
-		<dependency>
+        <dependency>
 			<groupId>com.fieldid</groupId>
 			<artifactId>fid-cert-data</artifactId>
 		</dependency>
@@ -58,6 +63,11 @@
 			<scope>test</scope>
 		</dependency>
         <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-java8</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        <dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate.version}</version>
@@ -66,12 +76,6 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>${hibernate.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>javassist</groupId>
-                    <artifactId>javassist</artifactId>
-                </exclusion>
-            </exclusions>
 		</dependency>
         <dependency>
             <groupId>mysql</groupId>
@@ -115,7 +119,6 @@
 			<artifactId>xstream</artifactId>
 			<version>1.3.1</version>
 		</dependency>
-        <!-- Stopped making updates here -->
 		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>

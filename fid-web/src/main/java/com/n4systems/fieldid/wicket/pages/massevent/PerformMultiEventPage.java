@@ -2,12 +2,16 @@ package com.n4systems.fieldid.wicket.pages.massevent;
 
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.service.escalationrule.AssignmentEscalationRuleService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.perform.PerformThingEventHelperService;
 import com.n4systems.fieldid.utils.CopyEventFactory;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.model.CriteriaResult;
+import com.n4systems.model.Event;
 import com.n4systems.model.ThingEvent;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.tools.FileDataContainer;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
@@ -30,6 +34,8 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
     private EventScheduleService eventScheduleService;
     @SpringBean
     private AssetService assetService;
+    @SpringBean
+    protected AssignmentEscalationRuleService ruleService;
 
     @SpringBean
     private PerformThingEventHelperService thingEventHelperService;
@@ -45,10 +51,14 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
         try {
             thingEvent =  CopyEventFactory.copyEvent(thingEventHelperService.createEvent(selectedEventList.get(0).getId(), selectedEventList.get(0).getAsset().getId(), selectedEventList.get(0).getType().getId()));
 
+            //This generic event should not have any id's associated to it when copying it over to the original events.
+            thingEvent.setId(null);
+            thingEvent.setMobileGUID(null);
             //Do not display any default owner/location
             thingEvent.setAdvancedLocation(null);
             thingEvent.setOwner(getCurrentUser().getOwner().getPrimaryOrg());
             thingEvent.setPrintable(thingEvent.getType().isPrintable());
+            thingEvent.setInitialResultBasedOnScoreOrOneClicksBeingAvailable();
 
             event = Model.of(thingEvent);
 
@@ -76,6 +86,7 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
     protected List<ThingEvent> doSave() {
         event.getObject().storeTransientCriteriaResults();
         event.getObject().setEventResult(getEventResult());
+        event.getObject().setWorkflowState(WorkflowState.CLOSED);
 
         FileDataContainer fileDataContainer = null;
         List<ThingEvent> finalList = new ArrayList<ThingEvent>();
@@ -89,11 +100,24 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
                 originalEvent = thingEventHelperService.createEventFromOpenEvent(originalEventFromList.getId());
             }
 
+            originalEvent.setProofTestInfo(event.getObject().getProofTestInfo());
+
+            if(event.getObject().getPerformedBy() == null) {
+                event.getObject().setPerformedBy(getCurrentUser());
+            }
+
+            if(originalEvent.getSectionResults() != null) {
+                originalEvent.storeTransientCriteriaResults();
+            }
             copyMassEventInfo(originalEvent);
 
-            ThingEvent savedEvent = eventCreationService.createEventWithSchedules(originalEvent, 0L, fileDataContainer, fileAttachments, createEventScheduleBundles(originalEvent.getAsset()));
+            ThingEvent savedEvent = eventCreationService.createEventWithSchedules(originalEvent, 0L, fileDataContainer, fileAttachments, createEventScheduleBundles(originalEvent.getAsset()), false);
+
             finalList.add(savedEvent);
         }
+
+        eventCreationService.cleanUpMultiEventCriteriaImages(event.getObject().getResults());
+
         return finalList;
     }
 
@@ -107,6 +131,14 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
         ThingEvent genericEvent = event.getObject();
 
         CopyEventFactory.copyEventForMassEvents(originalEvent, genericEvent);
+
+        for (CriteriaResult result : originalEvent.getResults()) {
+            for (Event action : result.getActions()) {
+                action.setTenant(originalEvent.getTenant());
+            }
+        }
+
+        originalEvent.setTriggersIntoResultingActions(originalEvent);
 
         originalEvent.setPrintable(event.getObject().isPrintable());
 

@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventFormService;
 import com.n4systems.fieldid.service.event.ObservationCountService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -69,18 +70,18 @@ public class ObservationCountResultConfigurationPage extends EventTypePage{
             super(id, new CompoundPropertyModel<>(eventForm));
             add(new FIDFeedbackPanel("feedbackPanel"));
 
-            DropDownChoice<ObservationCount> observationCountDropDownChoicePass;
-            DropDownChoice<ObservationCount> observationCountDropDownChoiceFail;
+            FidDropDownChoice<ObservationCount> observationCountDropDownChoicePass;
+            FidDropDownChoice<ObservationCount> observationCountDropDownChoiceFail;
             ScoreResultRangePanel passRangePanel;
             ScoreResultRangePanel failRangePanel;
 
             //Populate depending on whether the eventform has a group associated with it.
             if (eventForm.getObservationCountGroup() == null) {
-                observationCountDropDownChoicePass = new DropDownChoice<>("observationCountPass", new ArrayList<>(), new ObservationCountChoiceRenderer());
-                observationCountDropDownChoiceFail = new DropDownChoice<>("observationCountFail", new ArrayList<>(), new ObservationCountChoiceRenderer());
+                observationCountDropDownChoicePass = new FidDropDownChoice<>("observationCountPass", new ArrayList<>(), new ObservationCountChoiceRenderer());
+                observationCountDropDownChoiceFail = new FidDropDownChoice<>("observationCountFail", new ArrayList<>(), new ObservationCountChoiceRenderer());
             } else {
-                observationCountDropDownChoicePass = new DropDownChoice<>("observationCountPass", eventForm.getObservationCountGroup().getObservationCounts(), new ObservationCountChoiceRenderer());
-                observationCountDropDownChoiceFail = new DropDownChoice<>("observationCountFail", eventForm.getObservationCountGroup().getObservationCounts(), new ObservationCountChoiceRenderer());
+                observationCountDropDownChoicePass = new FidDropDownChoice<>("observationCountPass", eventForm.getObservationCountGroup().getObservationCounts(), new ObservationCountChoiceRenderer());
+                observationCountDropDownChoiceFail = new FidDropDownChoice<>("observationCountFail", eventForm.getObservationCountGroup().getObservationCounts(), new ObservationCountChoiceRenderer());
             }
 
             observationCountDropDownChoicePass.setNullValid(true);
@@ -89,7 +90,7 @@ public class ObservationCountResultConfigurationPage extends EventTypePage{
             observationCountDropDownChoiceFail.setNullValid(true);
             add(observationCountDropDownChoiceFail);
 
-            DropDownChoice<ObservationCountGroup> observationCountGroupDropDownChoice = new DropDownChoice<ObservationCountGroup>("observationCountGroup", observationCountService.getObservationCountGroups(), new ObservationCountGroupChoiceRenderer()) {
+            FidDropDownChoice<ObservationCountGroup> observationCountGroupDropDownChoice = new FidDropDownChoice<ObservationCountGroup>("observationCountGroup", observationCountService.getObservationCountGroups(), new ObservationCountGroupChoiceRenderer()) {
                 @Override
                 protected boolean wantOnSelectionChangedNotifications() {
                     return true;
@@ -136,7 +137,7 @@ public class ObservationCountResultConfigurationPage extends EventTypePage{
             };
             add(failRangePanel);
 
-            DropDownChoice<ScoreCalculationType> passCalculationType = new DropDownChoice<ScoreCalculationType>("observationcountPassCalculationType", Arrays.asList(ScoreCalculationType.values()), new CalculationChoiceRenderer()) {
+            FidDropDownChoice<ScoreCalculationType> passCalculationType = new FidDropDownChoice<ScoreCalculationType>("observationcountPassCalculationType", Arrays.asList(ScoreCalculationType.values()), new CalculationChoiceRenderer()) {
                 @Override
                 protected boolean wantOnSelectionChangedNotifications() {
                     return true;
@@ -153,7 +154,7 @@ public class ObservationCountResultConfigurationPage extends EventTypePage{
             };
             add(passCalculationType);
 
-            DropDownChoice<ScoreCalculationType> failCalculationType = new DropDownChoice<ScoreCalculationType>("observationcountFailCalculationType", Arrays.asList(ScoreCalculationType.values()), new CalculationChoiceRenderer()) {
+            FidDropDownChoice<ScoreCalculationType> failCalculationType = new FidDropDownChoice<ScoreCalculationType>("observationcountFailCalculationType", Arrays.asList(ScoreCalculationType.values()), new CalculationChoiceRenderer()) {
                 @Override
                 protected boolean wantOnSelectionChangedNotifications() {
                     return true;
@@ -171,7 +172,7 @@ public class ObservationCountResultConfigurationPage extends EventTypePage{
             add(failCalculationType);
 
             add(new NonWicketLink("cancelLink", "eventType.action?uniqueID="+eventTypeId));
-            add(new Button("submitButton"));
+            add(new SubmitLink("submitLink"));
         }
 
         @Override

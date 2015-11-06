@@ -1,33 +1,33 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
 
-<div class="setupList">
+<div class="setup-list">
 
-		<div wicket:id="manageCustomersContainer" class="setupOption customers">
+		<div wicket:id="manageCustomersContainer" class="setup-option customers">
 			<h1><a href="/fieldid/customerList.action" ><wicket:message key="label.customers"/></a></h1>
 			<p><wicket:message key="label.manage_customers_msg"/></p>
 		</div>
          <wicket:enclosure>
-		<div class="setupOption users">
+		<div class="setup-option users">
 			<h1><a wicket:id="manageUsersLink" ><wicket:message key="label.users"/></a></h1>
 			<p><wicket:message key="label.manage_users_msg"/></p>
 		</div>
          </wicket:enclosure>
         <wicket:enclosure>
-            <div class="setupOption users">
+            <div class="setup-option users">
                 <h1><a wicket:id="userGroupsLink" ><wicket:message key="label.user_groups"/></a></h1>
                 <p><wicket:message key="label.manage_user_groups_msg"/></p>
             </div>
         </wicket:enclosure>
 
         <wicket:enclosure>
-            <div class="setupOption userRegistrations">
+            <div class="setup-option user-registrations">
                 <h1><a wicket:id="userRegistrationsLink" ><wicket:message key="label.user_registrations"/></a></h1>
                 <p><wicket:message key="label.manage_user_registrations_msg"/></p>
             </div>
         </wicket:enclosure>
 
-        <div wicket:id="managePredefinedLocationsContainer" class="setupOption locations">
+        <div wicket:id="managePredefinedLocationsContainer" class="setup-option locations">
             <h1><a href="/fieldid/predefinedLocations.action" ><wicket:message key="title.manage_predefined_locations.plural"/></a></h1>
             <p><wicket:message key="label.manage_predefined_locations"/></p>
         </div>

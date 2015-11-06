@@ -21,6 +21,7 @@ import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.search.SortDirection;
 import org.apache.log4j.Logger;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
@@ -521,7 +522,7 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
      */
     public void createApplicableQueueItems(Event event) {
         QueryBuilder<AssignmentEscalationRule> ruleQuery = new QueryBuilder<>(AssignmentEscalationRule.class, new OpenSecurityFilter());
-        ruleQuery.addSimpleWhere("tenant.id", event.getTenant().getId());
+        ruleQuery.addSimpleWhere("tenant.id", getCurrentTenant().getId());
 
         persistenceService.findAll(ruleQuery)
                           .stream()
@@ -631,7 +632,11 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
      *
      * @param eventId - A Long representing the ID of an Event which has one or more Queue Items for processing.
      */
-    @Transactional
+	/*
+		WEB-5861: This was causing a hibernate exception when called from the webservice.  Something about a collection not being associated with the session.
+		Forcing a new transaction *should* fix it
+	 */
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void clearEscalationRulesForEvent(Long eventId) {
         Query deleteQuery = getEntityManager().createNativeQuery(CLEAR_RULES_FOR_EVENT_SQL);
         deleteQuery.setParameter("eventId", eventId);

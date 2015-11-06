@@ -16,8 +16,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "fileattachments")
-public class
-        FileAttachment extends EntityWithTenant implements Attachment {
+public class FileAttachment extends EntityWithTenant implements Attachment {
 	private static final long serialVersionUID = 1L;
 
 	@Column(length=255)

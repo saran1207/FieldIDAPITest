@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.setup;
 
 import com.n4systems.fieldid.service.tenant.SystemSettingsService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
@@ -9,6 +10,7 @@ import com.n4systems.fieldid.wicket.components.renderer.DateFormatSampleChoiceRe
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.tenant.SystemSettings;
 import com.n4systems.util.ConfigurationProvider;
@@ -26,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("serial")
-public class SystemSettingsPage extends FieldIDFrontEndPage {
+public class SystemSettingsPage extends FieldIDTemplatePage {
 
     @SpringBean
     private SystemSettingsService systemSettingsService;
@@ -75,14 +77,14 @@ public class SystemSettingsPage extends FieldIDFrontEndPage {
 			add(orderDetails.setVisible(showOrderDetails));
             add(new ContextImage("gpsLogo", "images/gps-logo.png"));
             add(new CheckBox("gpsCapture"));
-            add(new DropDownChoice<String>("dateFormat", getDateFormats(), new DateFormatSampleChoiceRenderer()).setNullValid(false));
+            add(new FidDropDownChoice<>("dateFormat", getDateFormats(), new DateFormatSampleChoiceRenderer()).setNullValid(false));
             add(new TextField<String>("identifierLabel").setRequired(true));
             add(new TextField<String>("identifierFormat")); 
             add(new TextField<String>("supportUrl").add(new UrlValidator()));
             add(new TextField<String>("logoutUrl").add(new UrlValidator()));
             add(new BookmarkablePageLink<Void>("overrides", IdentifierOverridesPage.class));
             
-            add(new Button("submitButton"));
+            add(new SubmitLink("submitButton"));
             add(new BookmarkablePageLink<Void>("cancelLink", SettingsPage.class));
 
         }

@@ -59,7 +59,7 @@ public class PerformMasterEventPage extends MasterEventPage {
     @Override
     protected AbstractEvent doSave() {
         event.getObject().storeTransientCriteriaResults();
-        event.getObject().getSubEvents().stream().forEach(subEvent -> subEvent.storeTransientCriteriaResults());
+        event.getObject().getSubEvents().stream().forEach(AbstractEvent::storeTransientCriteriaResults);
         event.getObject().setEventResult(getEventResult());
 
         FileDataContainer fileDataContainer = null;
@@ -68,7 +68,7 @@ public class PerformMasterEventPage extends MasterEventPage {
         }
 
         if (event.getObject().getType().isThingEventType()) {
-            Asset asset =  ((ThingEvent)event.getObject()).getAsset();
+            Asset asset =  event.getObject().getAsset();
 
             if (null != asset && null != event.getObject().getGpsLocation() && null != event.getObject().getGpsLocation().getLatitude() && null != event.getObject().getGpsLocation().getLongitude()) {
                 asset.setGpsLocation(new GpsLocation(event.getObject().getGpsLocation().getLatitude(), event.getObject().getGpsLocation().getLongitude()));

@@ -2,6 +2,7 @@ package com.n4systems.reporting;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.procedure.SvgGenerationService;
+import com.n4systems.model.Asset;
 import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.procedure.*;
 import com.n4systems.reporting.data.ImagePrintoutContainer;
@@ -10,6 +11,7 @@ import com.n4systems.util.DateTimeDefinition;
 import org.apache.log4j.Logger;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -90,6 +92,23 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
         List<ImagePrintoutContainer> allImages = convertToImageContainerCollection(procDef.getImages());
 
         add("allImages", allImages);
+
+        add("assetProfileImage", getAssetProfileImage(procDef.getAsset()));
+    }
+
+    private ByteArrayInputStream getAssetProfileImage(Asset asset) {
+        try {
+            if (asset.getImageName() != null && s3Service.assetProfileImageExists(asset.getId(), asset.getImageName())) {
+                return new ByteArrayInputStream(s3Service.downloadAssetProfileMediumImage(asset.getId(), asset.getImageName()));
+            } else if (asset.getType().hasImage() && s3Service.assetTypeProfileImageExists(asset.getType())) {
+                    return new ByteArrayInputStream(s3Service.downloadAssetTypeProfileImageBytes(asset.getType()));
+            } else {
+                return null;
+            }
+        } catch (IOException e) {
+            logger.error("Failed to download Profile Image", e);
+            return null;
+        }
     }
 
     private String countIsolationPoints(List<IsolationPoint> lockIsolationPoints) {
@@ -129,8 +148,8 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
 
         try {
             byte[] imageData = null;
-            //Always regerate SVGs for drafts in case annotations have changed
-            if(!procDef.getPublishedState().equals(PublishedState.DRAFT)) {
+            //Always regenerate SVGs for drafts in case annotations have changed
+            if(!procDef.getPublishedState().equals(PublishedState.DRAFT) && !procDef.getPublishedState().equals(PublishedState.WAITING_FOR_APPROVAL)) {
                 imageData = s3Service.downloadProcedureDefinitionImageSvg(image);
             }
 
@@ -218,8 +237,8 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
                 if (theImage == null) throw new NoSuchElementException("The image was empty... that's still bad news.");
 
                 byte[] imageData = null;
-                //Always regerate SVGs for drafts in case annotations have changed
-                if(!procDef.getPublishedState().equals(PublishedState.DRAFT)) {
+                //Always regenerate SVGs for drafts in case annotations have changed
+                if(!procDef.getPublishedState().equals(PublishedState.DRAFT) && !procDef.getPublishedState().equals(PublishedState.WAITING_FOR_APPROVAL)) {
                     imageData = s3Service.downloadProcedureDefinitionImageSvg(theImage, isolationPoint);
                 }
 

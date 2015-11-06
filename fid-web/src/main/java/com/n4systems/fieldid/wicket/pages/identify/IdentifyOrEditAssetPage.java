@@ -5,6 +5,7 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetIdentifierService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.escalationrule.AssignmentEscalationRuleService;
+import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.user.UserGroupService;
@@ -85,6 +86,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
     @SpringBean private OrgService orgService;
     @SpringBean private UserGroupService userGroupService;
     @SpringBean private AssignmentEscalationRuleService ruleService;
+    @SpringBean private EventScheduleService eventScheduleService;
 
     EventSchedulesPanel eventSchedulesPanel;
     AttributesEditPanel attributesEditPanel;
@@ -280,6 +282,8 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
                     } else {
                         locationPicker.setLocationOwner(getOwner());
                     }
+                    autoSchedule(assetModel);
+                    target.add(eventSchedulesPanel);
                 }
             }.withAutoUpdate());
 
@@ -521,6 +525,15 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
         asset.setTenant(getTenant());
         asset.setInfoOptions(new HashSet<InfoOptionBean>(enteredInfoOptions));
 
+        //Find out and set it's procedureCount
+        //-1 if the AssetType of this procedure IS NOT LOTO enabled.
+        //0 if the AssetType of this asset IS LOTO enabled.
+        if(asset.getType().hasProcedures()) {
+            asset.setActiveProcedureDefinitionCount(new Long(0));
+        } else {
+            asset.setActiveProcedureDefinitionCount(new Long(-1));
+        }
+
         if (asset.isNew()) {
             asset.setIdentifiedBy(getCurrentUser());
             createdOrEditedAsset = assetSaveService.createWithHistory(asset, attachments, assetImageBytes, assetImageFileName);
@@ -540,15 +553,11 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             if(eventToSchedule.getAssignedGroup() != null) {
                 copiedEvent.setAssignedGroup(userGroupService.getUserGroup(eventToSchedule.getAssignedGroup().getId()));
             }
-
             copiedEvent.setAsset(asset);
             copiedEvent.setTenant(getTenant());
             copiedEvent.setOwner(asset.getOwner());
 
-            Long id = persistenceService.save(copiedEvent);
-            copiedEvent = persistenceService.find(ThingEvent.class, id);
-
-            ruleService.createApplicableQueueItems(copiedEvent);
+            eventScheduleService.createSchedule(copiedEvent);
         }
     }
 
@@ -561,7 +570,14 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
         String clientFileName = assetImagePanel.getClientFileName();
         List<Long> createdAssetIds = new ArrayList<Long>();
 
-
+        //Find out and set it's procedureCount
+        //-1 if the AssetType of this procedure IS NOT LOTO enabled.
+        //0 if the AssetType of this asset IS LOTO enabled.
+        if(assetToCreate.getType().hasProcedures()) {
+            assetToCreate.setActiveProcedureDefinitionCount(new Long(0));
+        } else {
+            assetToCreate.setActiveProcedureDefinitionCount(new Long(-1));
+        }
 
         for (MultipleAssetConfiguration.AssetConfiguration assetConfig : assetConfigs) {
             assetToCreate.reset();
@@ -571,7 +587,6 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             assetToCreate.setIdentifier(assetConfig.getIdentifier());
             assetToCreate.setRfidNumber(assetConfig.getRfidNumber());
             assetToCreate.setCustomerRefNumber(assetConfig.getCustomerRefNumber());
-
 
             //since multiple assets can't have the same GUID, we reset them here
             assetToCreate.setMobileGUID(null);

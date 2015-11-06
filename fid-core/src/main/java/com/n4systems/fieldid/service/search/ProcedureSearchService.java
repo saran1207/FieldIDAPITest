@@ -2,7 +2,6 @@ package com.n4systems.fieldid.service.search;
 
 import com.n4systems.model.ProcedureWorkflowState;
 import com.n4systems.model.procedure.Procedure;
-import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.search.ProcedureCriteria;
 import com.n4systems.model.search.ProcedureWorkflowStateCriteria;
 import com.n4systems.services.date.DateService;
@@ -56,17 +55,5 @@ public class ProcedureSearchService extends SearchService<ProcedureCriteria, Pro
         QueryBuilder<Procedure> countProcedures = createTenantSecurityBuilder(Procedure.class);
         return persistenceService.count(countProcedures) > 0;
     }
-
-    public void save(ProcedureDefinition procedureDefinition) {
-        persistenceService.update(procedureDefinition);
-    }
-
-    public ProcedureDefinition reset(ProcedureDefinition procedureDefinition) {
-        if (procedureDefinition!=null && !procedureDefinition.isNew()) {
-            return persistenceService.reattach(procedureDefinition,true);
-        }
-        return procedureDefinition;
-    }
-
 
 }

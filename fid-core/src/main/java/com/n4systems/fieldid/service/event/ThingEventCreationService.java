@@ -11,11 +11,15 @@ import com.n4systems.model.*;
 import com.n4systems.model.user.User;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.util.ServiceLocator;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ThingEventCreationService extends EventCreationService<ThingEvent, Asset> {
+
+    @Autowired
+    private EventTypeRulesService eventTypeRulesService;
 
     @Override
     protected ThingEvent createEvent() {
@@ -65,13 +69,18 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
         return trainingWheels;
     }
 
-    /**
-     * This override was necessary because of a problem with Java 8u20 which prevents a successful compile due to Class
-     * resolution issues.  This workaround will no longer be necessary if we move to a more recent version of Java.
-     */
     @Override
     public ThingEvent createEventWithSchedules(ThingEvent event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle<Asset>> schedules) {
-        event = super.createEventWithSchedules(event, scheduleId, fileData, uploadedFiles, schedules);
+        return createEventWithSchedules(event, scheduleId, fileData, uploadedFiles, schedules, true);
+    }
+
+        /**
+         * This override was necessary because of a problem with Java 8u20 which prevents a successful compile due to Class
+         * resolution issues.  This workaround will no longer be necessary if we move to a more recent version of Java.
+         */
+    @Override
+    public ThingEvent createEventWithSchedules(ThingEvent event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle<Asset>> schedules, Boolean cleanUpCriteriaImages) {
+        event = super.createEventWithSchedules(event, scheduleId, fileData, uploadedFiles, schedules, cleanUpCriteriaImages);
 
         ruleService.clearEscalationRulesForEvent(event.getId());
         if(event.getWorkflowState().equals(WorkflowState.OPEN)) {
@@ -163,7 +172,6 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
         Asset asset = persistenceService.findUsingTenantOnlySecurityWithArchived(Asset.class, event.getAsset().getId());
         asset.setSubAssets(assetService.findSubAssets(asset));
 
-
         ownershipUpdates(event, asset);
 
         try {
@@ -183,7 +191,13 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
     }
 
     private void statusUpdates(ThingEvent event, Asset asset) {
-        asset.setAssetStatus(event.getAssetStatus());
+        if (eventTypeRulesService.exists(event.getType(), event.getEventResult())) {
+            EventTypeRule rule = eventTypeRulesService.getRule(event.getType(), event.getEventResult());
+            event.setAssetStatus(rule.getAssetStatus());
+            asset.setAssetStatus(rule.getAssetStatus());
+        } else {
+            asset.setAssetStatus(event.getAssetStatus());
+        }
     }
 
     private void ownershipUpdates(Event event, Asset asset) {
@@ -206,7 +220,18 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
 
     @Override
     protected void postUpdateEvent(ThingEvent event, FileDataContainer fileData) {
+        User modifiedBy = getCurrentUser();
+        Asset asset = persistenceService.findUsingTenantOnlySecurityWithArchived(Asset.class, event.getAsset().getId());
+
+        statusUpdates(event, asset);
         assignNextEventInSeries(event, EventEnum.PERFORM);
+
+        try {
+            assetService.update(asset, modifiedBy);
+        } catch (SubAssetUniquenessException e) {
+            logger.error("received a subasset uniquness error this should not be possible form this type of update.", e);
+            throw new RuntimeException(e);
+        }
     }
 
     private void uploadProofTestFile(ThingEvent event, FileDataContainer fileData) throws ProcessingProofTestException {

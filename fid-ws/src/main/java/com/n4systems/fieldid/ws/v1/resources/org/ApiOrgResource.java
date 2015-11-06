@@ -3,8 +3,11 @@ package com.n4systems.fieldid.ws.v1.resources.org;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
+import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiPlaceEventHistoryResource;
+import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiPlaceEventTypeResource;
 import com.n4systems.fieldid.ws.v1.resources.model.DateParam;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
+import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedPlaceEventResource;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -21,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Component
 @Path("organization")
@@ -29,6 +33,16 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 
     @Autowired
     private S3Service s3Service;
+
+    @Autowired
+    private ApiPlaceEventHistoryResource eventHistoryResource;
+
+    @Autowired
+    private ApiPlaceEventTypeResource eventTypeResource;
+
+    //TODO Need to make use of this.
+    @Autowired
+    private ApiSavedPlaceEventResource savedPlaceEventResource;
 
 	public ApiOrgResource() {
 		super(BaseOrg.class, true);
@@ -61,6 +75,11 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 		if (baseOrg.getDivisionOrg() != null) {
 			apiOrg.setDivisionId(baseOrg.getDivisionOrg().getId());
 		}
+
+        apiOrg.setEventHistory(eventHistoryResource.findAllEventHistory(baseOrg.getId()));
+        apiOrg.setEventTypes(baseOrg.getEventTypes().stream().map(eventTypeResource::convertToApiPlaceEvent).collect(Collectors.toList()));
+        apiOrg.setEvents(savedPlaceEventResource.findLastEventOfEachType(baseOrg.getId()));
+
 		return apiOrg;
 	}
 

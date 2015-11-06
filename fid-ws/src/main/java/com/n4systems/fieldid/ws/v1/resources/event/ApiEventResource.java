@@ -290,10 +290,15 @@ public class ApiEventResource extends FieldIdPersistenceService {
 	private void convertApiEventForAbstractEvent(ApiEvent apiEvent, AbstractEvent<ThingEventType,Asset> event, boolean isUpdate) {
 		event.setTenant(getCurrentTenant());
 		event.setMobileGUID(apiEvent.getSid());
+
 		event.setModified(apiEvent.getModified());
-		event.setComments(apiEvent.getComments());		
+        if(apiEvent.getModifiedById() != null) {
+            event.setModifiedBy(persistenceService.findUsingTenantOnlySecurityWithArchived(User.class, apiEvent.getModifiedById()));
+        }
+
+		event.setComments(apiEvent.getComments());
+
 		event.setType(persistenceService.find(EventType.class, apiEvent.getTypeId()));
-		event.setModifiedBy(persistenceService.findUsingTenantOnlySecurityWithArchived(User.class, apiEvent.getModifiedById()));
 		
 		if(event.getTarget() == null) { // In the case of MultiEvent, we set event.asset much early on.
 			event.setTarget(assetService.findByMobileId(apiEvent.getAssetId(), true));

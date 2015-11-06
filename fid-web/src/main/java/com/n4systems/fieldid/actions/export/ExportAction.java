@@ -45,15 +45,20 @@ public class ExportAction extends AbstractAction {
 	public List<EventType> getEventTypes() {
 		return eventService.getEventTypes();
 	}
-	
+
 	public String doShow() { 
 		return SUCCESS;
 	}
 	
 	public String doExport() {
-		DownloadLink link = getDownloadLink();		
-		eventTypeEventTypeExportService.exportEventTypeToExcel(getSessionUserId(), eventTypeId, getFromDate(), getToDate(), link.getId() );
-		return SUCCESS;
+		if (! eventService.getThingEventsByType(eventTypeId, getFromDate(), getToDate()).isEmpty() ) {
+			DownloadLink link = getDownloadLink();
+			eventTypeEventTypeExportService.exportEventTypeToExcel(getSessionUserId(), eventTypeId, getFromDate(), getToDate(), link.getId() );
+			return SUCCESS;
+		} else {
+			addActionError(getText("error.no_events_to_export"));
+			return ERROR;
+		}
 	}
 		
 	private EventType getEventType() {
@@ -74,7 +79,7 @@ public class ExportAction extends AbstractAction {
 		}
 		return SUCCESS;
 	}
-	
+
 	public void setEventTypeId(Long eventTypeId) {
 		this.eventTypeId = eventTypeId;
 	}

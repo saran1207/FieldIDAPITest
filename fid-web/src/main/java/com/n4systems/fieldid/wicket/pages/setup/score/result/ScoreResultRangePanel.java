@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.setup.score.result;
 
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
+import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.setup.score.validator.SecondRangeValueValidator;
 import com.n4systems.model.ResultRange;
@@ -28,10 +29,10 @@ public abstract class ScoreResultRangePanel extends Panel {
         super(id, model);
         setOutputMarkupId(true);
 
-        DropDownChoice<ScoreComparator> comparatorChoice;
+        FidDropDownChoice<ScoreComparator> comparatorChoice;
 
         PropertyModel<ScoreComparator> comparatorModel = new PropertyModel<ScoreComparator>(model, "comparator");
-        add(comparatorChoice = new DropDownChoice<ScoreComparator>("comparatorSelect", comparatorModel, Arrays.asList(ScoreComparator.values()), createComparatorRenderer()));
+        add(comparatorChoice = new FidDropDownChoice<ScoreComparator>("comparatorSelect", comparatorModel, Arrays.asList(ScoreComparator.values()), createComparatorRenderer()));
         comparatorChoice.add(new UpdateComponentOnChange() {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {

@@ -51,9 +51,6 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
     private AssetTypeService assetTypeService;
 
     @SpringBean
-    private AssetTypeScheduleService assetTypeScheduleService;
-
-    @SpringBean
     private AssociatedEventTypesService associatedEventTypesService;
 
     private WebMarkupContainer schedules;
@@ -96,11 +93,8 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
                 item.add(new AjaxLink<Void>("remove") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        AssetType assetType = assetTypeModel.getObject();
-                        assetType.getSchedules().remove(schedule.getObject());
-                        assetType.touch();
-                        assetTypeService.update(assetType);
-                        assetTypeScheduleService.delete(assetTypeScheduleService.getSchedule(schedule.getObject().getId()));
+                        AssetType updatedAssetType = assetTypeService.removeAssetTypeSchedule(assetTypeModel.getObject(), schedule.getObject());
+                        assetTypeModel.setObject(updatedAssetType);
                         frequencyList.detachModels();
                         target.add(schedules, filterActions);
                     }
@@ -245,11 +239,8 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
         return new FrequencyFormPanel(frequencyModalWindow.getContentId(), assetTypeModel) {
             @Override
             protected void onSaveSchedule(AjaxRequestTarget target, AssetTypeSchedule schedule) {
-                assetTypeScheduleService.createSchedule(schedule);
-                AssetType assetType = assetTypeModel.getObject();
-                assetType.getSchedules().add(schedule);
-                assetType.touch();
-                assetTypeService.update(assetType);
+                AssetType updatedAssetType = assetTypeService.addAssetTypeSchedule(assetTypeModel.getObject(), schedule);
+                assetTypeModel.setObject(updatedAssetType);
                 target.add(schedules, filterActions);
                 frequencyModalWindow.close(target);
                 frequencyModalWindow.setContent(getFrequencyForm());

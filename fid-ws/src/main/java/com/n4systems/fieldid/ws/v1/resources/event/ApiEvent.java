@@ -1,11 +1,11 @@
 package com.n4systems.fieldid.ws.v1.resources.event;
 
+import com.n4systems.fieldid.ws.v1.resources.eventattachment.ApiEventAttachment;
+
 import java.math.BigDecimal;
 import java.util.List;
 
-import com.n4systems.fieldid.ws.v1.resources.eventattachment.ApiEventAttachment;
-
-public class ApiEvent extends ApiBaseEvent {	
+public class ApiEvent extends ApiBaseThingEvent {
 	private BigDecimal gpsLatitude;
 	private BigDecimal gpsLongitude;
 	private String eventScheduleId;

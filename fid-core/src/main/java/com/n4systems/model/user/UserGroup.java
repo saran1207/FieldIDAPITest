@@ -3,10 +3,7 @@ package com.n4systems.model.user;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -20,8 +17,9 @@ public class UserGroup extends ArchivableEntityWithTenant implements Listable<Lo
     @Column(name = "group_id", length = 255)
     private String groupId;
 
-    @ManyToMany(mappedBy = "groups")
-    private Collection<User> members = new ArrayList<User>();
+    @ManyToMany
+    @JoinTable(name = "users_user_groups", joinColumns = @JoinColumn(name="user_group_id"), inverseJoinColumns = @JoinColumn(name="user_id"))
+    private Collection<User> members = new ArrayList<>();
 
     public String getName() {
         return name;

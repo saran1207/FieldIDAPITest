@@ -2,9 +2,9 @@ package com.n4systems.fieldid.wicket.pages.setup.eventtype;
 
 import com.n4systems.fieldid.service.event.EventTypeService;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
-import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
 import com.n4systems.fieldid.wicket.pages.setup.observationcount.ObservationCountResultConfigurationPage;
 import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigurationPage;
@@ -19,7 +19,7 @@ import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilde
 import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.param;
 import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.uniqueId;
 
-public class EventTypePage extends FieldIDFrontEndPage {
+public class EventTypePage extends FieldIDTemplatePage {
 
     protected Long eventTypeId;
     protected IModel<EventType> eventTypeModel;
@@ -50,6 +50,7 @@ public class EventTypePage extends FieldIDFrontEndPage {
                 aNavItem().label("nav.event_form").page(EventFormEditPage.class).params(uniqueId(eventTypeId)).build(),
                 aNavItem().label("nav.observations").page(ObservationCountResultConfigurationPage.class).params(uniqueId(eventTypeId)).build(),
                 aNavItem().label("nav.scoring").page(ScoreResultConfigurationPage.class).params(uniqueId(eventTypeId)).build(),
+                aNavItem().label("nav.rules").page(RulesPage.class).params(uniqueId(eventTypeId)).cond(eventTypeModel.getObject().isThingEventType()).build(),
                 aNavItem().label("nav.asset_type_associations").page("selectAssetTypes.action").params(param("eventTypeId", eventTypeId)).cond(eventTypeModel.getObject().isThingEventType()).build()));
     }
 

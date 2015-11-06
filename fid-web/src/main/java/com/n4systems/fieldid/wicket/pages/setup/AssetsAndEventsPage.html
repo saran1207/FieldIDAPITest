@@ -1,48 +1,44 @@
+<html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
 
-<div class="setupList">
+<div class="setup-list">
     <div wicket:id="allOptionsContainer">
-		<div class="setupOption eventTypeGroup">
+		<div class="setup-option event-type-group">
 			<h1><a wicket:id="eventTypeGroup" ><wicket:message key="title.manage_event_type_groups.plural"/></a></h1>
 			<p><wicket:message key="label.manage_event_type_groups_msg"/></p>
 		</div>
 
-		<div class="setupOption eventTypes">
+		<div class="setup-option event-types">
 			<h1><a href="/fieldid/eventTypes.action" ><wicket:message key="title.manage_event_types.plural"/></a></h1>
 			<p><wicket:message key="label.manage_event_types_msg"/></p>
 		</div>
 
-        <div class="setupOption eventStatusList">
+        <div class="setup-option event-status-list">
             <h1><a wicket:id="eventStatusList" ><wicket:message key="title.manage_event_status.plural"/></a></h1>
             <p><wicket:message key="label.manage_event_status_msg"/></p>
         </div>
 
 
-		<div class="setupOption eventBooks">
+		<div class="setup-option eventbooks">
 			<h1><a wicket:id="eventBooksListLink" ><wicket:message key="title.manage_event_books.plural"/></a></h1>
 			<p><wicket:message key="label.manage_event_books_msg"/></p>
 		</div>
 
-		<!--<div class="setupOption assetTypeGroups">-->
-			<!--<h1><a href="/fieldid/assetTypeGroups.action" ><wicket:message key="title.asset_type_groups.plural"/></a></h1>-->
-			<!--<p><wicket:message key="label.manage_asset_type_groups_msg"/></p>-->
-		<!--</div>-->
-
-        <div class="setupOption assetTypeGroups">
+        <div class="setup-option asset-type-groups">
             <h1>
                 <a wicket:id="assetTypeGroupsList"><wicket:message key="title.asset_type_groups.plural"/></a>
             </h1>
             <p><wicket:message key="label.manage_asset_type_groups_msg"/></p>
         </div>
 
-		<div class="setupOption assetTypes">
+		<div class="setup-option asset-types">
 			<h1>
                 <a wicket:id="assetTypesList"><wicket:message key="title.asset_types.plural"/></a>
             </h1>
 			<p><wicket:message key="label.manage_asset_types_msg"/></p>
 		</div>
 
-		<div class="setupOption assetStatusList">
+		<div class="setup-option asset-status-list">
 			<h1><a wicket:id="assetStatusList"><wicket:message key="title.manage_asset_statuses.plural"/></a></h1>
 			<p><wicket:message key="label.manage_asset_status_msg"/></p>
 		</div>
@@ -52,3 +48,4 @@
 </div>
 
 </wicket:extend>
+</html>

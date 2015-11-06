@@ -391,6 +391,16 @@ public class EventService extends FieldIdPersistenceService {
     	return event;
     }
 
+    public PlaceEvent findPlaceEventByMobileId(String mobileId, boolean withArchived) {
+        QueryBuilder<PlaceEvent> builder = createUserSecurityBuilder(PlaceEvent.class, withArchived);
+        builder.addWhere(WhereClauseFactory.create("mobileGUID", mobileId));
+        return persistenceService.find(builder);
+    }
+
+    public PlaceEvent findPlaceEventByMobileId(String mobileId) {
+        return findPlaceEventByMobileId(mobileId, false);
+    }
+
     public List<ThingEvent> getLastEventOfEachType(Long assetId) {
 		QueryBuilder<EventIdTypeAndCompletedView> builder = new QueryBuilder<>(ThingEvent.class, securityContext.getUserSecurityFilter());
         builder.setSelectArgument(new NewObjectSelect(EventIdTypeAndCompletedView.class, "id", "type.id", "completedDate"));
@@ -413,6 +423,30 @@ public class EventService extends FieldIdPersistenceService {
 
         return lastEventsByType;
 	}
+
+    public List<PlaceEvent> getLastPlaceEventOfEachType(Long placeId) {
+        //Pretty much a copy of the method above, but I couldn't use Generics here, because the QueryBuilder can't figure
+        //out security-related stuff for it.  But maybe I'm just missing a key step in doing it that way!!
+        QueryBuilder<EventIdTypeAndCompletedView> builder = new QueryBuilder<>(PlaceEvent.class, securityContext.getUserSecurityFilter());
+        builder.setSelectArgument(new NewObjectSelect(EventIdTypeAndCompletedView.class, "id", "type.id", "completedDate"));
+        builder.addWhere(WhereClauseFactory.create("place.id", placeId));
+        builder.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.COMPLETED));
+        List<EventIdTypeAndCompletedView> allEvents = persistenceService.findAll(builder);
+
+        List<PlaceEvent> lastEventsByType = allEvents.stream().collect(
+                Collectors.groupingBy(
+                        // group by event type
+                        EventIdTypeAndCompletedView::getTypeId,
+                        // reduce by the max completed date
+                        Collectors.reducing(BinaryOperator.maxBy(java.util.Comparator.comparing(EventIdTypeAndCompletedView::getCompleted)))
+                )
+        ).values().stream()
+                // Map them into full thing events and return a list
+                .map((e) -> persistenceService.find(PlaceEvent.class, e.get().getId()))
+                .collect(Collectors.toList());
+
+        return lastEventsByType;
+    }
 
     public List<LastEventForTypeView> getLastEventOfEachType(List<String> assetMobileGuids) {
 		// Start by finding all the events for all the assets

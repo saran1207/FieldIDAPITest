@@ -7,6 +7,8 @@ import com.n4systems.model.user.User;
 import com.n4systems.services.reporting.AssetSearchRecord;
 import com.n4systems.services.search.MappedResults;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.util.persistence.search.AssetLockoutTagoutStatus;
 import com.n4systems.util.persistence.search.JoinTerm;
 import com.n4systems.util.persistence.search.terms.GpsBoundsTerm;
 import com.n4systems.util.persistence.search.terms.HasGpsTerm;
@@ -51,6 +53,18 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
         if (includeGps) {
             addGpsLocationTerm(search, criteriaModel);
         }
+
+        addHasProcedureTerm(search, criteriaModel.getAssetLockoutTagoutStatus());
+    }
+
+    private void addHasProcedureTerm(List<SearchTermDefiner> search, AssetLockoutTagoutStatus status) {
+        if(status != null && status.equals(AssetLockoutTagoutStatus.WITHPROCEDURES)) {
+            addSimpleTerm(search, "activeProcedureDefinitionCount", new Long(0), WhereParameter.Comparator.GT);
+        } else if (status != null && status.equals(AssetLockoutTagoutStatus.WITHOUTPROCEDURES)) {
+            addSimpleTerm(search, "activeProcedureDefinitionCount", new Long(0), WhereParameter.Comparator.EQ);
+        } else if (status != null && status.equals(AssetLockoutTagoutStatus.ALL)) {
+            addSimpleTerm(search, "activeProcedureDefinitionCount", new Long(-1), WhereParameter.Comparator.GT);
+        }
     }
 
     private void addHasGpsTerm(List<SearchTermDefiner> search, AssetSearchCriteria criteriaModel) {
@@ -62,7 +76,6 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
     private void addGpsLocationTerm(List<SearchTermDefiner> search, AssetSearchCriteria criteriaModel) {
         search.add(new GpsBoundsTerm("gpsLocation",criteriaModel.getBounds()));
     }
-
 
     private void addPredefinedLocationTerm(List<SearchTermDefiner> search, AssetSearchCriteria criteriaModel) {
         Long predefLocationId = getId(criteriaModel.getLocation().getPredefinedLocation());

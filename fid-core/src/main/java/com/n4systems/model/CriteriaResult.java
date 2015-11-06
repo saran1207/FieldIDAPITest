@@ -2,7 +2,6 @@ package com.n4systems.model;
 
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.parents.EntityWithTenant;
-import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -17,24 +16,24 @@ public abstract class CriteriaResult extends EntityWithTenant {
 	
 	@ManyToOne(cascade=CascadeType.REFRESH, fetch=FetchType.EAGER, optional=false)
 	protected Criteria criteria;
-	
-	@ManyToOne(cascade=CascadeType.REFRESH, fetch=FetchType.EAGER, optional=false)
+
+	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER, optional=false)
     @JoinColumn(name="event_id")
 	private AbstractEvent event;
 	
 	@OneToMany(fetch= FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinTable(name="criteriaresults_recommendations")
-	@IndexColumn(name="orderidx")
+	@JoinTable(name="criteriaresults_recommendations", joinColumns = @JoinColumn(name="criteriaresults_id"), inverseJoinColumns = @JoinColumn(name = "recommendations_id"))
+	@OrderColumn(name="orderidx")
 	private List<Recommendation> recommendations = new ArrayList<Recommendation>();
 
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name="criteriaresults_actions", joinColumns = @JoinColumn(name = "criteriaresult_id"), inverseJoinColumns = @JoinColumn(name = "event_id"))
-    @IndexColumn(name="orderidx")
+    @OrderColumn(name="orderidx")
     private List<Event> actions = new ArrayList<Event>();
 	
 	@OneToMany(fetch= FetchType.EAGER, cascade=CascadeType.ALL)
-	@JoinTable(name="criteriaresults_deficiencies")
-	@IndexColumn(name="orderidx")
+	@JoinTable(name="criteriaresults_deficiencies", joinColumns = @JoinColumn(name="criteriaresults_id"), inverseJoinColumns = @JoinColumn(name = "deficiencies_id"))
+	@OrderColumn(name="orderidx")
 	private List<Deficiency> deficiencies = new ArrayList<Deficiency>();
 
     @OneToMany(mappedBy = "criteriaResult", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)

@@ -71,6 +71,7 @@
 
 		//My Saved items overrides
 		.saved-items {
+		  	overflow-y: auto!important;
 			#mySavedItemsLink {
 				padding-left: 10px;
 				color: $red;

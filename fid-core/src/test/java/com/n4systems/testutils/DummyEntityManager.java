@@ -1,17 +1,13 @@
 package com.n4systems.testutils;
 
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.FlushModeType;
-import javax.persistence.LockModeType;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.metamodel.Metamodel;
+import java.util.List;
+import java.util.Map;
 
 public class DummyEntityManager implements EntityManager {
 
@@ -40,6 +36,26 @@ public class DummyEntityManager implements EntityManager {
     }
 
     public Query createNativeQuery(String arg0, String arg1) {
+        return null;
+    }
+
+    @Override
+    public StoredProcedureQuery createNamedStoredProcedureQuery(String s) {
+        return null;
+    }
+
+    @Override
+    public StoredProcedureQuery createStoredProcedureQuery(String s) {
+        return null;
+    }
+
+    @Override
+    public StoredProcedureQuery createStoredProcedureQuery(String s, Class... classes) {
+        return null;
+    }
+
+    @Override
+    public StoredProcedureQuery createStoredProcedureQuery(String s, String... strings) {
         return null;
     }
 
@@ -75,6 +91,11 @@ public class DummyEntityManager implements EntityManager {
 
     public void joinTransaction() {}
 
+    @Override
+    public boolean isJoinedToTransaction() {
+        return false;
+    }
+
     public void lock(Object arg0, LockModeType arg1) {}
 
     public <T> T merge(T arg0) {
@@ -96,6 +117,16 @@ public class DummyEntityManager implements EntityManager {
 
     @Override
     public <T> TypedQuery<T> createQuery(CriteriaQuery<T> criteriaQuery) {
+        return null;
+    }
+
+    @Override
+    public Query createQuery(CriteriaUpdate criteriaUpdate) {
+        return null;
+    }
+
+    @Override
+    public Query createQuery(CriteriaDelete criteriaDelete) {
         return null;
     }
 
@@ -140,6 +171,26 @@ public class DummyEntityManager implements EntityManager {
 
     @Override
     public Metamodel getMetamodel() {
+        return null;
+    }
+
+    @Override
+    public <T> EntityGraph<T> createEntityGraph(Class<T> aClass) {
+        return null;
+    }
+
+    @Override
+    public EntityGraph<?> createEntityGraph(String s) {
+        return null;
+    }
+
+    @Override
+    public EntityGraph<?> getEntityGraph(String s) {
+        return null;
+    }
+
+    @Override
+    public <T> List<EntityGraph<? super T>> getEntityGraphs(Class<T> aClass) {
         return null;
     }
 

@@ -1,0 +1,1 @@
+alter table saved_searches add assetLockoutTagoutStatus VARCHAR (25) DEFAULT NULL;

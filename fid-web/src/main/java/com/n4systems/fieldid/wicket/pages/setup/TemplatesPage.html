@@ -1,30 +1,32 @@
+<html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
 
-<div class="setupList">
-		<div class="setupOption autoAttributeCriteria">
+<div class="setup-list">
+		<div class="setup-option auto-attribute-criteria">
 			<h1><a href="/fieldid/autoAttributeCriteriaList.action" ><wicket:message key="title.auto_attribute_wizard.plural" /></a></h1>
 			<p><wicket:message key="label.manage_auto_attirbute_criteria_msg" /></p>
 		</div>
 
-		<div class="setupOption commentTemplate">
+		<div class="setup-option comment-template">
 			<h1><a wicket:id="commentTemplateLink" ><wicket:message key="title.manage_comment_templates.plural" /></a></h1>
 			<p><wicket:message key="label.manage_comment_template_msg" /></p>
 		</div>
 
-		<div class="setupOption assetColumnsLayout">
+		<div class="setup-option asset-columns-layout">
 			<h1><a wicket:id="assetLayoutLink"><wicket:message key="title.column_layout_asset" /></a></h1>
 			<p><wicket:message key="label.column_layout_asset" /></p>
 		</div>
 
-		<div wicket:id="eventColumnsLayoutContainer" class="setupOption eventColumnsLayout">
+		<div wicket:id="eventColumnsLayoutContainer" class="setup-option event-columns-layout">
 			<h1><a wicket:id="eventLayoutLink"><wicket:message key="title.column_layout_event" /></a></h1>
 			<p><wicket:message key="label.column_layout_event" /></p>
 		</div>
 
-        <div wicket:id="assetCodeMappingContainer" class="setupOption assetCodeMapping">
+        <div wicket:id="assetCodeMappingContainer" class="setup-option asset-code-mapping">
             <h1><a href="/fieldid/assetCodeMappingList.action" ><wicket:message key="title.manage_asset_code_mappings.plural" /></a></h1>
             <p><wicket:message key="label.manage_asset_code_mapping_msg" /></p>
         </div>
 </div>
 
 </wicket:extend>
+</html>

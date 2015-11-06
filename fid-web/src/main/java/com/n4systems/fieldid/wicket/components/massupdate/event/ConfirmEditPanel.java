@@ -10,6 +10,7 @@ import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.model.PlatformType;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.user.User;
+import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
@@ -20,6 +21,8 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 public class ConfirmEditPanel extends AbstractMassUpdatePanel {
+
+	private static final Logger logger = Logger.getLogger(ConfirmEditPanel.class);
 	
     @SpringBean
     private AsyncService asyncService;
@@ -55,12 +58,13 @@ public class ConfirmEditPanel extends AbstractMassUpdatePanel {
 
                         try {
                             massUpdateEventService.updateEvents(eventScheduleIds, massUpdateEventModel.getEvent(), massUpdateEventModel.getSelect(), modifiedBy.getId());
+							massUpdateEventService.sendSuccessEmailResponse(eventScheduleIds, modifiedBy);
                         } catch (Exception e) {
+							logger.error(e.getMessage(), e);
                             massUpdateEventService.sendFailureEmailResponse(eventScheduleIds, modifiedBy);
-                        }
-                            massUpdateEventService.sendSuccessEmailResponse(eventScheduleIds, modifiedBy);
-
-                        ThreadLocalInteractionContext.getInstance().clear();
+                        } finally {
+							ThreadLocalInteractionContext.getInstance().clear();
+						}
                         return null;
                     }
                 });

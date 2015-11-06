@@ -1,7 +1,5 @@
 package com.n4systems.fieldid.wicket.pages.loto.definition;
 
-import com.google.common.collect.Lists;
-import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.components.image.ArrowStyleAnnotatedSvg;
 import com.n4systems.fieldid.wicket.components.image.CallOutStyleAnnotatedSvg;
@@ -18,12 +16,7 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-
-import java.io.Serializable;
-import java.util.List;
 
 public class IsolationPointImagePanel extends Panel {
 
@@ -81,11 +74,21 @@ public class IsolationPointImagePanel extends Panel {
 
     private Component getImage() {
         Component image;
+
         if (annotationTypeModel.getObject().equals(AnnotationType.ARROW_STYLE)) {
-            image = new ArrowStyleAnnotatedSvg("image",  new PropertyModel<>(getDefaultModel(), "annotation")).withScale(2.0);
+            if(((IsolationPoint)getDefaultModel().getObject()).getAnnotation() == null || ((IsolationPoint) getDefaultModel().getObject()).getAnnotation().isRenderAnnotation()) {
+                image = new ArrowStyleAnnotatedSvg("image",  new PropertyModel<>(getDefaultModel(), "annotation")).withScale(2.0);
+            } else {
+                image = new ArrowStyleAnnotatedSvg("image",  new PropertyModel<>(getDefaultModel(), "annotation")).withScale(2.0).withNoAnnotations();
+            }
         } else {
-            image = new CallOutStyleAnnotatedSvg("image", new PropertyModel<>(getDefaultModel(), "annotation.image"),
-                                                          new PropertyModel<>(getDefaultModel(), "annotation")).withScale(2.0);
+            if(((IsolationPoint) getDefaultModel().getObject()).getAnnotation() == null || ((IsolationPoint) getDefaultModel().getObject()).getAnnotation().isRenderAnnotation()) {
+                image = new CallOutStyleAnnotatedSvg("image", new PropertyModel<>(getDefaultModel(), "annotation.image"),
+                        new PropertyModel<>(getDefaultModel(), "annotation")).withScale(2.0);
+            } else {
+                image = new CallOutStyleAnnotatedSvg("image", new PropertyModel<>(getDefaultModel(), "annotation.image"),
+                        new PropertyModel<>(getDefaultModel(), "annotation")).withScale(2.0).withNoAnnotations();
+            }
         }
         image.setOutputMarkupId(true);
         return image;
