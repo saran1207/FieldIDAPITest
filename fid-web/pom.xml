@@ -278,6 +278,10 @@
 					<groupId>xmlbeans</groupId>
 					<artifactId>xbean</artifactId>
 				</exclusion>
+                <exclusion>
+                    <groupId>org.codehaus.xfire</groupId>
+                    <artifactId>xfire-spring</artifactId>
+                </exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -327,7 +331,7 @@
       		<groupId>com.google.code.gson</groupId>
       		<artifactId>gson</artifactId>
       		<version>1.7.1</version>
-      		<scope>compile</scope>
+      		<!--<scope>compile</scope>-->
     	</dependency>
         <dependency>
             <groupId>org.apache.tomcat</groupId>
