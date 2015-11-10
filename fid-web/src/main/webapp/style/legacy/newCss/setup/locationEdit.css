@@ -1,0 +1,13 @@
+.crudForm .infoSet span, .crudForm .infoSet div.simpleContainer {
+    width: 315px;
+}
+
+.crudForm .infoSet span.entypo-search {
+    width: 50px;
+}
+
+
+.crudForm .infoSet {
+    border-bottom: none;
+    overflow: visible;
+}

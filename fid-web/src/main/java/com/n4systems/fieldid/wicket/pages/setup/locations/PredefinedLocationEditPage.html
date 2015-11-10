@@ -1,0 +1,35 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+
+    <form wicket:id="form" class="crudForm">
+
+        <fieldset class="form-horizontal">
+
+            <div class="control-group infoSet">
+                <label class="label"><wicket:message key="label.name"/></label>
+                <span class="fieldHolder">
+                    <input wicket:id="name" type="text"/>
+                </span>
+            </div>
+
+            <div class="control-group infoSet">
+                <label class="label"><wicket:message key="label.owner"/></label>
+                <span class="fieldHolder">
+                    <div wicket:id="owner"/>
+                </span>
+            </div>
+
+            <div class="formActions">
+                <a class="btn-primary btn-sml" wicket:id="saveLink"><wicket:message key="label.save"/></a>
+                <wicket:message key="label.or"/>
+                <a wicket:id="removeLink"><wicket:message key="label.remove"/></a>
+                <wicket:message key="label.or"/>
+                <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+            </div>
+
+        </fieldset>
+
+    </form>
+
+</wicket:extend>
+</html>

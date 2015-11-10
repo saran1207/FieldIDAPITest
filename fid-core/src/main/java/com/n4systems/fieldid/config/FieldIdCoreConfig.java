@@ -38,6 +38,7 @@ import com.n4systems.fieldid.service.event.perform.PerformThingEventHelperServic
 import com.n4systems.fieldid.service.export.EventTypeExportService;
 import com.n4systems.fieldid.service.images.ImageService;
 import com.n4systems.fieldid.service.job.JobService;
+import com.n4systems.fieldid.service.location.LocationService;
 import com.n4systems.fieldid.service.mail.MailService;
 import com.n4systems.fieldid.service.massupdate.MassUpdateService;
 import com.n4systems.fieldid.service.mixpanel.MixpanelService;
@@ -917,5 +918,10 @@ public class FieldIdCoreConfig {
     @Bean
     public EventTypeRulesService eventTypeRulesService() {
         return new EventTypeRulesService();
+    }
+
+    @Bean
+    public LocationService locationService() {
+        return new LocationService();
     }
 }
