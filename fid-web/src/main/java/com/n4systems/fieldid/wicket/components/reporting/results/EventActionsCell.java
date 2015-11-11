@@ -105,8 +105,11 @@ public class EventActionsCell extends Panel {
             }
         };
 
-        BookmarkablePageLink startEventLink = new BookmarkablePageLink<Void>("startEventLink", StartRegularOrMasterEventPage.class,
-                new PageParameters().add("type", event.getType().getId()).add("assetId", event.getAsset().getId()));
+        PageParameters nextParams = new PageParameters().add("assetId", event.getTarget().getId())
+                .add("type", event.getType().getId())
+                .add("scheduleId", event.getId());
+
+        BookmarkablePageLink startEventLink = new BookmarkablePageLink<Void>("startEventLink", StartRegularOrMasterEventPage.class, nextParams);
 
 
         BookmarkablePageLink viewSchedulesLink = new BookmarkablePageLink("viewLink", AssetEventsPage.class, PageParametersBuilder.uniqueId(event.getAsset().getId()));
