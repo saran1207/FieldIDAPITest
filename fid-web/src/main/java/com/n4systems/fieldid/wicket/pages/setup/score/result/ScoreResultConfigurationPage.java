@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.setup.score.result;
 
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
@@ -62,13 +63,13 @@ public class ScoreResultConfigurationPage extends EventTypePage {
             add(new CheckBox("displayScoreSectionTotals", new PropertyModel<>(eventTypeModel, "displayScoreSectionTotals")));
             add(new CheckBox("displayScorePercentage", new PropertyModel<>(eventTypeModel, "displayScorePercentage")));
             add(useScoreForResult = new CheckBox("useScoreForResult"));
+            useScoreForResult.add(new UpdateComponentOnChange());
 
             boolean initialPercentage = eventForm.getScoreCalculationType().equals(ScoreCalculationType.AVERAGE);
 
             ScoreResultRangePanel failRangePanel = new ScoreResultRangePanel("failRangePanel", new PropertyModel<>(eventForm, "failRange"), initialPercentage){
                 @Override
                 protected boolean isValidationRequired() {
-                    System.out.println("Checkbox Value: " + useScoreForResult.getModelObject());
                     return useScoreForResult.getModelObject();
                 }
             };
@@ -77,7 +78,6 @@ public class ScoreResultConfigurationPage extends EventTypePage {
             ScoreResultRangePanel passRangePanel = new ScoreResultRangePanel("passRangePanel", new PropertyModel<>(eventForm, "passRange"), initialPercentage){
                 @Override
                 protected boolean isValidationRequired() {
-                    System.out.println("Checkbox Value: " + useScoreForResult.getModelObject());
                     return useScoreForResult.getModelObject();
                 }
             };
