@@ -1,10 +1,11 @@
 package com.n4systems.fieldid.ws.v1.resources;
 
 import com.n4systems.model.parents.AbstractEntity;
-import static junit.framework.Assert.*;
 import org.junit.Test;
 
 import java.util.stream.Stream;
+
+import static junit.framework.Assert.*;
 
 public class ApiResourceTest {
 

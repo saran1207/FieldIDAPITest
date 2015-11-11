@@ -51,8 +51,8 @@ public class TenantSettings extends EntityWithTenant {
 
     @Column(name="language", nullable=false)
     @ElementCollection(fetch= FetchType.EAGER)
-    @CollectionTable(name="tenant_languages", joinColumns = @JoinColumn(name = "tenant_settings_id"))
-    @IndexColumn(name="orderidx")
+    @JoinTable(name="tenant_languages", joinColumns = @JoinColumn(name = "tenant_settings_id"))
+    @OrderColumn(name="orderidx")
     // NOTE : this does NOT include the default language.  just the ones that are translated to.
     private List<Locale> translatedLanguages = Lists.newArrayList();
 

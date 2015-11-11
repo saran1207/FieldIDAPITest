@@ -2,7 +2,6 @@ package com.n4systems.fieldid.wicket.components.user;
 
 import com.n4systems.fieldid.wicket.behavior.JChosenBehavior;
 import com.n4systems.fieldid.wicket.components.renderer.BlankOptionChoiceRenderer;
-import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.select.GroupedDropDownChoice;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.user.Assignable;

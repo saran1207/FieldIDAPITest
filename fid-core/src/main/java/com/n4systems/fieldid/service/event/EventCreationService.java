@@ -15,7 +15,6 @@ import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.notification.AssigneeNotification;
 import com.n4systems.model.parents.EntityWithTenant;
-import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.signature.SignatureService;
 import com.n4systems.tools.FileDataContainer;

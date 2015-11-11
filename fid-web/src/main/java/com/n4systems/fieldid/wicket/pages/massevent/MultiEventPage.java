@@ -15,7 +15,6 @@ import com.n4systems.fieldid.wicket.components.event.EventFormEditPanel;
 import com.n4systems.fieldid.wicket.components.event.book.NewOrExistingEventBook;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
-import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
 import com.n4systems.fieldid.wicket.components.user.GroupedUserPicker;

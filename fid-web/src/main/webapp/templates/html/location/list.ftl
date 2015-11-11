@@ -9,8 +9,8 @@ ${action.setPageType('predefined_locations', 'location_list')!}
 
 	   		jQuery('#editLocation').click(function(){
 	   				var nodeId = jQuery('#nodeList').getSelectedNode().id;
-		       		if(nodeId!=-1){
-		       			redirect("<@s.url action="predefinedLocationEdit" />" + "?uniqueID="+nodeId);
+		       		if(nodeId!= undefined){
+		       			redirect("w/setup/predefinedLocationEdit?uniqueID=" + nodeId );
 		       		}else{
 		       			alert("<@s.text name="label.cannot_edit_root"/>")
 		       		}
