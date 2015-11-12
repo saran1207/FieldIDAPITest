@@ -29,7 +29,9 @@ import java.util.List;
 
 
 /**
- * Created by jheath on 2015-10-23.
+ * This is the Place Event API Endpoint.  It allows users to GET and PUT PlaceEvents.
+ *
+ * Created by Jordan Heath on 2015-10-23.
  */
 @Component
 @Path("placeevent")
@@ -68,6 +70,7 @@ public class ApiPlaceEventResource extends FieldIdPersistenceService {
     }
 
     @GET
+    @Path("downloadReport")
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional(readOnly = true)
     public Response downloadReport(@QueryParam("eventSid") String eventSid, @QueryParam("reportType") String reportType) throws Exception {
