@@ -5,6 +5,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.certificate.CertificateService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.PlaceEventCreationService;
+import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.ws.v1.resources.eventattachment.ApiEventAttachmentResource;
 import com.n4systems.model.*;
@@ -45,6 +46,7 @@ public class ApiPlaceEventResource extends FieldIdPersistenceService {
     @Autowired private PlaceEventCreationService eventCreationService;
     @Autowired private ApiEventAttachmentResource apiAttachmentResource;
     @Autowired private UserService userService;
+    @Autowired private OrgService orgService;
 
 
     @PUT
@@ -127,6 +129,8 @@ public class ApiPlaceEventResource extends FieldIdPersistenceService {
         event.setWorkflowState(WorkflowState.COMPLETED);
 
         convertApiPlaceEventForAbstractEvent(apiEvent, event, isUpdate);
+
+        event.setPlace(orgService.findById(apiEvent.getPlaceId()));
 
         if(event.getPlace().isArchived()) {
             event.archiveEntity();
