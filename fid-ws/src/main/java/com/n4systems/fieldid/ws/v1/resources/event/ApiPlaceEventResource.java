@@ -4,6 +4,7 @@ import com.n4systems.exceptions.NonPrintableEventType;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.certificate.CertificateService;
 import com.n4systems.fieldid.service.event.EventService;
+import com.n4systems.fieldid.service.event.EventTypeService;
 import com.n4systems.fieldid.service.event.PlaceEventCreationService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.user.UserService;
@@ -47,6 +48,7 @@ public class ApiPlaceEventResource extends FieldIdPersistenceService {
     @Autowired private ApiEventAttachmentResource apiAttachmentResource;
     @Autowired private UserService userService;
     @Autowired private OrgService orgService;
+    @Autowired private EventTypeService eventTypeService;
 
 
     @PUT
@@ -88,8 +90,8 @@ public class ApiPlaceEventResource extends FieldIdPersistenceService {
             String mediaType = ContentTypeUtil.getContentType(fileName);
 
             Response response = Response.ok(new ByteArrayInputStream(pdf), mediaType)
-                                        .header("Content-Disposition", "attachment; filename=\"" + fileName + "\"")
-                                        .build();
+                    .header("Content-Disposition", "attachment; filename=\"" + fileName + "\"")
+                    .build();
 
             return response;
         } catch(NonPrintableEventType npe) {
@@ -134,6 +136,8 @@ public class ApiPlaceEventResource extends FieldIdPersistenceService {
 
         if(event.getPlace().isArchived()) {
             event.archiveEntity();
+        } else {
+            event.activateEntity();
         }
 
         event.setDate(apiEvent.getDate());
@@ -168,9 +172,11 @@ public class ApiPlaceEventResource extends FieldIdPersistenceService {
         }
     }
 
+    @SuppressWarnings("unchecked") //Because I hate warnings.
     private void convertApiPlaceEventForAbstractEvent(ApiPlaceEvent apiEvent, AbstractEvent<PlaceEventType, BaseOrg> event, boolean isUpdate) {
         event.setTenant(getCurrentTenant());
         event.setMobileGUID(apiEvent.getSid());
+        event.setType(eventTypeService.getEventType(apiEvent.getTypeId()));
 
         event.setModified(apiEvent.getModified());
         if(apiEvent.getModifiedById() != null) {
