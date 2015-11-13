@@ -2,7 +2,6 @@ package com.n4systems.model.dashboard;
 
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.user.User;
-import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ public class DashboardLayout extends EntityWithTenant {
     @JoinTable(name = "dashboard_layouts_dashboard_columns",
                     joinColumns = @JoinColumn(name = "dashboard_layout_id"),
                     inverseJoinColumns = @JoinColumn(name = "dashboard_column_id"))
-    @IndexColumn(name="orderIdx")
+    @OrderColumn(name="orderIdx")
     private List<DashboardColumn> columns = new ArrayList<DashboardColumn>();
 
     @ManyToOne(fetch= FetchType.EAGER, optional=false)

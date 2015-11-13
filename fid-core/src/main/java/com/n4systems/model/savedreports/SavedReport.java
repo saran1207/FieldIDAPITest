@@ -6,7 +6,6 @@ import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.user.User;
-import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -54,7 +53,7 @@ public class SavedReport extends EntityWithTenant implements NamedEntity, Listab
 	private String sortDirection;
 	
 	@ElementCollection(fetch= FetchType.EAGER)
-	@IndexColumn(name="idx")
+	@OrderColumn(name="idx")
     @JoinTable(name="savedreports_columns", joinColumns = {@JoinColumn(name="savedreports_id")})
     @Column(name="element")
 	private List<String> columns = new ArrayList<String>();

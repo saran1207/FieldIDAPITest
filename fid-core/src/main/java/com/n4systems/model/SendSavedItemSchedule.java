@@ -7,7 +7,6 @@ import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.user.User;
 import com.n4systems.util.DateHelper;
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
 import java.util.*;
@@ -47,7 +46,7 @@ public class SendSavedItemSchedule extends EntityWithTenant {
     
     @Column(name="email", nullable=false, length=255)
     @ElementCollection(fetch= FetchType.EAGER)
-    @IndexColumn(name="orderidx")
+    @OrderColumn(name="orderidx")
     @JoinTable(name="send_saved_item_schedules_emails", joinColumns = {@JoinColumn(name="send_saved_item_schedule_id")})
     private List<String> emailAddresses = new ArrayList<String>();
 

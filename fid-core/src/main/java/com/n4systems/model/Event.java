@@ -14,7 +14,6 @@ import com.n4systems.model.utils.ActionDescriptionUtil;
 import com.n4systems.reporting.EventReportType;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.StringUtils;
-import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -90,7 +89,7 @@ public abstract class Event<T extends EventType, V extends Event, R extends Enti
     private UserGroup assignedGroup;
 
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-	@IndexColumn(name="orderidx")
+	@OrderColumn(name="orderidx")
     @JoinTable(name = "masterevents_subevents", joinColumns = @JoinColumn(name="masterevents_event_id"), inverseJoinColumns = @JoinColumn(name="subevents_event_id"))
 	private List<SubEvent> subEvents = new ArrayList<SubEvent>();
 	

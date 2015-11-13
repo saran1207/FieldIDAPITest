@@ -19,7 +19,6 @@ import com.n4systems.tools.EncryptionUtility;
 import com.n4systems.util.DateTimeDefinition;
 import com.n4systems.util.RandomString;
 import com.n4systems.util.timezone.CountryList;
-import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
 import java.io.File;
@@ -84,7 +83,7 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 
     @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
     @JoinTable(name="users_saved_items", joinColumns = @JoinColumn(name="user_id"), inverseJoinColumns = @JoinColumn(name="item_id"))
-    @IndexColumn(name="orderIdx")
+    @OrderColumn(name="orderIdx")
     private List<SavedItem> savedItems;
 
     /**

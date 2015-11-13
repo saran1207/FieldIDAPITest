@@ -7,7 +7,6 @@ import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.persistence.localization.Localized;
-import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -44,7 +43,7 @@ public abstract class EventType<T extends EventType> extends ArchivableEntityWit
     private EventForm eventForm;
 
 	@ElementCollection(fetch= FetchType.LAZY)
-	@IndexColumn(name="orderidx")
+	@OrderColumn(name="orderidx")
     @JoinTable(name="eventtypes_infofieldnames", joinColumns = {@JoinColumn(name="eventtypes_id")})
     @Column(name="element")
 	private List<String> infoFieldNames = new ArrayList<String>();

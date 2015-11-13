@@ -2,7 +2,6 @@ package com.n4systems.model;
 
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
-import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,7 +12,7 @@ import java.util.List;
 public class EventForm extends ArchivableEntityWithTenant {
 
     @OneToMany(fetch= FetchType.LAZY, cascade= CascadeType.ALL, orphanRemoval = false)
-    @IndexColumn(name="orderidx")
+    @OrderColumn(name="orderidx")
     @JoinTable(name="eventforms_criteriasections", joinColumns = @JoinColumn(name="eventform_id"), inverseJoinColumns = @JoinColumn(name="sections_id"))
     private List<CriteriaSection> sections = new ArrayList<CriteriaSection>();
 

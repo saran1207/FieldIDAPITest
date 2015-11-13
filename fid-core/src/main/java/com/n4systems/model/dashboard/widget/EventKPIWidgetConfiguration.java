@@ -1,23 +1,12 @@
 package com.n4systems.model.dashboard.widget;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
-
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.chart.RangeType;
-import org.hibernate.annotations.IndexColumn;
 
-import com.n4systems.model.orgs.BaseOrg;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("serial")
 @Entity
@@ -29,7 +18,7 @@ public class EventKPIWidgetConfiguration extends WidgetConfiguration {
     @JoinTable(name = "widget_configurations_event_kpi_orgs",
                     joinColumns = @JoinColumn(name = "config_id"),
                     inverseJoinColumns = @JoinColumn(name = "org_id"))
-    @IndexColumn(name="orderIdx")
+    @OrderColumn(name="orderIdx")
     private List<BaseOrg> orgs = new ArrayList<BaseOrg>();
 
 	@Enumerated(EnumType.STRING)

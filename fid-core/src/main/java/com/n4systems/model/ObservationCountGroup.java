@@ -3,7 +3,6 @@ package com.n4systems.model;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.persistence.localization.Localized;
-import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public class ObservationCountGroup extends ArchivableEntityWithTenant implements
 
     @OneToMany(fetch= FetchType.EAGER, cascade= CascadeType.ALL)
     @JoinTable(name="observationcount_groups_observationcounts", joinColumns = @JoinColumn(name="observationcount_group_id"), inverseJoinColumns = @JoinColumn(name="observationcount_id"))
-    @IndexColumn(name="orderIdx")
+    @OrderColumn(name="orderIdx")
     private List<ObservationCount> observationCounts = new ArrayList<ObservationCount>();
 
     public String getName() {

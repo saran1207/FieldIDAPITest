@@ -2,7 +2,6 @@ package com.n4systems.model.procedure;
 
 import com.n4systems.model.AssetType;
 import com.n4systems.model.BaseEntity;
-import org.hibernate.annotations.IndexColumn;
 import rfid.ejb.entity.InfoOptionBean;
 
 import javax.persistence.*;
@@ -20,7 +19,7 @@ public class IsolationDeviceDescription extends BaseEntity {
     private AssetType assetType;
 
     @OneToMany
-    @IndexColumn(name="orderIdx")
+    @OrderColumn(name="orderIdx")
     @JoinTable(name="isolation_device_descriptions_attribute_values", joinColumns = @JoinColumn(name = "isolation_device_description_id"), inverseJoinColumns = @JoinColumn(name = "infooption_id"))
     private List<InfoOptionBean> attributeValues;
 
