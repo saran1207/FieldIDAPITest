@@ -22,17 +22,7 @@ public class EventCriteriaEditService extends FieldIdPersistenceService {
         for (AbstractEvent.SectionResults sectionResult : sectionResults) {
             for (CriteriaResult result : sectionResult.results) {
                 CriteriaResult existingResult;
-                if (result.getId() == null || sectionResult.disabled) {
-                    if(sectionResult.disabled) {
-                        //If the CriteriaResult exists in the DB, we have to destroy it.
-                        if(result.getId() != null) {
-                            result = persistenceService.find(CriteriaResult.class, result.getId());
-                            persistenceService.remove(result);
-                        }
-                        Criteria criteria = result.getCriteria();
-                        result = criteriaResultFactory.createCriteriaResult(result.getCriteria().getCriteriaType());
-                        result.setCriteria(criteria);
-                    }
+                if (result.getId() == null) {
                     existingResult = criteriaResultFactory.createCriteriaResult(result.getCriteria().getCriteriaType());
                 } else {
                     existingResult = findExistingResultFor(result);

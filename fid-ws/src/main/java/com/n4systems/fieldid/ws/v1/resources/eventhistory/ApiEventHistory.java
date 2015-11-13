@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.ws.v1.resources.eventhistory;
 
 import java.util.Date;
+import java.util.List;
 
 public class ApiEventHistory {
 	private String assetId;
@@ -12,6 +13,7 @@ public class ApiEventHistory {
 	private String performedBy;
 	private String status;
 	private boolean printable;
+    private List<ApiEventHistory> subEvents;
 
 	public String getAssetId() {
 		return assetId;
@@ -84,4 +86,12 @@ public class ApiEventHistory {
 	public void setPrintable(boolean printable) {
 		this.printable = printable;
 	}
+
+    public List<ApiEventHistory> getSubEvents() {
+        return subEvents;
+    }
+
+    public void setSubEvents(List<ApiEventHistory> subEvents) {
+        this.subEvents = subEvents;
+    }
 }

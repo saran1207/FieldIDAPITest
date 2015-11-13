@@ -27,7 +27,7 @@ public abstract class AbstractEvent<T extends EventType, R extends EntityWithTen
     @JoinColumn(name="eventform_id")
     private EventForm eventForm;
 
-	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, mappedBy = "event")
+	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, mappedBy = "event", orphanRemoval = true)
 	private Set<CriteriaResult> results = new HashSet<CriteriaResult>();
 	
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)

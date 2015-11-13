@@ -17,7 +17,7 @@ public abstract class CriteriaResult extends EntityWithTenant {
 	@ManyToOne(cascade=CascadeType.REFRESH, fetch=FetchType.EAGER, optional=false)
 	protected Criteria criteria;
 
-	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER, optional=false)
+	@ManyToOne(fetch=FetchType.EAGER, optional=false)
     @JoinColumn(name="event_id")
 	private AbstractEvent event;
 	

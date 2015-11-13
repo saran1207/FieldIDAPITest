@@ -5,6 +5,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.certificate.CertificateService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.PlaceEventCreationService;
+import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.ws.v1.resources.eventattachment.ApiEventAttachmentResource;
 import com.n4systems.model.*;
@@ -29,7 +30,9 @@ import java.util.List;
 
 
 /**
- * Created by jheath on 2015-10-23.
+ * This is the Place Event API Endpoint.  It allows users to GET and PUT PlaceEvents.
+ *
+ * Created by Jordan Heath on 2015-10-23.
  */
 @Component
 @Path("placeevent")
@@ -43,6 +46,7 @@ public class ApiPlaceEventResource extends FieldIdPersistenceService {
     @Autowired private PlaceEventCreationService eventCreationService;
     @Autowired private ApiEventAttachmentResource apiAttachmentResource;
     @Autowired private UserService userService;
+    @Autowired private OrgService orgService;
 
 
     @PUT
@@ -68,6 +72,7 @@ public class ApiPlaceEventResource extends FieldIdPersistenceService {
     }
 
     @GET
+    @Path("downloadReport")
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional(readOnly = true)
     public Response downloadReport(@QueryParam("eventSid") String eventSid, @QueryParam("reportType") String reportType) throws Exception {
@@ -124,6 +129,8 @@ public class ApiPlaceEventResource extends FieldIdPersistenceService {
         event.setWorkflowState(WorkflowState.COMPLETED);
 
         convertApiPlaceEventForAbstractEvent(apiEvent, event, isUpdate);
+
+        event.setPlace(orgService.findById(apiEvent.getPlaceId()));
 
         if(event.getPlace().isArchived()) {
             event.archiveEntity();
