@@ -1,6 +1,7 @@
 package com.n4systems.model;
 
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.criteriarules.CriteriaRule;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.persistence.localization.Localized;
 import org.apache.commons.lang.StringUtils;
@@ -38,6 +39,10 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
 
 	@Column(nullable=false)
 	private boolean required = false;
+
+    //The cascade should ensure that - if the criteria is deleted - the rule is deleted, too.
+    @OneToOne(mappedBy = "criteria", cascade = CascadeType.ALL)
+    private CriteriaRule rule;
 
     @Transient
     private Long oldId;
@@ -130,5 +135,13 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
 
     public void setOldId(Long oldId) {
         this.oldId = oldId;
+    }
+
+    public CriteriaRule getRule() {
+        return rule;
+    }
+
+    public void setRule(CriteriaRule rule) {
+        this.rule = rule;
     }
 }

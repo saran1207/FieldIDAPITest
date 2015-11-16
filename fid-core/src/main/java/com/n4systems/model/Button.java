@@ -3,10 +3,13 @@ package com.n4systems.model;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Retirable;
+import com.n4systems.model.criteriarules.OneClickCriteriaRule;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.persistence.localization.Localized;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "buttons")
@@ -25,6 +28,9 @@ public class Button extends EntityWithTenant implements Listable<Long>, Retirabl
 
 	@Column(nullable=false)
 	private boolean retired = false;
+
+    @OneToMany(mappedBy = "button", cascade = CascadeType.ALL)
+    private List<OneClickCriteriaRule> criteriaRules = new ArrayList<>();
 	
 	public Button() {}
 
@@ -126,4 +132,12 @@ public class Button extends EntityWithTenant implements Listable<Long>, Retirabl
 				getButtonName().equals(button.getButtonName()));
 	}
 
+    public List<OneClickCriteriaRule> getCriteriaRules() {
+        return criteriaRules;
+    }
+
+    public void setCriteriaRules(List<OneClickCriteriaRule> criteriaRules) {
+        this.criteriaRules.clear();
+        this.criteriaRules.addAll(criteriaRules);
+    }
 }
