@@ -41,7 +41,8 @@ public class ObservationCountGroup extends ArchivableEntityWithTenant implements
     }
 
     public void setObservationCounts(List<ObservationCount> observationCounts) {
-        this.observationCounts = observationCounts;
+        this.observationCounts.clear();
+        this.observationCounts.addAll(observationCounts);
     }
 
     @Override

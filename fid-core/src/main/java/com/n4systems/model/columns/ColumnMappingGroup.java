@@ -2,15 +2,9 @@ package com.n4systems.model.columns;
 
 import com.n4systems.model.parents.AbstractEntity;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 @Entity
 @Table(name = "column_mapping_groups")
@@ -37,7 +31,8 @@ public class ColumnMappingGroup extends AbstractEntity {
     }
 
     public void setColumnMappings(Collection<ColumnMapping> columnMappings) {
-        this.columnMappings = columnMappings;
+        this.columnMappings.clear();
+        this.columnMappings.addAll(columnMappings);
     }
 
     public ReportType getType() {

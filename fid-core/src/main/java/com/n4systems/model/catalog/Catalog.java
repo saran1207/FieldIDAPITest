@@ -1,20 +1,14 @@
 package com.n4systems.model.catalog;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.EntityWithTenant;
+
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="catalogs")
@@ -43,7 +37,8 @@ public class Catalog extends EntityWithTenant implements Saveable{
 	}
 
 	public void setPublishedAssetTypes(Set<AssetType> publishedAssetTypes) {
-		this.publishedAssetTypes = publishedAssetTypes;
+		this.publishedAssetTypes.clear();
+		this.publishedAssetTypes.addAll(publishedAssetTypes);
 	}
 
 	public Set<EventType> getPublishedEventTypes() {
@@ -51,7 +46,8 @@ public class Catalog extends EntityWithTenant implements Saveable{
 	}
 
 	public void setPublishedEventTypes(Set<EventType> publishedEventTypes) {
-		this.publishedEventTypes = publishedEventTypes;
+		this.publishedEventTypes.clear();
+		this.publishedEventTypes.addAll(publishedEventTypes);
 	}
 
 	public boolean hasTypesPublished() {

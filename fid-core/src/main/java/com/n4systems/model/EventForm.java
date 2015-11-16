@@ -23,7 +23,8 @@ public class EventForm extends ArchivableEntityWithTenant {
     }
 
     public void setSections(List<CriteriaSection> sections) {
-        this.sections = sections;
+        this.sections.clear();
+        this.sections.addAll(sections);
     }
 
     @Column(nullable=false, name="use_score_for_result")

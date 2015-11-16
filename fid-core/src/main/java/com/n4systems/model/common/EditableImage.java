@@ -40,7 +40,8 @@ public class EditableImage extends EntityWithTenant implements S3Image {
     }
 
     public void setAnnotations(List<ImageAnnotation> annotations) {
-        this.annotations = annotations;
+        this.annotations.clear();
+        this.annotations.addAll(annotations);
     }
 
     public String getFileName() {

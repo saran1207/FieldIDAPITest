@@ -89,7 +89,8 @@ public abstract class CriteriaResult extends EntityWithTenant {
 	}
 
 	public void setRecommendations(List<Recommendation> recomendations) {
-		this.recommendations = recomendations;
+		this.recommendations.clear();
+		this.recommendations.addAll(recomendations);
 	}
 
 	public List<Deficiency> getDeficiencies() {
@@ -97,7 +98,8 @@ public abstract class CriteriaResult extends EntityWithTenant {
 	}
 
 	public void setDeficiencies(List<Deficiency> deficiencies) {
-		this.deficiencies = deficiencies;
+		this.deficiencies.clear();
+		this.deficiencies.addAll(deficiencies);
 	}
 
     public EventResult getResult() {
@@ -109,7 +111,8 @@ public abstract class CriteriaResult extends EntityWithTenant {
 	}
 
 	public void setCriteriaImages(List<CriteriaResultImage> criteriaImages) {
-		this.criteriaImages = criteriaImages;
+		this.criteriaImages.clear();
+		this.criteriaImages.addAll(criteriaImages);
 	}
 
 	public String getMobileId() {
@@ -134,6 +137,7 @@ public abstract class CriteriaResult extends EntityWithTenant {
     }
 
     public void setActions(List<Event> actions) {
-        this.actions = actions;
+        this.actions.clear();
+		this.actions.addAll(actions);
     }
 }
