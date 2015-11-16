@@ -121,7 +121,8 @@ public abstract class AbstractEvent<T extends EventType, R extends EntityWithTen
 	}
 
 	public void setCriteriaResults(Set<CriteriaResult> results) {
-		this.results = results;
+        this.results.clear();
+        this.results.addAll(results);
 	}
 
 	@Override

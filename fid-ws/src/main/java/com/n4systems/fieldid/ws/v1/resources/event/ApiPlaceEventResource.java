@@ -90,8 +90,8 @@ public class ApiPlaceEventResource extends FieldIdPersistenceService {
             String mediaType = ContentTypeUtil.getContentType(fileName);
 
             Response response = Response.ok(new ByteArrayInputStream(pdf), mediaType)
-                                        .header("Content-Disposition", "attachment; filename=\"" + fileName + "\"")
-                                        .build();
+                    .header("Content-Disposition", "attachment; filename=\"" + fileName + "\"")
+                    .build();
 
             return response;
         } catch(NonPrintableEventType npe) {
