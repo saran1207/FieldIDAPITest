@@ -37,7 +37,8 @@ public class ColumnMappingGroup extends AbstractEntity {
     }
 
     public void setColumnMappings(Collection<ColumnMapping> columnMappings) {
-        this.columnMappings = columnMappings;
+        this.columnMappings.clear();
+        this.columnMappings.addAll(columnMappings);
     }
 
     public ReportType getType() {

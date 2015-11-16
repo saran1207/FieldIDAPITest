@@ -132,7 +132,8 @@ public abstract class AbstractEvent<T extends EventType, R extends EntityWithTen
 
 	@Override
 	public void setAttachments(List<FileAttachment> attachments) {
-		this.attachments = attachments;
+		this.attachments.clear();
+        this.attachments.addAll(attachments);
 	}
 	
 	@AllowSafetyNetworkAccess

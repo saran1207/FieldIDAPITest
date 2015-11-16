@@ -86,7 +86,8 @@ public class EventBook extends ArchivableEntityWithOwner implements NamedEntity,
 	}
 	
 	public void setEvents(Set<Event> events) {
-		this.events = events;
+		this.events.clear();
+		this.events.addAll(events);
 	}
 	
 	@AllowSafetyNetworkAccess

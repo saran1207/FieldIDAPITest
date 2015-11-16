@@ -26,7 +26,8 @@ public class ObservationCountCriteriaResult extends CriteriaResult implements Li
     }
 
     public void setObservationCountResults(List<ObservationCountResult> observationCountResults) {
-        this.observationCountResults = observationCountResults;
+        this.observationCountResults.clear();
+        this.observationCountResults.addAll(observationCountResults);
     }
 
     @Override

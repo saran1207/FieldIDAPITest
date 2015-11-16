@@ -65,7 +65,8 @@ public class CriteriaSection extends EntityWithTenant implements Listable<Long>,
 	}
 	
 	public void setCriteria(List<Criteria> criteria) {
-		this.criteria = criteria;
+		this.criteria.clear();
+		this.criteria.addAll(criteria);
 	}
 
 	public String getShortName() { 

@@ -75,7 +75,8 @@ public class Recurrence extends BaseEntity {
     }
 
     public void setTimes(Set<RecurrenceTime> times) {
-        this.times = Sets.newTreeSet(times);
+        this.times.clear();
+        this.times.addAll(times);
     }
 
     @Override

@@ -30,7 +30,8 @@ public class EventKPIWidgetConfiguration extends WidgetConfiguration {
     }
     
     public void setOrgs(List<BaseOrg> orgs) {
-        this.orgs = orgs;
+        this.orgs.clear();
+        this.orgs.addAll(orgs);
     }
 
     @Override

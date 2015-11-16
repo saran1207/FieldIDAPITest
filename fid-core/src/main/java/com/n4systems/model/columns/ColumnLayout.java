@@ -41,7 +41,8 @@ public class ColumnLayout extends EntityWithTenant {
     }
 
     public void setColumnMappingList(Collection<ActiveColumnMapping> columnMappingList) {
-        this.columnMappingList = columnMappingList;
+        this.columnMappingList.clear();
+        this.columnMappingList.addAll(columnMappingList);
     }
 
     public ColumnMapping getSortColumn() {

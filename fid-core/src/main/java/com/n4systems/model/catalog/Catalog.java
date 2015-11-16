@@ -43,7 +43,8 @@ public class Catalog extends EntityWithTenant implements Saveable{
 	}
 
 	public void setPublishedAssetTypes(Set<AssetType> publishedAssetTypes) {
-		this.publishedAssetTypes = publishedAssetTypes;
+		this.publishedAssetTypes.clear();
+		this.publishedAssetTypes.addAll(publishedAssetTypes);
 	}
 
 	public Set<EventType> getPublishedEventTypes() {
@@ -51,7 +52,8 @@ public class Catalog extends EntityWithTenant implements Saveable{
 	}
 
 	public void setPublishedEventTypes(Set<EventType> publishedEventTypes) {
-		this.publishedEventTypes = publishedEventTypes;
+		this.publishedEventTypes.clear();
+		this.publishedEventTypes.addAll(publishedEventTypes);
 	}
 
 	public boolean hasTypesPublished() {

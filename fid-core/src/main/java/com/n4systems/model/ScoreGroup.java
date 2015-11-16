@@ -35,7 +35,8 @@ public class ScoreGroup extends ArchivableEntityWithTenant implements Listable {
     }
 
     public void setScores(List<Score> scores) {
-        this.scores = scores;
+        this.scores.clear();
+        this.scores.addAll(scores);
     }
 
     @Override

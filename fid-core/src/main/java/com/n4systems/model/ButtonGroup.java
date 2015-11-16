@@ -58,7 +58,8 @@ public class ButtonGroup extends EntityWithTenant implements NamedEntity, Listab
 	}
 
 	public void setButtons(List<Button> buttons) {
-		this.buttons = buttons;
+		this.buttons.clear();
+		this.buttons.addAll(buttons);
 	}
 	
 	public boolean isRetired() {

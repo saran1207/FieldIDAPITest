@@ -22,7 +22,8 @@ public class DashboardColumn extends AbstractEntity {
     }
 
     public void setWidgets(List<WidgetDefinition> widgets) {
-        this.widgets = widgets;
+        this.widgets.clear();
+        this.widgets.addAll(widgets);
     }
 
 }

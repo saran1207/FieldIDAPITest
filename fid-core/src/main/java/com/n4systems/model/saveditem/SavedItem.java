@@ -73,7 +73,8 @@ public abstract class SavedItem<T extends SearchCriteria> extends EntityWithTena
     }
 
     public void setSendSchedules(List<SendSavedItemSchedule> sendSchedules) {
-        this.sendSchedules = sendSchedules;
+        this.sendSchedules.clear();
+        this.sendSchedules.addAll(sendSchedules);
     }
 
     @Transient

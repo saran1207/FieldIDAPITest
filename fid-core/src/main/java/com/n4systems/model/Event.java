@@ -216,7 +216,8 @@ public abstract class Event<T extends EventType, V extends Event, R extends Enti
 	}
 
 	public void setSubEvents(List<SubEvent> subEvents) {
-		this.subEvents = subEvents;
+		this.subEvents.clear();
+		this.subEvents.addAll(subEvents);
 	}
 
 	@Override
