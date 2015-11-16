@@ -42,5 +42,6 @@ public class NumberFieldDetailsPanel extends Panel {
 		decimalPlaces.add(new RangeValidator<Integer>(0, 10));
 	}
 
+	protected void onConfigureCriteriaLogic() {}
 
 }

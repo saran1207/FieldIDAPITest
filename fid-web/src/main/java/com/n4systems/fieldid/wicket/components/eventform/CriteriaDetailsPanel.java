@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components.eventform;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.TooltipImage;
 import com.n4systems.fieldid.wicket.components.eventform.details.*;
+import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.model.*;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -17,6 +18,8 @@ public class CriteriaDetailsPanel extends Panel {
     private CheckBox requiredCheckBox;
     private WebMarkupContainer scoreRequiredLabel;
 
+    private FIDModalWindow modalWindow;
+
     public CriteriaDetailsPanel(String id, IModel<Criteria> criteriaModel) {
         super(id, criteriaModel);
         add(new TooltipImage("tooltip", new StringResourceModel("label.tooltip.criteria_settings", this, null)));
@@ -30,6 +33,8 @@ public class CriteriaDetailsPanel extends Panel {
         add(scoreRequiredLabel = new WebMarkupContainer("scoreRequired"));
         scoreRequiredLabel.setOutputMarkupPlaceholderTag(true);
         scoreRequiredLabel.setVisible(false);
+
+        add(modalWindow = new FIDModalWindow("modalWindow"));
     }
 
     @Override
@@ -52,11 +57,22 @@ public class CriteriaDetailsPanel extends Panel {
                 protected void onSetsResultSelected(boolean setsResult) {
                     CriteriaDetailsPanel.this.onSetsResultSelected(setsResult);
                 }
+
+
+                @Override
+                protected void onConfigureCriteriaLogic() {
+                    //TODO Open modal window and set content to appropriate panel
+                }
             });
         } else if (criteria instanceof TextFieldCriteria) {
             add(new TextFieldDetailsPanel("specificDetailsPanel", new Model<TextFieldCriteria>((TextFieldCriteria) criteria)));
         } else if (criteria instanceof SelectCriteria) {
-        	add(new SelectDetailsPanel("specificDetailsPanel", new Model<SelectCriteria>((SelectCriteria) criteria)));
+        	add(new SelectDetailsPanel("specificDetailsPanel", new Model<SelectCriteria>((SelectCriteria) criteria)) {
+                @Override
+                protected void onConfigureCriteriaLogic() {
+                    //TODO Open modal window and set content to appropriate panel
+                }
+            });
         } else if (criteria instanceof ComboBoxCriteria) {
         	add(new ComboBoxDetailsPanel("specificDetailsPanel", new Model<ComboBoxCriteria>((ComboBoxCriteria) criteria)));
         } else if (criteria instanceof UnitOfMeasureCriteria) {
@@ -74,7 +90,12 @@ public class CriteriaDetailsPanel extends Panel {
             	
             });
         } else if (criteria instanceof NumberFieldCriteria) {
-        	add(new NumberFieldDetailsPanel("specificDetailsPanel", new Model<NumberFieldCriteria>((NumberFieldCriteria) criteria)));
+        	add(new NumberFieldDetailsPanel("specificDetailsPanel", new Model<NumberFieldCriteria>((NumberFieldCriteria) criteria)) {
+                @Override
+                protected void onConfigureCriteriaLogic() {
+                    //TODO Open modal window and set content to appropriate panel
+                }
+            });
         } else if (criteria instanceof ObservationCountCriteria) {
             add(new ObservationCountDetailsPanel("specificDetailsPanel", new Model<ObservationCountCriteria>((ObservationCountCriteria) criteria)));
         }

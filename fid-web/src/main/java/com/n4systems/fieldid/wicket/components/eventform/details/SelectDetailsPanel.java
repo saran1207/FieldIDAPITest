@@ -20,4 +20,6 @@ public class SelectDetailsPanel extends Panel {
 		add(selectOptionsEditor = new SortableStringListEditor("selectOptionsEditor", new PropertyModel<List<String>>(selectCriteria, "options"),
                 new Model<String>("Drop Down Options")));
 	}
+
+	protected void onConfigureCriteriaLogic() {}
 }

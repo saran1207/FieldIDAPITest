@@ -81,4 +81,6 @@ public class OneClickDetailsPanel extends Panel {
 
     protected void onSetsResultSelected(boolean setsResult) { }
 
+    protected void onConfigureCriteriaLogic() {}
+
 }
