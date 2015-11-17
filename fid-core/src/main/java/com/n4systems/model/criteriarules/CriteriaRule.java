@@ -1,6 +1,7 @@
 package com.n4systems.model.criteriarules;
 
 import com.n4systems.model.Criteria;
+import com.n4systems.model.api.Listable;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.parents.EntityWithTenant;
 

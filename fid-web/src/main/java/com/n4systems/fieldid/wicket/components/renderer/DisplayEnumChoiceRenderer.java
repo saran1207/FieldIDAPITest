@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.util;
+package com.n4systems.fieldid.wicket.components.renderer;
 
 import com.n4systems.model.api.DisplayEnum;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;

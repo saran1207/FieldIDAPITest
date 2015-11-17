@@ -517,8 +517,21 @@ div.verticalEditPanel * {
 }
 
 .control-group {
-    display: block;
-    float: left;
-    clear: both;
     padding: 15px 5px;
+}
+
+.control-group .label {
+    display: inline-block;
+    text-align: right;
+    width: 130px;
+    padding-right: 10px;
+}
+
+.control-group .button {
+    vertical-align: middle;
+    padding-right: 5px;
+}
+
+.form-action {
+    text-align: right;
 }

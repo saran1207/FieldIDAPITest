@@ -19,7 +19,7 @@ import com.n4systems.fieldid.wicket.data.UsersDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
-import com.n4systems.fieldid.wicket.util.DisplayEnumChoiceRenderer;
+import com.n4systems.fieldid.wicket.components.renderer.DisplayEnumChoiceRenderer;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;

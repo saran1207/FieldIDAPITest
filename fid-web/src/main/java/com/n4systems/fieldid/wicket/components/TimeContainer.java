@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.wicket.components;
 
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
-import com.n4systems.fieldid.wicket.util.EnumPropertyChoiceRenderer;
+import com.n4systems.fieldid.wicket.components.renderer.EnumPropertyChoiceRenderer;
 import com.n4systems.model.RecurrenceTimeOfDay;
 import com.n4systems.model.RecurrenceType;
 import org.apache.wicket.markup.html.WebMarkupContainer;

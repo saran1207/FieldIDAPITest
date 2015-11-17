@@ -69,6 +69,7 @@ public class CriteriaDetailsPanel extends Panel {
                 protected void onConfigureCriteriaLogic(AjaxRequestTarget target, Button button) {
                     modalWindow.setContent(new OneClickCriteriaLogicForm(modalWindow.getContentId(), Model.of(button)));
                     modalWindow.show(target);
+                    modalWindow.setInitialWidth(300);
                 }
             });
         } else if (criteria instanceof TextFieldCriteria) {

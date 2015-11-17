@@ -6,7 +6,7 @@ import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
-import com.n4systems.fieldid.wicket.util.DisplayEnumChoiceRenderer;
+import com.n4systems.fieldid.wicket.components.renderer.DisplayEnumChoiceRenderer;
 import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.procedure.AnnotationType;
 import com.n4systems.model.procedure.LotoSettings;
