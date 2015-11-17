@@ -46,7 +46,7 @@ public abstract class CriteriaRule extends EntityWithTenant {
     }
 
     public enum ActionType {
-        IMAGE("Image"), ACTION("Action");
+        IMAGE("label.take_photo"), ACTION("label.assign_action");
 
         private String label;
 

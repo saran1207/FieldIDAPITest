@@ -2,9 +2,8 @@ package com.n4systems.fieldid.wicket.components.eventform.details.oneclick;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.util.EnumPropertyChoiceRenderer;
 import com.n4systems.model.Button;
-import com.n4systems.model.criteriarules.CriteriaRuleAction;
+import com.n4systems.model.criteriarules.CriteriaRule;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -16,7 +15,7 @@ import org.apache.wicket.model.PropertyModel;
 
 public class OneClickCriteriaLogicForm extends Panel {
 
-    private IModel<CriteriaRuleAction> criteriaRuleAction;
+    private IModel<CriteriaRule.ActionType> criteriaRuleAction;
 
     public OneClickCriteriaLogicForm(String id, IModel<Button> buttonModel) {
         super(id, buttonModel);
@@ -26,17 +25,17 @@ public class OneClickCriteriaLogicForm extends Panel {
         form.add(new ContextImage("buttonImage", "images/eventButtons/" + buttonModel.getObject().getButtonName() + ".png"));
         form.add(new Label("buttonLabel", new PropertyModel<String>(buttonModel, "displayText")));
 
-        form.add(new DropDownChoice<CriteriaRuleAction>("actionType",
-                new PropertyModel<CriteriaRuleAction>(this, "criteriaRuleAction"),
-                Lists.newArrayList(CriteriaRuleAction.values()),
-                new IChoiceRenderer<CriteriaRuleAction>() {
+        form.add(new DropDownChoice<CriteriaRule.ActionType>("actionType",
+                new PropertyModel<CriteriaRule.ActionType>(this, "criteriaRuleAction"),
+                Lists.newArrayList(CriteriaRule.ActionType.values()),
+                new IChoiceRenderer<CriteriaRule.ActionType>() {
                     @Override
-                    public Object getDisplayValue(CriteriaRuleAction object) {
+                    public Object getDisplayValue(CriteriaRule.ActionType object) {
                         return new FIDLabelModel(object.getLabel()).getObject();
                     }
 
                     @Override
-                    public String getIdValue(CriteriaRuleAction object, int index) {
+                    public String getIdValue(CriteriaRule.ActionType object, int index) {
                         return object.getName();
                     }
                 }));
