@@ -145,11 +145,25 @@ div.criteria {
     display: block;
     float: left;
     padding-top: 9px;
+    width: 30px;
+}
+
+.add-logic-link {
+    display: block;
+    float: left;
+    padding-top: 9px;
+    padding-left: 10px;
+}
+
+.buttonImageDiv .tool-tip {
+    padding: 7px 0 0 5px;
 }
 
 .buttonImageDiv {
     padding-left: 15px;
     padding-top:10px;
+    float: left;
+    width: 100%;
 }
 
 div.observationSectionTitle {
@@ -500,4 +514,11 @@ div.verticalEditPanel * {
     padding:5px 5px 5px 15px;
     color : #777;
     font-size: 13px;
+}
+
+.control-group {
+    display: block;
+    float: left;
+    clear: both;
+    padding: 15px 5px;
 }

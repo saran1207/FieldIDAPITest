@@ -3,8 +3,13 @@ package com.n4systems.fieldid.wicket.components.eventform;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.TooltipImage;
 import com.n4systems.fieldid.wicket.components.eventform.details.*;
+import com.n4systems.fieldid.wicket.components.eventform.details.oneclick.OneClickCriteriaLogicForm;
+import com.n4systems.fieldid.wicket.components.eventform.details.oneclick.OneClickDetailsPanel;
+import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.*;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -18,7 +23,7 @@ public class CriteriaDetailsPanel extends Panel {
     private CheckBox requiredCheckBox;
     private WebMarkupContainer scoreRequiredLabel;
 
-    private FIDModalWindow modalWindow;
+    private DialogModalWindow modalWindow;
 
     public CriteriaDetailsPanel(String id, IModel<Criteria> criteriaModel) {
         super(id, criteriaModel);
@@ -34,7 +39,8 @@ public class CriteriaDetailsPanel extends Panel {
         scoreRequiredLabel.setOutputMarkupPlaceholderTag(true);
         scoreRequiredLabel.setVisible(false);
 
-        add(modalWindow = new FIDModalWindow("modalWindow"));
+        add(modalWindow = new DialogModalWindow("modalWindow"));
+        modalWindow.setTitle(new FIDLabelModel("title.criteria_logic_setup"));
     }
 
     @Override
@@ -60,8 +66,9 @@ public class CriteriaDetailsPanel extends Panel {
 
 
                 @Override
-                protected void onConfigureCriteriaLogic() {
-                    //TODO Open modal window and set content to appropriate panel
+                protected void onConfigureCriteriaLogic(AjaxRequestTarget target, Button button) {
+                    modalWindow.setContent(new OneClickCriteriaLogicForm(modalWindow.getContentId(), Model.of(button)));
+                    modalWindow.show(target);
                 }
             });
         } else if (criteria instanceof TextFieldCriteria) {

@@ -1,7 +1,10 @@
 package com.n4systems.fieldid.wicket.components.eventform.details.oneclick;
 
+import com.n4systems.fieldid.wicket.components.TooltipImage;
 import com.n4systems.model.Button;
 import com.n4systems.model.ButtonGroup;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -9,6 +12,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.StringResourceModel;
 
 import java.util.List;
 
@@ -26,12 +30,16 @@ public class ButtonGroupDisplayPanel extends Panel {
                 ContextImage image = new ContextImage("buttonImage", "images/eventButtons/"+buttonName+".png");
                 item.add(image);
                 item.add(new Label("buttonLabel", new PropertyModel<String>(item.getModel(), "displayText")));
+                item.add(new AjaxLink<Void>("addLogicLink") {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        onConfigureCriteriaLogic(target, button);
+                    }
+                });
+                item.add(new TooltipImage("tooltip", new StringResourceModel("label.tooltip.criteria_logic", this, null)));
             }
         });
     }
 
-    @Override
-    public boolean isVisible() {
-        return true;// getDefaultModelObject() != null;
-    }
+    protected void onConfigureCriteriaLogic(AjaxRequestTarget target, Button button) {}
 }

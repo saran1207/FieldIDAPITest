@@ -61,6 +61,7 @@ public class CriteriaConfigurationPanel extends Panel {
     private CriteriaDetailsPanel createDetailsPanel(final Model<Criteria> criteriaModel) {
         return new CriteriaDetailsPanel("settings", criteriaModel) {
             @Override protected void onStateSetSelected(ButtonGroup buttonGroup) {
+                //TODO clear criteria rules here!
                 setPreviouslySelectedStateSet(buttonGroup);
             }
             @Override protected void onSetsResultSelected(boolean setsResult) {

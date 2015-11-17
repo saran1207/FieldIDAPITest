@@ -1,9 +1,9 @@
-package com.n4systems.fieldid.wicket.components.eventform.details;
+package com.n4systems.fieldid.wicket.components.eventform.details.oneclick;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
-import com.n4systems.fieldid.wicket.components.eventform.details.oneclick.ButtonGroupDisplayPanel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
+import com.n4systems.model.Button;
 import com.n4systems.model.ButtonGroup;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.stateset.StateSetLoader;
@@ -26,7 +26,12 @@ public class OneClickDetailsPanel extends Panel {
     public OneClickDetailsPanel(String id, IModel<OneClickCriteria> oneClickCriteria) {
         super(id, oneClickCriteria);
         add(new StateSetForm("stateSetForm"));
-        add(buttonGroupDisplayPanel = new ButtonGroupDisplayPanel("buttonGroupDetailsPanel", ProxyModel.of(getCriteriaModel(), on(OneClickCriteria.class).getButtonGroup())));
+        add(buttonGroupDisplayPanel = new ButtonGroupDisplayPanel("buttonGroupDetailsPanel", ProxyModel.of(getCriteriaModel(), on(OneClickCriteria.class).getButtonGroup())){
+            @Override
+            protected void onConfigureCriteriaLogic(AjaxRequestTarget target, Button button) {
+                OneClickDetailsPanel.this.onConfigureCriteriaLogic(target, button);
+            }
+        });
     }
 
     protected IModel<OneClickCriteria> getCriteriaModel() {
@@ -81,6 +86,6 @@ public class OneClickDetailsPanel extends Panel {
 
     protected void onSetsResultSelected(boolean setsResult) { }
 
-    protected void onConfigureCriteriaLogic() {}
+    protected void onConfigureCriteriaLogic(AjaxRequestTarget target, Button button) {}
 
 }
