@@ -1,8 +1,6 @@
 package com.n4systems.model.criteriarules;
 
 import com.n4systems.model.Criteria;
-import com.n4systems.model.api.Listable;
-import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.parents.EntityWithTenant;
 
 import javax.persistence.*;
@@ -26,7 +24,7 @@ public abstract class CriteriaRule extends EntityWithTenant {
     @Enumerated(EnumType.STRING)
     private ActionType action;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "criteria_id")
     private Criteria criteria;
 

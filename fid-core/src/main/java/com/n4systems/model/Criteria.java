@@ -41,8 +41,8 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
 	private boolean required = false;
 
     //The cascade should ensure that - if the criteria is deleted - the rule is deleted, too.
-    @OneToOne(mappedBy = "criteria", cascade = CascadeType.ALL)
-    private CriteriaRule rule;
+    @OneToMany(mappedBy = "criteria", cascade = CascadeType.ALL)
+    private List<CriteriaRule> rules;
 
     @Transient
     private Long oldId;
@@ -137,11 +137,12 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
         this.oldId = oldId;
     }
 
-    public CriteriaRule getRule() {
-        return rule;
+    public List<CriteriaRule> getRules() {
+        return rules;
     }
 
-    public void setRule(CriteriaRule rule) {
-        this.rule = rule;
+    public void setRules(List<CriteriaRule> rules) {
+        this.rules.clear();
+        this.rules.addAll(rules);
     }
 }
