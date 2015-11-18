@@ -6,6 +6,7 @@ import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.Button;
 import com.n4systems.model.ButtonGroup;
 import com.n4systems.model.OneClickCriteria;
+import com.n4systems.model.criteriarules.OneClickCriteriaRule;
 import com.n4systems.model.stateset.StateSetLoader;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
@@ -30,6 +31,11 @@ public class OneClickDetailsPanel extends Panel {
             @Override
             protected void onConfigureCriteriaLogic(AjaxRequestTarget target, Button button) {
                 OneClickDetailsPanel.this.onConfigureCriteriaLogic(target, button);
+            }
+
+            @Override
+            protected Boolean hasRule(Button button) {
+                return oneClickCriteria.getObject().getRules().stream().anyMatch(rule -> ((OneClickCriteriaRule) rule).getButton().equals(button));
             }
         });
     }

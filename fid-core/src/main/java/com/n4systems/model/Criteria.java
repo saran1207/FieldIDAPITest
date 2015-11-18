@@ -1,5 +1,6 @@
 package com.n4systems.model;
 
+import com.google.common.collect.Lists;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.criteriarules.CriteriaRule;
 import com.n4systems.model.parents.EntityWithTenant;
@@ -41,8 +42,8 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
 	private boolean required = false;
 
     //The cascade should ensure that - if the criteria is deleted - the rule is deleted, too.
-    @OneToMany(mappedBy = "criteria", cascade = CascadeType.ALL)
-    private List<CriteriaRule> rules;
+    @OneToMany(mappedBy = "criteria", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    private List<CriteriaRule> rules = Lists.newArrayList();
 
     @Transient
     private Long oldId;

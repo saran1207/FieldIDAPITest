@@ -1,5 +1,7 @@
 package com.n4systems.model.criteriarules;
 
+import com.n4systems.model.Criteria;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -23,6 +25,19 @@ public class SelectCriteriaRule extends CriteriaRule {
 
     @Column(name = "select_value")
     private String selectValue;
+
+    public SelectCriteriaRule() {
+    }
+
+    public SelectCriteriaRule(Criteria criteria, String selectValue) {
+        super(criteria);
+        this.selectValue = selectValue;
+    }
+
+    public SelectCriteriaRule(Criteria newCriteria, SelectCriteriaRule rule) {
+        super(newCriteria, rule);
+        this.selectValue = rule.getSelectValue();
+    }
 
     public String getSelectValue() {
         return selectValue;

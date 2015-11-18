@@ -1,6 +1,7 @@
 package com.n4systems.model.criteriarules;
 
 import com.n4systems.model.Button;
+import com.n4systems.model.Criteria;
 
 import javax.persistence.*;
 
@@ -18,6 +19,19 @@ public class OneClickCriteriaRule extends CriteriaRule {
     @ManyToOne
     @JoinColumn(name = "button_id")
     private Button button;
+
+    public OneClickCriteriaRule() {
+    }
+
+    public OneClickCriteriaRule(Criteria criteria, Button button) {
+        super(criteria);
+        this.button = button;
+    }
+
+    public OneClickCriteriaRule(Criteria newCriteria, OneClickCriteriaRule rule) {
+        super(newCriteria, rule);
+        this.button = rule.getButton();
+    }
 
     public Button getButton() {
         return button;

@@ -1,5 +1,7 @@
 package com.n4systems.model.criteriarules;
 
+import com.n4systems.model.Criteria;
+
 import javax.persistence.*;
 
 /**
@@ -22,6 +24,14 @@ public class NumberFieldCriteriaRule extends CriteriaRule {
     @Column(name = "comparison_type")
     @Enumerated(EnumType.STRING)
     private ComparisonType comparisonType;
+
+    public NumberFieldCriteriaRule() {
+    }
+
+    //TODO fix me!!!
+    public NumberFieldCriteriaRule(Criteria criteria) {
+        super(criteria);
+    }
 
     public Double getValue1() {
         return value1;

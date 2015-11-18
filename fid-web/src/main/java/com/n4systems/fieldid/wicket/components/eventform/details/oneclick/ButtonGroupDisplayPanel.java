@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.wicket.components.eventform.details.oneclick;
 
+import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.TooltipImage;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Button;
 import com.n4systems.model.ButtonGroup;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -30,16 +32,29 @@ public class ButtonGroupDisplayPanel extends Panel {
                 ContextImage image = new ContextImage("buttonImage", "images/eventButtons/"+buttonName+".png");
                 item.add(image);
                 item.add(new Label("buttonLabel", new PropertyModel<String>(item.getModel(), "displayText")));
-                item.add(new AjaxLink<Void>("addLogicLink") {
+
+                AjaxLink addEditLogicLink;
+
+                item.add(addEditLogicLink = new AjaxLink<Void>("addEditLogicLink") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         onConfigureCriteriaLogic(target, button);
                     }
                 });
+
+                if (hasRule(button)) {
+                    addEditLogicLink.add(new FlatLabel("addEditLabel", new FIDLabelModel("label.edit_logic")));
+                } else {
+                    addEditLogicLink.add(new FlatLabel("addEditLabel", new FIDLabelModel("label.add_logic")));
+                }
+
+
                 item.add(new TooltipImage("tooltip", new StringResourceModel("label.tooltip.criteria_logic", this, null)));
             }
         });
     }
 
     protected void onConfigureCriteriaLogic(AjaxRequestTarget target, Button button) {}
+
+    protected Boolean hasRule(Button button) { return false; }
 }

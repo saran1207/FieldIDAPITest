@@ -15,6 +15,10 @@
 
         <div class="form-actions">
             <a wicket:id="saveLink"><wicket:message key="label.save"/></a>
+            <wicket:enclosure child="removeLink">
+                |
+                <a wicket:id="removeLink"><wicket:message key="label.remove"/></a>
+            </wicket:enclosure>
             |
             <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
         </div>

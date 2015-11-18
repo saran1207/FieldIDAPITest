@@ -1,9 +1,13 @@
 package com.n4systems.util.eventform;
 
 import com.n4systems.model.*;
+import com.n4systems.model.criteriarules.CriteriaRule;
+import com.n4systems.model.criteriarules.OneClickCriteriaRule;
+import com.n4systems.model.criteriarules.SelectCriteriaRule;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CriteriaCopyUtil {
 
@@ -48,6 +52,9 @@ public class CriteriaCopyUtil {
     private Criteria copyNumberFieldCriteria(NumberFieldCriteria criteria) {
     	NumberFieldCriteria newCriteria = new NumberFieldCriteria();
     	newCriteria.setDecimalPlaces(criteria.getDecimalPlaces());
+
+        //TODO Copy criteria rules
+
     	return newCriteria;
 	}
 
@@ -92,13 +99,17 @@ public class CriteriaCopyUtil {
         }
     }
 
-    private Criteria copyTextFieldCriteria(TextFieldCriteria textFieldCriteria) {
+    private Criteria copyTextFieldCriteria(TextFieldCriteria criteria) {
         return new TextFieldCriteria();
     }
     
     private Criteria copySelectCriteria(SelectCriteria criteria) {
 		SelectCriteria selectCriteria = new SelectCriteria();
 		selectCriteria.setOptions(new ArrayList<String>(criteria.getOptions()));
+
+        List<CriteriaRule> rules =  criteria.getRules().stream().map(rule -> new SelectCriteriaRule(selectCriteria, (SelectCriteriaRule) rule)).collect(Collectors.toList());
+        selectCriteria.setRules(rules);
+
 		return selectCriteria;
 	}
     
@@ -109,11 +120,15 @@ public class CriteriaCopyUtil {
 	}
 
 
-    private Criteria copyOneClickCriteria(OneClickCriteria oneClickCriteria) {
-        OneClickCriteria criteria = new OneClickCriteria();
-        criteria.setPrincipal(oneClickCriteria.isPrincipal());
-        criteria.setButtonGroup(oneClickCriteria.getButtonGroup());
-        return criteria;
+    private Criteria copyOneClickCriteria(OneClickCriteria criteria) {
+        OneClickCriteria oneClickCriteria = new OneClickCriteria();
+        oneClickCriteria.setPrincipal(criteria.isPrincipal());
+        oneClickCriteria.setButtonGroup(criteria.getButtonGroup());
+
+        List<CriteriaRule> rules =  criteria.getRules().stream().map(rule -> new OneClickCriteriaRule(oneClickCriteria, (OneClickCriteriaRule) rule)).collect(Collectors.toList());
+        oneClickCriteria.setRules(rules);
+
+        return oneClickCriteria;
     }
 
     private String findUnusedNameBasedOn(String name, List<Criteria> existingCriteria) {

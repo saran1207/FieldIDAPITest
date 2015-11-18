@@ -28,6 +28,20 @@ public abstract class CriteriaRule extends EntityWithTenant {
     @JoinColumn(name = "criteria_id")
     private Criteria criteria;
 
+    public CriteriaRule() {
+    }
+
+    public CriteriaRule(Criteria criteria) {
+        super(criteria.getTenant());
+        this.criteria = criteria;
+    }
+
+    public CriteriaRule(Criteria newCriteria, CriteriaRule rule) {
+        super(rule.getTenant());
+        this.criteria = newCriteria;
+        this.action = rule.getAction();
+    }
+
     public ActionType getAction() {
         return action;
     }

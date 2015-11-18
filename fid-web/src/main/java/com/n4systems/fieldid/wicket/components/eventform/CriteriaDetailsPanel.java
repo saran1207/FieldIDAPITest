@@ -6,9 +6,10 @@ import com.n4systems.fieldid.wicket.components.eventform.details.*;
 import com.n4systems.fieldid.wicket.components.eventform.details.oneclick.OneClickCriteriaLogicForm;
 import com.n4systems.fieldid.wicket.components.eventform.details.oneclick.OneClickDetailsPanel;
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
-import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.*;
+import com.n4systems.model.criteriarules.CriteriaRule;
+import com.n4systems.model.criteriarules.OneClickCriteriaRule;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -51,7 +52,7 @@ public class CriteriaDetailsPanel extends Panel {
 
         Criteria criteria = (Criteria) getDefaultModelObject();
         if (criteria instanceof OneClickCriteria) {
-            add(new OneClickDetailsPanel("specificDetailsPanel", new Model<OneClickCriteria>((OneClickCriteria) criteria)) {
+            add(new OneClickDetailsPanel("specificDetailsPanel", new Model<>((OneClickCriteria) criteria)) {
                 @Override
                 protected void onStateSetSelected(ButtonGroup buttonGroup) {
                     // we need to notify when buttons are selected since new one click criteria need to have the previous choice
@@ -64,10 +65,34 @@ public class CriteriaDetailsPanel extends Panel {
                     CriteriaDetailsPanel.this.onSetsResultSelected(setsResult);
                 }
 
-
                 @Override
                 protected void onConfigureCriteriaLogic(AjaxRequestTarget target, Button button) {
-                    modalWindow.setContent(new OneClickCriteriaLogicForm(modalWindow.getContentId(), Model.of(button)));
+
+                   OneClickCriteriaRule criteriaRule = (OneClickCriteriaRule) (criteria).getRules().stream()
+                           .filter(rule -> ((OneClickCriteriaRule) rule).getButton().equals(button))
+                           .findFirst().orElse(new OneClickCriteriaRule(criteria, button));
+
+                    modalWindow.setContent(new OneClickCriteriaLogicForm(modalWindow.getContentId(), Model.of(criteriaRule)) {
+                        @Override
+                        public void onSaveRule(AjaxRequestTarget target, CriteriaRule rule) {
+                            rule.setCriteria(criteria);
+                            criteria.getRules().add(rule);
+                            modalWindow.close(target);
+                            target.add(CriteriaDetailsPanel.this);
+                        }
+
+                        @Override
+                        public void onRemoveRule(AjaxRequestTarget target, CriteriaRule rule) {
+                            criteria.getRules().remove(rule);
+                            modalWindow.close(target);
+                            target.add(CriteriaDetailsPanel.this);
+                        }
+
+                        @Override
+                        public void onCancel(AjaxRequestTarget target) {
+                            modalWindow.close(target);
+                        }
+                    });
                     modalWindow.show(target);
                     modalWindow.setInitialWidth(300);
                 }
