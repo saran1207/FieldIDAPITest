@@ -49,7 +49,7 @@ public class NumberFieldCriteriaRule extends CriteriaRule {
 
     //NOTE: This may be wrong and we may need to remove the label value entirely... I think it's fine, though.
     public enum ComparisonType {
-        GT("Greater than"), GE("Greater than or equal"), EQ("Equal"), LT("Less than"), LE("Less than or equal");
+        LE("<="), GE(">="), EQ("=="), BT("Between");
 
         private String label;
 
