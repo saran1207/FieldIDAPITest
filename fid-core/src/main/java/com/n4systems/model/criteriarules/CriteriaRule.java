@@ -22,7 +22,7 @@ public abstract class CriteriaRule extends EntityWithTenant {
 
     @Column(name="action")
     @Enumerated(EnumType.STRING)
-    private ActionType action;
+    private ActionType action = ActionType.ACTION;
 
     @ManyToOne
     @JoinColumn(name = "criteria_id")
@@ -59,7 +59,7 @@ public abstract class CriteriaRule extends EntityWithTenant {
     }
 
     public enum ActionType {
-        IMAGE("label.take_photo"), ACTION("label.assign_action");
+        ACTION("label.assign_action"), IMAGE("label.take_photo");
 
         private String label;
 

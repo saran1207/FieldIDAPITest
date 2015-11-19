@@ -42,6 +42,8 @@ public class CriteriaDetailsPanel extends Panel {
 
         add(modalWindow = new DialogModalWindow("modalWindow"));
         modalWindow.setTitle(new FIDLabelModel("title.criteria_logic_setup"));
+        modalWindow.setInitialWidth(350);
+
     }
 
     @Override
@@ -89,12 +91,16 @@ public class CriteriaDetailsPanel extends Panel {
                         }
 
                         @Override
+                        public boolean isNewRule(CriteriaRule rule) {
+                            return criteria.getRules().contains(rule);
+                        }
+
+                        @Override
                         public void onCancel(AjaxRequestTarget target) {
                             modalWindow.close(target);
                         }
                     });
                     modalWindow.show(target);
-                    modalWindow.setInitialWidth(300);
                 }
             });
         } else if (criteria instanceof TextFieldCriteria) {

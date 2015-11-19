@@ -3,13 +3,10 @@ package com.n4systems.fieldid.wicket.components.eventform.details.oneclick;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.renderer.CriteriaRuleActionChoiceRenderer;
-import com.n4systems.model.Button;
-import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.criteriarules.CriteriaRule;
 import com.n4systems.model.criteriarules.OneClickCriteriaRule;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -28,11 +25,12 @@ public class OneClickCriteriaLogicForm extends Panel {
         form.add(new ContextImage("buttonImage", "images/eventButtons/" + criteriaRuleModel.getObject().getButton().getButtonName() + ".png"));
         form.add(new Label("buttonLabel", new PropertyModel<String>(criteriaRuleModel, "button.displayText")));
 
-        form.add(new DropDownChoice<CriteriaRule.ActionType>("actionType",
-                new PropertyModel<CriteriaRule.ActionType>(criteriaRuleModel, "action"),
+        form.add(new DropDownChoice<>("actionType",
+                new PropertyModel<>(criteriaRuleModel, "action"),
                 Lists.newArrayList(CriteriaRule.ActionType.values()),
                 new CriteriaRuleActionChoiceRenderer())
-                .setNullValid(false).add(new UpdateComponentOnChange()));
+                .setNullValid(false)
+                .add(new UpdateComponentOnChange()));
 
         form.add(new AjaxLink<Void>("saveLink") {
             @Override
@@ -46,12 +44,17 @@ public class OneClickCriteriaLogicForm extends Panel {
             public void onClick(AjaxRequestTarget target) {
                 onRemoveRule(target, criteriaRuleModel.getObject());
             }
-        }.setVisible(!criteriaRuleModel.getObject().isNew()));
+
+            @Override
+            public boolean isVisible() {
+                return isNewRule(criteriaRuleModel.getObject());
+            }
+        });
 
         form.add(new AjaxLink<Void>("cancelLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-
+                onCancel(target);
             }
         });
 
@@ -62,4 +65,6 @@ public class OneClickCriteriaLogicForm extends Panel {
     public void onRemoveRule(AjaxRequestTarget target, CriteriaRule rule) {}
 
     public void onCancel(AjaxRequestTarget target) {}
+
+    public boolean isNewRule(CriteriaRule rule) { return false; }
 }
