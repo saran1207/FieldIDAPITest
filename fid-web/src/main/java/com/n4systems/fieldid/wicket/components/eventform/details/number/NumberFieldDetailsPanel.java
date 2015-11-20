@@ -1,6 +1,12 @@
-package com.n4systems.fieldid.wicket.components.eventform.details;
+package com.n4systems.fieldid.wicket.components.eventform.details.number;
 
+import com.n4systems.fieldid.wicket.components.FlatLabel;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.model.NumberFieldCriteria;
+import com.n4systems.model.criteriarules.CriteriaRule;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -15,8 +21,9 @@ public class NumberFieldDetailsPanel extends Panel {
 	
 	private TextField<Integer> decimalPlaces;
 	private ContainerFeedbackPanel feedbackPanel;
+	private AjaxLink addEditLogicLink;
 
-	public NumberFieldDetailsPanel(String id, IModel<?> model) {
+	public NumberFieldDetailsPanel(String id, IModel<NumberFieldCriteria> model) {
 		super(id, model);
 		add(feedbackPanel = new ContainerFeedbackPanel("feedbackPanel", this));
 		feedbackPanel.setOutputMarkupId(true);
@@ -40,8 +47,35 @@ public class NumberFieldDetailsPanel extends Panel {
 			}
 		});
 		decimalPlaces.add(new RangeValidator<Integer>(0, 10));
+
+		add(addEditLogicLink = new AjaxLink<Void>("addEditLogicLink") {
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				onConfigureCriteriaLogic(target);
+			}
+		});
+
+		addEditLogicLink.add(getAddEditLinkLabel());
+
 	}
 
-	protected void onConfigureCriteriaLogic() {}
+	private Label getAddEditLinkLabel() {
+		if (hasRule()) {
+			return new Label("addEditLabel", new FIDLabelModel("label.edit_logic"));
+		} else {
+			return new Label("addEditLabel", new FIDLabelModel("label.add_logic"));
+		}
 
+	}
+
+	public void updateAddEditLinkLabel() {
+		addEditLogicLink.replace(getAddEditLinkLabel());
+	}
+
+	public void onConfigureCriteriaLogic(AjaxRequestTarget target) {
+	}
+
+	public boolean hasRule() {
+		return false;
+	};
 }

@@ -1,6 +1,7 @@
 package com.n4systems.model.criteriarules;
 
 import com.n4systems.model.Criteria;
+import com.n4systems.model.api.DisplayEnum;
 
 import javax.persistence.*;
 
@@ -23,14 +24,20 @@ public class NumberFieldCriteriaRule extends CriteriaRule {
 
     @Column(name = "comparison_type")
     @Enumerated(EnumType.STRING)
-    private ComparisonType comparisonType;
+    private ComparisonType comparisonType = ComparisonType.LE;
 
     public NumberFieldCriteriaRule() {
     }
 
-    //TODO fix me!!!
     public NumberFieldCriteriaRule(Criteria criteria) {
         super(criteria);
+    }
+
+    public NumberFieldCriteriaRule(Criteria newCriteria, NumberFieldCriteriaRule rule) {
+        super(newCriteria, rule);
+        this.value1 = rule.getValue1();
+        this.value2 = rule.getValue2();
+        this.comparisonType = rule.getComparisonType();
     }
 
     public Double getValue1() {
@@ -58,7 +65,7 @@ public class NumberFieldCriteriaRule extends CriteriaRule {
     }
 
     //NOTE: This may be wrong and we may need to remove the label value entirely... I think it's fine, though.
-    public enum ComparisonType {
+    public enum ComparisonType implements DisplayEnum {
         LE("<="), GE(">="), EQ("=="), BT("Between");
 
         private String label;

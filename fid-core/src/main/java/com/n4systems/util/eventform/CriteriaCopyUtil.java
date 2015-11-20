@@ -2,6 +2,7 @@ package com.n4systems.util.eventform;
 
 import com.n4systems.model.*;
 import com.n4systems.model.criteriarules.CriteriaRule;
+import com.n4systems.model.criteriarules.NumberFieldCriteriaRule;
 import com.n4systems.model.criteriarules.OneClickCriteriaRule;
 import com.n4systems.model.criteriarules.SelectCriteriaRule;
 
@@ -53,9 +54,10 @@ public class CriteriaCopyUtil {
     	NumberFieldCriteria newCriteria = new NumberFieldCriteria();
     	newCriteria.setDecimalPlaces(criteria.getDecimalPlaces());
 
-        //TODO Copy criteria rules
+        List<CriteriaRule> rules = criteria.getRules().stream().map(rule -> new NumberFieldCriteriaRule(newCriteria, (NumberFieldCriteriaRule) rule)).collect(Collectors.toList());
+        newCriteria.setRules(rules);
 
-    	return newCriteria;
+        return newCriteria;
 	}
 
     private Criteria copyScoreCriteria(ScoreCriteria criteria) {

@@ -3,6 +3,8 @@ package com.n4systems.fieldid.wicket.components.eventform;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.TooltipImage;
 import com.n4systems.fieldid.wicket.components.eventform.details.*;
+import com.n4systems.fieldid.wicket.components.eventform.details.number.NumberCriteriaLogicForm;
+import com.n4systems.fieldid.wicket.components.eventform.details.number.NumberFieldDetailsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.details.oneclick.OneClickCriteriaLogicForm;
 import com.n4systems.fieldid.wicket.components.eventform.details.oneclick.OneClickDetailsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.details.select.SelectCriteriaLogicPanel;
@@ -10,6 +12,7 @@ import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.*;
 import com.n4systems.model.criteriarules.CriteriaRule;
+import com.n4systems.model.criteriarules.NumberFieldCriteriaRule;
 import com.n4systems.model.criteriarules.OneClickCriteriaRule;
 import com.n4systems.model.criteriarules.SelectCriteriaRule;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -94,7 +97,7 @@ public class CriteriaDetailsPanel extends Panel {
                         }
 
                         @Override
-                        public boolean isNewRule(CriteriaRule rule) {
+                        public boolean hasRule(CriteriaRule rule) {
                             return criteria.getRules().contains(rule);
                         }
 
@@ -145,7 +148,7 @@ public class CriteriaDetailsPanel extends Panel {
                         }
 
                         @Override
-                        protected boolean isNewRule(CriteriaRule rule) {
+                        protected boolean hasRule(CriteriaRule rule) {
                             return criteria.getRules().contains(rule);
                         }
 
@@ -187,8 +190,45 @@ public class CriteriaDetailsPanel extends Panel {
         } else if (criteria instanceof NumberFieldCriteria) {
         	add(new NumberFieldDetailsPanel("specificDetailsPanel", new Model<>((NumberFieldCriteria) criteria)) {
                 @Override
-                protected void onConfigureCriteriaLogic() {
-                    //TODO Open modal window and set content to appropriate panel
+                public void onConfigureCriteriaLogic(AjaxRequestTarget target) {
+
+                    NumberFieldCriteriaRule criteriaRule = criteria.getRules().isEmpty() ?
+                            new NumberFieldCriteriaRule(criteria) : (NumberFieldCriteriaRule) criteria.getRules().get(0);
+
+                    modalWindow.setContent(new NumberCriteriaLogicForm(modalWindow.getContentId(), Model.of(criteriaRule)) {
+                        @Override
+                        public void onCancel(AjaxRequestTarget target) {
+                            modalWindow.close(target);
+                        }
+
+                        @Override
+                        public boolean hasRule() {
+                            return !criteria.getRules().isEmpty();
+                        }
+
+                        @Override
+                        public void onRemoveRule(AjaxRequestTarget target, NumberFieldCriteriaRule rule) {
+                            criteria.getRules().remove(rule);
+                            modalWindow.close(target);
+                            updateAddEditLinkLabel();
+                            target.add(CriteriaDetailsPanel.this);
+                        }
+
+                        @Override
+                        public void onSaveRule(AjaxRequestTarget target, NumberFieldCriteriaRule rule) {
+                            rule.setCriteria(criteria);
+                            criteria.getRules().add(rule);
+                            modalWindow.close(target);
+                            updateAddEditLinkLabel();
+                            target.add(CriteriaDetailsPanel.this);
+                        }
+                    });
+                    modalWindow.show(target);
+                }
+
+                @Override
+                public boolean hasRule() {
+                    return !criteria.getRules().isEmpty();
                 }
             });
         } else if (criteria instanceof ObservationCountCriteria) {

@@ -52,7 +52,7 @@ public abstract class SelectCriteriaLogicPanel extends Panel {
             public void onClick(AjaxRequestTarget target) {
                 onRemoveRule(target, ruleModel.getObject());
             }
-        }.setVisible(isNewRule(ruleModel.getObject())));
+        }.setVisible(hasRule(ruleModel.getObject())));
 
         theForm.add(new AjaxLink<Void>("cancelLink") {
             @Override
@@ -70,5 +70,5 @@ public abstract class SelectCriteriaLogicPanel extends Panel {
 
     protected abstract void onCancel(AjaxRequestTarget target);
 
-    protected abstract boolean isNewRule(CriteriaRule rule);
+    protected abstract boolean hasRule(CriteriaRule rule);
 }

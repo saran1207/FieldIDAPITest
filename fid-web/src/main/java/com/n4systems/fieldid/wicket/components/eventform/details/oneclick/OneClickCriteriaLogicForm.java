@@ -47,7 +47,7 @@ public class OneClickCriteriaLogicForm extends Panel {
 
             @Override
             public boolean isVisible() {
-                return isNewRule(criteriaRuleModel.getObject());
+                return hasRule(criteriaRuleModel.getObject());
             }
         });
 
@@ -66,5 +66,5 @@ public class OneClickCriteriaLogicForm extends Panel {
 
     public void onCancel(AjaxRequestTarget target) {}
 
-    public boolean isNewRule(CriteriaRule rule) { return false; }
+    public boolean hasRule(CriteriaRule rule) { return false; }
 }
