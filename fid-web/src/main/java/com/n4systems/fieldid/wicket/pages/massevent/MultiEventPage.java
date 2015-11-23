@@ -7,6 +7,7 @@ import com.n4systems.fieldid.service.event.EventStatusService;
 import com.n4systems.fieldid.wicket.behavior.ConfirmNavigationBehavior;
 import com.n4systems.fieldid.wicket.behavior.DisableButtonBeforeSubmit;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
+import com.n4systems.fieldid.wicket.behavior.validation.CriteriaRuleValidator;
 import com.n4systems.fieldid.wicket.behavior.validation.DisableNavigationConfirmationBehavior;
 import com.n4systems.fieldid.wicket.behavior.validation.RequiredCriteriaValidator;
 import com.n4systems.fieldid.wicket.components.*;
@@ -285,7 +286,8 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDTemplatePag
 
             List<AbstractEvent.SectionResults> results =  event.getObject().getSectionResults();
 
-            RequiredCriteriaValidator.validate(results).stream().forEach(this::error);
+            RequiredCriteriaValidator.validate(results).forEach(this::error);
+            CriteriaRuleValidator.validate(results).forEach(this::error);
         }
     }
 

@@ -9,6 +9,7 @@ import com.n4systems.fieldid.wicket.behavior.ConfirmNavigationBehavior;
 import com.n4systems.fieldid.wicket.behavior.DisableButtonBeforeSubmit;
 import com.n4systems.fieldid.wicket.behavior.JavaScriptAlertConfirmBehavior;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
+import com.n4systems.fieldid.wicket.behavior.validation.CriteriaRuleValidator;
 import com.n4systems.fieldid.wicket.behavior.validation.DisableNavigationConfirmationBehavior;
 import com.n4systems.fieldid.wicket.behavior.validation.RequiredCriteriaValidator;
 import com.n4systems.fieldid.wicket.components.*;
@@ -433,9 +434,10 @@ public abstract class EventPage<T extends Event> extends FieldIDTemplatePage {
                 }
             }
 
-           List<AbstractEvent.SectionResults> results =  event.getObject().getSectionResults();
+            List<AbstractEvent.SectionResults> results =  event.getObject().getSectionResults();
 
-           RequiredCriteriaValidator.validate(results).stream().forEach(this::error);
+            RequiredCriteriaValidator.validate(results).forEach(this::error);
+            CriteriaRuleValidator.validate(results).forEach(this::error);
         }
 
         @Override
