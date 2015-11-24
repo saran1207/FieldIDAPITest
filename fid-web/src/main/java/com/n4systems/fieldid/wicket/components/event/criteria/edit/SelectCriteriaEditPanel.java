@@ -3,6 +3,8 @@ package com.n4systems.fieldid.wicket.components.event.criteria.edit;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.model.SelectCriteriaResult;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -11,14 +13,20 @@ import org.apache.wicket.model.PropertyModel;
 import java.util.List;
 
 public class SelectCriteriaEditPanel extends Panel {
-
     public SelectCriteriaEditPanel(String id, IModel<SelectCriteriaResult> result) {
         super(id);
 
-        DropDownChoice<String> selectField = new FidDropDownChoice<String>("selectField", new PropertyModel<String>(result, "value"), new PropertyModel<List<String>>(result, "criteria.options"));
+        DropDownChoice<String> selectField = new FidDropDownChoice<>("selectField", new PropertyModel<String>(result, "value"), new PropertyModel<List<String>>(result, "criteria.options"));
         selectField.setNullValid(true);
         selectField.add(new UpdateComponentOnChange());
+        selectField.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                doUpdateAction(target, result);
+            }
+        });
         add(selectField);
     }
 
+    protected void doUpdateAction(AjaxRequestTarget target, IModel<SelectCriteriaResult> result) {}
 }

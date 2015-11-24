@@ -3,6 +3,8 @@ package com.n4systems.fieldid.wicket.components.event.criteria.edit;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.model.NumberFieldCriteria;
 import com.n4systems.model.NumberFieldCriteriaResult;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -15,7 +17,6 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 public class NumberFieldCriteriaEditPanel extends Panel {
-
     public NumberFieldCriteriaEditPanel(String id, IModel<NumberFieldCriteriaResult> result) {
         super(id);
 
@@ -37,7 +38,15 @@ public class NumberFieldCriteriaEditPanel extends Panel {
             }
         };
         numberField.add(new UpdateComponentOnChange());
+        numberField.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                doUpdateAction(target, result);
+            }
+        });
         add(numberField);
     }
+
+    protected void doUpdateAction(AjaxRequestTarget target, IModel<NumberFieldCriteriaResult> result) {}
 
 }

@@ -18,7 +18,6 @@ import java.util.List;
 import static ch.lambdaj.Lambda.on;
 
 public class OneClickCriteriaEditPanel extends Panel {
-
     private List<Button> buttons;
     private int currentStateIndex;
     
@@ -50,6 +49,7 @@ public class OneClickCriteriaEditPanel extends Panel {
                 currentStateIndex = (currentStateIndex + 1) % buttons.size();
                 result.getObject().setButton(buttons.get(currentStateIndex));
                 target.add(buttonImage, buttonLabel);
+                doUpdateAction(target, result);
             }
         });
         
@@ -64,4 +64,5 @@ public class OneClickCriteriaEditPanel extends Panel {
         return "images/eventButtons/"+result.getObject().getButton().getButtonName()+".png";
     }
 
+    protected void doUpdateAction(AjaxRequestTarget target, IModel<OneClickCriteriaResult> result) {}
 }
