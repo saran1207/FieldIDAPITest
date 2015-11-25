@@ -172,7 +172,8 @@ public class Project extends EntityWithOwner implements NamedEntity, Listable<Lo
 	}
 
 	public void setNotes( List<FileAttachment> notes ) {
-		this.notes = notes;
+		this.notes.clear();
+		this.notes.addAll(notes);
 	}
 
 	public boolean isRetired() {
@@ -236,7 +237,8 @@ public class Project extends EntityWithOwner implements NamedEntity, Listable<Lo
     }
 
     public void setEvents(Set<Event> events) {
-        this.events = events;
+        this.events.clear();
+		this.events.addAll(events);
     }
 
 

@@ -3,15 +3,9 @@ package com.n4systems.model.dashboard;
 import com.n4systems.model.parents.AbstractEntity;
 import org.hibernate.annotations.IndexColumn;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 @Entity
 @Table(name = "dashboard_columns")
@@ -29,7 +23,8 @@ public class DashboardColumn extends AbstractEntity {
     }
 
     public void setWidgets(List<WidgetDefinition> widgets) {
-        this.widgets = widgets;
+        this.widgets.clear();
+        this.widgets.addAll(widgets);
     }
 
 }

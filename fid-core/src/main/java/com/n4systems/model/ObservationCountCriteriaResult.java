@@ -1,7 +1,6 @@
 package com.n4systems.model;
 
 import com.n4systems.model.api.Listable;
-import com.n4systems.util.DoubleFormatter;
 import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
@@ -28,7 +27,8 @@ public class ObservationCountCriteriaResult extends CriteriaResult implements Li
     }
 
     public void setObservationCountResults(List<ObservationCountResult> observationCountResults) {
-        this.observationCountResults = observationCountResults;
+        this.observationCountResults.clear();
+        this.observationCountResults.addAll(observationCountResults);
     }
 
     @Override

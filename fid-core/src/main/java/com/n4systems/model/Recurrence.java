@@ -1,7 +1,6 @@
 package com.n4systems.model;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Sets;
 import org.apache.log4j.Logger;
 import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
@@ -75,7 +74,8 @@ public class Recurrence extends BaseEntity {
     }
 
     public void setTimes(Set<RecurrenceTime> times) {
-        this.times = Sets.newTreeSet(times);
+        this.times.clear();
+        this.times.addAll(times);
     }
 
     @Override

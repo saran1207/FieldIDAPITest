@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket.components.event.observations;
 
-import com.n4systems.api.validation.validators.StringLengthValidator;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Observation;
@@ -84,8 +83,8 @@ public abstract class ObservationsEditPanel<T extends Observation> extends Panel
         form.add(new AjaxSubmitLink("saveButton") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                storeObservations();
                 storeComment(comments);
+                storeObservations();
                 onClose(target);
             }
 

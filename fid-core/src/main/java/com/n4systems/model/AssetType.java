@@ -395,7 +395,8 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	}
 
 	public void setSchedules(Set<AssetTypeSchedule> schedules) {
-		this.schedules = schedules;
+		this.schedules.clear();
+		this.schedules.addAll(schedules);
 	}
 	
 	/**
@@ -459,7 +460,8 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 
 	@Override
 	public void setAttachments( List<FileAttachment> attachments ) {
-		this.attachments = attachments;
+		this.attachments.clear();
+		this.attachments.addAll(attachments);
 	}
 
 	@AllowSafetyNetworkAccess

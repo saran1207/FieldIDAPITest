@@ -34,7 +34,8 @@ public class DashboardLayout extends EntityWithTenant {
     }
 
     public void setColumns(List<DashboardColumn> columns) {
-        this.columns = columns;
+        this.columns.clear();
+        this.columns.addAll(columns);
     }
 
     public User getUser() {
