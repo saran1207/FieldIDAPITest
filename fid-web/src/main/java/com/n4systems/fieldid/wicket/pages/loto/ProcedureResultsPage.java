@@ -204,12 +204,9 @@ public class ProcedureResultsPage extends FieldIDFrontEndPage {
         response.renderJavaScriptReference("javascript/jquery.annotate.js");
         response.renderJavaScriptReference("javascript/displayAnnotations.js");
 
-        procedureModel.getObject().getType().getLockIsolationPoints();
-
-//        JsonElement convertedIsolationLockAnnotations = serializeImageAnnotations(procedureModel.getObject().getLockResults());
         JsonElement convertedIsolationLockAnnotations = serializeImageAnnotations(procedureModel.getObject().getType().getLockIsolationPoints());
         response.renderJavaScript("var isolationLockAnnotations = " + convertedIsolationLockAnnotations.toString()+";", null);
-//        JsonElement convertedIsolationUnlockAnnotations = serializeImageAnnotations(procedureModel.getObject().getUnlockResults());
+
         JsonElement convertedIsolationUnlockAnnotations = serializeImageAnnotations(procedureModel.getObject().getType().getUnlockIsolationPoints());
         response.renderJavaScript("var isolationUnlockAnnotations = " + convertedIsolationUnlockAnnotations.toString()+";", null);
         response.renderJavaScript("unlockingState = " + currentTimelineDisplay.equals(ProcedureWorkflowState.UNLOCKED) + ";", null);

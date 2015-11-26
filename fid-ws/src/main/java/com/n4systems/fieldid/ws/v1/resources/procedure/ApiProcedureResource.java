@@ -63,6 +63,10 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
             procedure.setModified(new Date());
 
             persistenceService.save(procedure);
+        } else {
+            //This is necessary whether it's a scheduled or unscheduled procedure, since we only set the type on
+            //Lock for some reason.  This was causing some weird errors represented in WEB-5959
+            procedure.setType(procedureDefinitionService.findProcedureDefinitionByMobileId(apiProcedure.getProcedureDefinitionId()));
         }
 
 
