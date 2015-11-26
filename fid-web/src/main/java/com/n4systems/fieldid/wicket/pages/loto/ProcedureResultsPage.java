@@ -220,7 +220,11 @@ public class ProcedureResultsPage extends FieldIDFrontEndPage {
     protected JsonElement serializeImageAnnotations(List<IsolationPoint> isolationPoints) {
         JsonArray points = new JsonArray();
 
-        isolationPoints.forEach(isolationPoint -> {
+        isolationPoints.stream()
+                        //We only care about IPs that HAVE annotations.  Otherwise we get an NPE.  How was this
+                        //never exploding?!
+                       .filter(isolationPoint -> isolationPoint.getAnnotation() != null)
+                       .forEach(isolationPoint -> {
             JsonObject point = new JsonObject();
             point.addProperty("x", isolationPoint.getAnnotation().getX());
             point.addProperty("y", isolationPoint.getAnnotation().getY());
