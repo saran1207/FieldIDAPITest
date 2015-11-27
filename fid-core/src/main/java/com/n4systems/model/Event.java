@@ -14,6 +14,7 @@ import com.n4systems.model.utils.ActionDescriptionUtil;
 import com.n4systems.reporting.EventReportType;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.StringUtils;
+import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -216,8 +217,9 @@ public abstract class Event<T extends EventType, V extends Event, R extends Enti
 	}
 
 	public void setSubEvents(List<SubEvent> subEvents) {
-		this.subEvents.clear();
-		this.subEvents.addAll(subEvents);
+        this.subEvents = subEvents;
+//		this.subEvents.clear();
+//		this.subEvents.addAll(subEvents);
 	}
 
 	@Override
