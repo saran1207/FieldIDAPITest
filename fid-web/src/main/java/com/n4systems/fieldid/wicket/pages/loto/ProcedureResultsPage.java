@@ -204,12 +204,9 @@ public class ProcedureResultsPage extends FieldIDFrontEndPage {
         response.renderJavaScriptReference("javascript/jquery.annotate.js");
         response.renderJavaScriptReference("javascript/displayAnnotations.js");
 
-        procedureModel.getObject().getType().getLockIsolationPoints();
-
-//        JsonElement convertedIsolationLockAnnotations = serializeImageAnnotations(procedureModel.getObject().getLockResults());
         JsonElement convertedIsolationLockAnnotations = serializeImageAnnotations(procedureModel.getObject().getType().getLockIsolationPoints());
         response.renderJavaScript("var isolationLockAnnotations = " + convertedIsolationLockAnnotations.toString()+";", null);
-//        JsonElement convertedIsolationUnlockAnnotations = serializeImageAnnotations(procedureModel.getObject().getUnlockResults());
+
         JsonElement convertedIsolationUnlockAnnotations = serializeImageAnnotations(procedureModel.getObject().getType().getUnlockIsolationPoints());
         response.renderJavaScript("var isolationUnlockAnnotations = " + convertedIsolationUnlockAnnotations.toString()+";", null);
         response.renderJavaScript("unlockingState = " + currentTimelineDisplay.equals(ProcedureWorkflowState.UNLOCKED) + ";", null);
@@ -223,7 +220,11 @@ public class ProcedureResultsPage extends FieldIDFrontEndPage {
     protected JsonElement serializeImageAnnotations(List<IsolationPoint> isolationPoints) {
         JsonArray points = new JsonArray();
 
-        isolationPoints.forEach(isolationPoint -> {
+        isolationPoints.stream()
+                        //We only care about IPs that HAVE annotations.  Otherwise we get an NPE.  How was this
+                        //never exploding?!
+                       .filter(isolationPoint -> isolationPoint.getAnnotation() != null)
+                       .forEach(isolationPoint -> {
             JsonObject point = new JsonObject();
             point.addProperty("x", isolationPoint.getAnnotation().getX());
             point.addProperty("y", isolationPoint.getAnnotation().getY());
