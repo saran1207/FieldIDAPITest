@@ -907,9 +907,9 @@ public class AssetService extends CrudService<Asset> {
     }
 
     public void increaseProcedureCount(Asset asset) {
-        long count = asset.getActiveProcedureDefinitionCount();
-        if(count == -1 || count == 0) {
-            asset.setActiveProcedureDefinitionCount(new Long(1));
+        Long count = asset.getActiveProcedureDefinitionCount();
+        if(count == null || count == -1 || count == 0) {
+            asset.setActiveProcedureDefinitionCount(1L);
         } else {
             asset.setActiveProcedureDefinitionCount(count + 1);
         }
@@ -922,11 +922,11 @@ public class AssetService extends CrudService<Asset> {
         for(Asset asset:allActiveAssetsOfType) {
             //If it was "turned off", we have to turn it "on"
             if (asset.getActiveProcedureDefinitionCount() == -1) {
-                asset.setActiveProcedureDefinitionCount(new Long(0));
+                asset.setActiveProcedureDefinitionCount(0L);
                 persistenceService.update(asset);
             } //If it was turned "on" but didn't have any procedures authored, then reset it to -1
             else if (asset.getActiveProcedureDefinitionCount() == 0) {
-                asset.setActiveProcedureDefinitionCount(new Long(-1));
+                asset.setActiveProcedureDefinitionCount((long) -1);
                 persistenceService.update(asset);
             }
         }
