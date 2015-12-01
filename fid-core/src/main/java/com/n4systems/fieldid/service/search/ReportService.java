@@ -255,6 +255,8 @@ public class ReportService extends SearchService<EventReportCriteria, ThingEvent
                 if(!newSortExpressions.isEmpty()) {
                     sortColumn.setSortExpression(newSortExpressions.substring(0, newSortExpressions.length()-1));
                 }
+            } else {
+                sortColumn.setSortExpression(null);
             }
             super.addSortTerms(criteriaModel, searchBuilder, sortColumn, sortDirection);
         }
