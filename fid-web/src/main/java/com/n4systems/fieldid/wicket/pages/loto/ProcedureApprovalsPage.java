@@ -34,23 +34,10 @@ public abstract class ProcedureApprovalsPage extends FieldIDTemplatePage {
         ));
     }
 
-//    @Override
-//    protected Component createActionGroup(String actionGroupId) {
-//        return new PlaceActionGroup(actionGroupId,orgModel) {
-//            @Override
-//            protected void refreshContainingPage(AjaxRequestTarget target) {
-//                refreshContent(target);
-//            }
-//        };
-//    }
-
-
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/legacy/pageStyles/procedureDefinition.css");
         response.renderJavaScriptReference("javascript/procedureDefinitionPage.js");
-        response.renderCSSReference("style/legacy/newCss/component/matt_buttons.css");
     }
 
 }

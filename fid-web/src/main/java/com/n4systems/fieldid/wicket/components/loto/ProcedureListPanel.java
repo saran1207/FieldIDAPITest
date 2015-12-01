@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class ProcedureListPanel extends Panel {
 
-    public static final int PROCEDURES_PER_PAGE = 500;
+    public static final int PROCEDURES_PER_PAGE = 30;
     @SpringBean
     private ProcedureDefinitionService procedureDefinitionService;
 
@@ -43,7 +43,7 @@ public class ProcedureListPanel extends Panel {
     }
 
     protected String getTableStyle() {
-        return  "no_paging";
+        return  "";
     }
 
     private List<IColumn<? extends ProcedureDefinition>> getProceduresTableColumns() {
