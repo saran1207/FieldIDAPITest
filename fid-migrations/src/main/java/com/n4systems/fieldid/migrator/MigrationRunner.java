@@ -38,9 +38,21 @@ public class MigrationRunner {
 			logger.info("Running migrations");
 			conn = getConnection();
 			conn.setAutoCommit(false);
+
+			logger.info("Turning triggers off!");
+			//Turn off triggers
+			turnTriggersOff(conn);
+			logger.info("Triggers are off!");
+
 			for (Migration migration: loadMigrations(getCompletedMigrations(conn))) {
 				migration.migrate(conn);
 			}
+
+			logger.info("Turning triggers on!");
+			//Turn on triggers
+			turnTriggersOn(conn);
+			logger.info("Triggers are on!");
+
 			logger.info("Finished migrations in " + ((System.currentTimeMillis() - start) / 1000.0f) + "s");
         } catch (Exception e) {
 			logger.error("Migrations Failed", e);
@@ -62,6 +74,26 @@ public class MigrationRunner {
 		}
 		conn.setAutoCommit(false);
 		return conn;
+	}
+
+	private void turnTriggersOff(Connection conn) throws SQLException {
+		PreparedStatement versionStmt = null;
+		try {
+			versionStmt = conn.prepareStatement("SET @disable_triggers = 1");
+			versionStmt.executeUpdate();
+		} finally {
+			DbUtils.close(versionStmt);
+		}
+	}
+
+	private void turnTriggersOn(Connection conn) throws SQLException {
+		PreparedStatement versionStmt = null;
+		try {
+			versionStmt = conn.prepareStatement("SET @disable_triggers = NULL");
+			versionStmt.executeUpdate();
+		} finally {
+			DbUtils.close(versionStmt);
+		}
 	}
 
 	private List<Long> getCompletedMigrations(Connection conn) throws SQLException {
