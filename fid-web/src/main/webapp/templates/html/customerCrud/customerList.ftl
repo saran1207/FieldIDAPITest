@@ -19,7 +19,7 @@
 		</tr>
 	
 	<#list page.list as customer>
-	
+
 		<tr>
 			<td>
 				<#if customer.archived>
@@ -39,8 +39,8 @@
 				<#elseif customer.archived>
 					<a href="<@s.url value="customerUnarchive.action" uniqueID="${customer.id}" />" ><@s.text name="label.unarchive" /></a>
 				<#else>
-					<a href="<@s.url value="customerEdit.action" uniqueID="${customer.id}" />" ><@s.text name="label.edit" /></a> | 
-					<a href="<@s.url value="customerArchive.action" uniqueID="${customer.id}" />" onclick="return confirm('<@s.text name="label.areyousurearchivecustomer" />');" ><@s.text name="label.archive" /></a>
+					<a href="<@s.url value="customerEdit.action" uniqueID="${customer.id}" />" ><@s.text name="label.edit" /></a> |
+					<a href="<@s.url value="customerArchive.action" uniqueID="${customer.id}" />" onclick="${action.getAppropriateJSValue(customer.id)}" ><@s.text name="label.archive" /></a>
 				</#if>
 			</td>
 		</tr>
