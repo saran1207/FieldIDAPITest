@@ -56,7 +56,7 @@ public class CriteriaRuleValidator {
                   .filter(rule -> ((OneClickCriteriaRule)rule).getButton().getId().equals(((OneClickCriteriaResult)result).getButton().getId()))
                   .forEach(rule -> validateRuleAdherence(sectionName, rule, result, errors));
         } else
-        if(result instanceof NumberFieldCriteriaResult) {
+        if(result instanceof NumberFieldCriteriaResult && ((NumberFieldCriteriaResult) result).getValue() != null) {
             result.getCriteria()
                   .getRules()
                   .stream()
