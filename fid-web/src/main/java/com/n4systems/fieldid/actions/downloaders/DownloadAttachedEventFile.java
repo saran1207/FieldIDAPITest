@@ -7,6 +7,7 @@ import com.n4systems.model.*;
 import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
 import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.net.URLEncoder;
@@ -18,6 +19,8 @@ import java.util.zip.ZipOutputStream;
 
 public class DownloadAttachedEventFile extends DownloadAction {
 	private static final long serialVersionUID = 1L;
+
+    private static Logger logger = Logger.getLogger(DownloadAttachedEventFile.class);
 
 	//private ThingEvent event;
 	private EventManager eventManager;
@@ -251,10 +254,10 @@ public class DownloadAttachedEventFile extends DownloadAction {
             }
             IOUtils.closeQuietly(zipOut);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            logger.error(e);
             failure = true;
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e);
             failure = true;
         }
         File downloadFile = getFile(fileName);
@@ -265,6 +268,7 @@ public class DownloadAttachedEventFile extends DownloadAction {
             input = new FileInputStream( downloadFile );
             return sendFile( input );
         } catch( IOException e ) {
+            logger.error(e);
         } finally {
             failure = true;
         }
