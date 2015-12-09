@@ -16,7 +16,7 @@ public class EventTypeCopier implements Copier<EventType> {
 	private final EventTypeSaver typeSaver;
 	private final EventTypeUniqueNameLoader typeNameLoader;
     private final EventFormSaver formSaver;
-	private final EventFormService eventFormService = new EventFormService();
+	private final EventFormService eventFormService;
     private boolean withProofTests = true;
 
 	public EventTypeCopier(Cleaner<EventType> typeCleaner, FilteredIdLoader<EventType> typeLoader, EventTypeSaver typeSaver, EventFormSaver formSaver, EventTypeUniqueNameLoader typeNameLoader) {
@@ -25,8 +25,9 @@ public class EventTypeCopier implements Copier<EventType> {
 		this.typeSaver = typeSaver;
 		this.typeNameLoader = typeNameLoader;
         this.formSaver = formSaver;
+		eventFormService = new EventFormService();
 	}
-	
+
 	protected EventTypeCopier(Tenant tenant, SecurityFilter filter) {
 		this(new ThingEventTypeCleaner(tenant), new FilteredIdLoader<EventType>(filter, EventType.class), new EventTypeSaver(), new EventFormSaver(), new EventTypeUniqueNameLoader(filter));
 	}
@@ -51,10 +52,10 @@ public class EventTypeCopier implements Copier<EventType> {
 		String newName = typeNameLoader.setName(type.getName()).load();
 		type.setName(newName);
 
-		//Need to create a new copy of the event form.
-		type.setEventForm(eventFormService.copyEventForm(type.getEventForm()));
-
         if (type.getEventForm() != null) {
+			//Need to create a new copy of the event form.
+			type.setEventForm(eventFormService.copyEventForm(type.getEventForm()));
+
             formSaver.save(type.getEventForm());
         }
 		typeSaver.save(type);
