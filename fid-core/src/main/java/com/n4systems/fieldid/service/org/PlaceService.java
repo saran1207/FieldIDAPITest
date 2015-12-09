@@ -185,9 +185,9 @@ public class PlaceService extends FieldIdPersistenceService {
         return persistenceService.findAll(query);
     }
 
-    public Long getAssetCount(BaseOrg org) {
+    public Long getAssetCount(Long orgId) {
         QueryBuilder<Asset> query = createTenantSecurityBuilder(Asset.class);
-        query.addSimpleWhere("owner", org);
+        query.addSimpleWhere("owner.id", orgId);
 
         return persistenceService.count(query);
     }

@@ -47,11 +47,11 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
 
         Procedure procedure = procedureService.findByMobileId(apiProcedure.getProcedureId(), true);
 
+        ProcedureDefinition procedureDefinition = procedureDefinitionService.findProcedureDefinitionByMobileId(apiProcedure.getProcedureDefinitionId());
+
         //The Mobile app is performing an unscheduled procedure, so we need to create it first.
         if(procedure == null) {
             procedure = new Procedure();
-
-            ProcedureDefinition procedureDefinition = procedureDefinitionService.findProcedureDefinitionByMobileId(apiProcedure.getProcedureDefinitionId());
 
             procedure.setMobileGUID(apiProcedure.getProcedureId());
             procedure.setType(procedureDefinition);
@@ -63,10 +63,6 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
             procedure.setModified(new Date());
 
             persistenceService.save(procedure);
-        } else {
-            //This is necessary whether it's a scheduled or unscheduled procedure, since we only set the type on
-            //Lock for some reason.  This was causing some weird errors represented in WEB-5959
-            procedure.setType(procedureDefinitionService.findProcedureDefinitionByMobileId(apiProcedure.getProcedureDefinitionId()));
         }
 
 
@@ -79,7 +75,7 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
         procedure.setLockedBy(getCurrentUser());
         procedure.setLockDate(convertedResults.get(convertedResults.size() - 1).getCheckCheckTime());
         procedure.setWorkflowState(ProcedureWorkflowState.LOCKED);
-        procedure.setType(procedureDefinitionService.getPublishedProcedureDefinition(procedure.getAsset(), procedure.getType().getFamilyId()));
+        procedure.setType(procedureDefinition);
         convertGpsLocation(apiProcedure, procedure);
 
         if(getCurrentUser().isUsageBasedUser()) {

@@ -145,7 +145,7 @@ public class PlaceActionGroup extends Panel {
         });
 
         if(getOrg().isDivision() || getOrg().isCustomer()) {
-            Long assetCount = placeService.getAssetCount(getOrg());
+            Long assetCount = placeService.getAssetCount(getOrg().getId());
             if(assetCount != null && assetCount > 0) {
                 archiveLink.add(new AlertBehaviour(new FIDLabelModel("msg.alert_archive_org", getOrg().getName())));
             } else {
