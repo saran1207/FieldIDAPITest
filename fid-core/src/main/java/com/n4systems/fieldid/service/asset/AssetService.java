@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.n4systems.exceptions.*;
 import com.n4systems.fieldid.LegacyMethod;
-import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.amazon.S3Service;
@@ -633,10 +632,13 @@ public class AssetService extends CrudService<Asset> {
 
         User user = persistenceService.find(User.class, securityFilter.getUserId());
 
-        Collection<User> visibleUsers = ThreadLocalInteractionContext.getInstance().getVisibleUsers();
+//        Collection<User> visibleUsers = ThreadLocalInteractionContext.getInstance().getVisibleUsers();
+//        if(visibleUsers != null && visibleUsers.size() > 0) {
+//            query += " AND event.performedBy in (:visibleUsers) ";
+//        }
 
         if (!user.getGroups().isEmpty()) {
-            query += " AND event.performedBy  in (:visibleUsers) ";
+//            query += " AND event.performedBy  in (:visibleUsers) ";
             query += " AND (event.assignedGroup is null or event.assignedGroup in (:groupList) ) ";
         }
 
@@ -655,8 +657,11 @@ public class AssetService extends CrudService<Asset> {
         eventQuery.setParameter("activeState", Archivable.EntityState.ACTIVE);
         eventQuery.setParameter("completed", WorkflowState.COMPLETED);
 
+//        if(visibleUsers != null && visibleUsers.size() > 0) {
+//            eventQuery.setParameter("visibleUsers", visibleUsers);
+//        }
+
         if (!user.getGroups().isEmpty()) {
-            eventQuery.setParameter("visibleUsers", visibleUsers);
             eventQuery.setParameter("groupList", user.getGroups());
         }
 
