@@ -46,8 +46,7 @@ public class EventFormService extends FieldIdPersistenceService {
         EventForm eventForm = new EventForm();
 
         eventForm.setTenant(from.getTenant());
-        List<CriteriaSection> newCriteriaSections = createCopiesOf(from.getSections());
-        eventForm.setSections(convertSectionsToNewObservationCountGroup(newCriteriaSections, from.getObservationCountGroup()));
+        eventForm.setSections(createCopiesOf(from.getSections()));
         eventForm = copyEventFormSettings(from, eventForm);
 
         return eventForm;

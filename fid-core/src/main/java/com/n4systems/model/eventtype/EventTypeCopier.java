@@ -2,6 +2,7 @@ package com.n4systems.model.eventtype;
 
 import com.n4systems.fieldid.service.event.EventFormService;
 import com.n4systems.model.Copier;
+import com.n4systems.model.EventForm;
 import com.n4systems.model.EventType;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Cleaner;
@@ -54,7 +55,8 @@ public class EventTypeCopier implements Copier<EventType> {
 
         if (type.getEventForm() != null) {
 			//Need to create a new copy of the event form.
-			type.setEventForm(eventFormService.copyEventForm(type.getEventForm()));
+			EventForm newCopy = eventFormService.copyEventForm(type.getEventForm());
+			type.setEventForm(newCopy);
 
             formSaver.save(type.getEventForm());
         }
