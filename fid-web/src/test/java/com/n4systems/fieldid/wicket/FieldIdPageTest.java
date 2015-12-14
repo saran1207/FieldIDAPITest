@@ -7,6 +7,8 @@ import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.model.user.User;
 import com.n4systems.services.config.ConfigService;
+import com.n4systems.services.config.MutableRootConfig;
+import com.n4systems.services.config.RootConfig;
 import com.n4systems.util.ConfigEntry;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.junit.Before;
@@ -63,6 +65,9 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
         expect(configService.getString(ConfigEntry.CUSTOM_JS)).andReturn("");
         expect(configService.getString(eq(ConfigEntry.FOOTER_SCRIPT), anyLong())).andReturn("");
         expect(configService.getString(eq(ConfigEntry.HEADER_SCRIPT), anyLong())).andReturn("");
+		expect(configService.getConfig()).andReturn(new RootConfig(new MutableRootConfig()));
+
+
 		replay(configService);
 	}
 

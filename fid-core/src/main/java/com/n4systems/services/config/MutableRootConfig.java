@@ -3,14 +3,14 @@ package com.n4systems.services.config;
 public class MutableRootConfig {
 	private String name;
 	private Long tenantId;
-	private MutableAwsConfig aws;
-	private MutableSystemConfig system;
-	private MutableWebConfig web;
-	private MutableMobileConfig mobile;
-	private MutableIndexingConfig indexing;
-	private MutableMailConfig mail;
-	private MutableProofTestConfig proofTest;
-	private MutableLimitConfig limit;
+	private MutableAwsConfig aws = new MutableAwsConfig();
+	private MutableSystemConfig system = new MutableSystemConfig();
+	private MutableWebConfig web = new MutableWebConfig();
+	private MutableMobileConfig mobile = new MutableMobileConfig();
+	private MutableIndexingConfig indexing = new MutableIndexingConfig();
+	private MutableMailConfig mail = new MutableMailConfig();
+	private MutableProofTestConfig proofTest = new MutableProofTestConfig();
+	private MutableLimitConfig limit = new MutableLimitConfig();
 
 	public String getName() {
 		return name;
