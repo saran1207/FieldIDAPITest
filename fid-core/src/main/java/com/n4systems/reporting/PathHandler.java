@@ -3,7 +3,6 @@ package com.n4systems.reporting;
 import com.n4systems.model.*;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.user.User;
-import com.n4systems.util.ConfigContext;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -112,7 +111,7 @@ public class PathHandler {
 	 * @return	A File object for this directory
 	 */
 	private static File getAppRoot() {
-		return ConfigContext.getCurrentContext().getAppRoot();
+		return new File("/var/fieldid");
 	}
 	
 	/**

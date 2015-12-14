@@ -11,7 +11,7 @@ import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.OwnerAndDownWithPrimaryFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
-import com.n4systems.services.ConfigService;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.services.search.writer.AssetIndexWriter;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.persistence.JoinClause;

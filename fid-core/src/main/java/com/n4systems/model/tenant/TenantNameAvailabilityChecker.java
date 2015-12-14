@@ -1,5 +1,15 @@
 package com.n4systems.model.tenant;
 
+import com.n4systems.model.Tenant;
+import com.n4systems.model.utils.StreamUtils;
+import com.n4systems.persistence.loaders.AllEntityListLoader;
+import com.n4systems.reporting.PathHandler;
+import com.n4systems.services.config.ConfigService;
+import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.ConfigurationProvider;
+import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -8,17 +18,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-
-import com.n4systems.model.Tenant;
-import com.n4systems.model.utils.StreamUtils;
-import com.n4systems.persistence.loaders.AllEntityListLoader;
-import com.n4systems.reporting.PathHandler;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.ConfigurationProvider;
 
 public class TenantNameAvailabilityChecker {
 	private final Logger logger = Logger.getLogger(TenantNameAvailabilityChecker.class);
@@ -29,7 +28,7 @@ public class TenantNameAvailabilityChecker {
 	private Set<String> unavailableNames;
 	
 	public TenantNameAvailabilityChecker() {
-		this(new AllEntityListLoader<Tenant>(Tenant.class), ConfigContext.getCurrentContext(), PathHandler.getReservedTenantNamesConfigFile());
+		this(new AllEntityListLoader<Tenant>(Tenant.class), ConfigService.getInstance(), PathHandler.getReservedTenantNamesConfigFile());
 	}
 	
 	public TenantNameAvailabilityChecker(AllEntityListLoader<Tenant> tenantsLoader, ConfigurationProvider configContext, File reservedTenantNamesFile) {

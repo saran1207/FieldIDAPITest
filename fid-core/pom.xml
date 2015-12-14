@@ -376,5 +376,10 @@
             <artifactId>batik-codec</artifactId>
             <version>1.7</version>
         </dependency>
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.16</version>
+        </dependency>
     </dependencies>
 </project>

@@ -1,7 +1,5 @@
 package com.n4systems.fieldid.service.download;
 
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.views.ExcelOutputHandler;
 
 /**

@@ -19,7 +19,6 @@ import com.n4systems.model.dashboard.WidgetType;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.ui.seenit.SeenItItem;
 import com.n4systems.services.dashboard.DashboardService;
-import com.n4systems.util.ConfigurationProvider;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -64,14 +63,7 @@ public class DashboardPage extends FieldIDTemplatePage {
     boolean activeWindow = false;
     boolean activeDashboardWindow = false;
 
-    public DashboardPage() {
-    	this(null);
-    }
-
-	@Deprecated // for testing only... need to find a generic way to override configProvider for all unit tests.
-	public DashboardPage(ConfigurationProvider configProvider) {
-    	super(configProvider);
-
+	public DashboardPage() {
         currentLayoutModel = new CurrentLayoutModel();
         setShowTitle(false);
 

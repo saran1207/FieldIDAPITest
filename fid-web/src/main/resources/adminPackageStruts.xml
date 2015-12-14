@@ -180,22 +180,6 @@
             <result name="error" type="freemarker">/admin/templates/html/mail/mail.ftl</result>
         </action>
 
-        <action name="configCrud" method="doLoad"
-			class="com.n4systems.fieldidadmin.actions.ConfigurationAction">
-			<result name="success" type="freemarker">/admin/templates/html/config/config.ftl
-			</result>
-			<result name="error" type="freemarker">/admin/templates/html/config/config.ftl
-			</result>
-		</action>
-
-        <action name="configCrudSave" method="doSave"
-                class="com.n4systems.fieldidadmin.actions.ConfigurationAction">
-            <result name="success" type="freemarker">/admin/templates/html/config/config.ftl
-            </result>
-            <result name="error" type="freemarker">/admin/templates/html/config/config.ftl
-            </result>
-        </action>
-
 		<action name="certSelection" class="com.n4systems.fieldidadmin.actions.SimpleAction">
 			<result name="success" type="freemarker">/admin/templates/html/certSelection/show.ftl
 			</result>
@@ -367,24 +351,6 @@
 			</result>
 		</action>
 
-		<action name="changeAdminPass" method="doLoad" class="com.n4systems.fieldidadmin.actions.ChangeSystemPasswordAction">
-			<result name="success" type="freemarker">
-                /admin/templates/html/changeadminpass/form.ftl
-			</result>
-			<result name="error" type="freemarker">
-                /admin/templates/html/changeadminpass/form.ftl
-			</result>
-		</action>
-
-        <action name="saveAdminPass" method="doSave" class="com.n4systems.fieldidadmin.actions.ChangeSystemPasswordAction">
-            <result name="success" type="freemarker">
-                /admin/templates/html/changeadminpass/form.ftl
-            </result>
-            <result name="error" type="freemarker">
-                /admin/templates/html/changeadminpass/form.ftl
-            </result>
-        </action>
-
 		<action name="eulas" method="doList"
 			class="com.n4systems.fieldidadmin.actions.EulaCrud">
 			<result name="success" type="freemarker">/admin/templates/html/eula/list.ftl
@@ -456,10 +422,6 @@
 
 
 	<package name="adminAjaxAction" extends="admin" namespace="/adminAjax">
-		<action name="getConfigValue" method="doGetConfiguration"
-			class="com.n4systems.fieldidadmin.actions.ConfigurationAction">
-			<result name="success" type="freemarker">/admin/templates/html/config/ajaxConfigValue.ftl</result>
-		</action>
 
 		<action name="editNote" method="doEditNote"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">

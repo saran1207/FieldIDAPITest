@@ -8,7 +8,7 @@ import com.n4systems.fieldid.service.attachment.*;
 import com.n4systems.fieldid.service.images.ImageService;
 import com.n4systems.model.attachment.S3Attachment;
 import com.n4systems.model.attachment.Attachment;
-import com.n4systems.services.ConfigService;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;

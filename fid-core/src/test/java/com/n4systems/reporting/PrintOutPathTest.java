@@ -1,18 +1,17 @@
 package com.n4systems.reporting;
 
-import static org.junit.Assert.*;
-
-import java.io.File;
-
+import com.n4systems.model.PrintOut;
+import com.n4systems.model.PrintOut.PrintOutType;
+import com.n4systems.model.Tenant;
+import com.n4systems.services.config.ConfigServiceTestManager;
+import com.n4systems.util.ConfigContextOverridableTestDouble;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.model.PrintOut;
-import com.n4systems.model.PrintOut.PrintOutType;
-import com.n4systems.model.Tenant;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigContextOverridableTestDouble;
+import java.io.File;
+
+import static org.junit.Assert.assertEquals;
 
 public class PrintOutPathTest {
 
@@ -21,7 +20,6 @@ public class PrintOutPathTest {
 	
 	private PrintOut printOut;
 	private Tenant tenant;
-	private ConfigContext oldContext;
 
 	@Before
 	public void setUp() throws Exception {
@@ -39,13 +37,12 @@ public class PrintOutPathTest {
 	
 	@Before
 	public void changeConfigContext() {
-		oldContext = ConfigContext.getCurrentContext();
-		ConfigContext.setCurrentContext(new ConfigContextOverridableTestDouble());
+		ConfigServiceTestManager.setInstance(new ConfigContextOverridableTestDouble());
 	}
 	
 	@After 
 	public void removeConfig() {
-		ConfigContext.setCurrentContext(oldContext);
+		ConfigServiceTestManager.resetInstance();
 	}
 	
 	

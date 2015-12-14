@@ -1,13 +1,12 @@
 package com.n4systems.fieldid.actions.helpers;
 
-import java.net.URI;
-
-import javax.servlet.http.HttpServletRequest;
-
 import com.n4systems.fieldid.utils.ActionInvocationWrapper;
-import com.n4systems.util.ConfigContext;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.HostNameParser;
+
+import javax.servlet.http.HttpServletRequest;
+import java.net.URI;
 
 public class FieldIdURI {
 
@@ -26,12 +25,12 @@ public class FieldIdURI {
 	public boolean isNonBrandedUrl() {
 		HostNameParser hostParser = HostNameParser.create(getBaseURI());
 		boolean b = !hostParser.hasSubDomain();
-		boolean nonbrandedsubdomain = hostParser.getFirstSubDomain().equals(ConfigContext.getCurrentContext().getString(ConfigEntry.UNBRANDED_SUBDOMAIN));
+		boolean nonbrandedsubdomain = hostParser.getFirstSubDomain().equals(ConfigService.getInstance().getString(ConfigEntry.UNBRANDED_SUBDOMAIN));
 		return (b || nonbrandedsubdomain);
 	}
 	
 	public String baseNonBrandedUrl() {
-		String unbrandedSubDomain = ConfigContext.getCurrentContext().getString(ConfigEntry.UNBRANDED_SUBDOMAIN);
+		String unbrandedSubDomain = ConfigService.getInstance().getString(ConfigEntry.UNBRANDED_SUBDOMAIN);
 		HostNameParser hostParser = HostNameParser.create(getBaseURI());
 		String newHostname = hostParser.replaceFirstSubDomain(unbrandedSubDomain);
 		
@@ -55,7 +54,7 @@ public class FieldIdURI {
 	}
 
     private String getProtocol() {
-        return ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_PROTOCOL) + "://";
+        return ConfigService.getInstance().getString(ConfigEntry.SYSTEM_PROTOCOL) + "://";
     }
 	
 }

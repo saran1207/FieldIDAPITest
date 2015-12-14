@@ -53,10 +53,8 @@ import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.columns.ReportType;
 import com.n4systems.model.tenant.TenantSettings;
-import com.n4systems.services.ConfigService;
-import com.n4systems.util.ConfigContext;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.ConfigurationProvider;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -110,29 +108,18 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     private Asset smartSearchAsset;
     private Component titleLabel;
 	private Component topTitleLabel;
-    private ConfigurationProvider configurationProvider;
     private TopFeedbackPanel topFeedbackPanel;
     private ModalWindow languageSelectionModalWindow;
     private final SelectLanguagePanel selectLanguagePanel;
 
 
     public FieldIDFrontEndPage() {
-        this(null, null);
-    }
-
-    public FieldIDFrontEndPage(ConfigurationProvider configurationProvider) {
-        this(null, configurationProvider);
+        this(null);
     }
 
     public FieldIDFrontEndPage(PageParameters params) {
-    	this(params,null);
-    }
-
-    public FieldIDFrontEndPage(PageParameters params, ConfigurationProvider configurationProvider) {
         super(params);
         storePageParameters(params);
-
-        setConfigurationProvider(configurationProvider);
 
         add(languageSelectionModalWindow = new DialogModalWindow("languageSelectionModalWindow").setInitialWidth(480).setInitialHeight(280));
 
@@ -415,22 +402,22 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         add(new NavigationBar(navBarId));
     }
 
-	protected ConfigurationProvider getConfigurationProvider() {
-		if (configurationProvider==null) { 
-			configurationProvider = ConfigContext.getCurrentContext(); 
-		}		
-		return configurationProvider; 
-	}
-	
-	@Deprecated // for testing only to get around static implementation of configContext.
-    public void setConfigurationProvider(ConfigurationProvider configurationProvider) {
-		this.configurationProvider = configurationProvider;
-	}
+//	protected ConfigurationProvider getConfigurationProvider() {
+//		if (configurationProvider==null) {
+//			configurationProvider = ConfigService.getInstance();
+//		}
+//		return configurationProvider;
+//	}
+//
+//	@Deprecated // for testing only to get around static implementation of configContext.
+//    public void setConfigurationProvider(ConfigurationProvider configurationProvider) {
+//		this.configurationProvider = configurationProvider;
+//	}
 
     @Override
     public void renderHead(IHeaderResponse response) {
         StringBuffer javascriptBuffer = new StringBuffer();
-        Integer timeoutTime = getConfigurationProvider().getInteger(ConfigEntry.ACTIVE_SESSION_TIME_OUT);
+        Integer timeoutTime = configService.getInteger(ConfigEntry.ACTIVE_SESSION_TIME_OUT);
         String loginLightboxTitle = getApplication().getResourceSettings().getLocalizer().getString("title.sessionexpired", null);
         javascriptBuffer.append("loggedInUserName = '").append(getSessionUser().getUserName()).append("';\n");
         javascriptBuffer.append("tenantName = '").append(getTenant().getName()).append("';\n");

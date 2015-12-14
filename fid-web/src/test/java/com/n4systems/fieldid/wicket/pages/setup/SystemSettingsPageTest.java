@@ -66,7 +66,7 @@ public class SystemSettingsPageTest extends FieldIdPageTest<SystemsSettingsPageH
 
 	@Override
 	public SystemSettingsPage createFixture(String id) {
-		return new SystemSettingsPage(getConfigurationProvider());
+		return new SystemSettingsPage();
 	}
 
 	@Override

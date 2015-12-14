@@ -22,7 +22,7 @@ import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
-import com.n4systems.services.ConfigService;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.services.signature.SignatureService;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ContentTypeUtil;

@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.wicket.components;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.services.ConfigService;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;

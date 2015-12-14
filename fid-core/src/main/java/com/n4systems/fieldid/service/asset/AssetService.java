@@ -30,6 +30,7 @@ import com.n4systems.model.security.*;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.archivers.EventListArchiver;
 import com.n4systems.persistence.utils.PostFetcher;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.services.reporting.AssetsIdentifiedReportRecord;
 import com.n4systems.services.reporting.AssetsStatusReportRecord;
 import com.n4systems.services.tenant.Tenant30DayCountRecord;
@@ -72,6 +73,7 @@ public class AssetService extends CrudService<Asset> {
     @Autowired private NotifyEventAssigneeService notifyEventAssigneeService;
     @Autowired private NotifyProcedureAssigneeService notifyProcedureAssigneeService;
     @Autowired private S3Service s3Service;
+    @Autowired private ConfigService configService;
 
 	private Logger logger = Logger.getLogger(AssetService.class);
 
@@ -835,7 +837,7 @@ public class AssetService extends CrudService<Asset> {
         AssetCodeMapping assetCodeMapping = assetCodeMappingService.getAssetCodeByAssetCodeAndTenant(lineItem.getAssetCode());
         Asset asset;
 
-        if (assetCodeMapping.getAssetInfo() != null && !assetCodeMapping.getAssetInfo().getName().equals(ConfigEntry.DEFAULT_PRODUCT_TYPE_NAME.getDefaultValue())) {
+        if (assetCodeMapping.getAssetInfo() != null && !assetCodeMapping.getAssetInfo().getName().equals(configService.getString(ConfigEntry.DEFAULT_PRODUCT_TYPE_NAME))) {
             asset = new Asset();
             asset.setType(assetCodeMapping.getAssetInfo());
 

@@ -1,13 +1,12 @@
 package com.n4systems.util.mail;
 
+import com.n4systems.freemarker.FreemarkerTemplateFactory;
+import com.n4systems.services.config.ConfigService;
+import freemarker.template.Template;
+
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.n4systems.freemarker.FreemarkerTemplateFactory;
-import com.n4systems.util.ConfigContext;
-
-import freemarker.template.Template;
 
 public class TemplateMailMessage extends MailMessage {
 	private static final long serialVersionUID = 1L;
@@ -18,7 +17,7 @@ public class TemplateMailMessage extends MailMessage {
 	private MessageType templateType;
 	
 	public TemplateMailMessage() {
-		super(MessageType.HTML, ConfigContext.getCurrentContext());
+		super(MessageType.HTML, ConfigService.getInstance());
 	}
 	
 	public TemplateMailMessage(String subject, String templatePath) {

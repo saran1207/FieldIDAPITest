@@ -3,7 +3,7 @@ package com.n4systems.fieldid.wicket.pages.widgets;
 import com.n4systems.fieldid.wicket.pages.widgets.config.WidgetConfigPanel;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.WidgetConfiguration;
-import com.n4systems.services.ConfigService;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.IHeaderResponse;

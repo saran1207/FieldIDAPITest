@@ -5,7 +5,6 @@ import com.n4systems.ejb.legacy.*;
 import com.n4systems.ejb.legacy.wrapper.OptionEJBContainer;
 import com.n4systems.ejb.legacy.wrapper.PopulatorLogEJBContainer;
 import com.n4systems.ejb.wrapper.AutoAttributeManagerEJBContainer;
-import com.n4systems.ejb.wrapper.ConfigManagerEJBContainer;
 import com.n4systems.ejb.wrapper.EventManagerEJBContainer;
 import com.n4systems.ejb.wrapper.PredefinedLocationManagerEJBContainer;
 import com.n4systems.fieldid.service.PersistenceService;
@@ -26,6 +25,7 @@ import com.n4systems.notifiers.Notifier;
 import com.n4systems.services.EventScheduleService;
 import com.n4systems.services.EventScheduleServiceImpl;
 import com.n4systems.services.SecurityContext;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.services.localization.LocalizationService;
 import com.n4systems.services.signature.SignatureService;
 import org.springframework.beans.BeansException;
@@ -44,15 +44,10 @@ public class ServiceLocator implements ApplicationContextAware {
 	//  Caveat : all spring beans should NOT be stateful..the previous implementation returned new instances but using getBean() 
 	//   will just return an existing one. 
 	//  currently, the app still uses legacy ejbContainers that handle their transactions themselves but in the future these methods should
-	//  just return @Transaction marked implementations.  (see PersistenceManagerImpl class & PersistenceManager IF for example). 
-	
-	
-	public static final ConfigManager getConfigManager() {
-		return new ConfigManagerEJBContainer();
-	}
+	//  just return @Transaction marked implementations.  (see PersistenceManagerImpl class & PersistenceManager IF for example).
 
 	public static final MailManager getMailManager() {
-		return MailManagerFactory.defaultMailManager(ConfigContext.getCurrentContext());
+		return MailManagerFactory.defaultMailManager(ConfigService.getInstance());
 	}
 
 	public static final PopulatorLog getPopulatorLog() {
@@ -199,7 +194,7 @@ public class ServiceLocator implements ApplicationContextAware {
 		return (T) applicationContext.getBean(name);
 	}
 
-	private static <T> T getBean(Class<T> clazz) {
+	public static <T> T getBean(Class<T> clazz) {
 		Map<String, T> beans = applicationContext.getBeansOfType(clazz);
 		if (beans.size()==1)  {
 			T bean = beans.values().iterator().next();

@@ -1,10 +1,5 @@
 package com.n4systems.fieldid.actions.helpers;
 
-import java.net.URI;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.lang.TenantLanguageSessionHelper;
 import com.n4systems.fieldid.permissions.NoValidTenantSelectedException;
@@ -12,9 +7,13 @@ import com.n4systems.fieldid.permissions.SerializableSecurityGuard;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.model.Tenant;
 import com.n4systems.services.TenantFinder;
-import com.n4systems.util.ConfigContext;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.HostNameParser;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.net.URI;
 
 public abstract class TenantContextInitializer {
 	private boolean forceTenantReload = false;
@@ -35,7 +34,7 @@ public abstract class TenantContextInitializer {
 	}
 
 	public void init() throws NoValidTenantSelectedException, UnbrandedDomainException {
-		unbrandedSubDomain = ConfigContext.getCurrentContext().getString(ConfigEntry.UNBRANDED_SUBDOMAIN);
+		unbrandedSubDomain = ConfigService.getInstance().getString(ConfigEntry.UNBRANDED_SUBDOMAIN);
 		
 		try {
 			findCurrentTenant();

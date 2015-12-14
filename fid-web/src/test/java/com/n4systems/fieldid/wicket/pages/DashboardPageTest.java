@@ -278,7 +278,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 	
 	@Override
 	public DashboardPage createFixture(String id) {
-		return new DashboardPage(configurationProvider) {
+		return new DashboardPage() {
 			@Override protected void redirectToSetupWizardIfNecessary() {
 				// do nothing...skip this when testing.
 			}

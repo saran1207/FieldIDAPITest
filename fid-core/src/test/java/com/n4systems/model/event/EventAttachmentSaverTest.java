@@ -1,60 +1,35 @@
 package com.n4systems.model.event;
 
-import static org.junit.Assert.*;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Date;
-
-import javax.persistence.EntityManager;
-
+import com.n4systems.exceptions.NotImplementedException;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.Event;
+import com.n4systems.model.FileAttachment;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.builders.EventBuilder;
+import com.n4systems.model.builders.FileAttachmentBuilder;
 import com.n4systems.model.builders.SubEventBuilder;
-import com.n4systems.util.ServiceLocator;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
+import com.n4systems.testutils.DummyEntityManager;
+import com.n4systems.testutils.TestHelper;
 import org.easymock.EasyMock;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.exceptions.NotImplementedException;
-import com.n4systems.model.FileAttachment;
-import com.n4systems.model.builders.FileAttachmentBuilder;
-import com.n4systems.reporting.PathHandler;
-import com.n4systems.testutils.DummyEntityManager;
-import com.n4systems.testutils.TestConfigContext;
-import com.n4systems.testutils.TestHelper;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
-import org.springframework.context.ApplicationContext;
+import javax.persistence.EntityManager;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Date;
+
+import static org.junit.Assert.assertTrue;
 
 public class EventAttachmentSaverTest {
-	private File appRoot;
 	private EventAttachmentSaver saver;
 	private Event event;
 	private SubEvent subEvent;
 	private FileAttachment attachment;
 	private byte[] attachmentData;
-
-	private void setup_config_context() {
-		appRoot = new File(System.getProperty("java.io.tmpdir"), TestHelper.randomString());
-		
-		TestConfigContext.newContext().setEntry(ConfigEntry.GLOBAL_APPLICATION_ROOT, appRoot.getPath());
-		assertEquals("ConfigContext isn't setup properly,", appRoot, ConfigContext.getCurrentContext().getAppRoot());
-
-	}
 	
 	@Before
 	public void setup_test_config() {
-		setup_config_context();
-
 		attachment = FileAttachmentBuilder.aFileAttachment().build();
 		attachmentData = TestHelper.randomString().getBytes();
 		
@@ -69,14 +44,6 @@ public class EventAttachmentSaverTest {
 		saver = new EventAttachmentSaver();
 		saver.setData(attachmentData);
 		saver.setEvent(event);
-	}
-	
-	@After
-	public void cleanup_temp_files_and_config_context() throws IOException {
-		if (appRoot.exists()) {
-			FileUtils.deleteDirectory(appRoot);
-		}
-		TestConfigContext.resetToDefaultContext();
 	}
 	
 	@Test
@@ -122,8 +89,6 @@ public class EventAttachmentSaverTest {
 		EasyMock.verify(em);
 		
 		assertTrue(subEvent.getAttachments().contains(attachment));
-
-        //PathHandler is getting deprecated verifyData(PathHandler.getEventAttachmentFile(event, subEvent, attachment));
 	}
 	
 	@Test(expected=NotImplementedException.class)
@@ -134,19 +99,5 @@ public class EventAttachmentSaverTest {
 	@Test(expected=NotImplementedException.class)
 	public void remove_throws_exception() {
 		saver.remove(new DummyEntityManager(), attachment);
-	}
-	
-	private void verifyData(File attachment) throws IOException {
-		InputStream in = null;
-		byte[] writtenData = null;
-		
-		try {
-			in = new FileInputStream(attachment);
-			writtenData = IOUtils.toByteArray(in);
-		} finally {
-			IOUtils.closeQuietly(in);
-		}
-		
-		assertArrayEquals(attachmentData, writtenData);
 	}
 }

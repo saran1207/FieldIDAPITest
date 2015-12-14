@@ -1,6 +1,11 @@
 package com.n4systems.fileprocessing;
 
-import static org.junit.Assert.*;
+import com.n4systems.exceptions.FileProcessingException;
+import com.n4systems.services.config.ConfigServiceTestManager;
+import com.n4systems.tools.FileDataContainer;
+import com.n4systems.util.NonDataSourceBackedConfigContext;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -8,13 +13,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import com.n4systems.exceptions.FileProcessingException;
-import com.n4systems.tools.FileDataContainer;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.NonDataSourceBackedConfigContext;
+import static org.junit.Assert.*;
 
 public class RobertsFileProcessorTest {
 	private Date datePerformed;
@@ -25,8 +24,8 @@ public class RobertsFileProcessorTest {
 		processor = new RobertsFileProcessor();
 		
 		datePerformed = (new SimpleDateFormat("dd-MM-yyyy")).parse("16-01-2009");
-		
-		ConfigContext.setCurrentContext(new NonDataSourceBackedConfigContext());
+
+		ConfigServiceTestManager.setInstance(new NonDataSourceBackedConfigContext());
 	}
 	
 	@Test

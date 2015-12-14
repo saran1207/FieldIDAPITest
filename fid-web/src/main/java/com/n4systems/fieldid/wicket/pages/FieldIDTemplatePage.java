@@ -5,7 +5,6 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.version.FieldIdVersion;
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.CachingStrategyLink;
 import com.n4systems.fieldid.wicket.components.CustomJavascriptPanel;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.asset.AutoCompleteSmartSearch;
@@ -53,10 +52,8 @@ import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.columns.ReportType;
 import com.n4systems.model.tenant.TenantSettings;
-import com.n4systems.services.ConfigService;
-import com.n4systems.util.ConfigContext;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.ConfigurationProvider;
 import com.n4systems.util.uri.ActionURLBuilder;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -94,7 +91,7 @@ import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilde
 public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIConstants {
 
     @SpringBean
-	private ConfigService configService;
+	protected ConfigService configService;
 
 	@SpringBean
 	private UserLimitService userLimitService;
@@ -105,29 +102,18 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
     private Asset smartSearchAsset;
     protected Component titleLabel;
 	protected Component topTitleLabel;
-    private ConfigurationProvider configurationProvider;
     private TopFeedbackPanel topFeedbackPanel;
     private ModalWindow languageSelectionModalWindow;
     private final SelectLanguagePanel selectLanguagePanel;
     protected boolean showTitle = true;
 
     public FieldIDTemplatePage() {
-        this(null, null);
-    }
-
-    public FieldIDTemplatePage(ConfigurationProvider configurationProvider) {
-        this(null, configurationProvider);
+        this(null);
     }
 
     public FieldIDTemplatePage(PageParameters params) {
-    	this(params,null);
-    }
-
-    public FieldIDTemplatePage(PageParameters params, ConfigurationProvider configurationProvider) {
         super(params);
         storePageParameters(params);
-
-        setConfigurationProvider(configurationProvider);
 
         add(languageSelectionModalWindow = new DialogModalWindow("languageSelectionModalWindow").setInitialWidth(480).setInitialHeight(280));
 
@@ -147,7 +133,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         add(new WebMarkupContainer("metaIE").add(new AttributeAppender("content", getMetaIE())));
 
         add(topFeedbackPanel = new TopFeedbackPanel("topFeedbackPanel"));
-        add(new Label("versionLabel", FieldIdVersion.getVersion()));
+        add(new Label("versionLabel", getVersionLabelText()));
 
         String footerScript = configService.getString(ConfigEntry.FOOTER_SCRIPT, getTenantId());
         if (footerScript != null && !footerScript.isEmpty()) {
@@ -368,30 +354,30 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         add(new BreadCrumbBar(breadCrumbBarId).setVisible(false));
     }
 
-    protected ConfigurationProvider getConfigurationProvider() {
-		if (configurationProvider==null) { 
-			configurationProvider = ConfigContext.getCurrentContext(); 
-		}		
-		return configurationProvider; 
-	}
+//    protected ConfigurationProvider getConfigurationProvider() {
+//		if (configurationProvider==null) {
+//			configurationProvider = ConfigContext.getCurrentContext();
+//		}
+//		return configurationProvider;
+//	}
 
     protected ActionURLBuilder createActionUrlBuilder() {
-        return new ActionURLBuilder(getBaseURI(), getConfigurationProvider());
+        return new ActionURLBuilder(getBaseURI(), configService);
     }
 
     private URI getBaseURI() {
         return URI.create(getServletRequest().getRequestURL().toString()).resolve(getServletRequest().getContextPath() + "/");
     }
 	
-	@Deprecated // for testing only to get around static implementation of configContext.
-    public void setConfigurationProvider(ConfigurationProvider configurationProvider) {
-		this.configurationProvider = configurationProvider;
-	}
+//	@Deprecated // for testing only to get around static implementation of configContext.
+//    public void setConfigurationProvider(ConfigurationProvider configurationProvider) {
+//		this.configurationProvider = configurationProvider;
+//	}
 
     @Override
     public void renderHead(IHeaderResponse response) {
         StringBuffer javascriptBuffer = new StringBuffer();
-        Integer timeoutTime = getConfigurationProvider().getInteger(ConfigEntry.ACTIVE_SESSION_TIME_OUT);
+        Integer timeoutTime = configService.getInteger(ConfigEntry.ACTIVE_SESSION_TIME_OUT);
         String loginLightboxTitle = getApplication().getResourceSettings().getLocalizer().getString("title.sessionexpired", null);
         javascriptBuffer.append("loggedInUserName = '").append(getSessionUser().getUserName()).append("';\n");
         javascriptBuffer.append("tenantName = '").append(getTenant().getName()).append("';\n");
@@ -573,6 +559,10 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         lotoLinkContainer.setVisible(getSecurityGuard().isLotoEnabled());
 
         return lotoLinkContainer;
+    }
+
+    private String getVersionLabelText() {
+        return String.format("%s (%s)", FieldIdVersion.getVersion(), configService.getConfig().getSystem().getNodeName());
     }
 
     public boolean isShowTitle() {

@@ -33,6 +33,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.services.asset.AssetSaveService;
 import com.n4systems.services.date.DateService;
 import com.n4systems.tools.Pager;
@@ -68,6 +69,8 @@ public class AssetCrud extends UploadAttachmentSupport {
     private RecurringScheduleService recurringScheduleService;
     @Autowired
     private AssetService assetService;
+	@Autowired
+	private ConfigService configService;
 
     // drop down lists
 	private List<CommentTemplate> commentTemplates;
@@ -354,7 +357,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 		// default asset code if one could not be found.
 		AssetCodeMapping assetCodeMapping = assetCodeMappingServiceManager.getAssetCodeByAssetCodeAndTenant(lineItem.getAssetCode(), getTenantId());
 
-		if (assetCodeMapping.getAssetInfo() != null && !assetCodeMapping.getAssetInfo().getName().equals(ConfigEntry.DEFAULT_PRODUCT_TYPE_NAME.getDefaultValue())) {
+		if (assetCodeMapping.getAssetInfo() != null && !assetCodeMapping.getAssetInfo().getName().equals(configService.getString(ConfigEntry.DEFAULT_PRODUCT_TYPE_NAME))) {
 			setAssetTypeId(assetCodeMapping.getAssetInfo().getId());
 
 			if (assetCodeMapping.getInfoOptions() != null && !assetCodeMapping.getInfoOptions().isEmpty()) {

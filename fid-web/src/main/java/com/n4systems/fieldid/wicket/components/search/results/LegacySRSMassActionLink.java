@@ -1,9 +1,8 @@
 package com.n4systems.fieldid.wicket.components.search.results;
 
-import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.model.search.SearchCriteriaContainer;
-import com.n4systems.util.ConfigContext;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
@@ -33,7 +32,7 @@ public abstract class LegacySRSMassActionLink<MODEL extends SearchCriteria> exte
         SearchCriteriaContainer<MODEL> container = convertAndStoreCriteria(reportCriteriaModel.getObject(), session);
 
         String formattedUrl = String.format(url, container.getSearchId());
-        String destination = ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_PROTOCOL) + "://" + httpServletRequest.getServerName() + httpServletRequest.getContextPath() + formattedUrl;
+        String destination = ConfigService.getInstance().getString(ConfigEntry.SYSTEM_PROTOCOL) + "://" + httpServletRequest.getServerName() + httpServletRequest.getContextPath() + formattedUrl;
 
         getRequestCycle().replaceAllRequestHandlers(new RedirectRequestHandler(destination));
     }

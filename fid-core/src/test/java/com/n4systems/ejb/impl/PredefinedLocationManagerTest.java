@@ -38,7 +38,7 @@ public class PredefinedLocationManagerTest extends FieldIdServiceTest {
     @Before
     public void setup() {
         super.setUp();
-        //TestConfigContext.newContext().setEntry(ConfigEntry.MAX_SERIALS_PER_PROOFTEST, MAX_IDENTIFIERS);
+        //TestConfigContext.newContext().setEntry(ConfigEntry.maxSerialsPerProoftest, MAX_IDENTIFIERS);
         User user = UserBuilder.aFullUser().build();
         filter = new UserSecurityFilter(user);
         tenant = TenantBuilder.aTenant().build();

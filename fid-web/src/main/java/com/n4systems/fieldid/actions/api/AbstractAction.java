@@ -33,9 +33,12 @@ import com.n4systems.notifiers.Notifier;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.persistence.loaders.NonSecureLoaderFactory;
 import com.n4systems.persistence.savers.SaverFactory;
-import com.n4systems.services.ConfigService;
 import com.n4systems.services.SecurityContext;
-import com.n4systems.util.*;
+import com.n4systems.services.config.ConfigService;
+import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.ConfigurationProvider;
+import com.n4systems.util.FieldIdDateFormatter;
+import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.uri.ActionURLBuilder;
 import org.apache.commons.io.FileUtils;
@@ -567,7 +570,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	}
 
 	protected ConfigurationProvider getConfigContext() {
-		return ConfigContext.getCurrentContext();
+		return ConfigService.getInstance();
 	}
 
 
@@ -577,7 +580,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 
 
 	public Integer getCurrentSessionTimeout() {
-		return ConfigContext.getCurrentContext().getInteger(ConfigEntry.ACTIVE_SESSION_TIME_OUT);
+		return ConfigService.getInstance().getInteger(ConfigEntry.ACTIVE_SESSION_TIME_OUT);
 	}
 
 	protected CookieFactory createCookieFactory() {
@@ -617,7 +620,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	}
 
     public boolean isGoogleAnalyticsEnabled() {
-        return ConfigContext.getCurrentContext().getBoolean(ConfigEntry.GOOGLE_ANALYTICS_ENABLED);
+        return ConfigService.getInstance().getBoolean(ConfigEntry.GOOGLE_ANALYTICS_ENABLED);
     }
 
     public boolean isApptegicEnabled() {

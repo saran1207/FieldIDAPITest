@@ -11,6 +11,7 @@ import com.n4systems.fieldid.migrator.DbUtils;
 import com.n4systems.fieldid.migrator.Migration;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.images.ImageService;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
 import org.apache.commons.io.FileUtils;
 
@@ -78,36 +79,18 @@ public class M201212211056_MigrateAssetProfileImagesToS3 extends Migration {
     }
 
     private String getBucket(Connection conn) throws Exception {
-        PreparedStatement pstmt = null;
-        try {
-            pstmt = conn.prepareStatement("SELECT value from configurations WHERE identifier='AMAZON_S3_BUCKET'");
-            ResultSet resultSet = pstmt.executeQuery();
-            while(resultSet.next())
-                return resultSet.getString("value");
-        } finally {
-            DbUtils.close(pstmt);
-        }
-
-        return ConfigEntry.AMAZON_S3_BUCKET.getDefaultValue();
+        return ConfigService.getInstance().getString(ConfigEntry.AMAZON_S3_BUCKET);
     }
 
     private String getSystemProtocol(Connection conn) throws Exception {
-        PreparedStatement pstmt = null;
-        try {
-            pstmt = conn.prepareStatement("SELECT value from configurations WHERE identifier='SYSTEM_PROTOCOL'");
-            ResultSet resultSet = pstmt.executeQuery();
-            while(resultSet.next())
-                return resultSet.getString("value");
-        } finally {
-            DbUtils.close(pstmt);
-        }
-
-        return ConfigEntry.SYSTEM_PROTOCOL.getDefaultValue();
+        return ConfigService.getInstance().getString(ConfigEntry.SYSTEM_PROTOCOL);
     }
 
     private AmazonS3Client getAmazonS3Client(String systemProtocol) {
-        String accessKeyId = ConfigEntry.AMAZON_ACCESS_KEY_ID.getDefaultValue();
-        String secretAccessKey = ConfigEntry.AMAZON_SECRET_ACCESS_KEY.getDefaultValue();
+        ConfigService configService = ConfigService.getInstance();
+
+        String accessKeyId = configService.getString(ConfigEntry.AMAZON_ACCESS_KEY_ID);
+        String secretAccessKey = configService.getString(ConfigEntry.AMAZON_SECRET_ACCESS_KEY);
         AWSCredentials credentials = new BasicAWSCredentials(accessKeyId, secretAccessKey);
         ClientConfiguration config = new ClientConfiguration();
         if ("https".equals(systemProtocol)) {

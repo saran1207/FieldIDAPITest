@@ -1,15 +1,6 @@
 package com.n4systems.util;
 
+@Deprecated
+public class NonDataSourceBackedConfigContext extends ConfigContextOverridableTestDouble {
 
-public class NonDataSourceBackedConfigContext extends ConfigContext {
-
-	
-	public NonDataSourceBackedConfigContext() {
-		super();
-		markDirty();
-	}
-	
-	protected void reloadConfigurations() {
-		configruations.clear();
-	}
 }

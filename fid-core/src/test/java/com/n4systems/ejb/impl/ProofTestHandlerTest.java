@@ -1,18 +1,17 @@
 package com.n4systems.ejb.impl;
 
-import java.util.Collections;
-
+import com.n4systems.ejb.ProofTestHandler;
+import com.n4systems.exceptions.TooManyIdentifiersException;
+import com.n4systems.model.builders.UserBuilder;
+import com.n4systems.services.config.ConfigServiceTestManager;
+import com.n4systems.testutils.DummyEntityManager;
+import com.n4systems.tools.FileDataContainer;
+import com.n4systems.util.ConfigEntry;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.ejb.ProofTestHandler;
-import com.n4systems.exceptions.TooManyIdentifiersException;
-import com.n4systems.model.builders.UserBuilder;
-import com.n4systems.testutils.DummyEntityManager;
-import com.n4systems.testutils.TestConfigContext;
-import com.n4systems.tools.FileDataContainer;
-import com.n4systems.util.ConfigEntry;
+import java.util.Collections;
 
 public class ProofTestHandlerTest {
 
@@ -20,12 +19,12 @@ public class ProofTestHandlerTest {
 
 	@Before
 	public void setup_config_context() {
-		TestConfigContext.newContext().setEntry(ConfigEntry.MAX_SERIALS_PER_PROOFTEST, MAX_IDENTIFIERS);
+		ConfigServiceTestManager.setTestDouble().addConfigurationValue(ConfigEntry.MAX_SERIALS_PER_PROOFTEST, MAX_IDENTIFIERS);
 	}
 	
 	@After
 	public void reset_config_context() {
-		TestConfigContext.resetToDefaultContext();
+		ConfigServiceTestManager.resetInstance();
 	}
 	
 	@Test(expected=TooManyIdentifiersException.class)

@@ -32,8 +32,8 @@ import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.security.Permissions;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.uitags.views.HierarchicalNode;
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -133,7 +133,7 @@ public class MultiEventAction extends AbstractCrud implements ActionWithCriteria
 	}
 
 	private CommonEventTypeHandler createCommonEventTypeHandler() {
-		return new LoaderBackedCommonEventTypeHandler(new CommonAssetTypeDatabaseLoader(getSecurityFilter(), ConfigContext.getCurrentContext()), eventTypeService);
+		return new LoaderBackedCommonEventTypeHandler(new CommonAssetTypeDatabaseLoader(getSecurityFilter(), ConfigService.getInstance()), eventTypeService);
 	}
 
 	@SkipValidation

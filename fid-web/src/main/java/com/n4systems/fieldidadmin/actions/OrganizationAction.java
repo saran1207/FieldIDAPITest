@@ -18,6 +18,7 @@ import com.n4systems.model.tenant.TenantNameAvailabilityChecker;
 import com.n4systems.model.tenant.TenantSaver;
 import com.n4systems.model.tenant.UserLimits;
 import com.n4systems.model.user.User;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.services.TenantFinder;
 import com.n4systems.services.search.AssetIndexerService;
 import com.n4systems.services.search.CriteriaTrendsIndexerService;
@@ -82,6 +83,8 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
     private EventIndexerService eventIndexerService;
     @Autowired
     private CriteriaTrendsIndexerService criteriaTrendsIndexerService;
+	@Autowired
+	private ConfigService configService;
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {}
@@ -511,7 +514,7 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 
     @Override
     public String convertDateTime(Date date) {
-        TimeZone timezone = CountryList.getInstance().getRegionByFullId(ConfigEntry.DEFAULT_TIMEZONE_ID.getDefaultValue()).getTimeZone();
+        TimeZone timezone = CountryList.getInstance().getRegionByFullId(configService.getString(ConfigEntry.DEFAULT_TIMEZONE_ID)).getTimeZone();
         return DateHelper.date2String("MM/dd/yy hh:mm:ss a z", date, timezone);
     }
 }
