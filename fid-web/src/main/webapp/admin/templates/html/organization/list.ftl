@@ -32,8 +32,8 @@
 <#include "../../../../templates/html/common/_pagination.ftl">
 <table class="orgList">
 	<tr>
-		<#assign columns = ["tenant.disabled", "name", "tenant.name", "", "", "", "", "created"] >
-		<#assign labels = ["Active", "Company Name", "Company ID", "Assets Last 30 Days","Events Last 30 Days", "Last Login Date", "Last Login User", "Created"] >
+		<#assign columns = ["tenant.disabled", "name", "tenant.name", "", "", "created"] >
+		<#assign labels = ["Active", "Company Name", "Company ID", "Last Login Date", "Last Login User", "Created"] >
 		<#assign sortAction = "organizations" >
 		<#assign x=0>
 		<#list columns as column>
@@ -60,13 +60,6 @@
 			<td <#if primaryOrg.tenant.disabled> class='offIcon' <#else> class='onIcon'</#if>></td>
 			<td><a href="<@s.url namespace="/admin" action="organizationEdit"/>?id=${tenantId}">${primaryOrg.displayName?html}</a></td>
 			<td>${primaryOrg.tenant.name!}</td>
-
-            <td id="assets_${tenantId}">--</td>
-            <td id="events_${tenantId}">--</td>
-            <script type="text/javascript">
-                new Ajax.Updater('assets_${tenantId}', '<@s.url namespace="/adminAjax" action="assets30Day"/>?id=${tenantId}');
-                new Ajax.Updater('events_${tenantId}', '<@s.url namespace="/adminAjax" action="events30Day"/>?id=${tenantId}');
-            </script>
 
 			<#if primaryOrg.tenant.lastLoginUser?exists && primaryOrg.tenant.lastLoginUser.userID?exists && primaryOrg.tenant.lastLoginUser.userID != 'n4systems'>
 				<td>${action.convertDateTime(primaryOrg.tenant.lastLoginTime)}</td>
