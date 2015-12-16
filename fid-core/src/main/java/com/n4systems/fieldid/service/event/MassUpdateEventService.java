@@ -46,7 +46,7 @@ public class MassUpdateEventService extends FieldIdPersistenceService{
 
         for (Long id : ids) {
             //TODO We should be using ThingEvent.class but for some reason its not working as expected, need to investigate
-            changeTarget = (ThingEvent) persistenceService.find(Event.class, id);
+            changeTarget = persistenceService.find(ThingEvent.class, id);
             eventsUpdated.add(changeTarget);
 
             for (String updateKey : updateKeys) {

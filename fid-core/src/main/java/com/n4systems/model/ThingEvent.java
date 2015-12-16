@@ -8,16 +8,13 @@ import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.utils.AssetEvent;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="thing_events")
-@PrimaryKeyJoinColumn(name="id")
 public class ThingEvent extends Event<ThingEventType,ThingEvent,Asset> implements AssetEvent, NetworkEntity<ThingEvent> {
 
     public static final SecurityDefiner createSecurityDefiner() {

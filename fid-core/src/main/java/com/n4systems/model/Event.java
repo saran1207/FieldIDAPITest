@@ -23,7 +23,6 @@ import java.util.TimeZone;
 
 @Entity
 @Table(name = "masterevents")
-@PrimaryKeyJoinColumn(name="event_id")
 public abstract class Event<T extends EventType, V extends Event, R extends EntityWithTenant> extends AbstractEvent<T,R> implements Comparable<Event>, Archivable, Exportable, LocationContainer, HasCreatedModifiedPlatform, HasOwner, HasGpsLocation {
 	private static final long serialVersionUID = 1L;
     public static final String[] PROCEDURE_AUDIT_FIELD_PATHS = { "modifiedBy", "createdBy", "eventForm.sections", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "infoOptionMap", "subEvents", "procedureDefinition" };
