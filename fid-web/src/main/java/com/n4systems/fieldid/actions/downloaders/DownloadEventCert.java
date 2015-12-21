@@ -44,6 +44,8 @@ public class DownloadEventCert extends DownloadAction {
 
         Locale previousLanguage = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
         try {
+            logger.info("Prev lang: " + previousLanguage);
+            logger.info("User lang: " + getCurrentUser().getLanguage());
             ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(getCurrentUser().getLanguage());
             byte[] pdf = certificateService.generateEventCertificatePdf(reportType, event.getId());
 
