@@ -117,7 +117,10 @@ public class CertificateService extends FieldIdPersistenceService {
 	}
 
 	private JasperPrint generateEventCertificateWithSubEvents(ThingEvent event, PrintOut printOut, DateTimeDefiner dateDefiner) throws JRException {
-        Locale locale = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
+        Locale locale = getCurrentUser().getLanguage();
+		if (locale == null)
+			locale = getCurrentTenant().getSettings().getDefaultLanguage();
+
 		File jasperFile = PathHandler.getPrintOutFile(printOut, locale);
 
         //We will no longer compile the jaspers through FieldiD.  The assumption is that the jasper file will exist on S3.

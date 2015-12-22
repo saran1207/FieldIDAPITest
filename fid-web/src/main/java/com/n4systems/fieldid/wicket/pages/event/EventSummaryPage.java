@@ -107,6 +107,7 @@ public abstract class EventSummaryPage extends FieldIDTemplatePage {
             } else {
                 add(new BookmarkablePageLink<EditEventPage>("editLink", EditPlaceEventPage.class, PageParametersBuilder.uniqueId(uniqueId)));
             }
+            //TODO replace this with the handleDownload once WEB-5997 is completed
             WebMarkupContainer printDropDown;
             add(printDropDown = new WebMarkupContainer("printDropDown"));
             printDropDown.add(new NonWicketLink("printInspectionCertLink", "file/downloadEventCert.action?uniqueID="+uniqueId+"&reportType=INSPECTION_CERT")
