@@ -115,6 +115,7 @@ public abstract class EventSummaryPage extends FieldIDTemplatePage {
                 add(editLink);
             }
             editLink.setVisible(FieldIDSession.get().getSessionUser().hasAccess("editevent"));
+            //TODO replace this with the handleDownload once WEB-5997 is completed
             WebMarkupContainer printDropDown;
             add(printDropDown = new WebMarkupContainer("printDropDown"));
             printDropDown.add(new NonWicketLink("printInspectionCertLink", "file/downloadEventCert.action?uniqueID="+uniqueId+"&reportType=INSPECTION_CERT")
