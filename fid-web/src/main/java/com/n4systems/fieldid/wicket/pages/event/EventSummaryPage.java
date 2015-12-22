@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.event;
 
 
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
@@ -96,17 +97,24 @@ public abstract class EventSummaryPage extends FieldIDTemplatePage {
         public ActionGroup(String id) {
             super(id, "viewEventsActionGroup", EventSummaryPage.this);
 
+            BookmarkablePageLink editLink;
+
             if(eventSummaryType.equals(EventSummaryType.THING_EVENT)) {
                 if (!getEvent().getType().isActionEventType() && ((ThingEventType) getEvent().getType()).isMaster()) {
-                    add(new BookmarkablePageLink<EditEventPage>("editLink", EditMasterEventPage.class, PageParametersBuilder.uniqueId(getEvent().getId())));
+                    editLink = new BookmarkablePageLink<EditEventPage>("editLink", EditMasterEventPage.class, PageParametersBuilder.uniqueId(getEvent().getId()));
+                    add(editLink);
                 } else {
-                    add(new BookmarkablePageLink<EditEventPage>("editLink", EditEventPage.class, PageParametersBuilder.uniqueId(getEvent().getId())));
+                    editLink = new BookmarkablePageLink<EditEventPage>("editLink", EditEventPage.class, PageParametersBuilder.uniqueId(getEvent().getId()));
+                    add(editLink);
                 }
             } else if (eventSummaryType.equals(EventSummaryType.PROCEDURE_AUDIT_EVENT)) {
-                add(new BookmarkablePageLink<EditProcedureAuditEventPage>("editLink", EditProcedureAuditEventPage.class, PageParametersBuilder.uniqueId(uniqueId)));
+                editLink = new BookmarkablePageLink<EditProcedureAuditEventPage>("editLink", EditProcedureAuditEventPage.class, PageParametersBuilder.uniqueId(uniqueId));
+                add(editLink);
             } else {
-                add(new BookmarkablePageLink<EditEventPage>("editLink", EditPlaceEventPage.class, PageParametersBuilder.uniqueId(uniqueId)));
+                editLink = new BookmarkablePageLink<EditEventPage>("editLink", EditPlaceEventPage.class, PageParametersBuilder.uniqueId(uniqueId));
+                add(editLink);
             }
+            editLink.setVisible(FieldIDSession.get().getSessionUser().hasAccess("editevent"));
             WebMarkupContainer printDropDown;
             add(printDropDown = new WebMarkupContainer("printDropDown"));
             printDropDown.add(new NonWicketLink("printInspectionCertLink", "file/downloadEventCert.action?uniqueID="+uniqueId+"&reportType=INSPECTION_CERT")
