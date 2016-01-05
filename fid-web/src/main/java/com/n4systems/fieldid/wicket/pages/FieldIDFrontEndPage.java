@@ -75,14 +75,22 @@ import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.IRequestCycle;
+import org.apache.wicket.request.UrlEncoder;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.request.resource.ContextRelativeResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.file.Files;
+import org.apache.wicket.util.resource.FileResourceStream;
+import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.template.PackageTextTemplate;
 import org.apache.wicket.util.template.TextTemplate;
 import org.odlabs.wiquery.core.resources.CoreJavaScriptResourceReference;
 import rfid.web.helper.SessionUser;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -528,6 +536,37 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
     public TopFeedbackPanel getTopFeedbackPanel() {
         return topFeedbackPanel;
+    }
+
+    /**
+     * Theoretically, we can call-back to this method from any Component/Panel as long as the base page is, in fact,
+     * this Page class.
+     *
+     * This method was ripped out of some other Wicket components and allows the developer to send a file downstream
+     * to the user by directly manipulating the request cycle.  This functionality is offered by pre-canned components
+     * starting in Wicket 6, so the use of this method may be rather short-lived.
+     *
+     * The File which the user will download is represented by fileToDownload, and the name that will be given to
+     * the download is described by fileName.
+     *
+     * @param fileToDownload - A File object that will be downloaded by the user.
+     * @param fileName - A String representing the desired name for the File object.
+     */
+    public void handleDownload(File fileToDownload, String fileName) {
+        fileName = UrlEncoder.QUERY_INSTANCE.encode(fileName, getRequest().getCharset());
+
+        IResourceStream resourceStream = new FileResourceStream(new org.apache.wicket.util.file.File(fileToDownload));
+
+        getRequestCycle().scheduleRequestHandlerAfterCurrent(
+                new ResourceStreamRequestHandler(resourceStream) {
+                    @Override
+                    public void respond(IRequestCycle requestCycle) {
+                        super.respond(requestCycle);
+
+                        Files.remove(fileToDownload);
+                    }
+                }.setFileName(fileName).setContentDisposition(ContentDisposition.ATTACHMENT)
+        );
     }
 
 
