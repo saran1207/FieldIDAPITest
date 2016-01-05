@@ -9,6 +9,7 @@ import java.util.List;
 
 public class ApiOrg extends ApiReadonlyModel {
 	private String name;
+	private String contactName;
 	private Long parentId;
 	private Long secondaryId;
 	private Long customerId;
@@ -25,6 +26,14 @@ public class ApiOrg extends ApiReadonlyModel {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getContactName() {
+		return contactName;
+	}
+
+	public void setContactName(String contactName) {
+		this.contactName = contactName;
 	}
 
 	public Long getParentId() {

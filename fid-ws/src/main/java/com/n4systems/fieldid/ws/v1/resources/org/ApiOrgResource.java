@@ -55,6 +55,7 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 		apiOrg.setModified(baseOrg.getModified());
 		apiOrg.setActive(baseOrg.isActive());
 		apiOrg.setName(baseOrg.getName());
+		apiOrg.setContactName(baseOrg.getContact().getName());
 		if (versionLessThan(1, 8, 0)) {
 			apiOrg.setImage(loadOrgImage(baseOrg));
 		}
