@@ -55,6 +55,7 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 		apiOrg.setModified(baseOrg.getModified());
 		apiOrg.setActive(baseOrg.isActive());
 		apiOrg.setName(baseOrg.getName());
+
 		if (versionLessThan(1, 8, 0)) {
 			apiOrg.setImage(loadOrgImage(baseOrg));
 		}
@@ -75,6 +76,9 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 		if (baseOrg.getDivisionOrg() != null) {
 			apiOrg.setDivisionId(baseOrg.getDivisionOrg().getId());
 		}
+
+		//Add Contact Information (put together from Contact and AddressInfo)
+		convertContactInformation(apiOrg, baseOrg);
 
         apiOrg.setEventHistory(eventHistoryResource.findAllEventHistory(baseOrg.getId()));
         apiOrg.setEventTypes(baseOrg.getEventTypes().stream().map(eventTypeResource::convertToApiPlaceEvent).collect(Collectors.toList()));
@@ -160,4 +164,28 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 			builder.append(data);
 		}
 	}
+
+	private void convertContactInformation(ApiOrg apiOrg, BaseOrg baseOrg) {
+		//name
+		apiOrg.getContactInformation().setName(baseOrg.getContact().getName());
+		//email
+		apiOrg.getContactInformation().setEmail(baseOrg.getContact().getEmail());
+		//streetAddress
+		apiOrg.getContactInformation().setStreetAddress(baseOrg.getAddressInfo().getStreetAddress());
+		//city
+		apiOrg.getContactInformation().setCity(baseOrg.getAddressInfo().getCity());
+		//state
+		apiOrg.getContactInformation().setState(baseOrg.getAddressInfo().getState());
+		//country
+		apiOrg.getContactInformation().setCountry(baseOrg.getAddressInfo().getCountry());
+		//zip
+		apiOrg.getContactInformation().setZip(baseOrg.getAddressInfo().getZip());
+		//phone1
+		apiOrg.getContactInformation().setPhone1(baseOrg.getAddressInfo().getPhone1());
+		//phone2
+		apiOrg.getContactInformation().setPhone2(baseOrg.getAddressInfo().getPhone2());
+		//fax1
+		apiOrg.getContactInformation().setFax1(baseOrg.getAddressInfo().getFax1());
+	}
+
 }
