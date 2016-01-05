@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ApiOrg extends ApiReadonlyModel {
 	private String name;
-	private ContactInformation contactInformation = new ContactInformation();
+	private ContactInformation contactInformation;
 	private Long parentId;
 	private Long secondaryId;
 	private Long customerId;
@@ -19,6 +19,10 @@ public class ApiOrg extends ApiReadonlyModel {
     private List<ApiPlaceEventHistory> eventHistory;
     private List<ApiEventType> eventTypes;
     private List<ApiSavedPlaceEvent> events;
+
+	public ApiOrg() {
+		contactInformation = new ContactInformation();
+	}
 
 	public String getName() {
 		return name;
@@ -108,96 +112,97 @@ public class ApiOrg extends ApiReadonlyModel {
         this.events = events;
     }
 
-	public class ContactInformation {
-		public String name = "";
-		public String email = "";
-		private String streetAddress = "";
-		private String city = "";
-		private String state = "";
-		private String country = "";
-		private String zip = "";
-		private String phone1 = "";
-		private String phone2 = "";
-		private String fax1 = "";
+}
 
-		public String getName() {
-			return name;
-		}
+class ContactInformation {
+	public String name = "";
+	public String email = "";
+	private String streetAddress = "";
+	private String city = "";
+	private String state = "";
+	private String country = "";
+	private String zip = "";
+	private String phone1 = "";
+	private String phone2 = "";
+	private String fax1 = "";
 
-		public void setName(String name) {
-			this.name = name;
-		}
+	public String getName() {
+		return name;
+	}
 
-		public String getEmail() {
-			return email;
-		}
+	public void setName(String name) {
+		this.name = name;
+	}
 
-		public void setEmail(String email) {
-			this.email = email;
-		}
+	public String getEmail() {
+		return email;
+	}
 
-		public String getStreetAddress() {
-			return streetAddress;
-		}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-		public void setStreetAddress(String streetAddress) {
-			this.streetAddress = streetAddress;
-		}
+	public String getStreetAddress() {
+		return streetAddress;
+	}
 
-		public String getCity() {
-			return city;
-		}
+	public void setStreetAddress(String streetAddress) {
+		this.streetAddress = streetAddress;
+	}
 
-		public void setCity(String city) {
-			this.city = city;
-		}
+	public String getCity() {
+		return city;
+	}
 
-		public String getState() {
-			return state;
-		}
+	public void setCity(String city) {
+		this.city = city;
+	}
 
-		public void setState(String state) {
-			this.state = state;
-		}
+	public String getState() {
+		return state;
+	}
 
-		public String getCountry() {
-			return country;
-		}
+	public void setState(String state) {
+		this.state = state;
+	}
 
-		public void setCountry(String country) {
-			this.country = country;
-		}
+	public String getCountry() {
+		return country;
+	}
 
-		public String getZip() {
-			return zip;
-		}
+	public void setCountry(String country) {
+		this.country = country;
+	}
 
-		public void setZip(String zip) {
-			this.zip = zip;
-		}
+	public String getZip() {
+		return zip;
+	}
 
-		public String getPhone1() {
-			return phone1;
-		}
+	public void setZip(String zip) {
+		this.zip = zip;
+	}
 
-		public void setPhone1(String phone1) {
-			this.phone1 = phone1;
-		}
+	public String getPhone1() {
+		return phone1;
+	}
 
-		public String getPhone2() {
-			return phone2;
-		}
+	public void setPhone1(String phone1) {
+		this.phone1 = phone1;
+	}
 
-		public void setPhone2(String phone2) {
-			this.phone2 = phone2;
-		}
+	public String getPhone2() {
+		return phone2;
+	}
 
-		public String getFax1() {
-			return fax1;
-		}
+	public void setPhone2(String phone2) {
+		this.phone2 = phone2;
+	}
 
-		public void setFax1(String fax1) {
-			this.fax1 = fax1;
-		}
+	public String getFax1() {
+		return fax1;
+	}
+
+	public void setFax1(String fax1) {
+		this.fax1 = fax1;
 	}
 }

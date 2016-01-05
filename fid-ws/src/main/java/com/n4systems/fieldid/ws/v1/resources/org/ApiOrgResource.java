@@ -166,26 +166,49 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 	}
 
 	private void convertContactInformation(ApiOrg apiOrg, BaseOrg baseOrg) {
-		//name
-		apiOrg.getContactInformation().setName(baseOrg.getContact().getName());
-		//email
-		apiOrg.getContactInformation().setEmail(baseOrg.getContact().getEmail());
-		//streetAddress
-		apiOrg.getContactInformation().setStreetAddress(baseOrg.getAddressInfo().getStreetAddress());
-		//city
-		apiOrg.getContactInformation().setCity(baseOrg.getAddressInfo().getCity());
-		//state
-		apiOrg.getContactInformation().setState(baseOrg.getAddressInfo().getState());
-		//country
-		apiOrg.getContactInformation().setCountry(baseOrg.getAddressInfo().getCountry());
-		//zip
-		apiOrg.getContactInformation().setZip(baseOrg.getAddressInfo().getZip());
-		//phone1
-		apiOrg.getContactInformation().setPhone1(baseOrg.getAddressInfo().getPhone1());
-		//phone2
-		apiOrg.getContactInformation().setPhone2(baseOrg.getAddressInfo().getPhone2());
-		//fax1
-		apiOrg.getContactInformation().setFax1(baseOrg.getAddressInfo().getFax1());
+
+		if (baseOrg.getContact() != null) {
+			//name
+			if(baseOrg.getContact().getName() != null) {
+				apiOrg.getContactInformation().setName(baseOrg.getContact().getName());
+			}
+			//email
+			if(baseOrg.getContact().getEmail() != null) {
+				apiOrg.getContactInformation().setEmail(baseOrg.getContact().getEmail());
+			}
+			//streetAddress
+			if(baseOrg.getAddressInfo().getStreetAddress()!= null) {
+				apiOrg.getContactInformation().setStreetAddress(baseOrg.getAddressInfo().getStreetAddress());
+			}
+			//city
+			if(baseOrg.getAddressInfo().getCity() != null) {
+				apiOrg.getContactInformation().setCity(baseOrg.getAddressInfo().getCity());
+			}
+			//state
+			if(baseOrg.getAddressInfo().getState() != null) {
+				apiOrg.getContactInformation().setState(baseOrg.getAddressInfo().getState());
+			}
+			//country
+			if(baseOrg.getAddressInfo().getCountry() != null) {
+				apiOrg.getContactInformation().setCountry(baseOrg.getAddressInfo().getCountry());
+			}
+			//zip
+			if(baseOrg.getAddressInfo().getZip() != null) {
+				apiOrg.getContactInformation().setZip(baseOrg.getAddressInfo().getZip());
+			}
+			//phone1
+			if(baseOrg.getAddressInfo().getPhone1() != null) {
+				apiOrg.getContactInformation().setPhone1(baseOrg.getAddressInfo().getPhone1());
+			}
+			//phone2
+			if(baseOrg.getAddressInfo().getPhone2() != null) {
+				apiOrg.getContactInformation().setPhone2(baseOrg.getAddressInfo().getPhone2());
+			}
+			//fax1
+			if(baseOrg.getAddressInfo().getFax1() != null) {
+				apiOrg.getContactInformation().setFax1(baseOrg.getAddressInfo().getFax1());
+			}
+		}
 	}
 
 }
