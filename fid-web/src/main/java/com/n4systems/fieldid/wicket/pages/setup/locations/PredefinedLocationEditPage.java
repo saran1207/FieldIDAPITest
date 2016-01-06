@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.setup.locations;
 
 import com.n4systems.fieldid.service.location.LocationService;
+import com.n4systems.fieldid.service.predefinedlocation.PredefinedLocationService;
 import com.n4systems.fieldid.wicket.behavior.ConfirmBehavior;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
@@ -29,6 +30,9 @@ public class PredefinedLocationEditPage extends FieldIDFrontEndPage {
     @SpringBean
     private LocationService locationService;
 
+    @SpringBean
+    private PredefinedLocationService predefinedLocationService;
+
     public PredefinedLocationEditPage(PageParameters params) {
         Long id = params.get("uniqueID").toLong();
         predefinedLocationModel = new EntityModel<>(PredefinedLocation.class, id);
@@ -50,14 +54,19 @@ public class PredefinedLocationEditPage extends FieldIDFrontEndPage {
             }
         });
 
-        form.add(new SubmitLink("removeLink") {
+        SubmitLink removeLink = new SubmitLink("removeLink") {
             @Override
             public void onSubmit() {
                 locationService.archive(predefinedLocationModel.getObject());
                 info(new FIDLabelModel("message.location_removed").getObject());
                 redirect("/predefinedLocations.action");
             }
-        }.add(new ConfirmBehavior(new FIDLabelModel("warning.removeselectedlocation"))));
+        };
+
+        removeLink.add(new ConfirmBehavior(new FIDLabelModel("warning.removeselectedlocation")));
+        removeLink.setVisible(predefinedLocationService.loadLocationTreeNode(predefinedLocationModel.getObject()).getChildren().size() <= 0);
+
+        form.add(removeLink);
 
         form.add(new Link<Void>("cancelLink") {
             @Override
