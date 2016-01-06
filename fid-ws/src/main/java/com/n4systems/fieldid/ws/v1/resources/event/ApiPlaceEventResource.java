@@ -177,6 +177,7 @@ public class ApiPlaceEventResource extends FieldIdPersistenceService {
         event.setTenant(getCurrentTenant());
         event.setMobileGUID(apiEvent.getSid());
         event.setType(eventTypeService.getEventType(apiEvent.getTypeId()));
+        event.setComments(apiEvent.getComments());
 
         event.setModified(apiEvent.getModified());
         if(apiEvent.getModifiedById() != null) {
