@@ -32,9 +32,18 @@ public class PersistenceManager {
 
 	private static synchronized EntityManagerFactory getEntityManagerFactory() {
 		if (entityManagerFactory == null) {
+
+			String alternatePersistenceUnit = System.getProperty("persistence.unit");
+			if (alternatePersistenceUnit != null) {
+				persistenceUnit = alternatePersistenceUnit;
+				testProperties.put("hibernate.connection.driver_class", System.getProperty("persistence.driver", "com.mysql.jdbc.Driver"));
+				testProperties.put("hibernate.connection.url", System.getProperty("persistence.url", "jdbc:mysql://localhost:3306/fieldid"));
+				testProperties.put("hibernate.connection.username", System.getProperty("persistence.user", "root"));
+				testProperties.put("hibernate.connection.password", System.getProperty("persistence.pass", ""));
+			}
+
 			logger.debug("Creating EntityManagerFactory");
 			entityManagerFactory = Persistence.createEntityManagerFactory(persistenceUnit, testProperties);
-
 		}
 		return entityManagerFactory;
 	}

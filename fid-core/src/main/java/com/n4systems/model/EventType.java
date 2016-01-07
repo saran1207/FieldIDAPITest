@@ -193,6 +193,10 @@ public abstract class EventType<T extends EventType> extends ArchivableEntityWit
 		assignedToAvailable = false;
 	}
 
+	public void setAssignedToAvailable(boolean assignedToAvailable) {
+		this.assignedToAvailable = assignedToAvailable;
+	}
+
     @AllowSafetyNetworkAccess
     public EventForm getEventForm() {
         return eventForm;

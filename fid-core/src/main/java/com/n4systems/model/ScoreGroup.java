@@ -1,6 +1,7 @@
 package com.n4systems.model;
 
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.persistence.localization.Localized;
 import org.hibernate.annotations.IndexColumn;
@@ -13,7 +14,7 @@ import java.util.List;
 @Entity
 @Table(name="score_groups")
 @PrimaryKeyJoinColumn(name="id")
-public class ScoreGroup extends ArchivableEntityWithTenant implements Listable {
+public class ScoreGroup extends ArchivableEntityWithTenant implements Listable, NamedEntity {
 
     @Column(nullable=false)
     private @Localized String name;

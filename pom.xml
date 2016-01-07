@@ -17,7 +17,8 @@
         <module>fid-index-validator</module>
         <module>fid-pub-ws</module>
 		<module>fid-mobile-ws</module>
-    </modules>
+		<module>fid-data-migrator</module>
+	</modules>
     <properties>
         <hibernate.version>5.0.1.Final</hibernate.version>
         <spring.version>4.2.1.RELEASE</spring.version>
