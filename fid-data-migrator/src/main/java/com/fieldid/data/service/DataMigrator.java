@@ -31,7 +31,7 @@ public abstract class DataMigrator<T extends EntityWithTenant & NamedEntity> ext
 	}
 
 	@Transactional
-	public T copy(Long targetId, Long newTenantId, String newName) {
+	public T copy(Long targetId, Long newTenantId, String newNameArg) {
 		// Since we have no user context, we will disable the interaction context.
 		ThreadLocalInteractionContext.getInstance().disable();
 
@@ -41,8 +41,14 @@ public abstract class DataMigrator<T extends EntityWithTenant & NamedEntity> ext
 		Tenant newTenant = (newTenantId != null) ? persistenceService.findNonSecure(Tenant.class, newTenantId) : target.getTenant();
 		Objects.requireNonNull(newTenant, "Unable to find Tenant for id: " + newTenantId);
 
+		String newName = (newNameArg != null) ? newNameArg : target.getName();
+		boolean targetNameExists = persistenceService.exists(new QueryBuilder<>(targetClass, new TenantOnlySecurityFilter(newTenant)).addWhere(WhereClauseFactory.create("name", newName)));
+		if (targetNameExists) {
+			throw new IllegalArgumentException(targetClass.getSimpleName() + " named [" + newName + "] already exists in tenant [" + newTenant + "]");
+		}
+
 		logger.info("Coping " + targetClass.getSimpleName() + " [" + target.getTenant() + ": " + target + "] to [" + newTenant + ": " + newName + "]");
-		return copy(target, newTenant, (newName != null) ? newName : target.getName());
+		return copy(target, newTenant, newName);
 	}
 
 	@Transactional

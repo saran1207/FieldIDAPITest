@@ -46,40 +46,45 @@ public class Application implements CommandLineRunner {
 	public void run(String...args) throws Exception {
 		if (args.length < 4) help();
 
-		MigrationAction action = null;
-		switch (args[0].toLowerCase()) {
-			case "eventtype":
-				action = MigrationAction.COPY_EVENT_TYPE;
-				break;
-			case "eventtypegroup":
-				action = MigrationAction.COPY_EVENT_TYPE_GROUP;
-				break;
-			case "observationcountgroup":
-				action = MigrationAction.COPY_OBSERVATION_COUNT_GROUP;
-				break;
-			case "buttongroup":
-				action = MigrationAction.COPY_BUTTON_GROUP;
-				break;
-			case "scoregroup":
-				action = MigrationAction.COPY_SCORE_GROUP;
-				break;
-			case "printout":
-				action = MigrationAction.COPY_PRINT_OUT;
-				break;
-			default:
-				logger.error("Unknown option: " + args[0]);
-				help();
-				break;
+		try {
+			MigrationAction action = null;
+			switch (args[0].toLowerCase()) {
+				case "eventtype":
+					action = MigrationAction.COPY_EVENT_TYPE;
+					break;
+				case "eventtypegroup":
+					action = MigrationAction.COPY_EVENT_TYPE_GROUP;
+					break;
+				case "observationcountgroup":
+					action = MigrationAction.COPY_OBSERVATION_COUNT_GROUP;
+					break;
+				case "buttongroup":
+					action = MigrationAction.COPY_BUTTON_GROUP;
+					break;
+				case "scoregroup":
+					action = MigrationAction.COPY_SCORE_GROUP;
+					break;
+				case "printout":
+					action = MigrationAction.COPY_PRINT_OUT;
+					break;
+				default:
+					logger.error("Unknown option: " + args[0]);
+					help();
+					break;
+			}
+
+			Tenant fromTenant = findByName(Tenant.class, args[1]);
+			Tenant newTenant =  args[2].equalsIgnoreCase(args[1]) ? null : findByName(Tenant.class, args[2]);
+			String name = args[3];
+			String newName = (args.length >= 5) ? args[4] : null;
+
+			runAction(action, fromTenant, newTenant, name, newName);
+			logger.info("Done!");
+			System.exit(0);
+		} catch (Throwable t) {
+			t.printStackTrace(System.err);
+			System.exit(1);
 		}
-
-		Tenant fromTenant = findByName(Tenant.class, args[1]);
-		Tenant newTenant =  args[2].equalsIgnoreCase(args[1]) ? null : findByName(Tenant.class, args[2]);
-		String name = args[3];
-		String newName = (args.length >= 5) ? args[4] : null;
-
-		runAction(action, fromTenant, newTenant, name, newName);
-		logger.info("Done!");
-		System.exit(0);
 	}
 
 	private <T> T findByName(Class<T> clazz, String name) {

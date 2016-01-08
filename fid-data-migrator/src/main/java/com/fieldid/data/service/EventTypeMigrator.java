@@ -5,6 +5,9 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -19,41 +22,56 @@ public class EventTypeMigrator extends DataMigrator<EventType> {
 		super(EventType.class);
 	}
 
+	private transient Map<String, ButtonGroup> buttonGroupCache = new HashMap<>();
+
+	// This resolves button groups against a local cache.  Doing this makes a huge difference when processing large event forms.
+	private ButtonGroup findButtonGroup(String name, Tenant tenant) {
+		if (!buttonGroupCache.containsKey(name)) {
+			buttonGroupCache.put(name, findByName(ButtonGroup.class, name, tenant));
+		}
+		return buttonGroupCache.get(name);
+	}
+
 	@Override
 	@Transactional
 	protected EventType copy(EventType srcEventType, Tenant newTenant, String newEventTypeName) {
-		logger.info("Coping EventType [" + srcEventType.getTenant() + ": " + srcEventType + "] to [" + newTenant + ": " + newEventTypeName + "]");
-		EventType<?> dstEventType;
-		if (srcEventType instanceof ActionEventType) {
-			dstEventType = new ActionEventType();
-		} else if (srcEventType instanceof PlaceEventType) {
-			dstEventType = new PlaceEventType();
-		} else if (srcEventType instanceof ProcedureAuditEventType) {
-			dstEventType = new ProcedureAuditEventType();
-		} else if (srcEventType instanceof ThingEventType) {
-			dstEventType = new ThingEventType();
-			((ThingEventType) dstEventType).setMaster(((ThingEventType) srcEventType).isMaster());
-			((ThingEventType) dstEventType).getSupportedProofTests().addAll(((ThingEventType) srcEventType).getSupportedProofTests());
-		} else {
-			throw new IllegalArgumentException("Unhandled EventType: " + srcEventType.getClass());
+		try {
+			logger.info("Coping EventType [" + srcEventType.getTenant() + ": " + srcEventType + "] to [" + newTenant + ": " + newEventTypeName + "]");
+			EventType<?> dstEventType;
+			if (srcEventType instanceof ActionEventType) {
+				dstEventType = new ActionEventType();
+			} else if (srcEventType instanceof PlaceEventType) {
+				dstEventType = new PlaceEventType();
+			} else if (srcEventType instanceof ProcedureAuditEventType) {
+				dstEventType = new ProcedureAuditEventType();
+			} else if (srcEventType instanceof ThingEventType) {
+				dstEventType = new ThingEventType();
+				((ThingEventType) dstEventType).setMaster(((ThingEventType) srcEventType).isMaster());
+				((ThingEventType) dstEventType).getSupportedProofTests().addAll(((ThingEventType) srcEventType).getSupportedProofTests());
+			} else {
+				throw new IllegalArgumentException("Unhandled EventType: " + srcEventType.getClass());
+			}
+			dstEventType.setTenant(newTenant);
+			dstEventType.setGroup(findByName(EventTypeGroup.class, srcEventType.getGroup().getName(), newTenant));
+			dstEventType.setName(newEventTypeName);
+			dstEventType.setDescription(srcEventType.getDescription());
+			dstEventType.setPrintable(srcEventType.isPrintable());
+			dstEventType.setAssignedToAvailable(srcEventType.isAssignedToAvailable());
+			dstEventType.getInfoFieldNames().addAll(srcEventType.getInfoFieldNames());
+			dstEventType.setFormVersion(srcEventType.getFormVersion());
+			dstEventType.setDisplayScoreSectionTotals(srcEventType.isDisplayScoreSectionTotals());
+			dstEventType.setDisplayScorePercentage(srcEventType.isDisplayScorePercentage());
+			dstEventType.setDisplayObservationSectionTotals(srcEventType.isDisplayObservationSectionTotals());
+			dstEventType.setDisplayObservationPercentage(srcEventType.isDisplayObservationPercentage());
+			dstEventType.setEventForm(
+					ifNotNull(srcEventType.getEventForm(), bind(this::migrateEventForm, newTenant)).orElse(null)
+			);
+			logger.info("Saving EventType");
+			persistenceService.save(dstEventType);
+			return dstEventType;
+		} finally {
+			buttonGroupCache.clear();
 		}
-		dstEventType.setTenant(newTenant);
-		dstEventType.setGroup(findByName(EventTypeGroup.class, srcEventType.getGroup().getName(), newTenant));
-		dstEventType.setName(newEventTypeName);
-		dstEventType.setDescription(srcEventType.getDescription());
-		dstEventType.setPrintable(srcEventType.isPrintable());
-		dstEventType.setAssignedToAvailable(srcEventType.isAssignedToAvailable());
-		dstEventType.getInfoFieldNames().addAll(srcEventType.getInfoFieldNames());
-		dstEventType.setFormVersion(srcEventType.getFormVersion());
-		dstEventType.setDisplayScoreSectionTotals(srcEventType.isDisplayScoreSectionTotals());
-		dstEventType.setDisplayScorePercentage(srcEventType.isDisplayScorePercentage());
-		dstEventType.setDisplayObservationSectionTotals(srcEventType.isDisplayObservationSectionTotals());
-		dstEventType.setDisplayObservationPercentage(srcEventType.isDisplayObservationPercentage());
-		dstEventType.setEventForm(
-			ifNotNull(srcEventType.getEventForm(), bind(this::migrateEventForm, newTenant)).orElse(null)
-		);
-		persistenceService.save(dstEventType);
-		return dstEventType;
 	}
 
 	private EventForm migrateEventForm(Tenant newTenant, EventForm srcForm) {
@@ -74,12 +92,24 @@ public class EventTypeMigrator extends DataMigrator<EventType> {
 			observationCountResolver.accept(srcForm::getObservationCountPass, dstForm::setObservationCountPass);
 			observationCountResolver.accept(srcForm::getObservationCountFail, dstForm::setObservationCountFail);
 		});
+
+		// the following forces the buttongroup cache to prepopulate
+		srcForm
+				.getSections()
+				.stream()
+				.map(CriteriaSection::getCriteria)
+				.flatMap(Collection::stream)
+				.filter(c -> c instanceof OneClickCriteria)
+				.map(c -> ((OneClickCriteria) c).getButtonGroup().getName())
+				.forEach(bg -> findButtonGroup(bg, newTenant));
+
 		dstForm.getSections().addAll(map(srcForm.getAvailableSections(), bind(this::migrateCriteriaSection, newTenant)));
 		persistenceService.save(dstForm);
 		return dstForm;
 	}
 
 	private CriteriaSection migrateCriteriaSection(Tenant newTenant, CriteriaSection srcSection) {
+		logger.info("Working on Section  [" + srcSection.getName() + "]");
 		CriteriaSection dstSection = new CriteriaSection();
 		dstSection.setTenant(newTenant);
 		dstSection.setTitle(srcSection.getTitle());
@@ -112,7 +142,7 @@ public class EventTypeMigrator extends DataMigrator<EventType> {
 			case ONE_CLICK:
 				dstCriteria = new OneClickCriteria();
 				((OneClickCriteria) dstCriteria).setPrincipal(((OneClickCriteria) srcCriteria).isPrincipal());
-				((OneClickCriteria) dstCriteria).setButtonGroup(findByName(ButtonGroup.class, ((OneClickCriteria) srcCriteria).getButtonGroup().getName(), newTenant));
+				((OneClickCriteria) dstCriteria).setButtonGroup(findButtonGroup(((OneClickCriteria) srcCriteria).getButtonGroup().getName(), newTenant));
 				break;
 			case SCORE:
 				dstCriteria = new ScoreCriteria();
