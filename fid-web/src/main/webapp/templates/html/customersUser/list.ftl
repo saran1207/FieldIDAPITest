@@ -6,7 +6,7 @@ ${action.setPageType('customer', 'users')!}
 
 <#if userLimitService.readOnlyUsersEnabled>
 	<div class="useractions addUser">
-		<p><a href="<@s.url action="customersUserAdd" uniqueID=""  customerId="${customer.id}"/>"><@s.text name="label.add_user"/></a></p>
+		<p><a href="<@s.url value='/w/setup/addCustomerUser?customerId=${customer.id}'/>"><@s.text name="label.add_user"/></a></p>
 	</div>
 </#if>
 

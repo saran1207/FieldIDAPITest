@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.n4systems.exceptions.*;
 import com.n4systems.fieldid.LegacyMethod;
-import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.amazon.S3Service;
@@ -31,6 +30,7 @@ import com.n4systems.model.security.*;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.archivers.EventListArchiver;
 import com.n4systems.persistence.utils.PostFetcher;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.services.reporting.AssetsIdentifiedReportRecord;
 import com.n4systems.services.reporting.AssetsStatusReportRecord;
 import com.n4systems.services.tenant.Tenant30DayCountRecord;
@@ -73,6 +73,7 @@ public class AssetService extends CrudService<Asset> {
     @Autowired private NotifyEventAssigneeService notifyEventAssigneeService;
     @Autowired private NotifyProcedureAssigneeService notifyProcedureAssigneeService;
     @Autowired private S3Service s3Service;
+    @Autowired private ConfigService configService;
 
 	private Logger logger = Logger.getLogger(AssetService.class);
 
@@ -633,10 +634,13 @@ public class AssetService extends CrudService<Asset> {
 
         User user = persistenceService.find(User.class, securityFilter.getUserId());
 
-        Collection<User> visibleUsers = ThreadLocalInteractionContext.getInstance().getVisibleUsers();
+//        Collection<User> visibleUsers = ThreadLocalInteractionContext.getInstance().getVisibleUsers();
+//        if(visibleUsers != null && visibleUsers.size() > 0) {
+//            query += " AND event.performedBy in (:visibleUsers) ";
+//        }
 
         if (!user.getGroups().isEmpty()) {
-            query += " AND event.performedBy  in (:visibleUsers) ";
+//            query += " AND event.performedBy  in (:visibleUsers) ";
             query += " AND (event.assignedGroup is null or event.assignedGroup in (:groupList) ) ";
         }
 
@@ -655,8 +659,11 @@ public class AssetService extends CrudService<Asset> {
         eventQuery.setParameter("activeState", Archivable.EntityState.ACTIVE);
         eventQuery.setParameter("completed", WorkflowState.COMPLETED);
 
+//        if(visibleUsers != null && visibleUsers.size() > 0) {
+//            eventQuery.setParameter("visibleUsers", visibleUsers);
+//        }
+
         if (!user.getGroups().isEmpty()) {
-            eventQuery.setParameter("visibleUsers", visibleUsers);
             eventQuery.setParameter("groupList", user.getGroups());
         }
 
@@ -830,7 +837,7 @@ public class AssetService extends CrudService<Asset> {
         AssetCodeMapping assetCodeMapping = assetCodeMappingService.getAssetCodeByAssetCodeAndTenant(lineItem.getAssetCode());
         Asset asset;
 
-        if (assetCodeMapping.getAssetInfo() != null && !assetCodeMapping.getAssetInfo().getName().equals(ConfigEntry.DEFAULT_PRODUCT_TYPE_NAME.getDefaultValue())) {
+        if (assetCodeMapping.getAssetInfo() != null && !assetCodeMapping.getAssetInfo().getName().equals(configService.getString(ConfigEntry.DEFAULT_PRODUCT_TYPE_NAME))) {
             asset = new Asset();
             asset.setType(assetCodeMapping.getAssetInfo());
 
@@ -907,9 +914,9 @@ public class AssetService extends CrudService<Asset> {
     }
 
     public void increaseProcedureCount(Asset asset) {
-        long count = asset.getActiveProcedureDefinitionCount();
-        if(count == -1 || count == 0) {
-            asset.setActiveProcedureDefinitionCount(new Long(1));
+        Long count = asset.getActiveProcedureDefinitionCount();
+        if(count == null || count == -1 || count == 0) {
+            asset.setActiveProcedureDefinitionCount(1L);
         } else {
             asset.setActiveProcedureDefinitionCount(count + 1);
         }
@@ -922,11 +929,11 @@ public class AssetService extends CrudService<Asset> {
         for(Asset asset:allActiveAssetsOfType) {
             //If it was "turned off", we have to turn it "on"
             if (asset.getActiveProcedureDefinitionCount() == -1) {
-                asset.setActiveProcedureDefinitionCount(new Long(0));
+                asset.setActiveProcedureDefinitionCount(0L);
                 persistenceService.update(asset);
             } //If it was turned "on" but didn't have any procedures authored, then reset it to -1
             else if (asset.getActiveProcedureDefinitionCount() == 0) {
-                asset.setActiveProcedureDefinitionCount(new Long(-1));
+                asset.setActiveProcedureDefinitionCount((long) -1);
                 persistenceService.update(asset);
             }
         }

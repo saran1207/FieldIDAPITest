@@ -1,26 +1,25 @@
 package com.n4systems.services.safetyNetwork.catalog;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.n4systems.model.AssetType;
-import org.apache.log4j.Logger;
-import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
-
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.exception.ImportFailureException;
 import com.n4systems.tools.Pager;
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.persistence.QueryBuilder;
+import org.apache.log4j.Logger;
+import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CatalogAutoAttributesImportHandler extends CatalogImportHandler {
 
@@ -68,7 +67,7 @@ public class CatalogAutoAttributesImportHandler extends CatalogImportHandler {
 	private void importDefinitions() {
 		Pager<AutoAttributeDefinition> pager = null;
 		int pageNumber = 1;
-		while ((pager = importCatalog.getDefinitionPageFor(originalType.getId(), pageNumber, ConfigContext.getCurrentContext().getInteger(ConfigEntry.CATALOG_IMPORTER_PAGE_SIZE))).validPage() ) {
+		while ((pager = importCatalog.getDefinitionPageFor(originalType.getId(), pageNumber, ConfigService.getInstance().getInteger(ConfigEntry.CATALOG_IMPORTER_PAGE_SIZE))).validPage() ) {
 			for (AutoAttributeDefinition definition : pager.getList()) {
 				importDefinition(definition);
 			}
@@ -158,7 +157,7 @@ public class CatalogAutoAttributesImportHandler extends CatalogImportHandler {
             Pager<AutoAttributeDefinition> pager = null;
             QueryBuilder<AutoAttributeDefinition> existingDefinitionQuery = new QueryBuilder<AutoAttributeDefinition>(AutoAttributeDefinition.class, new OpenSecurityFilter());
             existingDefinitionQuery.addSimpleWhere("criteria", importCriteria);
-            while ((pager = persistenceManager.findAllPaged(existingDefinitionQuery, 1, ConfigContext.getCurrentContext().getInteger(ConfigEntry.CATALOG_IMPORTER_PAGE_SIZE))).validPage() ) {
+            while ((pager = persistenceManager.findAllPaged(existingDefinitionQuery, 1, ConfigService.getInstance().getInteger(ConfigEntry.CATALOG_IMPORTER_PAGE_SIZE))).validPage() ) {
                 for (AutoAttributeDefinition definition : pager.getList()) {
                     persistenceManager.delete(definition);
                 }

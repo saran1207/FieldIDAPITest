@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.*;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.OwnerAndDownWithPrimaryFilter;
 import com.n4systems.util.collections.OrgList;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -24,6 +25,14 @@ public class OrgService extends CrudService<BaseOrg> {
 	public OrgService() {
 		super(BaseOrg.class);
 	}
+
+    @Transactional(readOnly = true)
+    public List<PrimaryOrg> getActivePrimaryOrgs() {
+        QueryBuilder<PrimaryOrg> query =  new QueryBuilder<>(PrimaryOrg.class, new OpenSecurityFilter());
+        query.addWhere(WhereClauseFactory.create("tenant.disabled", false));
+        query.addOrder("name");
+        return persistenceService.findAll(query);
+    }
 
     @Transactional(readOnly = true)
     public List<InternalOrg> getInternalOrgs() {

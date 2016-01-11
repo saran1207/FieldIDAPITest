@@ -8,7 +8,6 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.chart.RangeType;
-import org.hibernate.annotations.IndexColumn;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
@@ -101,7 +100,7 @@ public class EventReportCriteria extends SearchCriteria implements PeopleCriteri
     private boolean includeSafetyNetwork;
 
 	@ElementCollection(fetch= FetchType.EAGER)
-	@IndexColumn(name="idx")
+	@OrderColumn(name="idx")
     @JoinTable(name="saved_reports_columns", joinColumns = {@JoinColumn(name="saved_report_id")})
     @Column(name="column_id")
 	private List<String> columns = new ArrayList<String>();

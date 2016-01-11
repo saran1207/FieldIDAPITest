@@ -42,6 +42,16 @@ public class EventFormService extends FieldIdPersistenceService {
         }
     }
 
+    public EventForm copyEventForm(EventForm from) {
+        EventForm eventForm = new EventForm();
+
+        eventForm.setTenant(from.getTenant());
+        eventForm.setSections(createCopiesOf(from.getSections()));
+        eventForm = copyEventFormSettings(from, eventForm);
+
+        return eventForm;
+    }
+
     @Transactional
     public void saveNewEventFormAfterObservationChange(Long eventTypeId, EventForm updatedForm) {
         EventType eventType = persistenceService.find(EventType.class, eventTypeId);

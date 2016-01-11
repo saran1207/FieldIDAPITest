@@ -53,10 +53,8 @@ import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.columns.ReportType;
 import com.n4systems.model.tenant.TenantSettings;
-import com.n4systems.services.ConfigService;
-import com.n4systems.util.ConfigContext;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.ConfigurationProvider;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -77,14 +75,22 @@ import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.IRequestCycle;
+import org.apache.wicket.request.UrlEncoder;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.request.resource.ContextRelativeResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.file.Files;
+import org.apache.wicket.util.resource.FileResourceStream;
+import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.template.PackageTextTemplate;
 import org.apache.wicket.util.template.TextTemplate;
 import org.odlabs.wiquery.core.resources.CoreJavaScriptResourceReference;
 import rfid.web.helper.SessionUser;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -110,29 +116,18 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     private Asset smartSearchAsset;
     private Component titleLabel;
 	private Component topTitleLabel;
-    private ConfigurationProvider configurationProvider;
     private TopFeedbackPanel topFeedbackPanel;
     private ModalWindow languageSelectionModalWindow;
     private final SelectLanguagePanel selectLanguagePanel;
 
 
     public FieldIDFrontEndPage() {
-        this(null, null);
-    }
-
-    public FieldIDFrontEndPage(ConfigurationProvider configurationProvider) {
-        this(null, configurationProvider);
+        this(null);
     }
 
     public FieldIDFrontEndPage(PageParameters params) {
-    	this(params,null);
-    }
-
-    public FieldIDFrontEndPage(PageParameters params, ConfigurationProvider configurationProvider) {
         super(params);
         storePageParameters(params);
-
-        setConfigurationProvider(configurationProvider);
 
         add(languageSelectionModalWindow = new DialogModalWindow("languageSelectionModalWindow").setInitialWidth(480).setInitialHeight(280));
 
@@ -415,22 +410,22 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         add(new NavigationBar(navBarId));
     }
 
-	protected ConfigurationProvider getConfigurationProvider() {
-		if (configurationProvider==null) { 
-			configurationProvider = ConfigContext.getCurrentContext(); 
-		}		
-		return configurationProvider; 
-	}
-	
-	@Deprecated // for testing only to get around static implementation of configContext.
-    public void setConfigurationProvider(ConfigurationProvider configurationProvider) {
-		this.configurationProvider = configurationProvider;
-	}
+//	protected ConfigurationProvider getConfigurationProvider() {
+//		if (configurationProvider==null) {
+//			configurationProvider = ConfigService.getInstance();
+//		}
+//		return configurationProvider;
+//	}
+//
+//	@Deprecated // for testing only to get around static implementation of configContext.
+//    public void setConfigurationProvider(ConfigurationProvider configurationProvider) {
+//		this.configurationProvider = configurationProvider;
+//	}
 
     @Override
     public void renderHead(IHeaderResponse response) {
         StringBuffer javascriptBuffer = new StringBuffer();
-        Integer timeoutTime = getConfigurationProvider().getInteger(ConfigEntry.ACTIVE_SESSION_TIME_OUT);
+        Integer timeoutTime = configService.getInteger(ConfigEntry.ACTIVE_SESSION_TIME_OUT);
         String loginLightboxTitle = getApplication().getResourceSettings().getLocalizer().getString("title.sessionexpired", null);
         javascriptBuffer.append("loggedInUserName = '").append(getSessionUser().getUserName()).append("';\n");
         javascriptBuffer.append("tenantName = '").append(getTenant().getName()).append("';\n");
@@ -541,6 +536,37 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
     public TopFeedbackPanel getTopFeedbackPanel() {
         return topFeedbackPanel;
+    }
+
+    /**
+     * Theoretically, we can call-back to this method from any Component/Panel as long as the base page is, in fact,
+     * this Page class.
+     *
+     * This method was ripped out of some other Wicket components and allows the developer to send a file downstream
+     * to the user by directly manipulating the request cycle.  This functionality is offered by pre-canned components
+     * starting in Wicket 6, so the use of this method may be rather short-lived.
+     *
+     * The File which the user will download is represented by fileToDownload, and the name that will be given to
+     * the download is described by fileName.
+     *
+     * @param fileToDownload - A File object that will be downloaded by the user.
+     * @param fileName - A String representing the desired name for the File object.
+     */
+    public void handleDownload(File fileToDownload, String fileName) {
+        fileName = UrlEncoder.QUERY_INSTANCE.encode(fileName, getRequest().getCharset());
+
+        IResourceStream resourceStream = new FileResourceStream(new org.apache.wicket.util.file.File(fileToDownload));
+
+        getRequestCycle().scheduleRequestHandlerAfterCurrent(
+                new ResourceStreamRequestHandler(resourceStream) {
+                    @Override
+                    public void respond(IRequestCycle requestCycle) {
+                        super.respond(requestCycle);
+
+                        Files.remove(fileToDownload);
+                    }
+                }.setFileName(fileName).setContentDisposition(ContentDisposition.ATTACHMENT)
+        );
     }
 
 

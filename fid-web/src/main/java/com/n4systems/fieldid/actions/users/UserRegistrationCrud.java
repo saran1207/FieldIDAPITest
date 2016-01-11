@@ -98,10 +98,9 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 			return ERROR;
 		}
 
-		TemplateMailMessage message = new TemplateMailMessage();
-		message.setSubject("Customer Account Request");
-		message.setEmailConent(String.format("A user has requested a customer account. To view the request <a href=\"%s?companyID=%s\">click here</a>.", createActionURI("userRequestList"), getTenant().getName()));
-		
+		TemplateMailMessage message = new TemplateMailMessage("Customer Account Request", "userRequest");
+		message.getTemplateMap().put("registerUrl", getBaseURI() + "w/setup/userRequestsList");
+
 		AdminUserListLoader userLoader = new AdminUserListLoader(new TenantOnlySecurityFilter(getTenant()));
 		for (User user: userLoader.load()) {
 			message.getToAddresses().add(user.getEmailAddress());

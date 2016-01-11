@@ -369,6 +369,15 @@ public class EventService extends FieldIdPersistenceService {
         } else {
             // Users in groups can pull in only local events of their group. Group filtering is done in the user security filter.
             builder = new QueryBuilder<Event>(ThingEvent.class, securityContext.getUserSecurityFilter());
+//            builder = new QueryBuilder<>(ThingEvent.class, new OwnerAndDownWithPrimaryFilter(getCurrentUser().getOwner()));
+        }
+
+        //Either need a way of applying the Owner And Down filter or a way to reproduce it here... currently we only
+        //actually filter the Owner of the Asset, not the Event... which is what's resulting in us seeing things that
+        //aren't necessarily what the user should be able to see given their current Owner.
+        if(!Objects.equals(getCurrentUser().getOwner().getId(), getCurrentUser().getOwner().getPrimaryOrg().getId())) {
+            builder.addWhere(WhereClauseFactory.create("owner", getCurrentUser().getOwner()));
+            //Do we need to include children, or is this good enough...????
         }
 
         builder.addWhere(WhereClauseFactory.create("asset.networkId", networkId));

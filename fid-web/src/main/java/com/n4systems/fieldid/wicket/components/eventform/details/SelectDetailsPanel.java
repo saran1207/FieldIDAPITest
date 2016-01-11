@@ -1,14 +1,12 @@
 package com.n4systems.fieldid.wicket.components.eventform.details;
 
-import java.util.List;
-
+import com.n4systems.fieldid.wicket.components.eventform.SortableStringListEditor;
+import com.n4systems.model.SelectCriteria;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-
-import com.n4systems.fieldid.wicket.components.eventform.SortableStringListEditor;
-import com.n4systems.model.SelectCriteria;
 
 public class SelectDetailsPanel extends Panel {
 	
@@ -17,7 +15,23 @@ public class SelectDetailsPanel extends Panel {
 	public SelectDetailsPanel(String id, IModel<SelectCriteria> selectCriteria) {
 		super(id, selectCriteria);
 		
-		add(selectOptionsEditor = new SortableStringListEditor("selectOptionsEditor", new PropertyModel<List<String>>(selectCriteria, "options"),
-                new Model<String>("Drop Down Options")));
+		add(selectOptionsEditor = new SortableStringListEditor("selectOptionsEditor", new PropertyModel<>(selectCriteria, "options"),
+                new Model<>("Drop Down Options"), true) {
+            @Override
+            protected void onAddLogicLinkClicked(AjaxRequestTarget target, String selectValue) {
+                onConfigureCriteriaLogic(target, selectValue);
+            }
+
+            @Override
+            protected boolean isExistingRule(String selectValue) {
+                return isRuleExists(selectValue);
+            }
+        });
 	}
+
+	protected void onConfigureCriteriaLogic(AjaxRequestTarget target, String selectValue) {}
+
+    protected boolean isRuleExists(String selectValue) {
+        return false;
+    }
 }

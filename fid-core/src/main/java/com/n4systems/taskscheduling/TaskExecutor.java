@@ -1,15 +1,14 @@
 package com.n4systems.taskscheduling;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Executor;
-
-import org.apache.log4j.Logger;
-
-import com.n4systems.util.ConfigContext;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.properties.HierarchicalProperties;
 import com.n4systems.util.properties.HirarchicalPropertiesLoader;
+import org.apache.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Executor;
 
 /**
  * 
@@ -47,7 +46,7 @@ public class TaskExecutor implements Executor {
 	 * @return	A default ThreadPoolExecutor
 	 */
 	private TaskPool createDefaultExecutor() {
-		int defaultPoolSize = ConfigContext.getCurrentContext().getInteger(ConfigEntry.DEFAULT_EXECUTOR_POOL_SIZE);
+		int defaultPoolSize = ConfigService.getInstance().getInteger(ConfigEntry.DEFAULT_EXECUTOR_POOL_SIZE);
 		
 		return new TaskPool(DEFAULT_POOL_NAME, defaultPoolSize);
 	}

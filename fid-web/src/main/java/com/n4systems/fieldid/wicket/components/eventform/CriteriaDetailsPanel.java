@@ -3,7 +3,19 @@ package com.n4systems.fieldid.wicket.components.eventform;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.TooltipImage;
 import com.n4systems.fieldid.wicket.components.eventform.details.*;
+import com.n4systems.fieldid.wicket.components.eventform.details.number.NumberCriteriaLogicForm;
+import com.n4systems.fieldid.wicket.components.eventform.details.number.NumberFieldDetailsPanel;
+import com.n4systems.fieldid.wicket.components.eventform.details.oneclick.OneClickCriteriaLogicForm;
+import com.n4systems.fieldid.wicket.components.eventform.details.oneclick.OneClickDetailsPanel;
+import com.n4systems.fieldid.wicket.components.eventform.details.select.SelectCriteriaLogicPanel;
+import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.*;
+import com.n4systems.model.criteriarules.CriteriaRule;
+import com.n4systems.model.criteriarules.NumberFieldCriteriaRule;
+import com.n4systems.model.criteriarules.OneClickCriteriaRule;
+import com.n4systems.model.criteriarules.SelectCriteriaRule;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -17,10 +29,12 @@ public class CriteriaDetailsPanel extends Panel {
     private CheckBox requiredCheckBox;
     private WebMarkupContainer scoreRequiredLabel;
 
+    private DialogModalWindow modalWindow;
+
     public CriteriaDetailsPanel(String id, IModel<Criteria> criteriaModel) {
         super(id, criteriaModel);
         add(new TooltipImage("tooltip", new StringResourceModel("label.tooltip.criteria_settings", this, null)));
-        add(requiredCheckBox = new CheckBox("required", new PropertyModel<Boolean>(criteriaModel, "required")) {
+        add(requiredCheckBox = new CheckBox("required", new PropertyModel<>(criteriaModel, "required")) {
             {
                 setOutputMarkupId(true);
                 add(new UpdateComponentOnChange());
@@ -30,6 +44,11 @@ public class CriteriaDetailsPanel extends Panel {
         add(scoreRequiredLabel = new WebMarkupContainer("scoreRequired"));
         scoreRequiredLabel.setOutputMarkupPlaceholderTag(true);
         scoreRequiredLabel.setVisible(false);
+
+        add(modalWindow = new DialogModalWindow("modalWindow"));
+        modalWindow.setTitle(new FIDLabelModel("title.criteria_logic_setup"));
+        modalWindow.setInitialWidth(350);
+
     }
 
     @Override
@@ -40,7 +59,7 @@ public class CriteriaDetailsPanel extends Panel {
 
         Criteria criteria = (Criteria) getDefaultModelObject();
         if (criteria instanceof OneClickCriteria) {
-            add(new OneClickDetailsPanel("specificDetailsPanel", new Model<OneClickCriteria>((OneClickCriteria) criteria)) {
+            add(new OneClickDetailsPanel("specificDetailsPanel", new Model<>((OneClickCriteria) criteria)) {
                 @Override
                 protected void onStateSetSelected(ButtonGroup buttonGroup) {
                     // we need to notify when buttons are selected since new one click criteria need to have the previous choice
@@ -52,21 +71,116 @@ public class CriteriaDetailsPanel extends Panel {
                 protected void onSetsResultSelected(boolean setsResult) {
                     CriteriaDetailsPanel.this.onSetsResultSelected(setsResult);
                 }
+
+
+                @Override
+                protected void onConfigureCriteriaLogic(AjaxRequestTarget target, Button button) {
+
+                   OneClickCriteriaRule criteriaRule = (OneClickCriteriaRule) (criteria).getRules().stream()
+                           .filter(rule -> ((OneClickCriteriaRule) rule).getButton().equals(button))
+                           .findFirst().orElse(new OneClickCriteriaRule(criteria, button));
+
+                    modalWindow.setContent(new OneClickCriteriaLogicForm(modalWindow.getContentId(), Model.of(criteriaRule)) {
+                        @Override
+                        public void onSaveRule(AjaxRequestTarget target, CriteriaRule rule) {
+                            rule.setCriteria(criteria);
+                            criteria.getRules().add(rule);
+                            modalWindow.close(target);
+                            target.add(CriteriaDetailsPanel.this);
+                        }
+
+                        @Override
+                        public void onRemoveRule(AjaxRequestTarget target, CriteriaRule rule) {
+                            criteria.getRules().remove(rule);
+                            modalWindow.close(target);
+                            target.add(CriteriaDetailsPanel.this);
+                        }
+
+                        @Override
+                        public boolean hasRule(CriteriaRule rule) {
+                            return criteria.getRules().contains(rule);
+                        }
+
+                        @Override
+                        public void onCancel(AjaxRequestTarget target) {
+                            modalWindow.close(target);
+                        }
+                    });
+                    modalWindow.show(target);
+                }
             });
         } else if (criteria instanceof TextFieldCriteria) {
-            add(new TextFieldDetailsPanel("specificDetailsPanel", new Model<TextFieldCriteria>((TextFieldCriteria) criteria)));
+            add(new TextFieldDetailsPanel("specificDetailsPanel", new Model<>((TextFieldCriteria) criteria)));
         } else if (criteria instanceof SelectCriteria) {
-        	add(new SelectDetailsPanel("specificDetailsPanel", new Model<SelectCriteria>((SelectCriteria) criteria)));
+        	add(new SelectDetailsPanel("specificDetailsPanel", new Model<>((SelectCriteria) criteria)) {
+                @Override
+                protected void onConfigureCriteriaLogic(AjaxRequestTarget target, String selectValue) {
+                    //We only need this list because
+                    SelectCriteriaRule rule =
+                            criteria.getRules()
+                                    //Process the rules in Stream mode...
+                                    .stream()
+                                    //Filter out any rule already using this Select Value
+                                    .filter(criteriaRule -> criteriaRule instanceof SelectCriteriaRule &&
+                                                            ((SelectCriteriaRule)criteriaRule).getSelectValue().equals(selectValue))
+                                    //Now convert these to the right type, to make it easier to deal with.
+                                    .map(criteriaRule -> (SelectCriteriaRule)criteriaRule)
+                                    //Now get the "first" one, which in this case is guaranteed to be the ONLY one...
+                                    .findFirst()
+                                    //...unless there are NONE, in which case create a new one.
+                                    .orElse(new SelectCriteriaRule(criteria, selectValue));
+
+
+                    modalWindow.setContent(new SelectCriteriaLogicPanel(modalWindow.getContentId(), Model.of(rule)) {
+                        @Override
+                        protected void onSaveRule(AjaxRequestTarget target, CriteriaRule rule) {
+                            rule.setCriteria(criteria);
+                            criteria.getRules().add(rule);
+                            modalWindow.close(target);
+                            target.add(CriteriaDetailsPanel.this);
+                        }
+
+                        @Override
+                        protected void onRemoveRule(AjaxRequestTarget target, CriteriaRule rule) {
+                            criteria.getRules().remove(rule);
+                            modalWindow.close(target);
+                            target.add(CriteriaDetailsPanel.this);
+                        }
+
+                        @Override
+                        protected boolean hasRule(CriteriaRule rule) {
+                            return criteria.getRules().contains(rule);
+                        }
+
+                        @Override
+                        protected void onCancel(AjaxRequestTarget target) {
+                            modalWindow.close(target);
+                        }
+                    });
+                    modalWindow.show(target);
+                }
+
+                @Override
+                protected boolean isRuleExists(String selectValue) {
+                    return criteria.getRules()
+                                   .stream()
+                                   .filter(criteriaRule -> criteriaRule instanceof SelectCriteriaRule &&
+                                            ((SelectCriteriaRule)criteriaRule).getSelectValue().equals(selectValue))
+                                   .map(criteriaRule -> (SelectCriteriaRule)criteriaRule)
+                                   .findFirst()
+                                   .isPresent();
+                }
+            });
         } else if (criteria instanceof ComboBoxCriteria) {
-        	add(new ComboBoxDetailsPanel("specificDetailsPanel", new Model<ComboBoxCriteria>((ComboBoxCriteria) criteria)));
+        	add(new ComboBoxDetailsPanel("specificDetailsPanel", new Model<>((ComboBoxCriteria) criteria)));
         } else if (criteria instanceof UnitOfMeasureCriteria) {
-            add(new UnitOfMeasureDetailsPanel("specificDetailsPanel", new Model<UnitOfMeasureCriteria>((UnitOfMeasureCriteria) criteria)));
+            add(new UnitOfMeasureDetailsPanel("specificDetailsPanel", new Model<>((UnitOfMeasureCriteria) criteria)));
         } else if (criteria instanceof SignatureCriteria) {
-            add(new SignatureDetailsPanel("specificDetailsPanel", new Model<SignatureCriteria>((SignatureCriteria) criteria)));
+            add(new SignatureDetailsPanel("specificDetailsPanel", new Model<>((SignatureCriteria) criteria)));
         } else if (criteria instanceof DateFieldCriteria) {
-            add(new DateFieldDetailsPanel("specificDetailsPanel", new Model<DateFieldCriteria>((DateFieldCriteria) criteria)));
+            add(new DateFieldDetailsPanel("specificDetailsPanel", new Model<>((DateFieldCriteria) criteria)));
         } else if (criteria instanceof ScoreCriteria) {
-            add(new ScoreDetailsPanel("specificDetailsPanel", new Model<ScoreCriteria>((ScoreCriteria) criteria)){
+            add(new ScoreDetailsPanel("specificDetailsPanel", new Model<>((ScoreCriteria) criteria)){
             	@Override
             	protected void onScoreGroupSelected(ScoreGroup scoreGroup) {
             		CriteriaDetailsPanel.this.onScoreGroupSelected(scoreGroup);            		
@@ -74,9 +188,51 @@ public class CriteriaDetailsPanel extends Panel {
             	
             });
         } else if (criteria instanceof NumberFieldCriteria) {
-        	add(new NumberFieldDetailsPanel("specificDetailsPanel", new Model<NumberFieldCriteria>((NumberFieldCriteria) criteria)));
+        	add(new NumberFieldDetailsPanel("specificDetailsPanel", new Model<>((NumberFieldCriteria) criteria)) {
+                @Override
+                public void onConfigureCriteriaLogic(AjaxRequestTarget target) {
+
+                    NumberFieldCriteriaRule criteriaRule = criteria.getRules().isEmpty() ?
+                            new NumberFieldCriteriaRule(criteria) : (NumberFieldCriteriaRule) criteria.getRules().get(0);
+
+                    modalWindow.setContent(new NumberCriteriaLogicForm(modalWindow.getContentId(), Model.of(criteriaRule)) {
+                        @Override
+                        public void onCancel(AjaxRequestTarget target) {
+                            modalWindow.close(target);
+                        }
+
+                        @Override
+                        public boolean hasRule() {
+                            return !criteria.getRules().isEmpty();
+                        }
+
+                        @Override
+                        public void onRemoveRule(AjaxRequestTarget target, NumberFieldCriteriaRule rule) {
+                            criteria.getRules().remove(rule);
+                            modalWindow.close(target);
+                            updateAddEditLinkLabel();
+                            target.add(CriteriaDetailsPanel.this);
+                        }
+
+                        @Override
+                        public void onSaveRule(AjaxRequestTarget target, NumberFieldCriteriaRule rule) {
+                            rule.setCriteria(criteria);
+                            criteria.getRules().add(rule);
+                            modalWindow.close(target);
+                            updateAddEditLinkLabel();
+                            target.add(CriteriaDetailsPanel.this);
+                        }
+                    });
+                    modalWindow.show(target);
+                }
+
+                @Override
+                public boolean hasRule() {
+                    return !criteria.getRules().isEmpty();
+                }
+            });
         } else if (criteria instanceof ObservationCountCriteria) {
-            add(new ObservationCountDetailsPanel("specificDetailsPanel", new Model<ObservationCountCriteria>((ObservationCountCriteria) criteria)));
+            add(new ObservationCountDetailsPanel("specificDetailsPanel", new Model<>((ObservationCountCriteria) criteria)));
         }
 
         if (criteria instanceof ScoreCriteria) {

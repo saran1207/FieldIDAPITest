@@ -9,8 +9,8 @@ import com.n4systems.fieldid.wicket.model.admin.tenants.AddTenantModel;
 import com.n4systems.fieldid.wicket.pages.admin.FieldIDAdminPage;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.ExtendedFeature;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.services.tenant.TenantCreationService;
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import org.apache.log4j.Logger;
 import org.apache.wicket.extensions.model.AbstractCheckBoxModel;
@@ -44,7 +44,7 @@ public class AddTenantPage extends FieldIDAdminPage {
 	
 	private AddTenantModel getDefaultTenantModel() {
 		AddTenantModel model = new AddTenantModel();
-		model.getAdminUser().setTimeZoneID(ConfigContext.getCurrentContext().getString(ConfigEntry.DEFAULT_TIMEZONE_ID));
+		model.getAdminUser().setTimeZoneID(ConfigService.getInstance().getString(ConfigEntry.DEFAULT_TIMEZONE_ID));
 		
 		return model;
 	}

@@ -39,8 +39,12 @@ import com.n4systems.servicedto.converts.*;
 import com.n4systems.servicedto.converts.util.DtoDateConverter;
 import com.n4systems.services.TenantFinder;
 import com.n4systems.services.asset.AssetSaveService;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.tools.Pager;
-import com.n4systems.util.*;
+import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.ServiceLocator;
+import com.n4systems.util.TransactionSupervisor;
+import com.n4systems.util.WsServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.n4systems.webservice.ModelToServiceConverterFactory;
@@ -85,7 +89,7 @@ public class DataServiceImpl implements DataService {
 	private RequestHandlerFactory createResponseHandlerFactory(RequestInformation request) {
 		LoaderFactory loaderFactory = createLoaderFactory(request);
 		ModelToServiceConverterFactory converterFactory = new ModelToServiceConverterFactory(loaderFactory, WsServiceLocator.getServiceDTOBeanConverter(request.getTenantId()));
-		RequestHandlerFactory handlerFactory = new RequestHandlerFactory(ConfigContext.getCurrentContext(), loaderFactory, converterFactory);
+		RequestHandlerFactory handlerFactory = new RequestHandlerFactory(ConfigService.getInstance(), loaderFactory, converterFactory);
 		return handlerFactory;
 	}
 
@@ -1066,10 +1070,10 @@ public class DataServiceImpl implements DataService {
 	public MobileUpdateInfo getMobileUpdateInfo(String currentVersion) throws ServiceException {
 		MobileUpdateInfo mobileUpdateInfo = new MobileUpdateInfo();
 
-		mobileUpdateInfo.setMajorVersion(ConfigContext.getCurrentContext().getInteger(ConfigEntry.CURRENT_MOBILE_MAJOR_VERSION));
-		mobileUpdateInfo.setMinorVersion(ConfigContext.getCurrentContext().getInteger(ConfigEntry.CURRENT_MOBILE_MINOR_VERSION));
-		mobileUpdateInfo.setBuildVersion(ConfigContext.getCurrentContext().getInteger(ConfigEntry.CURRENT_MOBILE_BUILD_VERSION));
-		mobileUpdateInfo.setFileName(ConfigContext.getCurrentContext().getString(ConfigEntry.CURRENT_MOBILE_FILE_NAME));
+		mobileUpdateInfo.setMajorVersion(ConfigService.getInstance().getInteger(ConfigEntry.CURRENT_MOBILE_MAJOR_VERSION));
+		mobileUpdateInfo.setMinorVersion(ConfigService.getInstance().getInteger(ConfigEntry.CURRENT_MOBILE_MINOR_VERSION));
+		mobileUpdateInfo.setBuildVersion(ConfigService.getInstance().getInteger(ConfigEntry.CURRENT_MOBILE_BUILD_VERSION));
+		mobileUpdateInfo.setFileName(ConfigService.getInstance().getString(ConfigEntry.CURRENT_MOBILE_FILE_NAME));
 
 		return mobileUpdateInfo;
 	}
@@ -1095,7 +1099,7 @@ public class DataServiceImpl implements DataService {
 	}
 
 	private int getSetupDataPageSize() {
-		return ConfigContext.getCurrentContext().getInteger(ConfigEntry.MOBLIE_PAGESIZE_SETUPDATA).intValue();
+		return ConfigService.getInstance().getInteger(ConfigEntry.MOBLIE_PAGESIZE_SETUPDATA).intValue();
 	}
 
     private void storeInteractionContext(RequestInformation request, Long modifiedById) {

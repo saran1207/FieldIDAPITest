@@ -12,7 +12,6 @@ import com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.tenant.SystemSettings;
-import com.n4systems.util.ConfigurationProvider;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -36,11 +35,7 @@ public class SystemSettingsPage extends FieldIDTemplatePage {
     private SystemSettingsService systemSettingsService;
 
     public SystemSettingsPage() {
-    	this(null);
-    }
-
-    public SystemSettingsPage(ConfigurationProvider configurationProvider) {
-    	super(null, configurationProvider);
+    	super();
     	add(new SystemSettingsForm("systemSettingsForm", systemSettingsService.getSystemSettings()));
 	}
 

@@ -8,7 +8,7 @@ import com.n4systems.fieldid.wicket.components.TimeContainer;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.util.EnumPropertyChoiceRenderer;
+import com.n4systems.fieldid.wicket.components.renderer.EnumPropertyChoiceRenderer;
 import com.n4systems.model.EventType;
 import com.n4systems.model.Recurrence;
 import com.n4systems.model.RecurrenceTimeOfDay;

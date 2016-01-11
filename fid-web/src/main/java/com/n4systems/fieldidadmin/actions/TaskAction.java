@@ -26,7 +26,7 @@ public class TaskAction extends AbstractAdminAction {
 	private Boolean enable;
 
 	public String doLoad() {
-		scheduledTasks = scheduler.getScheduledTasks();
+		scheduledTasks = getScheduledTasks();
 		
 		AllEntityListLoader<TaskConfig> loader = new AllEntityListLoader<TaskConfig>(TaskConfig.class);
 		taskConfigs = loader.load();
@@ -35,12 +35,8 @@ public class TaskAction extends AbstractAdminAction {
 	}
     
     public String doRunTask() {
-        TaskConfigLoader configLoader = new TaskConfigLoader();
-        configLoader.setId(configId);
-
-        TaskConfig conf = configLoader.load();
         try {
-            ScheduledTask task = (ScheduledTask) Class.forName(conf.getClassName()).newInstance();
+            ScheduledTask task = scheduler.getScheduledTask(configId);
 			task.setConfigId(configId);
             task.run();
             addActionMessage("Task run successful");
@@ -116,7 +112,7 @@ public class TaskAction extends AbstractAdminAction {
 	}
 	
 	public List<ScheduledTask> getScheduledTasks() {
-		return scheduledTasks;
+		return scheduler.getScheduledTasks();
 	}
 
 	public List<TaskConfig> getTaskConfigs() {

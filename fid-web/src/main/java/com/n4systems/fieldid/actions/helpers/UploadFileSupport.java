@@ -1,28 +1,20 @@
 package com.n4systems.fieldid.actions.helpers;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-
-import com.n4systems.ejb.ConfigManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.api.HasFileAttachments;
 import com.n4systems.model.user.User;
-import com.n4systems.util.ConfigContext;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.Validations;
 
+import java.io.File;
+import java.util.*;
+
 @SuppressWarnings("serial")
 abstract public class UploadFileSupport extends AbstractCrud {
-	protected ConfigManager configManager;
-	
 	private List<FileAttachment> uploadedFiles = new ArrayList<FileAttachment>();
 	private List<FileAttachment> attachments = new ArrayList<FileAttachment>();
 
@@ -59,7 +51,7 @@ abstract public class UploadFileSupport extends AbstractCrud {
 	}
 	
 	public Integer getFileUploadMax() {
-		return ConfigContext.getCurrentContext().getInteger(ConfigEntry.WEB_FILE_UPLOAD_MAX);
+		return ConfigService.getInstance().getInteger(ConfigEntry.WEB_FILE_UPLOAD_MAX);
 	}
 	
 	public String getFileName(String file) {

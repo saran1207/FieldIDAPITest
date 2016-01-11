@@ -5,7 +5,6 @@ import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.persistence.localization.Localized;
-import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ public class ButtonGroup extends EntityWithTenant implements NamedEntity, Listab
 	private boolean retired = false;
 	
 	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	@IndexColumn(name="orderIdx")
+	@OrderColumn(name="orderIdx")
     @JoinTable(name="button_groups_buttons", joinColumns = @JoinColumn(name = "button_group_id"), inverseJoinColumns = @JoinColumn(name = "button_id"))
 	private List<Button> buttons = new ArrayList<Button>();
 

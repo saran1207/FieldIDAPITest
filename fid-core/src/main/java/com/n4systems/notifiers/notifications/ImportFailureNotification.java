@@ -1,7 +1,7 @@
 package com.n4systems.notifiers.notifications;
 
 import com.n4systems.model.user.User;
-import com.n4systems.util.ConfigContext;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
 
 public abstract class ImportFailureNotification extends Notification {
@@ -16,7 +16,7 @@ public abstract class ImportFailureNotification extends Notification {
 	}
 	
 	public String getHelpUrl() {
-		return ConfigContext.getCurrentContext().getString(ConfigEntry.HELP_SYSTEM_URL);
+		return ConfigService.getInstance().getString(ConfigEntry.HELP_SYSTEM_URL);
 	}
 	
 }

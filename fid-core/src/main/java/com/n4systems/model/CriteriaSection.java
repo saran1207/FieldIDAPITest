@@ -5,7 +5,6 @@ import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Retirable;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.persistence.localization.Localized;
-import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ public class CriteriaSection extends EntityWithTenant implements Listable<Long>,
 	private boolean retired = false;
 	
 	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	@IndexColumn(name="orderIdx")
+	@OrderColumn(name="orderIdx")
     @JoinTable(name="criteriasections_criteria", joinColumns = @JoinColumn(name="criteriasections_id"), inverseJoinColumns = @JoinColumn(name="criteria_id"))
 	private List<Criteria> criteria = new ArrayList<Criteria>();
 

@@ -10,8 +10,8 @@ import com.n4systems.model.AssetType;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.tools.Pager;
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.MailMessage;
@@ -129,7 +129,7 @@ public class ArchiveAssetTypeTask implements Runnable {
 		MailMessage message = new MailMessage(subject, body, archivedBy.getEmailAddress());
 
 		if (deleteFailed()) {
-			message.getBccAddresses().add(ConfigContext.getCurrentContext().getString(ConfigEntry.FIELDID_ADMINISTRATOR_EMAIL));
+			message.getBccAddresses().add(ConfigService.getInstance().getString(ConfigEntry.FIELDID_ADMINISTRATOR_EMAIL));
 		}
 
 		ServiceLocator.getMailManager().sendMessage(message);

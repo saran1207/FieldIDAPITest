@@ -23,7 +23,8 @@ public class EventActionsCell extends Panel {
         NonWicketLink editLink;
         menu.add(editLink = new NonWicketLink("editLink", "selectEventEdit.action?uniqueID=" + event.getID()));
         editLink.setVisible(FieldIDSession.get().getSessionUser().hasAccess("editevent"));
-        
+
+        //TODO replace this with the handleDownload once WEB-5997 is completed
         NonWicketLink printLink;
         menu.add(printLink = new NonWicketLink("printReportLink", "file/downloadEventCert.action?uniqueID=" + event.getID() + "&reportType=INSPECTION_CERT"));
         printLink.setVisible(event.isEventCertPrintable());

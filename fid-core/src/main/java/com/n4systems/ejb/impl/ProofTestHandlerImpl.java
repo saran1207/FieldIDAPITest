@@ -23,6 +23,7 @@ import com.n4systems.model.orgs.LegacyFindOrCreateCustomerOrgHandler;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.util.*;
 import org.apache.log4j.Logger;
@@ -108,7 +109,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		
 		logger.info("Started processing of file [" + fileData.getFileName() + "]");
 		
-		int maxIdentifiers = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SERIALS_PER_PROOFTEST);
+		int maxIdentifiers = ConfigService.getInstance().getInteger(ConfigEntry.MAX_SERIALS_PER_PROOFTEST);
 		if (fileData.getIdentifiers().size() > maxIdentifiers){
 			throw new TooManyIdentifiersException("Max number of identifiers exceeded.  Size was " + fileData.getIdentifiers().size() + " max allowed is " + maxIdentifiers);
 		}

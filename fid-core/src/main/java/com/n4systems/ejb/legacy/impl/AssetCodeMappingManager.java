@@ -1,28 +1,25 @@
 package com.n4systems.ejb.legacy.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
-
+import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.impl.PersistenceManagerImpl;
 import com.n4systems.ejb.legacy.AssetCodeMappingService;
+import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.CopiedToService;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.services.config.ConfigService;
+import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.log4j.Logger;
-
 import rfid.ejb.entity.AssetCodeMapping;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.impl.PersistenceManagerImpl;
-import com.n4systems.exceptions.InvalidQueryException;
-import com.n4systems.model.security.OpenSecurityFilter;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.persistence.QueryBuilder;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class AssetCodeMappingManager implements AssetCodeMappingService {
@@ -84,7 +81,7 @@ public class AssetCodeMappingManager implements AssetCodeMappingService {
     @CopiedToService(com.n4systems.fieldid.service.asset.AssetCodeMappingService.class)
 	private AssetType defaultAssetType( Long tenantId ) {
 		// find the default asset type name for this tenant
-		String defaultTypeName = ConfigContext.getCurrentContext().getString(ConfigEntry.DEFAULT_PRODUCT_TYPE_NAME, tenantId);
+		String defaultTypeName = ConfigService.getInstance().getString(ConfigEntry.DEFAULT_PRODUCT_TYPE_NAME, tenantId);
 		
 		QueryBuilder<AssetType> builder = new QueryBuilder<AssetType>(AssetType.class, new OpenSecurityFilter());
 		builder.addSimpleWhere("tenant.id", tenantId);

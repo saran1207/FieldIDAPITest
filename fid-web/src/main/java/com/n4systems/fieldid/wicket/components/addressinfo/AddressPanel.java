@@ -75,6 +75,7 @@ public class AddressPanel extends Panel implements ILabelProvider<String> {
         response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false", GoogleMap.GOOGLE_MAP_API_ID);
         response.renderJavaScriptReference("javascript/googleMaps.js", GoogleMap.GOOGLE_MAPS_JS_ID);
         response.renderOnDomReadyJavaScript(String.format("googleMapFactory.createAutoCompleteAddress(%s);", getOptions()));
+        response.renderOnDomReadyJavaScript("var attr = $('.txt').autocomplete('widget').attr('class'); $('.txt').autocomplete('widget').attr('class', 'auto-complete-address ' + attr);");
     }
 
     public AddressPanel withExternalMap(String externalMapJsVar) {

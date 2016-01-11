@@ -145,11 +145,25 @@ div.criteria {
     display: block;
     float: left;
     padding-top: 9px;
+    width: 30px;
+}
+
+.add-logic-link {
+    display: block;
+    float: left;
+    padding-top: 9px;
+    padding-left: 10px;
+}
+
+.buttonImageDiv .tool-tip {
+    padding: 7px 0 0 5px;
 }
 
 .buttonImageDiv {
     padding-left: 15px;
     padding-top:10px;
+    float: left;
+    width: 100%;
 }
 
 div.observationSectionTitle {
@@ -500,4 +514,48 @@ div.verticalEditPanel * {
     padding:5px 5px 5px 15px;
     color : #777;
     font-size: 13px;
+}
+
+.control-group {
+    padding: 15px 5px;
+}
+
+.control-group .label {
+    display: inline-block;
+    text-align: right;
+    width: 130px;
+    padding-right: 10px;
+}
+
+.control-group .button {
+    vertical-align: middle;
+    padding-right: 5px;
+}
+
+.control-group select {
+    padding: 4px 4px 4px 1px
+}
+
+.form-actions {
+    text-align: right;
+}
+
+.comparator select {
+    width: 120px;
+}
+
+.number-range {
+    text-align: right;
+    padding-right: 40px;
+}
+
+.control-group.number-range > input {
+    width: 50px;
+    border: 1px solid #9c9c9c;
+    color: #555555;
+    padding: 4px;
+}
+
+.numberFieldConfiguration a {
+    padding-left: 15px;
 }

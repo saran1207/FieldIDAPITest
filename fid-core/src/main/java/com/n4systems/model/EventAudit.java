@@ -56,7 +56,7 @@ public class EventAudit extends BaseEntity {
     private String printable;
 
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name="eventaudit_event", joinColumns = @JoinColumn(name = "eventaudit_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "event_id", referencedColumnName = "event_id"))
+    @JoinTable(name="eventaudit_event", joinColumns = @JoinColumn(name = "eventaudit_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "event_id", referencedColumnName = "id"))
     private Set<Event> events;
 
     @Column(name="assigned_to", nullable = true)

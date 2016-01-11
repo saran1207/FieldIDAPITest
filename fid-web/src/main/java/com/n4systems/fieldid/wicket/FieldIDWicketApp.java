@@ -7,6 +7,7 @@ import com.n4systems.fieldid.wicket.pages.OopsPage;
 import com.n4systems.fieldid.wicket.pages.SecretTestPage;
 import com.n4systems.fieldid.wicket.pages.SelectLanguagePage;
 import com.n4systems.fieldid.wicket.pages.admin.adminusers.AdminUserPage;
+import com.n4systems.fieldid.wicket.pages.admin.config.ConfigPage;
 import com.n4systems.fieldid.wicket.pages.admin.connections.ConnectionViewPage;
 import com.n4systems.fieldid.wicket.pages.admin.languages.ConfigureLanguagesPage;
 import com.n4systems.fieldid.wicket.pages.admin.printouts.LotoPrintoutListPage;
@@ -175,6 +176,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/addPerson", AddPersonPage.class);
         mountPage("setup/editPerson", EditPersonPage.class);
         mountPage("setup/viewUser", ViewUserPage.class);
+        mountPage("setup/addCustomerUser", AddCustomerUserPage.class);
         mountPage("setup/changeUserPassword", ChangeUserPasswordPage.class);
         mountPage("setup/editUserMobilePasscode", EditUserMobilePasscodePage.class);
         mountPage("setup/manageUserMobilePasscode", ManageUserMobilePasscodePage.class);
@@ -282,6 +284,7 @@ public class FieldIDWicketApp extends WebApplication {
 		mountPage("admin/tenantUsers", TenantUserListPage.class);
         mountPage("admin/changeAdminPassword", ChangeAdminPasswordPage.class);
         mountPage("admin/lotoPrintoutSelection", LotoPrintoutListPage.class);
+        mountPage("admin/config", ConfigPage.class);
 
         mountPage("secret/test", SecretTestPage.class);
         mountPage("assetSummary", AssetSummaryPage.class);

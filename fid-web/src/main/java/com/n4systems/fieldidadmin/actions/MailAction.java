@@ -1,15 +1,14 @@
 package com.n4systems.fieldidadmin.actions;
 
+import com.n4systems.mail.MailManagerFactory;
+import com.n4systems.services.config.ConfigService;
+import com.n4systems.util.mail.MailMessage;
+import com.n4systems.util.mail.MailMessage.MessageType;
+import org.apache.commons.io.IOUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.apache.commons.io.IOUtils;
-
-import com.n4systems.mail.MailManagerFactory;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.mail.MailMessage;
-import com.n4systems.util.mail.MailMessage.MessageType;
 
 public class MailAction extends AbstractAdminAction {
 	private static final long serialVersionUID = 1L;
@@ -28,7 +27,7 @@ public class MailAction extends AbstractAdminAction {
 	public String doSend() {
 		try {
 			MessageType contentType = html ? MailMessage.MessageType.HTML : MailMessage.MessageType.PLAIN;
-			MailMessage message = new MailMessage(contentType, ConfigContext.getCurrentContext());
+			MailMessage message = new MailMessage(contentType, ConfigService.getInstance());
 			message.setSubject(subject);
 			message.setBody(body);
 			message.getToAddresses().add(toAddress);
@@ -38,7 +37,7 @@ public class MailAction extends AbstractAdminAction {
 				
 				message.getAttachments().put(attachment.getName(), getFileData(attachment));
 			}
-			MailManagerFactory.defaultMailManager(ConfigContext.getCurrentContext()).sendMessage(message);
+			MailManagerFactory.defaultMailManager(ConfigService.getInstance()).sendMessage(message);
 			
 		} catch(Exception e) {
 			addActionError("Send Failed: " + e.getMessage());

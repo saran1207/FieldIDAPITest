@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.navigation.MattBar;
 import com.n4systems.model.search.SearchCriteria;
-import com.n4systems.util.ConfigContext;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -100,11 +100,11 @@ public abstract class SubMenu<T extends SearchCriteria> extends Panel {
 
     protected void initializeLimits() {
         Long tenantId = FieldIDSession.get().getSessionUser().getTenant().getId();
-        maxUpdate = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MASS_ACTIONS_LIMIT, tenantId);
-        maxExport = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MASS_ACTIONS_LIMIT, tenantId);
-        maxPrint = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MASS_ACTIONS_LIMIT, tenantId);
-        maxEvent = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MASS_ACTIONS_LIMIT, tenantId);
-        maxSchedule = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MASS_ACTIONS_LIMIT, tenantId);
+        maxUpdate = ConfigService.getInstance().getInteger(ConfigEntry.MASS_ACTIONS_LIMIT, tenantId);
+        maxExport = ConfigService.getInstance().getInteger(ConfigEntry.MASS_ACTIONS_LIMIT, tenantId);
+        maxPrint = ConfigService.getInstance().getInteger(ConfigEntry.MASS_ACTIONS_LIMIT, tenantId);
+        maxEvent = ConfigService.getInstance().getInteger(ConfigEntry.MASS_ACTIONS_LIMIT, tenantId);
+        maxSchedule = ConfigService.getInstance().getInteger(ConfigEntry.MASS_ACTIONS_LIMIT, tenantId);
     }
 
     protected <T extends Link> T makeLinkLightBoxed(T link) {

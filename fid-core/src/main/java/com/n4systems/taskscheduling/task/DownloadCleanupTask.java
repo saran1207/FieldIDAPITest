@@ -1,16 +1,16 @@
 package com.n4systems.taskscheduling.task;
 
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 import com.n4systems.model.downloadlink.AllDownloadLinksByDateLoader;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.downloadlink.DownloadLinkSaver;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.taskscheduling.ScheduledTask;
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
+
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class DownloadCleanupTask extends ScheduledTask {
 	private final AllDownloadLinksByDateLoader downloadsLoader;
@@ -28,7 +28,7 @@ public class DownloadCleanupTask extends ScheduledTask {
 	
 	@Override
 	protected void runTask() throws Exception {
-		Integer expireTTL = ConfigContext.getCurrentContext().getInteger(ConfigEntry.DOWNLOAD_TTL_DAYS);
+		Integer expireTTL = ConfigService.getInstance().getInteger(ConfigEntry.DOWNLOAD_TTL_DAYS);
 		
 		Date olderThanDate = DateHelper.increment(DateHelper.getToday(), DateHelper.DAY, expireTTL * -1);
 		

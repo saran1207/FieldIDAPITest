@@ -1,12 +1,5 @@
 package com.n4systems.model.notificationsettings;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.*;
-
-import org.hibernate.annotations.IndexColumn;
-
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.HasUser;
 import com.n4systems.model.api.Saveable;
@@ -15,6 +8,10 @@ import com.n4systems.model.common.SimpleFrequency;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.EntityWithOwner;
 import com.n4systems.model.user.User;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "notificationsettings")
@@ -35,19 +32,19 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
 	@Column(name="addr", nullable=false)
 	@ElementCollection(fetch=FetchType.EAGER)
     @JoinTable(name="notificationsettings_addresses", joinColumns = @JoinColumn(name="notificationsettings_id"))
-	@IndexColumn(name="orderidx")
+	@OrderColumn(name="orderidx")
     private List<String> addresses = new ArrayList<String>();
 
 	@Column(name="assettype_id", nullable=false)
 	@ElementCollection(fetch=FetchType.EAGER)
     @JoinTable(name="notificationsettings_assettypes", joinColumns = @JoinColumn(name="notificationsettings_id"))
-	@IndexColumn(name="orderidx")
+	@OrderColumn(name="orderidx")
 	private List<Long> assetTypes = new ArrayList<Long>();
 	
 	@Column(name="eventtype_id", nullable=false)
 	@ElementCollection(fetch=FetchType.EAGER)
     @JoinTable(name="notificationsettings_eventtypes", joinColumns = @JoinColumn(name="notificationsettings_id"))
-	@IndexColumn(name="orderidx")
+	@OrderColumn(name="orderidx")
 	private List<Long> eventTypes = new ArrayList<Long>();
 	
 	private OverdueEventReport overdueReport = new OverdueEventReport();

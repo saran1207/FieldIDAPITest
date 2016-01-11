@@ -1,7 +1,6 @@
 package com.n4systems.model.dashboard;
 
 import com.n4systems.model.parents.AbstractEntity;
-import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ public class DashboardColumn extends AbstractEntity {
     @JoinTable(name = "dashboard_columns_widget_definitions",
                     joinColumns = @JoinColumn(name = "dashboard_column_id"),
                     inverseJoinColumns = @JoinColumn(name = "widget_definition_id"))
-    @IndexColumn(name="orderIdx")
+    @OrderColumn(name="orderIdx")
     private List<WidgetDefinition> widgets = new ArrayList<WidgetDefinition>();
 
     public List<WidgetDefinition> getWidgets() {

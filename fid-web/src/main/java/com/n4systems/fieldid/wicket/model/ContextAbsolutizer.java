@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.wicket.model;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.util.ConfigContext;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.cycle.RequestCycle;
@@ -9,7 +9,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 public class ContextAbsolutizer {
 
     public static String toAbsoluteUrl(String path) {
-        return ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_PROTOCOL) + "://" +
+        return ConfigService.getInstance().getString(ConfigEntry.SYSTEM_PROTOCOL) + "://" +
                 determineServerName() +
                 toContextAbsoluteUrl(path);
     }
@@ -32,7 +32,7 @@ public class ContextAbsolutizer {
 
     private static String determineServerName() {
         String tenantName = FieldIDSession.get().getSessionUser().getTenant().getName();
-        String systemDomain = ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_DOMAIN);
+        String systemDomain = ConfigService.getInstance().getString(ConfigEntry.SYSTEM_DOMAIN);
         return tenantName + "." + systemDomain;
     }
 

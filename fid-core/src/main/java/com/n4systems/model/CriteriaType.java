@@ -81,4 +81,8 @@ public enum CriteriaType implements Listable {
     public String getDisplayName() {
         return description;
     }
+
+    public boolean isAbleToHaveRules() {
+        return this == ONE_CLICK || this == SELECT || this == NUMBER_FIELD;
+    }
 }

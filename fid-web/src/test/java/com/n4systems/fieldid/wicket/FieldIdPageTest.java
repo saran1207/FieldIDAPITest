@@ -6,9 +6,10 @@ import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.model.user.User;
-import com.n4systems.services.ConfigService;
+import com.n4systems.services.config.ConfigService;
+import com.n4systems.services.config.MutableRootConfig;
+import com.n4systems.services.config.RootConfig;
 import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.ConfigurationProvider;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.junit.Before;
 
@@ -19,7 +20,7 @@ import static org.easymock.EasyMock.*;
 
 public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldIDTemplatePage> extends WicketPageTest<T,F,FieldIdWicketTestContext> {
 
-	protected ConfigurationProvider configurationProvider = createMock(ConfigurationProvider.class);
+//	protected ConfigurationProvider configurationProvider = createMock(ConfigurationProvider.class);
 	private ConfigService configService;
     protected UserLimitService userLimitService;
     protected S3Service s3Service;
@@ -46,10 +47,6 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
 	@Override
 	public F createFixture(IFixtureFactory<F> factory) {
 		F fixture = factory.createFixture("id");
-		if (fixture instanceof FieldIDTemplatePage) {
-            FieldIDTemplatePage fieldIdPage = fixture;
-			fieldIdPage.setConfigurationProvider(configurationProvider);
-		}
 		return fixture;
 	}
 	
@@ -59,9 +56,8 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
 	}		
 	
 	protected void expectingConfig() {
-		expect(configurationProvider.getString(ConfigEntry.SYSTEM_DOMAIN)).andReturn("localhost");
-		expect(configurationProvider.getInteger(ConfigEntry.ACTIVE_SESSION_TIME_OUT)).andReturn(new Integer(20));
-		replay(configurationProvider);
+        expect(configService.getString(ConfigEntry.SYSTEM_DOMAIN)).andReturn("localhost");
+        expect(configService.getInteger(ConfigEntry.ACTIVE_SESSION_TIME_OUT)).andReturn(new Integer(20));
 		expect(configService.getBoolean(ConfigEntry.GOOGLE_ANALYTICS_ENABLED)).andReturn(configData.googleAnalytics);
 		expect(configService.getString(ConfigEntry.RSS_FEED)).andReturn(configData.rssFeed);
         expect(configService.getBoolean(ConfigEntry.APPTEGIC_ENABLED)).andReturn(configData.apptegic);
@@ -69,11 +65,10 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
         expect(configService.getString(ConfigEntry.CUSTOM_JS)).andReturn("");
         expect(configService.getString(eq(ConfigEntry.FOOTER_SCRIPT), anyLong())).andReturn("");
         expect(configService.getString(eq(ConfigEntry.HEADER_SCRIPT), anyLong())).andReturn("");
-		replay(configService);
-	}
+		expect(configService.getConfig()).andReturn(new RootConfig(new MutableRootConfig()));
 
-    protected ConfigurationProvider getConfigurationProvider() {
-		return configurationProvider;
+
+		replay(configService);
 	}
 
 	@Override

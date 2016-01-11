@@ -3,7 +3,6 @@ package com.n4systems.model.dashboard.widget;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.chart.RangeType;
-import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -19,7 +18,7 @@ public class EventKPIWidgetConfiguration extends WidgetConfiguration {
     @JoinTable(name = "widget_configurations_event_kpi_orgs",
                     joinColumns = @JoinColumn(name = "config_id"),
                     inverseJoinColumns = @JoinColumn(name = "org_id"))
-    @IndexColumn(name="orderIdx")
+    @OrderColumn(name="orderIdx")
     private List<BaseOrg> orgs = new ArrayList<BaseOrg>();
 
 	@Enumerated(EnumType.STRING)

@@ -1,21 +1,13 @@
 package com.n4systems.mail;
 
-import java.util.Properties;
-
-import javax.mail.Authenticator;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.NoSuchProviderException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-
-import org.apache.log4j.Logger;
-
-import com.n4systems.util.ConfigContext;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ConfigurationProvider;
 import com.n4systems.util.mail.MailMessage;
+import org.apache.log4j.Logger;
+
+import javax.mail.*;
+import java.util.Properties;
 
 public class SMTPMailManager implements MailManager {
 	private Logger logger = Logger.getLogger(SMTPMailManager.class);
@@ -27,7 +19,7 @@ public class SMTPMailManager implements MailManager {
 	}
 
 	public SMTPMailManager() {
-		this(ConfigContext.getCurrentContext());
+		this(ConfigService.getInstance());
 	}
 
 	private Authenticator getAuthenticator() {

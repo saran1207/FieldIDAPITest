@@ -1,11 +1,11 @@
 package com.n4systems.graphing;
 
+import com.n4systems.services.config.ConfigService;
+import com.n4systems.util.ConfigEntry;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
 
 public class Chart implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -147,11 +147,11 @@ public class Chart implements Serializable {
 	public static Chart newInstance() {
 		Chart chart = new Chart();
 		
-		chart.setWidth(ConfigContext.getCurrentContext().getInteger(ConfigEntry.GRAPHING_CHART_SIZE_X));
-		chart.setHeight(ConfigContext.getCurrentContext().getInteger(ConfigEntry.GRAPHING_CHART_SIZE_Y));
-		chart.setUsingPeakArrows(ConfigContext.getCurrentContext().getBoolean(ConfigEntry.GRAPHING_CHART_PEAK_ARROWS));
-		chart.setUsingPeakDots(ConfigContext.getCurrentContext().getBoolean(ConfigEntry.GRAPHING_CHART_PEAK_DOTS));
-		chart.setUsingPeakMarkers(ConfigContext.getCurrentContext().getBoolean(ConfigEntry.GRAPHING_CHART_PEAK_MARKERS));
+		chart.setWidth(ConfigService.getInstance().getInteger(ConfigEntry.GRAPHING_CHART_SIZE_X));
+		chart.setHeight(ConfigService.getInstance().getInteger(ConfigEntry.GRAPHING_CHART_SIZE_Y));
+		chart.setUsingPeakArrows(ConfigService.getInstance().getBoolean(ConfigEntry.GRAPHING_CHART_PEAK_ARROWS));
+		chart.setUsingPeakDots(ConfigService.getInstance().getBoolean(ConfigEntry.GRAPHING_CHART_PEAK_DOTS));
+		chart.setUsingPeakMarkers(ConfigService.getInstance().getBoolean(ConfigEntry.GRAPHING_CHART_PEAK_MARKERS));
 
 		return chart;
 	}

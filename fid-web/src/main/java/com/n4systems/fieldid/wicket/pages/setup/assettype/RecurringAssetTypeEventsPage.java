@@ -20,7 +20,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
-import com.n4systems.fieldid.wicket.util.EnumPropertyChoiceRenderer;
+import com.n4systems.fieldid.wicket.components.renderer.EnumPropertyChoiceRenderer;
 import com.n4systems.fieldid.wicket.util.NullCoverterModel;
 import com.n4systems.model.*;
 import com.n4systems.model.location.PredefinedLocation;

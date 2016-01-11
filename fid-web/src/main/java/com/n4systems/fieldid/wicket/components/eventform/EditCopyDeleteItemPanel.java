@@ -4,6 +4,7 @@ import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressed
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.TrimmedStringModel;
+import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -18,10 +19,12 @@ import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.validation.validator.StringValidator;
 
 
 public class EditCopyDeleteItemPanel extends Panel {
+    private static final Logger logger = Logger.getLogger(EditCopyDeleteItemPanel.class);
 
     private static final String DELETE_IMAGE = "images/small-x.png";
     private static final String REORDER_IMAGE = "images/reorder.png";
@@ -37,18 +40,22 @@ public class EditCopyDeleteItemPanel extends Panel {
     }
 
     public EditCopyDeleteItemPanel(String id, IModel<String> stringModel, boolean displayCopyLink) {
-        this(id, stringModel, null, displayCopyLink);
+        this(id, stringModel, null, displayCopyLink, false);
     }
 
     public EditCopyDeleteItemPanel(String id, IModel<String> titleModel, IModel<String> subTitleModel) {
-        this(id, titleModel, subTitleModel, true);
+        this(id, titleModel, subTitleModel, true, false);
     }
 
     public EditCopyDeleteItemPanel(String id, IModel<String> titleModel, IModel<String> subTitleModel, final boolean displayCopyLink) {
+        this(id, titleModel, subTitleModel, displayCopyLink, false);
+    }
+
+    public EditCopyDeleteItemPanel(String id, IModel<String> titleModel, IModel<String> subTitleModel, final boolean displayCopyLink, final boolean displayAddLogicLink) {
         super(id, titleModel);        
         setOutputMarkupPlaceholderTag(true);
 
-        ContextImage deleteImage = new ContextImage("deleteImage", new PropertyModel<String>(this, "deleteImage")) {
+        ContextImage deleteImage = new ContextImage("deleteImage", new PropertyModel<>(this, "deleteImage")) {
             @Override
             public boolean isVisible() {
                 return !isReorderState() && isDeletable();
@@ -63,7 +70,7 @@ public class EditCopyDeleteItemPanel extends Panel {
         });
         add(deleteImage);
 
-        ContextImage reorderImage = new ContextImage("reorderImage", new PropertyModel<String>(this, "reorderImage")) {
+        ContextImage reorderImage = new ContextImage("reorderImage", new PropertyModel<>(this, "reorderImage")) {
             @Override
             public boolean isVisible() {
                 return isReorderState();
@@ -111,6 +118,14 @@ public class EditCopyDeleteItemPanel extends Panel {
 
         });
 
+        viewContainer.add(new AjaxLink<Void>("addLogicLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                onAddLogicClicked(target, titleModel.getObject());
+            }
+        }.setBody(isRuleExists(titleModel.getObject()) ? new StringResourceModel("label.edit_logic", this, null):new StringResourceModel("label.add_logic", this, null))
+                .setVisible(displayAddLogicLink));
+
         add(viewContainer);
 
         editFormContainer = new WebMarkupContainer("editFormContainer");
@@ -136,7 +151,7 @@ public class EditCopyDeleteItemPanel extends Panel {
             super(id);
             this.stringModel = model;
             setOutputMarkupPlaceholderTag(true);
-            add(newText = new RequiredTextField<String>("newText", stringModel));
+            add(newText = new RequiredTextField<>("newText", stringModel));
 
             AjaxSubmitLink storeLink;
             add(storeLink = new AjaxSubmitLink("storeLink") {
@@ -222,4 +237,9 @@ public class EditCopyDeleteItemPanel extends Panel {
         return newText;
     }
 
+    protected void onAddLogicClicked(AjaxRequestTarget target, String selectValue) {}
+
+    protected boolean isRuleExists(String selectValue) {
+        return false;
+    }
 }

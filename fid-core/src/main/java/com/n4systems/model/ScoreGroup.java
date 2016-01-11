@@ -3,7 +3,6 @@ package com.n4systems.model;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.persistence.localization.Localized;
-import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ public class ScoreGroup extends ArchivableEntityWithTenant implements Listable {
 
     @OneToMany(fetch= FetchType.EAGER, cascade= CascadeType.ALL)
     @JoinTable(name="score_groups_scores", joinColumns = @JoinColumn(name="score_group_id"), inverseJoinColumns = @JoinColumn(name="score_id"))
-    @IndexColumn(name="orderIdx")
+    @OrderColumn(name="orderIdx")
     private List<Score> scores = new ArrayList<Score>();
 
     public String getName() {

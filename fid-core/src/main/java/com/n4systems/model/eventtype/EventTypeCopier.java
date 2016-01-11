@@ -1,9 +1,10 @@
 package com.n4systems.model.eventtype;
 
+import com.n4systems.fieldid.service.event.EventFormService;
 import com.n4systems.model.Copier;
+import com.n4systems.model.EventForm;
 import com.n4systems.model.EventType;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.ThingEventType;
 import com.n4systems.model.api.Cleaner;
 import com.n4systems.model.event.EventFormSaver;
 import com.n4systems.model.security.SecurityFilter;
@@ -16,16 +17,18 @@ public class EventTypeCopier implements Copier<EventType> {
 	private final EventTypeSaver typeSaver;
 	private final EventTypeUniqueNameLoader typeNameLoader;
     private final EventFormSaver formSaver;
+	private final EventFormService eventFormService;
     private boolean withProofTests = true;
-	
+
 	public EventTypeCopier(Cleaner<EventType> typeCleaner, FilteredIdLoader<EventType> typeLoader, EventTypeSaver typeSaver, EventFormSaver formSaver, EventTypeUniqueNameLoader typeNameLoader) {
 		this.typeCleaner = typeCleaner;
 		this.typeLoader = typeLoader;
 		this.typeSaver = typeSaver;
 		this.typeNameLoader = typeNameLoader;
         this.formSaver = formSaver;
+		eventFormService = new EventFormService();
 	}
-	
+
 	protected EventTypeCopier(Tenant tenant, SecurityFilter filter) {
 		this(new ThingEventTypeCleaner(tenant), new FilteredIdLoader<EventType>(filter, EventType.class), new EventTypeSaver(), new EventFormSaver(), new EventTypeUniqueNameLoader(filter));
 	}
@@ -51,6 +54,10 @@ public class EventTypeCopier implements Copier<EventType> {
 		type.setName(newName);
 
         if (type.getEventForm() != null) {
+			//Need to create a new copy of the event form.
+			EventForm newCopy = eventFormService.copyEventForm(type.getEventForm());
+			type.setEventForm(newCopy);
+
             formSaver.save(type.getEventForm());
         }
 		typeSaver.save(type);

@@ -1,31 +1,20 @@
 package com.n4systems.util.mail;
 
+import com.n4systems.services.config.ConfigService;
+import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.ConfigurationProvider;
+import com.n4systems.util.ContentTypeUtil;
+import com.n4systems.util.StringUtils;
+
+import javax.activation.DataHandler;
+import javax.mail.*;
+import javax.mail.internet.*;
+import javax.mail.util.ByteArrayDataSource;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import javax.activation.DataHandler;
-import javax.activation.FileTypeMap;
-import javax.mail.Address;
-import javax.mail.BodyPart;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.Session;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-import javax.mail.util.ByteArrayDataSource;
-
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.ConfigurationProvider;
-import com.n4systems.util.ContentTypeUtil;
-import com.n4systems.util.StringUtils;
 
 public class MailMessage implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -73,7 +62,7 @@ public class MailMessage implements Serializable {
 	}
 	
 	public MailMessage(String subject, String body, String...toAddresses) {
-		this(MessageType.HTML, ConfigContext.getCurrentContext());
+		this(MessageType.HTML, ConfigService.getInstance());
 		setSubject(subject);
 		setBody(body);
 

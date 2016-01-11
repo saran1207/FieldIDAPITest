@@ -6,7 +6,7 @@ import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.fieldid.wicket.util.LegacyReportCriteriaStorage;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.SearchCriteriaContainer;
-import com.n4systems.util.ConfigContext;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.selection.MultiIdSelection;
 import org.apache.wicket.markup.html.form.SubmitLink;
@@ -42,7 +42,7 @@ public class AssetTextSearchActionsPanel extends Panel {
                 SearchCriteriaContainer<AssetSearchCriteria> container = new LegacyReportCriteriaStorage().storeCriteria(assetSearchCriteria, session);
 
                 String formattedUrl = String.format("/multiEvent/selectEventType.action?searchContainerKey=" + WebSessionMap.SEARCH_CRITERIA + "&searchId=%s", container.getSearchId());
-                String destination = ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_PROTOCOL) + "://" + httpServletRequest.getServerName() + httpServletRequest.getContextPath() + formattedUrl;
+                String destination = ConfigService.getInstance().getString(ConfigEntry.SYSTEM_PROTOCOL) + "://" + httpServletRequest.getServerName() + httpServletRequest.getContextPath() + formattedUrl;
 
                 getRequestCycle().replaceAllRequestHandlers(new RedirectRequestHandler(destination));
             }

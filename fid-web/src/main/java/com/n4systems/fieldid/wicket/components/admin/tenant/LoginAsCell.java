@@ -3,7 +3,7 @@ package com.n4systems.fieldid.wicket.components.admin.tenant;
 import com.n4systems.fieldid.service.admin.AdminUserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.model.user.User;
-import com.n4systems.services.ConfigService;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;

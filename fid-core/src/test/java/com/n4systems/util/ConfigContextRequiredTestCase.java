@@ -1,21 +1,18 @@
 package com.n4systems.util;
 
+import com.n4systems.services.config.ConfigServiceTestManager;
 import org.junit.After;
 import org.junit.Before;
 
 public abstract class ConfigContextRequiredTestCase {
-	private ConfigContext oldContext;
-
 	@Before
 	public void changeConfigContext() {
-		oldContext = ConfigContext.getCurrentContext();
-		ConfigContext.setCurrentContext(new ConfigContextOverridableTestDouble());
+		ConfigServiceTestManager.setInstance(new ConfigContextOverridableTestDouble());
 	}
 	
 	@After 
 	public void removeConfig() {
-		ConfigContext.setCurrentContext(oldContext);
+		ConfigServiceTestManager.resetInstance();
 	}
-
 }
 

@@ -11,7 +11,7 @@ public interface ConfigurationProvider extends Serializable {
 	 * @param tenantId		Id of a TenantOrganization or null to search for global entries
 	 * @return				The ConfigEntry's value
 	 */
-	public abstract String getString(ConfigEntry entry, Long tenantId);
+	String getString(ConfigEntry entry, Long tenantId);
 
 	/**
 	 * Returns the value of a global configuration as a String.
@@ -19,7 +19,9 @@ public interface ConfigurationProvider extends Serializable {
 	 * @param entry		A ConfigEntry
 	 * @return			The ConfigEntry's value
 	 */
-	public abstract String getString(ConfigEntry entry);
+	default String getString(ConfigEntry entry) {
+		return getString(entry, null);
+	}
 
 	/**
 	 * Returns the value of a configuration as an Integer.
@@ -28,7 +30,7 @@ public interface ConfigurationProvider extends Serializable {
 	 * @param tenantId	Id of a TenantOrganization or null to search for global entries
 	 * @return			The ConfigEntry's value or null if the String value could not be converted to Integer
 	 */
-	public abstract Integer getInteger(ConfigEntry entry, Long tenantId);
+	Integer getInteger(ConfigEntry entry, Long tenantId);
 
 	/**
 	 * Returns the value of a global configuration as an Integer.
@@ -36,7 +38,9 @@ public interface ConfigurationProvider extends Serializable {
 	 * @param entry		A ConfigEntry
 	 * @return			The ConfigEntry's value or null if the String value could not be converted to Integer
 	 */
-	public abstract Integer getInteger(ConfigEntry entry);
+	default Integer getInteger(ConfigEntry entry) {
+		return getInteger(entry, null);
+	}
 
 	/**
 	 * Returns the value of a configuration as a Long.
@@ -45,7 +49,7 @@ public interface ConfigurationProvider extends Serializable {
 	 * @param tenantId	Id of a TenantOrganization or null to search for global entries
 	 * @return			The ConfigEntry's value or null if the String value could not be converted to Long
 	 */
-	public abstract Long getLong(ConfigEntry entry, Long tenantId);
+	Long getLong(ConfigEntry entry, Long tenantId);
 
 	/**
 	 * Returns the value of a global configuration as a Long.
@@ -53,7 +57,9 @@ public interface ConfigurationProvider extends Serializable {
 	 * @param entry		A ConfigEntry
 	 * @return			The ConfigEntry's value or null if the String value could not be converted to Long
 	 */
-	public abstract Long getLong(ConfigEntry entry);
+	default Long getLong(ConfigEntry entry) {
+		return getLong(entry, null);
+	}
 
 	/**
 	 * Returns the value of a configuration as a Boolean.
@@ -62,7 +68,7 @@ public interface ConfigurationProvider extends Serializable {
 	 * @param tenantId	Id of a TenantOrganization or null to search for global entries
 	 * @return			The ConfigEntry's value or null if the String value could not be converted to Boolean
 	 */
-	public abstract Boolean getBoolean(ConfigEntry entry, Long tenantId);
+	Boolean getBoolean(ConfigEntry entry, Long tenantId);
 
 	/**
 	 * Returns the value of a global configuration as a Boolean.
@@ -70,6 +76,8 @@ public interface ConfigurationProvider extends Serializable {
 	 * @param entry		A ConfigEntry
 	 * @return			The ConfigEntry's value or null if the String value could not be converted to Boolean
 	 */
-	public abstract Boolean getBoolean(ConfigEntry entry);
+	default Boolean getBoolean(ConfigEntry entry) {
+		return getBoolean(entry, null);
+	}
 
 }

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.services.config.ConfigService;
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.OrderMappingBean;
@@ -36,7 +37,6 @@ import com.n4systems.plugins.integration.OrderResolver;
 import com.n4systems.plugins.integration.OrderTransfer;
 import com.n4systems.plugins.integration.ShopOrderTransfer;
 import com.n4systems.services.TenantFinder;
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -352,7 +352,7 @@ public class OrderManagerImpl implements OrderManager {
 			lineItem.setAssetCode(assetCode);
 		} else {
 			logger.warn("Line Item for Order [" + order.getOrderNumber() + "] had empty Asset Code.  Using default ...");
-			lineItem.setAssetCode(ConfigContext.getCurrentContext().getString(ConfigEntry.DEFAULT_PRODUCT_TYPE_NAME, order.getTenant().getId()));
+			lineItem.setAssetCode(ConfigService.getInstance().getString(ConfigEntry.DEFAULT_PRODUCT_TYPE_NAME, order.getTenant().getId()));
 		}
 		
 		String value;

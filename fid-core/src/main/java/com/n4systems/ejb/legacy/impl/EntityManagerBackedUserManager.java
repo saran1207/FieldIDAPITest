@@ -19,9 +19,10 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserQueryHelper;
 import com.n4systems.security.Permissions;
 import com.n4systems.security.UserType;
+import com.n4systems.services.config.ConfigService;
+import com.n4systems.tools.EncryptionUtility;
 import com.n4systems.tools.Page;
 import com.n4systems.tools.Pager;
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
@@ -76,23 +77,23 @@ public class EntityManagerBackedUserManager implements UserManager {
 		if (user == null) {
             AccountPolicy accountPolicy = getAccountPolicyForTenantId(tenant.getId());
 			throw new LoginException(new LoginFailureInfo(userID, accountPolicy.getMaxAttempts(), false, accountPolicy.getLockoutDuration(), false));
-		} else if (user.getHashPassword()==null) {
+		} else if (user.getHashPassword() == null) {
             // user was created without password and needs to register before successfully logging in.
             throw new LoginException(LoginFailureInfo.createUnactivatedLoginFailureInfo(user));
         } else {
-            checkIfStillLockedAndUnlockIfNecessary(user);
+			checkIfStillLockedAndUnlockIfNecessary(user);
 
-            if (!passwordMatches(plainTextPassword,user) || user.isLocked()) {
-                AccountPolicy accountPolicy = getAccountPolicyForUser(user);
-                if (user.getFailedLoginAttempts() < accountPolicy.getMaxAttempts()) {
-                    user.setFailedLoginAttempts(user.getFailedLoginAttempts() + 1);
-                }
-                throw new LoginException(new LoginFailureInfo(user, accountPolicy.getMaxAttempts(), accountPolicy.getLockoutDuration()));
-            }
+			if (!passwordMatches(plainTextPassword, user) || user.isLocked()) {
+				AccountPolicy accountPolicy = getAccountPolicyForUser(user);
+				if (user.getFailedLoginAttempts() < accountPolicy.getMaxAttempts()) {
+					user.setFailedLoginAttempts(user.getFailedLoginAttempts() + 1);
+				}
+				throw new LoginException(new LoginFailureInfo(user, accountPolicy.getMaxAttempts(), accountPolicy.getLockoutDuration()));
+			}
 
-            user.setFailedLoginAttempts(0);
-            return user;
-        }
+			user.setFailedLoginAttempts(0);
+		return user;
+	}
 	}
 
     private Tenant findTenant(String tenantName) {
@@ -114,7 +115,15 @@ public class EntityManagerBackedUserManager implements UserManager {
 	}
 
 	private boolean passwordMatches(String plainTextPassword, User user) {
-		return user != null && user.getHashPassword().equals(User.hashPassword(plainTextPassword));
+		if (user.getUserType() == UserType.SYSTEM) {
+			String systemUserPass = ConfigService.getInstance().getConfig(user.getTenant().getId()).getSystem().getSystemUserPassword();
+			if (systemUserPass == null || systemUserPass.length() < 128) {
+				throw new SecurityException("System password not configured correctly");
+			}
+			return systemUserPass.equals(EncryptionUtility.getSHA512HexHash(plainTextPassword));
+		} else {
+			return user.getHashPassword().equals(User.hashPassword(plainTextPassword));
+		}
 	}
 
 	public void checkIfStillLockedAndUnlockIfNecessary(User user) {
@@ -409,7 +418,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 		message.getToAddresses().add(user.getEmailAddress());
 		logger.info("Sending loginkey notification to [" + user.getEmailAddress() + "]");
 
-		MailManagerFactory.defaultMailManager(ConfigContext.getCurrentContext()).sendMessage(message);
+		MailManagerFactory.defaultMailManager(ConfigService.getInstance()).sendMessage(message);
 	}
 
 	@Override

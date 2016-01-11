@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.service.mail;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
-import com.n4systems.services.ConfigService;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.mail.MailMessage;
 import com.n4systems.util.mail.TemplateMailMessage;

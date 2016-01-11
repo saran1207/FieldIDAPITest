@@ -14,8 +14,12 @@ import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.notificationsetting.reports.EventScheduleCountGenerator;
 import com.n4systems.services.TenantFinder;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.taskscheduling.ScheduledTask;
-import com.n4systems.util.*;
+import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.DateHelper;
+import com.n4systems.util.LogUtils;
+import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.time.StoppedClock;
 import com.n4systems.util.timezone.Country;
 import com.n4systems.util.timezone.CountryList;
@@ -107,7 +111,7 @@ public class EventScheduleNotificationTask extends ScheduledTask {
             Calendar cal = new GregorianCalendar();
             cal.setTimeZone(timeZone);
 
-            int configuredHour = ConfigContext.getCurrentContext().getInteger(ConfigEntry.HOUR_TO_RUN_EVENT_SCHED_NOTIFICATIONS);
+            int configuredHour = ConfigService.getInstance().getInteger(ConfigEntry.HOUR_TO_RUN_EVENT_SCHED_NOTIFICATIONS);
             if (cal.get(Calendar.HOUR_OF_DAY) == configuredHour) {
                 currentTimezones.put(regionId, getTheDateInTimeZone(timeZoneId));
             }

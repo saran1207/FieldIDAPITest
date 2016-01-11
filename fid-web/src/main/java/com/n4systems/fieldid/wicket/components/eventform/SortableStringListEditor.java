@@ -15,7 +15,6 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.StringValidator;
@@ -30,8 +29,12 @@ public class SortableStringListEditor extends SortableListPanel {
     private boolean reorderState = false;
     private FIDFeedbackPanel feedbackPanel;
 
+    public SortableStringListEditor(String id, IModel<List<String>> listModel, IModel<String> addItemLabelModel) {
+        this(id, listModel, addItemLabelModel, false);
+    }
 
-	public SortableStringListEditor(String id, IModel<List<String>> listModel, IModel<String> addItemLabelModel) {
+
+	public SortableStringListEditor(String id, IModel<List<String>> listModel, IModel<String> addItemLabelModel, boolean displayAddLogicLabels) {
 		super(id, listModel);
         setOutputMarkupId(true);
 
@@ -44,7 +47,7 @@ public class SortableStringListEditor extends SortableListPanel {
             @Override
             protected void populateItem(final ListItem<String> item) {
             	item.setOutputMarkupId(true);
-                item.add(new EditCopyDeleteItemPanel("itemEditor", item.getModel(), false) {
+                item.add(new EditCopyDeleteItemPanel("itemEditor", item.getModel(), null, false, displayAddLogicLabels) {
                     @Override
                     protected void onViewLinkClicked(AjaxRequestTarget target) {
                         currentlySelectedIndex = item.getIndex();
@@ -70,6 +73,16 @@ public class SortableStringListEditor extends SortableListPanel {
                     @Override
                     protected boolean isReorderState() {
                         return reorderState;
+                    }
+
+                    @Override
+                    protected void onAddLogicClicked(AjaxRequestTarget target, String selectValue) {
+                        onAddLogicLinkClicked(target, selectValue);
+                    }
+
+                    @Override
+                    protected boolean isRuleExists(String selectValue) {
+                        return isExistingRule(selectValue);
                     }
                 });
                 
@@ -163,6 +176,12 @@ public class SortableStringListEditor extends SortableListPanel {
 
     protected int getTextFieldLengthLimit() {
         return 256;
+    }
+
+    protected void onAddLogicLinkClicked(AjaxRequestTarget target, String selectValue) {}
+
+    protected boolean isExistingRule(String selectValue) {
+        return false;
     }
 
 }

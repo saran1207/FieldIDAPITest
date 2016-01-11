@@ -3,6 +3,7 @@ package com.n4systems.model.activesession;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.Loader;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
@@ -21,7 +22,7 @@ public class LastLoggedInUserByTenantLoader extends Loader<User> {
 		QueryBuilder<User> builder = new QueryBuilder<User>(User.class, new TenantOnlySecurityFilter(tenantId));
 
         if(excludeN4User)
-            builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.NE, "userID", ConfigEntry.SYSTEM_USER_USERNAME.getDefaultValue()));
+            builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.NE, "userID", ConfigService.getInstance().getString(ConfigEntry.SYSTEM_USER_USERNAME)));
 
 		builder.addOrder("lastLogin", false);
         builder.setLimit(1);

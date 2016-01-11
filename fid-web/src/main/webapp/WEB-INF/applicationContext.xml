@@ -64,8 +64,6 @@
 	
     <bean id="massUpdateEJBContainer" class="com.n4systems.ejb.wrapper.MassUpdateManagerEJBContainer"/>
 
-    <bean id="configEJBContainer" class="com.n4systems.ejb.wrapper.ConfigManagerEJBContainer"/>
-
     <bean id="inspectionEJBContainer" class="com.n4systems.ejb.wrapper.EventManagerEJBContainer"/>
 
 	<!--  moved to FieldIdAppConfig class
@@ -89,7 +87,6 @@
 
 
     <!--  FROM FIELDID ADMIN -->
-    <bean id="userSecurityManager" class="com.n4systems.fieldidadmin.managers.UserSecurityManagerImpl"/>
     <bean id="importManager" class="com.n4systems.importing.ImportManagerEJBContainer"/>
 
     <!-- bean id="configManager" class="com.n4systems.ejb.wrapper.ConfigManagerEJBContainer" />

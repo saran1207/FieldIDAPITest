@@ -5,6 +5,7 @@ import com.n4systems.fieldid.service.event.PlaceEventScheduleService;
 import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.AlertBehaviour;
 import com.n4systems.fieldid.wicket.behavior.ConfirmBehavior;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.TimeAgoLabel;
@@ -142,7 +143,15 @@ public class PlaceActionGroup extends Panel {
                 setResponsePage(OrgViewPage.class);
             }
         });
-        archiveLink.add(new ConfirmBehavior(new FIDLabelModel("msg.confirm_archive_org", getOrg().getName())));
+
+        if(getOrg().isDivision() || getOrg().isCustomer()) {
+            Long assetCount = placeService.getAssetCount(getOrg().getId());
+            if(assetCount != null && assetCount > 0) {
+                archiveLink.add(new AlertBehaviour(new FIDLabelModel("msg.alert_archive_org", getOrg().getName())));
+            } else {
+                archiveLink.add(new ConfirmBehavior(new FIDLabelModel("msg.confirm_archive_org", getOrg().getName())));
+            }
+        }
         archiveLink.setVisible((getOrg().isCustomer() || getOrg().isDivision()) && canManageCustomers);
 
         optionsContainer.add(recurringSchedulesLink = new BookmarkablePageLink<PlaceRecurringSchedulesPage>("recurringSchedulesLink", PlaceRecurringSchedulesPage.class, PageParametersBuilder.id(getOrg().getId())));

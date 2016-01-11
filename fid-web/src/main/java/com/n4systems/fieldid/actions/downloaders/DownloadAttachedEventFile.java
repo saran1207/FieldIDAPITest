@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.actions.downloaders;
 
+import com.google.common.collect.Maps;
 import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.wicket.util.ZipFileUtil;
@@ -7,6 +8,7 @@ import com.n4systems.model.*;
 import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
 import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.net.URLEncoder;
@@ -19,6 +21,8 @@ import java.util.zip.ZipOutputStream;
 public class DownloadAttachedEventFile extends DownloadAction {
 	private static final long serialVersionUID = 1L;
 
+    private static Logger logger = Logger.getLogger(DownloadAttachedEventFile.class);
+
 	//private ThingEvent event;
 	private EventManager eventManager;
 	
@@ -30,7 +34,7 @@ public class DownloadAttachedEventFile extends DownloadAction {
 	public String doDownload() {
 		
 		// load the event
-        ThingEvent event =  eventManager.findAllFields( uniqueID, getSecurityFilter() );
+        ThingEvent event =  eventManager.findAllFields(uniqueID, getSecurityFilter());
 		
 		if( event == null ) {
 			addActionError( getText( "error.noevent" ) );
@@ -94,7 +98,7 @@ public class DownloadAttachedEventFile extends DownloadAction {
 		// load the event
         ThingEvent event = eventManager.findEventThroughSubEvent( uniqueID, getSecurityFilter() );
 		
-		SubEvent subEvent = eventManager.findSubEvent( uniqueID, getSecurityFilter() );
+		SubEvent subEvent = eventManager.findSubEvent(uniqueID, getSecurityFilter());
 		
 		if( subEvent == null ) {
 			addActionError( getText( "error.noevent" ) );
@@ -199,7 +203,7 @@ public class DownloadAttachedEventFile extends DownloadAction {
 
     public String doDownloadAll() {
         // load the event
-        ThingEvent event =  eventManager.findAllFields( uniqueID, getSecurityFilter() );
+        ThingEvent event =  eventManager.findAllFields(uniqueID, getSecurityFilter());
         String name = event.getAsset().getIdentifier();
 
         return doDownloadAll(event, name);
@@ -208,7 +212,7 @@ public class DownloadAttachedEventFile extends DownloadAction {
     public String doDownloadAllSub() {
 
         // load the event
-        SubEvent event =  eventManager.findSubEvent( uniqueID, getSecurityFilter() );
+        SubEvent event =  eventManager.findSubEvent(uniqueID, getSecurityFilter());
         String name = event.getAsset().getIdentifier();
 
         return doDownloadAll(event, name);
@@ -236,27 +240,49 @@ public class DownloadAttachedEventFile extends DownloadAction {
 
         try {
             setFileName(URLEncoder.encode(filename, "UTF-8"));
+
             ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(getFile(fileName)));
             List<FileAttachment> fileAttachments = event.getAttachments();
+
+            Map<String, Integer> duplicateFilenames = Maps.newHashMap();
+
             for(FileAttachment attachment: fileAttachments) {
 
+                File attachedFile = null;
+
                 if(attachment.isRemote()){
-                    ZipFileUtil.addToZipFile(s3Service.downloadFileAttachment(attachment), zipOut);
+                    attachedFile = s3Service.downloadFileAttachment(attachment);
                 }
                 else {
-                    File attachedFile = new File( PathHandler.getAttachmentFile(event), attachment.getFileName());
-                    ZipFileUtil.addToZipFile(attachedFile, zipOut);
+                    attachedFile = new File( PathHandler.getAttachmentFile(event), attachment.getFileName());
                 }
 
+                String attachmentName = attachedFile.getName();
+                Boolean isRenamed = false;
+                if (duplicateFilenames.containsKey(attachmentName)) {
+                    Integer count = duplicateFilenames.get(attachmentName) + 1;
+                    duplicateFilenames.put(attachmentName, count);
+                    String newName = attachedFile.getParent() + "/" + attachmentName.replaceFirst("\\.", "-" + count + "\\.");
+                    File renamedFile;
+                    if(attachedFile.renameTo(renamedFile = new File(newName))) {
+                        attachedFile = renamedFile;
+                        isRenamed = true;
+                    }
+
+                } else {
+                    duplicateFilenames.put(attachmentName, 0);
+                }
+                ZipFileUtil.addToZipFile(attachedFile, zipOut);
+                if (isRenamed) {
+                    attachedFile.delete();
+                }
             }
             IOUtils.closeQuietly(zipOut);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            failure = true;
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            logger.error(e);
             failure = true;
         }
+
         File downloadFile = getFile(fileName);
         // stream the file back to the browser
         fileSize = new Long( downloadFile.length() ).intValue();
@@ -264,7 +290,8 @@ public class DownloadAttachedEventFile extends DownloadAction {
         try {
             input = new FileInputStream( downloadFile );
             return sendFile( input );
-        } catch( IOException e ) {
+        } catch( Exception e ) {
+            logger.error(e);
         } finally {
             failure = true;
         }

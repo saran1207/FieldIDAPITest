@@ -12,7 +12,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.user.AssigneesModel;
 import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
 import com.n4systems.fieldid.wicket.model.user.VisibleUserGroupsModel;
-import com.n4systems.fieldid.wicket.util.EnumPropertyChoiceRenderer;
+import com.n4systems.fieldid.wicket.components.renderer.EnumPropertyChoiceRenderer;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Recurrence;
 import com.n4systems.model.RecurrenceTimeOfDay;

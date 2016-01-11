@@ -3,7 +3,7 @@ package com.n4systems.fieldid.service.asset;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.AssetType;
-import com.n4systems.util.ConfigContext;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.log4j.Logger;
@@ -58,7 +58,7 @@ public class AssetCodeMappingService extends FieldIdPersistenceService {
 
     private AssetType defaultAssetType() {
         // find the default asset type name for this tenant
-        String defaultTypeName = ConfigContext.getCurrentContext().getString(ConfigEntry.DEFAULT_PRODUCT_TYPE_NAME, getCurrentTenant().getId());
+        String defaultTypeName = ConfigService.getInstance().getString(ConfigEntry.DEFAULT_PRODUCT_TYPE_NAME, getCurrentTenant().getId());
 
         QueryBuilder<AssetType> builder = createTenantSecurityBuilder(AssetType.class);
 

@@ -36,10 +36,9 @@ public class FieldIDAdminPage extends FieldIDWicketPage {
 			navItemBuilder.page("/admin/eulas.action").label("EULA").cond(isSuperUser).build(),
 			navItemBuilder.page("/admin/orderMappingList.action").label("Order Mappings").cond(isSuperUser).build(),
 			navItemBuilder.page("/admin/mailTest.action").label("Mail").cond(isSuperUser).build(),
-			navItemBuilder.page("/admin/configCrud.action").label("Config").cond(isSuperUser).build(),
 			navItemBuilder.page("/admin/certSelection.action").label("Certs").cond(isSuperUser).build(),
 			navItemBuilder.page("/admin/taskCrud.action").label("Tasks").cond(isSuperUser).build(),
-			navItemBuilder.page("/admin/changeAdminPass.action").label("System Pass").cond(isSuperUser).build(),
+			navItemBuilder.page("/w/admin/config").label("Config").cond(isSuperUser).build(),
 			navItemBuilder.page("/w/admin/connections").label("Connections").cond(isSuperUser).build(),
             navItemBuilder.page("/w/admin/configureLanguages").label("Languages").cond(isSuperUser).build()
 		));

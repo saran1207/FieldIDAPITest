@@ -1,39 +1,31 @@
 package com.n4systems.reporting;
 
-import static com.n4systems.model.builders.AssetBuilder.*;
-import static org.junit.Assert.*;
-
-import java.io.File;
-
 import com.n4systems.model.Asset;
+import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.builders.TenantBuilder;
+import com.n4systems.services.config.ConfigServiceTestManager;
+import com.n4systems.util.ConfigContextOverridableTestDouble;
+import com.n4systems.util.DateHelper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.model.asset.AssetAttachment;
-import com.n4systems.util.DateHelper;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigContextOverridableTestDouble;
+import static com.n4systems.model.builders.AssetBuilder.anAsset;
 
 
 
 public class AssetPathTest {
-private ConfigContext oldContext;
 
 	@Before
 	public void changeConfigContext() {
-		oldContext = ConfigContext.getCurrentContext();
-		ConfigContext.setCurrentContext(new ConfigContextOverridableTestDouble());
+		ConfigServiceTestManager.setInstance(new ConfigContextOverridableTestDouble());
 	}
 	
 	@After 
 	public void removeConfig() {
-		ConfigContext.setCurrentContext(oldContext);
+		ConfigServiceTestManager.resetInstance();
 	}
-		
-	
-	
+
 	@Test 
 	public void should_get_asset_attachment_file() {
 		Asset asset = anAsset().forTenant(TenantBuilder.n4()).build();

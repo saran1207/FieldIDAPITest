@@ -17,7 +17,7 @@ import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import com.n4systems.model.security.SecurityFilter;
-import com.n4systems.services.ConfigService;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.services.SecurityContext;
 import com.n4systems.test.TestMock;
 import com.n4systems.test.TestTarget;

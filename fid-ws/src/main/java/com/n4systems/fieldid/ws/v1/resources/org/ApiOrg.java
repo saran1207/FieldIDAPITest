@@ -9,6 +9,7 @@ import java.util.List;
 
 public class ApiOrg extends ApiReadonlyModel {
 	private String name;
+	private ContactInformation contactInformation;
 	private Long parentId;
 	private Long secondaryId;
 	private Long customerId;
@@ -19,12 +20,24 @@ public class ApiOrg extends ApiReadonlyModel {
     private List<ApiEventType> eventTypes;
     private List<ApiSavedPlaceEvent> events;
 
+	public ApiOrg() {
+		contactInformation = new ContactInformation();
+	}
+
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public ContactInformation getContactInformation() {
+		return contactInformation;
+	}
+
+	public void setContactInformation (ContactInformation contactInformation) {
+		this.contactInformation = contactInformation;
 	}
 
 	public Long getParentId() {
@@ -98,4 +111,98 @@ public class ApiOrg extends ApiReadonlyModel {
     public void setEvents(List<ApiSavedPlaceEvent> events) {
         this.events = events;
     }
+
+}
+
+class ContactInformation {
+	public String name = "";
+	public String email = "";
+	private String streetAddress = "";
+	private String city = "";
+	private String state = "";
+	private String country = "";
+	private String zip = "";
+	private String phone1 = "";
+	private String phone2 = "";
+	private String fax1 = "";
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getStreetAddress() {
+		return streetAddress;
+	}
+
+	public void setStreetAddress(String streetAddress) {
+		this.streetAddress = streetAddress;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getZip() {
+		return zip;
+	}
+
+	public void setZip(String zip) {
+		this.zip = zip;
+	}
+
+	public String getPhone1() {
+		return phone1;
+	}
+
+	public void setPhone1(String phone1) {
+		this.phone1 = phone1;
+	}
+
+	public String getPhone2() {
+		return phone2;
+	}
+
+	public void setPhone2(String phone2) {
+		this.phone2 = phone2;
+	}
+
+	public String getFax1() {
+		return fax1;
+	}
+
+	public void setFax1(String fax1) {
+		this.fax1 = fax1;
+	}
 }

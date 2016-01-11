@@ -28,6 +28,7 @@ import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.security.Permissions;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.services.asset.AssetSaveService;
 import com.n4systems.uitags.views.HierarchicalNode;
 import com.n4systems.util.*;
@@ -52,6 +53,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 
     @Autowired private UserService userService;
     @Autowired private UserGroupService userGroupService;
+	@Autowired private ConfigService configService;
 
 	protected final LegacyAsset legacyAssetManager;
 	protected final OrderManager orderManager;
@@ -130,7 +132,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 		AssetCodeMapping assetCodeMapping = assetCodeMappingServiceManager.getAssetCodeByAssetCodeAndTenant(lineItem.getAssetCode(), getTenantId());
 
 		if (assetCodeMapping.getAssetInfo() != null && 
-				!assetCodeMapping.getAssetInfo().getName().equals(ConfigEntry.DEFAULT_PRODUCT_TYPE_NAME.getDefaultValue())) {
+				!assetCodeMapping.getAssetInfo().getName().equals(configService.getString(ConfigEntry.DEFAULT_PRODUCT_TYPE_NAME))) {
 			setAssetTypeId(assetCodeMapping.getAssetInfo().getId());
 
 			if (assetCodeMapping.getInfoOptions() != null) {

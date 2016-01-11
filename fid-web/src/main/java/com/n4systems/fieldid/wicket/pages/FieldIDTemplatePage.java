@@ -5,7 +5,6 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.version.FieldIdVersion;
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.CachingStrategyLink;
 import com.n4systems.fieldid.wicket.components.CustomJavascriptPanel;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.asset.AutoCompleteSmartSearch;
@@ -53,10 +52,8 @@ import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.columns.ReportType;
 import com.n4systems.model.tenant.TenantSettings;
-import com.n4systems.services.ConfigService;
-import com.n4systems.util.ConfigContext;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.ConfigurationProvider;
 import com.n4systems.util.uri.ActionURLBuilder;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -77,13 +74,21 @@ import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.IRequestCycle;
+import org.apache.wicket.request.UrlEncoder;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.file.Files;
+import org.apache.wicket.util.resource.FileResourceStream;
+import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.template.PackageTextTemplate;
 import org.apache.wicket.util.template.TextTemplate;
 import org.odlabs.wiquery.core.resources.CoreJavaScriptResourceReference;
 import rfid.web.helper.SessionUser;
 
+import java.io.File;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
@@ -94,7 +99,7 @@ import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilde
 public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIConstants {
 
     @SpringBean
-	private ConfigService configService;
+	protected ConfigService configService;
 
 	@SpringBean
 	private UserLimitService userLimitService;
@@ -105,29 +110,18 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
     private Asset smartSearchAsset;
     protected Component titleLabel;
 	protected Component topTitleLabel;
-    private ConfigurationProvider configurationProvider;
     private TopFeedbackPanel topFeedbackPanel;
     private ModalWindow languageSelectionModalWindow;
     private final SelectLanguagePanel selectLanguagePanel;
     protected boolean showTitle = true;
 
     public FieldIDTemplatePage() {
-        this(null, null);
-    }
-
-    public FieldIDTemplatePage(ConfigurationProvider configurationProvider) {
-        this(null, configurationProvider);
+        this(null);
     }
 
     public FieldIDTemplatePage(PageParameters params) {
-    	this(params,null);
-    }
-
-    public FieldIDTemplatePage(PageParameters params, ConfigurationProvider configurationProvider) {
         super(params);
         storePageParameters(params);
-
-        setConfigurationProvider(configurationProvider);
 
         add(languageSelectionModalWindow = new DialogModalWindow("languageSelectionModalWindow").setInitialWidth(480).setInitialHeight(280));
 
@@ -147,7 +141,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         add(new WebMarkupContainer("metaIE").add(new AttributeAppender("content", getMetaIE())));
 
         add(topFeedbackPanel = new TopFeedbackPanel("topFeedbackPanel"));
-        add(new Label("versionLabel", FieldIdVersion.getVersion()));
+        add(new Label("versionLabel", getVersionLabelText()));
 
         String footerScript = configService.getString(ConfigEntry.FOOTER_SCRIPT, getTenantId());
         if (footerScript != null && !footerScript.isEmpty()) {
@@ -368,30 +362,30 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         add(new BreadCrumbBar(breadCrumbBarId).setVisible(false));
     }
 
-    protected ConfigurationProvider getConfigurationProvider() {
-		if (configurationProvider==null) { 
-			configurationProvider = ConfigContext.getCurrentContext(); 
-		}		
-		return configurationProvider; 
-	}
+//    protected ConfigurationProvider getConfigurationProvider() {
+//		if (configurationProvider==null) {
+//			configurationProvider = ConfigContext.getCurrentContext();
+//		}
+//		return configurationProvider;
+//	}
 
     protected ActionURLBuilder createActionUrlBuilder() {
-        return new ActionURLBuilder(getBaseURI(), getConfigurationProvider());
+        return new ActionURLBuilder(getBaseURI(), configService);
     }
 
     private URI getBaseURI() {
         return URI.create(getServletRequest().getRequestURL().toString()).resolve(getServletRequest().getContextPath() + "/");
     }
 	
-	@Deprecated // for testing only to get around static implementation of configContext.
-    public void setConfigurationProvider(ConfigurationProvider configurationProvider) {
-		this.configurationProvider = configurationProvider;
-	}
+//	@Deprecated // for testing only to get around static implementation of configContext.
+//    public void setConfigurationProvider(ConfigurationProvider configurationProvider) {
+//		this.configurationProvider = configurationProvider;
+//	}
 
     @Override
     public void renderHead(IHeaderResponse response) {
         StringBuffer javascriptBuffer = new StringBuffer();
-        Integer timeoutTime = getConfigurationProvider().getInteger(ConfigEntry.ACTIVE_SESSION_TIME_OUT);
+        Integer timeoutTime = configService.getInteger(ConfigEntry.ACTIVE_SESSION_TIME_OUT);
         String loginLightboxTitle = getApplication().getResourceSettings().getLocalizer().getString("title.sessionexpired", null);
         javascriptBuffer.append("loggedInUserName = '").append(getSessionUser().getUserName()).append("';\n");
         javascriptBuffer.append("tenantName = '").append(getTenant().getName()).append("';\n");
@@ -575,6 +569,10 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         return lotoLinkContainer;
     }
 
+    private String getVersionLabelText() {
+        return String.format("%s (%s)", FieldIdVersion.getVersion(), configService.getConfig().getSystem().getNodeName());
+    }
+
     public boolean isShowTitle() {
         return showTitle;
     }
@@ -602,5 +600,36 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
 
     protected String getWrapperCss() {
         return "";
+    }
+
+    /**
+     * Theoretically, we can call-back to this method from any Component/Panel as long as the base page is, in fact,
+     * this Page class.
+     *
+     * This method was ripped out of some other Wicket components and allows the developer to send a file downstream
+     * to the user by directly manipulating the request cycle.  This functionality is offered by pre-canned components
+     * starting in Wicket 6, so the use of this method may be rather short-lived.
+     *
+     * The File which the user will download is represented by fileToDownload, and the name that will be given to
+     * the download is described by fileName.
+     *
+     * @param fileToDownload - A File object that will be downloaded by the user.
+     * @param fileName - A String representing the desired name for the File object.
+     */
+    public void handleDownload(File fileToDownload, String fileName) {
+        fileName = UrlEncoder.QUERY_INSTANCE.encode(fileName, getRequest().getCharset());
+
+        IResourceStream resourceStream = new FileResourceStream(new org.apache.wicket.util.file.File(fileToDownload));
+
+        getRequestCycle().scheduleRequestHandlerAfterCurrent(
+                new ResourceStreamRequestHandler(resourceStream) {
+                    @Override
+                    public void respond(IRequestCycle requestCycle) {
+                        super.respond(requestCycle);
+
+                        Files.remove(fileToDownload);
+                    }
+                }.setFileName(fileName).setContentDisposition(ContentDisposition.ATTACHMENT)
+        );
     }
 }

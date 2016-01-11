@@ -5,7 +5,7 @@ import com.mixpanel.mixpanelapi.MessageBuilder;
 import com.mixpanel.mixpanelapi.MixpanelAPI;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.user.User;
-import com.n4systems.services.ConfigService;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;

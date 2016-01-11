@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.viewhelpers;
 
-import com.n4systems.util.ConfigContext;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
 
 public class BaseActionHelper {
@@ -25,6 +25,6 @@ public class BaseActionHelper {
 	
 	public String configEntry(String entryName) {
 		ConfigEntry configEntry = ConfigEntry.valueOf(entryName);
-		return ConfigContext.getCurrentContext().getString(configEntry);
+		return ConfigService.getInstance().getString(configEntry);
 	}
 }

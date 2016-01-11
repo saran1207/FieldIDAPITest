@@ -8,7 +8,6 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.chart.RangeType;
 import com.n4systems.util.persistence.search.AssetLockoutTagoutStatus;
-import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -52,7 +51,7 @@ public class AssetSearchCriteria extends SearchCriteria {
     private User assignedTo;
 
 	@ElementCollection(fetch= FetchType.EAGER)
-	@IndexColumn(name="idx")
+	@OrderColumn(name="idx")
     @JoinTable(name="saved_searches_columns", joinColumns = {@JoinColumn(name="saved_search_id")})
     @Column(name="column_id")
 	private List<String> columns = new ArrayList<String>();

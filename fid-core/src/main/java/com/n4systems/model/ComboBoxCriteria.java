@@ -1,7 +1,6 @@
 package com.n4systems.model;
 
 import com.n4systems.persistence.localization.Localized;
-import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ public class ComboBoxCriteria extends Criteria {
 	@Column(name="selectoption", nullable=false)
 	@ElementCollection(fetch=FetchType.EAGER)
 	@JoinTable(name="combobox_criteria_options", joinColumns = @JoinColumn(name="combobox_criteria_id"))
-	@IndexColumn(name="orderidx")
+	@OrderColumn(name="orderidx")
     @Localized
 	private List<String> options = new ArrayList<String>();
 

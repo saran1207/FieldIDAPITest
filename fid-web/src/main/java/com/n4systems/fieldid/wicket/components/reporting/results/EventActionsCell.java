@@ -9,6 +9,7 @@ import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.event.*;
@@ -30,15 +31,9 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.IRequestCycle;
-import org.apache.wicket.request.UrlEncoder;
-import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.file.Files;
-import org.apache.wicket.util.resource.FileResourceStream;
-import org.apache.wicket.util.resource.IResourceStream;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -170,7 +165,13 @@ public class EventActionsCell extends Panel {
                 try {
                     report = generateCert(eventId);
 
-                    handleDownload(report, createReportName(event));
+                    //Call back to the base page that implements this.  We'll actually universally handle this, in the
+                    //off change that we're not calling back to the right page...
+                    if(this.getPage() instanceof FieldIDFrontEndPage) {
+                        ((FieldIDFrontEndPage) this.getPage()).handleDownload(report, createReportName(event));
+                    } else {
+                        ((FieldIDTemplatePage) this.getPage()).handleDownload(report, createReportName(event));
+                    }
                 } catch (IOException | ReportException e) {
                     if(report != null) Files.remove(report);
                     logger.error("There was an error when generating a Certificate for Event with ID " + eventId, e);
@@ -246,20 +247,4 @@ public class EventActionsCell extends Panel {
         return safetyNetworkActionsList;
     }
 
-    private void handleDownload(File certificate, String fileName) {
-        fileName = UrlEncoder.QUERY_INSTANCE.encode(fileName, getRequest().getCharset());
-
-        IResourceStream resourceStream = new FileResourceStream(new org.apache.wicket.util.file.File(certificate));
-
-        getRequestCycle().scheduleRequestHandlerAfterCurrent(
-                new ResourceStreamRequestHandler(resourceStream) {
-                    @Override
-                    public void respond(IRequestCycle requestCycle) {
-                        super.respond(requestCycle);
-
-                        Files.remove(certificate);
-                    }
-                }.setFileName(fileName).setContentDisposition(ContentDisposition.ATTACHMENT)
-        );
-    }
 }

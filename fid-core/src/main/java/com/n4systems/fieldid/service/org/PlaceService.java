@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.model.Asset;
 import com.n4systems.model.PlaceEvent;
 import com.n4systems.model.PlaceEventType;
 import com.n4systems.model.WorkflowState;
@@ -182,6 +183,13 @@ public class PlaceService extends FieldIdPersistenceService {
         query.addSimpleWhere("owner", org);
         query.addOrder("firstName", "lastName");
         return persistenceService.findAll(query);
+    }
+
+    public Long getAssetCount(Long orgId) {
+        QueryBuilder<Asset> query = createTenantSecurityBuilder(Asset.class);
+        query.addSimpleWhere("owner.id", orgId);
+
+        return persistenceService.count(query);
     }
 
     public List<PlaceEventType> getEventTypes() {

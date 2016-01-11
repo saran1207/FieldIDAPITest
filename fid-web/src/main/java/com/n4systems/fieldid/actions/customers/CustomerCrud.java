@@ -4,6 +4,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
 import com.n4systems.model.api.Listable;
@@ -35,12 +36,16 @@ public class CustomerCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	private static final int CRUD_RESULTS_PER_PAGE = 20;
 	private static Logger logger = Logger.getLogger(CustomerCrud.class);
-	
+
+    private static final String CUSTOMER_OWNS_ASSETS = "This Job Site is still listed as the Owner to one or more Assets.  You must change the Owner of these Assets before Archiving!";
+    private static final String CUSTOMER_ARCHIVE_WARNING = "Are you sure you want to archive this? All associated users will be removed, which cannot be undone by unarchiving this.";
+
 	private final OrgSaver saver;
 	
 	private boolean archivedOnly;
 	
 	private CustomerOrg customer;
+
 	private Pager<CustomerOrg> customerPage;
 	private String nameFilter;
 	private String idFilter;
@@ -53,9 +58,14 @@ public class CustomerCrud extends AbstractCrud {
 	private String logoImageDirectory;
 	private boolean removeImage = false;
 	private boolean newImage = false;
+    private boolean customerOwnsAssets = false;
 
     @Autowired
     private S3Service s3Service;
+
+    //Do these warnings matter, or are they here simply because we're shoehorning Struts 2 into Spring 4.2??
+    @Autowired
+    private PlaceService placeService;
 	
 	public CustomerCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -429,4 +439,13 @@ public class CustomerCrud extends AbstractCrud {
 	public void setNewImage(boolean newImage) {
 		this.newImage = newImage;
 	}
+
+    public String getAppropriateJSValue(Long customerId) {
+        Long assetCount = placeService.getAssetCount(customerId);
+        if(assetCount != null && assetCount > 0) {
+            return "alert('" + CUSTOMER_OWNS_ASSETS + "'); return false;";
+        } else {
+            return "return confirm('" + CUSTOMER_ARCHIVE_WARNING + "');";
+        }
+    }
 }

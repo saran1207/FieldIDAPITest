@@ -70,7 +70,7 @@ import com.n4systems.fieldid.service.warningtemplates.WarningTemplateService;
 import com.n4systems.persistence.listeners.LocalizationListener;
 import com.n4systems.persistence.listeners.SetupDataUpdateEventListener;
 import com.n4systems.services.AuthService;
-import com.n4systems.services.ConfigService;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.services.SecurityContext;
 import com.n4systems.services.asset.AssetSaveServiceSpring;
 import com.n4systems.services.dashboard.DashboardService;
@@ -232,9 +232,8 @@ public class FieldIdCoreConfig {
 	}
 	
 	@Bean
-	@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 	public ConfigService configService() {
-		return new ConfigService();
+		return ConfigService.getInstance();
 	}
 
 	@Bean

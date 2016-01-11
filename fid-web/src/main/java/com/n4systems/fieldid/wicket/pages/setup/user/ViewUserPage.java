@@ -19,6 +19,7 @@ import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.security.Permissions;
+import com.n4systems.security.UserType;
 import com.n4systems.util.BitField;
 import com.n4systems.util.timezone.CountryList;
 import org.apache.wicket.Component;
@@ -88,7 +89,7 @@ public class ViewUserPage extends FieldIDTemplatePage{
                 sendWelcomeEmail(userModel.getObject(), new WelcomeMessage(), userModel.getObject().getHashPassword() != null);
                 FieldIDSession.get().info(new FIDLabelModel("message.welcomeemailsent").getObject());
             }
-        });
+        }.setVisible(!userModel.getObject().getUserType().equals(UserType.PERSON)));
 
         add(new Label("owner", new PropertyModel<String>(userModel, "owner.displayName")));
 

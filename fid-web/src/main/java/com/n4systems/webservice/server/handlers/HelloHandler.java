@@ -1,10 +1,9 @@
 package com.n4systems.webservice.server.handlers;
 
-import org.apache.log4j.Logger;
-
-import com.n4systems.util.ConfigContext;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.webservice.dto.hello.HelloRequest;
 import com.n4systems.webservice.dto.hello.HelloResponse;
+import org.apache.log4j.Logger;
 
 public class HelloHandler {
 	
@@ -18,7 +17,7 @@ public class HelloHandler {
 	public HelloResponse sayHello(HelloRequest request) {
 		this.request = request;
 		logger.info(getLogMessage());
-		return new HelloResponse(ConfigContext.getCurrentContext());
+		return new HelloResponse(ConfigService.getInstance());
 	}
 	
 	private String getLogMessage() {

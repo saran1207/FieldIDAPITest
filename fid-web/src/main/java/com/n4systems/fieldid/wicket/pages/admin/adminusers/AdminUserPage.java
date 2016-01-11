@@ -5,7 +5,7 @@ import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.BooleanModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.admin.FieldIDAdminPage;
-import com.n4systems.fieldid.wicket.util.EnumPropertyChoiceRenderer;
+import com.n4systems.fieldid.wicket.components.renderer.EnumPropertyChoiceRenderer;
 import com.n4systems.model.admin.AdminUser;
 import com.n4systems.model.admin.AdminUserType;
 import com.n4systems.fieldid.service.admin.AdminUserService;

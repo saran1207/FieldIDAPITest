@@ -98,7 +98,7 @@ public class BasicPageTest extends FieldIdPageTest<BasicPageHarness, FieldIDTemp
 
 	@Override
 	public FieldIDTemplatePage createFixture(String id) {
-		return new FieldIDTemplatePage(configurationProvider);
+		return new FieldIDTemplatePage();
 	}
 
 	@Override

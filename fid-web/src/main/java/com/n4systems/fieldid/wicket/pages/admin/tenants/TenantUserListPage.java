@@ -5,7 +5,7 @@ import com.n4systems.fieldid.wicket.components.admin.tenant.TenantUserListPanel;
 import com.n4systems.fieldid.wicket.data.AdminDataProviderWrapper;
 import com.n4systems.fieldid.wicket.data.PlaceUsersDataProvider;
 import com.n4systems.fieldid.wicket.pages.admin.FieldIDAdminPage;
-import com.n4systems.fieldid.wicket.util.EnumPropertyChoiceRenderer;
+import com.n4systems.fieldid.wicket.components.renderer.EnumPropertyChoiceRenderer;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.security.UserType;
 import org.apache.wicket.ajax.AjaxRequestTarget;

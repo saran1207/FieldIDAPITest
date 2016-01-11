@@ -5,15 +5,19 @@ import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.SendSavedItemSchedule;
 import com.n4systems.model.admin.AdminUser;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.ExternalOrgFilter;
 import com.n4systems.model.orgs.InternalOrgFilter;
 import com.n4systems.model.saveditem.SavedItem;
+import com.n4systems.model.saveditem.SavedProcedureItem;
+import com.n4systems.model.saveditem.SavedReportItem;
+import com.n4systems.model.saveditem.SavedSearchItem;
 import com.n4systems.model.search.SearchCriteria;
-import com.n4systems.model.security.*;
+import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.security.OwnerAndDownWithPrimaryFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.model.user.UserQueryHelper;
@@ -29,7 +33,6 @@ import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Query;
 import java.util.*;
 
 @Transactional
@@ -305,15 +308,26 @@ public class UserService extends CrudService<User> {
     }
 
     @Transactional
+    @SuppressWarnings("unchecked")
     public void shareSavedItemWithUsers(Long savedItemId, List<Long> userIds) {
         final SavedItem savedItem = persistenceService.find(SavedItem.class, savedItemId);
         String sharedByName = getCurrentUser().getFullName();
         try {
             for (Long userId : userIds) {
                 final User user = persistenceService.find(User.class, userId);
-                final SavedItem clonedItem = (SavedItem) savedItem.clone();
+
+                SavedItem clonedItem;
+                if(savedItem instanceof SavedProcedureItem) {
+                    clonedItem = savedItem.copy(new SavedProcedureItem());
+                } else
+                if(savedItem instanceof SavedReportItem) {
+                    clonedItem = savedItem.copy(new SavedReportItem());
+                } else {
+                    clonedItem = savedItem.copy(new SavedSearchItem());
+                }
+
                 clonedItem.reset();
-                clonedItem.setSendSchedules(new ArrayList<SendSavedItemSchedule>()); // erase any existing schedules for shared report - don't want to inherit them.
+                clonedItem.getSendSchedules().clear(); // erase any existing schedules for shared report - don't want to inherit them.
                 clonedItem.setSharedByName(sharedByName);
                 SearchCriteria clonedCriteria = cloneCriteria(savedItem.getSearchCriteria());
                 clonedItem.setSearchCriteria(clonedCriteria);

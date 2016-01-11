@@ -35,13 +35,6 @@
             <a href="/fieldid/admin/mailTest.action">Mail</a>
         </#if>
     </li>
-    <li class=" <#if action.isPageName('config')>selected</#if>">
-        <#if action.isPageName('config')>
-            Config
-        <#else>
-            <a href="/fieldid/admin/configCrud.action">Config</a>
-        </#if>
-    </li>
     <li class=" <#if action.isPageName('certs')>selected</#if>">
         <#if action.isPageName('certs')>
             Certs
@@ -56,12 +49,8 @@
             <a href="/fieldid/admin/taskCrud.action">Tasks</a>
         </#if>
     </li>
-    <li class=" <#if action.isPageName('systemPass')>selected</#if>">
-        <#if action.isPageName('systemPass')>
-            SystemPass
-        <#else>
-            <a href="/fieldid/admin/changeAdminPass.action">System Pass</a>
-        </#if>
+    <li>
+        <a href="/fieldid/w/admin/config">Config</a>
     </li>
     <li>
         <a href="/fieldid/w/admin/connections">Connections</a>

@@ -4,35 +4,42 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.ProjectManager;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Project;
 import com.n4systems.reporting.PathHandler;
+import org.apache.log4j.Logger;
+import rfid.web.helper.Constants;
 
 public class DownloadProjectNoteFile extends DownloadAction {
 
 	private static final long serialVersionUID = 1L;
 
-	private Project project;
+	private Logger logger = Logger.getLogger(DownloadProjectNoteFile.class);
 
+	private Project project;
+	private ProjectManager projectManager;
 	
-	
-	public DownloadProjectNoteFile( PersistenceManager persistenceManager ) {
+	public DownloadProjectNoteFile(ProjectManager projectManager, PersistenceManager persistenceManager ) {
 		super(persistenceManager);
+		this.projectManager = projectManager;
 	}
 
 	public String doDownload() {
 		
 		if( project == null ) {
-			addActionError( getText( "error.noproject" ) );
+			addActionError(getText("error.noproject"));
+			logger.error("Project is null");
 			return MISSING;
 		} 
 		
 		FileAttachment attachment = null;
 		
 		// make sure our attachment is actually attached to this assettype
-		for(FileAttachment attach: project.getNotes()) {
+		for(FileAttachment attach: getProjectNotes()) {
 			if(attach.getId().equals(attachmentID)) {
 				attachment = attach;
 				break;
@@ -42,6 +49,7 @@ public class DownloadProjectNoteFile extends DownloadAction {
 		// we did not find the attachment
 		if(attachment == null || attachment.getFileName() == null ) {
 			addActionError(getText("error.noprojectnoteattachedfile", fileName));
+			logger.error("Attachment is null for Project: " + project.getId());
 			return MISSING;
 		}
 
@@ -49,7 +57,8 @@ public class DownloadProjectNoteFile extends DownloadAction {
         if(attachment.isRemote()){
             attachedFile = s3Service.downloadFileAttachment(attachment);
             if(attachedFile == null) {
-                addActionError( getText( "error.noprojectnoteattachedfile", fileName ) );
+                addActionError(getText("error.noprojectnoteattachedfile", fileName));
+				logger.error("Attachment missing on S3 for Project: " + project.getId());
                 return MISSING;
             }
         }
@@ -60,20 +69,23 @@ public class DownloadProjectNoteFile extends DownloadAction {
 
             // make sure the file actually exists
             if( !attachedFile.exists() ) {
-                addActionError( getText( "error.noprojectnoteattachedfile", fileName ) );
+                addActionError(getText("error.noprojectnoteattachedfile", fileName));
+				logger.error("Attachment missing on filesystem for Project: " + project.getId());
                 return MISSING;
             }
         }
 		
-		fileName = attachment.getFileName();
+		fileName = attachedFile.getName();
 		// stream the file back to the browser
 		//fileSize = new Long( attachedFile.length() ).intValue();
 		InputStream input = null;
 		boolean failure = false;
 		try {
+
 			input = new FileInputStream( attachedFile );
 			return sendFile( input );
 		} catch( IOException e ) {
+			logger.error(e.getStackTrace().toString());
 			failure = true;
 		} finally {
 			
@@ -82,20 +94,19 @@ public class DownloadProjectNoteFile extends DownloadAction {
 		return (failure) ? ERROR : null;
 	}
 
-
-
 	public Project getProject() {
 		return project;
 	}
 
-
+	private List<FileAttachment> getProjectNotes() {
+		return projectManager.getNotesPaged(project, 1, Constants.PAGE_SIZE).getList();
+	}
 
 	public void setProjectId( Long projectId ) {
 		if( projectId == null ) {
 			project = null;
 		} else if( project == null || !projectId.equals( project.getId() ) ) {
 			project = persistenceManager.find( Project.class, projectId, getSecurityFilter(), "notes" );
-			project.setNotes( persistenceManager.reattchAndFetch( project.getNotes(), "modifiedBy.userID" ) );
 		}
 	}
 
