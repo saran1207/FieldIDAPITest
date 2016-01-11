@@ -3,7 +3,7 @@
     <parent>
         <artifactId>fieldid-root</artifactId>
         <groupId>com.fieldid</groupId>
-        <version>2015.7.0-SNAPSHOT</version>
+        <version>2016.1.0-SNAPSHOT</version>
     </parent>
     <artifactId>fid-migrations</artifactId>
     <name>Migrations</name>
