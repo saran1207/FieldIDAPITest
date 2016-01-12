@@ -99,11 +99,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.AbstractEntityManagerFactoryBean;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import javax.sql.DataSource;
 import java.io.StringReader;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
@@ -435,16 +437,29 @@ public class FieldIdCoreConfig {
 	@Bean
     public AbstractEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
-        factoryBean.setPersistenceUnitName("fieldid");
-        //factoryBean.setPersistenceProvider(hibernatePersistenceProvider());
+
+        String persistenceUnit = System.getProperty("persistence.unit", "fieldid");
+        factoryBean.setPersistenceUnitName(persistenceUnit);
+
+        // Only use a data source when an alternate persistence unit is specified.  Otherwise it will use the non-jta DS out of the persistence.xml
+        // NOTE: this behaviour must be replicated in com.n4systems.persistence.PersistenceManager for legacy support
+        if (!persistenceUnit.equals("fieldid")) {
+            factoryBean.setDataSource(dataSource());
+        }
+
         return factoryBean;
     }
 
-//    @Bean
-//    public HibernatePersistenceProvider hibernatePersistenceProvider() {
-//        // see http://java.dzone.com/articles/spring-managed-hibernate for example.
-//        return new HibernatePersistenceProvider();
-//    }
+    @Bean
+    public DataSource dataSource() {
+        // This configuration is only used for CLI and testing modes
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName(System.getProperty("persistence.driver", "com.mysql.jdbc.Driver"));
+        dataSource.setUrl(System.getProperty("persistence.url", "jdbc:mysql://localhost:3306/fieldid"));
+        dataSource.setUsername(System.getProperty("persistence.user", "root"));
+        dataSource.setPassword(System.getProperty("persistence.pass", ""));
+        return dataSource;
+    }
 
     @Bean
     public PlatformTransactionManager txManager() {

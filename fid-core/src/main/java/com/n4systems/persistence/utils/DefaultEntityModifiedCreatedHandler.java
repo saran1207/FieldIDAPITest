@@ -39,16 +39,16 @@ public class DefaultEntityModifiedCreatedHandler implements EntityModifiedCreate
     }
 
     private void onCreate(AbstractEntity entity, Date time) {
-        User user = lookupCurrentUser(entity);
+        if (getInteractionContext().isEnabled()) {
+            User user = lookupCurrentUser(entity);
+            if (user != null && shouldStoreUserOnEntity(entity)) {
+                entity.setCreatedBy(user);
+            }
+            storeCreatedPlatform(entity);
+        }
         if (entity.getCreated() == null) {
             entity.setCreated(time);
         }
-        if (user != null && shouldStoreUserOnEntity(entity)) {
-            entity.setCreatedBy(user);
-        }
-
-        storeCreatedPlatform(entity);
-
         onUpdate(entity, time);
     }
 
@@ -57,15 +57,17 @@ public class DefaultEntityModifiedCreatedHandler implements EntityModifiedCreate
     }
 
     private void onUpdate(AbstractEntity entity, Date time) {
-        User user = lookupCurrentUser(entity);
-        if(user == null) {
-            //don't update the modifiedby field
-            logger.warn("Entity persisted without current user set in context", new Exception());
-        } else if (shouldStoreUserOnEntity(entity) && checkTenant(entity, user)) {
-            entity.setModifiedBy(user);
+        if (getInteractionContext().isEnabled()) {
+            User user = lookupCurrentUser(entity);
+            if(user == null) {
+                //don't update the modifiedby field
+                logger.warn("Entity persisted without current user set in context", new Exception());
+            } else if (shouldStoreUserOnEntity(entity) && checkTenant(entity, user)) {
+                entity.setModifiedBy(user);
+            }
+            storeModifiedPlatform(entity);
         }
         entity.setModified(time);
-        storeModifiedPlatform(entity);
     }
 
     private void storeModifiedPlatform(AbstractEntity entity) {

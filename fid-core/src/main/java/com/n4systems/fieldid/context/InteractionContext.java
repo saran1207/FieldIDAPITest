@@ -30,4 +30,6 @@ public interface InteractionContext {
 
     public Locale getLanguageToUse();
 
+    void disable();
+    boolean isEnabled();
 }
