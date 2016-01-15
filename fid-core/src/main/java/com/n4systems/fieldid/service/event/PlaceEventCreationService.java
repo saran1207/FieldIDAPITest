@@ -26,11 +26,21 @@ public class PlaceEventCreationService extends EventCreationService<PlaceEvent, 
     @Override
     protected void postUpdateEvent(PlaceEvent event, FileDataContainer fileData) {
         assignNextEventInSeries(event, EventEnum.PERFORM);
+        updatePlace(event.getTarget().getId());
     }
 
     @Override
     protected void postSaveEvent(PlaceEvent event, FileDataContainer fileData) {
         assignNextEventInSeries(event, EventEnum.PERFORM);
+        updatePlace(event.getTarget().getId());
+    }
+
+    private void updatePlace(Long placeId) {
+        BaseOrg place = persistenceService.findUsingTenantOnlySecurityWithArchived(BaseOrg.class, placeId);
+
+        place.touch();
+
+        persistenceService.update(place);
     }
 
     /**
