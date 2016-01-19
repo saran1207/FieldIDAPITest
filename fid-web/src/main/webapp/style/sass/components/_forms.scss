@@ -79,7 +79,7 @@ input[type="checkbox"] {
 
 //TODO may need to refactor
 .checkbox {
-	overflow: hidden;
+	overflow: visible;
 	
 	//input inside of a label
 	label {
@@ -384,6 +384,15 @@ legend + p {
 		input[type="radio"] {
 			float: none;
 		}
+	}
+    .control-group.ownerPicker {
+		label {
+		  margin-top: -20px;
+		}
+		div {
+		  display: inline-block;
+		}
+
 	}
 	
 	// Left align label text

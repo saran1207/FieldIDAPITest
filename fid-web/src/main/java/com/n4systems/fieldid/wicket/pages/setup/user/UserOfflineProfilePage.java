@@ -9,7 +9,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
-import com.n4systems.fieldid.wicket.pages.useraccount.OfflineProfilePanel;
+import com.n4systems.fieldid.wicket.pages.useraccount.mobileofflineprofile.OfflineProfilePanel;
 import com.n4systems.model.user.User;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.IHeaderResponse;

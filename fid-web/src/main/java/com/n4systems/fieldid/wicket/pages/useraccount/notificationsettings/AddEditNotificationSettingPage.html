@@ -1,0 +1,96 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+
+    <div wicket:id="feedbackPanel"/>
+
+    <form wicket:id="form" class="form-horizontal">
+
+        <div class="columns-two">
+            <fieldset>
+                <div class="control-group">
+                    <label class="label">* <wicket:message key="label.name"/></label>
+                    <input type="text" wicket:id="name"/>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend><wicket:message key="label.delivery_options"/></legend>
+                <div class="control-group">
+                    <label class="label"><wicket:message key="label.name"/></label>
+                    <select wicket:id="frequency"/>
+                </div>
+                <div class="control-group checkbox">
+                    <label class="label"><wicket:message key="label.send_blank_report"/></label>
+                    <input type="checkbox" wicket:id="sendBlankReport"/>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend><wicket:message key="label.notification_content"/></legend>
+                <div class="control-group checkbox">
+                    <label class="label"><wicket:message key="label.include_upcoming"/></label>
+                    <input type="checkbox" wicket:id="includeUpcoming"/>
+                    <span class="upcoming-range">
+                        <select wicket:id="periodStart"/> <wicket:message key="label.for_the_next"/> <select wicket:id="periodEnd"/>
+                    </span>
+                </div>
+                <div class="control-group checkbox">
+                    <label class="label"><wicket:message key="label.include_overdue"/></label>
+                    <input type="checkbox" wicket:id="includeOverdue"/>
+                </div>
+                <div class="control-group checkbox">
+                    <label class="label"><wicket:message key="label.include_failed"/></label>
+                    <input type="checkbox" wicket:id="includeFailed"/>
+                    <label class="label"><wicket:message key="label.smartFailure"/></label>
+                    <input type="checkbox" wicket:id="smartFail"/>
+                </div>
+            </fieldset>
+        </div>
+
+        <div class="columns-two">
+            <fieldset>
+                <legend><wicket:message key="label.filters"/></legend>
+                <div class="control-group ownerPicker">
+                    <label class="label"><wicket:message key="label.owner"/></label>
+                    <div wicket:id="ownerPicker"/>
+                </div>
+                <div class="control-group">
+                    <label class="label"><wicket:message key="label.asset_type_group"/></label>
+                    <select wicket:id="assetTypeGroup"/>
+                </div>
+                <div class="control-group">
+                    <label class="label"><wicket:message key="label.assettype"/></label>
+                    <select wicket:id="assetType"/>
+                </div>
+                <div class="control-group">
+                    <label class="label"><wicket:message key="label.assetstatus"/></label>
+                    <select wicket:id="assetStatus"/>
+                </div>
+                <div class="control-group">
+                    <label class="label"><wicket:message key="label.eventtypegroup"/></label>
+                    <select wicket:id="eventTypeGroup"/>
+                </div>
+                <div class="control-group">
+                    <label class="label"><wicket:message key="label.eventtype"/></label>
+                    <select wicket:id="eventType"/>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend><wicket:message key="label.who_should_get_the_notification"/></legend>
+                <div wicket:id="emailAddressesContainer" class="control-group">
+                    <label class="label"><wicket:message key="label.emailaddresses"/></label>
+                    <div class="emailAddress" wicket:id="emailAddresses">
+                        <input type="email" wicket:id="address"> <a class="btn-secondary" wicket:id="deleteLink"><wicket:message key="label.delete"/></a>
+                    </div>
+                    <a class="btn-secondary add-email clear" wicket:id="addEmailAddressLink"><wicket:message key="label.add"/></a>
+                </div>
+
+            </fieldset>
+        </div>
+
+        <div class="form-actions">
+            <a class="btn-primary" wicket:id="saveLink"><wicket:message key="label.save"/></a> <a class="btn-secondary" wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+        </div>
+
+    </form>
+
+</wicket:extend>
+</html>
