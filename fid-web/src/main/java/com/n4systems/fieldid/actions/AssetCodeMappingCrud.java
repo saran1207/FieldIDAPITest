@@ -26,7 +26,7 @@ import java.util.List;
 
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.Integration)
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_CONFIG})
 public class AssetCodeMappingCrud extends AbstractCrud {
 
 

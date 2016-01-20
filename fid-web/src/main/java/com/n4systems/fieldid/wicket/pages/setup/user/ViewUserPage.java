@@ -172,11 +172,11 @@ public class ViewUserPage extends FieldIDTemplatePage{
         BitField permField = new BitField(user.isNew() ? 0 : user.getPermissions());
 
         if (user.isLiteUser() || user.isUsageBasedUser())
-            permissionList = Permissions.getVisibleLiteUserPermissions();
+            permissionList = Permissions.getVisibleLiteUserEventPermissions();
         else if (user.isReadOnly())
-            permissionList = Permissions.getVisibleReadOnlyPermissions();
+            permissionList = Permissions.getVisibleReadOnlyEventPermissions();
         else
-            permissionList =  Permissions.getVisibleSystemUserPermissions();
+            permissionList =  Permissions.getVisibleSystemUserEventPermissions();
 
         for (int permission: permissionList) {
             permissions.add(new Permission(permission, Permissions.getLabel(permission), permField.isSet(permission)));

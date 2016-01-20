@@ -35,7 +35,7 @@ import java.util.Date;
 import java.util.List;
 
 @SuppressWarnings("serial")
-@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
+@UserPermissionFilter(userRequiresOneOf={Permissions.TAG})
 public class AssetImportAction extends AbstractImportAction {
 	private Logger logger = Logger.getLogger(AssetImportAction.class);
 	

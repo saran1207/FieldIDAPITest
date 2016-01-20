@@ -8,7 +8,7 @@ import com.n4systems.security.Permissions;
 import com.n4systems.services.TenantFinder;
 import com.n4systems.util.ConfigEntry;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SAFETY_NETWORK})
 public class RemoteOrgAction extends AbstractAction {
 
 	private String name;

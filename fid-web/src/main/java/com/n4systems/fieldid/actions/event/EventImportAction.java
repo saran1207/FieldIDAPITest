@@ -35,7 +35,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 @SuppressWarnings("serial")
-@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
+@UserPermissionFilter(userRequiresOneOf={Permissions.CREATE_EVENT})
 public class EventImportAction extends AbstractImportAction {
 	private Logger logger = Logger.getLogger(EventImportAction.class);
 	

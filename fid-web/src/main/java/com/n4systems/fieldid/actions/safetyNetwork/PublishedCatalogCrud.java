@@ -32,7 +32,7 @@ import com.n4systems.taskscheduling.task.CatalogImportTask;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ListingPair;
 
-@UserPermissionFilter(userRequiresOneOf = { Permissions.ManageSafetyNetwork })
+@UserPermissionFilter(userRequiresOneOf = { Permissions.MANAGE_SAFETY_NETWORK})
 public class PublishedCatalogCrud extends SafetyNetwork {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(PublishedCatalogCrud.class);

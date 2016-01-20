@@ -8,15 +8,15 @@ public enum PermissionType {
 	
 
 	
-	Tag("label.identify_permission", Permissions.Tag ), 				
-	ManageSystemConfig("label.managesystemconfig_permission", Permissions.ManageSystemConfig),	
-	ManageSystemUsers("label.managesystemusers_permission", Permissions.ManageSystemUsers),	
-	ManageEndUsers("label.managecustomers_permission", Permissions.ManageEndUsers),		
-	CreateEvent("label.createevent_permission",Permissions.CreateEvent),         
-	EditEvent("label.editevent_permission",Permissions.EditEvent),           
-	ManageJobs("label.managejobs_permission",Permissions.ManageJobs),
-	ManageSafetyNetwork("label.managesafetynetwork_permission",Permissions.ManageSafetyNetwork),
-	EditAssetDetails("label.editassetdetails_permission", Permissions.EditAssetDetails),
+	Tag("label.identify_permission", Permissions.TAG),
+	ManageSystemConfig("label.managesystemconfig_permission", Permissions.MANAGE_SYSTEM_CONFIG),
+	ManageSystemUsers("label.managesystemusers_permission", Permissions.MANAGE_SYSTEM_USERS),
+	ManageEndUsers("label.managecustomers_permission", Permissions.MANAGE_END_USERS),
+	CreateEvent("label.createevent_permission",Permissions.CREATE_EVENT),
+	EditEvent("label.editevent_permission",Permissions.EDIT_EVENT),
+	ManageJobs("label.managejobs_permission",Permissions.MANAGE_JOBS),
+	ManageSafetyNetwork("label.managesafetynetwork_permission",Permissions.MANAGE_SAFETY_NETWORK),
+	EditAssetDetails("label.editassetdetails_permission", Permissions.EDIT_ASSET_DETAILS),
 	// composite permissions....
 	ADMIN(Integer.MAX_VALUE-1),	// set all bits. 
 	SYSTEM(Integer.MAX_VALUE-1),// 

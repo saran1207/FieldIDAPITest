@@ -28,7 +28,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Deprecated
 public class MasterEventCrud extends AbstractCrud {
 	protected static final String SESSION_KEY = "masterEvent";
 	private static Logger logger = Logger.getLogger(MasterEventCrud.class);
@@ -107,7 +107,7 @@ public class MasterEventCrud extends AbstractCrud {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CREATE_EVENT})
 	public String doAdd() {
 
 		if (masterEvent == null) {
@@ -139,7 +139,7 @@ public class MasterEventCrud extends AbstractCrud {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.EditEvent})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.EDIT_EVENT})
 	public String doEdit() {
 
 		if (masterEvent == null) {
@@ -165,12 +165,12 @@ public class MasterEventCrud extends AbstractCrud {
 	}
 
 	
-	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CREATE_EVENT})
 	public String doCreate() {
 		return save();
 	}
 	
-	@UserPermissionFilter(userRequiresOneOf={Permissions.EditEvent})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.EDIT_EVENT})
 	public String doUpdate() {
 		return save();
 	}

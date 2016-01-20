@@ -36,7 +36,7 @@ public class SetupAction extends SimpleAction {
 	}
 
 	@Override
-	@UserPermissionFilter(userRequiresOneOf={Permissions.ManageEndUsers, Permissions.ManageSystemConfig, Permissions.ManageSystemUsers})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_END_USERS, Permissions.MANAGE_SYSTEM_CONFIG, Permissions.MANAGE_SYSTEM_USERS})
 	public String execute() {
 		return super.execute();
 	}

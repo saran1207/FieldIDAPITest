@@ -21,10 +21,10 @@ import com.n4systems.model.Order.OrderType;
 import com.n4systems.plugins.PluginFactory;
 import com.n4systems.plugins.integration.OrderResolver;
 import com.n4systems.security.Permissions;
-import com.n4systems.util.ConfigEntry;
 
+@Deprecated
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.Integration)
-@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
+@UserPermissionFilter(userRequiresOneOf={Permissions.TAG})
 public class IdentifyCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(IdentifyCrud.class);

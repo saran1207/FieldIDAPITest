@@ -11,14 +11,14 @@ public abstract class AbstractUserSecurityTestCase {
 		String permissionName = null;
 		
 		switch (permission) {
-			case Permissions.Tag : permissionName="Tag"; break;
-			case Permissions.CreateEvent: permissionName = "CreateEvent"; break;
-			case Permissions.EditEvent: permissionName = "EditEvent"; break;
-			case Permissions.ManageEndUsers : permissionName = "ManageEndUsers"; break;
-			case Permissions.ManageJobs : permissionName = "ManageJobs"; break;
-			case Permissions.ManageSafetyNetwork : permissionName = "ManageSafetyNetwork"; break;
-			case Permissions.ManageSystemConfig : permissionName = "ManageSystemConfig"; break;
-			case Permissions.ManageSystemUsers : permissionName = "ManageSystemUsers"; break;
+			case Permissions.TAG: permissionName="Tag"; break;
+			case Permissions.CREATE_EVENT: permissionName = "CreateEvent"; break;
+			case Permissions.EDIT_EVENT: permissionName = "EditEvent"; break;
+			case Permissions.MANAGE_END_USERS: permissionName = "ManageEndUsers"; break;
+			case Permissions.MANAGE_JOBS: permissionName = "ManageJobs"; break;
+			case Permissions.MANAGE_SAFETY_NETWORK: permissionName = "ManageSafetyNetwork"; break;
+			case Permissions.MANAGE_SYSTEM_CONFIG: permissionName = "ManageSystemConfig"; break;
+			case Permissions.MANAGE_SYSTEM_USERS: permissionName = "ManageSystemUsers"; break;
 		}
 		
 		return permissionName;

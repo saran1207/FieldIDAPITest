@@ -13,35 +13,35 @@ public class SessionUserSecurityGuard implements UserSecurityGuard {
 	}
 	
 	public boolean isAllowedManageSafetyNetwork() {
-		return Permissions.hasOneOf(permissions, Permissions.ManageSafetyNetwork);
+		return Permissions.hasOneOf(permissions, Permissions.MANAGE_SAFETY_NETWORK);
 	}
 
 	public boolean isAllowedCreateEvent() {
-		return Permissions.hasOneOf(permissions, Permissions.CreateEvent);
+		return Permissions.hasOneOf(permissions, Permissions.CREATE_EVENT);
 	}
 
 	public boolean isAllowedEditEvent() {
-		return Permissions.hasOneOf(permissions, Permissions.EditEvent);
+		return Permissions.hasOneOf(permissions, Permissions.EDIT_EVENT);
 	}
 
 	public boolean isAllowedManageEndUsers() {
-		return Permissions.hasOneOf(permissions, Permissions.ManageEndUsers);
+		return Permissions.hasOneOf(permissions, Permissions.MANAGE_END_USERS);
 	}
 
 	public boolean isAllowedManageJobs() {
-		return Permissions.hasOneOf(permissions, Permissions.ManageJobs);
+		return Permissions.hasOneOf(permissions, Permissions.MANAGE_JOBS);
 	}
 
 	public boolean isAllowedManageSystemConfig() {
-		return Permissions.hasOneOf(permissions, Permissions.ManageSystemConfig);
+		return Permissions.hasOneOf(permissions, Permissions.MANAGE_SYSTEM_CONFIG);
 	}
 
 	public boolean isAllowedTag() {
-		return Permissions.hasOneOf(permissions, Permissions.Tag);
+		return Permissions.hasOneOf(permissions, Permissions.TAG);
 	}
 
 	public boolean isAllowedManageSystemUsers() {
-		return Permissions.hasOneOf(permissions, Permissions.ManageSystemUsers);
+		return Permissions.hasOneOf(permissions, Permissions.MANAGE_SYSTEM_USERS);
 	}
 
 }

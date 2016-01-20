@@ -1,12 +1,10 @@
 package com.n4systems.fieldid.actions;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -49,7 +47,7 @@ import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidationParameter;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_CONFIG})
 public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValueValidator {
 	private static final Logger logger = Logger.getLogger(OrganizationalCrud.class);
 	private static final long serialVersionUID = 1L;

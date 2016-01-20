@@ -17,8 +17,8 @@ import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.Validations;
 
 @SuppressWarnings("serial")
-@UserPermissionFilter(userRequiresOneOf={Permissions.Tag, Permissions.ManageSystemConfig, Permissions.ManageSystemUsers, 
-											Permissions.CreateEvent, Permissions.EditEvent, Permissions.ManageJobs, Permissions.ManageEndUsers})
+@UserPermissionFilter(userRequiresOneOf={Permissions.TAG, Permissions.MANAGE_SYSTEM_CONFIG, Permissions.MANAGE_SYSTEM_USERS,
+											Permissions.CREATE_EVENT, Permissions.EDIT_EVENT, Permissions.MANAGE_JOBS, Permissions.MANAGE_END_USERS})
 public class UploadFileAction extends AbstractAction {
 	private Logger logger = Logger.getLogger(UploadFileAction.class);
 	private File upload;

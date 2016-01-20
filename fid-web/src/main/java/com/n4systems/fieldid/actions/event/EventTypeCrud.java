@@ -27,7 +27,7 @@
  import java.util.*;
  import java.util.stream.Collectors;
 
- @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
+ @UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_CONFIG})
 public class EventTypeCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	private Logger logger = Logger.getLogger(EventTypeCrud.class);

@@ -19,7 +19,7 @@ import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.Projects)
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageJobs})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_JOBS})
 public class ProjectEventCrud extends AbstractCrud {
 
 	private static final Logger logger = Logger.getLogger(ProjectEventCrud.class);
