@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components.org;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.org.OrgService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.addressinfo.AddressPanel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
@@ -44,6 +45,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class CreatePlacePanel extends Panel {
 
@@ -64,6 +66,14 @@ public class CreatePlacePanel extends Panel {
 
         public String getName() {
             return name();
+        }
+
+        public static List<Level> getLevels() {
+            if (FieldIDSession.get().getTenant().getSettings().isSecondaryOrgsEnabled()) {
+                return Lists.newArrayList(values());
+            } else {
+                return Lists.newArrayList(CUSTOMER);
+            }
         }
     };
 
@@ -94,7 +104,7 @@ public class CreatePlacePanel extends Panel {
             .add(new TextArea("notes"))
             .add(new TextField("contactName"))
             .add(new TextField("email").add(EmailAddressValidator.getInstance()))
-            .add(new FidDropDownChoice<Level>("level", new PropertyModel(newPlaceModel, "level"), Lists.newArrayList(Level.values()), getLevelChoiceRenderer()) {
+            .add(new FidDropDownChoice<Level>("level", new PropertyModel(newPlaceModel, "level"), Lists.newArrayList(Level.getLevels()), getLevelChoiceRenderer()) {
             @Override
             public boolean isVisible() {
                 return newPlaceModel.getObject().parent instanceof PrimaryOrg;
