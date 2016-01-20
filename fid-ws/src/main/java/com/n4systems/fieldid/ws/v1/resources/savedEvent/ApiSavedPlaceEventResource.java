@@ -31,6 +31,11 @@ public class ApiSavedPlaceEventResource extends ApiResource<ApiSavedPlaceEvent, 
         return convertAllEntitiesToApiModels(events);
     }
 
+    public List<ApiSavedPlaceEvent> findAllOpenEvents(BaseOrg baseOrg) {
+        List<PlaceEvent> events = eventService.getAllOpenPlaceEvents(baseOrg);
+        return convertAllEntitiesToApiModels(events);
+    }
+
     @Override
     protected ApiSavedPlaceEvent convertEntityToApiModel(PlaceEvent event) {
         ApiSavedPlaceEvent apiEvent = new ApiSavedPlaceEvent();

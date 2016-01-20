@@ -82,7 +82,7 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 
         apiOrg.setEventHistory(eventHistoryResource.findAllEventHistory(baseOrg.getId()));
         apiOrg.setEventTypes(baseOrg.getEventTypes().stream().map(eventTypeResource::convertToApiPlaceEvent).collect(Collectors.toList()));
-        apiOrg.setEvents(savedPlaceEventResource.findLastEventOfEachType(baseOrg.getId()));
+        apiOrg.setEvents(savedPlaceEventResource.findAllOpenEvents(baseOrg));
 
 		return apiOrg;
 	}

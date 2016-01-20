@@ -424,6 +424,13 @@ public class EventService extends FieldIdPersistenceService {
         return lastEventsByType;
 	}
 
+    public List<PlaceEvent> getAllOpenPlaceEvents(BaseOrg baseOrg) {
+        QueryBuilder<PlaceEvent> builder = createUserSecurityBuilder(PlaceEvent.class);
+        builder.addSimpleWhere("place", baseOrg);
+        builder.addSimpleWhere("workflowState", WorkflowState.OPEN);
+        return persistenceService.findAll(builder);
+	}
+
     public List<PlaceEvent> getLastPlaceEventOfEachType(Long placeId) {
         //Pretty much a copy of the method above, but I couldn't use Generics here, because the QueryBuilder can't figure
         //out security-related stuff for it.  But maybe I'm just missing a key step in doing it that way!!
