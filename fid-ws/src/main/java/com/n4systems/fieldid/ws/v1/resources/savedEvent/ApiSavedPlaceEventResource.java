@@ -46,14 +46,19 @@ public class ApiSavedPlaceEventResource extends ApiResource<ApiSavedPlaceEvent, 
         apiEvent.setDate(event.getDate());
         apiEvent.setOwnerId(event.getOwner().getId());
 
+        if(event.getPerformedBy() != null) {
+            apiEvent.setPerformedById(event.getPerformedBy().getId());
+        }
+
+
         if(event.getWorkflowState() == WorkflowState.COMPLETED) {
             apiEvent.setPerformedById(event.getPerformedBy().getId());
         }
 
         apiEvent.setPrintable(event.isPrintable());
 
-        if(event.getAssignedTo() != null && event.getAssignedTo().getAssignedUser() != null) {
-            apiEvent.setAssignedUserId(event.getAssignedTo().getAssignedUser().getId());
+        if(event.getAssignee() != null) {
+            apiEvent.setAssignedUserId(event.getAssignee().getID());
         }
 
         if(event.getBook() != null) {
