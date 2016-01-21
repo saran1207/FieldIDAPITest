@@ -12,6 +12,8 @@ import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiEventForm;
  */
 public class ApiSavedPlaceEvent extends ApiBasePlaceEvent {
     private ApiEventForm form;
+    private String eventTypeName;
+    private String ownerDisplayName;
 
     public ApiEventForm getForm() {
         return form;
@@ -19,5 +21,21 @@ public class ApiSavedPlaceEvent extends ApiBasePlaceEvent {
 
     public void setForm(ApiEventForm form) {
         this.form = form;
+    }
+
+    public String getEventTypeName() {
+        return eventTypeName;
+    }
+
+    public void setEventTypeName(String eventTypeName) {
+        this.eventTypeName = eventTypeName;
+    }
+
+    public String getOwnerDisplayName() {
+        return ownerDisplayName;
+    }
+
+    public void setOwnerDisplayName(String ownerDisplayName) {
+        this.ownerDisplayName = ownerDisplayName;
     }
 }

@@ -51,6 +51,9 @@ public class ApiSavedPlaceEventResource extends ApiResource<ApiSavedPlaceEvent, 
         }
 
 
+        apiEvent.setEventTypeName(event.getType().getDisplayName());
+        apiEvent.setOwnerDisplayName(event.getTenant().getDisplayName() + ", " + event.getOwner().getDisplayName());
+
         if(event.getWorkflowState() == WorkflowState.COMPLETED) {
             apiEvent.setPerformedById(event.getPerformedBy().getId());
         }
