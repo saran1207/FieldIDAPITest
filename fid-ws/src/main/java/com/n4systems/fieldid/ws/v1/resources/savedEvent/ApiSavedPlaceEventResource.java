@@ -6,6 +6,7 @@ import com.n4systems.fieldid.ws.v1.resources.event.ApiEventAttribute;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.PlaceEvent;
 import com.n4systems.model.PlaceEventType;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.model.orgs.BaseOrg;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -31,6 +32,11 @@ public class ApiSavedPlaceEventResource extends ApiResource<ApiSavedPlaceEvent, 
         return convertAllEntitiesToApiModels(events);
     }
 
+    public List<ApiSavedPlaceEvent> findAllOpenEvents(BaseOrg baseOrg) {
+        List<PlaceEvent> events = eventService.getAllOpenPlaceEvents(baseOrg);
+        return convertAllEntitiesToApiModels(events);
+    }
+
     @Override
     protected ApiSavedPlaceEvent convertEntityToApiModel(PlaceEvent event) {
         ApiSavedPlaceEvent apiEvent = new ApiSavedPlaceEvent();
@@ -39,7 +45,11 @@ public class ApiSavedPlaceEventResource extends ApiResource<ApiSavedPlaceEvent, 
 
         apiEvent.setDate(event.getDate());
         apiEvent.setOwnerId(event.getOwner().getId());
-        apiEvent.setPerformedById(event.getPerformedBy().getId());
+
+        if(event.getWorkflowState() == WorkflowState.COMPLETED) {
+            apiEvent.setPerformedById(event.getPerformedBy().getId());
+        }
+
         apiEvent.setPrintable(event.isPrintable());
 
         if(event.getAssignedTo() != null && event.getAssignedTo().getAssignedUser() != null) {
