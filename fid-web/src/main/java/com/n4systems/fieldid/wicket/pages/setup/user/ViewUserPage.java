@@ -149,7 +149,19 @@ public class ViewUserPage extends FieldIDTemplatePage{
 
         add(permissionsContainer = new WebMarkupContainer("permissionsContainer"));
 
-        permissionsContainer.add(new ListView<Permission>("permission", getPermissionsList(userModel)) {
+        permissionsContainer.add(getPermissionsListView("permission", getPermissionsList(userModel)));
+
+        if (getTenant().getSettings().isLotoEnabled()) {
+            permissionsContainer.add(getPermissionsListView("lotoPermission", getLotoPermissionsList(userModel)));
+        } else {
+            permissionsContainer.add(new WebMarkupContainer("lotoPermission").setVisible(false));
+        }
+
+        permissionsContainer.setVisible(!isPerson);
+    }
+
+    private ListView<Permission> getPermissionsListView(String id, List<Permission> permissionList) {
+        return new ListView<Permission>(id, permissionList) {
             @Override
             protected void populateItem(ListItem<Permission> item) {
                 IModel<Permission> permission = item.getModel();
@@ -160,24 +172,41 @@ public class ViewUserPage extends FieldIDTemplatePage{
                     item.add(new Label("state", new FIDLabelModel("label.off")));
                 }
             }
-        });
-
-        permissionsContainer.setVisible(!isPerson);
+        };
     }
 
     private List<Permission> getPermissionsList(IModel<User> userModel) {
-        List<Permission> permissions = Lists.newArrayList();
-        int[] permissionList;
+        List<Integer> permissionList;
         User user = userModel.getObject();
         BitField permField = new BitField(user.isNew() ? 0 : user.getPermissions());
 
         if (user.isLiteUser() || user.isUsageBasedUser())
-            permissionList = Permissions.getVisibleLiteUserEventPermissions();
+            permissionList = Permissions.getVisibleLiteUserInspectionPermissions();
         else if (user.isReadOnly())
-            permissionList = Permissions.getVisibleReadOnlyEventPermissions();
+            permissionList = Permissions.getVisibleReadOnlyInspectionPermissions();
         else
-            permissionList =  Permissions.getVisibleSystemUserEventPermissions();
+            permissionList =  Permissions.getVisibleSystemUserInspectionPermissions();
 
+        return getPermissionsList(permissionList, permField);
+    }
+
+    private List<Permission> getLotoPermissionsList(IModel<User> userModel) {
+        List<Integer> permissionList;
+        User user = userModel.getObject();
+        BitField permField = new BitField(user.isNew() ? 0 : user.getPermissions());
+
+        if (user.isLiteUser() || user.isUsageBasedUser())
+            permissionList = Permissions.getVisibleLiteUserLotoPermissions();
+        else if (user.isReadOnly())
+            permissionList = Permissions.getVisibleReadOnlyLotoPermissions();
+        else
+            permissionList =  Permissions.getVisibleSystemUserLotoPermissions();
+
+        return getPermissionsList(permissionList, permField);
+    }
+
+    private List<Permission> getPermissionsList(List<Integer> permissionList, BitField permField) {
+        List<Permission> permissions = Lists.newArrayList();
         for (int permission: permissionList) {
             permissions.add(new Permission(permission, Permissions.getLabel(permission), permField.isSet(permission)));
         }

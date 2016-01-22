@@ -1,12 +1,14 @@
 package com.n4systems.fieldid.wicket.components.user;
 
 import com.google.common.collect.Lists;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.BitField;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;
@@ -30,7 +32,16 @@ public class UserFormPermissionsPanel extends Panel {
 
         this.userModel = userModel;
 
-        add(new ListView<Permission>("permissions", getPermissionsList(userModel)) {
+        add(getListView("permissions", getPermissionsList(userModel)));
+
+        if (FieldIDSession.get().getTenant().getSettings().isLotoEnabled())
+            add(getListView("lotoPermissions", getLotoPermissionsList(userModel)));
+        else
+            add(new WebMarkupContainer("lotoPermissions").setVisible(false));
+    }
+
+    private ListView<Permission> getListView(String id, final List<Permission> permissionList) {
+        return new ListView<Permission>(id, permissionList) {
             @Override
             protected void populateItem(final ListItem<Permission> item) {
                 final Permission permission = item.getModelObject();
@@ -39,7 +50,7 @@ public class UserFormPermissionsPanel extends Panel {
 
                 final Model<Boolean> selection = Model.of(permission.enabled? Boolean.TRUE: Boolean.FALSE);
 
-                RadioGroup<Boolean> group = new RadioGroup<Boolean>("group", selection);
+                RadioGroup<Boolean> group = new RadioGroup<>("group", selection);
                 group.add(new AjaxFormChoiceComponentUpdatingBehavior() {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
@@ -49,31 +60,57 @@ public class UserFormPermissionsPanel extends Panel {
                         permissions.add(index, updatedPermission);
                     }
                 });
-                group.add(new Radio<Boolean>("on", new Model<Boolean>(Boolean.TRUE)));
-                group.add(new Radio<Boolean>("off", new Model<Boolean>(Boolean.FALSE)));
+                group.add(new Radio<>("on", new Model<>(Boolean.TRUE)));
+                group.add(new Radio<>("off", new Model<>(Boolean.FALSE)));
                 item.add(group);
 
             }
-        });
+        };
     }
 
     private List<Permission> getPermissionsList(IModel<User> userModel) {
-       permissions = Lists.newArrayList();
-        int[] permissionList;
+        this.permissions = Lists.newArrayList();
+        List<Integer> permissionList = Lists.newArrayList();
         User user = userModel.getObject();
         BitField permField = new BitField(user.isNew() ? 0 : user.getPermissions());
 
-        if (user.isLiteUser() || user.isUsageBasedUser())
-            permissionList =  Permissions.getVisibleLiteUserEventPermissions();
-        else if (user.isReadOnly())
-            permissionList = Permissions.getVisibleReadOnlyEventPermissions();
-        else
-            permissionList =  Permissions.getVisibleSystemUserEventPermissions();
+        if (user.isLiteUser() || user.isUsageBasedUser()) {
+            permissionList.addAll(Permissions.getVisibleLiteUserInspectionPermissions());
+        } else if (user.isReadOnly()) {
+            permissionList.addAll(Permissions.getVisibleReadOnlyInspectionPermissions());
+        } else {
+            permissionList.addAll(Permissions.getVisibleSystemUserInspectionPermissions());
+        }
 
+        getPermissionsList(permissionList, permField);
+
+        return this.permissions;
+    }
+
+    private List<Permission> getLotoPermissionsList(IModel<User> userModel) {
+        permissions = Lists.newArrayList();
+        List<Integer> permissionList = Lists.newArrayList();
+        User user = userModel.getObject();
+        BitField permField = new BitField(user.isNew() ? 0 : user.getPermissions());
+
+        if (user.isLiteUser() || user.isUsageBasedUser()) {
+            permissionList.addAll(Permissions.getVisibleLiteUserLotoPermissions());
+        } else if (user.isReadOnly()) {
+            permissionList.addAll(Permissions.getVisibleReadOnlyLotoPermissions());
+        } else {
+            permissionList.addAll(Permissions.getVisibleSystemUserLotoPermissions());
+        }
+
+        getPermissionsList(permissionList, permField);
+
+        return permissions;
+    }
+
+
+    private void getPermissionsList(List<Integer> permissionList, BitField permField) {
         for (int permission: permissionList) {
             permissions.add(new Permission(permission, Permissions.getLabel(permission), permField.isSet(permission)));
         }
-        return permissions;
     }
 
     public int getPermissions() {

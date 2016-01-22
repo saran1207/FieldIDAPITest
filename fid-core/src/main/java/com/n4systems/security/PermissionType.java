@@ -17,6 +17,15 @@ public enum PermissionType {
 	ManageJobs("label.managejobs_permission",Permissions.MANAGE_JOBS),
 	ManageSafetyNetwork("label.managesafetynetwork_permission",Permissions.MANAGE_SAFETY_NETWORK),
 	EditAssetDetails("label.editassetdetails_permission", Permissions.EDIT_ASSET_DETAILS),
+    AuthorEditProcedure("label.authoreditprocedure_permission", Permissions.AUTHOR_EDIT_PROCEDURE),
+	CertifyProcedure("label.certifyprocedure_permission", Permissions.CERTIFY_PROCEDURE),
+	DeleteProcedure("label.deleteprocedure_permission", Permissions.DELETE_PROCEDURE),
+    MaintainSchedule("label.maintainschedules_permission", Permissions.MAINTAIN_LOTO_SCHEDULE),
+	PerformProcedure("label.performprocedure_permission", Permissions.PERFORM_PROCEDURE),
+	PrintProcedure("label.printprocedure_permission", Permissions.PRINT_PROCEDURE),
+	ProcedureAudit("label.procedureaudit_permission", Permissions.PROCEDURE_AUDIT),
+	UnpublishProcedure("label.unpublishprocedure_permission", Permissions.UNPUBLISH_PROCEDURE),
+
 	// composite permissions....
 	ADMIN(Integer.MAX_VALUE-1),	// set all bits. 
 	SYSTEM(Integer.MAX_VALUE-1),// 
