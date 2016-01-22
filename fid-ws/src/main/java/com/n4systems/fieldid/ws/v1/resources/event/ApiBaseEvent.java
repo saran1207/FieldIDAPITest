@@ -8,6 +8,7 @@ import java.util.List;
 public class ApiBaseEvent extends ApiReadWriteModelWithOwner{
 	private Long typeId;
 	private Date date;
+	private Date dueDate;
 	private String status;
 	private Long eventStatusId;
 	private Long assignedUserId;
@@ -26,6 +27,14 @@ public class ApiBaseEvent extends ApiReadWriteModelWithOwner{
 
 	public void setTypeId(Long typeId) {
 		this.typeId = typeId;
+	}
+
+	public Date getDueDate() {
+		return dueDate;
+	}
+
+	public void setDueDate(Date dueDate) {
+		this.dueDate = dueDate;
 	}
 
 	public Date getDate() {

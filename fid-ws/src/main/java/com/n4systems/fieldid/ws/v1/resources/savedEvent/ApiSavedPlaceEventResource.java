@@ -43,16 +43,13 @@ public class ApiSavedPlaceEventResource extends ApiResource<ApiSavedPlaceEvent, 
 
         convertAbstractEventToApiEvent(apiEvent, event);
 
+        apiEvent.setDueDate(event.getDueDate());
         apiEvent.setDate(event.getDate());
         apiEvent.setOwnerId(event.getOwner().getId());
 
         if(event.getPerformedBy() != null) {
             apiEvent.setPerformedById(event.getPerformedBy().getId());
         }
-
-
-        apiEvent.setEventTypeName(event.getType().getDisplayName());
-        apiEvent.setOwnerDisplayName(event.getTenant().getDisplayName() + ", " + event.getOwner().getDisplayName());
 
         if(event.getWorkflowState() == WorkflowState.COMPLETED) {
             apiEvent.setPerformedById(event.getPerformedBy().getId());
@@ -95,7 +92,10 @@ public class ApiSavedPlaceEventResource extends ApiResource<ApiSavedPlaceEvent, 
         }
 
         apiEvent.setAttributes(convertToApiEventAttributes(event.getInfoOptionMap()));
+
         apiEvent.setForm(savedEventFormResource.convertToApiEventForm(event));
+        apiEvent.setEventTypeName(event.getType().getDisplayName());
+        apiEvent.setOwnerDisplayName(event.getTenant().getDisplayName() + ", " + ((PlaceEvent)(event)).getOwner().getDisplayName());
     }
 
     private List<ApiEventAttribute> convertToApiEventAttributes(Map<String, String> infoOptionMap) {
