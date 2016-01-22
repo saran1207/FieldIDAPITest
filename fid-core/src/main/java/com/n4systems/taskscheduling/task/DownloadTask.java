@@ -6,12 +6,15 @@ import com.n4systems.model.downloadlink.DownloadLinkSaver;
 import com.n4systems.model.downloadlink.DownloadState;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.savers.Saver;
+import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.TemplateMailMessage;
 import org.apache.log4j.Logger;
 
 import javax.mail.MessagingException;
-import java.io.ByteArrayOutputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.OutputStream;
 
 public abstract class DownloadTask implements Runnable {
@@ -41,14 +44,14 @@ public abstract class DownloadTask implements Runnable {
 		logger.info(String.format("Download Task Started [%s]", downloadLink));
 		
 		updateDownloadLinkState(DownloadState.INPROGRESS);
-		
-		try {
-			ByteArrayOutputStream fileContents = new ByteArrayOutputStream();
 
+		File tmpFile = PathHandler.getTempFileWithExt(downloadLink.getContentType().getExtension());
+		try (OutputStream fileContents = new BufferedOutputStream(new FileOutputStream(tmpFile))) {
 			generateFile(fileContents, downloadLink.getUser(), downloadLink.getName());
 
+			fileContents.flush();
 			//Before we update the DownloadLink state, we're going to want to upload the file to S3.
-			ServiceLocator.getS3Service().uploadGeneratedReport(fileContents.toByteArray(), downloadLink);
+			ServiceLocator.getS3Service().uploadGeneratedReport(tmpFile, downloadLink);
 
 			updateDownloadLinkState(DownloadState.COMPLETED);
 	
@@ -68,6 +71,8 @@ public abstract class DownloadTask implements Runnable {
 			} catch(MessagingException me) {
 				logger.error("Failed to send failure notification", me);
 			}
+		} finally {
+			tmpFile.delete();
 		}
 		
 		logger.info(String.format("Download Task Finished [%s]", downloadLink));

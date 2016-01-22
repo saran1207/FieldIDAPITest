@@ -24,16 +24,13 @@ import com.n4systems.model.eventschedule.NextEventDateByEventPassthruLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.model.utils.StreamUtils;
+import com.n4systems.reporting.PathHandler;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
-import org.apache.poi.util.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -86,16 +83,17 @@ public class EventTypeExportService extends FieldIdPersistenceService {
 	}
 
 	private void generateEventByTypeExport(DownloadLink downloadLink, Long eventTypeId, String dateFormat, TimeZone timeZone, Date from, Date to) {
-        ExcelXSSFMapWriter mapWriter = null;
-        ByteArrayOutputStream stream = null;
-
-        try {
+		File tmpFile = PathHandler.getTempFileWithExt(downloadLink.getContentType().getExtension());
+		try (OutputStream stream = new BufferedOutputStream(new FileOutputStream(tmpFile));
+			 ExcelXSSFMapWriter mapWriter = new ExcelXSSFMapWriter(new DateTimeDefiner(downloadLink.getUser()))) {
             updateDownloadLinkState(downloadLink.getId(), DownloadState.INPROGRESS);
-            mapWriter = new ExcelXSSFMapWriter(new DateTimeDefiner(downloadLink.getUser()));
+
             export(mapWriter, eventTypeId, from, to, dateFormat, timeZone);
-            stream = new ByteArrayOutputStream();
             mapWriter.writeToStream(stream);
-            s3Service.uploadGeneratedReport(stream.toByteArray(), downloadLink);
+			stream.flush();
+
+            s3Service.uploadGeneratedReport(tmpFile, downloadLink);
+
             //It might be okay to just set the state to completed... I'm pretty sure a legitimate failure of the
             //upload ends up with an Exception that would jump this following line and drop execution right into the
             //catch block...
@@ -104,10 +102,8 @@ public class EventTypeExportService extends FieldIdPersistenceService {
             log.error(e);
             updateDownloadLinkState(downloadLink.getId(), DownloadState.FAILED);
         } finally {
-            //Normally I hate inline IF statements... but they fit here.
-            if(mapWriter != null) IOUtils.closeQuietly(mapWriter);
-            if(stream != null) IOUtils.closeQuietly(stream);
-        }
+			tmpFile.delete();
+		}
     }
 
 	private void generateEventByTypeExport(File file, Long downloadLinkId, Long eventTypeId, String dateFormat, TimeZone timeZone, Date from, Date to) {

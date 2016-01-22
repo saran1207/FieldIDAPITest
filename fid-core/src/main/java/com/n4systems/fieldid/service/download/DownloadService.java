@@ -13,6 +13,7 @@ import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.downloadlink.DownloadLinkFactory;
 import com.n4systems.model.downloadlink.DownloadState;
 import com.n4systems.model.search.SearchCriteria;
+import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.mail.TemplateMailMessage;
 import com.n4systems.util.selection.MultiIdSelection;
 import org.apache.log4j.Logger;
@@ -20,8 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
-import java.io.ByteArrayOutputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.Collections;
 import java.util.List;
@@ -68,13 +70,16 @@ public abstract class DownloadService<T extends SearchCriteria> extends FieldIdP
 		updateDownloadLinkState(downloadLink, DownloadState.INPROGRESS);
         ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(getCurrentUser().getLanguage());
         SecurityContextInitializer.initSecurityContext(getCurrentUser());
-        try {
-			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+		File downloadTmpFile = PathHandler.getTempFileWithExt(downloadLink.getContentType().getExtension());
+		try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(downloadTmpFile))) {
 
 			generateFile(criteria, outputStream, true, 0, PAGE_SIZE);
 
+			outputStream.flush();
+
 			//Upload the file to S3 before we update the state of the DownloadLink...
-			s3Service.uploadGeneratedReport(outputStream.toByteArray(), downloadLink);
+			s3Service.uploadGeneratedReport(downloadTmpFile, downloadLink);
 
 			updateDownloadLinkState(downloadLink, DownloadState.COMPLETED);
 
@@ -94,6 +99,8 @@ public abstract class DownloadService<T extends SearchCriteria> extends FieldIdP
 			} catch(MessagingException me) {
 				logger.error("Failed to send failure notification", me);
 			}
+		} finally {
+			downloadTmpFile.delete();
 		}
 
 		logger.info(String.format("Download Task Finished [%s]", downloadLink));

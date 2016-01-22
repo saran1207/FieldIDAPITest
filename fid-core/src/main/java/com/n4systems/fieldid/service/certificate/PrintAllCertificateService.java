@@ -17,17 +17,19 @@ import com.n4systems.model.downloadlink.DownloadState;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.reporting.EventReportType;
+import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.config.ConfigService;
-import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.mail.TemplateMailMessage;
 import com.n4systems.util.selection.MultiIdSelection;
 import net.sf.jasperreports.engine.JasperPrint;
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.ByteArrayOutputStream;
+import javax.mail.MessagingException;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -86,22 +88,21 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 	}
 
 	private void generateCertificatePackage(List<Long> entityIds, EventReportType eventReportType, DownloadLink link, String downloadUrl, String templateName) {
-		ZipOutputStream zipOut = null;
-		try {
-			if (entityIds.isEmpty()) {
-				downloadLinkService.updateState(link, DownloadState.FAILED);	
+		if (entityIds.isEmpty()) {
+			downloadLinkService.updateState(link, DownloadState.FAILED);
+			try {
 				mailService.sendMessage(link.generateMailMessage("We're sorry, your report did not contain any printable events."));
-				return;
+			} catch (MessagingException e) {
+				logger.error("Unable to send message", e);
 			}
+			return;
+		}
 
-            downloadLinkService.updateState(link, DownloadState.INPROGRESS);
-			
-			Integer maxCertsPerGroup = configService.getInteger(ConfigEntry.REPORTING_MAX_REPORTS_PER_FILE);
+		downloadLinkService.updateState(link, DownloadState.INPROGRESS);
+		Integer maxCertsPerGroup = configService.getConfig().getLimit().getReportingMaxReportsPerFile();
 
-            ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-			
-			zipOut = new ZipOutputStream(byteOut);
-
+		File outputFile = PathHandler.getTempFileWithExt("zip");
+		try (ZipOutputStream zipOut = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(outputFile)))) {
 			int pageNumber = 1;
 			JasperPrint jPrint;
 			List<JasperPrint> printGroup = new ArrayList<>();
@@ -134,11 +135,12 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 
             //Finish working on the zipOut only... we'll handle the byte array separately.
             zipOut.finish();
+			zipOut.flush();
 
 			//Before we update the state of the DownloadLink, we want to shove it up into S3.  Otherwise any attempted
 			//downloads could fail if the file is big enough to present a considerable delay between update of state
 			//and arrival in the cloud.
-			s3Service.uploadGeneratedReport(byteOut.toByteArray(), link);
+			s3Service.uploadGeneratedReport(outputFile, link);
 
 			//Now the file is up there... or we at least think it is.  Flip it to completed.
 			downloadLinkService.updateState(link, DownloadState.COMPLETED);
@@ -147,7 +149,7 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 			downloadLinkService.updateState(link, DownloadState.FAILED);
 			logger.error("Failed generating multi event certificate download", e);
 		} finally {
-			IOUtils.closeQuietly(zipOut);
+			outputFile.delete();
 		}
 	}
 
