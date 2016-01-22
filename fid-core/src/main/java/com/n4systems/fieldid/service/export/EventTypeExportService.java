@@ -26,6 +26,7 @@ import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.model.utils.StreamUtils;
 import com.n4systems.reporting.PathHandler;
 import org.apache.commons.lang.time.DateUtils;
+import org.apache.commons.lang.time.StopWatch;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,16 +39,14 @@ import java.util.TimeZone;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class EventTypeExportService extends FieldIdPersistenceService {
-	
+	static Logger logger = Logger.getLogger("com.n4systems.taskscheduling");
+
 	@Autowired private UserService userService;
 	@Autowired private AsyncService asyncService;	
 	@Autowired private EventService eventService;
 	@Autowired private PersistenceService persistenceService;
     @Autowired private S3Service s3Service;
 
-    private static final Logger log = Logger.getLogger(EventTypeExportService.class);
-	
-	
 	/**
 	 * First attempt at Spring-ifying async transactions.   this needs serious refactoring before next service method is added.  it's ugly!!!!
 	 * suggestions : need to avoid creating runnables, need a DownloadService that handles all the link stuff automatically.  a couple of advices might make things cleaner.
@@ -83,23 +82,31 @@ public class EventTypeExportService extends FieldIdPersistenceService {
 	}
 
 	private void generateEventByTypeExport(DownloadLink downloadLink, Long eventTypeId, String dateFormat, TimeZone timeZone, Date from, Date to) {
+		logger.info("[" + downloadLink + "]: Started event type export for type [" + eventTypeId + "]");
+
+		StopWatch watch = new StopWatch();
+		watch.start();
+
 		File tmpFile = PathHandler.getTempFileWithExt(downloadLink.getContentType().getExtension());
-		try (OutputStream stream = new BufferedOutputStream(new FileOutputStream(tmpFile));
-			 ExcelXSSFMapWriter mapWriter = new ExcelXSSFMapWriter(new DateTimeDefiner(downloadLink.getUser()))) {
+		try {
             updateDownloadLinkState(downloadLink.getId(), DownloadState.INPROGRESS);
 
-            export(mapWriter, eventTypeId, from, to, dateFormat, timeZone);
-            mapWriter.writeToStream(stream);
-			stream.flush();
+			try (OutputStream stream = new BufferedOutputStream(new FileOutputStream(tmpFile));
+				 ExcelXSSFMapWriter mapWriter = new ExcelXSSFMapWriter(new DateTimeDefiner(downloadLink.getUser()))) {
+				export(mapWriter, eventTypeId, from, to, dateFormat, timeZone);
+				mapWriter.writeToStream(stream);
+			}
 
+			logger.info("[" + downloadLink + "]: Finished " + getClass().getSimpleName() + " generate, starting S3 upload");
             s3Service.uploadGeneratedReport(tmpFile, downloadLink);
 
             //It might be okay to just set the state to completed... I'm pretty sure a legitimate failure of the
             //upload ends up with an Exception that would jump this following line and drop execution right into the
             //catch block...
             updateDownloadLinkState(downloadLink.getId(), DownloadState.COMPLETED);
+			logger.info("[" + downloadLink + "]: Completed in " + watch);
         } catch (Exception e) {
-            log.error(e);
+			logger.error("[" + downloadLink + "]: Failed", e);
             updateDownloadLinkState(downloadLink.getId(), DownloadState.FAILED);
         } finally {
 			tmpFile.delete();
@@ -114,7 +121,7 @@ public class EventTypeExportService extends FieldIdPersistenceService {
 			export(mapWriter, eventTypeId, from, to, dateFormat, timeZone);
 			updateDownloadLinkState(downloadLinkId, DownloadState.COMPLETED);
 		} catch (Exception e) {
-            log.error(e);
+			logger.error(e);
 			updateDownloadLinkState(downloadLinkId, DownloadState.FAILED);
 		} finally {
 			StreamUtils.close(mapWriter);

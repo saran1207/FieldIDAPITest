@@ -16,6 +16,7 @@ import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.mail.TemplateMailMessage;
 import com.n4systems.util.selection.MultiIdSelection;
+import org.apache.commons.lang.time.StopWatch;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,8 +30,7 @@ import java.util.Collections;
 import java.util.List;
 
 public abstract class DownloadService<T extends SearchCriteria> extends FieldIdPersistenceService {
-
-	protected Logger logger = Logger.getLogger(getClass());
+	static Logger logger = Logger.getLogger("com.n4systems.taskscheduling");
 
     protected static final int PAGE_SIZE = 256;
 
@@ -65,18 +65,23 @@ public abstract class DownloadService<T extends SearchCriteria> extends FieldIdP
 
     @Transactional
 	private void run(T criteria, String downloadUrl, DownloadLink downloadLink) {
-		logger.info(String.format("Download Task Started [%s]", downloadLink));
+		logger.info("[" + downloadLink + "]: Started " + getClass().getSimpleName());
+
+		StopWatch watch = new StopWatch();
+		watch.start();
 
 		updateDownloadLinkState(downloadLink, DownloadState.INPROGRESS);
         ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(getCurrentUser().getLanguage());
         SecurityContextInitializer.initSecurityContext(getCurrentUser());
 
 		File downloadTmpFile = PathHandler.getTempFileWithExt(downloadLink.getContentType().getExtension());
-		try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(downloadTmpFile))) {
+		try {
 
-			generateFile(criteria, outputStream, true, 0, PAGE_SIZE);
+			try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(downloadTmpFile))) {
+				generateFile(criteria, outputStream, true, 0, PAGE_SIZE);
+			}
 
-			outputStream.flush();
+			logger.info("[" + downloadLink + "]: Finished " + getClass().getSimpleName() + " generate, starting S3 upload");
 
 			//Upload the file to S3 before we update the state of the DownloadLink...
 			s3Service.uploadGeneratedReport(downloadTmpFile, downloadLink);
@@ -87,23 +92,24 @@ public abstract class DownloadService<T extends SearchCriteria> extends FieldIdP
 				// we don't want exceptions coming from the notification to
 				// hit the failure block
 				sendSuccessNotification(downloadUrl, mailManager, downloadLink);
+
+				watch.stop();
+				logger.info("[" + downloadLink + "]: Completed in " + watch);
 			} catch(Exception e) {
-				logger.error("Failed to send success notification, the download has not been affected", e);
+				logger.warn("[" + downloadLink + "]: Failed to send success notification, the download has not been affected", e);
 			}
 		} catch(Exception e) {
-			logger.error("Failed to generate download", e);
+			logger.error("[" + downloadLink + "]: Failed", e);
 
 			updateDownloadLinkState(downloadLink, DownloadState.FAILED);
 			try {
 				sendFailureNotification(mailManager, downloadLink, e);
 			} catch(MessagingException me) {
-				logger.error("Failed to send failure notification", me);
+				logger.error("[" + downloadLink + "]: Failed to send failure notification", me);
 			}
 		} finally {
 			downloadTmpFile.delete();
 		}
-
-		logger.info(String.format("Download Task Finished [%s]", downloadLink));
 	}
 
 	@Transactional

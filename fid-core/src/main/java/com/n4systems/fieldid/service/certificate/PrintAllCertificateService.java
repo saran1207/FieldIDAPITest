@@ -22,6 +22,7 @@ import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.mail.TemplateMailMessage;
 import com.n4systems.util.selection.MultiIdSelection;
 import net.sf.jasperreports.engine.JasperPrint;
+import org.apache.commons.lang.time.StopWatch;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +39,7 @@ import java.util.zip.ZipOutputStream;
 
 @Transactional(readOnly = true)
 public class PrintAllCertificateService extends FieldIdPersistenceService {
-	private final Logger logger = Logger.getLogger(PrintAllCertificateService.class);
+	static Logger logger = Logger.getLogger("com.n4systems.taskscheduling");
 	
 	private final CertificatePrinter printer = new CertificatePrinter();
 
@@ -88,12 +89,14 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 	}
 
 	private void generateCertificatePackage(List<Long> entityIds, EventReportType eventReportType, DownloadLink link, String downloadUrl, String templateName) {
+		logger.info("[" + link + "]: Started multi certificate export " + entityIds.size() + " entities");
+
 		if (entityIds.isEmpty()) {
 			downloadLinkService.updateState(link, DownloadState.FAILED);
 			try {
 				mailService.sendMessage(link.generateMailMessage("We're sorry, your report did not contain any printable events."));
 			} catch (MessagingException e) {
-				logger.error("Unable to send message", e);
+				logger.error("[" + link + "]: Unable to send message", e);
 			}
 			return;
 		}
@@ -102,41 +105,55 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 		Integer maxCertsPerGroup = configService.getConfig().getLimit().getReportingMaxReportsPerFile();
 
 		File outputFile = PathHandler.getTempFileWithExt("zip");
-		try (ZipOutputStream zipOut = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(outputFile)))) {
-			int pageNumber = 1;
-			JasperPrint jPrint;
-			List<JasperPrint> printGroup = new ArrayList<>();
-			for (Long entityId: entityIds) {
-				
-				if (printGroup.size() == maxCertsPerGroup) {
+		try {
+			StopWatch watch = new StopWatch();
+			watch.start();
+			long lastSplitTime = watch.getStartTime();
+
+			try (ZipOutputStream zipOut = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(outputFile)))) {
+				int i = 0;
+				int pageNumber = 1;
+				JasperPrint jPrint;
+				List<JasperPrint> printGroup = new ArrayList<>();
+				for (Long entityId : entityIds) {
+					if (printGroup.size() == maxCertsPerGroup) {
+						zipOut.putNextEntry(new ZipEntry(pdfFileName(link.getName(), pageNumber)));
+						printer.printToPDF(printGroup, zipOut);
+						printGroup.clear();
+						pageNumber++;
+
+						watch.split();
+						long splitDiff = watch.getSplitTime() - lastSplitTime;
+						long avgRate = watch.getTime() / i;
+						long intRate = splitDiff / maxCertsPerGroup;
+						logger.info("[" + link + "]: (" + i + '/' + entityIds.size() + ") total: " + watch.toSplitString() + ", last " + maxCertsPerGroup + ": " + splitDiff + "ms, avg rate: " + avgRate + "ms/entity, interval rate: " + intRate + "ms/entity");
+						lastSplitTime = watch.getSplitTime();
+					}
+
+					jPrint = generateCertificate(eventReportType, entityId);
+					if (jPrint != null) {
+						printGroup.add(jPrint);
+					}
+
+					i++;
+				}
+
+				if (!printGroup.isEmpty()) {
 					zipOut.putNextEntry(new ZipEntry(pdfFileName(link.getName(), pageNumber)));
 					printer.printToPDF(printGroup, zipOut);
-					printGroup.clear();
-					pageNumber++;
+				} else {
+					if (pageNumber == 1) {
+						//In this case, the printGroup is empty AND pageNumber was never incremented past one.  This means
+						//we didn't produce any printed reports.  Something went wrong... that "something" is likely that
+						//the user tried to print a boatload of unprintable events.
+						throw new Exception("No reports were printed, likely because they were all non-printable.");
+					}
 				}
-
-                jPrint = generateCertificate(eventReportType, entityId);
-				if (jPrint != null) {
-					printGroup.add(jPrint);
-				}
+				zipOut.finish();
+				watch.split();
 			}
 
-            if (!printGroup.isEmpty()) {
-				zipOut.putNextEntry(new ZipEntry(pdfFileName(link.getName(), pageNumber)));
-				printer.printToPDF(printGroup, zipOut);
-			} else {
-                if(pageNumber == 1) {
-                    //In this case, the printGroup is empty AND pageNumber was never incremented past one.  This means
-                    //we didn't produce any printed reports.  Something went wrong... that "something" is likely that
-                    //the user tried to print a boatload of unprintable events.
-                    throw new Exception("No reports were printed, likely because they were all non-printable.");
-                }
-            }
-
-            //Finish working on the zipOut only... we'll handle the byte array separately.
-            zipOut.finish();
-			zipOut.flush();
-
+			logger.info("[" + link + "]: Finished generating report (" + watch.toSplitString() + "), now uploading to S3");
 			//Before we update the state of the DownloadLink, we want to shove it up into S3.  Otherwise any attempted
 			//downloads could fail if the file is big enough to present a considerable delay between update of state
 			//and arrival in the cloud.
@@ -145,9 +162,12 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 			//Now the file is up there... or we at least think it is.  Flip it to completed.
 			downloadLinkService.updateState(link, DownloadState.COMPLETED);
 			sendSuccessNotification(link, downloadUrl, templateName);
+
+			watch.stop();
+			logger.info("[" + link + "]: Completed in " + watch);
 		} catch (Exception e) {
 			downloadLinkService.updateState(link, DownloadState.FAILED);
-			logger.error("Failed generating multi event certificate download", e);
+			logger.error("[" + link + "]: Failed", e);
 		} finally {
 			outputFile.delete();
 		}

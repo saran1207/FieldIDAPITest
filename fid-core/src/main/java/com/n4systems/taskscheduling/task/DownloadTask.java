@@ -9,6 +9,7 @@ import com.n4systems.persistence.savers.Saver;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.TemplateMailMessage;
+import org.apache.commons.lang.time.StopWatch;
 import org.apache.log4j.Logger;
 
 import javax.mail.MessagingException;
@@ -18,7 +19,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 
 public abstract class DownloadTask implements Runnable {
-	protected Logger logger = Logger.getLogger(DownloadTask.class); 
+	static Logger logger = Logger.getLogger("com.n4systems.taskscheduling");
 	
 	protected final String templateName;
 	protected final String downloadUrl;
@@ -41,15 +42,21 @@ public abstract class DownloadTask implements Runnable {
 	abstract protected void generateFile(OutputStream fileContents, User user, String downloadName) throws Exception;
 	
 	public void run() {
-		logger.info(String.format("Download Task Started [%s]", downloadLink));
-		
+		logger.info("[" + downloadLink + "]: Started " + getClass().getSimpleName());
+
+		StopWatch watch = new StopWatch();
+		watch.start();
+
 		updateDownloadLinkState(DownloadState.INPROGRESS);
 
 		File tmpFile = PathHandler.getTempFileWithExt(downloadLink.getContentType().getExtension());
-		try (OutputStream fileContents = new BufferedOutputStream(new FileOutputStream(tmpFile))) {
-			generateFile(fileContents, downloadLink.getUser(), downloadLink.getName());
+		try {
+			try (OutputStream fileContents = new BufferedOutputStream(new FileOutputStream(tmpFile))) {
+				generateFile(fileContents, downloadLink.getUser(), downloadLink.getName());
+			}
 
-			fileContents.flush();
+			logger.info("[" + downloadLink + "]: Finished " + getClass().getSimpleName() + " generate, starting S3 upload");
+
 			//Before we update the DownloadLink state, we're going to want to upload the file to S3.
 			ServiceLocator.getS3Service().uploadGeneratedReport(tmpFile, downloadLink);
 
@@ -59,23 +66,23 @@ public abstract class DownloadTask implements Runnable {
 				// we don't want exceptions coming from the notification to 
 				// hit the failure block
 				sendSuccessNotification(mailManager, downloadLink);
+				watch.stop();
+				logger.info("[" + downloadLink + "]: Completed in " + watch);
 			} catch(Exception e) {
-				logger.error("Failed to send success notification, the download has not been affected", e);
+				logger.warn("[" + downloadLink + "]: Failed to send success notification, the download has not been affected", e);
 			}
 		} catch(Exception e) {
-			logger.error("Failed to generate download", e);
+			logger.error("[" + downloadLink + "]: Failed", e);
 			
 			updateDownloadLinkState(DownloadState.FAILED);
 			try {
 				sendFailureNotification(mailManager, downloadLink, e);
 			} catch(MessagingException me) {
-				logger.error("Failed to send failure notification", me);
+				logger.error("[" + downloadLink + "]: Failed to send failure notification", me);
 			}
 		} finally {
 			tmpFile.delete();
 		}
-		
-		logger.info(String.format("Download Task Finished [%s]", downloadLink));
 	}
 	
 	private void updateDownloadLinkState(DownloadState state) {
