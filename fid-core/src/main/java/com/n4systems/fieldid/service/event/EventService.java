@@ -56,10 +56,10 @@ public class EventService extends FieldIdPersistenceService {
     @Autowired private NotifyEventAssigneeService notifyEventAssigneeService;
 
     @Transactional(readOnly = true)
-    public List<ThingEvent> getThingEventsByType(Long eventTypeId, Date from, Date to) {
+    public List<ThingEvent> getThingEventsByType(Long eventTypeId, Date from, Date to, int page, int pageSize) {
 		QueryBuilder<ThingEvent> builder = thingEventsByTypeQuery(eventTypeId, from, to);
 		builder.setOrder("completedDate", false);
-		return persistenceService.findAll(builder);
+		return persistenceService.findAll(builder, page, pageSize);
 	}
 
 	@Transactional(readOnly = true)

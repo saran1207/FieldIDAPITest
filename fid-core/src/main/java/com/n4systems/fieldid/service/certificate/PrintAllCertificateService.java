@@ -21,6 +21,7 @@ import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.mail.TemplateMailMessage;
 import com.n4systems.util.selection.MultiIdSelection;
+import com.n4systems.util.time.RateTimer;
 import net.sf.jasperreports.engine.JasperPrint;
 import org.apache.commons.lang.time.StopWatch;
 import org.apache.log4j.Logger;
@@ -34,6 +35,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -106,12 +108,10 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 
 		File outputFile = PathHandler.getTempFileWithExt("zip");
 		try {
-			StopWatch watch = new StopWatch();
-			watch.start();
-			long lastSplitTime = watch.getStartTime();
+			RateTimer timer = new RateTimer();
+			timer.start().split();
 
 			try (ZipOutputStream zipOut = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(outputFile)))) {
-				int i = 0;
 				int pageNumber = 1;
 				JasperPrint jPrint;
 				List<JasperPrint> printGroup = new ArrayList<>();
@@ -122,12 +122,11 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 						printGroup.clear();
 						pageNumber++;
 
-						watch.split();
-						long splitDiff = watch.getSplitTime() - lastSplitTime;
-						long avgRate = watch.getTime() / i;
-						long intRate = splitDiff / maxCertsPerGroup;
-						logger.info("[" + link + "]: (" + i + '/' + entityIds.size() + ") total: " + watch.toSplitString() + ", last " + maxCertsPerGroup + ": " + splitDiff + "ms, avg rate: " + avgRate + "ms/entity, interval rate: " + intRate + "ms/entity");
-						lastSplitTime = watch.getSplitTime();
+						logger.info(String.format("[%s]: (%d/%d) Elapsed: %s, Since last %d: %s, Avg Rate: %.2f ms/entity, Interval Rate: %.2f ms/entity",
+								link, timer.getCount(), entityIds.size(), timer.elapsedString(), timer.getSplitCountDiff(), timer.elapsedSinceSplitString(),
+								timer.paceAvg(TimeUnit.MILLISECONDS), timer.paceSinceSplit(TimeUnit.MILLISECONDS)));
+
+						timer.split();
 					}
 
 					jPrint = generateCertificate(eventReportType, entityId);
@@ -135,7 +134,7 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 						printGroup.add(jPrint);
 					}
 
-					i++;
+					timer.increment();
 				}
 
 				if (!printGroup.isEmpty()) {
@@ -150,10 +149,9 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 					}
 				}
 				zipOut.finish();
-				watch.split();
 			}
 
-			logger.info("[" + link + "]: Finished generating report (" + watch.toSplitString() + "), now uploading to S3");
+			logger.info("[" + link + "]: Finished generating report (" + timer.elapsedString() + "), now uploading to S3");
 			//Before we update the state of the DownloadLink, we want to shove it up into S3.  Otherwise any attempted
 			//downloads could fail if the file is big enough to present a considerable delay between update of state
 			//and arrival in the cloud.
@@ -163,8 +161,7 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 			downloadLinkService.updateState(link, DownloadState.COMPLETED);
 			sendSuccessNotification(link, downloadUrl, templateName);
 
-			watch.stop();
-			logger.info("[" + link + "]: Completed in " + watch);
+			logger.info("[" + link + "]: Completed in " + timer.elapsedString());
 		} catch (Exception e) {
 			downloadLinkService.updateState(link, DownloadState.FAILED);
 			logger.error("[" + link + "]: Failed", e);
