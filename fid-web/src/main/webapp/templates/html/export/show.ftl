@@ -41,9 +41,9 @@ ${action.setPageType('my_account', 'exportEvent')!}
 	</div>				
 	<script type="text/javascript">
 		function exportEvents() {
-            var exportButton = $('#exportButton');
-            exportButton.attr('disabled','disabled');
-            exportButton.val('<@s.text name="hbutton.pleasewait"/>');
+            var exportButton = $('exportButton');
+            exportButton.disable();
+            exportButton.setValue('<@s.text name="hbutton.pleasewait"/>');
 
             var eventTypeId = $('eventTypeId').getValue();
             var from=$('form_fromDate').getValue();
@@ -56,8 +56,8 @@ ${action.setPageType('my_account', 'exportEvent')!}
                      jQuery().colorbox({
 						 html: data,
                          onClose: function () {
-                             exportButton.val('<@s.text name="label.exportNow"/>');
-                             exportButton.removeAttr('disabled');
+                             exportButton.setValue('<@s.text name="label.exportNow"/>');
+                             exportButton.enable();
 						 }
 					 });
                 }
