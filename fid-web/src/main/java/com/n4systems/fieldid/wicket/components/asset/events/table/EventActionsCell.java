@@ -3,7 +3,9 @@ package com.n4systems.fieldid.wicket.components.asset.events.table;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.event.EditEventPage;
 import com.n4systems.fieldid.wicket.pages.event.ThingEventSummaryPage;
+import com.n4systems.fieldid.wicket.pages.masterevent.EditMasterEventPage;
 import com.n4systems.model.Event;
 import com.n4systems.model.ThingEvent;
 import org.apache.wicket.AttributeModifier;
@@ -19,9 +21,15 @@ public class EventActionsCell extends Panel {
         Event event = eventModel.getObject();
 
         WebMarkupContainer menu = new WebMarkupContainer("menu");
-        
-        NonWicketLink editLink;
-        menu.add(editLink = new NonWicketLink("editLink", "selectEventEdit.action?uniqueID=" + event.getID()));
+
+        BookmarkablePageLink editLink;
+
+        if (!event.getType().isActionEventType() && ((ThingEvent)event).getThingType().isMaster()) {
+            menu.add(editLink = new BookmarkablePageLink<EditEventPage>("editLink", EditMasterEventPage.class, PageParametersBuilder.uniqueId(event.getId())));
+        } else {
+            menu.add(editLink = new BookmarkablePageLink<EditEventPage>("editLink", EditEventPage.class, PageParametersBuilder.uniqueId(event.getId())));
+        }
+
         editLink.setVisible(FieldIDSession.get().getSessionUser().hasAccess("editevent"));
 
         //TODO replace this with the handleDownload once WEB-5997 is completed
