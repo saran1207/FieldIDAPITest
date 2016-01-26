@@ -5,6 +5,7 @@ import com.n4systems.fieldid.service.procedure.LotoReportService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.procedure.SvgGenerationService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -58,9 +59,16 @@ public class PublishedProcedureActionsCell extends Panel {
 
         procedureDefinition = proDef.getObject();
 
+        Boolean hasAuthorEditProcedures = FieldIDSession.get().getUserSecurityGuard().isAllowedAuthorEditProcedure();
+        Boolean hasMaintainLotoSchedule = FieldIDSession.get().getUserSecurityGuard().isAllowedMaintainLotoSchedule();
+        Boolean hasProcedureAudit = FieldIDSession.get().getUserSecurityGuard().isAllowedProcedureAudit();
+        Boolean hasPublishedProcedureDefinition = procedureDefinitionService.hasPublishedProcedureDefinition(procedureDefinition.getAsset());
+
         FIDModalWindow modal;
         add(modal = new FIDModalWindow("modal", getDefaultModel(), 600, 200));
         modal.setTitle(new FIDLabelModel("message.downloadbeinggenerated"));
+
+        WebMarkupContainer optionsContainer = new WebMarkupContainer("optionsContainer");
 
         Link reviseLink = new Link("reviseLink") {
             @Override
@@ -71,27 +79,14 @@ public class PublishedProcedureActionsCell extends Panel {
             }
         };
 
-        if (procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED)) {
-            reviseLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(procedureDefinition.getAsset()));
-        } else if (procedureDefinition.getPublishedState().equals(PublishedState.PREVIOUSLY_PUBLISHED)) {
-            reviseLink.setVisible(true);
-        } else {
-            reviseLink.setVisible(false);
-        }
+        reviseLink.setVisible(hasPublishedProcedureDefinition);
 
         reviseLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.revise"), TipsyBehavior.Gravity.E));
 
-        if(procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED)) {
-            reviseLink.add(new Label("label", new FIDLabelModel("label.revise")));
-            reviseLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.revise"), TipsyBehavior.Gravity.E));
-        } else {
-            reviseLink.add(new Label("label", new FIDLabelModel("label.restore")));
-            reviseLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.restore"), TipsyBehavior.Gravity.E));
-        }
+        reviseLink.add(new Label("label", new FIDLabelModel("label.revise")));
+        reviseLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.revise"), TipsyBehavior.Gravity.E));
 
-        add(reviseLink);
-
-        WebMarkupContainer optionsContainer = new WebMarkupContainer("optionsContainer");
+        optionsContainer.add(reviseLink);
 
         Link copyLink = new Link("copyLink") {
             @Override
@@ -101,8 +96,7 @@ public class PublishedProcedureActionsCell extends Panel {
                 setResponsePage(new ProcedureDefinitionPage(Model.of(copiedDefinition), true));
             }
         };
-        copyLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(procedureDefinition.getAsset())
-                && procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED));
+        copyLink.setVisible(hasPublishedProcedureDefinition);
         copyLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.copy"), TipsyBehavior.Gravity.E));
         copyLink.add(new Label("label", new FIDLabelModel("label.copy")));
         optionsContainer.add(copyLink);
@@ -139,7 +133,7 @@ public class PublishedProcedureActionsCell extends Panel {
                 }
             }
         };
-        unpublishLink.setVisible(showUnpublished  && procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED));
+        unpublishLink.setVisible(showUnpublished);
         optionsContainer.add(unpublishLink);
 
         Link draftLink = new Link("draftLink") {
@@ -149,8 +143,7 @@ public class PublishedProcedureActionsCell extends Panel {
                 setResponsePage(new DraftListAllPage(publishedDef.getProcedureCode(), publishedDef.getAsset(), true, false));
             }
         };
-        draftLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(procedureDefinition.getAsset())
-                && procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED));
+        draftLink.setVisible(hasPublishedProcedureDefinition);
 
 
         optionsContainer.add(draftLink);
@@ -163,31 +156,40 @@ public class PublishedProcedureActionsCell extends Panel {
                 setResponsePage(new PreviouslyPublishedListAllPage(publishedDef.getProcedureCode(), publishedDef.getAsset(), true, false));
             }
         };
-        previouslyPublishedLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(procedureDefinition.getAsset())
+        previouslyPublishedLink.setVisible(hasPublishedProcedureDefinition
                 && procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED));
 
 
         optionsContainer.add(previouslyPublishedLink);
 
-        Link recurringSchedulesLink = new Link("recurringSchedulesLink") {
-            @Override
-            public void onClick() {
-                setResponsePage(RecurringLotoSchedulesPage.class, PageParametersBuilder.uniqueId(procedureDefinition.getAsset().getId()));
-            }
-        };
-        recurringSchedulesLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(procedureDefinition.getAsset())
-                && procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED));
+        Link recurringSchedulesLink = getRecurringScheduleLink("recurringSchedulesLink", hasPublishedProcedureDefinition);
+        recurringSchedulesLink.setVisible(hasMaintainLotoSchedule || hasProcedureAudit);
 
         optionsContainer.add(recurringSchedulesLink);
 
 
         add(optionsContainer);
 
-        optionsContainer.setVisible(reviseLink.isVisible() || copyLink.isVisible() || unpublishLink.isVisible()
-                || draftLink.isVisible() || previouslyPublishedLink.isVisible());
+        optionsContainer.setVisible(hasAuthorEditProcedures);
 
+        Link recurringSchedulesLink2 = getRecurringScheduleLink("recurringSchedulesLink2", hasPublishedProcedureDefinition);
 
+        recurringSchedulesLink2.setVisible(!hasAuthorEditProcedures && (hasMaintainLotoSchedule || hasProcedureAudit));
+
+        add(recurringSchedulesLink2);
         //Add the print buttons
-        add(new LotoPrintoutOptionsContainer("optionsContainer2", procedureDefinition, modal));
+        add(new LotoPrintoutOptionsContainer("printOptionsContainer", procedureDefinition, modal));
+    }
+
+    private Link getRecurringScheduleLink(String id, Boolean hasPublishedProcedureDefinition) {
+        Link recurringSchedulesLink = new Link(id) {
+            @Override
+            public void onClick() {
+                setResponsePage(RecurringLotoSchedulesPage.class, PageParametersBuilder.uniqueId(procedureDefinition.getAsset().getId()));
+            }
+        };
+        recurringSchedulesLink.setVisible(hasPublishedProcedureDefinition
+                && procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED));
+        return recurringSchedulesLink;
     }
 }

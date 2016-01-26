@@ -93,6 +93,24 @@ public class Permissions {
 			return MANAGE_SAFETY_NETWORK;
 		} else if (safeName.equals("editassetdetails")) {
 			return EDIT_ASSET_DETAILS;
+		} else if (safeName.equals("authoreditprocedure")) {
+			return AUTHOR_EDIT_PROCEDURE;
+		} else if (safeName.equals("certifyprocedure")) {
+			return CERTIFY_PROCEDURE;
+		} else if (safeName.equals("deleteprocedure")) {
+			return DELETE_PROCEDURE;
+		} else if (safeName.equals("maintainschedule")) {
+			return MAINTAIN_LOTO_SCHEDULE;
+		} else if (safeName.equals("performprocedure")) {
+			return PERFORM_PROCEDURE;
+		} else if (safeName.equals("printprocedure")) {
+			return PRINT_PROCEDURE;
+		} else if (safeName.equals("procedureaudit")) {
+			return PROCEDURE_AUDIT;
+		} else if (safeName.equals("unpublishprocedure")) {
+			return UNPUBLISH_PROCEDURE;
+
+
 		} else {
 			throw new InvalidPermission("Unknown permission name [" + permissionName + "]");
 		}

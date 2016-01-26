@@ -5,6 +5,8 @@ import com.n4systems.fieldid.service.procedure.LotoReportService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.procedure.SvgGenerationService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
@@ -12,10 +14,13 @@ import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPag
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
 import org.apache.log4j.Logger;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -50,6 +55,9 @@ public class DraftProcedureActionsCell extends Panel {
 
         final ProcedureDefinition procedureDefinition = proDef.getObject();
 
+        Boolean hasAuthorEditProcedures = FieldIDSession.get().getUserSecurityGuard().isAllowedAuthorEditProcedure();
+        Boolean hasDeleteProcedures = FieldIDSession.get().getUserSecurityGuard().isAllowedDeleteProcedure();
+
         FIDModalWindow modal;
         add(modal = new FIDModalWindow("modal", getDefaultModel(), 700, 150));
         modal.setTitle(new FIDLabelModel("message.downloadbeinggenerated"));
@@ -58,40 +66,51 @@ public class DraftProcedureActionsCell extends Panel {
         params.add("id", procedureDefinition.getId());
         params.add("isCopyOrRevise", "true");
 
-        BookmarkablePageLink<Void> editLink = new BookmarkablePageLink<Void>("editLink", ProcedureDefinitionPage.class, params) {
-        };
-        editLink.setVisible(procedureDefinition.getPublishedState().equals(PublishedState.DRAFT));
 
-        add(editLink);
+        WebMarkupContainer primaryActionLink;
 
-        WebMarkupContainer optionsContainer = new WebMarkupContainer("optionsContainer");
+        if (hasAuthorEditProcedures) {
+            //edit
+            primaryActionLink = new BookmarkablePageLink<>("primaryActionLink", ProcedureDefinitionPage.class, params);
+            primaryActionLink.add(new FlatLabel("label", new FIDLabelModel("label.edit")));
+        } else if (!hasAuthorEditProcedures && hasDeleteProcedures) {
+            //delete only
+            primaryActionLink = getDeleteLink("primaryActionLink", procedureListPanel, procedureDefinition);
+            primaryActionLink.add(new FlatLabel("label", new FIDLabelModel("label.delete")));
+            primaryActionLink.setVisible(procedureDefinitionService.isCurrentUserAuthor(procedureDefinition));
+        } else {
+            //no actions
+            primaryActionLink = new WebMarkupContainer("primaryActionLink");
+            primaryActionLink.setVisible(false);
+        }
+        add(primaryActionLink);
 
-        AjaxLink<Void> deleteLink = new AjaxLink<Void>("deleteLink") {
+        AjaxLink<Void> deleteLink = getDeleteLink("deleteLink", procedureListPanel, procedureDefinition);
 
-            @Override
-            public void onClick(AjaxRequestTarget target) {
+        deleteLink.setVisible(procedureDefinitionService.isCurrentUserAuthor(procedureDefinition) &&  hasAuthorEditProcedures && hasDeleteProcedures);
 
-                try {
-                    procedureDefinitionService.deleteProcedureDefinition(procedureDefinition);
-                    info(new FIDLabelModel("message.procedure_definitions.delete").getObject());
-                    target.add(procedureListPanel);
-                    target.add(((FieldIDTemplatePage) getPage()).getTopFeedbackPanel());
-                } catch (Exception e) {
-                    error(new FIDLabelModel("error.delete_procedure_definition").getObject());
-                    target.add(procedureListPanel.getErrorFeedbackPanel());
-                }
-            }
-        };
-
-        deleteLink.setVisible(procedureDefinitionService.isCurrentUserAuthor(procedureDefinition) && procedureDefinition.getPublishedState().equals(PublishedState.DRAFT));
-
-        optionsContainer.add(deleteLink);
-
-        add(optionsContainer);
-
-        optionsContainer.setVisible(deleteLink.isVisible());
+        add(deleteLink);
 
         //Add the print buttons
-        add(new LotoPrintoutOptionsContainer("optionsContainer2", procedureDefinition, modal));
+        add(new LotoPrintoutOptionsContainer("printOptionsContainer", procedureDefinition, modal));
+    }
+
+    private AjaxLink<Void> getDeleteLink(String id, final ProcedureListPanel procedureListPanel, final ProcedureDefinition procedureDefinition) {
+        return new AjaxLink<Void>(id) {
+
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+
+                    try {
+                        procedureDefinitionService.deleteProcedureDefinition(procedureDefinition);
+                        info(new FIDLabelModel("message.procedure_definitions.delete").getObject());
+                        target.add(procedureListPanel);
+                        target.add(((FieldIDTemplatePage) getPage()).getTopFeedbackPanel());
+                    } catch (Exception e) {
+                        error(new FIDLabelModel("error.delete_procedure_definition").getObject());
+                        target.add(procedureListPanel.getErrorFeedbackPanel());
+                    }
+                }
+            };
     }
 }

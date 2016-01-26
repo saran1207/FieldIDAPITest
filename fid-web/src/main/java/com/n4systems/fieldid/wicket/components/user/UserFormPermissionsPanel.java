@@ -24,6 +24,7 @@ import java.util.List;
 public class UserFormPermissionsPanel extends Panel {
 
     private List<Permission> permissions;
+    private List<Permission> lotoPermissions;
 
     private IModel<User> userModel;
 
@@ -56,8 +57,8 @@ public class UserFormPermissionsPanel extends Panel {
                     protected void onUpdate(AjaxRequestTarget target) {
                         Permission updatedPermission = new Permission(permission.id, permission.label, selection.getObject());
                         int index = item.getIndex();
-                        permissions.remove(index);
-                        permissions.add(index, updatedPermission);
+                        permissionList.remove(index);
+                        permissionList.add(index, updatedPermission);
                     }
                 });
                 group.add(new Radio<>("on", new Model<>(Boolean.TRUE)));
@@ -82,13 +83,13 @@ public class UserFormPermissionsPanel extends Panel {
             permissionList.addAll(Permissions.getVisibleSystemUserInspectionPermissions());
         }
 
-        getPermissionsList(permissionList, permField);
+        permissions = getPermissionsList(permissionList, permField);
 
-        return this.permissions;
+        return permissions;
     }
 
     private List<Permission> getLotoPermissionsList(IModel<User> userModel) {
-        permissions = Lists.newArrayList();
+        lotoPermissions = Lists.newArrayList();
         List<Integer> permissionList = Lists.newArrayList();
         User user = userModel.getObject();
         BitField permField = new BitField(user.isNew() ? 0 : user.getPermissions());
@@ -101,21 +102,32 @@ public class UserFormPermissionsPanel extends Panel {
             permissionList.addAll(Permissions.getVisibleSystemUserLotoPermissions());
         }
 
-        getPermissionsList(permissionList, permField);
+        lotoPermissions = getPermissionsList(permissionList, permField);
 
-        return permissions;
+        return lotoPermissions;
     }
 
 
-    private void getPermissionsList(List<Integer> permissionList, BitField permField) {
+    private List<Permission> getPermissionsList(List<Integer> permissionList, BitField permField) {
+        List<Permission> permissions = Lists.newArrayList();
         for (int permission: permissionList) {
             permissions.add(new Permission(permission, Permissions.getLabel(permission), permField.isSet(permission)));
         }
+        return permissions;
+    }
+
+    private List<Permission> getAllPermissions() {
+        List<Permission> allPermissions = Lists.newArrayList();
+        allPermissions.addAll(permissions);
+        if (lotoPermissions != null && !lotoPermissions.isEmpty()) {
+            allPermissions.addAll(lotoPermissions);
+        }
+        return allPermissions;
     }
 
     public int getPermissions() {
         BitField perms = new BitField();
-        for (Permission permission: permissions) {
+        for (Permission permission: getAllPermissions()) {
             if(permission.enabled) {
                 perms.set(permission.id);
             }
