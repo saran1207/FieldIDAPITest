@@ -44,4 +44,44 @@ public class SessionUserSecurityGuard implements UserSecurityGuard {
 		return Permissions.hasOneOf(permissions, Permissions.MANAGE_SYSTEM_USERS);
 	}
 
+	@Override
+	public boolean isAllowedAuthorEditProcedure() {
+		return Permissions.hasOneOf(permissions, Permissions.AUTHOR_EDIT_PROCEDURE);
+	}
+
+	@Override
+	public boolean isAllowedCertifyProcedure() {
+		return Permissions.hasOneOf(permissions, Permissions.CERTIFY_PROCEDURE);
+	}
+
+	@Override
+	public boolean isAllowedDeleteProcedure() {
+		return Permissions.hasOneOf(permissions, Permissions.DELETE_PROCEDURE);
+	}
+
+	@Override
+	public boolean isAllowedMaintainLotoSchedule() {
+		return Permissions.hasOneOf(permissions, Permissions.MAINTAIN_LOTO_SCHEDULE);
+	}
+
+	@Override
+	public boolean isAllowedPerformProcedure() {
+		return Permissions.hasOneOf(permissions, Permissions.PERFORM_PROCEDURE);
+	}
+
+	@Override
+	public boolean isAllowedPrintProcedure() {
+		return Permissions.hasOneOf(permissions, Permissions.PRINT_PROCEDURE);
+	}
+
+	@Override
+	public boolean isAllowedProcedureAudit() {
+		return Permissions.hasOneOf(permissions, Permissions.PROCEDURE_AUDIT);
+	}
+
+	@Override
+	public boolean isAllowedUnpublishProcedure() {
+		return Permissions.hasOneOf(permissions, Permissions.UNPUBLISH_PROCEDURE);
+	}
+
 }
