@@ -19,7 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemUsers})
+@Deprecated
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_USERS})
 public class EmployeeCrud extends UserCrud {
 	private static final long serialVersionUID = 1L;
 	

@@ -15,7 +15,7 @@ import com.n4systems.util.ConfigEntry;
 import java.util.ArrayList;
 import java.util.List;
 
-@UserPermissionFilter(userRequiresOneOf = { Permissions.ManageSafetyNetwork })
+@UserPermissionFilter(userRequiresOneOf = { Permissions.MANAGE_SAFETY_NETWORK})
 public class SafetyNetwork extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 

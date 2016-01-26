@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("serial")
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_CONFIG})
 public class AutoAttributeExportAction extends AbstractImportAction {
 	private Logger logger = Logger.getLogger(AutoAttributeExportAction.class);
 	

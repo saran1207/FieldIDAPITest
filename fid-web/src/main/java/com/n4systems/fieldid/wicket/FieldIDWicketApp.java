@@ -6,6 +6,8 @@ import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.OopsPage;
 import com.n4systems.fieldid.wicket.pages.SecretTestPage;
 import com.n4systems.fieldid.wicket.pages.SelectLanguagePage;
+import com.n4systems.fieldid.wicket.pages.useraccount.notificationsettings.AddEditNotificationSettingPage;
+import com.n4systems.fieldid.wicket.pages.useraccount.notificationsettings.NotificationSettingsListPage;
 import com.n4systems.fieldid.wicket.pages.admin.adminusers.AdminUserPage;
 import com.n4systems.fieldid.wicket.pages.admin.config.ConfigPage;
 import com.n4systems.fieldid.wicket.pages.admin.connections.ConnectionViewPage;
@@ -82,7 +84,7 @@ import com.n4systems.fieldid.wicket.pages.setup.userregistration.UserRequestList
 import com.n4systems.fieldid.wicket.pages.setup.userregistration.ViewUserRequestPage;
 import com.n4systems.fieldid.wicket.pages.template.*;
 import com.n4systems.fieldid.wicket.pages.trends.CriteriaTrendsPage;
-import com.n4systems.fieldid.wicket.pages.useraccount.MobileOfflineProfilePage;
+import com.n4systems.fieldid.wicket.pages.useraccount.mobileofflineprofile.MobileOfflineProfilePage;
 import com.n4systems.fieldid.wicket.pages.useraccount.UserAccountSearchPage;
 import com.n4systems.fieldid.wicket.resources.CacheInSessionLocalizer;
 import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
@@ -196,7 +198,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/eventStatusForm", EventStatusFormPage.class);
 
         mountPage("setup/actionEmailCustomization", ActionEmailSetupPage.class);
-
+        mountPage("setup/notificationsList", NotificationSettingsListPage.class);
+        mountPage("setup/addEditNotifications", AddEditNotificationSettingPage.class);
 
         mountPage("places", OrgViewPage.class);
         mountPage("placeSummary", PlaceSummaryPage.class);

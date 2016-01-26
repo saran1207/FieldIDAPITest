@@ -27,6 +27,7 @@ import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.SimpleListable;
 import com.opensymphony.xwork2.validator.annotations.VisitorFieldValidator;
 
+@Deprecated
 public class NotificationSettingsCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(NotificationSettingsCrud.class);

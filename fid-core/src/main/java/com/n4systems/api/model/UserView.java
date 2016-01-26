@@ -344,28 +344,28 @@ public class UserView extends ExternalModelView {
 		// ie. it doesn't check to see if the account type actually allows for these permissions.
 		int permissions = Permissions.NO_PERMISSIONS;
 		if (isPermission(getManageSystemConfiguration())) {
-			permissions |= Permissions.ManageSystemConfig;		
+			permissions |= Permissions.MANAGE_SYSTEM_CONFIG;
 		}
 		if (isPermission(getManageSystemUsers())) {
-			permissions |= Permissions.ManageSystemUsers;		
+			permissions |= Permissions.MANAGE_SYSTEM_USERS;
 		}
 		if (isPermission(getManageJobs())) {
-			permissions |= Permissions.ManageJobs;		
+			permissions |= Permissions.MANAGE_JOBS;
 		}
 		if (isPermission(getManageJobSites())) {
-			permissions |= Permissions.ManageEndUsers;		
+			permissions |= Permissions.MANAGE_END_USERS;
 		}
 		if (isPermission(getManageSafetyNetwork())) {
-			permissions |= Permissions.ManageSafetyNetwork;		
+			permissions |= Permissions.MANAGE_SAFETY_NETWORK;
 		}
 		if (isPermission(getIdentifyAssets())) {
-			permissions |= Permissions.Tag;					
+			permissions |= Permissions.TAG;
 		}
 		if (isPermission(getCreateEvents())) {
-			permissions |= Permissions.CreateEvent;		
+			permissions |= Permissions.CREATE_EVENT;
 		}
 		if (isPermission(getEditEvents())) {
-			permissions |= Permissions.EditEvent;		
+			permissions |= Permissions.EDIT_EVENT;
 		}
 		return permissions;
 	}

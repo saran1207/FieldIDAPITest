@@ -256,7 +256,16 @@ public class ReportService extends SearchService<EventReportCriteria, ThingEvent
                     sortColumn.setSortExpression(newSortExpressions.substring(0, newSortExpressions.length()-1));
                 }
             } else {
-                sortColumn.setSortExpression(null);
+                String[] sortExpressions = sortColumn.getSortExpression().split(",");
+                String newSortExpressions = "";
+                for(String sortExpression : sortExpressions) {
+                    if(sortExpression.startsWith("event.")) {
+                        newSortExpressions = sortExpression.substring(sortExpression.indexOf('.') + 1 );
+                    }
+                }
+                if(!newSortExpressions.isEmpty()) {
+                    sortColumn.setSortExpression(newSortExpressions.substring(0, newSortExpressions.length()));
+                }
             }
             super.addSortTerms(criteriaModel, searchBuilder, sortColumn, sortDirection);
         }

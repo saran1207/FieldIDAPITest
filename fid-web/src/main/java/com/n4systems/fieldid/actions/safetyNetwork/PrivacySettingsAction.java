@@ -7,7 +7,7 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.security.Permissions;
 
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SAFETY_NETWORK})
 public class PrivacySettingsAction extends SafetyNetwork {
 	private static final long serialVersionUID = 1L;
 	

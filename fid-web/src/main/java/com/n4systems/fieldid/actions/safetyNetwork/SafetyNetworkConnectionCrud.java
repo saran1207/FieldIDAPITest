@@ -13,7 +13,7 @@ import com.n4systems.services.safetyNetwork.CatalogServiceImpl;
 import com.n4systems.tools.Pager;
 
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SAFETY_NETWORK})
 public class SafetyNetworkConnectionCrud extends AbstractAction {
 	private static final long serialVersionUID = 1L;
 	

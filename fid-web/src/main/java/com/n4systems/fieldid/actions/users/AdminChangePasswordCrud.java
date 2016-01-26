@@ -8,7 +8,7 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemUsers})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_USERS})
 public class AdminChangePasswordCrud extends ChangePasswordCrud {
 	private static final long serialVersionUID = 1L;
 	

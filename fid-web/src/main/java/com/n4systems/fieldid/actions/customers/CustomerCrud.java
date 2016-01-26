@@ -30,8 +30,9 @@ import java.io.File;
 import java.net.URL;
 import java.util.List;
 
+@Deprecated
 @Validation
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageEndUsers})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_END_USERS})
 public class CustomerCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	private static final int CRUD_RESULTS_PER_PAGE = 20;

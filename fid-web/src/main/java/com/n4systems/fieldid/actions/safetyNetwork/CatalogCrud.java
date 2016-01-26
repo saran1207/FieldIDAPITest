@@ -21,7 +21,7 @@ import com.n4systems.services.safetyNetwork.CatalogServiceImpl;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SAFETY_NETWORK})
 public class CatalogCrud extends SafetyNetwork {
 
 	private static final long serialVersionUID = 1L;

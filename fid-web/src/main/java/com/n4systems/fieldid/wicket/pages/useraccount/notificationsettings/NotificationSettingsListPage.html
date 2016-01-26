@@ -1,0 +1,28 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+
+    <a class="btn-secondary" wicket:id="addNotificationLink"><wicket:message key="label.addnotificationsetting"/></a>
+
+    <table class="list borders comfortable">
+        <tr>
+            <th><wicket:message key="label.name"/></th>
+            <th><wicket:message key="label.sent"/></th>
+            <th><wicket:message key="label.events_starting"/></th>
+            <th><wicket:message key="label.for_the_next"/></th>
+            <th>&nbsp;</th>
+        </tr>
+        <tr wicket:id="notificationSetting">
+            <td><span wicket:id="name"/></td>
+            <td><span wicket:id="frequency"/></td>
+            <td><span wicket:id="start"/></td>
+            <td><span wicket:id="end"/></td>
+            <td>
+                <a class="btn-secondary" wicket:id="editLink"><wicket:message key="label.edit"/></a>
+                <a class="btn-secondary" wicket:id="deleteLink"><wicket:message key="label.delete"/></a>
+            </td>
+        </tr>
+    </table>
+
+
+</wicket:extend>
+</html>

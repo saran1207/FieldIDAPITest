@@ -13,7 +13,7 @@ import com.n4systems.model.location.PredefinedLocationLevels;
 import com.n4systems.model.location.PredefinedLocationLevelsSaver;
 import com.n4systems.security.Permissions;
 
-@UserPermissionFilter(userRequiresOneOf = { Permissions.ManageSystemConfig })
+@UserPermissionFilter(userRequiresOneOf = { Permissions.MANAGE_SYSTEM_CONFIG})
 public class PredefinedLocationLevelsCrud extends AbstractCrud {
 
 	private PredefinedLocationLevels predefinedLocationLevels;

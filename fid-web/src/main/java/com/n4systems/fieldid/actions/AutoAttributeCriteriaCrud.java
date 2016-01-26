@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_CONFIG})
 public class AutoAttributeCriteriaCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 
@@ -65,7 +65,7 @@ public class AutoAttributeCriteriaCrud extends AbstractCrud {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.TAG})
 	public String doShow() {
 
 		if (autoAttributeCriteria == null || autoAttributeCriteria.isNew()) {

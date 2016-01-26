@@ -34,14 +34,14 @@ public class UserToViewConverter implements ModelToViewConverter<User, UserView>
 		view.setGlobalId(model.getGlobalId());
         view.setUserGroup(model.getGroups().isEmpty() ? null : UserView.getUserGroupNames(model.getGroups()));
 		// permissions...
-		view.setIdentifyAssets(getPermissionYNString(model, Permissions.Tag));
-		view.setManageSystemConfiguration(getPermissionYNString(model, Permissions.ManageSystemConfig));
-		view.setManageSystemUsers(getPermissionYNString(model, Permissions.ManageSystemUsers));
-		view.setManageJobSites(getPermissionYNString(model, Permissions.ManageEndUsers));
-		view.setCreateEvents(getPermissionYNString(model, Permissions.CreateEvent));
-		view.setEditEvents(getPermissionYNString(model, Permissions.EditEvent));
-		view.setManageJobs(getPermissionYNString(model, Permissions.ManageJobs));
-		view.setManageSafetyNetwork(getPermissionYNString(model, Permissions.ManageSafetyNetwork));
+		view.setIdentifyAssets(getPermissionYNString(model, Permissions.TAG));
+		view.setManageSystemConfiguration(getPermissionYNString(model, Permissions.MANAGE_SYSTEM_CONFIG));
+		view.setManageSystemUsers(getPermissionYNString(model, Permissions.MANAGE_SYSTEM_USERS));
+		view.setManageJobSites(getPermissionYNString(model, Permissions.MANAGE_END_USERS));
+		view.setCreateEvents(getPermissionYNString(model, Permissions.CREATE_EVENT));
+		view.setEditEvents(getPermissionYNString(model, Permissions.EDIT_EVENT));
+		view.setManageJobs(getPermissionYNString(model, Permissions.MANAGE_JOBS));
+		view.setManageSafetyNetwork(getPermissionYNString(model, Permissions.MANAGE_SAFETY_NETWORK));
 
 		return view;
 	}

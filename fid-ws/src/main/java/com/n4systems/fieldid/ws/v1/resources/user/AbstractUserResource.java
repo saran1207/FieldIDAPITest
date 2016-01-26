@@ -53,9 +53,9 @@ public abstract class AbstractUserResource extends SetupDataResource<ApiUser, Us
 		apiUser.setUserType(user.getUserType().name());
 		apiUser.setHashPassword(user.getHashPassword());
 		apiUser.setHashSecurityCardNumber(user.getHashSecurityCardNumber());
-		apiUser.setCreateEventEnabled(Permissions.hasOneOf(user, Permissions.CreateEvent));
-		apiUser.setEditEventEnabled(Permissions.hasOneOf(user, Permissions.EditEvent));
-		apiUser.setIdentifyEnabled(Permissions.hasOneOf(user, Permissions.Tag));
+		apiUser.setCreateEventEnabled(Permissions.hasOneOf(user, Permissions.CREATE_EVENT));
+		apiUser.setEditEventEnabled(Permissions.hasOneOf(user, Permissions.EDIT_EVENT));
+		apiUser.setIdentifyEnabled(Permissions.hasOneOf(user, Permissions.TAG));
 		apiUser.setTenant(apiTenantResource.convertEntityToApiModel(user.getOwner().getPrimaryOrg()));
 		apiUser.setIdentifier(user.getIdentifier());
 		apiUser.setGroupIds(convertGroups(user.getGroups()));

@@ -30,7 +30,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @ExtendedFeatureFilter(requiredFeature = ExtendedFeature.Projects)
-@UserPermissionFilter(userRequiresOneOf = { Permissions.ManageJobs })
+@UserPermissionFilter(userRequiresOneOf = { Permissions.MANAGE_JOBS})
 public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValidator {
 
 	private static final long serialVersionUID = 1L;

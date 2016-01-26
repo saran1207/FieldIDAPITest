@@ -9,6 +9,7 @@ import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.notificationsettings.UpcomingEventReport;
 import com.n4systems.model.user.User;
 
+@Deprecated
 public class NotificationSettingViewModelConverter {
 	
 	private final Tenant tenant;
@@ -43,19 +44,19 @@ public class NotificationSettingViewModelConverter {
 			view.setCreatedTimeStamp(model.getCreated().getTime());
 		}
 		
-		view.setAssetTypeGroupId(model.getAssetTypeGroup());
-		view.setEventTypeGroupId(model.getEventTypeGroup());
+		view.setAssetTypeGroupId(model.getAssetTypeGroup().getId());
+		view.setEventTypeGroupId(model.getEventTypeGroup().getId());
 		
-		if (!model.getAssetTypes().isEmpty()) {
+		if (model.getAssetType() != null) {
 			// we only support a single asset type right now
-			view.setAssetTypeId(model.getAssetTypes().get(0));
+			view.setAssetTypeId(model.getAssetType().getId());
 		}
 		
-		view.setAssetStatus(model.getAssetStatus());
+		view.setAssetStatus(model.getAssetStatus().getId());
 		
-		if (!model.getEventTypes().isEmpty()) {
+		if (model.getEventType() != null) {
 			// we only support a single event type right now
-			view.setEventTypeId(model.getEventTypes().get(0));
+			view.setEventTypeId(model.getEventType().getId());
 		}
 		
 		view.getAddresses().addAll(model.getAddresses());
@@ -87,18 +88,18 @@ public class NotificationSettingViewModelConverter {
 			model.setCreated(new Date(view.getCreatedTimeStamp()));
 		}
 		
-		model.setAssetTypeGroup(view.getAssetTypeGroupId());
+		//model.setAssetTypeGroup(view.getAssetTypeGroupId());
 
-		model.setEventTypeGroup(view.getEventTypeGroupId());
+		//model.setEventTypeGroup(view.getEventTypeGroupId());
 		
 		if (view.getAssetTypeId() != null) {
-			model.getAssetTypes().add(view.getAssetTypeId());
+			//model.getAssetTypes().add(view.getAssetTypeId());
 		}
 		
-		model.setAssetStatus(view.getAssetStatus());
+		//model.setAssetStatus(view.getAssetStatus());
 		
 		if (view.getEventTypeId() != null) {
-			model.getEventTypes().add(view.getEventTypeId());
+			//model.getEventTypes().add(view.getEventTypeId());
 		}
 		
 		

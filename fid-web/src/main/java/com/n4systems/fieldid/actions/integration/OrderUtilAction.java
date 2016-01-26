@@ -22,7 +22,7 @@ import com.n4systems.plugins.PluginFactory;
 import com.n4systems.plugins.integration.OrderResolver;
 import com.n4systems.security.Permissions;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
+@UserPermissionFilter(userRequiresOneOf={Permissions.TAG})
 public class OrderUtilAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(OrderUtilAction.class);

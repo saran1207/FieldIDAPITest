@@ -17,7 +17,8 @@ import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageEndUsers})
+@Deprecated
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_END_USERS})
 public class CustomersUserCrud extends ReadOnlyUserCrud {
 	private static final long serialVersionUID = 1L;
 	

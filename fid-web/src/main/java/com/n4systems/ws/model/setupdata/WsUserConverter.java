@@ -19,8 +19,8 @@ public class WsUserConverter extends WsModelConverter<User, WsUser> {
 		wsModel.setUserId(model.getUserID());
 		wsModel.setHashPassword(model.getHashPassword());
 		wsModel.setHashSecurityCardNumber(model.getHashSecurityCardNumber());
-		wsModel.setAllowedToIdentify(permField.isSet(Permissions.Tag));
-		wsModel.setAllowedToInspect(permField.isSet(Permissions.CreateEvent));
+		wsModel.setAllowedToIdentify(permField.isSet(Permissions.TAG));
+		wsModel.setAllowedToInspect(permField.isSet(Permissions.CREATE_EVENT));
 		wsModel.setAttachedToPrimaryOrg(model.getOwner().getInternalOrg().isPrimary());		
 		wsModel.setOwnerId(model.getOwner().getId());
 		wsModel.setFirstName(model.getFirstName());

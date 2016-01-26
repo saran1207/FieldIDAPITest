@@ -16,7 +16,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import javax.mail.MessagingException;
 
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SAFETY_NETWORK})
 public class SendInvitationAction extends SafetyNetwork {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(SendInvitationAction.class);

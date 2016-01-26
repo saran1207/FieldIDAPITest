@@ -17,6 +17,22 @@
                     <div><input class="permissionOff"  wicket:id="off" type="radio"/></div>
                 </td>
             </tr>
+            <tr wicket:enclosure="lotoPermissions">
+                <th>
+                    <wicket:message key="label.loto_permissions"/>
+                </th>
+                <th>
+                    <div><wicket:message key="label.on"/></div>
+                    <div><wicket:message key="label.off"/></div>
+                </th>
+            </tr>
+            <tr wicket:id="lotoPermissions">
+                <td wicket:id="name"/>
+                <td wicket:id="group">
+                    <div><input class="permissionOn" wicket:id="on" type="radio"/></div>
+                    <div><input class="permissionOff"  wicket:id="off" type="radio"/></div>
+                </td>
+            </tr>
             <tr>
                 <td>&nbsp;</td>
                 <td>

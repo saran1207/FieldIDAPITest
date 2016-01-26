@@ -94,7 +94,7 @@ public class SubEventCrud extends EventCrud {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CREATE_EVENT})
 	public String doAdd() {
 		if (masterEventHelper == null) {
 			addActionErrorText("error.nomasterevent");
@@ -182,7 +182,7 @@ public class SubEventCrud extends EventCrud {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.EditEvent})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.EDIT_EVENT})
 	public String doEdit() {
 		if (masterEventHelper == null) {
 			addActionErrorText("error.nomasterevent");
@@ -195,13 +195,13 @@ public class SubEventCrud extends EventCrud {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CREATE_EVENT})
 	public String doStoreNewSubEvent() throws Exception {
 		return storeSubEvent();
 	}
 	
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.EditEvent})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.EDIT_EVENT})
 	public String doStoreExistingSubEvent() throws Exception {
 		return storeSubEvent();
 	}
@@ -252,12 +252,12 @@ public class SubEventCrud extends EventCrud {
 		return SUCCESS;
 	}
 
-	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CREATE_EVENT})
 	public String doStoreNewMasterEvent() throws Exception {
 		return storeMasterEvent();
 	}
 	
-	@UserPermissionFilter(userRequiresOneOf={Permissions.EditEvent})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.EDIT_EVENT})
 	public String doStoreExistingMasterEvent() throws Exception {
 		return storeMasterEvent();
 	}

@@ -26,7 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-@UserPermissionFilter(userRequiresOneOf = { Permissions.ManageSystemConfig })
+@UserPermissionFilter(userRequiresOneOf = { Permissions.MANAGE_SYSTEM_CONFIG})
 public class SystemSettingsCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 

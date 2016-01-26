@@ -22,7 +22,7 @@ import java.util.List;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @SuppressWarnings("serial")
-@UserPermissionFilter(userRequiresOneOf={Permissions.EditEvent})
+@UserPermissionFilter(userRequiresOneOf={Permissions.EDIT_EVENT})
 public class ExportAction extends AbstractAction {
 
 	@Autowired

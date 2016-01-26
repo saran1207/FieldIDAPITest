@@ -10,7 +10,8 @@ import com.n4systems.security.Permissions;
 import com.n4systems.security.UserType;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemUsers})
+@Deprecated
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_USERS})
 public class ReadOnlyUserCrud extends UserCrud {
 	private static final long serialVersionUID = 1L;
 	

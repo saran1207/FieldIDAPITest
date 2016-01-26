@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.n4systems.model.Event;
-import com.n4systems.model.EventBook;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.eventbook.EventBookListLoader;
 import org.apache.commons.io.FileUtils;
@@ -25,10 +24,8 @@ import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ListingPair;
 import com.opensymphony.xwork2.Preparable;
-import org.eclipse.jdt.internal.core.Assert;
-import rfid.web.helper.SessionUser;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
+@UserPermissionFilter(userRequiresOneOf={Permissions.CREATE_EVENT})
 public class MultiProofTestUpload extends AbstractAction implements Preparable {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(MultiProofTestUpload.class);
