@@ -173,12 +173,20 @@ public class RecurringLotoSchedulesPage extends FieldIDTemplatePage {
                 public void onClick(AjaxRequestTarget target) {
                     lotoRecurrenceModalWindow.show(target);
                 }
+                @Override
+                public boolean isVisible() {
+                    return getUserSecurityGuard().isAllowedMaintainLotoSchedule();
+                }
             });
 
             dropDownContainer.add(new AjaxLink("addRecurringAuditLink") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
                     auditRecurrenceModalWindow.show(target);
+                }
+                @Override
+                public boolean isVisible() {
+                    return getUserSecurityGuard().isAllowedProcedureAudit();
                 }
             });
 
