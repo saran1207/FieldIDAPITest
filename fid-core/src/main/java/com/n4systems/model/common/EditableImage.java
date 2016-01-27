@@ -2,6 +2,8 @@ package com.n4systems.model.common;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.n4systems.model.PlatformType;
+import com.n4systems.model.api.HasCreatedModifiedPlatform;
 import com.n4systems.model.parents.EntityWithTenant;
 
 import javax.persistence.*;
@@ -11,7 +13,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "editable_images")
 @Inheritance(strategy= InheritanceType.JOINED)
-public class EditableImage extends EntityWithTenant implements S3Image {
+public class EditableImage extends EntityWithTenant implements S3Image, HasCreatedModifiedPlatform {
 
     @OneToMany(mappedBy = "image", fetch = FetchType.EAGER)
     private List<ImageAnnotation> annotations = Lists.newArrayList();
@@ -27,6 +29,20 @@ public class EditableImage extends EntityWithTenant implements S3Image {
 
     @Transient
     private String contentType;
+
+    @Column(name="modified_platform", length = 200)
+    private String modifiedPlatform;
+
+    @Column(name="created_platform", length = 200)
+    private String createdPlatform;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="modified_platform_type")
+    private PlatformType modifiedPlatformType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="created_platform_type")
+    private PlatformType createdPlatformType;
 
     public EditableImage() {
     }
@@ -113,5 +129,45 @@ public class EditableImage extends EntityWithTenant implements S3Image {
         if (!getAnnotations().contains(annotation)) {
             getAnnotations().add(annotation);
         }
+    }
+
+    @Override
+    public String getModifiedPlatform() {
+        return modifiedPlatform;
+    }
+
+    @Override
+    public void setModifiedPlatform(String modifiedPlatform) {
+        this.modifiedPlatform = modifiedPlatform;
+    }
+
+    @Override
+    public String getCreatedPlatform() {
+        return createdPlatform;
+    }
+
+    @Override
+    public void setCreatedPlatform(String createdPlatform) {
+        this.createdPlatform = createdPlatform;
+    }
+
+    @Override
+    public PlatformType getModifiedPlatformType() {
+        return modifiedPlatformType;
+    }
+
+    @Override
+    public void setModifiedPlatformType(PlatformType modifiedPlatformType) {
+        this.modifiedPlatformType = modifiedPlatformType;
+    }
+
+    @Override
+    public PlatformType getCreatedPlatformType() {
+        return createdPlatformType;
+    }
+
+    @Override
+    public void setCreatedPlatformType(PlatformType createdPlatformType) {
+        this.createdPlatformType = createdPlatformType;
     }
 }
