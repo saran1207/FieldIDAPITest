@@ -20,7 +20,7 @@
 		<module>fid-data-migrator</module>
 	</modules>
     <properties>
-        <hibernate.version>5.0.1.Final</hibernate.version>
+        <hibernate.version>5.0.7.Final</hibernate.version>
         <spring.version>4.2.1.RELEASE</spring.version>
         <commons.io.version>1.3.2</commons.io.version>
         <commons.lang.version>2.5</commons.lang.version>
