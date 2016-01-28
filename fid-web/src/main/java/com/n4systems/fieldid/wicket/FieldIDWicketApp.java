@@ -328,6 +328,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("template/noColumnsTab", SecondTab.class);
         mountPage("template/allTemplates", AllTemplates.class);
         mountPage("template/formComponents", FormComponents.class);
+        mountPage("template/fonts", FontelloFonts.class);
 
         mountPage("completedProcedureAudits", ProcedureAuditCompletedListPage.class);
 
