@@ -14,6 +14,7 @@ import com.n4systems.model.search.PeopleCriteria;
 import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.UnassignedIndicator;
 import com.n4systems.model.user.User;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
@@ -48,7 +49,18 @@ public class PeopleDetailsCriteriaPanel extends Panel {
                 usersModel, userGroupsModel,
                 assignablesWithBlankOptionIfNecessary).setRenderBodyOnly(true));
 
-        add(new FidDropDownChoice<User>("performedBy", usersForTenantModel, new ListableChoiceRenderer<User>()).setNullValid(true));
+        //We should be using new ListableChoiceRenderer<User>() here but there is seems to be a hibernate proxy problem :(
+        add(new FidDropDownChoice<User>("performedBy", usersForTenantModel, new IChoiceRenderer<User>() {
+            @Override
+            public Object getDisplayValue(User object) {
+                return object.getDisplayName();
+            }
+
+            @Override
+            public String getIdValue(User object, int index) {
+                return object.getID() + "";
+            }
+        }).setNullValid(true));
     }
 
     private IModel<Assignable> createWrappedModel(final IModel<? extends PeopleCriteria> criteriaModel, final IModel<Assignable> assigneeModel) {

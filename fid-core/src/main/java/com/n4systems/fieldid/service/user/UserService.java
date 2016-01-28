@@ -34,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Transactional
 public class UserService extends CrudService<User> {
@@ -385,7 +386,7 @@ public class UserService extends CrudService<User> {
             builder.addWhere(group);
         }
 
-        builder.setLimit(threshold*4);
+        builder.setLimit(threshold * 4);
         List<User> results = persistenceService.findAll(builder);
         return new PrioritizedList<User>(results, threshold);
     }
@@ -496,5 +497,15 @@ public class UserService extends CrudService<User> {
 		}
 		return perms.getMask();
 	}
+
+    public List<User> getCertifiers() {
+
+        QueryBuilder<User> builder = createUserQueryBuilder(false, false);
+        builder.addSimpleWhere("userType", UserType.FULL);
+
+        return persistenceService.findAll(builder).stream()
+                .filter(u -> Permissions.hasOneOf(u.getPermissions(), Permissions.CERTIFY_PROCEDURE))
+                .collect(Collectors.toList());
+    }
 
 }
