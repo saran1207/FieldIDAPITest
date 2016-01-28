@@ -13,6 +13,7 @@
             <th><wicket:message key="label.created"/></th>
             <th><wicket:message key="label.last_modified"/></th>
             <th>&nbsp;</th>
+            <th>&nbsp;</th>
         </tr>
         <tr wicket:id="list">
             <td><a wicket:id="nameLink"><span wicket:id="name"/></a></td>
@@ -23,6 +24,10 @@
                 <a wicket:id="edit"><wicket:message key="label.edit"/></a>
                 |
                 <a wicket:id="copy"><wicket:message key="label.copy"/></a>
+            </td>
+            <td>
+                <span wicket:id="triggerIcon"></span>
+                <span wicket:id="recurringIcon"></span>
             </td>
         </tr>
         </tbody>
