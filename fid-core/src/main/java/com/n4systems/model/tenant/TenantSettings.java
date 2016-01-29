@@ -161,6 +161,7 @@ public class TenantSettings extends EntityWithTenant {
         this.approvalUserGroup = approvalUserGroup;
     }
 
+	@Deprecated
     @Transient
     public Assignable getApprovalUserOrGroup() {
         return approvalUser != null ?  approvalUser : approvalUserGroup;

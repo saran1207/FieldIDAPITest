@@ -498,10 +498,10 @@ public class UserService extends CrudService<User> {
 		return perms.getMask();
 	}
 
-    public List<User> getCertifiers() {
+    public List<User> getCertifierUsers() {
 
         QueryBuilder<User> builder = createUserQueryBuilder(false, false);
-        builder.addSimpleWhere("userType", UserType.FULL);
+        builder.addWhere(WhereClauseFactory.create(Comparator.IN, "userType", Lists.newArrayList(UserType.FULL, UserType.ADMIN)));
 
         return persistenceService.findAll(builder).stream()
                 .filter(u -> Permissions.hasOneOf(u.getPermissions(), Permissions.CERTIFY_PROCEDURE))
