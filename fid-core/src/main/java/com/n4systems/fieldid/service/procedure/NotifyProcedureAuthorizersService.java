@@ -106,8 +106,7 @@ public class NotifyProcedureAuthorizersService extends FieldIdPersistenceService
         certifiers.stream()
                   //First, get the certifiers that can actually see this thing... anyone that can't see it, can't
                   //certify it, anyways....
-                  .filter(user -> (procedureDefinition.getOwner().getId().equals(user.getOwner().getId()) ||
-                                   procedureDefinition.getOwner().isParentOf(user.getOwner())))
+                  .filter(user -> (procedureDefinition.getOwner().isParentOf(user.getOwner())))
                   .forEach(user -> {
                       sendNotifications(procedureDefinition, user, null);
                       procedureDefinition.setAuthorizationNotificationSent(true);
