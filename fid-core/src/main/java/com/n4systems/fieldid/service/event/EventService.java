@@ -56,15 +56,25 @@ public class EventService extends FieldIdPersistenceService {
     @Autowired private NotifyEventAssigneeService notifyEventAssigneeService;
 
     @Transactional(readOnly = true)
-    public List<ThingEvent> getThingEventsByType(Long eventTypeId, Date from, Date to) {
+    public List<ThingEvent> getThingEventsByType(Long eventTypeId, Date from, Date to, int page, int pageSize) {
+		QueryBuilder<ThingEvent> builder = thingEventsByTypeQuery(eventTypeId, from, to);
+		builder.setOrder("completedDate", false);
+		return persistenceService.findAll(builder, page, pageSize);
+	}
+
+	@Transactional(readOnly = true)
+	public Long countThingEventsByType(Long eventTypeId, Date from, Date to) {
+		return persistenceService.count(thingEventsByTypeQuery(eventTypeId, from, to));
+	}
+
+	private QueryBuilder<ThingEvent> thingEventsByTypeQuery(Long eventTypeId, Date from, Date to) {
 		QueryBuilder<ThingEvent> builder = getThingEventsByTypeBuilder(eventTypeId);
 		builder.addWhere(Comparator.GE, "fromDate", "completedDate", from).addWhere(Comparator.LE, "toDate", "completedDate", to);
-        builder.addSimpleWhere("workflowState", WorkflowState.COMPLETED);
-		builder.setOrder("completedDate", false);
-		return persistenceService.findAll(builder);
+		builder.addSimpleWhere("workflowState", WorkflowState.COMPLETED);
+		return builder;
 	}
-    
-    private QueryBuilder<ThingEvent> getThingEventsByTypeBuilder(Long eventTypeId) {
+
+	private QueryBuilder<ThingEvent> getThingEventsByTypeBuilder(Long eventTypeId) {
     	checkArgument(eventTypeId != null, "you must specify an event type id to get a list of events.");
     	QueryBuilder<ThingEvent> builder = createUserSecurityBuilder(ThingEvent.class);
     	builder.addSimpleWhere("type.id", eventTypeId);

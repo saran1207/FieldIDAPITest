@@ -17,26 +17,31 @@ import com.n4systems.model.downloadlink.DownloadState;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.reporting.EventReportType;
+import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.config.ConfigService;
-import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.mail.TemplateMailMessage;
 import com.n4systems.util.selection.MultiIdSelection;
+import com.n4systems.util.time.RateTimer;
 import net.sf.jasperreports.engine.JasperPrint;
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.time.StopWatch;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.ByteArrayOutputStream;
+import javax.mail.MessagingException;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 @Transactional(readOnly = true)
 public class PrintAllCertificateService extends FieldIdPersistenceService {
-	private final Logger logger = Logger.getLogger(PrintAllCertificateService.class);
+	static Logger logger = Logger.getLogger("com.n4systems.taskscheduling");
 	
 	private final CertificatePrinter printer = new CertificatePrinter();
 
@@ -86,68 +91,82 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 	}
 
 	private void generateCertificatePackage(List<Long> entityIds, EventReportType eventReportType, DownloadLink link, String downloadUrl, String templateName) {
-		ZipOutputStream zipOut = null;
-		try {
-			if (entityIds.isEmpty()) {
-				downloadLinkService.updateState(link, DownloadState.FAILED);	
+		logger.info("[" + link + "]: Started multi certificate export " + entityIds.size() + " entities");
+
+		if (entityIds.isEmpty()) {
+			downloadLinkService.updateState(link, DownloadState.FAILED);
+			try {
 				mailService.sendMessage(link.generateMailMessage("We're sorry, your report did not contain any printable events."));
-				return;
+			} catch (MessagingException e) {
+				logger.error("[" + link + "]: Unable to send message", e);
 			}
+			return;
+		}
 
-            downloadLinkService.updateState(link, DownloadState.INPROGRESS);
-			
-			Integer maxCertsPerGroup = configService.getInteger(ConfigEntry.REPORTING_MAX_REPORTS_PER_FILE);
+		downloadLinkService.updateState(link, DownloadState.INPROGRESS);
+		Integer maxCertsPerGroup = configService.getConfig().getLimit().getReportingMaxReportsPerFile();
 
-            ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-			
-			zipOut = new ZipOutputStream(byteOut);
+		File outputFile = PathHandler.getTempFileWithExt("zip");
+		try {
+			RateTimer timer = new RateTimer();
+			timer.start().split();
 
-			int pageNumber = 1;
-			JasperPrint jPrint;
-			List<JasperPrint> printGroup = new ArrayList<>();
-			for (Long entityId: entityIds) {
-				
-				if (printGroup.size() == maxCertsPerGroup) {
+			try (ZipOutputStream zipOut = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(outputFile)))) {
+				int pageNumber = 1;
+				JasperPrint jPrint;
+				List<JasperPrint> printGroup = new ArrayList<>();
+				for (Long entityId : entityIds) {
+					if (printGroup.size() == maxCertsPerGroup) {
+						zipOut.putNextEntry(new ZipEntry(pdfFileName(link.getName(), pageNumber)));
+						printer.printToPDF(printGroup, zipOut);
+						printGroup.clear();
+						pageNumber++;
+
+						logger.info(String.format("[%s]: (%d/%d) Elapsed: %s, Since last %d: %s, Avg Rate: %.2f ms/entity, Interval Rate: %.2f ms/entity",
+								link, timer.getCount(), entityIds.size(), timer.elapsedString(), timer.getSplitCountDiff(), timer.elapsedSinceSplitString(),
+								timer.paceAvg(TimeUnit.MILLISECONDS), timer.paceSinceSplit(TimeUnit.MILLISECONDS)));
+
+						timer.split();
+					}
+
+					jPrint = generateCertificate(eventReportType, entityId);
+					if (jPrint != null) {
+						printGroup.add(jPrint);
+					}
+
+					timer.increment();
+				}
+
+				if (!printGroup.isEmpty()) {
 					zipOut.putNextEntry(new ZipEntry(pdfFileName(link.getName(), pageNumber)));
 					printer.printToPDF(printGroup, zipOut);
-					printGroup.clear();
-					pageNumber++;
+				} else {
+					if (pageNumber == 1) {
+						//In this case, the printGroup is empty AND pageNumber was never incremented past one.  This means
+						//we didn't produce any printed reports.  Something went wrong... that "something" is likely that
+						//the user tried to print a boatload of unprintable events.
+						throw new Exception("No reports were printed, likely because they were all non-printable.");
+					}
 				}
-
-                jPrint = generateCertificate(eventReportType, entityId);
-				if (jPrint != null) {
-					printGroup.add(jPrint);
-				}
+				zipOut.finish();
 			}
 
-            if (!printGroup.isEmpty()) {
-				zipOut.putNextEntry(new ZipEntry(pdfFileName(link.getName(), pageNumber)));
-				printer.printToPDF(printGroup, zipOut);
-			} else {
-                if(pageNumber == 1) {
-                    //In this case, the printGroup is empty AND pageNumber was never incremented past one.  This means
-                    //we didn't produce any printed reports.  Something went wrong... that "something" is likely that
-                    //the user tried to print a boatload of unprintable events.
-                    throw new Exception("No reports were printed, likely because they were all non-printable.");
-                }
-            }
-
-            //Finish working on the zipOut only... we'll handle the byte array separately.
-            zipOut.finish();
-
+			logger.info("[" + link + "]: Finished generating report (" + timer.elapsedString() + "), now uploading to S3");
 			//Before we update the state of the DownloadLink, we want to shove it up into S3.  Otherwise any attempted
 			//downloads could fail if the file is big enough to present a considerable delay between update of state
 			//and arrival in the cloud.
-			s3Service.uploadGeneratedReport(byteOut.toByteArray(), link);
+			s3Service.uploadGeneratedReport(outputFile, link);
 
 			//Now the file is up there... or we at least think it is.  Flip it to completed.
 			downloadLinkService.updateState(link, DownloadState.COMPLETED);
 			sendSuccessNotification(link, downloadUrl, templateName);
+
+			logger.info("[" + link + "]: Completed in " + timer.elapsedString());
 		} catch (Exception e) {
 			downloadLinkService.updateState(link, DownloadState.FAILED);
-			logger.error("Failed generating multi event certificate download", e);
+			logger.error("[" + link + "]: Failed", e);
 		} finally {
-			IOUtils.closeQuietly(zipOut);
+			outputFile.delete();
 		}
 	}
 

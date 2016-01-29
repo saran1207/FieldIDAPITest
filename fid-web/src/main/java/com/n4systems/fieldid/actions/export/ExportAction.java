@@ -51,7 +51,7 @@ public class ExportAction extends AbstractAction {
 	}
 	
 	public String doExport() {
-		if (! eventService.getThingEventsByType(eventTypeId, getFromDate(), getToDate()).isEmpty() ) {
+		if (eventService.countThingEventsByType(eventTypeId, getFromDate(), getToDate()) > 0) {
 			DownloadLink link = getDownloadLink();
 			eventTypeEventTypeExportService.exportEventTypeToExcel(getSessionUserId(), eventTypeId, getFromDate(), getToDate(), link.getId() );
 			return SUCCESS;

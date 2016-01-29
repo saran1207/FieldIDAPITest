@@ -213,7 +213,6 @@ public class S3Service extends FieldIdPersistenceService {
      * @param file - A File representing the generated report you would like to jam up into S3 with a plunger.
      * @param downloadLink - A DownloadLink entity, representing the report you're uploading.
      */
-    @Deprecated
     public void uploadGeneratedReport(File file, DownloadLink downloadLink) {
         uploadResource(file,
                        downloadLink.getTenant().getId(),
