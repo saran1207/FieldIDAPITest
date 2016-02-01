@@ -12,7 +12,7 @@ import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.EnumLabelModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
-import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.util.NullCoverterModel;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeSchedule;
@@ -42,7 +42,7 @@ import java.util.Set;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
-public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
+public class AssetTypeSchedulesPage extends FieldIDTemplatePage {
 
     private IModel<AssetType> assetTypeModel;
 
