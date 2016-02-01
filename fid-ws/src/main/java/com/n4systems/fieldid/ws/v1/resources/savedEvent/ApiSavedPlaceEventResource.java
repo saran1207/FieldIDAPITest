@@ -6,6 +6,7 @@ import com.n4systems.fieldid.ws.v1.resources.event.ApiEventAttribute;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.PlaceEvent;
 import com.n4systems.model.PlaceEventType;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.model.orgs.BaseOrg;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -31,19 +32,33 @@ public class ApiSavedPlaceEventResource extends ApiResource<ApiSavedPlaceEvent, 
         return convertAllEntitiesToApiModels(events);
     }
 
+    public List<ApiSavedPlaceEvent> findAllOpenEvents(BaseOrg baseOrg) {
+        List<PlaceEvent> events = eventService.getAllOpenPlaceEvents(baseOrg);
+        return convertAllEntitiesToApiModels(events);
+    }
+
     @Override
     protected ApiSavedPlaceEvent convertEntityToApiModel(PlaceEvent event) {
         ApiSavedPlaceEvent apiEvent = new ApiSavedPlaceEvent();
 
         convertAbstractEventToApiEvent(apiEvent, event);
 
+        apiEvent.setDueDate(event.getDueDate());
         apiEvent.setDate(event.getDate());
         apiEvent.setOwnerId(event.getOwner().getId());
-        apiEvent.setPerformedById(event.getPerformedBy().getId());
+
+        if(event.getPerformedBy() != null) {
+            apiEvent.setPerformedById(event.getPerformedBy().getId());
+        }
+
+        if(event.getWorkflowState() == WorkflowState.COMPLETED) {
+            apiEvent.setPerformedById(event.getPerformedBy().getId());
+        }
+
         apiEvent.setPrintable(event.isPrintable());
 
-        if(event.getAssignedTo() != null && event.getAssignedTo().getAssignedUser() != null) {
-            apiEvent.setAssignedUserId(event.getAssignedTo().getAssignedUser().getId());
+        if(event.getAssignee() != null) {
+            apiEvent.setAssignedUserId(event.getAssignee().getID());
         }
 
         if(event.getBook() != null) {
@@ -77,7 +92,10 @@ public class ApiSavedPlaceEventResource extends ApiResource<ApiSavedPlaceEvent, 
         }
 
         apiEvent.setAttributes(convertToApiEventAttributes(event.getInfoOptionMap()));
+
         apiEvent.setForm(savedEventFormResource.convertToApiEventForm(event));
+        apiEvent.setEventTypeName(event.getType().getDisplayName());
+        apiEvent.setOwnerDisplayName(event.getTenant().getDisplayName() + ", " + ((PlaceEvent)(event)).getOwner().getDisplayName());
     }
 
     private List<ApiEventAttribute> convertToApiEventAttributes(Map<String, String> infoOptionMap) {

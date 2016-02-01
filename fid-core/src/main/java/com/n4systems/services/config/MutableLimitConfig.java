@@ -69,4 +69,8 @@ public class MutableLimitConfig extends LimitConfig {
 	public void setWebTotalInspectionButtons(Long webTotalInspectionButtons) {
 		this.webTotalInspectionButtons = webTotalInspectionButtons;
 	}
+
+	public void setExportPageSize(Integer exportPageSize) {
+		this.exportPageSize = exportPageSize;
+	}
 }
