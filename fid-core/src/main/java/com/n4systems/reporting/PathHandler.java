@@ -130,6 +130,10 @@ public class PathHandler {
 	private static String getTempFileName() {
 		return UUID.randomUUID().toString();
 	}
+
+	private static String getTempFileName(String ext) {
+		return getTempFileName() + '.' + ext;
+	}
 	
 	/**
 	 * Constructs a File object for a temporary directory.
@@ -150,6 +154,10 @@ public class PathHandler {
 	 */
 	public static File getTempFile() {
 		return parentize(getTempRoot(), getTempFileName());
+	}
+
+	public static File getTempFileWithExt(String ext) {
+		return getTempFile(getTempFileName(ext));
 	}
 
 	public static File getTempFileInRoot(String tempFileName) {
