@@ -354,7 +354,10 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
         returnMe.put("assignedGroupEmails", event.getAssignedGroup() != null ? createEmailList(event.getAssignedGroup()) : null);
         returnMe.put("assignedGroupName", event.getAssignedGroup() != null ? event.getAssignedGroup().getDisplayName() : null);
         returnMe.put("eventType", event.getType().getDisplayName());
-        returnMe.put("showLinks", (event.getAssignee() != null && !event.getAssignee().isPerson()) || event.getAssignedGroup() != null); //Not sure if this one is entirely necessary, but it might be.
+        //We can't really determine what links we want to show until we know who is receiving this notification... so
+        //we'll just fill this out on-the-fly.  I think that's why this is always wrong... because any time the event
+        //doesn't have an Assignee or Assigned Group, we automatically say, "Don't show the links."
+//        returnMe.put("showLinks", (event.getAssignee() != null && !event.getAssignee().isPerson()) || event.getAssignedGroup() != null); //Not sure if this one is entirely necessary, but it might be.
 
 
 
