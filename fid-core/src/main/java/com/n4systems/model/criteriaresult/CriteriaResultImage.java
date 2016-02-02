@@ -5,10 +5,13 @@ import com.n4systems.model.BaseEntity;
 import com.n4systems.model.CriteriaResult;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Table(name = "criteriaresult_images")
 public class CriteriaResultImage extends BaseEntity {
+
+	private String mobileGUID;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name="criteriaresult_id")
@@ -28,6 +31,36 @@ public class CriteriaResultImage extends BaseEntity {
 
     @Transient
     private String tempFileName;
+
+	@Override
+	protected void onCreate() {
+		super.onCreate();
+		adjustAssetForSave();
+	}
+
+	@Override
+	protected void onUpdate() {
+		super.onUpdate();
+		adjustAssetForSave();
+	}
+
+	private void adjustAssetForSave() {
+		ensureMobileGuidIsSet();
+	}
+
+	public void ensureMobileGuidIsSet() {
+		if (getMobileGUID() == null || getMobileGUID().length() == 0) {
+			setMobileGUID(UUID.randomUUID().toString());
+		}
+	}
+
+	public String getMobileGUID() {
+		return mobileGUID;
+	}
+
+	public void setMobileGUID(String mobileGUID) {
+		this.mobileGUID = mobileGUID;
+	}
 
 	public CriteriaResult getCriteriaResult() {
 		return criteriaResult;

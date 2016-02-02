@@ -849,6 +849,13 @@ public class S3Service extends FieldIdPersistenceService {
                 criteriaResultImage.getFileName());
     }
 
+    public void deleteCriteriaResultImage(CriteriaResultImage criteriaResultImage) {
+        removeResource(null, CRITERIA_RESULT_IMAGE_PATH_MEDIUM,
+                criteriaResultImage.getCriteriaResult().getEvent().getId(),
+                criteriaResultImage.getCriteriaResult().getId(),
+                criteriaResultImage.getFileName());
+    }
+
     public URL getCriteriaResultImageMediumTempURL(CriteriaResultImage criteriaResultImage) {
         return generateResourceUrl(null, CRITERIA_RESULT_MEDIUM_IMAGE_TEMP,
                 criteriaResultImage.getTempFileName());

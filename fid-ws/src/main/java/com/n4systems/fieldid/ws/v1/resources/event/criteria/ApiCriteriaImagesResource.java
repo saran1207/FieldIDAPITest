@@ -3,7 +3,6 @@ package com.n4systems.fieldid.ws.v1.resources.event.criteria;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
-import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -15,10 +14,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.activation.FileTypeMap;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 @Path("criteriaImage")
@@ -26,33 +25,18 @@ public class ApiCriteriaImagesResource extends FieldIdPersistenceService {
 	private static Logger logger = Logger.getLogger(ApiCriteriaImagesResource.class);
 	@Autowired private S3Service s3Service;
 
-	@GET
-	@Path("list")
-	@Consumes(MediaType.TEXT_PLAIN)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional(readOnly = true)
-	public ListResponse<ApiCriteriaImage> findAll(@QueryParam("criteriaResultId") String criteriaResultId) {
+	@PUT
+	@Path("delete")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Transactional
+	public void deleteCriteriaImage(String sid) {
+		QueryBuilder<CriteriaResultImage> builder = createTenantSecurityBuilder(CriteriaResultImage.class, true);
+		builder.addWhere(WhereClauseFactory.create("mobileGUID", sid));
+		CriteriaResultImage criteriaResultImage = persistenceService.find(builder);
+		s3Service.deleteCriteriaResultImage(criteriaResultImage);
 
-		QueryBuilder<CriteriaResult> builder = createTenantSecurityBuilder(CriteriaResult.class, true);
-		builder.addWhere(WhereClauseFactory.create("mobileId", criteriaResultId));
-
-		CriteriaResult criteriaResult = persistenceService.find(builder);
-
-		List<ApiCriteriaImage> images = new ArrayList<>();
-
-		for (CriteriaResultImage criteriaResultImage : criteriaResult.getCriteriaImages()) {
-			ApiCriteriaImage temp = new ApiCriteriaImage();
-			temp.setComments(criteriaResultImage.getComments());
-			temp.setCriteriaResultSid(criteriaResultId);
-			temp.setFileName(criteriaResultImage.getFileName());
-			temp.setImage(DigestUtils.md5(criteriaResultImage.getMd5sum()));
-			images.add(temp);
-		}
-
-		ListResponse<ApiCriteriaImage> response = new ListResponse<ApiCriteriaImage>(images, 0, images.size(), images.size());
-		return response;
+		logger.info("Criteria Image for CriteriaResult: " + criteriaResultImage.getCriteriaResult().getID() + " has been deleted.");
 	}
-
 
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -85,7 +69,7 @@ public class ApiCriteriaImagesResource extends FieldIdPersistenceService {
 		
 		logger.info("Saved Criteria Image for CriteriaResult: " + apiCriteriaImage.getCriteriaResultSid());
 	}
-	
+
 	@PUT
 	@Path("multi")
 	@Consumes(MediaType.APPLICATION_JSON)
