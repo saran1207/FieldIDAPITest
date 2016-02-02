@@ -1,9 +1,11 @@
 package com.n4systems.fieldid.ws.v1.resources.savedEvent;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.ws.v1.exceptions.InternalErrorException;
 import com.n4systems.fieldid.ws.v1.resources.event.ApiCriteriaResult;
 import com.n4systems.fieldid.ws.v1.resources.event.ApiObservation;
+import com.n4systems.fieldid.ws.v1.resources.event.criteria.ApiCriteriaImageDownload;
 import com.n4systems.fieldid.ws.v1.resources.event.criteria.ApiObservationCountResult;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiCriteriaSection;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiEventForm;
@@ -11,6 +13,7 @@ import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiEventTypeResource;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.criteria.ApiCriteria;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.criteria.ApiObservationCount;
 import com.n4systems.model.*;
+import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.services.signature.SignatureService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,7 @@ public class ApiSavedEventFormResource extends FieldIdPersistenceService{
 	
 	@Autowired private ApiEventTypeResource eventTypeResource;
     @Autowired private SignatureService signatureService;
+	@Autowired private S3Service s3Service;
 
 	public ApiEventForm convertToApiEventForm(AbstractEvent event) {
 		if(event.getEventForm() != null) {
@@ -92,6 +96,16 @@ public class ApiSavedEventFormResource extends FieldIdPersistenceService{
 	
 	private ApiCriteriaResult convertCriteriaResult(CriteriaResult criteriaResult, Long eventId) {
 		ApiCriteriaResult apiResult = new ApiCriteriaResult();
+
+		//Convert Criteria Images
+		for(CriteriaResultImage image:criteriaResult.getCriteriaImages()) {
+			ApiCriteriaImageDownload temp = new ApiCriteriaImageDownload();
+			temp.setCriteriaResultSid(Long.toString(criteriaResult.getId()));
+			temp.setSid(image.getMobileGUID());
+			temp.setComments(image.getComments());
+			temp.setImage(s3Service.getCriteriaResultImageMediumURL(image));
+			apiResult.getCriteriaImages().add(temp);
+		}
 
 		apiResult.setSid(criteriaResult.getMobileId());
 		apiResult.setCriteriaId(criteriaResult.getCriteria().getId());
