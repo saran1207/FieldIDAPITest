@@ -71,6 +71,14 @@ public class PreviouslyPublishedProcedureActionsCell extends Panel {
         add(reviseLink);
 
         //Add the print buttons
-        add(new LotoPrintoutOptionsContainer("optionsContainer2", procedureDefinition, modal));
+        add(new LotoPrintoutOptionsContainer("optionsContainer2", procedureDefinition, modal){
+            @Override
+            public boolean isVisible() {
+                if (FieldIDSession.get().getSessionUser().isReadOnlyUser())
+                    return false;
+                else
+                    return super.isVisible();
+            }
+        });
     }
 }

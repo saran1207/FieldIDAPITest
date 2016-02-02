@@ -92,7 +92,15 @@ public class DraftProcedureActionsCell extends Panel {
         add(deleteLink);
 
         //Add the print buttons
-        add(new LotoPrintoutOptionsContainer("printOptionsContainer", procedureDefinition, modal));
+        add(new LotoPrintoutOptionsContainer("printOptionsContainer", procedureDefinition, modal) {
+            @Override
+            public boolean isVisible() {
+                if (FieldIDSession.get().getSessionUser().isReadOnlyUser())
+                   return false;
+                else
+                    return super.isVisible();
+            }
+        });
     }
 
     private AjaxLink<Void> getDeleteLink(String id, final ProcedureListPanel procedureListPanel, final ProcedureDefinition procedureDefinition) {
