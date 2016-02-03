@@ -29,12 +29,3 @@ CREATE TRIGGER trig_most_recently_completed_event_insert AFTER INSERT ON thing_e
       END IF;
     END IF;
   END;//
-
-
--- Clean up 'most_recent_completed_thing_events' table
-
-DELETE FROM most_recent_completed_thing_events
-WHERE id NOT IN (SELECT id FROM
-  (SELECT MAX(id) as id
-   FROM most_recent_completed_thing_events
-   GROUP BY asset_id, type_id) x);

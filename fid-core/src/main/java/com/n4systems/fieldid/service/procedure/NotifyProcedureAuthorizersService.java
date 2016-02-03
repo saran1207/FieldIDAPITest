@@ -10,6 +10,7 @@ import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.util.mail.TemplateMailMessage;
@@ -39,15 +40,21 @@ public class NotifyProcedureAuthorizersService extends FieldIdPersistenceService
 
         List<ProcedureDefinition> publishedDefsAwaitingAuthorization = persistenceService.findAll(assigneeQuery);
 
-        List<User> certifierList = userService.getCertifierUsers();
-
         publishedDefsAwaitingAuthorization.forEach(procedureDefinition -> {
+
+            securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(procedureDefinition.getTenant().getId()));
+
+            //Safe bet that we can use the creator as the user to build security off of...
+            securityContext.setUserSecurityFilter(new UserSecurityFilter(procedureDefinition.getCreatedBy()));
+
+            //Now we grab all of the certifiers for that tenant.
+            List<User> certifierList = userService.getCertifierUsers();
+
             if(certifierList.isEmpty()) {
                 //If the certifier list is empty, then that means we just want to flip the ProcDef to certified. This
                 //likely means the ProcDef was made before the tenant decided not to have certifiers... so we'll just
                 //pretend this never really happened...
                 log.warn("Procedure def waiting for certification but no certifier user or group set: " + procedureDefinition.getId() +". Publishing automatically.");
-                securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(procedureDefinition.getTenant().getId()));
                 try {
                     procedureDefinitionService.publishProcedureDefinition(procedureDefinition);
                 } catch (Exception e) {
@@ -55,7 +62,6 @@ public class NotifyProcedureAuthorizersService extends FieldIdPersistenceService
                     log.error(e.getMessage());
                 }
                 //reset the context after, so there's no carryover...
-                securityContext.reset();
             } else
             if(procedureDefinition.getOwner().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.EmailAlerts)) {
                 try {
@@ -66,22 +72,10 @@ public class NotifyProcedureAuthorizersService extends FieldIdPersistenceService
                     persistenceService.update(procedureDefinition);
                 }
             }
+
+            //Once we're done, reset the security context so that we can configure it for the next one...
+            securityContext.reset();
         });
-
-
-//
-//        for (ProcedureDefinition procedureDefinition : publishedDefsAwaitingAuthorization) {
-//            if(procedureDefinition.getOwner().getPrimaryOrg().getExtendedFeatures().contains(ExtendedFeature.EmailAlerts) ||
-//                    procedureDefinition.getTenant().getSettings().getApprovalUserOrGroup() == null) {
-//                try {
-//                    sendAuthorizationNotification(procedureDefinition);
-//                } catch (Exception e) {
-//                    log.error("Could not send auth notification for procedureDef: " + procedureDefinition.getId(), e);
-//                } finally {
-//                    persistenceService.update(procedureDefinition);
-//                }
-//            }
-//        }
     }
 
     public void notifyProcedureRejection(ProcedureDefinition definition, String rejectionMessage) {
@@ -113,30 +107,6 @@ public class NotifyProcedureAuthorizersService extends FieldIdPersistenceService
                       securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(procedureDefinition.getTenant().getId()));
                   });
     }
-
-//    private void sendAuthorizationNotification(ProcedureDefinition procedureDefinition) {
-//        Tenant tenant = procedureDefinition.getTenant();
-//        TenantSettings settings = tenant.getSettings();
-//
-//        if (settings.getApprovalUser() != null) {
-//            sendNotifications(procedureDefinition, settings.getApprovalUser(), null);
-//            procedureDefinition.setAuthorizationNotificationSent(true);
-//        } else if (settings.getApprovalUserGroup() != null) {
-//            sendNotifications(procedureDefinition, settings.getApprovalUserGroup());
-//            procedureDefinition.setAuthorizationNotificationSent(true);
-//        } else {
-//            // There is no approval user or group (but was one earlier since this was marked waiting for approval)
-//            // This means we can simply publish the procedure def automatically.
-//            log.warn("Procedure def waiting for certification but no certifier user or group set: " + procedureDefinition.getId() +". Publishing automatically.");
-//            securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(tenant.getId()));
-//            try {
-//                procedureDefinitionService.publishProcedureDefinition(procedureDefinition);
-//            } catch (Exception e) {
-//                log.error("Failed to generate annotated images for Procedure Definition: " + procedureDefinition.getId());
-//                log.error(e.getMessage());
-//            }
-//        }
-//    }
 
     private void sendNotifications(ProcedureDefinition procedureDefinition, UserGroup approvalGroup) {
         List<User> usersInGroup = userGroupService.getUsersInGroup(approvalGroup);
