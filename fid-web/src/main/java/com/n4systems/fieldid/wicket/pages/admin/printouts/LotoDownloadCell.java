@@ -5,6 +5,7 @@ import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
+import com.n4systems.fieldid.wicket.pages.admin.FieldIDAdminPage;
 import com.n4systems.model.LotoPrintout;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -41,6 +42,8 @@ public class LotoDownloadCell extends Panel {
 
                     if(this.getPage() instanceof FieldIDFrontEndPage) {
                         ((FieldIDFrontEndPage) this.getPage()).handleDownload(file, fileName);
+                    } else if (this.getPage() instanceof FieldIDAdminPage) {
+                        ((FieldIDAdminPage) this.getPage()).handleDownload(file, fileName);
                     } else {
                         ((FieldIDTemplatePage) this.getPage()).handleDownload(file, fileName);
                     }
