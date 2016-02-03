@@ -501,7 +501,7 @@ public class UserService extends CrudService<User> {
     public List<User> getCertifierUsers() {
 
         QueryBuilder<User> builder = createUserQueryBuilder(false, false);
-        builder.addWhere(WhereClauseFactory.create(Comparator.IN, "userType", Lists.newArrayList(UserType.FULL, UserType.ADMIN)));
+        builder.addWhere(WhereClauseFactory.create(Comparator.IN, "userType", Lists.newArrayList(UserType.FULL, UserType.ADMIN, UserType.LITE)));
 
         return persistenceService.findAll(builder).stream()
                 .filter(u -> Permissions.hasOneOf(u.getPermissions(), Permissions.CERTIFY_PROCEDURE))
@@ -509,15 +509,8 @@ public class UserService extends CrudService<User> {
     }
 
     public List<User> getSortedCertifiers(String sort, boolean ascending) {
-        QueryBuilder<User> query = createUserQueryBuilder(false, false);
-        query.addWhere(WhereClauseFactory.create(Comparator.IN, "userType", Lists.newArrayList(UserType.FULL, UserType.ADMIN)));
-
-        //for some reason, an extra parameter gets in here and we have to clear it out... that's kinda weird.
-        query.getOrderArguments().clear();
-
-        for(String sortField : sort.split(",")) {
-            query.addOrder(sortField.trim(), ascending);
-        }
+        QueryBuilder<User> query = createUserQueryBuilder(new UserListFilterCriteria(false).withOrder(sort, ascending));
+        query.addWhere(WhereClauseFactory.create(Comparator.IN, "userType", Lists.newArrayList(UserType.FULL, UserType.ADMIN, UserType.LITE)));
 
         return persistenceService.findAll(query)
                                  .stream()
