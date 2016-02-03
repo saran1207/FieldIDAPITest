@@ -103,7 +103,7 @@ public class ApiSavedEventFormResource extends FieldIdPersistenceService{
 			temp.setCriteriaResultSid(Long.toString(criteriaResult.getId()));
 			temp.setSid(image.getMobileGUID());
 			temp.setComments(image.getComments());
-			temp.setImage(s3Service.getCriteriaResultImageMediumURL(image));
+			temp.setsrcImage(s3Service.getCriteriaResultImageMediumURL(image));
 			apiResult.getCriteriaImages().add(temp);
 		}
 
