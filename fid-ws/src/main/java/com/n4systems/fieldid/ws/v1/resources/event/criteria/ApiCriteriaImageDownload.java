@@ -14,7 +14,7 @@ public class ApiCriteriaImageDownload {
     private String sid;
     private String criteriaResultSid;
     private String comments;
-    private URL image;
+    private URL srcImage;
 
     public String getSid() {
         return sid;
@@ -40,11 +40,11 @@ public class ApiCriteriaImageDownload {
         this.comments = comments;
     }
 
-    public URL getImage() {
-        return image;
+    public URL getsrcImage() {
+        return srcImage;
     }
 
-    public void setImage(URL image) {
-        this.image = image;
+    public void setsrcImage(URL image) {
+        this.srcImage = image;
     }
 }
