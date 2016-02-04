@@ -19,6 +19,7 @@ public class ApiOrg extends ApiReadonlyModel {
     private List<ApiPlaceEventHistory> eventHistory;
     private List<ApiEventType> eventTypes;
     private List<ApiSavedPlaceEvent> events;
+	private List<ApiSavedPlaceEvent> schedules;
 
 	public ApiOrg() {
 		contactInformation = new ContactInformation();
@@ -112,6 +113,13 @@ public class ApiOrg extends ApiReadonlyModel {
         this.events = events;
     }
 
+	public List<ApiSavedPlaceEvent> getSchedules() {
+		return schedules;
+	}
+
+	public void setSchedules(List<ApiSavedPlaceEvent> schedules) {
+		this.schedules = schedules;
+	}
 }
 
 class ContactInformation {
