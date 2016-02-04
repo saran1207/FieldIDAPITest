@@ -124,6 +124,7 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
 
 
     private void setOrderForSubEvents(ThingEvent event) {
+        //TODO why are we using persistence service to get the Asset and not AssetService?
         Asset asset = persistenceService.findUsingTenantOnlySecurityWithArchived(Asset.class, event.getAsset().getId());
         List<SubAsset> subAssets = assetService.findSubAssets(asset);
         List<SubEvent> reorderedSubEvents = new ArrayList<SubEvent>();
@@ -138,6 +139,7 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
     }
 
     private void confirmSubEventsAreAgainstAttachedSubAssets(ThingEvent event) throws UnknownSubAsset {
+        //TODO why are we using persistence service to get the Asset and not AssetService?
         Asset asset = persistenceService.findUsingTenantOnlySecurityWithArchived(Asset.class, event.getAsset().getId());
         List<SubAsset> subAssets = assetService.findSubAssets(asset);
         for (SubEvent subEvent : event.getSubEvents()) {
@@ -149,8 +151,9 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
 
     private void updateAsset(ThingEvent event) {
         User modifiedBy = getCurrentUser();
+        //TODO why are we using persistence service to get the Asset and not AssetService?
         Asset asset = persistenceService.findUsingTenantOnlySecurityWithArchived(Asset.class, event.getAsset().getId());
-        asset.setSubAssets(assetService.findSubAssets(asset));
+        asset = assetService.fillInSubAssetsOnAsset(asset);
 
         // pushes the location and the ownership to the asset based on the
         // events data.
@@ -221,7 +224,9 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
     @Override
     protected void postUpdateEvent(ThingEvent event, FileDataContainer fileData) {
         User modifiedBy = getCurrentUser();
+        //TODO why are we using persistence service to get the Asset and not AssetService?
         Asset asset = persistenceService.findUsingTenantOnlySecurityWithArchived(Asset.class, event.getAsset().getId());
+        asset = assetService.fillInSubAssetsOnAsset(asset);
 
         statusUpdates(event, asset);
         assignNextEventInSeries(event, EventEnum.PERFORM);
