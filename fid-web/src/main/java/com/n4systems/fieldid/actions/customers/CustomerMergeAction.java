@@ -2,19 +2,23 @@ package com.n4systems.fieldid.actions.customers;
 
 import java.util.List;
 
+import com.n4systems.fieldid.service.org.CustomerMergerService;
+import com.n4systems.fieldid.service.org.OrgService;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.model.orgs.CustomerOrg;
-import com.n4systems.taskscheduling.TaskExecutor;
-import com.n4systems.taskscheduling.task.CustomerMergeTask;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class CustomerMergeAction extends AbstractCrud {
 	
 	private CustomerOrg winningCustomer;
 	private CustomerOrg losingCustomer;
+
+	@Autowired
+	private CustomerMergerService customerMergerService;
 	
 	private String search;
 	
@@ -52,9 +56,8 @@ public class CustomerMergeAction extends AbstractCrud {
 			return INPUT;
 		}
 
-		CustomerMergeTask task = new CustomerMergeTask(winningCustomer, losingCustomer, getUser());
-		TaskExecutor.getInstance().execute(task);
-		
+		customerMergerService.merge(winningCustomer, losingCustomer);
+
 		return SUCCESS;
 	}
 
