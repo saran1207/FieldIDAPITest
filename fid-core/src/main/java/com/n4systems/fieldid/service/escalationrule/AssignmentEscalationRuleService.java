@@ -403,15 +403,20 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
      * @return A List of Strings representing the group members' collective email addresses.
      */
     private List<String> createEmailList(UserGroup assignedGroup) {
-        //Ensure we reload this value.
-        QueryBuilder<UserGroup> query = new QueryBuilder<>(UserGroup.class, new OpenSecurityFilter());
-        query.addSimpleWhere("id", assignedGroup.getId());
-        assignedGroup = persistenceService.find(query);
+        if(assignedGroup.getEntityState().equals(Archivable.EntityState.ARCHIVED) || assignedGroup.getEntityState().equals(Archivable.EntityState.RETIRED)) {
+            //If the group is retired, return null... you want no part of this!!!
+            return null;
+        } else {
+            //Ensure we reload this value.
+            QueryBuilder<UserGroup> query = new QueryBuilder<>(UserGroup.class, new OpenSecurityFilter());
+            query.addSimpleWhere("id", assignedGroup.getId());
+            assignedGroup = persistenceService.find(query);
 
-        return assignedGroup.getMembers()
-                            .stream()
-                            .map(User::getEmailAddress)
-                            .collect(Collectors.toList());
+            return assignedGroup.getMembers()
+                                .stream()
+                                .map(User::getEmailAddress)
+                                .collect(Collectors.toList());
+        }
     }
 
     /**

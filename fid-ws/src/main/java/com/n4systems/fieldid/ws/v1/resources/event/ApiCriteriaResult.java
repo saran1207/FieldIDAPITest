@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.ws.v1.resources.event;
 
+import com.n4systems.fieldid.ws.v1.resources.event.criteria.ApiCriteriaImageDownload;
 import com.n4systems.fieldid.ws.v1.resources.event.criteria.ApiObservationCountResult;
 import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventSchedule;
 import com.n4systems.fieldid.ws.v1.resources.model.ApiReadWriteModel;
@@ -25,6 +26,7 @@ public class ApiCriteriaResult extends ApiReadWriteModel {
 	private Long scoreValue;
     private List<ApiObservationCountResult> observationCountValue = new ArrayList<>();
 	private List<ApiEventSchedule> actions = new ArrayList<>();
+	private List<ApiCriteriaImageDownload> criteriaImages = new ArrayList<>();
 
 	public Long getCriteriaId() {
 		return criteriaId;
@@ -145,4 +147,12 @@ public class ApiCriteriaResult extends ApiReadWriteModel {
     public void setObservationCountValue(List<ApiObservationCountResult> observationCountValue) {
         this.observationCountValue = observationCountValue;
     }
+
+	public List<ApiCriteriaImageDownload> getCriteriaImages() {
+		return criteriaImages;
+	}
+
+	public void setCriteriaImages(List<ApiCriteriaImageDownload> criteriaImages) {
+		this.criteriaImages = criteriaImages;
+	}
 }
