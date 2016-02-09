@@ -19,9 +19,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.savedreports.SavedReport;
-import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
-import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.util.mail.MailMessage;
 import com.n4systems.util.mail.TemplateMailMessage;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -107,8 +105,8 @@ public class CustomerMergerService extends FieldIdPersistenceService {
 	}
 
 	private void moveEmailNotifications(BaseOrg winningOrg, BaseOrg losingOrg) {
-		QueryBuilder<NotificationSetting> notificationQuery = new QueryBuilder<NotificationSetting>(NotificationSetting.class, new OpenSecurityFilter()).addSimpleWhere("owner", losingOrg);
-		List<NotificationSetting> notifications = PersistenceManager.findAll(notificationQuery);
+		QueryBuilder<NotificationSetting> notificationQuery = createTenantSecurityBuilder(NotificationSetting.class).addSimpleWhere("owner", losingOrg);
+		List<NotificationSetting> notifications = persistenceService.findAll(notificationQuery);
 		
 		for (NotificationSetting notification: notifications) {
 			notification.setOwner(winningOrg);
@@ -117,8 +115,8 @@ public class CustomerMergerService extends FieldIdPersistenceService {
 	}
 
 	private void moveSavedReports(BaseOrg winningOrg, BaseOrg losingOrg) {
-		QueryBuilder<SavedReport> reportQuery = new QueryBuilder<SavedReport>(SavedReport.class, new OpenSecurityFilter()).addSimpleWhere("tenant", losingOrg.getTenant());
-		List<SavedReport> reports = PersistenceManager.findAll(reportQuery);
+		QueryBuilder<SavedReport> reportQuery = createTenantSecurityBuilder(SavedReport.class).addSimpleWhere("tenant", losingOrg.getTenant());
+		List<SavedReport> reports = persistenceService.findAll(reportQuery);
 		
 		for (SavedReport report : reports) {
 			if(report.getCriteria().containsKey("ownerId") 
@@ -130,8 +128,8 @@ public class CustomerMergerService extends FieldIdPersistenceService {
 	}
 
 	private void moveUsers(BaseOrg winningOrg, BaseOrg losingOrg) {
-		QueryBuilder<User> userQuery = new QueryBuilder<User>(User.class, new OpenSecurityFilter()).addSimpleWhere("owner", losingOrg);
-		List<User> users = PersistenceManager.findAll(userQuery);
+		QueryBuilder<User> userQuery = createTenantSecurityBuilder(User.class).addSimpleWhere("owner", losingOrg);
+		List<User> users = persistenceService.findAll(userQuery);
 
 		for (User user: users) {
 			user.setOwner(winningOrg);
@@ -140,8 +138,8 @@ public class CustomerMergerService extends FieldIdPersistenceService {
 	}
 
 	private void moveJobs(BaseOrg winningOrg, BaseOrg losingOrg) {
-		QueryBuilder<Project> jobQuery = new QueryBuilder<Project>(Project.class, new OpenSecurityFilter()).addSimpleWhere("owner", losingOrg);
-		List<Project> jobs = PersistenceManager.findAll(jobQuery);
+		QueryBuilder<Project> jobQuery = createTenantSecurityBuilder(Project.class).addSimpleWhere("owner", losingOrg);
+		List<Project> jobs = persistenceService.findAll(jobQuery);
 		
 		for (Project job: jobs) {
 			job.setOwner(winningOrg);
@@ -150,8 +148,8 @@ public class CustomerMergerService extends FieldIdPersistenceService {
 	}
 
 	private void moveEventBooks(CustomerOrg winningCustomer, CustomerOrg losingCustomer) {
-		QueryBuilder<EventBook> eventBookQuery = new QueryBuilder<EventBook>(EventBook.class, new OpenSecurityFilter()).addSimpleWhere("owner", losingCustomer);
-		List<EventBook> eventBooks = PersistenceManager.findAll(eventBookQuery);
+		QueryBuilder<EventBook> eventBookQuery = createTenantSecurityBuilder(EventBook.class).addSimpleWhere("owner", losingCustomer);
+		List<EventBook> eventBooks = persistenceService.findAll(eventBookQuery);
 		
 		for (EventBook eventBook: eventBooks) {
 			eventBook.setOwner(winningCustomer);
@@ -215,23 +213,23 @@ public class CustomerMergerService extends FieldIdPersistenceService {
 	}
 
 	private List<DivisionOrg> getCustomerDivisions(CustomerOrg customer) {
-		QueryBuilder<DivisionOrg> divisionQuery = new QueryBuilder<DivisionOrg>(DivisionOrg.class, new OpenSecurityFilter()).addSimpleWhere("parent", customer).addPostFetchPaths("addressInfo");
-		return PersistenceManager.findAll(divisionQuery);
+		QueryBuilder<DivisionOrg> divisionQuery = createTenantSecurityBuilder(DivisionOrg.class).addSimpleWhere("parent", customer).addPostFetchPaths("addressInfo");
+		return persistenceService.findAll(divisionQuery);
 	}
 
 	private void moveAssets(BaseOrg winningOrg, BaseOrg losingOrg) {
 
-		QueryBuilder<Asset> assetQuery = new QueryBuilder<Asset>(Asset.class, new OpenSecurityFilter()).addSimpleWhere("owner", losingOrg);
-		List<Asset> assetsToMove = PersistenceManager.findAll(assetQuery);
+		QueryBuilder<Asset> assetQuery = createTenantSecurityBuilder(Asset.class).addSimpleWhere("owner", losingOrg);
+		List<Asset> assetsToMove = persistenceService.findAll(assetQuery);
 		
 		for (Asset assetToMove : assetsToMove) {
 			moveEvents(assetToMove, winningOrg);
-			moveSchedules(assetToMove, winningOrg);
 			assetToMove.setOwner(winningOrg);
 			assetService.update(assetToMove);
 		}
 	}
 
+	//Move Open and Completed Events
 	private void moveEvents(Asset asset, BaseOrg winningOrg) {
 		List<ThingEvent> eventsToMove = eventService.getAssetEvents(asset);
 
@@ -239,15 +237,6 @@ public class CustomerMergerService extends FieldIdPersistenceService {
 			eventToMove.setOwner(winningOrg);
 			persistenceService.update(eventToMove);
 		}
-	}
-
-	private void moveSchedules(Asset asset, BaseOrg winningOrg) {
-		List<ThingEvent> openEvents = eventScheduleService.getAvailableSchedulesFor(asset);
-		
-		for (ThingEvent event : openEvents) {
-            event.setOwner(winningOrg);
-			eventScheduleService.updateSchedule(event);
-		}		
 	}
 
 	private MailMessage getMessage(CustomerOrg winningCustomer, CustomerOrg losingCustomer) {

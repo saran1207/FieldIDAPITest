@@ -817,7 +817,7 @@ public class EventService extends FieldIdPersistenceService {
     }
 
     public List<ThingEvent> getAssetEvents(Asset asset) {
-        QueryBuilder<ThingEvent> eventsQuery = new QueryBuilder<ThingEvent>(Event.class, new OpenSecurityFilter()).addSimpleWhere("asset", asset);
+        QueryBuilder<ThingEvent> eventsQuery = createTenantSecurityBuilder(ThingEvent.class).addSimpleWhere("asset", asset);
         return persistenceService.findAll(eventsQuery);
     }
 }
