@@ -3,7 +3,7 @@
     <parent>
         <artifactId>fieldid-root</artifactId>
         <groupId>com.fieldid</groupId>
-        <version>2015.7.2-SNAPSHOT</version>
+        <version>2015.7.4-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>fid-connection-monitor</artifactId>
