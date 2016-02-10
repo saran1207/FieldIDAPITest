@@ -941,7 +941,6 @@ public class AssetService extends CrudService<Asset> {
 
     private List<Asset> findActiveAssetsByAssetType(AssetType assetType) {
         QueryBuilder<Asset> query = createTenantSecurityBuilder(Asset.class);
-        query.addSimpleWhere("state", Archivable.EntityState.ACTIVE);
         query.addSimpleWhere("type", assetType);
 
         return persistenceService.findAll(query);
