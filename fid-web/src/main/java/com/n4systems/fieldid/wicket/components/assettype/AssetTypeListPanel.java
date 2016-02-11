@@ -70,14 +70,22 @@ public class AssetTypeListPanel extends Panel {
                 WebMarkupContainer triggerIcon = new WebMarkupContainer("triggerIcon");
                 triggerIcon.setOutputMarkupId(true);
                 triggerIcon.add(new AttributeAppender("class", new Model<String>("icon-flow-cascade"), ""));
-                triggerIcon.add(new AttributeModifier("title", true, new Model<String>(Integer.toString(triggeredSchedules) + " tirggered schedules.")));
+                if(triggeredSchedules == 1) {
+                    triggerIcon.add(new AttributeModifier("title", true, new Model<String>(Integer.toString(triggeredSchedules) + " triggered schedule.")));
+                } else {
+                    triggerIcon.add(new AttributeModifier("title", true, new Model<String>(Integer.toString(triggeredSchedules) + " triggered schedules.")));
+                }
                 triggerIcon.setVisible(triggeredSchedules > 0);
                 item.add(triggerIcon);
 
                 WebMarkupContainer recurringIcon = new WebMarkupContainer("recurringIcon");
                 recurringIcon.setOutputMarkupId(true);
                 recurringIcon.add(new AttributeAppender("class", new Model<String>("icon-arrows-cw"), ""));
-                recurringIcon.add(new AttributeModifier("title", true, new Model<String>(Integer.toString(recurringSchedules) + " recurring schedules.")));
+                if(recurringSchedules == 1) {
+                    recurringIcon.add(new AttributeModifier("title", true, new Model<String>(Integer.toString(recurringSchedules) + " recurring schedule.")));
+                } else {
+                    recurringIcon.add(new AttributeModifier("title", true, new Model<String>(Integer.toString(recurringSchedules) + " recurring schedules.")));
+                }
                 recurringIcon.setVisible(recurringSchedules > 0);
                 item.add(recurringIcon);
 
