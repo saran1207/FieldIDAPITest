@@ -56,6 +56,17 @@ public abstract class AbstractUserResource extends SetupDataResource<ApiUser, Us
 		apiUser.setCreateEventEnabled(Permissions.hasOneOf(user, Permissions.CREATE_EVENT));
 		apiUser.setEditEventEnabled(Permissions.hasOneOf(user, Permissions.EDIT_EVENT));
 		apiUser.setIdentifyEnabled(Permissions.hasOneOf(user, Permissions.TAG));
+
+		//Procedure Permissions
+		apiUser.setAuthorEditProcedure(Permissions.hasOneOf(user, Permissions.AUTHOR_EDIT_PROCEDURE));
+		apiUser.setCertifyProcedure(Permissions.hasOneOf(user, Permissions.CERTIFY_PROCEDURE));
+		apiUser.setDeleteProcedure(Permissions.hasOneOf(user, Permissions.DELETE_PROCEDURE));
+		apiUser.setMaintainLotoSchedule(Permissions.hasOneOf(user, Permissions.MAINTAIN_LOTO_SCHEDULE));
+		apiUser.setPerformProcedure(Permissions.hasOneOf(user, Permissions.PERFORM_PROCEDURE));
+		apiUser.setPrintProcedure(Permissions.hasOneOf(user, Permissions.PRINT_PROCEDURE));
+		apiUser.setProcedureAudit(Permissions.hasOneOf(user, Permissions.PROCEDURE_AUDIT));
+		apiUser.setUnpublishProcedure(Permissions.hasOneOf(user, Permissions.UNPUBLISH_PROCEDURE));
+
 		apiUser.setTenant(apiTenantResource.convertEntityToApiModel(user.getOwner().getPrimaryOrg()));
 		apiUser.setIdentifier(user.getIdentifier());
 		apiUser.setGroupIds(convertGroups(user.getGroups()));
