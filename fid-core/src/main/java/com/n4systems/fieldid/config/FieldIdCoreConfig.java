@@ -44,6 +44,7 @@ import com.n4systems.fieldid.service.mail.MailService;
 import com.n4systems.fieldid.service.massupdate.MassUpdateService;
 import com.n4systems.fieldid.service.mixpanel.MixpanelService;
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
+import com.n4systems.fieldid.service.org.CustomerMergerService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.service.predefinedlocation.PredefinedLocationService;
@@ -944,4 +945,10 @@ public class FieldIdCoreConfig {
     public NotificationSettingService notificationSettingService() {
         return new NotificationSettingService();
     }
+
+    @Bean
+    public CustomerMergerService customerMergerService() {
+        return new CustomerMergerService();
+    }
+
 }

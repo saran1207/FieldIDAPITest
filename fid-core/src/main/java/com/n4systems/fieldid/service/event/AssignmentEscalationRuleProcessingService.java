@@ -90,7 +90,15 @@ public class AssignmentEscalationRuleProcessingService extends FieldIdPersistenc
             try {
                 //Now we send the mail... yet another place something could go wrong.  We could bail out form here, as
                 //well and - again - will not end up marking that Item as having processed.
-                mailService.sendMessage(createMailMessage(item));
+                TemplateMailMessage message = createMailMessage(item);
+
+                //In some weird edge cases, a message can end up with no addresses.  we don't want to actually send
+                //the message in those cases, because it will fail... failing is bad.
+                if(!message.getToAddresses().isEmpty() ||
+                        !message.getCcAddresses().isEmpty() ||
+                        !message.getBccAddresses().isEmpty()) {
+                    mailService.sendMessage(message);
+                }
 
                 item.setRuleHasRun(true);
 

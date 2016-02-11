@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.service.event;
 
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.fieldid.service.eventbook.EventBookListFilterCriteria;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.api.Archivable;
@@ -13,9 +13,13 @@ import com.n4systems.util.persistence.search.SortTerm;
 import java.util.Date;
 import java.util.List;
 
-public class EventBookService extends FieldIdPersistenceService {
+public class EventBookService extends CrudService<EventBook> {
 
     private static String [] DEFAULT_ORDER = {"firstName", "lastName"};
+
+    public EventBookService() {
+        super(EventBook.class);
+    }
 
     public List<EventBook> getAllEventBooks() {
         return persistenceService.findAll(EventBook.class);
@@ -55,24 +59,6 @@ public class EventBookService extends FieldIdPersistenceService {
         return persistenceService.count(query);
     }
 
-    public EventBook updateEventBook(EventBook eventBook, User user) {
-        eventBook.setModified(new Date(System.currentTimeMillis()));
-        eventBook.setModifiedBy(user);
-
-        return persistenceService.update(eventBook);
-    }
-
-    public EventBook saveEventBook(EventBook eventBook, User user) {
-        eventBook.setCreated(new Date(System.currentTimeMillis()));
-        eventBook.setModified(new Date(System.currentTimeMillis()));
-        eventBook.setCreatedBy(user);
-        eventBook.setModifiedBy(user);
-
-        Long id = persistenceService.save(eventBook);
-
-        return persistenceService.find(EventBook.class, id);
-    }
-
     public EventBook getEventBookByName(String name) {
         QueryBuilder<EventBook> query = createUserSecurityBuilder(EventBook.class);
 
@@ -80,11 +66,6 @@ public class EventBookService extends FieldIdPersistenceService {
         query.addSimpleWhere("name", name);
 
         return persistenceService.find(query);
-    }
-
-    public EventBook getEventBookById(Long id) {
-        QueryBuilder<EventBook> queryBuilder = createUserSecurityBuilder(EventBook.class, true).addSimpleWhere("id", id);
-        return persistenceService.find(queryBuilder);
     }
 
     public void archiveEventBook(EventBook eventBook) {
