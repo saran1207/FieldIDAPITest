@@ -9,6 +9,7 @@ import com.n4systems.fieldid.ws.v1.resources.model.DateParam;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedPlaceEventResource;
 import com.n4systems.model.AddressInfo;
+import com.n4systems.model.Contact;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
@@ -167,47 +168,57 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 	}
 
 	private void convertContactInformation(ApiOrg apiOrg, BaseOrg baseOrg) {
+		ContactInformation contactInformation = apiOrg.getContactInformation();
+		if (contactInformation == null) {
+			contactInformation = new ContactInformation();
+			apiOrg.setContactInformation(contactInformation);
+		}
 
-		if (baseOrg.getContact() != null) {
+		final Contact contact = baseOrg.getContact();
+		if (contact != null) {
 			//name
-			if(baseOrg.getContact().getName() != null) {
-				apiOrg.getContactInformation().setName(baseOrg.getContact().getName());
+			if (contact.getName() != null) {
+				contactInformation.setName(contact.getName());
 			}
 			//email
-			if(baseOrg.getContact().getEmail() != null) {
-				apiOrg.getContactInformation().setEmail(baseOrg.getContact().getEmail());
+			if (contact.getEmail() != null) {
+				contactInformation.setEmail(contact.getEmail());
 			}
+		}
+
+		final AddressInfo addressInfo = baseOrg.getAddressInfo();
+		if (addressInfo != null) {
 			//streetAddress
-			if(baseOrg.getAddressInfo().getStreetAddress()!= null) {
-				apiOrg.getContactInformation().setStreetAddress(baseOrg.getAddressInfo().getStreetAddress());
+			if(addressInfo.getStreetAddress()!= null) {
+				contactInformation.setStreetAddress(addressInfo.getStreetAddress());
 			}
 			//city
-			if(baseOrg.getAddressInfo().getCity() != null) {
-				apiOrg.getContactInformation().setCity(baseOrg.getAddressInfo().getCity());
+			if(addressInfo.getCity() != null) {
+				contactInformation.setCity(addressInfo.getCity());
 			}
 			//state
-			if(baseOrg.getAddressInfo().getState() != null) {
-				apiOrg.getContactInformation().setState(baseOrg.getAddressInfo().getState());
+			if(addressInfo.getState() != null) {
+				contactInformation.setState(addressInfo.getState());
 			}
 			//country
-			if(baseOrg.getAddressInfo().getCountry() != null) {
-				apiOrg.getContactInformation().setCountry(baseOrg.getAddressInfo().getCountry());
+			if(addressInfo.getCountry() != null) {
+				contactInformation.setCountry(addressInfo.getCountry());
 			}
 			//zip
-			if(baseOrg.getAddressInfo().getZip() != null) {
-				apiOrg.getContactInformation().setZip(baseOrg.getAddressInfo().getZip());
+			if(addressInfo.getZip() != null) {
+				contactInformation.setZip(addressInfo.getZip());
 			}
 			//phone1
-			if(baseOrg.getAddressInfo().getPhone1() != null) {
-				apiOrg.getContactInformation().setPhone1(baseOrg.getAddressInfo().getPhone1());
+			if(addressInfo.getPhone1() != null) {
+				contactInformation.setPhone1(addressInfo.getPhone1());
 			}
 			//phone2
-			if(baseOrg.getAddressInfo().getPhone2() != null) {
-				apiOrg.getContactInformation().setPhone2(baseOrg.getAddressInfo().getPhone2());
+			if(addressInfo.getPhone2() != null) {
+				contactInformation.setPhone2(addressInfo.getPhone2());
 			}
 			//fax1
-			if(baseOrg.getAddressInfo().getFax1() != null) {
-				apiOrg.getContactInformation().setFax1(baseOrg.getAddressInfo().getFax1());
+			if(addressInfo.getFax1() != null) {
+				contactInformation.setFax1(addressInfo.getFax1());
 			}
 		}
 	}
