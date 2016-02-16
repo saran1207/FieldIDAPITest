@@ -7,13 +7,13 @@ import java.util.List;
 
 public class ApiSavedEvent extends ApiBaseThingEvent {
 	private ApiEventForm form;
-	private List<ApiSavedEvent> subEvents;
+	private List<ApiSavedSubEvent> subEvents;
 	
-	public List<ApiSavedEvent> getSubEvents() {
+	public List<ApiSavedSubEvent> getSubEvents() {
 		return subEvents;
 	}
 
-	public void setSubEvents(List<ApiSavedEvent> subEvents) {
+	public void setSubEvents(List<ApiSavedSubEvent> subEvents) {
 		this.subEvents = subEvents;
 	}	
 
