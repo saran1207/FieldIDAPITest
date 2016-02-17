@@ -7,13 +7,14 @@ import java.util.List;
 
 public class ApiSavedEvent extends ApiBaseThingEvent {
 	private ApiEventForm form;
-	private List<ApiSavedSubEvent> subEvents;
-	
-	public List<ApiSavedSubEvent> getSubEvents() {
+	private List<ApiSavedEvent> subEvents;
+	private String masterEventSid;
+
+	public List<ApiSavedEvent> getSubEvents() {
 		return subEvents;
 	}
 
-	public void setSubEvents(List<ApiSavedSubEvent> subEvents) {
+	public void setSubEvents(List<ApiSavedEvent> subEvents) {
 		this.subEvents = subEvents;
 	}	
 
@@ -23,5 +24,13 @@ public class ApiSavedEvent extends ApiBaseThingEvent {
 	
 	public void setForm(ApiEventForm form) {
 		this.form = form;
+	}
+
+	public String getMasterEventSid() {
+		return masterEventSid;
+	}
+
+	public void setMasterEventSid(String masterEventSid) {
+		this.masterEventSid = masterEventSid;
 	}
 }

@@ -92,12 +92,12 @@ public class ApiSavedEventResource extends ApiResource<ApiSavedEvent, ThingEvent
 		return null;
 	}
 	
-	private List<ApiSavedSubEvent> convertToSubApiEvents(List<SubEvent> subEvents, String masterSid) {
+	private List<ApiSavedEvent> convertToSubApiEvents(List<SubEvent> subEvents, String masterSid) {
 		if(subEvents != null && subEvents.size() > 0) {
-			List<ApiSavedSubEvent> apiSubEvents = new ArrayList<ApiSavedSubEvent>();
+			List<ApiSavedEvent> apiSubEvents = new ArrayList<ApiSavedEvent>();
 			
 			for(SubEvent subEvent : subEvents) {
-				ApiSavedSubEvent apiSubEvent = new ApiSavedSubEvent();
+				ApiSavedEvent apiSubEvent = new ApiSavedEvent();
 				apiSubEvent.setMasterEventSid(masterSid);
 				convertAbstractEventToApiEvent(apiSubEvent, subEvent);
 				apiSubEvents.add(apiSubEvent);
