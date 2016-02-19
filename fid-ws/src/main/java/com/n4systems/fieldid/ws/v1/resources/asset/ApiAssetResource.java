@@ -32,6 +32,7 @@ import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import org.apache.commons.collections.ListUtils;
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -144,7 +145,16 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		List<ApiAsset> apiAssets = convertAllAssetsToApiModels(assets, downloadEvents, downloadImageAttachments, syncDuration);
         logger.info("ID:" + rand + "   We got back " + apiAssets.size() + " assets...");
 		ListResponse<ApiAsset> response = new ListResponse<>(apiAssets, 0, assets.size(), assets.size());
-		return response;
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            logger.info("ID:" + rand + "   JSON = " + mapper.writeValueAsString(response));
+        } catch (IOException e) {
+            logger.info("ID:" + rand + "   JSON = FAILED TO GENERATE");
+        }
+
+        return response;
 	}
 	
 	@GET
