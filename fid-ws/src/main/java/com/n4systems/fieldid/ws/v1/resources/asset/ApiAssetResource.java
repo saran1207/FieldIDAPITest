@@ -32,7 +32,6 @@ import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import org.apache.commons.collections.ListUtils;
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,15 +75,6 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			@QueryParam("owner") Long ownerId,
 			@DefaultValue("false") @QueryParam("downloadEvents") boolean downloadEvents,
             @DefaultValue("true") @QueryParam("downloadImageAttachments") boolean downloadImageAttachments) {
-
-        logger.info("ApiAssetResource.findAll called...");
-        logger.info("after = " + after.toString());
-        logger.info("page = " + page);
-        logger.info("pageSize = " + pageSize);
-        logger.info("owner = " + ownerId);
-        logger.info("downloadEvents = " + downloadEvents);
-        logger.info("downloadImageAttachments = " + downloadImageAttachments);
-		
 		QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
 		builder.addOrder("created");
 		
@@ -104,9 +94,6 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 
 		List<Asset> assets = persistenceService.findAll(builder, page, pageSize);
 		Long total = persistenceService.count(builder);
-
-        logger.info("There were " + assets.size() + " results from a total of " + total + " assets");
-		
 		List<ApiAsset> apiAssets = convertAllAssetsToApiModels(assets, downloadEvents, downloadImageAttachments, SyncDuration.ALL);
 		ListResponse<ApiAsset> response = new ListResponse<>(apiAssets, page, pageSize, total);
 		return response;
@@ -122,38 +109,13 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
             @DefaultValue("true") @QueryParam("downloadImageAttachments") boolean downloadImageAttachments,
 			@DefaultValue("YEAR") @QueryParam("syncDuration") SyncDuration syncDuration) {
 
-        final double rand = Math.random();
-
-        @SuppressWarnings("StringBufferMayBeStringBuilder")
-        final StringBuffer buffer = new StringBuffer();
-
-        for (String assetId : assetIds) {
-            buffer.append(", ")
-                  .append(assetId);
-        }
-
-        logger.info("ID:" + rand + "   ApiAssetResource.list called...");
-        logger.info("ID:" + rand + "   assetIds = " + buffer.toString());
-        logger.info("ID:" + rand + "   downloadEvents = " + downloadEvents);
-        logger.info("ID:" + rand + "   downloadImageAttachments = " + downloadEvents);
-        logger.info("ID:" + rand + "   syncDuration = " + syncDuration);
 		QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
 		builder.addWhere(WhereClauseFactory.create(Comparator.IN, "mobileGUID", assetIds));
 		
 		List<Asset> assets = persistenceService.findAll(builder);
 
 		List<ApiAsset> apiAssets = convertAllAssetsToApiModels(assets, downloadEvents, downloadImageAttachments, syncDuration);
-        logger.info("ID:" + rand + "   We got back " + apiAssets.size() + " assets...");
 		ListResponse<ApiAsset> response = new ListResponse<>(apiAssets, 0, assets.size(), assets.size());
-
-        ObjectMapper mapper = new ObjectMapper();
-
-        try {
-            logger.info("ID:" + rand + "   JSON = " + mapper.writeValueAsString(response));
-        } catch (IOException e) {
-            logger.info("ID:" + rand + "   JSON = FAILED TO GENERATE");
-        }
-
         return response;
 	}
 	
