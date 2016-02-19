@@ -120,23 +120,29 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			@DefaultValue("false") @QueryParam("downloadEvents") boolean downloadEvents,
             @DefaultValue("true") @QueryParam("downloadImageAttachments") boolean downloadImageAttachments,
 			@DefaultValue("YEAR") @QueryParam("syncDuration") SyncDuration syncDuration) {
-        String assetList = "";
+
+        final double rand = Math.random();
+
+        @SuppressWarnings("StringBufferMayBeStringBuilder")
+        final StringBuffer buffer = new StringBuffer();
+
         for (String assetId : assetIds) {
-            assetList += ", " + assetId;
+            buffer.append(", ")
+                  .append(assetId);
         }
 
-        logger.info("ApiAssetResource.list called...");
-        logger.info("assetIds = " + assetList);
-        logger.info("downloadEvents = " + downloadEvents);
-        logger.info("downloadImageAttachments = " + downloadEvents);
-        logger.info("syncDuration = " + syncDuration);
+        logger.info("ID:" + rand + "   ApiAssetResource.list called...");
+        logger.info("ID:" + rand + "   assetIds = " + buffer.toString());
+        logger.info("ID:" + rand + "   downloadEvents = " + downloadEvents);
+        logger.info("ID:" + rand + "   downloadImageAttachments = " + downloadEvents);
+        logger.info("ID:" + rand + "   syncDuration = " + syncDuration);
 		QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
 		builder.addWhere(WhereClauseFactory.create(Comparator.IN, "mobileGUID", assetIds));
 		
 		List<Asset> assets = persistenceService.findAll(builder);
 
 		List<ApiAsset> apiAssets = convertAllAssetsToApiModels(assets, downloadEvents, downloadImageAttachments, syncDuration);
-        logger.info("We got back " + apiAssets.size() + " assets...");
+        logger.info("ID:" + rand + "   We got back " + apiAssets.size() + " assets...");
 		ListResponse<ApiAsset> response = new ListResponse<>(apiAssets, 0, assets.size(), assets.size());
 		return response;
 	}
