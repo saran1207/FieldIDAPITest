@@ -479,14 +479,14 @@ public class UserService extends CrudService<User> {
 				break;
 			case LITE:
                 // lite and usage based users can only have create and edit events
-                perms.retain(Permissions.CREATE_EVENT, Permissions.EDIT_EVENT);
+                perms.retain(Permissions.CREATE_EVENT, Permissions.EDIT_EVENT, Permissions.AUTHOR_EDIT_PROCEDURE, Permissions.CERTIFY_PROCEDURE, Permissions.PERFORM_PROCEDURE, Permissions.PRINT_PROCEDURE, Permissions.PROCEDURE_AUDIT);
                 break;
 			case USAGE_BASED:
 				// lite and usage based users can only have create and edit events
-				perms.retain(Permissions.CREATE_EVENT, Permissions.EDIT_EVENT);
+                perms.retain(Permissions.CREATE_EVENT, Permissions.EDIT_EVENT, Permissions.AUTHOR_EDIT_PROCEDURE, Permissions.CERTIFY_PROCEDURE, Permissions.PERFORM_PROCEDURE, Permissions.PRINT_PROCEDURE, Permissions.PROCEDURE_AUDIT);
 				break;
 			case READONLY:
-                perms.retain(Permissions.EDIT_ASSET_DETAILS);
+                perms.retain(Permissions.EDIT_ASSET_DETAILS, Permissions.PRINT_PROCEDURE);
                 break;
 			case PERSON:
 				// Readonly and Persons have no permissions
