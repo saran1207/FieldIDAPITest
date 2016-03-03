@@ -1,5 +1,6 @@
 package com.n4systems.model.notificationsettings;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -13,7 +14,7 @@ import com.n4systems.util.time.Clock;
 
 
 @Embeddable
-public class UpcomingEventReport {
+public class UpcomingEventReport implements Serializable {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name="periodstart", nullable=false)
@@ -27,7 +28,7 @@ public class UpcomingEventReport {
 	private boolean includeUpcoming;
 	
 	public UpcomingEventReport() {
-		this(RelativeTime.TODAY, RelativeTime.NEXT_WEEK, true);
+		this(RelativeTime.TODAY, RelativeTime.DAY_1, true);
 	}
 	public UpcomingEventReport(RelativeTime periodStart, RelativeTime periodEnd, boolean include) {
 		this.periodStart = periodStart;

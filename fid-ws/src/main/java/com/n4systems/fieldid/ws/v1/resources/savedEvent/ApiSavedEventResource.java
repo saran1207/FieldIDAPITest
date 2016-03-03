@@ -1,16 +1,15 @@
 package com.n4systems.fieldid.ws.v1.resources.savedEvent;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import com.n4systems.fieldid.service.event.EventService;
+import com.n4systems.fieldid.ws.v1.resources.ApiResource;
+import com.n4systems.fieldid.ws.v1.resources.event.ApiEventAttribute;
 import com.n4systems.model.*;
 import com.n4systems.model.utils.AssetEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.n4systems.fieldid.service.event.EventService;
-import com.n4systems.fieldid.ws.v1.resources.ApiResource;
-import com.n4systems.fieldid.ws.v1.resources.event.ApiEventAttribute;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class ApiSavedEventResource extends ApiResource<ApiSavedEvent, ThingEvent> {
 	@Autowired private ApiSavedEventFormResource apiSavedEventFormResource;
@@ -51,7 +50,7 @@ public class ApiSavedEventResource extends ApiResource<ApiSavedEvent, ThingEvent
 			apiEvent.setFreeformLocation(event.getAdvancedLocation().getFreeformLocation());
 		}
 		
-		apiEvent.setSubEvents(convertToSubApiEvents(event.getSubEvents()));
+		apiEvent.setSubEvents(convertToSubApiEvents(event.getSubEvents(), event.getMobileGUID()));
 		
 		return apiEvent;
 	}
@@ -93,12 +92,13 @@ public class ApiSavedEventResource extends ApiResource<ApiSavedEvent, ThingEvent
 		return null;
 	}
 	
-	private List<ApiSavedEvent> convertToSubApiEvents(List<SubEvent> subEvents) {
+	private List<ApiSavedEvent> convertToSubApiEvents(List<SubEvent> subEvents, String masterSid) {
 		if(subEvents != null && subEvents.size() > 0) {
 			List<ApiSavedEvent> apiSubEvents = new ArrayList<ApiSavedEvent>();
 			
 			for(SubEvent subEvent : subEvents) {
 				ApiSavedEvent apiSubEvent = new ApiSavedEvent();
+				apiSubEvent.setMasterEventSid(masterSid);
 				convertAbstractEventToApiEvent(apiSubEvent, subEvent);
 				apiSubEvents.add(apiSubEvent);
 			}

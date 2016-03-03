@@ -11,7 +11,7 @@ import com.n4systems.util.ConfigEntry;
 import java.util.Date;
 
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
+@UserPermissionFilter(userRequiresOneOf={Permissions.CREATE_EVENT})
 public class AssetSelectionAction extends AbstractAction {
 
 	public AssetSelectionAction(PersistenceManager persistenceManager) {

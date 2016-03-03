@@ -1,13 +1,13 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
     <div wicket:id="modal" />
-    <div class="split-btn">
+    <div wicket:id="optionsContainer" class="split-btn">
         <a wicket:id="reviseLink" class="btn-secondary">
             <wicket:container wicket:id="label"/>
         </a>
-        <div wicket:enclosure="optionsContainer" class="dropdown">
+        <div class="dropdown">
             <button class="btn-secondary">Toggle Dropdown</button>
-            <ul wicket:id="optionsContainer" class="pull-right">
+            <ul  class="pull-right">
                 <li>
                     <a wicket:id="copyLink">
                         <wicket:container wicket:id="label"/>
@@ -36,11 +36,13 @@
             </ul>
         </div>
     </div>
+    <a wicket:id="recurringSchedulesLink2" class="btn-secondary">
+        <wicket:message key="label.uc_schedules"/>
+    </a>
 
-    <div wicket:enclosure="optionsContainer2" class="dropdown">
+    <div wicket:enclosure="printOptionsContainer" class="dropdown">
         <button class="btn-secondary">Print</button>
-        <ul wicket:id="optionsContainer2" class="pull-right">
-            <!-- wicket:message key="label.print"/ -->
+        <ul wicket:id="printOptionsContainer" class="pull-right">
             <li>
                 <a wicket:id="shortLink">
                     <wicket:container wicket:id="label"/>

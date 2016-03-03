@@ -25,7 +25,7 @@ import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemUsers})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_USERS})
 public class UserRequestCrud extends AbstractCrud {
 
 	private static final long serialVersionUID = 1L;

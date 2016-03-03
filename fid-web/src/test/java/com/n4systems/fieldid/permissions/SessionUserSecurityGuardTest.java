@@ -17,7 +17,7 @@ public class SessionUserSecurityGuardTest extends AbstractUserSecurityTestCase {
 		User user = UserBuilder.anEmployee().build();
 		SessionUserSecurityGuard securityGuard = null;
 		
-		for (int permission : Permissions.getVisibleSystemUserPermissions()) {
+		for (int permission : Permissions.getVisibleSystemUserInspectionPermissions()) {
 			user.setPermissions(permission);
 			securityGuard = new SessionUserSecurityGuard(user);			
 			assertTrue("Permission "+resolvePermissionName(permission), invokePermissionMethod(securityGuard, permission));

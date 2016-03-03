@@ -3,6 +3,8 @@ package com.n4systems.model.procedure;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.n4systems.model.Asset;
+import com.n4systems.model.PlatformType;
+import com.n4systems.model.api.HasCreatedModifiedPlatform;
 import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.common.ImageAnnotation;
@@ -12,16 +14,11 @@ import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.user.User;
 
 import javax.persistence.*;
-
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "procedure_definitions")
-public class ProcedureDefinition extends ArchivableEntityWithTenant implements Listable<Long>, HasOwner {
+public class ProcedureDefinition extends ArchivableEntityWithTenant implements Listable<Long>, HasOwner, HasCreatedModifiedPlatform {
 
     public static final SecurityDefiner createSecurityDefiner() {
         return new SecurityDefiner("tenant.id", "asset.owner", null, "state", false);
@@ -143,6 +140,20 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
 
 	@Column(nullable=false)
 	private String mobileId;
+
+    @Column(name="modified_platform", length = 200)
+    private String modifiedPlatform;
+
+    @Column(name="created_platform", length = 200)
+    private String createdPlatform;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="modified_platform_type")
+    private PlatformType modifiedPlatformType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="created_platform_type")
+    private PlatformType createdPlatformType;
 
 	@Override
 	protected void onCreate() {
@@ -531,4 +542,44 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
 	public void setMobileId(String mobileId) {
 		this.mobileId = mobileId;
 	}
+
+    @Override
+    public String getModifiedPlatform() {
+        return modifiedPlatform;
+    }
+
+    @Override
+    public void setModifiedPlatform(String modifiedPlatform) {
+        this.modifiedPlatform = modifiedPlatform;
+    }
+
+    @Override
+    public String getCreatedPlatform() {
+        return createdPlatform;
+    }
+
+    @Override
+    public void setCreatedPlatform(String createdPlatform) {
+        this.createdPlatform = createdPlatform;
+    }
+
+    @Override
+    public PlatformType getModifiedPlatformType() {
+        return modifiedPlatformType;
+    }
+
+    @Override
+    public void setModifiedPlatformType(PlatformType modifiedPlatformType) {
+        this.modifiedPlatformType = modifiedPlatformType;
+    }
+
+    @Override
+    public PlatformType getCreatedPlatformType() {
+        return createdPlatformType;
+    }
+
+    @Override
+    public void setCreatedPlatformType(PlatformType createdPlatformType) {
+        this.createdPlatformType = createdPlatformType;
+    }
 }

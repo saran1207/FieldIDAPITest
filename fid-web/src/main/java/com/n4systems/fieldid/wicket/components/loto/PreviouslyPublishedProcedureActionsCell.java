@@ -5,6 +5,7 @@ import com.n4systems.fieldid.service.procedure.LotoReportService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.procedure.SvgGenerationService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -46,6 +47,8 @@ public class PreviouslyPublishedProcedureActionsCell extends Panel {
     public PreviouslyPublishedProcedureActionsCell(String id, final IModel<ProcedureDefinition> proDef, final ProcedureListPanel procedureListPanel) {
         super(id);
 
+        Boolean hasAuthorEditProcedures = FieldIDSession.get().getUserSecurityGuard().isAllowedAuthorEditProcedure();
+
         final ProcedureDefinition procedureDefinition = proDef.getObject();
 
         FIDModalWindow modal;
@@ -61,28 +64,21 @@ public class PreviouslyPublishedProcedureActionsCell extends Panel {
             }
         };
 
-        if (procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED)) {
-            reviseLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(procedureDefinition.getAsset()));
-        } else if (procedureDefinition.getPublishedState().equals(PublishedState.PREVIOUSLY_PUBLISHED)) {
-            reviseLink.setVisible(true);
-        } else {
-            reviseLink.setVisible(false);
-        }
-
-        reviseLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.revise"), TipsyBehavior.Gravity.E));
-
-        if(procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED)) {
-            reviseLink.add(new Label("label", new FIDLabelModel("label.revise")));
-            reviseLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.revise"), TipsyBehavior.Gravity.E));
-        } else {
-            reviseLink.add(new Label("label", new FIDLabelModel("label.restore")));
-            reviseLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.restore"), TipsyBehavior.Gravity.E));
-        }
+        reviseLink.setVisible(hasAuthorEditProcedures);
+        reviseLink.add(new Label("label", new FIDLabelModel("label.restore")));
+        reviseLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.restore"), TipsyBehavior.Gravity.E));
 
         add(reviseLink);
 
-
         //Add the print buttons
-        add(new LotoPrintoutOptionsContainer("optionsContainer2", procedureDefinition, modal));
+        add(new LotoPrintoutOptionsContainer("optionsContainer2", procedureDefinition, modal){
+            @Override
+            public boolean isVisible() {
+                if (FieldIDSession.get().getSessionUser().isReadOnlyUser())
+                    return false;
+                else
+                    return super.isVisible();
+            }
+        });
     }
 }

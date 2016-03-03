@@ -135,10 +135,10 @@ public final class Messages {
     // @@protoc_insertion_point(enum_scope:com.n4systems.fieldid.api.pub.model.AttributeValueType)
   }
 
-  public interface AssetMessageOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface AssetMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.n4systems.fieldid.api.pub.model.AssetMessage)
+      com.google.protobuf.MessageOrBuilder {
 
-    // optional string id = 1;
     /**
      * <code>optional string id = 1;</code>
      */
@@ -153,7 +153,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getIdBytes();
 
-    // optional string createdDate = 2;
     /**
      * <code>optional string createdDate = 2;</code>
      */
@@ -168,7 +167,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCreatedDateBytes();
 
-    // optional string modifiedDate = 3;
     /**
      * <code>optional string modifiedDate = 3;</code>
      */
@@ -183,7 +181,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getModifiedDateBytes();
 
-    // optional string createdByUserName = 4;
     /**
      * <code>optional string createdByUserName = 4;</code>
      */
@@ -198,7 +195,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCreatedByUserNameBytes();
 
-    // optional string createdByUserId = 5;
     /**
      * <code>optional string createdByUserId = 5;</code>
      */
@@ -213,7 +209,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCreatedByUserIdBytes();
 
-    // optional string modifiedByUserName = 6;
     /**
      * <code>optional string modifiedByUserName = 6;</code>
      */
@@ -228,7 +223,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getModifiedByUserNameBytes();
 
-    // optional string modifiedByUserId = 7;
     /**
      * <code>optional string modifiedByUserId = 7;</code>
      */
@@ -243,7 +237,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getModifiedByUserIdBytes();
 
-    // optional string ownerName = 8;
     /**
      * <code>optional string ownerName = 8;</code>
      */
@@ -258,7 +251,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getOwnerNameBytes();
 
-    // required string ownerId = 9;
     /**
      * <code>required string ownerId = 9;</code>
      */
@@ -273,7 +265,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getOwnerIdBytes();
 
-    // required string identifier = 10;
     /**
      * <code>required string identifier = 10;</code>
      */
@@ -288,7 +279,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getIdentifierBytes();
 
-    // optional string rfidNumber = 11;
     /**
      * <code>optional string rfidNumber = 11;</code>
      */
@@ -303,7 +293,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getRfidNumberBytes();
 
-    // optional string customerRefNumber = 12;
     /**
      * <code>optional string customerRefNumber = 12;</code>
      */
@@ -318,7 +307,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCustomerRefNumberBytes();
 
-    // optional string purchaseOrder = 13;
     /**
      * <code>optional string purchaseOrder = 13;</code>
      */
@@ -333,7 +321,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getPurchaseOrderBytes();
 
-    // optional string comments = 14;
     /**
      * <code>optional string comments = 14;</code>
      */
@@ -348,7 +335,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCommentsBytes();
 
-    // optional string identifiedDate = 15;
     /**
      * <code>optional string identifiedDate = 15;</code>
      */
@@ -363,7 +349,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getIdentifiedDateBytes();
 
-    // optional string assetTypeName = 16;
     /**
      * <code>optional string assetTypeName = 16;</code>
      */
@@ -378,7 +363,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getAssetTypeNameBytes();
 
-    // required string assetTypeId = 17;
     /**
      * <code>required string assetTypeId = 17;</code>
      */
@@ -393,7 +377,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getAssetTypeIdBytes();
 
-    // optional string assetStatusName = 18;
     /**
      * <code>optional string assetStatusName = 18;</code>
      */
@@ -408,7 +391,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getAssetStatusNameBytes();
 
-    // optional string assetStatusId = 19;
     /**
      * <code>optional string assetStatusId = 19;</code>
      */
@@ -423,7 +405,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getAssetStatusIdBytes();
 
-    // optional string identifiedByUserName = 20;
     /**
      * <code>optional string identifiedByUserName = 20;</code>
      */
@@ -438,7 +419,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getIdentifiedByUserNameBytes();
 
-    // optional string identifiedByUserId = 21;
     /**
      * <code>optional string identifiedByUserId = 21;</code>
      */
@@ -453,7 +433,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getIdentifiedByUserIdBytes();
 
-    // optional string assignedUserName = 22;
     /**
      * <code>optional string assignedUserName = 22;</code>
      */
@@ -468,7 +447,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getAssignedUserNameBytes();
 
-    // optional string assignedUserId = 23;
     /**
      * <code>optional string assignedUserId = 23;</code>
      */
@@ -483,7 +461,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getAssignedUserIdBytes();
 
-    // optional string latitude = 24;
     /**
      * <code>optional string latitude = 24;</code>
      */
@@ -498,7 +475,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getLatitudeBytes();
 
-    // optional string longitude = 25;
     /**
      * <code>optional string longitude = 25;</code>
      */
@@ -513,7 +489,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getLongitudeBytes();
 
-    // optional string freeFormLocation = 26;
     /**
      * <code>optional string freeFormLocation = 26;</code>
      */
@@ -528,7 +503,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getFreeFormLocationBytes();
 
-    // optional string predefinedLocationName = 27;
     /**
      * <code>optional string predefinedLocationName = 27;</code>
      */
@@ -543,7 +517,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getPredefinedLocationNameBytes();
 
-    // optional string predefinedLocationId = 28;
     /**
      * <code>optional string predefinedLocationId = 28;</code>
      */
@@ -558,7 +531,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getPredefinedLocationIdBytes();
 
-    // optional string orderNumber = 29;
     /**
      * <code>optional string orderNumber = 29;</code>
      */
@@ -573,7 +545,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getOrderNumberBytes();
 
-    // optional string description = 30;
     /**
      * <code>optional string description = 30;</code>
      */
@@ -588,7 +559,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getDescriptionBytes();
 
-    // repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;
     /**
      * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;</code>
      */
@@ -617,8 +587,9 @@ public final class Messages {
    * Protobuf type {@code com.n4systems.fieldid.api.pub.model.AssetMessage}
    */
   public static final class AssetMessage extends
-      com.google.protobuf.GeneratedMessage
-      implements AssetMessageOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:com.n4systems.fieldid.api.pub.model.AssetMessage)
+      AssetMessageOrBuilder {
     // Use AssetMessage.newBuilder() to construct.
     private AssetMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -665,153 +636,183 @@ public final class Messages {
               break;
             }
             case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000001;
-              id_ = input.readBytes();
+              id_ = bs;
               break;
             }
             case 18: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000002;
-              createdDate_ = input.readBytes();
+              createdDate_ = bs;
               break;
             }
             case 26: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000004;
-              modifiedDate_ = input.readBytes();
+              modifiedDate_ = bs;
               break;
             }
             case 34: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000008;
-              createdByUserName_ = input.readBytes();
+              createdByUserName_ = bs;
               break;
             }
             case 42: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000010;
-              createdByUserId_ = input.readBytes();
+              createdByUserId_ = bs;
               break;
             }
             case 50: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000020;
-              modifiedByUserName_ = input.readBytes();
+              modifiedByUserName_ = bs;
               break;
             }
             case 58: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000040;
-              modifiedByUserId_ = input.readBytes();
+              modifiedByUserId_ = bs;
               break;
             }
             case 66: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000080;
-              ownerName_ = input.readBytes();
+              ownerName_ = bs;
               break;
             }
             case 74: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000100;
-              ownerId_ = input.readBytes();
+              ownerId_ = bs;
               break;
             }
             case 82: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000200;
-              identifier_ = input.readBytes();
+              identifier_ = bs;
               break;
             }
             case 90: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000400;
-              rfidNumber_ = input.readBytes();
+              rfidNumber_ = bs;
               break;
             }
             case 98: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000800;
-              customerRefNumber_ = input.readBytes();
+              customerRefNumber_ = bs;
               break;
             }
             case 106: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00001000;
-              purchaseOrder_ = input.readBytes();
+              purchaseOrder_ = bs;
               break;
             }
             case 114: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00002000;
-              comments_ = input.readBytes();
+              comments_ = bs;
               break;
             }
             case 122: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00004000;
-              identifiedDate_ = input.readBytes();
+              identifiedDate_ = bs;
               break;
             }
             case 130: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00008000;
-              assetTypeName_ = input.readBytes();
+              assetTypeName_ = bs;
               break;
             }
             case 138: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00010000;
-              assetTypeId_ = input.readBytes();
+              assetTypeId_ = bs;
               break;
             }
             case 146: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00020000;
-              assetStatusName_ = input.readBytes();
+              assetStatusName_ = bs;
               break;
             }
             case 154: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00040000;
-              assetStatusId_ = input.readBytes();
+              assetStatusId_ = bs;
               break;
             }
             case 162: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00080000;
-              identifiedByUserName_ = input.readBytes();
+              identifiedByUserName_ = bs;
               break;
             }
             case 170: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00100000;
-              identifiedByUserId_ = input.readBytes();
+              identifiedByUserId_ = bs;
               break;
             }
             case 178: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00200000;
-              assignedUserName_ = input.readBytes();
+              assignedUserName_ = bs;
               break;
             }
             case 186: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00400000;
-              assignedUserId_ = input.readBytes();
+              assignedUserId_ = bs;
               break;
             }
             case 194: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00800000;
-              latitude_ = input.readBytes();
+              latitude_ = bs;
               break;
             }
             case 202: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x01000000;
-              longitude_ = input.readBytes();
+              longitude_ = bs;
               break;
             }
             case 210: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x02000000;
-              freeFormLocation_ = input.readBytes();
+              freeFormLocation_ = bs;
               break;
             }
             case 218: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x04000000;
-              predefinedLocationName_ = input.readBytes();
+              predefinedLocationName_ = bs;
               break;
             }
             case 226: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x08000000;
-              predefinedLocationId_ = input.readBytes();
+              predefinedLocationId_ = bs;
               break;
             }
             case 234: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x10000000;
-              orderNumber_ = input.readBytes();
+              orderNumber_ = bs;
               break;
             }
             case 242: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x20000000;
-              description_ = input.readBytes();
+              description_ = bs;
               break;
             }
             case 250: {
@@ -864,10 +865,10 @@ public final class Messages {
       return PARSER;
     }
 
-    public interface AttributeMessageOrBuilder
-        extends com.google.protobuf.MessageOrBuilder {
+    public interface AttributeMessageOrBuilder extends
+        // @@protoc_insertion_point(interface_extends:com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage)
+        com.google.protobuf.MessageOrBuilder {
 
-      // optional .com.n4systems.fieldid.api.pub.model.AttributeValueType type = 1;
       /**
        * <code>optional .com.n4systems.fieldid.api.pub.model.AttributeValueType type = 1;</code>
        */
@@ -877,7 +878,6 @@ public final class Messages {
        */
       com.n4systems.fieldid.api.pub.model.Messages.AttributeValueType getType();
 
-      // optional string id = 2;
       /**
        * <code>optional string id = 2;</code>
        */
@@ -892,7 +892,6 @@ public final class Messages {
       com.google.protobuf.ByteString
           getIdBytes();
 
-      // optional string name = 3;
       /**
        * <code>optional string name = 3;</code>
        */
@@ -907,7 +906,6 @@ public final class Messages {
       com.google.protobuf.ByteString
           getNameBytes();
 
-      // optional string value = 4;
       /**
        * <code>optional string value = 4;</code>
        */
@@ -926,8 +924,9 @@ public final class Messages {
      * Protobuf type {@code com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage}
      */
     public static final class AttributeMessage extends
-        com.google.protobuf.GeneratedMessage
-        implements AttributeMessageOrBuilder {
+        com.google.protobuf.GeneratedMessage implements
+        // @@protoc_insertion_point(message_implements:com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage)
+        AttributeMessageOrBuilder {
       // Use AttributeMessage.newBuilder() to construct.
       private AttributeMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
         super(builder);
@@ -985,18 +984,21 @@ public final class Messages {
                 break;
               }
               case 18: {
+                com.google.protobuf.ByteString bs = input.readBytes();
                 bitField0_ |= 0x00000002;
-                id_ = input.readBytes();
+                id_ = bs;
                 break;
               }
               case 26: {
+                com.google.protobuf.ByteString bs = input.readBytes();
                 bitField0_ |= 0x00000004;
-                name_ = input.readBytes();
+                name_ = bs;
                 break;
               }
               case 34: {
+                com.google.protobuf.ByteString bs = input.readBytes();
                 bitField0_ |= 0x00000008;
-                value_ = input.readBytes();
+                value_ = bs;
                 break;
               }
             }
@@ -1039,7 +1041,6 @@ public final class Messages {
       }
 
       private int bitField0_;
-      // optional .com.n4systems.fieldid.api.pub.model.AttributeValueType type = 1;
       public static final int TYPE_FIELD_NUMBER = 1;
       private com.n4systems.fieldid.api.pub.model.Messages.AttributeValueType type_;
       /**
@@ -1055,7 +1056,6 @@ public final class Messages {
         return type_;
       }
 
-      // optional string id = 2;
       public static final int ID_FIELD_NUMBER = 2;
       private java.lang.Object id_;
       /**
@@ -1098,7 +1098,6 @@ public final class Messages {
         }
       }
 
-      // optional string name = 3;
       public static final int NAME_FIELD_NUMBER = 3;
       private java.lang.Object name_;
       /**
@@ -1141,7 +1140,6 @@ public final class Messages {
         }
       }
 
-      // optional string value = 4;
       public static final int VALUE_FIELD_NUMBER = 4;
       private java.lang.Object value_;
       /**
@@ -1193,7 +1191,8 @@ public final class Messages {
       private byte memoizedIsInitialized = -1;
       public final boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
-        if (isInitialized != -1) return isInitialized == 1;
+        if (isInitialized == 1) return true;
+        if (isInitialized == 0) return false;
 
         memoizedIsInitialized = 1;
         return true;
@@ -1321,8 +1320,9 @@ public final class Messages {
        * Protobuf type {@code com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage}
        */
       public static final class Builder extends
-          com.google.protobuf.GeneratedMessage.Builder<Builder>
-         implements com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessageOrBuilder {
+          com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+          // @@protoc_insertion_point(builder_implements:com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage)
+          com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessageOrBuilder {
         public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
           return com.n4systems.fieldid.api.pub.model.Messages.internal_static_com_n4systems_fieldid_api_pub_model_AssetMessage_AttributeMessage_descriptor;
@@ -1468,7 +1468,6 @@ public final class Messages {
         }
         private int bitField0_;
 
-        // optional .com.n4systems.fieldid.api.pub.model.AttributeValueType type = 1;
         private com.n4systems.fieldid.api.pub.model.Messages.AttributeValueType type_ = com.n4systems.fieldid.api.pub.model.Messages.AttributeValueType.TEXT;
         /**
          * <code>optional .com.n4systems.fieldid.api.pub.model.AttributeValueType type = 1;</code>
@@ -1504,7 +1503,6 @@ public final class Messages {
           return this;
         }
 
-        // optional string id = 2;
         private java.lang.Object id_ = "";
         /**
          * <code>optional string id = 2;</code>
@@ -1518,9 +1516,12 @@ public final class Messages {
         public java.lang.String getId() {
           java.lang.Object ref = id_;
           if (!(ref instanceof java.lang.String)) {
-            java.lang.String s = ((com.google.protobuf.ByteString) ref)
-                .toStringUtf8();
-            id_ = s;
+            com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
+            java.lang.String s = bs.toStringUtf8();
+            if (bs.isValidUtf8()) {
+              id_ = s;
+            }
             return s;
           } else {
             return (java.lang.String) ref;
@@ -1578,7 +1579,6 @@ public final class Messages {
           return this;
         }
 
-        // optional string name = 3;
         private java.lang.Object name_ = "";
         /**
          * <code>optional string name = 3;</code>
@@ -1592,9 +1592,12 @@ public final class Messages {
         public java.lang.String getName() {
           java.lang.Object ref = name_;
           if (!(ref instanceof java.lang.String)) {
-            java.lang.String s = ((com.google.protobuf.ByteString) ref)
-                .toStringUtf8();
-            name_ = s;
+            com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
+            java.lang.String s = bs.toStringUtf8();
+            if (bs.isValidUtf8()) {
+              name_ = s;
+            }
             return s;
           } else {
             return (java.lang.String) ref;
@@ -1652,7 +1655,6 @@ public final class Messages {
           return this;
         }
 
-        // optional string value = 4;
         private java.lang.Object value_ = "";
         /**
          * <code>optional string value = 4;</code>
@@ -1666,9 +1668,12 @@ public final class Messages {
         public java.lang.String getValue() {
           java.lang.Object ref = value_;
           if (!(ref instanceof java.lang.String)) {
-            java.lang.String s = ((com.google.protobuf.ByteString) ref)
-                .toStringUtf8();
-            value_ = s;
+            com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
+            java.lang.String s = bs.toStringUtf8();
+            if (bs.isValidUtf8()) {
+              value_ = s;
+            }
             return s;
           } else {
             return (java.lang.String) ref;
@@ -1738,7 +1743,6 @@ public final class Messages {
     }
 
     private int bitField0_;
-    // optional string id = 1;
     public static final int ID_FIELD_NUMBER = 1;
     private java.lang.Object id_;
     /**
@@ -1781,7 +1785,6 @@ public final class Messages {
       }
     }
 
-    // optional string createdDate = 2;
     public static final int CREATEDDATE_FIELD_NUMBER = 2;
     private java.lang.Object createdDate_;
     /**
@@ -1824,7 +1827,6 @@ public final class Messages {
       }
     }
 
-    // optional string modifiedDate = 3;
     public static final int MODIFIEDDATE_FIELD_NUMBER = 3;
     private java.lang.Object modifiedDate_;
     /**
@@ -1867,7 +1869,6 @@ public final class Messages {
       }
     }
 
-    // optional string createdByUserName = 4;
     public static final int CREATEDBYUSERNAME_FIELD_NUMBER = 4;
     private java.lang.Object createdByUserName_;
     /**
@@ -1910,7 +1911,6 @@ public final class Messages {
       }
     }
 
-    // optional string createdByUserId = 5;
     public static final int CREATEDBYUSERID_FIELD_NUMBER = 5;
     private java.lang.Object createdByUserId_;
     /**
@@ -1953,7 +1953,6 @@ public final class Messages {
       }
     }
 
-    // optional string modifiedByUserName = 6;
     public static final int MODIFIEDBYUSERNAME_FIELD_NUMBER = 6;
     private java.lang.Object modifiedByUserName_;
     /**
@@ -1996,7 +1995,6 @@ public final class Messages {
       }
     }
 
-    // optional string modifiedByUserId = 7;
     public static final int MODIFIEDBYUSERID_FIELD_NUMBER = 7;
     private java.lang.Object modifiedByUserId_;
     /**
@@ -2039,7 +2037,6 @@ public final class Messages {
       }
     }
 
-    // optional string ownerName = 8;
     public static final int OWNERNAME_FIELD_NUMBER = 8;
     private java.lang.Object ownerName_;
     /**
@@ -2082,7 +2079,6 @@ public final class Messages {
       }
     }
 
-    // required string ownerId = 9;
     public static final int OWNERID_FIELD_NUMBER = 9;
     private java.lang.Object ownerId_;
     /**
@@ -2125,7 +2121,6 @@ public final class Messages {
       }
     }
 
-    // required string identifier = 10;
     public static final int IDENTIFIER_FIELD_NUMBER = 10;
     private java.lang.Object identifier_;
     /**
@@ -2168,7 +2163,6 @@ public final class Messages {
       }
     }
 
-    // optional string rfidNumber = 11;
     public static final int RFIDNUMBER_FIELD_NUMBER = 11;
     private java.lang.Object rfidNumber_;
     /**
@@ -2211,7 +2205,6 @@ public final class Messages {
       }
     }
 
-    // optional string customerRefNumber = 12;
     public static final int CUSTOMERREFNUMBER_FIELD_NUMBER = 12;
     private java.lang.Object customerRefNumber_;
     /**
@@ -2254,7 +2247,6 @@ public final class Messages {
       }
     }
 
-    // optional string purchaseOrder = 13;
     public static final int PURCHASEORDER_FIELD_NUMBER = 13;
     private java.lang.Object purchaseOrder_;
     /**
@@ -2297,7 +2289,6 @@ public final class Messages {
       }
     }
 
-    // optional string comments = 14;
     public static final int COMMENTS_FIELD_NUMBER = 14;
     private java.lang.Object comments_;
     /**
@@ -2340,7 +2331,6 @@ public final class Messages {
       }
     }
 
-    // optional string identifiedDate = 15;
     public static final int IDENTIFIEDDATE_FIELD_NUMBER = 15;
     private java.lang.Object identifiedDate_;
     /**
@@ -2383,7 +2373,6 @@ public final class Messages {
       }
     }
 
-    // optional string assetTypeName = 16;
     public static final int ASSETTYPENAME_FIELD_NUMBER = 16;
     private java.lang.Object assetTypeName_;
     /**
@@ -2426,7 +2415,6 @@ public final class Messages {
       }
     }
 
-    // required string assetTypeId = 17;
     public static final int ASSETTYPEID_FIELD_NUMBER = 17;
     private java.lang.Object assetTypeId_;
     /**
@@ -2469,7 +2457,6 @@ public final class Messages {
       }
     }
 
-    // optional string assetStatusName = 18;
     public static final int ASSETSTATUSNAME_FIELD_NUMBER = 18;
     private java.lang.Object assetStatusName_;
     /**
@@ -2512,7 +2499,6 @@ public final class Messages {
       }
     }
 
-    // optional string assetStatusId = 19;
     public static final int ASSETSTATUSID_FIELD_NUMBER = 19;
     private java.lang.Object assetStatusId_;
     /**
@@ -2555,7 +2541,6 @@ public final class Messages {
       }
     }
 
-    // optional string identifiedByUserName = 20;
     public static final int IDENTIFIEDBYUSERNAME_FIELD_NUMBER = 20;
     private java.lang.Object identifiedByUserName_;
     /**
@@ -2598,7 +2583,6 @@ public final class Messages {
       }
     }
 
-    // optional string identifiedByUserId = 21;
     public static final int IDENTIFIEDBYUSERID_FIELD_NUMBER = 21;
     private java.lang.Object identifiedByUserId_;
     /**
@@ -2641,7 +2625,6 @@ public final class Messages {
       }
     }
 
-    // optional string assignedUserName = 22;
     public static final int ASSIGNEDUSERNAME_FIELD_NUMBER = 22;
     private java.lang.Object assignedUserName_;
     /**
@@ -2684,7 +2667,6 @@ public final class Messages {
       }
     }
 
-    // optional string assignedUserId = 23;
     public static final int ASSIGNEDUSERID_FIELD_NUMBER = 23;
     private java.lang.Object assignedUserId_;
     /**
@@ -2727,7 +2709,6 @@ public final class Messages {
       }
     }
 
-    // optional string latitude = 24;
     public static final int LATITUDE_FIELD_NUMBER = 24;
     private java.lang.Object latitude_;
     /**
@@ -2770,7 +2751,6 @@ public final class Messages {
       }
     }
 
-    // optional string longitude = 25;
     public static final int LONGITUDE_FIELD_NUMBER = 25;
     private java.lang.Object longitude_;
     /**
@@ -2813,7 +2793,6 @@ public final class Messages {
       }
     }
 
-    // optional string freeFormLocation = 26;
     public static final int FREEFORMLOCATION_FIELD_NUMBER = 26;
     private java.lang.Object freeFormLocation_;
     /**
@@ -2856,7 +2835,6 @@ public final class Messages {
       }
     }
 
-    // optional string predefinedLocationName = 27;
     public static final int PREDEFINEDLOCATIONNAME_FIELD_NUMBER = 27;
     private java.lang.Object predefinedLocationName_;
     /**
@@ -2899,7 +2877,6 @@ public final class Messages {
       }
     }
 
-    // optional string predefinedLocationId = 28;
     public static final int PREDEFINEDLOCATIONID_FIELD_NUMBER = 28;
     private java.lang.Object predefinedLocationId_;
     /**
@@ -2942,7 +2919,6 @@ public final class Messages {
       }
     }
 
-    // optional string orderNumber = 29;
     public static final int ORDERNUMBER_FIELD_NUMBER = 29;
     private java.lang.Object orderNumber_;
     /**
@@ -2985,7 +2961,6 @@ public final class Messages {
       }
     }
 
-    // optional string description = 30;
     public static final int DESCRIPTION_FIELD_NUMBER = 30;
     private java.lang.Object description_;
     /**
@@ -3028,7 +3003,6 @@ public final class Messages {
       }
     }
 
-    // repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;
     public static final int ATTRIBUTES_FIELD_NUMBER = 31;
     private java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage> attributes_;
     /**
@@ -3100,7 +3074,8 @@ public final class Messages {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasOwnerId()) {
         memoizedIsInitialized = 0;
@@ -3429,8 +3404,9 @@ public final class Messages {
      * Protobuf type {@code com.n4systems.fieldid.api.pub.model.AssetMessage}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.n4systems.fieldid.api.pub.model.Messages.AssetMessageOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:com.n4systems.fieldid.api.pub.model.AssetMessage)
+        com.n4systems.fieldid.api.pub.model.Messages.AssetMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.n4systems.fieldid.api.pub.model.Messages.internal_static_com_n4systems_fieldid_api_pub_model_AssetMessage_descriptor;
@@ -3918,7 +3894,6 @@ public final class Messages {
       }
       private int bitField0_;
 
-      // optional string id = 1;
       private java.lang.Object id_ = "";
       /**
        * <code>optional string id = 1;</code>
@@ -3932,9 +3907,12 @@ public final class Messages {
       public java.lang.String getId() {
         java.lang.Object ref = id_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          id_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            id_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -3992,7 +3970,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string createdDate = 2;
       private java.lang.Object createdDate_ = "";
       /**
        * <code>optional string createdDate = 2;</code>
@@ -4006,9 +3983,12 @@ public final class Messages {
       public java.lang.String getCreatedDate() {
         java.lang.Object ref = createdDate_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          createdDate_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            createdDate_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -4066,7 +4046,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string modifiedDate = 3;
       private java.lang.Object modifiedDate_ = "";
       /**
        * <code>optional string modifiedDate = 3;</code>
@@ -4080,9 +4059,12 @@ public final class Messages {
       public java.lang.String getModifiedDate() {
         java.lang.Object ref = modifiedDate_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          modifiedDate_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            modifiedDate_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -4140,7 +4122,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string createdByUserName = 4;
       private java.lang.Object createdByUserName_ = "";
       /**
        * <code>optional string createdByUserName = 4;</code>
@@ -4154,9 +4135,12 @@ public final class Messages {
       public java.lang.String getCreatedByUserName() {
         java.lang.Object ref = createdByUserName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          createdByUserName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            createdByUserName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -4214,7 +4198,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string createdByUserId = 5;
       private java.lang.Object createdByUserId_ = "";
       /**
        * <code>optional string createdByUserId = 5;</code>
@@ -4228,9 +4211,12 @@ public final class Messages {
       public java.lang.String getCreatedByUserId() {
         java.lang.Object ref = createdByUserId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          createdByUserId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            createdByUserId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -4288,7 +4274,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string modifiedByUserName = 6;
       private java.lang.Object modifiedByUserName_ = "";
       /**
        * <code>optional string modifiedByUserName = 6;</code>
@@ -4302,9 +4287,12 @@ public final class Messages {
       public java.lang.String getModifiedByUserName() {
         java.lang.Object ref = modifiedByUserName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          modifiedByUserName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            modifiedByUserName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -4362,7 +4350,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string modifiedByUserId = 7;
       private java.lang.Object modifiedByUserId_ = "";
       /**
        * <code>optional string modifiedByUserId = 7;</code>
@@ -4376,9 +4363,12 @@ public final class Messages {
       public java.lang.String getModifiedByUserId() {
         java.lang.Object ref = modifiedByUserId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          modifiedByUserId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            modifiedByUserId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -4436,7 +4426,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string ownerName = 8;
       private java.lang.Object ownerName_ = "";
       /**
        * <code>optional string ownerName = 8;</code>
@@ -4450,9 +4439,12 @@ public final class Messages {
       public java.lang.String getOwnerName() {
         java.lang.Object ref = ownerName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          ownerName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            ownerName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -4510,7 +4502,6 @@ public final class Messages {
         return this;
       }
 
-      // required string ownerId = 9;
       private java.lang.Object ownerId_ = "";
       /**
        * <code>required string ownerId = 9;</code>
@@ -4524,9 +4515,12 @@ public final class Messages {
       public java.lang.String getOwnerId() {
         java.lang.Object ref = ownerId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          ownerId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            ownerId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -4584,7 +4578,6 @@ public final class Messages {
         return this;
       }
 
-      // required string identifier = 10;
       private java.lang.Object identifier_ = "";
       /**
        * <code>required string identifier = 10;</code>
@@ -4598,9 +4591,12 @@ public final class Messages {
       public java.lang.String getIdentifier() {
         java.lang.Object ref = identifier_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          identifier_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            identifier_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -4658,7 +4654,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string rfidNumber = 11;
       private java.lang.Object rfidNumber_ = "";
       /**
        * <code>optional string rfidNumber = 11;</code>
@@ -4672,9 +4667,12 @@ public final class Messages {
       public java.lang.String getRfidNumber() {
         java.lang.Object ref = rfidNumber_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          rfidNumber_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            rfidNumber_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -4732,7 +4730,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string customerRefNumber = 12;
       private java.lang.Object customerRefNumber_ = "";
       /**
        * <code>optional string customerRefNumber = 12;</code>
@@ -4746,9 +4743,12 @@ public final class Messages {
       public java.lang.String getCustomerRefNumber() {
         java.lang.Object ref = customerRefNumber_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          customerRefNumber_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            customerRefNumber_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -4806,7 +4806,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string purchaseOrder = 13;
       private java.lang.Object purchaseOrder_ = "";
       /**
        * <code>optional string purchaseOrder = 13;</code>
@@ -4820,9 +4819,12 @@ public final class Messages {
       public java.lang.String getPurchaseOrder() {
         java.lang.Object ref = purchaseOrder_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          purchaseOrder_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            purchaseOrder_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -4880,7 +4882,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string comments = 14;
       private java.lang.Object comments_ = "";
       /**
        * <code>optional string comments = 14;</code>
@@ -4894,9 +4895,12 @@ public final class Messages {
       public java.lang.String getComments() {
         java.lang.Object ref = comments_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          comments_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            comments_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -4954,7 +4958,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string identifiedDate = 15;
       private java.lang.Object identifiedDate_ = "";
       /**
        * <code>optional string identifiedDate = 15;</code>
@@ -4968,9 +4971,12 @@ public final class Messages {
       public java.lang.String getIdentifiedDate() {
         java.lang.Object ref = identifiedDate_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          identifiedDate_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            identifiedDate_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -5028,7 +5034,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string assetTypeName = 16;
       private java.lang.Object assetTypeName_ = "";
       /**
        * <code>optional string assetTypeName = 16;</code>
@@ -5042,9 +5047,12 @@ public final class Messages {
       public java.lang.String getAssetTypeName() {
         java.lang.Object ref = assetTypeName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          assetTypeName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            assetTypeName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -5102,7 +5110,6 @@ public final class Messages {
         return this;
       }
 
-      // required string assetTypeId = 17;
       private java.lang.Object assetTypeId_ = "";
       /**
        * <code>required string assetTypeId = 17;</code>
@@ -5116,9 +5123,12 @@ public final class Messages {
       public java.lang.String getAssetTypeId() {
         java.lang.Object ref = assetTypeId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          assetTypeId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            assetTypeId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -5176,7 +5186,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string assetStatusName = 18;
       private java.lang.Object assetStatusName_ = "";
       /**
        * <code>optional string assetStatusName = 18;</code>
@@ -5190,9 +5199,12 @@ public final class Messages {
       public java.lang.String getAssetStatusName() {
         java.lang.Object ref = assetStatusName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          assetStatusName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            assetStatusName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -5250,7 +5262,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string assetStatusId = 19;
       private java.lang.Object assetStatusId_ = "";
       /**
        * <code>optional string assetStatusId = 19;</code>
@@ -5264,9 +5275,12 @@ public final class Messages {
       public java.lang.String getAssetStatusId() {
         java.lang.Object ref = assetStatusId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          assetStatusId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            assetStatusId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -5324,7 +5338,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string identifiedByUserName = 20;
       private java.lang.Object identifiedByUserName_ = "";
       /**
        * <code>optional string identifiedByUserName = 20;</code>
@@ -5338,9 +5351,12 @@ public final class Messages {
       public java.lang.String getIdentifiedByUserName() {
         java.lang.Object ref = identifiedByUserName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          identifiedByUserName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            identifiedByUserName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -5398,7 +5414,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string identifiedByUserId = 21;
       private java.lang.Object identifiedByUserId_ = "";
       /**
        * <code>optional string identifiedByUserId = 21;</code>
@@ -5412,9 +5427,12 @@ public final class Messages {
       public java.lang.String getIdentifiedByUserId() {
         java.lang.Object ref = identifiedByUserId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          identifiedByUserId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            identifiedByUserId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -5472,7 +5490,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string assignedUserName = 22;
       private java.lang.Object assignedUserName_ = "";
       /**
        * <code>optional string assignedUserName = 22;</code>
@@ -5486,9 +5503,12 @@ public final class Messages {
       public java.lang.String getAssignedUserName() {
         java.lang.Object ref = assignedUserName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          assignedUserName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            assignedUserName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -5546,7 +5566,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string assignedUserId = 23;
       private java.lang.Object assignedUserId_ = "";
       /**
        * <code>optional string assignedUserId = 23;</code>
@@ -5560,9 +5579,12 @@ public final class Messages {
       public java.lang.String getAssignedUserId() {
         java.lang.Object ref = assignedUserId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          assignedUserId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            assignedUserId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -5620,7 +5642,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string latitude = 24;
       private java.lang.Object latitude_ = "";
       /**
        * <code>optional string latitude = 24;</code>
@@ -5634,9 +5655,12 @@ public final class Messages {
       public java.lang.String getLatitude() {
         java.lang.Object ref = latitude_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          latitude_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            latitude_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -5694,7 +5718,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string longitude = 25;
       private java.lang.Object longitude_ = "";
       /**
        * <code>optional string longitude = 25;</code>
@@ -5708,9 +5731,12 @@ public final class Messages {
       public java.lang.String getLongitude() {
         java.lang.Object ref = longitude_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          longitude_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            longitude_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -5768,7 +5794,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string freeFormLocation = 26;
       private java.lang.Object freeFormLocation_ = "";
       /**
        * <code>optional string freeFormLocation = 26;</code>
@@ -5782,9 +5807,12 @@ public final class Messages {
       public java.lang.String getFreeFormLocation() {
         java.lang.Object ref = freeFormLocation_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          freeFormLocation_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            freeFormLocation_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -5842,7 +5870,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string predefinedLocationName = 27;
       private java.lang.Object predefinedLocationName_ = "";
       /**
        * <code>optional string predefinedLocationName = 27;</code>
@@ -5856,9 +5883,12 @@ public final class Messages {
       public java.lang.String getPredefinedLocationName() {
         java.lang.Object ref = predefinedLocationName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          predefinedLocationName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            predefinedLocationName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -5916,7 +5946,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string predefinedLocationId = 28;
       private java.lang.Object predefinedLocationId_ = "";
       /**
        * <code>optional string predefinedLocationId = 28;</code>
@@ -5930,9 +5959,12 @@ public final class Messages {
       public java.lang.String getPredefinedLocationId() {
         java.lang.Object ref = predefinedLocationId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          predefinedLocationId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            predefinedLocationId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -5990,7 +6022,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string orderNumber = 29;
       private java.lang.Object orderNumber_ = "";
       /**
        * <code>optional string orderNumber = 29;</code>
@@ -6004,9 +6035,12 @@ public final class Messages {
       public java.lang.String getOrderNumber() {
         java.lang.Object ref = orderNumber_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          orderNumber_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            orderNumber_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -6064,7 +6098,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string description = 30;
       private java.lang.Object description_ = "";
       /**
        * <code>optional string description = 30;</code>
@@ -6078,9 +6111,12 @@ public final class Messages {
       public java.lang.String getDescription() {
         java.lang.Object ref = description_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          description_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            description_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -6138,7 +6174,6 @@ public final class Messages {
         return this;
       }
 
-      // repeated .com.n4systems.fieldid.api.pub.model.AssetMessage.AttributeMessage attributes = 31;
       private java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage> attributes_ =
         java.util.Collections.emptyList();
       private void ensureAttributesIsMutable() {
@@ -6280,7 +6315,8 @@ public final class Messages {
           java.lang.Iterable<? extends com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.AttributeMessage> values) {
         if (attributesBuilder_ == null) {
           ensureAttributesIsMutable();
-          super.addAll(values, attributes_);
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, attributes_);
           onChanged();
         } else {
           attributesBuilder_.addAllMessages(values);
@@ -6389,10 +6425,10 @@ public final class Messages {
     // @@protoc_insertion_point(class_scope:com.n4systems.fieldid.api.pub.model.AssetMessage)
   }
 
-  public interface AssetStatusMessageOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface AssetStatusMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.n4systems.fieldid.api.pub.model.AssetStatusMessage)
+      com.google.protobuf.MessageOrBuilder {
 
-    // optional string id = 1;
     /**
      * <code>optional string id = 1;</code>
      */
@@ -6407,7 +6443,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getIdBytes();
 
-    // optional string createdDate = 2;
     /**
      * <code>optional string createdDate = 2;</code>
      */
@@ -6422,7 +6457,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCreatedDateBytes();
 
-    // optional string modifiedDate = 3;
     /**
      * <code>optional string modifiedDate = 3;</code>
      */
@@ -6437,7 +6471,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getModifiedDateBytes();
 
-    // optional string createdByUserName = 4;
     /**
      * <code>optional string createdByUserName = 4;</code>
      */
@@ -6452,7 +6485,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCreatedByUserNameBytes();
 
-    // optional string createdByUserId = 5;
     /**
      * <code>optional string createdByUserId = 5;</code>
      */
@@ -6467,7 +6499,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCreatedByUserIdBytes();
 
-    // optional string modifiedByUserName = 6;
     /**
      * <code>optional string modifiedByUserName = 6;</code>
      */
@@ -6482,7 +6513,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getModifiedByUserNameBytes();
 
-    // optional string modifiedByUserId = 7;
     /**
      * <code>optional string modifiedByUserId = 7;</code>
      */
@@ -6497,7 +6527,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getModifiedByUserIdBytes();
 
-    // optional string name = 8;
     /**
      * <code>optional string name = 8;</code>
      */
@@ -6516,8 +6545,9 @@ public final class Messages {
    * Protobuf type {@code com.n4systems.fieldid.api.pub.model.AssetStatusMessage}
    */
   public static final class AssetStatusMessage extends
-      com.google.protobuf.GeneratedMessage
-      implements AssetStatusMessageOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:com.n4systems.fieldid.api.pub.model.AssetStatusMessage)
+      AssetStatusMessageOrBuilder {
     // Use AssetStatusMessage.newBuilder() to construct.
     private AssetStatusMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -6564,43 +6594,51 @@ public final class Messages {
               break;
             }
             case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000001;
-              id_ = input.readBytes();
+              id_ = bs;
               break;
             }
             case 18: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000002;
-              createdDate_ = input.readBytes();
+              createdDate_ = bs;
               break;
             }
             case 26: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000004;
-              modifiedDate_ = input.readBytes();
+              modifiedDate_ = bs;
               break;
             }
             case 34: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000008;
-              createdByUserName_ = input.readBytes();
+              createdByUserName_ = bs;
               break;
             }
             case 42: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000010;
-              createdByUserId_ = input.readBytes();
+              createdByUserId_ = bs;
               break;
             }
             case 50: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000020;
-              modifiedByUserName_ = input.readBytes();
+              modifiedByUserName_ = bs;
               break;
             }
             case 58: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000040;
-              modifiedByUserId_ = input.readBytes();
+              modifiedByUserId_ = bs;
               break;
             }
             case 66: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000080;
-              name_ = input.readBytes();
+              name_ = bs;
               break;
             }
           }
@@ -6643,7 +6681,6 @@ public final class Messages {
     }
 
     private int bitField0_;
-    // optional string id = 1;
     public static final int ID_FIELD_NUMBER = 1;
     private java.lang.Object id_;
     /**
@@ -6686,7 +6723,6 @@ public final class Messages {
       }
     }
 
-    // optional string createdDate = 2;
     public static final int CREATEDDATE_FIELD_NUMBER = 2;
     private java.lang.Object createdDate_;
     /**
@@ -6729,7 +6765,6 @@ public final class Messages {
       }
     }
 
-    // optional string modifiedDate = 3;
     public static final int MODIFIEDDATE_FIELD_NUMBER = 3;
     private java.lang.Object modifiedDate_;
     /**
@@ -6772,7 +6807,6 @@ public final class Messages {
       }
     }
 
-    // optional string createdByUserName = 4;
     public static final int CREATEDBYUSERNAME_FIELD_NUMBER = 4;
     private java.lang.Object createdByUserName_;
     /**
@@ -6815,7 +6849,6 @@ public final class Messages {
       }
     }
 
-    // optional string createdByUserId = 5;
     public static final int CREATEDBYUSERID_FIELD_NUMBER = 5;
     private java.lang.Object createdByUserId_;
     /**
@@ -6858,7 +6891,6 @@ public final class Messages {
       }
     }
 
-    // optional string modifiedByUserName = 6;
     public static final int MODIFIEDBYUSERNAME_FIELD_NUMBER = 6;
     private java.lang.Object modifiedByUserName_;
     /**
@@ -6901,7 +6933,6 @@ public final class Messages {
       }
     }
 
-    // optional string modifiedByUserId = 7;
     public static final int MODIFIEDBYUSERID_FIELD_NUMBER = 7;
     private java.lang.Object modifiedByUserId_;
     /**
@@ -6944,7 +6975,6 @@ public final class Messages {
       }
     }
 
-    // optional string name = 8;
     public static final int NAME_FIELD_NUMBER = 8;
     private java.lang.Object name_;
     /**
@@ -7000,7 +7030,8 @@ public final class Messages {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       memoizedIsInitialized = 1;
       return true;
@@ -7156,8 +7187,9 @@ public final class Messages {
      * Protobuf type {@code com.n4systems.fieldid.api.pub.model.AssetStatusMessage}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.n4systems.fieldid.api.pub.model.Messages.AssetStatusMessageOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:com.n4systems.fieldid.api.pub.model.AssetStatusMessage)
+        com.n4systems.fieldid.api.pub.model.Messages.AssetStatusMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.n4systems.fieldid.api.pub.model.Messages.internal_static_com_n4systems_fieldid_api_pub_model_AssetStatusMessage_descriptor;
@@ -7349,7 +7381,6 @@ public final class Messages {
       }
       private int bitField0_;
 
-      // optional string id = 1;
       private java.lang.Object id_ = "";
       /**
        * <code>optional string id = 1;</code>
@@ -7363,9 +7394,12 @@ public final class Messages {
       public java.lang.String getId() {
         java.lang.Object ref = id_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          id_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            id_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -7423,7 +7457,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string createdDate = 2;
       private java.lang.Object createdDate_ = "";
       /**
        * <code>optional string createdDate = 2;</code>
@@ -7437,9 +7470,12 @@ public final class Messages {
       public java.lang.String getCreatedDate() {
         java.lang.Object ref = createdDate_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          createdDate_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            createdDate_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -7497,7 +7533,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string modifiedDate = 3;
       private java.lang.Object modifiedDate_ = "";
       /**
        * <code>optional string modifiedDate = 3;</code>
@@ -7511,9 +7546,12 @@ public final class Messages {
       public java.lang.String getModifiedDate() {
         java.lang.Object ref = modifiedDate_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          modifiedDate_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            modifiedDate_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -7571,7 +7609,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string createdByUserName = 4;
       private java.lang.Object createdByUserName_ = "";
       /**
        * <code>optional string createdByUserName = 4;</code>
@@ -7585,9 +7622,12 @@ public final class Messages {
       public java.lang.String getCreatedByUserName() {
         java.lang.Object ref = createdByUserName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          createdByUserName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            createdByUserName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -7645,7 +7685,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string createdByUserId = 5;
       private java.lang.Object createdByUserId_ = "";
       /**
        * <code>optional string createdByUserId = 5;</code>
@@ -7659,9 +7698,12 @@ public final class Messages {
       public java.lang.String getCreatedByUserId() {
         java.lang.Object ref = createdByUserId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          createdByUserId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            createdByUserId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -7719,7 +7761,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string modifiedByUserName = 6;
       private java.lang.Object modifiedByUserName_ = "";
       /**
        * <code>optional string modifiedByUserName = 6;</code>
@@ -7733,9 +7774,12 @@ public final class Messages {
       public java.lang.String getModifiedByUserName() {
         java.lang.Object ref = modifiedByUserName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          modifiedByUserName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            modifiedByUserName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -7793,7 +7837,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string modifiedByUserId = 7;
       private java.lang.Object modifiedByUserId_ = "";
       /**
        * <code>optional string modifiedByUserId = 7;</code>
@@ -7807,9 +7850,12 @@ public final class Messages {
       public java.lang.String getModifiedByUserId() {
         java.lang.Object ref = modifiedByUserId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          modifiedByUserId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            modifiedByUserId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -7867,7 +7913,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string name = 8;
       private java.lang.Object name_ = "";
       /**
        * <code>optional string name = 8;</code>
@@ -7881,9 +7926,12 @@ public final class Messages {
       public java.lang.String getName() {
         java.lang.Object ref = name_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          name_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            name_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -7952,10 +8000,10 @@ public final class Messages {
     // @@protoc_insertion_point(class_scope:com.n4systems.fieldid.api.pub.model.AssetStatusMessage)
   }
 
-  public interface AssetTypeMessageOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface AssetTypeMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.n4systems.fieldid.api.pub.model.AssetTypeMessage)
+      com.google.protobuf.MessageOrBuilder {
 
-    // optional string id = 1;
     /**
      * <code>optional string id = 1;</code>
      */
@@ -7970,7 +8018,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getIdBytes();
 
-    // optional string createdDate = 2;
     /**
      * <code>optional string createdDate = 2;</code>
      */
@@ -7985,7 +8032,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCreatedDateBytes();
 
-    // optional string modifiedDate = 3;
     /**
      * <code>optional string modifiedDate = 3;</code>
      */
@@ -8000,7 +8046,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getModifiedDateBytes();
 
-    // optional string createdByUserName = 4;
     /**
      * <code>optional string createdByUserName = 4;</code>
      */
@@ -8015,7 +8060,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCreatedByUserNameBytes();
 
-    // optional string createdByUserId = 5;
     /**
      * <code>optional string createdByUserId = 5;</code>
      */
@@ -8030,7 +8074,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCreatedByUserIdBytes();
 
-    // optional string modifiedByUserName = 6;
     /**
      * <code>optional string modifiedByUserName = 6;</code>
      */
@@ -8045,7 +8088,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getModifiedByUserNameBytes();
 
-    // optional string modifiedByUserId = 7;
     /**
      * <code>optional string modifiedByUserId = 7;</code>
      */
@@ -8060,7 +8102,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getModifiedByUserIdBytes();
 
-    // required string name = 8;
     /**
      * <code>required string name = 8;</code>
      */
@@ -8075,7 +8116,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getNameBytes();
 
-    // optional string warnings = 9;
     /**
      * <code>optional string warnings = 9;</code>
      */
@@ -8090,7 +8130,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getWarningsBytes();
 
-    // optional string instructions = 10;
     /**
      * <code>optional string instructions = 10;</code>
      */
@@ -8105,7 +8144,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getInstructionsBytes();
 
-    // optional string cautionUrl = 11;
     /**
      * <code>optional string cautionUrl = 11;</code>
      */
@@ -8120,7 +8158,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCautionUrlBytes();
 
-    // optional string descriptionTemplate = 12;
     /**
      * <code>optional string descriptionTemplate = 12;</code>
      */
@@ -8135,7 +8172,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getDescriptionTemplateBytes();
 
-    // optional string manufactureCertificateText = 13;
     /**
      * <code>optional string manufactureCertificateText = 13;</code>
      */
@@ -8150,7 +8186,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getManufactureCertificateTextBytes();
 
-    // optional bool hasManufactureCertificate = 14;
     /**
      * <code>optional bool hasManufactureCertificate = 14;</code>
      */
@@ -8160,7 +8195,6 @@ public final class Messages {
      */
     boolean getHasManufactureCertificate();
 
-    // optional bool allowAssetLinking = 15;
     /**
      * <code>optional bool allowAssetLinking = 15;</code>
      */
@@ -8170,7 +8204,6 @@ public final class Messages {
      */
     boolean getAllowAssetLinking();
 
-    // optional bool hasProcedures = 16;
     /**
      * <code>optional bool hasProcedures = 16;</code>
      */
@@ -8180,7 +8213,6 @@ public final class Messages {
      */
     boolean getHasProcedures();
 
-    // optional string assetTypeGroupId = 17;
     /**
      * <code>optional string assetTypeGroupId = 17;</code>
      */
@@ -8195,7 +8227,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getAssetTypeGroupIdBytes();
 
-    // optional string assetTypeGroupName = 18;
     /**
      * <code>optional string assetTypeGroupName = 18;</code>
      */
@@ -8210,7 +8241,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getAssetTypeGroupNameBytes();
 
-    // repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;
     /**
      * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;</code>
      */
@@ -8235,7 +8265,6 @@ public final class Messages {
     com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessageOrBuilder getSchedulesOrBuilder(
         int index);
 
-    // repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;
     /**
      * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;</code>
      */
@@ -8260,7 +8289,6 @@ public final class Messages {
     com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessageOrBuilder getAssociatedEventTypesOrBuilder(
         int index);
 
-    // repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;
     /**
      * <code>repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;</code>
      */
@@ -8289,8 +8317,9 @@ public final class Messages {
    * Protobuf type {@code com.n4systems.fieldid.api.pub.model.AssetTypeMessage}
    */
   public static final class AssetTypeMessage extends
-      com.google.protobuf.GeneratedMessage
-      implements AssetTypeMessageOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:com.n4systems.fieldid.api.pub.model.AssetTypeMessage)
+      AssetTypeMessageOrBuilder {
     // Use AssetTypeMessage.newBuilder() to construct.
     private AssetTypeMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -8337,68 +8366,81 @@ public final class Messages {
               break;
             }
             case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000001;
-              id_ = input.readBytes();
+              id_ = bs;
               break;
             }
             case 18: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000002;
-              createdDate_ = input.readBytes();
+              createdDate_ = bs;
               break;
             }
             case 26: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000004;
-              modifiedDate_ = input.readBytes();
+              modifiedDate_ = bs;
               break;
             }
             case 34: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000008;
-              createdByUserName_ = input.readBytes();
+              createdByUserName_ = bs;
               break;
             }
             case 42: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000010;
-              createdByUserId_ = input.readBytes();
+              createdByUserId_ = bs;
               break;
             }
             case 50: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000020;
-              modifiedByUserName_ = input.readBytes();
+              modifiedByUserName_ = bs;
               break;
             }
             case 58: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000040;
-              modifiedByUserId_ = input.readBytes();
+              modifiedByUserId_ = bs;
               break;
             }
             case 66: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000080;
-              name_ = input.readBytes();
+              name_ = bs;
               break;
             }
             case 74: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000100;
-              warnings_ = input.readBytes();
+              warnings_ = bs;
               break;
             }
             case 82: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000200;
-              instructions_ = input.readBytes();
+              instructions_ = bs;
               break;
             }
             case 90: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000400;
-              cautionUrl_ = input.readBytes();
+              cautionUrl_ = bs;
               break;
             }
             case 98: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000800;
-              descriptionTemplate_ = input.readBytes();
+              descriptionTemplate_ = bs;
               break;
             }
             case 106: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00001000;
-              manufactureCertificateText_ = input.readBytes();
+              manufactureCertificateText_ = bs;
               break;
             }
             case 112: {
@@ -8417,13 +8459,15 @@ public final class Messages {
               break;
             }
             case 138: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00010000;
-              assetTypeGroupId_ = input.readBytes();
+              assetTypeGroupId_ = bs;
               break;
             }
             case 146: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00020000;
-              assetTypeGroupName_ = input.readBytes();
+              assetTypeGroupName_ = bs;
               break;
             }
             case 154: {
@@ -8498,10 +8542,10 @@ public final class Messages {
       return PARSER;
     }
 
-    public interface AssociatedEventTypeMessageOrBuilder
-        extends com.google.protobuf.MessageOrBuilder {
+    public interface AssociatedEventTypeMessageOrBuilder extends
+        // @@protoc_insertion_point(interface_extends:com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage)
+        com.google.protobuf.MessageOrBuilder {
 
-      // required string eventTypeId = 1;
       /**
        * <code>required string eventTypeId = 1;</code>
        */
@@ -8516,7 +8560,6 @@ public final class Messages {
       com.google.protobuf.ByteString
           getEventTypeIdBytes();
 
-      // required string eventTypeName = 2;
       /**
        * <code>required string eventTypeName = 2;</code>
        */
@@ -8535,8 +8578,9 @@ public final class Messages {
      * Protobuf type {@code com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage}
      */
     public static final class AssociatedEventTypeMessage extends
-        com.google.protobuf.GeneratedMessage
-        implements AssociatedEventTypeMessageOrBuilder {
+        com.google.protobuf.GeneratedMessage implements
+        // @@protoc_insertion_point(message_implements:com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage)
+        AssociatedEventTypeMessageOrBuilder {
       // Use AssociatedEventTypeMessage.newBuilder() to construct.
       private AssociatedEventTypeMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
         super(builder);
@@ -8583,13 +8627,15 @@ public final class Messages {
                 break;
               }
               case 10: {
+                com.google.protobuf.ByteString bs = input.readBytes();
                 bitField0_ |= 0x00000001;
-                eventTypeId_ = input.readBytes();
+                eventTypeId_ = bs;
                 break;
               }
               case 18: {
+                com.google.protobuf.ByteString bs = input.readBytes();
                 bitField0_ |= 0x00000002;
-                eventTypeName_ = input.readBytes();
+                eventTypeName_ = bs;
                 break;
               }
             }
@@ -8632,7 +8678,6 @@ public final class Messages {
       }
 
       private int bitField0_;
-      // required string eventTypeId = 1;
       public static final int EVENTTYPEID_FIELD_NUMBER = 1;
       private java.lang.Object eventTypeId_;
       /**
@@ -8675,7 +8720,6 @@ public final class Messages {
         }
       }
 
-      // required string eventTypeName = 2;
       public static final int EVENTTYPENAME_FIELD_NUMBER = 2;
       private java.lang.Object eventTypeName_;
       /**
@@ -8725,7 +8769,8 @@ public final class Messages {
       private byte memoizedIsInitialized = -1;
       public final boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
-        if (isInitialized != -1) return isInitialized == 1;
+        if (isInitialized == 1) return true;
+        if (isInitialized == 0) return false;
 
         if (!hasEventTypeId()) {
           memoizedIsInitialized = 0;
@@ -8847,8 +8892,9 @@ public final class Messages {
        * Protobuf type {@code com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage}
        */
       public static final class Builder extends
-          com.google.protobuf.GeneratedMessage.Builder<Builder>
-         implements com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessageOrBuilder {
+          com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+          // @@protoc_insertion_point(builder_implements:com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage)
+          com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessageOrBuilder {
         public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
           return com.n4systems.fieldid.api.pub.model.Messages.internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_AssociatedEventTypeMessage_descriptor;
@@ -8982,7 +9028,6 @@ public final class Messages {
         }
         private int bitField0_;
 
-        // required string eventTypeId = 1;
         private java.lang.Object eventTypeId_ = "";
         /**
          * <code>required string eventTypeId = 1;</code>
@@ -8996,9 +9041,12 @@ public final class Messages {
         public java.lang.String getEventTypeId() {
           java.lang.Object ref = eventTypeId_;
           if (!(ref instanceof java.lang.String)) {
-            java.lang.String s = ((com.google.protobuf.ByteString) ref)
-                .toStringUtf8();
-            eventTypeId_ = s;
+            com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
+            java.lang.String s = bs.toStringUtf8();
+            if (bs.isValidUtf8()) {
+              eventTypeId_ = s;
+            }
             return s;
           } else {
             return (java.lang.String) ref;
@@ -9056,7 +9104,6 @@ public final class Messages {
           return this;
         }
 
-        // required string eventTypeName = 2;
         private java.lang.Object eventTypeName_ = "";
         /**
          * <code>required string eventTypeName = 2;</code>
@@ -9070,9 +9117,12 @@ public final class Messages {
         public java.lang.String getEventTypeName() {
           java.lang.Object ref = eventTypeName_;
           if (!(ref instanceof java.lang.String)) {
-            java.lang.String s = ((com.google.protobuf.ByteString) ref)
-                .toStringUtf8();
-            eventTypeName_ = s;
+            com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
+            java.lang.String s = bs.toStringUtf8();
+            if (bs.isValidUtf8()) {
+              eventTypeName_ = s;
+            }
             return s;
           } else {
             return (java.lang.String) ref;
@@ -9141,10 +9191,10 @@ public final class Messages {
       // @@protoc_insertion_point(class_scope:com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage)
     }
 
-    public interface AssetAttributeTypeMessageOrBuilder
-        extends com.google.protobuf.MessageOrBuilder {
+    public interface AssetAttributeTypeMessageOrBuilder extends
+        // @@protoc_insertion_point(interface_extends:com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage)
+        com.google.protobuf.MessageOrBuilder {
 
-      // required string id = 1;
       /**
        * <code>required string id = 1;</code>
        */
@@ -9159,7 +9209,6 @@ public final class Messages {
       com.google.protobuf.ByteString
           getIdBytes();
 
-      // required .com.n4systems.fieldid.api.pub.model.AttributeValueType type = 2;
       /**
        * <code>required .com.n4systems.fieldid.api.pub.model.AttributeValueType type = 2;</code>
        */
@@ -9169,7 +9218,6 @@ public final class Messages {
        */
       com.n4systems.fieldid.api.pub.model.Messages.AttributeValueType getType();
 
-      // required string name = 3;
       /**
        * <code>required string name = 3;</code>
        */
@@ -9184,12 +9232,11 @@ public final class Messages {
       com.google.protobuf.ByteString
           getNameBytes();
 
-      // repeated string attributeOptions = 4;
       /**
        * <code>repeated string attributeOptions = 4;</code>
        */
-      java.util.List<java.lang.String>
-      getAttributeOptionsList();
+      com.google.protobuf.ProtocolStringList
+          getAttributeOptionsList();
       /**
        * <code>repeated string attributeOptions = 4;</code>
        */
@@ -9208,8 +9255,9 @@ public final class Messages {
      * Protobuf type {@code com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage}
      */
     public static final class AssetAttributeTypeMessage extends
-        com.google.protobuf.GeneratedMessage
-        implements AssetAttributeTypeMessageOrBuilder {
+        com.google.protobuf.GeneratedMessage implements
+        // @@protoc_insertion_point(message_implements:com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage)
+        AssetAttributeTypeMessageOrBuilder {
       // Use AssetAttributeTypeMessage.newBuilder() to construct.
       private AssetAttributeTypeMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
         super(builder);
@@ -9256,8 +9304,9 @@ public final class Messages {
                 break;
               }
               case 10: {
+                com.google.protobuf.ByteString bs = input.readBytes();
                 bitField0_ |= 0x00000001;
-                id_ = input.readBytes();
+                id_ = bs;
                 break;
               }
               case 16: {
@@ -9272,16 +9321,18 @@ public final class Messages {
                 break;
               }
               case 26: {
+                com.google.protobuf.ByteString bs = input.readBytes();
                 bitField0_ |= 0x00000004;
-                name_ = input.readBytes();
+                name_ = bs;
                 break;
               }
               case 34: {
+                com.google.protobuf.ByteString bs = input.readBytes();
                 if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
                   attributeOptions_ = new com.google.protobuf.LazyStringArrayList();
                   mutable_bitField0_ |= 0x00000008;
                 }
-                attributeOptions_.add(input.readBytes());
+                attributeOptions_.add(bs);
                 break;
               }
             }
@@ -9293,7 +9344,7 @@ public final class Messages {
               e.getMessage()).setUnfinishedMessage(this);
         } finally {
           if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
-            attributeOptions_ = new com.google.protobuf.UnmodifiableLazyStringList(attributeOptions_);
+            attributeOptions_ = attributeOptions_.getUnmodifiableView();
           }
           this.unknownFields = unknownFields.build();
           makeExtensionsImmutable();
@@ -9327,7 +9378,6 @@ public final class Messages {
       }
 
       private int bitField0_;
-      // required string id = 1;
       public static final int ID_FIELD_NUMBER = 1;
       private java.lang.Object id_;
       /**
@@ -9370,7 +9420,6 @@ public final class Messages {
         }
       }
 
-      // required .com.n4systems.fieldid.api.pub.model.AttributeValueType type = 2;
       public static final int TYPE_FIELD_NUMBER = 2;
       private com.n4systems.fieldid.api.pub.model.Messages.AttributeValueType type_;
       /**
@@ -9386,7 +9435,6 @@ public final class Messages {
         return type_;
       }
 
-      // required string name = 3;
       public static final int NAME_FIELD_NUMBER = 3;
       private java.lang.Object name_;
       /**
@@ -9429,13 +9477,12 @@ public final class Messages {
         }
       }
 
-      // repeated string attributeOptions = 4;
       public static final int ATTRIBUTEOPTIONS_FIELD_NUMBER = 4;
       private com.google.protobuf.LazyStringList attributeOptions_;
       /**
        * <code>repeated string attributeOptions = 4;</code>
        */
-      public java.util.List<java.lang.String>
+      public com.google.protobuf.ProtocolStringList
           getAttributeOptionsList() {
         return attributeOptions_;
       }
@@ -9468,7 +9515,8 @@ public final class Messages {
       private byte memoizedIsInitialized = -1;
       public final boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
-        if (isInitialized != -1) return isInitialized == 1;
+        if (isInitialized == 1) return true;
+        if (isInitialized == 0) return false;
 
         if (!hasId()) {
           memoizedIsInitialized = 0;
@@ -9613,8 +9661,9 @@ public final class Messages {
        * Protobuf type {@code com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage}
        */
       public static final class Builder extends
-          com.google.protobuf.GeneratedMessage.Builder<Builder>
-         implements com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessageOrBuilder {
+          com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+          // @@protoc_insertion_point(builder_implements:com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage)
+          com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessageOrBuilder {
         public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
           return com.n4systems.fieldid.api.pub.model.Messages.internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_AssetAttributeTypeMessage_descriptor;
@@ -9696,8 +9745,7 @@ public final class Messages {
           }
           result.name_ = name_;
           if (((bitField0_ & 0x00000008) == 0x00000008)) {
-            attributeOptions_ = new com.google.protobuf.UnmodifiableLazyStringList(
-                attributeOptions_);
+            attributeOptions_ = attributeOptions_.getUnmodifiableView();
             bitField0_ = (bitField0_ & ~0x00000008);
           }
           result.attributeOptions_ = attributeOptions_;
@@ -9779,7 +9827,6 @@ public final class Messages {
         }
         private int bitField0_;
 
-        // required string id = 1;
         private java.lang.Object id_ = "";
         /**
          * <code>required string id = 1;</code>
@@ -9793,9 +9840,12 @@ public final class Messages {
         public java.lang.String getId() {
           java.lang.Object ref = id_;
           if (!(ref instanceof java.lang.String)) {
-            java.lang.String s = ((com.google.protobuf.ByteString) ref)
-                .toStringUtf8();
-            id_ = s;
+            com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
+            java.lang.String s = bs.toStringUtf8();
+            if (bs.isValidUtf8()) {
+              id_ = s;
+            }
             return s;
           } else {
             return (java.lang.String) ref;
@@ -9853,7 +9903,6 @@ public final class Messages {
           return this;
         }
 
-        // required .com.n4systems.fieldid.api.pub.model.AttributeValueType type = 2;
         private com.n4systems.fieldid.api.pub.model.Messages.AttributeValueType type_ = com.n4systems.fieldid.api.pub.model.Messages.AttributeValueType.TEXT;
         /**
          * <code>required .com.n4systems.fieldid.api.pub.model.AttributeValueType type = 2;</code>
@@ -9889,7 +9938,6 @@ public final class Messages {
           return this;
         }
 
-        // required string name = 3;
         private java.lang.Object name_ = "";
         /**
          * <code>required string name = 3;</code>
@@ -9903,9 +9951,12 @@ public final class Messages {
         public java.lang.String getName() {
           java.lang.Object ref = name_;
           if (!(ref instanceof java.lang.String)) {
-            java.lang.String s = ((com.google.protobuf.ByteString) ref)
-                .toStringUtf8();
-            name_ = s;
+            com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
+            java.lang.String s = bs.toStringUtf8();
+            if (bs.isValidUtf8()) {
+              name_ = s;
+            }
             return s;
           } else {
             return (java.lang.String) ref;
@@ -9963,7 +10014,6 @@ public final class Messages {
           return this;
         }
 
-        // repeated string attributeOptions = 4;
         private com.google.protobuf.LazyStringList attributeOptions_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         private void ensureAttributeOptionsIsMutable() {
           if (!((bitField0_ & 0x00000008) == 0x00000008)) {
@@ -9974,9 +10024,9 @@ public final class Messages {
         /**
          * <code>repeated string attributeOptions = 4;</code>
          */
-        public java.util.List<java.lang.String>
+        public com.google.protobuf.ProtocolStringList
             getAttributeOptionsList() {
-          return java.util.Collections.unmodifiableList(attributeOptions_);
+          return attributeOptions_.getUnmodifiableView();
         }
         /**
          * <code>repeated string attributeOptions = 4;</code>
@@ -10029,7 +10079,8 @@ public final class Messages {
         public Builder addAllAttributeOptions(
             java.lang.Iterable<java.lang.String> values) {
           ensureAttributeOptionsIsMutable();
-          super.addAll(values, attributeOptions_);
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, attributeOptions_);
           onChanged();
           return this;
         }
@@ -10068,7 +10119,6 @@ public final class Messages {
     }
 
     private int bitField0_;
-    // optional string id = 1;
     public static final int ID_FIELD_NUMBER = 1;
     private java.lang.Object id_;
     /**
@@ -10111,7 +10161,6 @@ public final class Messages {
       }
     }
 
-    // optional string createdDate = 2;
     public static final int CREATEDDATE_FIELD_NUMBER = 2;
     private java.lang.Object createdDate_;
     /**
@@ -10154,7 +10203,6 @@ public final class Messages {
       }
     }
 
-    // optional string modifiedDate = 3;
     public static final int MODIFIEDDATE_FIELD_NUMBER = 3;
     private java.lang.Object modifiedDate_;
     /**
@@ -10197,7 +10245,6 @@ public final class Messages {
       }
     }
 
-    // optional string createdByUserName = 4;
     public static final int CREATEDBYUSERNAME_FIELD_NUMBER = 4;
     private java.lang.Object createdByUserName_;
     /**
@@ -10240,7 +10287,6 @@ public final class Messages {
       }
     }
 
-    // optional string createdByUserId = 5;
     public static final int CREATEDBYUSERID_FIELD_NUMBER = 5;
     private java.lang.Object createdByUserId_;
     /**
@@ -10283,7 +10329,6 @@ public final class Messages {
       }
     }
 
-    // optional string modifiedByUserName = 6;
     public static final int MODIFIEDBYUSERNAME_FIELD_NUMBER = 6;
     private java.lang.Object modifiedByUserName_;
     /**
@@ -10326,7 +10371,6 @@ public final class Messages {
       }
     }
 
-    // optional string modifiedByUserId = 7;
     public static final int MODIFIEDBYUSERID_FIELD_NUMBER = 7;
     private java.lang.Object modifiedByUserId_;
     /**
@@ -10369,7 +10413,6 @@ public final class Messages {
       }
     }
 
-    // required string name = 8;
     public static final int NAME_FIELD_NUMBER = 8;
     private java.lang.Object name_;
     /**
@@ -10412,7 +10455,6 @@ public final class Messages {
       }
     }
 
-    // optional string warnings = 9;
     public static final int WARNINGS_FIELD_NUMBER = 9;
     private java.lang.Object warnings_;
     /**
@@ -10455,7 +10497,6 @@ public final class Messages {
       }
     }
 
-    // optional string instructions = 10;
     public static final int INSTRUCTIONS_FIELD_NUMBER = 10;
     private java.lang.Object instructions_;
     /**
@@ -10498,7 +10539,6 @@ public final class Messages {
       }
     }
 
-    // optional string cautionUrl = 11;
     public static final int CAUTIONURL_FIELD_NUMBER = 11;
     private java.lang.Object cautionUrl_;
     /**
@@ -10541,7 +10581,6 @@ public final class Messages {
       }
     }
 
-    // optional string descriptionTemplate = 12;
     public static final int DESCRIPTIONTEMPLATE_FIELD_NUMBER = 12;
     private java.lang.Object descriptionTemplate_;
     /**
@@ -10584,7 +10623,6 @@ public final class Messages {
       }
     }
 
-    // optional string manufactureCertificateText = 13;
     public static final int MANUFACTURECERTIFICATETEXT_FIELD_NUMBER = 13;
     private java.lang.Object manufactureCertificateText_;
     /**
@@ -10627,7 +10665,6 @@ public final class Messages {
       }
     }
 
-    // optional bool hasManufactureCertificate = 14;
     public static final int HASMANUFACTURECERTIFICATE_FIELD_NUMBER = 14;
     private boolean hasManufactureCertificate_;
     /**
@@ -10643,7 +10680,6 @@ public final class Messages {
       return hasManufactureCertificate_;
     }
 
-    // optional bool allowAssetLinking = 15;
     public static final int ALLOWASSETLINKING_FIELD_NUMBER = 15;
     private boolean allowAssetLinking_;
     /**
@@ -10659,7 +10695,6 @@ public final class Messages {
       return allowAssetLinking_;
     }
 
-    // optional bool hasProcedures = 16;
     public static final int HASPROCEDURES_FIELD_NUMBER = 16;
     private boolean hasProcedures_;
     /**
@@ -10675,7 +10710,6 @@ public final class Messages {
       return hasProcedures_;
     }
 
-    // optional string assetTypeGroupId = 17;
     public static final int ASSETTYPEGROUPID_FIELD_NUMBER = 17;
     private java.lang.Object assetTypeGroupId_;
     /**
@@ -10718,7 +10752,6 @@ public final class Messages {
       }
     }
 
-    // optional string assetTypeGroupName = 18;
     public static final int ASSETTYPEGROUPNAME_FIELD_NUMBER = 18;
     private java.lang.Object assetTypeGroupName_;
     /**
@@ -10761,7 +10794,6 @@ public final class Messages {
       }
     }
 
-    // repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;
     public static final int SCHEDULES_FIELD_NUMBER = 19;
     private java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage> schedules_;
     /**
@@ -10797,7 +10829,6 @@ public final class Messages {
       return schedules_.get(index);
     }
 
-    // repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;
     public static final int ASSOCIATEDEVENTTYPES_FIELD_NUMBER = 20;
     private java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage> associatedEventTypes_;
     /**
@@ -10833,7 +10864,6 @@ public final class Messages {
       return associatedEventTypes_.get(index);
     }
 
-    // repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;
     public static final int ATTRIBUTETYPES_FIELD_NUMBER = 21;
     private java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage> attributeTypes_;
     /**
@@ -10895,7 +10925,8 @@ public final class Messages {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasName()) {
         memoizedIsInitialized = 0;
@@ -11164,8 +11195,9 @@ public final class Messages {
      * Protobuf type {@code com.n4systems.fieldid.api.pub.model.AssetTypeMessage}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessageOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:com.n4systems.fieldid.api.pub.model.AssetTypeMessage)
+        com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.n4systems.fieldid.api.pub.model.Messages.internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_descriptor;
@@ -11609,7 +11641,6 @@ public final class Messages {
       }
       private int bitField0_;
 
-      // optional string id = 1;
       private java.lang.Object id_ = "";
       /**
        * <code>optional string id = 1;</code>
@@ -11623,9 +11654,12 @@ public final class Messages {
       public java.lang.String getId() {
         java.lang.Object ref = id_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          id_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            id_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -11683,7 +11717,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string createdDate = 2;
       private java.lang.Object createdDate_ = "";
       /**
        * <code>optional string createdDate = 2;</code>
@@ -11697,9 +11730,12 @@ public final class Messages {
       public java.lang.String getCreatedDate() {
         java.lang.Object ref = createdDate_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          createdDate_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            createdDate_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -11757,7 +11793,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string modifiedDate = 3;
       private java.lang.Object modifiedDate_ = "";
       /**
        * <code>optional string modifiedDate = 3;</code>
@@ -11771,9 +11806,12 @@ public final class Messages {
       public java.lang.String getModifiedDate() {
         java.lang.Object ref = modifiedDate_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          modifiedDate_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            modifiedDate_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -11831,7 +11869,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string createdByUserName = 4;
       private java.lang.Object createdByUserName_ = "";
       /**
        * <code>optional string createdByUserName = 4;</code>
@@ -11845,9 +11882,12 @@ public final class Messages {
       public java.lang.String getCreatedByUserName() {
         java.lang.Object ref = createdByUserName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          createdByUserName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            createdByUserName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -11905,7 +11945,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string createdByUserId = 5;
       private java.lang.Object createdByUserId_ = "";
       /**
        * <code>optional string createdByUserId = 5;</code>
@@ -11919,9 +11958,12 @@ public final class Messages {
       public java.lang.String getCreatedByUserId() {
         java.lang.Object ref = createdByUserId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          createdByUserId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            createdByUserId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -11979,7 +12021,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string modifiedByUserName = 6;
       private java.lang.Object modifiedByUserName_ = "";
       /**
        * <code>optional string modifiedByUserName = 6;</code>
@@ -11993,9 +12034,12 @@ public final class Messages {
       public java.lang.String getModifiedByUserName() {
         java.lang.Object ref = modifiedByUserName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          modifiedByUserName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            modifiedByUserName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -12053,7 +12097,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string modifiedByUserId = 7;
       private java.lang.Object modifiedByUserId_ = "";
       /**
        * <code>optional string modifiedByUserId = 7;</code>
@@ -12067,9 +12110,12 @@ public final class Messages {
       public java.lang.String getModifiedByUserId() {
         java.lang.Object ref = modifiedByUserId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          modifiedByUserId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            modifiedByUserId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -12127,7 +12173,6 @@ public final class Messages {
         return this;
       }
 
-      // required string name = 8;
       private java.lang.Object name_ = "";
       /**
        * <code>required string name = 8;</code>
@@ -12141,9 +12186,12 @@ public final class Messages {
       public java.lang.String getName() {
         java.lang.Object ref = name_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          name_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            name_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -12201,7 +12249,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string warnings = 9;
       private java.lang.Object warnings_ = "";
       /**
        * <code>optional string warnings = 9;</code>
@@ -12215,9 +12262,12 @@ public final class Messages {
       public java.lang.String getWarnings() {
         java.lang.Object ref = warnings_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          warnings_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            warnings_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -12275,7 +12325,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string instructions = 10;
       private java.lang.Object instructions_ = "";
       /**
        * <code>optional string instructions = 10;</code>
@@ -12289,9 +12338,12 @@ public final class Messages {
       public java.lang.String getInstructions() {
         java.lang.Object ref = instructions_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          instructions_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            instructions_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -12349,7 +12401,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string cautionUrl = 11;
       private java.lang.Object cautionUrl_ = "";
       /**
        * <code>optional string cautionUrl = 11;</code>
@@ -12363,9 +12414,12 @@ public final class Messages {
       public java.lang.String getCautionUrl() {
         java.lang.Object ref = cautionUrl_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          cautionUrl_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            cautionUrl_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -12423,7 +12477,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string descriptionTemplate = 12;
       private java.lang.Object descriptionTemplate_ = "";
       /**
        * <code>optional string descriptionTemplate = 12;</code>
@@ -12437,9 +12490,12 @@ public final class Messages {
       public java.lang.String getDescriptionTemplate() {
         java.lang.Object ref = descriptionTemplate_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          descriptionTemplate_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            descriptionTemplate_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -12497,7 +12553,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string manufactureCertificateText = 13;
       private java.lang.Object manufactureCertificateText_ = "";
       /**
        * <code>optional string manufactureCertificateText = 13;</code>
@@ -12511,9 +12566,12 @@ public final class Messages {
       public java.lang.String getManufactureCertificateText() {
         java.lang.Object ref = manufactureCertificateText_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          manufactureCertificateText_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            manufactureCertificateText_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -12571,7 +12629,6 @@ public final class Messages {
         return this;
       }
 
-      // optional bool hasManufactureCertificate = 14;
       private boolean hasManufactureCertificate_ ;
       /**
        * <code>optional bool hasManufactureCertificate = 14;</code>
@@ -12604,7 +12661,6 @@ public final class Messages {
         return this;
       }
 
-      // optional bool allowAssetLinking = 15;
       private boolean allowAssetLinking_ ;
       /**
        * <code>optional bool allowAssetLinking = 15;</code>
@@ -12637,7 +12693,6 @@ public final class Messages {
         return this;
       }
 
-      // optional bool hasProcedures = 16;
       private boolean hasProcedures_ ;
       /**
        * <code>optional bool hasProcedures = 16;</code>
@@ -12670,7 +12725,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string assetTypeGroupId = 17;
       private java.lang.Object assetTypeGroupId_ = "";
       /**
        * <code>optional string assetTypeGroupId = 17;</code>
@@ -12684,9 +12738,12 @@ public final class Messages {
       public java.lang.String getAssetTypeGroupId() {
         java.lang.Object ref = assetTypeGroupId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          assetTypeGroupId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            assetTypeGroupId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -12744,7 +12801,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string assetTypeGroupName = 18;
       private java.lang.Object assetTypeGroupName_ = "";
       /**
        * <code>optional string assetTypeGroupName = 18;</code>
@@ -12758,9 +12814,12 @@ public final class Messages {
       public java.lang.String getAssetTypeGroupName() {
         java.lang.Object ref = assetTypeGroupName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          assetTypeGroupName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            assetTypeGroupName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -12818,7 +12877,6 @@ public final class Messages {
         return this;
       }
 
-      // repeated .com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage schedules = 19;
       private java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage> schedules_ =
         java.util.Collections.emptyList();
       private void ensureSchedulesIsMutable() {
@@ -12960,7 +13018,8 @@ public final class Messages {
           java.lang.Iterable<? extends com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessage> values) {
         if (schedulesBuilder_ == null) {
           ensureSchedulesIsMutable();
-          super.addAll(values, schedules_);
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, schedules_);
           onChanged();
         } else {
           schedulesBuilder_.addAllMessages(values);
@@ -13058,7 +13117,6 @@ public final class Messages {
         return schedulesBuilder_;
       }
 
-      // repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssociatedEventTypeMessage associatedEventTypes = 20;
       private java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage> associatedEventTypes_ =
         java.util.Collections.emptyList();
       private void ensureAssociatedEventTypesIsMutable() {
@@ -13200,7 +13258,8 @@ public final class Messages {
           java.lang.Iterable<? extends com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssociatedEventTypeMessage> values) {
         if (associatedEventTypesBuilder_ == null) {
           ensureAssociatedEventTypesIsMutable();
-          super.addAll(values, associatedEventTypes_);
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, associatedEventTypes_);
           onChanged();
         } else {
           associatedEventTypesBuilder_.addAllMessages(values);
@@ -13298,7 +13357,6 @@ public final class Messages {
         return associatedEventTypesBuilder_;
       }
 
-      // repeated .com.n4systems.fieldid.api.pub.model.AssetTypeMessage.AssetAttributeTypeMessage attributeTypes = 21;
       private java.util.List<com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage> attributeTypes_ =
         java.util.Collections.emptyList();
       private void ensureAttributeTypesIsMutable() {
@@ -13440,7 +13498,8 @@ public final class Messages {
           java.lang.Iterable<? extends com.n4systems.fieldid.api.pub.model.Messages.AssetTypeMessage.AssetAttributeTypeMessage> values) {
         if (attributeTypesBuilder_ == null) {
           ensureAttributeTypesIsMutable();
-          super.addAll(values, attributeTypes_);
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, attributeTypes_);
           onChanged();
         } else {
           attributeTypesBuilder_.addAllMessages(values);
@@ -13549,10 +13608,10 @@ public final class Messages {
     // @@protoc_insertion_point(class_scope:com.n4systems.fieldid.api.pub.model.AssetTypeMessage)
   }
 
-  public interface AssetTypeGroupMessageOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface AssetTypeGroupMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.n4systems.fieldid.api.pub.model.AssetTypeGroupMessage)
+      com.google.protobuf.MessageOrBuilder {
 
-    // optional string id = 1;
     /**
      * <code>optional string id = 1;</code>
      */
@@ -13567,7 +13626,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getIdBytes();
 
-    // optional string createdDate = 2;
     /**
      * <code>optional string createdDate = 2;</code>
      */
@@ -13582,7 +13640,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCreatedDateBytes();
 
-    // optional string modifiedDate = 3;
     /**
      * <code>optional string modifiedDate = 3;</code>
      */
@@ -13597,7 +13654,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getModifiedDateBytes();
 
-    // optional string createdByUserName = 4;
     /**
      * <code>optional string createdByUserName = 4;</code>
      */
@@ -13612,7 +13668,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCreatedByUserNameBytes();
 
-    // optional string createdByUserId = 5;
     /**
      * <code>optional string createdByUserId = 5;</code>
      */
@@ -13627,7 +13682,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCreatedByUserIdBytes();
 
-    // optional string modifiedByUserName = 6;
     /**
      * <code>optional string modifiedByUserName = 6;</code>
      */
@@ -13642,7 +13696,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getModifiedByUserNameBytes();
 
-    // optional string modifiedByUserId = 7;
     /**
      * <code>optional string modifiedByUserId = 7;</code>
      */
@@ -13657,7 +13710,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getModifiedByUserIdBytes();
 
-    // required string name = 8;
     /**
      * <code>required string name = 8;</code>
      */
@@ -13676,8 +13728,9 @@ public final class Messages {
    * Protobuf type {@code com.n4systems.fieldid.api.pub.model.AssetTypeGroupMessage}
    */
   public static final class AssetTypeGroupMessage extends
-      com.google.protobuf.GeneratedMessage
-      implements AssetTypeGroupMessageOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:com.n4systems.fieldid.api.pub.model.AssetTypeGroupMessage)
+      AssetTypeGroupMessageOrBuilder {
     // Use AssetTypeGroupMessage.newBuilder() to construct.
     private AssetTypeGroupMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -13724,43 +13777,51 @@ public final class Messages {
               break;
             }
             case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000001;
-              id_ = input.readBytes();
+              id_ = bs;
               break;
             }
             case 18: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000002;
-              createdDate_ = input.readBytes();
+              createdDate_ = bs;
               break;
             }
             case 26: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000004;
-              modifiedDate_ = input.readBytes();
+              modifiedDate_ = bs;
               break;
             }
             case 34: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000008;
-              createdByUserName_ = input.readBytes();
+              createdByUserName_ = bs;
               break;
             }
             case 42: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000010;
-              createdByUserId_ = input.readBytes();
+              createdByUserId_ = bs;
               break;
             }
             case 50: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000020;
-              modifiedByUserName_ = input.readBytes();
+              modifiedByUserName_ = bs;
               break;
             }
             case 58: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000040;
-              modifiedByUserId_ = input.readBytes();
+              modifiedByUserId_ = bs;
               break;
             }
             case 66: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000080;
-              name_ = input.readBytes();
+              name_ = bs;
               break;
             }
           }
@@ -13803,7 +13864,6 @@ public final class Messages {
     }
 
     private int bitField0_;
-    // optional string id = 1;
     public static final int ID_FIELD_NUMBER = 1;
     private java.lang.Object id_;
     /**
@@ -13846,7 +13906,6 @@ public final class Messages {
       }
     }
 
-    // optional string createdDate = 2;
     public static final int CREATEDDATE_FIELD_NUMBER = 2;
     private java.lang.Object createdDate_;
     /**
@@ -13889,7 +13948,6 @@ public final class Messages {
       }
     }
 
-    // optional string modifiedDate = 3;
     public static final int MODIFIEDDATE_FIELD_NUMBER = 3;
     private java.lang.Object modifiedDate_;
     /**
@@ -13932,7 +13990,6 @@ public final class Messages {
       }
     }
 
-    // optional string createdByUserName = 4;
     public static final int CREATEDBYUSERNAME_FIELD_NUMBER = 4;
     private java.lang.Object createdByUserName_;
     /**
@@ -13975,7 +14032,6 @@ public final class Messages {
       }
     }
 
-    // optional string createdByUserId = 5;
     public static final int CREATEDBYUSERID_FIELD_NUMBER = 5;
     private java.lang.Object createdByUserId_;
     /**
@@ -14018,7 +14074,6 @@ public final class Messages {
       }
     }
 
-    // optional string modifiedByUserName = 6;
     public static final int MODIFIEDBYUSERNAME_FIELD_NUMBER = 6;
     private java.lang.Object modifiedByUserName_;
     /**
@@ -14061,7 +14116,6 @@ public final class Messages {
       }
     }
 
-    // optional string modifiedByUserId = 7;
     public static final int MODIFIEDBYUSERID_FIELD_NUMBER = 7;
     private java.lang.Object modifiedByUserId_;
     /**
@@ -14104,7 +14158,6 @@ public final class Messages {
       }
     }
 
-    // required string name = 8;
     public static final int NAME_FIELD_NUMBER = 8;
     private java.lang.Object name_;
     /**
@@ -14160,7 +14213,8 @@ public final class Messages {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasName()) {
         memoizedIsInitialized = 0;
@@ -14320,8 +14374,9 @@ public final class Messages {
      * Protobuf type {@code com.n4systems.fieldid.api.pub.model.AssetTypeGroupMessage}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessageOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:com.n4systems.fieldid.api.pub.model.AssetTypeGroupMessage)
+        com.n4systems.fieldid.api.pub.model.Messages.AssetTypeGroupMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.n4systems.fieldid.api.pub.model.Messages.internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeGroupMessage_descriptor;
@@ -14517,7 +14572,6 @@ public final class Messages {
       }
       private int bitField0_;
 
-      // optional string id = 1;
       private java.lang.Object id_ = "";
       /**
        * <code>optional string id = 1;</code>
@@ -14531,9 +14585,12 @@ public final class Messages {
       public java.lang.String getId() {
         java.lang.Object ref = id_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          id_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            id_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -14591,7 +14648,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string createdDate = 2;
       private java.lang.Object createdDate_ = "";
       /**
        * <code>optional string createdDate = 2;</code>
@@ -14605,9 +14661,12 @@ public final class Messages {
       public java.lang.String getCreatedDate() {
         java.lang.Object ref = createdDate_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          createdDate_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            createdDate_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -14665,7 +14724,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string modifiedDate = 3;
       private java.lang.Object modifiedDate_ = "";
       /**
        * <code>optional string modifiedDate = 3;</code>
@@ -14679,9 +14737,12 @@ public final class Messages {
       public java.lang.String getModifiedDate() {
         java.lang.Object ref = modifiedDate_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          modifiedDate_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            modifiedDate_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -14739,7 +14800,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string createdByUserName = 4;
       private java.lang.Object createdByUserName_ = "";
       /**
        * <code>optional string createdByUserName = 4;</code>
@@ -14753,9 +14813,12 @@ public final class Messages {
       public java.lang.String getCreatedByUserName() {
         java.lang.Object ref = createdByUserName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          createdByUserName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            createdByUserName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -14813,7 +14876,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string createdByUserId = 5;
       private java.lang.Object createdByUserId_ = "";
       /**
        * <code>optional string createdByUserId = 5;</code>
@@ -14827,9 +14889,12 @@ public final class Messages {
       public java.lang.String getCreatedByUserId() {
         java.lang.Object ref = createdByUserId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          createdByUserId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            createdByUserId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -14887,7 +14952,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string modifiedByUserName = 6;
       private java.lang.Object modifiedByUserName_ = "";
       /**
        * <code>optional string modifiedByUserName = 6;</code>
@@ -14901,9 +14965,12 @@ public final class Messages {
       public java.lang.String getModifiedByUserName() {
         java.lang.Object ref = modifiedByUserName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          modifiedByUserName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            modifiedByUserName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -14961,7 +15028,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string modifiedByUserId = 7;
       private java.lang.Object modifiedByUserId_ = "";
       /**
        * <code>optional string modifiedByUserId = 7;</code>
@@ -14975,9 +15041,12 @@ public final class Messages {
       public java.lang.String getModifiedByUserId() {
         java.lang.Object ref = modifiedByUserId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          modifiedByUserId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            modifiedByUserId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -15035,7 +15104,6 @@ public final class Messages {
         return this;
       }
 
-      // required string name = 8;
       private java.lang.Object name_ = "";
       /**
        * <code>required string name = 8;</code>
@@ -15049,9 +15117,12 @@ public final class Messages {
       public java.lang.String getName() {
         java.lang.Object ref = name_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          name_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            name_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -15120,10 +15191,10 @@ public final class Messages {
     // @@protoc_insertion_point(class_scope:com.n4systems.fieldid.api.pub.model.AssetTypeGroupMessage)
   }
 
-  public interface AssetTypeScheduleMessageOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface AssetTypeScheduleMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage)
+      com.google.protobuf.MessageOrBuilder {
 
-    // optional string id = 1;
     /**
      * <code>optional string id = 1;</code>
      */
@@ -15138,7 +15209,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getIdBytes();
 
-    // optional string createdDate = 2;
     /**
      * <code>optional string createdDate = 2;</code>
      */
@@ -15153,7 +15223,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCreatedDateBytes();
 
-    // optional string modifiedDate = 3;
     /**
      * <code>optional string modifiedDate = 3;</code>
      */
@@ -15168,7 +15237,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getModifiedDateBytes();
 
-    // optional string createdByUserName = 4;
     /**
      * <code>optional string createdByUserName = 4;</code>
      */
@@ -15183,7 +15251,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCreatedByUserNameBytes();
 
-    // optional string createdByUserId = 5;
     /**
      * <code>optional string createdByUserId = 5;</code>
      */
@@ -15198,7 +15265,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCreatedByUserIdBytes();
 
-    // optional string modifiedByUserName = 6;
     /**
      * <code>optional string modifiedByUserName = 6;</code>
      */
@@ -15213,7 +15279,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getModifiedByUserNameBytes();
 
-    // optional string modifiedByUserId = 7;
     /**
      * <code>optional string modifiedByUserId = 7;</code>
      */
@@ -15228,7 +15293,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getModifiedByUserIdBytes();
 
-    // optional string ownerName = 8;
     /**
      * <code>optional string ownerName = 8;</code>
      */
@@ -15243,7 +15307,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getOwnerNameBytes();
 
-    // required string ownerId = 9;
     /**
      * <code>required string ownerId = 9;</code>
      */
@@ -15258,7 +15321,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getOwnerIdBytes();
 
-    // optional string assetTypeName = 10;
     /**
      * <code>optional string assetTypeName = 10;</code>
      */
@@ -15273,7 +15335,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getAssetTypeNameBytes();
 
-    // required string assetTypeId = 11;
     /**
      * <code>required string assetTypeId = 11;</code>
      */
@@ -15288,7 +15349,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getAssetTypeIdBytes();
 
-    // optional string eventTypeName = 12;
     /**
      * <code>optional string eventTypeName = 12;</code>
      */
@@ -15303,7 +15363,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getEventTypeNameBytes();
 
-    // required string eventTypeId = 13;
     /**
      * <code>required string eventTypeId = 13;</code>
      */
@@ -15318,7 +15377,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getEventTypeIdBytes();
 
-    // required int64 frequencyInDays = 14;
     /**
      * <code>required int64 frequencyInDays = 14;</code>
      */
@@ -15328,7 +15386,6 @@ public final class Messages {
      */
     long getFrequencyInDays();
 
-    // required bool autoSchedule = 15;
     /**
      * <code>required bool autoSchedule = 15;</code>
      */
@@ -15342,8 +15399,9 @@ public final class Messages {
    * Protobuf type {@code com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage}
    */
   public static final class AssetTypeScheduleMessage extends
-      com.google.protobuf.GeneratedMessage
-      implements AssetTypeScheduleMessageOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage)
+      AssetTypeScheduleMessageOrBuilder {
     // Use AssetTypeScheduleMessage.newBuilder() to construct.
     private AssetTypeScheduleMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -15390,68 +15448,81 @@ public final class Messages {
               break;
             }
             case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000001;
-              id_ = input.readBytes();
+              id_ = bs;
               break;
             }
             case 18: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000002;
-              createdDate_ = input.readBytes();
+              createdDate_ = bs;
               break;
             }
             case 26: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000004;
-              modifiedDate_ = input.readBytes();
+              modifiedDate_ = bs;
               break;
             }
             case 34: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000008;
-              createdByUserName_ = input.readBytes();
+              createdByUserName_ = bs;
               break;
             }
             case 42: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000010;
-              createdByUserId_ = input.readBytes();
+              createdByUserId_ = bs;
               break;
             }
             case 50: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000020;
-              modifiedByUserName_ = input.readBytes();
+              modifiedByUserName_ = bs;
               break;
             }
             case 58: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000040;
-              modifiedByUserId_ = input.readBytes();
+              modifiedByUserId_ = bs;
               break;
             }
             case 66: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000080;
-              ownerName_ = input.readBytes();
+              ownerName_ = bs;
               break;
             }
             case 74: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000100;
-              ownerId_ = input.readBytes();
+              ownerId_ = bs;
               break;
             }
             case 82: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000200;
-              assetTypeName_ = input.readBytes();
+              assetTypeName_ = bs;
               break;
             }
             case 90: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000400;
-              assetTypeId_ = input.readBytes();
+              assetTypeId_ = bs;
               break;
             }
             case 98: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000800;
-              eventTypeName_ = input.readBytes();
+              eventTypeName_ = bs;
               break;
             }
             case 106: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00001000;
-              eventTypeId_ = input.readBytes();
+              eventTypeId_ = bs;
               break;
             }
             case 112: {
@@ -15504,7 +15575,6 @@ public final class Messages {
     }
 
     private int bitField0_;
-    // optional string id = 1;
     public static final int ID_FIELD_NUMBER = 1;
     private java.lang.Object id_;
     /**
@@ -15547,7 +15617,6 @@ public final class Messages {
       }
     }
 
-    // optional string createdDate = 2;
     public static final int CREATEDDATE_FIELD_NUMBER = 2;
     private java.lang.Object createdDate_;
     /**
@@ -15590,7 +15659,6 @@ public final class Messages {
       }
     }
 
-    // optional string modifiedDate = 3;
     public static final int MODIFIEDDATE_FIELD_NUMBER = 3;
     private java.lang.Object modifiedDate_;
     /**
@@ -15633,7 +15701,6 @@ public final class Messages {
       }
     }
 
-    // optional string createdByUserName = 4;
     public static final int CREATEDBYUSERNAME_FIELD_NUMBER = 4;
     private java.lang.Object createdByUserName_;
     /**
@@ -15676,7 +15743,6 @@ public final class Messages {
       }
     }
 
-    // optional string createdByUserId = 5;
     public static final int CREATEDBYUSERID_FIELD_NUMBER = 5;
     private java.lang.Object createdByUserId_;
     /**
@@ -15719,7 +15785,6 @@ public final class Messages {
       }
     }
 
-    // optional string modifiedByUserName = 6;
     public static final int MODIFIEDBYUSERNAME_FIELD_NUMBER = 6;
     private java.lang.Object modifiedByUserName_;
     /**
@@ -15762,7 +15827,6 @@ public final class Messages {
       }
     }
 
-    // optional string modifiedByUserId = 7;
     public static final int MODIFIEDBYUSERID_FIELD_NUMBER = 7;
     private java.lang.Object modifiedByUserId_;
     /**
@@ -15805,7 +15869,6 @@ public final class Messages {
       }
     }
 
-    // optional string ownerName = 8;
     public static final int OWNERNAME_FIELD_NUMBER = 8;
     private java.lang.Object ownerName_;
     /**
@@ -15848,7 +15911,6 @@ public final class Messages {
       }
     }
 
-    // required string ownerId = 9;
     public static final int OWNERID_FIELD_NUMBER = 9;
     private java.lang.Object ownerId_;
     /**
@@ -15891,7 +15953,6 @@ public final class Messages {
       }
     }
 
-    // optional string assetTypeName = 10;
     public static final int ASSETTYPENAME_FIELD_NUMBER = 10;
     private java.lang.Object assetTypeName_;
     /**
@@ -15934,7 +15995,6 @@ public final class Messages {
       }
     }
 
-    // required string assetTypeId = 11;
     public static final int ASSETTYPEID_FIELD_NUMBER = 11;
     private java.lang.Object assetTypeId_;
     /**
@@ -15977,7 +16037,6 @@ public final class Messages {
       }
     }
 
-    // optional string eventTypeName = 12;
     public static final int EVENTTYPENAME_FIELD_NUMBER = 12;
     private java.lang.Object eventTypeName_;
     /**
@@ -16020,7 +16079,6 @@ public final class Messages {
       }
     }
 
-    // required string eventTypeId = 13;
     public static final int EVENTTYPEID_FIELD_NUMBER = 13;
     private java.lang.Object eventTypeId_;
     /**
@@ -16063,7 +16121,6 @@ public final class Messages {
       }
     }
 
-    // required int64 frequencyInDays = 14;
     public static final int FREQUENCYINDAYS_FIELD_NUMBER = 14;
     private long frequencyInDays_;
     /**
@@ -16079,7 +16136,6 @@ public final class Messages {
       return frequencyInDays_;
     }
 
-    // required bool autoSchedule = 15;
     public static final int AUTOSCHEDULE_FIELD_NUMBER = 15;
     private boolean autoSchedule_;
     /**
@@ -16115,7 +16171,8 @@ public final class Messages {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasOwnerId()) {
         memoizedIsInitialized = 0;
@@ -16340,8 +16397,9 @@ public final class Messages {
      * Protobuf type {@code com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessageOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage)
+        com.n4systems.fieldid.api.pub.model.Messages.AssetTypeScheduleMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.n4systems.fieldid.api.pub.model.Messages.internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeScheduleMessage_descriptor;
@@ -16626,7 +16684,6 @@ public final class Messages {
       }
       private int bitField0_;
 
-      // optional string id = 1;
       private java.lang.Object id_ = "";
       /**
        * <code>optional string id = 1;</code>
@@ -16640,9 +16697,12 @@ public final class Messages {
       public java.lang.String getId() {
         java.lang.Object ref = id_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          id_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            id_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -16700,7 +16760,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string createdDate = 2;
       private java.lang.Object createdDate_ = "";
       /**
        * <code>optional string createdDate = 2;</code>
@@ -16714,9 +16773,12 @@ public final class Messages {
       public java.lang.String getCreatedDate() {
         java.lang.Object ref = createdDate_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          createdDate_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            createdDate_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -16774,7 +16836,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string modifiedDate = 3;
       private java.lang.Object modifiedDate_ = "";
       /**
        * <code>optional string modifiedDate = 3;</code>
@@ -16788,9 +16849,12 @@ public final class Messages {
       public java.lang.String getModifiedDate() {
         java.lang.Object ref = modifiedDate_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          modifiedDate_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            modifiedDate_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -16848,7 +16912,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string createdByUserName = 4;
       private java.lang.Object createdByUserName_ = "";
       /**
        * <code>optional string createdByUserName = 4;</code>
@@ -16862,9 +16925,12 @@ public final class Messages {
       public java.lang.String getCreatedByUserName() {
         java.lang.Object ref = createdByUserName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          createdByUserName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            createdByUserName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -16922,7 +16988,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string createdByUserId = 5;
       private java.lang.Object createdByUserId_ = "";
       /**
        * <code>optional string createdByUserId = 5;</code>
@@ -16936,9 +17001,12 @@ public final class Messages {
       public java.lang.String getCreatedByUserId() {
         java.lang.Object ref = createdByUserId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          createdByUserId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            createdByUserId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -16996,7 +17064,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string modifiedByUserName = 6;
       private java.lang.Object modifiedByUserName_ = "";
       /**
        * <code>optional string modifiedByUserName = 6;</code>
@@ -17010,9 +17077,12 @@ public final class Messages {
       public java.lang.String getModifiedByUserName() {
         java.lang.Object ref = modifiedByUserName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          modifiedByUserName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            modifiedByUserName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -17070,7 +17140,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string modifiedByUserId = 7;
       private java.lang.Object modifiedByUserId_ = "";
       /**
        * <code>optional string modifiedByUserId = 7;</code>
@@ -17084,9 +17153,12 @@ public final class Messages {
       public java.lang.String getModifiedByUserId() {
         java.lang.Object ref = modifiedByUserId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          modifiedByUserId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            modifiedByUserId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -17144,7 +17216,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string ownerName = 8;
       private java.lang.Object ownerName_ = "";
       /**
        * <code>optional string ownerName = 8;</code>
@@ -17158,9 +17229,12 @@ public final class Messages {
       public java.lang.String getOwnerName() {
         java.lang.Object ref = ownerName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          ownerName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            ownerName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -17218,7 +17292,6 @@ public final class Messages {
         return this;
       }
 
-      // required string ownerId = 9;
       private java.lang.Object ownerId_ = "";
       /**
        * <code>required string ownerId = 9;</code>
@@ -17232,9 +17305,12 @@ public final class Messages {
       public java.lang.String getOwnerId() {
         java.lang.Object ref = ownerId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          ownerId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            ownerId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -17292,7 +17368,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string assetTypeName = 10;
       private java.lang.Object assetTypeName_ = "";
       /**
        * <code>optional string assetTypeName = 10;</code>
@@ -17306,9 +17381,12 @@ public final class Messages {
       public java.lang.String getAssetTypeName() {
         java.lang.Object ref = assetTypeName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          assetTypeName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            assetTypeName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -17366,7 +17444,6 @@ public final class Messages {
         return this;
       }
 
-      // required string assetTypeId = 11;
       private java.lang.Object assetTypeId_ = "";
       /**
        * <code>required string assetTypeId = 11;</code>
@@ -17380,9 +17457,12 @@ public final class Messages {
       public java.lang.String getAssetTypeId() {
         java.lang.Object ref = assetTypeId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          assetTypeId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            assetTypeId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -17440,7 +17520,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string eventTypeName = 12;
       private java.lang.Object eventTypeName_ = "";
       /**
        * <code>optional string eventTypeName = 12;</code>
@@ -17454,9 +17533,12 @@ public final class Messages {
       public java.lang.String getEventTypeName() {
         java.lang.Object ref = eventTypeName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          eventTypeName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            eventTypeName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -17514,7 +17596,6 @@ public final class Messages {
         return this;
       }
 
-      // required string eventTypeId = 13;
       private java.lang.Object eventTypeId_ = "";
       /**
        * <code>required string eventTypeId = 13;</code>
@@ -17528,9 +17609,12 @@ public final class Messages {
       public java.lang.String getEventTypeId() {
         java.lang.Object ref = eventTypeId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          eventTypeId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            eventTypeId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -17588,7 +17672,6 @@ public final class Messages {
         return this;
       }
 
-      // required int64 frequencyInDays = 14;
       private long frequencyInDays_ ;
       /**
        * <code>required int64 frequencyInDays = 14;</code>
@@ -17621,7 +17704,6 @@ public final class Messages {
         return this;
       }
 
-      // required bool autoSchedule = 15;
       private boolean autoSchedule_ ;
       /**
        * <code>required bool autoSchedule = 15;</code>
@@ -17665,10 +17747,10 @@ public final class Messages {
     // @@protoc_insertion_point(class_scope:com.n4systems.fieldid.api.pub.model.AssetTypeScheduleMessage)
   }
 
-  public interface OwnerMessageOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface OwnerMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.n4systems.fieldid.api.pub.model.OwnerMessage)
+      com.google.protobuf.MessageOrBuilder {
 
-    // optional string id = 1;
     /**
      * <code>optional string id = 1;</code>
      */
@@ -17683,7 +17765,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getIdBytes();
 
-    // optional string createdDate = 2;
     /**
      * <code>optional string createdDate = 2;</code>
      */
@@ -17698,7 +17779,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCreatedDateBytes();
 
-    // optional string modifiedDate = 3;
     /**
      * <code>optional string modifiedDate = 3;</code>
      */
@@ -17713,7 +17793,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getModifiedDateBytes();
 
-    // optional string createdByUserName = 4;
     /**
      * <code>optional string createdByUserName = 4;</code>
      */
@@ -17728,7 +17807,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCreatedByUserNameBytes();
 
-    // optional string createdByUserId = 5;
     /**
      * <code>optional string createdByUserId = 5;</code>
      */
@@ -17743,7 +17821,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCreatedByUserIdBytes();
 
-    // optional string modifiedByUserName = 6;
     /**
      * <code>optional string modifiedByUserName = 6;</code>
      */
@@ -17758,7 +17835,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getModifiedByUserNameBytes();
 
-    // optional string modifiedByUserId = 7;
     /**
      * <code>optional string modifiedByUserId = 7;</code>
      */
@@ -17773,7 +17849,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getModifiedByUserIdBytes();
 
-    // required string name = 8;
     /**
      * <code>required string name = 8;</code>
      */
@@ -17788,7 +17863,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getNameBytes();
 
-    // optional string parentName = 9;
     /**
      * <code>optional string parentName = 9;</code>
      */
@@ -17803,7 +17877,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getParentNameBytes();
 
-    // optional string parentId = 10;
     /**
      * <code>optional string parentId = 10;</code>
      */
@@ -17818,7 +17891,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getParentIdBytes();
 
-    // optional string code = 11;
     /**
      * <code>optional string code = 11;</code>
      */
@@ -17833,7 +17905,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCodeBytes();
 
-    // optional string notes = 12;
     /**
      * <code>optional string notes = 12;</code>
      */
@@ -17848,7 +17919,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getNotesBytes();
 
-    // optional string streetAddress = 13;
     /**
      * <code>optional string streetAddress = 13;</code>
      */
@@ -17863,7 +17933,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getStreetAddressBytes();
 
-    // optional string city = 14;
     /**
      * <code>optional string city = 14;</code>
      */
@@ -17878,7 +17947,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCityBytes();
 
-    // optional string state = 15;
     /**
      * <code>optional string state = 15;</code>
      */
@@ -17893,7 +17961,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getStateBytes();
 
-    // optional string country = 16;
     /**
      * <code>optional string country = 16;</code>
      */
@@ -17908,7 +17975,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCountryBytes();
 
-    // optional string zip = 17;
     /**
      * <code>optional string zip = 17;</code>
      */
@@ -17923,7 +17989,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getZipBytes();
 
-    // optional string phone1 = 18;
     /**
      * <code>optional string phone1 = 18;</code>
      */
@@ -17938,7 +18003,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getPhone1Bytes();
 
-    // optional string phone2 = 19;
     /**
      * <code>optional string phone2 = 19;</code>
      */
@@ -17953,7 +18017,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getPhone2Bytes();
 
-    // optional string fax1 = 20;
     /**
      * <code>optional string fax1 = 20;</code>
      */
@@ -17968,7 +18031,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getFax1Bytes();
 
-    // optional string latitude = 21;
     /**
      * <code>optional string latitude = 21;</code>
      */
@@ -17983,7 +18045,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getLatitudeBytes();
 
-    // optional string longitude = 22;
     /**
      * <code>optional string longitude = 22;</code>
      */
@@ -17998,7 +18059,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getLongitudeBytes();
 
-    // optional string contactName = 23;
     /**
      * <code>optional string contactName = 23;</code>
      */
@@ -18013,7 +18073,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getContactNameBytes();
 
-    // optional string contactEmail = 24;
     /**
      * <code>optional string contactEmail = 24;</code>
      */
@@ -18032,8 +18091,9 @@ public final class Messages {
    * Protobuf type {@code com.n4systems.fieldid.api.pub.model.OwnerMessage}
    */
   public static final class OwnerMessage extends
-      com.google.protobuf.GeneratedMessage
-      implements OwnerMessageOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:com.n4systems.fieldid.api.pub.model.OwnerMessage)
+      OwnerMessageOrBuilder {
     // Use OwnerMessage.newBuilder() to construct.
     private OwnerMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -18080,123 +18140,147 @@ public final class Messages {
               break;
             }
             case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000001;
-              id_ = input.readBytes();
+              id_ = bs;
               break;
             }
             case 18: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000002;
-              createdDate_ = input.readBytes();
+              createdDate_ = bs;
               break;
             }
             case 26: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000004;
-              modifiedDate_ = input.readBytes();
+              modifiedDate_ = bs;
               break;
             }
             case 34: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000008;
-              createdByUserName_ = input.readBytes();
+              createdByUserName_ = bs;
               break;
             }
             case 42: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000010;
-              createdByUserId_ = input.readBytes();
+              createdByUserId_ = bs;
               break;
             }
             case 50: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000020;
-              modifiedByUserName_ = input.readBytes();
+              modifiedByUserName_ = bs;
               break;
             }
             case 58: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000040;
-              modifiedByUserId_ = input.readBytes();
+              modifiedByUserId_ = bs;
               break;
             }
             case 66: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000080;
-              name_ = input.readBytes();
+              name_ = bs;
               break;
             }
             case 74: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000100;
-              parentName_ = input.readBytes();
+              parentName_ = bs;
               break;
             }
             case 82: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000200;
-              parentId_ = input.readBytes();
+              parentId_ = bs;
               break;
             }
             case 90: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000400;
-              code_ = input.readBytes();
+              code_ = bs;
               break;
             }
             case 98: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000800;
-              notes_ = input.readBytes();
+              notes_ = bs;
               break;
             }
             case 106: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00001000;
-              streetAddress_ = input.readBytes();
+              streetAddress_ = bs;
               break;
             }
             case 114: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00002000;
-              city_ = input.readBytes();
+              city_ = bs;
               break;
             }
             case 122: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00004000;
-              state_ = input.readBytes();
+              state_ = bs;
               break;
             }
             case 130: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00008000;
-              country_ = input.readBytes();
+              country_ = bs;
               break;
             }
             case 138: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00010000;
-              zip_ = input.readBytes();
+              zip_ = bs;
               break;
             }
             case 146: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00020000;
-              phone1_ = input.readBytes();
+              phone1_ = bs;
               break;
             }
             case 154: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00040000;
-              phone2_ = input.readBytes();
+              phone2_ = bs;
               break;
             }
             case 162: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00080000;
-              fax1_ = input.readBytes();
+              fax1_ = bs;
               break;
             }
             case 170: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00100000;
-              latitude_ = input.readBytes();
+              latitude_ = bs;
               break;
             }
             case 178: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00200000;
-              longitude_ = input.readBytes();
+              longitude_ = bs;
               break;
             }
             case 186: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00400000;
-              contactName_ = input.readBytes();
+              contactName_ = bs;
               break;
             }
             case 194: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00800000;
-              contactEmail_ = input.readBytes();
+              contactEmail_ = bs;
               break;
             }
           }
@@ -18239,7 +18323,6 @@ public final class Messages {
     }
 
     private int bitField0_;
-    // optional string id = 1;
     public static final int ID_FIELD_NUMBER = 1;
     private java.lang.Object id_;
     /**
@@ -18282,7 +18365,6 @@ public final class Messages {
       }
     }
 
-    // optional string createdDate = 2;
     public static final int CREATEDDATE_FIELD_NUMBER = 2;
     private java.lang.Object createdDate_;
     /**
@@ -18325,7 +18407,6 @@ public final class Messages {
       }
     }
 
-    // optional string modifiedDate = 3;
     public static final int MODIFIEDDATE_FIELD_NUMBER = 3;
     private java.lang.Object modifiedDate_;
     /**
@@ -18368,7 +18449,6 @@ public final class Messages {
       }
     }
 
-    // optional string createdByUserName = 4;
     public static final int CREATEDBYUSERNAME_FIELD_NUMBER = 4;
     private java.lang.Object createdByUserName_;
     /**
@@ -18411,7 +18491,6 @@ public final class Messages {
       }
     }
 
-    // optional string createdByUserId = 5;
     public static final int CREATEDBYUSERID_FIELD_NUMBER = 5;
     private java.lang.Object createdByUserId_;
     /**
@@ -18454,7 +18533,6 @@ public final class Messages {
       }
     }
 
-    // optional string modifiedByUserName = 6;
     public static final int MODIFIEDBYUSERNAME_FIELD_NUMBER = 6;
     private java.lang.Object modifiedByUserName_;
     /**
@@ -18497,7 +18575,6 @@ public final class Messages {
       }
     }
 
-    // optional string modifiedByUserId = 7;
     public static final int MODIFIEDBYUSERID_FIELD_NUMBER = 7;
     private java.lang.Object modifiedByUserId_;
     /**
@@ -18540,7 +18617,6 @@ public final class Messages {
       }
     }
 
-    // required string name = 8;
     public static final int NAME_FIELD_NUMBER = 8;
     private java.lang.Object name_;
     /**
@@ -18583,7 +18659,6 @@ public final class Messages {
       }
     }
 
-    // optional string parentName = 9;
     public static final int PARENTNAME_FIELD_NUMBER = 9;
     private java.lang.Object parentName_;
     /**
@@ -18626,7 +18701,6 @@ public final class Messages {
       }
     }
 
-    // optional string parentId = 10;
     public static final int PARENTID_FIELD_NUMBER = 10;
     private java.lang.Object parentId_;
     /**
@@ -18669,7 +18743,6 @@ public final class Messages {
       }
     }
 
-    // optional string code = 11;
     public static final int CODE_FIELD_NUMBER = 11;
     private java.lang.Object code_;
     /**
@@ -18712,7 +18785,6 @@ public final class Messages {
       }
     }
 
-    // optional string notes = 12;
     public static final int NOTES_FIELD_NUMBER = 12;
     private java.lang.Object notes_;
     /**
@@ -18755,7 +18827,6 @@ public final class Messages {
       }
     }
 
-    // optional string streetAddress = 13;
     public static final int STREETADDRESS_FIELD_NUMBER = 13;
     private java.lang.Object streetAddress_;
     /**
@@ -18798,7 +18869,6 @@ public final class Messages {
       }
     }
 
-    // optional string city = 14;
     public static final int CITY_FIELD_NUMBER = 14;
     private java.lang.Object city_;
     /**
@@ -18841,7 +18911,6 @@ public final class Messages {
       }
     }
 
-    // optional string state = 15;
     public static final int STATE_FIELD_NUMBER = 15;
     private java.lang.Object state_;
     /**
@@ -18884,7 +18953,6 @@ public final class Messages {
       }
     }
 
-    // optional string country = 16;
     public static final int COUNTRY_FIELD_NUMBER = 16;
     private java.lang.Object country_;
     /**
@@ -18927,7 +18995,6 @@ public final class Messages {
       }
     }
 
-    // optional string zip = 17;
     public static final int ZIP_FIELD_NUMBER = 17;
     private java.lang.Object zip_;
     /**
@@ -18970,7 +19037,6 @@ public final class Messages {
       }
     }
 
-    // optional string phone1 = 18;
     public static final int PHONE1_FIELD_NUMBER = 18;
     private java.lang.Object phone1_;
     /**
@@ -19013,7 +19079,6 @@ public final class Messages {
       }
     }
 
-    // optional string phone2 = 19;
     public static final int PHONE2_FIELD_NUMBER = 19;
     private java.lang.Object phone2_;
     /**
@@ -19056,7 +19121,6 @@ public final class Messages {
       }
     }
 
-    // optional string fax1 = 20;
     public static final int FAX1_FIELD_NUMBER = 20;
     private java.lang.Object fax1_;
     /**
@@ -19099,7 +19163,6 @@ public final class Messages {
       }
     }
 
-    // optional string latitude = 21;
     public static final int LATITUDE_FIELD_NUMBER = 21;
     private java.lang.Object latitude_;
     /**
@@ -19142,7 +19205,6 @@ public final class Messages {
       }
     }
 
-    // optional string longitude = 22;
     public static final int LONGITUDE_FIELD_NUMBER = 22;
     private java.lang.Object longitude_;
     /**
@@ -19185,7 +19247,6 @@ public final class Messages {
       }
     }
 
-    // optional string contactName = 23;
     public static final int CONTACTNAME_FIELD_NUMBER = 23;
     private java.lang.Object contactName_;
     /**
@@ -19228,7 +19289,6 @@ public final class Messages {
       }
     }
 
-    // optional string contactEmail = 24;
     public static final int CONTACTEMAIL_FIELD_NUMBER = 24;
     private java.lang.Object contactEmail_;
     /**
@@ -19300,7 +19360,8 @@ public final class Messages {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasName()) {
         memoizedIsInitialized = 0;
@@ -19572,8 +19633,9 @@ public final class Messages {
      * Protobuf type {@code com.n4systems.fieldid.api.pub.model.OwnerMessage}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.n4systems.fieldid.api.pub.model.Messages.OwnerMessageOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:com.n4systems.fieldid.api.pub.model.OwnerMessage)
+        com.n4systems.fieldid.api.pub.model.Messages.OwnerMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.n4systems.fieldid.api.pub.model.Messages.internal_static_com_n4systems_fieldid_api_pub_model_OwnerMessage_descriptor;
@@ -19945,7 +20007,6 @@ public final class Messages {
       }
       private int bitField0_;
 
-      // optional string id = 1;
       private java.lang.Object id_ = "";
       /**
        * <code>optional string id = 1;</code>
@@ -19959,9 +20020,12 @@ public final class Messages {
       public java.lang.String getId() {
         java.lang.Object ref = id_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          id_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            id_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -20019,7 +20083,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string createdDate = 2;
       private java.lang.Object createdDate_ = "";
       /**
        * <code>optional string createdDate = 2;</code>
@@ -20033,9 +20096,12 @@ public final class Messages {
       public java.lang.String getCreatedDate() {
         java.lang.Object ref = createdDate_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          createdDate_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            createdDate_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -20093,7 +20159,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string modifiedDate = 3;
       private java.lang.Object modifiedDate_ = "";
       /**
        * <code>optional string modifiedDate = 3;</code>
@@ -20107,9 +20172,12 @@ public final class Messages {
       public java.lang.String getModifiedDate() {
         java.lang.Object ref = modifiedDate_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          modifiedDate_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            modifiedDate_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -20167,7 +20235,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string createdByUserName = 4;
       private java.lang.Object createdByUserName_ = "";
       /**
        * <code>optional string createdByUserName = 4;</code>
@@ -20181,9 +20248,12 @@ public final class Messages {
       public java.lang.String getCreatedByUserName() {
         java.lang.Object ref = createdByUserName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          createdByUserName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            createdByUserName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -20241,7 +20311,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string createdByUserId = 5;
       private java.lang.Object createdByUserId_ = "";
       /**
        * <code>optional string createdByUserId = 5;</code>
@@ -20255,9 +20324,12 @@ public final class Messages {
       public java.lang.String getCreatedByUserId() {
         java.lang.Object ref = createdByUserId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          createdByUserId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            createdByUserId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -20315,7 +20387,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string modifiedByUserName = 6;
       private java.lang.Object modifiedByUserName_ = "";
       /**
        * <code>optional string modifiedByUserName = 6;</code>
@@ -20329,9 +20400,12 @@ public final class Messages {
       public java.lang.String getModifiedByUserName() {
         java.lang.Object ref = modifiedByUserName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          modifiedByUserName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            modifiedByUserName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -20389,7 +20463,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string modifiedByUserId = 7;
       private java.lang.Object modifiedByUserId_ = "";
       /**
        * <code>optional string modifiedByUserId = 7;</code>
@@ -20403,9 +20476,12 @@ public final class Messages {
       public java.lang.String getModifiedByUserId() {
         java.lang.Object ref = modifiedByUserId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          modifiedByUserId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            modifiedByUserId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -20463,7 +20539,6 @@ public final class Messages {
         return this;
       }
 
-      // required string name = 8;
       private java.lang.Object name_ = "";
       /**
        * <code>required string name = 8;</code>
@@ -20477,9 +20552,12 @@ public final class Messages {
       public java.lang.String getName() {
         java.lang.Object ref = name_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          name_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            name_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -20537,7 +20615,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string parentName = 9;
       private java.lang.Object parentName_ = "";
       /**
        * <code>optional string parentName = 9;</code>
@@ -20551,9 +20628,12 @@ public final class Messages {
       public java.lang.String getParentName() {
         java.lang.Object ref = parentName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          parentName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            parentName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -20611,7 +20691,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string parentId = 10;
       private java.lang.Object parentId_ = "";
       /**
        * <code>optional string parentId = 10;</code>
@@ -20625,9 +20704,12 @@ public final class Messages {
       public java.lang.String getParentId() {
         java.lang.Object ref = parentId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          parentId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            parentId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -20685,7 +20767,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string code = 11;
       private java.lang.Object code_ = "";
       /**
        * <code>optional string code = 11;</code>
@@ -20699,9 +20780,12 @@ public final class Messages {
       public java.lang.String getCode() {
         java.lang.Object ref = code_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          code_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            code_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -20759,7 +20843,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string notes = 12;
       private java.lang.Object notes_ = "";
       /**
        * <code>optional string notes = 12;</code>
@@ -20773,9 +20856,12 @@ public final class Messages {
       public java.lang.String getNotes() {
         java.lang.Object ref = notes_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          notes_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            notes_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -20833,7 +20919,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string streetAddress = 13;
       private java.lang.Object streetAddress_ = "";
       /**
        * <code>optional string streetAddress = 13;</code>
@@ -20847,9 +20932,12 @@ public final class Messages {
       public java.lang.String getStreetAddress() {
         java.lang.Object ref = streetAddress_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          streetAddress_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            streetAddress_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -20907,7 +20995,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string city = 14;
       private java.lang.Object city_ = "";
       /**
        * <code>optional string city = 14;</code>
@@ -20921,9 +21008,12 @@ public final class Messages {
       public java.lang.String getCity() {
         java.lang.Object ref = city_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          city_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            city_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -20981,7 +21071,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string state = 15;
       private java.lang.Object state_ = "";
       /**
        * <code>optional string state = 15;</code>
@@ -20995,9 +21084,12 @@ public final class Messages {
       public java.lang.String getState() {
         java.lang.Object ref = state_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          state_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            state_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -21055,7 +21147,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string country = 16;
       private java.lang.Object country_ = "";
       /**
        * <code>optional string country = 16;</code>
@@ -21069,9 +21160,12 @@ public final class Messages {
       public java.lang.String getCountry() {
         java.lang.Object ref = country_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          country_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            country_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -21129,7 +21223,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string zip = 17;
       private java.lang.Object zip_ = "";
       /**
        * <code>optional string zip = 17;</code>
@@ -21143,9 +21236,12 @@ public final class Messages {
       public java.lang.String getZip() {
         java.lang.Object ref = zip_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          zip_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            zip_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -21203,7 +21299,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string phone1 = 18;
       private java.lang.Object phone1_ = "";
       /**
        * <code>optional string phone1 = 18;</code>
@@ -21217,9 +21312,12 @@ public final class Messages {
       public java.lang.String getPhone1() {
         java.lang.Object ref = phone1_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          phone1_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            phone1_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -21277,7 +21375,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string phone2 = 19;
       private java.lang.Object phone2_ = "";
       /**
        * <code>optional string phone2 = 19;</code>
@@ -21291,9 +21388,12 @@ public final class Messages {
       public java.lang.String getPhone2() {
         java.lang.Object ref = phone2_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          phone2_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            phone2_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -21351,7 +21451,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string fax1 = 20;
       private java.lang.Object fax1_ = "";
       /**
        * <code>optional string fax1 = 20;</code>
@@ -21365,9 +21464,12 @@ public final class Messages {
       public java.lang.String getFax1() {
         java.lang.Object ref = fax1_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          fax1_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            fax1_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -21425,7 +21527,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string latitude = 21;
       private java.lang.Object latitude_ = "";
       /**
        * <code>optional string latitude = 21;</code>
@@ -21439,9 +21540,12 @@ public final class Messages {
       public java.lang.String getLatitude() {
         java.lang.Object ref = latitude_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          latitude_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            latitude_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -21499,7 +21603,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string longitude = 22;
       private java.lang.Object longitude_ = "";
       /**
        * <code>optional string longitude = 22;</code>
@@ -21513,9 +21616,12 @@ public final class Messages {
       public java.lang.String getLongitude() {
         java.lang.Object ref = longitude_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          longitude_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            longitude_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -21573,7 +21679,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string contactName = 23;
       private java.lang.Object contactName_ = "";
       /**
        * <code>optional string contactName = 23;</code>
@@ -21587,9 +21692,12 @@ public final class Messages {
       public java.lang.String getContactName() {
         java.lang.Object ref = contactName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          contactName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            contactName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -21647,7 +21755,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string contactEmail = 24;
       private java.lang.Object contactEmail_ = "";
       /**
        * <code>optional string contactEmail = 24;</code>
@@ -21661,9 +21768,12 @@ public final class Messages {
       public java.lang.String getContactEmail() {
         java.lang.Object ref = contactEmail_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          contactEmail_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            contactEmail_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -21732,10 +21842,10 @@ public final class Messages {
     // @@protoc_insertion_point(class_scope:com.n4systems.fieldid.api.pub.model.OwnerMessage)
   }
 
-  public interface PredefinedLocationMessageOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface PredefinedLocationMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.n4systems.fieldid.api.pub.model.PredefinedLocationMessage)
+      com.google.protobuf.MessageOrBuilder {
 
-    // optional string id = 1;
     /**
      * <code>optional string id = 1;</code>
      */
@@ -21750,7 +21860,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getIdBytes();
 
-    // optional string createdDate = 2;
     /**
      * <code>optional string createdDate = 2;</code>
      */
@@ -21765,7 +21874,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCreatedDateBytes();
 
-    // optional string modifiedDate = 3;
     /**
      * <code>optional string modifiedDate = 3;</code>
      */
@@ -21780,7 +21888,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getModifiedDateBytes();
 
-    // optional string createdByUserName = 4;
     /**
      * <code>optional string createdByUserName = 4;</code>
      */
@@ -21795,7 +21902,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCreatedByUserNameBytes();
 
-    // optional string createdByUserId = 5;
     /**
      * <code>optional string createdByUserId = 5;</code>
      */
@@ -21810,7 +21916,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCreatedByUserIdBytes();
 
-    // optional string modifiedByUserName = 6;
     /**
      * <code>optional string modifiedByUserName = 6;</code>
      */
@@ -21825,7 +21930,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getModifiedByUserNameBytes();
 
-    // optional string modifiedByUserId = 7;
     /**
      * <code>optional string modifiedByUserId = 7;</code>
      */
@@ -21840,7 +21944,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getModifiedByUserIdBytes();
 
-    // optional string ownerName = 8;
     /**
      * <code>optional string ownerName = 8;</code>
      */
@@ -21855,7 +21958,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getOwnerNameBytes();
 
-    // optional string ownerId = 9;
     /**
      * <code>optional string ownerId = 9;</code>
      */
@@ -21870,7 +21972,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getOwnerIdBytes();
 
-    // optional string parentName = 10;
     /**
      * <code>optional string parentName = 10;</code>
      */
@@ -21885,7 +21986,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getParentNameBytes();
 
-    // optional string parentId = 11;
     /**
      * <code>optional string parentId = 11;</code>
      */
@@ -21900,7 +22000,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getParentIdBytes();
 
-    // required string name = 12;
     /**
      * <code>required string name = 12;</code>
      */
@@ -21919,8 +22018,9 @@ public final class Messages {
    * Protobuf type {@code com.n4systems.fieldid.api.pub.model.PredefinedLocationMessage}
    */
   public static final class PredefinedLocationMessage extends
-      com.google.protobuf.GeneratedMessage
-      implements PredefinedLocationMessageOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:com.n4systems.fieldid.api.pub.model.PredefinedLocationMessage)
+      PredefinedLocationMessageOrBuilder {
     // Use PredefinedLocationMessage.newBuilder() to construct.
     private PredefinedLocationMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -21967,63 +22067,75 @@ public final class Messages {
               break;
             }
             case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000001;
-              id_ = input.readBytes();
+              id_ = bs;
               break;
             }
             case 18: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000002;
-              createdDate_ = input.readBytes();
+              createdDate_ = bs;
               break;
             }
             case 26: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000004;
-              modifiedDate_ = input.readBytes();
+              modifiedDate_ = bs;
               break;
             }
             case 34: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000008;
-              createdByUserName_ = input.readBytes();
+              createdByUserName_ = bs;
               break;
             }
             case 42: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000010;
-              createdByUserId_ = input.readBytes();
+              createdByUserId_ = bs;
               break;
             }
             case 50: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000020;
-              modifiedByUserName_ = input.readBytes();
+              modifiedByUserName_ = bs;
               break;
             }
             case 58: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000040;
-              modifiedByUserId_ = input.readBytes();
+              modifiedByUserId_ = bs;
               break;
             }
             case 66: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000080;
-              ownerName_ = input.readBytes();
+              ownerName_ = bs;
               break;
             }
             case 74: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000100;
-              ownerId_ = input.readBytes();
+              ownerId_ = bs;
               break;
             }
             case 82: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000200;
-              parentName_ = input.readBytes();
+              parentName_ = bs;
               break;
             }
             case 90: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000400;
-              parentId_ = input.readBytes();
+              parentId_ = bs;
               break;
             }
             case 98: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000800;
-              name_ = input.readBytes();
+              name_ = bs;
               break;
             }
           }
@@ -22066,7 +22178,6 @@ public final class Messages {
     }
 
     private int bitField0_;
-    // optional string id = 1;
     public static final int ID_FIELD_NUMBER = 1;
     private java.lang.Object id_;
     /**
@@ -22109,7 +22220,6 @@ public final class Messages {
       }
     }
 
-    // optional string createdDate = 2;
     public static final int CREATEDDATE_FIELD_NUMBER = 2;
     private java.lang.Object createdDate_;
     /**
@@ -22152,7 +22262,6 @@ public final class Messages {
       }
     }
 
-    // optional string modifiedDate = 3;
     public static final int MODIFIEDDATE_FIELD_NUMBER = 3;
     private java.lang.Object modifiedDate_;
     /**
@@ -22195,7 +22304,6 @@ public final class Messages {
       }
     }
 
-    // optional string createdByUserName = 4;
     public static final int CREATEDBYUSERNAME_FIELD_NUMBER = 4;
     private java.lang.Object createdByUserName_;
     /**
@@ -22238,7 +22346,6 @@ public final class Messages {
       }
     }
 
-    // optional string createdByUserId = 5;
     public static final int CREATEDBYUSERID_FIELD_NUMBER = 5;
     private java.lang.Object createdByUserId_;
     /**
@@ -22281,7 +22388,6 @@ public final class Messages {
       }
     }
 
-    // optional string modifiedByUserName = 6;
     public static final int MODIFIEDBYUSERNAME_FIELD_NUMBER = 6;
     private java.lang.Object modifiedByUserName_;
     /**
@@ -22324,7 +22430,6 @@ public final class Messages {
       }
     }
 
-    // optional string modifiedByUserId = 7;
     public static final int MODIFIEDBYUSERID_FIELD_NUMBER = 7;
     private java.lang.Object modifiedByUserId_;
     /**
@@ -22367,7 +22472,6 @@ public final class Messages {
       }
     }
 
-    // optional string ownerName = 8;
     public static final int OWNERNAME_FIELD_NUMBER = 8;
     private java.lang.Object ownerName_;
     /**
@@ -22410,7 +22514,6 @@ public final class Messages {
       }
     }
 
-    // optional string ownerId = 9;
     public static final int OWNERID_FIELD_NUMBER = 9;
     private java.lang.Object ownerId_;
     /**
@@ -22453,7 +22556,6 @@ public final class Messages {
       }
     }
 
-    // optional string parentName = 10;
     public static final int PARENTNAME_FIELD_NUMBER = 10;
     private java.lang.Object parentName_;
     /**
@@ -22496,7 +22598,6 @@ public final class Messages {
       }
     }
 
-    // optional string parentId = 11;
     public static final int PARENTID_FIELD_NUMBER = 11;
     private java.lang.Object parentId_;
     /**
@@ -22539,7 +22640,6 @@ public final class Messages {
       }
     }
 
-    // required string name = 12;
     public static final int NAME_FIELD_NUMBER = 12;
     private java.lang.Object name_;
     /**
@@ -22599,7 +22699,8 @@ public final class Messages {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasName()) {
         memoizedIsInitialized = 0;
@@ -22787,8 +22888,9 @@ public final class Messages {
      * Protobuf type {@code com.n4systems.fieldid.api.pub.model.PredefinedLocationMessage}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.n4systems.fieldid.api.pub.model.Messages.PredefinedLocationMessageOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:com.n4systems.fieldid.api.pub.model.PredefinedLocationMessage)
+        com.n4systems.fieldid.api.pub.model.Messages.PredefinedLocationMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.n4systems.fieldid.api.pub.model.Messages.internal_static_com_n4systems_fieldid_api_pub_model_PredefinedLocationMessage_descriptor;
@@ -23028,7 +23130,6 @@ public final class Messages {
       }
       private int bitField0_;
 
-      // optional string id = 1;
       private java.lang.Object id_ = "";
       /**
        * <code>optional string id = 1;</code>
@@ -23042,9 +23143,12 @@ public final class Messages {
       public java.lang.String getId() {
         java.lang.Object ref = id_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          id_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            id_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -23102,7 +23206,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string createdDate = 2;
       private java.lang.Object createdDate_ = "";
       /**
        * <code>optional string createdDate = 2;</code>
@@ -23116,9 +23219,12 @@ public final class Messages {
       public java.lang.String getCreatedDate() {
         java.lang.Object ref = createdDate_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          createdDate_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            createdDate_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -23176,7 +23282,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string modifiedDate = 3;
       private java.lang.Object modifiedDate_ = "";
       /**
        * <code>optional string modifiedDate = 3;</code>
@@ -23190,9 +23295,12 @@ public final class Messages {
       public java.lang.String getModifiedDate() {
         java.lang.Object ref = modifiedDate_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          modifiedDate_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            modifiedDate_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -23250,7 +23358,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string createdByUserName = 4;
       private java.lang.Object createdByUserName_ = "";
       /**
        * <code>optional string createdByUserName = 4;</code>
@@ -23264,9 +23371,12 @@ public final class Messages {
       public java.lang.String getCreatedByUserName() {
         java.lang.Object ref = createdByUserName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          createdByUserName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            createdByUserName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -23324,7 +23434,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string createdByUserId = 5;
       private java.lang.Object createdByUserId_ = "";
       /**
        * <code>optional string createdByUserId = 5;</code>
@@ -23338,9 +23447,12 @@ public final class Messages {
       public java.lang.String getCreatedByUserId() {
         java.lang.Object ref = createdByUserId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          createdByUserId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            createdByUserId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -23398,7 +23510,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string modifiedByUserName = 6;
       private java.lang.Object modifiedByUserName_ = "";
       /**
        * <code>optional string modifiedByUserName = 6;</code>
@@ -23412,9 +23523,12 @@ public final class Messages {
       public java.lang.String getModifiedByUserName() {
         java.lang.Object ref = modifiedByUserName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          modifiedByUserName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            modifiedByUserName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -23472,7 +23586,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string modifiedByUserId = 7;
       private java.lang.Object modifiedByUserId_ = "";
       /**
        * <code>optional string modifiedByUserId = 7;</code>
@@ -23486,9 +23599,12 @@ public final class Messages {
       public java.lang.String getModifiedByUserId() {
         java.lang.Object ref = modifiedByUserId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          modifiedByUserId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            modifiedByUserId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -23546,7 +23662,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string ownerName = 8;
       private java.lang.Object ownerName_ = "";
       /**
        * <code>optional string ownerName = 8;</code>
@@ -23560,9 +23675,12 @@ public final class Messages {
       public java.lang.String getOwnerName() {
         java.lang.Object ref = ownerName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          ownerName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            ownerName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -23620,7 +23738,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string ownerId = 9;
       private java.lang.Object ownerId_ = "";
       /**
        * <code>optional string ownerId = 9;</code>
@@ -23634,9 +23751,12 @@ public final class Messages {
       public java.lang.String getOwnerId() {
         java.lang.Object ref = ownerId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          ownerId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            ownerId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -23694,7 +23814,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string parentName = 10;
       private java.lang.Object parentName_ = "";
       /**
        * <code>optional string parentName = 10;</code>
@@ -23708,9 +23827,12 @@ public final class Messages {
       public java.lang.String getParentName() {
         java.lang.Object ref = parentName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          parentName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            parentName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -23768,7 +23890,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string parentId = 11;
       private java.lang.Object parentId_ = "";
       /**
        * <code>optional string parentId = 11;</code>
@@ -23782,9 +23903,12 @@ public final class Messages {
       public java.lang.String getParentId() {
         java.lang.Object ref = parentId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          parentId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            parentId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -23842,7 +23966,6 @@ public final class Messages {
         return this;
       }
 
-      // required string name = 12;
       private java.lang.Object name_ = "";
       /**
        * <code>required string name = 12;</code>
@@ -23856,9 +23979,12 @@ public final class Messages {
       public java.lang.String getName() {
         java.lang.Object ref = name_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          name_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            name_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -23927,10 +24053,10 @@ public final class Messages {
     // @@protoc_insertion_point(class_scope:com.n4systems.fieldid.api.pub.model.PredefinedLocationMessage)
   }
 
-  public interface TestSimpleMessageOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface TestSimpleMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.n4systems.fieldid.api.pub.model.TestSimpleMessage)
+      com.google.protobuf.MessageOrBuilder {
 
-    // optional double double_field = 1;
     /**
      * <code>optional double double_field = 1;</code>
      */
@@ -23940,7 +24066,6 @@ public final class Messages {
      */
     double getDoubleField();
 
-    // optional float float_field = 2;
     /**
      * <code>optional float float_field = 2;</code>
      */
@@ -23950,7 +24075,6 @@ public final class Messages {
      */
     float getFloatField();
 
-    // optional int32 int32_field = 3;
     /**
      * <code>optional int32 int32_field = 3;</code>
      */
@@ -23960,7 +24084,6 @@ public final class Messages {
      */
     int getInt32Field();
 
-    // optional int64 int64_field = 4;
     /**
      * <code>optional int64 int64_field = 4;</code>
      */
@@ -23970,7 +24093,6 @@ public final class Messages {
      */
     long getInt64Field();
 
-    // optional uint32 uint32_field = 5;
     /**
      * <code>optional uint32 uint32_field = 5;</code>
      */
@@ -23980,7 +24102,6 @@ public final class Messages {
      */
     int getUint32Field();
 
-    // optional uint64 uint64_field = 6;
     /**
      * <code>optional uint64 uint64_field = 6;</code>
      */
@@ -23990,7 +24111,6 @@ public final class Messages {
      */
     long getUint64Field();
 
-    // optional sint32 sint32_field = 7;
     /**
      * <code>optional sint32 sint32_field = 7;</code>
      */
@@ -24000,7 +24120,6 @@ public final class Messages {
      */
     int getSint32Field();
 
-    // optional sint64 sint64_field = 8;
     /**
      * <code>optional sint64 sint64_field = 8;</code>
      */
@@ -24010,7 +24129,6 @@ public final class Messages {
      */
     long getSint64Field();
 
-    // optional fixed32 fixed32_field = 9;
     /**
      * <code>optional fixed32 fixed32_field = 9;</code>
      */
@@ -24020,7 +24138,6 @@ public final class Messages {
      */
     int getFixed32Field();
 
-    // optional fixed64 fixed64_field = 10;
     /**
      * <code>optional fixed64 fixed64_field = 10;</code>
      */
@@ -24030,7 +24147,6 @@ public final class Messages {
      */
     long getFixed64Field();
 
-    // optional sfixed32 sfixed32_field = 11;
     /**
      * <code>optional sfixed32 sfixed32_field = 11;</code>
      */
@@ -24040,7 +24156,6 @@ public final class Messages {
      */
     int getSfixed32Field();
 
-    // optional sfixed64 sfixed64_field = 12;
     /**
      * <code>optional sfixed64 sfixed64_field = 12;</code>
      */
@@ -24050,7 +24165,6 @@ public final class Messages {
      */
     long getSfixed64Field();
 
-    // optional bool bool_field = 13;
     /**
      * <code>optional bool bool_field = 13;</code>
      */
@@ -24060,7 +24174,6 @@ public final class Messages {
      */
     boolean getBoolField();
 
-    // optional string string_field = 14;
     /**
      * <code>optional string string_field = 14;</code>
      */
@@ -24079,8 +24192,9 @@ public final class Messages {
    * Protobuf type {@code com.n4systems.fieldid.api.pub.model.TestSimpleMessage}
    */
   public static final class TestSimpleMessage extends
-      com.google.protobuf.GeneratedMessage
-      implements TestSimpleMessageOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:com.n4systems.fieldid.api.pub.model.TestSimpleMessage)
+      TestSimpleMessageOrBuilder {
     // Use TestSimpleMessage.newBuilder() to construct.
     private TestSimpleMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -24192,8 +24306,9 @@ public final class Messages {
               break;
             }
             case 114: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00002000;
-              stringField_ = input.readBytes();
+              stringField_ = bs;
               break;
             }
           }
@@ -24236,7 +24351,6 @@ public final class Messages {
     }
 
     private int bitField0_;
-    // optional double double_field = 1;
     public static final int DOUBLE_FIELD_FIELD_NUMBER = 1;
     private double doubleField_;
     /**
@@ -24252,7 +24366,6 @@ public final class Messages {
       return doubleField_;
     }
 
-    // optional float float_field = 2;
     public static final int FLOAT_FIELD_FIELD_NUMBER = 2;
     private float floatField_;
     /**
@@ -24268,7 +24381,6 @@ public final class Messages {
       return floatField_;
     }
 
-    // optional int32 int32_field = 3;
     public static final int INT32_FIELD_FIELD_NUMBER = 3;
     private int int32Field_;
     /**
@@ -24284,7 +24396,6 @@ public final class Messages {
       return int32Field_;
     }
 
-    // optional int64 int64_field = 4;
     public static final int INT64_FIELD_FIELD_NUMBER = 4;
     private long int64Field_;
     /**
@@ -24300,7 +24411,6 @@ public final class Messages {
       return int64Field_;
     }
 
-    // optional uint32 uint32_field = 5;
     public static final int UINT32_FIELD_FIELD_NUMBER = 5;
     private int uint32Field_;
     /**
@@ -24316,7 +24426,6 @@ public final class Messages {
       return uint32Field_;
     }
 
-    // optional uint64 uint64_field = 6;
     public static final int UINT64_FIELD_FIELD_NUMBER = 6;
     private long uint64Field_;
     /**
@@ -24332,7 +24441,6 @@ public final class Messages {
       return uint64Field_;
     }
 
-    // optional sint32 sint32_field = 7;
     public static final int SINT32_FIELD_FIELD_NUMBER = 7;
     private int sint32Field_;
     /**
@@ -24348,7 +24456,6 @@ public final class Messages {
       return sint32Field_;
     }
 
-    // optional sint64 sint64_field = 8;
     public static final int SINT64_FIELD_FIELD_NUMBER = 8;
     private long sint64Field_;
     /**
@@ -24364,7 +24471,6 @@ public final class Messages {
       return sint64Field_;
     }
 
-    // optional fixed32 fixed32_field = 9;
     public static final int FIXED32_FIELD_FIELD_NUMBER = 9;
     private int fixed32Field_;
     /**
@@ -24380,7 +24486,6 @@ public final class Messages {
       return fixed32Field_;
     }
 
-    // optional fixed64 fixed64_field = 10;
     public static final int FIXED64_FIELD_FIELD_NUMBER = 10;
     private long fixed64Field_;
     /**
@@ -24396,7 +24501,6 @@ public final class Messages {
       return fixed64Field_;
     }
 
-    // optional sfixed32 sfixed32_field = 11;
     public static final int SFIXED32_FIELD_FIELD_NUMBER = 11;
     private int sfixed32Field_;
     /**
@@ -24412,7 +24516,6 @@ public final class Messages {
       return sfixed32Field_;
     }
 
-    // optional sfixed64 sfixed64_field = 12;
     public static final int SFIXED64_FIELD_FIELD_NUMBER = 12;
     private long sfixed64Field_;
     /**
@@ -24428,7 +24531,6 @@ public final class Messages {
       return sfixed64Field_;
     }
 
-    // optional bool bool_field = 13;
     public static final int BOOL_FIELD_FIELD_NUMBER = 13;
     private boolean boolField_;
     /**
@@ -24444,7 +24546,6 @@ public final class Messages {
       return boolField_;
     }
 
-    // optional string string_field = 14;
     public static final int STRING_FIELD_FIELD_NUMBER = 14;
     private java.lang.Object stringField_;
     /**
@@ -24506,7 +24607,8 @@ public final class Messages {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       memoizedIsInitialized = 1;
       return true;
@@ -24704,8 +24806,9 @@ public final class Messages {
      * Protobuf type {@code com.n4systems.fieldid.api.pub.model.TestSimpleMessage}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.n4systems.fieldid.api.pub.model.Messages.TestSimpleMessageOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:com.n4systems.fieldid.api.pub.model.TestSimpleMessage)
+        com.n4systems.fieldid.api.pub.model.Messages.TestSimpleMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.n4systems.fieldid.api.pub.model.Messages.internal_static_com_n4systems_fieldid_api_pub_model_TestSimpleMessage_descriptor;
@@ -24937,7 +25040,6 @@ public final class Messages {
       }
       private int bitField0_;
 
-      // optional double double_field = 1;
       private double doubleField_ ;
       /**
        * <code>optional double double_field = 1;</code>
@@ -24970,7 +25072,6 @@ public final class Messages {
         return this;
       }
 
-      // optional float float_field = 2;
       private float floatField_ ;
       /**
        * <code>optional float float_field = 2;</code>
@@ -25003,7 +25104,6 @@ public final class Messages {
         return this;
       }
 
-      // optional int32 int32_field = 3;
       private int int32Field_ ;
       /**
        * <code>optional int32 int32_field = 3;</code>
@@ -25036,7 +25136,6 @@ public final class Messages {
         return this;
       }
 
-      // optional int64 int64_field = 4;
       private long int64Field_ ;
       /**
        * <code>optional int64 int64_field = 4;</code>
@@ -25069,7 +25168,6 @@ public final class Messages {
         return this;
       }
 
-      // optional uint32 uint32_field = 5;
       private int uint32Field_ ;
       /**
        * <code>optional uint32 uint32_field = 5;</code>
@@ -25102,7 +25200,6 @@ public final class Messages {
         return this;
       }
 
-      // optional uint64 uint64_field = 6;
       private long uint64Field_ ;
       /**
        * <code>optional uint64 uint64_field = 6;</code>
@@ -25135,7 +25232,6 @@ public final class Messages {
         return this;
       }
 
-      // optional sint32 sint32_field = 7;
       private int sint32Field_ ;
       /**
        * <code>optional sint32 sint32_field = 7;</code>
@@ -25168,7 +25264,6 @@ public final class Messages {
         return this;
       }
 
-      // optional sint64 sint64_field = 8;
       private long sint64Field_ ;
       /**
        * <code>optional sint64 sint64_field = 8;</code>
@@ -25201,7 +25296,6 @@ public final class Messages {
         return this;
       }
 
-      // optional fixed32 fixed32_field = 9;
       private int fixed32Field_ ;
       /**
        * <code>optional fixed32 fixed32_field = 9;</code>
@@ -25234,7 +25328,6 @@ public final class Messages {
         return this;
       }
 
-      // optional fixed64 fixed64_field = 10;
       private long fixed64Field_ ;
       /**
        * <code>optional fixed64 fixed64_field = 10;</code>
@@ -25267,7 +25360,6 @@ public final class Messages {
         return this;
       }
 
-      // optional sfixed32 sfixed32_field = 11;
       private int sfixed32Field_ ;
       /**
        * <code>optional sfixed32 sfixed32_field = 11;</code>
@@ -25300,7 +25392,6 @@ public final class Messages {
         return this;
       }
 
-      // optional sfixed64 sfixed64_field = 12;
       private long sfixed64Field_ ;
       /**
        * <code>optional sfixed64 sfixed64_field = 12;</code>
@@ -25333,7 +25424,6 @@ public final class Messages {
         return this;
       }
 
-      // optional bool bool_field = 13;
       private boolean boolField_ ;
       /**
        * <code>optional bool bool_field = 13;</code>
@@ -25366,7 +25456,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string string_field = 14;
       private java.lang.Object stringField_ = "";
       /**
        * <code>optional string string_field = 14;</code>
@@ -25380,9 +25469,12 @@ public final class Messages {
       public java.lang.String getStringField() {
         java.lang.Object ref = stringField_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          stringField_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            stringField_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -25451,10 +25543,10 @@ public final class Messages {
     // @@protoc_insertion_point(class_scope:com.n4systems.fieldid.api.pub.model.TestSimpleMessage)
   }
 
-  public interface TestNestedMessageOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface TestNestedMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.n4systems.fieldid.api.pub.model.TestNestedMessage)
+      com.google.protobuf.MessageOrBuilder {
 
-    // required string string_field = 1;
     /**
      * <code>required string string_field = 1;</code>
      */
@@ -25473,8 +25565,9 @@ public final class Messages {
    * Protobuf type {@code com.n4systems.fieldid.api.pub.model.TestNestedMessage}
    */
   public static final class TestNestedMessage extends
-      com.google.protobuf.GeneratedMessage
-      implements TestNestedMessageOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:com.n4systems.fieldid.api.pub.model.TestNestedMessage)
+      TestNestedMessageOrBuilder {
     // Use TestNestedMessage.newBuilder() to construct.
     private TestNestedMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -25521,8 +25614,9 @@ public final class Messages {
               break;
             }
             case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000001;
-              stringField_ = input.readBytes();
+              stringField_ = bs;
               break;
             }
           }
@@ -25565,7 +25659,6 @@ public final class Messages {
     }
 
     private int bitField0_;
-    // required string string_field = 1;
     public static final int STRING_FIELD_FIELD_NUMBER = 1;
     private java.lang.Object stringField_;
     /**
@@ -25614,7 +25707,8 @@ public final class Messages {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasStringField()) {
         memoizedIsInitialized = 0;
@@ -25725,8 +25819,9 @@ public final class Messages {
      * Protobuf type {@code com.n4systems.fieldid.api.pub.model.TestNestedMessage}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.n4systems.fieldid.api.pub.model.Messages.TestNestedMessageOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:com.n4systems.fieldid.api.pub.model.TestNestedMessage)
+        com.n4systems.fieldid.api.pub.model.Messages.TestNestedMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.n4systems.fieldid.api.pub.model.Messages.internal_static_com_n4systems_fieldid_api_pub_model_TestNestedMessage_descriptor;
@@ -25845,7 +25940,6 @@ public final class Messages {
       }
       private int bitField0_;
 
-      // required string string_field = 1;
       private java.lang.Object stringField_ = "";
       /**
        * <code>required string string_field = 1;</code>
@@ -25859,9 +25953,12 @@ public final class Messages {
       public java.lang.String getStringField() {
         java.lang.Object ref = stringField_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          stringField_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            stringField_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -25930,10 +26027,10 @@ public final class Messages {
     // @@protoc_insertion_point(class_scope:com.n4systems.fieldid.api.pub.model.TestNestedMessage)
   }
 
-  public interface TestContainerMessageOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface TestContainerMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.n4systems.fieldid.api.pub.model.TestContainerMessage)
+      com.google.protobuf.MessageOrBuilder {
 
-    // required int32 int32_field = 1;
     /**
      * <code>required int32 int32_field = 1;</code>
      */
@@ -25943,7 +26040,6 @@ public final class Messages {
      */
     int getInt32Field();
 
-    // optional .com.n4systems.fieldid.api.pub.model.TestNestedMessage nested = 2;
     /**
      * <code>optional .com.n4systems.fieldid.api.pub.model.TestNestedMessage nested = 2;</code>
      */
@@ -25961,8 +26057,9 @@ public final class Messages {
    * Protobuf type {@code com.n4systems.fieldid.api.pub.model.TestContainerMessage}
    */
   public static final class TestContainerMessage extends
-      com.google.protobuf.GeneratedMessage
-      implements TestContainerMessageOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:com.n4systems.fieldid.api.pub.model.TestContainerMessage)
+      TestContainerMessageOrBuilder {
     // Use TestContainerMessage.newBuilder() to construct.
     private TestContainerMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -26066,7 +26163,6 @@ public final class Messages {
     }
 
     private int bitField0_;
-    // required int32 int32_field = 1;
     public static final int INT32_FIELD_FIELD_NUMBER = 1;
     private int int32Field_;
     /**
@@ -26082,7 +26178,6 @@ public final class Messages {
       return int32Field_;
     }
 
-    // optional .com.n4systems.fieldid.api.pub.model.TestNestedMessage nested = 2;
     public static final int NESTED_FIELD_NUMBER = 2;
     private com.n4systems.fieldid.api.pub.model.Messages.TestNestedMessage nested_;
     /**
@@ -26111,7 +26206,8 @@ public final class Messages {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasInt32Field()) {
         memoizedIsInitialized = 0;
@@ -26235,8 +26331,9 @@ public final class Messages {
      * Protobuf type {@code com.n4systems.fieldid.api.pub.model.TestContainerMessage}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.n4systems.fieldid.api.pub.model.Messages.TestContainerMessageOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:com.n4systems.fieldid.api.pub.model.TestContainerMessage)
+        com.n4systems.fieldid.api.pub.model.Messages.TestContainerMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.n4systems.fieldid.api.pub.model.Messages.internal_static_com_n4systems_fieldid_api_pub_model_TestContainerMessage_descriptor;
@@ -26377,7 +26474,6 @@ public final class Messages {
       }
       private int bitField0_;
 
-      // required int32 int32_field = 1;
       private int int32Field_ ;
       /**
        * <code>required int32 int32_field = 1;</code>
@@ -26410,7 +26506,6 @@ public final class Messages {
         return this;
       }
 
-      // optional .com.n4systems.fieldid.api.pub.model.TestNestedMessage nested = 2;
       private com.n4systems.fieldid.api.pub.model.Messages.TestNestedMessage nested_ = com.n4systems.fieldid.api.pub.model.Messages.TestNestedMessage.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.n4systems.fieldid.api.pub.model.Messages.TestNestedMessage, com.n4systems.fieldid.api.pub.model.Messages.TestNestedMessage.Builder, com.n4systems.fieldid.api.pub.model.Messages.TestNestedMessageOrBuilder> nestedBuilder_;
@@ -26519,7 +26614,7 @@ public final class Messages {
         if (nestedBuilder_ == null) {
           nestedBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.n4systems.fieldid.api.pub.model.Messages.TestNestedMessage, com.n4systems.fieldid.api.pub.model.Messages.TestNestedMessage.Builder, com.n4systems.fieldid.api.pub.model.Messages.TestNestedMessageOrBuilder>(
-                  nested_,
+                  getNested(),
                   getParentForChildren(),
                   isClean());
           nested_ = null;
@@ -26538,10 +26633,10 @@ public final class Messages {
     // @@protoc_insertion_point(class_scope:com.n4systems.fieldid.api.pub.model.TestContainerMessage)
   }
 
-  public interface UserMessageOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface UserMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.n4systems.fieldid.api.pub.model.UserMessage)
+      com.google.protobuf.MessageOrBuilder {
 
-    // optional string id = 1;
     /**
      * <code>optional string id = 1;</code>
      */
@@ -26556,7 +26651,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getIdBytes();
 
-    // optional string created = 2;
     /**
      * <code>optional string created = 2;</code>
      */
@@ -26571,7 +26665,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCreatedBytes();
 
-    // optional string modified = 3;
     /**
      * <code>optional string modified = 3;</code>
      */
@@ -26586,7 +26679,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getModifiedBytes();
 
-    // optional string createdByUserName = 4;
     /**
      * <code>optional string createdByUserName = 4;</code>
      */
@@ -26601,7 +26693,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCreatedByUserNameBytes();
 
-    // optional string createdByUserId = 5;
     /**
      * <code>optional string createdByUserId = 5;</code>
      */
@@ -26616,7 +26707,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getCreatedByUserIdBytes();
 
-    // optional string modifiedByUserName = 6;
     /**
      * <code>optional string modifiedByUserName = 6;</code>
      */
@@ -26631,7 +26721,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getModifiedByUserNameBytes();
 
-    // optional string modifiedByUserId = 7;
     /**
      * <code>optional string modifiedByUserId = 7;</code>
      */
@@ -26646,7 +26735,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getModifiedByUserIdBytes();
 
-    // optional string ownerName = 8;
     /**
      * <code>optional string ownerName = 8;</code>
      */
@@ -26661,7 +26749,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getOwnerNameBytes();
 
-    // required string ownerId = 9;
     /**
      * <code>required string ownerId = 9;</code>
      */
@@ -26676,7 +26763,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getOwnerIdBytes();
 
-    // optional string userID = 10;
     /**
      * <code>optional string userID = 10;</code>
      */
@@ -26691,7 +26777,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getUserIDBytes();
 
-    // optional string firstName = 11;
     /**
      * <code>optional string firstName = 11;</code>
      */
@@ -26706,7 +26791,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getFirstNameBytes();
 
-    // optional string lastName = 12;
     /**
      * <code>optional string lastName = 12;</code>
      */
@@ -26721,7 +26805,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getLastNameBytes();
 
-    // optional string emailAddress = 13;
     /**
      * <code>optional string emailAddress = 13;</code>
      */
@@ -26736,7 +26819,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getEmailAddressBytes();
 
-    // optional string timeZoneID = 14;
     /**
      * <code>optional string timeZoneID = 14;</code>
      */
@@ -26751,7 +26833,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getTimeZoneIDBytes();
 
-    // optional string position = 15;
     /**
      * <code>optional string position = 15;</code>
      */
@@ -26766,7 +26847,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getPositionBytes();
 
-    // optional string initials = 16;
     /**
      * <code>optional string initials = 16;</code>
      */
@@ -26781,7 +26861,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getInitialsBytes();
 
-    // optional int32 failedLoginAttempts = 17;
     /**
      * <code>optional int32 failedLoginAttempts = 17;</code>
      */
@@ -26791,7 +26870,6 @@ public final class Messages {
      */
     int getFailedLoginAttempts();
 
-    // optional bool locked = 18;
     /**
      * <code>optional bool locked = 18;</code>
      */
@@ -26801,7 +26879,6 @@ public final class Messages {
      */
     boolean getLocked();
 
-    // optional string lockedUntil = 19;
     /**
      * <code>optional string lockedUntil = 19;</code>
      */
@@ -26816,7 +26893,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getLockedUntilBytes();
 
-    // optional string passwordChanged = 20;
     /**
      * <code>optional string passwordChanged = 20;</code>
      */
@@ -26831,7 +26907,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getPasswordChangedBytes();
 
-    // optional string language = 21;
     /**
      * <code>optional string language = 21;</code>
      */
@@ -26846,7 +26921,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getLanguageBytes();
 
-    // optional string identifier = 22;
     /**
      * <code>optional string identifier = 22;</code>
      */
@@ -26861,7 +26935,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getIdentifierBytes();
 
-    // optional string lastLogin = 23;
     /**
      * <code>optional string lastLogin = 23;</code>
      */
@@ -26876,7 +26949,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getLastLoginBytes();
 
-    // repeated .com.n4systems.fieldid.api.pub.model.UserGroupMessage groups = 24;
     /**
      * <code>repeated .com.n4systems.fieldid.api.pub.model.UserGroupMessage groups = 24;</code>
      */
@@ -26901,7 +26973,6 @@ public final class Messages {
     com.n4systems.fieldid.api.pub.model.Messages.UserGroupMessageOrBuilder getGroupsOrBuilder(
         int index);
 
-    // required .com.n4systems.fieldid.api.pub.model.UserMessage.UserType userType = 25;
     /**
      * <code>required .com.n4systems.fieldid.api.pub.model.UserMessage.UserType userType = 25;</code>
      */
@@ -26911,7 +26982,6 @@ public final class Messages {
      */
     com.n4systems.fieldid.api.pub.model.Messages.UserMessage.UserType getUserType();
 
-    // required .com.n4systems.fieldid.api.pub.model.UserMessage.PermissionsMessage permissions = 26;
     /**
      * <code>required .com.n4systems.fieldid.api.pub.model.UserMessage.PermissionsMessage permissions = 26;</code>
      */
@@ -26929,8 +26999,9 @@ public final class Messages {
    * Protobuf type {@code com.n4systems.fieldid.api.pub.model.UserMessage}
    */
   public static final class UserMessage extends
-      com.google.protobuf.GeneratedMessage
-      implements UserMessageOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:com.n4systems.fieldid.api.pub.model.UserMessage)
+      UserMessageOrBuilder {
     // Use UserMessage.newBuilder() to construct.
     private UserMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -26977,83 +27048,99 @@ public final class Messages {
               break;
             }
             case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000001;
-              id_ = input.readBytes();
+              id_ = bs;
               break;
             }
             case 18: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000002;
-              created_ = input.readBytes();
+              created_ = bs;
               break;
             }
             case 26: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000004;
-              modified_ = input.readBytes();
+              modified_ = bs;
               break;
             }
             case 34: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000008;
-              createdByUserName_ = input.readBytes();
+              createdByUserName_ = bs;
               break;
             }
             case 42: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000010;
-              createdByUserId_ = input.readBytes();
+              createdByUserId_ = bs;
               break;
             }
             case 50: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000020;
-              modifiedByUserName_ = input.readBytes();
+              modifiedByUserName_ = bs;
               break;
             }
             case 58: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000040;
-              modifiedByUserId_ = input.readBytes();
+              modifiedByUserId_ = bs;
               break;
             }
             case 66: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000080;
-              ownerName_ = input.readBytes();
+              ownerName_ = bs;
               break;
             }
             case 74: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000100;
-              ownerId_ = input.readBytes();
+              ownerId_ = bs;
               break;
             }
             case 82: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000200;
-              userID_ = input.readBytes();
+              userID_ = bs;
               break;
             }
             case 90: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000400;
-              firstName_ = input.readBytes();
+              firstName_ = bs;
               break;
             }
             case 98: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000800;
-              lastName_ = input.readBytes();
+              lastName_ = bs;
               break;
             }
             case 106: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00001000;
-              emailAddress_ = input.readBytes();
+              emailAddress_ = bs;
               break;
             }
             case 114: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00002000;
-              timeZoneID_ = input.readBytes();
+              timeZoneID_ = bs;
               break;
             }
             case 122: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00004000;
-              position_ = input.readBytes();
+              position_ = bs;
               break;
             }
             case 130: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00008000;
-              initials_ = input.readBytes();
+              initials_ = bs;
               break;
             }
             case 136: {
@@ -27067,28 +27154,33 @@ public final class Messages {
               break;
             }
             case 154: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00040000;
-              lockedUntil_ = input.readBytes();
+              lockedUntil_ = bs;
               break;
             }
             case 162: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00080000;
-              passwordChanged_ = input.readBytes();
+              passwordChanged_ = bs;
               break;
             }
             case 170: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00100000;
-              language_ = input.readBytes();
+              language_ = bs;
               break;
             }
             case 178: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00200000;
-              identifier_ = input.readBytes();
+              identifier_ = bs;
               break;
             }
             case 186: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00400000;
-              lastLogin_ = input.readBytes();
+              lastLogin_ = bs;
               break;
             }
             case 194: {
@@ -27274,10 +27366,10 @@ public final class Messages {
       // @@protoc_insertion_point(enum_scope:com.n4systems.fieldid.api.pub.model.UserMessage.UserType)
     }
 
-    public interface PermissionsMessageOrBuilder
-        extends com.google.protobuf.MessageOrBuilder {
+    public interface PermissionsMessageOrBuilder extends
+        // @@protoc_insertion_point(interface_extends:com.n4systems.fieldid.api.pub.model.UserMessage.PermissionsMessage)
+        com.google.protobuf.MessageOrBuilder {
 
-      // required bool createAssets = 1;
       /**
        * <code>required bool createAssets = 1;</code>
        */
@@ -27287,7 +27379,6 @@ public final class Messages {
        */
       boolean getCreateAssets();
 
-      // required bool manageSystemConfig = 2;
       /**
        * <code>required bool manageSystemConfig = 2;</code>
        */
@@ -27297,7 +27388,6 @@ public final class Messages {
        */
       boolean getManageSystemConfig();
 
-      // required bool manageSystemUsers = 3;
       /**
        * <code>required bool manageSystemUsers = 3;</code>
        */
@@ -27307,7 +27397,6 @@ public final class Messages {
        */
       boolean getManageSystemUsers();
 
-      // required bool manageEndUsers = 4;
       /**
        * <code>required bool manageEndUsers = 4;</code>
        */
@@ -27317,7 +27406,6 @@ public final class Messages {
        */
       boolean getManageEndUsers();
 
-      // required bool createEvents = 5;
       /**
        * <code>required bool createEvents = 5;</code>
        */
@@ -27327,7 +27415,6 @@ public final class Messages {
        */
       boolean getCreateEvents();
 
-      // required bool editEvents = 6;
       /**
        * <code>required bool editEvents = 6;</code>
        */
@@ -27337,7 +27424,6 @@ public final class Messages {
        */
       boolean getEditEvents();
 
-      // required bool manageJobs = 7;
       /**
        * <code>required bool manageJobs = 7;</code>
        */
@@ -27347,7 +27433,6 @@ public final class Messages {
        */
       boolean getManageJobs();
 
-      // required bool manageSafetyNetwork = 8;
       /**
        * <code>required bool manageSafetyNetwork = 8;</code>
        */
@@ -27361,8 +27446,9 @@ public final class Messages {
      * Protobuf type {@code com.n4systems.fieldid.api.pub.model.UserMessage.PermissionsMessage}
      */
     public static final class PermissionsMessage extends
-        com.google.protobuf.GeneratedMessage
-        implements PermissionsMessageOrBuilder {
+        com.google.protobuf.GeneratedMessage implements
+        // @@protoc_insertion_point(message_implements:com.n4systems.fieldid.api.pub.model.UserMessage.PermissionsMessage)
+        PermissionsMessageOrBuilder {
       // Use PermissionsMessage.newBuilder() to construct.
       private PermissionsMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
         super(builder);
@@ -27488,7 +27574,6 @@ public final class Messages {
       }
 
       private int bitField0_;
-      // required bool createAssets = 1;
       public static final int CREATEASSETS_FIELD_NUMBER = 1;
       private boolean createAssets_;
       /**
@@ -27504,7 +27589,6 @@ public final class Messages {
         return createAssets_;
       }
 
-      // required bool manageSystemConfig = 2;
       public static final int MANAGESYSTEMCONFIG_FIELD_NUMBER = 2;
       private boolean manageSystemConfig_;
       /**
@@ -27520,7 +27604,6 @@ public final class Messages {
         return manageSystemConfig_;
       }
 
-      // required bool manageSystemUsers = 3;
       public static final int MANAGESYSTEMUSERS_FIELD_NUMBER = 3;
       private boolean manageSystemUsers_;
       /**
@@ -27536,7 +27619,6 @@ public final class Messages {
         return manageSystemUsers_;
       }
 
-      // required bool manageEndUsers = 4;
       public static final int MANAGEENDUSERS_FIELD_NUMBER = 4;
       private boolean manageEndUsers_;
       /**
@@ -27552,7 +27634,6 @@ public final class Messages {
         return manageEndUsers_;
       }
 
-      // required bool createEvents = 5;
       public static final int CREATEEVENTS_FIELD_NUMBER = 5;
       private boolean createEvents_;
       /**
@@ -27568,7 +27649,6 @@ public final class Messages {
         return createEvents_;
       }
 
-      // required bool editEvents = 6;
       public static final int EDITEVENTS_FIELD_NUMBER = 6;
       private boolean editEvents_;
       /**
@@ -27584,7 +27664,6 @@ public final class Messages {
         return editEvents_;
       }
 
-      // required bool manageJobs = 7;
       public static final int MANAGEJOBS_FIELD_NUMBER = 7;
       private boolean manageJobs_;
       /**
@@ -27600,7 +27679,6 @@ public final class Messages {
         return manageJobs_;
       }
 
-      // required bool manageSafetyNetwork = 8;
       public static final int MANAGESAFETYNETWORK_FIELD_NUMBER = 8;
       private boolean manageSafetyNetwork_;
       /**
@@ -27629,7 +27707,8 @@ public final class Messages {
       private byte memoizedIsInitialized = -1;
       public final boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
-        if (isInitialized != -1) return isInitialized == 1;
+        if (isInitialized == 1) return true;
+        if (isInitialized == 0) return false;
 
         if (!hasCreateAssets()) {
           memoizedIsInitialized = 0;
@@ -27817,8 +27896,9 @@ public final class Messages {
        * Protobuf type {@code com.n4systems.fieldid.api.pub.model.UserMessage.PermissionsMessage}
        */
       public static final class Builder extends
-          com.google.protobuf.GeneratedMessage.Builder<Builder>
-         implements com.n4systems.fieldid.api.pub.model.Messages.UserMessage.PermissionsMessageOrBuilder {
+          com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+          // @@protoc_insertion_point(builder_implements:com.n4systems.fieldid.api.pub.model.UserMessage.PermissionsMessage)
+          com.n4systems.fieldid.api.pub.model.Messages.UserMessage.PermissionsMessageOrBuilder {
         public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
           return com.n4systems.fieldid.api.pub.model.Messages.internal_static_com_n4systems_fieldid_api_pub_model_UserMessage_PermissionsMessage_descriptor;
@@ -28026,7 +28106,6 @@ public final class Messages {
         }
         private int bitField0_;
 
-        // required bool createAssets = 1;
         private boolean createAssets_ ;
         /**
          * <code>required bool createAssets = 1;</code>
@@ -28059,7 +28138,6 @@ public final class Messages {
           return this;
         }
 
-        // required bool manageSystemConfig = 2;
         private boolean manageSystemConfig_ ;
         /**
          * <code>required bool manageSystemConfig = 2;</code>
@@ -28092,7 +28170,6 @@ public final class Messages {
           return this;
         }
 
-        // required bool manageSystemUsers = 3;
         private boolean manageSystemUsers_ ;
         /**
          * <code>required bool manageSystemUsers = 3;</code>
@@ -28125,7 +28202,6 @@ public final class Messages {
           return this;
         }
 
-        // required bool manageEndUsers = 4;
         private boolean manageEndUsers_ ;
         /**
          * <code>required bool manageEndUsers = 4;</code>
@@ -28158,7 +28234,6 @@ public final class Messages {
           return this;
         }
 
-        // required bool createEvents = 5;
         private boolean createEvents_ ;
         /**
          * <code>required bool createEvents = 5;</code>
@@ -28191,7 +28266,6 @@ public final class Messages {
           return this;
         }
 
-        // required bool editEvents = 6;
         private boolean editEvents_ ;
         /**
          * <code>required bool editEvents = 6;</code>
@@ -28224,7 +28298,6 @@ public final class Messages {
           return this;
         }
 
-        // required bool manageJobs = 7;
         private boolean manageJobs_ ;
         /**
          * <code>required bool manageJobs = 7;</code>
@@ -28257,7 +28330,6 @@ public final class Messages {
           return this;
         }
 
-        // required bool manageSafetyNetwork = 8;
         private boolean manageSafetyNetwork_ ;
         /**
          * <code>required bool manageSafetyNetwork = 8;</code>
@@ -28302,7 +28374,6 @@ public final class Messages {
     }
 
     private int bitField0_;
-    // optional string id = 1;
     public static final int ID_FIELD_NUMBER = 1;
     private java.lang.Object id_;
     /**
@@ -28345,7 +28416,6 @@ public final class Messages {
       }
     }
 
-    // optional string created = 2;
     public static final int CREATED_FIELD_NUMBER = 2;
     private java.lang.Object created_;
     /**
@@ -28388,7 +28458,6 @@ public final class Messages {
       }
     }
 
-    // optional string modified = 3;
     public static final int MODIFIED_FIELD_NUMBER = 3;
     private java.lang.Object modified_;
     /**
@@ -28431,7 +28500,6 @@ public final class Messages {
       }
     }
 
-    // optional string createdByUserName = 4;
     public static final int CREATEDBYUSERNAME_FIELD_NUMBER = 4;
     private java.lang.Object createdByUserName_;
     /**
@@ -28474,7 +28542,6 @@ public final class Messages {
       }
     }
 
-    // optional string createdByUserId = 5;
     public static final int CREATEDBYUSERID_FIELD_NUMBER = 5;
     private java.lang.Object createdByUserId_;
     /**
@@ -28517,7 +28584,6 @@ public final class Messages {
       }
     }
 
-    // optional string modifiedByUserName = 6;
     public static final int MODIFIEDBYUSERNAME_FIELD_NUMBER = 6;
     private java.lang.Object modifiedByUserName_;
     /**
@@ -28560,7 +28626,6 @@ public final class Messages {
       }
     }
 
-    // optional string modifiedByUserId = 7;
     public static final int MODIFIEDBYUSERID_FIELD_NUMBER = 7;
     private java.lang.Object modifiedByUserId_;
     /**
@@ -28603,7 +28668,6 @@ public final class Messages {
       }
     }
 
-    // optional string ownerName = 8;
     public static final int OWNERNAME_FIELD_NUMBER = 8;
     private java.lang.Object ownerName_;
     /**
@@ -28646,7 +28710,6 @@ public final class Messages {
       }
     }
 
-    // required string ownerId = 9;
     public static final int OWNERID_FIELD_NUMBER = 9;
     private java.lang.Object ownerId_;
     /**
@@ -28689,7 +28752,6 @@ public final class Messages {
       }
     }
 
-    // optional string userID = 10;
     public static final int USERID_FIELD_NUMBER = 10;
     private java.lang.Object userID_;
     /**
@@ -28732,7 +28794,6 @@ public final class Messages {
       }
     }
 
-    // optional string firstName = 11;
     public static final int FIRSTNAME_FIELD_NUMBER = 11;
     private java.lang.Object firstName_;
     /**
@@ -28775,7 +28836,6 @@ public final class Messages {
       }
     }
 
-    // optional string lastName = 12;
     public static final int LASTNAME_FIELD_NUMBER = 12;
     private java.lang.Object lastName_;
     /**
@@ -28818,7 +28878,6 @@ public final class Messages {
       }
     }
 
-    // optional string emailAddress = 13;
     public static final int EMAILADDRESS_FIELD_NUMBER = 13;
     private java.lang.Object emailAddress_;
     /**
@@ -28861,7 +28920,6 @@ public final class Messages {
       }
     }
 
-    // optional string timeZoneID = 14;
     public static final int TIMEZONEID_FIELD_NUMBER = 14;
     private java.lang.Object timeZoneID_;
     /**
@@ -28904,7 +28962,6 @@ public final class Messages {
       }
     }
 
-    // optional string position = 15;
     public static final int POSITION_FIELD_NUMBER = 15;
     private java.lang.Object position_;
     /**
@@ -28947,7 +29004,6 @@ public final class Messages {
       }
     }
 
-    // optional string initials = 16;
     public static final int INITIALS_FIELD_NUMBER = 16;
     private java.lang.Object initials_;
     /**
@@ -28990,7 +29046,6 @@ public final class Messages {
       }
     }
 
-    // optional int32 failedLoginAttempts = 17;
     public static final int FAILEDLOGINATTEMPTS_FIELD_NUMBER = 17;
     private int failedLoginAttempts_;
     /**
@@ -29006,7 +29061,6 @@ public final class Messages {
       return failedLoginAttempts_;
     }
 
-    // optional bool locked = 18;
     public static final int LOCKED_FIELD_NUMBER = 18;
     private boolean locked_;
     /**
@@ -29022,7 +29076,6 @@ public final class Messages {
       return locked_;
     }
 
-    // optional string lockedUntil = 19;
     public static final int LOCKEDUNTIL_FIELD_NUMBER = 19;
     private java.lang.Object lockedUntil_;
     /**
@@ -29065,7 +29118,6 @@ public final class Messages {
       }
     }
 
-    // optional string passwordChanged = 20;
     public static final int PASSWORDCHANGED_FIELD_NUMBER = 20;
     private java.lang.Object passwordChanged_;
     /**
@@ -29108,7 +29160,6 @@ public final class Messages {
       }
     }
 
-    // optional string language = 21;
     public static final int LANGUAGE_FIELD_NUMBER = 21;
     private java.lang.Object language_;
     /**
@@ -29151,7 +29202,6 @@ public final class Messages {
       }
     }
 
-    // optional string identifier = 22;
     public static final int IDENTIFIER_FIELD_NUMBER = 22;
     private java.lang.Object identifier_;
     /**
@@ -29194,7 +29244,6 @@ public final class Messages {
       }
     }
 
-    // optional string lastLogin = 23;
     public static final int LASTLOGIN_FIELD_NUMBER = 23;
     private java.lang.Object lastLogin_;
     /**
@@ -29237,7 +29286,6 @@ public final class Messages {
       }
     }
 
-    // repeated .com.n4systems.fieldid.api.pub.model.UserGroupMessage groups = 24;
     public static final int GROUPS_FIELD_NUMBER = 24;
     private java.util.List<com.n4systems.fieldid.api.pub.model.Messages.UserGroupMessage> groups_;
     /**
@@ -29273,7 +29321,6 @@ public final class Messages {
       return groups_.get(index);
     }
 
-    // required .com.n4systems.fieldid.api.pub.model.UserMessage.UserType userType = 25;
     public static final int USERTYPE_FIELD_NUMBER = 25;
     private com.n4systems.fieldid.api.pub.model.Messages.UserMessage.UserType userType_;
     /**
@@ -29289,7 +29336,6 @@ public final class Messages {
       return userType_;
     }
 
-    // required .com.n4systems.fieldid.api.pub.model.UserMessage.PermissionsMessage permissions = 26;
     public static final int PERMISSIONS_FIELD_NUMBER = 26;
     private com.n4systems.fieldid.api.pub.model.Messages.UserMessage.PermissionsMessage permissions_;
     /**
@@ -29342,7 +29388,8 @@ public final class Messages {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasOwnerId()) {
         memoizedIsInitialized = 0;
@@ -29646,8 +29693,9 @@ public final class Messages {
      * Protobuf type {@code com.n4systems.fieldid.api.pub.model.UserMessage}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.n4systems.fieldid.api.pub.model.Messages.UserMessageOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:com.n4systems.fieldid.api.pub.model.UserMessage)
+        com.n4systems.fieldid.api.pub.model.Messages.UserMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.n4systems.fieldid.api.pub.model.Messages.internal_static_com_n4systems_fieldid_api_pub_model_UserMessage_descriptor;
@@ -30091,7 +30139,6 @@ public final class Messages {
       }
       private int bitField0_;
 
-      // optional string id = 1;
       private java.lang.Object id_ = "";
       /**
        * <code>optional string id = 1;</code>
@@ -30105,9 +30152,12 @@ public final class Messages {
       public java.lang.String getId() {
         java.lang.Object ref = id_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          id_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            id_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -30165,7 +30215,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string created = 2;
       private java.lang.Object created_ = "";
       /**
        * <code>optional string created = 2;</code>
@@ -30179,9 +30228,12 @@ public final class Messages {
       public java.lang.String getCreated() {
         java.lang.Object ref = created_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          created_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            created_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -30239,7 +30291,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string modified = 3;
       private java.lang.Object modified_ = "";
       /**
        * <code>optional string modified = 3;</code>
@@ -30253,9 +30304,12 @@ public final class Messages {
       public java.lang.String getModified() {
         java.lang.Object ref = modified_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          modified_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            modified_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -30313,7 +30367,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string createdByUserName = 4;
       private java.lang.Object createdByUserName_ = "";
       /**
        * <code>optional string createdByUserName = 4;</code>
@@ -30327,9 +30380,12 @@ public final class Messages {
       public java.lang.String getCreatedByUserName() {
         java.lang.Object ref = createdByUserName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          createdByUserName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            createdByUserName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -30387,7 +30443,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string createdByUserId = 5;
       private java.lang.Object createdByUserId_ = "";
       /**
        * <code>optional string createdByUserId = 5;</code>
@@ -30401,9 +30456,12 @@ public final class Messages {
       public java.lang.String getCreatedByUserId() {
         java.lang.Object ref = createdByUserId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          createdByUserId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            createdByUserId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -30461,7 +30519,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string modifiedByUserName = 6;
       private java.lang.Object modifiedByUserName_ = "";
       /**
        * <code>optional string modifiedByUserName = 6;</code>
@@ -30475,9 +30532,12 @@ public final class Messages {
       public java.lang.String getModifiedByUserName() {
         java.lang.Object ref = modifiedByUserName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          modifiedByUserName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            modifiedByUserName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -30535,7 +30595,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string modifiedByUserId = 7;
       private java.lang.Object modifiedByUserId_ = "";
       /**
        * <code>optional string modifiedByUserId = 7;</code>
@@ -30549,9 +30608,12 @@ public final class Messages {
       public java.lang.String getModifiedByUserId() {
         java.lang.Object ref = modifiedByUserId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          modifiedByUserId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            modifiedByUserId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -30609,7 +30671,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string ownerName = 8;
       private java.lang.Object ownerName_ = "";
       /**
        * <code>optional string ownerName = 8;</code>
@@ -30623,9 +30684,12 @@ public final class Messages {
       public java.lang.String getOwnerName() {
         java.lang.Object ref = ownerName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          ownerName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            ownerName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -30683,7 +30747,6 @@ public final class Messages {
         return this;
       }
 
-      // required string ownerId = 9;
       private java.lang.Object ownerId_ = "";
       /**
        * <code>required string ownerId = 9;</code>
@@ -30697,9 +30760,12 @@ public final class Messages {
       public java.lang.String getOwnerId() {
         java.lang.Object ref = ownerId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          ownerId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            ownerId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -30757,7 +30823,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string userID = 10;
       private java.lang.Object userID_ = "";
       /**
        * <code>optional string userID = 10;</code>
@@ -30771,9 +30836,12 @@ public final class Messages {
       public java.lang.String getUserID() {
         java.lang.Object ref = userID_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          userID_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            userID_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -30831,7 +30899,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string firstName = 11;
       private java.lang.Object firstName_ = "";
       /**
        * <code>optional string firstName = 11;</code>
@@ -30845,9 +30912,12 @@ public final class Messages {
       public java.lang.String getFirstName() {
         java.lang.Object ref = firstName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          firstName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            firstName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -30905,7 +30975,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string lastName = 12;
       private java.lang.Object lastName_ = "";
       /**
        * <code>optional string lastName = 12;</code>
@@ -30919,9 +30988,12 @@ public final class Messages {
       public java.lang.String getLastName() {
         java.lang.Object ref = lastName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          lastName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            lastName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -30979,7 +31051,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string emailAddress = 13;
       private java.lang.Object emailAddress_ = "";
       /**
        * <code>optional string emailAddress = 13;</code>
@@ -30993,9 +31064,12 @@ public final class Messages {
       public java.lang.String getEmailAddress() {
         java.lang.Object ref = emailAddress_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          emailAddress_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            emailAddress_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -31053,7 +31127,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string timeZoneID = 14;
       private java.lang.Object timeZoneID_ = "";
       /**
        * <code>optional string timeZoneID = 14;</code>
@@ -31067,9 +31140,12 @@ public final class Messages {
       public java.lang.String getTimeZoneID() {
         java.lang.Object ref = timeZoneID_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          timeZoneID_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            timeZoneID_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -31127,7 +31203,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string position = 15;
       private java.lang.Object position_ = "";
       /**
        * <code>optional string position = 15;</code>
@@ -31141,9 +31216,12 @@ public final class Messages {
       public java.lang.String getPosition() {
         java.lang.Object ref = position_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          position_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            position_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -31201,7 +31279,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string initials = 16;
       private java.lang.Object initials_ = "";
       /**
        * <code>optional string initials = 16;</code>
@@ -31215,9 +31292,12 @@ public final class Messages {
       public java.lang.String getInitials() {
         java.lang.Object ref = initials_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          initials_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            initials_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -31275,7 +31355,6 @@ public final class Messages {
         return this;
       }
 
-      // optional int32 failedLoginAttempts = 17;
       private int failedLoginAttempts_ ;
       /**
        * <code>optional int32 failedLoginAttempts = 17;</code>
@@ -31308,7 +31387,6 @@ public final class Messages {
         return this;
       }
 
-      // optional bool locked = 18;
       private boolean locked_ ;
       /**
        * <code>optional bool locked = 18;</code>
@@ -31341,7 +31419,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string lockedUntil = 19;
       private java.lang.Object lockedUntil_ = "";
       /**
        * <code>optional string lockedUntil = 19;</code>
@@ -31355,9 +31432,12 @@ public final class Messages {
       public java.lang.String getLockedUntil() {
         java.lang.Object ref = lockedUntil_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          lockedUntil_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            lockedUntil_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -31415,7 +31495,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string passwordChanged = 20;
       private java.lang.Object passwordChanged_ = "";
       /**
        * <code>optional string passwordChanged = 20;</code>
@@ -31429,9 +31508,12 @@ public final class Messages {
       public java.lang.String getPasswordChanged() {
         java.lang.Object ref = passwordChanged_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          passwordChanged_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            passwordChanged_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -31489,7 +31571,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string language = 21;
       private java.lang.Object language_ = "";
       /**
        * <code>optional string language = 21;</code>
@@ -31503,9 +31584,12 @@ public final class Messages {
       public java.lang.String getLanguage() {
         java.lang.Object ref = language_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          language_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            language_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -31563,7 +31647,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string identifier = 22;
       private java.lang.Object identifier_ = "";
       /**
        * <code>optional string identifier = 22;</code>
@@ -31577,9 +31660,12 @@ public final class Messages {
       public java.lang.String getIdentifier() {
         java.lang.Object ref = identifier_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          identifier_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            identifier_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -31637,7 +31723,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string lastLogin = 23;
       private java.lang.Object lastLogin_ = "";
       /**
        * <code>optional string lastLogin = 23;</code>
@@ -31651,9 +31736,12 @@ public final class Messages {
       public java.lang.String getLastLogin() {
         java.lang.Object ref = lastLogin_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          lastLogin_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            lastLogin_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -31711,7 +31799,6 @@ public final class Messages {
         return this;
       }
 
-      // repeated .com.n4systems.fieldid.api.pub.model.UserGroupMessage groups = 24;
       private java.util.List<com.n4systems.fieldid.api.pub.model.Messages.UserGroupMessage> groups_ =
         java.util.Collections.emptyList();
       private void ensureGroupsIsMutable() {
@@ -31853,7 +31940,8 @@ public final class Messages {
           java.lang.Iterable<? extends com.n4systems.fieldid.api.pub.model.Messages.UserGroupMessage> values) {
         if (groupsBuilder_ == null) {
           ensureGroupsIsMutable();
-          super.addAll(values, groups_);
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, groups_);
           onChanged();
         } else {
           groupsBuilder_.addAllMessages(values);
@@ -31951,7 +32039,6 @@ public final class Messages {
         return groupsBuilder_;
       }
 
-      // required .com.n4systems.fieldid.api.pub.model.UserMessage.UserType userType = 25;
       private com.n4systems.fieldid.api.pub.model.Messages.UserMessage.UserType userType_ = com.n4systems.fieldid.api.pub.model.Messages.UserMessage.UserType.ADMIN;
       /**
        * <code>required .com.n4systems.fieldid.api.pub.model.UserMessage.UserType userType = 25;</code>
@@ -31987,7 +32074,6 @@ public final class Messages {
         return this;
       }
 
-      // required .com.n4systems.fieldid.api.pub.model.UserMessage.PermissionsMessage permissions = 26;
       private com.n4systems.fieldid.api.pub.model.Messages.UserMessage.PermissionsMessage permissions_ = com.n4systems.fieldid.api.pub.model.Messages.UserMessage.PermissionsMessage.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.n4systems.fieldid.api.pub.model.Messages.UserMessage.PermissionsMessage, com.n4systems.fieldid.api.pub.model.Messages.UserMessage.PermissionsMessage.Builder, com.n4systems.fieldid.api.pub.model.Messages.UserMessage.PermissionsMessageOrBuilder> permissionsBuilder_;
@@ -32096,7 +32182,7 @@ public final class Messages {
         if (permissionsBuilder_ == null) {
           permissionsBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.n4systems.fieldid.api.pub.model.Messages.UserMessage.PermissionsMessage, com.n4systems.fieldid.api.pub.model.Messages.UserMessage.PermissionsMessage.Builder, com.n4systems.fieldid.api.pub.model.Messages.UserMessage.PermissionsMessageOrBuilder>(
-                  permissions_,
+                  getPermissions(),
                   getParentForChildren(),
                   isClean());
           permissions_ = null;
@@ -32115,10 +32201,10 @@ public final class Messages {
     // @@protoc_insertion_point(class_scope:com.n4systems.fieldid.api.pub.model.UserMessage)
   }
 
-  public interface UserGroupMessageOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface UserGroupMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.n4systems.fieldid.api.pub.model.UserGroupMessage)
+      com.google.protobuf.MessageOrBuilder {
 
-    // optional string id = 1;
     /**
      * <code>optional string id = 1;</code>
      */
@@ -32133,7 +32219,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getIdBytes();
 
-    // required string name = 2;
     /**
      * <code>required string name = 2;</code>
      */
@@ -32148,7 +32233,6 @@ public final class Messages {
     com.google.protobuf.ByteString
         getNameBytes();
 
-    // optional string groupId = 3;
     /**
      * <code>optional string groupId = 3;</code>
      */
@@ -32167,8 +32251,9 @@ public final class Messages {
    * Protobuf type {@code com.n4systems.fieldid.api.pub.model.UserGroupMessage}
    */
   public static final class UserGroupMessage extends
-      com.google.protobuf.GeneratedMessage
-      implements UserGroupMessageOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:com.n4systems.fieldid.api.pub.model.UserGroupMessage)
+      UserGroupMessageOrBuilder {
     // Use UserGroupMessage.newBuilder() to construct.
     private UserGroupMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -32215,18 +32300,21 @@ public final class Messages {
               break;
             }
             case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000001;
-              id_ = input.readBytes();
+              id_ = bs;
               break;
             }
             case 18: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000002;
-              name_ = input.readBytes();
+              name_ = bs;
               break;
             }
             case 26: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000004;
-              groupId_ = input.readBytes();
+              groupId_ = bs;
               break;
             }
           }
@@ -32269,7 +32357,6 @@ public final class Messages {
     }
 
     private int bitField0_;
-    // optional string id = 1;
     public static final int ID_FIELD_NUMBER = 1;
     private java.lang.Object id_;
     /**
@@ -32312,7 +32399,6 @@ public final class Messages {
       }
     }
 
-    // required string name = 2;
     public static final int NAME_FIELD_NUMBER = 2;
     private java.lang.Object name_;
     /**
@@ -32355,7 +32441,6 @@ public final class Messages {
       }
     }
 
-    // optional string groupId = 3;
     public static final int GROUPID_FIELD_NUMBER = 3;
     private java.lang.Object groupId_;
     /**
@@ -32406,7 +32491,8 @@ public final class Messages {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasName()) {
         memoizedIsInitialized = 0;
@@ -32531,8 +32617,9 @@ public final class Messages {
      * Protobuf type {@code com.n4systems.fieldid.api.pub.model.UserGroupMessage}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.n4systems.fieldid.api.pub.model.Messages.UserGroupMessageOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:com.n4systems.fieldid.api.pub.model.UserGroupMessage)
+        com.n4systems.fieldid.api.pub.model.Messages.UserGroupMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.n4systems.fieldid.api.pub.model.Messages.internal_static_com_n4systems_fieldid_api_pub_model_UserGroupMessage_descriptor;
@@ -32673,7 +32760,6 @@ public final class Messages {
       }
       private int bitField0_;
 
-      // optional string id = 1;
       private java.lang.Object id_ = "";
       /**
        * <code>optional string id = 1;</code>
@@ -32687,9 +32773,12 @@ public final class Messages {
       public java.lang.String getId() {
         java.lang.Object ref = id_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          id_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            id_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -32747,7 +32836,6 @@ public final class Messages {
         return this;
       }
 
-      // required string name = 2;
       private java.lang.Object name_ = "";
       /**
        * <code>required string name = 2;</code>
@@ -32761,9 +32849,12 @@ public final class Messages {
       public java.lang.String getName() {
         java.lang.Object ref = name_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          name_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            name_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -32821,7 +32912,6 @@ public final class Messages {
         return this;
       }
 
-      // optional string groupId = 3;
       private java.lang.Object groupId_ = "";
       /**
        * <code>optional string groupId = 3;</code>
@@ -32835,9 +32925,12 @@ public final class Messages {
       public java.lang.String getGroupId() {
         java.lang.Object ref = groupId_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          groupId_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            groupId_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -32907,10 +33000,10 @@ public final class Messages {
   }
 
   public interface ListResponseMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.n4systems.fieldid.api.pub.model.ListResponseMessage)
       com.google.protobuf.GeneratedMessage.
           ExtendableMessageOrBuilder<ListResponseMessage> {
 
-    // required int32 page = 1;
     /**
      * <code>required int32 page = 1;</code>
      */
@@ -32920,7 +33013,6 @@ public final class Messages {
      */
     int getPage();
 
-    // required int32 pageSize = 2;
     /**
      * <code>required int32 pageSize = 2;</code>
      */
@@ -32930,7 +33022,6 @@ public final class Messages {
      */
     int getPageSize();
 
-    // required int64 total = 3;
     /**
      * <code>required int64 total = 3;</code>
      */
@@ -32945,7 +33036,9 @@ public final class Messages {
    */
   public static final class ListResponseMessage extends
       com.google.protobuf.GeneratedMessage.ExtendableMessage<
-        ListResponseMessage> implements ListResponseMessageOrBuilder {
+        ListResponseMessage> implements
+      // @@protoc_insertion_point(message_implements:com.n4systems.fieldid.api.pub.model.ListResponseMessage)
+      ListResponseMessageOrBuilder {
     // Use ListResponseMessage.newBuilder() to construct.
     private ListResponseMessage(com.google.protobuf.GeneratedMessage.ExtendableBuilder<com.n4systems.fieldid.api.pub.model.Messages.ListResponseMessage, ?> builder) {
       super(builder);
@@ -33046,7 +33139,6 @@ public final class Messages {
     }
 
     private int bitField0_;
-    // required int32 page = 1;
     public static final int PAGE_FIELD_NUMBER = 1;
     private int page_;
     /**
@@ -33062,7 +33154,6 @@ public final class Messages {
       return page_;
     }
 
-    // required int32 pageSize = 2;
     public static final int PAGESIZE_FIELD_NUMBER = 2;
     private int pageSize_;
     /**
@@ -33078,7 +33169,6 @@ public final class Messages {
       return pageSize_;
     }
 
-    // required int64 total = 3;
     public static final int TOTAL_FIELD_NUMBER = 3;
     private long total_;
     /**
@@ -33102,7 +33192,8 @@ public final class Messages {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasPage()) {
         memoizedIsInitialized = 0;
@@ -33245,7 +33336,9 @@ public final class Messages {
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.ExtendableBuilder<
-          com.n4systems.fieldid.api.pub.model.Messages.ListResponseMessage, Builder> implements com.n4systems.fieldid.api.pub.model.Messages.ListResponseMessageOrBuilder {
+          com.n4systems.fieldid.api.pub.model.Messages.ListResponseMessage, Builder> implements
+        // @@protoc_insertion_point(builder_implements:com.n4systems.fieldid.api.pub.model.ListResponseMessage)
+        com.n4systems.fieldid.api.pub.model.Messages.ListResponseMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.n4systems.fieldid.api.pub.model.Messages.internal_static_com_n4systems_fieldid_api_pub_model_ListResponseMessage_descriptor;
@@ -33393,7 +33486,6 @@ public final class Messages {
       }
       private int bitField0_;
 
-      // required int32 page = 1;
       private int page_ ;
       /**
        * <code>required int32 page = 1;</code>
@@ -33426,7 +33518,6 @@ public final class Messages {
         return this;
       }
 
-      // required int32 pageSize = 2;
       private int pageSize_ ;
       /**
        * <code>required int32 pageSize = 2;</code>
@@ -33459,7 +33550,6 @@ public final class Messages {
         return this;
       }
 
-      // required int64 total = 3;
       private long total_ ;
       /**
        * <code>required int64 total = 3;</code>
@@ -33602,87 +33692,87 @@ public final class Messages {
           .newFileScopedGeneratedExtension(
         com.n4systems.fieldid.api.pub.model.Messages.UserGroupMessage.class,
         com.n4systems.fieldid.api.pub.model.Messages.UserGroupMessage.getDefaultInstance());
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_com_n4systems_fieldid_api_pub_model_AssetMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_com_n4systems_fieldid_api_pub_model_AssetMessage_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_com_n4systems_fieldid_api_pub_model_AssetMessage_AttributeMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_com_n4systems_fieldid_api_pub_model_AssetMessage_AttributeMessage_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_com_n4systems_fieldid_api_pub_model_AssetStatusMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_com_n4systems_fieldid_api_pub_model_AssetStatusMessage_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_AssociatedEventTypeMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_AssociatedEventTypeMessage_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_AssetAttributeTypeMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_AssetAttributeTypeMessage_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeGroupMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeGroupMessage_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeScheduleMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeScheduleMessage_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_com_n4systems_fieldid_api_pub_model_OwnerMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_com_n4systems_fieldid_api_pub_model_OwnerMessage_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_com_n4systems_fieldid_api_pub_model_PredefinedLocationMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_com_n4systems_fieldid_api_pub_model_PredefinedLocationMessage_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_com_n4systems_fieldid_api_pub_model_TestSimpleMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_com_n4systems_fieldid_api_pub_model_TestSimpleMessage_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_com_n4systems_fieldid_api_pub_model_TestNestedMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_com_n4systems_fieldid_api_pub_model_TestNestedMessage_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_com_n4systems_fieldid_api_pub_model_TestContainerMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_com_n4systems_fieldid_api_pub_model_TestContainerMessage_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_com_n4systems_fieldid_api_pub_model_UserMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_com_n4systems_fieldid_api_pub_model_UserMessage_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_com_n4systems_fieldid_api_pub_model_UserMessage_PermissionsMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_com_n4systems_fieldid_api_pub_model_UserMessage_PermissionsMessage_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_com_n4systems_fieldid_api_pub_model_UserGroupMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_com_n4systems_fieldid_api_pub_model_UserGroupMessage_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_com_n4systems_fieldid_api_pub_model_ListResponseMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -33861,139 +33951,142 @@ public final class Messages {
       "systems.fieldid.api.pub.modelB\010Messages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-      new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-        public com.google.protobuf.ExtensionRegistry assignDescriptors(
-            com.google.protobuf.Descriptors.FileDescriptor root) {
-          descriptor = root;
-          internal_static_com_n4systems_fieldid_api_pub_model_AssetMessage_descriptor =
-            getDescriptor().getMessageTypes().get(0);
-          internal_static_com_n4systems_fieldid_api_pub_model_AssetMessage_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_com_n4systems_fieldid_api_pub_model_AssetMessage_descriptor,
-              new java.lang.String[] { "Id", "CreatedDate", "ModifiedDate", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "OwnerName", "OwnerId", "Identifier", "RfidNumber", "CustomerRefNumber", "PurchaseOrder", "Comments", "IdentifiedDate", "AssetTypeName", "AssetTypeId", "AssetStatusName", "AssetStatusId", "IdentifiedByUserName", "IdentifiedByUserId", "AssignedUserName", "AssignedUserId", "Latitude", "Longitude", "FreeFormLocation", "PredefinedLocationName", "PredefinedLocationId", "OrderNumber", "Description", "Attributes", });
-          internal_static_com_n4systems_fieldid_api_pub_model_AssetMessage_AttributeMessage_descriptor =
-            internal_static_com_n4systems_fieldid_api_pub_model_AssetMessage_descriptor.getNestedTypes().get(0);
-          internal_static_com_n4systems_fieldid_api_pub_model_AssetMessage_AttributeMessage_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_com_n4systems_fieldid_api_pub_model_AssetMessage_AttributeMessage_descriptor,
-              new java.lang.String[] { "Type", "Id", "Name", "Value", });
-          internal_static_com_n4systems_fieldid_api_pub_model_AssetStatusMessage_descriptor =
-            getDescriptor().getMessageTypes().get(1);
-          internal_static_com_n4systems_fieldid_api_pub_model_AssetStatusMessage_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_com_n4systems_fieldid_api_pub_model_AssetStatusMessage_descriptor,
-              new java.lang.String[] { "Id", "CreatedDate", "ModifiedDate", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "Name", });
-          internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_descriptor =
-            getDescriptor().getMessageTypes().get(2);
-          internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_descriptor,
-              new java.lang.String[] { "Id", "CreatedDate", "ModifiedDate", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "Name", "Warnings", "Instructions", "CautionUrl", "DescriptionTemplate", "ManufactureCertificateText", "HasManufactureCertificate", "AllowAssetLinking", "HasProcedures", "AssetTypeGroupId", "AssetTypeGroupName", "Schedules", "AssociatedEventTypes", "AttributeTypes", });
-          internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_AssociatedEventTypeMessage_descriptor =
-            internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_descriptor.getNestedTypes().get(0);
-          internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_AssociatedEventTypeMessage_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_AssociatedEventTypeMessage_descriptor,
-              new java.lang.String[] { "EventTypeId", "EventTypeName", });
-          internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_AssetAttributeTypeMessage_descriptor =
-            internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_descriptor.getNestedTypes().get(1);
-          internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_AssetAttributeTypeMessage_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_AssetAttributeTypeMessage_descriptor,
-              new java.lang.String[] { "Id", "Type", "Name", "AttributeOptions", });
-          internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeGroupMessage_descriptor =
-            getDescriptor().getMessageTypes().get(3);
-          internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeGroupMessage_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeGroupMessage_descriptor,
-              new java.lang.String[] { "Id", "CreatedDate", "ModifiedDate", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "Name", });
-          internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeScheduleMessage_descriptor =
-            getDescriptor().getMessageTypes().get(4);
-          internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeScheduleMessage_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeScheduleMessage_descriptor,
-              new java.lang.String[] { "Id", "CreatedDate", "ModifiedDate", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "OwnerName", "OwnerId", "AssetTypeName", "AssetTypeId", "EventTypeName", "EventTypeId", "FrequencyInDays", "AutoSchedule", });
-          internal_static_com_n4systems_fieldid_api_pub_model_OwnerMessage_descriptor =
-            getDescriptor().getMessageTypes().get(5);
-          internal_static_com_n4systems_fieldid_api_pub_model_OwnerMessage_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_com_n4systems_fieldid_api_pub_model_OwnerMessage_descriptor,
-              new java.lang.String[] { "Id", "CreatedDate", "ModifiedDate", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "Name", "ParentName", "ParentId", "Code", "Notes", "StreetAddress", "City", "State", "Country", "Zip", "Phone1", "Phone2", "Fax1", "Latitude", "Longitude", "ContactName", "ContactEmail", });
-          internal_static_com_n4systems_fieldid_api_pub_model_PredefinedLocationMessage_descriptor =
-            getDescriptor().getMessageTypes().get(6);
-          internal_static_com_n4systems_fieldid_api_pub_model_PredefinedLocationMessage_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_com_n4systems_fieldid_api_pub_model_PredefinedLocationMessage_descriptor,
-              new java.lang.String[] { "Id", "CreatedDate", "ModifiedDate", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "OwnerName", "OwnerId", "ParentName", "ParentId", "Name", });
-          internal_static_com_n4systems_fieldid_api_pub_model_TestSimpleMessage_descriptor =
-            getDescriptor().getMessageTypes().get(7);
-          internal_static_com_n4systems_fieldid_api_pub_model_TestSimpleMessage_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_com_n4systems_fieldid_api_pub_model_TestSimpleMessage_descriptor,
-              new java.lang.String[] { "DoubleField", "FloatField", "Int32Field", "Int64Field", "Uint32Field", "Uint64Field", "Sint32Field", "Sint64Field", "Fixed32Field", "Fixed64Field", "Sfixed32Field", "Sfixed64Field", "BoolField", "StringField", });
-          internal_static_com_n4systems_fieldid_api_pub_model_TestNestedMessage_descriptor =
-            getDescriptor().getMessageTypes().get(8);
-          internal_static_com_n4systems_fieldid_api_pub_model_TestNestedMessage_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_com_n4systems_fieldid_api_pub_model_TestNestedMessage_descriptor,
-              new java.lang.String[] { "StringField", });
-          internal_static_com_n4systems_fieldid_api_pub_model_TestContainerMessage_descriptor =
-            getDescriptor().getMessageTypes().get(9);
-          internal_static_com_n4systems_fieldid_api_pub_model_TestContainerMessage_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_com_n4systems_fieldid_api_pub_model_TestContainerMessage_descriptor,
-              new java.lang.String[] { "Int32Field", "Nested", });
-          internal_static_com_n4systems_fieldid_api_pub_model_UserMessage_descriptor =
-            getDescriptor().getMessageTypes().get(10);
-          internal_static_com_n4systems_fieldid_api_pub_model_UserMessage_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_com_n4systems_fieldid_api_pub_model_UserMessage_descriptor,
-              new java.lang.String[] { "Id", "Created", "Modified", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "OwnerName", "OwnerId", "UserID", "FirstName", "LastName", "EmailAddress", "TimeZoneID", "Position", "Initials", "FailedLoginAttempts", "Locked", "LockedUntil", "PasswordChanged", "Language", "Identifier", "LastLogin", "Groups", "UserType", "Permissions", });
-          internal_static_com_n4systems_fieldid_api_pub_model_UserMessage_PermissionsMessage_descriptor =
-            internal_static_com_n4systems_fieldid_api_pub_model_UserMessage_descriptor.getNestedTypes().get(0);
-          internal_static_com_n4systems_fieldid_api_pub_model_UserMessage_PermissionsMessage_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_com_n4systems_fieldid_api_pub_model_UserMessage_PermissionsMessage_descriptor,
-              new java.lang.String[] { "CreateAssets", "ManageSystemConfig", "ManageSystemUsers", "ManageEndUsers", "CreateEvents", "EditEvents", "ManageJobs", "ManageSafetyNetwork", });
-          internal_static_com_n4systems_fieldid_api_pub_model_UserGroupMessage_descriptor =
-            getDescriptor().getMessageTypes().get(11);
-          internal_static_com_n4systems_fieldid_api_pub_model_UserGroupMessage_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_com_n4systems_fieldid_api_pub_model_UserGroupMessage_descriptor,
-              new java.lang.String[] { "Id", "Name", "GroupId", });
-          internal_static_com_n4systems_fieldid_api_pub_model_ListResponseMessage_descriptor =
-            getDescriptor().getMessageTypes().get(12);
-          internal_static_com_n4systems_fieldid_api_pub_model_ListResponseMessage_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_com_n4systems_fieldid_api_pub_model_ListResponseMessage_descriptor,
-              new java.lang.String[] { "Page", "PageSize", "Total", });
-          serializedName.internalInit(descriptor.getExtensions().get(0));
-          assets.internalInit(descriptor.getExtensions().get(1));
-          owners.internalInit(descriptor.getExtensions().get(2));
-          assetStatuses.internalInit(descriptor.getExtensions().get(3));
-          assetTypes.internalInit(descriptor.getExtensions().get(4));
-          assetTypeGroups.internalInit(descriptor.getExtensions().get(5));
-          locations.internalInit(descriptor.getExtensions().get(6));
-          users.internalInit(descriptor.getExtensions().get(7));
-          userGroups.internalInit(descriptor.getExtensions().get(8));
-          com.google.protobuf.ExtensionRegistry registry =
-            com.google.protobuf.ExtensionRegistry.newInstance();
-          registry.add(com.n4systems.fieldid.api.pub.model.Messages.serializedName);
-          registry.add(com.n4systems.fieldid.api.pub.model.Messages.serializedName);
-          registry.add(com.n4systems.fieldid.api.pub.model.Messages.serializedName);
-          registry.add(com.n4systems.fieldid.api.pub.model.Messages.serializedName);
-          registry.add(com.n4systems.fieldid.api.pub.model.Messages.serializedName);
-          registry.add(com.n4systems.fieldid.api.pub.model.Messages.serializedName);
-          registry.add(com.n4systems.fieldid.api.pub.model.Messages.serializedName);
-          registry.add(com.n4systems.fieldid.api.pub.model.Messages.serializedName);
-          return registry;
-        }
-      };
+        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
+          public com.google.protobuf.ExtensionRegistry assignDescriptors(
+              com.google.protobuf.Descriptors.FileDescriptor root) {
+            descriptor = root;
+            return null;
+          }
+        };
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
           com.google.protobuf.DescriptorProtos.getDescriptor(),
         }, assigner);
+    internal_static_com_n4systems_fieldid_api_pub_model_AssetMessage_descriptor =
+      getDescriptor().getMessageTypes().get(0);
+    internal_static_com_n4systems_fieldid_api_pub_model_AssetMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_com_n4systems_fieldid_api_pub_model_AssetMessage_descriptor,
+        new java.lang.String[] { "Id", "CreatedDate", "ModifiedDate", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "OwnerName", "OwnerId", "Identifier", "RfidNumber", "CustomerRefNumber", "PurchaseOrder", "Comments", "IdentifiedDate", "AssetTypeName", "AssetTypeId", "AssetStatusName", "AssetStatusId", "IdentifiedByUserName", "IdentifiedByUserId", "AssignedUserName", "AssignedUserId", "Latitude", "Longitude", "FreeFormLocation", "PredefinedLocationName", "PredefinedLocationId", "OrderNumber", "Description", "Attributes", });
+    internal_static_com_n4systems_fieldid_api_pub_model_AssetMessage_AttributeMessage_descriptor =
+      internal_static_com_n4systems_fieldid_api_pub_model_AssetMessage_descriptor.getNestedTypes().get(0);
+    internal_static_com_n4systems_fieldid_api_pub_model_AssetMessage_AttributeMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_com_n4systems_fieldid_api_pub_model_AssetMessage_AttributeMessage_descriptor,
+        new java.lang.String[] { "Type", "Id", "Name", "Value", });
+    internal_static_com_n4systems_fieldid_api_pub_model_AssetStatusMessage_descriptor =
+      getDescriptor().getMessageTypes().get(1);
+    internal_static_com_n4systems_fieldid_api_pub_model_AssetStatusMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_com_n4systems_fieldid_api_pub_model_AssetStatusMessage_descriptor,
+        new java.lang.String[] { "Id", "CreatedDate", "ModifiedDate", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "Name", });
+    internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_descriptor =
+      getDescriptor().getMessageTypes().get(2);
+    internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_descriptor,
+        new java.lang.String[] { "Id", "CreatedDate", "ModifiedDate", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "Name", "Warnings", "Instructions", "CautionUrl", "DescriptionTemplate", "ManufactureCertificateText", "HasManufactureCertificate", "AllowAssetLinking", "HasProcedures", "AssetTypeGroupId", "AssetTypeGroupName", "Schedules", "AssociatedEventTypes", "AttributeTypes", });
+    internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_AssociatedEventTypeMessage_descriptor =
+      internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_descriptor.getNestedTypes().get(0);
+    internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_AssociatedEventTypeMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_AssociatedEventTypeMessage_descriptor,
+        new java.lang.String[] { "EventTypeId", "EventTypeName", });
+    internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_AssetAttributeTypeMessage_descriptor =
+      internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_descriptor.getNestedTypes().get(1);
+    internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_AssetAttributeTypeMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_AssetAttributeTypeMessage_descriptor,
+        new java.lang.String[] { "Id", "Type", "Name", "AttributeOptions", });
+    internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeGroupMessage_descriptor =
+      getDescriptor().getMessageTypes().get(3);
+    internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeGroupMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeGroupMessage_descriptor,
+        new java.lang.String[] { "Id", "CreatedDate", "ModifiedDate", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "Name", });
+    internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeScheduleMessage_descriptor =
+      getDescriptor().getMessageTypes().get(4);
+    internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeScheduleMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeScheduleMessage_descriptor,
+        new java.lang.String[] { "Id", "CreatedDate", "ModifiedDate", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "OwnerName", "OwnerId", "AssetTypeName", "AssetTypeId", "EventTypeName", "EventTypeId", "FrequencyInDays", "AutoSchedule", });
+    internal_static_com_n4systems_fieldid_api_pub_model_OwnerMessage_descriptor =
+      getDescriptor().getMessageTypes().get(5);
+    internal_static_com_n4systems_fieldid_api_pub_model_OwnerMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_com_n4systems_fieldid_api_pub_model_OwnerMessage_descriptor,
+        new java.lang.String[] { "Id", "CreatedDate", "ModifiedDate", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "Name", "ParentName", "ParentId", "Code", "Notes", "StreetAddress", "City", "State", "Country", "Zip", "Phone1", "Phone2", "Fax1", "Latitude", "Longitude", "ContactName", "ContactEmail", });
+    internal_static_com_n4systems_fieldid_api_pub_model_PredefinedLocationMessage_descriptor =
+      getDescriptor().getMessageTypes().get(6);
+    internal_static_com_n4systems_fieldid_api_pub_model_PredefinedLocationMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_com_n4systems_fieldid_api_pub_model_PredefinedLocationMessage_descriptor,
+        new java.lang.String[] { "Id", "CreatedDate", "ModifiedDate", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "OwnerName", "OwnerId", "ParentName", "ParentId", "Name", });
+    internal_static_com_n4systems_fieldid_api_pub_model_TestSimpleMessage_descriptor =
+      getDescriptor().getMessageTypes().get(7);
+    internal_static_com_n4systems_fieldid_api_pub_model_TestSimpleMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_com_n4systems_fieldid_api_pub_model_TestSimpleMessage_descriptor,
+        new java.lang.String[] { "DoubleField", "FloatField", "Int32Field", "Int64Field", "Uint32Field", "Uint64Field", "Sint32Field", "Sint64Field", "Fixed32Field", "Fixed64Field", "Sfixed32Field", "Sfixed64Field", "BoolField", "StringField", });
+    internal_static_com_n4systems_fieldid_api_pub_model_TestNestedMessage_descriptor =
+      getDescriptor().getMessageTypes().get(8);
+    internal_static_com_n4systems_fieldid_api_pub_model_TestNestedMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_com_n4systems_fieldid_api_pub_model_TestNestedMessage_descriptor,
+        new java.lang.String[] { "StringField", });
+    internal_static_com_n4systems_fieldid_api_pub_model_TestContainerMessage_descriptor =
+      getDescriptor().getMessageTypes().get(9);
+    internal_static_com_n4systems_fieldid_api_pub_model_TestContainerMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_com_n4systems_fieldid_api_pub_model_TestContainerMessage_descriptor,
+        new java.lang.String[] { "Int32Field", "Nested", });
+    internal_static_com_n4systems_fieldid_api_pub_model_UserMessage_descriptor =
+      getDescriptor().getMessageTypes().get(10);
+    internal_static_com_n4systems_fieldid_api_pub_model_UserMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_com_n4systems_fieldid_api_pub_model_UserMessage_descriptor,
+        new java.lang.String[] { "Id", "Created", "Modified", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "OwnerName", "OwnerId", "UserID", "FirstName", "LastName", "EmailAddress", "TimeZoneID", "Position", "Initials", "FailedLoginAttempts", "Locked", "LockedUntil", "PasswordChanged", "Language", "Identifier", "LastLogin", "Groups", "UserType", "Permissions", });
+    internal_static_com_n4systems_fieldid_api_pub_model_UserMessage_PermissionsMessage_descriptor =
+      internal_static_com_n4systems_fieldid_api_pub_model_UserMessage_descriptor.getNestedTypes().get(0);
+    internal_static_com_n4systems_fieldid_api_pub_model_UserMessage_PermissionsMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_com_n4systems_fieldid_api_pub_model_UserMessage_PermissionsMessage_descriptor,
+        new java.lang.String[] { "CreateAssets", "ManageSystemConfig", "ManageSystemUsers", "ManageEndUsers", "CreateEvents", "EditEvents", "ManageJobs", "ManageSafetyNetwork", });
+    internal_static_com_n4systems_fieldid_api_pub_model_UserGroupMessage_descriptor =
+      getDescriptor().getMessageTypes().get(11);
+    internal_static_com_n4systems_fieldid_api_pub_model_UserGroupMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_com_n4systems_fieldid_api_pub_model_UserGroupMessage_descriptor,
+        new java.lang.String[] { "Id", "Name", "GroupId", });
+    internal_static_com_n4systems_fieldid_api_pub_model_ListResponseMessage_descriptor =
+      getDescriptor().getMessageTypes().get(12);
+    internal_static_com_n4systems_fieldid_api_pub_model_ListResponseMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_com_n4systems_fieldid_api_pub_model_ListResponseMessage_descriptor,
+        new java.lang.String[] { "Page", "PageSize", "Total", });
+    serializedName.internalInit(descriptor.getExtensions().get(0));
+    assets.internalInit(descriptor.getExtensions().get(1));
+    owners.internalInit(descriptor.getExtensions().get(2));
+    assetStatuses.internalInit(descriptor.getExtensions().get(3));
+    assetTypes.internalInit(descriptor.getExtensions().get(4));
+    assetTypeGroups.internalInit(descriptor.getExtensions().get(5));
+    locations.internalInit(descriptor.getExtensions().get(6));
+    users.internalInit(descriptor.getExtensions().get(7));
+    userGroups.internalInit(descriptor.getExtensions().get(8));
+    com.google.protobuf.ExtensionRegistry registry =
+        com.google.protobuf.ExtensionRegistry.newInstance();
+    registry.add(com.n4systems.fieldid.api.pub.model.Messages.serializedName);
+    registry.add(com.n4systems.fieldid.api.pub.model.Messages.serializedName);
+    registry.add(com.n4systems.fieldid.api.pub.model.Messages.serializedName);
+    registry.add(com.n4systems.fieldid.api.pub.model.Messages.serializedName);
+    registry.add(com.n4systems.fieldid.api.pub.model.Messages.serializedName);
+    registry.add(com.n4systems.fieldid.api.pub.model.Messages.serializedName);
+    registry.add(com.n4systems.fieldid.api.pub.model.Messages.serializedName);
+    registry.add(com.n4systems.fieldid.api.pub.model.Messages.serializedName);
+    com.google.protobuf.Descriptors.FileDescriptor
+        .internalUpdateFileDescriptor(descriptor, registry);
+    com.google.protobuf.DescriptorProtos.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

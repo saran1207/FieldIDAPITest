@@ -34,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Transactional
 public class UserService extends CrudService<User> {
@@ -385,7 +386,7 @@ public class UserService extends CrudService<User> {
             builder.addWhere(group);
         }
 
-        builder.setLimit(threshold*4);
+        builder.setLimit(threshold * 4);
         List<User> results = persistenceService.findAll(builder);
         return new PrioritizedList<User>(results, threshold);
     }
@@ -478,14 +479,14 @@ public class UserService extends CrudService<User> {
 				break;
 			case LITE:
                 // lite and usage based users can only have create and edit events
-                perms.retain(Permissions.CreateEvent, Permissions.EditEvent);
+                perms.retain(Permissions.CREATE_EVENT, Permissions.EDIT_EVENT, Permissions.AUTHOR_EDIT_PROCEDURE, Permissions.CERTIFY_PROCEDURE, Permissions.PERFORM_PROCEDURE, Permissions.PRINT_PROCEDURE, Permissions.PROCEDURE_AUDIT);
                 break;
 			case USAGE_BASED:
 				// lite and usage based users can only have create and edit events
-				perms.retain(Permissions.CreateEvent, Permissions.EditEvent);
+                perms.retain(Permissions.CREATE_EVENT, Permissions.EDIT_EVENT, Permissions.AUTHOR_EDIT_PROCEDURE, Permissions.CERTIFY_PROCEDURE, Permissions.PERFORM_PROCEDURE, Permissions.PRINT_PROCEDURE, Permissions.PROCEDURE_AUDIT);
 				break;
 			case READONLY:
-                perms.retain(Permissions.EditAssetDetails);
+                perms.retain(Permissions.EDIT_ASSET_DETAILS, Permissions.PRINT_PROCEDURE);
                 break;
 			case PERSON:
 				// Readonly and Persons have no permissions
@@ -496,5 +497,35 @@ public class UserService extends CrudService<User> {
 		}
 		return perms.getMask();
 	}
+
+    public List<User> getCertifierUsers() {
+
+        QueryBuilder<User> builder = createUserQueryBuilder(false, false);
+        builder.addWhere(WhereClauseFactory.create(Comparator.IN, "userType", Lists.newArrayList(UserType.FULL, UserType.ADMIN, UserType.LITE)));
+
+        return persistenceService.findAll(builder).stream()
+                .filter(u -> Permissions.hasOneOf(u.getPermissions(), Permissions.CERTIFY_PROCEDURE))
+                .collect(Collectors.toList());
+    }
+
+    public List<User> getSortedCertifiers(String sort, boolean ascending) {
+        QueryBuilder<User> query = createUserQueryBuilder(new UserListFilterCriteria(false).withOrder(sort, ascending));
+        query.addWhere(WhereClauseFactory.create(Comparator.IN, "userType", Lists.newArrayList(UserType.FULL, UserType.ADMIN, UserType.LITE)));
+
+        return persistenceService.findAll(query)
+                                 .stream()
+                                 .filter(user -> Permissions.hasOneOf(user.getPermissions(), Permissions.CERTIFY_PROCEDURE))
+                                 .collect(Collectors.toList());
+    }
+
+    public long countCertifiers() {
+        QueryBuilder<User> query = createUserQueryBuilder(false, false);
+        query.addWhere(WhereClauseFactory.create(Comparator.IN, "userType", Lists.newArrayList(UserType.FULL, UserType.ADMIN)));
+
+        return persistenceService.findAll(query)
+                                 .stream()
+                                 .filter(u -> Permissions.hasOneOf(u.getPermissions(), Permissions.CERTIFY_PROCEDURE))
+                                 .count();
+    }
 
 }

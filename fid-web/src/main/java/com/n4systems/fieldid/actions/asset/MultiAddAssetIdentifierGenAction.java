@@ -13,7 +13,8 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
+@Deprecated
+@UserPermissionFilter(userRequiresOneOf={Permissions.TAG})
 public class MultiAddAssetIdentifierGenAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(MultiAddAssetIdentifierGenAction.class);

@@ -6,7 +6,7 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.safetynetwork.TypedOrgConnection;
 import com.n4systems.security.Permissions;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SAFETY_NETWORK})
 public class QuickSetupWizardSafetyNetworkConnections extends SafetyNetworkConnectionCrud {
 	
 	private Long idImported;

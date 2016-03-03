@@ -63,9 +63,9 @@ public class AddEventBookPage extends FieldIDTemplatePage {
                 thisBook.getObject().setOwner(thisBaseOrg);
 
                 if(isEdit()) {
-                    eventBookService.updateEventBook(thisBook.getObject(), getCurrentUser());
+                    eventBookService.update(thisBook.getObject());
                 } else {
-                    eventBookService.saveEventBook(thisBook.getObject(), getCurrentUser());
+                    eventBookService.save(thisBook.getObject());
                 }
 
                 EventBooksListAllPage nextPage = new EventBooksListAllPage();

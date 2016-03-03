@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class ProcedureAuditListPanel extends Panel {
 
-    public static final int PROCEDURES_PER_PAGE = 200;
+    public static final int PROCEDURES_PER_PAGE = 30;
 
     private FieldIDDataProvider<ProcedureAuditEvent> dataProvider;
 

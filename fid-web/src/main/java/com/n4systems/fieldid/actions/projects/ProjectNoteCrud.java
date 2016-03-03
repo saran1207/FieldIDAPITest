@@ -19,7 +19,7 @@ import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.Projects)
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageJobs})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_JOBS})
 public class ProjectNoteCrud extends UploadFileSupport {
 
 	private static final Logger logger = Logger.getLogger(ProjectNoteCrud.class);

@@ -21,7 +21,8 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import java.util.ArrayList;
 import java.util.List;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
+@Deprecated
+@UserPermissionFilter(userRequiresOneOf={Permissions.CREATE_EVENT})
 public class EventScheduleCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(EventScheduleCrud.class);
@@ -122,7 +123,7 @@ public class EventScheduleCrud extends AbstractCrud {
 
 	
 	
-	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent, Permissions.ManageJobs})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CREATE_EVENT, Permissions.MANAGE_JOBS})
 	public String doSave() {
 		testRequiredEntities(true);
 		try {

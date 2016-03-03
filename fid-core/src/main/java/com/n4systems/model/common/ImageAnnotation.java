@@ -1,5 +1,7 @@
 package com.n4systems.model.common;
 
+import com.n4systems.model.PlatformType;
+import com.n4systems.model.api.HasCreatedModifiedPlatform;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.procedure.AnnotationType;
 
@@ -7,7 +9,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="image_annotation")
-public class ImageAnnotation extends EntityWithTenant {
+public class ImageAnnotation extends EntityWithTenant implements HasCreatedModifiedPlatform {
 
     @Enumerated(EnumType.STRING)
     private ImageAnnotationType type = ImageAnnotationType.W;
@@ -37,6 +39,20 @@ public class ImageAnnotation extends EntityWithTenant {
 
     @Transient
     private Long tempId;
+
+    @Column(name="modified_platform", length = 200)
+    private String modifiedPlatform;
+
+    @Column(name="created_platform", length = 200)
+    private String createdPlatform;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="modified_platform_type")
+    private PlatformType modifiedPlatformType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="created_platform_type")
+    private PlatformType createdPlatformType;
 
     public ImageAnnotation() {
     }
@@ -159,5 +175,45 @@ public class ImageAnnotation extends EntityWithTenant {
 
     public void setRenderAnnotation(boolean renderAnnotation) {
         this.renderAnnotation = renderAnnotation;
+    }
+
+    @Override
+    public String getModifiedPlatform() {
+        return modifiedPlatform;
+    }
+
+    @Override
+    public void setModifiedPlatform(String modifiedPlatform) {
+        this.modifiedPlatform = modifiedPlatform;
+    }
+
+    @Override
+    public String getCreatedPlatform() {
+        return createdPlatform;
+    }
+
+    @Override
+    public void setCreatedPlatform(String createdPlatform) {
+        this.createdPlatform = createdPlatform;
+    }
+
+    @Override
+    public PlatformType getModifiedPlatformType() {
+        return modifiedPlatformType;
+    }
+
+    @Override
+    public void setModifiedPlatformType(PlatformType modifiedPlatformType) {
+        this.modifiedPlatformType = modifiedPlatformType;
+    }
+
+    @Override
+    public PlatformType getCreatedPlatformType() {
+        return createdPlatformType;
+    }
+
+    @Override
+    public void setCreatedPlatformType(PlatformType createdPlatformType) {
+        this.createdPlatformType = createdPlatformType;
     }
 }

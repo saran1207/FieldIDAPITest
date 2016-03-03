@@ -25,7 +25,7 @@ public class GroupedVisibleUsersModel extends FieldIDSpringModel<List<User>> {
 
         List<User> users = userService.getUsers(true, false);
 
-        List<User> filteredUsers = new ArrayList<User>();
+        List<User> filteredUsers = new ArrayList<>();
 
         for (User user : users) {
             boolean readOnlyCustomerUserAndExternal = sessionUser.isReadOnlyCustomerUser() && user.getOwner().isExternal();
@@ -34,15 +34,12 @@ public class GroupedVisibleUsersModel extends FieldIDSpringModel<List<User>> {
             }
         }
 
-        Collections.sort(filteredUsers, new Comparator<User>() {
-            @Override
-            public int compare(User user1, User user2) {
-                Comparator<String> naturalComparator = NaturalOrderSort.getNaturalComparator();
-                if (user1.getOwner().equals(user2.getOwner())) {
-                    return naturalComparator.compare(user1.getDisplayName(), user2.getDisplayName());
-                }
-                return compareOwners(user1.getOwner(), user2.getOwner(), naturalComparator);
+        Collections.sort(filteredUsers, (user1, user2) -> {
+            Comparator<String> naturalComparator = NaturalOrderSort.getNaturalComparator();
+            if (user1.getOwner().equals(user2.getOwner())) {
+                return naturalComparator.compare(user1.getLastName(), user2.getLastName());
             }
+            return compareOwners(user1.getOwner(), user2.getOwner(), naturalComparator);
         });
 
 

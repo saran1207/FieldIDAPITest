@@ -47,7 +47,7 @@ public class EventBooksActionCell extends Panel {
             add(openOrCloseLink = new AjaxLink("openOrCloseLink") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
-                    EventBook bookToOpen = eventBookService.getEventBookById(thisBook.getId());
+                    EventBook bookToOpen = eventBookService.findById(thisBook.getId());
                     eventBookService.openEventBook(bookToOpen);
 
                     FieldIDSession.get()
@@ -63,7 +63,7 @@ public class EventBooksActionCell extends Panel {
             add(openOrCloseLink = new AjaxLink("openOrCloseLink") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
-                    EventBook bookToClose = eventBookService.getEventBookById(thisBook.getId());
+                    EventBook bookToClose = eventBookService.findById(thisBook.getId());
                     eventBookService.closeEventBook(bookToClose);
 
                     FieldIDSession.get()
@@ -82,7 +82,7 @@ public class EventBooksActionCell extends Panel {
         optionsContainer.add(archiveLink = new AjaxLink("archiveLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                EventBook bookToArchive = eventBookService.getEventBookById(thisBook.getId());
+                EventBook bookToArchive = eventBookService.findById(thisBook.getId());
                 eventBookService.archiveEventBook(bookToArchive);
 
                 FieldIDSession.get()
@@ -99,7 +99,7 @@ public class EventBooksActionCell extends Panel {
         add(unarchiveLink = new AjaxLink("unarchiveLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                EventBook bookToUnarchive = eventBookService.getEventBookById(thisBook.getId());
+                EventBook bookToUnarchive = eventBookService.findById(thisBook.getId());
                 eventBookService.unarchiveStatus(bookToUnarchive);
 
                 FieldIDSession.get()

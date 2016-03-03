@@ -66,6 +66,7 @@ public class  EventScheduleService extends FieldIdPersistenceService {
         QueryBuilder<ThingEvent> query = createUserSecurityBuilder(ThingEvent.class);
         query.addSimpleWhere("asset", asset);
         query.addWhere(Comparator.EQ, "workflowState", "workflowState", WorkflowState.OPEN);
+        query.addPostFetchPaths(ThingEvent.ALL_FIELD_PATHS_WITH_SUB_EVENTS);
         if(eventType != null)
             query.addSimpleWhere("type.id", eventType.getId());
         query.addOrder("dueDate");

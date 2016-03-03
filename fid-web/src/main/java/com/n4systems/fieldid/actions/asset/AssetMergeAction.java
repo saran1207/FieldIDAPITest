@@ -22,7 +22,7 @@ import com.n4systems.security.Permissions;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.AssetMergeTask;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
+@UserPermissionFilter(userRequiresOneOf={Permissions.TAG})
 public class AssetMergeAction extends AbstractCrud {
 
 	private static final long serialVersionUID = 1L;

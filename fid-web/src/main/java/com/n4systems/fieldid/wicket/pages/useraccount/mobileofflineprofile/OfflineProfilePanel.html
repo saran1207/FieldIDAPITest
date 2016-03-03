@@ -1,0 +1,17 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:wicket="http://wicket.apache.org">
+
+<wicket:panel>
+
+  <div class="control-group">
+    <label class="label"><wicket:message key="label.platform_version"/>:</label> <span wicket:id="platform"/><br>
+    <label class="label"><wicket:message key="label.total_offline_assets"/>:</label> <span wicket:id="totalAssets"/>
+  </div>
+
+  <div class="control-group">
+    <a class="clear btn btn-secondary btn-sml" wicket:id="clearAll"><wicket:message key="label.clear_offline_profile"/></a>
+  </div>
+  <table wicket:id="assetsTable" class="list comfortable"/>
+
+</wicket:panel>
+</html>

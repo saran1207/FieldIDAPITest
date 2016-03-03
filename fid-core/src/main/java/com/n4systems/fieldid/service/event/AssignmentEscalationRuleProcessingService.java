@@ -169,6 +169,12 @@ public class AssignmentEscalationRuleProcessingService extends FieldIdPersistenc
         Map<String, Object> mailContents =
                 unmarshaller.readValue(item.getMapJson(), Map.class);
 
+        //Ugly-Hack: Because we pre-render the JSON for these and have now decided (2016-02-01) that we're going to
+        //           show these links, that means we're basically showing them to everyone.  Rather than some messed up
+        //           migration to try and re-generate the JSON, we're just going to set this to true all the time...
+        //           because logically it has to be true all the time.
+        mailContents.put("showLinks", true);
+
         mailContents.put("messageBody", item.getRule().getCustomMessageText() == null ? "" : item.getRule().getCustomMessageText());
 
         TemplateMailMessage msg = new TemplateMailMessage(item.getRule().getSubjectText(),

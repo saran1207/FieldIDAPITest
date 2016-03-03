@@ -1,6 +1,6 @@
 package com.n4systems.model.notificationsettings;
 
-import com.n4systems.model.Tenant;
+import com.n4systems.model.*;
 import com.n4systems.model.api.HasUser;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.common.RelativeTime;
@@ -35,18 +35,6 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
 	@OrderColumn(name="orderidx")
     private List<String> addresses = new ArrayList<String>();
 
-	@Column(name="assettype_id", nullable=false)
-	@ElementCollection(fetch=FetchType.EAGER)
-    @JoinTable(name="notificationsettings_assettypes", joinColumns = @JoinColumn(name="notificationsettings_id"))
-	@OrderColumn(name="orderidx")
-	private List<Long> assetTypes = new ArrayList<Long>();
-	
-	@Column(name="eventtype_id", nullable=false)
-	@ElementCollection(fetch=FetchType.EAGER)
-    @JoinTable(name="notificationsettings_eventtypes", joinColumns = @JoinColumn(name="notificationsettings_id"))
-	@OrderColumn(name="orderidx")
-	private List<Long> eventTypes = new ArrayList<Long>();
-	
 	private OverdueEventReport overdueReport = new OverdueEventReport();
 
 	private UpcomingEventReport upcomingReport = new UpcomingEventReport();
@@ -55,13 +43,22 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
 	
 	@Column(nullable=false)
 	private Boolean sendBlankReport;
-	
-	private Long assetStatus;
-    
-    private Long assetTypeGroup;
 
-    private Long eventTypeGroup;
-    
+	@ManyToOne(optional = true)
+	private AssetStatus assetStatus;
+
+	@ManyToOne(optional = true)
+    private AssetTypeGroup assetTypeGroup;
+
+	@ManyToOne(optional=true)
+	private AssetType assetType;
+
+	@ManyToOne(optional = true)
+    private EventTypeGroup eventTypeGroup;
+
+	@ManyToOne(optional=true)
+	private EventType eventType;
+
 	public NotificationSetting() {}
 	
 	public NotificationSetting(Tenant tenant, BaseOrg owner) {
@@ -88,12 +85,10 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
     	return upcomingReport.getPeriodStart();
     }
 
-	
 	public RelativeTime getPeriodEnd() {
     	return upcomingReport.getPeriodEnd();
     }
 
-	
 	@Override
 	public User getUser() {
     	return user;
@@ -112,22 +107,6 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
     	this.addresses = addresses;
     }
     
-	public List<Long> getAssetTypes() {
-    	return assetTypes;
-    }
-
-	public void setAssetTypes(List<Long> assetTypes) {
-    	this.assetTypes = assetTypes;
-    }
-
-	public List<Long> getEventTypes() {
-    	return eventTypes;
-    }
-
-	public void setEventTypes(List<Long> eventTypes) {
-    	this.eventTypes = eventTypes;
-    }
-
 	public boolean isIncludeOverdue() {
 		return overdueReport.includeOverdue;
 	}
@@ -168,28 +147,43 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
 		this.sendBlankReport = sendBlankReport;
 	}
 
-	public Long getAssetTypeGroup() {
+	public AssetTypeGroup getAssetTypeGroup() {
 		return assetTypeGroup;
 	}
 
-	public void setAssetTypeGroup(Long assetTypeGroup) {
+	public void setAssetTypeGroup(AssetTypeGroup assetTypeGroup) {
 		this.assetTypeGroup = assetTypeGroup;
 	}
 
-	public Long getAssetStatus() {
+	public AssetStatus getAssetStatus() {
 		return assetStatus;
 	}
 
-	public void setAssetStatus(Long assetStatus) {
+	public void setAssetStatus(AssetStatus assetStatus) {
 		this.assetStatus = assetStatus;
 	}
 
-	public Long getEventTypeGroup() {
+	public EventTypeGroup getEventTypeGroup() {
 		return eventTypeGroup;
 	}
 
-	public void setEventTypeGroup(Long eventTypeGroup) {
+	public void setEventTypeGroup(EventTypeGroup eventTypeGroup) {
 		this.eventTypeGroup = eventTypeGroup;
 	}
 
+	public AssetType getAssetType() {
+		return assetType;
+	}
+
+	public void setAssetType(AssetType assetType) {
+		this.assetType = assetType;
+	}
+
+	public EventType getEventType() {
+		return eventType;
+	}
+
+	public void setEventType(EventType eventType) {
+		this.eventType = eventType;
+	}
 }

@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.loto;
 
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
@@ -26,6 +27,11 @@ public class PublishedProcedureActionsColumn extends AbstractColumn<ProcedureDef
     @Override
     public void populateItem(Item<ICellPopulator<ProcedureDefinition>> cellItem, String componentId, final IModel<ProcedureDefinition> rowModel) {
 
+        Boolean hasAuthorEditProcedures = FieldIDSession.get().getUserSecurityGuard().isAllowedAuthorEditProcedure();
+        Boolean hasMaintainLotoSchedule = FieldIDSession.get().getUserSecurityGuard().isAllowedMaintainLotoSchedule();
+        Boolean hasProcedureAudit = FieldIDSession.get().getUserSecurityGuard().isAllowedProcedureAudit();
+        Boolean hasPrintProcedures = FieldIDSession.get().getUserSecurityGuard().isAllowedPrintProcedure();
+
         if(rowModel.getObject().getPublishedState().equals(PublishedState.PUBLISHED)) {
             cellItem.add(new PublishedProcedureActionsCell(componentId, rowModel, procedureListPanel));
         } else if (rowModel.getObject().getPublishedState().equals(PublishedState.DRAFT)) {
@@ -33,7 +39,10 @@ public class PublishedProcedureActionsColumn extends AbstractColumn<ProcedureDef
         } else {
             cellItem.add(new PreviouslyPublishedProcedureActionsCell(componentId, rowModel, procedureListPanel));
         }
-        cellItem.add(new AttributeAppender("class", "actions"));
+
+        if (hasAuthorEditProcedures | hasMaintainLotoSchedule | hasProcedureAudit | hasPrintProcedures) {
+            cellItem.add(new AttributeAppender("class", "actions"));
+        }
     }
 
 }

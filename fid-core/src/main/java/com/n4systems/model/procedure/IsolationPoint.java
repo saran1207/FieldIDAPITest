@@ -1,6 +1,8 @@
 package com.n4systems.model.procedure;
 
 import com.n4systems.model.IsolationPointSourceType;
+import com.n4systems.model.PlatformType;
+import com.n4systems.model.api.HasCreatedModifiedPlatform;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.parents.EntityWithTenant;
 
@@ -9,7 +11,7 @@ import java.util.Comparator;
 
 @Entity
 @Table(name = "isolation_points")
-public class IsolationPoint extends EntityWithTenant {
+public class IsolationPoint extends EntityWithTenant implements HasCreatedModifiedPlatform {
 
     public static Comparator<IsolationPoint> LOCK_ORDER = new Comparator<IsolationPoint>() {
         @Override
@@ -64,6 +66,20 @@ public class IsolationPoint extends EntityWithTenant {
 
     @Column(name="rev_idx")
     private Integer revIdx;
+
+    @Column(name="modified_platform", length = 200)
+    private String modifiedPlatform;
+
+    @Column(name="created_platform", length = 200)
+    private String createdPlatform;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="modified_platform_type")
+    private PlatformType modifiedPlatformType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="created_platform_type")
+    private PlatformType createdPlatformType;
 
     public String getIdentifier() {
         return identifier;
@@ -159,5 +175,45 @@ public class IsolationPoint extends EntityWithTenant {
 
     public void setRevIdx(Integer revIdx) {
         this.revIdx = revIdx;
+    }
+
+    @Override
+    public String getModifiedPlatform() {
+        return modifiedPlatform;
+    }
+
+    @Override
+    public void setModifiedPlatform(String modifiedPlatform) {
+        this.modifiedPlatform = modifiedPlatform;
+    }
+
+    @Override
+    public String getCreatedPlatform() {
+        return createdPlatform;
+    }
+
+    @Override
+    public void setCreatedPlatform(String createdPlatform) {
+        this.createdPlatform = createdPlatform;
+    }
+
+    @Override
+    public PlatformType getModifiedPlatformType() {
+        return modifiedPlatformType;
+    }
+
+    @Override
+    public void setModifiedPlatformType(PlatformType modifiedPlatformType) {
+        this.modifiedPlatformType = modifiedPlatformType;
+    }
+
+    @Override
+    public PlatformType getCreatedPlatformType() {
+        return createdPlatformType;
+    }
+
+    @Override
+    public void setCreatedPlatformType(PlatformType createdPlatformType) {
+        this.createdPlatformType = createdPlatformType;
     }
 }

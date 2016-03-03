@@ -815,5 +815,10 @@ public class EventService extends FieldIdPersistenceService {
 
         return currentModDate.equals(eventModDate);
     }
+
+    public List<ThingEvent> getAssetEvents(Asset asset) {
+        QueryBuilder<ThingEvent> eventsQuery = createTenantSecurityBuilder(ThingEvent.class).addSimpleWhere("asset", asset);
+        return persistenceService.findAll(eventsQuery);
+    }
 }
 

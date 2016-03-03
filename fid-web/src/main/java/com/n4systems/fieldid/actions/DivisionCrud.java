@@ -25,7 +25,7 @@ import com.opensymphony.xwork2.validator.annotations.Validation;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
 @Validation
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageEndUsers})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_END_USERS})
 public class DivisionCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(DivisionCrud.class);

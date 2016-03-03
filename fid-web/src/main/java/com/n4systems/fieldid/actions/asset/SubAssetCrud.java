@@ -28,7 +28,7 @@ import com.n4systems.model.SubAsset;
 import com.n4systems.model.utils.FindSubAssets;
 import com.n4systems.security.Permissions;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
+@UserPermissionFilter(userRequiresOneOf={Permissions.TAG})
 public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValidator {
 
 	private static final long serialVersionUID = 1L;

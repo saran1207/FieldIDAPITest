@@ -12,6 +12,7 @@ public class ApiEvent extends ApiBaseThingEvent {
 	private ApiEventFormResult form;
 	private List<ApiEventAttachment> attachments;
 	private List<ApiEvent> subEvents;
+	private String masterEventSid;
 	
 	public BigDecimal getGpsLatitude() {
 		return gpsLatitude;
@@ -59,5 +60,13 @@ public class ApiEvent extends ApiBaseThingEvent {
 
 	public void setSubEvents(List<ApiEvent> subEvents) {
 		this.subEvents = subEvents;
+	}
+
+	public String getMasterEventSid() {
+		return masterEventSid;
+	}
+
+	public void setMasterEventSid(String masterEventSid) {
+		this.masterEventSid = masterEventSid;
 	}
 }

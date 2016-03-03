@@ -33,6 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.net.URI;
 import java.util.List;
 
+// This page does not appear to be used :-/ -dlai
 public class UserAccountSearchPage extends FieldIDWicketPage {
 
     @SpringBean

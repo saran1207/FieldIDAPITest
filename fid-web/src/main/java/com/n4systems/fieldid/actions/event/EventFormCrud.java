@@ -18,7 +18,8 @@ import com.n4systems.security.Permissions;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.Validations;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
+@Deprecated
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_CONFIG})
 public class EventFormCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 

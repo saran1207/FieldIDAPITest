@@ -24,7 +24,7 @@ import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.Validations;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_CONFIG})
 public class ButtonGroupCrud extends AbstractCrud implements HasDuplicateValueValidator{
 
 	

@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.pages.useraccount;
+package com.n4systems.fieldid.wicket.pages.useraccount.mobileofflineprofile;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.asset.AssetService;
