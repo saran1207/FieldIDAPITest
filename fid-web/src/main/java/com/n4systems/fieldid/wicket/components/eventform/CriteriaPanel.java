@@ -272,7 +272,7 @@ public class CriteriaPanel extends SortableListPanel {
 
     @Override
     protected void onItemMoving(int oldIndex, int newIndex, AjaxRequestTarget target) {
-        //For some reason simply removing and re-adding the critera object to the model stopped working
+        //TODO We have to copy the list before calling add(index, object) due to this bug https://hibernate.atlassian.net/browse/HHH-10375
         List<Criteria> criteriaList = Lists.newArrayList();
         criteriaList.addAll(getCriteriaSection().getCriteria());
 
