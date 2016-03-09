@@ -112,14 +112,13 @@ public class HeaderPanel extends Panel {
             eventHistoryLink.add(new AttributeAppender("class", "mattButtonRight").setSeparator(" "));
         }
 
-        //Its strange that we are using the EditEvent permission to display this link
         if (FieldIDSession.get().getUserSecurityGuard().isAllowedEditEvent() && !FieldIDSession.get().getSessionUser().isReadOnlyUser())
             add(new BookmarkablePageLink<Void>("editAssetLink", IdentifyOrEditAssetPage.class, PageParametersBuilder.id(asset.getId())));
         else
             add(new BookmarkablePageLink<Void>("editAssetLink", LimitedEditAsset.class, PageParametersBuilder.id(asset.getId())) {
                 @Override
                 public boolean isVisible() {
-                    return FieldIDSession.get().getUserSecurityGuard().isAllowedEditAssetDetails();
+                    return FieldIDSession.get().getUserSecurityGuard().isAllowedEditEvent();
                 }
             });
         // Necessary for localization stuff to not break on this page.

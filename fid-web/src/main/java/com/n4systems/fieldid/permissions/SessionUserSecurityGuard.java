@@ -16,11 +16,6 @@ public class SessionUserSecurityGuard implements UserSecurityGuard {
 		return Permissions.hasOneOf(permissions, Permissions.MANAGE_SAFETY_NETWORK);
 	}
 
-	@Override
-	public boolean isAllowedEditAssetDetails() {
-		return Permissions.hasOneOf(permissions, Permissions.EDIT_ASSET_DETAILS);
-	}
-
 	public boolean isAllowedCreateEvent() {
 		return Permissions.hasOneOf(permissions, Permissions.CREATE_EVENT);
 	}
