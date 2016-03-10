@@ -6,6 +6,7 @@ import com.n4systems.fieldid.ws.v1.resources.eventtype.criteria.*;
 import com.n4systems.fieldid.ws.v1.resources.model.DateParam;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.Path;
@@ -15,6 +16,8 @@ import java.util.List;
 @Component
 @Path("eventType")
 public class ApiEventTypeResource extends SetupDataResource<ApiEventType, EventType> {
+	@Autowired
+	private ApiCriteriaRuleResource criteriaRuleResource;
 
 	public ApiEventTypeResource() {
 		super(EventType.class, true);
@@ -116,6 +119,7 @@ public class ApiEventTypeResource extends SetupDataResource<ApiEventType, EventT
 		apiCriteria.getDeficiencies().addAll(criteria.getDeficiencies());
 		apiCriteria.setInstructions(criteria.getInstructions());
 		apiCriteria.setRequired(criteria.isRequired());
+		apiCriteria.setCriteriaRules(criteriaRuleResource.convertAllEntitiesToApiModels(criteria.getRules()));
 
 		return apiCriteria;
 	}
