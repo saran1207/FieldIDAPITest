@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.eventform;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.utils.Predicate;
 import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressedBehavior;
 import com.n4systems.fieldid.wicket.components.AppendToClassIfCondition;
@@ -167,10 +168,18 @@ public class SortableStringListEditor extends SortableListPanel {
 		return getStringList().indexOf(listItem);
 	}
 
-	@Override
+
+    @Override
 	protected void onItemMoving(int oldIndex, int newIndex,	AjaxRequestTarget target) {
-		String movingListItem = getStringList().remove(oldIndex);
-		getStringList().add(newIndex, movingListItem);
+        //TODO We have to copy the list before calling add(index, object) due to this bug https://hibernate.atlassian.net/browse/HHH-10375
+        List <String> stringList = Lists.newArrayList();
+        stringList.addAll(getStringList());
+
+		String movingListItem = stringList.remove(oldIndex);
+        stringList.add(newIndex, movingListItem);
+
+        getStringList().clear();
+        getStringList().addAll(stringList);
 		target.add(this);
 	}
 

@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.eventform;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.event.ScoreService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressedBehavior;
@@ -271,8 +272,16 @@ public class CriteriaPanel extends SortableListPanel {
 
     @Override
     protected void onItemMoving(int oldIndex, int newIndex, AjaxRequestTarget target) {
-        Criteria movingCriteria = getCriteriaSection().getCriteria().remove(oldIndex);
-        getCriteriaSection().getCriteria().add(newIndex, movingCriteria);
+        //TODO We have to copy the list before calling add(index, object) due to this bug https://hibernate.atlassian.net/browse/HHH-10375
+        List<Criteria> criteriaList = Lists.newArrayList();
+        criteriaList.addAll(getCriteriaSection().getCriteria());
+
+        Criteria movingCriteria = criteriaList.remove(oldIndex);
+        criteriaList.add(newIndex, movingCriteria);
+
+        getCriteriaSection().getCriteria().clear();
+        getCriteriaSection().getCriteria().addAll(criteriaList);
+
         target.add(this);
     }
 

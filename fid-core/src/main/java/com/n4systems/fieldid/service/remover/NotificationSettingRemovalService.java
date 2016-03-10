@@ -4,12 +4,10 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.handlers.remover.summary.NotificationSettingDeleteSummary;
 import com.n4systems.model.EventType;
 import com.n4systems.model.notificationsettings.NotificationSetting;
+import com.n4systems.util.persistence.QueryBuilder;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
-
-import javax.persistence.Query;
 
 public class NotificationSettingRemovalService extends FieldIdPersistenceService {
 
@@ -31,13 +29,11 @@ public class NotificationSettingRemovalService extends FieldIdPersistenceService
 		return summary;
 	}
 
-	@SuppressWarnings("unchecked")
 	private List<NotificationSetting> getNotificationsWithEventType(EventType eventType) {
-        HashMap<String, Object> params = new HashMap<String, Object>();
-		params.put("eventTypeId", eventType.getId());
-        Query query = persistenceService.createQuery("FROM " + NotificationSetting.class.getName() + " ns, IN (ns.eventTypes) eventTypeId WHERE eventTypeId = :eventTypeId", params);
+		QueryBuilder<NotificationSetting> query = createUserSecurityBuilder(NotificationSetting.class);
+		query.addSimpleWhere("eventType", eventType);
 
-        return (List<NotificationSetting>)query.getResultList();
+		return persistenceService.findAll(query);
 	}
 
 }
