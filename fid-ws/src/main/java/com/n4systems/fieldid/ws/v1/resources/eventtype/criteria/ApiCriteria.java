@@ -1,10 +1,10 @@
 package com.n4systems.fieldid.ws.v1.resources.eventtype.criteria;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.n4systems.fieldid.ws.v1.resources.event.ApiCriteriaResult;
 import com.n4systems.fieldid.ws.v1.resources.model.ApiReadonlyModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ApiCriteria extends ApiReadonlyModel {
 	private String criteriaType;
@@ -14,6 +14,7 @@ public class ApiCriteria extends ApiReadonlyModel {
 	private List<String> deficiencies = new ArrayList<String>();
 	private ApiCriteriaResult result;
 	private Boolean required;
+	private List<ApiCriteriaRule> criteriaRules;
 
 	protected ApiCriteria(String criteriaType) {
 		this.criteriaType = criteriaType;
@@ -73,5 +74,14 @@ public class ApiCriteria extends ApiReadonlyModel {
 
 	public void setRequired(Boolean required) {
 		this.required = required;
+	}
+
+	public List<ApiCriteriaRule> getCriteriaRules() {
+		return criteriaRules;
+	}
+
+	public ApiCriteria setCriteriaRules(List<ApiCriteriaRule> criteriaRules) {
+		this.criteriaRules = criteriaRules;
+		return this;
 	}
 }
