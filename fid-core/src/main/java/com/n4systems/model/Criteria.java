@@ -28,12 +28,12 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
     @Column(nullable = true, length=5000)
     private /** DD : sept 2013.  TO BE DONE LATER. @Localized **/ String instructions;
 	
-	@Column(name="text", nullable=false, length=511)
+	@Column(name="text", nullable=false, length=2048)
 	@ElementCollection(fetch= FetchType.EAGER)
 	@OrderColumn(name="orderidx")
 	private @Localized List<String> recommendations = new ArrayList<String>();
 	
-	@Column(name="text", nullable=false, length=511)
+	@Column(name="text", nullable=false, length=2048)
 	@ElementCollection(fetch= FetchType.EAGER)
 	@OrderColumn(name="orderidx")
 	private @Localized List<String> deficiencies = new ArrayList<String>();
