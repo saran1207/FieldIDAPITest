@@ -660,6 +660,7 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
      *
      * @param ruleId - A Long representing the ID of a Rule which may have active Queue Items that need to be cleared.
      */
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     private void clearQueueItemsForRule(Long ruleId) {
         Query deleteQuery = getEntityManager().createNativeQuery(CLEAR_QUEUE_ITEMS_FOR_RULE_SQL);
         deleteQuery.setParameter("ruleId", ruleId);
