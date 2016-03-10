@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.eventform;
 
 import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressedBehavior;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
@@ -52,9 +53,11 @@ public class StringListEditor extends Panel {
 
         private String string;
         private TextField<String> addItemTextField;
+        private FIDFeedbackPanel feedbackPanel;
 
         public AddStringForm(String id) {
             super(id);
+            add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
             add(addItemTextField = new RequiredTextField<String>("string", new PropertyModel<String>(this, "string")));
             addItemTextField.setOutputMarkupId(true);
             AjaxButton addButton;
@@ -69,9 +72,12 @@ public class StringListEditor extends Panel {
 
                 @Override
                 protected void onError(AjaxRequestTarget target, Form<?> form) {
+                    target.add(feedbackPanel);
                 }
             });
             addItemTextField.add(new ClickOnComponentWhenEnterKeyPressedBehavior(addButton));
+
+            withValidation(addItemTextField);
         }
 
         private void focusOnAddItemTextField(AjaxRequestTarget target) {
@@ -79,5 +85,7 @@ public class StringListEditor extends Panel {
         }
 
     }
+
+    protected void withValidation(TextField<String> addItemTextField) {}
 
 }
