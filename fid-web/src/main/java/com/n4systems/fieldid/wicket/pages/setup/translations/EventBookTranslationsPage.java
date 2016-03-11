@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.setup.translations;
 
 import com.google.common.collect.Lists;
-import com.n4systems.fieldid.service.event.EventBookService;
+import com.n4systems.fieldid.service.eventbook.EventBookService;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.model.EventBook;
 import org.apache.wicket.markup.html.form.DropDownChoice;

@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.setup.eventbook;
 
-import com.n4systems.fieldid.service.event.EventBookService;
+import com.n4systems.fieldid.service.eventbook.EventBookService;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;

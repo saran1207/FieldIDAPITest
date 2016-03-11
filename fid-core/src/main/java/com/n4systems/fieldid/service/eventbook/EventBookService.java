@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.service.event;
+package com.n4systems.fieldid.service.eventbook;
 
 import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.fieldid.service.eventbook.EventBookListFilterCriteria;

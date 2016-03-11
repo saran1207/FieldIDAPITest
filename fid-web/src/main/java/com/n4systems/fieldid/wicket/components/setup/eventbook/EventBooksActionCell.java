@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.wicket.components.setup.eventbook;
 
-import com.n4systems.fieldid.service.event.EventBookService;
+import com.n4systems.fieldid.service.eventbook.EventBookService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.setup.eventbook.EventBooksListAllPage;
