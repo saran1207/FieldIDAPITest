@@ -1,15 +1,12 @@
 package com.n4systems.fieldid.actions.users;
 
-import java.io.File;
-import java.io.IOException;
-
+import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.user.User;
-import com.n4systems.util.ServiceLocator;
-import org.apache.commons.io.FileUtils;
-
-import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.reporting.PathHandler;
+import com.n4systems.util.ServiceLocator;
+
+import java.io.File;
 
 public class FileSystemUserSignatureFileProcessor {
     private S3Service s3Service = ServiceLocator.getS3Service();

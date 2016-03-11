@@ -1,23 +1,18 @@
 package com.n4systems.ejb.impl;
 
-import java.io.File;
-import java.io.IOException;
-
-
-
-import javax.persistence.EntityManager;
-
 import com.amazonaws.AmazonClientException;
-import com.n4systems.fieldid.service.amazon.S3Service;
-import com.n4systems.util.ServiceLocator;
-import org.apache.log4j.Logger;
-
 import com.n4systems.ejb.NoteManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.FileAttachmentException;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Project;
 import com.n4systems.reporting.PathHandler;
+import com.n4systems.util.ServiceLocator;
+import org.apache.log4j.Logger;
+
+import javax.persistence.EntityManager;
+import java.io.File;
 
 
 public class NoteManagerImpl implements NoteManager {

@@ -1,9 +1,9 @@
 package com.n4systems.util;
 
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
 import java.util.Collection;
-
-import org.apache.commons.io.FileUtils;
 
 /**
  * Thin wrapper around the File class, to handle directory specific functions.

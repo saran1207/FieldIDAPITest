@@ -1,10 +1,10 @@
 package com.n4systems.model.builders;
 
-import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
-
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.InternalOrg;
-import static com.n4systems.model.builders.SecondaryOrgBuilder.*;
+
+import static com.n4systems.model.builders.PrimaryOrgBuilder.aPrimaryOrg;
+import static com.n4systems.model.builders.SecondaryOrgBuilder.aSecondaryOrg;
 
 
 

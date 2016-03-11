@@ -1,11 +1,6 @@
 package com.n4systems.util;
 
-import com.n4systems.ejb.AssetManager;
-import com.n4systems.ejb.AutoAttributeManager;
-import com.n4systems.ejb.EventScheduleManager;
-import com.n4systems.ejb.OrderManager;
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProofTestHandler;
+import com.n4systems.ejb.*;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;

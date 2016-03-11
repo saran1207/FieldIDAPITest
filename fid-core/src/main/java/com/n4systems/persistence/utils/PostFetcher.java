@@ -1,12 +1,12 @@
 package com.n4systems.persistence.utils;
 
+import com.n4systems.util.reflection.ReflectionException;
+import com.n4systems.util.reflection.Reflector;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
-import com.n4systems.util.reflection.ReflectionException;
-import com.n4systems.util.reflection.Reflector;
 
 public class PostFetcher {
 	

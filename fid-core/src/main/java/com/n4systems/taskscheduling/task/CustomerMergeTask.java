@@ -1,7 +1,5 @@
 package com.n4systems.taskscheduling.task;
 
-import org.apache.log4j.Logger;
-
 import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -10,6 +8,7 @@ import com.n4systems.services.customer.CustomerMerger;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.MailMessage;
 import com.n4systems.util.mail.TemplateMailMessage;
+import org.apache.log4j.Logger;
 
 public class CustomerMergeTask implements Runnable {
 	private static final Logger logger = Logger.getLogger(CustomerMergeTask.class);

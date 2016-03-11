@@ -4,7 +4,6 @@ package com.n4systems.fieldid.service.attachment;
 import com.n4systems.model.attachment.Attachment;
 
 import java.net.URL;
-import java.util.Collection;
 
 public interface AttachmentHandler<T extends Attachment> {
     

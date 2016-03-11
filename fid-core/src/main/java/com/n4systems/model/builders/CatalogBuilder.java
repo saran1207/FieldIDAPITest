@@ -1,12 +1,12 @@
 package com.n4systems.model.builders;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 import com.n4systems.model.AssetType;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.catalog.Catalog;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CatalogBuilder extends BaseBuilder<Catalog> {
 

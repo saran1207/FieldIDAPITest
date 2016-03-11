@@ -1,19 +1,17 @@
 package com.n4systems.model;
 
-import static org.junit.Assert.*;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
-
 import com.google.common.collect.Sets;
 import com.n4systems.model.builders.AssetBuilder;
 import com.n4systems.model.builders.AssetTypeBuilder;
 import com.n4systems.model.builders.InfoFieldBeanBuilder;
 import com.n4systems.model.builders.InfoOptionBeanBuilder;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
+
+import static org.junit.Assert.*;
 public class AssetTest {
 
 	private String IDENTIFIER = "ID";

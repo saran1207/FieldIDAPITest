@@ -6,12 +6,10 @@ import com.n4systems.model.attachment.Attachment;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-import java.util.Collection;
 import java.util.Map;
 
 public class FlavourFactory implements ApplicationContextAware,BeanFactoryAware {

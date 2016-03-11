@@ -1,21 +1,20 @@
 package com.n4systems.caching.safetynetwork;
 
-import static com.n4systems.model.builders.OrgBuilder.*;
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.easymock.EasyMock;
-import org.junit.Before;
-import org.junit.Test;
-
 import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.VendorOrgConnectionsListLoader;
 import com.n4systems.test.helpers.FluentArrayList;
+import org.easymock.EasyMock;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.n4systems.model.builders.OrgBuilder.aPrimaryOrg;
+import static org.junit.Assert.assertEquals;
 
 public class VendorListCacheLoaderTest {
 	

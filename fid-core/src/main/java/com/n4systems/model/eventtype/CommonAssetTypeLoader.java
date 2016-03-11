@@ -1,9 +1,9 @@
 package com.n4systems.model.eventtype;
 
-import java.util.List;
-
 import com.n4systems.model.AssetType;
 import com.n4systems.persistence.Transaction;
+
+import java.util.List;
 
 public interface CommonAssetTypeLoader {
 

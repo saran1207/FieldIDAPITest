@@ -1,10 +1,5 @@
 package com.n4systems.api.conversion.orgs;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
 import com.n4systems.api.FullExternalOrgViewBuilder;
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.model.FullExternalOrgView;
@@ -14,6 +9,11 @@ import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.loaders.GlobalIdLoader;
 import com.n4systems.testutils.DummyTransaction;
+import org.junit.Test;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class DivisionOrgToModelConverterTest {
 	

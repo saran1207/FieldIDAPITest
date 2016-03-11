@@ -1,9 +1,8 @@
 package com.n4systems.export.converters;
 
-import org.apache.commons.lang.StringUtils;
-
 import com.n4systems.exceptions.NotImplementedException;
 import com.thoughtworks.xstream.converters.SingleValueConverter;
+import org.apache.commons.lang.StringUtils;
 
 public abstract class ExportValueConverter<T> implements SingleValueConverter {
 

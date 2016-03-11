@@ -1,14 +1,13 @@
 package com.n4systems.ws.utils;
 
-import static org.junit.Assert.assertEquals;
-
-import javax.persistence.EntityManager;
-
-import org.junit.Test;
-
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.ws.exceptions.WsInternalErrorException;
 import com.n4systems.ws.exceptions.WsResourceNotFoundException;
+import org.junit.Test;
+
+import javax.persistence.EntityManager;
+
+import static org.junit.Assert.assertEquals;
 
 public class WsLoaderHelperTest {
 	

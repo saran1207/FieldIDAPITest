@@ -1,15 +1,13 @@
 package com.n4systems.model.safetynetwork;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.NonSecureIdLoader;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 public class SafetyNetworkAssignedAssetEventLoader extends SafetyNetworkEventLoader {
 	private final AssetsByNetworkIdLoader assetsByNetworkIdLoader;

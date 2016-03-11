@@ -1,16 +1,15 @@
 package com.n4systems.api.validation.validators;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.exporting.beanutils.SerializableField;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserByFullNameLoader;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class FullNameUserValidator implements FieldValidator {
 

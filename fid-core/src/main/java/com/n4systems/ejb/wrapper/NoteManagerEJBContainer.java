@@ -1,7 +1,5 @@
 package com.n4systems.ejb.wrapper;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.ejb.NoteManager;
 import com.n4systems.ejb.impl.NoteManagerImpl;
 import com.n4systems.exceptions.FileAttachmentException;
@@ -10,6 +8,8 @@ import com.n4systems.model.Project;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
+
+import javax.persistence.EntityManager;
 
 public class NoteManagerEJBContainer extends EJBTransactionEmulator<NoteManager> implements NoteManager {
 

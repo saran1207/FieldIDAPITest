@@ -1,9 +1,5 @@
 package com.n4systems.fieldid.actions.asset;
 
-import java.util.List;
-
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
@@ -14,6 +10,9 @@ import com.n4systems.security.Permissions;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import java.util.List;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class AssetStatusCrud extends AbstractCrud implements HasDuplicateValueValidator {

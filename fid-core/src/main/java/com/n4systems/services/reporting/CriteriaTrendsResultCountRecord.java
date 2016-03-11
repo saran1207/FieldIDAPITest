@@ -1,7 +1,5 @@
 package com.n4systems.services.reporting;
 
-import com.n4systems.util.chart.StringChartable;
-
 import java.io.Serializable;
 
 public class CriteriaTrendsResultCountRecord implements Serializable {

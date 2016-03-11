@@ -1,9 +1,9 @@
 package com.n4systems.webservice.dto.limitedproductupdate;
 
-import static com.n4systems.webservice.dto.MobileDTOHelper.*;
-
 import com.n4systems.webservice.dto.LocationServiceDTO;
 import com.n4systems.webservice.dto.RequestInformation;
+
+import static com.n4systems.webservice.dto.MobileDTOHelper.isValidServerId;
 
 public class LimitedProductUpdateRequest extends RequestInformation implements LocationServiceDTO {
 

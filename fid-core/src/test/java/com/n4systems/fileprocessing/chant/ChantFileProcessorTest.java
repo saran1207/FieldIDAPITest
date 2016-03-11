@@ -1,12 +1,11 @@
 package com.n4systems.fileprocessing.chant;
 
-import static org.junit.Assert.*;
-
+import com.n4systems.fileprocessing.ChantFileProcessor;
 import com.n4systems.tools.FileDataContainer;
+import com.n4systems.util.ConfigContextRequiredTestCase;
 import org.junit.Test;
 
-import com.n4systems.fileprocessing.ChantFileProcessor;
-import com.n4systems.util.ConfigContextRequiredTestCase;
+import static org.junit.Assert.assertEquals;
 
 public class ChantFileProcessorTest extends ConfigContextRequiredTestCase {
 

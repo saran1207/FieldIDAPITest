@@ -1,15 +1,5 @@
 package com.n4systems.fieldid.actions.projects;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.Test;
-
-
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.user.User;
@@ -18,6 +8,14 @@ import com.n4systems.tools.Pager;
 import com.n4systems.tools.SillyPager;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.SimpleListable;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 public class JobResourcesCrudTest {
 

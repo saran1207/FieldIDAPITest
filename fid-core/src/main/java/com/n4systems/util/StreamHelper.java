@@ -1,11 +1,11 @@
 package com.n4systems.util;
 
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-
-import org.apache.log4j.Logger;
 
 public class StreamHelper {
 	private static Logger logger = Logger.getLogger(StreamHelper.class);

@@ -1,12 +1,12 @@
 package com.n4systems.ejb;
 
-import java.util.List;
-
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.InstructionalVideo;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.persistence.QueryBuilder;
+
+import java.util.List;
 
 public class InstructionalVidoeHelper {
 	

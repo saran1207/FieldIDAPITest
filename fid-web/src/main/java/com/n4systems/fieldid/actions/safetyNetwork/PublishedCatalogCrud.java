@@ -1,28 +1,17 @@
 package com.n4systems.fieldid.actions.safetyNetwork;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
-
-import com.n4systems.ejb.legacy.LegacyAssetType;
-import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.safetynetwork.TypedOrgConnection;
-import com.n4systems.services.TenantFinder;
-import org.apache.log4j.Logger;
-
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.exceptions.NoAccessToTenantException;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.safetynetwork.TypedOrgConnection;
 import com.n4systems.security.Permissions;
+import com.n4systems.services.TenantFinder;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.ImportCatalogService;
 import com.n4systems.services.safetyNetwork.SafetyNetworkAccessService;
@@ -31,6 +20,10 @@ import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.CatalogImportTask;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ListingPair;
+import org.apache.log4j.Logger;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 @UserPermissionFilter(userRequiresOneOf = { Permissions.ManageSafetyNetwork })
 public class PublishedCatalogCrud extends SafetyNetwork {

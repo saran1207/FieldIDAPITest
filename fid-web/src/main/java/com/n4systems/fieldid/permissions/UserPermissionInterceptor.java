@@ -1,11 +1,10 @@
 package com.n4systems.fieldid.permissions;
 
-import org.apache.log4j.Logger;
-
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.utils.ActionInvocationWrapper;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
+import org.apache.log4j.Logger;
 
 public class UserPermissionInterceptor extends AbstractInterceptor {
 	private static final Logger logger = Logger.getLogger(UserPermissionInterceptor.class);

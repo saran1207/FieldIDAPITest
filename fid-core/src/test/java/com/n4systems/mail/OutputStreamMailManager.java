@@ -1,12 +1,11 @@
 package com.n4systems.mail;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import com.n4systems.util.mail.MailMessage;
 
 import javax.mail.MessagingException;
 import javax.mail.NoSuchProviderException;
-
-import com.n4systems.util.mail.MailMessage;
+import java.io.IOException;
+import java.io.OutputStream;
 
 public class OutputStreamMailManager implements MailManager {
 

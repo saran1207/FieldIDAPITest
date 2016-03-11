@@ -1,11 +1,11 @@
 package com.n4systems.caching.safetynetwork;
 
-import java.util.List;
-
 import com.n4systems.caching.SimpleCacheStore;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
+
+import java.util.List;
 
 public class VendorListCacheStore extends SimpleCacheStore<VendorListCacheKey, List<InternalOrg>> {
 

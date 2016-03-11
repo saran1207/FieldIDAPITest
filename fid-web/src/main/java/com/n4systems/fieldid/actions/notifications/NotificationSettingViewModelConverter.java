@@ -1,13 +1,13 @@
 package com.n4systems.fieldid.actions.notifications;
 
-import java.util.Date;
-
 import com.n4systems.model.Tenant;
 import com.n4systems.model.common.RelativeTime;
 import com.n4systems.model.common.SimpleFrequency;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.notificationsettings.UpcomingEventReport;
 import com.n4systems.model.user.User;
+
+import java.util.Date;
 
 public class NotificationSettingViewModelConverter {
 	

@@ -1,17 +1,13 @@
 package com.n4systems.fieldid.actions.helpers;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
+
+import java.util.*;
 
 public class AssetTypeLister {
 	private PersistenceManager persistenceManager;

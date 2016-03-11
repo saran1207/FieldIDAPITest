@@ -4,7 +4,6 @@ import com.n4systems.model.Tenant;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.user.User;
 
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

@@ -1,20 +1,18 @@
 package com.n4systems.fieldid.utils;
 
+import com.n4systems.fieldid.context.InteractionContext;
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.version.FieldIdVersion;
 import com.n4systems.model.PlatformType;
-import com.n4systems.util.ServiceLocator;
-import org.apache.struts2.StrutsStatics;
-
-import rfid.web.helper.SessionUser;
-
-import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
-import com.n4systems.fieldid.context.InteractionContext;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.services.SecurityContext;
+import com.n4systems.util.ServiceLocator;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
+import org.apache.struts2.StrutsStatics;
+import rfid.web.helper.SessionUser;
 
 import java.util.Collection;
 

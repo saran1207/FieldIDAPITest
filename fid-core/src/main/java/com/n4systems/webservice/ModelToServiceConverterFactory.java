@@ -1,7 +1,6 @@
 package com.n4systems.webservice;
 
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
-import com.n4systems.model.Event;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.persistence.loaders.LoaderFactory;

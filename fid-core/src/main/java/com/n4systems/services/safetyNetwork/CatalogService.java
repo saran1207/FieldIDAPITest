@@ -1,14 +1,13 @@
 package com.n4systems.services.safetyNetwork;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
 import com.n4systems.model.*;
-import com.n4systems.model.ButtonGroup;
 import com.n4systems.model.catalog.Catalog;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 public interface CatalogService {
 

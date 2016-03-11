@@ -1,9 +1,9 @@
 package com.n4systems.taskscheduling.task;
 
-import java.util.concurrent.TimeUnit;
-
 import com.n4systems.persistence.CacheManager;
 import com.n4systems.taskscheduling.ScheduledTask;
+
+import java.util.concurrent.TimeUnit;
 
 public class CacheLoggerTask extends ScheduledTask {
 

@@ -1,7 +1,5 @@
 package com.n4systems.model.safetynetwork;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.Asset;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -9,6 +7,8 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import com.n4systems.persistence.utils.PostFetcher;
+
+import javax.persistence.EntityManager;
 
 public class SafetyNetworkAssetLoader extends SecurityFilteredLoader<Asset> {
 	private final FilteredIdLoader<Asset> assetLoader;

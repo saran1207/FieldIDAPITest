@@ -1,20 +1,18 @@
 package com.n4systems.uitags.views;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import com.n4systems.model.Asset;
-import org.apache.struts2.components.UIBean;
-
 import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.model.Asset;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.VendorOrgConnectionsListLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.util.ListingPair;
 import com.opensymphony.xwork2.util.ValueStack;
+import org.apache.struts2.components.UIBean;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SafetyNetworkSmartSearchComponent extends UIBean {
 	public static final String TEMPLATE = "safetyNetworkSmartSearch";

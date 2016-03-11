@@ -1,9 +1,9 @@
 package com.n4systems.util;
 
+import org.apache.log4j.Logger;
+
 import java.util.Collection;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
 
 public class DebugHelper {
 	private static final char TAB = '\t';

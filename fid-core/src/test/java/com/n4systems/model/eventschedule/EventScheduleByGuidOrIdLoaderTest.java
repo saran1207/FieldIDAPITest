@@ -1,6 +1,5 @@
 package com.n4systems.model.eventschedule;
 
-import com.n4systems.model.Event;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
@@ -11,10 +10,7 @@ import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import org.junit.Test;
 
-import javax.persistence.EntityManager;
-
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 public class EventScheduleByGuidOrIdLoaderTest {
 	

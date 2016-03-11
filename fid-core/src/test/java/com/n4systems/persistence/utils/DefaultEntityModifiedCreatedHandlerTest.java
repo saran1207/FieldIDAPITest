@@ -12,9 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static org.easymock.EasyMock.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.*;
 
 public class DefaultEntityModifiedCreatedHandlerTest {
 

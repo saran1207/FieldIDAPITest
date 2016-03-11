@@ -1,17 +1,12 @@
 package com.n4systems.testutils;
 
+import javax.activation.DataHandler;
+import javax.mail.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Date;
 import java.util.Enumeration;
-
-import javax.activation.DataHandler;
-import javax.mail.Address;
-import javax.mail.Flags;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
 
 public class TestDoubleMessage extends Message {
 

@@ -1,11 +1,10 @@
 package com.n4systems.fieldid.service.task;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.downloadlink.DownloadState;
+import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class DownloadLinkService extends FieldIdPersistenceService {

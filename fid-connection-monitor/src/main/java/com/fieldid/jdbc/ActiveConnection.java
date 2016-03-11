@@ -1,14 +1,11 @@
 package com.fieldid.jdbc;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimeZone;
 
 public class ActiveConnection implements Comparable<ActiveConnection>, Serializable {
 	private final long id;

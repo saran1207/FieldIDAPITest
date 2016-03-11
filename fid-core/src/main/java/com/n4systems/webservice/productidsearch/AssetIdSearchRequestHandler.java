@@ -1,15 +1,14 @@
 package com.n4systems.webservice.productidsearch;
 
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import com.n4systems.model.asset.SyncAssetListLoader;
 import com.n4systems.webservice.RequestHandler;
 import com.n4systems.webservice.assetdownload.AssetIdListResponse;
 import com.n4systems.webservice.assetdownload.AssetSearchRequest;
 import com.n4systems.webservice.assetdownload.SyncAsset;
 import com.n4systems.webservice.exceptions.ServiceException;
+import org.apache.log4j.Logger;
+
+import java.util.List;
 
 public class AssetIdSearchRequestHandler implements RequestHandler<AssetSearchRequest, AssetIdListResponse> {
 	private final Logger logger = Logger.getLogger(AssetIdSearchRequestHandler.class);

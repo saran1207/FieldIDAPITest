@@ -12,12 +12,7 @@ import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.user.User;
 
 import javax.persistence.*;
-
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "procedure_definitions")

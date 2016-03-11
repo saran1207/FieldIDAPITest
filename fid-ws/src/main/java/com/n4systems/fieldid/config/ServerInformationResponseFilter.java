@@ -1,11 +1,11 @@
 package com.n4systems.fieldid.config;
 
-import java.util.Date;
-
 import com.n4systems.fieldid.version.FieldIdVersion;
 import com.sun.jersey.spi.container.ContainerRequest;
 import com.sun.jersey.spi.container.ContainerResponse;
 import com.sun.jersey.spi.container.ContainerResponseFilter;
+
+import java.util.Date;
 
 public class ServerInformationResponseFilter implements ContainerResponseFilter {
 

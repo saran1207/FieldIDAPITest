@@ -1,9 +1,9 @@
 package com.n4systems.model.orgs;
 
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
+
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
-
-import com.n4systems.model.security.AllowSafetyNetworkAccess;
 
 
 @SuppressWarnings("serial")

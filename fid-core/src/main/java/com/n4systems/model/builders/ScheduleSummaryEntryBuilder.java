@@ -2,7 +2,6 @@ package com.n4systems.model.builders;
 
 import com.google.common.collect.Lists;
 import com.n4systems.model.AssetType;
-import com.n4systems.model.Event;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.asset.ScheduleSummaryEntry;
 

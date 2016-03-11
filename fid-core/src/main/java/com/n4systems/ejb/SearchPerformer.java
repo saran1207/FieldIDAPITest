@@ -1,14 +1,13 @@
 package com.n4systems.ejb;
 
-import java.util.List;
-
-import javax.mail.search.SearchTerm;
-
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.persistence.search.BaseSearchDefiner;
 import com.n4systems.util.persistence.search.ResultTransformer;
 import com.n4systems.util.persistence.search.SearchDefiner;
 import com.n4systems.util.persistence.search.SortTerm;
+
+import javax.mail.search.SearchTerm;
+import java.util.List;
 
 public interface SearchPerformer {
 

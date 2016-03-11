@@ -1,14 +1,10 @@
 package com.n4systems.taskscheduling.task;
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
 
 import com.n4systems.exporting.AssetExporter;
-import com.n4systems.model.Asset;
-import org.junit.Test;
-
 import com.n4systems.exporting.AutoAttributeExporter;
 import com.n4systems.exporting.CustomerExporter;
 import com.n4systems.exporting.ExporterFactory;
+import com.n4systems.model.Asset;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -17,6 +13,10 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.persistence.savers.Saver;
 import com.n4systems.util.ConfigContextRequiredTestCase;
+import org.junit.Test;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 public class DownloadTaskFactoryTest extends ConfigContextRequiredTestCase {
 

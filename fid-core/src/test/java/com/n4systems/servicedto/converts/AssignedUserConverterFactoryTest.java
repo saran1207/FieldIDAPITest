@@ -1,13 +1,12 @@
 package com.n4systems.servicedto.converts;
 
-import static org.easymock.EasyMock.*;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.persistence.loaders.LoaderFactory;
+import org.junit.Test;
+
+import static org.easymock.EasyMock.*;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.junit.Assert.assertThat;
 
 
 public class AssignedUserConverterFactoryTest {

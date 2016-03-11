@@ -1,12 +1,11 @@
 package com.n4systems.model.eula;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import com.n4systems.util.persistence.QueryBuilder;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 public class LatestEulaAcceptanceLoader extends SecurityFilteredLoader<EulaAcceptance> {
 

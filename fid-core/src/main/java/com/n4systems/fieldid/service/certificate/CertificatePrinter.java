@@ -1,21 +1,14 @@
 package com.n4systems.fieldid.service.certificate;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.List;
-
+import com.n4systems.exceptions.ReportException;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
-
 import org.apache.commons.io.IOUtils;
 
-import com.n4systems.exceptions.ReportException;
+import java.io.*;
+import java.util.List;
 
 public class CertificatePrinter {
 

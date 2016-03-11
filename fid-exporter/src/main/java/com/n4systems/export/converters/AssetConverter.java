@@ -1,18 +1,16 @@
 package com.n4systems.export.converters;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-
-import rfid.ejb.entity.InfoOptionBean;
-
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import rfid.ejb.entity.InfoOptionBean;
+
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class AssetConverter extends EntityWithOwnerConverter<Asset> {
 	protected final EntityManager em;

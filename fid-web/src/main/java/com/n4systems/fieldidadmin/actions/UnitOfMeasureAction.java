@@ -1,8 +1,8 @@
 package com.n4systems.fieldidadmin.actions;
 
-import java.util.Collection;
-
 import com.n4systems.model.UnitOfMeasure;
+
+import java.util.Collection;
 
 public class UnitOfMeasureAction extends AbstractAdminAction {
 	private static final long serialVersionUID = 1L;

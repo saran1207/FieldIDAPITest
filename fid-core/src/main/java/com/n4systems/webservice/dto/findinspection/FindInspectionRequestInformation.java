@@ -1,8 +1,8 @@
 package com.n4systems.webservice.dto.findinspection;
 
-import java.util.Date;
-
 import com.n4systems.webservice.dto.RequestInformation;
+
+import java.util.Date;
 
 public class FindInspectionRequestInformation extends RequestInformation {
 	

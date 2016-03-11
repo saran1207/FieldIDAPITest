@@ -1,16 +1,14 @@
 package com.n4systems.fieldid.actions;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UnitOfMeasureManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.UnitOfMeasure;
 import com.opensymphony.xwork2.Preparable;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UnitOfMeasureAction extends AbstractAction implements  Preparable {
 

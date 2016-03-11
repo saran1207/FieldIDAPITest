@@ -1,6 +1,5 @@
 package com.n4systems.services;
 
-import com.n4systems.model.Event;
 import com.n4systems.model.ThingEvent;
 
 public interface EventScheduleService {

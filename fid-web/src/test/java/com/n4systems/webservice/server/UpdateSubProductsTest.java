@@ -1,15 +1,5 @@
 package com.n4systems.webservice.server;
 
-import static com.n4systems.model.builders.AssetBuilder.*;
-import static com.n4systems.model.builders.SubAssetBuilder.*;
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Test;
-
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exceptions.SubAssetUniquenessException;
@@ -20,6 +10,15 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.test.helpers.FluentArrayList;
 import com.n4systems.webservice.dto.InspectionServiceDTO;
 import com.n4systems.webservice.dto.SubProductMapServiceDTO;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.n4systems.model.builders.AssetBuilder.anAsset;
+import static com.n4systems.model.builders.SubAssetBuilder.aSubAsset;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 
 
 public class UpdateSubProductsTest {

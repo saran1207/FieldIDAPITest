@@ -1,10 +1,5 @@
 package com.n4systems.services.safetyNetwork.catalog;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.ButtonGroup;
 import com.n4systems.model.Tenant;
@@ -12,10 +7,15 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.utils.CleanStateSetFactory;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.catalog.summary.BaseImportSummary;
-import com.n4systems.services.safetyNetwork.catalog.summary.StateSetImportSummary;
 import com.n4systems.services.safetyNetwork.catalog.summary.BaseImportSummary.FailureType;
+import com.n4systems.services.safetyNetwork.catalog.summary.StateSetImportSummary;
 import com.n4systems.services.safetyNetwork.exception.ImportFailureException;
 import org.apache.log4j.Logger;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class CatalogStateSetsImportHandler extends CatalogImportHandler {
 

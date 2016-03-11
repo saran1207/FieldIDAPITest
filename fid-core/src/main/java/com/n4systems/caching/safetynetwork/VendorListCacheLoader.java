@@ -1,13 +1,13 @@
 package com.n4systems.caching.safetynetwork;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.n4systems.caching.CacheLoader;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.VendorOrgConnectionsListLoader;
 import com.n4systems.model.security.OrgOnlySecurityFilter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class VendorListCacheLoader implements CacheLoader<VendorListCacheKey, List<InternalOrg>> {
 

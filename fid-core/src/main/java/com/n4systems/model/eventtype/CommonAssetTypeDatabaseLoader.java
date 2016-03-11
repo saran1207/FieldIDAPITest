@@ -1,9 +1,5 @@
 package com.n4systems.model.eventtype;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.exceptions.IdListTooBigException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
@@ -13,6 +9,9 @@ import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ConfigurationProvider;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 public class CommonAssetTypeDatabaseLoader extends ListLoader<AssetType> implements CommonAssetTypeLoader {
 

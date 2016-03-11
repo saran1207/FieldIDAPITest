@@ -1,9 +1,8 @@
 package com.n4systems.ws.model;
 
-import java.io.Serializable;
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 
 @XmlRootElement
 public abstract class WsModel implements Serializable {

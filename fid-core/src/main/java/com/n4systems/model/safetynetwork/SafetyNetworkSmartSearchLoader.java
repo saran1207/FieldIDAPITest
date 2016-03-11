@@ -1,14 +1,14 @@
 package com.n4systems.model.safetynetwork;
 
-import java.util.List;
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.Asset;
-import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.asset.SmartSearchWhereClause;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.persistence.utils.PostFetcher;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 public class SafetyNetworkSmartSearchLoader extends ListLoader<Asset> {
 	private final VendorLinkedOrgLoader linkedOrgLoader;

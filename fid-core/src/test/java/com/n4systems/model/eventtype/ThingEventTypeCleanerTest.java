@@ -1,21 +1,20 @@
 package com.n4systems.model.eventtype;
 
-import static org.junit.Assert.*;
+import com.n4systems.fileprocessing.ProofTestType;
+import com.n4systems.model.*;
+import com.n4systems.model.api.Cleaner;
+import com.n4systems.model.builders.EventTypeBuilder;
+import com.n4systems.model.builders.TenantBuilder;
+import com.n4systems.model.builders.UserBuilder;
+import org.easymock.EasyMock;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.n4systems.model.*;
-import com.n4systems.model.builders.EventTypeBuilder;
-import com.n4systems.model.builders.UserBuilder;
-import org.easymock.EasyMock;
-import org.junit.Test;
-
-import com.n4systems.fileprocessing.ProofTestType;
-import com.n4systems.model.api.Cleaner;
-import com.n4systems.model.builders.TenantBuilder;
+import static org.junit.Assert.*;
 
 public class ThingEventTypeCleanerTest {
 	private static final String name = "type_name";	

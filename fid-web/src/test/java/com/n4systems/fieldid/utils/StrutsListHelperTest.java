@@ -1,13 +1,12 @@
 package com.n4systems.fieldid.utils;
 
-import static org.junit.Assert.*;
+import com.n4systems.test.helpers.FluentArrayList;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
-
-import com.n4systems.test.helpers.FluentArrayList;
+import static org.junit.Assert.assertEquals;
 
 
 public class StrutsListHelperTest {

@@ -1,22 +1,20 @@
 package com.n4systems.fieldid.actions.safetyNetwork;
 
-import java.util.List;
-
-import com.n4systems.model.safetynetwork.AllPreAssignedAssetsLoader;
-import com.n4systems.model.safetynetwork.BulkRegisterData;
-import com.n4systems.model.safetynetwork.BulkRegisterHelper;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.Asset;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.safetynetwork.AllPreAssignedAssetsLoader;
+import com.n4systems.model.safetynetwork.BulkRegisterData;
+import com.n4systems.model.safetynetwork.BulkRegisterHelper;
 import com.n4systems.model.safetynetwork.SafetyNetworkSmartSearchLoader;
 import com.n4systems.persistence.SimplePager;
-import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.Pager;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.Validation;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import java.util.List;
 
 @Validation
 @SuppressWarnings("serial")

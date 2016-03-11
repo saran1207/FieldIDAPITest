@@ -1,13 +1,5 @@
 package com.n4systems.fieldid.actions;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
-import java.net.URI;
-
-import org.junit.Test;
-
-
 import com.n4systems.fieldid.actions.user.UserWelcomeNotificationProducer;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.user.User;
@@ -15,6 +7,12 @@ import com.n4systems.notifiers.TestSingleNotifier;
 import com.n4systems.notifiers.notifications.UserWelcomeEmail;
 import com.n4systems.util.ConfigContextOverridableTestDouble;
 import com.n4systems.util.uri.ActionURLBuilder;
+import org.junit.Test;
+
+import java.net.URI;
+
+import static org.hamcrest.Matchers.endsWith;
+import static org.junit.Assert.*;
 
 
 public class UserActivationEmailTest {

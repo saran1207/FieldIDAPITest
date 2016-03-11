@@ -1,6 +1,12 @@
 package com.n4systems.model.tenant;
 
-import static org.junit.Assert.*;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.builders.TenantBuilder;
+import com.n4systems.persistence.loaders.AllEntityListLoader;
+import com.n4systems.util.ConfigContextOverridableTestDouble;
+import com.n4systems.util.ConfigEntry;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -8,14 +14,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import com.n4systems.model.Tenant;
-import com.n4systems.model.builders.TenantBuilder;
-import com.n4systems.persistence.loaders.AllEntityListLoader;
-import com.n4systems.util.ConfigContextOverridableTestDouble;
-import com.n4systems.util.ConfigEntry;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class TenantNameAvailabilityCheckerTest {
 	private File reservedTenantNameFile;

@@ -1,17 +1,15 @@
 package com.n4systems.api.validation.validators;
 
-import java.lang.reflect.Field;
-import java.util.Map;
-
-import javax.persistence.Column;
-
-import org.apache.log4j.Logger;
-
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.exceptions.Defect;
 import com.n4systems.exporting.beanutils.SerializableField;
 import com.n4systems.model.security.SecurityFilter;
+import org.apache.log4j.Logger;
+
+import javax.persistence.Column;
+import java.lang.reflect.Field;
+import java.util.Map;
 
 public abstract class AssetViewStringFieldLengthValidator implements FieldValidator  {
 

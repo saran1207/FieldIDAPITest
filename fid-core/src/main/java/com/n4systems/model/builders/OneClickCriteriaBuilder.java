@@ -1,7 +1,7 @@
 package com.n4systems.model.builders;
 
-import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.ButtonGroup;
+import com.n4systems.model.OneClickCriteria;
 
 public class OneClickCriteriaBuilder extends CriteriaBuilder<OneClickCriteria> {
 	private final boolean principal;

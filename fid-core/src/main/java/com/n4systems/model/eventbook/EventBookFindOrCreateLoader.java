@@ -1,9 +1,9 @@
 package com.n4systems.model.eventbook;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.EventBook;
 import com.n4systems.model.security.SecurityFilter;
+
+import javax.persistence.EntityManager;
 
 public class EventBookFindOrCreateLoader extends EventBookByNameLoader {
 	private final EventBookSaver saver;

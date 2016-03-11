@@ -1,11 +1,5 @@
 package com.n4systems.model.assettype;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.Tenant;
@@ -13,6 +7,11 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.loaders.TenantFilteredLoader;
 import com.n4systems.util.persistence.QueryBuilder;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class AssetTypeLoader extends TenantFilteredLoader<AssetType> {
 

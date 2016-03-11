@@ -1,12 +1,10 @@
 package com.n4systems.model.downloadlink;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
-
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.user.User;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class DownloadLinkFactoryTest {
 

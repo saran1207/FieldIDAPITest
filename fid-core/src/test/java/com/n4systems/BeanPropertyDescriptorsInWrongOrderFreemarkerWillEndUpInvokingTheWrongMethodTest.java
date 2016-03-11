@@ -1,27 +1,24 @@
 package com.n4systems;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import com.n4systems.model.Asset;
+import com.n4systems.model.builders.AssetBuilder;
+import com.n4systems.model.security.EntitySecurityEnhancer;
+import com.n4systems.model.security.SecurityLevel;
+import freemarker.ext.beans.BeanModel;
+import freemarker.ext.beans.BeansWrapper;
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.MethodInterceptor;
+import net.sf.cglib.proxy.MethodProxy;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 
-import com.n4systems.model.builders.AssetBuilder;
-import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.MethodProxy;
-
-import org.junit.Ignore;
-import org.junit.Test;
-
-import com.n4systems.model.Asset;
-import com.n4systems.model.security.EntitySecurityEnhancer;
-import com.n4systems.model.security.SecurityLevel;
-
-import freemarker.ext.beans.BeanModel;
-import freemarker.ext.beans.BeansWrapper;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
 //TODO: move to the integeration tests and add integration tests to the ant build.
 public class BeanPropertyDescriptorsInWrongOrderFreemarkerWillEndUpInvokingTheWrongMethodTest {

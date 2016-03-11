@@ -1,12 +1,11 @@
 package com.n4systems.model.asset;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.Asset;
 import com.n4systems.persistence.loaders.NonSecuredListLoader;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RecursiveLinkedChildAssetLoader extends NonSecuredListLoader<Asset> {
 	private final LinkedChildAssetLoader linkedAssetLoader;

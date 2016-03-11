@@ -1,10 +1,9 @@
 package com.n4systems.fieldid.selenium;
 
-import org.junit.runner.RunWith;
-
 import com.n4systems.fieldid.selenium.PackageJunitRunner.AfterPackage;
 import com.n4systems.fieldid.selenium.PackageJunitRunner.BeforePackage;
 import com.n4systems.fieldid.selenium.PackageJunitRunner.SuitePackage;
+import org.junit.runner.RunWith;
 
 @RunWith(PackageJunitRunner.class)
 @SuitePackage("com.n4systems.fieldid.selenium.testcase")

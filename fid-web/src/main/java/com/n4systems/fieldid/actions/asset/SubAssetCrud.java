@@ -1,32 +1,25 @@
 package com.n4systems.fieldid.actions.asset;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
+import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.exceptions.SubAssetUniquenessException;
+import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.asset.helpers.AssetLinkedHelper;
 import com.n4systems.fieldid.actions.helpers.AllEventHelper;
 import com.n4systems.fieldid.actions.helpers.MasterEvent;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.EventType;
-import com.n4systems.model.SubEvent;
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
-
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.exceptions.MissingEntityException;
-import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.SubAssetHelper;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
-import com.n4systems.model.AssociatedEventType;
-import com.n4systems.model.SubAsset;
+import com.n4systems.model.*;
 import com.n4systems.model.utils.FindSubAssets;
 import com.n4systems.security.Permissions;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValidator {

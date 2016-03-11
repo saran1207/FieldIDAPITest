@@ -1,14 +1,13 @@
 package com.n4systems.model.asset;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.Asset;
 import com.n4systems.model.security.AssetNetworkFilter;
 import com.n4systems.persistence.loaders.NonSecuredListLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 public class LinkedChildAssetLoader extends NonSecuredListLoader<Asset> {
 

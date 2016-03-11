@@ -1,7 +1,5 @@
 package com.n4systems.model.safetynetwork;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.caching.Cache;
 import com.n4systems.caching.safetynetwork.VendorListCacheStore;
 import com.n4systems.model.orgs.BaseOrg;
@@ -10,6 +8,8 @@ import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.safetynetwork.TypedOrgConnection.ConnectionType;
 import com.n4systems.persistence.savers.Saver;
+
+import javax.persistence.EntityManager;
 
 public class OrgConnectionSaver extends Saver<OrgConnection> {
 	private final Long houseAccountId;

@@ -1,11 +1,11 @@
 package com.n4systems.model.security;
 
-import javax.persistence.Query;
-
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.persistence.QueryBuilder;
+
+import javax.persistence.Query;
 
 public class TenantOnlySecurityFilter extends AbstractSecurityFilter {
 	private final Long tenantId;

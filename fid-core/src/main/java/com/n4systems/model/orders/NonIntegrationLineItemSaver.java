@@ -1,9 +1,9 @@
 package com.n4systems.model.orders;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.LineItem;
 import com.n4systems.persistence.savers.Saver;
+
+import javax.persistence.EntityManager;
 
 public class NonIntegrationLineItemSaver extends Saver<LineItem> {
 

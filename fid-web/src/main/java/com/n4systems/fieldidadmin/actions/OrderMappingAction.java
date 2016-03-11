@@ -1,18 +1,13 @@
 package com.n4systems.fieldidadmin.actions;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Map;
-
-import rfid.ejb.entity.OrderMappingBean;
-
 import com.n4systems.ejb.legacy.OrderMapping;
 import com.n4systems.model.OrderKey;
 import com.n4systems.util.ListHelper;
+import rfid.ejb.entity.OrderMappingBean;
+
+import java.io.*;
+import java.util.Collection;
+import java.util.Map;
 
 public class OrderMappingAction extends AbstractAdminAction {
 	private static final long serialVersionUID = 1L;

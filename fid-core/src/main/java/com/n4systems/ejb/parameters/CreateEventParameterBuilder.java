@@ -1,16 +1,15 @@
 package com.n4systems.ejb.parameters;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import com.n4systems.ejb.impl.CreateEventParameter;
 import com.n4systems.ejb.impl.EventScheduleBundle;
 import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.tools.FileDataContainer;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class CreateEventParameterBuilder {
 

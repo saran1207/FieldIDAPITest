@@ -1,16 +1,9 @@
 package com.n4systems.export.converters;
 
-import org.apache.commons.lang.StringUtils;
-
-import com.n4systems.model.ComboBoxCriteriaResult;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.OneClickCriteriaResult;
-import com.n4systems.model.SelectCriteriaResult;
-import com.n4systems.model.TextFieldCriteriaResult;
-import com.n4systems.model.UnitOfMeasureCriteria;
-import com.n4systems.model.UnitOfMeasureCriteriaResult;
+import com.n4systems.model.*;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import org.apache.commons.lang.StringUtils;
 
 
 public class CriteriaResultConverter extends ExportConverter {

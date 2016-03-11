@@ -6,10 +6,9 @@ import com.n4systems.model.EventType;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Query;
 import java.util.HashMap;
 import java.util.List;
-
-import javax.persistence.Query;
 
 public class NotificationSettingRemovalService extends FieldIdPersistenceService {
 

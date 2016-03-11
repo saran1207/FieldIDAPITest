@@ -1,16 +1,11 @@
 package com.n4systems.util.properties;
 
-import java.io.File;
+import com.n4systems.exceptions.UncheckedLoadingException;
+import org.apache.commons.io.IOUtils;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-
-import com.n4systems.exceptions.UncheckedLoadingException;
-import com.n4systems.model.Tenant;
-import com.n4systems.reporting.PathHandler;
 
 
 public class HirarchicalPropertiesLoader {

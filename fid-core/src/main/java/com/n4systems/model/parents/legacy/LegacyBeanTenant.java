@@ -1,13 +1,13 @@
 package com.n4systems.model.parents.legacy;
 
+import com.n4systems.model.Tenant;
+import com.n4systems.model.api.HasTenant;
+import com.n4systems.model.security.SecurityDefiner;
+
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
-
-import com.n4systems.model.Tenant;
-import com.n4systems.model.api.HasTenant;
-import com.n4systems.model.security.SecurityDefiner;
 
 @SuppressWarnings("serial")
 @MappedSuperclass

@@ -1,6 +1,8 @@
 package com.n4systems.ejb;
 
-import com.n4systems.model.*;
+import com.n4systems.model.Asset;
+import com.n4systems.model.ThingEvent;
+import com.n4systems.model.ThingEventType;
 
 import java.util.List;
 

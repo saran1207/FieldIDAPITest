@@ -1,6 +1,5 @@
 package com.n4systems.model.eventschedulecount;
 
-import com.n4systems.model.Event;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.security.OwnerAndDownFilter;

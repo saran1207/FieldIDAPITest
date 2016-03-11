@@ -1,11 +1,11 @@
 package com.n4systems.util.uri;
 
-import java.net.URI;
-
 import com.n4systems.model.BaseEntity;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ConfigurationProvider;
 import com.n4systems.util.StringUtils;
+
+import java.net.URI;
 
 public class ActionURLBuilder extends InternalUrlBuilder {
 	

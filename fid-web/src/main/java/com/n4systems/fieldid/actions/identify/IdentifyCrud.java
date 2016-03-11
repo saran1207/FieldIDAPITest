@@ -1,11 +1,5 @@
 package com.n4systems.fieldid.actions.identify;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
-
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.Option;
@@ -16,12 +10,15 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
-import com.n4systems.model.TagOption;
 import com.n4systems.model.Order.OrderType;
+import com.n4systems.model.TagOption;
 import com.n4systems.plugins.PluginFactory;
 import com.n4systems.plugins.integration.OrderResolver;
 import com.n4systems.security.Permissions;
-import com.n4systems.util.ConfigEntry;
+import org.apache.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.Integration)
 @UserPermissionFilter(userRequiresOneOf={Permissions.Tag})

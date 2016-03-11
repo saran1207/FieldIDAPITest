@@ -1,10 +1,10 @@
 package com.n4systems.taskscheduling;
 
+import org.apache.log4j.Logger;
+
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicLong;
-
-import org.apache.log4j.Logger;
 
 public class TaskThreadFactory implements ThreadFactory, UncaughtExceptionHandler {
 	private Logger logger = Logger.getLogger(TaskThreadFactory.class);

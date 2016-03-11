@@ -1,12 +1,6 @@
 package com.n4systems.util.properties;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 public class HierarchicalProperties extends Properties {
 	private static final long serialVersionUID = 1L;

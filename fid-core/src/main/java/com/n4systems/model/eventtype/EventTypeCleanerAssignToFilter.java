@@ -2,7 +2,6 @@ package com.n4systems.model.eventtype;
 
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.model.EventType;
-import com.n4systems.model.ThingEventType;
 import com.n4systems.model.api.Cleaner;
 
 

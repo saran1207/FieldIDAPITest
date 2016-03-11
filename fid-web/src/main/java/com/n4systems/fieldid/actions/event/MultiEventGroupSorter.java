@@ -1,17 +1,10 @@
 package com.n4systems.fieldid.actions.event;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
-import com.n4systems.model.ThingEventType;
 import com.n4systems.model.api.Listable;
+
+import java.util.*;
 
 public class MultiEventGroupSorter {
 	private final class ListableByDisplayNameComparator implements Comparator<Listable<Long>> {

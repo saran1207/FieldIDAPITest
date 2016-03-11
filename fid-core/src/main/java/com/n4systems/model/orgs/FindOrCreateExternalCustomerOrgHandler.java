@@ -1,12 +1,12 @@
 package com.n4systems.model.orgs;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.persistence.savers.Saver;
 import com.n4systems.util.FuzzyResolver;
 import com.n4systems.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public abstract class FindOrCreateExternalCustomerOrgHandler {

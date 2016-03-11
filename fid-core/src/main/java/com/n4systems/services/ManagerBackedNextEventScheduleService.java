@@ -2,7 +2,6 @@ package com.n4systems.services;
 
 import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.fieldid.CopiedToService;
-import com.n4systems.model.Event;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.util.DateHelper;
 

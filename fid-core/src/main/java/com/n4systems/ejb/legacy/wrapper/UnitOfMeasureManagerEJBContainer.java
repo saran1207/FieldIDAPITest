@@ -1,7 +1,5 @@
 package com.n4systems.ejb.legacy.wrapper;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.ejb.legacy.UnitOfMeasureManager;
 import com.n4systems.ejb.legacy.impl.UnitOfMeasureManagerImpl;
 import com.n4systems.ejb.wrapper.EJBTransactionEmulator;
@@ -9,6 +7,8 @@ import com.n4systems.model.UnitOfMeasure;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
+
+import javax.persistence.EntityManager;
 
 public class UnitOfMeasureManagerEJBContainer extends EJBTransactionEmulator<UnitOfMeasureManager> implements UnitOfMeasureManager {
 

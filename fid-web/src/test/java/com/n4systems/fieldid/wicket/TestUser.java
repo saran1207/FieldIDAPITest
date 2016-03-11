@@ -1,10 +1,10 @@
 package com.n4systems.fieldid.wicket;
 
-import java.util.Set;
-
 import com.google.common.collect.Sets;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.security.Permissions;
+
+import java.util.Set;
 
 public enum TestUser {
 

@@ -1,16 +1,15 @@
 package com.n4systems.notifiers.notifications;
 
-import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
-import static com.n4systems.model.builders.SecondaryOrgBuilder.*;
-import static com.n4systems.model.builders.UserBuilder.*;
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
-
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.user.User;
+import org.junit.Test;
+
+import static com.n4systems.model.builders.PrimaryOrgBuilder.aPrimaryOrg;
+import static com.n4systems.model.builders.SecondaryOrgBuilder.aSecondaryOrg;
+import static com.n4systems.model.builders.UserBuilder.aUser;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 public class UserWelcomeEmailTest {

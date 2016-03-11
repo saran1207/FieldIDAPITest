@@ -1,13 +1,12 @@
 package com.n4systems.ws.model.autoattribute;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.n4systems.ws.model.WsModel;
+import com.n4systems.ws.model.assettype.WsInfoOption;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import com.n4systems.ws.model.WsModel;
-import com.n4systems.ws.model.assettype.WsInfoOption;
+import java.util.ArrayList;
+import java.util.List;
 
 @XmlRootElement
 public class WsAutoAttributeDefinition extends WsModel {

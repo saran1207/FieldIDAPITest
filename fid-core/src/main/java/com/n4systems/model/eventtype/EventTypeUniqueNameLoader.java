@@ -1,12 +1,12 @@
 package com.n4systems.model.eventtype;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.EventType;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+
+import javax.persistence.EntityManager;
 
 /**
  * Given a name String, finds a new unique EventType name.  Names are generated via the format String.

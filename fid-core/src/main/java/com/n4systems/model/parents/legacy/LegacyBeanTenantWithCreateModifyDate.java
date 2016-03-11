@@ -1,15 +1,14 @@
 package com.n4systems.model.parents.legacy;
 
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
-
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.HasTenant;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.SecurityDefiner;
-import com.n4systems.model.security.SecurityLevel;
+
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
 
 // this class this just temporary while we refactor the legacy beans to use the new AbstractEntity
 // Once a been is moved to it's new version, OrganizationAndTenant should be replaced with EntityWithTenant

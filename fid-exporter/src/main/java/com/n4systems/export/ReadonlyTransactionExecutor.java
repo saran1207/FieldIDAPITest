@@ -1,10 +1,10 @@
 package com.n4systems.export;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.loaders.Loader;
+
+import javax.persistence.EntityManager;
 
 public class ReadonlyTransactionExecutor {
 	

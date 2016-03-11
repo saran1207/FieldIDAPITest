@@ -1,9 +1,9 @@
 package com.n4systems.security;
 
-import java.io.Serializable;
-
 import com.n4systems.model.user.User;
 import com.n4systems.util.ServiceLocator;
+
+import java.io.Serializable;
 
 
 public final class AuditLoggingContext implements Serializable {

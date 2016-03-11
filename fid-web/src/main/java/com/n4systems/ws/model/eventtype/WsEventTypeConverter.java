@@ -1,6 +1,5 @@
 package com.n4systems.ws.model.eventtype;
 
-import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.ThingEventType;
 import com.n4systems.ws.model.WsModelConverter;

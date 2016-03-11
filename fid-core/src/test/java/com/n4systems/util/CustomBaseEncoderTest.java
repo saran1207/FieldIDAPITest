@@ -1,7 +1,8 @@
 package com.n4systems.util;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
 
 public class CustomBaseEncoderTest {
 	private CustomBaseEncoder hex = new CustomBaseEncoder("0123456789ABCDEF".toCharArray());

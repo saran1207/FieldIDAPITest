@@ -1,14 +1,12 @@
 package com.n4systems.api.conversion.event;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Date;
-
 import com.google.common.collect.Lists;
 import com.n4systems.model.*;
 import org.junit.Test;
 
-import com.n4systems.model.EventResult;
+import java.util.Date;
+
+import static org.junit.Assert.assertEquals;
 
 
 public class CriteriaResultFactoryTest {

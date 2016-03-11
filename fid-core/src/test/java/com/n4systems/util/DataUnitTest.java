@@ -1,11 +1,11 @@
 package com.n4systems.util;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 public class DataUnitTest {
 	private static final int FLOAT_SCALE = 10;

@@ -1,11 +1,5 @@
 package com.n4systems.fieldid.config;
 
-import java.net.URI;
-
-import javax.ws.rs.core.MultivaluedMap;
-
-import org.apache.log4j.Logger;
-
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.SecurityContextInitializer;
 import com.n4systems.fieldid.ws.v1.exceptions.ForbiddenException;
@@ -15,6 +9,10 @@ import com.sun.jersey.spi.container.ContainerRequest;
 import com.sun.jersey.spi.container.ContainerRequestFilter;
 import com.sun.jersey.spi.container.ContainerResponse;
 import com.sun.jersey.spi.container.ContainerResponseFilter;
+import org.apache.log4j.Logger;
+
+import javax.ws.rs.core.MultivaluedMap;
+import java.net.URI;
 
 public class ApiSecurityRequestFilter implements ContainerRequestFilter, ContainerResponseFilter {
 	private static Logger logger = Logger.getLogger(ApiSecurityRequestFilter.class);

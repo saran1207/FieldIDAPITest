@@ -1,11 +1,11 @@
 package com.n4systems.persistence.loaders;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.api.Exportable;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+
+import javax.persistence.EntityManager;
 
 public class GlobalIdLoader<T extends Exportable> extends SecurityFilteredLoader<T> {
 	private Class<T> entityClass;

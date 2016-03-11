@@ -9,7 +9,6 @@ import com.n4systems.api.validation.validators.AssetViewValidator;
 import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.services.asset.AssetSaveService;

@@ -1,8 +1,6 @@
 package com.n4systems.model.user;
 
 
-import java.util.Arrays;
-
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
@@ -12,6 +10,8 @@ import com.n4systems.util.persistence.ListableSelect;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+
+import java.util.Arrays;
 
 public class UserListableLoader extends ListableLoader {
 	private boolean noDeleted = false;

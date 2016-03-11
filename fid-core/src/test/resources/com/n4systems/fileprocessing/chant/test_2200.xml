@@ -200,7 +200,7 @@
     <YPrecision>2</YPrecision>
     <XName>Time (sec)</XName>
     <XUnits>sec</XUnits>
-    <TraceColor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+    <TraceColor/>
     <IncludesData>true</IncludesData>
   </dtChartInfo>
   <dtChartInfo>
@@ -213,7 +213,7 @@
     <YPrecision>1</YPrecision>
     <XName>Time (sec)</XName>
     <XUnits>sec</XUnits>
-    <TraceColor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+    <TraceColor/>
     <IncludesData>false</IncludesData>
   </dtChartInfo>
   <dtCH CH="0" X="1.83625591" Y="1.22" />

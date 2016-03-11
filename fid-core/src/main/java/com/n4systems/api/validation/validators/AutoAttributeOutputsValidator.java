@@ -1,7 +1,5 @@
 package com.n4systems.api.validation.validators;
 
-import java.util.Map;
-
 import com.n4systems.api.model.AutoAttributeView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.model.AutoAttributeCriteria;
@@ -10,6 +8,8 @@ import com.n4systems.model.infooption.InfoOptionMapConverter;
 import com.n4systems.model.infooption.MissingInfoOptionException;
 import com.n4systems.model.infooption.StaticOptionResolutionException;
 import com.n4systems.model.security.SecurityFilter;
+
+import java.util.Map;
 
 
 public class AutoAttributeOutputsValidator extends AutoAttributeValidator {

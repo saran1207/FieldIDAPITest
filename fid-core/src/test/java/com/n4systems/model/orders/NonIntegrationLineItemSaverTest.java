@@ -1,15 +1,14 @@
 package com.n4systems.model.orders;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
-import javax.persistence.EntityManager;
-
+import com.n4systems.model.LineItem;
+import com.n4systems.model.Order;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.model.LineItem;
-import com.n4systems.model.Order;
+import javax.persistence.EntityManager;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertSame;
 
 public class NonIntegrationLineItemSaverTest {
 	private NonIntegrationLineItemSaver saver = new NonIntegrationLineItemSaver();

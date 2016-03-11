@@ -1,9 +1,9 @@
 package com.n4systems.util.uri;
 
-import java.net.URI;
-
 import com.n4systems.model.user.User;
 import com.n4systems.util.ConfigurationProvider;
+
+import java.net.URI;
 
 public class SignupUrlBuilder extends InternalUrlBuilder {
 	private final User referralUser;

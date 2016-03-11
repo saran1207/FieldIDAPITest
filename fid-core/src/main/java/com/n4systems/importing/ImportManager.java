@@ -1,8 +1,8 @@
 package com.n4systems.importing;
 
-import java.io.File;
-
 import com.n4systems.exceptions.FileImportException;
+
+import java.io.File;
 
 public interface ImportManager {
 	

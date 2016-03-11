@@ -1,23 +1,17 @@
 package com.n4systems.fieldid.lang;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import com.n4systems.fieldid.actions.utils.WebSessionMap;
+import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.services.TenantFinder;
+import org.apache.log4j.Logger;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-
-import com.n4systems.fieldid.actions.utils.WebSessionMap;
-import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.Tenant;
-import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.reporting.PathHandler;
-import com.n4systems.services.TenantFinder;
 
 public class TenantLanguageSessionHelper {
 	private static Logger logger = Logger.getLogger(TenantLanguageSessionHelper.class);

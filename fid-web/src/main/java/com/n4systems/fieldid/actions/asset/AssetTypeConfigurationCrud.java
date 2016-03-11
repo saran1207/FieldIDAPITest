@@ -1,24 +1,22 @@
 package com.n4systems.fieldid.actions.asset;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.n4systems.ejb.legacy.LegacyAssetType;
-import com.n4systems.model.AssetType;
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
-
-import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.AssetManager;
+import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.utils.StrutsListHelper;
+import com.n4systems.model.AssetType;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class AssetTypeConfigurationCrud extends AbstractCrud {

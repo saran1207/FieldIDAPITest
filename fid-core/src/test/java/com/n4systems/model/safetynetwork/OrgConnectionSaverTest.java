@@ -1,17 +1,16 @@
 package com.n4systems.model.safetynetwork;
 
-import static org.junit.Assert.*;
-import static org.easymock.EasyMock.*;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.n4systems.caching.safetynetwork.VendorListCacheStore;
 import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.testutils.DummyEntityManager;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 
 public class OrgConnectionSaverTest {
 	

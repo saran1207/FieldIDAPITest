@@ -1,16 +1,15 @@
 package com.n4systems.model;
 
-import static com.n4systems.model.builders.EventBuilder.*;
-import static com.n4systems.model.event.AssignedToUpdate.*;
-import static org.hamcrest.Matchers.*;
-
+import com.n4systems.model.event.AssignedToUpdate;
+import com.n4systems.model.user.User;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.n4systems.model.event.AssignedToUpdate;
-import com.n4systems.model.user.User;
+import static com.n4systems.model.builders.EventBuilder.anEvent;
+import static com.n4systems.model.event.AssignedToUpdate.assignAssetToUser;
+import static org.hamcrest.Matchers.not;
 
 
 public class EventPersistenceNormalizationTest {

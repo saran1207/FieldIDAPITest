@@ -1,21 +1,19 @@
 package com.n4systems.fieldid.actions.projects;
 
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
-import rfid.web.helper.Constants;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProjectManager;
 import com.n4systems.exceptions.AssetAlreadyAttachedException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Asset;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Project;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+import rfid.web.helper.Constants;
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.Projects)
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageJobs})

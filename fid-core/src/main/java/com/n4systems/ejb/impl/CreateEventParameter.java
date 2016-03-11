@@ -1,7 +1,6 @@
 package com.n4systems.ejb.impl;
 
 import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.tools.FileDataContainer;

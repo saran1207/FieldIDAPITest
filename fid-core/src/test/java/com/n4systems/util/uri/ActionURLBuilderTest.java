@@ -1,14 +1,13 @@
 package com.n4systems.util.uri;
 
-import static com.n4systems.model.builders.AssetBuilder.*;
-import static org.junit.Assert.*;
+import com.n4systems.model.Asset;
+import com.n4systems.util.NonDataSourceBackedConfigContext;
+import org.junit.Test;
 
 import java.net.URI;
 
-import com.n4systems.model.Asset;
-import org.junit.Test;
-
-import com.n4systems.util.NonDataSourceBackedConfigContext;
+import static com.n4systems.model.builders.AssetBuilder.anAsset;
+import static org.junit.Assert.assertEquals;
 
 
 public class ActionURLBuilderTest {

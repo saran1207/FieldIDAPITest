@@ -1,13 +1,5 @@
 package com.n4systems.model.eventbook;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
 import com.n4systems.model.EventBook;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
@@ -16,6 +8,13 @@ import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Loads a list of event books.  Note that the security on this list is backwards to our normal security model.

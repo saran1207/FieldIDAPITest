@@ -1,9 +1,8 @@
 package com.n4systems.ejb.legacy;
 
+import com.n4systems.tools.Pager;
 import rfid.ejb.PopulatorCriteria;
 import rfid.ejb.entity.PopulatorLogBean;
-
-import com.n4systems.tools.Pager;
 
 public interface PopulatorLog {
 

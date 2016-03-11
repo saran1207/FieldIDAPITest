@@ -1,11 +1,11 @@
 package com.n4systems.model.location;
 
-import javax.persistence.Query;
-
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.util.persistence.FromTable;
 import com.n4systems.util.persistence.WhereClause;
 import com.n4systems.util.persistence.search.terms.SingleTermDefiner;
+
+import javax.persistence.Query;
 
 public class PredefinedLocationSearchTerm extends SingleTermDefiner implements WhereClause<Long> {
 	private static final long serialVersionUID = 1L;

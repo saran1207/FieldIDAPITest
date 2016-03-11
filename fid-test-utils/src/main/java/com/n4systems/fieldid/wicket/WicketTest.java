@@ -1,17 +1,8 @@
 package com.n4systems.fieldid.wicket;
 
-import static com.google.common.base.Preconditions.*;
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
-import java.io.Serializable;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
+import com.google.common.base.CaseFormat;
+import com.google.common.base.Preconditions;
 import junit.framework.Assert;
-
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -30,8 +21,16 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.junit.Before;
 
-import com.google.common.base.CaseFormat;
-import com.google.common.base.Preconditions;
+import java.io.Serializable;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.*;
 
 public abstract class WicketTest<T extends WicketHarness,F extends Component, C> implements IWicketTester, IFixtureFactory<F> {
 	

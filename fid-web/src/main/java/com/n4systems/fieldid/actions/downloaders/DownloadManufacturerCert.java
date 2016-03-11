@@ -1,19 +1,18 @@
 package com.n4systems.fieldid.actions.downloaders;
 
-import java.io.ByteArrayInputStream;
-import java.util.List;
-import java.util.Locale;
-
-import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.NonPrintableEventType;
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.certificate.CertificateService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.safetynetwork.AssetsByNetworkIdLoader;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.ByteArrayInputStream;
+import java.util.List;
+import java.util.Locale;
 
 public class DownloadManufacturerCert extends DownloadAction {
 

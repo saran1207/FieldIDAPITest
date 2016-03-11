@@ -1,14 +1,13 @@
 package com.n4systems.export.converters;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-
 import com.n4systems.model.Asset;
 import com.n4systems.model.SubAsset;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import java.util.List;
 
 
 public class MasterAssetConverter extends AssetConverter {

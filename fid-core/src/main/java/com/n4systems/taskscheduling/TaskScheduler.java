@@ -1,16 +1,14 @@
 package com.n4systems.taskscheduling;
 
+import com.n4systems.model.taskconfig.TaskConfig;
+import com.n4systems.model.taskconfig.TaskConfigSaver;
 import it.sauronsoftware.cron4j.Scheduler;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
-
-import com.n4systems.model.taskconfig.TaskConfig;
-import com.n4systems.model.taskconfig.TaskConfigSaver;
 
 public class TaskScheduler {
 	private static final Logger logger = Logger.getLogger(TaskScheduler.class);

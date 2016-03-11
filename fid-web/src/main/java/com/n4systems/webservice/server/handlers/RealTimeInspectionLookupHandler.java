@@ -1,12 +1,12 @@
 package com.n4systems.webservice.server.handlers;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import com.n4systems.model.Event;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.event.NewestEventsForAssetIdLoader;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class RealTimeInspectionLookupHandler {
 

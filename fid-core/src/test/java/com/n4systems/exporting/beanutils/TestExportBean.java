@@ -1,12 +1,12 @@
 package com.n4systems.exporting.beanutils;
 
+import com.n4systems.api.model.CriteriaResultView;
+import com.n4systems.api.validation.validators.NotNullValidator;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.n4systems.api.model.CriteriaResultView;
-import com.n4systems.api.validation.validators.NotNullValidator;
 
 public class TestExportBean {
 	@SerializableField(title = "Type", order = 0, validators = {NotNullValidator.class})

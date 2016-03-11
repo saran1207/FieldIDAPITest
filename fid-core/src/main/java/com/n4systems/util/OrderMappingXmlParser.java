@@ -1,11 +1,10 @@
 package com.n4systems.util;
 
-import java.util.List;
-
-import rfid.ejb.entity.OrderMappingBean;
-
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import rfid.ejb.entity.OrderMappingBean;
+
+import java.util.List;
 
 public class OrderMappingXmlParser {
 	private XStream xStream;

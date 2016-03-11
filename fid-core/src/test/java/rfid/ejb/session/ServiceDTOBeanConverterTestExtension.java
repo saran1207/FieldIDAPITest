@@ -1,8 +1,8 @@
 package rfid.ejb.session;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.ejb.legacy.impl.ServiceDTOBeanConverterImpl;
+
+import javax.persistence.EntityManager;
 
 public class ServiceDTOBeanConverterTestExtension extends ServiceDTOBeanConverterImpl {
 	

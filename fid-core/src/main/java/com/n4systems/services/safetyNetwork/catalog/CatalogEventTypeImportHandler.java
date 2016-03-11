@@ -1,20 +1,20 @@
 package com.n4systems.services.safetyNetwork.catalog;
 
-import static com.n4systems.model.eventtype.EventTypeCleanerFactory.*;
+import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.model.*;
+import com.n4systems.model.user.User;
+import com.n4systems.services.safetyNetwork.CatalogService;
+import com.n4systems.services.safetyNetwork.catalog.summary.BaseImportSummary.FailureType;
+import com.n4systems.services.safetyNetwork.catalog.summary.EventTypeImportSummary;
+import com.n4systems.services.safetyNetwork.exception.ImportFailureException;
+import com.n4systems.util.ListingPair;
+import org.apache.log4j.Logger;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.model.*;
-import com.n4systems.model.user.User;
-import com.n4systems.services.safetyNetwork.CatalogService;
-import com.n4systems.services.safetyNetwork.catalog.summary.EventTypeImportSummary;
-import com.n4systems.services.safetyNetwork.catalog.summary.BaseImportSummary.FailureType;
-import com.n4systems.services.safetyNetwork.exception.ImportFailureException;
-import com.n4systems.util.ListingPair;
-import org.apache.log4j.Logger;
+import static com.n4systems.model.eventtype.EventTypeCleanerFactory.cleanerFor;
 
 public class CatalogEventTypeImportHandler extends CatalogImportHandler {
 

@@ -1,12 +1,12 @@
 package com.n4systems.model.eventbook;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.EventBook;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+
+import javax.persistence.EntityManager;
 
 public class EventBookByMobileIdLoader extends SecurityFilteredLoader<EventBook> {
 	private String mobileId;

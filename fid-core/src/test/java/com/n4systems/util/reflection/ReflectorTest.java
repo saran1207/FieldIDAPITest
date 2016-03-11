@@ -1,29 +1,17 @@
 package com.n4systems.util.reflection;
 
-import static org.junit.Assert.*;
+import com.n4systems.util.reflection.beans.*;
+import com.n4systems.util.reflection.builders.ReflectionTestBeanABuilder;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import com.n4systems.util.reflection.beans.NonEmptyChild;
-import com.n4systems.util.reflection.beans.ReflectionTestBeanA;
-import com.n4systems.util.reflection.beans.ReflectionTestBeanB;
-import com.n4systems.util.reflection.beans.ReflectionTestBeanC;
-import com.n4systems.util.reflection.beans.ReflectorTestAnno;
-import com.n4systems.util.reflection.builders.ReflectionTestBeanABuilder;
+import static org.junit.Assert.*;
 
 public class ReflectorTest {
 	private class ExposedReflector extends Reflector {

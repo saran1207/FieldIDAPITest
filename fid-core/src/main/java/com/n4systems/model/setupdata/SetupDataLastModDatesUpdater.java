@@ -1,14 +1,13 @@
 package com.n4systems.model.setupdata;
 
-import java.util.Date;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
 import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.UnitOfWork;
 import com.n4systems.services.SetupDataGroup;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.util.Date;
 
 public class SetupDataLastModDatesUpdater implements UnitOfWork<Void> {
 	private final SetupDataGroup group;

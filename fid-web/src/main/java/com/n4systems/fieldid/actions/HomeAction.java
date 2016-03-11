@@ -1,12 +1,5 @@
 package com.n4systems.fieldid.actions;
 
-import java.util.List;
-import java.util.Random;
-
-import org.apache.log4j.Logger;
-
-import rfid.web.helper.Constants;
-
 import com.n4systems.ejb.InstructionalVidoeHelper;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
@@ -18,6 +11,11 @@ import com.n4systems.model.ui.releasenotes.ReleaseNotes;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.JobListService;
 import com.n4systems.tools.Pager;
+import org.apache.log4j.Logger;
+import rfid.web.helper.Constants;
+
+import java.util.List;
+import java.util.Random;
 
 public class HomeAction extends AbstractAction {
 	private static final Logger logger = Logger.getLogger(HomeAction.class);

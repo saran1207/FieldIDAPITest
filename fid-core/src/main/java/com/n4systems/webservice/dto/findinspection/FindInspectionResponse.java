@@ -1,9 +1,9 @@
 package com.n4systems.webservice.dto.findinspection;
 
+import com.n4systems.webservice.dto.InspectionServiceDTO;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.n4systems.webservice.dto.InspectionServiceDTO;
 
 public class FindInspectionResponse {
 	private List<InspectionServiceDTO> inspections = new ArrayList<InspectionServiceDTO>();

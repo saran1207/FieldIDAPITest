@@ -1,14 +1,14 @@
 package com.n4systems.fieldid.reporting.helpers;
 
+import com.n4systems.model.builders.Builder;
+import com.n4systems.model.search.ColumnMappingGroupView;
+import com.n4systems.model.search.ColumnMappingView;
+import com.n4systems.util.RandomString;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-
-import com.n4systems.model.search.ColumnMappingGroupView;
-import com.n4systems.model.search.ColumnMappingView;
-import com.n4systems.model.builders.Builder;
-import com.n4systems.util.RandomString;
 
 public class ColumnMappingGroupBuilder implements Builder<ColumnMappingGroupView> {
 	private static final ArrayList<ColumnMappingView> EMPTY_MAPPINGS = new ArrayList<ColumnMappingView>();

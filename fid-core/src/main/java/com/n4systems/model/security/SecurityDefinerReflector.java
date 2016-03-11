@@ -1,10 +1,9 @@
 package com.n4systems.model.security;
 
-import java.lang.reflect.Method;
-
+import com.n4systems.model.api.UnsecuredEntity;
 import org.apache.log4j.Logger;
 
-import com.n4systems.model.api.UnsecuredEntity;
+import java.lang.reflect.Method;
 
 public class SecurityDefinerReflector {
 	private final Logger logger = Logger.getLogger(SecurityDefinerReflector.class);

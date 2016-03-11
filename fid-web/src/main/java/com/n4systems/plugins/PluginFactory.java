@@ -1,9 +1,8 @@
 package com.n4systems.plugins;
 
 
-import org.apache.log4j.Logger;
-
 import com.n4systems.plugins.integration.OrderResolver;
+import org.apache.log4j.Logger;
 
 /**
  * Factory for creating implemented plugins.

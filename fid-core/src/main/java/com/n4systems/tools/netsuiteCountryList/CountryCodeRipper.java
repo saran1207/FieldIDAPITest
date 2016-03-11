@@ -1,17 +1,13 @@
 package com.n4systems.tools.netsuiteCountryList;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.n4systems.util.timezone.Country;
 import com.n4systems.util.timezone.CountryList;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+
+import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Takes a file containing a list of countries and their country code in a line separated format of <country code>:<country name>

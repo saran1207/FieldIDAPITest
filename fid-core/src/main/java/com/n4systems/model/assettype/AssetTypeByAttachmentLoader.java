@@ -1,10 +1,10 @@
 package com.n4systems.model.assettype;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
 import com.n4systems.model.AssetType;
 import com.n4systems.persistence.loaders.Loader;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 /**
  *  Returns the AssetType id (or null if one was not found) for a FileAttachment.

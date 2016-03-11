@@ -1,15 +1,15 @@
 package com.n4systems.fieldid.actions.event;
 
-import java.util.Date;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.EventType;
-import com.n4systems.model.AssetType;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.util.DateHelper;
+
+import java.util.Date;
 
 public class CalcNextDateAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;

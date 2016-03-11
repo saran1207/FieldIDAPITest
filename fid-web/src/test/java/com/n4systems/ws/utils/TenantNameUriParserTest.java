@@ -1,12 +1,11 @@
 package com.n4systems.ws.utils;
 
-import static org.junit.Assert.*;
+import com.n4systems.ws.exceptions.WsSecurityException;
+import org.junit.Test;
 
 import java.net.URI;
 
-import org.junit.Test;
-
-import com.n4systems.ws.exceptions.WsSecurityException;
+import static org.junit.Assert.assertEquals;
 
 public class TenantNameUriParserTest {
 	private TenantNameUriParser parser = new TenantNameUriParser();

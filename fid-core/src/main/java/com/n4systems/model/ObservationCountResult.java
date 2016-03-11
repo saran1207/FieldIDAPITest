@@ -1,11 +1,8 @@
 package com.n4systems.model;
 
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
-import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by rrana on 2015-02-02.

@@ -1,16 +1,16 @@
 package com.n4systems.webservice;
 
-import static org.junit.Assert.*;
+import com.n4systems.model.BaseEntity;
+import com.n4systems.tools.SillyPager;
+import com.n4systems.webservice.dto.AbstractBaseServiceDTO;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Test;
-
-import com.n4systems.model.BaseEntity;
-import com.n4systems.tools.SillyPager;
-import com.n4systems.webservice.dto.AbstractBaseServiceDTO;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class PaginatedModelToServiceConverterTest {
 

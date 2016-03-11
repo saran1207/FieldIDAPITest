@@ -1,13 +1,14 @@
 package com.n4systems.util;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.junit.Test;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 public class ArrayUtilsTest {
 

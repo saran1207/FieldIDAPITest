@@ -1,9 +1,9 @@
 package rfid.ejb.entity;
 
+import com.n4systems.model.parents.legacy.LegacyBeanTenantId;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
-import com.n4systems.model.parents.legacy.LegacyBeanTenantId;
 
 @Entity
 @Table(name = "assetextension")

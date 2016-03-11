@@ -1,13 +1,12 @@
 package com.n4systems.model.eula;
 
-import java.util.Date;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+
+import javax.persistence.EntityManager;
+import java.util.Date;
 
 public class CurrentEulaLoader  extends Loader<EULA>   {
 

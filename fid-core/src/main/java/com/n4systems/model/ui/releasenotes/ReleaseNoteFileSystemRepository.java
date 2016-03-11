@@ -1,13 +1,13 @@
 package com.n4systems.model.ui.releasenotes;
 
+import com.n4systems.exceptions.ProcessFailureException;
+import com.n4systems.util.serialization.Serializer;
+import com.n4systems.util.serialization.XStreamSerializer;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-
-import com.n4systems.exceptions.ProcessFailureException;
-import com.n4systems.util.serialization.Serializer;
-import com.n4systems.util.serialization.XStreamSerializer;
 
 public class ReleaseNoteFileSystemRepository implements ReleaseNoteRepository {
 	private final File releaseNoteFile;

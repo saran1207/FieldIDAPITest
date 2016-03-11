@@ -1,23 +1,17 @@
 package com.n4systems.fieldid.permissions;
 
-import static com.n4systems.model.builders.PrimaryOrgBuilder.aPrimaryOrg;
-import static com.n4systems.model.builders.TenantBuilder.aTenant;
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.services.TenantFinder;
+import org.junit.Test;
 
 import java.lang.reflect.Method;
 
-import org.junit.Test;
-
-import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.Tenant;
-import com.n4systems.model.builders.PrimaryOrgBuilder;
-import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.services.TenantFinder;
+import static com.n4systems.model.builders.PrimaryOrgBuilder.aPrimaryOrg;
+import static com.n4systems.model.builders.TenantBuilder.aTenant;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 
 public class SerializableSecurityGuardTest {

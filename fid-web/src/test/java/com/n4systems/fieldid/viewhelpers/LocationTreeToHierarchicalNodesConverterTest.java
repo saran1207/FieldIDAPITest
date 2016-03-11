@@ -1,23 +1,22 @@
 package com.n4systems.fieldid.viewhelpers;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import com.n4systems.model.location.PredefinedLocation;
+import com.n4systems.model.location.PredefinedLocationLevels;
+import com.n4systems.model.location.PredefinedLocationTree;
+import com.n4systems.model.location.PredefinedLocationTreeNode;
+import com.n4systems.uitags.views.HierarchicalNode;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.junit.Test;
+import org.junit.internal.matchers.TypeSafeMatcher;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.junit.Test;
-import org.junit.internal.matchers.TypeSafeMatcher;
-
-import com.n4systems.model.location.PredefinedLocation;
-import com.n4systems.model.location.PredefinedLocationLevels;
-import com.n4systems.model.location.PredefinedLocationTree;
-import com.n4systems.model.location.PredefinedLocationTreeNode;
-import com.n4systems.uitags.views.HierarchicalNode;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 
 
 public class LocationTreeToHierarchicalNodesConverterTest {

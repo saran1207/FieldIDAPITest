@@ -2,8 +2,6 @@ package com.n4systems.model.dashboard.widget;
 
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
-import com.n4systems.model.utils.DateRange;
-import com.n4systems.util.chart.RangeType;
 
 import javax.persistence.*;
 

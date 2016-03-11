@@ -1,9 +1,9 @@
 package com.n4systems.webservice.dto;
 
+import com.n4systems.tools.Pager;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.n4systems.tools.Pager;
 
 public class EmployeeListResponse extends AbstractListResponse {
 	

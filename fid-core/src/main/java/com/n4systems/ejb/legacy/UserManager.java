@@ -1,10 +1,5 @@
 package com.n4systems.ejb.legacy;
 
-import java.net.URI;
-import java.util.List;
-
-import javax.mail.MessagingException;
-
 import com.n4systems.exceptions.DuplicateRfidException;
 import com.n4systems.exceptions.DuplicateUserException;
 import com.n4systems.exceptions.LoginException;
@@ -16,6 +11,10 @@ import com.n4systems.model.user.User;
 import com.n4systems.security.UserType;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
+
+import javax.mail.MessagingException;
+import java.net.URI;
+import java.util.List;
 
 public interface UserManager {
 	

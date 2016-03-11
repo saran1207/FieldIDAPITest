@@ -1,9 +1,9 @@
 package com.n4systems.webservice.assetdownload;
 
+import com.n4systems.webservice.dto.RequestResponse;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.n4systems.webservice.dto.RequestResponse;
 
 
 public class AssetIdListResponse extends RequestResponse {

@@ -1,14 +1,5 @@
 package com.n4systems.model.event;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.Event;
 import com.n4systems.model.EventResult;
 import com.n4systems.model.ThingEvent;
@@ -18,6 +9,9 @@ import com.n4systems.util.persistence.WhereClause.ChainOp;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.n4systems.util.persistence.WhereParameterGroup;
+
+import javax.persistence.EntityManager;
+import java.util.*;
 
 public class SmartFailedEventListLoader extends FailedEventListLoader {
 		

@@ -1,26 +1,17 @@
 package com.n4systems.util.persistence;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
-
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.api.UnsecuredEntity;
-import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.SimplePager;
 import com.n4systems.persistence.utils.PostFetcher;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.persistence.JoinClause.JoinType;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import java.util.*;
 
 
 /**

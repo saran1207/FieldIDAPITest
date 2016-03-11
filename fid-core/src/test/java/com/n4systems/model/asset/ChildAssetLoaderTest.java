@@ -1,18 +1,16 @@
 package com.n4systems.model.asset;
 
-import static com.n4systems.model.builders.AssetBuilder.*;
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.Asset;
+import com.n4systems.testutils.DummyEntityManager;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.testutils.DummyEntityManager;
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.n4systems.model.builders.AssetBuilder.anAsset;
+import static org.junit.Assert.assertEquals;
 
 public class ChildAssetLoaderTest {
 

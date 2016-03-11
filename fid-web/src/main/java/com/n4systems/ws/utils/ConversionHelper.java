@@ -1,9 +1,9 @@
 package com.n4systems.ws.utils;
 
-import java.util.List;
-
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.ws.model.WsModelConverter;
+
+import java.util.List;
 
 public class ConversionHelper {
 	

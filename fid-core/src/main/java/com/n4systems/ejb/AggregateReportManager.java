@@ -1,8 +1,8 @@
 package com.n4systems.ejb;
 
-import java.util.List;
-
 import com.n4systems.util.AggregateReport;
+
+import java.util.List;
 
 public interface AggregateReportManager {
 	public AggregateReport createAggregateReport(List<Long> eventIds);

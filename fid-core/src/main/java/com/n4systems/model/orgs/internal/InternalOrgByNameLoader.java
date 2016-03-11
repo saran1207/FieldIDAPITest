@@ -1,7 +1,5 @@
 package com.n4systems.model.orgs.internal;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
@@ -10,6 +8,8 @@ import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import com.n4systems.services.TenantFinder;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+
+import javax.persistence.EntityManager;
 
 public class InternalOrgByNameLoader extends SecurityFilteredLoader<InternalOrg> {
 	private String name;

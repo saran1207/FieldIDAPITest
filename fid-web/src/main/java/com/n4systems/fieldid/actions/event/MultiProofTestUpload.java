@@ -1,32 +1,24 @@
 package com.n4systems.fieldid.actions.event;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.n4systems.model.Event;
-import com.n4systems.model.EventBook;
-import com.n4systems.model.ThingEvent;
-import com.n4systems.model.eventbook.EventBookListLoader;
-import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProofTestHandler;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fileprocessing.ProofTestType;
+import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
+import com.n4systems.model.eventbook.EventBookListLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ListingPair;
 import com.opensymphony.xwork2.Preparable;
-import org.eclipse.jdt.internal.core.Assert;
-import rfid.web.helper.SessionUser;
+import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
+
+import java.io.File;
+import java.util.*;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
 public class MultiProofTestUpload extends AbstractAction implements Preparable {

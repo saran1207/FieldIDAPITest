@@ -1,10 +1,10 @@
 package com.n4systems.util.timezone;
 
-import java.util.TimeZone;
-
 import com.n4systems.model.api.Listable;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+
+import java.util.TimeZone;
 
 @XStreamAlias("Region")
 public class Region implements Comparable<Region>, Listable<String>  {

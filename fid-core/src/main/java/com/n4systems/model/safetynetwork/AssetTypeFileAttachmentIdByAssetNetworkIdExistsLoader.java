@@ -1,10 +1,10 @@
 package com.n4systems.model.safetynetwork;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
 import com.n4systems.model.Asset;
 import com.n4systems.persistence.loaders.Loader;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 /**
  * A loader to test that an AssetType attachment can be loaded from a given networkId.  The

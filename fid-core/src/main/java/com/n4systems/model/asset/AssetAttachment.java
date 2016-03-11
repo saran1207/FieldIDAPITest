@@ -7,11 +7,8 @@ import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.SecurityDefiner;
 import org.eclipse.jdt.internal.core.Assert;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.UUID;
 
 @Entity

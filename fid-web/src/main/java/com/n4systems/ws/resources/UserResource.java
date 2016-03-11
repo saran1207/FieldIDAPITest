@@ -1,11 +1,11 @@
 package com.n4systems.ws.resources;
 
+import com.n4systems.model.user.User;
+import com.n4systems.ws.model.setupdata.WsUser;
+
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
-
-import com.n4systems.model.user.User;
-import com.n4systems.ws.model.setupdata.WsUser;
 
 
 @Path("/User")

@@ -1,23 +1,23 @@
 package com.n4systems.webservice.server.handlers;
 
-import static com.n4systems.model.builders.AssetBuilder.*;
-import static org.junit.Assert.*;
-import static org.easymock.EasyMock.*;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import com.n4systems.model.Asset;
-import org.junit.Before;
-import org.junit.Test;
-
 import com.n4systems.model.SubAsset;
 import com.n4systems.model.asset.AssetSubAssetsLoader;
 import com.n4systems.model.asset.SmartSearchLoader;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.test.helpers.DateHelper;
 import com.n4systems.test.helpers.FluentArrayList;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import static com.n4systems.model.builders.AssetBuilder.anAsset;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class RealTimeAssetLookupHandlerTest {
 	

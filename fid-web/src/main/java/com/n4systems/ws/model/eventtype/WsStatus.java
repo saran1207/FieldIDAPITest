@@ -1,9 +1,9 @@
 package com.n4systems.ws.model.eventtype;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.EventResult;
+
+import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public enum WsStatus {

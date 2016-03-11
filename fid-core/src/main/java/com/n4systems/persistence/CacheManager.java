@@ -1,10 +1,10 @@
 package com.n4systems.persistence;
 
-import java.util.Arrays;
-
 import org.apache.log4j.Logger;
 import org.hibernate.stat.SecondLevelCacheStatistics;
 import org.hibernate.stat.Statistics;
+
+import java.util.Arrays;
 
 public class CacheManager {
 	private static Logger logger = Logger.getLogger("cache-info");

@@ -1,10 +1,9 @@
 package com.n4systems.persistence.loaders;
 
-import java.util.List;
+import com.n4systems.model.security.SecurityFilter;
 
 import javax.persistence.EntityManager;
-
-import com.n4systems.model.security.SecurityFilter;
+import java.util.List;
 
 public class PassthruListLoader<T> extends ListLoader<T> {
 	private final List<T> entities;

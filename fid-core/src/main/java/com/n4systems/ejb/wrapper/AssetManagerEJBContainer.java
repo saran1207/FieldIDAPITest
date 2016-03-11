@@ -1,11 +1,5 @@
 package com.n4systems.ejb.wrapper;
 
-import java.util.List;
-import java.util.SortedSet;
-
-import javax.persistence.EntityManager;
-
-
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.impl.AssetManagerImpl;
 import com.n4systems.exceptions.NonUniqueAssetException;
@@ -19,10 +13,14 @@ import com.n4systems.model.user.User;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
-import com.n4systems.util.ListingPair;
 import com.n4systems.util.AssetRemovalSummary;
 import com.n4systems.util.AssetTypeGroupRemovalSummary;
 import com.n4systems.util.AssetTypeRemovalSummary;
+import com.n4systems.util.ListingPair;
+
+import javax.persistence.EntityManager;
+import java.util.List;
+import java.util.SortedSet;
 
 public class AssetManagerEJBContainer extends EJBTransactionEmulator<AssetManager> implements AssetManager {
 

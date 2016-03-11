@@ -1,15 +1,14 @@
 package com.n4systems.fieldid.actions.customers;
 
-import java.util.List;
-
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.CustomerMergeTask;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import java.util.List;
 
 public class CustomerMergeAction extends AbstractCrud {
 	

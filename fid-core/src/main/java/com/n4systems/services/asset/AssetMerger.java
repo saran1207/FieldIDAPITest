@@ -1,10 +1,5 @@
 package com.n4systems.services.asset;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -13,13 +8,20 @@ import com.n4systems.exceptions.TenantNotValidForActionException;
 import com.n4systems.exceptions.UsedOnMasterEventException;
 import com.n4systems.exceptions.asset.AssetTypeMissMatchException;
 import com.n4systems.exceptions.asset.DuplicateAssetException;
-import com.n4systems.model.*;
+import com.n4systems.model.Asset;
+import com.n4systems.model.SubAsset;
+import com.n4systems.model.SubEvent;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.services.EventScheduleService;
 import com.n4systems.services.EventScheduleServiceImpl;
 import com.n4systems.util.persistence.QueryBuilder;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class AssetMerger {
 

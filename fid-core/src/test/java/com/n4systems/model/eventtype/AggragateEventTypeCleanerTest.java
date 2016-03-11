@@ -1,14 +1,12 @@
 package com.n4systems.model.eventtype;
 
-import static com.n4systems.model.builders.EventTypeBuilder.*;
-import static org.easymock.EasyMock.*;
-
-import com.n4systems.model.ThingEvent;
+import com.n4systems.model.EventType;
 import com.n4systems.model.ThingEventType;
+import com.n4systems.model.api.Cleaner;
 import org.junit.Test;
 
-import com.n4systems.model.EventType;
-import com.n4systems.model.api.Cleaner;
+import static com.n4systems.model.builders.EventTypeBuilder.anEventType;
+import static org.easymock.EasyMock.*;
 
 
 

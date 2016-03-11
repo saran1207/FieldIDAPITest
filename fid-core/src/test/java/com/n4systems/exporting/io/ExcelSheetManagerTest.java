@@ -1,19 +1,14 @@
 package com.n4systems.exporting.io;
 
-import static org.easymock.EasyMock.*;
+import jxl.write.*;
+import jxl.write.biff.RowsExceededException;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import jxl.write.Label;
-import jxl.write.WritableCell;
-import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;
-import jxl.write.WriteException;
-import jxl.write.biff.RowsExceededException;
-
-import org.junit.Test;
+import static org.easymock.EasyMock.*;
 
 public class ExcelSheetManagerTest {	
 	

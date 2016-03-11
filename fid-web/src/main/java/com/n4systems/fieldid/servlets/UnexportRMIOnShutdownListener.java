@@ -4,11 +4,10 @@ import com.n4systems.rmi.RemoteOrderManager;
 import com.n4systems.services.RemoteOrderManagerServiceInitializer;
 import org.apache.log4j.Logger;
 
-import java.rmi.NoSuchObjectException;
-import java.rmi.server.UnicastRemoteObject;
-
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import java.rmi.NoSuchObjectException;
+import java.rmi.server.UnicastRemoteObject;
 
 public class UnexportRMIOnShutdownListener implements ServletContextListener {
 

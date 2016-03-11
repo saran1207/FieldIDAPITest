@@ -1,7 +1,6 @@
 package com.n4systems.model.eventtype;
 
 import com.n4systems.fieldid.permissions.AlwaysOffSystemSecurityGuardTestDouble;
-import com.n4systems.model.EventType;
 import com.n4systems.model.ThingEventType;
 import org.junit.Test;
 

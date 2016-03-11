@@ -4,8 +4,8 @@
 package com.n4systems.fieldid.actions.search;
 
 import com.n4systems.fieldid.reporting.helpers.ReportColumnFilter;
-import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.search.ColumnMappingView;
 
 final class AssignedToReportColumnFilter implements ReportColumnFilter {
 	private final boolean assignedToEnabled;

@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.version;
 
-import java.util.Properties;
-
 import org.apache.log4j.Logger;
+
+import java.util.Properties;
 
 public class FieldIdVersion {
 	private static Logger logger = Logger.getLogger(FieldIdVersion.class);

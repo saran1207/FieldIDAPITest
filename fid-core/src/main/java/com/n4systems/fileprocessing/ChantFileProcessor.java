@@ -1,11 +1,11 @@
 package com.n4systems.fileprocessing;
 
-import java.io.InputStream;
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
+import com.n4systems.exceptions.FileProcessingException;
+import com.n4systems.graphing.Chart;
+import com.n4systems.graphing.ChartPoint2D;
+import com.n4systems.graphing.ChartSeries;
+import com.n4systems.graphing.GraphFactory;
+import com.n4systems.tools.FileDataContainer;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -13,12 +13,11 @@ import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 
-import com.n4systems.exceptions.FileProcessingException;
-import com.n4systems.graphing.Chart;
-import com.n4systems.graphing.ChartPoint2D;
-import com.n4systems.graphing.ChartSeries;
-import com.n4systems.graphing.GraphFactory;
-import com.n4systems.tools.FileDataContainer;
+import java.io.InputStream;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 /*
  * This is a pulltest processor for Chant files, implementing the FileProcessor interface.  Chant files

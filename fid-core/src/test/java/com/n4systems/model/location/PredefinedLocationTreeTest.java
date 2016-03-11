@@ -1,10 +1,10 @@
 package com.n4systems.model.location;
 
-import static com.n4systems.model.location.EmptyPredefinedLocationTreeMatcher.*;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+
+import static com.n4systems.model.location.EmptyPredefinedLocationTreeMatcher.anEmptyLocationTree;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertThat;
 
 
 public class PredefinedLocationTreeTest {

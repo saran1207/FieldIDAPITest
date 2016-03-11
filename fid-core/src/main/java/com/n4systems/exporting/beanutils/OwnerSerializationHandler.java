@@ -1,10 +1,10 @@
 package com.n4systems.exporting.beanutils;
 
+import com.n4systems.util.StringUtils;
+
 import java.lang.reflect.Field;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import com.n4systems.util.StringUtils;
 
 public class OwnerSerializationHandler extends SerializationHandler<String[]> {
 

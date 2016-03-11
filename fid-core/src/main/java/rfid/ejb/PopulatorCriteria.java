@@ -1,9 +1,9 @@
 package rfid.ejb;
 
+import com.n4systems.ejb.legacy.PopulatorLog;
+
 import java.io.Serializable;
 import java.util.Date;
-
-import com.n4systems.ejb.legacy.PopulatorLog;
 
 
 public class PopulatorCriteria implements Serializable {

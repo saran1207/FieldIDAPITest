@@ -1,13 +1,12 @@
 package com.n4systems.model.catalog;
 
 
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.util.persistence.QueryBuilder;
+
+import javax.persistence.EntityManager;
 
 public class CatalogLoader extends Loader<Catalog> {
 

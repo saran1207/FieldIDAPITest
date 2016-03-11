@@ -2,7 +2,6 @@ package com.n4systems.fieldid.viewhelpers.handlers;
 
 import com.n4systems.fieldid.service.download.TableGenerationContext;
 import com.n4systems.fieldid.service.download.WebOutputHandler;
-import com.n4systems.model.Event;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.eventschedule.NextEventScheduleLoader;
 import com.n4systems.util.DateTimeDefinition;

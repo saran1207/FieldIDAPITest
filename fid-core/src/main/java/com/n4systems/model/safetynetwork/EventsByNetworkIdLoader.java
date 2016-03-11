@@ -1,6 +1,5 @@
 package com.n4systems.model.safetynetwork;
 
-import com.n4systems.model.Event;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.WorkflowState;

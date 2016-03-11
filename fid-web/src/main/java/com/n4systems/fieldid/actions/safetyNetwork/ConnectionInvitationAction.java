@@ -1,11 +1,5 @@
 package com.n4systems.fieldid.actions.safetyNetwork;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.handlers.creator.safetynetwork.ConnectionInvitationHandler;
 import com.n4systems.handlers.creator.safetynetwork.CreateConnectionHandler;
@@ -27,6 +21,11 @@ import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.StringListingPair;
 import com.n4systems.util.uri.ActionURLBuilder;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})

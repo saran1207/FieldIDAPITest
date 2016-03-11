@@ -1,12 +1,12 @@
 package com.n4systems.fieldid.validators;
 
-import java.util.Collection;
-import java.util.List;
-
 import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.opensymphony.xwork2.validator.ValidationException;
 import com.opensymphony.xwork2.validator.validators.FieldValidatorSupport;
+
+import java.util.Collection;
+import java.util.List;
 
 
 

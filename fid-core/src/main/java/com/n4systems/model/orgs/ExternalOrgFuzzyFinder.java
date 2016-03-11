@@ -1,8 +1,8 @@
 package com.n4systems.model.orgs;
 
-import java.util.List;
-
 import com.n4systems.util.FuzzyResolver;
+
+import java.util.List;
 
 
 /**

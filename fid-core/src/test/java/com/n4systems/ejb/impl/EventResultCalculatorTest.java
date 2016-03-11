@@ -1,9 +1,7 @@
 package com.n4systems.ejb.impl;
 
 import com.n4systems.model.*;
-import com.n4systems.model.EventResult;
 import com.n4systems.model.builders.*;
-import com.n4systems.model.builders.ButtonGroupBuilder;
 import org.junit.Before;
 import org.junit.Test;
 

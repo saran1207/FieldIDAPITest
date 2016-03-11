@@ -1,21 +1,14 @@
 package com.n4systems.fieldid.viewhelpers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
 import com.n4systems.model.search.ColumnMappingGroupView;
 import com.n4systems.model.search.ColumnMappingView;
-import org.apache.log4j.Logger;
-
-import com.n4systems.model.Tenant;
 import com.n4systems.util.properties.HierarchicalProperties;
 import com.n4systems.util.properties.HirarchicalPropertiesLoader;
+import org.apache.log4j.Logger;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class ColumnMappingFactory {
 	private static final ConcurrentMap<Class<?>, SortedSet<ColumnMappingGroupView>> classDataMap = new ConcurrentHashMap<Class<?>, SortedSet<ColumnMappingGroupView>>();

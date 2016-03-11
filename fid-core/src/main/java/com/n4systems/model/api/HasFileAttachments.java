@@ -1,8 +1,8 @@
 package com.n4systems.model.api;
 
-import java.util.List;
-
 import com.n4systems.model.FileAttachment;
+
+import java.util.List;
 
 public interface HasFileAttachments {
 	public List<FileAttachment> getAttachments();

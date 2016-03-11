@@ -1,45 +1,21 @@
 package com.n4systems.ejb.legacy.impl;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-
-import javax.persistence.Query;
-
 import com.amazonaws.AmazonClientException;
-import com.n4systems.ejb.EventScheduleManager;
-import com.n4systems.ejb.impl.EventScheduleManagerImpl;
-import com.n4systems.fieldid.service.amazon.S3Service;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetType;
-import com.n4systems.util.ServiceLocator;
-import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
-
-import rfid.ejb.entity.AddAssetHistory;
-import rfid.ejb.entity.AssetInfoOption;
-import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
-import rfid.ejb.entity.AssetCodeMapping;
-
 import com.n4systems.ejb.AutoAttributeManager;
+import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.impl.AutoAttributeManagerImpl;
+import com.n4systems.ejb.impl.EventScheduleManagerImpl;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
+import com.n4systems.ejb.legacy.AssetCodeMappingService;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.ejb.legacy.LegacyAssetType;
-import com.n4systems.ejb.legacy.AssetCodeMappingService;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ImageAttachmentException;
 import com.n4systems.exceptions.InvalidQueryException;
+import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.api.Archivable.EntityState;
@@ -49,9 +25,20 @@ import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.Page;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
+import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import org.apache.log4j.Logger;
+import rfid.ejb.entity.*;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
  
 public class LegacyAssetTypeManager implements LegacyAssetType {

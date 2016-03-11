@@ -1,4 +1,5 @@
 package com.n4systems.exporting;
+
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.event.EventToModelConverter;
 import com.n4systems.api.model.EventView;
@@ -16,8 +17,6 @@ import com.n4systems.exporting.beanutils.ExportMapUnmarshaler;
 import com.n4systems.exporting.beanutils.MarshalingException;
 import com.n4systems.handlers.creator.NullObjectDefaultedEventPersistenceFactory;
 import com.n4systems.handlers.creator.events.EventCreator;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventType;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.ThingEventType;
 import com.n4systems.model.builders.EventBuilder;

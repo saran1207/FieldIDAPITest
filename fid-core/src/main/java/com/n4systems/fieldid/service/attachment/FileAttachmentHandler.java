@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.service.attachment;
 
-import com.google.common.collect.Lists;
 import com.n4systems.model.attachment.LocalFileAttachment;
 import org.apache.commons.io.FileUtils;
 
@@ -9,7 +8,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collection;
 
 public class FileAttachmentHandler extends AbstractAttachmentHandler<LocalFileAttachment> {
 

@@ -1,17 +1,16 @@
 package com.n4systems.ws.handlers;
 
-import static org.junit.Assert.*;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-
-import org.easymock.EasyMock;
-import org.junit.Test;
-
 import com.n4systems.model.Tenant;
 import com.n4systems.model.tenant.TenantByNameLoader;
 import com.n4systems.ws.exceptions.WsSecurityException;
 import com.n4systems.ws.utils.TenantNameUriParser;
+import org.easymock.EasyMock;
+import org.junit.Test;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import static org.junit.Assert.assertEquals;
 
 public class TenantLoadHandlerTest {
 	

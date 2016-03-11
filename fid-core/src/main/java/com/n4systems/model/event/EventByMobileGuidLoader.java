@@ -1,11 +1,11 @@
 package com.n4systems.model.event;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import com.n4systems.util.persistence.QueryBuilder;
+
+import javax.persistence.EntityManager;
 
 public class EventByMobileGuidLoader<T extends AbstractEvent> extends SecurityFilteredLoader<T> {
 

@@ -1,13 +1,11 @@
 package com.n4systems.notifiers.notifications;
 
-import static com.n4systems.model.builders.UserBuilder.*;
-import static org.junit.Assert.*;
-
+import com.n4systems.model.user.User;
 import org.junit.Test;
 
-
-import com.n4systems.model.user.User;
-import com.n4systems.notifiers.notifications.Notification;
+import static com.n4systems.model.builders.UserBuilder.anEmployee;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class NotificationEqualsTest {
 

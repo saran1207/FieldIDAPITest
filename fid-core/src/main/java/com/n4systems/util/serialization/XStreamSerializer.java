@@ -1,10 +1,10 @@
 package com.n4systems.util.serialization;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class XStreamSerializer<T> implements Serializer<T> {
 	

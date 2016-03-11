@@ -1,11 +1,10 @@
 package com.n4systems.notifiers;
 
-import org.apache.log4j.Logger;
-
 import com.n4systems.mail.MailManager;
 import com.n4systems.notifiers.notifications.Notification;
 import com.n4systems.util.mail.MailMessage;
 import com.n4systems.util.mail.TemplateMailMessage;
+import org.apache.log4j.Logger;
 
 public class EmailNotifier implements Notifier {
 	private Logger logger = Logger.getLogger(EmailNotifier.class);

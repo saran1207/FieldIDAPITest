@@ -1,13 +1,11 @@
 package com.n4systems.persistence.archivers;
 
-import java.util.Set;
-
-import javax.persistence.EntityManager;
-
-
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.user.User;
+
+import javax.persistence.EntityManager;
+import java.util.Set;
 
 public class EntityListArchiver<T extends AbstractEntity & Archivable> {
 	private final Class<T> archiveClass;

@@ -7,7 +7,6 @@ import com.n4systems.util.ServiceLocator;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.io.File;
 import java.io.FileInputStream;

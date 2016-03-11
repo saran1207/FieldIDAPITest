@@ -1,14 +1,13 @@
 package com.n4systems.fieldidadmin.actions;
 
-import java.util.List;
-
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
 import com.n4systems.model.PrintOut;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import java.util.List;
 
 public class CustomPrintOutCrud extends DefaultPrintOutCrud {
 	private static final long serialVersionUID = 1L;

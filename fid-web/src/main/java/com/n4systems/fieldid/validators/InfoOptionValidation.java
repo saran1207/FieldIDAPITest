@@ -1,10 +1,10 @@
 package com.n4systems.fieldid.validators;
 
-import java.util.Collection;
-import java.util.List;
-
 import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
+
+import java.util.Collection;
+import java.util.List;
 
 public class InfoOptionValidation {
 	private final Collection<InfoOptionInput> infoOptionInputs;

@@ -1,14 +1,5 @@
 package com.n4systems.fieldid.service.amazon;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
-import com.n4systems.fieldid.service.attachment.Flavour;
-import com.n4systems.fieldid.service.images.ImageService;
-import com.n4systems.model.attachment.Attachment;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
-
 @Deprecated // DELETE THIS
 public class S3ImageAttachmentHandler { //extends S3AttachmentHandler {
 

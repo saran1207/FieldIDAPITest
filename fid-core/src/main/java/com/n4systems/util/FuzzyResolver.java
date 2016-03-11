@@ -1,9 +1,9 @@
 package com.n4systems.util;
 
-import java.util.Collection;
-
 import com.n4systems.util.reflection.ReflectionException;
 import com.n4systems.util.reflection.Reflector;
+
+import java.util.Collection;
 
 public class FuzzyResolver {
 	private static String nonAlphaRegex = "[^a-z]";

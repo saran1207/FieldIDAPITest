@@ -1,13 +1,13 @@
 package com.n4systems.export.converters;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.export.IdWrapper;
 import com.n4systems.export.PersistenceTask;
 import com.n4systems.export.ReadonlyTransactionExecutor;
 import com.n4systems.model.Asset;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+
+import javax.persistence.EntityManager;
 
 public class IdWrapperConverter extends ExportConverter {
 	private final long tenantId;

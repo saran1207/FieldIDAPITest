@@ -1,18 +1,16 @@
 package com.n4systems.ejb.legacy.wrapper;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.ejb.legacy.AssetCodeMappingService;
-import rfid.ejb.entity.AssetCodeMapping;
-
 import com.n4systems.ejb.legacy.impl.AssetCodeMappingManager;
 import com.n4systems.ejb.wrapper.EJBTransactionEmulator;
 import com.n4systems.model.AssetType;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
+import rfid.ejb.entity.AssetCodeMapping;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 public class AssetCodeMappingEJBContainer extends EJBTransactionEmulator<AssetCodeMappingService> implements AssetCodeMappingService {
 

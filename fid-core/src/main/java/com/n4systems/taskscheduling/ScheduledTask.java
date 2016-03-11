@@ -1,9 +1,9 @@
 package com.n4systems.taskscheduling;
 
+import org.apache.log4j.Logger;
+
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
-
-import org.apache.log4j.Logger;
 
 /**
  * The top-level class for Task execution.  Extending classes

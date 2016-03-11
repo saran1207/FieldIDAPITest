@@ -1,10 +1,10 @@
 package com.n4systems.servicedto.converts.util;
 
+import org.apache.log4j.Logger;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import org.apache.log4j.Logger;
 
 public class DtoDateConverter {
 	private static Logger logger = Logger.getLogger(DtoDateConverter.class);  

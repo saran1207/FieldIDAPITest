@@ -1,10 +1,9 @@
 package com.n4systems.model.utils;
 
-import java.util.Comparator;
-
-
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
+
+import java.util.Comparator;
 /**
  * sorts the users into a list so that
  * it goes 

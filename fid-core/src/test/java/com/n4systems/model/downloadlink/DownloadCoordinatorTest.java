@@ -1,15 +1,7 @@
 package com.n4systems.model.downloadlink;
 
-import static org.easymock.EasyMock.*;
-
-import java.util.concurrent.Executor;
-
-import com.n4systems.taskscheduling.task.AssetExportTask;
-import org.junit.Test;
-
-
-import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.Asset;
+import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -17,9 +9,15 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.persistence.savers.Saver;
+import com.n4systems.taskscheduling.task.AssetExportTask;
 import com.n4systems.taskscheduling.task.AutoAttributeExportTask;
 import com.n4systems.taskscheduling.task.CustomerExportTask;
 import com.n4systems.taskscheduling.task.DownloadTaskFactory;
+import org.junit.Test;
+
+import java.util.concurrent.Executor;
+
+import static org.easymock.EasyMock.*;
 
 public class DownloadCoordinatorTest {
 

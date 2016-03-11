@@ -1,13 +1,13 @@
 package com.n4systems.servicedto.converts;
 
-import static com.n4systems.util.ServiceLocator.*;
-
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.model.Asset;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.webservice.dto.ProductServiceDTO;
+
+import static com.n4systems.util.ServiceLocator.getServiceDTOBeanConverter;
 
 public class ProductServiceDTOConverter {
 

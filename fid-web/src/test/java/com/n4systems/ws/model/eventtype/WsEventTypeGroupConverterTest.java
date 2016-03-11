@@ -1,10 +1,9 @@
 package com.n4systems.ws.model.eventtype;
 
-import static org.junit.Assert.*;
-
+import com.n4systems.model.EventTypeGroup;
 import org.junit.Test;
 
-import com.n4systems.model.EventTypeGroup;
+import static org.junit.Assert.assertEquals;
 
 public class WsEventTypeGroupConverterTest {
 	

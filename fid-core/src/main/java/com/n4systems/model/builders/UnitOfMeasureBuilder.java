@@ -1,9 +1,9 @@
 package com.n4systems.model.builders;
 
-import java.util.Date;
-
 import com.n4systems.model.UnitOfMeasure;
 import com.n4systems.model.user.User;
+
+import java.util.Date;
 
 public class UnitOfMeasureBuilder extends AbstractEntityBuilder<UnitOfMeasure> {
 	private final String name;

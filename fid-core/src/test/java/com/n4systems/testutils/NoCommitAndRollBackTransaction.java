@@ -1,11 +1,10 @@
 package com.n4systems.testutils;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-
+import com.n4systems.persistence.Transaction;
 import org.apache.commons.lang.NotImplementedException;
 
-import com.n4systems.persistence.Transaction;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 
 public class NoCommitAndRollBackTransaction implements Transaction {
 

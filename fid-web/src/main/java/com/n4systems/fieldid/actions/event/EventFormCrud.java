@@ -1,22 +1,21 @@
 package com.n4systems.fieldid.actions.event;
 
-import java.util.Collections;
-import java.util.List;
-
 import com.n4systems.ejb.EventManager;
-import com.n4systems.model.ButtonGroup;
-import com.n4systems.model.EventType;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.utils.StrutsListHelper;
+import com.n4systems.model.ButtonGroup;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
+import com.n4systems.model.EventType;
 import com.n4systems.security.Permissions;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.Validations;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import java.util.Collections;
+import java.util.List;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class EventFormCrud extends AbstractCrud {

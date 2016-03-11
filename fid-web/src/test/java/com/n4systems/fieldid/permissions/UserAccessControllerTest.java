@@ -1,14 +1,13 @@
 package com.n4systems.fieldid.permissions;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
-import rfid.web.helper.SessionUser;
-
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.security.Permissions;
+import org.junit.Test;
+import rfid.web.helper.SessionUser;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 
 public class UserAccessControllerTest {

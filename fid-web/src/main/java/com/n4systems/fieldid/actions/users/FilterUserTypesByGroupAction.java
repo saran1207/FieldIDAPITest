@@ -1,12 +1,12 @@
 package com.n4systems.fieldid.actions.users;
 
-import java.util.ArrayList;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.security.UserType;
 import com.n4systems.util.StringListingPair;
 import com.n4systems.util.UserBelongsToFilter;
+
+import java.util.ArrayList;
 
 public class FilterUserTypesByGroupAction extends AbstractAction {
 

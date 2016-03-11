@@ -1,15 +1,14 @@
 package com.n4systems.fieldid.actions.safetyNetwork;
 
-import java.util.List;
-
-import com.n4systems.model.Asset;
-import org.apache.log4j.Logger;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.model.Asset;
 import com.n4systems.model.safetynetwork.SafetyNetworkSmartSearchLoader;
 import com.n4systems.security.Permissions;
+import org.apache.log4j.Logger;
+
+import java.util.List;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})
 public class SafetyNetworkSmartSearchAction extends AbstractAction {

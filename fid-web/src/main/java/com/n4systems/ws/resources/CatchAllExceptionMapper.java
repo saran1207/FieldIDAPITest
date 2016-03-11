@@ -1,12 +1,12 @@
 package com.n4systems.ws.resources;
 
+import org.apache.log4j.Logger;
+
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
-
-import org.apache.log4j.Logger;
 
 @Provider
 public class CatchAllExceptionMapper implements ExceptionMapper<Throwable> {

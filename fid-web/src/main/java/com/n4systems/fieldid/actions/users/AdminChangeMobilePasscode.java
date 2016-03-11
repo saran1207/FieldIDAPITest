@@ -1,7 +1,5 @@
 package com.n4systems.fieldid.actions.users;
 
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.fieldid.actions.user.ChangeMobilePasscode;
@@ -9,6 +7,7 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.validators.HasDuplicateRfidValidator;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
+import org.apache.struts2.interceptor.validation.SkipValidation;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemUsers})
 public class AdminChangeMobilePasscode extends ChangeMobilePasscode  implements HasDuplicateRfidValidator  {

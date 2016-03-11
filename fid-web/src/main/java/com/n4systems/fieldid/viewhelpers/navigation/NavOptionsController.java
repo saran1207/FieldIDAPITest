@@ -1,19 +1,13 @@
 package com.n4systems.fieldid.viewhelpers.navigation;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import rfid.web.helper.SessionUser;
-
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.util.properties.HierarchicalProperties;
+import rfid.web.helper.SessionUser;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
 
 public class NavOptionsController {
 

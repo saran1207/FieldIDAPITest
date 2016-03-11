@@ -1,23 +1,17 @@
 package com.n4systems.fieldid.selenium;
 
-import java.util.Arrays;
-import java.util.List;
-
-import javax.persistence.Query;
-
-import org.apache.log4j.Logger;
-import org.junit.Before;
-
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
-import com.n4systems.fieldid.selenium.persistence.MinimalTenantDataSetup;
-import com.n4systems.fieldid.selenium.persistence.PersistenceCallback;
-import com.n4systems.fieldid.selenium.persistence.PersistenceTemplate;
-import com.n4systems.fieldid.selenium.persistence.Scenario;
-import com.n4systems.fieldid.selenium.persistence.TenantCleaner;
+import com.n4systems.fieldid.selenium.persistence.*;
 import com.n4systems.fieldid.selenium.util.TimeLogger;
 import com.n4systems.model.Tenant;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
+import org.apache.log4j.Logger;
+import org.junit.Before;
+
+import javax.persistence.Query;
+import java.util.Arrays;
+import java.util.List;
 
 public abstract class DBTestCase {
 	private static final Logger logger = Logger.getLogger(DBTestCase.class);

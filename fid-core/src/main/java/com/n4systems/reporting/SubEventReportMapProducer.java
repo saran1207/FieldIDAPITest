@@ -1,7 +1,5 @@
 package com.n4systems.reporting;
 
-import java.io.File;
-
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.event.LastEventDateService;
 import com.n4systems.model.AbstractEvent;
@@ -9,6 +7,8 @@ import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.SubEvent;
 import com.n4systems.util.DateTimeDefinition;
+
+import java.io.File;
 
 public class SubEventReportMapProducer extends AbsractEventReportMapProducer {
 

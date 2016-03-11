@@ -1,16 +1,13 @@
 package com.n4systems.fieldidadmin.actions;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
-import java.util.List;
-
+import com.n4systems.test.helpers.FluentArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.fieldidadmin.actions.ObjectFactor;
-import com.n4systems.fieldidadmin.actions.StrutsAutoGrowingList;
-import com.n4systems.test.helpers.FluentArrayList;
+import java.util.List;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 
 
 public class StrutsAutoGrowingListTest {

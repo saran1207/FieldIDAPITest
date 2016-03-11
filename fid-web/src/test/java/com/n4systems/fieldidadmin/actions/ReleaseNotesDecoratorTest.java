@@ -1,15 +1,14 @@
 package com.n4systems.fieldidadmin.actions;
 
-import static org.junit.Assert.*;
+import com.n4systems.model.ui.releasenotes.BulletPoint;
+import com.n4systems.model.ui.releasenotes.ReleaseNotes;
+import com.n4systems.test.helpers.FluentArrayList;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
-
-import com.n4systems.model.ui.releasenotes.BulletPoint;
-import com.n4systems.model.ui.releasenotes.ReleaseNotes;
-import com.n4systems.test.helpers.FluentArrayList;
+import static org.junit.Assert.assertEquals;
 
 
 public class ReleaseNotesDecoratorTest {

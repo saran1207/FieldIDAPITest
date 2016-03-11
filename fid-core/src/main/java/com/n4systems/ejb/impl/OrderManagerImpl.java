@@ -1,34 +1,13 @@
 package com.n4systems.ejb.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-
-import com.n4systems.services.config.ConfigService;
-import org.apache.log4j.Logger;
-
-import rfid.ejb.entity.OrderMappingBean;
-
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.OrderMapping;
 import com.n4systems.ejb.legacy.impl.OrderMappingManager;
 import com.n4systems.exceptions.OrderProcessingException;
-import com.n4systems.model.Asset;
-import com.n4systems.model.LineItem;
-import com.n4systems.model.Order;
+import com.n4systems.model.*;
 import com.n4systems.model.Order.OrderType;
-import com.n4systems.model.OrderKey;
-import com.n4systems.model.Tenant;
-import com.n4systems.model.orgs.CustomerOrg;
-import com.n4systems.model.orgs.DivisionOrg;
-import com.n4systems.model.orgs.LegacyFindOrCreateCustomerOrgHandler;
-import com.n4systems.model.orgs.LegacyFindOrCreateDivisionOrgHandler;
-import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.orgs.*;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.plugins.PluginException;
@@ -37,10 +16,16 @@ import com.n4systems.plugins.integration.OrderResolver;
 import com.n4systems.plugins.integration.OrderTransfer;
 import com.n4systems.plugins.integration.ShopOrderTransfer;
 import com.n4systems.services.TenantFinder;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
+import org.apache.log4j.Logger;
+import rfid.ejb.entity.OrderMappingBean;
+
+import javax.persistence.EntityManager;
+import java.util.*;
 @SuppressWarnings("deprecation")
  
 public class OrderManagerImpl implements OrderManager {

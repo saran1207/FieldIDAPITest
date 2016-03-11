@@ -1,14 +1,7 @@
 package com.n4systems.services.safetyNetwork;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.*;
-import com.n4systems.model.ButtonGroup;
 import com.n4systems.model.catalog.Catalog;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
@@ -21,6 +14,8 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.SimpleSelect;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+
+import java.util.*;
 
 public class CatalogServiceImpl implements CatalogService {
 

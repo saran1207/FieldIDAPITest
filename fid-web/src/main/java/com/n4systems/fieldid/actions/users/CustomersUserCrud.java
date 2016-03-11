@@ -1,14 +1,10 @@
 package com.n4systems.fieldid.actions.users;
 
-import com.n4systems.fieldid.service.user.UserGroupService;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
-import rfid.web.helper.Constants;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.user.User;
@@ -16,6 +12,8 @@ import com.n4systems.model.user.UserPaginatedLoader;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+import rfid.web.helper.Constants;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageEndUsers})
 public class CustomersUserCrud extends ReadOnlyUserCrud {

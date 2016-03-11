@@ -1,11 +1,11 @@
 package com.n4systems.ws.utils;
 
-import javax.ws.rs.core.UriInfo;
-
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.ws.handlers.TenantLoadHandler;
+
+import javax.ws.rs.core.UriInfo;
 
 public class ResourceContext {
 	private final UriInfo uriInfo;

@@ -3,7 +3,10 @@ package com.n4systems.model.notification;
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.Event;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "assignee_notifications")

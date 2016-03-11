@@ -1,20 +1,10 @@
 package com.n4systems.model.event;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreRemove;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
-
 import com.n4systems.model.Event;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.security.SecurityDefiner;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name="masterevents_subevents")

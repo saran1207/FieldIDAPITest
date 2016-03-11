@@ -14,6 +14,7 @@ import com.n4systems.fieldid.service.event.AssignmentEscalationRuleProcessingSer
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.LastEventDateService;
 import com.n4systems.fieldid.service.event.NotifyEventAssigneeService;
+import com.n4systems.fieldid.service.pentaho.PentahoService;
 import com.n4systems.fieldid.service.procedure.*;
 import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.fieldid.service.sendsearch.SendSearchService;
@@ -183,6 +184,10 @@ public class ServiceLocator implements ApplicationContextAware {
     public static ProcedureDefinitionService getProcedureDefinitionService() {
         return getBean(ProcedureDefinitionService.class);
     }
+
+	public static PentahoService getPentahoService() {
+		return getBean(PentahoService.class);
+	}
 
     public static SvgGenerationService getSvgGenerationService() {
         return getBean(SvgGenerationService.class);

@@ -1,11 +1,5 @@
 package com.n4systems.fieldid.actions.projects;
 
-import java.util.List;
-
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.EmployeeAlreadyAttachedException;
 import com.n4systems.exceptions.MissingEntityException;
@@ -23,6 +17,10 @@ import com.n4systems.tools.Pager;
 import com.n4systems.tools.SillyPager;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import java.util.List;
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.Projects)
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageJobs})

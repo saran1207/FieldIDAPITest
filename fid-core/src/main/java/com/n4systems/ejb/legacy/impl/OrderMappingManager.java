@@ -1,22 +1,18 @@
 package com.n4systems.ejb.legacy.impl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
-import rfid.ejb.entity.OrderMappingBean;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
 import com.n4systems.ejb.legacy.OrderMapping;
 import com.n4systems.model.OrderKey;
 import com.n4systems.model.Tenant;
 import com.n4systems.util.OrderMappingXmlParser;
+import rfid.ejb.entity.OrderMappingBean;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class OrderMappingManager implements OrderMapping {

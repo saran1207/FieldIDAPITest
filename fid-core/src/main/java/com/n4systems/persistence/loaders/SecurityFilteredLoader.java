@@ -1,8 +1,8 @@
 package com.n4systems.persistence.loaders;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.security.SecurityFilter;
+
+import javax.persistence.EntityManager;
 
 
 abstract public class SecurityFilteredLoader<T> extends Loader<T> {

@@ -1,11 +1,10 @@
 package com.n4systems.fieldid.wicket.util;
 
-import java.util.Date;
-import java.util.Locale;
-
+import com.n4systems.model.utils.PlainDate;
 import org.apache.wicket.util.convert.converter.DateConverter;
 
-import com.n4systems.model.utils.PlainDate;
+import java.util.Date;
+import java.util.Locale;
 
 public class PlainDateConverter extends DateConverter {
 	

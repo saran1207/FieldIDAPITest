@@ -1,9 +1,9 @@
 package com.n4systems.fieldid.viewhelpers.handlers;
 
+import com.n4systems.util.StringListingPair;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.n4systems.util.StringListingPair;
 
 public enum PublishedState {
 	PUBLISHED		("label.publishedstateselector", "Publish Over Safety Network", "label.publishedoversafetynetwork", "Published Over Safety Network"),

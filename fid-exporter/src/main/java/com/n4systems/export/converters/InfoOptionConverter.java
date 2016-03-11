@@ -1,9 +1,8 @@
 package com.n4systems.export.converters;
 
-import rfid.ejb.entity.InfoOptionBean;
-
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import rfid.ejb.entity.InfoOptionBean;
 
 public class InfoOptionConverter extends ExportConverter {
 

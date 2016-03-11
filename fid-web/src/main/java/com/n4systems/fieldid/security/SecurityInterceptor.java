@@ -1,15 +1,13 @@
 package com.n4systems.fieldid.security;
 
-import org.apache.log4j.Logger;
-import org.apache.struts2.StrutsStatics;
-
-import rfid.web.helper.SessionUser;
-
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.utils.ActionInvocationWrapper;
 import com.n4systems.security.AuditLoggingContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
+import org.apache.log4j.Logger;
+import org.apache.struts2.StrutsStatics;
+import rfid.web.helper.SessionUser;
 
 /**
  * A Struts 2 interceptor used to initialize and clear the SecurityContext.  Should be run immediately after the

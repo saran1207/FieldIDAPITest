@@ -1,11 +1,10 @@
 package com.n4systems.ws.model.autoattribute;
 
-import rfid.ejb.entity.InfoOptionBean;
-
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.ws.model.WsModelConverter;
 import com.n4systems.ws.model.assettype.WsInfoOption;
 import com.n4systems.ws.model.assettype.WsInfoOptionConverter;
+import rfid.ejb.entity.InfoOptionBean;
 
 public class WsAutoAttributeDefinitionConverter extends WsModelConverter<AutoAttributeDefinition, WsAutoAttributeDefinition> {
 	private final WsModelConverter<InfoOptionBean, WsInfoOption> infoOptionConverter;

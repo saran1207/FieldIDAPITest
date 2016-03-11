@@ -1,9 +1,5 @@
 package com.n4systems.fieldid.actions;
 
-import java.util.List;
-
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
 import com.google.gson.Gson;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
@@ -12,11 +8,10 @@ import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.commenttemplate.CommentTemplate;
 import com.n4systems.security.Permissions;
-import com.opensymphony.xwork2.validator.annotations.CustomValidator;
-import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
-import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
-import com.opensymphony.xwork2.validator.annotations.Validation;
-import com.opensymphony.xwork2.validator.annotations.ValidatorType;
+import com.opensymphony.xwork2.validator.annotations.*;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import java.util.List;
 
 @Validation
 @UserPermissionFilter(userRequiresOneOf = { Permissions.ManageSystemConfig })

@@ -1,15 +1,10 @@
 package com.n4systems.fileprocessing;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-import org.apache.commons.io.IOUtils;
-
 import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.tools.FileDataContainer;
+import org.apache.commons.io.IOUtils;
+
+import java.io.*;
 
 
 abstract public class FileProcessor {

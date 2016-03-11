@@ -1,17 +1,5 @@
 package com.n4systems.ws.resources;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriInfo;
-
 import com.n4systems.model.lastmodified.LastModified;
 import com.n4systems.model.lastmodified.LastModifiedListLoader;
 import com.n4systems.model.safetynetwork.IdLoader;
@@ -24,6 +12,12 @@ import com.n4systems.ws.utils.ConversionHelper;
 import com.n4systems.ws.utils.DateParam;
 import com.n4systems.ws.utils.ResourceContext;
 import com.n4systems.ws.utils.WsLoaderHelper;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class BaseResource<M, W> {
 	protected final ConversionHelper converter;

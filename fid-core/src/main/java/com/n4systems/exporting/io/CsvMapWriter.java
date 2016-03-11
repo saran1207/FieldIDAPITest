@@ -1,13 +1,9 @@
 package com.n4systems.exporting.io;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.util.Map;
-
 import com.n4systems.util.MapUtils;
+
+import java.io.*;
+import java.util.Map;
 
 
 public class CsvMapWriter implements MapWriter {

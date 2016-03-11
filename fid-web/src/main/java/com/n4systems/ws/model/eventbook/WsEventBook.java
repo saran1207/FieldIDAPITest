@@ -1,10 +1,10 @@
 package com.n4systems.ws.model.eventbook;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
 import com.n4systems.ws.model.WsUploadModel;
 import com.n4systems.ws.model.org.WsOrg;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class WsEventBook extends WsUploadModel {

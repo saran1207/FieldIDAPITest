@@ -1,11 +1,6 @@
 package com.n4systems.taskscheduling.task;
 
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
 import com.n4systems.exporting.ImportException;
 import com.n4systems.exporting.Importer;
 import com.n4systems.notifiers.Notifier;
@@ -14,6 +9,10 @@ import com.n4systems.notifiers.notifications.ImportSuccessNotification;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.testutils.DummyTransaction;
+import org.junit.Test;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 public class ImportTaskTest {
 

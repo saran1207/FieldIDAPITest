@@ -1,14 +1,14 @@
 package com.n4systems.persistence;
 
-import static org.junit.Assert.*;
+import com.n4systems.testutils.DummyEntityManager;
+import org.junit.Before;
+import org.junit.Test;
 
 import javax.persistence.EntityManager;
 
 import static org.easymock.EasyMock.*;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.n4systems.testutils.DummyEntityManager;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 
 public class FieldIdTransactionManagerTest {
 	private EntityManager em;

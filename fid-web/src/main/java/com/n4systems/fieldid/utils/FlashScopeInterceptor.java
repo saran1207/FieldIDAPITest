@@ -1,10 +1,9 @@
 package com.n4systems.fieldid.utils;
 
-import org.apache.struts2.ServletActionContext;
-import org.apache.struts2.StrutsStatics;
-
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.StrutsStatics;
 import org.apache.struts2.dispatcher.ServletRedirectResult;
 
 import javax.servlet.http.HttpServletRequest;

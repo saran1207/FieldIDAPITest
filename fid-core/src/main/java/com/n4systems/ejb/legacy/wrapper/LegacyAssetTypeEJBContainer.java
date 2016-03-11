@@ -1,25 +1,23 @@
 package com.n4systems.ejb.legacy.wrapper;
 
-import java.io.File;
-import java.util.Collection;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.ejb.legacy.LegacyAssetType;
-import rfid.ejb.entity.InfoFieldBean;
-
 import com.n4systems.ejb.legacy.impl.LegacyAssetTypeManager;
 import com.n4systems.ejb.wrapper.EJBTransactionEmulator;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ImageAttachmentException;
 import com.n4systems.exceptions.InvalidQueryException;
-import com.n4systems.model.FileAttachment;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.FileAttachment;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.util.ListingPair;
+import rfid.ejb.entity.InfoFieldBean;
+
+import javax.persistence.EntityManager;
+import java.io.File;
+import java.util.Collection;
+import java.util.List;
 
 public class LegacyAssetTypeEJBContainer extends EJBTransactionEmulator<LegacyAssetType> implements LegacyAssetType {
 

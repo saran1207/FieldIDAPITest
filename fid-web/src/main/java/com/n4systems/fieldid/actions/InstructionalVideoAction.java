@@ -1,14 +1,12 @@
 package com.n4systems.fieldid.actions;
 
-import org.apache.log4j.Logger;
-
-import rfid.web.helper.Constants;
-
 import com.n4systems.ejb.InstructionalVidoeHelper;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.InstructionalVideo;
 import com.n4systems.tools.Pager;
+import org.apache.log4j.Logger;
+import rfid.web.helper.Constants;
 
 public class InstructionalVideoAction extends AbstractAction {
 

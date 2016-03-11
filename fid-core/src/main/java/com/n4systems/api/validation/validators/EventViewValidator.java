@@ -1,13 +1,13 @@
 package com.n4systems.api.validation.validators;
 
-import java.util.Map;
-
 import com.n4systems.api.model.EventView;
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.exporting.beanutils.SerializableField;
 import com.n4systems.model.EventType;
 import com.n4systems.model.security.SecurityFilter;
+
+import java.util.Map;
 
 public abstract class EventViewValidator implements FieldValidator {
 	public static final String EVENT_TYPE_KEY = "eventType";

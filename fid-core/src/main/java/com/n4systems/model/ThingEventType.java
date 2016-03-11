@@ -1,7 +1,6 @@
 package com.n4systems.model;
 
 import com.n4systems.fileprocessing.ProofTestType;
-import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;

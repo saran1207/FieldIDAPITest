@@ -1,14 +1,5 @@
 package com.n4systems.fieldid.actions;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
-import rfid.ejb.PopulatorCriteria;
-import rfid.ejb.entity.PopulatorLogBean;
-import rfid.web.helper.Constants;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.PopulatorLog;
 import com.n4systems.fieldid.actions.api.AbstractAction;
@@ -17,6 +8,13 @@ import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.DateHelper;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
+import org.apache.log4j.Logger;
+import rfid.ejb.PopulatorCriteria;
+import rfid.ejb.entity.PopulatorLogBean;
+import rfid.web.helper.Constants;
+
+import java.util.Arrays;
+import java.util.List;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class DataLogAction extends AbstractAction {

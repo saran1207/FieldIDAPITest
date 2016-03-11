@@ -1,6 +1,5 @@
 package com.n4systems.ejb.impl;
 
-import com.n4systems.model.Asset;
 import com.n4systems.model.EventType;
 import com.n4systems.model.Project;
 import com.n4systems.model.api.HasOwner;

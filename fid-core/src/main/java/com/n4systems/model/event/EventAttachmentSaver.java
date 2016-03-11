@@ -1,26 +1,17 @@
 package com.n4systems.model.event;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-
-import javax.persistence.EntityManager;
-
 import com.amazonaws.AmazonServiceException;
-import com.n4systems.fieldid.service.amazon.S3Service;
-import com.n4systems.model.SubEvent;
-import com.n4systems.util.ServiceLocator;
-import org.apache.commons.io.IOUtils;
-
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.NotImplementedException;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Event;
+import com.n4systems.model.FileAttachment;
+import com.n4systems.model.SubEvent;
 import com.n4systems.persistence.savers.Saver;
-import com.n4systems.reporting.PathHandler;
+import com.n4systems.util.ServiceLocator;
+
+import javax.persistence.EntityManager;
 
 public class EventAttachmentSaver extends Saver<FileAttachment> {
 

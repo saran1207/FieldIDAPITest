@@ -1,8 +1,8 @@
 package com.n4systems.persistence;
 
-import java.util.List;
-
 import com.n4systems.tools.Pager;
+
+import java.util.List;
 
 public class SimplePager<T> implements Pager<T> {
 	private final int currentPage;

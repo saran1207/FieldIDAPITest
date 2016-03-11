@@ -1,9 +1,9 @@
 package com.n4systems.webservice.predefinedlocation;
 
+import com.n4systems.webservice.dto.AbstractBaseServiceDTO;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.n4systems.webservice.dto.AbstractBaseServiceDTO;
 
 public class PredefinedLocationServiceDTO extends AbstractBaseServiceDTO {
 	private String name;

@@ -1,11 +1,11 @@
 package com.n4systems.model.messages;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+
+import javax.persistence.EntityManager;
 
 public class UnreadMessageCountLoader extends SecurityFilteredLoader<Long> {
 

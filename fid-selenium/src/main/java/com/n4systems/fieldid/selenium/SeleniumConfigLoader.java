@@ -1,12 +1,12 @@
 package com.n4systems.fieldid.selenium;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Properties;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.log4j.Logger;
 
 public class SeleniumConfigLoader {
 	private static final Logger logger = Logger.getLogger(SeleniumConfigLoader.class);

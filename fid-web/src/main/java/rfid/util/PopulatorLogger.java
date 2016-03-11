@@ -1,10 +1,9 @@
 package rfid.util;
 
-import rfid.ejb.entity.PopulatorLogBean;
-
 import com.n4systems.ejb.legacy.PopulatorLog;
 import com.n4systems.model.Tenant;
 import com.n4systems.util.ServiceLocator;
+import rfid.ejb.entity.PopulatorLogBean;
 
 public class PopulatorLogger {
 	private static PopulatorLogger instance = null;

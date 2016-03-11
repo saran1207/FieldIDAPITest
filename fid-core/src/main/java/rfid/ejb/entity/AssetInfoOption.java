@@ -1,11 +1,11 @@
 package rfid.ejb.entity;
 
+import com.n4systems.model.parents.legacy.LegacyBaseEntity;
+
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 
 
 @Entity

@@ -1,11 +1,11 @@
 package com.n4systems.fieldid.actions.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.persistence.loaders.FilteredListableLoader;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class InternalOrgLister {
 

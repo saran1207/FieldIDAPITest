@@ -1,12 +1,11 @@
 package com.n4systems.fieldid.actions.safetyNetwork;
 
 import com.n4systems.ejb.EventScheduleManager;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.EventScheduleCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import org.apache.struts2.interceptor.validation.SkipValidation;
 
 public class SafetyNetworkEventSchedule extends EventScheduleCrud {
 

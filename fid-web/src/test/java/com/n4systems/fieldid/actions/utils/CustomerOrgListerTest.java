@@ -1,14 +1,5 @@
 package com.n4systems.fieldid.actions.utils;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.builders.CustomerOrgBuilder;
 import com.n4systems.model.builders.DivisionOrgBuilder;
@@ -19,6 +10,14 @@ import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.test.helpers.FluentArrayList;
 import com.n4systems.util.persistence.SimpleListable;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 
 

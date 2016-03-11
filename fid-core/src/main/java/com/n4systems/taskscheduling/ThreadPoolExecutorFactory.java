@@ -1,11 +1,11 @@
 package com.n4systems.taskscheduling;
 
+import org.apache.log4j.Logger;
+
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import org.apache.log4j.Logger;
 
 public class ThreadPoolExecutorFactory {
 	private static final Logger logger = Logger.getLogger(ThreadPoolExecutorFactory.class);

@@ -1,18 +1,16 @@
 package com.n4systems.ws.model.eventtype;
 
-import static org.junit.Assert.*;
+import com.n4systems.model.*;
+import com.n4systems.model.builders.UnitOfMeasureBuilder;
+import com.n4systems.model.builders.UnitOfMeasureCriteriaBuilder;
+import com.n4systems.ws.model.WsModelConverter;
+import org.easymock.EasyMock;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
-import com.n4systems.model.*;
-import org.easymock.EasyMock;
-import org.junit.Test;
-
-import com.n4systems.model.ButtonGroup;
-import com.n4systems.model.builders.UnitOfMeasureBuilder;
-import com.n4systems.model.builders.UnitOfMeasureCriteriaBuilder;
-import com.n4systems.ws.model.WsModelConverter;
+import static org.junit.Assert.*;
 
 public class WsCriteriaConverterTest {
 	

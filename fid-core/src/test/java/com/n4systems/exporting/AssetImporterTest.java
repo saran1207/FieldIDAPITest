@@ -1,22 +1,8 @@
 package com.n4systems.exporting;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.asset.AssetToModelConverter;
 import com.n4systems.api.model.AssetView;
-import com.n4systems.services.asset.AssetSaveService;
-import org.junit.Test;
-
-import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.api.validation.Validator;
@@ -27,7 +13,16 @@ import com.n4systems.exporting.io.MapReader;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.builders.AssetTypeBuilder;
+import com.n4systems.services.asset.AssetSaveService;
 import com.n4systems.testutils.DummyTransaction;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.*;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 
 public class AssetImporterTest {
 	/*

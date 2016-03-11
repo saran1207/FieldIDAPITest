@@ -1,22 +1,19 @@
 package com.n4systems.reporting;
 
-import static com.n4systems.model.builders.AssetBuilder.*;
-import static com.n4systems.model.builders.UserBuilder.*;
-import static com.n4systems.reporting.ReportMapEntryMatcher.*;
-import static org.easymock.EasyMock.anyObject;
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import com.n4systems.fieldid.service.event.LastEventDateService;
+import com.n4systems.model.Asset;
+import com.n4systems.util.DateTimeDefinition;
+import org.junit.Test;
 
 import java.util.Date;
 import java.util.Map;
 
-import com.n4systems.fieldid.service.event.LastEventDateService;
-import org.junit.Test;
-
-import com.n4systems.model.Asset;
-import com.n4systems.util.DateTimeDefinition;
+import static com.n4systems.model.builders.AssetBuilder.anAsset;
+import static com.n4systems.model.builders.UserBuilder.anEmployee;
+import static com.n4systems.reporting.ReportMapEntryMatcher.hasReportEntry;
+import static org.easymock.EasyMock.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
 
 
 public class AssetReportMapProducerTest {

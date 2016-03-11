@@ -1,16 +1,15 @@
 package com.n4systems.fieldid.validators;
 
-import static org.junit.Assert.*;
-
-import java.util.Random;
-
-import org.junit.Test;
-
-import rfid.ejb.entity.InfoFieldBean.InfoFieldType;
-
 import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.test.helpers.FluentArrayList;
+import org.junit.Test;
+import rfid.ejb.entity.InfoFieldBean.InfoFieldType;
+
+import java.util.Random;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 
 public class InfoOptionValidatorTest {

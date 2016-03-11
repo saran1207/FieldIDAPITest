@@ -1,14 +1,14 @@
 package com.n4systems.model.orgs;
 
-import static com.n4systems.model.builders.CustomerOrgBuilder.*;
-import static org.junit.Assert.*;
+import com.n4systems.test.helpers.FluentArrayList;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
-
-import com.n4systems.test.helpers.FluentArrayList;
+import static com.n4systems.model.builders.CustomerOrgBuilder.aPrimaryCustomerOrg;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 public class ExternalOrgFuzzyFinderTest {
 
 	

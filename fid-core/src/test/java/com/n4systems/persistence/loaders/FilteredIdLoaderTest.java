@@ -1,15 +1,14 @@
 package com.n4systems.persistence.loaders;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
-
 import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.testutils.DummyTransaction;
 import com.n4systems.util.persistence.QueryBuilder;
+import org.junit.Test;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 
 public class FilteredIdLoaderTest {
 	

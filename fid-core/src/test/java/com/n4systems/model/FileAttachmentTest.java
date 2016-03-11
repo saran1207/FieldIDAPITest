@@ -1,9 +1,10 @@
 package com.n4systems.model;
 
-import static com.n4systems.model.builders.FileAttachmentBuilder.*;
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+
+import static com.n4systems.model.builders.FileAttachmentBuilder.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class FileAttachmentTest {
 

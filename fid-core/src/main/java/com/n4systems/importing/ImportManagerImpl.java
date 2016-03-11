@@ -1,30 +1,24 @@
 package com.n4systems.importing;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.Reader;
-import java.util.List;
-
-
-
-import javax.persistence.EntityManager;
-
-
-import com.n4systems.model.EventType;
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-
 import au.com.bytecode.opencsv.CSVReader;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
 import com.n4systems.exceptions.FileImportException;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
+import com.n4systems.model.EventType;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.util.FuzzyResolver;
 import com.n4systems.util.persistence.QueryBuilder;
+import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
+
+import javax.persistence.EntityManager;
+import java.io.File;
+import java.io.FileReader;
+import java.io.Reader;
+import java.util.List;
 
 
 public class ImportManagerImpl implements ImportManager {

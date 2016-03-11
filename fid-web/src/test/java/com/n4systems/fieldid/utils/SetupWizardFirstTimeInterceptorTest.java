@@ -1,20 +1,17 @@
 package com.n4systems.fieldid.utils;
 
-import static com.n4systems.model.builders.UserBuilder.*;
-import static org.junit.Assert.*;
-
-
-import org.junit.Test;
-
-import rfid.web.helper.SessionUser;
-
 import com.n4systems.fieldid.ui.seenit.SeenItRegistry;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistryEmpyDataSource;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistryImpl;
-import com.n4systems.fieldid.utils.SetupWizardFirstTimeInterceptor;
 import com.n4systems.model.ui.seenit.SeenItItem;
 import com.n4systems.model.user.User;
 import com.n4systems.security.UserType;
+import org.junit.Test;
+import rfid.web.helper.SessionUser;
+
+import static com.n4systems.model.builders.UserBuilder.aUser;
+import static com.n4systems.model.builders.UserBuilder.anAdminUser;
+import static org.junit.Assert.assertTrue;
 
 public class SetupWizardFirstTimeInterceptorTest {
 

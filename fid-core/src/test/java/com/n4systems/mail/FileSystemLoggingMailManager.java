@@ -1,11 +1,10 @@
 package com.n4systems.mail;
 
-import javax.mail.MessagingException;
-import javax.mail.NoSuchProviderException;
-
+import com.n4systems.util.mail.MailMessage;
 import org.apache.log4j.Logger;
 
-import com.n4systems.util.mail.MailMessage;
+import javax.mail.MessagingException;
+import javax.mail.NoSuchProviderException;
 
 public class FileSystemLoggingMailManager implements MailManager {
 	private static Logger logger = Logger.getLogger("mailLogger");

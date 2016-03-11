@@ -1,15 +1,14 @@
 package com.n4systems.model.notificationsettings;
 
-import java.util.Date;
+import com.n4systems.model.common.RelativeTime;
+import com.n4systems.util.Range;
+import com.n4systems.util.time.Clock;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-
-import com.n4systems.model.common.RelativeTime;
-import com.n4systems.util.Range;
-import com.n4systems.util.time.Clock;
+import java.util.Date;
 
 
 @Embeddable

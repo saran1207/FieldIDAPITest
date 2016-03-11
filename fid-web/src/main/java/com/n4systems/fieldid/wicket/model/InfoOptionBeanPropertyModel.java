@@ -7,10 +7,7 @@ import org.apache.wicket.model.PropertyModel;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
 
 public class InfoOptionBeanPropertyModel extends PropertyModel<String> {
 

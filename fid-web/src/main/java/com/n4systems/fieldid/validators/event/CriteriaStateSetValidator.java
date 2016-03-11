@@ -1,13 +1,13 @@
 package com.n4systems.fieldid.validators.event;
 
-import java.util.Collection;
-
 import com.n4systems.fieldid.actions.api.AbstractAction;
-import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
+import com.n4systems.model.OneClickCriteria;
 import com.opensymphony.xwork2.validator.ValidationException;
 import com.opensymphony.xwork2.validator.validators.FieldValidatorSupport;
+
+import java.util.Collection;
 
 public class CriteriaStateSetValidator extends FieldValidatorSupport {
 

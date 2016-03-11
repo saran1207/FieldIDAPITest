@@ -1,11 +1,11 @@
 package com.n4systems.model.security;
 
-import javax.persistence.Query;
-
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+
+import javax.persistence.Query;
 
 abstract public class AbstractSecurityFilter implements SecurityFilter {
 	private static final String FIELD_PREFIX = "filter_";

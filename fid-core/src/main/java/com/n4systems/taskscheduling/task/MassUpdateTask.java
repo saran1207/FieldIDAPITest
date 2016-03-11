@@ -1,7 +1,5 @@
 package com.n4systems.taskscheduling.task;
 
-import org.apache.log4j.Logger;
-
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
@@ -10,6 +8,7 @@ import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.MailMessage;
+import org.apache.log4j.Logger;
 
 public abstract class MassUpdateTask implements Runnable {
 

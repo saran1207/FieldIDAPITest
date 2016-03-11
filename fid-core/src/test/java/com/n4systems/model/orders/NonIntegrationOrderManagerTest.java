@@ -1,12 +1,12 @@
 package com.n4systems.model.orders;
 
-import static org.junit.Assert.*;
-import static org.easymock.EasyMock.*;
-
-import org.junit.Test;
-
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Tenant;
+import org.junit.Test;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 public class NonIntegrationOrderManagerTest {
 	private static final String testOrderNumber = "ON123";

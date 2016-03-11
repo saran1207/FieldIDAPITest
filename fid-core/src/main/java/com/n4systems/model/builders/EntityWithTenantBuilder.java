@@ -1,11 +1,10 @@
 package com.n4systems.model.builders;
 
-import java.util.Date;
-
-
 import com.n4systems.model.Tenant;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.user.User;
+
+import java.util.Date;
 
 abstract public class EntityWithTenantBuilder<K extends EntityWithTenant> extends AbstractEntityBuilder<K> {
 	protected Tenant tenant;

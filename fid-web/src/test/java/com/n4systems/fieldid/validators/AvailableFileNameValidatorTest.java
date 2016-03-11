@@ -1,15 +1,14 @@
 package com.n4systems.fieldid.validators;
 
-import static com.google.common.collect.Lists.*;
-import static com.n4systems.model.builders.FileAttachmentBuilder.*;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import com.n4systems.model.FileAttachment;
+import org.junit.Test;
 
 import java.util.List;
 
-import org.junit.Test;
-
-import com.n4systems.model.FileAttachment;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.n4systems.model.builders.FileAttachmentBuilder.aFileAttachment;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 
 public class AvailableFileNameValidatorTest {

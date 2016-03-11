@@ -1,19 +1,18 @@
 package com.n4systems.notifiers;
 
-import static com.n4systems.model.builders.UserBuilder.*;
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
-import javax.mail.MessagingException;
-
-import org.junit.Test;
-
 import com.n4systems.ejb.MailManagerTestDouble;
 import com.n4systems.mail.MailManager;
 import com.n4systems.notifiers.notifications.Notification;
 import com.n4systems.test.helpers.FluentHashSet;
 import com.n4systems.util.mail.MailMessage;
 import com.n4systems.util.mail.TemplateMailMessage;
+import org.junit.Test;
+
+import javax.mail.MessagingException;
+
+import static com.n4systems.model.builders.UserBuilder.anEmployee;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 
 public class EmailNotifierTest {

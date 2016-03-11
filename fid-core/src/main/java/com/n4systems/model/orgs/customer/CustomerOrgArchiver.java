@@ -1,9 +1,5 @@
 package com.n4systems.model.orgs.customer;
 
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
@@ -18,6 +14,9 @@ import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.loaders.LoaderFactory;
+import org.apache.log4j.Logger;
+
+import java.util.List;
 
 public class CustomerOrgArchiver {
 

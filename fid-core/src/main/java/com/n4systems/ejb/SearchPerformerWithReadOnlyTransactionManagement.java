@@ -1,11 +1,11 @@
 package com.n4systems.ejb;
 
-import java.util.List;
-
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.util.persistence.search.BaseSearchDefiner;
 import com.n4systems.util.persistence.search.SearchDefiner;
+
+import java.util.List;
 
 public class SearchPerformerWithReadOnlyTransactionManagement implements SearchPerformer {
 

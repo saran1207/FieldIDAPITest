@@ -1,8 +1,7 @@
 package com.n4systems.model.infooption;
 
-import rfid.ejb.entity.InfoOptionBean;
-
 import com.n4systems.model.LegacyBaseEntityCleaner;
+import rfid.ejb.entity.InfoOptionBean;
 
 public class InfoOptionCleaner extends LegacyBaseEntityCleaner<InfoOptionBean> {
 

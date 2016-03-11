@@ -1,16 +1,15 @@
 package com.n4systems.fieldid.ui;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
-import java.util.List;
-
-import org.junit.Test;
-
 import com.google.common.collect.ImmutableList;
 import com.n4systems.model.api.Listable;
 import com.n4systems.test.helpers.FluentArrayList;
 import com.n4systems.util.persistence.SimpleListable;
+import org.junit.Test;
+
+import java.util.List;
+
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
 
 public class OptionListsTest {
 

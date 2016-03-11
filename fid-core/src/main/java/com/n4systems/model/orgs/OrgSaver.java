@@ -1,14 +1,13 @@
 package com.n4systems.model.orgs;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.savers.Saver;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 public class OrgSaver extends Saver<BaseOrg> {
 

@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket.model;
 
-import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.util.DateHelper;
 import org.apache.wicket.model.IModel;
 

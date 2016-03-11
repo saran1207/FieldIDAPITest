@@ -1,12 +1,11 @@
 package com.n4systems.model.safetynetwork;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 public class LinkedOrgLoader extends SecurityFilteredLoader<PrimaryOrg> {
 	private final OrgConnectionByLinkedOrgLoader connectionLoader;

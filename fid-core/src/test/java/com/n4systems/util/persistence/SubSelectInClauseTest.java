@@ -1,9 +1,9 @@
 package com.n4systems.util.persistence;
-import static org.junit.Assert.*;
-
-import org.junit.Test;
 
 import com.n4systems.exceptions.InvalidQueryException;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class SubSelectInClauseTest {
 	

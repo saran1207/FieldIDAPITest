@@ -1,9 +1,9 @@
 package com.n4systems.ws.model.setupdata;
 
+import com.n4systems.ws.model.WsModel;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import com.n4systems.ws.model.WsModel;
 
 @XmlRootElement
 public class WsUser extends WsModel {

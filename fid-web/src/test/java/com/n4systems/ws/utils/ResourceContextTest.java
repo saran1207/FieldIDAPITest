@@ -1,16 +1,14 @@
 package com.n4systems.ws.utils;
 
-import static org.junit.Assert.*;
-
-import java.net.URI;
-
-import javax.ws.rs.core.UriInfo;
-
+import com.n4systems.model.Tenant;
+import com.n4systems.ws.handlers.TenantLoadHandler;
 import org.easymock.EasyMock;
 import org.junit.Test;
 
-import com.n4systems.model.Tenant;
-import com.n4systems.ws.handlers.TenantLoadHandler;
+import javax.ws.rs.core.UriInfo;
+import java.net.URI;
+
+import static org.junit.Assert.*;
 
 public class ResourceContextTest {
 

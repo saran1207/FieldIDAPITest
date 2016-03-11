@@ -1,9 +1,5 @@
 package rfid.ejb.entity;
 
-import java.util.List;
-
-import javax.persistence.*;
-
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.api.HasOwner;
@@ -11,8 +7,10 @@ import com.n4systems.model.api.HasUser;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.EntityWithTenant;
-import com.n4systems.model.parents.legacy.LegacyBeanTenant;
 import com.n4systems.model.user.User;
+
+import javax.persistence.*;
+import java.util.List;
 
 /**
  * This stores, for each system user, the last options they used when creating a

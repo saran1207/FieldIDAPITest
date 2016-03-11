@@ -1,14 +1,13 @@
 package com.n4systems.taskscheduling;
 
-import static org.junit.Assert.*;
+import com.n4systems.taskscheduling.task.PrintEventSummaryReportTask;
+import com.n4systems.util.properties.HierarchicalProperties;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Test;
-
-import com.n4systems.taskscheduling.task.PrintEventSummaryReportTask;
-import com.n4systems.util.properties.HierarchicalProperties;
+import static org.junit.Assert.*;
 
 public class TaskPoolListInitializerTest {
 	

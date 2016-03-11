@@ -1,10 +1,9 @@
 package com.n4systems.ws.utils;
 
-import org.apache.log4j.Logger;
-
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.ws.exceptions.WsInternalErrorException;
 import com.n4systems.ws.exceptions.WsResourceNotFoundException;
+import org.apache.log4j.Logger;
 
 public class WsLoaderHelper<T> {
 	private static Logger logger = Logger.getLogger(WsLoaderHelper.class);

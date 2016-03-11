@@ -1,13 +1,13 @@
 package com.n4systems.model.event;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.Event;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+
+import javax.persistence.EntityManager;
 
 public class EventBySubEventLoader extends Loader<Event> {
 

@@ -1,12 +1,12 @@
 package com.n4systems.model;
 
+import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.user.User;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.n4systems.model.parents.EntityWithTenant;
-import com.n4systems.model.user.User;
 
 
 @Entity

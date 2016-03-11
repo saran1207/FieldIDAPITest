@@ -1,25 +1,20 @@
 package com.n4systems.fieldid.actions.safetyNetwork;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
-
-import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
-import com.n4systems.model.EventType;
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.EventType;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.CatalogServiceImpl;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})
 public class CatalogCrud extends SafetyNetwork {

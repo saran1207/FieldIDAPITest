@@ -1,7 +1,5 @@
 package com.n4systems.fieldid.actions.safetyNetwork;
 
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
@@ -11,6 +9,7 @@ import com.n4systems.security.Permissions;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.CatalogServiceImpl;
 import com.n4systems.tools.Pager;
+import org.apache.struts2.interceptor.validation.SkipValidation;
 
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})

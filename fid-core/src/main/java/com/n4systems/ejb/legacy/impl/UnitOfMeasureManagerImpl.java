@@ -1,13 +1,12 @@
 package com.n4systems.ejb.legacy.impl;
 
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-
-import javax.persistence.Query;
-
 import com.n4systems.ejb.legacy.UnitOfMeasureManager;
 import com.n4systems.model.UnitOfMeasure;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
 
 
 

@@ -1,14 +1,13 @@
 package com.n4systems.util;
 
-import com.n4systems.fieldid.CopiedToService;
-import com.n4systems.fieldid.service.transaction.TransactionService;
-import org.hibernate.exception.ConstraintViolationException;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.InvalidTransactionGUIDException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
+import com.n4systems.fieldid.CopiedToService;
+import com.n4systems.fieldid.service.transaction.TransactionService;
 import com.n4systems.model.RequestTransaction;
 import com.n4systems.model.Tenant;
+import org.hibernate.exception.ConstraintViolationException;
 
 @Deprecated // Use TransactionService
 @CopiedToService(TransactionService.class)

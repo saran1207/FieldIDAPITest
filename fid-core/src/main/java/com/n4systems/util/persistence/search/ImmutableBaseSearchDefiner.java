@@ -1,10 +1,10 @@
 package com.n4systems.util.persistence.search;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ImmutableBaseSearchDefiner implements BaseSearchDefiner {
 	private static final long serialVersionUID = 1L;

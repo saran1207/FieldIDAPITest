@@ -1,16 +1,6 @@
 package com.n4systems.fieldid.actions.asset;
 
-import java.util.HashMap;
-import java.util.List;
-
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
-import com.n4systems.ejb.AssetManager;
-import com.n4systems.ejb.EventManager;
-import com.n4systems.ejb.EventScheduleManager;
-import com.n4systems.ejb.OrderManager;
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProjectManager;
+import com.n4systems.ejb.*;
 import com.n4systems.ejb.legacy.AssetCodeMappingService;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.ejb.legacy.LegacyAssetType;
@@ -18,6 +8,10 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.safetynetwork.AssetsByNetworkIdLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkAssetAttachmentListLoader;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class TraceabilityCrud extends AssetCrud {
 

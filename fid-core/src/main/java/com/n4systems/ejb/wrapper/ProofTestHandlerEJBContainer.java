@@ -1,10 +1,5 @@
 package com.n4systems.ejb.wrapper;
 
-import java.io.File;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.ejb.ProofTestHandler;
 import com.n4systems.ejb.impl.ProofTestHandlerImpl;
 import com.n4systems.exceptions.FileProcessingException;
@@ -15,6 +10,10 @@ import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.tools.FileDataContainer;
+
+import javax.persistence.EntityManager;
+import java.io.File;
+import java.util.Map;
 
 public class ProofTestHandlerEJBContainer extends EJBTransactionEmulator<ProofTestHandler> implements ProofTestHandler {
 

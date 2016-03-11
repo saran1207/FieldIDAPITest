@@ -1,11 +1,10 @@
 package com.n4systems.fieldid.utils;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import com.n4systems.fieldid.actions.api.FlashScopeAware;
 
 import javax.servlet.http.HttpSession;
-
-import com.n4systems.fieldid.actions.api.FlashScopeAware;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class FlashScopeMarshaller {
 

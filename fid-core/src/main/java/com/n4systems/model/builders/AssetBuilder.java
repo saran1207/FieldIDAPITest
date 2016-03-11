@@ -1,21 +1,17 @@
 package com.n4systems.model.builders;
 
-import static com.n4systems.model.builders.AssetTypeBuilder.*;
-import static com.n4systems.model.builders.SubAssetBuilder.*;
+import com.n4systems.model.*;
+import com.n4systems.model.location.Location;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.user.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.SubAsset;
-import com.n4systems.model.Tenant;
-import com.n4systems.model.location.Location;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.user.User;
+import static com.n4systems.model.builders.AssetTypeBuilder.anAssetType;
+import static com.n4systems.model.builders.SubAssetBuilder.aSubAsset;
 
 public class AssetBuilder extends EntityWithOwnerBuilder<Asset> {
 	private static final User NOT_ASSIGNED = null;

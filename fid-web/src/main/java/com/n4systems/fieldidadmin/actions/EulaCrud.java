@@ -1,10 +1,5 @@
 package com.n4systems.fieldidadmin.actions;
 
-import java.util.Date;
-
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.eula.EULA;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -13,6 +8,10 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.Preparable;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import java.util.Date;
 
 public class EulaCrud extends AbstractAdminAction implements Preparable {
 	private static final long serialVersionUID = 1L;

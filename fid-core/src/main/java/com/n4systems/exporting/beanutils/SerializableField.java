@@ -1,11 +1,11 @@
 package com.n4systems.exporting.beanutils;
 
+import com.n4systems.api.validation.validators.FieldValidator;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import com.n4systems.api.validation.validators.FieldValidator;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

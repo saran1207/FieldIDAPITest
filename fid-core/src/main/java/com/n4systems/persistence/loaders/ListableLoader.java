@@ -1,12 +1,11 @@
 package com.n4systems.persistence.loaders;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 public abstract class ListableLoader extends ListLoader<Listable<Long>> {
 	

@@ -1,11 +1,10 @@
 package com.n4systems.ws.model.lastmod;
 
-import java.util.Date;
+import com.n4systems.ws.model.WsModel;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import com.n4systems.ws.model.WsModel;
+import java.util.Date;
 
 @XmlRootElement
 public class WsLastModified extends WsModel {

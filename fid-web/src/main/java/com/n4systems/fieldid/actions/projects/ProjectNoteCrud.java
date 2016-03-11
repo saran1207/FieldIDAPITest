@@ -1,10 +1,5 @@
 package com.n4systems.fieldid.actions.projects;
 
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
-import rfid.web.helper.Constants;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProjectManager;
 import com.n4systems.fieldid.actions.helpers.UploadFileSupport;
@@ -17,6 +12,9 @@ import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+import rfid.web.helper.Constants;
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.Projects)
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageJobs})

@@ -1,22 +1,19 @@
 package rfid.ejb.session;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
-import java.util.Set;
-
-import javax.persistence.EntityManager;
-
-import org.junit.Test;
-
-import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
-
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.model.builders.InfoFieldBeanBuilder;
 import com.n4systems.model.builders.InfoOptionBeanBuilder;
 import com.n4systems.webservice.dto.InfoOptionServiceDTO;
 import com.n4systems.webservice.dto.ProductServiceDTO;
+import org.junit.Test;
+import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
+
+import javax.persistence.EntityManager;
+import java.util.Set;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 
 public class ServiceDTOConverterInfoOptionTest {

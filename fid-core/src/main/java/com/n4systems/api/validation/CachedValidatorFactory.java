@@ -1,9 +1,9 @@
 package com.n4systems.api.validation;
 
+import com.n4systems.api.validation.validators.FieldValidator;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import com.n4systems.api.validation.validators.FieldValidator;
 
 public class CachedValidatorFactory implements ValidatorFactory {
 	private static final Map<Class<? extends FieldValidator>, FieldValidator> validatorCache = new ConcurrentHashMap<Class<? extends FieldValidator>, FieldValidator>();

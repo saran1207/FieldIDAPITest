@@ -1,13 +1,12 @@
 package com.n4systems.api.conversion.orgs;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.model.FullExternalOrgView;
 import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.orgs.DivisionOrg;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class DivisionOrgToViewConverterTest {
 	

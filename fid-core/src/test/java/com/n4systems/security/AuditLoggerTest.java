@@ -1,15 +1,14 @@
 package com.n4systems.security;
 
-import static org.easymock.EasyMock.*;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
 import com.n4systems.model.Event;
+import com.n4systems.model.builders.EventBuilder;
 import org.apache.log4j.Logger;
 import org.easymock.Capture;
 import org.junit.Test;
 
-import com.n4systems.model.builders.EventBuilder;
+import static org.easymock.EasyMock.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.junit.Assert.assertThat;
 
 
 public class AuditLoggerTest {

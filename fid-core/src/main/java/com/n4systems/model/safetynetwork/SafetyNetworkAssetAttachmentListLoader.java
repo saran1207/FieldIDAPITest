@@ -1,13 +1,12 @@
 package com.n4systems.model.safetynetwork;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.util.persistence.QueryBuilder;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 public class SafetyNetworkAssetAttachmentListLoader extends Loader<List<AssetAttachment>> {
 	private Long assetId;

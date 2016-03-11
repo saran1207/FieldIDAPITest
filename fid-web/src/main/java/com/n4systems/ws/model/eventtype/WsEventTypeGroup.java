@@ -1,8 +1,8 @@
 package com.n4systems.ws.model.eventtype;
 
-import javax.xml.bind.annotation.XmlElement;
-
 import com.n4systems.ws.model.WsModel;
+
+import javax.xml.bind.annotation.XmlElement;
 
 public class WsEventTypeGroup extends WsModel {
 	private String name;

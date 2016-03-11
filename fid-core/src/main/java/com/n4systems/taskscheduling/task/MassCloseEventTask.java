@@ -2,9 +2,6 @@ package com.n4systems.taskscheduling.task;
 
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.exceptions.UpdateFailureException;
-import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.PersistenceManager;

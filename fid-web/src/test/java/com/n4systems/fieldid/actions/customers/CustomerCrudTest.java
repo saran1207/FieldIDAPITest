@@ -1,21 +1,5 @@
 package com.n4systems.fieldid.actions.customers;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.mock.web.MockHttpSession;
-
-import rfid.web.helper.SessionUser;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.model.builders.OrgBuilder;
@@ -25,6 +9,17 @@ import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.tools.Pager;
 import com.n4systems.tools.SillyPager;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.mock.web.MockHttpSession;
+import rfid.web.helper.SessionUser;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class CustomerCrudTest {
 	

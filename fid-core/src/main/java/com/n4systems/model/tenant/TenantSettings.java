@@ -8,7 +8,6 @@ import com.n4systems.model.security.PasswordPolicy;
 import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
-import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
 import java.util.List;

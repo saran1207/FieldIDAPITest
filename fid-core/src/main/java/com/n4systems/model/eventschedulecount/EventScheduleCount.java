@@ -1,8 +1,8 @@
 package com.n4systems.model.eventschedulecount;
 
-import java.util.Date;
-
 import com.n4systems.model.orgs.BaseOrg;
+
+import java.util.Date;
 
 public class EventScheduleCount implements Comparable<EventScheduleCount> {
 	private Date nextEventDate;

@@ -1,9 +1,5 @@
 package com.n4systems.fieldid.actions.location;
 
-import java.util.List;
-
-import org.apache.struts2.interceptor.validation.SkipValidation;
-import org.apache.log4j.Logger;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
@@ -12,6 +8,10 @@ import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.location.PredefinedLocationLevels;
 import com.n4systems.model.location.PredefinedLocationLevelsSaver;
 import com.n4systems.security.Permissions;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import java.util.List;
 
 @UserPermissionFilter(userRequiresOneOf = { Permissions.ManageSystemConfig })
 public class PredefinedLocationLevelsCrud extends AbstractCrud {
