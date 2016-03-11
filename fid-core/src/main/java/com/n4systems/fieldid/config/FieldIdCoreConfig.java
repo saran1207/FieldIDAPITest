@@ -29,6 +29,7 @@ import com.n4systems.fieldid.service.attachment.FlavourFactory;
 import com.n4systems.fieldid.service.attachment.ImageFlavour;
 import com.n4systems.fieldid.service.certificate.CertificateService;
 import com.n4systems.fieldid.service.certificate.PrintAllCertificateService;
+import com.n4systems.fieldid.service.eventbook.EventBookService;
 import com.n4systems.fieldid.service.notificationsetting.NotificationSettingService;
 import com.n4systems.fieldid.service.escalationrule.AssignmentEscalationRuleService;
 import com.n4systems.fieldid.service.event.*;
@@ -951,4 +952,8 @@ public class FieldIdCoreConfig {
         return new CustomerMergerService();
     }
 
+    @Bean
+    public ButtonGroupService buttonGroupService() {
+        return new ButtonGroupService();
+    }
 }
