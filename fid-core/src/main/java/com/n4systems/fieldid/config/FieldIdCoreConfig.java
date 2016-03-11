@@ -29,7 +29,6 @@ import com.n4systems.fieldid.service.attachment.FlavourFactory;
 import com.n4systems.fieldid.service.attachment.ImageFlavour;
 import com.n4systems.fieldid.service.certificate.CertificateService;
 import com.n4systems.fieldid.service.certificate.PrintAllCertificateService;
-import com.n4systems.fieldid.service.notificationsetting.NotificationSettingService;
 import com.n4systems.fieldid.service.escalationrule.AssignmentEscalationRuleService;
 import com.n4systems.fieldid.service.event.*;
 import com.n4systems.fieldid.service.event.massevent.MassEventService;
@@ -43,6 +42,7 @@ import com.n4systems.fieldid.service.location.LocationService;
 import com.n4systems.fieldid.service.mail.MailService;
 import com.n4systems.fieldid.service.massupdate.MassUpdateService;
 import com.n4systems.fieldid.service.mixpanel.MixpanelService;
+import com.n4systems.fieldid.service.notificationsetting.NotificationSettingService;
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
 import com.n4systems.fieldid.service.org.CustomerMergerService;
 import com.n4systems.fieldid.service.org.OrgService;
@@ -72,9 +72,9 @@ import com.n4systems.fieldid.service.warningtemplates.WarningTemplateService;
 import com.n4systems.persistence.listeners.LocalizationListener;
 import com.n4systems.persistence.listeners.SetupDataUpdateEventListener;
 import com.n4systems.services.AuthService;
-import com.n4systems.services.config.ConfigService;
 import com.n4systems.services.SecurityContext;
 import com.n4systems.services.asset.AssetSaveServiceSpring;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.services.dashboard.DashboardService;
 import com.n4systems.services.date.DateService;
 import com.n4systems.services.localization.LocalizationService;
@@ -951,4 +951,8 @@ public class FieldIdCoreConfig {
         return new CustomerMergerService();
     }
 
+    @Bean
+    public ButtonGroupService buttonGroupService() {
+        return new ButtonGroupService();
+    }
 }
