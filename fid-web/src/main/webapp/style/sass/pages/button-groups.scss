@@ -1,0 +1,10 @@
+.button-labels, .button-display {
+  display: inline-block;
+  width: 120px;
+}
+
+.button-labels {
+  .image-label{
+    top: -15px
+  }
+}
