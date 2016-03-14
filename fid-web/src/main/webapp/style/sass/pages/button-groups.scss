@@ -1,10 +1,45 @@
-.button-labels, .button-display {
+.button-labels, .button-display, .add-container, .button-form {
   display: inline-block;
   width: 120px;
+  height: 185px;
+  vertical-align: middle;
 }
 
 .button-labels {
   .image-label{
-    top: -15px
+    margin-top: 5px;
+    margin-bottom: 15px;
+  }
+}
+
+.button-display.hide {
+  display: none;
+}
+
+.add-container {
+  .btn-secondary {
+    margin-top: 50px;
+  }
+}
+
+.button-form {
+  input[type="text"], select {
+    width: 100px;
+  }
+
+  input[type="text"] {
+    margin-bottom: 0;
+  }
+
+  .list-table > li > div {
+    padding: 0;
+  }
+}
+
+.fieldid-framework {
+  .button-form {
+    .chzn-container {
+      margin: 0;
+    }
   }
 }
