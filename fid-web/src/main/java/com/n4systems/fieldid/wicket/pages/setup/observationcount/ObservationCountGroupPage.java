@@ -13,6 +13,7 @@ import com.n4systems.fieldid.wicket.model.eventform.ObservationCountGroupsForTen
 import com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
+import com.n4systems.fieldid.wicket.pages.setup.buttongroups.ButtonGroupPage;
 import com.n4systems.fieldid.wicket.pages.setup.score.ScoreGroupsPage;
 import com.n4systems.fieldid.wicket.util.NoBarsValidator;
 import com.n4systems.fieldid.wicket.util.NoColonsValidator;
@@ -170,7 +171,7 @@ public class ObservationCountGroupPage extends FieldIDFrontEndPage {
     protected void addNavBar(String navBarId) {
         add(new NavigationBar(navBarId,
                 NavigationItemBuilder.aNavItem().page("eventTypes.action").label("nav.view_all").build(),
-                NavigationItemBuilder.aNavItem().page("buttonGroups.action").label("nav.button_groups").build(),
+                NavigationItemBuilder.aNavItem().page(ButtonGroupPage.class).label("nav.button_groups").build(),
                 NavigationItemBuilder.aNavItem().page(ObservationCountGroupPage.class).label("nav.observation_groups").build(),
                 NavigationItemBuilder.aNavItem().page(ScoreGroupsPage.class).label("nav.score_groups").build()));
     }

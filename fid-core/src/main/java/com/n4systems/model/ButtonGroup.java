@@ -26,6 +26,9 @@ public class ButtonGroup extends EntityWithTenant implements NamedEntity, Listab
     @JoinTable(name="button_groups_buttons", joinColumns = @JoinColumn(name = "button_group_id"), inverseJoinColumns = @JoinColumn(name = "button_id"))
 	private List<Button> buttons = new ArrayList<Button>();
 
+	@Transient
+	private boolean changed = false;
+
 	public ButtonGroup() {}
 	
 	@Override
@@ -126,5 +129,13 @@ public class ButtonGroup extends EntityWithTenant implements NamedEntity, Listab
 		return null;
 	}
 
+	public boolean isChanged() {
+		return changed;
+	}
+
+	public ButtonGroup setChanged(boolean changed) {
+		this.changed = changed;
+		return this;
+	}
 }
 

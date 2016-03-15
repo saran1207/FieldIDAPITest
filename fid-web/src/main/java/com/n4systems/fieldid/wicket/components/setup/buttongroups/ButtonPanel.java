@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.pages.setup.buttongroups;
+package com.n4systems.fieldid.wicket.components.setup.buttongroups;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
@@ -26,7 +26,7 @@ import org.apache.wicket.model.PropertyModel;
 
 import java.util.List;
 
-public class ButtonPanel extends Panel {
+public abstract class ButtonPanel extends Panel {
 
     private IModel<List<Button>> buttonListModel;
     private WebMarkupContainer container;
@@ -36,9 +36,12 @@ public class ButtonPanel extends Panel {
 
     public ButtonPanel(String id, IModel<List<Button>> buttonListModel) {
         super(id, buttonListModel);
-        this.buttonListModel =buttonListModel;
+        this.buttonListModel = buttonListModel;
 
-        add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
+        feedbackPanel = new FIDFeedbackPanel("feedbackPanel");
+        feedbackPanel.setOutputMarkupId(true);
+        add(feedbackPanel);
+
 
         add(container = new WebMarkupContainer("container"));
         container.setOutputMarkupId(true);
@@ -53,6 +56,7 @@ public class ButtonPanel extends Panel {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         item.getModelObject().setRetired(true);
+                        didUpdateButtons();
                         target.add(container);
                     }
 
@@ -96,6 +100,8 @@ public class ButtonPanel extends Panel {
 
     }
 
+    protected abstract void didUpdateButtons();
+
     private class ButtonForm extends Form<Button> {
 
         private final int NUM_BUTTONS = 14;
@@ -130,6 +136,7 @@ public class ButtonPanel extends Panel {
                     form.setVisible(false);
                     ButtonForm.this.reset();
                     addLink.setVisible(showAddLink());
+                    didUpdateButtons();
                     target.add(container, feedbackPanel, ButtonPanel.this.form, addLink);
                 }
 
