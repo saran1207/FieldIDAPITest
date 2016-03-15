@@ -2,6 +2,7 @@ package com.n4systems.fieldid.service.event;
 
 import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.model.ButtonGroup;
+import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,12 @@ public class ButtonGroupService extends CrudService<ButtonGroup>{
     public ButtonGroup update(ButtonGroup buttonGroup) {
         touchEventTypes(buttonGroup);
         return super.update(buttonGroup);
+    }
+
+    public List<ButtonGroup> findAllButtonGroups(Boolean retired) {
+        QueryBuilder<ButtonGroup> query = createTenantSecurityBuilder(ButtonGroup.class);
+        query.addSimpleWhere("retired", retired);
+        return persistenceService.findAll(query);
     }
 
     //When button groups are updated we need to update the event types so that the updated groups get synced

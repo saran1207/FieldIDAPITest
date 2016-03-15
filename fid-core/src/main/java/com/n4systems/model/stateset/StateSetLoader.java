@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+@Deprecated
 public class StateSetLoader extends ListLoader<ButtonGroup> {
 
     public StateSetLoader(SecurityFilter filter) {
