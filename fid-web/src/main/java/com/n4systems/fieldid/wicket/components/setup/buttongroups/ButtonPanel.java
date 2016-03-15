@@ -3,7 +3,6 @@ package com.n4systems.fieldid.wicket.components.setup.buttongroups;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
-import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.renderer.StatusChoiceRenderer;
 import com.n4systems.model.Button;
 import com.n4systems.model.EventResult;
@@ -32,16 +31,10 @@ public abstract class ButtonPanel extends Panel {
     private WebMarkupContainer container;
     private Form<Button> form;
     private AjaxLink addLink;
-    private FIDFeedbackPanel feedbackPanel;
 
     public ButtonPanel(String id, IModel<List<Button>> buttonListModel) {
         super(id, buttonListModel);
         this.buttonListModel = buttonListModel;
-
-        feedbackPanel = new FIDFeedbackPanel("feedbackPanel");
-        feedbackPanel.setOutputMarkupId(true);
-        add(feedbackPanel);
-
 
         add(container = new WebMarkupContainer("container"));
         container.setOutputMarkupId(true);
@@ -137,12 +130,12 @@ public abstract class ButtonPanel extends Panel {
                     ButtonForm.this.reset();
                     addLink.setVisible(showAddLink());
                     didUpdateButtons();
-                    target.add(container, feedbackPanel, ButtonPanel.this.form, addLink);
+                    target.add(container, ButtonPanel.this.form, addLink);
                 }
 
                 @Override
                 protected void onError(AjaxRequestTarget target, Form<?> form) {
-                    target.add(feedbackPanel);
+                    //do nothing, look pretty.
                 }
             });
 
@@ -152,7 +145,7 @@ public abstract class ButtonPanel extends Panel {
                     form.setVisible(false);
                     ButtonForm.this.reset();
                     addLink.setVisible(showAddLink());
-                    target.add(container, feedbackPanel, ButtonPanel.this.form, addLink);
+                    target.add(container, ButtonPanel.this.form, addLink);
                 }
             });
 

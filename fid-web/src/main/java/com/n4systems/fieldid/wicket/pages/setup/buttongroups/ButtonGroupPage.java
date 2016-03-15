@@ -61,7 +61,32 @@ public class ButtonGroupPage extends FieldIDTemplatePage {
 
         add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
 
-        Form buttonGroupForm = new Form("controlForm");
+        Form buttonGroupForm = new Form("controlForm") {
+            @Override
+            protected void onValidate() {
+                if(getDataProvider().getCurrentGroupList().stream().filter(group -> group.getButtons().stream().filter(button -> !button.isRetired()).count() == 0).count() > 0 ||
+                        getDataProvider().getCurrentGroupList().stream().filter(group -> group.getName() == null || group.getName().isEmpty()).count() > 0) {
+                    getDataProvider().getCurrentGroupList()
+                            .stream()
+                            .filter(group -> group.getButtons()
+                                    .stream()
+                                    .filter(button -> !button.isRetired())
+                                    .count() == 0)
+                            .forEach(group -> error(new FIDLabelModel("label.group_could_not_save", group.getName()).getObject()));
+
+                    getDataProvider().getCurrentGroupList()
+                            .stream()
+                            .filter(group -> group.getName() == null || group.getName().isEmpty())
+                            .forEach(group -> error(new FIDLabelModel("label.group_has_no_name").getObject()));
+                }
+            }
+
+            @Override
+            protected void onSubmit() {
+                doSave();
+                setResponsePage(ButtonGroupPage.class);
+            }
+        };
 
         WebMarkupContainer listContainer = new WebMarkupContainer("buttonGroupsListPanel");
 
@@ -89,9 +114,7 @@ public class ButtonGroupPage extends FieldIDTemplatePage {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 logger.info("The Save button has been clicked!!");
-                doSave();
                 target.add(this, listContainer, feedbackPanel);
-                setResponsePage(ButtonGroupPage.class);
             }
 
             @Override
@@ -132,12 +155,17 @@ public class ButtonGroupPage extends FieldIDTemplatePage {
     }
 
     private void doSave() {
+
+
         //Saving should be interesting... we really want two things, only one of which I'm currently certain of how to
         //figure out:
         //1) ButtonGroup entities which have changed - "changed" must be true and the entity must have an ID.
         getDataProvider().getCurrentGroupList()
                          .stream()
-                         .filter(group -> group.getId() != null && group.isChanged())
+                         .filter(group -> group.getId() != null &&
+                                 group.isChanged() &&
+                                 (group.getName() == null ||
+                                         group.getName().isEmpty()))
                          .forEach(buttonGroupService::update);
 
         //2) New ButtonGroup entities - this is easy... they'll have no ID.
@@ -182,13 +210,4 @@ public class ButtonGroupPage extends FieldIDTemplatePage {
     protected String getMainCss() {
         return "button-groups-page";
     }
-
-    /*
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        response.renderCSSReference("style/legacy/newCss/component/header_reorder_link_button.css");
-        response.renderCSSReference("style/legacy/newCss/component/buttons.css");
-    }
-*/
 }
