@@ -146,6 +146,16 @@ public abstract class ButtonPanel extends Panel {
                 }
             });
 
+            add(new AjaxLink<Void>("cancelLink") {
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    form.setVisible(false);
+                    ButtonForm.this.reset();
+                    addLink.setVisible(showAddLink());
+                    target.add(container, feedbackPanel, ButtonPanel.this.form, addLink);
+                }
+            });
+
         }
 
         public String getButtonImageUrl() {
