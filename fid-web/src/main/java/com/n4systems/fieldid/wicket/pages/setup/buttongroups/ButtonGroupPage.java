@@ -19,12 +19,10 @@ import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -55,6 +53,8 @@ public class ButtonGroupPage extends FieldIDTemplatePage {
 
     private FIDFeedbackPanel feedbackPanel;
 
+    private AjaxSubmitLink saveButton;
+
     @Override
     protected void onInitialize() {
         super.onInitialize();
@@ -79,12 +79,13 @@ public class ButtonGroupPage extends FieldIDTemplatePage {
             public void onClick(AjaxRequestTarget target) {
                 logger.info("The add group button has been clicked!!");
                 doAdd();
+                target.focusComponent(saveButton);
                 target.add(this, listContainer, feedbackPanel);
             }
 
         });
 
-        buttonGroupForm.add(new AjaxSubmitLink("saveButton") {
+        buttonGroupForm.add(saveButton = new AjaxSubmitLink("saveButton") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 logger.info("The Save button has been clicked!!");
@@ -102,7 +103,7 @@ public class ButtonGroupPage extends FieldIDTemplatePage {
         buttonGroupForm.add(new Link<Void>("cancelLink") {
             @Override
             public void onClick() {
-                logger.info("Cancel link has been clicked!!");
+                dataProvider.refreshGroupList();
             }
         });
 

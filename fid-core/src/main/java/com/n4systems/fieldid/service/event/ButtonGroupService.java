@@ -35,11 +35,13 @@ public class ButtonGroupService extends CrudService<ButtonGroup>{
                 "INNER JOIN criteriasections_criteria csc ON efcs.sections_id = csc.criteriasections_id " +
                 "INNER JOIN oneclick_criteria occ ON csc.criteria_id = occ.id " +
                 "INNER JOIN button_groups bg ON occ.button_group_id = bg.id " +
-                "SET et.modified = NOW() " +
+                "SET et.modified = NOW(), " +
+                "et.modifiedBy = :userId " +
                 "WHERE et.state = 'ACTIVE' AND ef.state = 'ACTIVE' AND bg.id = :buttonGroupId";
 
         Query touchQuery = getEntityManager().createNativeQuery(updateQuery);
         touchQuery.setParameter("buttonGroupId", buttonGroup.getId());
+        touchQuery.setParameter("userId", getCurrentUser().getId());
 
         int rowsUpdated = touchQuery.executeUpdate();
 
