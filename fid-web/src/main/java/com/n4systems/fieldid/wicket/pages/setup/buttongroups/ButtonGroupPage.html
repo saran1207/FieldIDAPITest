@@ -4,13 +4,11 @@
         <div>
             <wicket:message key="instruction.buttongroup"/>
         </div>
-        <form wicket:id="addGroupForm">
-            <div>
-                <button wicket:id="addGroupButton"><wicket:message key="label.addbuttongroup"/></button>
-            </div>
-        </form>
-        <div wicket:id="buttonGroupsListPanel">
-            <table wicket:id="buttonGroupsList"></table>
+        <div class="add-link-container">
+            <a class="btn-secondary" wicket:id="addGroupLink"><wicket:message key="label.addbuttongroup"/></a>
+        </div>
+        <div class="list-panel" wicket:id="buttonGroupsListPanel">
+            <table class="list-table" wicket:id="buttonGroupsList"></table>
         </div>
         <form wicket:id="controlForm">
             <div>

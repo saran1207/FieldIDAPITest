@@ -18,6 +18,7 @@ import com.n4systems.model.ButtonGroup;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
@@ -73,22 +74,15 @@ public class ButtonGroupPage extends FieldIDTemplatePage {
 
         add(listContainer);
 
-        Form addGroupForm = new Form("addGroupForm");
-        addGroupForm.add(new AjaxButton("addGroupButton") {
+        add(new AjaxLink<Void>("addGroupLink") {
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+            public void onClick(AjaxRequestTarget target) {
                 logger.info("The add group button has been clicked!!");
                 doAdd();
                 target.add(this, listContainer, feedbackPanel);
             }
 
-            @Override
-            protected void onError(AjaxRequestTarget target, Form<?> form) {
-                target.add(feedbackPanel);
-            }
         });
-
-        add(addGroupForm);
 
         buttonGroupForm.add(new AjaxSubmitLink("saveButton") {
             @Override
@@ -183,11 +177,17 @@ public class ButtonGroupPage extends FieldIDTemplatePage {
         return new Label(labelId, new FIDLabelModel("nav.button_groups"));
     }
 
+    @Override
+    protected String getMainCss() {
+        return "button-groups-page";
+    }
 
+    /*
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderCSSReference("style/legacy/newCss/component/header_reorder_link_button.css");
         response.renderCSSReference("style/legacy/newCss/component/buttons.css");
     }
+*/
 }
