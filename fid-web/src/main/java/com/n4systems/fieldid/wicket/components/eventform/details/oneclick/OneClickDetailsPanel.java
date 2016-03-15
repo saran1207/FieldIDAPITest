@@ -1,13 +1,12 @@
 package com.n4systems.fieldid.wicket.components.eventform.details.oneclick;
 
-import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.service.event.ButtonGroupService;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.Button;
 import com.n4systems.model.ButtonGroup;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.criteriarules.OneClickCriteriaRule;
-import com.n4systems.model.stateset.StateSetLoader;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -15,12 +14,16 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
 
 import static ch.lambdaj.Lambda.on;
 
 public class OneClickDetailsPanel extends Panel {
+
+    @SpringBean
+    private ButtonGroupService buttonGroupService;
 
     private ButtonGroupDisplayPanel buttonGroupDisplayPanel;
 
@@ -69,8 +72,7 @@ public class OneClickDetailsPanel extends Panel {
         }
 
         private List<ButtonGroup> getStateSetList() {
-            StateSetLoader stateSetLoader = new StateSetLoader(FieldIDSession.get().getSessionUser().getSecurityFilter());
-            return stateSetLoader.load();
+            return buttonGroupService.findAllButtonGroups(false);
         }
     }
 
