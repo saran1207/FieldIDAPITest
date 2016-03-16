@@ -2,13 +2,16 @@ package com.n4systems.fieldid.service.event;
 
 import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.model.ButtonGroup;
-import com.n4systems.model.EventType;
+import com.n4systems.util.persistence.QueryBuilder;
+import org.apache.log4j.Logger;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
+import javax.persistence.Query;
 import java.util.List;
-import java.util.Map;
 
 public class ButtonGroupService extends CrudService<ButtonGroup>{
+
+    private static final Logger logger = Logger.getLogger(ButtonGroupService.class);
 
     public ButtonGroupService() {
         super(ButtonGroup.class);
@@ -18,22 +21,46 @@ public class ButtonGroupService extends CrudService<ButtonGroup>{
         return persistenceService.isUniqueName(ButtonGroup.class, name, null);
     }
 
-    public void touchEventTypes(ButtonGroup buttonGroup) {
-        String queryString = "SELECT DISTINCT et FROM " + EventType.class.getName() + " et INNER JOIN eventforms ef ON et.eventform_id = ef.id\n" +
-                "                                   INNER JOIN eventforms_criteriasections efcs on ef.id = efcs.eventform_id\n" +
-                "                                   INNER JOIN criteriasections_criteria csc ON efcs.sections_id = csc.criteriasections_id\n" +
-                "                                   INNER JOIN oneclick_criteria occ ON csc.criteria_id = occ.id\n" +
-                "                                   INNER JOIN button_groups bg ON occ.button_group_id = bg.id\n" +
-                "WHERE et.state = 'ACTIVE' AND ef.state = 'ACTIVE' AND bg.id = :buttonGroupId GROUP BY et.id;";
+    @Override
+    @Transactional
+    public ButtonGroup update(ButtonGroup buttonGroup) {
+        touchEventTypes(buttonGroup);
+        return super.update(buttonGroup);
+    }
 
-        Map<String, Object> params = new HashMap<String, Object>();
-        params.put("tenantId", securityContext.getTenantSecurityFilter().getTenantId());
-        params.put("buttonGroupId", buttonGroup.getId());
+    public List<ButtonGroup> findAllButtonGroups(Boolean retired) {
+        QueryBuilder<ButtonGroup> query = createTenantSecurityBuilder(ButtonGroup.class);
+        query.addSimpleWhere("retired", retired);
+        return persistenceService.findAll(query);
+    }
 
-        List<EventType> eventTypes = (List<EventType>) persistenceService.runQuery(queryString, params);
+    //When button groups are updated we need to update the event types so that the updated groups get synced
+    private void touchEventTypes(ButtonGroup buttonGroup) {
+        String updateQuery =
+                "UPDATE eventtypes et INNER JOIN eventforms ef ON et.eventform_id = ef.id " +
+                "INNER JOIN eventforms_criteriasections efcs on ef.id = efcs.eventform_id " +
+                "INNER JOIN criteriasections_criteria csc ON efcs.sections_id = csc.criteriasections_id " +
+                "INNER JOIN oneclick_criteria occ ON csc.criteria_id = occ.id " +
+                "INNER JOIN button_groups bg ON occ.button_group_id = bg.id " +
+                "SET et.modified = NOW(), " +
+                "et.modifiedBy = :userId " +
+                "WHERE et.state = 'ACTIVE' AND ef.state = 'ACTIVE' AND bg.id = :buttonGroupId";
 
-        eventTypes.stream().forEach(et -> et.touch());
+        Query touchQuery = getEntityManager().createNativeQuery(updateQuery);
+        touchQuery.setParameter("buttonGroupId", buttonGroup.getId());
+        touchQuery.setParameter("userId", getCurrentUser().getId());
 
-        persistenceService.update(eventTypes);
+        int rowsUpdated = touchQuery.executeUpdate();
+
+        logger.debug(rowsUpdated + " eventtypes updated.");
+    }
+
+    public List<ButtonGroup> getButtonGroups() {
+        //Heh... one line.  YEAH BABY!!!!
+        return persistenceService.findAll(createUserSecurityBuilder(ButtonGroup.class));
+    }
+
+    public Long getButtonGroupCount() {
+        return persistenceService.count(createUserSecurityBuilder(ButtonGroup.class));
     }
 }
