@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components.setup.buttongroups;
 import com.n4systems.model.ButtonGroup;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
+import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -29,7 +30,7 @@ public class ButtonGroupListPanel extends Panel {
 
         TextField<String> buttonGroupNameField;
 
-        add(buttonGroupNameField = new TextField<>("buttonGroupNameField", new PropertyModel<>(buttonGroupModel.getObject(), "name")));
+        add(buttonGroupNameField = new RequiredTextField<>("buttonGroupNameField", new PropertyModel<>(buttonGroupModel.getObject(), "name")));
 
         buttonGroupNameField.add(new OnChangeAjaxBehavior() {
             @Override

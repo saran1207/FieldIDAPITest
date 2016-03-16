@@ -162,10 +162,8 @@ public class ButtonGroupPage extends FieldIDTemplatePage {
         //1) ButtonGroup entities which have changed - "changed" must be true and the entity must have an ID.
         getDataProvider().getCurrentGroupList()
                          .stream()
-                         .filter(group -> group.getId() != null &&
-                                 group.isChanged() &&
-                                 (group.getName() == null ||
-                                         group.getName().isEmpty()))
+                         .filter(group -> group.isNew() &&
+                                 group.isChanged())
                          .forEach(buttonGroupService::update);
 
         //2) New ButtonGroup entities - this is easy... they'll have no ID.
