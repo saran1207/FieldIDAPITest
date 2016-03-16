@@ -88,9 +88,7 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
     public void archiveRule(AssignmentEscalationRule rule) {
         rule.setState(Archivable.EntityState.ARCHIVED);
         updateRule(rule);
-        //We don't really need to clear these anymore.  They'll get cleared when the Task discovers the rule has been
-        //archived.
-//        clearQueueItemsForRule(rule.getId());
+        clearQueueItemsForRule(rule.getId());
     }
 
     /**
@@ -519,10 +517,6 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
      */
     public EscalationRuleExecutionQueueItem updateQueueItem(EscalationRuleExecutionQueueItem queueItem) {
         return persistenceService.update(queueItem);
-    }
-
-    public void deleteQueueItem(EscalationRuleExecutionQueueItem queueItem) {
-        persistenceService.remove(queueItem);
     }
 
     /**

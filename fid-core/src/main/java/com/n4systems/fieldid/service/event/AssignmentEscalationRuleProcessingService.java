@@ -85,33 +85,28 @@ public class AssignmentEscalationRuleProcessingService extends FieldIdPersistenc
                 //Do we need to set user?
             }
 
-            //If the rule is null, it has been retired... that means the queue item should be removed.
-            if(item.getRule() == null) {
-                ruleService.deleteQueueItem(item);
-            } else {
-                item = handleReassignmentAndStaleCheck(item);
+            item = handleReassignmentAndStaleCheck(item);
 
-                try {
-                    //Now we send the mail... yet another place something could go wrong.  We could bail out form here, as
-                    //well and - again - will not end up marking that Item as having processed.
-                    TemplateMailMessage message = createMailMessage(item);
+            try {
+                //Now we send the mail... yet another place something could go wrong.  We could bail out form here, as
+                //well and - again - will not end up marking that Item as having processed.
+                TemplateMailMessage message = createMailMessage(item);
 
-                    //In some weird edge cases, a message can end up with no addresses.  we don't want to actually send
-                    //the message in those cases, because it will fail... failing is bad.
-                    if (!message.getToAddresses().isEmpty() ||
-                            !message.getCcAddresses().isEmpty() ||
-                            !message.getBccAddresses().isEmpty()) {
-                        mailService.sendMessage(message);
-                    }
-
-                    item.setRuleHasRun(true);
-
-                    ruleService.updateQueueItem(item);
-                } catch (IOException e) {
-                    logger.error(MessageFormat.format(JSON_PROCESSING_ERROR, item.getRule().getId()), e);
-                } catch (MessagingException e) {
-                    logger.error(MessageFormat.format(MAIL_SERVICE_ERROR, item.getRule().getId()), e);
+                //In some weird edge cases, a message can end up with no addresses.  we don't want to actually send
+                //the message in those cases, because it will fail... failing is bad.
+                if(!message.getToAddresses().isEmpty() ||
+                        !message.getCcAddresses().isEmpty() ||
+                        !message.getBccAddresses().isEmpty()) {
+                    mailService.sendMessage(message);
                 }
+
+                item.setRuleHasRun(true);
+
+                ruleService.updateQueueItem(item);
+            } catch (IOException e) {
+                logger.error(MessageFormat.format(JSON_PROCESSING_ERROR, item.getRule().getId()), e);
+            } catch (MessagingException e) {
+                logger.error(MessageFormat.format(MAIL_SERVICE_ERROR, item.getRule().getId()), e);
             }
         }
     }
