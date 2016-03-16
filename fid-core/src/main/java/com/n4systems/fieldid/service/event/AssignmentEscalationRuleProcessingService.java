@@ -44,6 +44,8 @@ public class AssignmentEscalationRuleProcessingService extends FieldIdPersistenc
     private static final String MAIL_SERVICE_ERROR = "There was an exception while sending an Escalation Rule " +
                                                     "Notification for Rule with ID {0}.";
 
+    private static final String INVALID_RULE_ERROR = "The rule with ID {0} is invalid and possesses no valid Escalate-To User or Group.  As such, instance with ID {1} has not been processed.";
+
     @Autowired
     private AssignmentEscalationRuleService ruleService;
 
@@ -78,35 +80,34 @@ public class AssignmentEscalationRuleProcessingService extends FieldIdPersistenc
         Tenant lastTenant = null;
 
         for(EscalationRuleExecutionQueueItem item : queueItemsForProcessing) {
-            if(lastTenant == null || !lastTenant.equals(item.getRule().getTenant())) {
-                lastTenant = item.getRule().getTenant();
-                securityContext.reset();
-                securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(item.getRule().getTenant()));
-                //Do we need to set user?
-            }
+            if(item.getRule().getEscalateToUser() == null &&
+                    (item.getRule().getEscalateToUserGroup() == null ||
+                     item.getRule().getEscalateToUserGroup().getMembers().size() <= 0)) {
 
-            item = handleReassignmentAndStaleCheck(item);
-
-            try {
-                //Now we send the mail... yet another place something could go wrong.  We could bail out form here, as
-                //well and - again - will not end up marking that Item as having processed.
-                TemplateMailMessage message = createMailMessage(item);
-
-                //In some weird edge cases, a message can end up with no addresses.  we don't want to actually send
-                //the message in those cases, because it will fail... failing is bad.
-                if(!message.getToAddresses().isEmpty() ||
-                        !message.getCcAddresses().isEmpty() ||
-                        !message.getBccAddresses().isEmpty()) {
-                    mailService.sendMessage(message);
+                logger.warn(MessageFormat.format(INVALID_RULE_ERROR, item.getRule().getId(), item.getId()));
+            } else {
+                if (lastTenant == null || !lastTenant.equals(item.getRule().getTenant())) {
+                    lastTenant = item.getRule().getTenant();
+                    securityContext.reset();
+                    securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(item.getRule().getTenant()));
+                    //Do we need to set user?
                 }
 
-                item.setRuleHasRun(true);
+                item = handleReassignmentAndStaleCheck(item);
 
-                ruleService.updateQueueItem(item);
-            } catch (IOException e) {
-                logger.error(MessageFormat.format(JSON_PROCESSING_ERROR, item.getRule().getId()), e);
-            } catch (MessagingException e) {
-                logger.error(MessageFormat.format(MAIL_SERVICE_ERROR, item.getRule().getId()), e);
+                try {
+                    //Now we send the mail... yet another place something could go wrong.  We could bail out form here, as
+                    //well and - again - will not end up marking that Item as having processed
+                    mailService.sendMessage(createMailMessage(item));
+
+                    item.setRuleHasRun(true);
+
+                    ruleService.updateQueueItem(item);
+                } catch (IOException e) {
+                    logger.error(MessageFormat.format(JSON_PROCESSING_ERROR, item.getRule().getId()), e);
+                } catch (MessagingException e) {
+                    logger.error(MessageFormat.format(MAIL_SERVICE_ERROR, item.getRule().getId()), e);
+                }
             }
         }
     }

@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.wicket.data;
 
-import com.n4systems.fieldid.service.event.EventBookService;
+import com.n4systems.fieldid.service.eventbook.EventBookService;
 import com.n4systems.fieldid.service.eventbook.EventBookListFilterCriteria;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.api.Archivable;

@@ -4,7 +4,7 @@ import com.n4systems.exceptions.DuplicateCustomerException;
 import com.n4systems.exceptions.TenantNotValidForActionException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
-import com.n4systems.fieldid.service.event.EventBookService;
+import com.n4systems.fieldid.service.eventbook.EventBookService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.ThingEventCreationService;
