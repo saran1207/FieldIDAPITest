@@ -1,0 +1,21 @@
+<html xmlns:wicket="http://wicket.apache.org">
+    <wicket:extend>
+        <div wicket:id="feedbackPanel"></div>
+        <div>
+            <wicket:message key="instruction.buttongroup"/>
+        </div>
+        <div class="add-link-container">
+            <a class="btn-secondary" wicket:id="addGroupLink"><wicket:message key="label.addbuttongroup"/></a>
+        </div>
+        <div class="list-panel" wicket:id="buttonGroupsListPanel">
+            <table class="list-table" wicket:id="buttonGroupsList"></table>
+        </div>
+        <form wicket:id="controlForm">
+            <div>
+                <input wicket:id="saveButton" type="submit" wicket:message="value:label.save" class="btn-primary"/>
+                <wicket:message key="label.or"/>
+                <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+            </div>
+        </form>
+    </wicket:extend>
+</html>
