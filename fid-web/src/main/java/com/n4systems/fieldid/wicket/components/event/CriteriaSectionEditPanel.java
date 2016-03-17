@@ -286,7 +286,7 @@ public class CriteriaSectionEditPanel extends Panel {
                                         }
                                     })
                                     .map(rule -> (NumberFieldCriteriaRule)rule)
-                                    .findAny();
+                                    .findFirst();
 
                     if(optionalRule.isPresent()) {
                         handleModalSelection(optionalRule.get().getAction(), target, Model.of((CriteriaResult)result.getObject()));

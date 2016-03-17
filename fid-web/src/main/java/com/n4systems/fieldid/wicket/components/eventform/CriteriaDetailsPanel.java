@@ -24,6 +24,10 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class CriteriaDetailsPanel extends Panel {
 
     private CheckBox requiredCheckBox;
@@ -75,14 +79,24 @@ public class CriteriaDetailsPanel extends Panel {
 
                 @Override
                 protected void onConfigureCriteriaLogic(AjaxRequestTarget target, Button button) {
-
-                   OneClickCriteriaRule criteriaRule = (OneClickCriteriaRule) (criteria).getRules().stream()
-                           .filter(rule -> ((OneClickCriteriaRule) rule).getButton().equals(button))
-                           .findFirst().orElse(new OneClickCriteriaRule(criteria, button));
+                   OneClickCriteriaRule criteriaRule =
+                           criteria.getRules()
+                                   .stream()
+                                   .filter(rule -> ((OneClickCriteriaRule) rule).getButton().equals(button))
+                                   .map(convertMe -> (OneClickCriteriaRule)convertMe)
+                                   .findFirst()
+                                   .orElse(new OneClickCriteriaRule(criteria, button));
 
                     modalWindow.setContent(new OneClickCriteriaLogicForm(modalWindow.getContentId(), Model.of(criteriaRule)) {
                         @Override
                         public void onSaveRule(AjaxRequestTarget target, CriteriaRule rule) {
+                            //Here, we want to remove any logic pointing to the same button state as the rule we're
+                            //saving.  Otherwise, we end up with multiples... and that's just wrong.
+                            criteria.getRules().removeAll(criteria.getRules()
+                                                                  .stream()
+                                                                  .filter(r -> ((OneClickCriteriaRule) r).getButton().getId().equals(((OneClickCriteriaRule)rule).getButton().getId()))
+                                                                  .collect(Collectors.toList()));
+
                             rule.setCriteria(criteria);
                             criteria.getRules().add(rule);
                             modalWindow.close(target);
@@ -115,7 +129,7 @@ public class CriteriaDetailsPanel extends Panel {
         	add(new SelectDetailsPanel("specificDetailsPanel", new Model<>((SelectCriteria) criteria)) {
                 @Override
                 protected void onConfigureCriteriaLogic(AjaxRequestTarget target, String selectValue) {
-                    //We only need this list because
+                    //We only need this list because <-- Incomplete thoughts are confusing.
                     SelectCriteriaRule rule =
                             criteria.getRules()
                                     //Process the rules in Stream mode...
@@ -134,6 +148,13 @@ public class CriteriaDetailsPanel extends Panel {
                     modalWindow.setContent(new SelectCriteriaLogicPanel(modalWindow.getContentId(), Model.of(rule)) {
                         @Override
                         protected void onSaveRule(AjaxRequestTarget target, CriteriaRule rule) {
+                            //Here, we want to remove any rule/logic pointing to the same Select value as the rule we're
+                            //about to save... again... to prevent duplicates.
+                            criteria.getRules().removeAll(criteria.getRules()
+                                                                  .stream()
+                                                                  .filter(r -> ((SelectCriteriaRule)r).getSelectValue().equals(selectValue))
+                                                                  .collect(Collectors.toList()));
+
                             rule.setCriteria(criteria);
                             criteria.getRules().add(rule);
                             modalWindow.close(target);
@@ -191,11 +212,16 @@ public class CriteriaDetailsPanel extends Panel {
         	add(new NumberFieldDetailsPanel("specificDetailsPanel", new Model<>((NumberFieldCriteria) criteria)) {
                 @Override
                 public void onConfigureCriteriaLogic(AjaxRequestTarget target) {
+                    NumberFieldCriteriaRule rule =
+                            criteria.getRules()
+                                    .stream()
+                                    .filter(criteriaRule -> criteriaRule instanceof NumberFieldCriteriaRule &&
+                                            criteriaRule.getCriteria().equals(criteria))
+                                    .map(criteriaRule -> (NumberFieldCriteriaRule)criteriaRule)
+                                    .findFirst()
+                                    .orElse(new NumberFieldCriteriaRule(criteria));
 
-                    NumberFieldCriteriaRule criteriaRule = criteria.getRules().isEmpty() ?
-                            new NumberFieldCriteriaRule(criteria) : (NumberFieldCriteriaRule) criteria.getRules().get(0);
-
-                    modalWindow.setContent(new NumberCriteriaLogicForm(modalWindow.getContentId(), Model.of(criteriaRule)) {
+                    modalWindow.setContent(new NumberCriteriaLogicForm(modalWindow.getContentId(), Model.of(rule)) {
                         @Override
                         public void onCancel(AjaxRequestTarget target) {
                             modalWindow.close(target);
@@ -216,8 +242,17 @@ public class CriteriaDetailsPanel extends Panel {
 
                         @Override
                         public void onSaveRule(AjaxRequestTarget target, NumberFieldCriteriaRule rule) {
+                            //We can only ever have one rule on this kind of criteria... so unlike other places, what
+                            //we want to do here is REPLACE the "list" of one rule with the new "list" of one rule.
                             rule.setCriteria(criteria);
-                            criteria.getRules().add(rule);
+                            List<CriteriaRule> rules = new ArrayList<>();
+
+                            //This just ensures we're putting clean data into the DB.
+                            if(!rule.getComparisonType().equals(NumberFieldCriteriaRule.ComparisonType.BT)) {
+                                rule.setValue2(null);
+                            }
+                            rules.add(rule);
+                            criteria.setRules(rules);
                             modalWindow.close(target);
                             updateAddEditLinkLabel();
                             target.add(CriteriaDetailsPanel.this);
