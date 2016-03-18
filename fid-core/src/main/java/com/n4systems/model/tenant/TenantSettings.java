@@ -41,14 +41,6 @@ public class TenantSettings extends EntityWithTenant {
     @Column(name="loto_enabled", nullable = false)
     private Boolean lotoEnabled = false;
 
-    @ManyToOne
-    @JoinColumn(name = "approval_user_id")
-    private User approvalUser;
-
-    @ManyToOne
-    @JoinColumn(name = "approval_user_group_id")
-    private UserGroup approvalUserGroup;
-
     @Column(name="language", nullable=false)
     @ElementCollection(fetch= FetchType.EAGER)
     @JoinTable(name="tenant_languages", joinColumns = @JoinColumn(name = "tenant_settings_id"))
@@ -141,41 +133,6 @@ public class TenantSettings extends EntityWithTenant {
 
     public void setLogoutUrl(String logoutUrl) {
         this.logoutUrl = logoutUrl;
-    }
-
-    public User getApprovalUser() {
-        return approvalUser;
-    }
-
-    public void setApprovalUser(User approvalUser) {
-        this.approvalUserGroup = null;
-        this.approvalUser = approvalUser;
-    }
-
-    public UserGroup getApprovalUserGroup() {
-        return approvalUserGroup;
-    }
-
-    public void setApprovalUserGroup(UserGroup approvalUserGroup) {
-        this.approvalUser = null;
-        this.approvalUserGroup = approvalUserGroup;
-    }
-
-	@Deprecated
-    @Transient
-    public Assignable getApprovalUserOrGroup() {
-        return approvalUser != null ?  approvalUser : approvalUserGroup;
-    }
-
-    public void setApprovalUserOrGroup(Assignable assignee) {
-        if (assignee instanceof User) {
-            setApprovalUser((User) assignee);
-        } else if (assignee instanceof UserGroup) {
-            setApprovalUserGroup((UserGroup) assignee);
-        } else if (assignee == null) {
-            this.approvalUser = null;
-            this.approvalUserGroup = null;
-        }
     }
 
     public List<Locale> getTranslatedLanguages() {
