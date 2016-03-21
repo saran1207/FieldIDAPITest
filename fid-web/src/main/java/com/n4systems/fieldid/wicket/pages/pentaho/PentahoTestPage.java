@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.pentaho;
 
+
 import com.n4systems.fieldid.service.pentaho.PentahoService;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.navigation.BreadCrumbBar;
@@ -8,6 +9,7 @@ import com.n4systems.fieldid.wicket.model.navigation.NavigationItem;
 import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.template.TemplatePage;
+import sun.net.www.protocol.http.HttpURLConnection;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -20,6 +22,10 @@ import org.apache.wicket.markup.html.pages.RedirectPage;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.net.URLEncoder;
 
 /**
@@ -43,6 +49,8 @@ public class PentahoTestPage extends FieldIDTemplatePage {
 
     public String viewer = "http://localhost:8081/pentaho/api/repos/%3Ahome%3Aadmin%3Atest.xanalyzer/viewer?";
     public String editor = "http://localhost:8081/pentaho/api/repos/%3Ahome%3Aadmin%3Atest.xanalyzer/editor?";
+    public String auth = "http://localhost:8081/pentaho/j_spring_security_check";
+
 
     public FidDropDownChoice<String> performedBy;
     public FidDropDownChoice<String> location;
@@ -59,6 +67,13 @@ public class PentahoTestPage extends FieldIDTemplatePage {
     public InlineFrame frame2;
 
     public PentahoTestPage() {
+
+        System.out.println("\nTesting - Send Http POST request");
+        try {
+            sendPost();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         performedBy = new FidDropDownChoice<String>("performedBy", Model.of(urlPerformedBy), pentahoService.getPerformedByList());
         location = new FidDropDownChoice<String>("location", Model.of(urlLocation), pentahoService.getLocation());
@@ -206,4 +221,46 @@ public class PentahoTestPage extends FieldIDTemplatePage {
     protected Component createTitleLabel(String labelId) {
         return new Label(labelId, "Sample Charts");
     }
+
+    // HTTP POST request
+    private void sendPost() throws Exception {
+
+        String url = auth;
+        URL obj = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+        //add reuqest header
+        con.setRequestMethod("POST");
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+        con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+
+        String urlParameters = "j_username=Admin&j_password=password";
+
+        // Send post request
+        con.setDoOutput(true);
+        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+        wr.writeBytes(urlParameters);
+        wr.flush();
+        wr.close();
+
+        int responseCode = con.getResponseCode();
+        System.out.println("\nSending 'POST' request to URL : " + url);
+        System.out.println("Post parameters : " + urlParameters);
+        System.out.println("Response Code : " + responseCode);
+
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+
+        //print result
+        System.out.println(response.toString());
+
+    }
+
 }
