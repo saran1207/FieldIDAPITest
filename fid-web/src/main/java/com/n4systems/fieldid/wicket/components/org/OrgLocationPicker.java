@@ -233,6 +233,16 @@ public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
         return StringUtils.isNotBlank(id) ? Long.parseLong(_entityId.getRawInput()) : null;
     }
 
+    public void disableTextBox() {
+        text.setEnabled(false);
+        icon.setVisible(false);
+    }
+
+    public void enableTextBox() {
+        text.setEnabled(true);
+        icon.setVisible(true);
+    }
+
     public String getInput() {
         return input;
     }
