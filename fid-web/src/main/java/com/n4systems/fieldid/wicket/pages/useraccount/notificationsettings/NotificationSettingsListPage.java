@@ -48,6 +48,7 @@ public class NotificationSettingsListPage extends AccountSetupPage {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         notificationSettingService.remove(item.getModelObject());
+                        setResponsePage(NotificationSettingsListPage.class);
                     }
                 });
 
