@@ -1,0 +1,3 @@
+DROP TABLE notificationsettings_assettypes;
+
+DROP TABLE notificationsettings_eventtypes;
