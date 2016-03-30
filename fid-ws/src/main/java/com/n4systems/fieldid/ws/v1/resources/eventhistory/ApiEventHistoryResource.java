@@ -26,7 +26,8 @@ public class ApiEventHistoryResource extends ApiResource<ApiEventHistory, ThingE
 		builder.addWhere(WhereClauseFactory.create("asset.mobileGUID", assetId));
 		builder.addOrder("completedDate", false);
 
-		List<ThingEvent> events = persistenceService.findAll(builder);
+		// FIMB-1039: Mobile only displays the last 3 events.  Pulling the entire event history was causing performance problems.
+		List<ThingEvent> events = persistenceService.findAll(builder, 0, 3);
 		List<ApiEventHistory> apiEventHistory = convertAllEntitiesToApiModels(events);
 		return apiEventHistory;
 	}
