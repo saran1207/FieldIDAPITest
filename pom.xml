@@ -13,7 +13,6 @@
 		<module>fid-exporter</module>
 		<module>fid-ws</module>
         <module>fid-migrations</module>
-        <module>fid-connection-monitor</module>
         <module>fid-index-validator</module>
         <module>fid-pub-ws</module>
 		<module>fid-mobile-ws</module>

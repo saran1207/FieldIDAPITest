@@ -53,9 +53,6 @@
         <a href="/fieldid/w/admin/config">Config</a>
     </li>
     <li>
-        <a href="/fieldid/w/admin/connections">Connections</a>
-    </li>
-    <li>
         <a href="/fieldid/w/admin/configureLanguages">Languages</a>
     </li>
 	</#if>

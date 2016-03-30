@@ -104,10 +104,6 @@
 			<groupId>com.fieldid</groupId>
 			<artifactId>fid-ws</artifactId>
 		</dependency>
-        <dependency>
-            <groupId>com.fieldid</groupId>
-            <artifactId>fid-connection-monitor</artifactId>
-        </dependency>
 		<dependency>
 			<groupId>com.fieldid</groupId>
 			<artifactId>fid-test-utils</artifactId>
