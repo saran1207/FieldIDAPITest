@@ -37,7 +37,7 @@ ${action.setPageType('job', 'show')!}
 <div class="crudForm largeForm bigForm pageSection layout">
 	<h2 class="decoratedHeader"><@s.text name="label.projectdetails"/> 
 		<#if sessionUser.hasAccess("managejobs")> 
-			<a href="<@s.url action="jobEdit" uniqueID="${project.id}"/>"><@s.text name="label.littleedit"/></a>
+			<a href="/fieldid/w/editJob?uniqueID=${project.id}"><@s.text name="label.littleedit"/></a>
 		</#if>	
 	</h2>
 	<@s.hidden id="uniqueID" name="uniqueID"/>
@@ -106,12 +106,12 @@ ${action.setPageType('job', 'show')!}
 						
 			<div class="infoSet">
 				<label for="duration"><@s.text name="label.duration"/></label>
-				<span>${project.duration?html !}</span>
+				<span>${project.duration!}</span>
 			</div>
 
 			<div class="infoSet">
 				<label for="poNumber"><@s.text name="label.ponumber"/></label>
-				<span>${(project.poNumber?html) !}</span>
+				<span>${project.poNumber!}</span>
 			</div>
 			
 			<div class="infoSet">
