@@ -379,13 +379,13 @@ legend + p {
 			width: 99%;
 		}
 	}
-	.control-group.checkbox {
+	.control-group {
 		input[type="checkbox"],
 		input[type="radio"] {
 			float: none;
 		}
 	}
-    .control-group.ownerPicker {
+    .control-group.owner-picker {
 		label {
 		  margin-top: -20px;
 		}
@@ -397,6 +397,9 @@ legend + p {
   	.control-group {
 	  .datepicker-container {
 		display: inline;
+		label {
+		  text-align: left;
+		}
 	  }
 
 	  .radio {
