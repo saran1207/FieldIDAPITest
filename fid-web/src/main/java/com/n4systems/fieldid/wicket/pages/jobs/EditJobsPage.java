@@ -42,8 +42,8 @@ public class EditJobsPage extends JobsFormPage {
                 aNavItem().label("nav.view_all").page("jobs.action").build(),
                 aNavItem().label("nav.view").page("job.action").params(PageParametersBuilder.uniqueId(id)).build(),
                 aNavItem().label("nav.edit").page(EditJobsPage.class).params(PageParametersBuilder.uniqueId(id)).build(),
-                aNavItem().label("nav.events").page("jobEvents.action").params(PageParametersBuilder.uniqueId(id)).build(),
-                aNavItem().label("nav.notes").page("jobNotes.action").params(PageParametersBuilder.uniqueId(id)).build(),
+                aNavItem().label("nav.events").page("jobEvents.action").params(PageParametersBuilder.param("projectId", id)).build(),
+                aNavItem().label("nav.notes").page("jobNotes.action").params(PageParametersBuilder.param("projectId", id)).build(),
                 aNavItem().label("nav.add").page(AddJobsPage.class).onRight().build()));
     }
 
