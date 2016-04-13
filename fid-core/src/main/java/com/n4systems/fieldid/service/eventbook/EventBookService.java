@@ -1,16 +1,13 @@
 package com.n4systems.fieldid.service.eventbook;
 
 import com.n4systems.fieldid.service.CrudService;
-import com.n4systems.fieldid.service.eventbook.EventBookListFilterCriteria;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.security.OwnerAndDownFilter;
-import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.SortTerm;
 
-import java.util.Date;
 import java.util.List;
 
 public class EventBookService extends CrudService<EventBook> {
@@ -25,20 +22,12 @@ public class EventBookService extends CrudService<EventBook> {
         return persistenceService.findAll(EventBook.class);
     }
 
-    public List<EventBook> getActiveEventBooks() {
-        QueryBuilder<EventBook> query = createUserSecurityBuilder(EventBook.class);
-
-        query.addOrder("name");
-
-        return persistenceService.findAll(query);
-    }
-
-    public List<EventBook> getArchivedEventBooks() {
+    public EventBook findArchivedEventBookById(Long id) {
         QueryBuilder<EventBook> query = createUserSecurityBuilder(EventBook.class, true);
 
-        query.addOrder("name");
+        query.addSimpleWhere("id", id);
 
-        return persistenceService.findAll(query);
+        return persistenceService.find(query);
     }
 
     public Long getActiveEventBookCount() {
@@ -57,15 +46,6 @@ public class EventBookService extends CrudService<EventBook> {
                 Archivable.EntityState.ARCHIVED);
 
         return persistenceService.count(query);
-    }
-
-    public EventBook getEventBookByName(String name) {
-        QueryBuilder<EventBook> query = createUserSecurityBuilder(EventBook.class);
-
-        query.addSimpleWhere("state", Archivable.EntityState.ACTIVE);
-        query.addSimpleWhere("name", name);
-
-        return persistenceService.find(query);
     }
 
     public void archiveEventBook(EventBook eventBook) {
@@ -184,40 +164,11 @@ public class EventBookService extends CrudService<EventBook> {
 
     }
 
-    public Long getEventBooksCountByState(Archivable.EntityState state) {
-        if(Archivable.EntityState.ACTIVE.equals(state)) {
-            return getActiveEventBookCount();
-        } else {
-            return getArchivedEventBookCount();
-        }
-    }
-
     public List<EventBook> getEventBooks(EventBookListFilterCriteria criteria, Archivable.EntityState state) {
         QueryBuilder<EventBook> query = createUserSecurityBuilder(EventBook.class, true);
         applyFilter(query, criteria);
         query.addSimpleWhere("state", state);
         return persistenceService.findAll(query);
 
-    }
-
-    public List<EventBook> getPagedEventBooksListByState(Archivable.EntityState state,
-                                                         String order,
-                                                         boolean ascending,
-                                                         int first,
-                                                         int count) {
-
-        QueryBuilder<EventBook> query = (Archivable.EntityState.ACTIVE.equals(state) ?
-                                            createUserSecurityBuilder(EventBook.class) :
-                                            createUserSecurityBuilder(EventBook.class, true));
-
-        query.addSimpleWhere("state", state);
-
-        if(order != null) {
-            for (String subOrder : order.split(",")) {
-                query.addOrder(subOrder.trim(), ascending);
-            }
-        }
-
-        return persistenceService.findAllPaginated(query, first, count);
     }
 }
