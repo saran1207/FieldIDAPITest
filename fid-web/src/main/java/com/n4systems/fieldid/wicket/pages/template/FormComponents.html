@@ -1,7 +1,7 @@
 <html xmlns:wicket="http://wicket.apache.org">
     <wicket:extend>
         <form>
-            <fieldset wicket:id="formContainer">
+            <fieldset wicket:id="formContainer" class="form-horizontal">
                 <legend>Form Components</legend>
 
                 <div class="control-group">
@@ -16,7 +16,7 @@
                     <label class="label">Dropdown</label>
                     <select wicket:id="dropdownField"/>
                 </div>
-                <div class="control-group">
+                <div class="control-group checkbox">
                     <label class="label">Checkbox</label>
                     <input type="checkbox"/>
                 </div>
@@ -24,11 +24,11 @@
                     <label class="label">Radio</label>
                     <input type="radio"/>
                 </div>
-                <div class="control-group">
+                <div class="control-group owner-picker">
                     <label class="label">Owner Location Picker</label>
                     <div wicket:id="orgPicker"/>
                 </div>
-                <div class="control-group">
+                <div class="control-group owner-picker">
                     <label class="label">Location Picker</label>
                     <div wicket:id="locationPicker"/>
                 </div>

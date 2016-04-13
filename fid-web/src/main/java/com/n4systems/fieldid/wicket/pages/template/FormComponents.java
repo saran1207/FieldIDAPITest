@@ -36,7 +36,7 @@ public class FormComponents extends FieldIDTemplatePage {
 
     private WebMarkupContainer container;
 
-    private boolean isHorizontal = false;
+    private boolean isHorizontal = true;
 
     private BaseOrg org;
     private Date date;

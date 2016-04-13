@@ -8,7 +8,6 @@ import com.n4systems.fieldid.wicket.pages.SecretTestPage;
 import com.n4systems.fieldid.wicket.pages.SelectLanguagePage;
 import com.n4systems.fieldid.wicket.pages.admin.adminusers.AdminUserPage;
 import com.n4systems.fieldid.wicket.pages.admin.config.ConfigPage;
-import com.n4systems.fieldid.wicket.pages.admin.connections.ConnectionViewPage;
 import com.n4systems.fieldid.wicket.pages.admin.languages.ConfigureLanguagesPage;
 import com.n4systems.fieldid.wicket.pages.admin.printouts.LotoPrintoutListPage;
 import com.n4systems.fieldid.wicket.pages.admin.security.ChangeAdminPasswordPage;
@@ -22,6 +21,8 @@ import com.n4systems.fieldid.wicket.pages.event.*;
 import com.n4systems.fieldid.wicket.pages.event.criteriaimage.CriteriaImageViewListPage;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
 import com.n4systems.fieldid.wicket.pages.identify.LimitedEditAsset;
+import com.n4systems.fieldid.wicket.pages.jobs.AddJobsPage;
+import com.n4systems.fieldid.wicket.pages.jobs.EditJobsPage;
 import com.n4systems.fieldid.wicket.pages.loto.*;
 import com.n4systems.fieldid.wicket.pages.loto.copy.CopyProceduresList;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
@@ -285,7 +286,6 @@ public class FieldIDWicketApp extends WebApplication {
 
         mountPage("admin/addTenant", AddTenantPage.class);
 		mountPage("admin/users", AdminUserPage.class);
-		mountPage("admin/connections", ConnectionViewPage.class);
         mountPage("admin/configureLanguages", ConfigureLanguagesPage.class);
 		mountPage("admin/tenantUsers", TenantUserListPage.class);
         mountPage("admin/changeAdminPassword", ChangeAdminPasswordPage.class);
@@ -319,6 +319,9 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("mobileOfflineProfile", MobileOfflineProfilePage.class);
 
         mountPage("userAccountSearch", UserAccountSearchPage.class);
+
+        mountPage("addJob", AddJobsPage.class);
+        mountPage("editJob", EditJobsPage.class);
 
         mountPage("template", TemplatePage.class);
         mountPage("template/assetSummary", TemplateAssetSummaryPage.class);

@@ -1,9 +1,9 @@
 package com.n4systems.fieldid.wicket.components.eventform.details.number;
 
-import com.n4systems.fieldid.wicket.components.FlatLabel;
+import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
+import com.n4systems.fieldid.wicket.components.feedback.ContainerFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.NumberFieldCriteria;
-import com.n4systems.model.criteriarules.CriteriaRule;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
@@ -13,9 +13,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.RangeValidator;
-
-import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
-import com.n4systems.fieldid.wicket.components.feedback.ContainerFeedbackPanel;
 
 public class NumberFieldDetailsPanel extends Panel {
 	
@@ -29,7 +26,7 @@ public class NumberFieldDetailsPanel extends Panel {
 		feedbackPanel.setOutputMarkupId(true);
 		feedbackPanel.setOutputMarkupPlaceholderTag(true);
 
-		add(decimalPlaces = new RequiredTextField<Integer>("decimalPlacesInputField", new PropertyModel<Integer>(model, "decimalPlaces")));
+		add(decimalPlaces = new RequiredTextField<>("decimalPlacesInputField", new PropertyModel<>(model, "decimalPlaces")));
 		decimalPlaces.add(new UpdateComponentOnChange() {
 			@Override
 			protected void onError(AjaxRequestTarget target, RuntimeException e) {
@@ -46,7 +43,7 @@ public class NumberFieldDetailsPanel extends Panel {
 				}
 			}
 		});
-		decimalPlaces.add(new RangeValidator<Integer>(0, 10));
+		decimalPlaces.add(new RangeValidator<>(0, 10));
 
 		add(addEditLogicLink = new AjaxLink<Void>("addEditLogicLink") {
 			@Override
@@ -72,10 +69,9 @@ public class NumberFieldDetailsPanel extends Panel {
 		addEditLogicLink.replace(getAddEditLinkLabel());
 	}
 
-	public void onConfigureCriteriaLogic(AjaxRequestTarget target) {
-	}
+	public void onConfigureCriteriaLogic(AjaxRequestTarget target) {}
 
 	public boolean hasRule() {
 		return false;
-	};
+	}
 }

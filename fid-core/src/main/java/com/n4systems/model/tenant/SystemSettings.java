@@ -17,7 +17,6 @@ public class SystemSettings implements Serializable {
 	public boolean gpsCapture;
 	public String supportUrl;
     public String logoutUrl;
-    public Assignable procedureApprover;
 
 	public void setSupportUrl(String supportUrl) {
 		this.supportUrl = supportUrl;
@@ -99,11 +98,4 @@ public class SystemSettings implements Serializable {
         this.logoutUrl = logoutUrl;
     }
 
-    public Assignable getProcedureApprover() {
-        return procedureApprover;
-    }
-
-    public void setProcedureApprover(Assignable procedureApprover) {
-        this.procedureApprover = procedureApprover;
-    }
 }

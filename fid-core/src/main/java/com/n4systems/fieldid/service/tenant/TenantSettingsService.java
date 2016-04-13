@@ -68,13 +68,12 @@ public class TenantSettingsService extends FieldIdPersistenceService {
 		persistenceService.update(tenantSettings);
 	}
 
-	public void updateGpsCaptureAndUrls(boolean gpsCapture, String supportUrl, String logoutUrl, Assignable approver) {
+	public void updateGpsCaptureAndUrls(boolean gpsCapture, String supportUrl, String logoutUrl) {
 		TenantSettings tenantSettings = getTenantSettings();
 		tenantSettings.setGpsCapture(gpsCapture);
 		tenantSettings.setSupportUrl(supportUrl);
         tenantSettings.setLogoutUrl(logoutUrl);
-        tenantSettings.setApprovalUserOrGroup(approver);
-		persistenceService.update(tenantSettings);				
+		persistenceService.update(tenantSettings);
 	}
 
 }

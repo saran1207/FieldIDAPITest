@@ -35,7 +35,6 @@ public class SystemSettingsService extends FieldIdPersistenceService {
         systemSettings.setDateFormat(primaryOrg.getDateFormat());
         systemSettings.setSupportUrl(tenantSettings.getSupportUrl());
         systemSettings.setLogoutUrl(tenantSettings.getLogoutUrl());
-        systemSettings.setProcedureApprover(tenantSettings.getApprovalUserOrGroup());
 
         return systemSettings;
     }
@@ -49,7 +48,7 @@ public class SystemSettingsService extends FieldIdPersistenceService {
     public void saveSystemSettings(SystemSettings settings) {
     	// note that some settings are really tenant settings and other are primary org settings. 
     	// (not sure why tho...but that's the way it is).
-        tenantSettingsService.updateGpsCaptureAndUrls(settings.isGpsCapture(), settings.getSupportUrl(), settings.getLogoutUrl(), settings.getProcedureApprover());
+        tenantSettingsService.updateGpsCaptureAndUrls(settings.isGpsCapture(), settings.getSupportUrl(), settings.getLogoutUrl());
 
         PrimaryOrg primaryOrg = getPrimaryOrg();
 

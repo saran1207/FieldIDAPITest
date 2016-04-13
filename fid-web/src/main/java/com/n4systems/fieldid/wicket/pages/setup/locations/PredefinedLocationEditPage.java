@@ -43,12 +43,22 @@ public class PredefinedLocationEditPage extends FieldIDFrontEndPage {
 
         form.add(new RequiredTextField<String>("name", new PropertyModel<>(predefinedLocationModel, "name")));
 
-        form.add(new OrgLocationPicker("owner", new PropertyModel<>(predefinedLocationModel, "owner")));
+        OrgLocationPicker picker = new OrgLocationPicker("owner", new PropertyModel<>(predefinedLocationModel, "owner"));
+        Boolean isVisible = !(predefinedLocationModel.getObject().hasParent());
+        if(!isVisible) {
+            picker.disableTextBox();
+        }
+        form.add(picker);
 
         form.add(new SubmitLink("saveLink"){
             @Override
             public void onSubmit() {
                 locationService.saveOrUpdate(predefinedLocationModel.getObject());
+                if(isVisible) {
+                    //update all of the children to have the new owner model
+                    locationService.updateOwnerForAllChildren(predefinedLocationModel.getObject().getID(), predefinedLocationModel.getObject().getOwner());
+
+                }
                 info(new FIDLabelModel("Location Updated").getObject());
                 redirect("/predefinedLocations.action");
             }
