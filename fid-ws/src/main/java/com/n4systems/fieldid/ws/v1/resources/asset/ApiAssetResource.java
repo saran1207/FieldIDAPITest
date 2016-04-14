@@ -223,9 +223,16 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 
 		apiAsset.setSchedules(apiEventScheduleResource.findAllSchedules(asset.getId(), syncDuration));
         apiAsset.setProcedures(procedureResource.getOpenAndLockedProcedures(asset.getId()));
+
 		if (downloadEvents) {
 			apiAsset.setEvents(apiSavedEventResource.findLastEventOfEachType(asset.getId()));
+			// When download events is enabled we respect the sync duration.  Page size is arbitrarily limited to 1M
+			apiAsset.setEventHistory(apiEventHistoryResource.findAllEventHistory(asset.getMobileGUID(), syncDuration, 0, 1000000));
+		} else {
+			// When download events is off, we limit to the last 3 events for display on the asset details page
+			apiAsset.setEventHistory(apiEventHistoryResource.findAllEventHistory(asset.getMobileGUID(), SyncDuration.ALL, 0, 3));
 		}
+
         if(downloadImageAttachments){
             //Assert.isNotNull(apiAttachment.getData());
             apiAsset.getAttachments()
@@ -287,7 +294,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		}		
 		
 		apiAsset.setAttributeValues(findAllAttributeValues(asset));		
-		apiAsset.setEventHistory(apiEventHistoryResource.findAllEventHistory(asset.getMobileGUID()));
+
 
         List<AssetAttachment> assetAttachments = assetService.findAssetAttachments(asset);
         List<FileAttachment> typeAttachments = asset.getType().getAttachments();

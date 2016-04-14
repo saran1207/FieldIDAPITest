@@ -1,12 +1,16 @@
 package com.n4systems.fieldid.ws.v1.resources.eventhistory;
 
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
+import com.n4systems.fieldid.ws.v1.resources.synchronization.ApiSynchronizationResource;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.WorkflowState;
+import com.n4systems.model.offlineprofile.OfflineProfile;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+import com.n4systems.util.persistence.WhereParameter;
 import org.apache.log4j.Logger;
+import org.joda.time.LocalDate;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.Path;
@@ -20,13 +24,18 @@ public class ApiEventHistoryResource extends ApiResource<ApiEventHistory, ThingE
 
     private static final Logger logger = Logger.getLogger(ApiEventHistoryResource.class);
 
-    public List<ApiEventHistory> findAllEventHistory(String assetId) {
+    public List<ApiEventHistory> findAllEventHistory(String assetId, OfflineProfile.SyncDuration syncDuration, int page, int pageSize) {
 		QueryBuilder<ThingEvent> builder = createUserSecurityBuilder(ThingEvent.class);
         builder.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.COMPLETED));
 		builder.addWhere(WhereClauseFactory.create("asset.mobileGUID", assetId));
 		builder.addOrder("completedDate", false);
 
-		List<ThingEvent> events = persistenceService.findAll(builder, 0, 3);
+		if(syncDuration != OfflineProfile.SyncDuration.ALL) {
+			Date startDate = ApiSynchronizationResource.getSyncStartDate(syncDuration, new LocalDate().toDate());
+			builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GE, "completedDate", startDate));
+		}
+
+		List<ThingEvent> events = persistenceService.findAll(builder, page, pageSize);
 		List<ApiEventHistory> apiEventHistory = convertAllEntitiesToApiModels(events);
 		return apiEventHistory;
 	}
