@@ -492,8 +492,8 @@ public class ApiProcedureDefinitionResource extends ApiResource<ApiProcedureDefi
 		entityIsolationPoint.setFwdIdx(apiIsolationPoint.getFwdIdx());
 		entityIsolationPoint.setRevIdx(apiIsolationPoint.getRevIdx());
 
-		entityIsolationPoint.setDeviceDefinition(convertDefinition(apiIsolationPoint.getDeviceDefinition()));
-		entityIsolationPoint.setLockDefinition(convertDefinition(apiIsolationPoint.getLockDefinition()));
+		entityIsolationPoint.setDeviceDefinition(apiIsolationPoint.getDeviceDefinition());
+		entityIsolationPoint.setLockDefinition(apiIsolationPoint.getLockDefinition());
 
 		if(apiIsolationPoint.getAnnotation() == null) {
 			entityIsolationPoint.setAnnotation(null);
@@ -525,8 +525,8 @@ public class ApiProcedureDefinitionResource extends ApiResource<ApiProcedureDefi
 		isoPoint.setFwdIdx(apiIsolationPoint.getFwdIdx());
 		isoPoint.setRevIdx(apiIsolationPoint.getRevIdx());
 
-		isoPoint.setDeviceDefinition(convertDefinition(apiIsolationPoint.getDeviceDefinition()));
-		isoPoint.setLockDefinition(convertDefinition(apiIsolationPoint.getLockDefinition()));
+		isoPoint.setDeviceDefinition(apiIsolationPoint.getDeviceDefinition());
+		isoPoint.setLockDefinition(apiIsolationPoint.getLockDefinition());
 
 		if(apiIsolationPoint.getAnnotation() != null) {
 			ImageAnnotation imageAnnotation = createNewImageAnnotation(apiIsolationPoint.getAnnotation(), isoPoint.getSourceType(), isoPoint.getIdentifier());
@@ -607,8 +607,9 @@ public class ApiProcedureDefinitionResource extends ApiResource<ApiProcedureDefi
 			apiIsolationPoint.setModified(isolationPoint.getModified());
 			apiIsolationPoint.setSid(isolationPoint.getId());
 			apiIsolationPoint.setCheck(isolationPoint.getCheck());
-			apiIsolationPoint.setDeviceDefinition(convertDefinition(isolationPoint.getDeviceDefinition()));
-			apiIsolationPoint.setLockDefinition(convertDefinition(isolationPoint.getLockDefinition()));
+
+			apiIsolationPoint.setDeviceDefinition(isolationPoint.getDeviceDefinition());
+			apiIsolationPoint.setLockDefinition(isolationPoint.getLockDefinition());
 			apiIsolationPoint.setSource(isolationPoint.getSourceType().name());
 			apiIsolationPoint.setSourceText(isolationPoint.getSourceText());
 			apiIsolationPoint.setIdentifier(isolationPoint.getIdentifier());

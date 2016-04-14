@@ -8,8 +8,8 @@ public class ApiIsolationPoint extends ApiReadonlyModel {
     private String identifier;
     private String source;
     private String sourceText;
-    private ApiDeviceDescription deviceDefinition;
-    private ApiDeviceDescription lockDefinition;
+    private String deviceDefinition;
+    private String lockDefinition;
     private String location;
     private String method;
     private String check;
@@ -33,19 +33,19 @@ public class ApiIsolationPoint extends ApiReadonlyModel {
         this.source = source;
     }
 
-    public ApiDeviceDescription getDeviceDefinition() {
+    public String getDeviceDefinition() {
         return deviceDefinition;
     }
 
-    public void setDeviceDefinition(ApiDeviceDescription deviceDefinition) {
+    public void setDeviceDefinition(String deviceDefinition) {
         this.deviceDefinition = deviceDefinition;
     }
 
-    public ApiDeviceDescription getLockDefinition() {
+    public String getLockDefinition() {
         return lockDefinition;
     }
 
-    public void setLockDefinition(ApiDeviceDescription lockDefinition) {
+    public void setLockDefinition(String lockDefinition) {
         this.lockDefinition = lockDefinition;
     }
 

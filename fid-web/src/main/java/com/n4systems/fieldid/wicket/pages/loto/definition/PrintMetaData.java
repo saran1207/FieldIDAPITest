@@ -54,7 +54,7 @@ public class PrintMetaData extends Panel {
             //loop through device defns - sum iso points
             for(IsolationPoint iPt: isoPts) {
 
-                if(iPt != null && StringUtils.isNotEmpty(iPt.getDeviceDefinition().getFreeformDescription())) {
+                if(iPt != null && StringUtils.isNotEmpty(iPt.getDeviceDefinition())) {
                     deviceCount++;
                 }
             }

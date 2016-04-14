@@ -2,7 +2,6 @@ package com.n4systems.fieldid.wicket.pages.loto.definition;
 
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.ComponentWithExternalHtml;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.procedure.IsolationPoint;
@@ -30,7 +29,7 @@ public class PrintList extends Panel {
         super(id,model);
         this.model = model;
 
-        final ListView<IsolationPoint> listView = new ListView<IsolationPoint>("list",new PropertyModel(model,"isolationPoints")) {
+        final ListView<IsolationPoint> listView = new ListView<IsolationPoint>("list", new PropertyModel<>(model,"isolationPoints")) {
             @Override protected void populateItem(ListItem<IsolationPoint> item) {
                 populateIsolationPoint(item);
                 item.setOutputMarkupId(true);
@@ -55,10 +54,8 @@ public class PrintList extends Panel {
 
         if (isolationPoint.getDeviceDefinition() == null) {
             item.add(new Label("device").setVisible(!isNotes));
-        } else if(isolationPoint.getDeviceDefinition().isFreeform()) {
-            item.add(new Label("device", getDeviceFreeFormDescription(isolationPoint)).setVisible(!isNotes));
-        } else {
-            item.add(new Label("device", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getDeviceDefinition().getAssetType().getName())).setVisible(!isNotes));
+        } else if(isolationPoint.getDeviceDefinition() != null) {
+            item.add(new Label("device", isolationPoint.getDeviceDefinition()));
         }
 
         if(isNotes) {
@@ -70,18 +67,6 @@ public class PrintList extends Panel {
             item.add(new Label("method", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getMethod())));
         }
 
-    }
-
-    private String getDeviceFreeFormDescription(IsolationPoint isolationPoint) {
-        StringBuilder description = new StringBuilder();
-        description.append(isolationPoint.getDeviceDefinition().getFreeformDescription());
-        if(isolationPoint.getLockDefinition().getFreeformDescription() != null) {
-            description.append(" ");
-            description.append(new FIDLabelModel("label.and").getObject());
-            description.append(" ");
-            description.append(isolationPoint.getLockDefinition().getFreeformDescription());
-        }
-        return description.toString();
     }
 
 }
