@@ -44,6 +44,10 @@ public class AlterTable implements ExecutableStatement {
 		return addForeignKey(null, column, referencedTable, referencedColumn);
 	}
 
+	public AlterTable dropForeignKey(String name, String column, String referencedTable, String referencedColumn) {
+		return add(new DropForeignKey(name, column, referencedTable, referencedColumn));
+	}
+
 	public AlterTable dropColumn(String column) {
 		return add(new DropColumn(column));
 	}
@@ -161,6 +165,36 @@ public class AlterTable implements ExecutableStatement {
 		}
 	}
 
+	private class DropForeignKey extends AlterStatement {
+		//You're right, I AM that lazy.
+		private String name, column, referencedTable, referencedColumn;
+
+		public DropForeignKey(String name, String column, String referencedTable, String referencedColumn) {
+			this.name = name;
+			this.column = column;
+			this.referencedTable = referencedTable;
+			this.referencedColumn = referencedColumn;
+		}
+
+		@Override
+		boolean canExecute(Connection conn, String table) throws SQLException {
+			return DDLUtils.foreignKeyExists(conn, table, column, referencedTable, referencedColumn);
+		}
+
+		@Override
+		String getDDL() {
+			StringBuilder sql = new StringBuilder("DROP FOREIGN KEY ");
+			if(name != null) {
+				sql.append(name);
+			}
+
+			//Yep, that's it... the other fields are only needed to make sure the key exists, so we don't explode when
+			//we try to remove it.
+
+			return sql.toString();
+		}
+	}
+
 	private class AddPrimaryKey extends AlterStatement {
 		private final String[] columns;
 
@@ -260,7 +294,7 @@ public class AlterTable implements ExecutableStatement {
 
 		@Override
 		public boolean canExecute(Connection conn, String table) throws SQLException {
-			return DDLUtils.columnExists(conn, table, name);
+			return !DDLUtils.columnExists(conn, table, name);
 		}
 
 		@Override
