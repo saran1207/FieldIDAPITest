@@ -197,4 +197,15 @@ public class ApiSynchronizationResource extends FieldIdPersistenceService {
 		
 		return null;
 	}
+
+	public static Date getSyncStartDate(SyncDuration syncDuration, Date endDate) {
+		DateTime dateTime = new DateTime(endDate);
+		switch(syncDuration) {
+			case WEEK: return dateTime.minusWeeks(1).toDate();
+			case MONTH: return dateTime.minusMonths(1).toDate();
+			case SIX_MONTHS: return dateTime.minusMonths(6).toDate();
+			case YEAR: return dateTime.minusYears(1).toDate();
+		}
+		return null;
+	}
 }
