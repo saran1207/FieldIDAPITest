@@ -7,6 +7,7 @@ import com.n4systems.fieldid.certificate.model.Job;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.LastEventDateService;
@@ -44,13 +45,14 @@ public class CertificateService extends FieldIdPersistenceService {
 	@Autowired private EventService eventService;
 	@Autowired private S3Service s3service;
     @Autowired private LastEventDateService lastEventDateService;
+	@Autowired private AssetService assetService;
 
 	public byte[] generateAssetCertificatePdf(Asset asset) throws ReportException, NonPrintableManufacturerCert {
-		return printer.printToPDF(generateAssetCertificate(persistenceService.find(Asset.class, asset.getId())));
+		return printer.printToPDF(generateAssetCertificate(assetService.findById(asset.getId())));
 	}
 	
 	public JasperPrint generateAssetCertificate(Long assetId) throws ReportException, NonPrintableManufacturerCert {
-		Asset asset = persistenceService.find(Asset.class, assetId);
+		Asset asset = assetService.findById(assetId);
 
         return generateAssetCertificate(asset);
 	}

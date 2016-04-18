@@ -3,6 +3,7 @@ package com.n4systems.fieldid.service.schedule;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.junit.FieldIdServiceTest;
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.escalationrule.AssignmentEscalationRuleService;
 import com.n4systems.model.*;
 import com.n4systems.model.asset.ScheduleSummaryEntry;
@@ -27,6 +28,7 @@ public class MassScheduleServiceTest extends FieldIdServiceTest {
     private @TestMock PersistenceService persistenceService;
     private @TestMock SecurityContext securityContext;
     private @TestMock AssignmentEscalationRuleService ruleService;
+    private @TestMock AssetService assetService;
     private Asset asset1;
     private Asset asset2;
     private Asset asset3;
@@ -51,11 +53,11 @@ public class MassScheduleServiceTest extends FieldIdServiceTest {
         // no schedules attached to this entry.
         List<ScheduleSummaryEntry> schedules = Lists.newArrayList(scheduleSummaryEntry);
 
-        expect(persistenceService.find(Asset.class, 1L)).andReturn(asset1);
-        expect(persistenceService.find(Asset.class, 2L)).andReturn(asset2);
-        expect(persistenceService.find(Asset.class, 3L)).andReturn(asset3);
+        expect(assetService.findById(1L)).andReturn(asset1);
+        expect(assetService.findById(2L)).andReturn(asset2);
+        expect(assetService.findById(3L)).andReturn(asset3);
 
-        replay(persistenceService);
+        replay(assetService);
 
         massScheduleService.performSchedules(schedules, false);
 
@@ -69,13 +71,12 @@ public class MassScheduleServiceTest extends FieldIdServiceTest {
         ScheduleSummaryEntry scheduleSummaryEntry = new ScheduleSummaryEntryBuilder().withAssetType(assetType).withAssetIds(1L, 2L, 3L).withScheduledEvents(event).build();
         List<ScheduleSummaryEntry> schedules = Lists.newArrayList(scheduleSummaryEntry);
 
-        expect(persistenceService.find(Asset.class, 1L)).andReturn(asset1);
-        expect(persistenceService.find(Asset.class, 2L)).andReturn(asset2);
-        expect(persistenceService.find(Asset.class, 3L)).andReturn(asset3);
+        expect(assetService.findById(1L)).andReturn(asset1);
+        expect(assetService.findById(2L)).andReturn(asset2);
+        expect(assetService.findById(3L)).andReturn(asset3);
         expect(persistenceService.save(anyObject(Event.class))).andReturn(1L).times(3);
-//        expect(persistenceService.find(ThingEvent.class, Long.parseLong("1"))).andReturn(event).times(3);
 
-        replay(persistenceService);
+        replay(assetService, persistenceService);
 
         massScheduleService.performSchedules(schedules,  false);
 
@@ -97,9 +98,9 @@ public class MassScheduleServiceTest extends FieldIdServiceTest {
         incompleteSchedule.setProject(project);
         incompleteSchedule.setType(event.getType());
 
-        expect(persistenceService.find(Asset.class, 1L)).andReturn(asset1);
-        expect(persistenceService.find(Asset.class, 2L)).andReturn(asset2);
-        expect(persistenceService.find(Asset.class, 3L)).andReturn(asset3);
+        expect(assetService.findById(1L)).andReturn(asset1);
+        expect(assetService.findById(2L)).andReturn(asset2);
+        expect(assetService.findById(3L)).andReturn(asset3);
         expect(scheduleService.findIncompleteSchedulesForAsset(asset1)).andReturn(incompleteSchedules);
         expect(scheduleService.findIncompleteSchedulesForAsset(asset2)).andReturn(incompleteSchedules);
         expect(scheduleService.findIncompleteSchedulesForAsset(asset3)).andReturn(incompleteSchedules);
@@ -108,6 +109,7 @@ public class MassScheduleServiceTest extends FieldIdServiceTest {
         replay(scheduleService);
         replay(persistenceService);
         replay(ruleService);
+        replay(assetService);
 
         massScheduleService.performSchedules(schedules,  true);
 

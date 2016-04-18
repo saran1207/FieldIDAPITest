@@ -125,7 +125,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             asset.setIdentified(dateService.todayAsDate());
         } else if (!params.get("id").isEmpty()) {
             Long assetId = params.get("id").toLongObject();
-            asset = persistenceService.find(Asset.class, assetId);
+            asset = assetService.findById(assetId);
             asset.setSubAssets(assetService.findSubAssets(asset));
         } else {
             asset = assetService.createAssetWithHistory();

@@ -1,11 +1,14 @@
 package com.n4systems.fieldid.service.event.perform;
 
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.model.*;
 import com.n4systems.persistence.utils.PostFetcher;
-
-import java.util.HashSet;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class PerformThingEventHelperService extends PerformEventHelperService<ThingEvent, ThingEventType> {
+
+    @Autowired
+    private AssetService assetService;
 
     public PerformThingEventHelperService() {
         super(ThingEvent.class, ThingEventType.class);
@@ -29,7 +32,7 @@ public class PerformThingEventHelperService extends PerformEventHelperService<Th
     @Override
     protected ThingEvent createNewEvent(ThingEvent event, Long targetId, Long eventTypeId) {
         ThingEvent newEvent = super.createNewEvent(event, targetId, eventTypeId);
-        Asset asset = persistenceService.find(Asset.class, targetId);
+        Asset asset = assetService.findById(targetId);
 
         newEvent.setAssetStatus(asset.getAssetStatus());
         newEvent.setAsset(asset);
