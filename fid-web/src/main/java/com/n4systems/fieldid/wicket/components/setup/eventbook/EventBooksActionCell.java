@@ -99,7 +99,7 @@ public class EventBooksActionCell extends Panel {
         add(unarchiveLink = new AjaxLink("unarchiveLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                EventBook bookToUnarchive = eventBookService.findById(thisBook.getId());
+                EventBook bookToUnarchive = eventBookService.findArchivedEventBookById(thisBook.getId());
                 eventBookService.unarchiveStatus(bookToUnarchive);
 
                 FieldIDSession.get()
