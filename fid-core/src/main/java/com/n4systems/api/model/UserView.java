@@ -15,16 +15,28 @@ public class UserView extends ExternalModelView {
 	public static final long serialVersionUID = 1L;
 	
 	public static final String USER_NAME_FIELD = "User Name";
-	public static final String MANAGE_JOBS_FIELD = "Manage Jobs (Y/N)";
-	public static final String MANAGE_SAFETY_NETWORK_FIELD = "Manage Safety Network (Y/N)";
 	public static final String ACCESS_WEB_STORE_FIELD = "Access Web Store (Y/N)";
 	public static final String SYSTEM_ID_FIELD = "System ID";
-	public static final String EDIT_EVENTS_FIELD = "Edit Events (Y/N)";
-	public static final String CREATE_EVENTS_FIELD = "Create Events (Y/N)";
-	public static final String MANAGE_JOB_SITES_FIELD = "Manage Job Sites (Y/N)";
-	public static final String MANAGE_SYSTEM_USERS_FIELD = "Manage System Users (Y/N)";
+
+	public static final String IDENTIFY_ASSETS_FIELD = "Identify Assets (Y/N)";
 	public static final String MANAGE_SYSTEM_CONFIGURATION_FIELD = "Manage System Configuration (Y/N)";
-	public static final String IDENTIFY_ASSETS_FIELD = "Identify Assets";
+	public static final String MANAGE_SYSTEM_USERS_FIELD = "Manage System Users (Y/N)";
+	public static final String MANAGE_JOB_SITES_FIELD = "Manage Job Sites (Y/N)";
+	public static final String CREATE_EVENTS_FIELD = "Create Events (Y/N)";
+	public static final String EDIT_EVENTS_FIELD = "Edit Events (Y/N)";
+	public static final String MANAGE_JOBS_FIELD = "Manage Jobs (Y/N)";
+	public static final String MANAGE_SAFETY_NETWORK_FIELD = "Manage Safety Network (Y/N)";
+	public static final String EDIT_ASSET_DETAILS = "Edit Asset Details (Y/N)";
+
+	public static final String AUTHOR_EDIT_PROCEDURE = "Author/Edit Procedures (Y/N)";
+	public static final String CERTIFY_PROCEDURE = "Certify Procedure (Y/N)";
+	public static final String DELETE_PROCEDURE = "Delete Procedure (Y/N)";
+	public static final String MAINTAIN_LOTO_SCHEDULE = "Maintain LOTO Schedule (Y/N)";
+	public static final String PERFORM_PROCEDURE = "Perform Procedure (Y/N)";
+	public static final String PRINT_PROCEDURE = "Print Procedure (Y/N)";
+	public static final String PROCEDURE_AUDIT = "Procedure Audit (Y/N)";
+	public static final String UNPUBLISH_PROCEDURE = "Unpublish Procedure (Y/N)";
+
 	public static final String SEND_WELCOME_EMAIL_FIELD = "Send Welcome Email (Y/N)";
 	public static final String MOBILE_PASSCODE_FIELD = "Mobile Passcode";
 	public static final String POSTITION_FIELD = "Postition";
@@ -98,9 +110,8 @@ public class UserView extends ExternalModelView {
 	private String accountType;	
 	
 	@SerializableField(title=IDENTIFY_ASSETS_FIELD, order = 560, validators = {PermissionValidator.class})
-
 	private String identifyAssets;
-	
+
 	@SerializableField(title=MANAGE_SYSTEM_CONFIGURATION_FIELD, order = 570, validators = {PermissionValidator.class})
 	private String manageSystemConfiguration;
 	
@@ -121,11 +132,38 @@ public class UserView extends ExternalModelView {
 	
 	@SerializableField(title=MANAGE_SAFETY_NETWORK_FIELD, order = 630, validators = {PermissionValidator.class})
 	private String manageSafetyNetwork;
-	
-    @SerializableField(title= MOBILE_PASSCODE_FIELD, order = 680, validators = {}, handler=MaskedSerializationHandler.class)
+
+	@SerializableField(title=EDIT_ASSET_DETAILS, order = 640, validators = {PermissionValidator.class})
+	private String editAssetDetails;
+
+	@SerializableField(title=AUTHOR_EDIT_PROCEDURE, order = 650, validators = {PermissionValidator.class})
+	private String authorEditProcedure;
+
+	@SerializableField(title=CERTIFY_PROCEDURE, order = 660, validators = {PermissionValidator.class})
+	private String certifyProcedure;
+
+	@SerializableField(title=DELETE_PROCEDURE, order = 670, validators = {PermissionValidator.class})
+	private String deleteProcedure;
+
+	@SerializableField(title=MAINTAIN_LOTO_SCHEDULE, order = 680, validators = {PermissionValidator.class})
+	private String maintainLotoSchedule;
+
+	@SerializableField(title=PERFORM_PROCEDURE, order = 690, validators = {PermissionValidator.class})
+	private String performProcedure;
+
+	@SerializableField(title=PRINT_PROCEDURE, order = 700, validators = {PermissionValidator.class})
+	private String printProcedure;
+
+	@SerializableField(title=PROCEDURE_AUDIT, order = 710, validators = {PermissionValidator.class})
+	private String procedureAudit;
+
+	@SerializableField(title=UNPUBLISH_PROCEDURE, order = 720, validators = {PermissionValidator.class})
+	private String unpublishProcedure;
+
+	@SerializableField(title= MOBILE_PASSCODE_FIELD, order = 730, validators = {}, handler=MaskedSerializationHandler.class)
 	private String securityRfidNumber;
 
-	@SerializableField(title=ASSIGN_PASSWORD_FIELD, order = 700, validators = {YNValidator.class})
+	@SerializableField(title=ASSIGN_PASSWORD_FIELD, order = 740, validators = {YNValidator.class})
 	private String assignPassword = "N";
 	
 	@SerializableField(title=PASSWORD_FIELD, order = 800, validators = {PasswordValidator.class}, handler=MaskedSerializationHandler.class)
@@ -316,6 +354,78 @@ public class UserView extends ExternalModelView {
 		this.manageSafetyNetwork = manageSafetyNetwork;
 	}
 
+	public String getEditAssetDetails() {
+		return editAssetDetails;
+	}
+
+	public void setEditAssetDetails(String editAssetDetails) {
+		this.editAssetDetails = editAssetDetails;
+	}
+
+	public String getAuthorEditProcedure() {
+		return authorEditProcedure;
+	}
+
+	public void setAuthorEditProcedure(String authorEditProcedure) {
+		this.authorEditProcedure = authorEditProcedure;
+	}
+
+	public String getCertifyProcedure() {
+		return certifyProcedure;
+	}
+
+	public void setCertifyProcedure(String certifyProcedure) {
+		this.certifyProcedure = certifyProcedure;
+	}
+
+	public String getDeleteProcedure() {
+		return deleteProcedure;
+	}
+
+	public void setDeleteProcedure(String deleteProcedure) {
+		this.deleteProcedure = deleteProcedure;
+	}
+
+	public String getMaintainLotoSchedule() {
+		return maintainLotoSchedule;
+	}
+
+	public void setMaintainLotoSchedule(String maintainLotoSchedule) {
+		this.maintainLotoSchedule = maintainLotoSchedule;
+	}
+
+	public String getPerformProcedure() {
+		return performProcedure;
+	}
+
+	public void setPerformProcedure(String performProcedure) {
+		this.performProcedure = performProcedure;
+	}
+
+	public String getPrintProcedure() {
+		return printProcedure;
+	}
+
+	public void setPrintProcedure(String printProcedure) {
+		this.printProcedure = printProcedure;
+	}
+
+	public String getProcedureAudit() {
+		return procedureAudit;
+	}
+
+	public void setProcedureAudit(String procedureAudit) {
+		this.procedureAudit = procedureAudit;
+	}
+
+	public String getUnpublishProcedure() {
+		return unpublishProcedure;
+	}
+
+	public void setUnpublishProcedure(String unpublishProcedure) {
+		this.unpublishProcedure = unpublishProcedure;
+	}
+
 	private boolean isPermission(String yOrN) {
 		return YNField.isYes(yOrN);
 	}
@@ -343,29 +453,56 @@ public class UserView extends ExternalModelView {
 		// CAVEAT : this defines the permissions as defined in the excel columns but they aren't validated.
 		// ie. it doesn't check to see if the account type actually allows for these permissions.
 		int permissions = Permissions.NO_PERMISSIONS;
+		if (isPermission(getIdentifyAssets())) {
+			permissions |= Permissions.TAG;
+		}
 		if (isPermission(getManageSystemConfiguration())) {
 			permissions |= Permissions.MANAGE_SYSTEM_CONFIG;
 		}
 		if (isPermission(getManageSystemUsers())) {
 			permissions |= Permissions.MANAGE_SYSTEM_USERS;
 		}
-		if (isPermission(getManageJobs())) {
-			permissions |= Permissions.MANAGE_JOBS;
-		}
 		if (isPermission(getManageJobSites())) {
 			permissions |= Permissions.MANAGE_END_USERS;
-		}
-		if (isPermission(getManageSafetyNetwork())) {
-			permissions |= Permissions.MANAGE_SAFETY_NETWORK;
-		}
-		if (isPermission(getIdentifyAssets())) {
-			permissions |= Permissions.TAG;
 		}
 		if (isPermission(getCreateEvents())) {
 			permissions |= Permissions.CREATE_EVENT;
 		}
 		if (isPermission(getEditEvents())) {
 			permissions |= Permissions.EDIT_EVENT;
+		}
+		if (isPermission(getManageJobs())) {
+			permissions |= Permissions.MANAGE_JOBS;
+		}
+		if (isPermission(getManageSafetyNetwork())) {
+			permissions |= Permissions.MANAGE_SAFETY_NETWORK;
+		}
+		if (isPermission(getEditAssetDetails())) {
+			permissions |= Permissions.EDIT_ASSET_DETAILS;
+		}
+		if (isPermission(getAuthorEditProcedure())) {
+			permissions |= Permissions.AUTHOR_EDIT_PROCEDURE;
+		}
+		if (isPermission(getCertifyProcedure())) {
+			permissions |= Permissions.CERTIFY_PROCEDURE;
+		}
+		if (isPermission(getDeleteProcedure())) {
+			permissions |= Permissions.DELETE_PROCEDURE;
+		}
+		if (isPermission(getMaintainLotoSchedule())) {
+			permissions |= Permissions.MAINTAIN_LOTO_SCHEDULE;
+		}
+		if (isPermission(getPerformProcedure())) {
+			permissions |= Permissions.PERFORM_PROCEDURE;
+		}
+		if (isPermission(getPrintProcedure())) {
+			permissions |= Permissions.PRINT_PROCEDURE;
+		}
+		if (isPermission(getProcedureAudit())) {
+			permissions |= Permissions.PROCEDURE_AUDIT;
+		}
+		if (isPermission(getUnpublishProcedure())) {
+			permissions |= Permissions.UNPUBLISH_PROCEDURE;
 		}
 		return permissions;
 	}
