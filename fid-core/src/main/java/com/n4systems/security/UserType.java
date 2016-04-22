@@ -11,10 +11,10 @@ public enum UserType implements DisplayEnum{
 	ADMIN( "Admin", PermissionType.allPermissions() ),
 	SYSTEM( "System", PermissionType.allPermissions() ),
     FULL( "Administration", PermissionType.values() ),
-    LITE( "Inspection", PermissionType.CreateEvent, PermissionType.EditEvent ),
-    READONLY( "Reporting" /*no permissions*/ ),
+    LITE( "Inspection", PermissionType.CreateEvent, PermissionType.EditEvent, PermissionType.AuthorEditProcedure, PermissionType.CertifyProcedure, PermissionType.PerformProcedure, PermissionType.PrintProcedure, PermissionType.ProcedureAudit ),
+    READONLY( "Reporting", PermissionType.EditAssetDetails, PermissionType.PrintProcedure ),
     PERSON("Person" /*no permissions*/),
-    USAGE_BASED("Usage Based", PermissionType.CreateEvent, PermissionType.EditEvent);
+    USAGE_BASED("Usage Based", PermissionType.CreateEvent, PermissionType.EditEvent, PermissionType.AuthorEditProcedure, PermissionType.CertifyProcedure, PermissionType.PerformProcedure, PermissionType.PrintProcedure, PermissionType.ProcedureAudit);
 
     public static UserType [] VISIBLE_USER_TYPES= {FULL, LITE, READONLY, PERSON, USAGE_BASED};
 

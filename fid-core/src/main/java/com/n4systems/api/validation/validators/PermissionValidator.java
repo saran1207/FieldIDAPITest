@@ -25,6 +25,15 @@ public class PermissionValidator implements FieldValidator {
 		permissionsMap.put(UserView.EDIT_EVENTS_FIELD, PermissionType.EditEvent);
 		permissionsMap.put(UserView.MANAGE_JOBS_FIELD, PermissionType.ManageJobs);
 		permissionsMap.put(UserView.MANAGE_SAFETY_NETWORK_FIELD, PermissionType.ManageSafetyNetwork);
+		permissionsMap.put(UserView.EDIT_ASSET_DETAILS, PermissionType.EditAssetDetails);
+		permissionsMap.put(UserView.AUTHOR_EDIT_PROCEDURE, PermissionType.AuthorEditProcedure);
+		permissionsMap.put(UserView.CERTIFY_PROCEDURE, PermissionType.CertifyProcedure);
+		permissionsMap.put(UserView.DELETE_PROCEDURE, PermissionType.DeleteProcedure);
+		permissionsMap.put(UserView.MAINTAIN_LOTO_SCHEDULE, PermissionType.MaintainSchedule);
+		permissionsMap.put(UserView.PERFORM_PROCEDURE, PermissionType.PerformProcedure);
+		permissionsMap.put(UserView.PRINT_PROCEDURE, PermissionType.PrintProcedure);
+		permissionsMap.put(UserView.PROCEDURE_AUDIT, PermissionType.ProcedureAudit);
+		permissionsMap.put(UserView.UNPUBLISH_PROCEDURE, PermissionType.UnpublishProcedure);
 	}
 		
 	@Override

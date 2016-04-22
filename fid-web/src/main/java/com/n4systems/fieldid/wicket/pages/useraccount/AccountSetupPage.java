@@ -32,7 +32,7 @@ public abstract class AccountSetupPage extends FieldIDTemplatePage {
         ));
     }
 
-    private boolean hasEmailAlerts() {
+    protected boolean hasEmailAlerts() {
         return FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.EmailAlerts);
     }
 }
