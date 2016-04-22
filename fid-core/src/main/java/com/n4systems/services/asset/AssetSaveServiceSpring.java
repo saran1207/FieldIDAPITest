@@ -68,11 +68,11 @@ public class AssetSaveServiceSpring extends FieldIdPersistenceService {
 
     private List<InfoOptionBean> reconcileInfoOptions(Collection<InfoOptionBean> options) {
         //WEB-3944 -- We need to reattach selected static info options in order to avoid a detached entity exception
-        List<InfoOptionBean> reconciledOptions = new ArrayList<InfoOptionBean>();
+        List<InfoOptionBean> reconciledOptions = new ArrayList<>();
 
         for (InfoOptionBean option : options) {
             if (option.isStaticData()) {
-                QueryBuilder<InfoOptionBean> query = new QueryBuilder<InfoOptionBean>(InfoOptionBean.class, new OpenSecurityFilter());
+                QueryBuilder<InfoOptionBean> query = new QueryBuilder<>(InfoOptionBean.class, new OpenSecurityFilter());
                 query.addSimpleWhere("uniqueID", option.getUniqueID());
                 InfoOptionBean foundOption = persistenceService.find(query);
                 reconciledOptions.add(foundOption);
@@ -90,7 +90,7 @@ public class AssetSaveServiceSpring extends FieldIdPersistenceService {
                 asset.archiveEntity();
             }
             
-			asset = assetService.create(asset, getCurrentUser());
+			asset = assetService.create(asset);//, getCurrentUser());
 			saveUploadedAttachments(asset, uploadedAttachments);
 			saveAssetImage(asset, imageData, imageFileName, true);
 			return asset;
@@ -101,7 +101,7 @@ public class AssetSaveServiceSpring extends FieldIdPersistenceService {
 
 	public Asset update(Asset asset, List<AssetAttachment> assetAttachments, byte[] imageData, String imageFileName, boolean updateImage) {
 		try {
-			asset = assetService.update(asset, getCurrentUser());
+			asset = assetService.updateWithSubassets(asset);//, getCurrentUser());
             if (assetAttachments != null) {
                 // When attachments are null, we mean do not update attachments here. The mobile takes care of attachments
                 // separately by calling ApiAttachmentResource
@@ -131,7 +131,7 @@ public class AssetSaveServiceSpring extends FieldIdPersistenceService {
             }
         }
 
-        List<AssetAttachment> newAttachments = new ArrayList<AssetAttachment>();
+        List<AssetAttachment> newAttachments = new ArrayList<>();
         for (AssetAttachment assetAttachment : assetAttachments) {
             if (assetAttachment.isNew()) {
                 newAttachments.add(assetAttachment);

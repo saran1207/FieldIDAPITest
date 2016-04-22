@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ThingEventCreationService extends EventCreationService<ThingEvent, Asset> {
 
@@ -124,23 +125,21 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
 
 
     private void setOrderForSubEvents(ThingEvent event) {
-        //TODO why are we using persistence service to get the Asset and not AssetService?
-        Asset asset = persistenceService.findUsingTenantOnlySecurityWithArchived(Asset.class, event.getAsset().getId());
+        Asset asset = assetService.findArchivedById(event.getAsset().getId());
         List<SubAsset> subAssets = assetService.findSubAssets(asset);
-        List<SubEvent> reorderedSubEvents = new ArrayList<SubEvent>();
+        List<SubEvent> reorderedSubEvents = new ArrayList<>();
         for (SubAsset subAsset : subAssets) {
-            for (SubEvent subEvent : event.getSubEvents()) {
-                if (subEvent.getAsset().equals(subAsset.getAsset())) {
-                    reorderedSubEvents.add(subEvent);
-                }
-            }
+            reorderedSubEvents.addAll(
+                    event.getSubEvents()
+                         .stream()
+                         .filter(subEvent -> subEvent.getAsset().equals(subAsset.getAsset()))
+                         .collect(Collectors.toList()));
         }
         event.setSubEvents(reorderedSubEvents);
     }
 
     private void confirmSubEventsAreAgainstAttachedSubAssets(ThingEvent event) throws UnknownSubAsset {
-        //TODO why are we using persistence service to get the Asset and not AssetService?
-        Asset asset = persistenceService.findUsingTenantOnlySecurityWithArchived(Asset.class, event.getAsset().getId());
+        Asset asset = assetService.findArchivedById(event.getAsset().getId());
         List<SubAsset> subAssets = assetService.findSubAssets(asset);
         for (SubEvent subEvent : event.getSubEvents()) {
             if (!subAssets.contains(new SubAsset(subEvent.getAsset(), null))) {
@@ -151,8 +150,7 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
 
     private void updateAsset(ThingEvent event) {
         User modifiedBy = getCurrentUser();
-        //TODO why are we using persistence service to get the Asset and not AssetService?
-        Asset asset = persistenceService.findUsingTenantOnlySecurityWithArchived(Asset.class, event.getAsset().getId());
+        Asset asset = assetService.findArchivedById(event.getAsset().getId());
         asset = assetService.fillInSubAssetsOnAsset(asset);
 
         // pushes the location and the ownership to the asset based on the
@@ -163,7 +161,7 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
         gpsUpdates(event, asset);
 
         try {
-            assetService.update(asset, modifiedBy);
+            assetService.updateWithSubassets(asset);//, modifiedBy);
         } catch (SubAssetUniquenessException e) {
             logger.error("received a subasset uniquness error this should not be possible form this type of update.", e);
             throw new RuntimeException(e);
@@ -172,13 +170,14 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
 
     public void updateAssetOwner(ThingEvent event) {
         User modifiedBy = getCurrentUser();
-        Asset asset = persistenceService.findUsingTenantOnlySecurityWithArchived(Asset.class, event.getAsset().getId());
+        Asset asset = assetService.findArchivedById(event.getAsset().getId());
         asset.setSubAssets(assetService.findSubAssets(asset));
 
         ownershipUpdates(event, asset);
 
         try {
-            assetService.update(asset, modifiedBy);
+//            assetService.update(asset, modifiedBy);
+            assetService.updateWithSubassets(asset);
         } catch (SubAssetUniquenessException e) {
             logger.error("received a subasset uniquness error this should not be possible form this type of update.", e);
             throw new RuntimeException(e);
@@ -224,15 +223,15 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
     @Override
     protected void postUpdateEvent(ThingEvent event, FileDataContainer fileData) {
         User modifiedBy = getCurrentUser();
-        //TODO why are we using persistence service to get the Asset and not AssetService?
-        Asset asset = persistenceService.findUsingTenantOnlySecurityWithArchived(Asset.class, event.getAsset().getId());
+        Asset asset = assetService.findArchivedById(event.getAsset().getId());
         asset = assetService.fillInSubAssetsOnAsset(asset);
 
         statusUpdates(event, asset);
         assignNextEventInSeries(event, EventEnum.PERFORM);
 
         try {
-            assetService.update(asset, modifiedBy);
+//            assetService.update(asset, modifiedBy);
+            assetService.updateWithSubassets(asset);
         } catch (SubAssetUniquenessException e) {
             logger.error("received a subasset uniquness error this should not be possible form this type of update.", e);
             throw new RuntimeException(e);
@@ -261,7 +260,7 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
     }
 
     public void assignNextEventInSeries(ThingEvent event, EventEnum eventEnum) {
-        Event nextEvent = null;
+        Event nextEvent;
 
         RecurringAssetTypeEvent recurringEvent = event.getRecurringEvent();
 

@@ -83,7 +83,7 @@ public class LinkedAssetPanel extends Panel {
                         Asset asset = assetModel.getObject();
                         asset.setSubAssets(linkedAssetsModel.getObject());
                         try {
-                            asset = assetService.update(asset, getCurrentUser());
+                            asset = assetService.updateWithSubassets(asset);//, getCurrentUser());
                         } catch (SubAssetUniquenessException e) {
                             error("Unable to remove Linked Asset:" + item.getModelObject().getAsset().getIdentifier());
                         }
@@ -106,7 +106,7 @@ public class LinkedAssetPanel extends Panel {
                 Asset asset = assetModel.getObject();
                 asset.setSubAssets(linkedAssetsModel.getObject());
                 try {
-                    asset = assetService.update(asset, getCurrentUser());
+                    asset = assetService.updateWithSubassets(asset);//, getCurrentUser());
                 } catch (SubAssetUniquenessException e) {
                     error("Unable to reorder Linked Assets");
                 }
@@ -163,7 +163,7 @@ public class LinkedAssetPanel extends Panel {
                         SubAsset subasset = new SubAsset(assetForLinking, asset);
                         asset.getSubAssets().add(subasset);
                         try {
-                            assetService.update(asset, getCurrentUser());
+                            assetService.updateWithSubassets(asset);//, getCurrentUser());
                             form.setVisible(false);
                             addLink.setVisible(true);
                             assetForLinking = null;

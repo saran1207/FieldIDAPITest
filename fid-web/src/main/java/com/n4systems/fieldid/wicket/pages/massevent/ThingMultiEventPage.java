@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.massevent;
 
 import com.n4systems.ejb.impl.EventScheduleBundle;
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.ThingEventCreationService;
 import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForAssetTypeModel;
@@ -8,7 +9,10 @@ import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
 import com.n4systems.fieldid.wicket.pages.event.post.PostThingEventPanel;
 import com.n4systems.fieldid.wicket.pages.event.target.AssetDetailsPanel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
-import com.n4systems.model.*;
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetTypeSchedule;
+import com.n4systems.model.ThingEvent;
+import com.n4systems.model.ThingEventProofTest;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
@@ -23,15 +27,19 @@ import static ch.lambdaj.Lambda.on;
 
 public abstract class ThingMultiEventPage extends MultiEventPage<ThingEvent> {
 
-    @SpringBean protected ThingEventCreationService eventCreationService;
+    @SpringBean
+    protected ThingEventCreationService eventCreationService;
 
-    protected IModel<ThingEventProofTest> proofTestInfo;
+    @SpringBean
+    private AssetService assetService;
+
+    private IModel<ThingEventProofTest> proofTestInfo;
 
     @Override
     protected void onInitialize() {
-        proofTestInfo = new PropertyModel<ThingEventProofTest>(event, "proofTestInfo");
+        proofTestInfo = new PropertyModel<>(event, "proofTestInfo");
         if (proofTestInfo.getObject() == null) {
-            proofTestInfo = new Model<ThingEventProofTest>(new ThingEventProofTest());
+            proofTestInfo = new Model<>(new ThingEventProofTest());
         }
 
         super.onInitialize();
@@ -44,11 +52,12 @@ public abstract class ThingMultiEventPage extends MultiEventPage<ThingEvent> {
         return openEvent;
     }
 
+    @SuppressWarnings("unchecked")
     protected List<EventScheduleBundle<Asset>> createEventScheduleBundles(Asset asset) {
-        List<EventScheduleBundle<Asset>> scheduleBundles = new ArrayList<EventScheduleBundle<Asset>>();
+        List<EventScheduleBundle<Asset>> scheduleBundles = new ArrayList<>();
 
         for (ThingEvent sched : schedules) {
-            EventScheduleBundle bundle = new EventScheduleBundle<Asset>(asset, sched.getType(), sched.getProject(), sched.getDueDate(), sched.getAssignedUserOrGroup());
+            EventScheduleBundle bundle = new EventScheduleBundle<>(asset, sched.getType(), sched.getProject(), sched.getDueDate(), sched.getAssignedUserOrGroup());
             scheduleBundles.add(bundle);
         }
 
@@ -60,7 +69,7 @@ public abstract class ThingMultiEventPage extends MultiEventPage<ThingEvent> {
             eventSchedule.setType(event.getObject().getType());
             eventSchedule.setDueDate(schedule.getNextDate(event.getObject().getDate()));
 
-            EventScheduleBundle bundle = new EventScheduleBundle<Asset>(asset, eventSchedule.getType(), eventSchedule.getProject(), eventSchedule.getDueDate(), eventSchedule.getAssignedUserOrGroup());
+            EventScheduleBundle bundle = new EventScheduleBundle<>(asset, eventSchedule.getType(), eventSchedule.getProject(), eventSchedule.getDueDate(), eventSchedule.getAssignedUserOrGroup());
             scheduleBundles.add(bundle);
         }
 
@@ -69,7 +78,7 @@ public abstract class ThingMultiEventPage extends MultiEventPage<ThingEvent> {
 
     @Override
     protected boolean targetAlreadyArchived(ThingEvent event) {
-        return persistenceService.findUsingTenantOnlySecurityWithArchived(Asset.class, event.getAsset().getId()).isArchived();
+        return (assetService.findById(event.getTarget().getId()) != null);
     }
 
     @Override
@@ -88,7 +97,7 @@ public abstract class ThingMultiEventPage extends MultiEventPage<ThingEvent> {
 
     @Override
     protected SchedulePicker<ThingEvent> createSchedulePicker() {
-        return new SchedulePicker<ThingEvent>("schedulePicker", new PropertyModel<ThingEvent>(ThingMultiEventPage.this, "scheduleToAdd"), new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(event, "asset.type")), new EventJobsForTenantModel()) {
+        return new SchedulePicker<ThingEvent>("schedulePicker", new PropertyModel<>(ThingMultiEventPage.this, "scheduleToAdd"), new EventTypesForAssetTypeModel(new PropertyModel<>(event, "asset.type")), new EventJobsForTenantModel()) {
             @Override
             protected void onPickComplete(AjaxRequestTarget target) {
                 onSchedulePickComplete(target);

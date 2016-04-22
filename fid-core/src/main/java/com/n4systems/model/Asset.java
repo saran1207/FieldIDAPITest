@@ -22,7 +22,7 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 	private static final long serialVersionUID = 1L;
 	public static final String[] POST_FETCH_ALL_PATHS = { "infoOptions", "type.infoFields", "type.eventTypes", "type.attachments", "type.subTypes", "projects", "modifiedBy.displayName" };
 
-	@Column(name="network_id", nullable=true)
+	@Column(name="network_id")
 	private Long networkId;
 	
 	@Column(nullable=false, length=50)
@@ -44,44 +44,44 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date identified;
 
-	@ManyToOne(optional = true)
+	@ManyToOne
 	@JoinColumn(name = "shoporder_id")
 	private LineItem shopOrder;	// was orderMaster
 
-	@ManyToOne(optional = true)
+	@ManyToOne
 	@JoinColumn(name = "customerorder_id")
 	private Order customerOrder;
 
-	@ManyToOne(optional = true)
+	@ManyToOne
 	private AssetType type;
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "asset_infooption", joinColumns = @JoinColumn(name = "r_productserial", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "r_infooption", referencedColumnName = "uniqueid"))
-	private Set<InfoOptionBean> infoOptions = new HashSet<InfoOptionBean>();
+	private Set<InfoOptionBean> infoOptions = new HashSet<>();
 
-	@ManyToOne(optional = true)
+	@ManyToOne
     @JoinColumn(name="assetstatus_id")
 	private AssetStatus assetStatus;
 
-	@ManyToOne(optional = true)
+	@ManyToOne
 	private User identifiedBy;
     
-    @ManyToOne(optional = true)
+    @ManyToOne
     @JoinColumn(name = "assigneduser_id")
     private User assignedUser;
     
     @Transient
-    private List<SubAsset> subAssets = new ArrayList<SubAsset>();
+    private List<SubAsset> subAssets = new ArrayList<>();
     
     @ManyToMany( fetch= FetchType.LAZY )
     @JoinTable(name = "projects_assets", joinColumns = @JoinColumn(name="asset_id"), inverseJoinColumns = @JoinColumn(name="projects_id"))
-    private List<Project> projects = new ArrayList<Project>();
+    private List<Project> projects = new ArrayList<>();
     
     @Column(name="published", nullable=false)
     private boolean published = false;
     
-    @JoinColumn(name = "linked_id", nullable = true)
-    @ManyToOne(optional = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "linked_id")
+    @ManyToOne(fetch = FetchType.LAZY)
     private Asset linkedAsset;
 
     @Column(insertable=false, updatable=false)
@@ -118,12 +118,8 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
     private Date lastEventDate;
 
 	@Column(name="active_procedure_definition_count")
-	private Long activeProcedureDefinitionCount = new Long(-1);
+	private Long activeProcedureDefinitionCount = (long) -1;
 
-//	@Column(name="last_event_completed_date")
-//	private Date lastEventCompletedDate;
-
-    
 	public Asset() {
 		this.identified = new PlainDate();
 	}
@@ -268,7 +264,7 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 	
 	public void removeBlankInfoOptions() {
 		if( infoOptions != null ) {
-			List<InfoOptionBean> removeList = new ArrayList<InfoOptionBean>();
+			List<InfoOptionBean> removeList = new ArrayList<>();
 			for (InfoOptionBean infoOption : infoOptions) {
 				if( "".equals( infoOption.getName() ) ) {
 					removeList.add( infoOption );
@@ -327,7 +323,7 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 
 	@AllowSafetyNetworkAccess
 	public List<InfoOptionBean> getOrderedInfoOptionList() {
-		ArrayList<InfoOptionBean> orderedList = new ArrayList<InfoOptionBean>();
+		ArrayList<InfoOptionBean> orderedList = new ArrayList<>();
 		orderedList.addAll(this.infoOptions);
 		Collections.sort(orderedList);
 
@@ -459,7 +455,7 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
     }
 	
 	public boolean linkedAssetHasChanged() {
-		return (last_linked_id != linked_id);
+		return (!Objects.equals(last_linked_id, linked_id));
 	}
 	
 	@Override
