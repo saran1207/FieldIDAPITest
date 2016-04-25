@@ -104,7 +104,7 @@ public abstract class ThingEventPage extends EventPage<ThingEvent> {
 
     @Override
     protected boolean targetAlreadyArchived(ThingEvent event) {
-        return (assetService.findById(event.getTarget().getId()) != null);
+        return (assetService.findById(event.getTarget().getId()) == null);
     }
 
     @Override
