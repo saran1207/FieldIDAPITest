@@ -30,8 +30,14 @@ fieldset {
     .org-picker-container {
       label {
         float: left;
-        margin-top: 15px;
+        margin-top: 10px;
       }
+      input[disabled="disabled"] {
+        padding-left: 4px;
+      margin: 5px 0 0 5px;
+
+      }
+
     }
     .action-details {
       label {
