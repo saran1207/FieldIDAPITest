@@ -42,6 +42,12 @@
           display: none;
         }
 
+        .button-display {
+          .button-label {
+            word-wrap: break-word;
+          }
+        }
+
         .button-labels, .button-display, .button-form {
           .list-table {
             margin-bottom: 0;
