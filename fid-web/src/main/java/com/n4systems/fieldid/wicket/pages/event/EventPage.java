@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.EventStatusService;
+import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.ConfirmNavigationBehavior;
 import com.n4systems.fieldid.wicket.behavior.DisableButtonBeforeSubmit;
@@ -78,6 +79,9 @@ public abstract class EventPage<T extends Event> extends FieldIDTemplatePage {
     protected EventStatusService eventStatusService;
     @SpringBean
     protected S3Service s3Service;
+
+    @SpringBean
+    protected OrgService orgService;
 
     protected IModel<T> event;
 
@@ -213,23 +217,29 @@ public abstract class EventPage<T extends Event> extends FieldIDTemplatePage {
 
             final PropertyModel<BaseOrg> ownerModel = new PropertyModel(event,"owner");
             //Owner Picker
-            ownerSection.add(new OrgLocationPicker("orgPicker", ownerModel) {
-                @Override
-                protected void onChanged(AjaxRequestTarget target) {
-                    if (getTextString() != null && getTextString().equals("")) {
-                        locationPicker.setLocationOwner(null);
-                    } else {
-                        locationPicker.setLocationOwner(getOwner());
+            OrgLocationPicker ownerPicker;
+                ownerSection.add(ownerPicker = new OrgLocationPicker("orgPicker", ownerModel) {
+                    @Override
+                    protected void onChanged(AjaxRequestTarget target) {
+                        if (getTextString() != null && getTextString().equals("")) {
+                            locationPicker.setLocationOwner(null);
+                        } else {
+                            locationPicker.setLocationOwner(getOwner());
+                        }
+
+                        doAutoSchedule();
+                        target.add(schedulesContainer);
+                        BaseOrg selectedOrg = (BaseOrg) getDefaultModel().getObject();
+                        newOrExistingEventBook.setOwner(selectedOrg);
+                        target.add(newOrExistingEventBook);
                     }
+                }.withAutoUpdate());
 
-                    doAutoSchedule();
-                    target.add(schedulesContainer);
-                    BaseOrg selectedOrg = (BaseOrg) getDefaultModel().getObject();
-                    newOrExistingEventBook.setOwner(selectedOrg);
-                    target.add(newOrExistingEventBook);
-                }
-            }.withAutoUpdate());
-
+            /* We need this so that siloed users can edit events they did not create */
+            if (!canEditOwner()) {
+                ownerPicker.disableTextBox();
+                ownerPicker.findWithTenantOnlySecurity();
+            }
             // checkbox
             ownerSection.add(new CheckBox("assetOwnerUpdate", new PropertyModel<Boolean>(EventPage.this, "assetOwnerUpdate")).add(new UpdateComponentOnChange()));
 
@@ -556,5 +566,8 @@ public abstract class EventPage<T extends Event> extends FieldIDTemplatePage {
     }
 
     public boolean isActionButtonsVisible() { return true; }
+
+    protected boolean canEditOwner() { return true; }
+
 
 }
