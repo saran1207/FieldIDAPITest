@@ -44,11 +44,13 @@ public class M201604131712_Denormalize_Lock_and_Device_Definitions extends Migra
                 .execute(conn);
 
         //Drop the no longer needed columns... done.
-        BatchStatementExecutor.create()
-                .add(AlterTable.named("isolation_points")
-                        .dropColumn("device_definition_id")
-                        .dropColumn("lock_definition_id"))
-                .execute(conn);
+        //OMG that's careless.  I changed my mind, or got cold feet.  If we need to revert this, we want to keep those
+        //columns... the keys can go, but the columns should stay.  Just like the table, we can't undelete these.
+//        BatchStatementExecutor.create()
+//                .add(AlterTable.named("isolation_points")
+//                        .dropColumn("device_definition_id")
+//                        .dropColumn("lock_definition_id"))
+//                .execute(conn);
 
         //We'll hold off on deleting the isolation_device_descriptions table until we know everything is fine.  That
         //cleanup can happen in a subsequent release, as it would be difficult to undelete this table.
