@@ -180,7 +180,17 @@ public class AssetTypeService extends CrudService<AssetType> {
         List<ThingEvent> events = persistenceService.findAll(builder);
         for (ThingEvent event:events) {
             logger.debug("removing scheduled event for asset " + event.getAsset().getIdentifier() + " on " + event.getDueDate());
+            removeEscalationRuleExecutionQueueItem(event);
             persistenceService.delete(event);
+        }
+    }
+
+    private void removeEscalationRuleExecutionQueueItem(ThingEvent event) {
+        QueryBuilder<EscalationRuleExecutionQueueItem> query = createTenantSecurityBuilder(EscalationRuleExecutionQueueItem.class);
+        query.addSimpleWhere("eventId", event.getId());
+        EscalationRuleExecutionQueueItem queueItem = persistenceService.find(query);
+        if (queueItem != null) {
+            persistenceService.deleteAny(queueItem);
         }
     }
 
