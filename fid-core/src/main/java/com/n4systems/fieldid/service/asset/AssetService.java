@@ -263,7 +263,7 @@ public class AssetService extends CrudService<Asset> {
 //
 //        asset = saver.update(getEntityManager(), asset);
 
-        persistenceService.update(asset);
+        asset = persistenceService.update(asset);
 
         saveSubAssets(asset);
 
