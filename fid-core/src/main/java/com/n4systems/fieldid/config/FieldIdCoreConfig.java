@@ -4,6 +4,8 @@ import com.amazonaws.ClientConfiguration;
 import com.amazonaws.Protocol;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
@@ -133,7 +135,16 @@ public class FieldIdCoreConfig {
         if ("https".equals(configService().getString(ConfigEntry.SYSTEM_PROTOCOL))) {
             config.setProtocol(Protocol.HTTPS);
         }
-        return new AmazonS3Client(credentials, config);
+
+        AmazonS3Client client = new AmazonS3Client(credentials, config);
+
+        //Here, we want to set the region... eventually we're going to want to do this on ALL servers... but for now,
+        //we just want to do it on our Europe instance.  We don't need to declare our endpoint, because there's some
+        if(configService().getString(ConfigEntry.REGION) != null) {
+            client.setRegion(Region.getRegion(Regions.fromName(configService().getString(ConfigEntry.REGION))));
+        }
+
+        return client;
     }
 
     @Bean

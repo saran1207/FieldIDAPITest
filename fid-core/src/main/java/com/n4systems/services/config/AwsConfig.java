@@ -8,6 +8,7 @@ public class AwsConfig {
 	protected String lotoReportsBucket;
 	protected String uploadMaxFileSizeBytes;
 	protected String uploadTimeout;
+	protected String region;
 
 	public AwsConfig() {}
 
@@ -19,6 +20,7 @@ public class AwsConfig {
 		this.uploadMaxFileSizeBytes = orig.uploadMaxFileSizeBytes;
 		this.uploadTimeout = orig.uploadTimeout;
 		this.secretAccessKey = orig.secretAccessKey;
+		this.region = orig.region;
 	}
 
 	public String getAccessKeyId() {
@@ -49,6 +51,10 @@ public class AwsConfig {
 		return secretAccessKey;
 	}
 
+	public String getRegion() {
+		return region;
+	}
+
 	@Override
 	public String toString() {
 		return "\t\taccessKeyId: '" + accessKeyId + "'\n" +
@@ -57,6 +63,7 @@ public class AwsConfig {
 				"\t\tmainBucket: '" + mainBucket + "'\n" +
 				"\t\tlotoReportsBucket: '" + lotoReportsBucket + "'\n" +
 				"\t\tuploadMaxFileSizeBytes: '" + uploadMaxFileSizeBytes + "'\n" +
-				"\t\tuploadTimeout: '" + uploadTimeout + "'\n";
+				"\t\tuploadTimeout: '" + uploadTimeout + "'\n" +
+				"\t\tregion: '" + region + "'\n";
 	}
 }

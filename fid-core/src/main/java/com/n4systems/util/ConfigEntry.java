@@ -93,7 +93,9 @@ public enum ConfigEntry {
 	WEB_FILE_UPLOAD_MAX						(r -> r.getLimit().getWebFileUploadMax()),
 	WEB_PAGINATION_PAGE_SIZE				(r -> r.getLimit().getWebPaginationPageSize()),
 	WEB_TOTAL_INSPECTION_BUTTONS			(r -> r.getLimit().getWebTotalInspectionButtons()),
-	REPORTING_MAX_REPORTS_PER_FILE			(r -> r.getLimit().getReportingMaxReportsPerFile());
+	REPORTING_MAX_REPORTS_PER_FILE			(r -> r.getLimit().getReportingMaxReportsPerFile()),
+	REGION									(r -> r.getAws().getRegion());
+
 
 	private final Function<RootConfig, ?> rootConfigAdapter;
 
