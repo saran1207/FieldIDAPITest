@@ -21,7 +21,11 @@ public class ImageService {
 		return scaleImage(imageData, 600, 600);
 	}
 
-	public byte[] scaleImage(byte[] imageData, int width, int height) throws ImageProcessingException {
+	public byte[] scaleImage(byte[] imageData, int width, int height) {
+		return scaleImage(imageData, width, height, 0.8);
+	}
+
+	public byte[] scaleImage(byte[] imageData, int width, int height, double quality) throws ImageProcessingException {
 		try {
 			ByteArrayOutputStream newImageStream = new ByteArrayOutputStream();
 			Thumbnails
@@ -30,7 +34,7 @@ public class ImageService {
 					.height(height)
 					.keepAspectRatio(true)
 					.useOriginalFormat()
-					.outputQuality(0.8)
+					.outputQuality(quality)
 					.toOutputStream(newImageStream);
 			return newImageStream.toByteArray();
 		} catch (IOException e) {
