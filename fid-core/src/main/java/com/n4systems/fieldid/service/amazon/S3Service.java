@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
+import com.n4systems.exceptions.ImageAttachmentException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.images.ImageService;
 import com.n4systems.fieldid.service.uuid.UUIDService;
@@ -39,6 +40,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -123,6 +125,10 @@ public class S3Service extends FieldIdPersistenceService {
     public static final String MEDIUM_EXTENSION = ".medium";
 
     public static final String LOTO_BUCKET = "fieldid-loto";
+
+    private static final String PUT_OBJECT_ERROR = "There was an error uploading a file named \'{0}\' to S3.  The provided satatus code was {1} and an error message stating \'{2}\' was supplied.";
+    private static final String ASSET_TYPE_PROFILE_IMAGE_UPLOAD_FAILURE = "Failure when uploading Asset Type Profile Image for AssetType with ID {0}.";
+    private static final String ASSET_TYPE_PROFILE_IMAGE_NOT_FOUND = "Asset Type Profile Image for AssetType with ID \'{0}\' has gone missing.  Its expected name is \'{1}\'.";
 
     @Autowired private ConfigService configService;
     @Autowired private ImageService imageService;
@@ -1039,7 +1045,7 @@ public class S3Service extends FieldIdPersistenceService {
         } catch (AmazonS3Exception e) {
             //We should be logging errors when they happen.  Handling things quietly is a bad idea.
             logger.error("Error processing file contents!!", e);
-            return handleAmazonS3Exception(e, (byte[]) null);
+            return handleAmazonS3Exception(e, null);
         } finally {
             IOUtils.closeQuietly(resourceInput);
         }
@@ -1051,7 +1057,7 @@ public class S3Service extends FieldIdPersistenceService {
             InputStream resourceInput = resource.getObjectContent();
             return resourceInput;
         } catch (AmazonS3Exception e) {
-            return handleAmazonS3Exception(e, (InputStream) null);
+            return handleAmazonS3Exception(e, null);
         }
     }
 
@@ -1078,6 +1084,7 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     private <T> T handleAmazonS3Exception(AmazonS3Exception e, T notFoundReturn) {
+        //FIXME There are more status codes than Just 404 that we should be considering handling...
         if (e.getStatusCode() == 404) {
             return notFoundReturn;
         } else {
@@ -1092,16 +1099,30 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     private PutObjectResult putObject(String path, File file) {
-        PutObjectResult result = getClient().putObject(getBucket(), path, file);
+        PutObjectResult result;
+
+        try {
+            result = getClient().putObject(getBucket(), path, file);
+        } catch (AmazonS3Exception e) {
+            logger.error(MessageFormat.format(PUT_OBJECT_ERROR, file.getName(), e.getStatusCode(), e.getErrorMessage()), e);
+            throw e;
+        }
         return result;
     }
 
     private PutObjectResult putObject(String path, byte[] data, String contentType) {
-        ObjectMetadata objectMeta = new ObjectMetadata();
-        objectMeta.setContentLength(data.length);
-        objectMeta.setContentType(contentType);
 
-        PutObjectResult result = getClient().putObject(new PutObjectRequest(getBucket(), path, new ByteArrayInputStream(data), objectMeta));
+        PutObjectResult result;
+        try {
+            ObjectMetadata objectMeta = new ObjectMetadata();
+            objectMeta.setContentLength(data.length);
+            objectMeta.setContentType(contentType);
+
+            result = getClient().putObject(new PutObjectRequest(getBucket(), path, new ByteArrayInputStream(data), objectMeta));
+        } catch (AmazonS3Exception e) {
+            logger.error(MessageFormat.format(PUT_OBJECT_ERROR, path, e.getStatusCode(), e.getErrorMessage()));
+            throw e;
+        }
         return result;
     }
 
@@ -1235,20 +1256,28 @@ public class S3Service extends FieldIdPersistenceService {
         return assetTypeProfileImageFile;
     }
 
+    @Deprecated
     public void uploadAssetTypeProfileImage(File assetTypeProfileImageFile, AssetType assetType){
         uploadAssetTypeProfileImage(assetTypeProfileImageFile, assetType.getTenant().getId(), assetType.getId(), assetType.getImageName());
     }
 
-    public void uploadAssetTypeProfileImage(File assetTypeProfileImageFile, Long tenantId, Long assetTypeId, String assetTypeImageName){
+    @Deprecated
+    private void uploadAssetTypeProfileImage(File assetTypeProfileImageFile, Long tenantId, Long assetTypeId, String assetTypeImageName){
         uploadResource(assetTypeProfileImageFile, tenantId, ASSETTYPE_PROFILE_IMAGE_PATH, assetTypeId, assetTypeImageName);
     }
 
-    public void uploadAssetTypeProfileImageData(byte[] assetTypeProfileImageData, AssetType assetType){
+    public void uploadAssetTypeProfileImageData(byte[] assetTypeProfileImageData, AssetType assetType) throws ImageAttachmentException {
         String contentType = ContentTypeUtil.getContentType(assetType.getImageName());
-        uploadAssetTypeProfileImageData(assetTypeProfileImageData, contentType, assetType.getTenant().getId(), assetType.getId(), assetType.getImageName());
+        try {
+            uploadAssetTypeProfileImageData(assetTypeProfileImageData, contentType, assetType.getTenant().getId(), assetType.getId(), assetType.getImageName());
+        } catch(AmazonS3Exception e) {
+            logger.error(e.getErrorResponseXml());
+            logger.error(MessageFormat.format(ASSET_TYPE_PROFILE_IMAGE_UPLOAD_FAILURE, assetType.getId()));
+            throw new ImageAttachmentException(e);
+        }
     }
 
-    public void uploadAssetTypeProfileImageData(byte[] assetTypeProfileImageData, String contentType, Long tenantId, Long assetTypeId, String assetTypeImageName){
+    public void uploadAssetTypeProfileImageData(byte[] assetTypeProfileImageData, String contentType, Long tenantId, Long assetTypeId, String assetTypeImageName) {
         uploadResource(assetTypeProfileImageData, contentType, tenantId, ASSETTYPE_PROFILE_IMAGE_PATH, assetTypeId, assetTypeImageName);
     }
 
@@ -1267,7 +1296,13 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     public boolean assetTypeProfileImageExists(Long tenantId, Long assetTypeId, String assetTypeImageName){
-        boolean exists = resourceExists(tenantId, ASSETTYPE_PROFILE_IMAGE_PATH, assetTypeId, assetTypeImageName);
+        boolean exists;
+        try {
+            exists = resourceExists(tenantId, ASSETTYPE_PROFILE_IMAGE_PATH, assetTypeId, assetTypeImageName);
+        } catch (AmazonS3Exception e) {
+            exists = false;
+            logger.warn(MessageFormat.format(ASSET_TYPE_PROFILE_IMAGE_NOT_FOUND, assetTypeId, assetTypeImageName), e);
+        }
         return exists;
     }
 

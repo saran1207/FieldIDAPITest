@@ -252,6 +252,7 @@ public class AssetTypeService extends CrudService<AssetType> {
         return persistenceService.update(assetType);
     }
 
+    @Transactional(rollbackFor = {FileAttachmentException.class, ImageAttachmentException.class})
     public AssetType saveAssetType(AssetType assetType, List<FileAttachment> uploadedFiles, byte[] imageData ) throws FileAttachmentException, ImageAttachmentException {
         AssetType oldPI = null;
         if( assetType.getId() != null ) {
@@ -262,16 +263,17 @@ public class AssetTypeService extends CrudService<AssetType> {
         }
 
         assetType.touch();
-        assetType = (AssetType) persistenceService.saveOrUpdate(assetType);
+        assetType = persistenceService.saveOrUpdate(assetType);
         processUploadedFiles(assetType, uploadedFiles );
         processAssetImage(assetType, imageData );
         return assetType;
     }
 
-    private void processAssetImage( AssetType assetType, byte[] imageData ) throws ImageAttachmentException{
+    private void processAssetImage( AssetType assetType, byte[] imageData ) throws ImageAttachmentException {
         if( imageData != null ) {
             try {
                 s3Service.uploadAssetTypeProfileImageData(imageData, assetType);
+                //TODO Figure out if we actually need this general try/catch... maybe the ImageAttachmentException thrown above is enough...
             } catch (Exception e) {
                 throw new ImageAttachmentException( e );
             }
