@@ -33,6 +33,15 @@ public class RecurrenceTypeTest {
         assertEquals(new LocalDate(2011, 5,2), RecurrenceType.WEEKLY_MONDAY.getNext(april30_2011));
     }
 
+    @Test
+    public void test_biweekly_monday() {
+        assertEquals(new LocalDate(2011, 1, 17), RecurrenceType.BIWEEKLY_MONDAY.getNext(jan1_2011));
+        assertEquals(new LocalDate(2012, 1, 16), RecurrenceType.BIWEEKLY_MONDAY.getNext(dec31_2011));
+        assertEquals(new LocalDate(2011, 3, 14), RecurrenceType.BIWEEKLY_MONDAY.getNext(feb28_2011));
+        assertEquals(new LocalDate(2012, 3, 19), RecurrenceType.BIWEEKLY_MONDAY.getNext(feb28_2012));
+        assertEquals(new LocalDate(2011, 5, 16), RecurrenceType.BIWEEKLY_MONDAY.getNext(april30_2011));
+    }
+
 
     @Test
     public void test_weekly_tuesday() {
@@ -43,6 +52,15 @@ public class RecurrenceTypeTest {
         assertEquals(new LocalDate(2011, 5,3), RecurrenceType.WEEKLY_TUESDAY.getNext(april30_2011));
     }
 
+    @Test
+    public void test_biweekly_tuesday() {
+        assertEquals(new LocalDate(2011, 1, 18), RecurrenceType.BIWEEKLY_TUESDAY.getNext(jan1_2011));
+        assertEquals(new LocalDate(2012, 1, 17), RecurrenceType.BIWEEKLY_TUESDAY.getNext(dec31_2011));
+        assertEquals(new LocalDate(2011, 3, 15), RecurrenceType.BIWEEKLY_TUESDAY.getNext(feb28_2011));
+        assertEquals(new LocalDate(2012, 3, 13), RecurrenceType.BIWEEKLY_TUESDAY.getNext(feb28_2012));
+        assertEquals(new LocalDate(2011, 5, 17), RecurrenceType.BIWEEKLY_TUESDAY.getNext(april30_2011));
+    }
+
 
     @Test
     public void test_weekly_wednesday() {
@@ -51,6 +69,15 @@ public class RecurrenceTypeTest {
         assertEquals(new LocalDate(2011, 3,2), RecurrenceType.WEEKLY_WEDNESDAY.getNext(feb28_2011));
         assertEquals(new LocalDate(2012, 2,29), RecurrenceType.WEEKLY_WEDNESDAY.getNext(feb28_2012));
         assertEquals(new LocalDate(2011, 5,4), RecurrenceType.WEEKLY_WEDNESDAY.getNext(april30_2011));
+    }
+
+    @Test
+    public void test_biweekly_wednesday() {
+        assertEquals(new LocalDate(2011, 1, 19), RecurrenceType.BIWEEKLY_WEDNESDAY.getNext(jan1_2011));
+        assertEquals(new LocalDate(2012, 1, 18), RecurrenceType.BIWEEKLY_WEDNESDAY.getNext(dec31_2011));
+        assertEquals(new LocalDate(2011, 3, 16), RecurrenceType.BIWEEKLY_WEDNESDAY.getNext(feb28_2011));
+        assertEquals(new LocalDate(2012, 3, 14), RecurrenceType.BIWEEKLY_WEDNESDAY.getNext(feb28_2012));
+        assertEquals(new LocalDate(2011, 5, 18), RecurrenceType.BIWEEKLY_WEDNESDAY.getNext(april30_2011));
     }
 
 
@@ -64,12 +91,30 @@ public class RecurrenceTypeTest {
     }
 
     @Test
+    public void test_biweekly_thursday() {
+        assertEquals(new LocalDate(2011, 1, 20), RecurrenceType.BIWEEKLY_THURSDAY.getNext(jan1_2011));
+        assertEquals(new LocalDate(2012, 1, 19), RecurrenceType.BIWEEKLY_THURSDAY.getNext(dec31_2011));
+        assertEquals(new LocalDate(2011, 3, 17), RecurrenceType.BIWEEKLY_THURSDAY.getNext(feb28_2011));
+        assertEquals(new LocalDate(2012, 3, 15), RecurrenceType.BIWEEKLY_THURSDAY.getNext(feb28_2012));
+        assertEquals(new LocalDate(2011, 5, 19), RecurrenceType.BIWEEKLY_THURSDAY.getNext(april30_2011));
+    }
+
+    @Test
     public void test_weekly_friday() {
         assertEquals(new LocalDate(2011, 1,7), RecurrenceType.WEEKLY_FRIDAY.getNext(jan1_2011));
         assertEquals(new LocalDate(2012, 1,6), RecurrenceType.WEEKLY_FRIDAY.getNext(dec31_2011));
         assertEquals(new LocalDate(2011, 3,4), RecurrenceType.WEEKLY_FRIDAY.getNext(feb28_2011));
         assertEquals(new LocalDate(2012, 3,2), RecurrenceType.WEEKLY_FRIDAY.getNext(feb28_2012));
         assertEquals(new LocalDate(2011, 5,6), RecurrenceType.WEEKLY_FRIDAY.getNext(april30_2011));
+    }
+
+    @Test
+    public void test_biweekly_friday() {
+        assertEquals(new LocalDate(2011, 1, 21), RecurrenceType.BIWEEKLY_FRIDAY.getNext(jan1_2011));
+        assertEquals(new LocalDate(2012, 1, 20), RecurrenceType.BIWEEKLY_FRIDAY.getNext(dec31_2011));
+        assertEquals(new LocalDate(2011, 3, 18), RecurrenceType.BIWEEKLY_FRIDAY.getNext(feb28_2011));
+        assertEquals(new LocalDate(2012, 3, 16), RecurrenceType.BIWEEKLY_FRIDAY.getNext(feb28_2012));
+        assertEquals(new LocalDate(2011, 5, 20), RecurrenceType.BIWEEKLY_FRIDAY.getNext(april30_2011));
     }
 
     @Test
@@ -82,12 +127,30 @@ public class RecurrenceTypeTest {
     }
 
     @Test
+    public void test_biweekly_saturday() {
+        assertEquals(new LocalDate(2011, 1, 15), RecurrenceType.BIWEEKLY_SATURDAY.getNext(jan1_2011));
+        assertEquals(new LocalDate(2012, 1, 14), RecurrenceType.BIWEEKLY_SATURDAY.getNext(dec31_2011));
+        assertEquals(new LocalDate(2011, 3, 19), RecurrenceType.BIWEEKLY_SATURDAY.getNext(feb28_2011));
+        assertEquals(new LocalDate(2012, 3, 17), RecurrenceType.BIWEEKLY_SATURDAY.getNext(feb28_2012));
+        assertEquals(new LocalDate(2011, 5, 14), RecurrenceType.BIWEEKLY_SATURDAY.getNext(april30_2011));
+    }
+
+    @Test
     public void test_weekly_sunday() {
         assertEquals(new LocalDate(2011, 1,2), RecurrenceType.WEEKLY_SUNDAY.getNext(jan1_2011));
         assertEquals(new LocalDate(2012, 1,1), RecurrenceType.WEEKLY_SUNDAY.getNext(dec31_2011));
         assertEquals(new LocalDate(2011, 3,6), RecurrenceType.WEEKLY_SUNDAY.getNext(feb28_2011));
         assertEquals(new LocalDate(2012, 3,4), RecurrenceType.WEEKLY_SUNDAY.getNext(feb28_2012));
         assertEquals(new LocalDate(2011, 5,1), RecurrenceType.WEEKLY_SUNDAY.getNext(april30_2011));
+    }
+
+    @Test
+    public void test_biweekly_sunday() {
+        assertEquals(new LocalDate(2011, 1, 16), RecurrenceType.BIWEEKLY_SUNDAY.getNext(jan1_2011));
+        assertEquals(new LocalDate(2012, 1, 15), RecurrenceType.BIWEEKLY_SUNDAY.getNext(dec31_2011));
+        assertEquals(new LocalDate(2011, 3, 20), RecurrenceType.BIWEEKLY_SUNDAY.getNext(feb28_2011));
+        assertEquals(new LocalDate(2012, 3, 18), RecurrenceType.BIWEEKLY_SUNDAY.getNext(feb28_2012));
+        assertEquals(new LocalDate(2011, 5, 15), RecurrenceType.BIWEEKLY_SUNDAY.getNext(april30_2011));
     }
 
     @Test
