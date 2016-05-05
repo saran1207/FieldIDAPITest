@@ -103,7 +103,7 @@ public class UserView extends ExternalModelView {
 
 	// NOTE : this field is also tested in conjunction with GlobalId.  (ie. if globalId=null, userId must not exist in DB and vice versa).
 	//   userId is limited (currently to 15) by schema.rb definition.  if schema changes, alter this meta-data.
-	@SerializableField(title=USER_NAME_FIELD, order = 425, maxLength = 15, validators = {UserIdNotNullValidator.class, UserIdStringLengthValidator.class})
+	@SerializableField(title=USER_NAME_FIELD, order = 425, maxLength = 255, validators = {UserIdNotNullValidator.class, UserIdStringLengthValidator.class})
 	private String userID;
 
 	@SerializableField(title=ACCOUNT_TYPE_FIELD, order = 450, validators = {NotNullValidator.class, AccountTypeValidator.class})
