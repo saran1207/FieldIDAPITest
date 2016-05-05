@@ -6,21 +6,19 @@ import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.procedure.SvgGenerationService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.ajax.ConfirmAjaxCallDecorator;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
 import com.n4systems.model.procedure.ProcedureDefinition;
-import com.n4systems.model.procedure.PublishedState;
 import org.apache.log4j.Logger;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.IAjaxCallDecorator;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -119,6 +117,11 @@ public class DraftProcedureActionsCell extends Panel {
                         target.add(procedureListPanel.getErrorFeedbackPanel());
                     }
                 }
-            };
+
+            @Override
+            protected IAjaxCallDecorator getAjaxCallDecorator() {
+                return new ConfirmAjaxCallDecorator(new FIDLabelModel("message.confirm_delete_procedure").getObject());
+            }
+        };
     }
 }

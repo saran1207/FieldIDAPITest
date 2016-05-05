@@ -5,6 +5,7 @@ import com.n4systems.fieldid.service.procedure.LotoReportService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.SvgGenerationService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.ajax.ConfirmAjaxCallDecorator;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
@@ -14,6 +15,7 @@ import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.IAjaxCallDecorator;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -62,8 +64,6 @@ public class ProcedureApprovalsActionsCell extends Panel {
 
         final ProcedureDefinition procedureDefinition = procedureDefinitionModel.getObject();
 
-        logger.info(procedureDefinition.getPublishedState());
-
         FIDModalWindow modal;
         add(modal = new FIDModalWindow("modal", getDefaultModel(), 600, 50));
         modal.setTitle(new FIDLabelModel("message.downloadbeinggenerated"));
@@ -100,6 +100,7 @@ public class ProcedureApprovalsActionsCell extends Panel {
 
             }
 
+            @Override
             public boolean isVisible() {
                 if ((isAuthor(procedureDefinition) || isApprover(procedureDefinition)) ) {
                     return FieldIDSession.get().getUserSecurityGuard().isAllowedDeleteProcedure();
@@ -107,6 +108,12 @@ public class ProcedureApprovalsActionsCell extends Panel {
                 else
                     return false;
             }
+
+            @Override
+            protected IAjaxCallDecorator getAjaxCallDecorator() {
+                return new ConfirmAjaxCallDecorator(new FIDLabelModel("message.confirm_delete_procedure").getObject());
+            }
+
 
         };
 
