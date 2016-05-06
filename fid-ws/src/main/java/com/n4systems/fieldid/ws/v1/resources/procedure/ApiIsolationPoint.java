@@ -8,14 +8,14 @@ public class ApiIsolationPoint extends ApiReadonlyModel {
     private String identifier;
     private String source;
     private String sourceText;
-    private String deviceDefinition;
-    private String lockDefinition;
+    private ApiDeviceDescription deviceDefinition;
+    private ApiDeviceDescription lockDefinition;
     private String location;
     private String method;
     private String check;
     private ApiImageAnnotation annotation;
-	private int fwdIdx;
-	private int revIdx;
+    private int fwdIdx;
+    private int revIdx;
 
     public String getIdentifier() {
         return identifier;
@@ -33,19 +33,19 @@ public class ApiIsolationPoint extends ApiReadonlyModel {
         this.source = source;
     }
 
-    public String getDeviceDefinition() {
+    public ApiDeviceDescription getDeviceDefinition() {
         return deviceDefinition;
     }
 
-    public void setDeviceDefinition(String deviceDefinition) {
+    public void setDeviceDefinition(ApiDeviceDescription deviceDefinition) {
         this.deviceDefinition = deviceDefinition;
     }
 
-    public String getLockDefinition() {
+    public ApiDeviceDescription getLockDefinition() {
         return lockDefinition;
     }
 
-    public void setLockDefinition(String lockDefinition) {
+    public void setLockDefinition(ApiDeviceDescription lockDefinition) {
         this.lockDefinition = lockDefinition;
     }
 
@@ -97,19 +97,19 @@ public class ApiIsolationPoint extends ApiReadonlyModel {
         this.annotation = annotation;
     }
 
-	public int getFwdIdx() {
-		return fwdIdx;
-	}
+    public int getFwdIdx() {
+        return fwdIdx;
+    }
 
-	public void setFwdIdx(int fwdIdx) {
-		this.fwdIdx = fwdIdx;
-	}
+    public void setFwdIdx(int fwdIdx) {
+        this.fwdIdx = fwdIdx;
+    }
 
-	public int getRevIdx() {
-		return revIdx;
-	}
+    public int getRevIdx() {
+        return revIdx;
+    }
 
-	public void setRevIdx(int revIdx) {
-		this.revIdx = revIdx;
-	}
+    public void setRevIdx(int revIdx) {
+        this.revIdx = revIdx;
+    }
 }

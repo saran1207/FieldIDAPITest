@@ -4,7 +4,10 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
 import com.n4systems.fieldid.ws.v1.resources.assettype.attributevalues.ApiAttributeValueResource;
 import com.n4systems.model.common.ImageAnnotation;
-import com.n4systems.model.procedure.*;
+import com.n4systems.model.procedure.IsolationPoint;
+import com.n4systems.model.procedure.ProcedureDefinition;
+import com.n4systems.model.procedure.ProcedureDefinitionImage;
+import com.n4systems.model.procedure.PublishedState;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,8 +59,8 @@ public class ApiProcedureDefinitionResource extends SetupDataResource<ApiProcedu
             apiIsolationPoint.setSid(isolationPoint.getId());
             apiIsolationPoint.setCheck(isolationPoint.getCheck());
 
-            apiIsolationPoint.setDeviceDefinition(isolationPoint.getDeviceDefinition());
-            apiIsolationPoint.setLockDefinition(isolationPoint.getLockDefinition());
+            apiIsolationPoint.setDeviceDefinition(convertDefinition(isolationPoint.getDeviceDefinition()));
+            apiIsolationPoint.setLockDefinition(convertDefinition(isolationPoint.getLockDefinition()));
             apiIsolationPoint.setSource(isolationPoint.getSourceType().name());
             apiIsolationPoint.setSourceText(isolationPoint.getSourceText());
             apiIsolationPoint.setIdentifier(isolationPoint.getIdentifier());
@@ -118,16 +121,16 @@ public class ApiProcedureDefinitionResource extends SetupDataResource<ApiProcedu
         return convertedAnnotation;
     }
 
-    private ApiDeviceDescription convertDefinition(IsolationDeviceDescription deviceDefinition) {
+    private ApiDeviceDescription convertDefinition(String deviceDefinition) {
         if (deviceDefinition == null) {
             return null;
         }
         ApiDeviceDescription apiDescription = new ApiDeviceDescription();
         apiDescription.setActive(true);
-        apiDescription.setAssetTypeSid(deviceDefinition.getAssetType() == null ? null : deviceDefinition.getAssetType().getId());
-        apiDescription.setAttributes(attrResource.convertInfoOptions(deviceDefinition.getAttributeValues()));
-        apiDescription.setFreeformDescription(deviceDefinition.getFreeformDescription());
-        apiDescription.setSid(deviceDefinition.getId());
+        apiDescription.setAssetTypeSid(null);
+        apiDescription.setAttributes(null);
+        apiDescription.setFreeformDescription(deviceDefinition);
+        apiDescription.setSid(0L);
         return apiDescription;
     }
 

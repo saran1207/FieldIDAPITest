@@ -515,8 +515,8 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         entityIsolationPoint.setFwdIdx(apiIsolationPoint.getFwdIdx());
         entityIsolationPoint.setRevIdx(apiIsolationPoint.getRevIdx());
 
-        entityIsolationPoint.setDeviceDefinition(apiIsolationPoint.getDeviceDefinition());
-        entityIsolationPoint.setLockDefinition(apiIsolationPoint.getLockDefinition());
+        entityIsolationPoint.setDeviceDefinition(apiIsolationPoint.getDeviceDefinition().getFreeformDescription());
+        entityIsolationPoint.setLockDefinition(apiIsolationPoint.getLockDefinition().getFreeformDescription());
 
         if(apiIsolationPoint.getAnnotation() == null) {
             entityIsolationPoint.setAnnotation(null);
@@ -548,8 +548,8 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         isoPoint.setFwdIdx(apiIsolationPoint.getFwdIdx());
         isoPoint.setRevIdx(apiIsolationPoint.getRevIdx());
 
-        isoPoint.setDeviceDefinition(apiIsolationPoint.getDeviceDefinition());
-        isoPoint.setLockDefinition(apiIsolationPoint.getLockDefinition());
+        isoPoint.setDeviceDefinition(apiIsolationPoint.getDeviceDefinition().getFreeformDescription());
+        isoPoint.setLockDefinition(apiIsolationPoint.getLockDefinition().getFreeformDescription());
 
         if(apiIsolationPoint.getAnnotation() != null) {
             ImageAnnotation imageAnnotation = createNewImageAnnotation(apiIsolationPoint.getAnnotation(), isoPoint.getSourceType(), isoPoint.getIdentifier());
@@ -631,8 +631,8 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
             apiIsolationPoint.setSid(isolationPoint.getId());
             apiIsolationPoint.setCheck(isolationPoint.getCheck());
 
-            apiIsolationPoint.setDeviceDefinition(isolationPoint.getDeviceDefinition());
-            apiIsolationPoint.setLockDefinition(isolationPoint.getLockDefinition());
+            apiIsolationPoint.setDeviceDefinition(convertDefinition(isolationPoint.getDeviceDefinition()));
+            apiIsolationPoint.setLockDefinition(convertDefinition(isolationPoint.getLockDefinition()));
             apiIsolationPoint.setSource(isolationPoint.getSourceType().name());
             apiIsolationPoint.setSourceText(isolationPoint.getSourceText());
             apiIsolationPoint.setIdentifier(isolationPoint.getIdentifier());
@@ -719,16 +719,16 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         return convertedAnnotation;
     }
 
-    private ApiDeviceDescription convertDefinition(IsolationDeviceDescription deviceDefinition) {
+    private ApiDeviceDescription convertDefinition(String deviceDefinition) {
         if (deviceDefinition == null) {
             return null;
         }
         ApiDeviceDescription apiDescription = new ApiDeviceDescription();
         apiDescription.setActive(true);
-        apiDescription.setAssetTypeSid(deviceDefinition.getAssetType() == null ? null : deviceDefinition.getAssetType().getId());
-        apiDescription.setAttributes(attrResource.convertInfoOptions(deviceDefinition.getAttributeValues()));
-        apiDescription.setFreeformDescription(deviceDefinition.getFreeformDescription());
-        apiDescription.setSid(deviceDefinition.getId());
+        apiDescription.setAssetTypeSid(null);
+        apiDescription.setAttributes(null);
+        apiDescription.setFreeformDescription(deviceDefinition);
+        apiDescription.setSid(0L);
         return apiDescription;
     }
 
