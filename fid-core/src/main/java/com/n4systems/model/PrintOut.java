@@ -4,12 +4,15 @@ import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.persistence.localization.Localized;
 import com.n4systems.reporting.PathHandler;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "printouts")
 @Localized(ignore =true)
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class PrintOut extends EntityWithTenant implements NamedEntity {
 
 	private static final long serialVersionUID = 1L;

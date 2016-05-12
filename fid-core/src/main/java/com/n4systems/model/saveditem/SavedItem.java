@@ -5,6 +5,7 @@ import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.model.security.SecurityDefiner;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,6 +15,8 @@ import java.util.List;
 @Entity
 @Table(name="saved_items")
 @DiscriminatorColumn(name = "type")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public abstract class SavedItem<T extends SearchCriteria> extends EntityWithTenant implements NamedEntity {
 
 	public static SecurityDefiner createSecurityDefiner() {
@@ -30,6 +33,7 @@ public abstract class SavedItem<T extends SearchCriteria> extends EntityWithTena
 	private String description;
     
     @OneToMany(mappedBy = "savedItem", fetch = FetchType.LAZY, orphanRemoval = true)
+	@org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private List<SendSavedItemSchedule> sendSchedules = new ArrayList<SendSavedItemSchedule>();
 
     public SavedItem() {

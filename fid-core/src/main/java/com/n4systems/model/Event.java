@@ -14,6 +14,7 @@ import com.n4systems.model.utils.ActionDescriptionUtil;
 import com.n4systems.reporting.EventReportType;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.StringUtils;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ import java.util.TimeZone;
 
 @Entity
 @Table(name = "masterevents")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "EventCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public abstract class Event<T extends EventType, V extends Event, R extends EntityWithTenant> extends AbstractEvent<T,R> implements Comparable<Event>, Archivable, Exportable, LocationContainer, HasCreatedModifiedPlatform, HasOwner, HasGpsLocation {
 	private static final long serialVersionUID = 1L;
     public static final String[] PROCEDURE_AUDIT_FIELD_PATHS = { "modifiedBy", "createdBy", "eventForm.sections", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "infoOptionMap", "subEvents", "procedureDefinition" };
@@ -90,6 +93,7 @@ public abstract class Event<T extends EventType, V extends Event, R extends Enti
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@OrderColumn(name="orderidx")
     @JoinTable(name = "masterevents_subevents", joinColumns = @JoinColumn(name="masterevents_event_id"), inverseJoinColumns = @JoinColumn(name="subevents_event_id"))
+	@org.hibernate.annotations.Cache(region = "EventCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	private List<SubEvent> subEvents = new ArrayList<SubEvent>();
 	
 	@Enumerated(EnumType.STRING)

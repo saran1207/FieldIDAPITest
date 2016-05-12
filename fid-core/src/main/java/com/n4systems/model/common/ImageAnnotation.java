@@ -4,11 +4,14 @@ import com.n4systems.model.PlatformType;
 import com.n4systems.model.api.HasCreatedModifiedPlatform;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.procedure.AnnotationType;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name="image_annotation")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "ProcedureCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class ImageAnnotation extends EntityWithTenant implements HasCreatedModifiedPlatform {
 
     @Enumerated(EnumType.STRING)

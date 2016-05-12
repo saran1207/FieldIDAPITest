@@ -5,10 +5,7 @@ import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.AccountPolicy;
 import com.n4systems.model.security.KeyPair;
 import com.n4systems.model.security.PasswordPolicy;
-import com.n4systems.model.user.Assignable;
-import com.n4systems.model.user.User;
-import com.n4systems.model.user.UserGroup;
-import org.hibernate.annotations.IndexColumn;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.List;
@@ -17,6 +14,8 @@ import java.util.Locale;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "tenant_settings")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class TenantSettings extends EntityWithTenant {
 	private boolean secondaryOrgsEnabled;
 	

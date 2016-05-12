@@ -14,6 +14,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.persistence.localization.Localized;
 import com.n4systems.util.time.DateUtil;
 import org.apache.log4j.Logger;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
@@ -26,6 +27,8 @@ import java.util.regex.Pattern;
 
 @Entity
 @Table(name = "assettypes")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class AssetType extends ArchivableEntityWithTenant implements NamedEntity, HasFileAttachments, Listable<Long>, Saveable, SecurityEnhanced<AssetType>, ApiModelWithName {
 
 	private static final Logger logger = Logger.getLogger(AssetType.class);
@@ -63,21 +66,26 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	private boolean hasManufactureCertificate;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "assetType", orphanRemoval = true)
+	@org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<AssetTypeSchedule> schedules = new HashSet<AssetTypeSchedule>();
 
 	@OneToMany(mappedBy = "assetInfo", targetEntity = InfoFieldBean.class, cascade = CascadeType.ALL)
 	@OrderBy("weight, name ASC")
+	@org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	private Collection<InfoFieldBean> infoFields = new ArrayList<InfoFieldBean>();
 	
 	@OneToOne( mappedBy="assetType", targetEntity = AutoAttributeCriteria.class, fetch = FetchType.LAZY)
+	@org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	private AutoAttributeCriteria autoAttributeCriteria;
 	
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
     @JoinTable(name="assettypes_fileattachments", joinColumns = @JoinColumn(name="assettype_id"), inverseJoinColumns = @JoinColumn(name="attachments_id"))
+	@org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	private List<FileAttachment> attachments = new ArrayList<FileAttachment>();
 
 	@ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name="assettypes_assettypes", joinColumns = @JoinColumn(name="assettype_id"), inverseJoinColumns = @JoinColumn(name="subtypes_id"))
+	@org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	private Set<AssetType> subTypes = new HashSet<AssetType>();
 	
 	private String archivedName;

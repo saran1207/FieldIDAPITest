@@ -1,11 +1,9 @@
 package com.n4systems.model;
 
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
-import org.hibernate.annotations.IndexColumn;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by rrana on 2015-02-02.
@@ -15,6 +13,8 @@ import java.util.List;
 @Entity
 @Table(name="observationcount_result")
 @PrimaryKeyJoinColumn(name="id")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "EventCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class ObservationCountResult extends ArchivableEntityWithTenant {
 
     @ManyToOne(cascade= CascadeType.REFRESH, fetch= FetchType.EAGER, optional=false)

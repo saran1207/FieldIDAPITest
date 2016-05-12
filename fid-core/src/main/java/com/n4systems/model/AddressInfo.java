@@ -7,13 +7,17 @@ import com.google.common.collect.Lists;
 import com.n4systems.model.api.HasGpsLocation;
 import com.n4systems.model.parents.AbstractEntity;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
 @Table(name = "addressinfo")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class AddressInfo extends AbstractEntity implements HasGpsLocation {
 
 	private String streetAddress = "";

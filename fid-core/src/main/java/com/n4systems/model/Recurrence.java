@@ -2,6 +2,7 @@ package com.n4systems.model;
 
 import com.google.common.base.Preconditions;
 import org.apache.log4j.Logger;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 
@@ -13,11 +14,14 @@ import java.util.TreeSet;
 
 @Entity
 @Table(name = "recurrence")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Recurrence extends BaseEntity {
 
     private static final Logger logger=Logger.getLogger(Recurrence.class);
 
     @OneToMany(mappedBy = "recurrence", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<RecurrenceTime> times = new TreeSet<RecurrenceTime>();
 
     @Enumerated(EnumType.STRING)

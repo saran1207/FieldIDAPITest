@@ -5,6 +5,7 @@ import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Retirable;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.persistence.localization.Localized;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,6 +13,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "criteriasections")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class CriteriaSection extends EntityWithTenant implements Listable<Long>, NamedEntity, Retirable {
 	private static final long serialVersionUID = 1L;
 
@@ -24,6 +27,7 @@ public class CriteriaSection extends EntityWithTenant implements Listable<Long>,
 	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	@OrderColumn(name="orderIdx")
     @JoinTable(name="criteriasections_criteria", joinColumns = @JoinColumn(name="criteriasections_id"), inverseJoinColumns = @JoinColumn(name="criteria_id"))
+	@org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	private List<Criteria> criteria = new ArrayList<Criteria>();
 
     private boolean optional = false;

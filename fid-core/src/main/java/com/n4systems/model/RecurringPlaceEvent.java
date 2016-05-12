@@ -6,12 +6,15 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.ArchivableEntityWithOwner;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "recurring_place_events")
 @PrimaryKeyJoinColumn(name="id")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class RecurringPlaceEvent extends ArchivableEntityWithOwner implements Saveable, SecurityEnhanced<RecurringPlaceEvent>, Cloneable {
 
     @ManyToOne(fetch = FetchType.EAGER)

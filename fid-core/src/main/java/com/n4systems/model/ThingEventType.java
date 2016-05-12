@@ -1,10 +1,10 @@
 package com.n4systems.model;
 
 import com.n4systems.fileprocessing.ProofTestType;
-import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -13,6 +13,8 @@ import java.util.Set;
 @Entity
 @Table(name = "thing_event_types")
 @PrimaryKeyJoinColumn(name="id")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class ThingEventType extends EventType<ThingEventType> {
 
     public ThingEventType() {}
@@ -25,6 +27,7 @@ public class ThingEventType extends EventType<ThingEventType> {
     @Enumerated(EnumType.STRING)
     @JoinTable(name="thing_event_types_supported_proof_tests", joinColumns = {@JoinColumn(name="thing_event_id")})
     @Column(name="element")
+    @org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<ProofTestType> supportedProofTests = new HashSet<ProofTestType>();
 
     @Column(nullable=false)

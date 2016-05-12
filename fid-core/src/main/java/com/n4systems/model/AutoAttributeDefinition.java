@@ -3,16 +3,9 @@ package com.n4systems.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
@@ -26,6 +19,8 @@ import com.n4systems.model.parents.EntityWithTenant;
  */
 @Entity
 @Table( name="autoattributedefinition")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class AutoAttributeDefinition extends EntityWithTenant implements Exportable {
 
 	private static final long serialVersionUID = 1L;
@@ -35,6 +30,7 @@ public class AutoAttributeDefinition extends EntityWithTenant implements Exporta
 					joinColumns = @JoinColumn(name = "r_autoattributedefinition", referencedColumnName = "id"),
 					inverseJoinColumns = @JoinColumn(name = "r_infooption", referencedColumnName = "uniqueid"))
 	@OrderBy( "infoField" )
+	@org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	List<InfoOptionBean> inputs = new ArrayList<InfoOptionBean>();
 	
 	@ManyToMany (targetEntity = InfoOptionBean.class, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
@@ -42,6 +38,7 @@ public class AutoAttributeDefinition extends EntityWithTenant implements Exporta
 					joinColumns = @JoinColumn(name = "r_autoattributedefinition", referencedColumnName = "id"),
 					inverseJoinColumns = @JoinColumn(name = "r_infooption", referencedColumnName = "uniqueid"))
 	@OrderBy( "uniqueID" )
+	@org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	List<InfoOptionBean> outputs = new ArrayList<InfoOptionBean>();
 	
 	@ManyToOne(optional = false, fetch = FetchType.LAZY )

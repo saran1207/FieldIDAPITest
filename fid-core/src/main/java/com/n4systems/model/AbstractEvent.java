@@ -4,6 +4,7 @@ import com.n4systems.model.api.HasFileAttachments;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.util.StringUtils;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,6 +14,8 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "events")
 @Inheritance(strategy = InheritanceType.JOINED)
+@Cacheable
+@org.hibernate.annotations.Cache(region = "EventCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public abstract class AbstractEvent<T extends EventType, R extends EntityWithTenant> extends EntityWithTenant implements HasFileAttachments {
 	private static final long serialVersionUID = 1L;
 
@@ -28,16 +31,19 @@ public abstract class AbstractEvent<T extends EventType, R extends EntityWithTen
     private EventForm eventForm;
 
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, mappedBy = "event", orphanRemoval = true)
+	@org.hibernate.annotations.Cache(region = "EventCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	private Set<CriteriaResult> results = new HashSet<CriteriaResult>();
 	
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
     @JoinTable(name="events_fileattachments", joinColumns = @JoinColumn(name="events_id"), inverseJoinColumns = @JoinColumn(name="attachments_id"))
+	@org.hibernate.annotations.Cache(region = "EventCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	private List<FileAttachment> attachments = new ArrayList<FileAttachment>();
 
     @ElementCollection(fetch = FetchType.LAZY)
     @JoinTable(name="events_infooptionmap", joinColumns = @JoinColumn(name="events_id"))
     @MapKeyColumn(name = "mapkey")
     @Column(name="element")
+	@org.hibernate.annotations.Cache(region = "EventCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Map<String, String> infoOptionMap = new HashMap<String, String>();
 
     @Column(name="score")

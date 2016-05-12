@@ -6,6 +6,7 @@ import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -19,6 +20,8 @@ import java.util.List;
  */
 @Entity
 @Table(name="assignment_escalation_rules")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class AssignmentEscalationRule extends ArchivableEntityWithTenant {
 
     @Column(name = "rule_name")

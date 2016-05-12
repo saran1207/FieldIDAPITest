@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.model.PlatformType;
 import com.n4systems.model.api.HasCreatedModifiedPlatform;
 import com.n4systems.model.parents.EntityWithTenant;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.List;
@@ -13,9 +14,12 @@ import java.util.UUID;
 @Entity
 @Table(name = "editable_images")
 @Inheritance(strategy= InheritanceType.JOINED)
+@Cacheable
+@org.hibernate.annotations.Cache(region = "ProcedureCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class EditableImage extends EntityWithTenant implements S3Image, HasCreatedModifiedPlatform {
 
     @OneToMany(mappedBy = "image", fetch = FetchType.EAGER)
+    @org.hibernate.annotations.Cache(region = "ProcedureCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private List<ImageAnnotation> annotations = Lists.newArrayList();
     
     @Column(name = "filename", nullable = false)

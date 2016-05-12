@@ -12,12 +12,15 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.user.User;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.*;
 
 @Entity
 @Table(name = "procedure_definitions")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "ProcedureCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class ProcedureDefinition extends ArchivableEntityWithTenant implements Listable<Long>, HasOwner, HasCreatedModifiedPlatform {
 
     public static final SecurityDefiner createSecurityDefiner() {
@@ -83,9 +86,11 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
 
     @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
     @JoinTable(name="procedure_definitions_isolation_points", joinColumns = @JoinColumn(name = "procedure_definition_id"), inverseJoinColumns = @JoinColumn(name = "isolation_point_id"))
+    @org.hibernate.annotations.Cache(region = "ProcedureCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<IsolationPoint> isolationPoints = Sets.newHashSet();
 
     @OneToMany(mappedBy = "procedureDefinition", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @org.hibernate.annotations.Cache(region = "ProcedureCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private List<ProcedureDefinitionImage> images = Lists.newArrayList();
 
     @Column(name="origin_date")

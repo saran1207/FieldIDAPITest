@@ -3,12 +3,15 @@ package com.n4systems.model.criteriaresult;
 
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.CriteriaResult;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
 @Table(name = "criteriaresult_images")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "EventCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class CriteriaResultImage extends BaseEntity {
 
 	private String mobileGUID;

@@ -5,12 +5,15 @@ import com.n4systems.model.PlatformType;
 import com.n4systems.model.api.HasCreatedModifiedPlatform;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.parents.EntityWithTenant;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.Comparator;
 
 @Entity
 @Table(name = "isolation_points")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "ProcedureCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class IsolationPoint extends EntityWithTenant implements HasCreatedModifiedPlatform {
 
     public static Comparator<IsolationPoint> LOCK_ORDER = (o1, o2) -> o1.getFwdIdx().compareTo(o2.getFwdIdx());

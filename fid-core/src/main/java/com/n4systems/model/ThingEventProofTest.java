@@ -1,25 +1,19 @@
 package com.n4systems.model;
 
 import com.n4systems.fileprocessing.ProofTestType;
-import com.n4systems.model.api.NetworkEntity;
-import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
-import com.n4systems.model.security.EntitySecurityEnhancer;
-import com.n4systems.model.security.SecurityDefiner;
-import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.utils.AssetEvent;
 import com.n4systems.tools.FileDataContainer;
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name="thing_event_prooftests")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "EventCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class ThingEventProofTest extends BaseEntity implements AssetEvent, Serializable {
     private static final long serialVersionUID = 2L;
 

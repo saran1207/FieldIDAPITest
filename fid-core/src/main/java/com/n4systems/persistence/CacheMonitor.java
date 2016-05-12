@@ -1,34 +1,37 @@
 package com.n4systems.persistence;
 
-import java.util.Arrays;
-
+import com.n4systems.fieldid.config.CacheConfigurator;
+import com.n4systems.fieldid.service.PersistenceService;
 import org.apache.log4j.Logger;
 import org.hibernate.stat.SecondLevelCacheStatistics;
 import org.hibernate.stat.Statistics;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 
-public class CacheManager {
+import java.util.Arrays;
+
+
+public class CacheMonitor {
 	private static Logger logger = Logger.getLogger("cache-info");
-	
-	private static CacheManager self = new CacheManager();
-	
-	public static CacheManager getInstance() {
-		return self;
-	}
-	
-	public static void setInstance(CacheManager cm) {
-		self = cm;
-	}
-	
-	protected CacheManager() {}
-	
+
+
+	private static final double B_TO_MB = 1024d * 1024d;
+
+	@Autowired
+	protected PersistenceService persistenceService;
+
+	@Scheduled(fixedRate = 30000)
 	public void logStats() {
-		logStats("fieldid", PersistenceManager.getHibernateStats());
-		
+		if (!CacheConfigurator.isCacheEnabled()) return;
+
+		Statistics stats = persistenceService.getHibernateSession().getSessionFactory().getStatistics();
+		stats.setStatisticsEnabled(true);
+		logStats("fieldid", stats);
 	}
 	
 	public void logStats(String unitName, Statistics stats) {
 		logger.info(String.format("============================================================== %-8s ========================================================================", unitName));
-		
+
 		logHitMissCounts("QueryCache", stats.getQueryCacheHitCount(), stats.getQueryCacheMissCount(), stats.getQueryCachePutCount());
 		logHitMissCounts("SecondLevel", stats.getSecondLevelCacheHitCount(), stats.getSecondLevelCacheMissCount(), stats.getSecondLevelCachePutCount());
 		
@@ -42,8 +45,8 @@ public class CacheManager {
 		logger.info("================================================================================================================================================");
 	}
 	
-	public void logSecondLevelRegionStats(String name, SecondLevelCacheStatistics stats) {		
-		String extraInfo = String.format("SizeInMem [%8d], ElementsInMem [%5d], ElementsOnDisk [%5d]", stats.getSizeInMemory(), stats.getElementCountInMemory(), stats.getElementCountOnDisk());
+	public void logSecondLevelRegionStats(String name, SecondLevelCacheStatistics stats) {
+		String extraInfo = String.format("SizeInMemMB [%8.2f], ElementsInMem [%5d], ElementsOnDisk [%5d]", stats.getSizeInMemory() / B_TO_MB, stats.getElementCountInMemory(), stats.getElementCountOnDisk());
 
 		logHitMissCounts(name, stats.getHitCount(), stats.getMissCount(), stats.getPutCount(), extraInfo);
 	}
@@ -62,7 +65,7 @@ public class CacheManager {
 			
 		double ratio = calcHitRatio(hits, misses);
 		
-		String message = String.format("%-95s: HitPct [%5.1f%%], Hit [%5.0f], Miss [%5.0f], Puts [%5.0f]%s", cacheName, ratio, hits, misses, puts, extra);
+		String message = String.format("%-65s: HitPct [%5.1f%%], Hit [%5.0f], Miss [%5.0f], Puts [%5.0f]%s", cacheName, ratio, hits, misses, puts, extra);
 		logger.info(message);
 	}
 	

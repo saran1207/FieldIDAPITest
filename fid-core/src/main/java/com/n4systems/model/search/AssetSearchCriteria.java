@@ -8,6 +8,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.chart.RangeType;
 import com.n4systems.util.persistence.search.AssetLockoutTagoutStatus;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,6 +16,8 @@ import java.util.List;
 
 @Entity
 @Table(name="saved_searches")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class AssetSearchCriteria extends SearchCriteria {
 
     private static final String LAST_EVENT_DATE_COLUMN = "asset_search_lasteventdate";
@@ -54,6 +57,7 @@ public class AssetSearchCriteria extends SearchCriteria {
 	@OrderColumn(name="idx")
     @JoinTable(name="saved_searches_columns", joinColumns = {@JoinColumn(name="saved_search_id")})
     @Column(name="column_id")
+    @org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	private List<String> columns = new ArrayList<String>();
 
     private @Transient Integer maxItemsBeforeGrouping = 199;

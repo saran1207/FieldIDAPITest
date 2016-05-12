@@ -2,6 +2,7 @@ package com.n4systems.model;
 
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.parents.EntityWithTenant;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -11,6 +12,8 @@ import java.util.UUID;
 @Entity
 @Table(name = "criteriaresults")
 @Inheritance(strategy = InheritanceType.JOINED)
+@Cacheable
+@org.hibernate.annotations.Cache(region = "EventCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public abstract class CriteriaResult extends EntityWithTenant {
 	private static final long serialVersionUID = 1L;
 	
@@ -24,20 +27,24 @@ public abstract class CriteriaResult extends EntityWithTenant {
 	@OneToMany(fetch= FetchType.EAGER, cascade=CascadeType.ALL)
 	@JoinTable(name="criteriaresults_recommendations", joinColumns = @JoinColumn(name="criteriaresults_id"), inverseJoinColumns = @JoinColumn(name = "recommendations_id"))
 	@OrderColumn(name="orderidx")
+	@org.hibernate.annotations.Cache(region = "EventCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	private List<Recommendation> recommendations = new ArrayList<Recommendation>();
 
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name="criteriaresults_actions", joinColumns = @JoinColumn(name = "criteriaresult_id"), inverseJoinColumns = @JoinColumn(name = "event_id"))
     @OrderColumn(name="orderidx")
+	@org.hibernate.annotations.Cache(region = "EventCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private List<Event> actions = new ArrayList<Event>();
 	
 	@OneToMany(fetch= FetchType.EAGER, cascade=CascadeType.ALL)
 	@JoinTable(name="criteriaresults_deficiencies", joinColumns = @JoinColumn(name="criteriaresults_id"), inverseJoinColumns = @JoinColumn(name = "deficiencies_id"))
 	@OrderColumn(name="orderidx")
+	@org.hibernate.annotations.Cache(region = "EventCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	private List<Deficiency> deficiencies = new ArrayList<Deficiency>();
 
     @OneToMany(mappedBy = "criteriaResult", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@OrderBy // Ordered by primary key
+	@org.hibernate.annotations.Cache(region = "EventCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	private List<CriteriaResultImage> criteriaImages = new ArrayList<CriteriaResultImage>();
 
 	@Column(nullable=false)

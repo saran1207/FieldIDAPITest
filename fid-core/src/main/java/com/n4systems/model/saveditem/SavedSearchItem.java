@@ -1,12 +1,15 @@
 package com.n4systems.model.saveditem;
 
 import com.n4systems.model.search.AssetSearchCriteria;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorValue("S")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class SavedSearchItem extends SavedItem<AssetSearchCriteria> {
 
     public SavedSearchItem() {}

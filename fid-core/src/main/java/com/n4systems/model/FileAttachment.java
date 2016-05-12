@@ -3,9 +3,11 @@ package com.n4systems.model;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.user.User;
 import com.n4systems.util.ContentTypeUtil;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.util.StringUtils;
 
 import javax.activation.FileTypeMap;
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -13,6 +15,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "fileattachments")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "EventCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class FileAttachment extends EntityWithTenant implements Attachment {
 	private static final long serialVersionUID = 1L;
 

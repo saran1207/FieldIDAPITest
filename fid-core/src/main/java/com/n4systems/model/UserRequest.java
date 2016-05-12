@@ -1,16 +1,16 @@
 package com.n4systems.model;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.user.User;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
 
 
 @Entity
 @Table ( name= "userrequest" )
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class UserRequest extends EntityWithTenant {
 	private static final long serialVersionUID = 1L;
 	

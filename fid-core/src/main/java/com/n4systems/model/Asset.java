@@ -11,6 +11,7 @@ import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.PlainDate;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import rfid.ejb.entity.InfoOptionBean;
 
 import javax.persistence.*;
@@ -18,6 +19,8 @@ import java.util.*;
 
 @Entity
 @Table(name = "assets")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "AssetCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, NetworkEntity<Asset>, Exportable, LocationContainer, HasCreatedModifiedPlatform, HasGpsLocation {
 	private static final long serialVersionUID = 1L;
 	public static final String[] POST_FETCH_ALL_PATHS = { "infoOptions", "type.infoFields", "type.eventTypes", "type.attachments", "type.subTypes", "projects", "modifiedBy.displayName" };
@@ -57,6 +60,7 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "asset_infooption", joinColumns = @JoinColumn(name = "r_productserial", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "r_infooption", referencedColumnName = "uniqueid"))
+	@org.hibernate.annotations.Cache(region = "AssetCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	private Set<InfoOptionBean> infoOptions = new HashSet<>();
 
 	@ManyToOne
@@ -75,6 +79,7 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
     
     @ManyToMany( fetch= FetchType.LAZY )
     @JoinTable(name = "projects_assets", joinColumns = @JoinColumn(name="asset_id"), inverseJoinColumns = @JoinColumn(name="projects_id"))
+	@org.hibernate.annotations.Cache(region = "AssetCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private List<Project> projects = new ArrayList<>();
     
     @Column(name="published", nullable=false)
@@ -156,7 +161,7 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 		}
 	}
 	
-	public void synchronizeNetworkId() {
+	private void synchronizeNetworkId() {
 		if (linkedAsset != null) {
 			networkId = linkedAsset.getNetworkId();
 		} else {

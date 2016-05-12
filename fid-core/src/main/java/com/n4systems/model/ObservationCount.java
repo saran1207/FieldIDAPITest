@@ -2,11 +2,9 @@ package com.n4systems.model;
 
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.persistence.localization.Localized;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by rrana on 2015-01-21.
@@ -16,6 +14,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name="observationcount")
 @PrimaryKeyJoinColumn(name="id")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class ObservationCount extends ArchivableEntityWithTenant{
 
     @Column(name="name")

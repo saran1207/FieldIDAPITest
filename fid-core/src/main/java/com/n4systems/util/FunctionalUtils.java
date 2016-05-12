@@ -48,4 +48,9 @@ public class FunctionalUtils {
 	public static <T, R> Supplier<R> bind(Function<T, R> function, T bindee) {
 		return () -> function.apply(bindee);
 	}
+
+	public static <T> Runnable bind(Consumer<T> function, T bindee) {
+		return () -> function.accept(bindee);
+	}
+
 }

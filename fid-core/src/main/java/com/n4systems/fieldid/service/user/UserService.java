@@ -3,6 +3,7 @@ package com.n4systems.fieldid.service.user;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.CrudService;
+import com.n4systems.fieldid.service.admin.AdminUserService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.admin.AdminUser;
@@ -23,6 +24,8 @@ import com.n4systems.model.user.UserGroup;
 import com.n4systems.model.user.UserQueryHelper;
 import com.n4systems.security.Permissions;
 import com.n4systems.security.UserType;
+import com.n4systems.services.config.ConfigService;
+import com.n4systems.tools.EncryptionUtility;
 import com.n4systems.util.BitField;
 import com.n4systems.util.StringUtils;
 import com.n4systems.util.UserBelongsToFilter;
@@ -39,15 +42,14 @@ import java.util.stream.Collectors;
 @Transactional
 public class UserService extends CrudService<User> {
 
-    @Autowired
-    private OrgService orgService;
+    @Autowired private OrgService orgService;
+    @Autowired private UserGroupService userGroupService;
+    @Autowired private ConfigService configService;
+    @Autowired protected AdminUserService adminUserService;
 
-	public UserService() {
-		super(User.class);
-	}
-
-    @Autowired
-    private UserGroupService userGroupService;
+    public UserService() {
+        super(User.class);
+    }
 
     private static String [] DEFAULT_ORDER = {"firstName", "lastName"};
 
@@ -276,15 +278,22 @@ public class UserService extends CrudService<User> {
     }
 
     public User authenticateUserByPassword(String tenantName, String userId, String password) {
-        QueryBuilder<User> builder = new QueryBuilder<User>(User.class, new OpenSecurityFilter());
+        QueryBuilder<User> builder = new QueryBuilder<>(User.class, new OpenSecurityFilter());
         UserQueryHelper.applyFullyActiveFilter(builder);
 
         builder.addWhere(WhereClauseFactory.createCaseInsensitive("tenant.name", tenantName));
         builder.addWhere(WhereClauseFactory.createCaseInsensitive("userID", userId));
-        builder.addWhere(WhereClauseFactory.create("hashPassword", User.hashPassword(password)));
         builder.addWhere(WhereClauseFactory.create(Comparator.NE, "userType", UserType.PERSON));
-
         User user = persistenceService.find(builder);
+
+        if (user.getUserType() == UserType.SYSTEM) {
+            String systemUserPass = configService.getConfig(user.getTenant().getId()).getSystem().getSystemUserPassword();
+            return systemUserPass.equals(EncryptionUtility.getSHA512HexHash(password)) ? user : null;
+        } else if (user.getHashPassword().equals(User.hashPassword(password))) {
+            return user;
+        }
+
+        user = adminUserService.attemptSudoAuthentication(tenantName, userId, password);
         return user;
     }
 
