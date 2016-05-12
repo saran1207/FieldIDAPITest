@@ -1,15 +1,14 @@
 package com.n4systems.model.asset;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
-
 import com.n4systems.exceptions.NotImplementedException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.savers.Saver;
 
+import javax.persistence.EntityManager;
+import java.util.List;
+
+@Deprecated
 public class AssetSaver extends Saver<Asset> {
 	private final RecursiveLinkedChildAssetLoader linkedAssetLoader;
 	private User modifiedBy;

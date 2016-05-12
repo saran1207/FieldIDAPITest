@@ -265,6 +265,11 @@ public class AssetService extends CrudService<Asset> {
 
         asset = persistenceService.update(asset);
 
+        //Apparently I have to manually do this... the onUpdate and onCreate hooks don't execute twice on double calls.
+        asset.synchronizeNetworkId();
+
+        asset = persistenceService.update(asset);
+
         saveSubAssets(asset);
 
         asset.setSubAssets(findSubAssets(asset));

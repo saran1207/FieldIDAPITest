@@ -156,7 +156,7 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 		}
 	}
 	
-	private void synchronizeNetworkId() {
+	public void synchronizeNetworkId() {
 		if (linkedAsset != null) {
 			networkId = linkedAsset.getNetworkId();
 		} else {
