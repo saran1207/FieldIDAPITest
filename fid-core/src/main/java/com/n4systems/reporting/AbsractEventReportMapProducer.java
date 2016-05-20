@@ -3,6 +3,7 @@ package com.n4systems.reporting;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.certificate.model.InspectionImage;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.LastEventDateService;
 import com.n4systems.fieldid.util.EventFormHelper;
 import com.n4systems.model.*;
@@ -24,15 +25,17 @@ import java.util.stream.Collectors;
 public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 
     protected LastEventDateService lastEventDateService;
+    protected AssetService assetService;
 
     protected Integer totalNumCriteria = 0;
     protected Integer totalNumCriteriaWithObservation = 0;
     protected Integer totalNumCriteriaWithActions = 0;
     protected Map<String, Integer> actionsByPriorityCode = new HashMap<>();
 
-    public AbsractEventReportMapProducer(DateTimeDefinition dateTimeDefinition, S3Service s3Service, LastEventDateService lastEventDateService) {
+    public AbsractEventReportMapProducer(DateTimeDefinition dateTimeDefinition, S3Service s3Service, LastEventDateService lastEventDateService, AssetService assetService) {
 		super(dateTimeDefinition, s3Service);
         this.lastEventDateService = lastEventDateService;
+        this.assetService = assetService;
     }
 
 	public void addParameters() {
@@ -55,7 +58,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		add("eventTypeDescription", getEvent().getType().getName());
 		add("eventInfoOptionMap", eventInfoOptions());
 
-		add("product", new AssetReportMapProducer(getEvent().getTarget(), lastEventDateService, dateTimeDefinition, s3Service).produceMap());
+		add("product", new AssetReportMapProducer(getEvent().getTarget(), lastEventDateService, dateTimeDefinition, s3Service, assetService).produceMap());
 		
 		List<CriteriaStateView> criteriaViews = createCriteriaViews();
         populateTotalsAndPercentages();

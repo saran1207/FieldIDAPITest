@@ -5,6 +5,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.ReportException;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.LastEventDateService;
 import com.n4systems.model.*;
@@ -36,19 +37,22 @@ public class EventSummaryGenerator {
 	private final EventManager eventManager;
 	private final DateTimeDefiner dateDefiner;
     private final S3Service s3service;
-    private EventService eventService;
-    private LastEventDateService lastEventDateService;
+    private final EventService eventService;
+	private final AssetService assetService;
 
-    public EventSummaryGenerator(DateTimeDefiner dateDefiner, PersistenceManager persistenceManager, EventManager eventManager, S3Service s3service, EventService eventService) {
+	private LastEventDateService lastEventDateService;
+
+    public EventSummaryGenerator(DateTimeDefiner dateDefiner, PersistenceManager persistenceManager, EventManager eventManager, S3Service s3service, EventService eventService, AssetService assetService) {
 		this.dateDefiner = dateDefiner;
 		this.persistenceManager = persistenceManager;
 		this.eventManager = eventManager;
         this.s3service = s3service;
         this.eventService = eventService;
+		this.assetService = assetService;
     }
 	
 	public EventSummaryGenerator(DateTimeDefiner dateDefiner) {
-		this(dateDefiner, ServiceLocator.getPersistenceManager(), ServiceLocator.getEventManager(), ServiceLocator.getS3Service(), ServiceLocator.getEventService());
+		this(dateDefiner, ServiceLocator.getPersistenceManager(), ServiceLocator.getEventManager(), ServiceLocator.getS3Service(), ServiceLocator.getEventService(), ServiceLocator.getAssetService());
 	}
 	
 	public JasperPrint generate(ReportDefiner reportDefiner, List<Long> eventIds, User user) throws ReportException {
@@ -120,7 +124,7 @@ public class EventSummaryGenerator {
 						? event.getAssignedTo().getAssignedUser().getDisplayName() : "");
 
 
-				Map<String, Object> eventReportMap = new EventReportMapProducer(event, dateDefiner, s3service, eventService, lastEventDateService).produceMap();
+				Map<String, Object> eventReportMap = new EventReportMapProducer(event, dateDefiner, s3service, eventService, lastEventDateService, assetService).produceMap();
 				eventMap.put("mainInspection", eventReportMap);
 				eventMap.put("product", eventReportMap.get("product"));
 				
@@ -128,7 +132,7 @@ public class EventSummaryGenerator {
 				inspectionResultMaps.add(eventReportMap);
 				
 				for (SubEvent subEvent : event.getSubEvents()) {
-					inspectionResultMaps.add(new SubEventReportMapProducer(subEvent, event, dateDefiner, s3service, lastEventDateService).produceMap());
+					inspectionResultMaps.add(new SubEventReportMapProducer(subEvent, event, dateDefiner, s3service, lastEventDateService, assetService).produceMap());
 				}
 
 				eventMap.put("allInspections", inspectionResultMaps);

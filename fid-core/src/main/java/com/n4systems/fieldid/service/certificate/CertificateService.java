@@ -73,7 +73,7 @@ public class CertificateService extends FieldIdPersistenceService {
             reportMap.put("SUBREPORT_DIR", jrxmlFile.getParent() + "/");
 
             addIdentifiedByParams(reportMap, asset.getIdentifiedBy());
-            reportMap.putAll(new AssetReportMapProducer(asset, lastEventDateService, new DateTimeDefiner(getCurrentUser()), s3service).produceMap());
+            reportMap.putAll(new AssetReportMapProducer(asset, lastEventDateService, new DateTimeDefiner(getCurrentUser()), s3service, assetService).produceMap());
             addAssetTypeParams(reportMap, asset.getType());
             addShopOrderParams(reportMap, asset);
             addOrganizationParams(reportMap, asset.getOwner().getInternalOrg());
@@ -138,7 +138,7 @@ public class CertificateService extends FieldIdPersistenceService {
 		addNextEventScheduleParams(reportMap, event, dateDefiner);
 		addEventScheduleParams(reportMap, event);
 
-		Map<String, Object> masterEventReportMap = new EventReportMapProducer(event, dateDefiner, s3service, eventService, lastEventDateService).produceMap();
+		Map<String, Object> masterEventReportMap = new EventReportMapProducer(event, dateDefiner, s3service, eventService, lastEventDateService, assetService).produceMap();
 		reportMap.put("mainInspection", masterEventReportMap);
 		reportMap.put("product", masterEventReportMap.get("product"));
 
@@ -146,7 +146,7 @@ public class CertificateService extends FieldIdPersistenceService {
 		eventResultMaps.add(masterEventReportMap);
 
 		for (SubEvent subEvent : event.getSubEvents()) {
-			eventResultMaps.add(new SubEventReportMapProducer(subEvent, event, dateDefiner, s3service, lastEventDateService).produceMap());
+			eventResultMaps.add(new SubEventReportMapProducer(subEvent, event, dateDefiner, s3service, lastEventDateService, assetService).produceMap());
 		}
 		reportMap.put("allInspections", eventResultMaps);
 
@@ -176,9 +176,9 @@ public class CertificateService extends FieldIdPersistenceService {
 		addAssetTypeParams(reportMap, event.getAsset().getType());
 		addShopOrderParams(reportMap, event.getAsset());
 
-		reportMap.putAll(new AssetReportMapProducer(event.getAsset(), lastEventDateService,  dateDefiner, s3service).produceMap());
+		reportMap.putAll(new AssetReportMapProducer(event.getAsset(), lastEventDateService,  dateDefiner, s3service, assetService).produceMap());
 
-		Map<String, Object> eventMap = new EventReportMapProducer(event, dateDefiner, s3service, eventService, lastEventDateService).produceMap();
+		Map<String, Object> eventMap = new EventReportMapProducer(event, dateDefiner, s3service, eventService, lastEventDateService, assetService).produceMap();
 		reportMap.putAll(eventMap);
 
 		JasperReport jasperReport = (JasperReport) JRLoader.loadObject(PathHandler.getCompiledPrintOutFile(printOut, locale));
