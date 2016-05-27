@@ -4,6 +4,8 @@ import com.amazonaws.ClientConfiguration;
 import com.amazonaws.Protocol;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
@@ -38,6 +40,7 @@ import com.n4systems.fieldid.service.event.perform.PerformThingEventHelperServic
 import com.n4systems.fieldid.service.eventbook.EventBookService;
 import com.n4systems.fieldid.service.export.EventTypeExportService;
 import com.n4systems.fieldid.service.images.ImageService;
+import com.n4systems.fieldid.service.jmx.StatisticsServiceMBeanInitializer;
 import com.n4systems.fieldid.service.job.JobService;
 import com.n4systems.fieldid.service.location.LocationService;
 import com.n4systems.fieldid.service.mail.MailService;
@@ -70,6 +73,7 @@ import com.n4systems.fieldid.service.user.*;
 import com.n4systems.fieldid.service.uuid.AtomicLongService;
 import com.n4systems.fieldid.service.uuid.UUIDService;
 import com.n4systems.fieldid.service.warningtemplates.WarningTemplateService;
+import com.n4systems.persistence.CacheMonitor;
 import com.n4systems.persistence.listeners.LocalizationListener;
 import com.n4systems.persistence.listeners.SetupDataUpdateEventListener;
 import com.n4systems.services.AuthService;
@@ -94,10 +98,8 @@ import com.n4systems.util.json.CallOutStyleAnnotationJsonRenderer;
 import com.n4systems.util.json.JsonRenderer;
 import org.apache.lucene.analysis.util.CharArraySet;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.ehcache.EhCacheCacheManager;
-import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
+import org.hibernate.SessionFactory;
+import org.hibernate.jpa.HibernateEntityManagerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -114,10 +116,12 @@ import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.security.Security;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 @Configuration
-@EnableCaching
+//@EnableCaching
 public class FieldIdCoreConfig {
 
 	static {
@@ -133,7 +137,28 @@ public class FieldIdCoreConfig {
         if ("https".equals(configService().getString(ConfigEntry.SYSTEM_PROTOCOL))) {
             config.setProtocol(Protocol.HTTPS);
         }
-        return new AmazonS3Client(credentials, config);
+
+        AmazonS3Client client = new AmazonS3Client(credentials, config);
+
+        //Here, we want to set the region... eventually we're going to want to do this on ALL servers... but for now,
+        //we just want to do it on our Europe instance.  We don't need to declare our endpoint, because there's some
+        if(configService().getString(ConfigEntry.REGION) != null) {
+            client.setRegion(Region.getRegion(Regions.fromName(configService().getString(ConfigEntry.REGION))));
+        }
+
+        return client;
+    }
+
+    @Bean
+    @Scope("singleton")
+    public CacheMonitor cacheMonitor() {
+        return new CacheMonitor();
+    }
+
+    @Bean(initMethod = "init")
+    @Scope("singleton")
+    public StatisticsServiceMBeanInitializer statisticsMXBeanInitializer() {
+        return new StatisticsServiceMBeanInitializer();
     }
 
     @Bean
@@ -439,7 +464,10 @@ public class FieldIdCoreConfig {
 
 	@Bean
     public AbstractEntityManagerFactoryBean entityManagerFactory() {
+        Map<String, String> jpaCacheProperties = new HashMap<>();
+        CacheConfigurator.initAndSetJPAProperties(jpaCacheProperties);
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
+        factoryBean.setJpaPropertyMap(jpaCacheProperties);
 
         String persistenceUnit = System.getProperty("persistence.unit", "fieldid");
         factoryBean.setPersistenceUnitName(persistenceUnit);
@@ -467,6 +495,11 @@ public class FieldIdCoreConfig {
     @Bean
     public PlatformTransactionManager txManager() {
         return new JpaTransactionManager(entityManagerFactory().getObject());
+    }
+
+    @Bean
+    public SessionFactory sessionFactory() {
+        return entityManagerFactory().getObject().unwrap(HibernateEntityManagerFactory.class).getSessionFactory();
     }
 
     @Bean
@@ -722,22 +755,6 @@ public class FieldIdCoreConfig {
     @Bean
     public AnalyzerFactory analyzerFactory() {
         return new AnalyzerFactory();
-    }
-
-    @Bean
-    public CacheManager cacheManager() {
-        EhCacheCacheManager ehCacheCacheManager = new EhCacheCacheManager();
-        try {
-            ehCacheCacheManager.setCacheManager(ehCache().getObject());
-        } catch (Exception e) {
-            throw new IllegalStateException("failed to create ehCache");
-        }
-        return ehCacheCacheManager;
-    }
-
-    @Bean
-    public EhCacheManagerFactoryBean ehCache() {
-        return new EhCacheManagerFactoryBean();
     }
 
     @Bean

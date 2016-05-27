@@ -6,6 +6,7 @@ import com.n4systems.model.criteriarules.CriteriaRule;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.persistence.localization.Localized;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -16,6 +17,8 @@ import java.util.List;
 @Entity
 @Table(name = "criteria")
 @Inheritance(strategy = InheritanceType.JOINED)
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public abstract class Criteria extends EntityWithTenant implements Listable<Long> {
 	private static final long serialVersionUID = 1L;
 
@@ -31,11 +34,13 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
 	@Column(name="text", nullable=false, length=2048)
 	@ElementCollection(fetch= FetchType.EAGER)
 	@OrderColumn(name="orderidx")
+	@org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	private @Localized List<String> recommendations = new ArrayList<String>();
 	
 	@Column(name="text", nullable=false, length=2048)
 	@ElementCollection(fetch= FetchType.EAGER)
 	@OrderColumn(name="orderidx")
+	@org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	private @Localized List<String> deficiencies = new ArrayList<String>();
 
 	@Column(nullable=false)
@@ -43,6 +48,7 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
 
     //The cascade should ensure that - if the criteria is deleted - the rule is deleted, too.
     @OneToMany(mappedBy = "criteria", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private List<CriteriaRule> rules = Lists.newArrayList();
 
     @Transient

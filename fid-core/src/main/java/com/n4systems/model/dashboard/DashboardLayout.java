@@ -2,6 +2,7 @@ package com.n4systems.model.dashboard;
 
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.user.User;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -9,6 +10,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "dashboard_layouts")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class DashboardLayout extends EntityWithTenant {
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -16,6 +19,7 @@ public class DashboardLayout extends EntityWithTenant {
                     joinColumns = @JoinColumn(name = "dashboard_layout_id"),
                     inverseJoinColumns = @JoinColumn(name = "dashboard_column_id"))
     @OrderColumn(name="orderIdx")
+    @org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private List<DashboardColumn> columns = new ArrayList<DashboardColumn>();
 
     @ManyToOne(fetch= FetchType.EAGER, optional=false)

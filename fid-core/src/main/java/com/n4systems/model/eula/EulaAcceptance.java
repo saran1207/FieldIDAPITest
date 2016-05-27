@@ -1,24 +1,19 @@
 package com.n4systems.model.eula;
 
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.exceptions.NotUpdatableException;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.user.User;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "eulaacceptances")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class EulaAcceptance extends EntityWithTenant {
 
 	private static final long serialVersionUID = 1L;

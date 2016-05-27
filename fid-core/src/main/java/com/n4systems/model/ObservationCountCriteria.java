@@ -1,5 +1,7 @@
 package com.n4systems.model;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.*;
 
 /**
@@ -9,6 +11,8 @@ import javax.persistence.*;
 @Entity
 @Table(name="observationcount_criteria")
 @PrimaryKeyJoinColumn(name="id")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class ObservationCountCriteria extends Criteria {
 
     @ManyToOne(cascade= CascadeType.REFRESH, fetch= FetchType.EAGER, optional=false)

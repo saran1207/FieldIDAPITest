@@ -12,6 +12,7 @@ import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -20,6 +21,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "procedures")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "ProcedureCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Procedure extends ArchivableEntityWithTenant implements NetworkEntity<Procedure>, HasGpsLocation {
 
     public static final SecurityDefiner createSecurityDefiner() {
@@ -69,11 +72,13 @@ public class Procedure extends ArchivableEntityWithTenant implements NetworkEnti
     @OneToMany(cascade = CascadeType.ALL)
     @OrderColumn(name="orderIdx")
     @JoinTable(name="procedures_lock_results", joinColumns = @JoinColumn(name = "procedure_id"), inverseJoinColumns = @JoinColumn(name = "isolation_point_result_id"))
+    @org.hibernate.annotations.Cache(region = "ProcedureCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private List<IsolationPointResult> lockResults;
 
     @OneToMany(cascade = CascadeType.ALL)
     @OrderColumn(name="orderIdx")
     @JoinTable(name="procedures_unlock_results", joinColumns = @JoinColumn(name = "procedure_id"), inverseJoinColumns = @JoinColumn(name = "isolation_point_result_id"))
+    @org.hibernate.annotations.Cache(region = "ProcedureCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private List<IsolationPointResult> unlockResults;
 
     @Column(name="mobileguid")

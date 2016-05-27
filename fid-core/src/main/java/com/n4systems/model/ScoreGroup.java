@@ -4,6 +4,7 @@ import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.persistence.localization.Localized;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,6 +14,8 @@ import java.util.List;
 @Entity
 @Table(name="score_groups")
 @PrimaryKeyJoinColumn(name="id")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class ScoreGroup extends ArchivableEntityWithTenant implements Listable, NamedEntity {
 
     @Column(nullable=false)
@@ -21,6 +24,7 @@ public class ScoreGroup extends ArchivableEntityWithTenant implements Listable, 
     @OneToMany(fetch= FetchType.EAGER, cascade= CascadeType.ALL)
     @JoinTable(name="score_groups_scores", joinColumns = @JoinColumn(name="score_group_id"), inverseJoinColumns = @JoinColumn(name="score_id"))
     @OrderColumn(name="orderIdx")
+	@org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private List<Score> scores = new ArrayList<Score>();
 
     public String getName() {

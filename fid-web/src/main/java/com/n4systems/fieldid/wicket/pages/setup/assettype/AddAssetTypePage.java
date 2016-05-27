@@ -10,7 +10,6 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.Watermark;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
-import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.assettype.*;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
@@ -26,7 +25,6 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -40,7 +38,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.AbstractValidator;
-import org.apache.wicket.validation.validator.StringValidator;
 import org.apache.wicket.validation.validator.UrlValidator;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
@@ -108,7 +105,7 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
 
     @Override
     protected Component createBackToLink(String linkId, String linkLabelId) {
-        BookmarkablePageLink<Void> pageLink = new BookmarkablePageLink<Void>(linkId, AssetsAndEventsPage.class);
+        BookmarkablePageLink<Void> pageLink = new BookmarkablePageLink<>(linkId, AssetsAndEventsPage.class);
         pageLink.add(new FlatLabel(linkLabelId, new FIDLabelModel("label.back_to_setup")));
         return pageLink;
     }
@@ -137,6 +134,7 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
 
     private class AssetTypeForm extends Form<AssetType> {
 
+        @SuppressWarnings("unchecked")
         private AssetTypeForm(String id, IModel<AssetType> model) {
             super(id, model);
 
@@ -144,7 +142,8 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
 
             RequiredTextField nameField;
 
-            add(nameField = new RequiredTextField<String>("name", new PropertyModel<String>(model, "name")));
+            add(nameField = new RequiredTextField<>("name", new PropertyModel<String>(model, "name")));
+
             nameField.add(new AbstractValidator() {
                 @Override
                 protected void onValidate(IValidatable validatable) {
@@ -157,11 +156,11 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
                 }
             });
             nameField.add(new Watermark(new FIDLabelModel("label.asset_type.form.name").getObject()));
-            add(new FidDropDownChoice<AssetTypeGroup>("group", new PropertyModel<AssetTypeGroup>(model, "group"),
-                    assetTypeService.getAssetTypeGroupsByOrder(), new ListableChoiceRenderer<AssetTypeGroup>()).setNullValid(true));
+            add(new FidDropDownChoice<>("group", new PropertyModel<>(model, "group"),
+                    assetTypeService.getAssetTypeGroupsByOrder(), new ListableChoiceRenderer<>()).setNullValid(true));
             add(imagePanel = new AssetTypeImagePanel("image", model));
             add(attributePanel = new AssetTypeAttributePanel("attributes", model));
-            add(new TextField<String>("descriptionTemplate", new PropertyModel<String>(model, "descriptionTemplate")));
+            add(new TextField<>("descriptionTemplate", new PropertyModel<String>(model, "descriptionTemplate")));
             add(new AjaxLink<Void>("templateExample") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
@@ -170,16 +169,16 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
             });
 
             add(moreInfo = new WebMarkupContainer("moreInfo"));
-            moreInfo.add(new CheckBox("linkable", new PropertyModel<Boolean>(model, "linkable")));
-            moreInfo.add(new CheckBox("hasManufacturerCert", new PropertyModel<Boolean>(model, "hasManufactureCertificate")));
-            moreInfo.add(new TextArea<String>("manufacturerCertText", new PropertyModel<String>(model, "manufactureCertificateText"))
+            moreInfo.add(new CheckBox("linkable", new PropertyModel<>(model, "linkable")));
+            moreInfo.add(new CheckBox("hasManufacturerCert", new PropertyModel<>(model, "hasManufactureCertificate")));
+            moreInfo.add(new TextArea<>("manufacturerCertText", new PropertyModel<String>(model, "manufactureCertificateText"))
                     .add(new Watermark(new FIDLabelModel("label.asset_type.form.manufacturer_cert").getObject())));
             moreInfo.add(attachmentsPanel = new AssetTypeAttachmentsPanel("attachments", model));
-            moreInfo.add(new TextArea<String>("warnings", new PropertyModel<String>(model, "warnings")));
-            moreInfo.add(new TextArea<String>("instructions", new PropertyModel<String>(model, "instructions")));
+            moreInfo.add(new TextArea<>("warnings", new PropertyModel<String>(model, "warnings")));
+            moreInfo.add(new TextArea<>("instructions", new PropertyModel<String>(model, "instructions")));
 
             TextField cautionUrl;
-            moreInfo.add(cautionUrl = new TextField<String>("cautionUrl", new PropertyModel<String>(model, "cautionUrl")));
+            moreInfo.add(cautionUrl = new TextField<>("cautionUrl", new PropertyModel<String>(model, "cautionUrl")));
             cautionUrl.add(new UrlValidator());
             moreInfo.setOutputMarkupPlaceholderTag(true);
             moreInfo.setVisible(false);
@@ -221,7 +220,7 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
             }
 
             if(attributePanel.getInfoFields(assetType).isEmpty()) {
-                assetType.setInfoFields(Lists.<InfoFieldBean>newArrayList());
+                assetType.setInfoFields(Lists.newArrayList());
             } else {
                 if(isCopy()) {
                     assetType.getInfoFields().clear();
@@ -231,22 +230,23 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
             }
 
             try {
-               assetType = assetTypeService.saveAssetType(assetType, attachmentsPanel.getAttachments(), imageData);
+                assetType = assetTypeService.saveAssetType(assetType, attachmentsPanel.getAttachments(), imageData);
+
+                if (isEdit()) {
+                    FieldIDSession.get().info(new FIDLabelModel("message.asset_type.edit").getObject());
+                } else {
+                    FieldIDSession.get().info(new FIDLabelModel("message.asset_type.add").getObject());
+                }
+
+                setResponsePage(AssetTypeListPage.class);
             } catch (ImageAttachmentException e) {
-                error("Failed to attach files to Asset Type: " + assetType.getDisplayName());
+                FieldIDSession.get().error(new FIDLabelModel("error.asset_type_attachment_upload_failure", assetType.getDisplayName()).getObject());
             }
-
-            if (isEdit()) {
-                FieldIDSession.get().info(new FIDLabelModel("message.asset_type.edit").getObject());
-            } else {
-                FieldIDSession.get().info(new FIDLabelModel("message.asset_type.add").getObject());
-            }
-
-            setResponsePage(AssetTypeListPage.class);
         }
 
+
         private void processInfoFields(List<InfoFieldInput> infoFields) {
-            List<InfoFieldBean> deleted = new ArrayList<InfoFieldBean>();
+            List<InfoFieldBean> deleted = new ArrayList<>();
             for (InfoFieldInput input : infoFields) {
                 if (input.getUniqueID() == null) {
                     if (!input.isDeleted()) {
@@ -257,7 +257,7 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
                         addedInfoField.setIncludeTime(input.isIncludeTime());
 
                         input.setInfoFieldFieldType(addedInfoField);
-                        addedInfoField.setUnfilteredInfoOptions(new HashSet<InfoOptionBean>());
+                        addedInfoField.setUnfilteredInfoOptions(new HashSet<>());
                         addedInfoField.setRetired(input.isRetired());
                         assetType.getObject().getInfoFields().add(addedInfoField);
                         assetType.getObject().associateFields();
@@ -270,27 +270,29 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
                         input.setInfoField(addedInfoField);
                     }
                 } else {
-                    for (InfoFieldBean infoField : assetType.getObject().getInfoFields()) {
-                        if (infoField.getUniqueID() != null && infoField.getUniqueID().equals(input.getUniqueID())) {
-                            if (input.isDeleted()) {
-                                deleted.add(infoField);
-                            } else {
-                                infoField.setName(input.getName().trim());
-                                infoField.setWeight(input.getWeight());
-                                infoField.setRequired(input.isRequired());
-                                infoField.setIncludeTime(input.isIncludeTime());
-                                input.setInfoFieldFieldType(infoField);
+                    assetType.getObject()
+                             .getInfoFields()
+                             .stream()
+                             .filter(infoField -> infoField.getUniqueID() != null && infoField.getUniqueID().equals(input.getUniqueID()))
+                             .forEach(infoField -> {
+                                    if (input.isDeleted()) {
+                                        deleted.add(infoField);
+                                    } else {
+                                        infoField.setName(input.getName().trim());
+                                        infoField.setWeight(input.getWeight());
+                                        infoField.setRequired(input.isRequired());
+                                        infoField.setIncludeTime(input.isIncludeTime());
+                                        input.setInfoFieldFieldType(infoField);
 
-                                infoField.setRetired(input.isRetired());
-                                if (input.getDefaultUnitOfMeasure() != null) {
-                                    infoField.setUnitOfMeasure(assetTypeService.getUnitOfMeasure(input.getDefaultUnitOfMeasure()));
-                                } else {
-                                    infoField.setUnitOfMeasure(null);
-                                }
-                            }
-                            input.setInfoField(infoField);
-                        }
-                    }
+                                        infoField.setRetired(input.isRetired());
+                                        if (input.getDefaultUnitOfMeasure() != null) {
+                                            infoField.setUnitOfMeasure(assetTypeService.getUnitOfMeasure(input.getDefaultUnitOfMeasure()));
+                                        } else {
+                                            infoField.setUnitOfMeasure(null);
+                                        }
+                                    }
+                                    input.setInfoField(infoField);
+                             });
                 }
             }
             assetType.getObject().getInfoFields().removeAll(deleted);

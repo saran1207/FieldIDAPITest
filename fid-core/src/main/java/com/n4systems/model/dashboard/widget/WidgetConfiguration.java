@@ -1,6 +1,7 @@
 package com.n4systems.model.dashboard.widget;
 
 import com.n4systems.model.parents.AbstractEntity;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
@@ -8,6 +9,8 @@ import javax.persistence.*;
 @Entity
 @Table(name = "widget_configurations")
 @Inheritance(strategy = InheritanceType.JOINED)
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class WidgetConfiguration extends AbstractEntity {
 
     @Column(name="name")

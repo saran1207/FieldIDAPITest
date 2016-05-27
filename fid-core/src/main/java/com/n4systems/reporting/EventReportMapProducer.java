@@ -1,6 +1,7 @@
 package com.n4systems.reporting;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.LastEventDateService;
 import com.n4systems.model.*;
@@ -16,8 +17,8 @@ public class EventReportMapProducer extends AbsractEventReportMapProducer {
 	private final ThingEvent event;
     private EventService eventService;
 
-    public EventReportMapProducer(ThingEvent event, DateTimeDefinition dateTimeDefinition, S3Service s3Service, EventService eventService, LastEventDateService lastEventDateService) {
-		super(dateTimeDefinition, s3Service, lastEventDateService);
+    public EventReportMapProducer(ThingEvent event, DateTimeDefinition dateTimeDefinition, S3Service s3Service, EventService eventService, LastEventDateService lastEventDateService, AssetService assetService) {
+		super(dateTimeDefinition, s3Service, lastEventDateService, assetService);
 		this.event = event;
         this.eventService = eventService;
     }

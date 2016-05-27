@@ -5,12 +5,15 @@ import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.parents.ArchivableEntityWithOwner;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "recurring_asset_type_events")
 @PrimaryKeyJoinColumn(name="id")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class RecurringAssetTypeEvent extends ArchivableEntityWithOwner implements Saveable, SecurityEnhanced<RecurringAssetTypeEvent>, Cloneable {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = true)

@@ -4,6 +4,7 @@ import com.n4systems.exceptions.ReportException;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.model.*;
 import com.n4systems.model.orgs.InternalOrg;
@@ -34,14 +35,18 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
     private static final String n4LogoFileName = "n4_logo.gif";
     private Logger logger = Logger.getLogger(EventSummaryJasperGenerator.class);
 
-    private @Autowired EventService eventService;
-    private @Autowired OrgService orgService;
-    private @Autowired DateService dateService;
-    private @Autowired LastEventDateService lastEventDateService;
-
-
+    @Autowired
+    private  EventService eventService;
+    @Autowired
+    private OrgService orgService;
+    @Autowired
+    private DateService dateService;
+    @Autowired
+    private LastEventDateService lastEventDateService;
     @Autowired
     private S3Service s3service;
+    @Autowired
+    private AssetService assetService;
 
     @Transactional
     public JasperPrint generate(EventReportCriteria criteria, List<Long> sortedIdList) throws ReportException  {
@@ -116,7 +121,7 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
                         ? event.getAssignedTo().getAssignedUser().getDisplayName() : "");
 
 
-                Map<String, Object> eventReportMap = new EventReportMapProducer(event, dateDefiner, s3service, eventService, lastEventDateService).produceMap();
+                Map<String, Object> eventReportMap = new EventReportMapProducer(event, dateDefiner, s3service, eventService, lastEventDateService, assetService).produceMap();
                 eventMap.put("mainInspection", eventReportMap);
                 eventMap.put("product", eventReportMap.get("product"));
 
@@ -134,7 +139,7 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
                 */
 
                 for (SubEvent subEvent : event.getSubEvents()) {
-                    inspectionResultMaps.add(new SubEventReportMapProducer(subEvent, event, dateDefiner, s3service, lastEventDateService).produceMap());
+                    inspectionResultMaps.add(new SubEventReportMapProducer(subEvent, event, dateDefiner, s3service, lastEventDateService, assetService).produceMap());
                 }
 
                 eventMap.put("allInspections", inspectionResultMaps);

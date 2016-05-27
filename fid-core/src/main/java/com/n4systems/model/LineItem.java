@@ -1,19 +1,19 @@
 package com.n4systems.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "lineitems")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "AssetCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class LineItem extends EntityWithTenant implements Listable<Long>, SecurityEnhanced<LineItem> {
 	private static final long serialVersionUID = 1L;
 	public static final String DEFAULT_ASSET_CODE = "DEFAULT";

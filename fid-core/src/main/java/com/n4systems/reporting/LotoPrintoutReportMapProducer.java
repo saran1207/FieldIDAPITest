@@ -212,7 +212,8 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
         IsolationPointPrintoutContainer container = new IsolationPointPrintoutContainer();
 
         container.setCheck(isolationPoint.getCheck());
-        container.setDevice(isolationPoint.getDeviceDefinition().getAssetType() == null ? isolationPoint.getDeviceDefinition().getFreeformDescription() : isolationPoint.getDeviceDefinition().getAssetType().getDisplayName());
+
+        container.setDevice(isolationPoint.getDeviceDefinition());
         container.setLockoutMethod(isolationPoint.getMethod());
         container.setSourceId(isolationPoint.getIdentifier());
         container.setSourceLocation(isolationPoint.getLocation());

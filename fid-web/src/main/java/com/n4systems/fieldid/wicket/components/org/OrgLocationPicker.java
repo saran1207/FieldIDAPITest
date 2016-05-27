@@ -45,6 +45,7 @@ public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
 
     private BaseOrg locationOwner;
     private Boolean locationPicker = false;
+    private Boolean findWithTenantOnlySecurity = false;
 
     public OrgLocationPicker(String id, IModel<BaseOrg> orgModel) {
         this(id,new OrgLocationModel(orgModel));
@@ -212,7 +213,12 @@ public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
                 case INTERNAL_ORG:
                 case CUSTOMER_ORG:
                 case DIVISION_ORG:
-                    entity = persistenceService.findById(BaseOrg.class,  getEntityIdAsLong());
+                    /* We need to do this to allow siloed users to edit events created by other owners see WEB-6133*/
+                    if (findWithTenantOnlySecurity) {
+                        entity = persistenceService.findUsingTenantOnlySecurityWithArchived(BaseOrg.class, getEntityIdAsLong());
+                    } else {
+                        entity = persistenceService.findById(BaseOrg.class, getEntityIdAsLong());
+                    }
                     break;
                 case VOID:
                     entity = null;
@@ -261,5 +267,10 @@ public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
 
     public String getWatermarkText() {
         return new FIDLabelModel("message.ownerpicker_watermark").getObject();
+    }
+
+    public OrgLocationPicker findWithTenantOnlySecurity() {
+        this.findWithTenantOnlySecurity = true;
+        return this;
     }
 }

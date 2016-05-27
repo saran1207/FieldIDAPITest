@@ -337,7 +337,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	protected abstract int processPermissions();
 
 	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.useridrequired")
-	@StringLengthFieldValidator(type = ValidatorType.FIELD, message = "", key = "errors.useridlength", maxLength = "15")
+	@StringLengthFieldValidator(type = ValidatorType.FIELD, message = "", key = "errors.useridlength", maxLength = "255")
 	@CustomValidator(type = "uniqueValue", message = "", key = "errors.data.userduplicate")
 	public String getUserId() {
 		return user.getUserID();

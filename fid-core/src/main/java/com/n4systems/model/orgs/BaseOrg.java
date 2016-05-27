@@ -12,6 +12,7 @@ import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.utils.GlobalID;
 import com.n4systems.persistence.localization.Localized;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -21,6 +22,8 @@ import java.util.Set;
 @Table(name = "org_base")
 @Inheritance(strategy = InheritanceType.JOINED)
 @Localized(ignore =true)
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public abstract class BaseOrg extends ArchivableEntityWithTenant implements NamedEntity, Listable<Long>, Comparable<BaseOrg>, NetworkEntity<BaseOrg>, Exportable, Archivable, HasOwner, ApiModelWithName {
 
 	private static final long serialVersionUID = 1L;
@@ -37,6 +40,7 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
 
     @ManyToMany(fetch= FetchType.LAZY, cascade= CascadeType.ALL)
     @JoinTable(name="orgs_place_event_types", joinColumns = @JoinColumn(name="org_id"), inverseJoinColumns = @JoinColumn(name="place_event_type_id"))
+	@org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<PlaceEventType> eventTypes = new HashSet<PlaceEventType>();
 
     // NOTE : for later?

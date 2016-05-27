@@ -2,11 +2,14 @@ package com.n4systems.model;
 
 import com.n4systems.fieldid.service.event.EventTypeRulesService;
 import com.n4systems.model.parents.EntityWithTenant;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "event_type_rules")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class EventTypeRule extends EntityWithTenant {
 
     public EventTypeRule() {

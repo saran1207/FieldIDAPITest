@@ -1,13 +1,17 @@
 package com.n4systems.model.orgs;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 
 @SuppressWarnings("serial")
 @MappedSuperclass
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 abstract public class InternalOrg extends BaseOrg {
 
 	@Column(name="certificatename")

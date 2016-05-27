@@ -9,6 +9,7 @@ import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.localization.Localized;
 import com.n4systems.util.HashCode;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -17,6 +18,8 @@ import java.util.UUID;
 @Entity
 @Table(name="tenants")
 @Localized(ignore =true)
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Tenant extends BaseEntity implements Listable<Long>, NamedEntity, Saveable, Comparable<Tenant> {
 	private static final long serialVersionUID = 1L;
 	

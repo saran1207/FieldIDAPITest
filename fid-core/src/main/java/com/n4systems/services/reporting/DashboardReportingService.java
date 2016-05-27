@@ -96,11 +96,11 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 
 		Date from = getFrom(granularity, dateRange);
 		Date to = getTo(granularity, dateRange);
-		List<CompletedEventsReportRecord> completedEvents = eventService.getCompletedEvents(from, to, org, null, granularity);
+		List<CompletedEventsReportRecord> completedEvents = eventService.getCompletedEvents(from, to, org, null, false, granularity);
         results.add(new ChartSeries<LocalDate>(EventResult.ALL, EventResult.ALL.getLabel(), completedEvents));
 
 		for (EventResult eventResult : EventResult.getValidEventResults()) {
-			completedEvents = eventService.getCompletedEvents(from, to, org, eventResult, granularity);
+			completedEvents = eventService.getCompletedEvents(from, to, org, eventResult, false, granularity);
 			results.add(new ChartSeries<LocalDate>(eventResult, eventResult.getDisplayName(), completedEvents));
 		}
 

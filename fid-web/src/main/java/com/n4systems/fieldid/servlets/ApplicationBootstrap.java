@@ -3,6 +3,7 @@ package com.n4systems.fieldid.servlets;
 import com.n4systems.services.Initializer;
 import com.n4systems.services.RemoteOrderManagerServiceInitializer;
 import com.n4systems.taskscheduling.TaskSchedulerBootstrapper;
+import com.n4systems.util.S3Initializer;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletContextEvent;
@@ -15,7 +16,8 @@ public class ApplicationBootstrap implements ServletContextListener {
 		for (Initializer init: new Initializer[] {
 				new MigrationInitializer(),
 				new TaskSchedulerBootstrapper(),
-				new RemoteOrderManagerServiceInitializer()
+				new RemoteOrderManagerServiceInitializer(),
+				new S3Initializer()
 		}) {
 			try {
 				init.initialize();

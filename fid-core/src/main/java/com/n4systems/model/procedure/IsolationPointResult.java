@@ -2,12 +2,15 @@ package com.n4systems.model.procedure;
 
 import com.n4systems.model.Asset;
 import com.n4systems.model.BaseEntity;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name = "isolation_point_results")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "ProcedureCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class IsolationPointResult extends BaseEntity {
 
     @ManyToOne

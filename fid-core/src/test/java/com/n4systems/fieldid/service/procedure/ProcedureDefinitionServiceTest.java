@@ -196,8 +196,9 @@ public class ProcedureDefinitionServiceTest extends FieldIdServiceTest {
         assertEquals(expected.getIdentifier(), actual.getIdentifier());
         assertEquals(expected.getSourceText(), actual.getSourceText());
         assertEquals(expected.getCheck(), actual.getCheck());
-        assertEquals(expected.getDeviceDefinition().getFreeformDescription(), actual.getDeviceDefinition().getFreeformDescription());
-        assertEquals(expected.getLockDefinition().getFreeformDescription(), actual.getLockDefinition().getFreeformDescription());
+
+        assertEquals(expected.getDeviceDefinition(), actual.getDeviceDefinition());
+        assertEquals(expected.getLockDefinition(), actual.getLockDefinition());
         assertEquals(expected.getElectronicIdentifier(), actual.getElectronicIdentifier());
         assertEquals(expected.getSourceType(), actual.getSourceType());
         assertEquals(expected.getLocation(), actual.getLocation());

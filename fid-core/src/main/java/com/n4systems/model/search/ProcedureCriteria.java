@@ -9,12 +9,15 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.chart.RangeType;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name="saved_procedures")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class ProcedureCriteria extends SearchCriteria implements PeopleCriteria {
 
     private AssetType assetType;

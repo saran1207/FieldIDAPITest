@@ -1,7 +1,6 @@
 package com.n4systems.reporting;
 
 import com.n4systems.model.IsolationPointSourceType;
-import com.n4systems.model.procedure.IsolationDeviceDescription;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
@@ -109,10 +108,7 @@ public class ReportTester implements Runnable {
         IsolationPoint isolationPoint = new IsolationPoint();
         isolationPoint.setCheck("Check");
 
-        IsolationDeviceDescription isolationDeviceDescription = new IsolationDeviceDescription();
-        isolationDeviceDescription.setFreeformDescription("Isolation Device");
-
-        isolationPoint.setDeviceDefinition(isolationDeviceDescription);
+        isolationPoint.setDeviceDefinition("Isolation Device");
         isolationPoint.setSourceType(type);
         isolationPoint.setSourceText("Source Text");
         isolationPoint.setMethod("Method");

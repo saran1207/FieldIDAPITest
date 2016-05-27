@@ -22,10 +22,7 @@ import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
 import java.util.Map.Entry;
@@ -55,7 +52,7 @@ public class PersistenceService extends FieldIdService {
         return entity;
     }
 
-    protected Session getHibernateSession() {
+    public Session getHibernateSession() {
         return (Session) em.getDelegate();
     }
 
@@ -107,8 +104,6 @@ public class PersistenceService extends FieldIdService {
         queryBuilder.setSimpleSelect();
         return find(queryBuilder);
     }
-
-
 
     @Transactional(readOnly = true)
     public <T extends EntityWithTenant> T findUsingTenantOnlySecurityWithArchived(Class<T> entityClass, Long entityId) {

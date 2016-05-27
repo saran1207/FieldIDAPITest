@@ -46,7 +46,8 @@ public class MassUpdateAssetService extends FieldIdPersistenceService{
                 Asset asset = assetService.getAsset(id, Asset.POST_FETCH_ALL_PATHS);
                 asset = assetService.fillInSubAssetsOnAsset(asset);
                 updateAsset(asset, assetModificationData, values, orderNumber);
-                assetService.update(asset, modifiedBy);
+//                assetService.update(asset, modifiedBy);
+                assetService.updateWithSubassets(asset);
                 assetsUpdated.add(asset);
                 result++;
             }

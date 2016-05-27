@@ -181,7 +181,7 @@ public class EventService extends FieldIdPersistenceService {
 
 
     @Transactional(readOnly = true)
-	public List<CompletedEventsReportRecord> getCompletedEvents(Date fromDate, Date toDate, BaseOrg org, EventResult eventResult, ChartGranularity granularity) {
+	public List<CompletedEventsReportRecord> getCompletedEvents(Date fromDate, Date toDate, BaseOrg org, EventResult eventResult, Boolean isAction, ChartGranularity granularity) {
         // UGGH : hack.   this is a small, focused approach to fixing yet another time zone bug.
         // this should be reverted when a complete, system wide approach to handling time zones is implemented.
         // see WEB-2836
@@ -197,6 +197,7 @@ public class EventService extends FieldIdPersistenceService {
 		
 		builder.addWhere(whereFromToForCompletedEvents(fromDate, toDate, "completedDate", timeZone));
         builder.addSimpleWhere("workflowState", WorkflowState.COMPLETED);
+        builder.addSimpleWhere("type.actionType", isAction);
 
         Date sampleDate = fromDate;
 		builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity, "completedDate", timeZone, sampleDate));
@@ -208,9 +209,6 @@ public class EventService extends FieldIdPersistenceService {
 		
 		return persistenceService.findAll(builder);	
 	}
-
-
-
 
     @Transactional(readOnly = true)
 	public EventKpiRecord getEventKpi(Date fromDate, Date toDate, BaseOrg owner) {

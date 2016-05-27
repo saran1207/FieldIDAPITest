@@ -2,6 +2,7 @@ package com.n4systems.model;
 
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.parents.EntityWithTenant;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
@@ -12,6 +13,8 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "loto_printouts")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "ProcedureCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class LotoPrintout extends EntityWithTenant implements Listable<Long> {
 
     public LotoPrintout() {

@@ -6,6 +6,7 @@ import com.n4systems.model.api.Retirable;
 import com.n4systems.model.criteriarules.OneClickCriteriaRule;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.persistence.localization.Localized;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,6 +14,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "buttons")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Button extends EntityWithTenant implements Listable<Long>, Retirable, NamedEntity {
 	private static final long serialVersionUID = 1L;
 		
@@ -30,6 +33,7 @@ public class Button extends EntityWithTenant implements Listable<Long>, Retirabl
 	private boolean retired = false;
 
     @OneToMany(mappedBy = "button", cascade = CascadeType.ALL)
+	@org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private List<OneClickCriteriaRule> criteriaRules = new ArrayList<>();
 	
 	public Button() {}

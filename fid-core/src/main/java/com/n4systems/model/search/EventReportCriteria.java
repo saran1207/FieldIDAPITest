@@ -8,6 +8,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.chart.RangeType;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
@@ -17,6 +18,8 @@ import java.util.List;
 
 @Entity
 @Table(name="saved_reports")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class EventReportCriteria extends SearchCriteria implements PeopleCriteria {
 
     private static final String EVENT_LOCATION_COLUMN = "event_search_location";
@@ -103,6 +106,7 @@ public class EventReportCriteria extends SearchCriteria implements PeopleCriteri
 	@OrderColumn(name="idx")
     @JoinTable(name="saved_reports_columns", joinColumns = {@JoinColumn(name="saved_report_id")})
     @Column(name="column_id")
+    @org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	private List<String> columns = new ArrayList<String>();
 
     @Column(name="workflow_state")

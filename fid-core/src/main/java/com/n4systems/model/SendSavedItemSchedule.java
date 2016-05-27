@@ -7,12 +7,15 @@ import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.user.User;
 import com.n4systems.util.DateHelper;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.*;
 
 @Entity
 @Table(name="send_saved_item_schedules")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class SendSavedItemSchedule extends EntityWithTenant {
 
     @ManyToOne
@@ -48,6 +51,7 @@ public class SendSavedItemSchedule extends EntityWithTenant {
     @ElementCollection(fetch= FetchType.EAGER)
     @OrderColumn(name="orderidx")
     @JoinTable(name="send_saved_item_schedules_emails", joinColumns = {@JoinColumn(name="send_saved_item_schedule_id")})
+    @org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private List<String> emailAddresses = new ArrayList<String>();
 
     @Column(name="send_blank_report", nullable = false)

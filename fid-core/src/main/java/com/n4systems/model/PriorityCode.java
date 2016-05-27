@@ -3,11 +3,14 @@ package com.n4systems.model;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "prioritycode")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class PriorityCode extends ArchivableEntityWithTenant implements Listable<Long>, Saveable {
     private static final long serialVersionUID = 1L;
 

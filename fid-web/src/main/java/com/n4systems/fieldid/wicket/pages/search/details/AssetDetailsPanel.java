@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.search.details;
 import com.google.common.base.Joiner;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.LatentImage;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
@@ -29,6 +30,7 @@ public class AssetDetailsPanel extends SearchItemDetailsPanel {
 
     @SpringBean private S3Service s3Service;
     @SpringBean private PersistenceService persistenceService;
+    @SpringBean private AssetService assetService;
 
     public AssetDetailsPanel(String id, IModel<SearchResult> resultModel) {
 
@@ -70,7 +72,7 @@ public class AssetDetailsPanel extends SearchItemDetailsPanel {
             @Override
             protected String updateSrc() {
                 final Long assetId = searchResult.getLong(AssetIndexField.ID.getField());
-                Asset asset = persistenceService.find(Asset.class, assetId);
+                Asset asset = assetService.findById(assetId);
                 // CAVEAT : careful about making assumptions regarding asset Ids retrieved from search results (ie. lucene index).
                 // it is entirely possible that it might be a stale id and therefore might not exist.
                 // e.g. if user deletes an asset and you search for it before the asset index has been updated.

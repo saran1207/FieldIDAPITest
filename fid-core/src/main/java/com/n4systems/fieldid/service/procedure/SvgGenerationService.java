@@ -39,6 +39,7 @@ public class SvgGenerationService extends FieldIdPersistenceService {
     public static final Integer DEFAULT_JASPER_WIDTH = 140;
     private static final double DEFAULT_IMAGE_SIZE = 200.0;
     private static final double DEFAULT_STROKE_WIDTH = 5.0;
+    private static final double DEFAULT_OUTPUT_QUALITY = 1.0;
 
     public void generateAndUploadAnnotatedSvgs(ProcedureDefinition definition) throws Exception {
         for(ProcedureDefinitionImage image: definition.getImages()) {
@@ -96,7 +97,7 @@ public class SvgGenerationService extends FieldIdPersistenceService {
         byte [] bytes = s3Service.downloadProcedureDefinitionImage((ProcedureDefinitionImage) annotation.getImage());
 
         //convert image to be scaled down to jasper size
-        bytes = imageService.scaleImage(bytes, DEFAULT_JASPER_WIDTH, DEFAULT_JASPER_HEIGHT);
+        bytes = imageService.scaleImage(bytes, DEFAULT_JASPER_WIDTH, DEFAULT_JASPER_HEIGHT, DEFAULT_OUTPUT_QUALITY);
 
         BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(bytes));
 
@@ -139,7 +140,7 @@ public class SvgGenerationService extends FieldIdPersistenceService {
         byte [] bytes = s3Service.downloadProcedureDefinitionImage(image);
 
         //convert image to be scaled down to jasper size
-        bytes = imageService.scaleImage(bytes, DEFAULT_JASPER_WIDTH, DEFAULT_JASPER_HEIGHT);
+        bytes = imageService.scaleImage(bytes, DEFAULT_JASPER_WIDTH, DEFAULT_JASPER_HEIGHT, DEFAULT_OUTPUT_QUALITY);
 
         BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(bytes));
 
@@ -382,7 +383,7 @@ public class SvgGenerationService extends FieldIdPersistenceService {
         byte [] bytes = s3Service.downloadProcedureDefinitionImage((ProcedureDefinitionImage) annotation.getImage());
 
         //convert image to be scaled down to jasper size
-        bytes = imageService.scaleImage(bytes, DEFAULT_JASPER_WIDTH, DEFAULT_JASPER_HEIGHT);
+        bytes = imageService.scaleImage(bytes, DEFAULT_JASPER_WIDTH, DEFAULT_JASPER_HEIGHT, DEFAULT_OUTPUT_QUALITY);
 
         BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(bytes));
 

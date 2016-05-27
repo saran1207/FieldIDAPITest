@@ -13,6 +13,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.parents.legacy.LegacyBeanTenant;
 import com.n4systems.model.user.User;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * This stores, for each system user, the last options they used when creating a
@@ -23,6 +24,8 @@ import com.n4systems.model.user.User;
  */
 @Entity
 @Table(name = "add_asset_history")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class AddAssetHistory extends EntityWithTenant implements HasUser, HasOwner {
 	private static final long serialVersionUID = 1L;
 	
@@ -55,6 +58,7 @@ public class AddAssetHistory extends EntityWithTenant implements HasUser, HasOwn
 	
 	@ManyToMany(targetEntity = InfoOptionBean.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "add_asset_history_infooption", joinColumns = @JoinColumn(name = "add_asset_history_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "infooption_id", referencedColumnName = "uniqueid"))
+	@org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	private List<InfoOptionBean> infoOptions;
 
 	public User getUser() {

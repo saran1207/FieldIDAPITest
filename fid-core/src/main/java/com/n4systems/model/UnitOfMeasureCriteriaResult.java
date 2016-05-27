@@ -1,13 +1,14 @@
 package com.n4systems.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "unitofmeasure_criteriaresults")
 @PrimaryKeyJoinColumn(name="id")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "EventCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class UnitOfMeasureCriteriaResult extends CriteriaResult {
 
     @Column(name="primary_value", length = 255)

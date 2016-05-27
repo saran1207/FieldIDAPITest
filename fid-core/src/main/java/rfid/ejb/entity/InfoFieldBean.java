@@ -4,6 +4,7 @@ import com.n4systems.model.AssetType;
 import com.n4systems.model.UnitOfMeasure;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 import com.n4systems.persistence.localization.Localized;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -13,6 +14,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "infofield")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class InfoFieldBean extends LegacyBaseEntity implements Comparable<InfoFieldBean> {
 	private static final long serialVersionUID = 1L;
 	private static final Long DEFAULT_WEIGHT = 0L;
@@ -68,6 +71,7 @@ public class InfoFieldBean extends LegacyBaseEntity implements Comparable<InfoFi
 	@OneToMany(mappedBy = "infoField", targetEntity = InfoOptionBean.class, fetch = FetchType.EAGER, cascade=CascadeType.ALL)
 	@OrderBy( "weight" )
 	@Where(clause="staticData = 1")
+	@org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	private Set<InfoOptionBean> unfilteredInfoOptions;
 	
 

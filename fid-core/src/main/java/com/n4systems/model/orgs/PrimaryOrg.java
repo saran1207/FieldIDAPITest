@@ -5,6 +5,7 @@ import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.DenyReadOnlyUsersAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.text.SimpleDateFormat;
@@ -14,6 +15,8 @@ import java.util.Set;
 @Entity
 @Table(name = "org_primary")
 @PrimaryKeyJoinColumn(name="org_id")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class PrimaryOrg extends InternalOrg {
 	private static final long serialVersionUID = 1L;
 
@@ -24,6 +27,7 @@ public class PrimaryOrg extends InternalOrg {
             joinColumns = @JoinColumn(name="org_id")
     )
     @Column(name="feature", nullable=false)
+	@org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	private Set<ExtendedFeature> extendedFeatures = new HashSet<ExtendedFeature>();
 
     @Deprecated // Use identifer format on PrimaryOrg and AssetTypes -- TODO remove from DTOs
