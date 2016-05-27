@@ -168,6 +168,8 @@ public class AssetSaveServiceSpring extends FieldIdPersistenceService {
 			AssetImageFileSaver assetImageFileSaver =  new AssetImageFileSaver(asset, imageFileName);
 			assetImageFileSaver.remove();
 		}
+
+        assetService.update(asset);
 	}
 
 }

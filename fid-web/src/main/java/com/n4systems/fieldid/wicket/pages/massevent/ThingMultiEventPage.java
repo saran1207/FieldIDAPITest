@@ -78,7 +78,7 @@ public abstract class ThingMultiEventPage extends MultiEventPage<ThingEvent> {
 
     @Override
     protected boolean targetAlreadyArchived(ThingEvent event) {
-        return (assetService.findById(event.getTarget().getId()) != null);
+        return event.getTarget().isArchived();
     }
 
     @Override
