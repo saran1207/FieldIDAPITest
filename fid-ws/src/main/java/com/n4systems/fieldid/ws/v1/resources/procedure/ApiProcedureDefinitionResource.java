@@ -123,7 +123,7 @@ public class ApiProcedureDefinitionResource extends SetupDataResource<ApiProcedu
 
     private ApiDeviceDescription convertDefinition(String deviceDefinition) {
         if (deviceDefinition == null) {
-            return new ApiDeviceDescription();
+            deviceDefinition = "";
         }
         ApiDeviceDescription apiDescription = new ApiDeviceDescription();
         apiDescription.setActive(true);

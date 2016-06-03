@@ -721,7 +721,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
 
     private ApiDeviceDescription convertDefinition(String deviceDefinition) {
         if (deviceDefinition == null) {
-            return null;
+            deviceDefinition = "";
         }
         ApiDeviceDescription apiDescription = new ApiDeviceDescription();
         apiDescription.setActive(true);
