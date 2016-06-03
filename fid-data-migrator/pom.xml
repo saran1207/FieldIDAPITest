@@ -5,7 +5,7 @@
     <parent>
         <artifactId>fieldid-root</artifactId>
         <groupId>com.fieldid</groupId>
-        <version>2016.3.1-SNAPSHOT</version>
+        <version>2016.3.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>fid-data-migrator</artifactId>
