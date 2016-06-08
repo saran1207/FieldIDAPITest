@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.loto;
 
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.ConfirmBehavior;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
@@ -33,12 +34,22 @@ public class LotoActionGroup extends Panel {
             public void onClick() {
                 setResponsePage(new ProcedureDefinitionPage(assetModel.getObject()));
             }
+
+            @Override
+            public boolean isVisible() {
+                return FieldIDSession.get().getUserSecurityGuard().isAllowedAuthorEditProcedure();
+            }
         });
 
         optionsContainer.add(new Link("recurringSchedulesLink") {
             @Override
             public void onClick() {
                 setResponsePage(RecurringLotoSchedulesPage.class, PageParametersBuilder.uniqueId(assetModel.getObject().getId()));
+            }
+
+            @Override
+            public boolean isVisible() {
+                return FieldIDSession.get().getUserSecurityGuard().isAllowedMaintainLotoSchedule() || FieldIDSession.get().getUserSecurityGuard().isAllowedProcedureAudit();
             }
         });
 

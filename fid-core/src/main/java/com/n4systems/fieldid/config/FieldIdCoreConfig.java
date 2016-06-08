@@ -4,6 +4,8 @@ import com.amazonaws.ClientConfiguration;
 import com.amazonaws.Protocol;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
@@ -35,14 +37,18 @@ import com.n4systems.fieldid.service.event.massevent.MassEventService;
 import com.n4systems.fieldid.service.event.perform.PerformPlaceEventHelperService;
 import com.n4systems.fieldid.service.event.perform.PerformProcedureAuditEventHelperService;
 import com.n4systems.fieldid.service.event.perform.PerformThingEventHelperService;
+import com.n4systems.fieldid.service.eventbook.EventBookService;
 import com.n4systems.fieldid.service.export.EventTypeExportService;
 import com.n4systems.fieldid.service.images.ImageService;
+import com.n4systems.fieldid.service.jmx.StatisticsServiceMBeanInitializer;
 import com.n4systems.fieldid.service.job.JobService;
 import com.n4systems.fieldid.service.location.LocationService;
 import com.n4systems.fieldid.service.mail.MailService;
 import com.n4systems.fieldid.service.massupdate.MassUpdateService;
 import com.n4systems.fieldid.service.mixpanel.MixpanelService;
+import com.n4systems.fieldid.service.notificationsetting.NotificationSettingService;
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
+import com.n4systems.fieldid.service.org.CustomerMergerService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.service.pentaho.PentahoService;
@@ -68,6 +74,7 @@ import com.n4systems.fieldid.service.user.*;
 import com.n4systems.fieldid.service.uuid.AtomicLongService;
 import com.n4systems.fieldid.service.uuid.UUIDService;
 import com.n4systems.fieldid.service.warningtemplates.WarningTemplateService;
+import com.n4systems.persistence.CacheMonitor;
 import com.n4systems.persistence.listeners.LocalizationListener;
 import com.n4systems.persistence.listeners.SetupDataUpdateEventListener;
 import com.n4systems.services.AuthService;
@@ -92,28 +99,30 @@ import com.n4systems.util.json.CallOutStyleAnnotationJsonRenderer;
 import com.n4systems.util.json.JsonRenderer;
 import org.apache.lucene.analysis.util.CharArraySet;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.ehcache.EhCacheCacheManager;
-import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
+import org.hibernate.SessionFactory;
+import org.hibernate.jpa.HibernateEntityManagerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.AbstractEntityManagerFactoryBean;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import javax.sql.DataSource;
 import java.io.StringReader;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.security.Security;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 @Configuration
-@EnableCaching
+//@EnableCaching
 public class FieldIdCoreConfig {
 
 	static {
@@ -172,7 +181,28 @@ public class FieldIdCoreConfig {
         if ("https".equals(configService().getString(ConfigEntry.SYSTEM_PROTOCOL))) {
             config.setProtocol(Protocol.HTTPS);
         }
-        return new AmazonS3Client(credentials, config);
+
+        AmazonS3Client client = new AmazonS3Client(credentials, config);
+
+        //Here, we want to set the region... eventually we're going to want to do this on ALL servers... but for now,
+        //we just want to do it on our Europe instance.  We don't need to declare our endpoint, because there's some
+        if(configService().getString(ConfigEntry.REGION) != null) {
+            client.setRegion(Region.getRegion(Regions.fromName(configService().getString(ConfigEntry.REGION))));
+        }
+
+        return client;
+    }
+
+    @Bean
+    @Scope("singleton")
+    public CacheMonitor cacheMonitor() {
+        return new CacheMonitor();
+    }
+
+    @Bean(initMethod = "init")
+    @Scope("singleton")
+    public StatisticsServiceMBeanInitializer statisticsMXBeanInitializer() {
+        return new StatisticsServiceMBeanInitializer();
     }
 
     @Bean
@@ -483,21 +513,42 @@ public class FieldIdCoreConfig {
 
 	@Bean
     public AbstractEntityManagerFactoryBean entityManagerFactory() {
+        Map<String, String> jpaCacheProperties = new HashMap<>();
+        CacheConfigurator.initAndSetJPAProperties(jpaCacheProperties);
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
-        factoryBean.setPersistenceUnitName("fieldid");
-        //factoryBean.setPersistenceProvider(hibernatePersistenceProvider());
+        factoryBean.setJpaPropertyMap(jpaCacheProperties);
+
+        String persistenceUnit = System.getProperty("persistence.unit", "fieldid");
+        factoryBean.setPersistenceUnitName(persistenceUnit);
+
+        // Only use a data source when an alternate persistence unit is specified.  Otherwise it will use the non-jta DS out of the persistence.xml
+        // NOTE: this behaviour must be replicated in com.n4systems.persistence.PersistenceManager for legacy support
+        if (!persistenceUnit.equals("fieldid")) {
+            factoryBean.setDataSource(dataSource());
+        }
+
         return factoryBean;
     }
 
-//    @Bean
-//    public HibernatePersistenceProvider hibernatePersistenceProvider() {
-//        // see http://java.dzone.com/articles/spring-managed-hibernate for example.
-//        return new HibernatePersistenceProvider();
-//    }
+    @Bean
+    public DataSource dataSource() {
+        // This configuration is only used for CLI and testing modes
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName(System.getProperty("persistence.driver", "com.mysql.jdbc.Driver"));
+        dataSource.setUrl(System.getProperty("persistence.url", "jdbc:mysql://localhost:3306/fieldid"));
+        dataSource.setUsername(System.getProperty("persistence.user", "root"));
+        dataSource.setPassword(System.getProperty("persistence.pass", ""));
+        return dataSource;
+    }
 
     @Bean
     public PlatformTransactionManager txManager() {
         return new JpaTransactionManager(entityManagerFactory().getObject());
+    }
+
+    @Bean
+    public SessionFactory sessionFactory() {
+        return entityManagerFactory().getObject().unwrap(HibernateEntityManagerFactory.class).getSessionFactory();
     }
 
     @Bean
@@ -756,22 +807,6 @@ public class FieldIdCoreConfig {
     }
 
     @Bean
-    public CacheManager cacheManager() {
-        EhCacheCacheManager ehCacheCacheManager = new EhCacheCacheManager();
-        try {
-            ehCacheCacheManager.setCacheManager(ehCache().getObject());
-        } catch (Exception e) {
-            throw new IllegalStateException("failed to create ehCache");
-        }
-        return ehCacheCacheManager;
-    }
-
-    @Bean
-    public EhCacheManagerFactoryBean ehCache() {
-        return new EhCacheManagerFactoryBean();
-    }
-
-    @Bean
     public AssetIndexWriter assetIndexWriter() {
         return new AssetIndexWriter();
     }
@@ -971,5 +1006,20 @@ public class FieldIdCoreConfig {
     @Bean
     public LocationService locationService() {
         return new LocationService();
+    }
+
+    @Bean
+    public NotificationSettingService notificationSettingService() {
+        return new NotificationSettingService();
+    }
+
+    @Bean
+    public CustomerMergerService customerMergerService() {
+        return new CustomerMergerService();
+    }
+
+    @Bean
+    public ButtonGroupService buttonGroupService() {
+        return new ButtonGroupService();
     }
 }

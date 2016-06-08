@@ -1,0 +1,87 @@
+<html xmlns:wicket="http://wicket.apache.org">
+
+<wicket:extend>
+
+    <div wicket:id="feedbackPanel"/>
+
+    <form wicket:id="form" class="form-horizontal">
+
+        <fieldset>
+            <legend><wicket:message key="label.projectdetails"/></legend>
+
+            <div class="control-group" >
+                <label wicket:enclosure="jobType" class="label">* <wicket:message key="label.projecttype"/></label>
+                <div class="radio" wicket:id="jobType"/>
+            </div>
+
+            <div class="columns-two">
+                <div class="control-group">
+                    <label class="label">* <wicket:message key="label.projectid"/></label>
+                    <input type="text" wicket:id="jobID"/>
+                </div>
+                <div class="control-group">
+                    <label class="label">* <wicket:message key="label.title"/></label>
+                    <input type="text" wicket:id="title"/>
+                </div>
+                <div class="control-group owner-picker">
+                    <label class="label">* <wicket:message key="label.owner"/></label>
+                    <div wicket:id="ownerPicker"/>
+                </div>
+                <div class="control-group">
+                    <label class="label"><wicket:message key="label.status"/></label>
+                    <input type="text" wicket:id="status"/>
+                </div>
+                <div class="control-group checkbox">
+                    <label class="label"><wicket:message key="label.open"/></label>
+                    <input type="checkbox" wicket:id="isOpen"/>
+                </div>
+                <div class="control-group">
+                    <label class="label"><wicket:message key="label.description"/></label>
+                    <textarea wicket:id="description"/>
+                </div>
+            </div>
+
+            <div class="columns-two">
+                <div class="control-group">
+                    <label class="label"><wicket:message key="label.datecreated"/></label>
+                    <span wicket:id="created"/>
+                </div>
+                <div class="control-group">
+                    <label class="label"><wicket:message key="label.datestarted"/></label>
+                    <div wicket:id="dateStartedPicker"/>
+                </div>
+                <div class="control-group">
+                    <label class="label"><wicket:message key="label.estimatedcompletion"/></label>
+                    <div wicket:id="estimatedCompletionPicker"/>
+                </div>
+                <div class="control-group">
+                    <label class="label"><wicket:message key="label.actualcompletion"/></label>
+                    <div wicket:id="actualCompletionPicker"/>
+                </div>
+                <div class="control-group">
+                    <label class="label"><wicket:message key="label.duration"/></label>
+                    <input type="text" wicket:id="duration"/>
+                </div>
+                <div class="control-group">
+                    <label class="label"><wicket:message key="label.ponumber"/></label>
+                    <input type="text" wicket:id="poNumber"/>
+                </div>
+                <div class="control-group">
+                    <label class="label"><wicket:message key="label.workperformed"/></label>
+                    <textarea wicket:id="workPerformed"/>
+                </div>
+            </div>
+
+        </fieldset>
+
+        <div class="form-actions">
+            <a class="btn-primary" wicket:id="saveLink"><wicket:message key="label.save"/></a>
+            &nbsp;
+            <a class="btn-secondary" wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+        </div>
+
+    </form>
+
+</wicket:extend>
+
+</html>

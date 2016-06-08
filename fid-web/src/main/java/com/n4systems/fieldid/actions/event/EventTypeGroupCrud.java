@@ -24,7 +24,7 @@ import rfid.web.helper.Constants;
 
 import java.util.List;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_CONFIG})
 public class EventTypeGroupCrud extends AbstractPaginatedCrud<EventTypeGroup> implements HasDuplicateValueValidator{
 	
 	private static final long serialVersionUID = 1L;

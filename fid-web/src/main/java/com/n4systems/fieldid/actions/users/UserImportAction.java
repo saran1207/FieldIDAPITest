@@ -13,7 +13,7 @@ import com.n4systems.notifiers.notifications.UserImportSuccessNotification;
 import com.n4systems.security.Permissions;
 import com.n4systems.utils.email.WelcomeNotifier;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageEndUsers})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_END_USERS})
 @SuppressWarnings("serial")
 public class UserImportAction extends AbstractImportAction {
 

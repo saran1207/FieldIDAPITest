@@ -14,7 +14,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import java.util.List;
 
 @Validation
-@UserPermissionFilter(userRequiresOneOf = { Permissions.ManageSystemConfig })
+@UserPermissionFilter(userRequiresOneOf = { Permissions.MANAGE_SYSTEM_CONFIG})
 public class CommentTemplateCrud extends AbstractCrud implements HasDuplicateValueValidator {
 	private static final long serialVersionUID = 1L;
 
@@ -44,7 +44,7 @@ public class CommentTemplateCrud extends AbstractCrud implements HasDuplicateVal
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf = { Permissions.ManageSystemConfig, Permissions.Tag, Permissions.CreateEvent, Permissions.EditEvent })
+	@UserPermissionFilter(userRequiresOneOf = { Permissions.MANAGE_SYSTEM_CONFIG, Permissions.TAG, Permissions.CREATE_EVENT, Permissions.EDIT_EVENT})
 	public String doShow() {
 		if (commentTemplate == null) {
 			commentTemplate = new CommentTemplate();

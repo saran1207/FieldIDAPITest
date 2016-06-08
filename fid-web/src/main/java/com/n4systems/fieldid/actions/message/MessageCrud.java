@@ -15,7 +15,7 @@ import com.n4systems.util.ConfigEntry;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SAFETY_NETWORK})
 public class MessageCrud extends SafetyNetwork {
 	private static final long serialVersionUID = 1L;
 

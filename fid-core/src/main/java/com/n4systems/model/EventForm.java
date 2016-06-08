@@ -2,6 +2,7 @@ package com.n4systems.model;
 
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -9,11 +10,14 @@ import java.util.List;
 
 @Entity
 @Table(name = "eventforms")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class EventForm extends ArchivableEntityWithTenant {
 
     @OneToMany(fetch= FetchType.LAZY, cascade= CascadeType.ALL, orphanRemoval = false)
     @OrderColumn(name="orderidx")
     @JoinTable(name="eventforms_criteriasections", joinColumns = @JoinColumn(name="eventform_id"), inverseJoinColumns = @JoinColumn(name="sections_id"))
+    @org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private List<CriteriaSection> sections = new ArrayList<CriteriaSection>();
 
     @AllowSafetyNetworkAccess

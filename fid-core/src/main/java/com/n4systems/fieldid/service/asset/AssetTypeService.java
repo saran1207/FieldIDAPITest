@@ -180,7 +180,17 @@ public class AssetTypeService extends CrudService<AssetType> {
         List<ThingEvent> events = persistenceService.findAll(builder);
         for (ThingEvent event:events) {
             logger.debug("removing scheduled event for asset " + event.getAsset().getIdentifier() + " on " + event.getDueDate());
+            removeEscalationRuleExecutionQueueItem(event);
             persistenceService.delete(event);
+        }
+    }
+
+    private void removeEscalationRuleExecutionQueueItem(ThingEvent event) {
+        QueryBuilder<EscalationRuleExecutionQueueItem> query = createTenantSecurityBuilder(EscalationRuleExecutionQueueItem.class);
+        query.addSimpleWhere("eventId", event.getId());
+        EscalationRuleExecutionQueueItem queueItem = persistenceService.find(query);
+        if (queueItem != null) {
+            persistenceService.deleteAny(queueItem);
         }
     }
 
@@ -242,6 +252,7 @@ public class AssetTypeService extends CrudService<AssetType> {
         return persistenceService.update(assetType);
     }
 
+    @Transactional(rollbackFor = {FileAttachmentException.class, ImageAttachmentException.class})
     public AssetType saveAssetType(AssetType assetType, List<FileAttachment> uploadedFiles, byte[] imageData ) throws FileAttachmentException, ImageAttachmentException {
         AssetType oldPI = null;
         if( assetType.getId() != null ) {
@@ -252,16 +263,17 @@ public class AssetTypeService extends CrudService<AssetType> {
         }
 
         assetType.touch();
-        assetType = (AssetType) persistenceService.saveOrUpdate(assetType);
+        assetType = persistenceService.saveOrUpdate(assetType);
         processUploadedFiles(assetType, uploadedFiles );
         processAssetImage(assetType, imageData );
         return assetType;
     }
 
-    private void processAssetImage( AssetType assetType, byte[] imageData ) throws ImageAttachmentException{
+    private void processAssetImage( AssetType assetType, byte[] imageData ) throws ImageAttachmentException {
         if( imageData != null ) {
             try {
                 s3Service.uploadAssetTypeProfileImageData(imageData, assetType);
+                //TODO Figure out if we actually need this general try/catch... maybe the ImageAttachmentException thrown above is enough...
             } catch (Exception e) {
                 throw new ImageAttachmentException( e );
             }

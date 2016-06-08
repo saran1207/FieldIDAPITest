@@ -5,12 +5,15 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.utils.AssetEvent;
 import com.n4systems.tools.FileDataContainer;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name="thing_event_prooftests")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "EventCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class ThingEventProofTest extends BaseEntity implements AssetEvent, Serializable {
     private static final long serialVersionUID = 2L;
 

@@ -1,6 +1,7 @@
 package com.n4systems.persistence;
 
 import com.n4systems.exceptions.EntityStillReferencedException;
+import com.n4systems.fieldid.config.CacheConfigurator;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.persistence.deleters.Deleter;
 import com.n4systems.persistence.loaders.Loader;
@@ -20,21 +21,32 @@ import javax.persistence.Persistence;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 public class PersistenceManager {
     public static final String PRODUCTION_PERSISTENCE_UNIT = "fieldid";
 	public static final String TESTING_PERSISTENCE_UNIT = "fieldid-test";
     public static String persistenceUnit = PRODUCTION_PERSISTENCE_UNIT;
-    public static Map<String, String> testProperties = new HashMap<String, String>();
+    public static Map<String, String> properties = new HashMap<String, String>();
 
 	private static Logger logger = Logger.getLogger(PersistenceManager.class);
 	private static EntityManagerFactory entityManagerFactory;
 
 	private static synchronized EntityManagerFactory getEntityManagerFactory() {
 		if (entityManagerFactory == null) {
-			logger.debug("Creating EntityManagerFactory");
-			entityManagerFactory = Persistence.createEntityManagerFactory(persistenceUnit, testProperties);
+			CacheConfigurator.initAndSetJPAProperties(properties);
 
+			String alternatePersistenceUnit = System.getProperty("persistence.unit");
+			if (alternatePersistenceUnit != null) {
+				persistenceUnit = alternatePersistenceUnit;
+				properties.put("hibernate.connection.driver_class", System.getProperty("persistence.driver", "com.mysql.jdbc.Driver"));
+				properties.put("hibernate.connection.url", System.getProperty("persistence.url", "jdbc:mysql://localhost:3306/fieldid"));
+				properties.put("hibernate.connection.username", System.getProperty("persistence.user", "root"));
+				properties.put("hibernate.connection.password", System.getProperty("persistence.pass", ""));
+			}
+
+			logger.debug("Creating EntityManagerFactory");
+			entityManagerFactory = Persistence.createEntityManagerFactory(persistenceUnit, properties);
 		}
 		return entityManagerFactory;
 	}

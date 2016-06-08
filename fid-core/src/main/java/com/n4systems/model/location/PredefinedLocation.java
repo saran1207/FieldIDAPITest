@@ -8,6 +8,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.ArchivableEntityWithOwner;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.persistence.PersistenceManager;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,6 +16,8 @@ import java.util.List;
 
 @SuppressWarnings("serial")
 @Entity(name = "predefinedlocations")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class PredefinedLocation extends ArchivableEntityWithOwner implements NamedEntity, TreeNode, HasOwner, ApiModelWithName {
 
 

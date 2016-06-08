@@ -2,6 +2,7 @@ package com.n4systems.model.user;
 
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -9,6 +10,8 @@ import java.util.Collection;
 
 @Entity
 @Table(name="user_groups")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class UserGroup extends ArchivableEntityWithTenant implements Listable<Long>, Assignable {
 
     @Column(name = "name", length = 255)
@@ -19,6 +22,7 @@ public class UserGroup extends ArchivableEntityWithTenant implements Listable<Lo
 
     @ManyToMany
     @JoinTable(name = "users_user_groups", joinColumns = @JoinColumn(name="user_group_id"), inverseJoinColumns = @JoinColumn(name="user_id"))
+    @org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Collection<User> members = new ArrayList<>();
 
     public String getName() {

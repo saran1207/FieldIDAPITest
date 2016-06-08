@@ -2,6 +2,7 @@ package com.n4systems.model.criteriarules;
 
 import com.n4systems.model.Criteria;
 import com.n4systems.model.parents.EntityWithTenant;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
@@ -18,6 +19,8 @@ import javax.persistence.*;
 @Entity
 @Table(name="criteria_rules")
 @Inheritance(strategy = InheritanceType.JOINED)
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public abstract class CriteriaRule extends EntityWithTenant {
 
     @Column(name="action")

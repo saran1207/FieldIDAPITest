@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.ws.v1.resources.authentication;
 
-import com.n4systems.fieldid.service.admin.AdminUserService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.ws.v1.exceptions.ForbiddenException;
 import com.n4systems.fieldid.ws.v1.resources.user.ApiUser;
@@ -20,7 +19,6 @@ public class AuthenticationResourceTest {
 	private UserService userService;
 	private ApiUserResource apiUserResource;
 	private SecurityContext securityContext;
-	private AdminUserService adminUserService;
 	
 	@Before
 	public void before() {
@@ -28,12 +26,10 @@ public class AuthenticationResourceTest {
 		userService = createMock(UserService.class);
 		apiUserResource = createMock(ApiUserResource.class);
 		securityContext = createMock(SecurityContext.class);
-		adminUserService = createMock(AdminUserService.class);
 
 		fixture.userService = userService;
 		fixture.apiUserResource = apiUserResource;
 		fixture.securityContext = securityContext;
-		fixture.adminUserService = adminUserService;
 
 	}
 	
@@ -63,9 +59,6 @@ public class AuthenticationResourceTest {
 		
 		expect(userService.authenticateUserByPassword(tenant, user, pass)).andReturn(null);
 		replay(userService);
-
-		expect(adminUserService.attemptSudoAuthentication(tenant, user, pass)).andReturn(null);
-		replay(adminUserService);
 
 		fixture.authenticate(tenant, user, pass);
 	}

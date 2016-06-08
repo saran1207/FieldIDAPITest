@@ -20,7 +20,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import java.util.ArrayList;
 import java.util.List;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
+@UserPermissionFilter(userRequiresOneOf={Permissions.TAG})
 public class OrderUtilAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(OrderUtilAction.class);

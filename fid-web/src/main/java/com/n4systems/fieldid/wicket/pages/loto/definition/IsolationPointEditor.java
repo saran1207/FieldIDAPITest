@@ -104,7 +104,7 @@ public class IsolationPointEditor extends Panel {
             }
         });
 
-        form.add(deviceComboBox = new LabelledComboBox<String>("device", "label.device", new PropertyModel<>(getDefaultModel(),"deviceDefinition.freeformDescription")){
+        form.add(deviceComboBox = new LabelledComboBox<String>("device", "label.device", new PropertyModel<>(getDefaultModel(), "deviceDefinition")){
             @Override
             protected IModel<List<String>> getChoices() {
                 return getPreConfiguredDevices(new PropertyModel<>(getIsolationPoint(),"sourceType"));
@@ -114,8 +114,8 @@ public class IsolationPointEditor extends Panel {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 IsolationPoint isolationPoint = (IsolationPoint) getDefaultModel().getObject();
-                if(isolationPoint.getDeviceDefinition().getFreeformDescription() != null) {
-                    PreconfiguredDevice device = procedureDefinitionService.getPreConfiguredDevice(isolationPoint.getDeviceDefinition().getFreeformDescription(), isolationPoint.getSourceType());
+                if(isolationPoint.getDeviceDefinition() != null) {
+                    PreconfiguredDevice device = procedureDefinitionService.getPreConfiguredDevice(isolationPoint.getDeviceDefinition(), isolationPoint.getSourceType());
                     methodField.setModelValue(device != null ? device.getMethod() : null);
                     target.add(methodField);
                 } else {
@@ -127,8 +127,7 @@ public class IsolationPointEditor extends Panel {
         deviceComboBox.add(new TipsyBehavior(new FIDLabelModel("message.isolation_point.device"), TipsyBehavior.Gravity.N));
 
 
-
-        form.add(lockField = new LabelledTextField<String>("lock", "label.lock", new PropertyModel<>(getDefaultModel(),"lockDefinition.freeformDescription")));
+        form.add(lockField = new LabelledTextField<String>("lock", "label.lock", new PropertyModel<>(getDefaultModel(),"lockDefinition")));
 
         //These all needed to change, because they're not proper components.  We need our internally made components so
         //we get more control over what's rendered...

@@ -21,7 +21,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import java.util.ArrayList;
 import java.util.List;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
+@UserPermissionFilter(userRequiresOneOf={Permissions.TAG})
 public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValidator {
 
 	private static final long serialVersionUID = 1L;

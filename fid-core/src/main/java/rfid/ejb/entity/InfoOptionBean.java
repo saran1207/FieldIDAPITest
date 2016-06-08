@@ -2,11 +2,14 @@ package rfid.ejb.entity;
 
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 import com.n4systems.persistence.localization.Localized;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "infooption")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class InfoOptionBean extends LegacyBaseEntity implements Comparable<InfoOptionBean> {
 	private static final long serialVersionUID = 1L;
 	private static final Long DEFAULT_WEIGHT = 0L;

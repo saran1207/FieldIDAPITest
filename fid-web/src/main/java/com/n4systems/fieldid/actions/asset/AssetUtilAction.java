@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
 
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
+@UserPermissionFilter(userRequiresOneOf={Permissions.TAG})
 public class AssetUtilAction extends AbstractAction {
 
 	private static final long serialVersionUID = 1L;

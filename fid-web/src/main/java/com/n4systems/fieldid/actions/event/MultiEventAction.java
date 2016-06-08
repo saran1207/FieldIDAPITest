@@ -47,7 +47,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
+@Deprecated
+@UserPermissionFilter(userRequiresOneOf={Permissions.CREATE_EVENT})
 public class MultiEventAction extends AbstractCrud implements ActionWithCriteriaResults {
 
 	private static final long UNASSIGNED_OPTION_VALUE = 0L;

@@ -40,8 +40,10 @@
 			> li {
 				border-left: 1px solid $gray-medium;
 				font-size: 13px;
+				overflow-y: auto!important;
 
-				&:first-child {
+
+			  &:first-child {
 					border: none;
 				}
 				> span {
@@ -71,7 +73,6 @@
 
 		//My Saved items overrides
 		.saved-items {
-		  	overflow-y: auto!important;
 			#mySavedItemsLink {
 				padding-left: 10px;
 				color: $red;

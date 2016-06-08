@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.wicket.components.eventform;
 
+import com.google.common.collect.Lists;
+import com.n4systems.fieldid.service.event.ButtonGroupService;
 import com.n4systems.fieldid.service.event.ScoreService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressedBehavior;
@@ -11,7 +13,6 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.eventform.CriteriaTypeDescriptionModel;
 import com.n4systems.fieldid.wicket.util.NoDoubleBarsValidator;
 import com.n4systems.model.*;
-import com.n4systems.model.stateset.StateSetLoader;
 import com.n4systems.util.eventform.CriteriaCopyUtil;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -51,6 +52,9 @@ public class CriteriaPanel extends SortableListPanel {
 
     @SpringBean
     private ScoreService scoreService;
+
+    @SpringBean
+    private ButtonGroupService buttonGroupService;
 
     public CriteriaPanel(String id, PropertyModel<EventForm> eventFormModel, boolean isMasterEvent) {
         super(id);
@@ -271,8 +275,16 @@ public class CriteriaPanel extends SortableListPanel {
 
     @Override
     protected void onItemMoving(int oldIndex, int newIndex, AjaxRequestTarget target) {
-        Criteria movingCriteria = getCriteriaSection().getCriteria().remove(oldIndex);
-        getCriteriaSection().getCriteria().add(newIndex, movingCriteria);
+        //TODO We have to copy the list before calling add(index, object) due to this bug https://hibernate.atlassian.net/browse/HHH-10375
+        List<Criteria> criteriaList = Lists.newArrayList();
+        criteriaList.addAll(getCriteriaSection().getCriteria());
+
+        Criteria movingCriteria = criteriaList.remove(oldIndex);
+        criteriaList.add(newIndex, movingCriteria);
+
+        getCriteriaSection().getCriteria().clear();
+        getCriteriaSection().getCriteria().addAll(criteriaList);
+
         target.add(this);
     }
 
@@ -301,8 +313,7 @@ public class CriteriaPanel extends SortableListPanel {
     }
 
     private ButtonGroup getDefaultStateSet() {
-        StateSetLoader stateSetLoader = new StateSetLoader(FieldIDSession.get().getSessionUser().getSecurityFilter());
-        List<ButtonGroup> buttonGroupList =  stateSetLoader.load();
+        List<ButtonGroup> buttonGroupList =  buttonGroupService.findAllButtonGroups(false);
         if (buttonGroupList.isEmpty()) {
             return null;
         }

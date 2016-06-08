@@ -6,12 +6,15 @@ import com.n4systems.model.api.Retirable;
 import com.n4systems.model.parents.EntityWithOwner;
 import com.n4systems.model.user.User;
 import com.n4systems.util.DateHelper;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.*;
 
 @Entity
 @Table( name="projects" )
+@Cacheable
+@org.hibernate.annotations.Cache(region = "AssetCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Project extends EntityWithOwner implements NamedEntity, Listable<Long>, Retirable {
 
 	private static final long serialVersionUID = 1L;
@@ -53,17 +56,21 @@ public class Project extends EntityWithOwner implements NamedEntity, Listable<Lo
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "projects_assets", joinColumns = @JoinColumn(name="projects_id"), inverseJoinColumns = @JoinColumn(name="asset_id"))
     @OrderColumn(name="orderidx")
+	@org.hibernate.annotations.Cache(region = "AssetCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private List<Asset> assets = new ArrayList<>();
     
     @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinTable(name = "projects_fileattachments", joinColumns = @JoinColumn(name="projects_id"), inverseJoinColumns = @JoinColumn(name="notes_id"))
+	@org.hibernate.annotations.Cache(region = "AssetCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private List<FileAttachment> notes = new ArrayList<>();
     
     @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="project")
+	@org.hibernate.annotations.Cache(region = "AssetCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Event> events = new HashSet<>();
     
     @ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
     @JoinTable(name = "projects_users", joinColumns = @JoinColumn(name="projects_id"), inverseJoinColumns = @JoinColumn(name = "resources_id"))
+	@org.hibernate.annotations.Cache(region = "AssetCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<User> resources = new HashSet<>();
     
     private boolean retired;

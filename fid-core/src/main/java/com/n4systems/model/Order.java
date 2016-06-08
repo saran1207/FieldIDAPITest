@@ -6,12 +6,18 @@ import com.n4systems.model.parents.EntityWithOwner;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+import java.util.Date;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name = "orders")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "AssetCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Order extends EntityWithOwner implements Listable<Long>, SecurityEnhanced<Order> {
 	private static final long serialVersionUID = 1L;
 	

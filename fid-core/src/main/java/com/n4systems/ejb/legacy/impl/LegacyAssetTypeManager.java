@@ -40,7 +40,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
- 
+@Deprecated
 public class LegacyAssetTypeManager implements LegacyAssetType {
 	private static Logger logger = Logger.getLogger( LegacyAssetTypeManager.class );
 	

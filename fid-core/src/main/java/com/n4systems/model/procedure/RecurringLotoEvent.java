@@ -10,12 +10,15 @@ import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "recurring_loto_events")
 @PrimaryKeyJoinColumn(name="id")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "ProcedureCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class RecurringLotoEvent  extends ArchivableEntityWithTenant implements Saveable, SecurityEnhanced<RecurringLotoEvent>, Cloneable{
 
     public enum RecurringLotoEventType implements DisplayEnum{

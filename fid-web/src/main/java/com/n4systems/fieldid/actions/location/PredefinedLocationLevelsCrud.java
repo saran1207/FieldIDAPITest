@@ -13,7 +13,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import java.util.List;
 
-@UserPermissionFilter(userRequiresOneOf = { Permissions.ManageSystemConfig })
+@UserPermissionFilter(userRequiresOneOf = { Permissions.MANAGE_SYSTEM_CONFIG})
 public class PredefinedLocationLevelsCrud extends AbstractCrud {
 
 	private PredefinedLocationLevels predefinedLocationLevels;

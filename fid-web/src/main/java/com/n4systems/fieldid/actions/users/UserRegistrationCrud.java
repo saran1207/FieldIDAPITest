@@ -117,7 +117,7 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 	}
 
 	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.useridrequired")
-	@StringLengthFieldValidator(type = ValidatorType.FIELD, message = "", key = "errors.useridlength", maxLength = "15")
+	@StringLengthFieldValidator(type = ValidatorType.FIELD, message = "", key = "errors.useridlength", maxLength = "255")
 	@CustomValidator(type = "uniqueValue", message = "", key = "errors.data.userduplicate")
 	public String getUserId() {
 		return userAccount.getUserID();

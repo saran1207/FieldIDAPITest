@@ -8,6 +8,7 @@ import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.persistence.localization.Localized;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -16,6 +17,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "eventbooks")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "EventCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class EventBook extends ArchivableEntityWithOwner implements NamedEntity, Listable<Long>, Comparable<EventBook>, SecurityEnhanced<EventBook> {
 	private static final long serialVersionUID = 1L;
 	
@@ -26,6 +29,7 @@ public class EventBook extends ArchivableEntityWithOwner implements NamedEntity,
 	private boolean open = true;
 	
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="book")
+	@org.hibernate.annotations.Cache(region = "EventCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	private Set<Event> events = new TreeSet<Event>();
 
 	@Column(nullable=false)

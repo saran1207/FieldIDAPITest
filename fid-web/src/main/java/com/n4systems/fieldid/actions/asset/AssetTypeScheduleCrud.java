@@ -25,7 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
+@Deprecated
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_CONFIG})
 public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateValueValidator {
 	private static final long serialVersionUID = 1L;
 

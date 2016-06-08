@@ -11,7 +11,7 @@ public class UserSecurityGuardTest extends AbstractUserSecurityTestCase {
 	public void should_have_a_method_for_every_visible_permission() {
 		Class<UserSecurityGuard> interfaceDefinition = UserSecurityGuard.class;
 		
-		for (int permission : Permissions.getVisibleSystemUserPermissions()) {
+		for (int permission : Permissions.getVisibleSystemUserInspectionPermissions()) {
 			if (resolvePermissionName(permission) == null) {
 				fail("No permission name setup for permission number "+permission);
 			} else {

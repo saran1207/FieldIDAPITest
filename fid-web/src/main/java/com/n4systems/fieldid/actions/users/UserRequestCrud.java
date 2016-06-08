@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemUsers})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_USERS})
 public class UserRequestCrud extends AbstractCrud {
 
 	private static final long serialVersionUID = 1L;

@@ -17,7 +17,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import rfid.web.helper.Constants;
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.Projects)
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageJobs})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_JOBS})
 public class ProjectNoteCrud extends UploadFileSupport {
 
 	private static final Logger logger = Logger.getLogger(ProjectNoteCrud.class);

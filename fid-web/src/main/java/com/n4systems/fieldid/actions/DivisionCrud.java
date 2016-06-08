@@ -24,7 +24,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 @Validation
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageEndUsers})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_END_USERS})
 public class DivisionCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(DivisionCrud.class);

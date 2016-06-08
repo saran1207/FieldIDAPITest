@@ -20,7 +20,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import java.util.Date;
 import java.util.List;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
+@UserPermissionFilter(userRequiresOneOf={Permissions.TAG})
 public class AssetMergeAction extends AbstractCrud {
 
 	private static final long serialVersionUID = 1L;

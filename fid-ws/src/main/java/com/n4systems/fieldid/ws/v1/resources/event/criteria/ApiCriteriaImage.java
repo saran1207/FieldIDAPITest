@@ -5,6 +5,7 @@ public class ApiCriteriaImage {
 	private String fileName;
 	private String comments;
 	private byte[] image;
+	private byte[] srcImage;
 
 	public String getCriteriaResultSid() {
 		return criteriaResultSid;
@@ -36,5 +37,15 @@ public class ApiCriteriaImage {
 
 	public void setImage(byte[] image) {
 		this.image = image;
+	}
+
+	public byte[] getSrcImage() {
+
+		return srcImage;
+	}
+
+	public ApiCriteriaImage setSrcImage(byte[] srcImage) {
+		this.srcImage = srcImage;
+		return this;
 	}
 }

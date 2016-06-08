@@ -32,8 +32,9 @@ import rfid.ejb.entity.InfoOptionBean;
 import java.io.File;
 import java.util.*;
 
+@Deprecated
 @Validation
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_CONFIG})
 public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValueValidator,
         HasAssetDescriptionTemplateValidator {
 	private static final long serialVersionUID = 1L;

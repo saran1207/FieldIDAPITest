@@ -2,12 +2,15 @@ package com.n4systems.model.dashboard;
 
 import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 import com.n4systems.model.parents.AbstractEntity;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "widget_definitions")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class WidgetDefinition<W extends WidgetConfiguration> extends AbstractEntity {
 
     @Column(name="widget_type")

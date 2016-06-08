@@ -117,9 +117,6 @@ public class EntityManagerBackedUserManager implements UserManager {
 	private boolean passwordMatches(String plainTextPassword, User user) {
 		if (user.getUserType() == UserType.SYSTEM) {
 			String systemUserPass = ConfigService.getInstance().getConfig(user.getTenant().getId()).getSystem().getSystemUserPassword();
-			if (systemUserPass == null || systemUserPass.length() < 128) {
-				throw new SecurityException("System password not configured correctly");
-			}
 			return systemUserPass.equals(EncryptionUtility.getSHA512HexHash(plainTextPassword));
 		} else {
 			return user.getHashPassword().equals(User.hashPassword(plainTextPassword));

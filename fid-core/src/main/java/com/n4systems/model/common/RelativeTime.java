@@ -27,7 +27,9 @@ public enum RelativeTime implements Listable<String> {
 	MONTH_12	("label.12_month",		DateHelper.MONTH,	12, true),
 	MONTH_18	("label.18_month",		DateHelper.MONTH,	18, true),
 	MONTH_24	("label.24_month",		DateHelper.MONTH,	24, true);
-	
+
+	public static RelativeTime [] START_TIME = {TODAY, TOMORROW, THIS_WEEK, NEXT_WEEK, THIS_MONTH, NEXT_MONTH};
+	public static RelativeTime [] PERIOD_LENGTH = {DAY_1, DAY_2, DAY_7, WEEK_1, WEEK_2, MONTH_1, MONTH_2, MONTH_3, MONTH_6, MONTH_9, MONTH_12, MONTH_18, MONTH_24};
 	
 	private String label;
 	private int dateField;

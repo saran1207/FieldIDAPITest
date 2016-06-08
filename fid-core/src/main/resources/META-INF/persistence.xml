@@ -8,13 +8,19 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <non-jta-data-source>java:/comp/env/jdbc/fieldid</non-jta-data-source>
         <properties>
-            <property name="hibernate.archive.autodetection" value="class" />
+            <property name="hibernate.archive.which " value="class" />
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
             <property name="hibernate.max_fetch_depth" value="1" />
+            <property name="hibernate.generate_statistics" value="true" />
 
-            <!--property name="hibernate.cache.use_second_level_cache" value="true"/>
+            <!--
+            These are now configured in CacheConfigurator
+            <property name="hibernate.cache.use_second_level_cache" value="true"/>
             <property name="hibernate.cache.use_query_cache" value="true"/>
-            <property name="javax.persistence.sharedCache.mode" value="DISABLE_SELECTIVE"/>
+            <property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory"/>
+            -->
+
+            <!--property name="javax.persistence.sharedCache.mode" value="DISABLE_SELECTIVE"/>
             <property name="hibernate.cache.default_cache_concurrency_strategy" value="read-write" />
             <property name="hibernate.cache.region.factory_class" value="net.sf.ehcache.hibernate.SingletonEhCacheRegionFactory"/>
             <property name="hibernate.generate_statistics" value="true" /-->
@@ -62,6 +68,15 @@
             <property name="hibernate.connection.username" value="root" />
             <property name="hibernate.connection.password" value="" />
 
+        </properties>
+    </persistence-unit>
+
+    <persistence-unit name="fieldid-cli" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <properties>
+            <property name="hibernate.archive.autodetection" value="class" />
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
+            <property name="hibernate.max_fetch_depth" value="1" />
         </properties>
     </persistence-unit>
 </persistence>

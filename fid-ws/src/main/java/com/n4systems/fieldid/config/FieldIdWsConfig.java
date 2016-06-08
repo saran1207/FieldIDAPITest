@@ -25,6 +25,7 @@ import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiPlaceEventHistoryRe
 import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventScheduleResource;
 import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiTriggerEventResource;
 import com.n4systems.fieldid.ws.v1.resources.eventstatus.ApiEventStatusResource;
+import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiCriteriaRuleResource;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiEventTypeResource;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiPlaceEventTypeResource;
 import com.n4systems.fieldid.ws.v1.resources.hello.ApiHelloResource;
@@ -301,4 +302,9 @@ public class FieldIdWsConfig {
     public ApiPlaceEventTypeResource apiPlaceEventTypeResource() {
         return new ApiPlaceEventTypeResource();
     }
+
+	@Bean
+	public ApiCriteriaRuleResource apiCriteriaRuleResource() {
+		return new ApiCriteriaRuleResource();
+	}
 }

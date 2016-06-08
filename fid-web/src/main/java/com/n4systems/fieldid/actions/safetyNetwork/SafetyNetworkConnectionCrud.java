@@ -12,7 +12,7 @@ import com.n4systems.tools.Pager;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SAFETY_NETWORK})
 public class SafetyNetworkConnectionCrud extends AbstractAction {
 	private static final long serialVersionUID = 1L;
 	

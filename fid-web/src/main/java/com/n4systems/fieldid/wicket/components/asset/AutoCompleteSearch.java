@@ -85,7 +85,7 @@ public class AutoCompleteSearch extends AutoComplete<Asset> {
 
     @Override
     protected Asset findEntity(long entityId, String input) {
-        return persistenceService.find(Asset.class,entityId);
+        return assetService.findById(entityId);
     }
 
     protected String getDisplayValue(Asset asset) {

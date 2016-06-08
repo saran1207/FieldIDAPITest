@@ -1,9 +1,11 @@
 package com.n4systems.reporting;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.LastEventDateService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.util.DateTimeDefinition;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.beanutils.BeanUtils;
@@ -25,13 +27,15 @@ public class AssetReportMapProducer extends ReportMapProducer {
 	private static final String UNASSIGNED_USER_NAME = "Unassigned";
 	private final Asset asset;
     private LastEventDateService lastEventDateService;
+    private AssetService assetService;
 
     private static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(AssetReportMapProducer.class);
 
-    public AssetReportMapProducer(Asset asset, LastEventDateService lastEventDateService, DateTimeDefinition dateTimeDefinition, S3Service s3Service) {
+    public AssetReportMapProducer(Asset asset, LastEventDateService lastEventDateService, DateTimeDefinition dateTimeDefinition, S3Service s3Service, AssetService assetService) {
 		super(dateTimeDefinition, s3Service);
 		this.asset = asset;
         this.lastEventDateService = lastEventDateService;
+        this.assetService = assetService;
     }
 
 	@Override
@@ -71,6 +75,9 @@ public class AssetReportMapProducer extends ReportMapProducer {
 		add("ownerLogo", getCustomerLogo(asset.getOwner()));
         add("latitude", asset.getGpsLocation() != null ? asset.getGpsLocation().getLatitude() : "");
         add("longitude", asset.getGpsLocation() != null ? asset.getGpsLocation().getLongitude() : "");
+
+        ThingEvent nextScheduleEvent = assetService.findNextScheduledEventByAsset(asset.getId());
+        add("nextInspectionDate", nextScheduleEvent != null ? formatDate(nextScheduleEvent.getDueDate(), true) : "");
 	}
 
     private List<InfoOptionBean> cloneInfoOptionList(List<InfoOptionBean> orderedInfoOptionList) {

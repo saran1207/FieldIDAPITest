@@ -647,7 +647,12 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
             lotoLinkContainer.add(new BookmarkablePageLink<Void>("procedureSearchLink", ProcedureSearchPage.class));
             lotoLinkContainer.add(new BookmarkablePageLink<Void>("procedureList", PublishedListAllPage.class));
-            lotoLinkContainer.add(new BookmarkablePageLink<Void>("upcomingAuditsLink", ProcedureAuditListPage.class));
+            lotoLinkContainer.add(new BookmarkablePageLink<Void>("upcomingAuditsLink", ProcedureAuditListPage.class) {
+                @Override
+                public boolean isVisible() {
+                    return getUserSecurityGuard().isAllowedProcedureAudit();
+                }
+            });
             lotoLinkContainer.add(new BookmarkablePageLink<Void>("procedureAwaitingApprovalLink", ProcedureWaitingApprovalsPage.class));
             lotoLinkContainer.setVisible(getSecurityGuard().isLotoEnabled());
 

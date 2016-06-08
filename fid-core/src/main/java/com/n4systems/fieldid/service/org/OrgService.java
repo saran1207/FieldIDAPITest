@@ -7,6 +7,7 @@ import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.*;
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.security.OwnerAndDownWithPrimaryFilter;
 import com.n4systems.util.collections.OrgList;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -85,9 +86,16 @@ public class OrgService extends CrudService<BaseOrg> {
 
         return persistenceService.find(query);
     }
-    
+
     public PrimaryOrg getPrimaryOrgForTenant(Long tenantId) {
         return getPrimaryOrgForTenant(tenantId, true);
+    }
+
+    public List<BaseOrg> getVisibleOrgs() {
+        QueryBuilder<BaseOrg> query = createUserSecurityBuilder(BaseOrg.class);
+        query.applyFilter(new OwnerAndDownFilter(getCurrentUser().getOwner()));
+        query.addOrder("name");
+        return persistenceService.findAll(query);
     }
 
     public OrgList search(String term, int threshold) {

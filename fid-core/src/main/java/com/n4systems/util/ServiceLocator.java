@@ -10,6 +10,7 @@ import com.n4systems.ejb.wrapper.PredefinedLocationManagerEJBContainer;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetIdentifierService;
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.AssignmentEscalationRuleProcessingService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.LastEventDateService;
@@ -152,6 +153,10 @@ public class ServiceLocator implements ApplicationContextAware {
     public static EventService getEventService() {
         return getBean(EventService.class);
     }
+
+	public static AssetService getAssetService() {
+		return getBean(AssetService.class);
+	}
 
     public static LastEventDateService getLastEventDateService() {
         return getBean(LastEventDateService.class);

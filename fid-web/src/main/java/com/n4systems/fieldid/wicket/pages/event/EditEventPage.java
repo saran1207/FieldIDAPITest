@@ -79,4 +79,9 @@ public class EditEventPage extends ThingEventPage {
         return new Label(labelId, new FIDLabelModel("title.edit_event", event.getObject().getType().getDisplayName()));
     }
 
+    @Override
+    protected boolean canEditOwner() {
+        return orgService.getVisibleOrgs().contains(event.getObject().getOwner());
+    }
+
 }

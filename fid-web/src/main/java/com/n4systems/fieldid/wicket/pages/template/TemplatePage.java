@@ -21,6 +21,7 @@ public class TemplatePage extends FieldIDTemplatePage {
         add(new BookmarkablePageLink<Void>("wideLink", Wide.class));
         add(new BookmarkablePageLink<Void>("allTemplatesLink", AllTemplates.class));
         add(new BookmarkablePageLink<Void>("formComponents", FormComponents.class));
+        add(new BookmarkablePageLink<Void>("fontelloFonts", FontelloFonts.class));
     }
 
     @Override

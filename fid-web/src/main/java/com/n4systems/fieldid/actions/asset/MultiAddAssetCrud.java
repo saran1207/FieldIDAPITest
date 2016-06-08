@@ -46,7 +46,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
+@Deprecated
+@UserPermissionFilter(userRequiresOneOf={Permissions.TAG})
 public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(MultiAddAssetCrud.class);
@@ -119,7 +120,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	}
 	
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.TAG})
 	public String doAddWithOrder() {
 
 		if (lineItem == null || lineItem.getId() == null) {

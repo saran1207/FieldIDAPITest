@@ -2,6 +2,7 @@ package com.n4systems.services.search;
 
 import com.n4systems.ejb.PageHolder;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.util.ResultTransformerFactory;
 import com.n4systems.model.Asset;
 import com.n4systems.model.search.SearchCriteria;
@@ -19,6 +20,9 @@ public class AssetSearchTableAdapterService extends FieldIdPersistenceService {
 
     private @Autowired AssetFullTextSearchService fullTextSearchService;
 
+    @Autowired
+    private AssetService assetService;
+
     public int getResultCount(SearchCriteria searchCriteria) {
         SearchResults count = fullTextSearchService.count(searchCriteria.getQuery());
         return count.getCount();
@@ -35,7 +39,7 @@ public class AssetSearchTableAdapterService extends FieldIdPersistenceService {
         List<Asset> assetsList = new ArrayList<Asset>(pageSize);
         for (SearchResult searchResult : search.getResults()) {
             Long id = Long.valueOf(searchResult.get(AssetIndexField.ID.getField()));
-            assetsList.add(persistenceService.find(Asset.class, id));
+            assetsList.add(assetService.findById(id));
 
         }
         ResultTransformer<TableView> resultTransformer = new ResultTransformerFactory().createResultTransformer(searchCriteria);

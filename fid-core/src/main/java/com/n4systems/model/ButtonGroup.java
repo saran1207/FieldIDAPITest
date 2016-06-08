@@ -5,6 +5,7 @@ import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.persistence.localization.Localized;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,6 +13,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "button_groups")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class ButtonGroup extends EntityWithTenant implements NamedEntity, Listable<Long>, Saveable {
 	private static final long serialVersionUID = 1L;
 
@@ -24,7 +27,11 @@ public class ButtonGroup extends EntityWithTenant implements NamedEntity, Listab
 	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	@OrderColumn(name="orderIdx")
     @JoinTable(name="button_groups_buttons", joinColumns = @JoinColumn(name = "button_group_id"), inverseJoinColumns = @JoinColumn(name = "button_id"))
+	@org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	private List<Button> buttons = new ArrayList<Button>();
+
+	@Transient
+	private boolean changed = false;
 
 	public ButtonGroup() {}
 	
@@ -126,5 +133,13 @@ public class ButtonGroup extends EntityWithTenant implements NamedEntity, Listab
 		return null;
 	}
 
+	public boolean isChanged() {
+		return changed;
+	}
+
+	public ButtonGroup setChanged(boolean changed) {
+		this.changed = changed;
+		return this;
+	}
 }
 

@@ -21,7 +21,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import javax.persistence.Query;
 import java.util.List;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_CONFIG})
 public class ButtonGroupCrud extends AbstractCrud implements HasDuplicateValueValidator{
 
 	

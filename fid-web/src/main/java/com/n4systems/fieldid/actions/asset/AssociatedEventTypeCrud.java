@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_CONFIG})
 public class AssociatedEventTypeCrud extends AbstractCrud {
 
 	private static Logger logger = Logger.getLogger(AssociatedEventTypeCrud.class);

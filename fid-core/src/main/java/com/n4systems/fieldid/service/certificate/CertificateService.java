@@ -7,6 +7,7 @@ import com.n4systems.fieldid.certificate.model.Job;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.LastEventDateService;
@@ -44,13 +45,14 @@ public class CertificateService extends FieldIdPersistenceService {
 	@Autowired private EventService eventService;
 	@Autowired private S3Service s3service;
     @Autowired private LastEventDateService lastEventDateService;
+	@Autowired private AssetService assetService;
 
 	public byte[] generateAssetCertificatePdf(Asset asset) throws ReportException, NonPrintableManufacturerCert {
-		return printer.printToPDF(generateAssetCertificate(persistenceService.find(Asset.class, asset.getId())));
+		return printer.printToPDF(generateAssetCertificate(assetService.findById(asset.getId())));
 	}
 	
 	public JasperPrint generateAssetCertificate(Long assetId) throws ReportException, NonPrintableManufacturerCert {
-		Asset asset = persistenceService.find(Asset.class, assetId);
+		Asset asset = assetService.findById(assetId);
 
         return generateAssetCertificate(asset);
 	}
@@ -71,7 +73,7 @@ public class CertificateService extends FieldIdPersistenceService {
             reportMap.put("SUBREPORT_DIR", jrxmlFile.getParent() + "/");
 
             addIdentifiedByParams(reportMap, asset.getIdentifiedBy());
-            reportMap.putAll(new AssetReportMapProducer(asset, lastEventDateService, new DateTimeDefiner(getCurrentUser()), s3service).produceMap());
+            reportMap.putAll(new AssetReportMapProducer(asset, lastEventDateService, new DateTimeDefiner(getCurrentUser()), s3service, assetService).produceMap());
             addAssetTypeParams(reportMap, asset.getType());
             addShopOrderParams(reportMap, asset);
             addOrganizationParams(reportMap, asset.getOwner().getInternalOrg());
@@ -136,7 +138,7 @@ public class CertificateService extends FieldIdPersistenceService {
 		addNextEventScheduleParams(reportMap, event, dateDefiner);
 		addEventScheduleParams(reportMap, event);
 
-		Map<String, Object> masterEventReportMap = new EventReportMapProducer(event, dateDefiner, s3service, eventService, lastEventDateService).produceMap();
+		Map<String, Object> masterEventReportMap = new EventReportMapProducer(event, dateDefiner, s3service, eventService, lastEventDateService, assetService).produceMap();
 		reportMap.put("mainInspection", masterEventReportMap);
 		reportMap.put("product", masterEventReportMap.get("product"));
 
@@ -144,7 +146,7 @@ public class CertificateService extends FieldIdPersistenceService {
 		eventResultMaps.add(masterEventReportMap);
 
 		for (SubEvent subEvent : event.getSubEvents()) {
-			eventResultMaps.add(new SubEventReportMapProducer(subEvent, event, dateDefiner, s3service, lastEventDateService).produceMap());
+			eventResultMaps.add(new SubEventReportMapProducer(subEvent, event, dateDefiner, s3service, lastEventDateService, assetService).produceMap());
 		}
 		reportMap.put("allInspections", eventResultMaps);
 
@@ -174,9 +176,9 @@ public class CertificateService extends FieldIdPersistenceService {
 		addAssetTypeParams(reportMap, event.getAsset().getType());
 		addShopOrderParams(reportMap, event.getAsset());
 
-		reportMap.putAll(new AssetReportMapProducer(event.getAsset(), lastEventDateService,  dateDefiner, s3service).produceMap());
+		reportMap.putAll(new AssetReportMapProducer(event.getAsset(), lastEventDateService,  dateDefiner, s3service, assetService).produceMap());
 
-		Map<String, Object> eventMap = new EventReportMapProducer(event, dateDefiner, s3service, eventService, lastEventDateService).produceMap();
+		Map<String, Object> eventMap = new EventReportMapProducer(event, dateDefiner, s3service, eventService, lastEventDateService, assetService).produceMap();
 		reportMap.putAll(eventMap);
 
 		JasperReport jasperReport = (JasperReport) JRLoader.loadObject(PathHandler.getCompiledPrintOutFile(printOut, locale));

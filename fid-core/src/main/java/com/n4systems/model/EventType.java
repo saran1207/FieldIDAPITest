@@ -7,6 +7,7 @@ import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.persistence.localization.Localized;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,6 +16,8 @@ import java.util.List;
 @Entity
 @Table(name = "eventtypes")
 @Inheritance(strategy = InheritanceType.JOINED)
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public abstract class EventType<T extends EventType> extends ArchivableEntityWithTenant implements NamedEntity, Listable<Long>, Saveable, SecurityEnhanced<T>, ApiModelWithName {
 	private static final long serialVersionUID = 1L;
 	public static final long DEFAULT_FORM_VERSION = 1;
@@ -46,6 +49,7 @@ public abstract class EventType<T extends EventType> extends ArchivableEntityWit
 	@OrderColumn(name="orderidx")
     @JoinTable(name="eventtypes_infofieldnames", joinColumns = {@JoinColumn(name="eventtypes_id")})
     @Column(name="element")
+	@org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	private List<String> infoFieldNames = new ArrayList<String>();
 	
 	@Column(nullable=false)
@@ -190,6 +194,10 @@ public abstract class EventType<T extends EventType> extends ArchivableEntityWit
 	
 	public void removeAssignedTo() {
 		assignedToAvailable = false;
+	}
+
+	public void setAssignedToAvailable(boolean assignedToAvailable) {
+		this.assignedToAvailable = assignedToAvailable;
 	}
 
     @AllowSafetyNetworkAccess

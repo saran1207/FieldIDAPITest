@@ -1,0 +1,45 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+
+    <div wicket:id="container">
+        <div class="button-labels">
+            <ul class="list-table no-borders">
+                <li class="image-label"><label><wicket:message key="label.image"/>:</label></li>
+                <li><label><wicket:message key="label.label"/>:</label></li>
+                <li><label><wicket:message key="label.indicates"/>:</label></li>
+                <li><label><wicket:message key="label.options"/>:</label></li>
+            </ul>
+        </div>
+
+        <div wicket:id="button" class="button-display">
+            <ul class="list-table no-borders">
+                <li><img wicket:id="buttonImage"/></li>
+                <li class="button-label"><label wicket:id="displayText"></label></li>
+                <li><label wicket:id="eventResult"></label></li>
+                <li>
+                    <a wicket:id="retireLink"><wicket:message key="label.retire"/></a>
+                    <a wicket:id="removeLink"><wicket:message key="label.remove"/></a>
+                </li>
+            </ul>
+        </div>
+
+        <form wicket:id="buttonForm" class="button-form">
+                <ul class="list-table no-borders">
+                    <li><img wicket:id="buttonImage"/></li>
+                    <li><input type="text" wicket:id="displayText"/></li>
+                    <li><select wicket:id="eventResult"/></li>
+                    <li>
+                        <a wicket:id="saveLink"><wicket:message key="label.save"/></a>
+                        |
+                        <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+                    </li>
+                </ul>
+        </form>
+
+        <div class="add-container">
+            <a class="btn-secondary" wicket:id="addLink"><wicket:message key="label.add"/></a>
+        </div>
+    </div>
+
+</wicket:panel>
+</html>

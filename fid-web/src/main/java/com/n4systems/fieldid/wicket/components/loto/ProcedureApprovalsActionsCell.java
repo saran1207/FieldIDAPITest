@@ -4,6 +4,8 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.procedure.LotoReportService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.SvgGenerationService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.ajax.ConfirmAjaxCallDecorator;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
@@ -13,6 +15,7 @@ import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.IAjaxCallDecorator;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -58,9 +61,8 @@ public class ProcedureApprovalsActionsCell extends Panel {
         final AjaxLink<Void> deleteLink;
         final BookmarkablePageLink<Void> startApprovalLink;
         final BookmarkablePageLink<Void> editLink;
-        final BookmarkablePageLink<Void> viewLink;
 
-        final ProcedureDefinition procedureDefinition = (ProcedureDefinition) procedureDefinitionModel.getObject();
+        final ProcedureDefinition procedureDefinition = procedureDefinitionModel.getObject();
 
         FIDModalWindow modal;
         add(modal = new FIDModalWindow("modal", getDefaultModel(), 600, 50));
@@ -68,7 +70,10 @@ public class ProcedureApprovalsActionsCell extends Panel {
 
         editLink = new BookmarkablePageLink<Void>("editLink", ProcedureDefinitionPage.class, PageParametersBuilder.id(procedureDefinitionModel.getObject().getId())) {
             public boolean isVisible() {
-                return ( isAuthor(procedureDefinition) || ( isApprover(procedureDefinition) && isRejected(procedureDefinition) ) );
+                if ( isAuthor(procedureDefinition) || ( isApprover(procedureDefinition) && isRejected(procedureDefinition) ) )
+                    return FieldIDSession.get().getUserSecurityGuard().isAllowedEditEvent();
+                else
+                    return false;
             }
         };
 
@@ -95,9 +100,20 @@ public class ProcedureApprovalsActionsCell extends Panel {
 
             }
 
+            @Override
             public boolean isVisible() {
-                return ((isAuthor(procedureDefinition) || isApprover(procedureDefinition)) );
+                if ((isAuthor(procedureDefinition) || isApprover(procedureDefinition)) ) {
+                    return FieldIDSession.get().getUserSecurityGuard().isAllowedDeleteProcedure();
+                }
+                else
+                    return false;
             }
+
+            @Override
+            protected IAjaxCallDecorator getAjaxCallDecorator() {
+                return new ConfirmAjaxCallDecorator(new FIDLabelModel("message.confirm_delete_procedure").getObject());
+            }
+
 
         };
 
@@ -117,9 +133,15 @@ public class ProcedureApprovalsActionsCell extends Panel {
         add(actionsList);
 
         //Add the print buttons
-        WebMarkupContainer optionsContainer2;
-        add(optionsContainer2 = new LotoPrintoutOptionsContainer("optionsContainer2", procedureDefinition, modal));
-        optionsContainer2.setVisible(!procedureDefinition.getPublishedState().equals(PublishedState.REJECTED) && actionsList.isVisible());
+        add(new LotoPrintoutOptionsContainer("optionsContainer2", procedureDefinition, modal) {
+            @Override
+            public boolean isVisible() {
+                if (FieldIDSession.get().getSessionUser().isReadOnlyUser())
+                    return false;
+                else
+                    return super.isVisible() && !isRejected(procedureDefinition) && actionsList.isVisible();
+            }
+        });
     }
 
     private boolean isAuthor(ProcedureDefinition procedureDefinition) {
@@ -142,7 +164,7 @@ public class ProcedureApprovalsActionsCell extends Panel {
 
     private boolean isRejected(ProcedureDefinition procedureDefinition) {
 
-        if (procedureDefinition.getPublishedState().equals(PublishedState.REJECTED ) && null != procedureDefinition.getRejectedDate()) {
+        if (procedureDefinition.getPublishedState().equals(PublishedState.REJECTED ) && procedureDefinition.getRejectedDate() != null) {
             return true;
         }
         return false;

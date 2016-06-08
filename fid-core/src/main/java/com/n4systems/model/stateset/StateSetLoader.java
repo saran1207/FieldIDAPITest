@@ -8,6 +8,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+@Deprecated
 public class StateSetLoader extends ListLoader<ButtonGroup> {
 
     public StateSetLoader(SecurityFilter filter) {

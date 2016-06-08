@@ -69,7 +69,7 @@ public class EditEventBookPage extends AddEventBookPage {
 
     private EventBook getEventBook(PageParameters params) {
         if(params.get("eventBookId") != null) {
-            return eventBookService.getEventBookById(params.get("eventBookId").toLong());
+            return eventBookService.findById(params.get("eventBookId").toLong());
         }
 
         error(new FIDLabelModel("Error retrieving Event Book... creating a new one instead!!"));

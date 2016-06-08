@@ -64,9 +64,9 @@ public class Exporter {
 	private void configurePersistence(String dbUrl, String dbUser, String dbPass) {
 		System.out.println(String.format("Using DB URL [%s], User [%s]", dbUrl, dbUser));
 		PersistenceManager.persistenceUnit = PersistenceManager.TESTING_PERSISTENCE_UNIT;
-        PersistenceManager.testProperties.put("hibernate.connection.url", dbUrl);
-        PersistenceManager.testProperties.put("hibernate.connection.username", dbUser);
-        PersistenceManager.testProperties.put("hibernate.connection.password", dbPass);
+        PersistenceManager.properties.put("hibernate.connection.url", dbUrl);
+        PersistenceManager.properties.put("hibernate.connection.username", dbUser);
+        PersistenceManager.properties.put("hibernate.connection.password", dbPass);
 	}
 	
 	public void export(String tenantName) throws Exception {

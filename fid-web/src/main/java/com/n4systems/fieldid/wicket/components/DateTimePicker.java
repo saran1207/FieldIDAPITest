@@ -59,6 +59,8 @@ public class DateTimePicker extends Panel {
         setOutputMarkupId(true);
 		setOutputMarkupPlaceholderTag(true);
 
+        add(new AttributeAppender("class", "datepicker-container").setSeparator(" "));
+
         add(dateTextField = new DateTextField("dateField", (IModel<Date>) dateModel) {
             // need to make the format dynamic since we can toggle the "includeTime" attribute after component created.
             @Override

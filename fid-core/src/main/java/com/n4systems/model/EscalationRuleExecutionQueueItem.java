@@ -1,5 +1,7 @@
 package com.n4systems.model;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -13,6 +15,8 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "escalation_rule_execution_queue")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.READ_WRITE)
 public class EscalationRuleExecutionQueueItem extends BaseEntity {
 
 	@Column(name = "event_id")

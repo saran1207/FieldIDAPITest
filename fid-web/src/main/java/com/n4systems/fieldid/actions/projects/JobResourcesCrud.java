@@ -23,7 +23,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import java.util.List;
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.Projects)
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageJobs})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_JOBS})
 public class JobResourcesCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(JobResourcesCrud.class);

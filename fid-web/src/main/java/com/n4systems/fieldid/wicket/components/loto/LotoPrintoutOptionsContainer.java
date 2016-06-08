@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.loto;
 
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.LotoPrintoutType;
@@ -51,6 +52,12 @@ public class LotoPrintoutOptionsContainer extends WebMarkupContainer {
         add(longLink);
     }
 
+
+    @Override
+    public boolean isVisible() {
+        return FieldIDSession.get().getUserSecurityGuard().isAllowedPrintProcedure();
+    }
+
     private CreatePrintoutModalPanel createPrintoutPanel(LotoPrintoutType type) {
         return new CreatePrintoutModalPanel(FIDModalWindow.CONTENT_ID, Model.of(procedureDefinition), type) {
             @Override
@@ -60,4 +67,6 @@ public class LotoPrintoutOptionsContainer extends WebMarkupContainer {
             }
         };
     }
+
+
 }

@@ -11,7 +11,7 @@ import com.n4systems.notifiers.notifications.ImportFailureNotification;
 import com.n4systems.notifiers.notifications.ImportSuccessNotification;
 import com.n4systems.security.Permissions;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageEndUsers})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_END_USERS})
 @SuppressWarnings("serial")
 public class CustomerImportAction extends AbstractImportAction {
 	

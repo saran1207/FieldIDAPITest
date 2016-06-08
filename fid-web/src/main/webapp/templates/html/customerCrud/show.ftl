@@ -23,7 +23,7 @@ ${action.setPageType('customer','show')!}
 	</#if>
 	<#if securityGuard.emailAlertsEnabled>
 		<div class="useractions email">
-			<p><a href="<@s.url action="notificationSettings"/>"><@s.text name="label.setup_email_settings"/></a></p>
+			<p><a href="<@s.url value="/w/setup/notificationsList"/>"><@s.text name="label.setup_email_settings"/></a></p>
 		</div>
 	</#if>
 	

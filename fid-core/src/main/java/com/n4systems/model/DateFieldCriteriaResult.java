@@ -1,5 +1,7 @@
 package com.n4systems.model;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -7,6 +9,8 @@ import java.util.Date;
 @Entity
 @Table(name = "datefield_criteriaresults")
 @PrimaryKeyJoinColumn(name="id")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "EventCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class DateFieldCriteriaResult extends CriteriaResult {
 
 	@Temporal(TemporalType.TIMESTAMP)

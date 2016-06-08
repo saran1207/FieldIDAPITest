@@ -426,7 +426,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
                 procDef.addImage(entityImage);
             }
 
-            //Next, we're going to add the isolation points.  These might
+            //Next, we're going to add the isolation points.  These are new... i'm pretty sure that's what I was thinking.
             isolationPoints.stream()
                            .map(isolationPoint ->
                                    createNewIsolationPoint(isolationPoint,
@@ -515,8 +515,8 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         entityIsolationPoint.setFwdIdx(apiIsolationPoint.getFwdIdx());
         entityIsolationPoint.setRevIdx(apiIsolationPoint.getRevIdx());
 
-        entityIsolationPoint.setDeviceDefinition(convertDefinition(apiIsolationPoint.getDeviceDefinition()));
-        entityIsolationPoint.setLockDefinition(convertDefinition(apiIsolationPoint.getLockDefinition()));
+        entityIsolationPoint.setDeviceDefinition(apiIsolationPoint.getDeviceDefinition().getFreeformDescription());
+        entityIsolationPoint.setLockDefinition(apiIsolationPoint.getLockDefinition().getFreeformDescription());
 
         if(apiIsolationPoint.getAnnotation() == null) {
             entityIsolationPoint.setAnnotation(null);
@@ -548,8 +548,8 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         isoPoint.setFwdIdx(apiIsolationPoint.getFwdIdx());
         isoPoint.setRevIdx(apiIsolationPoint.getRevIdx());
 
-        isoPoint.setDeviceDefinition(convertDefinition(apiIsolationPoint.getDeviceDefinition()));
-        isoPoint.setLockDefinition(convertDefinition(apiIsolationPoint.getLockDefinition()));
+        isoPoint.setDeviceDefinition(apiIsolationPoint.getDeviceDefinition().getFreeformDescription());
+        isoPoint.setLockDefinition(apiIsolationPoint.getLockDefinition().getFreeformDescription());
 
         if(apiIsolationPoint.getAnnotation() != null) {
             ImageAnnotation imageAnnotation = createNewImageAnnotation(apiIsolationPoint.getAnnotation(), isoPoint.getSourceType(), isoPoint.getIdentifier());
@@ -630,6 +630,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
             apiIsolationPoint.setModified(isolationPoint.getModified());
             apiIsolationPoint.setSid(isolationPoint.getId());
             apiIsolationPoint.setCheck(isolationPoint.getCheck());
+
             apiIsolationPoint.setDeviceDefinition(convertDefinition(isolationPoint.getDeviceDefinition()));
             apiIsolationPoint.setLockDefinition(convertDefinition(isolationPoint.getLockDefinition()));
             apiIsolationPoint.setSource(isolationPoint.getSourceType().name());
@@ -718,16 +719,16 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         return convertedAnnotation;
     }
 
-    private ApiDeviceDescription convertDefinition(IsolationDeviceDescription deviceDefinition) {
+    private ApiDeviceDescription convertDefinition(String deviceDefinition) {
         if (deviceDefinition == null) {
             return null;
         }
         ApiDeviceDescription apiDescription = new ApiDeviceDescription();
         apiDescription.setActive(true);
-        apiDescription.setAssetTypeSid(deviceDefinition.getAssetType() == null ? null : deviceDefinition.getAssetType().getId());
-        apiDescription.setAttributes(attrResource.convertInfoOptions(deviceDefinition.getAttributeValues()));
-        apiDescription.setFreeformDescription(deviceDefinition.getFreeformDescription());
-        apiDescription.setSid(deviceDefinition.getId());
+        apiDescription.setAssetTypeSid(null);
+        apiDescription.setAttributes(null);
+        apiDescription.setFreeformDescription(deviceDefinition);
+        apiDescription.setSid(0L);
         return apiDescription;
     }
 

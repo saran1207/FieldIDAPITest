@@ -26,7 +26,6 @@ import com.n4systems.security.Permissions;
 import com.n4systems.servicedto.converts.PrimaryOrgToServiceDTOConverter;
 import com.n4systems.servicedto.converts.util.DtoDateConverter;
 import com.n4systems.services.TenantFinder;
-import com.n4systems.services.signature.SignatureService;
 import com.n4systems.util.BitField;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.webservice.dto.*;
@@ -893,8 +892,8 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		userService.setHashPassword(user.getHashPassword());
 		userService.setSecurityRfidNumber(user.getHashSecurityCardNumber());
 		BitField permField = new BitField(user.getPermissions());
-		userService.setAllowedToIdentify(permField.isSet(Permissions.Tag));
-		userService.setAllowedToInspect(permField.isSet(Permissions.CreateEvent));
+		userService.setAllowedToIdentify(permField.isSet(Permissions.TAG));
+		userService.setAllowedToInspect(permField.isSet(Permissions.CREATE_EVENT));
 
 		populateOwners(user.getOwner(), userService);
 

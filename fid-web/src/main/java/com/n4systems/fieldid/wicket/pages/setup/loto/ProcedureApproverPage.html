@@ -1,19 +1,5 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
-
-    <form wicket:id="form">
-        <fieldset>
-            <p><wicket:message key="message.procedure_approval"/></p>
-            <div class="control-group">
-                <div wicket:id="approver"/>
-            </div>
-        </fieldset>
-        <div>
-            <a wicket:id="save" class="btn-primary"><wicket:message key="label.save"/></a>
-            <wicket:message key="label.or"/>
-            <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
-        </div>
-    </form>
-
+    <div wicket:id="certifierListContainer"></div>
 </wicket:extend>
 </html>

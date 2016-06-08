@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.fieldid</groupId>
 	<artifactId>fieldid-root</artifactId>
-	<version>2015.7.4-SNAPSHOT</version>
+	<version>2016.3.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Field ID Parent POM</name>
 	<modules>
@@ -13,13 +13,13 @@
 		<module>fid-exporter</module>
 		<module>fid-ws</module>
         <module>fid-migrations</module>
-        <module>fid-connection-monitor</module>
         <module>fid-index-validator</module>
         <module>fid-pub-ws</module>
 		<module>fid-mobile-ws</module>
-    </modules>
+		<module>fid-data-migrator</module>
+	</modules>
     <properties>
-        <hibernate.version>5.0.1.Final</hibernate.version>
+        <hibernate.version>5.0.7.Final</hibernate.version>
         <spring.version>4.2.1.RELEASE</spring.version>
         <commons.io.version>1.3.2</commons.io.version>
         <commons.lang.version>2.5</commons.lang.version>

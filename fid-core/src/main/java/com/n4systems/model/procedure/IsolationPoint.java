@@ -1,29 +1,24 @@
 package com.n4systems.model.procedure;
 
 import com.n4systems.model.IsolationPointSourceType;
+import com.n4systems.model.PlatformType;
+import com.n4systems.model.api.HasCreatedModifiedPlatform;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.parents.EntityWithTenant;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.Comparator;
 
 @Entity
 @Table(name = "isolation_points")
-public class IsolationPoint extends EntityWithTenant {
+@Cacheable
+@org.hibernate.annotations.Cache(region = "ProcedureCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+public class IsolationPoint extends EntityWithTenant implements HasCreatedModifiedPlatform {
 
-    public static Comparator<IsolationPoint> LOCK_ORDER = new Comparator<IsolationPoint>() {
-        @Override
-        public int compare(IsolationPoint o1, IsolationPoint o2) {
-            return o1.getFwdIdx().compareTo(o2.getFwdIdx());
-        }
-    };
+    public static Comparator<IsolationPoint> LOCK_ORDER = (o1, o2) -> o1.getFwdIdx().compareTo(o2.getFwdIdx());
 
-    public static Comparator<IsolationPoint> UNLOCK_ORDER = new Comparator<IsolationPoint>() {
-        @Override
-        public int compare(IsolationPoint o1, IsolationPoint o2) {
-            return o1.getRevIdx().compareTo(o2.getRevIdx());
-        }
-    };
+    public static Comparator<IsolationPoint> UNLOCK_ORDER = (o1, o2) -> o1.getRevIdx().compareTo(o2.getRevIdx());
 
     @Column(name="electronic_identifier")
     private String electronicIdentifier;
@@ -38,13 +33,11 @@ public class IsolationPoint extends EntityWithTenant {
     @Column(name="source")
     private IsolationPointSourceType sourceType = IsolationPointSourceType.getDefault();
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="device_definition_id")
-    private IsolationDeviceDescription deviceDefinition = new IsolationDeviceDescription();
+    @Column(name = "lock_definition")
+    private String lockDefinition;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="lock_definition_id")
-    private IsolationDeviceDescription lockDefinition = new IsolationDeviceDescription();
+    @Column(name = "device_definition")
+    private String deviceDefinition;
 
     @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "image_annotation_id")
@@ -65,6 +58,20 @@ public class IsolationPoint extends EntityWithTenant {
     @Column(name="rev_idx")
     private Integer revIdx;
 
+    @Column(name="modified_platform", length = 200)
+    private String modifiedPlatform;
+
+    @Column(name="created_platform", length = 200)
+    private String createdPlatform;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="modified_platform_type")
+    private PlatformType modifiedPlatformType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="created_platform_type")
+    private PlatformType createdPlatformType;
+
     public String getIdentifier() {
         return identifier;
     }
@@ -81,19 +88,19 @@ public class IsolationPoint extends EntityWithTenant {
         this.sourceType = source;
     }
 
-    public IsolationDeviceDescription getDeviceDefinition() {
+    public String getDeviceDefinition() {
         return deviceDefinition;
     }
 
-    public void setDeviceDefinition(IsolationDeviceDescription deviceDefinition) {
+    public void setDeviceDefinition(String deviceDefinition) {
         this.deviceDefinition = deviceDefinition;
     }
 
-    public IsolationDeviceDescription getLockDefinition() {
+    public String getLockDefinition() {
         return lockDefinition;
     }
 
-    public void setLockDefinition(IsolationDeviceDescription lockDefinition) {
+    public void setLockDefinition(String lockDefinition) {
         this.lockDefinition = lockDefinition;
     }
 
@@ -159,5 +166,45 @@ public class IsolationPoint extends EntityWithTenant {
 
     public void setRevIdx(Integer revIdx) {
         this.revIdx = revIdx;
+    }
+
+    @Override
+    public String getModifiedPlatform() {
+        return modifiedPlatform;
+    }
+
+    @Override
+    public void setModifiedPlatform(String modifiedPlatform) {
+        this.modifiedPlatform = modifiedPlatform;
+    }
+
+    @Override
+    public String getCreatedPlatform() {
+        return createdPlatform;
+    }
+
+    @Override
+    public void setCreatedPlatform(String createdPlatform) {
+        this.createdPlatform = createdPlatform;
+    }
+
+    @Override
+    public PlatformType getModifiedPlatformType() {
+        return modifiedPlatformType;
+    }
+
+    @Override
+    public void setModifiedPlatformType(PlatformType modifiedPlatformType) {
+        this.modifiedPlatformType = modifiedPlatformType;
+    }
+
+    @Override
+    public PlatformType getCreatedPlatformType() {
+        return createdPlatformType;
+    }
+
+    @Override
+    public void setCreatedPlatformType(PlatformType createdPlatformType) {
+        this.createdPlatformType = createdPlatformType;
     }
 }

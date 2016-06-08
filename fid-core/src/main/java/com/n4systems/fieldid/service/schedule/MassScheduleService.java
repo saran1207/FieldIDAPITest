@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.service.schedule;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.escalationrule.AssignmentEscalationRuleService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
@@ -19,6 +20,9 @@ public class MassScheduleService extends FieldIdPersistenceService {
     @Autowired
     protected AssignmentEscalationRuleService ruleService;
 
+    @Autowired
+    protected AssetService assetService;
+
     public void performSchedules(List<ScheduleSummaryEntry> schedules, boolean duplicateDetection) {
         for (ScheduleSummaryEntry schedule : schedules) {
             performScheduleForAssetType(schedule, duplicateDetection);
@@ -27,7 +31,7 @@ public class MassScheduleService extends FieldIdPersistenceService {
 
     private void performScheduleForAssetType(ScheduleSummaryEntry scheduleSummary, boolean duplicateDetection) {
         for (Long assetId : scheduleSummary.getAssetIds()) {
-            Asset asset = persistenceService.find(Asset.class, assetId);
+            Asset asset = assetService.findById(assetId);
             performScheduleForAsset(scheduleSummary, asset, duplicateDetection);
         }
     }

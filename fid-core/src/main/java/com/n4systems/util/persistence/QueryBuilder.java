@@ -8,6 +8,7 @@ import com.n4systems.tools.Pager;
 import com.n4systems.util.persistence.JoinClause.JoinType;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
+import javax.persistence.Cacheable;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -70,6 +71,7 @@ public class QueryBuilder<E> {
 	private List<String> postFetchPaths = new ArrayList<String>();
     private Integer limit;
     private String queryAlias;
+	private boolean cacheable = false;
 
     /** 
      * Constructs a <tt>QueryBuilder</tt> for an UnsecuredEntity.  No SecurityFilter will
@@ -80,6 +82,7 @@ public class QueryBuilder<E> {
 	public QueryBuilder(Class<? extends UnsecuredEntity> tableClass) {
 		setFromArgument(tableClass, defaultAlias);
 		setSimpleSelect();
+		setCacheable(tableClass.isAnnotationPresent(Cacheable.class));
 	}
 	
 	/** 
@@ -94,6 +97,7 @@ public class QueryBuilder<E> {
 		setFromArgument(tableClass, alias);
 		setSimpleSelect();
 		applyFilter(filter);
+		setCacheable(tableClass.isAnnotationPresent(Cacheable.class));
 	}
 	
 	/** 
@@ -434,7 +438,16 @@ public class QueryBuilder<E> {
 		}
 		return this;
 	}
-	
+
+	public boolean isCacheable() {
+		return cacheable;
+	}
+
+	public QueryBuilder<E> setCacheable(boolean cacheable) {
+		this.cacheable = cacheable;
+		return this;
+	}
+
 	private <T extends ClauseArgument> String buildCommaSeperatedClauses(Collection<T> clauses) throws InvalidQueryException {
 		String clauseString = "";
 		
@@ -560,6 +573,9 @@ public class QueryBuilder<E> {
         if (limit!=null) { 
             query.setMaxResults(limit);
         }
+		if (cacheable) {
+			query.setHint("org.hibernate.cacheable", "true");
+		}
 		bindParams(query);
 		return query;
 	}

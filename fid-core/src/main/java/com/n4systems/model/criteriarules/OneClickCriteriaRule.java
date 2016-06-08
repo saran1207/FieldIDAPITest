@@ -2,6 +2,7 @@ package com.n4systems.model.criteriarules;
 
 import com.n4systems.model.Button;
 import com.n4systems.model.Criteria;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
@@ -14,6 +15,8 @@ import javax.persistence.*;
 @Entity
 @Table(name = "one_click_rules")
 @PrimaryKeyJoinColumn(name = "id")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class OneClickCriteriaRule extends CriteriaRule {
 
     @ManyToOne

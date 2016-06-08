@@ -8,6 +8,7 @@ import com.n4systems.persistence.savers.Saver;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+@Deprecated
 public class AssetSaver extends Saver<Asset> {
 	private final RecursiveLinkedChildAssetLoader linkedAssetLoader;
 	private User modifiedBy;

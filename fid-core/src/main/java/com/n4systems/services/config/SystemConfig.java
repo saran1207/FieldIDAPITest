@@ -54,6 +54,9 @@ public class SystemConfig {
 	}
 
 	public String getSystemUserPassword() {
+		if (systemUserPassword == null || systemUserPassword.length() < 128) {
+			throw new SecurityException("System password not configured correctly");
+		}
 		return systemUserPassword;
 	}
 

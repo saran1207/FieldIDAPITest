@@ -55,7 +55,7 @@ ${action.setPageType('my_account', 'exportEvent')!}
                 function(data) {
                      jQuery().colorbox({
 						 html: data,
-                         onClose: function () {
+                         onClosed: function () {
                              exportButton.setValue('<@s.text name="label.exportNow"/>');
                              exportButton.enable();
 						 }

@@ -2,15 +2,15 @@ package com.n4systems.model.orgs;
 
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 
 
 @SuppressWarnings("serial")
 @MappedSuperclass
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 abstract public class ExternalOrg extends BaseOrg {
 
 

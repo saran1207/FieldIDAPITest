@@ -50,24 +50,24 @@ public class FailedEventListLoader extends ListLoader<ThingEvent>{
 		if(setting.getOwner() != null) {
 			builder.applyFilter(new OwnerAndDownFilter(setting.getOwner()));
 		}
-		if(!setting.getAssetTypes().isEmpty()) {
-			builder.addSimpleWhere("asset.type.id", setting.getAssetTypes().get(0));
+		if(setting.getAssetType() != null) {
+			builder.addSimpleWhere("asset.type", setting.getAssetType());
 		}
 
-		if (setting.getAssetTypes().isEmpty() && setting.getAssetTypeGroup() != null) {
-			builder.addSimpleWhere("asset.type.group.id", setting.getAssetTypeGroup());
+		if (setting.getAssetType() == null && setting.getAssetTypeGroup() != null) {
+			builder.addSimpleWhere("asset.type.group", setting.getAssetTypeGroup());
 		}
 		
-		if(setting.getEventTypes().isEmpty() && setting.getEventTypeGroup() !=null){
-			builder.addSimpleWhere("type.group.id", setting.getEventTypeGroup());
+		if(setting.getEventType() == null && setting.getEventTypeGroup() !=null){
+			builder.addSimpleWhere("type.group", setting.getEventTypeGroup());
 		}
 
 		if (setting.getAssetStatus() != null) {
-			builder.addSimpleWhere("asset.assetStatus.id", setting.getAssetStatus());
+			builder.addSimpleWhere("asset.assetStatus", setting.getAssetStatus());
 		}		
 		
-		if(!setting.getEventTypes().isEmpty()) {
-			builder.addSimpleWhere("type.id", setting.getEventTypes().get(0));
+		if(setting.getEventType() != null) {
+			builder.addSimpleWhere("type.id", setting.getEventType());
 		}
 	}
 

@@ -19,6 +19,7 @@ import com.n4systems.tools.EncryptionUtility;
 import com.n4systems.util.DateTimeDefinition;
 import com.n4systems.util.RandomString;
 import com.n4systems.util.timezone.CountryList;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.io.File;
@@ -27,6 +28,8 @@ import java.util.*;
 @Entity
 @Table(name = "users")
 @Localized(ignore = true)
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class User extends ArchivableEntityWithOwner implements Listable<Long>, Saveable, SecurityEnhanced<User>, Exportable, DateTimeDefinition, Assignable {
 	private static final long serialVersionUID = 1L;
 	public static final int REFERRAL_KEY_LENGTH = 10;
@@ -70,11 +73,12 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 
 	@Column(nullable = false, unique = true)
 	private String authKey;
-	
+
 	@Column(name="password", nullable=false)
 	@ElementCollection(fetch=FetchType.EAGER)
 	@JoinTable(name="user_previous_pw", joinColumns = @JoinColumn(name="userId"))
 	@OrderBy("id")
+	@org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	private List<String> previousPasswords = new ArrayList<String>();
 	
 	@Enumerated(EnumType.STRING)
@@ -84,6 +88,7 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
     @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
     @JoinTable(name="users_saved_items", joinColumns = @JoinColumn(name="user_id"), inverseJoinColumns = @JoinColumn(name="item_id"))
     @OrderColumn(name="orderIdx")
+	@org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private List<SavedItem> savedItems;
 
     /**
@@ -99,6 +104,7 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "user_group_id"))
     @OrderBy( "id" )
+	@org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<UserGroup> groups = new HashSet<UserGroup>();
 
 	private boolean registered = false;

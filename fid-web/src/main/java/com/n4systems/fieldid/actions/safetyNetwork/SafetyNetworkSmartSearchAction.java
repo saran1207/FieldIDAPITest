@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 
 import java.util.List;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SAFETY_NETWORK})
 public class SafetyNetworkSmartSearchAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(SafetyNetworkSmartSearchAction.class);

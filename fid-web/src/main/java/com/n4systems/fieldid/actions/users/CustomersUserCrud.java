@@ -15,7 +15,8 @@ import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 import rfid.web.helper.Constants;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageEndUsers})
+@Deprecated
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_END_USERS})
 public class CustomersUserCrud extends ReadOnlyUserCrud {
 	private static final long serialVersionUID = 1L;
 	

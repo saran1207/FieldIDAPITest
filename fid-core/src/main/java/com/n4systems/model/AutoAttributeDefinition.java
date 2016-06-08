@@ -1,13 +1,16 @@
 package com.n4systems.model;
 
-import com.n4systems.model.api.Exportable;
-import com.n4systems.model.parents.EntityWithTenant;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.*;
+
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import com.n4systems.model.api.Exportable;
+import com.n4systems.model.parents.EntityWithTenant;
 
 /**
  * This class
@@ -16,6 +19,8 @@ import java.util.List;
  */
 @Entity
 @Table( name="autoattributedefinition")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class AutoAttributeDefinition extends EntityWithTenant implements Exportable {
 
 	private static final long serialVersionUID = 1L;
@@ -25,6 +30,7 @@ public class AutoAttributeDefinition extends EntityWithTenant implements Exporta
 					joinColumns = @JoinColumn(name = "r_autoattributedefinition", referencedColumnName = "id"),
 					inverseJoinColumns = @JoinColumn(name = "r_infooption", referencedColumnName = "uniqueid"))
 	@OrderBy( "infoField" )
+	@org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	List<InfoOptionBean> inputs = new ArrayList<InfoOptionBean>();
 	
 	@ManyToMany (targetEntity = InfoOptionBean.class, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
@@ -32,6 +38,7 @@ public class AutoAttributeDefinition extends EntityWithTenant implements Exporta
 					joinColumns = @JoinColumn(name = "r_autoattributedefinition", referencedColumnName = "id"),
 					inverseJoinColumns = @JoinColumn(name = "r_infooption", referencedColumnName = "uniqueid"))
 	@OrderBy( "uniqueID" )
+	@org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	List<InfoOptionBean> outputs = new ArrayList<InfoOptionBean>();
 	
 	@ManyToOne(optional = false, fetch = FetchType.LAZY )

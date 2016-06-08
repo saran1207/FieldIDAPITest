@@ -17,6 +17,14 @@ public class ApiUser extends ApiReadonlyModelWithOwner {
 	private boolean identifyEnabled;
 	private boolean createEventEnabled;
 	private boolean editEventEnabled;
+	private boolean authorEditProcedure;
+	private boolean certifyProcedure;
+	private boolean deleteProcedure;
+	private boolean maintainLotoSchedule;
+	private boolean performProcedure;
+	private boolean printProcedure;
+	private boolean procedureAudit;
+	private boolean unpublishProcedure;
 	private ApiOfflineProfile offlineProfile;
 	private ApiTenant tenant;
 	private String identifier;
@@ -92,6 +100,70 @@ public class ApiUser extends ApiReadonlyModelWithOwner {
 
 	public void setEditEventEnabled(boolean permissionEditEvent) {
 		this.editEventEnabled = permissionEditEvent;
+	}
+
+	public boolean isAuthorEditProcedure() {
+		return authorEditProcedure;
+	}
+
+	public void setAuthorEditProcedure(boolean authorEditProcedure) {
+		this.authorEditProcedure = authorEditProcedure;
+	}
+
+	public boolean isCertifyProcedure() {
+		return certifyProcedure;
+	}
+
+	public void setCertifyProcedure(boolean certifyProcedure) {
+		this.certifyProcedure = certifyProcedure;
+	}
+
+	public boolean isDeleteProcedure() {
+		return deleteProcedure;
+	}
+
+	public void setDeleteProcedure(boolean deleteProcedure) {
+		this.deleteProcedure = deleteProcedure;
+	}
+
+	public boolean isMaintainLotoSchedule() {
+		return maintainLotoSchedule;
+	}
+
+	public void setMaintainLotoSchedule(boolean maintainLotoSchedule) {
+		this.maintainLotoSchedule = maintainLotoSchedule;
+	}
+
+	public boolean isPerformProcedure() {
+		return performProcedure;
+	}
+
+	public void setPerformProcedure(boolean performProcedure) {
+		this.performProcedure = performProcedure;
+	}
+
+	public boolean isPrintProcedure() {
+		return printProcedure;
+	}
+
+	public void setPrintProcedure(boolean printProcedure) {
+		this.printProcedure = printProcedure;
+	}
+
+	public boolean isProcedureAudit() {
+		return procedureAudit;
+	}
+
+	public void setProcedureAudit(boolean procedureAudit) {
+		this.procedureAudit = procedureAudit;
+	}
+
+	public boolean isUnpublishProcedure() {
+		return unpublishProcedure;
+	}
+
+	public void setUnpublishProcedure(boolean unpublishProcedure) {
+		this.unpublishProcedure = unpublishProcedure;
 	}
 
 	public ApiOfflineProfile getOfflineProfile() {

@@ -59,4 +59,9 @@ public abstract class CrudService<T extends AbstractEntity> extends FieldIdPersi
 	public T update(T model) {
 		return persistenceService.update(model);
 	}
+
+	@Transactional
+	public T saveOrUpdate(T model) {
+		return persistenceService.saveOrUpdate(model);
+	}
 }

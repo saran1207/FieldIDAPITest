@@ -1,10 +1,14 @@
 package com.n4systems.model;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name="signature_criteriaresults")
 @PrimaryKeyJoinColumn(name="id")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "EventCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class SignatureCriteriaResult extends CriteriaResult {
 
     @Column(name="signed")

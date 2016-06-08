@@ -140,6 +140,10 @@ public class ActionDetailsPanel extends Panel {
 
         issuingEventSection.add(new DateTimeLabel("issuingEventDate", new UserToUTCDateModel(new PropertyModel<Date>(actionModel, "triggerEvent.date"))));
         issuingEventSection.add(new Label("issuingEventTypeName", new PropertyModel<String>(actionModel, "triggerEvent.type.name")));
+
+        // FIXME For some reason if we don't call getActionDescription before the PropertyModel handles it we get LazyInit exceptions :-/
+        actionModel.getObject().getActionDescription();
+
         issuingEventSection.add(new Label("criteriaDescription", new PropertyModel<String>(actionModel, "actionDescription")));
 
         issuingEventSection.add(new ListView<CriteriaResultImage>("criteriaImages", new PropertyModel<List<CriteriaResultImage>>(criteriaResultModel, "criteriaImages")) {

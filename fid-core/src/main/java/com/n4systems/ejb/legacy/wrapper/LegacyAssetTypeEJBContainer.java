@@ -19,6 +19,8 @@ import java.io.File;
 import java.util.Collection;
 import java.util.List;
 
+//Or can we just delete this instead of marking it as deprecated?
+@Deprecated
 public class LegacyAssetTypeEJBContainer extends EJBTransactionEmulator<LegacyAssetType> implements LegacyAssetType {
 
 	protected LegacyAssetType createManager(EntityManager em) {

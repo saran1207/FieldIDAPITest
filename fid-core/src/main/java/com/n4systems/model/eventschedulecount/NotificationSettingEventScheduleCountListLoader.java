@@ -50,24 +50,24 @@ public abstract class NotificationSettingEventScheduleCountListLoader extends Li
 		 * NOTE: only a single assettype and eventtype are allowed via the interface.  If we have one
 		 * we will use it directly (rather then an in-list)
 		 */
-		if (!notification.getAssetTypes().isEmpty()) {
-			builder.addSimpleWhere("asset.type.id", notification.getAssetTypes().get(0));
+		if (notification.getAssetType() != null) {
+			builder.addSimpleWhere("asset.type", notification.getAssetType());
 		}
 
-		if (notification.getAssetTypes().isEmpty() && notification.getAssetTypeGroup() != null) {
-			builder.addSimpleWhere("asset.type.group.id", notification.getAssetTypeGroup());
+		if (notification.getAssetType() == null && notification.getAssetTypeGroup() != null) {
+			builder.addSimpleWhere("asset.type.group", notification.getAssetTypeGroup());
 		}
 		
-		if(notification.getEventTypes().isEmpty() && notification.getEventTypeGroup() != null){
-			builder.addSimpleWhere("type.group.id", notification.getEventTypeGroup());
+		if(notification.getEventType() == null && notification.getEventTypeGroup() != null){
+			builder.addSimpleWhere("type.group", notification.getEventTypeGroup());
 		}
 
 		if (notification.getAssetStatus() != null) {
-			builder.addSimpleWhere("asset.assetStatus.id", notification.getAssetStatus());
+			builder.addSimpleWhere("asset.assetStatus", notification.getAssetStatus());
 		}
 		
-		if (!notification.getEventTypes().isEmpty()) {
-			builder.addSimpleWhere("type.id", notification.getEventTypes().get(0));
+		if (notification.getEventType() != null) {
+			builder.addSimpleWhere("type", notification.getEventType());
 		}
 		
 		builder.applyFilter(new OwnerAndDownFilter(notification.getOwner()));

@@ -88,7 +88,7 @@ public class ActionsListPanel extends Panel {
     }
 
     protected boolean isReadOnly() {
-        return readOnly || !Permissions.hasAllOf(getCurrentUser(), Permissions.CreateEvent);
+        return readOnly || !Permissions.hasAllOf(getCurrentUser(), Permissions.CREATE_EVENT);
     }
 
     protected void clickFinished(AjaxRequestTarget target) {

@@ -1,0 +1,89 @@
+.button-groups-page {
+
+  .add-link-container {
+    margin: 15px 0;
+  }
+
+  .list-panel {
+    .list-table {
+
+      border: 1px solid #ECECEC;
+
+      thead {
+        display: none;
+      }
+      tr {
+        margin-top: 10px;
+
+        .button-group-list-container {
+              margin-top: 10px;
+              margin-left: 20px;
+        }
+
+        .button-list-panel {
+          margin-left: 45px;
+        }
+
+        .button-labels, .button-display, .add-container, .button-form {
+          display: inline-block;
+          width: 120px;
+          height: 155px;
+          vertical-align: middle;
+        }
+
+        .button-labels {
+          .image-label{
+            margin-top: 5px;
+            margin-bottom: 15px;
+          }
+        }
+
+        .button-display.hide {
+          display: none;
+        }
+
+        .button-display {
+          .button-label {
+            word-wrap: break-word;
+          }
+        }
+
+        .button-labels, .button-display, .button-form {
+          .list-table {
+            margin-bottom: 0;
+            border: none;
+          }
+        }
+
+        .add-container {
+          .btn-secondary {
+            margin-top: 50px;
+          }
+        }
+
+        .button-form {
+          input[type="text"], select {
+            width: 100px;
+          }
+
+          input[type="text"] {
+            margin-bottom: 0;
+          }
+
+          .list-table > li > div {
+            padding: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+.fieldid-framework {
+  .button-form {
+    .chzn-container {
+      margin: 0;
+    }
+  }
+}
+

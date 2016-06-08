@@ -5,6 +5,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.selection.MultiIdSelection;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,6 +14,8 @@ import java.util.Comparator;
 import java.util.List;
 
 @MappedSuperclass
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public abstract class SearchCriteria extends AbstractEntity {
 
     @Transient

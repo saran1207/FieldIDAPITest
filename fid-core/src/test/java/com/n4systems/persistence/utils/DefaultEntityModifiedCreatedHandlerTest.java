@@ -41,7 +41,7 @@ public class DefaultEntityModifiedCreatedHandlerTest {
 
 
         assertSame(user, eula.getCreatedBy());
-        //assertSame(user, eula.getModifiedBy());
+        assertSame(user, eula.getModifiedBy());
 
         assertEquals(testDate, eula.getCreated());
         assertEquals(testDate, eula.getModified());
@@ -56,7 +56,7 @@ public class DefaultEntityModifiedCreatedHandlerTest {
 
         modifiedCreatedHandler.onUpdate(eula);
 
-        //assertSame(user, eula.getModifiedBy());
+        assertSame(user, eula.getModifiedBy());
         assertEquals(testDate, eula.getModified());
     }
 
@@ -92,6 +92,7 @@ public class DefaultEntityModifiedCreatedHandlerTest {
             user.setUserID("testuser");
 
         expect(mockInteractionContext.getCurrentUser()).andReturn(user).anyTimes();
+        expect(mockInteractionContext.isEnabled()).andReturn(Boolean.TRUE).anyTimes();
         replay(mockInteractionContext);
     }
 

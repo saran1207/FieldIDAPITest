@@ -30,4 +30,8 @@ public class MutableAwsConfig extends AwsConfig {
 		this.uploadTimeout = uploadTimeout;
 	}
 
+	public void setRegion(String region) {
+		this.region = region;
+	}
+
 }

@@ -17,7 +17,8 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import java.util.Collections;
 import java.util.List;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
+@Deprecated
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_CONFIG})
 public class EventFormCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 

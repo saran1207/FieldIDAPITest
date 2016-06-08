@@ -5,12 +5,18 @@ import com.n4systems.model.Tenant;
 import com.n4systems.model.exceptions.NotUpdatableException;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.user.User;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+import java.util.Date;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name = "eulaacceptances")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class EulaAcceptance extends EntityWithTenant {
 
 	private static final long serialVersionUID = 1L;

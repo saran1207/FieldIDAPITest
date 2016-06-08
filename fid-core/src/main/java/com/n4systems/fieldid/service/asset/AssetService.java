@@ -2,12 +2,14 @@ package com.n4systems.fieldid.service.asset;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.n4systems.exceptions.*;
+import com.n4systems.exceptions.InvalidArgumentException;
+import com.n4systems.exceptions.InvalidQueryException;
+import com.n4systems.exceptions.SubAssetUniquenessException;
+import com.n4systems.exceptions.UsedOnMasterEventException;
 import com.n4systems.fieldid.LegacyMethod;
 import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.amazon.S3Service;
-import com.n4systems.fieldid.service.event.LastEventDateService;
 import com.n4systems.fieldid.service.event.NotifyEventAssigneeService;
 import com.n4systems.fieldid.service.event.ProcedureAuditEventService;
 import com.n4systems.fieldid.service.mixpanel.MixpanelService;
@@ -20,7 +22,6 @@ import com.n4systems.fieldid.service.transaction.TransactionService;
 import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.asset.AssetAttachment;
-import com.n4systems.model.asset.AssetSaver;
 import com.n4systems.model.asset.ScheduleSummaryEntry;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -61,7 +62,6 @@ public class AssetService extends CrudService<Asset> {
 
 	@Autowired private ReportServiceHelper reportServiceHelper;
     @Autowired private TransactionService transactionService;
-    @Autowired private LastEventDateService lastEventDateService;
     @Autowired private AssetCodeMappingService assetCodeMappingService;
     @Autowired private AssetTypeService assetTypeService;
     @Autowired private OrgService orgService;
@@ -81,16 +81,9 @@ public class AssetService extends CrudService<Asset> {
 		super(Asset.class);
 	}
 
-    @Transactional(readOnly=true)
-    public Long countAssets() {
-
-        QueryBuilder<Asset> builder = new QueryBuilder<Asset>(Asset.class, securityContext.getTenantSecurityFilter());
-        return persistenceService.count(builder);
-    }
-
 	@Transactional(readOnly=true)
 	public List<AssetsIdentifiedReportRecord> getAssetsIdentified(ChartGranularity granularity, Date fromDate, Date toDate, BaseOrg org) {
-		QueryBuilder<AssetsIdentifiedReportRecord> builder = new QueryBuilder<AssetsIdentifiedReportRecord>(Asset.class, securityContext.getUserSecurityFilter());
+		QueryBuilder<AssetsIdentifiedReportRecord> builder = new QueryBuilder<>(Asset.class, securityContext.getUserSecurityFilter());
 
         NewObjectSelect select = new NewObjectSelect(AssetsIdentifiedReportRecord.class);
 		List<String> args = Lists.newArrayList("COUNT(*)");
@@ -107,6 +100,18 @@ public class AssetService extends CrudService<Asset> {
 		return persistenceService.findAll(builder);
 	}
 
+    /**
+     * Sometimes Assets are Archived, but we still need to access them.
+     *
+     * This quick method will help dredge up any ARCHIVED Assets by ID.
+     *
+     * @param id - A Long value representing the ID of a possibly Archived Asset.
+     * @return A potentially archived Asset... possibly with or without its SubAssets?
+     */
+    public Asset findArchivedById(Long id) {
+        return persistenceService.find(createTenantSecurityBuilder(Asset.class, true).addSimpleWhere("id", id));
+    }
+
 	private WhereClause<?> whereFromTo(Date fromDate,Date toDate) {
 		if (fromDate!=null && toDate!=null) {
 			WhereParameterGroup filterGroup = new WhereParameterGroup("filtergroup");
@@ -115,10 +120,10 @@ public class AssetService extends CrudService<Asset> {
 			return filterGroup;
 		}
 		if (fromDate!=null) {
-			return new WhereParameter<Date>(WhereParameter.Comparator.GE, "from", fromDate);
+			return new WhereParameter<>(WhereParameter.Comparator.GE, "from", fromDate);
 		}
 		if (toDate!=null) {
-			return new WhereParameter<Date>(WhereParameter.Comparator.LT, "to", toDate);
+			return new WhereParameter<>(WhereParameter.Comparator.LT, "to", toDate);
 		}
 		return null;
 	}
@@ -129,7 +134,7 @@ public class AssetService extends CrudService<Asset> {
 	 * have 10 assets identified, but the asset status widget shows < 10 for the same date range.
 	 */
 	public List<AssetsStatusReportRecord> getAssetsStatus(Date fromDate, Date toDate, BaseOrg org) {
-		QueryBuilder<AssetsStatusReportRecord> builder = new QueryBuilder<AssetsStatusReportRecord>(Asset.class, securityContext.getUserSecurityFilter());
+		QueryBuilder<AssetsStatusReportRecord> builder = new QueryBuilder<>(Asset.class, securityContext.getUserSecurityFilter());
 
 		builder.setSelectArgument(new NewObjectSelect(AssetsStatusReportRecord.class, "assetStatus.name", "COUNT(*)"));
 		builder.addWhere(whereFromTo(fromDate, toDate));
@@ -141,7 +146,7 @@ public class AssetService extends CrudService<Asset> {
 
     public List<ScheduleSummaryEntry> getAssetScheduleSummary(List<Long> assetIds) {
         List<Asset> assets = getAssets(assetIds);
-        Map<AssetType, ScheduleSummaryEntry> summaryEntryMap = new HashMap<AssetType, ScheduleSummaryEntry>();
+        Map<AssetType, ScheduleSummaryEntry> summaryEntryMap = new HashMap<>();
         for (Asset asset : assets) {
             AssetType assetType = asset.getType();
 
@@ -155,11 +160,11 @@ public class AssetService extends CrudService<Asset> {
             scheduleSummaryEntry.getAssetIds().add(asset.getId());
         }
 
-        return new ArrayList<ScheduleSummaryEntry>(summaryEntryMap.values());
+        return new ArrayList<>(summaryEntryMap.values());
     }
 
     public List<Asset> getAssets(List<Long> assetIds) {
-        QueryBuilder<Asset> query = new QueryBuilder<Asset>(Asset.class, securityContext.getUserSecurityFilter());
+        QueryBuilder<Asset> query = new QueryBuilder<>(Asset.class, securityContext.getUserSecurityFilter());
         query.addWhere(WhereClauseFactory.create(Comparator.IN, "id", assetIds));
         return persistenceService.findAll(query);
     }
@@ -171,8 +176,7 @@ public class AssetService extends CrudService<Asset> {
     public Asset findByMobileId(String mobileId, boolean withArchived) {
     	QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class, withArchived);
     	builder.addWhere(WhereClauseFactory.create("mobileGUID", mobileId));
-    	Asset asset = persistenceService.find(builder);
-    	return asset;
+        return persistenceService.find(builder);
     }
 
     public Asset getAsset(Long assetId) {
@@ -195,8 +199,7 @@ public class AssetService extends CrudService<Asset> {
     @Transactional(readOnly = true)
 	public List<SubAsset> findSubAssets(Asset asset) {
 		QueryBuilder<SubAsset> subAssetQuery = new QueryBuilder<SubAsset>(SubAsset.class, new OpenSecurityFilter()).addSimpleWhere("masterAsset", asset).addOrder("weight").addOrder("created").addOrder("id");
-		List<SubAsset> subAssets = persistenceService.findAll(subAssetQuery);
-		return subAssets;
+        return persistenceService.findAll(subAssetQuery);
 	}
 
 	public Asset parentAsset(Asset asset) {
@@ -214,20 +217,6 @@ public class AssetService extends CrudService<Asset> {
 			return null;
 		}
 	}
-
-
-    public AssetStatus findAssetStatus(Long uniqueID, Long tenantId) {
-        Query query = persistenceService.createQuery("FROM "+AssetStatus.class.getName()+" st WHERE st.id = :uniqueID AND st.tenant.id = :tenantId");
-        query.setParameter("uniqueID", uniqueID);
-        query.setParameter("tenantId", tenantId);
-        AssetStatus obj = null;
-        try {
-            obj = (AssetStatus) query.getSingleResult();
-        } catch (NoResultException e) {
-            obj = null;
-        }
-        return obj;
-    }
 
     public boolean rfidExists(String rfidNumber) {
         return rfidExists(rfidNumber, null);
@@ -266,13 +255,20 @@ public class AssetService extends CrudService<Asset> {
         }
     }
 
-    public Asset create(Asset asset, User modifiedBy) throws SubAssetUniquenessException {
-        runAssetSavePreRecs(asset, modifiedBy);
+    public Asset create(Asset asset/*, User modifiedBy*/) throws SubAssetUniquenessException {
+        runAssetSavePreRecs(asset);//, modifiedBy);
 
-        AssetSaver saver = new AssetSaver();
-        saver.setModifiedBy(modifiedBy);
+//        AssetSaver saver = new AssetSaver();
+//        saver.setModifiedBy(modifiedBy);
+//
+//        asset = saver.update(getEntityManager(), asset);
 
-        asset = saver.update(getEntityManager(), asset);
+        asset = persistenceService.update(asset);
+
+        //Apparently I have to manually do this... the onUpdate and onCreate hooks don't execute twice on double calls.
+        asset.synchronizeNetworkId();
+
+        asset = persistenceService.update(asset);
 
         saveSubAssets(asset);
 
@@ -289,20 +285,18 @@ public class AssetService extends CrudService<Asset> {
         }
     }
 
-    private void runAssetSavePreRecs(Asset asset, User modifiedBy) throws SubAssetUniquenessException {
-        moveRfidFromAssets(asset, modifiedBy);
-        processSubAssets(asset, modifiedBy);
+    private void runAssetSavePreRecs(Asset asset/*, User modifiedBy*/) throws SubAssetUniquenessException {
+        moveRfidFromAssets(asset);//, modifiedBy);
+        processSubAssets(asset);//, modifiedBy);
     }
 
-    public Asset update(Asset asset, User modifiedBy) throws SubAssetUniquenessException {
+    public Asset updateWithSubassets(Asset asset) throws SubAssetUniquenessException {
         asset.touch();
-        runAssetSavePreRecs(asset, modifiedBy);
+        runAssetSavePreRecs(asset);
 
         saveSubAssets(asset);
 
-        AssetSaver saver = new AssetSaver();
-        saver.setModifiedBy(modifiedBy);
-        asset = saver.update(getEntityManager(), asset);
+        super.update(asset);
 
         updateSchedulesOwnership(asset);
         return asset;
@@ -328,7 +322,7 @@ public class AssetService extends CrudService<Asset> {
         }
     }
 
-    private void processSubAssets(Asset asset, User modifiedBy) throws SubAssetUniquenessException {
+    private void processSubAssets(Asset asset/*, User modifiedBy*/) throws SubAssetUniquenessException {
 
         checkForUniqueSubAssets(asset);
         clearOldSubAssets(asset);
@@ -336,7 +330,7 @@ public class AssetService extends CrudService<Asset> {
         long weight = 0;
         for (SubAsset subAsset : asset.getSubAssets()) {
 
-            detachFromPreviousParent(asset, subAsset, modifiedBy);
+            detachFromPreviousParent(asset, subAsset);//, modifiedBy);
 
             subAsset.getAsset().setOwner(asset.getOwner());
             subAsset.getAsset().setAdvancedLocation(asset.getAdvancedLocation());
@@ -344,9 +338,11 @@ public class AssetService extends CrudService<Asset> {
             subAsset.getAsset().setAssetStatus(asset.getAssetStatus());
             subAsset.setWeight(weight);
 
-            AssetSaver saver = new AssetSaver();
-            saver.setModifiedBy(modifiedBy);
-            saver.update(getEntityManager(), subAsset.getAsset());
+//            AssetSaver saver = new AssetSaver();
+//            saver.setModifiedBy(modifiedBy);
+//            saver.update(getEntityManager(), subAsset.getAsset());
+
+            persistenceService.update(subAsset.getAsset());
 
             weight++;
         }
@@ -368,7 +364,7 @@ public class AssetService extends CrudService<Asset> {
         }
     }
 
-    private void detachFromPreviousParent(Asset asset, SubAsset subAsset, User modifiedBy) {
+    private void detachFromPreviousParent(Asset asset, SubAsset subAsset/*, User modifiedBy*/) {
         Asset parentAsset = parentAsset(subAsset.getAsset());
 
         if (parentAsset != null && !parentAsset.equals(asset)) {
@@ -378,7 +374,8 @@ public class AssetService extends CrudService<Asset> {
                 SubAsset subAssetToRemove = persistenceService.find(query);
                 parentAsset.getSubAssets().remove(subAssetToRemove);
                 persistenceService.delete(subAssetToRemove);
-                update(parentAsset, modifiedBy);
+//                update(parentAsset, modifiedBy);
+                updateWithSubassets(parentAsset);
             } catch (SubAssetUniquenessException e) {
                 logger.error("parent asset is in an invalid state in the database", e);
                 throw new RuntimeException("parent asset is in an invalid state in the database", e);
@@ -386,8 +383,8 @@ public class AssetService extends CrudService<Asset> {
         }
     }
 
-    public void checkForUniqueSubAssets(Asset asset) throws SubAssetUniquenessException {
-        Set<SubAsset> uniqueSubAssets = new HashSet<SubAsset>(asset.getSubAssets());
+    private void checkForUniqueSubAssets(Asset asset) throws SubAssetUniquenessException {
+        Set<SubAsset> uniqueSubAssets = new HashSet<>(asset.getSubAssets());
         if (asset.getSubAssets().size() != uniqueSubAssets.size()) {
             throw new SubAssetUniquenessException();
         }
@@ -399,7 +396,7 @@ public class AssetService extends CrudService<Asset> {
      */
     @LegacyMethod
     public Asset createWithHistory(Asset asset, User modifiedBy) throws SubAssetUniquenessException {
-        asset = create(asset, modifiedBy);
+        asset = create(asset);//, modifiedBy);
 
         AddAssetHistory addAssetHistory = getAddAssetHistory(modifiedBy.getId());
 
@@ -414,7 +411,7 @@ public class AssetService extends CrudService<Asset> {
         addAssetHistory.setAssetStatus(asset.getAssetStatus());
         addAssetHistory.setPurchaseOrder(asset.getPurchaseOrder());
         addAssetHistory.setLocation(asset.getAdvancedLocation());
-        addAssetHistory.setInfoOptions(new ArrayList<InfoOptionBean>(asset.getInfoOptions()));
+        addAssetHistory.setInfoOptions(new ArrayList<>(asset.getInfoOptions()));
         addAssetHistory.setAssignedUser(asset.getAssignedUser());
 
         getEntityManager().merge(addAssetHistory);
@@ -425,7 +422,7 @@ public class AssetService extends CrudService<Asset> {
     public ThingEvent findNextScheduledEventByAsset(Long assetId) {
         ThingEvent schedule = null;
 
-        QueryBuilder<ThingEvent> query = new QueryBuilder<ThingEvent>(ThingEvent.class, new OpenSecurityFilter());
+        QueryBuilder<ThingEvent> query = new QueryBuilder<>(ThingEvent.class, new OpenSecurityFilter());
         query.addSimpleWhere("asset.id", assetId);
         query.addWhere(Comparator.EQ, "workflowState", "workflowState", WorkflowState.OPEN);
 
@@ -446,8 +443,9 @@ public class AssetService extends CrudService<Asset> {
 
     public int findExactAssetSizeByIdentifiersForNewSmartSearch(String searchValue, UserSecurityFilter filter) {
 
-        QueryBuilder<Asset> builder =  new QueryBuilder<Asset>(Asset.class, filter);
+        QueryBuilder<Asset> builder = new QueryBuilder<>(Asset.class, filter);
 
+        //TODO Can probably drop that "IGNORE_CASE" crap... the DB always ignores case... that's part of the config.
         WhereParameterGroup group = new WhereParameterGroup("smartsearch");
         group.addClause(WhereClauseFactory.create(Comparator.EQ, "identifier", "identifier", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
         group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "rfidNumber", "rfidNumber", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
@@ -456,18 +454,18 @@ public class AssetService extends CrudService<Asset> {
         builder.addOrder("type", "created");
         //builder.addOrder("created");
 
-        int results = persistenceService.count(builder).intValue();
-        return results;
+        return persistenceService.count(builder).intValue();
     }
 
     public List<Asset> findExactAssetByIdentifiersForNewSmartSearch(String searchValue) {
         return findExactAssetByIdentifiersForNewSmartSearch(searchValue, securityContext.getUserSecurityFilter());
     }
 
-    public List<Asset> findExactAssetByIdentifiersForNewSmartSearch(String searchValue, UserSecurityFilter filter) {
+    private List<Asset> findExactAssetByIdentifiersForNewSmartSearch(String searchValue, UserSecurityFilter filter) {
 
-        QueryBuilder<Asset> builder =  new QueryBuilder<Asset>(Asset.class, filter);
+        QueryBuilder<Asset> builder = new QueryBuilder<>(Asset.class, filter);
 
+        //TODO Can probably drop that "IGNORE_CASE" crap... the DB always ignores case... that's part of the config.
         WhereParameterGroup group = new WhereParameterGroup("smartsearch");
         group.addClause(WhereClauseFactory.create(Comparator.EQ, "identifier", "identifier", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
         group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "rfidNumber", "rfidNumber", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
@@ -476,8 +474,7 @@ public class AssetService extends CrudService<Asset> {
         builder.addOrder("type", "created");
         //builder.addOrder("created");
 
-        List<Asset> results = persistenceService.findAll(builder);
-        return results;
+        return persistenceService.findAll(builder);
     }
 
     public List<Asset> findAssetByIdentifiersForNewSmartSearch(String searchValue) {
@@ -486,12 +483,12 @@ public class AssetService extends CrudService<Asset> {
 
     public List<Asset> findAssetByIdentifiersForNewSmartSearch(String searchValue, UserSecurityFilter filter) {
         if(searchValue.length() < 3) {
-            return new ArrayList<Asset>();
+            return new ArrayList<>();
         }
 
         //mysql full-text search uses "-" as a word delimiter, so we have to use the old smart search "like" approach.
         if(searchValue.contains("-")) {
-            QueryBuilder<Asset> builder =  new QueryBuilder<Asset>(Asset.class, filter);
+            QueryBuilder<Asset> builder = new QueryBuilder<>(Asset.class, filter);
 
             WhereParameterGroup group = new WhereParameterGroup("smartsearch");
             group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "identifier", "identifier", searchValue, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
@@ -501,8 +498,7 @@ public class AssetService extends CrudService<Asset> {
             builder.addOrder("type", "created");
             //builder.addOrder("created");
 
-            List<Asset> results = persistenceService.findAll(builder);
-            return results;
+            return persistenceService.findAll(builder);
         } else {
             String queryString = "SELECT * FROM assets p join org_base o on p.owner_id=o.id WHERE (MATCH (p.identifier, p.rfidNumber, p.customerRefNumber) AGAINST ('" + searchValue + "*' IN BOOLEAN MODE)) ";
 
@@ -513,28 +509,31 @@ public class AssetService extends CrudService<Asset> {
             queryString += "AND p.TENANT_ID = " + filter.getTenantId() + " AND p.state='ACTIVE' ORDER BY p.type_id, p.created";
             Query query = persistenceService.createSQLQuery(queryString, Asset.class);
 
+            //noinspection unchecked
             return query.getResultList();
         }
 
     }
 
-    private void moveRfidFromAssets(Asset asset, User modifiedBy) {
-        AssetSaver saver = new AssetSaver();
-        saver.setModifiedBy(modifiedBy);
+    private void moveRfidFromAssets(Asset asset/*, User modifiedBy*/) {
+//        AssetSaver saver = new AssetSaver();
+//        saver.setModifiedBy(modifiedBy);
 
         if (rfidExists(asset.getRfidNumber(), asset.getTenant().getId())) {
             Collection<Asset> duplicateRfidAssets = findAssetsByRfidNumber(asset.getRfidNumber());
-            for (Asset duplicateRfidAsset : duplicateRfidAssets) {
-                if (!duplicateRfidAsset.getId().equals(asset.getId())) {
-                    duplicateRfidAsset.setRfidNumber(null);
+            //                    saver.update(getEntityManager(), duplicateRfidAsset);
+            duplicateRfidAssets.stream()
+                               .filter(duplicateRfidAsset -> !duplicateRfidAsset.getId().equals(asset.getId()))
+                               .forEach(duplicateRfidAsset -> {
+                duplicateRfidAsset.setRfidNumber(null);
 
-                    saver.update(getEntityManager(), duplicateRfidAsset);
+//                    saver.update(getEntityManager(), duplicateRfidAsset);
+                persistenceService.update(duplicateRfidAsset);
 
-                    String auditMessage = "Moving RFID [" + asset.getRfidNumber() + "] from Asset [" + duplicateRfidAsset.getId() + ":" + duplicateRfidAsset.getIdentifier() + "] to [" + asset.getId() + ":"
-                            + asset.getIdentifier() + "]";
-                    logger.info(auditMessage);
-                }
-            }
+                String auditMessage = "Moving RFID [" + asset.getRfidNumber() + "] from Asset [" + duplicateRfidAsset.getId() + ":" + duplicateRfidAsset.getIdentifier() + "] to [" + asset.getId() + ":"
+                        + asset.getIdentifier() + "]";
+                logger.info(auditMessage);
+            });
         }
     }
 
@@ -601,25 +600,9 @@ public class AssetService extends CrudService<Asset> {
         try {
             event = (ThingEvent) eventQuery.getSingleResult();
         } catch (NoResultException e) {
+            //This might actually be fine... event will just be null.
         }
         return event;
-    }
-
-    @LegacyMethod
-    public Long countAllEvents(Asset asset, SecurityFilter securityFilter) {
-        Long count = countAllLocalEvents(asset, securityFilter);
-        return count;
-    }
-
-    @LegacyMethod
-    public Long countAllLocalEvents(Asset asset, SecurityFilter securityFilter) {
-        Query eventQuery = createAllEventQuery(asset, securityFilter, true);
-        return (Long)eventQuery.getSingleResult();
-    }
-
-    @LegacyMethod
-    private Query createAllEventQuery(Asset asset, SecurityFilter securityFilter, boolean count) {
-        return createAllEventQuery(asset, securityFilter, count, false);
     }
 
     @LegacyMethod
@@ -634,13 +617,7 @@ public class AssetService extends CrudService<Asset> {
 
         User user = persistenceService.find(User.class, securityFilter.getUserId());
 
-//        Collection<User> visibleUsers = ThreadLocalInteractionContext.getInstance().getVisibleUsers();
-//        if(visibleUsers != null && visibleUsers.size() > 0) {
-//            query += " AND event.performedBy in (:visibleUsers) ";
-//        }
-
         if (!user.getGroups().isEmpty()) {
-//            query += " AND event.performedBy  in (:visibleUsers) ";
             query += " AND (event.assignedGroup is null or event.assignedGroup in (:groupList) ) ";
         }
 
@@ -668,14 +645,6 @@ public class AssetService extends CrudService<Asset> {
         }
 
         return eventQuery;
-    }
-
-    public Asset createAssetWithServiceTransaction(String transactionGUID, Asset asset, User modifiedBy) throws TransactionAlreadyProcessedException, SubAssetUniquenessException {
-        asset = create(asset, modifiedBy);
-
-        transactionService.completeAssetTransaction(transactionGUID, asset.getTenant());
-
-        return asset;
     }
 
     public Asset findLocalAssetFor(Asset asset) {
@@ -708,7 +677,7 @@ public class AssetService extends CrudService<Asset> {
 
         builder.setLimit(threshold * 4);
         List<Asset> results = persistenceService.findAll(builder);
-        return new PrioritizedList<Asset>(results, threshold);
+        return new PrioritizedList<>(results, threshold);
     }
 
     private String getAssetTypeTerm(String search) {
@@ -728,7 +697,7 @@ public class AssetService extends CrudService<Asset> {
     }
 
     public boolean hasAssetAttachments(Long id) {
-        QueryBuilder<AssetAttachment> builder = new QueryBuilder<AssetAttachment>(AssetAttachment.class, securityContext.getTenantSecurityFilter());
+        QueryBuilder<AssetAttachment> builder = new QueryBuilder<>(AssetAttachment.class, securityContext.getTenantSecurityFilter());
         builder.addSimpleWhere("asset.id", id);
 
         Long size = persistenceService.count(builder);
@@ -744,7 +713,7 @@ public class AssetService extends CrudService<Asset> {
         if (asset == null) {
             throw new InvalidArgumentException("you must have an asset to load asset attachments");
         }
-        QueryBuilder<AssetAttachment> builder = new QueryBuilder<AssetAttachment>(AssetAttachment.class, securityContext.getTenantSecurityFilter());
+        QueryBuilder<AssetAttachment> builder = new QueryBuilder<>(AssetAttachment.class, securityContext.getTenantSecurityFilter());
         builder.addSimpleWhere("asset", asset).addOrder("id");
 
         return persistenceService.findAll(builder);
@@ -756,7 +725,7 @@ public class AssetService extends CrudService<Asset> {
         builder.setLimit(threshold*4);
         builder.getOrderArguments().add(new OrderClause("modified", false));
         List<Asset> results = persistenceService.findAll(builder);
-        return new PrioritizedList<Asset>(results, threshold);
+        return new PrioritizedList<>(results, threshold);
     }
 
     public boolean hasLinkedAssets(Asset asset) {
@@ -768,7 +737,7 @@ public class AssetService extends CrudService<Asset> {
     }
 
     public Map<Long, Long> getTenantsLast30DaysCount(Map<Tenant,PrimaryOrg> tenants) {
-        QueryBuilder<Tenant30DayCountRecord> builder = new QueryBuilder<Tenant30DayCountRecord>(Asset.class, new OpenSecurityFilter());
+        QueryBuilder<Tenant30DayCountRecord> builder = new QueryBuilder<>(Asset.class, new OpenSecurityFilter());
 
         NewObjectSelect select = new NewObjectSelect(Tenant30DayCountRecord.class);
         select.setConstructorArgs(Lists.newArrayList("obj.tenant", "COUNT(*)"));
@@ -883,7 +852,7 @@ public class AssetService extends CrudService<Asset> {
             SubAsset subAssetToRemove = parentAsset.getSubAssets().get(parentAsset.getSubAssets().indexOf(new SubAsset(asset, parentAsset)));
             persistenceService.delete(subAssetToRemove);
             parentAsset.getSubAssets().remove(subAssetToRemove);
-            save(parentAsset, archivedBy);
+            update(parentAsset);//, archivedBy);
         }
 
         asset.archiveEntity();
@@ -895,7 +864,7 @@ public class AssetService extends CrudService<Asset> {
         archiveProcedures(asset);
         archiveProcedureAudits(asset);
 
-        return save(asset, archivedBy);
+        return save(asset);//, archivedBy);
     }
 
     private void archiveProcedureAudits(Asset asset) {
@@ -941,7 +910,6 @@ public class AssetService extends CrudService<Asset> {
 
     private List<Asset> findActiveAssetsByAssetType(AssetType assetType) {
         QueryBuilder<Asset> query = createTenantSecurityBuilder(Asset.class);
-        query.addSimpleWhere("state", Archivable.EntityState.ACTIVE);
         query.addSimpleWhere("type", assetType);
 
         return persistenceService.findAll(query);
@@ -961,14 +929,15 @@ public class AssetService extends CrudService<Asset> {
         }
     }
 
-    protected Asset save(Asset asset, User modifiedBy) {
-        AssetSaver assetSaver = new AssetSaver();
-        assetSaver.setModifiedBy(modifiedBy);
-
-        asset = assetSaver.update(getEntityManager(), asset);
-
-        return asset;
-    }
+    //No.  This comes from the CrudService methods.  Modified-by user **should** be set automagically.
+//    protected Asset save(Asset asset, User modifiedBy) {
+//        AssetSaver assetSaver = new AssetSaver();
+//        assetSaver.setModifiedBy(modifiedBy);
+//
+//        asset = assetSaver.update(getEntityManager(), asset);
+//
+//        return asset;
+//    }
 
     public AssetRemovalSummary testArchive(Asset asset) {
         AssetRemovalSummary summary = new AssetRemovalSummary(asset);

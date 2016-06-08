@@ -121,14 +121,14 @@ public class UserResource extends CrudResource<User, UserMessage, Builder> {
 
 	private UserMessage.PermissionsMessage.Builder convertPermissionsToMessage(int permissions) {
 		return UserMessage.PermissionsMessage.newBuilder()
-				.setCreateAssets(Permissions.hasOneOf(permissions, Permissions.Tag))
-				.setManageSystemConfig(Permissions.hasOneOf(permissions, Permissions.ManageSystemConfig))
-				.setManageSystemUsers(Permissions.hasOneOf(permissions, Permissions.ManageSystemUsers))
-				.setManageEndUsers(Permissions.hasOneOf(permissions, Permissions.ManageEndUsers))
-				.setCreateEvents(Permissions.hasOneOf(permissions, Permissions.CreateEvent))
-				.setEditEvents(Permissions.hasOneOf(permissions, Permissions.EditEvent))
-				.setManageJobs(Permissions.hasOneOf(permissions, Permissions.ManageJobs))
-				.setManageSafetyNetwork(Permissions.hasOneOf(permissions, Permissions.ManageSafetyNetwork));
+				.setCreateAssets(Permissions.hasOneOf(permissions, Permissions.TAG))
+				.setManageSystemConfig(Permissions.hasOneOf(permissions, Permissions.MANAGE_SYSTEM_CONFIG))
+				.setManageSystemUsers(Permissions.hasOneOf(permissions, Permissions.MANAGE_SYSTEM_USERS))
+				.setManageEndUsers(Permissions.hasOneOf(permissions, Permissions.MANAGE_END_USERS))
+				.setCreateEvents(Permissions.hasOneOf(permissions, Permissions.CREATE_EVENT))
+				.setEditEvents(Permissions.hasOneOf(permissions, Permissions.EDIT_EVENT))
+				.setManageJobs(Permissions.hasOneOf(permissions, Permissions.MANAGE_JOBS))
+				.setManageSafetyNetwork(Permissions.hasOneOf(permissions, Permissions.MANAGE_SAFETY_NETWORK));
 	}
 
 	private UserType convertTypeToModel(UserMessage.UserType type, ConversionContext<UserMessage, User> context) {
@@ -157,14 +157,14 @@ public class UserResource extends CrudResource<User, UserMessage, Builder> {
 
 	private int convertPermissionsToModel(UserMessage.PermissionsMessage permissions) {
 		BitField perms = new BitField();
-		perms.set(Permissions.Tag, permissions.getCreateAssets());
-		perms.set(Permissions.ManageSystemConfig, permissions.getManageSystemConfig());
-		perms.set(Permissions.ManageSystemUsers, permissions.getManageSystemUsers());
-		perms.set(Permissions.ManageEndUsers, permissions.getManageEndUsers());
-		perms.set(Permissions.CreateEvent, permissions.getCreateEvents());
-		perms.set(Permissions.EditEvent, permissions.getEditEvents());
-		perms.set(Permissions.ManageJobs, permissions.getManageJobs());
-		perms.set(Permissions.ManageSafetyNetwork, permissions.getManageSafetyNetwork());
+		perms.set(Permissions.TAG, permissions.getCreateAssets());
+		perms.set(Permissions.MANAGE_SYSTEM_CONFIG, permissions.getManageSystemConfig());
+		perms.set(Permissions.MANAGE_SYSTEM_USERS, permissions.getManageSystemUsers());
+		perms.set(Permissions.MANAGE_END_USERS, permissions.getManageEndUsers());
+		perms.set(Permissions.CREATE_EVENT, permissions.getCreateEvents());
+		perms.set(Permissions.EDIT_EVENT, permissions.getEditEvents());
+		perms.set(Permissions.MANAGE_JOBS, permissions.getManageJobs());
+		perms.set(Permissions.MANAGE_SAFETY_NETWORK, permissions.getManageSafetyNetwork());
 		return perms.getMask();
 	}
 }

@@ -1,6 +1,7 @@
 package com.n4systems.model;
 
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
@@ -12,6 +13,8 @@ import javax.persistence.*;
 @Entity
 @Table(name="observationcount_result")
 @PrimaryKeyJoinColumn(name="id")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "EventCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class ObservationCountResult extends ArchivableEntityWithTenant {
 
     @ManyToOne(cascade= CascadeType.REFRESH, fetch= FetchType.EAGER, optional=false)

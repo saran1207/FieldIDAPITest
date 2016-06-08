@@ -10,6 +10,7 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.fieldid.service.user.UserGroupService;
+import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.service.uuid.AtomicLongService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
@@ -21,9 +22,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.procedure.*;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
-import com.n4systems.model.user.Assignable;
-import com.n4systems.model.user.User;
-import com.n4systems.model.user.UserGroup;
+import com.n4systems.security.Permissions;
 import com.n4systems.services.date.DateService;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.chart.ChartGranularity;
@@ -34,7 +33,6 @@ import com.n4systems.util.persistence.search.SortTerm;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import rfid.ejb.entity.InfoOptionBean;
 
 import java.util.*;
 
@@ -51,6 +49,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     @Autowired private RecurringScheduleService recurringScheduleService;
     @Autowired private SvgGenerationService svgGenerationService;
     @Autowired private AssetService assetService;
+    @Autowired private UserService userService;
 
 
     public Boolean hasPublishedProcedureDefinition(Asset asset) {
@@ -848,30 +847,15 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     }
 
     public boolean isProcedureApprovalRequiredForCurrentUser() {
-        Assignable approvalUserOrGroup = getCurrentTenant().getSettings().getApprovalUserOrGroup();
-        if (approvalUserOrGroup == null) {
-            // There is no approval user/group, no approval required
-            return false;
-        }
-        return !canCurrentUserApprove();
+        return isApprovalRequired() && !canCurrentUserApprove();
     }
 
     public boolean canCurrentUserApprove() {
-        Assignable approvalUserOrGroup = getCurrentTenant().getSettings().getApprovalUserOrGroup();
-
-        if (approvalUserOrGroup instanceof User && getCurrentUser().equals(approvalUserOrGroup)) {
-            // The current user is the approval user, no approval required
-            return true;
-        }
-        if (approvalUserOrGroup instanceof UserGroup && userGroupService.getUsersInGroup((UserGroup) approvalUserOrGroup).contains(getCurrentUser())) {
-            // The current user is in the approval user group, no approval required
-            return true;
-        }
-        return false;
+        return Permissions.hasOneOf(getCurrentUser().getPermissions(), Permissions.CERTIFY_PROCEDURE);
     }
 
     public boolean isApprovalRequired() {
-        return getCurrentTenant().getSettings().getApprovalUserOrGroup() != null;
+        return !userService.getCertifierUsers().isEmpty();
     }
 
     @Transactional(readOnly=true)
@@ -985,11 +969,13 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         isolationPoint.setTenant(source.getTenant());
         isolationPoint.setSourceText(source.getSourceText());
         isolationPoint.setElectronicIdentifier(source.getElectronicIdentifier());
+
         if(source.getDeviceDefinition() != null) {
-            isolationPoint.setDeviceDefinition(cloneIsolationDeviceDescription(source.getDeviceDefinition(), new IsolationDeviceDescription()));
+            isolationPoint.setDeviceDefinition(source.getDeviceDefinition());
         }
+
         if(source.getLockDefinition() != null) {
-            isolationPoint.setLockDefinition(cloneIsolationDeviceDescription(source.getLockDefinition(), new IsolationDeviceDescription()));
+            isolationPoint.setLockDefinition(source.getLockDefinition());
         }
         if(source.getAnnotation() != null) {
             isolationPoint.setAnnotation(cloneImageAnnotation(source.getAnnotation(), clonedImages));
@@ -1003,7 +989,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         Preconditions.checkArgument(from != null && to != null, "can't use null isolation deviceDescription when cloning.");
         to.setFreeformDescription(from.getFreeformDescription());
         to.setAssetType(from.getAssetType());
-        to.setAttributeValues(new ArrayList<InfoOptionBean>());
+        to.setAttributeValues(new ArrayList<>());
         //TODO: Deal with copying the list later...currently not used.
         //to.setAttributeValues(Lists.newArrayList(from.getAttributeValues()));
         return to;
@@ -1071,6 +1057,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         to.setSourceType(from.getSourceType());
         to.setTenant(from.getTenant());
         to.setSourceText(from.getSourceText());
+
         to.setDeviceDefinition(from.getDeviceDefinition());
         to.setLockDefinition(from.getLockDefinition());
         to.setElectronicIdentifier(from.getElectronicIdentifier());

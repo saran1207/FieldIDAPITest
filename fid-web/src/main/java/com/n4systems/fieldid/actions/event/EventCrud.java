@@ -62,12 +62,11 @@ import com.opensymphony.xwork2.validator.annotations.VisitorFieldValidator;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
 
 import java.io.File;
 import java.util.*;
 
-
+@Deprecated
 public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, ActionWithCriteriaResults {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(EventCrud.class);
@@ -221,7 +220,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CREATE_EVENT})
 	public String doQuickEvent() {
 
 		if (asset == null) {
@@ -242,7 +241,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	}
 	
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent, Permissions.EditEvent})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CREATE_EVENT, Permissions.EDIT_EVENT})
 	public String doSelect() {
 		if (event == null) {
 			addActionError(getText("error.noevent"));
@@ -269,7 +268,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CREATE_EVENT})
 	public String doAdd() {
 		testDependencies();
 
@@ -320,7 +319,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	}
 	
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.EditEvent})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.EDIT_EVENT})
 	public String doEdit() {
 		isEditing = true;
 		try {
@@ -375,12 +374,12 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 		}
 	}
 
-	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CREATE_EVENT})
 	public String doCreate() {
 		return save();
 	}
 	
-	@UserPermissionFilter(userRequiresOneOf={Permissions.EditEvent})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.EDIT_EVENT})
 	public String doUpdate() {
 		return save();
 	}
@@ -572,7 +571,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.EditEvent})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.EDIT_EVENT})
 	public String doDelete() {
 		try {
 			testDependencies();

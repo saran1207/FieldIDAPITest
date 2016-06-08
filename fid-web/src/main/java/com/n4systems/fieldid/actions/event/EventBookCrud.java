@@ -26,7 +26,8 @@ import rfid.web.helper.Constants;
 
 import java.util.List;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
+@Deprecated
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_CONFIG})
 public class EventBookCrud extends AbstractCrud implements HasDuplicateValueValidator {
 
 	private static final long serialVersionUID = 1L;

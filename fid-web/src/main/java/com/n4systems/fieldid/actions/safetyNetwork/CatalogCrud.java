@@ -16,7 +16,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import java.util.*;
 import java.util.Map.Entry;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SAFETY_NETWORK})
 public class CatalogCrud extends SafetyNetwork {
 
 	private static final long serialVersionUID = 1L;

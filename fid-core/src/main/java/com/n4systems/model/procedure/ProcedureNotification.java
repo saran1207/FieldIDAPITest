@@ -1,11 +1,9 @@
 package com.n4systems.model.procedure;
 
 import com.n4systems.model.BaseEntity;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * This entity is used to describe Procedures that have an Assignee, but have not yet had notifications sent out to
@@ -15,6 +13,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "procedure_notifications")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "ProcedureCache", usage = CacheConcurrencyStrategy.READ_WRITE)
 public class ProcedureNotification extends BaseEntity {
 
     @OneToOne

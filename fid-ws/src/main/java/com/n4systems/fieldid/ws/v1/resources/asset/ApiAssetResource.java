@@ -42,6 +42,7 @@ import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @Path("asset")
@@ -74,7 +75,6 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			@QueryParam("owner") Long ownerId,
 			@DefaultValue("false") @QueryParam("downloadEvents") boolean downloadEvents,
             @DefaultValue("true") @QueryParam("downloadImageAttachments") boolean downloadImageAttachments) {
-		
 		QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
 		builder.addOrder("created");
 		
@@ -94,9 +94,8 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 
 		List<Asset> assets = persistenceService.findAll(builder, page, pageSize);
 		Long total = persistenceService.count(builder);
-		
 		List<ApiAsset> apiAssets = convertAllAssetsToApiModels(assets, downloadEvents, downloadImageAttachments, SyncDuration.ALL);
-		ListResponse<ApiAsset> response = new ListResponse<ApiAsset>(apiAssets, page, pageSize, total);
+		ListResponse<ApiAsset> response = new ListResponse<>(apiAssets, page, pageSize, total);
 		return response;
 	}
 	
@@ -109,14 +108,15 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			@DefaultValue("false") @QueryParam("downloadEvents") boolean downloadEvents,
             @DefaultValue("true") @QueryParam("downloadImageAttachments") boolean downloadImageAttachments,
 			@DefaultValue("YEAR") @QueryParam("syncDuration") SyncDuration syncDuration) {
+
 		QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
 		builder.addWhere(WhereClauseFactory.create(Comparator.IN, "mobileGUID", assetIds));
 		
 		List<Asset> assets = persistenceService.findAll(builder);
 
 		List<ApiAsset> apiAssets = convertAllAssetsToApiModels(assets, downloadEvents, downloadImageAttachments, syncDuration);
-		ListResponse<ApiAsset> response = new ListResponse<ApiAsset>(apiAssets, 0, assets.size(), assets.size());
-		return response;
+		ListResponse<ApiAsset> response = new ListResponse<>(apiAssets, 0, assets.size(), assets.size());
+        return response;
 	}
 	
 	@GET
@@ -206,21 +206,16 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	}
 
 	private List<AssetAttachment> convertAllAttachmentsForAsset(List<ApiAssetAttachment> apiAttachments, Asset asset) {
-		List<AssetAttachment> attachments = new ArrayList<AssetAttachment>();
-		for (ApiAssetAttachment apiAttachment: apiAttachments) {
-			if (apiAttachment.getData() != null) {
-				attachments.add(apiAttachmentResource.convertApiModelToEntity(apiAttachment, asset));
-			}
-		}
-		return attachments;
+        return apiAttachments.stream()
+                             .filter(apiAttachment -> apiAttachment.getData() != null)
+                             .map(apiAttachment -> apiAttachmentResource.convertApiModelToEntity(apiAttachment, asset))
+                             .collect(Collectors.toList());
 	}
 	
 	protected List<ApiAsset> convertAllAssetsToApiModels(List<Asset> assets, boolean downloadEvents, boolean downloadImageAttachments, SyncDuration syncDuration) {
-		List<ApiAsset> apiAssets = new ArrayList<>();
-		for (Asset asset: assets) {
-			apiAssets.add(convertToApiAsset(asset, downloadEvents, downloadImageAttachments, syncDuration));
-		}
-		return apiAssets;
+        return assets.stream()
+                     .map(asset -> convertToApiAsset(asset, downloadEvents, downloadImageAttachments, syncDuration))
+                     .collect(Collectors.toList());
 	}
 	
 	protected ApiAsset convertToApiAsset(Asset asset, boolean downloadEvents, boolean downloadImageAttachments, SyncDuration syncDuration) {
@@ -232,12 +227,11 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			apiAsset.setEvents(apiSavedEventResource.findLastEventOfEachType(asset.getId()));
 		}
         if(downloadImageAttachments){
-            for (ApiAssetAttachment apiAttachment: apiAsset.getAttachments()) {
-                if (apiAttachment.isImage()) {
-                    apiAttachmentResource.loadAttachmentData(apiAttachment, asset);
-                    //Assert.isNotNull(apiAttachment.getData());
-                }
-            }
+            //Assert.isNotNull(apiAttachment.getData());
+            apiAsset.getAttachments()
+                    .stream()
+                    .filter(ApiAssetAttachment::isImage)
+                    .forEach(apiAttachment -> apiAttachmentResource.loadAttachmentData(apiAttachment, asset));
         }
 		return apiAsset;
 	}

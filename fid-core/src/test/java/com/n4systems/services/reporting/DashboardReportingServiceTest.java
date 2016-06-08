@@ -231,10 +231,10 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
 		allEvents.addAll(naEvents);
 		allEvents.addAll(passedEvents);
 		
-		expect(eventService.getCompletedEvents(dateRange.getFrom().toDate(), dateRange.getTo().toDate(), owner, (EventResult)null, granularity)).andReturn(allEvents);
-		expect(eventService.getCompletedEvents(dateRange.getFrom().toDate(), dateRange.getTo().toDate(), owner, EventResult.FAIL, granularity)).andReturn(failedEvents);
-		expect(eventService.getCompletedEvents(dateRange.getFrom().toDate(), dateRange.getTo().toDate(), owner, EventResult.NA, granularity)).andReturn(naEvents);
-		expect(eventService.getCompletedEvents(dateRange.getFrom().toDate(), dateRange.getTo().toDate(), owner, EventResult.PASS, granularity)).andReturn(passedEvents);
+		expect(eventService.getCompletedEvents(dateRange.getFrom().toDate(), dateRange.getTo().toDate(), owner, null, false, granularity)).andReturn(allEvents);
+		expect(eventService.getCompletedEvents(dateRange.getFrom().toDate(), dateRange.getTo().toDate(), owner, EventResult.FAIL, false, granularity)).andReturn(failedEvents);
+		expect(eventService.getCompletedEvents(dateRange.getFrom().toDate(), dateRange.getTo().toDate(), owner, EventResult.NA, false, granularity)).andReturn(naEvents);
+		expect(eventService.getCompletedEvents(dateRange.getFrom().toDate(), dateRange.getTo().toDate(), owner, EventResult.PASS, false, granularity)).andReturn(passedEvents);
 		replay(eventService);
 		replay(assetService);
 		

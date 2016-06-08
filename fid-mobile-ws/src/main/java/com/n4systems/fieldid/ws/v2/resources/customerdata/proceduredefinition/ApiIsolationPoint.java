@@ -13,8 +13,8 @@ public class ApiIsolationPoint extends ApiReadOnlyModel {
     private String method;
     private String check;
     private ApiImageAnnotation annotation;
-	private int fwdIdx;
-	private int revIdx;
+    private int fwdIdx;
+    private int revIdx;
 
     public String getIdentifier() {
         return identifier;
@@ -96,19 +96,19 @@ public class ApiIsolationPoint extends ApiReadOnlyModel {
         this.annotation = annotation;
     }
 
-	public int getFwdIdx() {
-		return fwdIdx;
-	}
+    public int getFwdIdx() {
+        return fwdIdx;
+    }
 
-	public void setFwdIdx(int fwdIdx) {
-		this.fwdIdx = fwdIdx;
-	}
+    public void setFwdIdx(int fwdIdx) {
+        this.fwdIdx = fwdIdx;
+    }
 
-	public int getRevIdx() {
-		return revIdx;
-	}
+    public int getRevIdx() {
+        return revIdx;
+    }
 
-	public void setRevIdx(int revIdx) {
-		this.revIdx = revIdx;
-	}
+    public void setRevIdx(int revIdx) {
+        this.revIdx = revIdx;
+    }
 }

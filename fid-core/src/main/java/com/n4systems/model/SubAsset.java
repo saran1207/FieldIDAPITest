@@ -2,11 +2,16 @@ package com.n4systems.model;
 
 import com.n4systems.model.api.UnsecuredEntity;
 import com.n4systems.model.parents.AbstractEntity;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name="subassets")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "AssetCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class SubAsset extends AbstractEntity implements UnsecuredEntity {
 
 	private static final long serialVersionUID = 1L;

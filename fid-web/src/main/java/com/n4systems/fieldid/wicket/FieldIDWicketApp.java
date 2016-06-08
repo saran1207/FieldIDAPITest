@@ -8,7 +8,6 @@ import com.n4systems.fieldid.wicket.pages.SecretTestPage;
 import com.n4systems.fieldid.wicket.pages.SelectLanguagePage;
 import com.n4systems.fieldid.wicket.pages.admin.adminusers.AdminUserPage;
 import com.n4systems.fieldid.wicket.pages.admin.config.ConfigPage;
-import com.n4systems.fieldid.wicket.pages.admin.connections.ConnectionViewPage;
 import com.n4systems.fieldid.wicket.pages.admin.languages.ConfigureLanguagesPage;
 import com.n4systems.fieldid.wicket.pages.admin.printouts.LotoPrintoutListPage;
 import com.n4systems.fieldid.wicket.pages.admin.security.ChangeAdminPasswordPage;
@@ -22,6 +21,8 @@ import com.n4systems.fieldid.wicket.pages.event.*;
 import com.n4systems.fieldid.wicket.pages.event.criteriaimage.CriteriaImageViewListPage;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
 import com.n4systems.fieldid.wicket.pages.identify.LimitedEditAsset;
+import com.n4systems.fieldid.wicket.pages.jobs.AddJobsPage;
+import com.n4systems.fieldid.wicket.pages.jobs.EditJobsPage;
 import com.n4systems.fieldid.wicket.pages.loto.*;
 import com.n4systems.fieldid.wicket.pages.loto.copy.CopyProceduresList;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
@@ -55,6 +56,7 @@ import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListAllPa
 import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListArchivedPage;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.*;
 import com.n4systems.fieldid.wicket.pages.setup.assettypegroup.*;
+import com.n4systems.fieldid.wicket.pages.setup.buttongroups.ButtonGroupPage;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.comment.AddCommentTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.comment.CommentTemplateListPage;
@@ -83,8 +85,10 @@ import com.n4systems.fieldid.wicket.pages.setup.userregistration.UserRequestList
 import com.n4systems.fieldid.wicket.pages.setup.userregistration.ViewUserRequestPage;
 import com.n4systems.fieldid.wicket.pages.template.*;
 import com.n4systems.fieldid.wicket.pages.trends.CriteriaTrendsPage;
-import com.n4systems.fieldid.wicket.pages.useraccount.MobileOfflineProfilePage;
 import com.n4systems.fieldid.wicket.pages.useraccount.UserAccountSearchPage;
+import com.n4systems.fieldid.wicket.pages.useraccount.mobileofflineprofile.MobileOfflineProfilePage;
+import com.n4systems.fieldid.wicket.pages.useraccount.notificationsettings.AddEditNotificationSettingPage;
+import com.n4systems.fieldid.wicket.pages.useraccount.notificationsettings.NotificationSettingsListPage;
 import com.n4systems.fieldid.wicket.resources.CacheInSessionLocalizer;
 import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
 import com.n4systems.fieldid.wicket.resources.TenantOverridesResourceLoader;
@@ -197,7 +201,10 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/eventStatusForm", EventStatusFormPage.class);
 
         mountPage("setup/actionEmailCustomization", ActionEmailSetupPage.class);
+        mountPage("setup/notificationsList", NotificationSettingsListPage.class);
+        mountPage("setup/addEditNotifications", AddEditNotificationSettingPage.class);
 
+        mountPage("setup/buttonGroups", ButtonGroupPage.class);
 
         mountPage("places", OrgViewPage.class);
         mountPage("placeSummary", PlaceSummaryPage.class);
@@ -280,7 +287,6 @@ public class FieldIDWicketApp extends WebApplication {
 
         mountPage("admin/addTenant", AddTenantPage.class);
 		mountPage("admin/users", AdminUserPage.class);
-		mountPage("admin/connections", ConnectionViewPage.class);
         mountPage("admin/configureLanguages", ConfigureLanguagesPage.class);
 		mountPage("admin/tenantUsers", TenantUserListPage.class);
         mountPage("admin/changeAdminPassword", ChangeAdminPasswordPage.class);
@@ -315,6 +321,9 @@ public class FieldIDWicketApp extends WebApplication {
 
         mountPage("userAccountSearch", UserAccountSearchPage.class);
 
+        mountPage("addJob", AddJobsPage.class);
+        mountPage("editJob", EditJobsPage.class);
+
         mountPage("template", TemplatePage.class);
 
         mountPage("pentaho", PentahoTestPage.class);
@@ -330,6 +339,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("template/noColumnsTab", SecondTab.class);
         mountPage("template/allTemplates", AllTemplates.class);
         mountPage("template/formComponents", FormComponents.class);
+        mountPage("template/fonts", FontelloFonts.class);
 
         mountPage("completedProcedureAudits", ProcedureAuditCompletedListPage.class);
 

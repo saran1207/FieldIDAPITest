@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket.pages.loto.definition;
 
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.procedure.IsolationPoint;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -24,12 +23,13 @@ public class IsolationPointListItem extends Panel {
         final IsolationPoint isolationPoint = model.getObject();
 
         add(new Label("source", getSourceTypeDescription(isolationPoint)));
+
+        //Probably want to give this clusterfuck some thought...
+        //Probably want to give this clusterfuck some thought...
         if (isolationPoint.getDeviceDefinition() == null) {
             add(new Label("device"));
-        } else if(isolationPoint.getDeviceDefinition().isFreeform()) {
-            add(new Label("device", getDeviceFreeFormDescription(isolationPoint)));
-        } else {
-            add(new Label("device", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getDeviceDefinition().getAssetType().getName())));
+        } else if(isolationPoint.getDeviceDefinition() != null) {
+            add(new Label("device", isolationPoint.getDeviceDefinition()));
         }
 
         add(new Label("location", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getLocation())));
@@ -47,18 +47,6 @@ public class IsolationPointListItem extends Panel {
             description.append(isolationPoint.getSourceType().getIdentifier());
         }
 
-        return description.toString();
-    }
-
-    private String getDeviceFreeFormDescription(IsolationPoint isolationPoint) {
-        StringBuilder description = new StringBuilder();
-        description.append(isolationPoint.getDeviceDefinition().getFreeformDescription());
-        if(isolationPoint.getLockDefinition().getFreeformDescription() != null) {
-            description.append(" ");
-            description.append(new FIDLabelModel("label.and").getObject());
-            description.append(" ");
-            description.append(isolationPoint.getLockDefinition().getFreeformDescription());
-        }
         return description.toString();
     }
 

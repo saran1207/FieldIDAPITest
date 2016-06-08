@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.identify;
 
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
@@ -28,11 +29,15 @@ public class LimitedEditAsset extends FieldIDTemplatePage {
 
     @SpringBean
     private PersistenceService persistenceService;
+
+    @SpringBean
+    private AssetService assetService;
+
     private Asset asset;
 
     public LimitedEditAsset(PageParameters params) {
         Long id = params.get("id").toLongObject();
-        asset = persistenceService.find(Asset.class, id);
+        asset = assetService.findById(id);
 
         add(new EditAssetCustomerInformationForm("editCustomerInformationForm", Model.of(asset)));
     }

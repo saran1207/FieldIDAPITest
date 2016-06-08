@@ -54,6 +54,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+@Deprecated
 public class AssetCrud extends UploadAttachmentSupport {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(AssetCrud.class);
@@ -331,21 +332,21 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf = { Permissions.Tag })
+	@UserPermissionFilter(userRequiresOneOf = { Permissions.TAG})
 	public String doAddNoHistory() {
 		asset.setIdentified(DateHelper.getToday());
 		return SUCCESS;
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf = { Permissions.Tag })
+	@UserPermissionFilter(userRequiresOneOf = { Permissions.TAG})
 	public String doAdd() {
 		applyDefaults();
 		return SUCCESS;
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf = { Permissions.Tag })
+	@UserPermissionFilter(userRequiresOneOf = { Permissions.TAG})
 	public String doAddWithOrder() {
 
 		if (lineItem == null || lineItem.getId() == null) {
@@ -415,7 +416,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf = { Permissions.Tag })
+	@UserPermissionFilter(userRequiresOneOf = { Permissions.TAG})
 	public String doEdit() {
 		isEditing  = true;
 		makeEmployeesIncludeCurrentAssignedUser();
@@ -431,7 +432,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 		OptionLists.includeInList(getEmployees(), assignedUserListable);
 	}
 
-	@UserPermissionFilter(userRequiresOneOf = { Permissions.Tag })
+	@UserPermissionFilter(userRequiresOneOf = { Permissions.TAG})
 	public String doCreate() {
 		testAsset();
 
@@ -529,7 +530,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 		assetWebModel.fillInAsset(asset);
 	}
 
-	@UserPermissionFilter(userRequiresOneOf = { Permissions.Tag })
+	@UserPermissionFilter(userRequiresOneOf = { Permissions.TAG})
 	public String doUpdate() {
 		testAsset();
 		makeEmployeesIncludeCurrentAssignedUser();
@@ -574,7 +575,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf = { Permissions.Tag })
+	@UserPermissionFilter(userRequiresOneOf = { Permissions.TAG})
 	public String doConnectToShopOrder() {
 		testExistingAsset();
 
@@ -613,7 +614,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf = { Permissions.Tag })
+	@UserPermissionFilter(userRequiresOneOf = { Permissions.TAG})
 	public String doConnectToCustomerOrder() {
 		testExistingAsset();
 
@@ -644,7 +645,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf = { Permissions.Tag })
+	@UserPermissionFilter(userRequiresOneOf = { Permissions.TAG})
 	public String doConfirmDelete() {
 		testExistingAsset();
 		try {
@@ -656,7 +657,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf = { Permissions.Tag })
+	@UserPermissionFilter(userRequiresOneOf = { Permissions.TAG})
 	public String doDelete() {
 		testExistingAsset();
 		try {
@@ -674,7 +675,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf = { Permissions.Tag })
+	@UserPermissionFilter(userRequiresOneOf = { Permissions.TAG})
 	public String doAssetTypeChange() {
 		webEventSchedules.clear();
 		setAutoEventSchedules(getAutoEventSchedules());		

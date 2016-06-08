@@ -8,6 +8,7 @@ import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.persistence.localization.Localized;
 import com.n4systems.util.DateHelper;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -15,6 +16,8 @@ import java.util.Date;
 @Entity
 @Table(name = "asset_type_schedules")
 @Localized(ignore =true)
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class AssetTypeSchedule extends EntityWithOwner implements Saveable, SecurityEnhanced<AssetTypeSchedule> {
 	private static final long serialVersionUID = 1L;
 	

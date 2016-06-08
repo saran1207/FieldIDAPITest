@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSafetyNetwork})
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SAFETY_NETWORK})
 public class ConnectionInvitationAction extends SafetyNetwork {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(ConnectionInvitationAction.class);

@@ -125,7 +125,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             asset.setIdentified(dateService.todayAsDate());
         } else if (!params.get("id").isEmpty()) {
             Long assetId = params.get("id").toLongObject();
-            asset = persistenceService.find(Asset.class, assetId);
+            asset = assetService.findById(assetId);
             asset.setSubAssets(assetService.findSubAssets(asset));
         } else {
             asset = assetService.createAssetWithHistory();
@@ -169,6 +169,10 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
                         error(new FIDLabelModel("error.latitude_value").getObject());
                     }
                 }
+
+                if(ownerPicker.getTextString() == null || ownerPicker.getTextString().equals("")) {
+                    error(new FIDLabelModel("error.owner.required").getObject());
+                }
             }
 
         });
@@ -186,7 +190,9 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
 
         GpsTextField<BigDecimal> latitude;
         GpsTextField<BigDecimal> longitude;
-        private OrgLocationPicker locationPicker;
+
+        OrgLocationPicker locationPicker;
+        OrgLocationPicker ownerPicker;
 
         public IdentifyOrEditAssetForm(String id, final IModel<Asset> assetModel) {
             super(id, assetModel);
@@ -274,7 +280,8 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
 
             final PropertyModel<BaseOrg> ownerModel = new PropertyModel(assetModel,"owner");
             //Owner Picker
-            add(new OrgLocationPicker("owner", ownerModel) {
+
+            ownerPicker = new OrgLocationPicker("owner", ownerModel) {
                 @Override
                 protected void onChanged(AjaxRequestTarget target) {
                     if(getTextString() != null && getTextString().equals("")) {
@@ -285,7 +292,8 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
                     autoSchedule(assetModel);
                     target.add(eventSchedulesPanel);
                 }
-            }.withAutoUpdate());
+            }.withAutoUpdate();
+            add(ownerPicker);
 
             //Location Picker
             final PropertyModel<Location> locationModel = new PropertyModel<Location>(assetModel, "advancedLocation");
@@ -368,7 +376,8 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
 
             actionsContainer.add(new Button("saveButton") {
                 @Override
-                public void onSubmit() {performSingleOrMultiSave(assetModel);
+                public void onSubmit() {
+                    performSingleOrMultiSave(assetModel);
                     if (assetModel.getObject().isNew()) {
                         setResponsePage(IdentifyOrEditAssetPage.class);
                     } else {

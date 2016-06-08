@@ -2,14 +2,14 @@ package com.n4systems.model;
 
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.EntityWithTenant;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name="associated_event_types")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class AssociatedEventType extends EntityWithTenant implements Saveable {
 	private static final long serialVersionUID = 1L;
 

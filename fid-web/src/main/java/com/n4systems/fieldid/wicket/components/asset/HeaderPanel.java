@@ -82,8 +82,8 @@ public class HeaderPanel extends Panel {
         BookmarkablePageLink summaryLink;
         BookmarkablePageLink eventHistoryLink;
         NonWicketIframeLink traceabilityLink;
-        boolean hasProcedures = FieldIDSession.get().getSecurityGuard().isLotoEnabled() &&
-                asset.getType().hasProcedures();
+        boolean hasProcedures = FieldIDSession.get().getSecurityGuard().isLotoEnabled()
+                                    && asset.getType().hasProcedures();
 
         add(summaryLink = new BookmarkablePageLink<Void>("summaryLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(asset.getId())));
 
@@ -112,13 +112,14 @@ public class HeaderPanel extends Panel {
             eventHistoryLink.add(new AttributeAppender("class", "mattButtonRight").setSeparator(" "));
         }
 
-        if (FieldIDSession.get().getSessionUser().hasAccess("editevent") && !FieldIDSession.get().getSessionUser().isReadOnlyUser())
+        //Its strange that we are using the EditEvent permission to display this link
+        if (FieldIDSession.get().getUserSecurityGuard().isAllowedEditEvent() && !FieldIDSession.get().getSessionUser().isReadOnlyUser())
             add(new BookmarkablePageLink<Void>("editAssetLink", IdentifyOrEditAssetPage.class, PageParametersBuilder.id(asset.getId())));
         else
             add(new BookmarkablePageLink<Void>("editAssetLink", LimitedEditAsset.class, PageParametersBuilder.id(asset.getId())) {
                 @Override
                 public boolean isVisible() {
-                    return FieldIDSession.get().getSessionUser().hasAccess("editassetdetails");
+                    return FieldIDSession.get().getUserSecurityGuard().isAllowedEditAssetDetails();
                 }
             });
         // Necessary for localization stuff to not break on this page.
@@ -130,7 +131,8 @@ public class HeaderPanel extends Panel {
             }
         }).call();
         boolean isLotoEnabled = FieldIDSession.get().getSecurityGuard().isLotoEnabled();
-        boolean hasCreateEvent = FieldIDSession.get().getSessionUser().hasAccess("createevent");
+        boolean hasCreateEvent = FieldIDSession.get().getUserSecurityGuard().isAllowedCreateEvent();
+        boolean hasMaintainLotoSchedule = FieldIDSession.get().getUserSecurityGuard().isAllowedMaintainLotoSchedule();
 
         BookmarkablePageLink startEventLink;
         add(startEventLink = new BookmarkablePageLink<Void>("startEventLink", QuickEventPage.class, PageParametersBuilder.id(asset.getId())));
@@ -164,7 +166,7 @@ public class HeaderPanel extends Panel {
         boolean showScheduleEventLink;
         boolean showScheduleProcedureLink;
 
-        if (isLotoEnabled) {
+        if (isLotoEnabled &&  hasMaintainLotoSchedule) {
             showScheduleEventLink = hasAssociatedEventTypes && !asset.getType().hasProcedures();
             showScheduleProcedureLink = !hasAssociatedEventTypes && asset.getType().hasProcedures();
         } else {
@@ -205,7 +207,7 @@ public class HeaderPanel extends Panel {
                                 isLotoEnabled && //We may no longer need this, since we're determining if LOTO is enabled differently.
                                 hasAssociatedEventTypes &&
                                 asset.getType().hasProcedures() &&
-                                FieldIDSession.get().getSecurityGuard().isLotoEnabled());
+                                hasMaintainLotoSchedule);
 
         add(scheduleMenu);
 

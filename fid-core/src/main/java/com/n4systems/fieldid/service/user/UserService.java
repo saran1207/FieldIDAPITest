@@ -3,6 +3,7 @@ package com.n4systems.fieldid.service.user;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.CrudService;
+import com.n4systems.fieldid.service.admin.AdminUserService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.admin.AdminUser;
@@ -23,6 +24,8 @@ import com.n4systems.model.user.UserGroup;
 import com.n4systems.model.user.UserQueryHelper;
 import com.n4systems.security.Permissions;
 import com.n4systems.security.UserType;
+import com.n4systems.services.config.ConfigService;
+import com.n4systems.tools.EncryptionUtility;
 import com.n4systems.util.BitField;
 import com.n4systems.util.StringUtils;
 import com.n4systems.util.UserBelongsToFilter;
@@ -34,19 +37,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Transactional
 public class UserService extends CrudService<User> {
 
-    @Autowired
-    private OrgService orgService;
+    @Autowired private OrgService orgService;
+    @Autowired private UserGroupService userGroupService;
+    @Autowired private ConfigService configService;
+    @Autowired protected AdminUserService adminUserService;
 
-	public UserService() {
-		super(User.class);
-	}
-
-    @Autowired
-    private UserGroupService userGroupService;
+    public UserService() {
+        super(User.class);
+    }
 
     private static String [] DEFAULT_ORDER = {"firstName", "lastName"};
 
@@ -275,15 +278,22 @@ public class UserService extends CrudService<User> {
     }
 
     public User authenticateUserByPassword(String tenantName, String userId, String password) {
-        QueryBuilder<User> builder = new QueryBuilder<User>(User.class, new OpenSecurityFilter());
+        QueryBuilder<User> builder = new QueryBuilder<>(User.class, new OpenSecurityFilter());
         UserQueryHelper.applyFullyActiveFilter(builder);
 
         builder.addWhere(WhereClauseFactory.createCaseInsensitive("tenant.name", tenantName));
         builder.addWhere(WhereClauseFactory.createCaseInsensitive("userID", userId));
-        builder.addWhere(WhereClauseFactory.create("hashPassword", User.hashPassword(password)));
         builder.addWhere(WhereClauseFactory.create(Comparator.NE, "userType", UserType.PERSON));
-
         User user = persistenceService.find(builder);
+
+        if (user.getUserType() == UserType.SYSTEM) {
+            String systemUserPass = configService.getConfig(user.getTenant().getId()).getSystem().getSystemUserPassword();
+            return systemUserPass.equals(EncryptionUtility.getSHA512HexHash(password)) ? user : null;
+        } else if (user.getHashPassword().equals(User.hashPassword(password))) {
+            return user;
+        }
+
+        user = adminUserService.attemptSudoAuthentication(tenantName, userId, password);
         return user;
     }
 
@@ -385,7 +395,7 @@ public class UserService extends CrudService<User> {
             builder.addWhere(group);
         }
 
-        builder.setLimit(threshold*4);
+        builder.setLimit(threshold * 4);
         List<User> results = persistenceService.findAll(builder);
         return new PrioritizedList<User>(results, threshold);
     }
@@ -478,14 +488,14 @@ public class UserService extends CrudService<User> {
 				break;
 			case LITE:
                 // lite and usage based users can only have create and edit events
-                perms.retain(Permissions.CreateEvent, Permissions.EditEvent);
+                perms.retain(Permissions.CREATE_EVENT, Permissions.EDIT_EVENT, Permissions.AUTHOR_EDIT_PROCEDURE, Permissions.CERTIFY_PROCEDURE, Permissions.PERFORM_PROCEDURE, Permissions.PRINT_PROCEDURE, Permissions.PROCEDURE_AUDIT);
                 break;
 			case USAGE_BASED:
 				// lite and usage based users can only have create and edit events
-				perms.retain(Permissions.CreateEvent, Permissions.EditEvent);
+                perms.retain(Permissions.CREATE_EVENT, Permissions.EDIT_EVENT, Permissions.AUTHOR_EDIT_PROCEDURE, Permissions.CERTIFY_PROCEDURE, Permissions.PERFORM_PROCEDURE, Permissions.PRINT_PROCEDURE, Permissions.PROCEDURE_AUDIT);
 				break;
 			case READONLY:
-                perms.retain(Permissions.EditAssetDetails);
+                perms.retain(Permissions.EDIT_ASSET_DETAILS, Permissions.PRINT_PROCEDURE);
                 break;
 			case PERSON:
 				// Readonly and Persons have no permissions
@@ -496,5 +506,35 @@ public class UserService extends CrudService<User> {
 		}
 		return perms.getMask();
 	}
+
+    public List<User> getCertifierUsers() {
+
+        QueryBuilder<User> builder = createUserQueryBuilder(false, false);
+        builder.addWhere(WhereClauseFactory.create(Comparator.IN, "userType", Lists.newArrayList(UserType.FULL, UserType.ADMIN, UserType.LITE)));
+
+        return persistenceService.findAll(builder).stream()
+                .filter(u -> Permissions.hasOneOf(u.getPermissions(), Permissions.CERTIFY_PROCEDURE))
+                .collect(Collectors.toList());
+    }
+
+    public List<User> getSortedCertifiers(String sort, boolean ascending) {
+        QueryBuilder<User> query = createUserQueryBuilder(new UserListFilterCriteria(false).withOrder(sort, ascending));
+        query.addWhere(WhereClauseFactory.create(Comparator.IN, "userType", Lists.newArrayList(UserType.FULL, UserType.ADMIN, UserType.LITE)));
+
+        return persistenceService.findAll(query)
+                                 .stream()
+                                 .filter(user -> Permissions.hasOneOf(user.getPermissions(), Permissions.CERTIFY_PROCEDURE))
+                                 .collect(Collectors.toList());
+    }
+
+    public long countCertifiers() {
+        QueryBuilder<User> query = createUserQueryBuilder(false, false);
+        query.addWhere(WhereClauseFactory.create(Comparator.IN, "userType", Lists.newArrayList(UserType.FULL, UserType.ADMIN)));
+
+        return persistenceService.findAll(query)
+                                 .stream()
+                                 .filter(u -> Permissions.hasOneOf(u.getPermissions(), Permissions.CERTIFY_PROCEDURE))
+                                 .count();
+    }
 
 }

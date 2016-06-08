@@ -23,11 +23,13 @@
             <param name="ConversionPattern" value="%D: %c: %m%n" />
         </layout>
     </appender>
-    <appender name="CACHE_LOG" class="org.apache.log4j.FileAppender">
+	<appender name="CACHE_LOG" class="org.apache.log4j.RollingFileAppender">
 		<param name="File" value="/var/fieldid/logs/fieldid-cache.log" />
 		<param name="Append" value="true" />
-		<layout class="com.n4systems.fieldid.log.JSONEventLayoutV1">
-			<param name="ConversionPattern" value="%D: %c: %m%n" />
+		<param name="MaxFileSize" value="500MB" />
+		<param name="MaxBackupIndex" value="1" />
+		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
+			<param name="ConversionPattern" value="%D: %m%n" />
 		</layout>
 	</appender>
 	<appender name="FIELDID_LOG" class="org.apache.log4j.FileAppender">
@@ -131,6 +133,10 @@
 	<category name="org.hibernate.jdbc.AbstractBatcher">
 		<priority value="ERROR" />
 	</category>
+	<category name="org.hibernate.stat" additivity="false">
+		<priority value="WARN" />
+		<appender-ref ref="CACHE_LOG" />
+	</category>
 	<category name="net.sf.jasperreports">
 		<priority value="INFO" />
 	</category>
@@ -196,12 +202,12 @@
     </category>
 
     <category name="com.googlecode.ehcache">
-        <priority value="DEBUG" />
+        <priority value="INFO" />
         <appender-ref ref="CACHE_LOG" />
     </category>
 
     <category name="net.sf.ehcache">
-        <priority value="DEBUG" />
+        <priority value="INFO" />
         <appender-ref ref="CACHE_LOG" />
     </category>
 

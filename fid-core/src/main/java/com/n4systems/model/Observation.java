@@ -1,6 +1,10 @@
 package com.n4systems.model;
 
 import com.n4systems.model.parents.EntityWithTenant;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+import java.util.UUID;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -10,6 +14,8 @@ import java.util.UUID;
 @Table(name = "observations")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
+@Cacheable
+@org.hibernate.annotations.Cache(region = "EventCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 abstract public class Observation extends EntityWithTenant {
 
 	public enum Type { 
