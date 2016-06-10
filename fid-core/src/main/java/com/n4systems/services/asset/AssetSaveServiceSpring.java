@@ -156,19 +156,20 @@ public class AssetSaveServiceSpring extends FieldIdPersistenceService {
         if (!updateImage) {
             return;
         }
-		if (imageData != null) {
+		if (imageData != null && imageData.length > 0) {
 			logger.info("Saved Asset Image to Amazon S3 for " + asset.getIdentifier());
 			asset.setImageName(imageFileName);
 			AssetImageFileSaver assetImageFileSaver =  new AssetImageFileSaver(asset, imageFileName);
 			assetImageFileSaver.setData(imageData);
 			assetImageFileSaver.save();
-		} else if(asset.getImageName() != null) { // imageData is null but asset has imageName. So we need to remove image.
+		} else if(asset.getImageName() != null && imageData == null) { // imageData is null but asset has imageName. So we need to remove image.
 			logger.info("Removed Asset Image from Amazon S3 for " + asset.getIdentifier());
 			asset.setImageName(null);
 			AssetImageFileSaver assetImageFileSaver =  new AssetImageFileSaver(asset, imageFileName);
 			assetImageFileSaver.remove();
-		}
-
+		} else { //Some how we have an image with no data and a name, so don't do anything! (This scenario is caused by the mobile sync upgrade)
+            return;
+        }
         assetService.update(asset);
 	}
 
