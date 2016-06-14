@@ -43,14 +43,18 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
         this.searchClass = searchClass;
     }
 
-	public List<Long> idSearch(T criteria) {
+    public List<Long> idSearch(T criteria) {
+        return idSearch(criteria, "id");
+    }
+
+	public List<Long> idSearch(T criteria, String idField) {
 		// construct a search QueryBuilder with Long as the select class since we will force simple select to be "id" later
 		QueryBuilder<?> idBuilder = createBaseSearchQueryBuilder(criteria);
 
 		addSortTermsToBuilder(idBuilder, criteria);
 
 		// note that this will fail for entities not implementing BaseEntity (unless you get lucky)
-		return (List<Long>) persistenceService.findAll(idBuilder.setSimpleSelect("id"));
+		return (List<Long>) persistenceService.findAll(idBuilder.setSimpleSelect(idField));
 	}
 
 	public Integer countPages(T criteriaModel, Long pageSize) {
