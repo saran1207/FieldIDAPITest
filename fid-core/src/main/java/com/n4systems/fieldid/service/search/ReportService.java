@@ -332,6 +332,6 @@ public class ReportService extends SearchService<EventReportCriteria, ThingEvent
         if(criteriaModel.isShowMostRecentEventsOnly()) {
             return idSearch(criteriaModel, "event.id");
         } else
-            return idSearch(criteriaModel);
+            return super.idSearch(criteriaModel);
     }
 }
