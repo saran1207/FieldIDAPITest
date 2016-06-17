@@ -326,4 +326,12 @@ public class ReportService extends SearchService<EventReportCriteria, ThingEvent
         }
         return super.convertResults(criteriaModel, results);
     }
+
+    @Override
+    public List<Long> idSearch(EventReportCriteria criteriaModel) {
+        if(criteriaModel.isShowMostRecentEventsOnly()) {
+            return idSearch(criteriaModel, "event.id");
+        } else
+            return super.idSearch(criteriaModel);
+    }
 }

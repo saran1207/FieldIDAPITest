@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.ws.v1.resources.event.criteria;
 
-public class ApiCriteriaImage {
+import com.n4systems.fieldid.ws.v1.resources.model.ApiReadWriteModel;
+
+public class ApiCriteriaImage extends ApiReadWriteModel {
 	private String criteriaResultSid;
 	private String fileName;
 	private String comments;
