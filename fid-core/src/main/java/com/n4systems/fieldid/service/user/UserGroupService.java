@@ -28,6 +28,7 @@ public class UserGroupService extends CrudService<UserGroup> {
         Collection<User> friends = new HashSet<User>();
         for (UserGroup userGroup : user.getGroups()) {
             friends.addAll(getUsersInGroup(userGroup, user));
+            friends.addAll(getArchivedUsersInGroup(userGroup, user));
         }
         return friends;
     }

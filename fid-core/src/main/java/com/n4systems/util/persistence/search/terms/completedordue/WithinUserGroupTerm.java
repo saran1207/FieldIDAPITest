@@ -37,7 +37,7 @@ public class WithinUserGroupTerm extends CompleteOrIncompleteTerm {
     protected void populateIncompleteTerm(WhereParameterGroup incompleteGroup) {
         WhereParameterGroup assignedToMyGroupOrToAUserInMyGroup = new WhereParameterGroup("assignedToMyGroupOrToAUserInMyGroup");
         assignedToMyGroupOrToAUserInMyGroup.setChainOperator(WhereClause.ChainOp.AND);
-        Collection<User> visibleUsers = ThreadLocalInteractionContext.getInstance().getVisibleUsers();
+        Collection<User> visibleUsers = ThreadLocalInteractionContext.getInstance().getVisibleUsersWithArchived();
         assignedToMyGroupOrToAUserInMyGroup.addClause(new WhereParameter<Set>(WhereParameter.Comparator.IN, "assignedGroupFilter", prefix + ASSIGNED_GROUP_JOIN_ALIAS, user.getGroups(), null, true, WhereClause.ChainOp.OR));
         assignedToMyGroupOrToAUserInMyGroup.addClause(new WhereParameter<Collection>(WhereParameter.Comparator.IN, "assigneeFilter", prefix + "assignee", visibleUsers, null, false, WhereClause.ChainOp.OR));
         incompleteGroup.addClause(assignedToMyGroupOrToAUserInMyGroup);
@@ -54,7 +54,7 @@ public class WithinUserGroupTerm extends CompleteOrIncompleteTerm {
         doneByMeOrGroupVisibleByMe.setChainOperator(WhereClause.ChainOp.AND);
         doneByMeOrGroupVisibleByMe.addClause(WhereClauseFactory.create(prefix + "performedBy.id", user.getId(), WhereClause.ChainOp.OR));
 
-        Collection<User> visibleUsers = ThreadLocalInteractionContext.getInstance().getVisibleUsers();
+        Collection<User> visibleUsers = ThreadLocalInteractionContext.getInstance().getVisibleUsersWithArchived();
 
         WhereParameterGroup performerIsInMyGroupAndWasntAssignedOutsideMyGroup = new WhereParameterGroup("performerIsInMyGroupAndWasntAssignedOutsideMyGroup");
         performerIsInMyGroupAndWasntAssignedOutsideMyGroup.setChainOperator(WhereClause.ChainOp.OR);
