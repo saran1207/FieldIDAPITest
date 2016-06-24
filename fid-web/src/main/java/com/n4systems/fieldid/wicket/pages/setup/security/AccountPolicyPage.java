@@ -1,6 +1,8 @@
-package com.n4systems.fieldid.wicket.pages.setup;
+package com.n4systems.fieldid.wicket.pages.setup.security;
 
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.pages.setup.SecurityPage;
+import com.n4systems.fieldid.wicket.pages.setup.SetupPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -18,7 +20,7 @@ import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.model.security.AccountPolicy;
 
-public class AccountPolicyPage extends SetupPage {
+public class AccountPolicyPage extends AbstractSecurityPage {
 	private FIDFeedbackPanel feedback;
 	
 	@SpringBean

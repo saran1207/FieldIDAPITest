@@ -78,6 +78,8 @@ import com.n4systems.fieldid.wicket.pages.setup.prioritycode.ConfirmArchivePage;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
 import com.n4systems.fieldid.wicket.pages.setup.score.ScoreGroupsPage;
 import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigurationPage;
+import com.n4systems.fieldid.wicket.pages.setup.security.AccountPolicyPage;
+import com.n4systems.fieldid.wicket.pages.setup.security.PasswordPolicyPage;
 import com.n4systems.fieldid.wicket.pages.setup.translations.*;
 import com.n4systems.fieldid.wicket.pages.setup.user.*;
 import com.n4systems.fieldid.wicket.pages.setup.userregistration.UserRequestListPage;

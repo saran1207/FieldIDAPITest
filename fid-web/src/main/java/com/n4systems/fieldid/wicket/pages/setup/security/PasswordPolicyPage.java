@@ -1,12 +1,15 @@
-package com.n4systems.fieldid.wicket.pages.setup;
+package com.n4systems.fieldid.wicket.pages.setup.security;
 
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.pages.setup.SecurityPage;
+import com.n4systems.fieldid.wicket.pages.setup.SetupPage;
 import com.n4systems.model.security.PasswordPolicy;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
@@ -18,7 +21,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.MinimumValidator;
 import org.apache.wicket.validation.validator.RangeValidator;
 
-public class PasswordPolicyPage extends SetupPage {
+public class PasswordPolicyPage extends AbstractSecurityPage {
 
 	@SpringBean 
 	private TenantSettingsService tenantSettingsService;
@@ -52,15 +55,17 @@ public class PasswordPolicyPage extends SetupPage {
             checkName = new CheckBox("checkName", Model.of(getModel().getObject().isCheckName()));
             add(checkName);
             
-            add(new AjaxButton("saveButton") {
+            add(new AjaxSubmitLink("saveButton") {
 				private static final long serialVersionUID = 1L;
-				@Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				@Override
+                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     target.add(feedbackPanel);
                     ((PasswordPolicy) form.getModelObject()).setCheckName(Boolean.valueOf(checkName.getValue()));
                     tenantSettingsService.updateTenantPasswordPolicySettings((PasswordPolicy) form.getModelObject());
-                	setResponsePage(SecurityPage.class);                    
+                	setResponsePage(SecurityPage.class);
                 }
-				@Override protected void onError(AjaxRequestTarget target, Form<?> form) {
+				@Override
+                protected void onError(AjaxRequestTarget target, Form<?> form) {
 					target.add(feedbackPanel);
 				}
             });
@@ -95,5 +100,6 @@ public class PasswordPolicyPage extends SetupPage {
 	protected Label createTitleLabel(String labelId) {
 		return new Label(labelId, new FIDLabelModel("title.password_policy_page"));
 	}
-    
+
+
 }
