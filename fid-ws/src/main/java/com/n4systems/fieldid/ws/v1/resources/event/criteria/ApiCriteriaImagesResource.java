@@ -31,7 +31,16 @@ public class ApiCriteriaImagesResource extends FieldIdPersistenceService {
 		QueryBuilder<CriteriaResultImage> builder = createTenantSecurityBuilder(CriteriaResultImage.class, true);
 		builder.addWhere(WhereClauseFactory.create("mobileGUID", sid));
 		CriteriaResultImage criteriaResultImage = persistenceService.find(builder);
+
+		//Remove it from S3
 		s3Service.deleteCriteriaResultImage(criteriaResultImage);
+
+		//Remove it's link from the Criteria Result Object
+		CriteriaResult result = criteriaResultImage.getCriteriaResult();
+		result.getCriteriaImages().remove(criteriaResultImage);
+		persistenceService.update(result);
+
+		//Remove it completely
 		persistenceService.remove(criteriaResultImage);
 
 		logger.info("Criteria Image for CriteriaResult: " + criteriaResultImage.getCriteriaResult().getID() + " has been deleted.");
