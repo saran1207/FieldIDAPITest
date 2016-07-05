@@ -24,9 +24,10 @@ public class ApiCriteriaImagesResource extends FieldIdPersistenceService {
 	@Autowired private S3Service s3Service;
 
 	@DELETE
+	@Path("{sid}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
-	public void deleteCriteriaImage(@QueryParam("sid") String sid) {
+	public void deleteCriteriaImage(@PathParam("sid") String sid) {
 		QueryBuilder<CriteriaResultImage> builder = createTenantSecurityBuilder(CriteriaResultImage.class, true);
 		builder.addWhere(WhereClauseFactory.create("mobileGUID", sid));
 		CriteriaResultImage criteriaResultImage = persistenceService.find(builder);
