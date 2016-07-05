@@ -14,9 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.activation.FileTypeMap;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 @Component
@@ -25,11 +23,10 @@ public class ApiCriteriaImagesResource extends FieldIdPersistenceService {
 	private static Logger logger = Logger.getLogger(ApiCriteriaImagesResource.class);
 	@Autowired private S3Service s3Service;
 
-	@PUT
-	@Path("delete")
+	@DELETE
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
-	public void deleteCriteriaImage(String sid) {
+	public void deleteCriteriaImage(@QueryParam("sid") String sid) {
 		QueryBuilder<CriteriaResultImage> builder = createTenantSecurityBuilder(CriteriaResultImage.class, true);
 		builder.addWhere(WhereClauseFactory.create("mobileGUID", sid));
 		CriteriaResultImage criteriaResultImage = persistenceService.find(builder);
@@ -37,7 +34,6 @@ public class ApiCriteriaImagesResource extends FieldIdPersistenceService {
 
 		logger.info("Criteria Image for CriteriaResult: " + criteriaResultImage.getCriteriaResult().getID() + " has been deleted.");
 	}
-
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
