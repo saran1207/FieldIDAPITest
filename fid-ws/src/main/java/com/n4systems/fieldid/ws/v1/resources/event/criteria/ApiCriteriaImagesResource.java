@@ -32,9 +32,11 @@ public class ApiCriteriaImagesResource extends FieldIdPersistenceService {
 		builder.addWhere(WhereClauseFactory.create("mobileGUID", sid));
 		CriteriaResultImage criteriaResultImage = persistenceService.find(builder);
 		s3Service.deleteCriteriaResultImage(criteriaResultImage);
+		persistenceService.remove(criteriaResultImage);
 
 		logger.info("Criteria Image for CriteriaResult: " + criteriaResultImage.getCriteriaResult().getID() + " has been deleted.");
 	}
+
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
