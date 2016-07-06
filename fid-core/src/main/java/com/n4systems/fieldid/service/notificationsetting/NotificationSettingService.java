@@ -14,12 +14,26 @@ public class NotificationSettingService extends CrudService<NotificationSetting>
     }
 
     public List<NotificationSetting> findAllUserNotifications(User user) {
+        return persistenceService.findAll(getNotificationSettingByUserQueryBuilder(user));
+    }
+
+    public Long countAllUserNotifications(User user) {
+        return persistenceService.count(getNotificationSettingByUserQueryBuilder(user));
+    }
+
+    private QueryBuilder<NotificationSetting> getNotificationSettingByUserQueryBuilder(User user) {
         QueryBuilder<NotificationSetting> query = createUserSecurityBuilder(NotificationSetting.class);
         query.addSimpleWhere("user", user);
-        return persistenceService.findAll(query);
+        return query;
     }
 
     public void remove(NotificationSetting notificationSetting) {
         persistenceService.remove(notificationSetting);
+    }
+
+    public void removeAllUserNotifications(User user) {
+        for(NotificationSetting setting: findAllUserNotifications(user)) {
+            remove(setting);
+        }
     }
 }

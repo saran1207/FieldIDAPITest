@@ -51,7 +51,9 @@ public class UserFormIdentifiersPanel extends Panel {
         this.uploadedImage = signatureImage;
 
         OrgLocationPicker ownerPicker = new OrgLocationPicker("ownerPicker", new PropertyModel(user,"owner")) {
-            @Override protected void onChanged(AjaxRequestTarget target) { }
+            @Override protected void onChanged(AjaxRequestTarget target) {
+                onOwnerPicked(target);
+            }
 
             @Override protected void onError(AjaxRequestTarget target, RuntimeException e) { }
         }.withAutoUpdate();
@@ -72,6 +74,8 @@ public class UserFormIdentifiersPanel extends Panel {
         uploadForm.setMultiPart(true);
         uploadForm.setVisible(!user.getObject().isPerson());
     }
+
+    protected void onOwnerPicked(AjaxRequestTarget target) { }
 
     class UploadForm extends Form<FileAttachment> {
         FileUploadField uploadField;

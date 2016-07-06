@@ -23,6 +23,7 @@ import com.n4systems.util.timezone.Country;
 import com.n4systems.util.timezone.CountryList;
 import com.n4systems.util.timezone.Region;
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -180,12 +181,25 @@ public abstract class UserPage extends FieldIDTemplatePage {
         return user;
     }
 
+    protected void addConfirmBehavior(SubmitLink submitLink) {
+    }
+
+    protected void onOwnerPicked(AjaxRequestTarget target) {}
+
+
     class AddUserForm extends Form {
+
+        SubmitLink submitLink;
 
         public AddUserForm(String id) {
             super(id);
 
-            add(identifiersPanel = new UserFormIdentifiersPanel("identifiersPanel", userModel, getSignatureImage()));
+            add(identifiersPanel = new UserFormIdentifiersPanel("identifiersPanel", userModel, getSignatureImage()) {
+                @Override
+                protected void onOwnerPicked(AjaxRequestTarget target) {
+                    UserPage.this.onOwnerPicked(target);
+                }
+            });
 
             add(new UserFormLocalizationPanel("localizationPanel", userModel));
 
@@ -193,7 +207,9 @@ public abstract class UserPage extends FieldIDTemplatePage {
 
             add(permissionsPanel = createPermissionsPanel("permissionsPanel"));
 
-            add(new SubmitLink("save"));
+            add(submitLink = new SubmitLink("save"));
+
+            addConfirmBehavior(submitLink);
 
             add(new BookmarkablePageLink<UsersListPage>("cancel", UsersListPage.class));
         }
@@ -204,6 +220,7 @@ public abstract class UserPage extends FieldIDTemplatePage {
             FieldIDSession.get().info(new FIDLabelModel("message.user_saved").getObject());
         }
     }
+
 }
 
 
