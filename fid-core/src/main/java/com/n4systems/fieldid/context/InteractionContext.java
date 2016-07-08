@@ -18,6 +18,7 @@ public interface InteractionContext {
     public void setCurrentPlatform(String platform);
 
     public Collection<User> getVisibleUsers();
+    public Collection<User> getVisibleUsersWithArchived();
     public void setVisibleUsers(Collection<User> visibleUsers);
 
     public Locale getUserThreadLanguage();

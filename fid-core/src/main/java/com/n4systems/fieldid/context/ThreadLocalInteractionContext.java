@@ -7,6 +7,7 @@ import com.n4systems.model.user.User;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class ThreadLocalInteractionContext implements InteractionContext, Serializable {
 
@@ -70,6 +71,11 @@ public class ThreadLocalInteractionContext implements InteractionContext, Serial
     }
 
     public Collection<User> getVisibleUsers() {
+        return visibleUsersThreadLocal.get().stream().filter(user -> user.isActive()).collect(Collectors.toList());
+    }
+
+    @Override
+    public Collection<User> getVisibleUsersWithArchived() {
         return visibleUsersThreadLocal.get();
     }
 

@@ -1,0 +1,36 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+
+    <form wicket:id=accountPolicyForm>
+
+        <div id="formErrors" wicket:id="feedbackPanel"></div>
+
+        <fieldset class="form-horizontal">
+            <legend><wicket:message key="label.account_policy"/></legend>
+			<div class="control-group">
+			    <label class="label" wicket:for="maxAttempts"><wicket:message key="label.max_attempts"/></label>
+			    <input type="text" wicket:id="maxAttempts"></input>
+			</div>
+
+			<div class="control-group">
+			    <label class="label" wicket:for="lockoutDuration"><wicket:message key="label.lockout_duration"/></label>
+			    <input type="text" wicket:id="lockoutDuration"></input>
+			</div>
+
+            <div class="control-group">
+                <label class="label" wicket:for="lockoutOnMobile"><wicket:message key="label.lockout_on_mobile"/></label>
+                <input type="checkbox" wicket:id="lockoutOnMobile" />
+            </div>
+
+        </fieldset>
+
+        <div class="actions">
+            <input wicket:id="saveButton" type="submit" class="btn-primary" wicket:message="value:label.save" />
+            <wicket:message key="label.or"/>
+            <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>            
+        </div>
+
+    </form>
+
+</wicket:extend>
+</html>

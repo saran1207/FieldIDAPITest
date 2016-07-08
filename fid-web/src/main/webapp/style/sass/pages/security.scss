@@ -1,0 +1,14 @@
+.password-policy {
+  .form-horizontal {
+    label {
+      width: 375px;
+      text-align: left;
+      p {
+        font-weight: normal;
+      }
+    }
+    input[type=text] {
+      width: 150px;
+    }
+  }
+}
