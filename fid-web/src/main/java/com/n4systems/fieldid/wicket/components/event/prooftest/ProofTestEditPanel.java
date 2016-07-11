@@ -19,6 +19,9 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.ValidationError;
+import org.apache.wicket.validation.validator.AbstractValidator;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -87,6 +90,19 @@ public class ProofTestEditPanel extends FormComponentPanel<ThingEventProofTest> 
             uploadedProofTestContainer.setOutputMarkupPlaceholderTag(true);
 
             uploadedProofTestContainer.add(fileUploadField = new FileUploadField("fileUpload"));
+
+            fileUploadField.add(new AbstractValidator<FileUpload>() {
+                @Override
+                protected void onValidate(IValidatable<FileUpload> validatable) {
+                    FileUpload fileUpload = (FileUpload) ((List) validatable.getValue()).get(0);
+                    // tst is the old format for Wirop and we need to accept them even though the clients should be using the text files
+                    if (!fileUpload.getContentType().contains("text") && !fileUpload.getClientFileName().split("\\.")[1].equals("tst")) {
+                        ValidationError error = new ValidationError();
+                        error.addMessageKey("error.proof_test_file_type");
+                        validatable.error(error);
+                    }
+                }
+            });
 
             final List<ProofTestType> proofTestTypes = new ArrayList<ProofTestType>(eventType.getSupportedProofTests());
 
