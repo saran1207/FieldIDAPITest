@@ -7,6 +7,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.model.*;
 import com.n4systems.tools.FileDataContainer;
+import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -28,6 +29,8 @@ import java.util.Iterator;
 import java.util.List;
 
 public class ProofTestEditPanel extends FormComponentPanel<ThingEventProofTest> {
+
+    private static Logger logger = Logger.getLogger(ProofTestDetailsPanel.class);
 
     private RemoveExistingProofTestPanel removeExistingPanel;
     private ProofTestDetailsPanel proofTestDetailsPanel;
@@ -97,6 +100,7 @@ public class ProofTestEditPanel extends FormComponentPanel<ThingEventProofTest> 
                     FileUpload fileUpload = (FileUpload) ((List) validatable.getValue()).get(0);
                     // tst is the old format for Wirop and we need to accept them even though the clients should be using the text files
                     if (!fileUpload.getContentType().contains("text") && !fileUpload.getClientFileName().split("\\.")[1].equals("tst")) {
+                        logger.info("ContentType : " + fileUpload.getContentType() + " , File Extention : " + fileUpload.getClientFileName().split("\\.")[1]);
                         ValidationError error = new ValidationError();
                         error.addMessageKey("error.proof_test_file_type");
                         validatable.error(error);
