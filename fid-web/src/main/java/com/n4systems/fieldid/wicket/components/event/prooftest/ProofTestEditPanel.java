@@ -99,7 +99,9 @@ public class ProofTestEditPanel extends FormComponentPanel<ThingEventProofTest> 
                 protected void onValidate(IValidatable<FileUpload> validatable) {
                     FileUpload fileUpload = (FileUpload) ((List) validatable.getValue()).get(0);
                     // tst is the old format for Wirop and we need to accept them even though the clients should be using the text files
-                    if (!fileUpload.getContentType().contains("text") && !fileUpload.getClientFileName().split("\\.")[1].equals("tst")) {
+                    if (!fileUpload.getContentType().contains("text")
+                            && !fileUpload.getClientFileName().split("\\.")[1].toLowerCase().equals("tst")
+                            && !fileUpload.getClientFileName().split("\\.")[1].toLowerCase().equals("log")) {
                         logger.info("ContentType : " + fileUpload.getContentType() + " , File Extention : " + fileUpload.getClientFileName().split("\\.")[1]);
                         ValidationError error = new ValidationError();
                         error.addMessageKey("error.proof_test_file_type");
