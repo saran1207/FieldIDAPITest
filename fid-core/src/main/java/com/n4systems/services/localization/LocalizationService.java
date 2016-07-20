@@ -220,9 +220,13 @@ public class LocalizationService extends FieldIdPersistenceService implements In
     }
 
     public boolean hasTranslations(Locale language) {
-        QueryBuilder<Translation> query = createTenantSecurityBuilder(Translation.class);
-        query.addSimpleWhere("id.language", language.getLanguage());
-        return persistenceService.exists(query);
+        if(language != null && language.getLanguage() != null) {
+            QueryBuilder<Translation> query = createTenantSecurityBuilder(Translation.class);
+            query.addSimpleWhere("id.language", language.getLanguage());
+            return persistenceService.exists(query);
+        } else {
+            return false;
+        }
     }
 
     public List<Language> getSystemLanguages() {
