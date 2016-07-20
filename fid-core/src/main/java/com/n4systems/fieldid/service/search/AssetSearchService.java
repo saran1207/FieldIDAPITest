@@ -114,7 +114,7 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
     @Override
     protected List<Asset> convertResults(AssetSearchCriteria criteriaModel, List results) {
         //We need the orginal attribute name and not the translated name for custom search columns
-        if (getCurrentUser().getLanguage() != null && localizationService.hasTranslations(getCurrentUser().getLanguage())) {
+        if (localizationService.hasTranslations(getCurrentUser().getLanguage())) {
             List<Asset> convertedResults = new ArrayList<>();
             for (Object result : results) {
                 Asset asset = (Asset) result;
