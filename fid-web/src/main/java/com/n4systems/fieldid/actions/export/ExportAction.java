@@ -25,6 +25,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @UserPermissionFilter(userRequiresOneOf={Permissions.EDIT_EVENT})
 public class ExportAction extends AbstractAction {
 
+	private static long MAX_EXPORT_COUNT = 2500;
+
 	@Autowired
     EventTypeExportService eventTypeEventTypeExportService;
 	@Autowired EventService eventService;
@@ -51,10 +53,14 @@ public class ExportAction extends AbstractAction {
 	}
 	
 	public String doExport() {
-		if (eventService.countThingEventsByType(eventTypeId, getFromDate(), getToDate()) > 0) {
+		long count = eventService.countThingEventsByType(eventTypeId, getFromDate(), getToDate());
+		if (count > 0 && count <= MAX_EXPORT_COUNT) {
 			DownloadLink link = getDownloadLink();
-			eventTypeEventTypeExportService.exportEventTypeToExcel(getSessionUserId(), eventTypeId, getFromDate(), getToDate(), link.getId() );
+			eventTypeEventTypeExportService.exportEventTypeToExcel(getSessionUserId(), eventTypeId, getFromDate(), getToDate(), link.getId());
 			return SUCCESS;
+		} else if(count > MAX_EXPORT_COUNT) {
+			addActionError(getText("error.too_large_to_export"));
+			return ERROR;
 		} else {
 			addActionError(getText("error.no_events_to_export"));
 			return ERROR;
