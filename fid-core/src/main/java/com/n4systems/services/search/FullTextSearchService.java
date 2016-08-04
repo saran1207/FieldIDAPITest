@@ -187,6 +187,9 @@ public abstract class FullTextSearchService extends FieldIdPersistenceService {
         }
 
         Query getQuery() {
+            //We need to scrub the query string, too!
+            queryString = queryString.replace("/", " ");
+            queryString = queryString.replace(",", " ");
             searchQuery = searchParserService.createSearchQuery(queryString);
             return searchParserService.convertToLuceneQuery(searchQuery);
         }
