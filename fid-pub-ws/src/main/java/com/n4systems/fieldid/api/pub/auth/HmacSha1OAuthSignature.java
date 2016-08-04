@@ -38,6 +38,12 @@ public class HmacSha1OAuthSignature implements OAuthSignature {
 
     @Override
     public boolean verify(OAuthRequestParams requestParams, OAuthSecrets secrets) {
-        return sign(requestParams, secrets).equals(OAuthEncoder.encode(requestParams.getOAuthParams().getSignature()));
+        try {
+            String secretSign = sign(requestParams, secrets);
+            String requestSign = OAuthEncoder.encode(new String(encoder.encode(calculator.doFinal(requestParams.getSignatureString().getBytes("UTF-8")))));
+            return secretSign.equals(requestSign);
+        } catch (UnsupportedEncodingException ignored) {} // there's no way UTF-8 is unsupported
+
+        return false;
     }
 }
