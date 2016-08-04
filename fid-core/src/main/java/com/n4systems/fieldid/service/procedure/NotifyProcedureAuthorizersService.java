@@ -17,6 +17,7 @@ import com.n4systems.util.mail.TemplateMailMessage;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,8 +33,9 @@ public class NotifyProcedureAuthorizersService extends FieldIdPersistenceService
     @Autowired private MailService mailService;
     @Autowired private UserService userService;
 
+    @Transactional
     public void notifyProcedureAuthorizers() {
-        QueryBuilder<ProcedureDefinition> assigneeQuery = new QueryBuilder<ProcedureDefinition>(ProcedureDefinition.class, new OpenSecurityFilter());
+        QueryBuilder<ProcedureDefinition> assigneeQuery = new QueryBuilder<>(ProcedureDefinition.class, new OpenSecurityFilter());
         assigneeQuery.addSimpleWhere("publishedState", PublishedState.WAITING_FOR_APPROVAL);
         assigneeQuery.addSimpleWhere("authorizationNotificationSent", false);
         assigneeQuery.addSimpleWhere("tenant.disabled", false);
