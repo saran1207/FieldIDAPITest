@@ -15,7 +15,7 @@ public class HmacSha1OAuthSignature implements OAuthSignature {
     private Mac calculator;
     private Base64.Encoder encoder;
     public HmacSha1OAuthSignature() throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        calculator = Mac.getInstance("HmacSHA1");
+        calculator = Mac.getInstance("HMAC-SHA1");
         encoder = Base64.getEncoder();
     }
 
@@ -24,7 +24,7 @@ public class HmacSha1OAuthSignature implements OAuthSignature {
         String signatureString = secrets.getSigningString();
         try
         {
-            SecretKeySpec keySpec = new SecretKeySpec(signatureString.getBytes("UTF-8"), "HmacSHA1");
+            SecretKeySpec keySpec = new SecretKeySpec(signatureString.getBytes("UTF-8"), "HMAC-SHA1");
             calculator.init(keySpec);
             String sigString = requestParams.getSignatureString();
 
@@ -38,6 +38,12 @@ public class HmacSha1OAuthSignature implements OAuthSignature {
 
     @Override
     public boolean verify(OAuthRequestParams requestParams, OAuthSecrets secrets) {
-        return sign(requestParams, secrets).equals(OAuthEncoder.encode(requestParams.getOAuthParams().getSignature()));
+        try {
+            String secretSign = sign(requestParams, secrets);
+            String requestSign = OAuthEncoder.encode(new String(encoder.encode(calculator.doFinal(requestParams.getSignatureString().getBytes("UTF-8")))));
+            return secretSign.equals(requestSign);
+        } catch (UnsupportedEncodingException ignored) {} // there's no way UTF-8 is unsupported
+
+        return false;
     }
 }
