@@ -19,6 +19,7 @@ public class LimitConfig {
 	protected Integer webPaginationPageSize;
 	protected Long webTotalInspectionButtons;
 	protected Integer exportPageSize;
+	protected Integer eventTypeExportLimit;
 
 	public LimitConfig() {}
 
@@ -41,6 +42,7 @@ public class LimitConfig {
 		this.webPaginationPageSize = other.webPaginationPageSize;
 		this.webTotalInspectionButtons = other.webTotalInspectionButtons;
 		this.exportPageSize = other.exportPageSize;
+		this.eventTypeExportLimit = other.eventTypeExportLimit;
 	}
 
 	public Integer getActiveSessionTimeOut() {
@@ -115,6 +117,10 @@ public class LimitConfig {
 		return exportPageSize;
 	}
 
+	public Integer getEventTypeExportLimit() {
+		return eventTypeExportLimit;
+	}
+
 	@Override
 	public String toString() {
 		return "\t\tactiveSessionTimeOut: " + activeSessionTimeOut + '\n' +
@@ -134,6 +140,7 @@ public class LimitConfig {
 				"\t\twebFileUploadMax: " + webFileUploadMax + '\n' +
 				"\t\twebPaginationPageSize: " + webPaginationPageSize + '\n' +
 				"\t\twebTotalInspectionButtons: " + webTotalInspectionButtons + '\n' +
-				"\t\texportPageSize: " + exportPageSize + '\n';
+				"\t\texportPageSize: " + exportPageSize + '\n' +
+				"\t\teventTypeExportLimit: " + eventTypeExportLimit + '\n';
 	}
 }
