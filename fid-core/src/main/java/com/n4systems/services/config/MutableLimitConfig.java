@@ -73,4 +73,6 @@ public class MutableLimitConfig extends LimitConfig {
 	public void setExportPageSize(Integer exportPageSize) {
 		this.exportPageSize = exportPageSize;
 	}
+
+	public void setEventTypeExportLimit(Integer eventTypeExportLimit) { this.eventTypeExportLimit = eventTypeExportLimit; }
 }

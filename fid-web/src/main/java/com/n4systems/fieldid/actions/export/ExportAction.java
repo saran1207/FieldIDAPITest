@@ -11,11 +11,14 @@ import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.downloadlink.DownloadState;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
+import com.n4systems.services.config.ConfigService;
+import com.n4systems.util.ConfigEntry;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +28,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @UserPermissionFilter(userRequiresOneOf={Permissions.EDIT_EVENT})
 public class ExportAction extends AbstractAction {
 
-	private static long MAX_EXPORT_COUNT = 2500;
+	private static Integer MAX_EXPORT_COUNT = 2500;
 
 	@Autowired
     EventTypeExportService eventTypeEventTypeExportService;
@@ -54,12 +57,12 @@ public class ExportAction extends AbstractAction {
 	
 	public String doExport() {
 		long count = eventService.countThingEventsByType(eventTypeId, getFromDate(), getToDate());
-		if (count > 0 && count <= MAX_EXPORT_COUNT) {
+		if (count > 0 && count <= getMaxExportCount()) {
 			DownloadLink link = getDownloadLink();
 			eventTypeEventTypeExportService.exportEventTypeToExcel(getSessionUserId(), eventTypeId, getFromDate(), getToDate(), link.getId());
 			return SUCCESS;
-		} else if(count > MAX_EXPORT_COUNT) {
-			addActionError(getText("error.too_large_to_export"));
+		} else if(count > getMaxExportCount()) {
+			addActionError(getText("error.too_large_to_export", Arrays.asList(getMaxExportCount())));
 			return ERROR;
 		} else {
 			addActionError(getText("error.no_events_to_export"));
@@ -167,6 +170,11 @@ public class ExportAction extends AbstractAction {
 
 	public Long getLinkId() {
 		return linkId;
+	}
+
+	public static Integer getMaxExportCount() {
+		Integer configuredExportLimit = ConfigService.getInstance().getInteger(ConfigEntry.EVENT_TYPE_EXPORT_LIMIT);
+		return configuredExportLimit != null? configuredExportLimit : MAX_EXPORT_COUNT;
 	}
 }
 
