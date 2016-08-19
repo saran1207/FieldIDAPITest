@@ -41,6 +41,7 @@ public abstract class SubEventPage extends FieldIDTemplatePage {
 
     protected IModel<ThingEvent> masterEvent;
     protected IModel<SubEvent> event;
+    protected IModel<Asset> subAsset;
 
     @Override
     protected void onInitialize() {
@@ -58,7 +59,7 @@ public abstract class SubEventPage extends FieldIDTemplatePage {
         public OuterEventForm(String id) {
             super(id);
 
-            add(new AssetDetailsPanel("targetDetailsPanel", ProxyModel.of(event, on(SubEvent.class).getAsset())));
+            add(new AssetDetailsPanel("targetDetailsPanel", subAsset));
 
             add(new Comment("comments", new PropertyModel<>(event, "comments")).addMaxLengthValidation(5000));
 

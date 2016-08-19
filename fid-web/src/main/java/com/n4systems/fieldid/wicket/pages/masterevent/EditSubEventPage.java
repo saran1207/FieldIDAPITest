@@ -2,17 +2,20 @@ package com.n4systems.fieldid.wicket.pages.masterevent;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.model.Asset;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.ThingEvent;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 public class EditSubEventPage extends SubEventPage {
 
     public EditSubEventPage(IModel<ThingEvent> masterEvent, IModel<SubEvent> subEvent) {
         this.masterEvent = masterEvent;
         this.event = subEvent;
+        this.subAsset = Model.of(assetService.getAsset(subEvent.getObject().getAsset().getId(), Asset.POST_FETCH_ALL_PATHS));
         this.fileAttachments = subEvent.getObject().getAttachments() == null ? Lists.newArrayList() : subEvent.getObject().getAttachments();
     }
 
