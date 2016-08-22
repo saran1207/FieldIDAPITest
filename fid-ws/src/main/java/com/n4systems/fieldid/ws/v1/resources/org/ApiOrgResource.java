@@ -2,6 +2,7 @@ package com.n4systems.fieldid.ws.v1.resources.org;
 
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
 import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiPlaceEventHistoryResource;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiPlaceEventTypeResource;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -40,6 +42,9 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 
     @Autowired
     private ApiPlaceEventTypeResource eventTypeResource;
+
+	@Autowired
+	private AssetService assetService;
 
     //TODO Need to make use of this.
     @Autowired
@@ -87,6 +92,30 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 		apiOrg.setSchedules(savedPlaceEventResource.findAllOpenEvents(baseOrg));
 
 		return apiOrg;
+	}
+
+	@GET
+	@Path("{orgId}/assetCount")
+	@Consumes(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Transactional(readOnly = true)
+	public Response findAssetCountForOrg(@PathParam("orgId") Long orgId) {
+		Long assetCount = assetService.getAssetCountByOrg(orgId);
+
+		return Response.ok(assetCount)
+					   .build();
+	}
+
+	@GET
+	@Path("{orgId}/offlineAssetCount")
+	@Consumes(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Transactional(readOnly = true)
+	public Response findOfflineAssetCountForOrg(@PathParam("orgId") Long orgId) {
+		Long offlineAssetCount = assetService.getOfflineAssetCountByOrg(orgId);
+
+		return Response.ok(offlineAssetCount)
+					   .build();
 	}
 
 	/*
