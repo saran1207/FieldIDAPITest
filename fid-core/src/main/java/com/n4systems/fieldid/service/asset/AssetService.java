@@ -58,6 +58,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Transactional
 public class AssetService extends CrudService<Asset> {
@@ -1056,5 +1057,19 @@ public class AssetService extends CrudService<Asset> {
                 .addSimpleWhere("mobileGUID", mobileId);
 
         return persistenceService.exists(query);
+    }
+
+    public List<String> getAssetMobileGUIDsByOrg(Long orgId) {
+        BaseOrg org = orgService.findById(orgId);
+
+        if(org == null) return null;
+
+        QueryBuilder<Asset> query = createUserSecurityBuilder(Asset.class)
+                .addSimpleWhere("owner", org);
+
+        return persistenceService.findAll(query)
+                                 .stream()
+                                 .map(Asset::getMobileGUID)
+                                 .collect(Collectors.toList());
     }
 }

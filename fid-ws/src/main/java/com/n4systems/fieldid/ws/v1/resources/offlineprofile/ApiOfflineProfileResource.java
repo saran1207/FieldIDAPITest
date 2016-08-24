@@ -1,17 +1,5 @@
 package com.n4systems.fieldid.ws.v1.resources.offlineprofile;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
@@ -20,6 +8,13 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.offlineprofile.OfflineProfile;
 import com.n4systems.model.offlineprofile.OfflineProfile.SyncDuration;
 import com.n4systems.model.orgs.BaseOrg;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 @Path("/offlineProfile")
 @Component
@@ -74,6 +69,17 @@ public class ApiOfflineProfileResource extends ApiResource<ApiOfflineProfile, Of
 		}
 		
 		profile.getOrganizations().add(orgId);
+
+		List<String> assetIds = assetService.getAssetMobileGUIDsByOrg(orgId);
+
+		if(assetIds != null) {
+			//We do this just to ensure there are no duplicates.
+			profile.getAssets().removeAll(assetIds);
+
+			//Now that we know there are no duplicates, add everything.
+			profile.getAssets().addAll(assetIds);
+		}
+
 		offlineProfileService.update(profile);
 	}
 	
@@ -88,7 +94,15 @@ public class ApiOfflineProfileResource extends ApiResource<ApiOfflineProfile, Of
 		}
 		
 		if (profile.getOrganizations().remove(orgId)) {
-			offlineProfileService.update(profile);
+			List<String> assetIds = assetService.getAssetMobileGUIDsByOrg(orgId);
+
+			if(assetIds != null) {
+				if(profile.getAssets().removeAll(assetIds)) {
+					offlineProfileService.update(profile);
+				}
+			} else {
+				offlineProfileService.update(profile);
+			}
 		}
 	}
 	
