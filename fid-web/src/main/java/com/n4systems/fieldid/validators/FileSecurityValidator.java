@@ -1,12 +1,11 @@
 package com.n4systems.fieldid.validators;
 
-import java.io.File;
-
-import org.apache.log4j.Logger;
-
 import com.opensymphony.xwork2.validator.ValidationException;
 import com.opensymphony.xwork2.validator.validators.FieldValidatorSupport;
+import org.apache.log4j.Logger;
 import org.springframework.util.StringUtils;
+
+import java.io.File;
 
 public class FileSecurityValidator extends FieldValidatorSupport {
 

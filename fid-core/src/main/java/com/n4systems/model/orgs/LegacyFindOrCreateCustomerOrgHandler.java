@@ -1,10 +1,10 @@
 package com.n4systems.model.orgs;
 
-import java.util.List;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
+
+import java.util.List;
 
 @Deprecated
 public class LegacyFindOrCreateCustomerOrgHandler extends FindOrCreateCustomerOrgHandler {

@@ -1,13 +1,13 @@
 package com.n4systems.model.eventtype;
 
-import javax.persistence.EntityManager;
-
-import org.junit.Test;
-import static org.junit.Assert.*;
-
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.testutils.DummyEntityManager;
+import org.junit.Test;
+
+import javax.persistence.EntityManager;
+
+import static org.junit.Assert.assertEquals;
 
 public class EventTypeUniqueNameLoaderTest {
 

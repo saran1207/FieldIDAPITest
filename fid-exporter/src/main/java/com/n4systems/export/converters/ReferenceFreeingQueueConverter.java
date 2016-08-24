@@ -1,9 +1,5 @@
 package com.n4systems.export.converters;
 
-import java.util.Queue;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.exceptions.NotImplementedException;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
@@ -11,6 +7,9 @@ import com.thoughtworks.xstream.converters.collections.AbstractCollectionConvert
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.Mapper;
+
+import javax.persistence.EntityManager;
+import java.util.Queue;
 
 public class ReferenceFreeingQueueConverter extends AbstractCollectionConverter {
 	private final EntityManager em;

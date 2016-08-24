@@ -1,9 +1,10 @@
 package com.n4systems.handlers;
 
-import static org.easymock.EasyMock.*;
-
 import com.n4systems.persistence.FieldIdTransaction;
 import com.n4systems.persistence.Transaction;
+
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.replay;
 
 public abstract class TestUsesTransactionBase {
 

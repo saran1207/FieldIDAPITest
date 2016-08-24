@@ -1,14 +1,12 @@
 package com.n4systems.fieldid.permissions;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
-
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.BitField;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class SessionUserSecurityGuardTest extends AbstractUserSecurityTestCase {
 

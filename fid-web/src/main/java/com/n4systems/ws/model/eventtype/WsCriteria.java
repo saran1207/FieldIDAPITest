@@ -1,12 +1,11 @@
 package com.n4systems.ws.model.eventtype;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.n4systems.ws.model.WsModel;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import com.n4systems.ws.model.WsModel;
+import java.util.ArrayList;
+import java.util.List;
 
 @XmlRootElement
 public abstract class WsCriteria extends WsModel {

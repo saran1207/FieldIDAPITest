@@ -1,16 +1,15 @@
 package com.n4systems.model.utils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-
 import com.n4systems.model.AssetType;
+import com.n4systems.model.AssetTypeSchedule;
+import com.n4systems.model.FileAttachment;
+import com.n4systems.model.Tenant;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
-import com.n4systems.model.FileAttachment;
-import com.n4systems.model.AssetTypeSchedule;
-import com.n4systems.model.Tenant;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 public class CleanAssetTypeFactory {
 

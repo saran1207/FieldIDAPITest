@@ -1,12 +1,10 @@
 package com.n4systems.model.messages;
 
-import static org.junit.Assert.*;
-
-
-import org.junit.Test;
-
 import com.n4systems.model.builders.PrimaryOrgBuilder;
 import com.n4systems.model.orgs.PrimaryOrg;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 
 public class MessageTest {

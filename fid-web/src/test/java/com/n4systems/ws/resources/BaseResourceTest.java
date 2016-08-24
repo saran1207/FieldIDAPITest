@@ -1,15 +1,5 @@
 package com.n4systems.ws.resources;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
 import com.n4systems.model.lastmodified.LastModified;
 import com.n4systems.model.lastmodified.LastModifiedListLoader;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
@@ -19,6 +9,15 @@ import com.n4systems.ws.model.lastmod.WsLastModified;
 import com.n4systems.ws.utils.ConversionHelper;
 import com.n4systems.ws.utils.DateParam;
 import com.n4systems.ws.utils.ResourceContext;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 public class BaseResourceTest {
 	

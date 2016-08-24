@@ -1,13 +1,12 @@
 package com.n4systems.fieldid.validators;
 
-import java.util.List;
-
-import rfid.ejb.entity.InfoFieldBean;
-
 import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.opensymphony.xwork2.validator.ValidationException;
 import com.opensymphony.xwork2.validator.validators.FieldValidatorSupport;
+import rfid.ejb.entity.InfoFieldBean;
+
+import java.util.List;
 
 public class InfoFieldComboBoxValidator extends FieldValidatorSupport {
 

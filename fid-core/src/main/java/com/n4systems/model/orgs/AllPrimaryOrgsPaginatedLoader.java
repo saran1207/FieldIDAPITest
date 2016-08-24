@@ -1,6 +1,5 @@
 package com.n4systems.model.orgs;
 
-import com.n4systems.model.Event;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.persistence.loaders.Loader;

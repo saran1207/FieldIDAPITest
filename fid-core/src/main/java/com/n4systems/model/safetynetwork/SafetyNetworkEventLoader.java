@@ -1,7 +1,5 @@
 package com.n4systems.model.safetynetwork;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.*;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityFilter;
@@ -9,6 +7,8 @@ import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.loaders.NonSecureIdLoader;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import com.n4systems.persistence.utils.PostFetcher;
+
+import javax.persistence.EntityManager;
 
 abstract public class SafetyNetworkEventLoader extends SecurityFilteredLoader<ThingEvent> implements IdLoader<SafetyNetworkEventLoader> {
 	private final NonSecureIdLoader<ThingEvent> eventLoader;

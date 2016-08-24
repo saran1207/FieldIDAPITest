@@ -1,14 +1,13 @@
 package com.n4systems.model.asset;
 
-import java.util.Date;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.Asset;
 import com.n4systems.model.security.AssetNetworkFilter;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.util.persistence.MaxSelect;
 import com.n4systems.util.persistence.QueryBuilder;
+
+import javax.persistence.EntityManager;
+import java.util.Date;
 
 public class LastEventDateLoader extends Loader<Date> {
 

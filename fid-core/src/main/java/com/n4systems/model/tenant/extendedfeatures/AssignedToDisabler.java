@@ -1,7 +1,5 @@
 package com.n4systems.model.tenant.extendedfeatures;
 
-import java.util.List;
-
 import com.n4systems.model.EventType;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.eventtype.EventTypeListLoader;
@@ -13,6 +11,8 @@ import com.n4systems.model.savedreports.SavedReportListLoader;
 import com.n4systems.model.savedreports.SavedReportSaver;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.Transaction;
+
+import java.util.List;
 
 public class AssignedToDisabler extends ExtendedFeatureDisabler {
 

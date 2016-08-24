@@ -1,18 +1,17 @@
 package com.n4systems.fileprocessing.roberts;
 
+import com.n4systems.exceptions.FileProcessingException;
+import com.n4systems.fileprocessing.ProofTestType;
+import com.n4systems.tools.FileDataContainer;
+import com.n4systems.util.DateHelper;
+import org.jfree.data.xy.XYSeries;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.jfree.data.xy.XYSeries;
-
-import com.n4systems.exceptions.FileProcessingException;
-import com.n4systems.fileprocessing.ProofTestType;
-import com.n4systems.tools.FileDataContainer;
-import com.n4systems.util.DateHelper;
 
 public class V9RobertsParser implements RobertsParser {
 	private static final int DATA_START_LINE = 26;

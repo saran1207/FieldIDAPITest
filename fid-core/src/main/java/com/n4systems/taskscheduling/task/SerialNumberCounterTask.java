@@ -1,15 +1,14 @@
 package com.n4systems.taskscheduling.task;
 
+import com.n4systems.fieldid.service.asset.AssetIdentifierService;
+import com.n4systems.taskscheduling.ScheduledTask;
+import com.n4systems.util.ServiceLocator;
+import rfid.ejb.entity.IdentifierCounter;
+
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
-
-import com.n4systems.fieldid.service.asset.AssetIdentifierService;
-import rfid.ejb.entity.IdentifierCounter;
-
-import com.n4systems.taskscheduling.ScheduledTask;
-import com.n4systems.util.ServiceLocator;
 
 
 /**

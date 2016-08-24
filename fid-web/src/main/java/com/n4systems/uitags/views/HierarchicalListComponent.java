@@ -1,12 +1,12 @@
 package com.n4systems.uitags.views;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.opensymphony.xwork2.util.ValueStack;
+import org.apache.struts2.components.UIBean;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts2.components.UIBean;
-import com.opensymphony.xwork2.util.ValueStack;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HierarchicalListComponent extends UIBean {
 	

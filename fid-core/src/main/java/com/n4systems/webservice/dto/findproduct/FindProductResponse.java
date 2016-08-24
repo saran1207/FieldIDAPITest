@@ -1,9 +1,9 @@
 package com.n4systems.webservice.dto.findproduct;
 
+import com.n4systems.webservice.dto.ProductServiceDTO;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.n4systems.webservice.dto.ProductServiceDTO;
 
 public class FindProductResponse {
 	

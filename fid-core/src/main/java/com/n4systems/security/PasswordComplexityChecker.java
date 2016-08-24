@@ -1,12 +1,11 @@
 package com.n4systems.security;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import com.n4systems.model.security.PasswordPolicy;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 
-import com.n4systems.model.security.PasswordPolicy;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PasswordComplexityChecker implements PasswordValidator {
 	private final Integer minLength;

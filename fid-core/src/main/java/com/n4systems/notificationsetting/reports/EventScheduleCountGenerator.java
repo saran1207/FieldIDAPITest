@@ -1,7 +1,6 @@
 package com.n4systems.notificationsetting.reports;
 
 import com.n4systems.mail.MailManager;
-import com.n4systems.model.Event;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.common.SimpleFrequency;
 import com.n4systems.model.event.FailedEventListLoader;

@@ -1,8 +1,6 @@
 package com.n4systems.fieldid.actions.eula;
 
 
-import javax.activation.FileTypeMap;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.eula.EULA;

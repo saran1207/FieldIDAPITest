@@ -1,9 +1,9 @@
 package com.n4systems.model;
 
+import com.n4systems.model.api.Listable;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.n4systems.model.api.Listable;
 
 public enum OrderKey implements Listable<String> {
 //                    lineMapping, required,     displayname	

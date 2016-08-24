@@ -1,11 +1,11 @@
 package com.plexus_online.inventory;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 import javax.xml.bind.annotation.XmlSchema;
 
-import org.junit.Test;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 
 

@@ -1,12 +1,11 @@
 package com.n4systems.fieldid.security;
 
-import java.lang.reflect.Method;
-
-import org.apache.struts2.StrutsStatics;
-
 import com.n4systems.fieldid.utils.ActionInvocationWrapper;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
+import org.apache.struts2.StrutsStatics;
+
+import java.lang.reflect.Method;
 
 public class SafetyNetworkAwareInterceptor extends AbstractInterceptor implements StrutsStatics {
 	private static final long serialVersionUID = 1L;

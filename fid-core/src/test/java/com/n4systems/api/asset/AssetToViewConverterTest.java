@@ -1,30 +1,24 @@
 package com.n4systems.api.asset;
 
-import static com.n4systems.model.builders.AssetBuilder.*;
-import static com.n4systems.model.location.Location.*;
-import static org.junit.Assert.*;
+import com.n4systems.api.conversion.ConversionException;
+import com.n4systems.api.conversion.asset.AssetToViewConverter;
+import com.n4systems.api.model.AssetView;
+import com.n4systems.model.*;
+import com.n4systems.model.builders.AssetTypeBuilder;
+import com.n4systems.model.builders.InfoFieldBeanBuilder;
+import com.n4systems.model.builders.InfoOptionBeanBuilder;
+import com.n4systems.model.builders.OrgBuilder;
+import com.n4systems.test.helpers.Asserts;
+import org.junit.Test;
+import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
 
 import java.text.ParseException;
 import java.util.Date;
 
-import com.n4systems.api.conversion.asset.AssetToViewConverter;
-import com.n4systems.api.model.AssetView;
-import com.n4systems.model.Asset;
-import org.junit.Test;
-
-import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
-
-import com.n4systems.api.conversion.ConversionException;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.LineItem;
-import com.n4systems.model.Order;
-import com.n4systems.model.builders.InfoFieldBeanBuilder;
-import com.n4systems.model.builders.InfoOptionBeanBuilder;
-import com.n4systems.model.builders.OrgBuilder;
-import com.n4systems.model.builders.AssetTypeBuilder;
-import com.n4systems.test.helpers.Asserts;
+import static com.n4systems.model.builders.AssetBuilder.anAsset;
+import static com.n4systems.model.location.Location.onlyFreeformLocation;
+import static org.junit.Assert.*;
 
 public class AssetToViewConverterTest {
 	private AssetToViewConverter converter = new AssetToViewConverter();

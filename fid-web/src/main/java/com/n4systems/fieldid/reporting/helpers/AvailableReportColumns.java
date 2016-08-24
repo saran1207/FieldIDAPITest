@@ -1,12 +1,12 @@
 package com.n4systems.fieldid.reporting.helpers;
 
+import com.n4systems.model.search.ColumnMappingGroupView;
+import com.n4systems.model.search.ColumnMappingView;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
-import com.n4systems.model.search.ColumnMappingGroupView;
-import com.n4systems.model.search.ColumnMappingView;
 
 public class AvailableReportColumns {
 

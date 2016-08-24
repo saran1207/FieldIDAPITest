@@ -1,18 +1,11 @@
 package rfid.ejb.entity;
 
-import java.util.Date;
-
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-
 import com.n4systems.ejb.legacy.PopulatorLog;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.parents.legacy.LegacyBeanTenant;
+
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "PopulatorLog")

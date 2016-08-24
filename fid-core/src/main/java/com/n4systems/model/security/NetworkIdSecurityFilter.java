@@ -1,13 +1,13 @@
 package com.n4systems.model.security;
 
-import javax.persistence.Query;
-
 import com.n4systems.exceptions.NotImplementedException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.SubSelectInClause;
+
+import javax.persistence.Query;
 
 public class NetworkIdSecurityFilter extends AbstractSecurityFilter {
 	private final SecurityFilter standardFilter;

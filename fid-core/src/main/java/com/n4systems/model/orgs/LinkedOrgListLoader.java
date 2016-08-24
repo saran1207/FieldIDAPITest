@@ -1,12 +1,11 @@
 package com.n4systems.model.orgs;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.loaders.NonSecuredListLoader;
 import com.n4systems.util.persistence.QueryBuilder;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 public class LinkedOrgListLoader extends NonSecuredListLoader<ExternalOrg> {
 	

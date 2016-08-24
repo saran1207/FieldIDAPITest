@@ -1,17 +1,5 @@
 package com.n4systems.graphing;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Paint;
-import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
@@ -19,21 +7,21 @@ import org.jfree.chart.annotations.XYAnnotation;
 import org.jfree.chart.annotations.XYDrawableAnnotation;
 import org.jfree.chart.annotations.XYPointerAnnotation;
 import org.jfree.chart.axis.ValueAxis;
-import org.jfree.chart.plot.Marker;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.plot.PlotRenderingInfo;
-import org.jfree.chart.plot.ValueMarker;
-import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.plot.*;
 import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import org.jfree.ui.Drawable;
-import org.jfree.ui.RectangleAnchor;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.RectangleInsets;
-import org.jfree.ui.TextAnchor;
-import org.jfree.ui.VerticalAlignment;
+import org.jfree.ui.*;
+
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 public class GraphFactory {

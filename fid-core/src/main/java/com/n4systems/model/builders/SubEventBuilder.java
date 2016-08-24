@@ -1,7 +1,6 @@
 package com.n4systems.model.builders;
 
 import com.n4systems.model.Asset;
-import com.n4systems.model.EventType;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.ThingEventType;
 

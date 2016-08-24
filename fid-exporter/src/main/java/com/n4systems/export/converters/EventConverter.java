@@ -2,11 +2,8 @@ package com.n4systems.export.converters;
 
 import com.n4systems.model.Event;
 import com.n4systems.model.ThingEvent;
-import com.n4systems.model.ThingEventProofTest;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-
-import java.util.Iterator;
 
 public class EventConverter extends AbstractEventConverter<ThingEvent> {
 

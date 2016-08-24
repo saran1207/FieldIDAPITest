@@ -1,14 +1,13 @@
 package com.n4systems.fileprocessing.roberts;
 
-import java.util.Date;
-import java.util.List;
-
-import org.jfree.data.xy.XYSeries;
-
 import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.util.DateHelper;
+import org.jfree.data.xy.XYSeries;
+
+import java.util.Date;
+import java.util.List;
 
 abstract public class LegacyRobertsParser implements RobertsParser {
 	private static final int CUSTOMER_LINE = 1;

@@ -8,9 +8,7 @@ import com.n4systems.fieldid.actions.helpers.UserDateConverter;
 import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.model.*;
 import com.n4systems.model.user.User;
-import com.n4systems.services.signature.SignatureService;
 import com.n4systems.util.ServiceLocator;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import rfid.web.helper.SessionUser;
 
 import java.io.IOException;

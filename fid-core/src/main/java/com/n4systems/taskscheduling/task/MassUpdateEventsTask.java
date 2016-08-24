@@ -1,14 +1,13 @@
 package com.n4systems.taskscheduling.task;
 
-import java.util.List;
-import java.util.Map;
-
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
-import com.n4systems.model.Event;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.user.User;
+
+import java.util.List;
+import java.util.Map;
 
 public class MassUpdateEventsTask extends MassUpdateTask {
 	

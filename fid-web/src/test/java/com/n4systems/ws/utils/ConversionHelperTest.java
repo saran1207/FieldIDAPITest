@@ -1,19 +1,17 @@
 package com.n4systems.ws.utils;
 
-import static org.junit.Assert.*;
-
-import java.util.Arrays;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
-import org.easymock.EasyMock;
-import org.junit.Test;
-
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.ws.exceptions.WsResourceNotFoundException;
 import com.n4systems.ws.model.WsModelConverter;
+import org.easymock.EasyMock;
+import org.junit.Test;
+
+import javax.persistence.EntityManager;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class ConversionHelperTest {
 	private ConversionHelper helper = new ConversionHelper();

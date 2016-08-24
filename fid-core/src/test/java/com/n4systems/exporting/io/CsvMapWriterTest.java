@@ -1,6 +1,6 @@
 package com.n4systems.exporting.io;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -8,7 +8,7 @@ import java.io.Writer;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 public class CsvMapWriterTest {
 	

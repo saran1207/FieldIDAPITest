@@ -1,14 +1,11 @@
 package com.n4systems.fieldid.viewhelpers.navigation;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
-
-import com.n4systems.fieldid.viewhelpers.navigation.NavOption;
-import com.n4systems.fieldid.viewhelpers.navigation.NavOptionsController;
+import static org.junit.Assert.assertEquals;
 
 
 

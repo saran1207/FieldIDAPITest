@@ -1,11 +1,10 @@
 package com.n4systems.model.safetynetwork;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 /**
  * Abstract loader containing the logic for securely loading customer or vendor OrgConnections.

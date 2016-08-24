@@ -1,8 +1,8 @@
 package com.n4systems.util.persistence;
 
-import javax.persistence.Query;
-
 import com.n4systems.exceptions.InvalidQueryException;
+
+import javax.persistence.Query;
 
 public interface WhereClause<T> extends ClauseArgument {
 	public enum ChainOp {

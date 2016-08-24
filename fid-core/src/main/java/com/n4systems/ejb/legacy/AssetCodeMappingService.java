@@ -1,10 +1,9 @@
 package com.n4systems.ejb.legacy;
 
-import java.util.List;
-
+import com.n4systems.model.AssetType;
 import rfid.ejb.entity.AssetCodeMapping;
 
-import com.n4systems.model.AssetType;
+import java.util.List;
 
 public interface AssetCodeMappingService {
 	

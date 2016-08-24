@@ -1,19 +1,18 @@
 package com.n4systems.importing;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.n4systems.model.AssetType;
-import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
-
 import com.n4systems.exceptions.InfoFieldNotFoundException;
 import com.n4systems.exceptions.InfoOptionNotFoundException;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.user.User;
 import com.n4systems.util.FuzzyResolver;
+import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
+
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AutoAttributeParser {
 	private static final int HEADER_LINE = 0;

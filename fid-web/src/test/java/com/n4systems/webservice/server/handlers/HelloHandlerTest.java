@@ -1,13 +1,12 @@
 package com.n4systems.webservice.server.handlers;
 
-import static org.junit.Assert.*;
-import static org.easymock.EasyMock.*;
-
+import com.n4systems.webservice.dto.hello.HelloRequest;
+import com.n4systems.webservice.dto.hello.HelloResponse;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import com.n4systems.webservice.dto.hello.HelloRequest;
-import com.n4systems.webservice.dto.hello.HelloResponse;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertNotNull;
 
 public class HelloHandlerTest {
 

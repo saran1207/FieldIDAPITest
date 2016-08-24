@@ -1,14 +1,13 @@
 package com.n4systems.ejb;
 
-import java.util.Collection;
-
 import com.n4systems.model.AssetType;
-import rfid.ejb.entity.InfoOptionBean;
-
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.Tenant;
 import com.n4systems.tools.Pager;
+import rfid.ejb.entity.InfoOptionBean;
+
+import java.util.Collection;
 
 public interface AutoAttributeManager {
 	

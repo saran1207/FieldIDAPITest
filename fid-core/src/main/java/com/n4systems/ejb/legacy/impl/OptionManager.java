@@ -11,9 +11,8 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.log4j.Logger;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
+import java.util.List;
 
 
 public class OptionManager implements Option {

@@ -1,14 +1,14 @@
 package com.n4systems.exporting.beanutils;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtilsBean;
+import org.apache.commons.lang.StringUtils;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.Map;
-
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.beanutils.PropertyUtilsBean;
-import org.apache.commons.lang.StringUtils;
 
 public abstract class SerializationHandler<T> {
 	private final Field field;

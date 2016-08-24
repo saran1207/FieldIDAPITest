@@ -1,6 +1,17 @@
 package com.n4systems.fieldid.selenium;
 
-import static org.junit.Assert.*;
+import com.n4systems.fieldid.selenium.lib.DefaultFieldIdSelenium;
+import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
+import com.n4systems.fieldid.selenium.mail.MailServer;
+import com.n4systems.fieldid.selenium.pages.*;
+import com.n4systems.fieldid.selenium.pages.admin.AdminLoginPage;
+import com.n4systems.fieldid.selenium.util.TimeLogger;
+import com.thoughtworks.selenium.DefaultSelenium;
+import com.thoughtworks.selenium.Selenium;
+import com.thoughtworks.selenium.SeleniumException;
+import org.apache.log4j.Logger;
+import org.junit.After;
+import org.junit.Before;
 
 import java.io.InputStream;
 import java.util.Arrays;
@@ -8,23 +19,7 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
-import org.junit.After;
-import org.junit.Before;
-
-import com.n4systems.fieldid.selenium.lib.DefaultFieldIdSelenium;
-import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.mail.MailServer;
-import com.n4systems.fieldid.selenium.pages.ChooseCompanyPage;
-import com.n4systems.fieldid.selenium.pages.LoginPage;
-import com.n4systems.fieldid.selenium.pages.SelectPackagePage;
-import com.n4systems.fieldid.selenium.pages.SignUpPage;
-import com.n4systems.fieldid.selenium.pages.WebEntity;
-import com.n4systems.fieldid.selenium.pages.admin.AdminLoginPage;
-import com.n4systems.fieldid.selenium.util.TimeLogger;
-import com.thoughtworks.selenium.DefaultSelenium;
-import com.thoughtworks.selenium.Selenium;
-import com.thoughtworks.selenium.SeleniumException;
+import static org.junit.Assert.*;
 
 public abstract class FieldIDTestCase extends DBTestCase {
 	private static final Logger logger = Logger.getLogger(FieldIDTestCase.class);

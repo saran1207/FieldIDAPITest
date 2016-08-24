@@ -1,12 +1,12 @@
 package com.n4systems.testutils;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.safetynetwork.OrgConnectionExistsLoader;
 import com.n4systems.persistence.loaders.NonSecureIdLoader;
 import com.n4systems.persistence.loaders.NonSecureLoaderFactory;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class TestDoubleNonSecuredLoaderFactory extends NonSecureLoaderFactory {
 

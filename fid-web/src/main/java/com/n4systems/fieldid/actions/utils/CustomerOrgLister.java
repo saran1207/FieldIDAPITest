@@ -1,13 +1,13 @@
 package com.n4systems.fieldid.actions.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.BaseOrgParentFilterListLoader;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.util.persistence.SimpleListable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CustomerOrgLister {
 	private static OrgType[] typesThatIncludeCustomerLists = {OrgType.ALL, OrgType.EXTERNAL, OrgType.CUSTOMER, OrgType.NON_PRIMARY}; 

@@ -1,10 +1,10 @@
 package com.n4systems.persistence.loaders;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
+
+import javax.persistence.EntityManager;
 
 abstract public class TenantFilteredLoader<T> extends Loader<T> {
 

@@ -1,12 +1,12 @@
 package com.n4systems.model.assettype;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.safetynetwork.IdLoader;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import com.n4systems.util.persistence.QueryBuilder;
+
+import javax.persistence.EntityManager;
 
 public class AutoAttributeCriteriaByAssetTypeIdLoader extends SecurityFilteredLoader<AutoAttributeCriteria> implements IdLoader<AutoAttributeCriteriaByAssetTypeIdLoader> {
 	private Long assetTypeId;

@@ -1,19 +1,18 @@
 package com.n4systems.api.conversion.autoattribute;
 
-import static org.junit.Assert.*;
-
-import java.util.LinkedHashMap;
-
-import org.junit.Test;
-
-import rfid.ejb.entity.InfoOptionBean;
-
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.model.AutoAttributeView;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.builders.InfoFieldBeanBuilder;
 import com.n4systems.model.builders.InfoOptionBeanBuilder;
+import org.junit.Test;
+import rfid.ejb.entity.InfoOptionBean;
+
+import java.util.LinkedHashMap;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class AutoAttributeToViewConverterTest {
 

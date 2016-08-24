@@ -1,17 +1,12 @@
 package com.n4systems.ws.resources;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import com.n4systems.ws.utils.TenantNameUriParser;
+import org.apache.log4j.Logger;
+
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
-
-import org.apache.log4j.Logger;
-
-import com.n4systems.ws.utils.TenantNameUriParser;
 
 @Path("/ErrorReporting")
 public class MobileErrorReportingResource {

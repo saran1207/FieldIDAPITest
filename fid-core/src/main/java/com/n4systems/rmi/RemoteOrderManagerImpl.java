@@ -1,11 +1,10 @@
 package com.n4systems.rmi;
 
-import java.rmi.RemoteException;
-import java.util.Map;
-
+import com.n4systems.ejb.wrapper.OrderManagerEJBContainer;
 import org.apache.log4j.Logger;
 
-import com.n4systems.ejb.wrapper.OrderManagerEJBContainer;
+import java.rmi.RemoteException;
+import java.util.Map;
 
 public class RemoteOrderManagerImpl implements RemoteOrderManager {
 	private final Logger logger = Logger.getLogger(RemoteOrderManagerImpl.class);

@@ -1,17 +1,16 @@
 package com.n4systems.services.safetyNetwork;
 
-import java.util.Set;
-
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyAssetType;
+import com.n4systems.model.assettype.AssetTypeScheduleSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.user.User;
-import com.n4systems.model.assettype.AssetTypeScheduleSaver;
 import com.n4systems.services.safetyNetwork.catalog.*;
 import com.n4systems.services.safetyNetwork.catalog.summary.CatalogImportSummary;
 import com.n4systems.services.safetyNetwork.exception.ImportFailureException;
 import org.apache.log4j.Logger;
+
+import java.util.Set;
 
 public class ImportCatalogService {
 

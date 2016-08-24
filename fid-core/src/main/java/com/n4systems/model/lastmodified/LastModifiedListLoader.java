@@ -1,10 +1,5 @@
 package com.n4systems.model.lastmodified;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
@@ -12,6 +7,10 @@ import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+
+import javax.persistence.EntityManager;
+import java.util.Date;
+import java.util.List;
 
 public class LastModifiedListLoader extends ListLoader<LastModified> {
 	private final Class<?> clazz;

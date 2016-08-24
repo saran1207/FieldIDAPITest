@@ -1,8 +1,8 @@
 package com.n4systems.services.reporting;
 
-import java.io.Serializable;
-
 import com.n4systems.model.WorkflowState;
+
+import java.io.Serializable;
 
 public class EventScheduleStatusCount implements Serializable{
 		

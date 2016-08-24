@@ -1,13 +1,12 @@
 package com.n4systems.fieldid.validators;
 
-import java.util.List;
-
 import com.n4systems.fieldid.actions.event.ActionWithCriteriaResults;
-import com.n4systems.fieldid.actions.event.EventCrud;
 import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModel;
 import com.n4systems.model.CriteriaType;
 import com.opensymphony.xwork2.validator.ValidationException;
 import com.opensymphony.xwork2.validator.validators.FieldValidatorSupport;
+
+import java.util.List;
 
 public class NumberCriteriaValidator extends FieldValidatorSupport {
 

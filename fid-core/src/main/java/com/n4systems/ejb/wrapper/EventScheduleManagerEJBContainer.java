@@ -3,7 +3,6 @@ package com.n4systems.ejb.wrapper;
 import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.impl.EventScheduleManagerImpl;
 import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.ThingEventType;
 import com.n4systems.persistence.FieldIdTransactionManager;

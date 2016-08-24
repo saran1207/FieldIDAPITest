@@ -1,15 +1,15 @@
 package com.n4systems.model.parents;
 
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
-
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.SecurityDefiner;
+
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
 
 @SuppressWarnings("serial")
 @MappedSuperclass

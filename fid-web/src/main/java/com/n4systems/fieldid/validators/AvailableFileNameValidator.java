@@ -3,12 +3,11 @@
  */
 package com.n4systems.fieldid.validators;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.model.FileAttachment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AvailableFileNameValidator {
 	private final List<FileAttachment> allAttachments;

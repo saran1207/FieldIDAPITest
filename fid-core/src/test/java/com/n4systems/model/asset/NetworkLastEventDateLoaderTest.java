@@ -1,8 +1,8 @@
 package com.n4systems.model.asset;
 
-import javax.persistence.EntityManager;
-
 import org.junit.Test;
+
+import javax.persistence.EntityManager;
 
 public class NetworkLastEventDateLoaderTest {
 

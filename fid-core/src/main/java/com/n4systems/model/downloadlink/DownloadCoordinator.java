@@ -1,8 +1,5 @@
 package com.n4systems.model.downloadlink;
 
-import java.util.List;
-import java.util.concurrent.Executor;
-
 import com.n4systems.model.Asset;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -12,16 +9,13 @@ import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.persistence.savers.Saver;
 import com.n4systems.reporting.ReportDefiner;
 import com.n4systems.taskscheduling.TaskExecutor;
-import com.n4systems.taskscheduling.task.AssetExportTask;
-import com.n4systems.taskscheduling.task.AutoAttributeExportTask;
-import com.n4systems.taskscheduling.task.CustomerExportTask;
-import com.n4systems.taskscheduling.task.DownloadTaskFactory;
-import com.n4systems.taskscheduling.task.ExcelReportExportTask;
-import com.n4systems.taskscheduling.task.PrintEventSummaryReportTask;
-import com.n4systems.taskscheduling.task.UserExportTask;
+import com.n4systems.taskscheduling.task.*;
 import com.n4systems.util.persistence.search.SearchDefiner;
 import com.n4systems.util.views.ExcelOutputHandler;
 import com.n4systems.util.views.TableView;
+
+import java.util.List;
+import java.util.concurrent.Executor;
 
 public class DownloadCoordinator {
 	private final Executor executor;

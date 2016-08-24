@@ -1,12 +1,5 @@
 package com.n4systems.ejb.legacy.wrapper;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-
-import rfid.ejb.entity.OrderMappingBean;
-
 import com.n4systems.ejb.legacy.OrderMapping;
 import com.n4systems.ejb.legacy.impl.OrderMappingManager;
 import com.n4systems.ejb.wrapper.EJBTransactionEmulator;
@@ -15,6 +8,11 @@ import com.n4systems.model.Tenant;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
+import rfid.ejb.entity.OrderMappingBean;
+
+import javax.persistence.EntityManager;
+import java.util.List;
+import java.util.Map;
 
 public class OrderMappingEJBContainer extends EJBTransactionEmulator<OrderMapping> implements OrderMapping {
 

@@ -1,12 +1,11 @@
 package com.n4systems.fieldidadmin.actions;
 
-import org.apache.log4j.Logger;
-
 import com.n4systems.ejb.InstructionalVidoeHelper;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.InstructionalVideo;
 import com.n4systems.tools.Pager;
 import com.opensymphony.xwork2.Preparable;
+import org.apache.log4j.Logger;
 
 public class InstructionalVideoCrud extends AbstractAdminAction implements Preparable {
 

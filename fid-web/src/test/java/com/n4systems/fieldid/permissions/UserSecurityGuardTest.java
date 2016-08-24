@@ -1,10 +1,9 @@
 package com.n4systems.fieldid.permissions;
 
-import static org.junit.Assert.*;
-
+import com.n4systems.security.Permissions;
 import org.junit.Test;
 
-import com.n4systems.security.Permissions;
+import static org.junit.Assert.fail;
 
 public class UserSecurityGuardTest extends AbstractUserSecurityTestCase {
 

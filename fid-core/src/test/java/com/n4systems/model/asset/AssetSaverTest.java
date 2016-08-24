@@ -1,21 +1,19 @@
 package com.n4systems.model.asset;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
+import com.n4systems.exceptions.NotImplementedException;
+import com.n4systems.model.Asset;
+import com.n4systems.model.builders.AssetBuilder;
+import com.n4systems.model.builders.UserBuilder;
+import com.n4systems.model.user.User;
+import org.junit.Test;
 
+import javax.persistence.EntityManager;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
-import com.n4systems.model.Asset;
-import com.n4systems.model.builders.AssetBuilder;
-import org.junit.Test;
-
-
-import com.n4systems.exceptions.NotImplementedException;
-import com.n4systems.model.builders.UserBuilder;
-import com.n4systems.model.user.User;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class AssetSaverTest {
 

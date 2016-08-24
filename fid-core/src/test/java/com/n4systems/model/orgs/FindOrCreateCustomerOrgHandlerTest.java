@@ -1,17 +1,13 @@
 package com.n4systems.model.orgs;
 
-import static com.n4systems.model.builders.CustomerOrgBuilder.*;
-import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
+import com.n4systems.persistence.loaders.ListLoader;
+import com.n4systems.persistence.savers.Saver;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
-
-import com.n4systems.persistence.loaders.ListLoader;
-import com.n4systems.persistence.savers.Saver;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 
 
 public class FindOrCreateCustomerOrgHandlerTest {

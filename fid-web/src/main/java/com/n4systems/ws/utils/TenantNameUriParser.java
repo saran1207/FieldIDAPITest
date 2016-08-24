@@ -1,9 +1,9 @@
 package com.n4systems.ws.utils;
 
-import java.net.URI;
-
 import com.n4systems.util.HostNameParser;
 import com.n4systems.ws.exceptions.WsSecurityException;
+
+import java.net.URI;
 
 public class TenantNameUriParser {
 

@@ -1,13 +1,12 @@
 package com.n4systems.model.user;
 
-import javax.persistence.EntityManager;
-
-
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+
+import javax.persistence.EntityManager;
 
 public class UserByReferralCodeLoader extends Loader<User> {
 	private Tenant tenant;

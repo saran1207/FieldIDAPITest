@@ -1,17 +1,16 @@
 package com.n4systems.api.validation.validators;
 
-import java.util.Map;
-
-import javax.persistence.NonUniqueResultException;
-
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.ValidationResult;
-import com.n4systems.exporting.beanutils.SerializableField;
 import com.n4systems.exporting.beanutils.OwnerSerializationHandler;
+import com.n4systems.exporting.beanutils.SerializableField;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.OrgByNameLoader;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.StringUtils;
+
+import javax.persistence.NonUniqueResultException;
+import java.util.Map;
 
 public class OwnerExistsValidator implements FieldValidator {
 

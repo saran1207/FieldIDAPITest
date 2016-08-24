@@ -1,22 +1,18 @@
 package com.n4systems.exporting.io;
 
-import static junit.framework.Assert.*;
-import static org.easymock.EasyMock.*;
+import jxl.write.*;
+import jxl.write.biff.RowsExceededException;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import jxl.write.DateTime;
-import jxl.write.Label;
-import jxl.write.WritableCell;
-import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;
-import jxl.write.WriteException;
-import jxl.write.biff.RowsExceededException;
+import static junit.framework.Assert.assertEquals;
+import static org.easymock.EasyMock.*;
 
-import org.junit.Test;
+import java.lang.Boolean;
 
 public class ExcelCellManagerTest {	
 	

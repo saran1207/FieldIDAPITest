@@ -1,13 +1,12 @@
 package com.n4systems.fieldid.actions.eula;
 
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.eula.EULA;
 import com.n4systems.model.eula.EulaAcceptance;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
 
 public class EulaAcceptanceAction extends AbstractAction {
 	private static final Logger logger = Logger.getLogger(EulaAcceptanceAction.class);

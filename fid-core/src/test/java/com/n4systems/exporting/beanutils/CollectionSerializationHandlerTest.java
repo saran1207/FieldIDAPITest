@@ -1,14 +1,13 @@
 package com.n4systems.exporting.beanutils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import com.google.common.collect.Lists;
+import org.junit.Test;
 
 import java.util.Date;
 import java.util.Map;
 
-import org.junit.Test;
-
-import com.google.common.collect.Lists;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 public class CollectionSerializationHandlerTest {
 	private final Date testDate = new Date();
 	private TestExportBean bean = new TestExportBean("mytype", null, 42, testDate, Lists.newArrayList(new Integer(123), new Integer(456)));
