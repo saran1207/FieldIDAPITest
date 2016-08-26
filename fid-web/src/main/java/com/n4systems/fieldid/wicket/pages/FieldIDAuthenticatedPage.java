@@ -21,10 +21,12 @@ public class FieldIDAuthenticatedPage extends FieldIDWicketPage {
     public FieldIDAuthenticatedPage(PageParameters params) {
         super(params);
         verifyLoggedIn();
+        verifyEulaAcceptance();
     }
 
     public FieldIDAuthenticatedPage() {
         verifyLoggedIn();
+        verifyEulaAcceptance();
     }
 
     @Override
@@ -39,6 +41,14 @@ public class FieldIDAuthenticatedPage extends FieldIDWicketPage {
         if (sessionUser == null) {
             new UrlArchive("preLoginContext", getServletRequest(), getServletRequest().getSession()).storeUrl();
             throw new RedirectToUrlException("/login.action");
+        }
+    }
+
+    private void verifyEulaAcceptance() {
+        SessionUser sessionUser = getSessionUser();
+
+        if (sessionUser.isAdmin() && !FieldIDSession.get().getEulaAcceptance().isLatestEulaAccepted()) {
+            throw new RedirectToUrlException("/eulaAcceptanceAdd.action");
         }
     }
 
