@@ -11,6 +11,7 @@ import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedPlaceEventResource;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
+import com.n4systems.model.api.Archivable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -51,6 +53,19 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 
 	public ApiOrgResource() {
 		super(BaseOrg.class, true);
+	}
+
+
+	@Override
+	protected QueryBuilder<BaseOrg> createFindAllBuilder(Date after) {
+		QueryBuilder<BaseOrg> builder = createTenantSecurityBuilder(BaseOrg.class, true);
+		builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.NE, "state", Archivable.EntityState.RETIRED));
+		if (after != null) {
+			builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GT, "modified", after));
+		}
+		builder.addOrder("id");
+		addTermsToBuilder(builder);
+		return builder;
 	}
 
 	@Override
