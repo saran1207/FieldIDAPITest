@@ -1,9 +1,9 @@
 package com.n4systems.persistence.loaders;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
+
+import javax.persistence.EntityManager;
 
 
 abstract public class Loader<T> {

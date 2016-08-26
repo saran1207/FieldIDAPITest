@@ -2,7 +2,6 @@ package com.n4systems.exporting.io;
 
 import com.n4systems.model.utils.PlainDate;
 import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

@@ -1,9 +1,9 @@
 package com.n4systems.util.persistence;
 
+import com.n4systems.exceptions.InvalidQueryException;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.n4systems.exceptions.InvalidQueryException;
 
 public class NewObjectSelect extends SelectClause {
 	private static final long serialVersionUID = 1L;

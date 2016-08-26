@@ -8,7 +8,6 @@ import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.model.search.EventReportCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.File;
 import java.io.OutputStream;
 import java.util.List;
 

@@ -1,19 +1,17 @@
 package com.n4systems.services;
 
-import static com.n4systems.model.builders.JobBuilder.*;
-import static com.n4systems.model.builders.UserBuilder.*;
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.EmployeeAlreadyAttachedException;
 import com.n4systems.exceptions.NonEmployeeUserException;
 import com.n4systems.model.Project;
 import com.n4systems.model.user.User;
 import com.n4systems.security.UserType;
+import org.junit.Test;
+
+import static com.n4systems.model.builders.JobBuilder.aJob;
+import static com.n4systems.model.builders.UserBuilder.*;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 
 public class JobResourceServiceTest {
 	private final User modifier = aUser().build();

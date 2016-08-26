@@ -1,8 +1,5 @@
 package com.n4systems.webservice.server;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exceptions.SubAssetUniquenessException;
@@ -12,6 +9,9 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.webservice.dto.InspectionServiceDTO;
 import com.n4systems.webservice.dto.SubProductMapServiceDTO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UpdateSubProducts {
 

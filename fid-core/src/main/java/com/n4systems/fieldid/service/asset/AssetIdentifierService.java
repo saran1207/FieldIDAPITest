@@ -16,7 +16,6 @@ import rfid.ejb.entity.IdentifierCounter;
 
 import java.text.DecimalFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Collection;
 

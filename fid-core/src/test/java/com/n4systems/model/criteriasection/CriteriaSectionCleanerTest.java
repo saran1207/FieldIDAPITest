@@ -1,23 +1,21 @@
 package com.n4systems.model.criteriasection;
 
-import static org.junit.Assert.*;
-
-import java.util.Arrays;
-import java.util.List;
-
-import com.n4systems.model.OneClickCriteria;
-import com.n4systems.model.builders.OneClickCriteriaBuilder;
+import com.n4systems.model.Criteria;
+import com.n4systems.model.CriteriaSection;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.api.Cleaner;
 import com.n4systems.model.builders.CriteriaSectionBuilder;
+import com.n4systems.model.builders.OneClickCriteriaBuilder;
+import com.n4systems.model.builders.TenantBuilder;
 import com.n4systems.model.builders.UserBuilder;
 import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.model.Criteria;
-import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.Tenant;
-import com.n4systems.model.api.Cleaner;
-import com.n4systems.model.builders.TenantBuilder;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class CriteriaSectionCleanerTest {
 	private static final String title = "title";

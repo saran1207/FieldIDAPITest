@@ -1,11 +1,10 @@
 package com.n4systems.util;
 
-import static com.n4systems.test.helpers.Asserts.*;
-import static org.junit.Assert.*;
-
+import com.n4systems.exceptions.InvalidArgumentException;
 import org.junit.Test;
 
-import com.n4systems.exceptions.InvalidArgumentException;
+import static com.n4systems.test.helpers.Asserts.assertNotEquals;
+import static org.junit.Assert.*;
 
 
 

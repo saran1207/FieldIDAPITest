@@ -1,14 +1,9 @@
 package com.n4systems.model.parents.legacy;
 
-import java.util.Date;
-
-import javax.persistence.MappedSuperclass;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
+
+import javax.persistence.*;
+import java.util.Date;
 
 @SuppressWarnings("serial")
 @MappedSuperclass

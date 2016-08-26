@@ -1,11 +1,11 @@
 package com.n4systems.webservice;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.n4systems.model.BaseEntity;
 import com.n4systems.tools.Pager;
 import com.n4systems.webservice.dto.AbstractBaseServiceDTO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class PaginatedModelToServiceConverter<M extends BaseEntity, S extends AbstractBaseServiceDTO> implements ModelToServiceConverter<M, S> {
 	

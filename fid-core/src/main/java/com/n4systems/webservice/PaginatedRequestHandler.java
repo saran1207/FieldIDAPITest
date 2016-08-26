@@ -1,13 +1,12 @@
 package com.n4systems.webservice;
 
-import org.apache.log4j.Logger;
-
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ConfigurationProvider;
 import com.n4systems.webservice.dto.AbstractListResponse;
 import com.n4systems.webservice.dto.PaginatedRequestInformation;
 import com.n4systems.webservice.exceptions.ServiceException;
+import org.apache.log4j.Logger;
 
 abstract public class PaginatedRequestHandler<R extends AbstractListResponse>  implements RequestHandler<PaginatedRequestInformation, R> {
 	private final Logger logger = Logger.getLogger(PaginatedRequestHandler.class);

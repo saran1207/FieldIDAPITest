@@ -1,12 +1,5 @@
 package com.n4systems.model.safetynetwork;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.UnsecuredEntity;
 import com.n4systems.model.orgs.BaseOrg;
@@ -14,6 +7,8 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.tenant.HasSetupDataTenant;
+
+import javax.persistence.*;
 
 
 

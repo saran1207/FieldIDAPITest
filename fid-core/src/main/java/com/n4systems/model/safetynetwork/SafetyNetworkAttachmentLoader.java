@@ -1,9 +1,9 @@
 package com.n4systems.model.safetynetwork;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.FileAttachment;
 import com.n4systems.persistence.loaders.Loader;
+
+import javax.persistence.EntityManager;
 
 public class SafetyNetworkAttachmentLoader extends Loader<FileAttachment> {
 	private final AssetTypeFileAttachmentIdByAssetNetworkIdExistsLoader canLoadAttachmentLoader;

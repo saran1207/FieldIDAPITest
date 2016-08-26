@@ -1,13 +1,5 @@
 package com.n4systems.model.eventtype;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Test;
-
 import com.google.common.collect.ImmutableList;
 import com.n4systems.exceptions.IdListTooBigException;
 import com.n4systems.model.Asset;
@@ -16,12 +8,15 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.ConfigContextOverridableTestDouble;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ConfigurationProvider;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.SimpleSelect;
-import com.n4systems.util.persistence.TestingQueryBuilder;
-import com.n4systems.util.persistence.TestingTransaction;
-import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 
 
 public class CommonAssetTypeLoaderTest {

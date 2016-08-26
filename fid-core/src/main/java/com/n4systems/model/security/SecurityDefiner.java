@@ -1,11 +1,11 @@
 package com.n4systems.model.security;
 
-import java.io.Serializable;
-
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.api.HasTenant;
 import com.n4systems.model.api.HasUser;
+
+import java.io.Serializable;
 
 /**
  * Defines the filter field paths to be used in a security filter.

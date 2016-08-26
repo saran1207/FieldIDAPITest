@@ -1,9 +1,8 @@
 package com.n4systems.ws.model.autoattribute;
 
-import rfid.ejb.entity.InfoFieldBean;
-
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.ws.model.WsModelConverter;
+import rfid.ejb.entity.InfoFieldBean;
 
 public class WsAutoAttributeCriteriaConverter extends WsModelConverter<AutoAttributeCriteria, WsAutoAttributeCriteria> {
 	

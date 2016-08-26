@@ -1,12 +1,11 @@
 package com.n4systems.uitags.views;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts2.components.UIBean;
-
 import com.n4systems.model.orgs.BaseOrg;
 import com.opensymphony.xwork2.util.ValueStack;
+import org.apache.struts2.components.UIBean;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class OrgPickerComponent extends UIBean {
 	public static final String TEMPLATE = "orgPicker";

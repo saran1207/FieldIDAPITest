@@ -1,13 +1,13 @@
 package com.n4systems.fieldid.actions.user;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.api.Listable;
 import com.n4systems.util.timezone.Country;
 import com.n4systems.util.timezone.CountryList;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class RegionListAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;

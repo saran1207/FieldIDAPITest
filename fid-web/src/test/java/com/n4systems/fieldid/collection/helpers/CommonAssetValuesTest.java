@@ -1,25 +1,23 @@
 package com.n4systems.fieldid.collection.helpers;
 
-import static com.n4systems.model.builders.PredefinedLocationBuilder.*;
-import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
-import static com.n4systems.model.builders.AssetBuilder.*;
-import static com.n4systems.model.builders.UserBuilder.*;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetStatus;
-
+import com.n4systems.model.location.Location;
+import com.n4systems.model.location.PredefinedLocation;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.user.User;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 
-
-import com.n4systems.model.location.Location;
-import com.n4systems.model.location.PredefinedLocation;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.user.User;
+import static com.n4systems.model.builders.AssetBuilder.anAsset;
+import static com.n4systems.model.builders.PredefinedLocationBuilder.aPredefinedLocation;
+import static com.n4systems.model.builders.PrimaryOrgBuilder.aPrimaryOrg;
+import static com.n4systems.model.builders.UserBuilder.anEmployee;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.sameInstance;
+import static org.junit.Assert.assertThat;
 
 
 public class CommonAssetValuesTest {

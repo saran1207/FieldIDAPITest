@@ -1,17 +1,17 @@
 package com.n4systems.ws.model.eventtype;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.easymock.EasyMock;
-import org.junit.Test;
-
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.ws.model.WsModelConverter;
+import org.easymock.EasyMock;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 public class WsCriteriaSectionConverterTest {
 	

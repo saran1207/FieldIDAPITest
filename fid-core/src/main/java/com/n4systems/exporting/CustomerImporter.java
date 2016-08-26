@@ -15,10 +15,8 @@ import com.n4systems.model.orgs.customer.CustomerOrgArchiver;
 import com.n4systems.model.orgs.division.DivisionOrgArchiver;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
-import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.Transaction;
-import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.persistence.savers.Saver;
 
 public class CustomerImporter extends AbstractImporter<FullExternalOrgView> {

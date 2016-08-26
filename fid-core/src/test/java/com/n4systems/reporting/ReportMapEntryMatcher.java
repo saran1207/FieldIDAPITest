@@ -3,13 +3,13 @@
  */
 package com.n4systems.reporting;
 
-import static org.hamcrest.Matchers.*;
-
-import java.util.Map;
-
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+
+import java.util.Map;
+
+import static org.hamcrest.Matchers.hasEntry;
 
 public class ReportMapEntryMatcher extends TypeSafeMatcher<Map<String, Object>> {
 	

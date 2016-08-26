@@ -1,9 +1,9 @@
 package com.n4systems.testutils;
 
+import com.n4systems.persistence.Transaction;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-
-import com.n4systems.persistence.Transaction;
 
 public class DummyTransaction implements Transaction {
 	private DummyEntityManager em = new DummyEntityManager();

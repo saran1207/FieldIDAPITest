@@ -1,14 +1,14 @@
 package com.n4systems.util.uri;
 
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
-
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.Tenant;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ConfigurationProvider;
 import com.n4systems.util.HostNameParser;
+
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 
 public abstract class InternalUrlBuilder extends BaseUrlBuilder {
 	private final ConfigurationProvider configContext;

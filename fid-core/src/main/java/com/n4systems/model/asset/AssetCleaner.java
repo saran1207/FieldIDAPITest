@@ -1,11 +1,10 @@
 package com.n4systems.model.asset;
 
-import com.n4systems.model.Asset;
-import rfid.ejb.entity.InfoOptionBean;
-
 import com.n4systems.model.AbstractEntityCleaner;
+import com.n4systems.model.Asset;
 import com.n4systems.model.api.Cleaner;
 import com.n4systems.model.infooption.InfoOptionCleaner;
+import rfid.ejb.entity.InfoOptionBean;
 
 public class AssetCleaner extends AbstractEntityCleaner<Asset> {
 	

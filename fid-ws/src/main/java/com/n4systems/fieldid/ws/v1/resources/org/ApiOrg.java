@@ -20,6 +20,8 @@ public class ApiOrg extends ApiReadonlyModel {
     private List<ApiEventType> eventTypes;
     private List<ApiSavedPlaceEvent> events;
 	private List<ApiSavedPlaceEvent> schedules;
+	private Long assetCount;
+	private Long offlineAssetCount;
 
 	public ApiOrg() {
 		contactInformation = new ContactInformation();
@@ -119,6 +121,24 @@ public class ApiOrg extends ApiReadonlyModel {
 
 	public void setSchedules(List<ApiSavedPlaceEvent> schedules) {
 		this.schedules = schedules;
+	}
+
+	public Long getAssetCount() {
+		return assetCount;
+	}
+
+	public ApiOrg setAssetCount(Long assetCount) {
+		this.assetCount = assetCount;
+		return this;
+	}
+
+	public Long getOfflineAssetCount() {
+		return offlineAssetCount;
+	}
+
+	public ApiOrg setOfflineAssetCount(Long offlineAssetCount) {
+		this.offlineAssetCount = offlineAssetCount;
+		return this;
 	}
 }
 

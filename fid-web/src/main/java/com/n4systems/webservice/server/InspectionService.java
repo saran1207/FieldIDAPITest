@@ -1,10 +1,10 @@
 package com.n4systems.webservice.server;
 
-import java.util.List;
-
 import com.n4systems.webservice.server.bundles.AuthBundle;
 import com.n4systems.webservice.server.bundles.ProofTestBundle;
 import com.n4systems.webservice.server.bundles.ProofTestStatusBundle;
+
+import java.util.List;
 
 
 public interface InspectionService extends AbstractWebService {

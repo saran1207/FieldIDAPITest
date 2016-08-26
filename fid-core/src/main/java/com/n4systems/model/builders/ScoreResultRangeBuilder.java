@@ -1,7 +1,7 @@
 package com.n4systems.model.builders;
 
-import com.n4systems.model.ScoreComparator;
 import com.n4systems.model.ResultRange;
+import com.n4systems.model.ScoreComparator;
 
 public class ScoreResultRangeBuilder extends BaseBuilder<ResultRange> {
 

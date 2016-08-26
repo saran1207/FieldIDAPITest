@@ -1,12 +1,12 @@
 package com.n4systems.model.safetynetwork;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.exceptions.NotImplementedException;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.safetynetwork.TypedOrgConnection.ConnectionType;
 import com.n4systems.persistence.savers.Saver;
+
+import javax.persistence.EntityManager;
 
 public class CatalogOnlyConnectionSaver extends Saver<TypedOrgConnection> {
 	private final Long houseAccountId;

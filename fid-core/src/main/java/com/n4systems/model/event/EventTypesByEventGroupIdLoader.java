@@ -1,14 +1,12 @@
 package com.n4systems.model.event;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
-import com.n4systems.model.EventType;
 import com.n4systems.model.ThingEventType;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.util.persistence.QueryBuilder;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 public class EventTypesByEventGroupIdLoader extends ListLoader<ThingEventType> {
 

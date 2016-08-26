@@ -1,8 +1,7 @@
 package com.n4systems.fieldid.service.user;
 
-import com.n4systems.fieldid.service.CrudService;
 import com.google.common.collect.Lists;
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.security.OwnerAndDownWithPrimaryFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;

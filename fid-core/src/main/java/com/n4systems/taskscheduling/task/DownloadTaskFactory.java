@@ -1,7 +1,5 @@
 package com.n4systems.taskscheduling.task;
 
-import java.util.List;
-
 import com.n4systems.exporting.ExporterFactory;
 import com.n4systems.mail.MailManager;
 import com.n4systems.model.Asset;
@@ -17,6 +15,8 @@ import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.search.SearchDefiner;
 import com.n4systems.util.views.ExcelOutputHandler;
 import com.n4systems.util.views.TableView;
+
+import java.util.List;
 
 public class DownloadTaskFactory {
 	private final Saver<DownloadLink> linkSaver;

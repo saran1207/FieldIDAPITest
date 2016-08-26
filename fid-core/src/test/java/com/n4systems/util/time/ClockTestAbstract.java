@@ -1,9 +1,9 @@
 package com.n4systems.util.time;
 
-import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertNotNull;
 
 public abstract class ClockTestAbstract {
 

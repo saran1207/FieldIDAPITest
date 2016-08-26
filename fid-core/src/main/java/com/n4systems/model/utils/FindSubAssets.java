@@ -1,12 +1,12 @@
 package com.n4systems.model.utils;
 
-import java.util.List;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.Asset;
 import com.n4systems.model.SubAsset;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
+
+import java.util.List;
 
 public class FindSubAssets {
 	private final PersistenceManager persistenceManager;

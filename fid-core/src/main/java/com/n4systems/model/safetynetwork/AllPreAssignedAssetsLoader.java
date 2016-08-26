@@ -5,9 +5,8 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
+import java.util.List;
 
 public class AllPreAssignedAssetsLoader extends ListLoader<Asset> {
 

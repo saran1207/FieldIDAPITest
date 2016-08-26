@@ -1,7 +1,6 @@
 package com.n4systems.model.dashboard.widget;
 
 import com.n4systems.model.AssetType;
-import com.n4systems.model.EventType;
 import com.n4systems.model.ThingEventType;
 import com.n4systems.model.dashboard.widget.interfaces.ConfigurationForAgenda;
 import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithOwner;

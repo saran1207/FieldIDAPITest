@@ -1,12 +1,11 @@
 package com.n4systems.persistence.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LargeInClauseSelect<T> {
 	protected static int MAX_IDS_IN_AN_IN_CLAUSE = 1000;

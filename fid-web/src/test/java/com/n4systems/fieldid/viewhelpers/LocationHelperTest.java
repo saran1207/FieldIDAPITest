@@ -1,19 +1,19 @@
 package com.n4systems.fieldid.viewhelpers;
 
-import static com.n4systems.model.builders.PredefinedLocationBuilder.*;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Test;
-import com.n4systems.fieldid.viewhelpers.LocationHelper;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.persistence.Transactor;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.uitags.views.HierarchicalNode;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.n4systems.model.builders.PredefinedLocationBuilder.aPredefinedLocation;
+import static com.n4systems.model.builders.PredefinedLocationBuilder.aRootPredefinedLocation;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 
 
 public class LocationHelperTest {

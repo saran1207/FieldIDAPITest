@@ -1,20 +1,17 @@
 package com.n4systems.ejb.legacy;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-
 import com.n4systems.exceptions.SubAssetUniquenessException;
-import com.n4systems.model.Asset;
-import rfid.ejb.entity.AddAssetHistory;
-import rfid.ejb.entity.AssetExtension;
-
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
+import com.n4systems.model.Asset;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.Event;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
+import rfid.ejb.entity.AddAssetHistory;
+import rfid.ejb.entity.AssetExtension;
+
+import java.util.Collection;
 
 public interface LegacyAsset {
 	

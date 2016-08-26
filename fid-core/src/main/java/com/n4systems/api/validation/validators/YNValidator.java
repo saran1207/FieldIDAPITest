@@ -1,13 +1,12 @@
 package com.n4systems.api.validation.validators;
 
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.exporting.beanutils.SerializableField;
 import com.n4systems.model.security.SecurityFilter;
+import org.apache.commons.lang.StringUtils;
+
+import java.util.Map;
 
 public class YNValidator implements FieldValidator {
 	

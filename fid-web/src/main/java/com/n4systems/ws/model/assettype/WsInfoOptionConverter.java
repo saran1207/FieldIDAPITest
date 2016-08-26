@@ -1,8 +1,7 @@
 package com.n4systems.ws.model.assettype;
 
-import rfid.ejb.entity.InfoOptionBean;
-
 import com.n4systems.ws.model.WsModelConverter;
+import rfid.ejb.entity.InfoOptionBean;
 
 public class WsInfoOptionConverter extends WsModelConverter<InfoOptionBean, WsInfoOption> {
 

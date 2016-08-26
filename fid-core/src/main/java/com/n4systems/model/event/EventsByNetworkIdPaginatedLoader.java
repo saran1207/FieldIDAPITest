@@ -7,12 +7,7 @@ import com.n4systems.model.safetynetwork.TypedOrgConnection;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.PaginatedLoader;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.SubSelectInClause;
-import com.n4systems.util.persistence.WhereClause;
-import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.util.persistence.WhereParameter;
-import com.n4systems.util.persistence.WhereParameterGroup;
+import com.n4systems.util.persistence.*;
 
 public class EventsByNetworkIdPaginatedLoader extends PaginatedLoader<Event> {
 

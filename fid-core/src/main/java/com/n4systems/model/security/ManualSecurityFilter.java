@@ -1,12 +1,12 @@
 package com.n4systems.model.security;
 
-import javax.persistence.Query;
-
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.WhereParameter;
+
+import javax.persistence.Query;
 
 public class ManualSecurityFilter implements QueryFilter {
 	private static final String tenantParamName = "securityTenantID";

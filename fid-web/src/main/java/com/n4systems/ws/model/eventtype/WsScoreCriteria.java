@@ -1,8 +1,8 @@
 package com.n4systems.ws.model.eventtype;
 
+import javax.xml.bind.annotation.XmlElement;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlElement;
 
 public class WsScoreCriteria extends WsCriteria {
 	

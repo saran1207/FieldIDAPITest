@@ -1,13 +1,13 @@
 package com.n4systems.api.validation.validators;
 
-import java.util.Map;
-
-import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.model.AssetView;
+import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.exporting.beanutils.SerializableField;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.security.SecurityFilter;
+
+import java.util.Map;
 
 public abstract class AssetViewValidator implements FieldValidator {
 	public static final String ASSET_TYPE_KEY = "assetType";

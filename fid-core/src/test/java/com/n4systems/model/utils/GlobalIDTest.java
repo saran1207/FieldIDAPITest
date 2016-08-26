@@ -1,8 +1,8 @@
 package com.n4systems.model.utils;
 
-import java.util.UUID;
-
 import org.junit.Test;
+
+import java.util.UUID;
 
 public class GlobalIDTest {
 

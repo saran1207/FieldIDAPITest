@@ -1,11 +1,10 @@
 package com.n4systems.taskscheduling;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.n4systems.util.properties.HierarchicalProperties;
 import org.apache.log4j.Logger;
 
-import com.n4systems.util.properties.HierarchicalProperties;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**

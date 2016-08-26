@@ -5,7 +5,6 @@ import com.n4systems.ejb.impl.MassUpdateManagerImpl;
 import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
 import com.n4systems.model.Project;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.user.User;

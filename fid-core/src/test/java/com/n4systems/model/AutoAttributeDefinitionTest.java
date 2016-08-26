@@ -1,19 +1,16 @@
 package com.n4systems.model;
 
-import static org.junit.Assert.*;
-
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.n4systems.model.builders.InfoOptionBeanBuilder;
 import com.n4systems.test.helpers.FluentArrayList;
-
+import org.junit.Before;
+import org.junit.Test;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
-import static com.n4systems.model.builders.InfoFieldBeanBuilder.*;
+import java.util.List;
+
+import static com.n4systems.model.builders.InfoFieldBeanBuilder.aTextField;
+import static org.junit.Assert.assertArrayEquals;
 
 public class AutoAttributeDefinitionTest {
 

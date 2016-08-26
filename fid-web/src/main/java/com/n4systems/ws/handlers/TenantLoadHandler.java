@@ -1,13 +1,12 @@
 package com.n4systems.ws.handlers;
 
-import java.net.URI;
-
-import org.apache.log4j.Logger;
-
 import com.n4systems.model.Tenant;
 import com.n4systems.model.tenant.TenantByNameLoader;
 import com.n4systems.ws.exceptions.WsSecurityException;
 import com.n4systems.ws.utils.TenantNameUriParser;
+import org.apache.log4j.Logger;
+
+import java.net.URI;
 
 public class TenantLoadHandler {
 	private static Logger logger = Logger.getLogger(TenantLoadHandler.class);

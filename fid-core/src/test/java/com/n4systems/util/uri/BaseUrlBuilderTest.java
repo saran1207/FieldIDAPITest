@@ -1,10 +1,10 @@
 package com.n4systems.util.uri;
 
+import org.junit.Test;
+
 import static org.hamcrest.Matchers.endsWith;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-
-import org.junit.Test;
 
 public class BaseUrlBuilderTest {
 	

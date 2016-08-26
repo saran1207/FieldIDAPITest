@@ -1,12 +1,5 @@
 package com.n4systems.model.event;
 
-import java.util.Calendar;
-import java.util.Date;
-
-import javax.persistence.EntityManager;
-
-import org.apache.commons.lang.time.DateUtils;
-
 import com.n4systems.model.Event;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
@@ -14,6 +7,11 @@ import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import org.apache.commons.lang.time.DateUtils;
+
+import javax.persistence.EntityManager;
+import java.util.Calendar;
+import java.util.Date;
 
 public class EventCountLoader extends Loader<Long> {
 

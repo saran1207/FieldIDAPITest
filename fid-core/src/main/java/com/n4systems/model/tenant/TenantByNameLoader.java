@@ -1,11 +1,11 @@
 package com.n4systems.model.tenant;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.util.persistence.QueryBuilder;
+
+import javax.persistence.EntityManager;
 
 public class TenantByNameLoader extends Loader<Tenant> {
 	private String tenantName;

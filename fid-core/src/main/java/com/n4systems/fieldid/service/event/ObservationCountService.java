@@ -2,8 +2,7 @@ package com.n4systems.fieldid.service.event;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.*;
-import com.n4systems.model.api.Archivable;
-import com.n4systems.util.persistence.*;
+import com.n4systems.util.persistence.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

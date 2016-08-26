@@ -1,9 +1,9 @@
 package com.n4systems.uitags.views;
 
+import com.opensymphony.xwork2.util.ValueStack;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.opensymphony.xwork2.util.ValueStack;
 
 public class N4TagModels {
 	

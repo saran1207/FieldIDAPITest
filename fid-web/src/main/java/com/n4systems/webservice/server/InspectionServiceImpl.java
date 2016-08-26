@@ -1,13 +1,5 @@
 package com.n4systems.webservice.server;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.log4j.Logger;
-
-
 import com.n4systems.fileprocessing.FileProcessorFactory;
 import com.n4systems.model.Event;
 import com.n4systems.model.user.User;
@@ -17,6 +9,11 @@ import com.n4systems.webservice.server.bundles.AuthBundle;
 import com.n4systems.webservice.server.bundles.ProofTestBundle;
 import com.n4systems.webservice.server.bundles.ProofTestStatusBundle;
 import com.n4systems.webservice.server.bundles.WebServiceStatus;
+import org.apache.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class InspectionServiceImpl extends AbstractWebServiceImpl implements InspectionService {
 	private Logger logger = Logger.getLogger(InspectionServiceImpl.class);

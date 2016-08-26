@@ -1,17 +1,16 @@
 package com.n4systems.fieldid.actions.downloaders;
 
-import java.io.ByteArrayInputStream;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-
-import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.n4systems.exceptions.NonPrintableEventType;
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.certificate.CertificateService;
 import com.n4systems.model.Event;
 import com.n4systems.reporting.EventReportType;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.ByteArrayInputStream;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 
 public class DownloadEventCert extends DownloadAction {

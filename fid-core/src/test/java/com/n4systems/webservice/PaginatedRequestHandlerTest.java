@@ -1,11 +1,5 @@
 package com.n4systems.webservice;
 
-import static junit.framework.Assert.*;
-import static org.easymock.EasyMock.*;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.util.ConfigContextOverridableTestDouble;
 import com.n4systems.util.ConfigEntry;
@@ -14,6 +8,11 @@ import com.n4systems.util.NonDataSourceBackedConfigContext;
 import com.n4systems.webservice.dto.AbstractListResponse;
 import com.n4systems.webservice.dto.PaginatedRequestInformation;
 import com.n4systems.webservice.exceptions.ServiceException;
+import org.junit.Before;
+import org.junit.Test;
+
+import static junit.framework.Assert.assertEquals;
+import static org.easymock.EasyMock.*;
 
 public class PaginatedRequestHandlerTest {
 

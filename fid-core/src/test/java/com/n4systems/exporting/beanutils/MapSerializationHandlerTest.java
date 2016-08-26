@@ -1,11 +1,11 @@
 package com.n4systems.exporting.beanutils;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 import java.util.Date;
 import java.util.Map;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 public class MapSerializationHandlerTest {
 
 	private static final long TIMESTAMP = 1000L;
