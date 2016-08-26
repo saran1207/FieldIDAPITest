@@ -129,49 +129,6 @@ public class FieldIdCoreConfig {
 		Security.addProvider(new BouncyCastleProvider());
 	}
 
-/*
-
-    @Bean
-    public MethodInvokingJobDetailFactoryBean methodInvokingJobDetailFactoryBean() {
-        MethodInvokingJobDetailFactoryBean obj = new MethodInvokingJobDetailFactoryBean();
-        obj.setTargetClass(GenericQuartzJob.class);
-        obj.setTargetMethod("myTask");
-        return obj;
-    }
-    @Bean
-    public SimpleTriggerFactoryBean simpleTriggerFactoryBean(){
-        SimpleTriggerFactoryBean stFactory = new SimpleTriggerFactoryBean();
-        stFactory.setJobDetail(methodInvokingJobDetailFactoryBean().getObject());
-        stFactory.setRepeatInterval(10000);
-        return stFactory;
-    }
-    @Bean
-    public SchedulerFactoryBean schedulerFactoryBean() {
-        SchedulerFactoryBean scheduler = new SchedulerFactoryBean();
-
-        Properties prop = new Properties();
-        prop.put("org.quartz.scheduler.instanceName","schedulerFactoryBean");
-        //prop.put("org.quartz.scheduler.instanceId", "CLUSTERED");
-        //prop.put("org.quartz.threadPool.class", "org.quartz.simpl.SimpleThreadPool");
-        //prop.put("org.quartz.threadPool.threadCount", "15");
-        //prop.put("org.quartz.jobStore.class", "org.quartz.impl.jdbcjobstore.JobStoreTX");
-        //prop.put("org.quartz.jobStore.isClustered", "true");
-        //prop.put("org.quartz.dataSource.quartzDataSource.driver", "com.mysql.jdbc.Driver");
-        //prop.put("org.quartz.dataSource.quartzDataSource.URL", "jdbc:mysql://localhost:3306/fieldid");
-        //prop.put("org.quartz.dataSource.quartzDataSource.user", "root");
-        //prop.put("org.quartz.dataSource.quartzDataSource.password", "");
-        //prop.put("org.quartz.jobStore.dataSource", "quartzDataSource");
-        //prop.put("org.quartz.jobStore.tablePrefix", "qrtz_");
-        //prop.put("org.quartz.jobStore.clusterCheckinInterval", "20000");
-        scheduler.setQuartzProperties(prop);
-        scheduler.setTriggers(simpleTriggerFactoryBean().getObject());
-        return scheduler;
-    }
-
-
-*/
-
-
     @Bean
     public AmazonS3Client amazonS3Client() {
         String accessKeyId = configService().getString(ConfigEntry.AMAZON_ACCESS_KEY_ID);

@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
  */
 public class PentahoService extends FieldIdPersistenceService {
 
+    /*
     private static final Logger logger=Logger.getLogger(PentahoService.class);
 
     public List<String> getPerformedByList() {
@@ -71,5 +72,5 @@ public class PentahoService extends FieldIdPersistenceService {
 
         return list.stream().distinct().collect(Collectors.toList());
     }
-
+*/
 }

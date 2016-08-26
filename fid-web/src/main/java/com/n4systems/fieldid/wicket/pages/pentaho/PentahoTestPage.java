@@ -47,9 +47,9 @@ public class PentahoTestPage extends FieldIDTemplatePage {
     public String finalViewerUrl = "";
     public String finalEditorUrl = "";
 
-    public String viewer = "http://localhost:8081/pentaho/api/repos/%3Ahome%3Aadmin%3Atest.xanalyzer/viewer?";
-    public String editor = "http://localhost:8081/pentaho/api/repos/%3Ahome%3Aadmin%3Atest.xanalyzer/editor?";
-    public String auth = "http://localhost:8081/pentaho/j_spring_security_check";
+    public String viewer = "http://fidstage.com:8081/pentaho/api/repos/%3Ahome%3Aadmin%3Atest.xanalyzer/viewer?";
+    public String editor = "http://fidstage.com/:8081/pentaho/api/repos/%3Ahome%3Aadmin%3Atest.xanalyzer/editor?";
+    public String auth = "http://fidstage.com/:8081/pentaho/j_spring_security_check";
 
 
     public FidDropDownChoice<String> performedBy;
