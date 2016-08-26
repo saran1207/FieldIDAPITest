@@ -13,6 +13,7 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.event.NotifyEventAssigneeService;
 import com.n4systems.fieldid.service.event.ProcedureAuditEventService;
 import com.n4systems.fieldid.service.mixpanel.MixpanelService;
+import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.procedure.NotifyProcedureAssigneeService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
@@ -23,6 +24,7 @@ import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.asset.ScheduleSummaryEntry;
+import com.n4systems.model.offlineprofile.OfflineProfile;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.procedure.Procedure;
@@ -56,6 +58,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Transactional
 public class AssetService extends CrudService<Asset> {
@@ -74,6 +77,7 @@ public class AssetService extends CrudService<Asset> {
     @Autowired private NotifyProcedureAssigneeService notifyProcedureAssigneeService;
     @Autowired private S3Service s3Service;
     @Autowired private ConfigService configService;
+    @Autowired private OfflineProfileService offlineProfileService;
 
 	private Logger logger = Logger.getLogger(AssetService.class);
 
@@ -1018,5 +1022,54 @@ public class AssetService extends CrudService<Asset> {
             }
         }
         return image;
+    }
+
+    public Long getAssetCountByOrg(long orgId) {
+        BaseOrg org = orgService.findById(orgId);
+
+        if(org == null) return null;
+
+        QueryBuilder<Asset> query = createUserSecurityBuilder(Asset.class)
+                .addSimpleWhere("owner", org);
+
+        return persistenceService.count(query);
+    }
+
+    public Long getOfflineAssetCountByOrg(long orgId) {
+        BaseOrg org = orgService.findById(orgId);
+
+        OfflineProfile userProfile = offlineProfileService.find(getCurrentUser());
+
+        if(org == null) return null;
+
+        Long assetCount = 0L;
+
+        for(String mobileId : userProfile.getAssets()) {
+            if(isMobileAssetOffline(mobileId, org)) assetCount++;
+        }
+
+        return assetCount;
+    }
+
+    private boolean isMobileAssetOffline(String mobileId, BaseOrg org) {
+        QueryBuilder<Asset> query = createUserSecurityBuilder(Asset.class)
+                .addSimpleWhere("owner", org)
+                .addSimpleWhere("mobileGUID", mobileId);
+
+        return persistenceService.exists(query);
+    }
+
+    public List<String> getAssetMobileGUIDsByOrg(Long orgId) {
+        BaseOrg org = orgService.findById(orgId);
+
+        if(org == null) return null;
+
+        QueryBuilder<Asset> query = createUserSecurityBuilder(Asset.class)
+                .addSimpleWhere("owner", org);
+
+        return persistenceService.findAll(query)
+                                 .stream()
+                                 .map(Asset::getMobileGUID)
+                                 .collect(Collectors.toList());
     }
 }

@@ -20,6 +20,7 @@ import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.RequestCycle;
+import rfid.web.helper.SessionEulaAcceptance;
 import rfid.web.helper.SessionUser;
 
 import javax.servlet.http.HttpSession;
@@ -184,4 +185,8 @@ public class FieldIDSession extends WebSession {
 	public boolean isBooted() {
 		return getWebSessionMap().isBooted();
 	}
+
+    public SessionEulaAcceptance getEulaAcceptance() {
+        return getWebSessionMap().getEulaAcceptance();
+    }
 }
