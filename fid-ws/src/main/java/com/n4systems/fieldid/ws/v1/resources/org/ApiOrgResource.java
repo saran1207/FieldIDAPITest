@@ -2,6 +2,7 @@ package com.n4systems.fieldid.ws.v1.resources.org;
 
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
 import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiPlaceEventHistoryResource;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiPlaceEventTypeResource;
@@ -40,6 +41,9 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 
     @Autowired
     private ApiPlaceEventTypeResource eventTypeResource;
+
+	@Autowired
+	private AssetService assetService;
 
     //TODO Need to make use of this.
     @Autowired
@@ -85,6 +89,8 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
         apiOrg.setEventTypes(baseOrg.getEventTypes().stream().map(eventTypeResource::convertToApiPlaceEvent).collect(Collectors.toList()));
         apiOrg.setEvents(savedPlaceEventResource.findLastEventOfEachType(baseOrg.getId()));
 		apiOrg.setSchedules(savedPlaceEventResource.findAllOpenEvents(baseOrg));
+		apiOrg.setAssetCount(assetService.getAssetCountByOrg(baseOrg.getId()));
+		apiOrg.setOfflineAssetCount(assetService.getOfflineAssetCountByOrg(baseOrg.getId()));
 
 		return apiOrg;
 	}
