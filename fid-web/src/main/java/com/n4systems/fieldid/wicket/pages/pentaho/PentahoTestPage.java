@@ -75,6 +75,7 @@ public class PentahoTestPage extends FieldIDTemplatePage {
             e.printStackTrace();
         }
 
+        /*
         performedBy = new FidDropDownChoice<String>("performedBy", Model.of(urlPerformedBy), pentahoService.getPerformedByList());
         location = new FidDropDownChoice<String>("location", Model.of(urlLocation), pentahoService.getLocation());
         location.setNullValid(true);
@@ -83,6 +84,8 @@ public class PentahoTestPage extends FieldIDTemplatePage {
         eventtype = new FidDropDownChoice<String>("eventtype", Model.of(urlEventType), pentahoService.getEventType());
         assettype = new FidDropDownChoice<String>("assettype", Model.of(urlAssetType), pentahoService.getAssetType());
         assetstatus = new FidDropDownChoice<String>("assetstatus", Model.of(urlAssetStatus), pentahoService.getAssetStatus());
+
+        */
 
         add(performedBy);
         add(location);
