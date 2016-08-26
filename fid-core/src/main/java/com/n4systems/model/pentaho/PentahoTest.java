@@ -9,9 +9,12 @@ import java.util.Date;
  * Created by rrana on 2016-03-08.
  */
 
-@Entity
-@Table(name = "pentaho_test")
-public class PentahoTest implements UnsecuredEntity {
+//@Entity
+//@Table(name = "pentaho_test")
+public class PentahoTest {    /*
+
+        implements UnsecuredEntity {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -112,4 +115,5 @@ public class PentahoTest implements UnsecuredEntity {
     public void setCompletedDate(Date completedDate) {
         this.completedDate = completedDate;
     }
+    */
 }
