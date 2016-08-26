@@ -7,6 +7,11 @@ import com.n4systems.model.eula.LatestEulaAcceptanceLoader;
 
 public class SessionEulaAcceptance {
 	private boolean latestEulaAccepted;
+
+	@Deprecated //For testing only
+	public SessionEulaAcceptance() {
+		this.latestEulaAccepted = true;
+	}
 	
 	public SessionEulaAcceptance(CurrentEulaLoader currentEulaLoader, LatestEulaAcceptanceLoader latestEulaAcceptanceLoader) {
 		EulaAcceptance eulaAccepted = latestEulaAcceptanceLoader.load();

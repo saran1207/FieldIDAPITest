@@ -50,6 +50,7 @@ public class FieldIDSession extends WebSession {
     	getHttpSession().setAttribute(WebSessionMap.KEY_SESSION_USER, new SessionUser(user));
         getHttpSession().setAttribute(WebSessionMap.KEY_USER_SECURITY_GUARD, new SessionUserSecurityGuard(user));
         getHttpSession().setAttribute(WebSessionMap.KEY_SECURITY_GUARD, new SerializableSecurityGuard(TenantBuilder.n4(), PrimaryOrgBuilder.aPrimaryOrg().build()));
+        getHttpSession().setAttribute(WebSessionMap.KEY_EULA_ACCEPTANCE, new SessionEulaAcceptance());
     }
 
     @Override
@@ -71,7 +72,9 @@ public class FieldIDSession extends WebSession {
     @Deprecated // for testing only.
     public void setUser(User user) {
         getHttpSession().setAttribute(WebSessionMap.KEY_SESSION_USER, new SessionUser(user));
+        getHttpSession().setAttribute(WebSessionMap.KEY_EULA_ACCEPTANCE, new SessionEulaAcceptance());
     }
+
 
 	public static FieldIDSession get() {
         return (FieldIDSession) Session.get();
