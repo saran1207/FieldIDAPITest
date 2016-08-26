@@ -16,10 +16,10 @@ public class PerformSubEventPage extends SubEventPage {
 
     public PerformSubEventPage(IModel<ThingEvent> masterEvent, Long subAssetId, Long subEventTypeID) {
         this.masterEvent = masterEvent;
-        Asset subAsset = assetService.getAsset(subAssetId, Asset.POST_FETCH_ALL_PATHS);
+        this.subAsset = Model.of(assetService.getAsset(subAssetId, Asset.POST_FETCH_ALL_PATHS));
         EventType subEventType = eventTypeService.getEventType(subEventTypeID);
         fileAttachments = Lists.newArrayList();
-        this.event = Model.of(createSubEvent(subAsset, subEventType));
+        this.event = Model.of(createSubEvent(subAsset.getObject(), subEventType));
     }
 
     @SuppressWarnings("unchecked")
