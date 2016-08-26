@@ -1,0 +1,1 @@
+update org_base set state='RETIRED' where state='ARCHIVED' and tenant_id=15512127;
