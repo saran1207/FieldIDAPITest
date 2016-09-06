@@ -4,6 +4,14 @@ ${action.setPageName('tasks')!}
 <@s.actionmessage />
 
 <h2>
+    Hibernate Caching:
+
+<@s.url id="clearCacheUrl" namespace="/admin" value="clearCache.action" />
+    <button type="button" onclick="window.location = '<@s.text name="%{clearCacheUrl}" />';">Clear Cache</button>
+
+</h2>
+
+<h2>
 	Scheduler Control: 
 	
 	<@s.url id="reloadSchedulerUrl" namespace="/admin" value="reloadScheduler.action" />
