@@ -339,6 +339,18 @@
 			</result>
 		</action>
 
+		<action name="clearCache" method="doClearCache"
+				class="com.n4systems.fieldidadmin.actions.TaskAction">
+			<result name="success" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">taskCrud</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="namespace">/admin</param>
+				<param name="actionName">taskCrud</param>
+			</result>
+		</action>
+
 		<action name="reloadScheduler" method="doReloadScheduler"
 			class="com.n4systems.fieldidadmin.actions.TaskAction">
 			<result name="success" type="redirectAction">
