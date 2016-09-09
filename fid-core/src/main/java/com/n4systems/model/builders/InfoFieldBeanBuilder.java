@@ -1,11 +1,11 @@
 package com.n4systems.model.builders;
 
+import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
+
 import java.util.Arrays;
 import java.util.Set;
 import java.util.TreeSet;
-
-import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
 
 public class InfoFieldBeanBuilder extends BaseBuilder<InfoFieldBean> {
 

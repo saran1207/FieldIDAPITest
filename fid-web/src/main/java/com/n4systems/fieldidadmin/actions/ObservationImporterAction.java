@@ -1,15 +1,14 @@
 package com.n4systems.fieldidadmin.actions;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.commons.io.FileUtils;
-
 import com.n4systems.importing.ImportManager;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.TenantFinder;
 import com.n4systems.util.ListHelper;
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ObservationImporterAction extends AbstractAdminAction {
 	private static final long serialVersionUID = 1L;

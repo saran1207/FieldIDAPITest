@@ -2,7 +2,6 @@ package com.n4systems.model.user;
 
 import com.n4systems.model.lastmodified.LastModified;
 import com.n4systems.model.lastmodified.LastModifiedListLoader;
-import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;

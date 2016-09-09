@@ -1,8 +1,7 @@
 package com.n4systems.fieldid.selenium;
 
-import org.junit.Before;
-
 import com.n4systems.fieldid.selenium.pages.WebPage;
+import org.junit.Before;
 
 public abstract class PageNavigatingTestCase<T extends WebPage> extends FieldIDTestCase {
 	

@@ -51,6 +51,7 @@ import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
 import com.n4systems.fieldid.service.org.CustomerMergerService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.org.PlaceService;
+import com.n4systems.fieldid.service.pentaho.PentahoService;
 import com.n4systems.fieldid.service.predefinedlocation.PredefinedLocationService;
 import com.n4systems.fieldid.service.procedure.*;
 import com.n4systems.fieldid.service.project.ProjectService;
@@ -364,6 +365,11 @@ public class FieldIdCoreConfig {
     @Bean
     public ProcedureDefinitionService procedureDefinitionService() {
         return new ProcedureDefinitionService();
+    }
+
+    @Bean
+    public PentahoService pentahoService() {
+        return new PentahoService();
     }
 
     @Bean

@@ -1,14 +1,10 @@
 package com.n4systems.model.security;
 
-import javax.persistence.Query;
-
 import com.n4systems.model.safetynetwork.OrgConnectionType;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.QueryFilter;
-import com.n4systems.util.persistence.WhereClause;
-import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.util.persistence.WhereParameterGroup;
+import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.WhereClause.ChainOp;
+
+import javax.persistence.Query;
 
 public class OrgConnectionSecurityFilter implements QueryFilter {
 	private final OrgConnectionType filterTarget;

@@ -1,9 +1,9 @@
 package com.n4systems.model.safetynetwork;
 
-import java.util.List;
-
 import com.n4systems.model.Asset;
 import com.n4systems.model.security.SecurityFilter;
+
+import java.util.List;
 
 public class SafetyNetworkBackgroundSearchLoader {
 	

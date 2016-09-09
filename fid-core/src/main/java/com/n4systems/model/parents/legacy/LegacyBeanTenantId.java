@@ -1,10 +1,10 @@
 package com.n4systems.model.parents.legacy;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
-
 import com.n4systems.model.api.HasTenantId;
 import com.n4systems.model.security.SecurityDefiner;
+
+import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
 
 @SuppressWarnings("serial")
 @MappedSuperclass

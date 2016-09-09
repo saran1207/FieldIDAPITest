@@ -1,9 +1,9 @@
 package com.n4systems.fieldidadmin.actions;
 
-import java.util.List;
-
 import com.n4systems.model.ui.releasenotes.BulletPoint;
 import com.n4systems.model.ui.releasenotes.ReleaseNotes;
+
+import java.util.List;
 
 public class ReleaseNotesDecorator extends ReleaseNotes {
 

@@ -1,9 +1,9 @@
 package com.n4systems.fieldid.validators;
 
-import java.util.Map;
-
 import com.opensymphony.xwork2.validator.ValidationException;
 import com.opensymphony.xwork2.validator.validators.FieldValidatorSupport;
+
+import java.util.Map;
 
 public class SelectCheckListValidator extends FieldValidatorSupport {
 

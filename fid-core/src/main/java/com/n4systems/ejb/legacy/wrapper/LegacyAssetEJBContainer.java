@@ -1,28 +1,24 @@
 package com.n4systems.ejb.legacy.wrapper;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.ejb.legacy.LegacyAsset;
+import com.n4systems.ejb.legacy.impl.LegacyAssetManager;
+import com.n4systems.ejb.wrapper.EJBTransactionEmulator;
 import com.n4systems.exceptions.SubAssetUniquenessException;
+import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.Event;
-import rfid.ejb.entity.AddAssetHistory;
-import rfid.ejb.entity.AssetExtension;
-
-import com.n4systems.ejb.legacy.impl.LegacyAssetManager;
-import com.n4systems.ejb.wrapper.EJBTransactionEmulator;
-import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
+import rfid.ejb.entity.AddAssetHistory;
+import rfid.ejb.entity.AssetExtension;
+
+import javax.persistence.EntityManager;
+import java.util.Collection;
 
 public class LegacyAssetEJBContainer extends EJBTransactionEmulator<LegacyAsset> implements LegacyAsset {
 

@@ -1,8 +1,5 @@
 package com.n4systems.fieldid.actions.helpers;
 
-import java.util.Collections;
-import java.util.List;
-
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
@@ -11,6 +8,9 @@ import com.n4systems.model.event.EventsByNetworkIdPaginatedLoader;
 import com.n4systems.model.safetynetwork.EventsByNetworkIdLoader;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.tools.Pager;
+
+import java.util.Collections;
+import java.util.List;
 
 public class AllEventHelper {
 	

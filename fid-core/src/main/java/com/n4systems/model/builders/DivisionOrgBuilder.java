@@ -2,7 +2,9 @@ package com.n4systems.model.builders;
 
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
-import static com.n4systems.model.builders.CustomerOrgBuilder.*;
+
+import static com.n4systems.model.builders.CustomerOrgBuilder.aPrimaryCustomerOrg;
+import static com.n4systems.model.builders.CustomerOrgBuilder.aSecondaryCustomerOrg;
 
 
 public class DivisionOrgBuilder extends BaseBuilder<DivisionOrg> {

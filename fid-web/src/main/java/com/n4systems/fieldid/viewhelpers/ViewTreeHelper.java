@@ -1,15 +1,14 @@
 package com.n4systems.fieldid.viewhelpers;
 
-import java.util.Collections;
-import java.util.List;
-
-
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.model.savedreports.SavedReport;
 import com.n4systems.model.savedreports.SharedReportUserListLoader;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.UserComparator;
+
+import java.util.Collections;
+import java.util.List;
 
 public class ViewTreeHelper {
 	private final SharedReportUserListLoader userListLoader;

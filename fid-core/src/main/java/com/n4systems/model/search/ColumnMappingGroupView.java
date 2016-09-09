@@ -1,10 +1,10 @@
 package com.n4systems.model.search;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class ColumnMappingGroupView implements Serializable, Comparable<ColumnMappingGroupView> {
 	private static final long serialVersionUID = 1L;

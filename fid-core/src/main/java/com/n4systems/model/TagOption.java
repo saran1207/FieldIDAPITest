@@ -8,6 +8,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
+import javax.persistence.*;
+
 @Entity
 @Table(name = "tagoptions")
 @Cacheable

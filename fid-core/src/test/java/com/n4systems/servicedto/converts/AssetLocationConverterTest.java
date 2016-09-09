@@ -1,12 +1,12 @@
 package com.n4systems.servicedto.converts;
 
-import static junit.framework.Assert.*;
-
 import com.n4systems.model.Asset;
-import org.junit.Test;
-
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.webservice.dto.LocationServiceDTO;
+import org.junit.Test;
+
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNull;
 
 public class AssetLocationConverterTest {
 

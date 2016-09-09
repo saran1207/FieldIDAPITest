@@ -1,6 +1,9 @@
 package com.n4systems.model.builders;
 
-import static com.n4systems.model.builders.TenantBuilder.aTenant;
+import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.util.DataUnit;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -8,10 +11,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.Tenant;
-import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.util.DataUnit;
+import static com.n4systems.model.builders.TenantBuilder.aTenant;
 
 
 public class PrimaryOrgBuilder extends BaseBuilder<PrimaryOrg> {

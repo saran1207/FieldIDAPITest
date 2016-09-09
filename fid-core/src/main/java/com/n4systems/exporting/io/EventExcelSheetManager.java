@@ -1,14 +1,12 @@
 package com.n4systems.exporting.io;
 
-import java.util.Map;
-
+import com.n4systems.exporting.beanutils.CriteriaResultSerializationHandler;
 import jxl.write.WritableCell;
 import jxl.write.WritableCellFeatures;
 import jxl.write.WritableSheet;
-
 import org.apache.commons.lang.StringUtils;
 
-import com.n4systems.exporting.beanutils.CriteriaResultSerializationHandler;
+import java.util.Map;
 
 public class EventExcelSheetManager extends ExcelSheetManager {
 	private final String DEFICIENCIES = "Deficiencies";

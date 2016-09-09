@@ -1,20 +1,18 @@
 package com.n4systems.webservice.server.handlers;
 
-import static org.junit.Assert.*;
-import static com.n4systems.model.builders.EventBuilder.*;
+import com.n4systems.model.ThingEvent;
+import com.n4systems.model.event.NewestEventsForAssetIdLoader;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.test.helpers.DateHelper;
+import com.n4systems.test.helpers.FluentArrayList;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.Date;
 import java.util.List;
 
-import com.n4systems.model.Event;
-import com.n4systems.model.ThingEvent;
-import com.n4systems.model.event.NewestEventsForAssetIdLoader;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.n4systems.model.security.TenantOnlySecurityFilter;
-import com.n4systems.test.helpers.DateHelper;
-import com.n4systems.test.helpers.FluentArrayList;
+import static com.n4systems.model.builders.EventBuilder.anEvent;
+import static org.junit.Assert.assertEquals;
 
 public class RealTimeInspectionLookupHandlerTest {
 	

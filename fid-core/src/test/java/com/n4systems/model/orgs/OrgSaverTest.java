@@ -1,18 +1,16 @@
 package com.n4systems.model.orgs;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
+import com.n4systems.model.builders.OrgBuilder;
+import com.n4systems.testutils.DummyEntityManager;
+import org.junit.Test;
 
+import javax.persistence.EntityManager;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
-import org.junit.Test;
-
-import com.n4systems.model.builders.OrgBuilder;
-import com.n4systems.testutils.DummyEntityManager;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 
 public class OrgSaverTest {

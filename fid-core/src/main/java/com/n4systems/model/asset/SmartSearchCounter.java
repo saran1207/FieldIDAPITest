@@ -1,11 +1,11 @@
 package com.n4systems.model.asset;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.Asset;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import com.n4systems.util.persistence.QueryBuilder;
+
+import javax.persistence.EntityManager;
 
 public class SmartSearchCounter extends SecurityFilteredLoader<Long> {
 	private String searchText;

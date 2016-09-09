@@ -1,11 +1,12 @@
 package com.n4systems.model.common;
 
-import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.Calendar;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class SimpleFrequencyTest {
 	private Calendar cal;

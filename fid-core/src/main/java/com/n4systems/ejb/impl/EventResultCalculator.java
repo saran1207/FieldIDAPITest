@@ -1,7 +1,6 @@
 package com.n4systems.ejb.impl;
 
 import com.n4systems.model.*;
-import com.n4systems.model.EventResult;
 
 public class EventResultCalculator {
 

@@ -1,9 +1,9 @@
 package com.n4systems.model.builders;
 
-import static com.n4systems.model.builders.AssetBuilder.*;
-
 import com.n4systems.model.Asset;
 import com.n4systems.model.SubAsset;
+
+import static com.n4systems.model.builders.AssetBuilder.anAsset;
 
 public class SubAssetBuilder extends BaseBuilder<SubAsset> {
 

@@ -36,6 +36,7 @@ import com.n4systems.fieldid.wicket.pages.masterevent.EditSubEventPage;
 import com.n4systems.fieldid.wicket.pages.masterevent.PerformMasterEventPage;
 import com.n4systems.fieldid.wicket.pages.masterevent.PerformSubEventPage;
 import com.n4systems.fieldid.wicket.pages.org.*;
+import com.n4systems.fieldid.wicket.pages.pentaho.PentahoTestPage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunLastReportPage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunReportPage;
@@ -326,6 +327,10 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("editJob", EditJobsPage.class);
 
         mountPage("template", TemplatePage.class);
+
+        mountPage("pentaho", PentahoTestPage.class);
+
+
         mountPage("template/assetSummary", TemplateAssetSummaryPage.class);
         mountPage("template/twoColumnLeft", TwoColumnLeft.class);
         mountPage("template/twoColumnRight", TwoColumnRight.class);

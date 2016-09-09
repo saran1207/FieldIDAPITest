@@ -1,22 +1,21 @@
 package com.n4systems.ejb;
 
-import java.util.List;
-import java.util.SortedSet;
-
+import com.n4systems.exceptions.NonUniqueAssetException;
+import com.n4systems.exceptions.UsedOnMasterEventException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.SubAsset;
-import rfid.ejb.entity.InfoFieldBean;
-
-import com.n4systems.exceptions.NonUniqueAssetException;
-import com.n4systems.exceptions.UsedOnMasterEventException;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
-import com.n4systems.util.ListingPair;
 import com.n4systems.util.AssetRemovalSummary;
 import com.n4systems.util.AssetTypeGroupRemovalSummary;
 import com.n4systems.util.AssetTypeRemovalSummary;
+import com.n4systems.util.ListingPair;
+import rfid.ejb.entity.InfoFieldBean;
+
+import java.util.List;
+import java.util.SortedSet;
 
 public interface AssetManager {
 

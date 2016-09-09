@@ -1,14 +1,5 @@
 package com.n4systems.model.orgs;
 
-import static org.easymock.EasyMock.*;
-
-import java.util.ArrayList;
-
-import javax.persistence.EntityManager;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.FieldIdTransaction;
 import com.n4systems.persistence.Transaction;
@@ -16,6 +7,13 @@ import com.n4systems.tools.SillyPager;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import org.junit.Before;
+import org.junit.Test;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+
+import static org.easymock.EasyMock.*;
 
 
 public class BaseOrgListLoaderTest  {

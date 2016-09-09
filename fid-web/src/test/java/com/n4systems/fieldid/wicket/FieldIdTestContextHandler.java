@@ -1,9 +1,8 @@
 package com.n4systems.fieldid.wicket;
 
-import org.apache.wicket.Session;
-
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.user.User;
+import org.apache.wicket.Session;
 
 public class FieldIdTestContextHandler implements TestContextHandler<FieldIdWicketTestContext> {
 

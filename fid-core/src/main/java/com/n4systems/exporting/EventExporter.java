@@ -5,7 +5,6 @@ import com.n4systems.api.conversion.event.EventToViewConverter;
 import com.n4systems.api.model.EventView;
 import com.n4systems.exporting.beanutils.ExportMapMarshaller;
 import com.n4systems.exporting.io.MapWriter;
-import com.n4systems.model.Event;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.eventschedule.NextEventDateByEventLoader;
 import com.n4systems.persistence.loaders.ListLoader;

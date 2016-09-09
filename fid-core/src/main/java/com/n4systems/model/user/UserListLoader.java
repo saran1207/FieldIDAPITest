@@ -7,9 +7,8 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
+import java.util.List;
 
 public class UserListLoader extends ListLoader<User> {
 

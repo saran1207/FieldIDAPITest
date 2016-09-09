@@ -1,11 +1,11 @@
 package com.n4systems.fieldid.ui.seenit;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.ui.seenit.SeenItItem;
 import com.n4systems.model.ui.seenit.SeenItStorageItem;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SeenItRegistryDatabaseDataSource implements SeenItRegistryDataSource {
 	private final Long userId;

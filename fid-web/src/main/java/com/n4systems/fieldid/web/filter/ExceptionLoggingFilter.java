@@ -2,14 +2,8 @@ package com.n4systems.fieldid.web.filter;
 
 import org.apache.log4j.Logger;
 
+import javax.servlet.*;
 import java.io.IOException;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 
 public class ExceptionLoggingFilter implements Filter {
 

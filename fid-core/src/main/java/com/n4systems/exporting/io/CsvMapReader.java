@@ -1,17 +1,12 @@
 package com.n4systems.exporting.io;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.Writer;
+import com.n4systems.util.MapUtils;
+
+import java.io.*;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import com.n4systems.util.MapUtils;
 
 public class CsvMapReader implements MapReader {
 	private static final String DEFAULT_FIELD_SEP = ",";

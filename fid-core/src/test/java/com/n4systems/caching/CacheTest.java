@@ -1,12 +1,12 @@
 package com.n4systems.caching;
 
-import static org.junit.Assert.*;
-
+import com.n4systems.caching.safetynetwork.VendorListCacheStore;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.caching.safetynetwork.VendorListCacheStore;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class CacheTest {
 

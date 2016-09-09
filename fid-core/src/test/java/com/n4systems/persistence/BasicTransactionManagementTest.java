@@ -1,18 +1,17 @@
 package com.n4systems.persistence;
 
-import static org.easymock.EasyMock.*;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Test;
-
 import com.google.common.collect.ImmutableList;
 import com.n4systems.handlers.creator.BasicTransactionManagement;
 import com.n4systems.handlers.creator.TestDoubleTransactionManager;
 import com.n4systems.util.persistence.TestingTransaction;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.easymock.EasyMock.*;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 
 
 public class BasicTransactionManagementTest {

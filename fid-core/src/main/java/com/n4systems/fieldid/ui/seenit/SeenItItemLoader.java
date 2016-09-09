@@ -1,11 +1,11 @@
 package com.n4systems.fieldid.ui.seenit;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.ui.seenit.SeenItStorageItem;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.util.persistence.QueryBuilder;
+
+import javax.persistence.EntityManager;
 
 public class SeenItItemLoader extends Loader<SeenItStorageItem>{
 

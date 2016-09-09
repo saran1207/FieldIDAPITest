@@ -1,12 +1,12 @@
 package com.n4systems.model.taskconfig;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
 import com.n4systems.model.api.UnsecuredEntity;
 import com.n4systems.model.parents.AbstractStringIdEntity;
 import com.n4systems.taskscheduling.ScheduledTask;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "tasks")

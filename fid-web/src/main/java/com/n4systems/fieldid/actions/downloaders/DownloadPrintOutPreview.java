@@ -1,13 +1,13 @@
 package com.n4systems.fieldid.actions.downloaders;
 
+import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.model.PrintOut;
+import com.n4systems.reporting.PathHandler;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.model.PrintOut;
-import com.n4systems.reporting.PathHandler;
 
 public class DownloadPrintOutPreview extends DownloadAction {
 

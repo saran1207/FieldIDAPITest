@@ -1,13 +1,9 @@
 package rfid.ejb.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
-
 import com.n4systems.model.OrderKey;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "ordermapping")

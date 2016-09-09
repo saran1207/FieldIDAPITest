@@ -1,16 +1,13 @@
 package com.n4systems.util.uri;
 
-import static org.junit.Assert.*;
-
-import java.net.URI;
-
+import com.n4systems.model.user.User;
+import com.n4systems.util.NonDataSourceBackedConfigContext;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.net.URI;
 
-import com.n4systems.model.user.User;
-import com.n4systems.util.NonDataSourceBackedConfigContext;
-import com.n4systems.util.uri.SignupUrlBuilder;
+import static org.junit.Assert.assertEquals;
 
 public class SignupUrlBuilderTest {
 	private final User user = new User();

@@ -4,7 +4,6 @@ import com.n4systems.exceptions.InvalidQueryException;
 
 import javax.persistence.Query;
 import java.util.Arrays;
-import java.util.List;
 
 public class TypeClause implements WhereClause<Class<?>[]> {
 

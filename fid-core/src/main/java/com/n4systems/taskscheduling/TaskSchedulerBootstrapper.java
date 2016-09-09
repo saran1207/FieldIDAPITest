@@ -1,11 +1,7 @@
 package com.n4systems.taskscheduling;
 
-import org.apache.log4j.Logger;
-
-import com.n4systems.model.taskconfig.TaskConfig;
-import com.n4systems.persistence.loaders.AllEntityListLoader;
 import com.n4systems.services.Initializer;
-import com.n4systems.taskscheduling.task.WatcherTask;
+import org.apache.log4j.Logger;
 
 public class TaskSchedulerBootstrapper implements Initializer {
 	private static Logger logger = Logger.getLogger(TaskSchedulerBootstrapper.class);
@@ -18,10 +14,40 @@ public class TaskSchedulerBootstrapper implements Initializer {
 	 * @throws SchedulingException
 	 */
 	public void initialize() {
+
+		/*
 		TaskScheduler scheduler = TaskScheduler.getInstance();
 		
 		scheduler.start();
 		
+		try {
+			sched = schedFact.getScheduler();
+			sched.start();
+		} catch (Exception e) {
+			System.err.println("QUARTZ ERROR!!!!! " + e.toString());
+		}
+
+		JobDetail job = newJob(GenericQuartzJob.class)
+				.withIdentity("myJob", "group1")
+				.bild();
+
+		// Trigger the job to run now, and then every 40 seconds
+		Trigger trigger = newTrigger()
+				.withIdentity("myTrigger", "group1")
+				.startNow()
+				.withSchedule(simpleSchedule()
+						.withIntervalInSeconds(10)
+						.repeatForever())
+				.build();
+
+		try {
+			// Tell quartz to schedule the job using our trigger
+			sched.scheduleJob(job, trigger);
+		} catch (Exception e) {
+			System.err.println("QUARTZ ERROR!!!!! " + e.toString());
+		}
+
+		/*
 		try {
 	        scheduler.register("watcher-task", "* * * * *", new WatcherTask(scheduler));
         } catch (SchedulingException e) {
@@ -39,6 +65,7 @@ public class TaskSchedulerBootstrapper implements Initializer {
             	logger.error("Could not schedule task " + task.getId(), e);
             }
 		}
+		*/
 	}
 	
 	public void uninitialize() {	
@@ -52,6 +79,4 @@ public class TaskSchedulerBootstrapper implements Initializer {
 			scheduler.unschedule(taskId);
 		}
 	}
-	
 }
-

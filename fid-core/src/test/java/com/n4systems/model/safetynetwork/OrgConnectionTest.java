@@ -1,12 +1,11 @@
 package com.n4systems.model.safetynetwork;
 
-import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
+import com.n4systems.model.orgs.PrimaryOrg;
 import org.junit.Test;
 
-import com.n4systems.model.orgs.PrimaryOrg;
+import static com.n4systems.model.builders.PrimaryOrgBuilder.aPrimaryOrg;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
 
 
 public class OrgConnectionTest {

@@ -1,15 +1,14 @@
 package com.n4systems.model.downloadlink;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.loaders.NonSecuredListLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+
+import javax.persistence.EntityManager;
+import java.util.Date;
+import java.util.List;
 
 public class AllDownloadLinksByDateLoader extends NonSecuredListLoader<DownloadLink> {
 

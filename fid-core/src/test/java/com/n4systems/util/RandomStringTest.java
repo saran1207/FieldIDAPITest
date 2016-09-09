@@ -1,12 +1,11 @@
 package com.n4systems.util;
 
-import static org.junit.Assert.*;
+import com.n4systems.test.helpers.FakeRandom;
+import org.junit.Test;
 
 import java.util.Arrays;
 
-import org.junit.Test;
-
-import com.n4systems.test.helpers.FakeRandom;
+import static org.junit.Assert.*;
 
 public class RandomStringTest {
 

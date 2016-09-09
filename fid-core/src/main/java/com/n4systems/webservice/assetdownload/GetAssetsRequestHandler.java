@@ -1,14 +1,13 @@
 package com.n4systems.webservice.assetdownload;
 
-import java.util.List;
-
 import com.n4systems.model.Asset;
-import com.n4systems.webservice.asset.AssetToServiceConverter;
-import org.apache.log4j.Logger;
-
 import com.n4systems.persistence.loaders.FilteredInListLoader;
 import com.n4systems.webservice.RequestHandler;
+import com.n4systems.webservice.asset.AssetToServiceConverter;
 import com.n4systems.webservice.exceptions.ServiceException;
+import org.apache.log4j.Logger;
+
+import java.util.List;
 
 public class GetAssetsRequestHandler implements RequestHandler<AssetRequest, AssetListResponse>{
 	private Logger logger = Logger.getLogger(GetAssetsRequestHandler.class);

@@ -2,18 +2,17 @@ package com.n4systems.fieldid.log;
 
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.model.user.User;
-import org.apache.log4j.PatternLayout;
-import org.apache.log4j.helpers.PatternParser;
-import org.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.FastDateFormat;
-import org.apache.log4j.Layout;
+import org.apache.log4j.PatternLayout;
 import org.apache.log4j.helpers.LogLog;
+import org.apache.log4j.helpers.PatternParser;
 import org.apache.log4j.spi.LocationInfo;
 import org.apache.log4j.spi.LoggingEvent;
 import org.apache.log4j.spi.ThrowableInformation;
-import java.net.UnknownHostException;
+import org.json.JSONObject;
 
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;

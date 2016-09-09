@@ -1,11 +1,10 @@
 package com.n4systems.util.persistence;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.n4systems.exceptions.InvalidQueryException;
 
 import javax.persistence.Query;
-
-import com.n4systems.exceptions.InvalidQueryException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PassthruWhereClause implements WhereClause<Map<String, Object>> {
 	private static final long serialVersionUID = 1L;

@@ -1,12 +1,11 @@
 package com.n4systems.ejb.legacy;
 
-import java.util.List;
-import java.util.Map;
-
-import rfid.ejb.entity.OrderMappingBean;
-
 import com.n4systems.model.OrderKey;
 import com.n4systems.model.Tenant;
+import rfid.ejb.entity.OrderMappingBean;
+
+import java.util.List;
+import java.util.Map;
 
 public interface OrderMapping {
 	

@@ -1,11 +1,7 @@
 package com.n4systems.exporting.beanutils;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class CollectionSerializationHandler<T> extends SerializationHandler<Collection<T>> {
 

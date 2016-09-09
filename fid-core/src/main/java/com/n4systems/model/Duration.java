@@ -1,13 +1,12 @@
 package com.n4systems.model;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 	Represents a time duration.  A time duration

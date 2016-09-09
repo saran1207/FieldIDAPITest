@@ -3,13 +3,6 @@
  */
 package com.n4systems.ejb;
 
-import java.util.Collection;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
-
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.security.EntitySecurityEnhancer;
@@ -23,6 +16,12 @@ import com.n4systems.util.persistence.search.JoinTerm;
 import com.n4systems.util.persistence.search.SearchDefiner;
 import com.n4systems.util.persistence.search.SortTerm;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import java.util.Collection;
+import java.util.List;
 
 public class PerformSearchRequiringTransaction implements SearchPerformer {
 	

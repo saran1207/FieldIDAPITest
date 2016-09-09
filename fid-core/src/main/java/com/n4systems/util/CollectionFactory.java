@@ -1,19 +1,9 @@
 package com.n4systems.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
+import antlr.collections.List;
 import org.apache.commons.beanutils.BeanUtils;
 
-import antlr.collections.List;
+import java.util.*;
 
 public class CollectionFactory {
 

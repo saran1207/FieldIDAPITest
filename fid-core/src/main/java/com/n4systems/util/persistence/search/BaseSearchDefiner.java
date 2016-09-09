@@ -1,10 +1,10 @@
 package com.n4systems.util.persistence.search;
 
-import java.io.Serializable;
-import java.util.List;
-
 import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
+
+import java.io.Serializable;
+import java.util.List;
 
 public interface BaseSearchDefiner extends Serializable {
 	public Class<?> getSearchClass();

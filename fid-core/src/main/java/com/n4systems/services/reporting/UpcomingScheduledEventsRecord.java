@@ -1,10 +1,9 @@
 package com.n4systems.services.reporting;
 
-import java.util.Date;
-
+import com.n4systems.util.chart.DateChartable;
 import org.joda.time.LocalDate;
 
-import com.n4systems.util.chart.DateChartable;
+import java.util.Date;
 
 @SuppressWarnings("serial")
 public class UpcomingScheduledEventsRecord extends DateChartable {

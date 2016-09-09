@@ -1,12 +1,11 @@
 package com.n4systems.taskscheduling.task;
 
-import java.util.concurrent.TimeUnit;
-
 import com.n4systems.ejb.legacy.LegacyAssetType;
-import org.apache.log4j.Logger;
-
 import com.n4systems.taskscheduling.ScheduledTask;
 import com.n4systems.util.ServiceLocator;
+import org.apache.log4j.Logger;
+
+import java.util.concurrent.TimeUnit;
 
 public class InfoOptionCleanerTask extends ScheduledTask {
 	@SuppressWarnings("unused")

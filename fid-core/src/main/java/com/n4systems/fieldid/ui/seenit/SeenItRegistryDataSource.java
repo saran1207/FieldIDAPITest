@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.ui.seenit;
 
-import java.util.Map;
-
 import com.n4systems.model.ui.seenit.SeenItItem;
+
+import java.util.Map;
 
 public interface SeenItRegistryDataSource {
 

@@ -1,10 +1,9 @@
 package com.n4systems.caching;
 
-import static org.junit.Assert.*;
-
+import com.n4systems.caching.safetynetwork.VendorListCacheStore;
 import org.junit.Test;
 
-import com.n4systems.caching.safetynetwork.VendorListCacheStore;
+import static org.junit.Assert.assertTrue;
 
 public class CacheTypeTest {
 

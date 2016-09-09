@@ -1,13 +1,5 @@
 package com.n4systems.fieldid.actions.utils;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.builders.PrimaryOrgBuilder;
 import com.n4systems.model.builders.SecondaryOrgBuilder;
@@ -15,6 +7,13 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.persistence.loaders.FilteredListableLoader;
 import com.n4systems.test.helpers.FluentArrayList;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.List;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertArrayEquals;
 
 
 public class InternalOrgListerTest {

@@ -1,17 +1,16 @@
 package com.n4systems.util.uri;
 
-import static com.n4systems.model.builders.TenantBuilder.aTenant;
-import static org.junit.Assert.assertEquals;
-
-import java.net.URI;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.n4systems.model.Tenant;
 import com.n4systems.util.ConfigContextOverridableTestDouble;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ConfigurationProvider;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.net.URI;
+
+import static com.n4systems.model.builders.TenantBuilder.aTenant;
+import static org.junit.Assert.assertEquals;
 
 
 public class InternalUrlBuilderTest {

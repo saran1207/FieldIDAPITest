@@ -1,14 +1,13 @@
 package com.n4systems.ejb.impl;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
 import com.n4systems.ejb.AggregateReportManager;
 import com.n4systems.model.Event;
 import com.n4systems.util.AggregateReport;
 import com.n4systems.util.AggregateReportRecord;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.util.List;
 
 public class AggregateReportManagerImpl implements AggregateReportManager {
 

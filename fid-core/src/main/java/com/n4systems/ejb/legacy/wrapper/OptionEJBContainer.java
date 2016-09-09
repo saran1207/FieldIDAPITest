@@ -1,9 +1,5 @@
 package com.n4systems.ejb.legacy.wrapper;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.ejb.legacy.Option;
 import com.n4systems.ejb.legacy.impl.OptionManager;
 import com.n4systems.ejb.wrapper.EJBTransactionEmulator;
@@ -13,6 +9,9 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 public class OptionEJBContainer extends EJBTransactionEmulator<Option> implements Option {
 

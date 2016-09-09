@@ -1,17 +1,16 @@
 package com.n4systems.freemarker;
 
-import java.io.IOException;
-import java.util.Locale;
-
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.mail.MailMessage.MessageType;
-
 import freemarker.cache.FileTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.ObjectWrapper;
 import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
+
+import java.io.IOException;
+import java.util.Locale;
 
 public class FreemarkerTemplateFactory {
 

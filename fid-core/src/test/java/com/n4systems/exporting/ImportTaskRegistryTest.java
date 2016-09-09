@@ -1,11 +1,11 @@
 package com.n4systems.exporting;
 
-import static org.junit.Assert.*;
-
+import com.n4systems.taskscheduling.task.ImportTask;
 import org.junit.After;
 import org.junit.Test;
 
-import com.n4systems.taskscheduling.task.ImportTask;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 
 public class ImportTaskRegistryTest {
 	private ImportTaskRegistry registry = new ImportTaskRegistry();
