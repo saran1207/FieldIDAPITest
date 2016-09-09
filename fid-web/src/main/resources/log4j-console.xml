@@ -189,6 +189,9 @@
 		<priority value="INFO" />
 		<appender-ref ref="CACHE_LOG" />
 	</category>
+	<category name="com.n4systems.fieldid.config.CatchAllExceptionMapper" additivity="false">
+		<appender-ref ref="MOBILE_ERROR" />
+	</category>
 	<category name="com.n4systems.fieldid.ws.v1.resources.logging.ApiLoggingResource" additivity="false">
 		<priority value="INFO" />
 		<appender-ref ref="API_LOG" />
