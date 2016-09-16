@@ -76,7 +76,7 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 		apiOrg.setActive(baseOrg.isActive());
 		apiOrg.setName(baseOrg.getName());
 
-		if (versionLessThan(1, 8, 0)) {
+		if (versionLessThan(1, 8, 0) && !versionEqualOrGreaterThan(2014, 1, 0)) {
 			apiOrg.setImage(loadOrgImage(baseOrg));
 		}
 		apiOrg.setAddress(convertAddress(baseOrg.getAddressInfo()));
@@ -155,12 +155,16 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 	
 	private byte[] loadOrgImage(BaseOrg baseOrg) {
         byte[] image = null;
-        try {
-            image = s3Service.downloadCustomerLogo(baseOrg.getId());
-        } catch(Exception e) {
-            logger.warn("Unable to load organization image at: " + baseOrg.getId(), e);
-        }
-        return image;
+		if(s3Service.customerLogoExists(baseOrg.getId())) {
+			try {
+				image = s3Service.downloadCustomerLogo(baseOrg.getId());
+			} catch (Exception e) {
+				logger.warn("Unable to load organization image at: " + baseOrg.getId(), e);
+			}
+			return image;
+		} else {
+			return new byte[0];
+		}
 	}
 
 	private String convertAddress(AddressInfo addressInfo) {		
