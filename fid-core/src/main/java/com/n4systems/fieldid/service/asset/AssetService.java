@@ -1040,7 +1040,7 @@ public class AssetService extends CrudService<Asset> {
 
         OfflineProfile userProfile = offlineProfileService.find(getCurrentUser());
 
-        if(org == null) return null;
+        if(org == null || userProfile == null) return null;
 
         Long assetCount = 0L;
 
