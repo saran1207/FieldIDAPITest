@@ -37,6 +37,7 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
         s3Service = wire(S3Service.class);
         tenantSettingsService = wire(TenantSettingsService.class);
         configData = new ConfigData();
+
     }
 	
 	@Override
@@ -53,7 +54,7 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
 	protected void setSessionUser(User user) {
 		FieldIDSession session = (FieldIDSession) getWicketTester().getSession();
 		session.setUser(user);
-	}		
+	}
 	
 	protected void expectingConfig() {
         expect(configService.getString(ConfigEntry.SYSTEM_DOMAIN)).andReturn("localhost");

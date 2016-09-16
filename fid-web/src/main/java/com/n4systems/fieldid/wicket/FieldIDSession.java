@@ -20,6 +20,7 @@ import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.RequestCycle;
+import rfid.web.helper.SessionEulaAcceptance;
 import rfid.web.helper.SessionUser;
 
 import javax.servlet.http.HttpSession;
@@ -49,6 +50,7 @@ public class FieldIDSession extends WebSession {
     	getHttpSession().setAttribute(WebSessionMap.KEY_SESSION_USER, new SessionUser(user));
         getHttpSession().setAttribute(WebSessionMap.KEY_USER_SECURITY_GUARD, new SessionUserSecurityGuard(user));
         getHttpSession().setAttribute(WebSessionMap.KEY_SECURITY_GUARD, new SerializableSecurityGuard(TenantBuilder.n4(), PrimaryOrgBuilder.aPrimaryOrg().build()));
+        getHttpSession().setAttribute(WebSessionMap.KEY_EULA_ACCEPTANCE, new SessionEulaAcceptance());
     }
 
     @Override
@@ -70,7 +72,9 @@ public class FieldIDSession extends WebSession {
     @Deprecated // for testing only.
     public void setUser(User user) {
         getHttpSession().setAttribute(WebSessionMap.KEY_SESSION_USER, new SessionUser(user));
+        getHttpSession().setAttribute(WebSessionMap.KEY_EULA_ACCEPTANCE, new SessionEulaAcceptance());
     }
+
 
 	public static FieldIDSession get() {
         return (FieldIDSession) Session.get();
@@ -184,4 +188,8 @@ public class FieldIDSession extends WebSession {
 	public boolean isBooted() {
 		return getWebSessionMap().isBooted();
 	}
+
+    public SessionEulaAcceptance getEulaAcceptance() {
+        return getWebSessionMap().getEulaAcceptance();
+    }
 }

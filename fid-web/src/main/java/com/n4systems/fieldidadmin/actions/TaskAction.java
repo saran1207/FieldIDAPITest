@@ -10,13 +10,15 @@ import com.n4systems.taskscheduling.SchedulingException;
 import com.n4systems.taskscheduling.TaskScheduler;
 import com.n4systems.taskscheduling.TaskSchedulerBootstrapper;
 import org.apache.log4j.Logger;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 import java.util.List;
 
 public class TaskAction extends AbstractAdminAction {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(TaskAction.class);
-	
+
 	private final TaskScheduler scheduler = TaskScheduler.getInstance();
 	
 	private List<ScheduledTask> scheduledTasks;
@@ -108,6 +110,16 @@ public class TaskAction extends AbstractAdminAction {
 		taskInit.uninitialize();
 		taskInit.initialize();
 		
+		return SUCCESS;
+	}
+
+	public String doClearCache() {
+
+		Session s = (Session)persistenceEJBContainer.getEntityManager().getDelegate();
+		SessionFactory sf = s.getSessionFactory();
+		sf.getCache().evictEntityRegions();
+		sf.getCache().evictCollectionRegions();
+
 		return SUCCESS;
 	}
 	

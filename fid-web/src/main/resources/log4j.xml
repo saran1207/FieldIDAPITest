@@ -156,6 +156,9 @@
 		<priority value="INFO" />
 		<appender-ref ref="MOBILE_ERROR" />
 	</category>
+	<category name="com.n4systems.fieldid.config.CatchAllExceptionMapper" additivity="false">
+		<appender-ref ref="MOBILE_ERROR" />
+	</category>
 	<category name="com.n4systems.ejb.interceptor.TimingInterceptor" additivity="false">
 		<priority value="DEBUG" />
 	</category>
