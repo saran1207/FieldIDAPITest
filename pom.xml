@@ -17,6 +17,7 @@
         <module>fid-pub-ws</module>
 		<module>fid-mobile-ws</module>
 		<module>fid-data-migrator</module>
+		<module>fid-customer-usage-analyzer</module>
 	</modules>
     <properties>
         <hibernate.version>5.0.7.Final</hibernate.version>
