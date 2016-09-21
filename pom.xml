@@ -43,24 +43,20 @@
         <buildnumber.maven.plugin.version>1.0-beta-3</buildnumber.maven.plugin.version>
     </properties>
 	<repositories>
-		<!--<repository>-->
-			<!--<snapshots>-->
-				<!--<enabled>false</enabled>-->
-			<!--</snapshots>-->
-			<!--<id>central</id>-->
-			<!--<name>libs-release</name>-->
-			<!--<url>http://repo.n4systems.net/artifactory/libs-release</url>-->
-		<!--</repository>-->
-		<!--<repository>-->
-			<!--<snapshots />-->
-			<!--<id>snapshots</id>-->
-			<!--<name>libs-snapshot</name>-->
-			<!--<url>http://repo.n4systems.net/artifactory/libs-snapshot</url>-->
-		<!--</repository>-->
-		<!--<repository>-->
-			<!--<id>jasperreports</id>-->
-			<!--<url>http://jasperreports.sourceforge.net/maven2</url>-->
-		<!--</repository>-->
+		<repository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>central</id>
+			<name>libs-release</name>
+			<url>http://repo.n4systems.net/artifactory/libs-release</url>
+		</repository>
+		<repository>
+			<snapshots />
+			<id>snapshots</id>
+			<name>libs-snapshot</name>
+			<url>http://repo.n4systems.net/artifactory/libs-snapshot</url>
+		</repository>
 		<repository>
 			<id>jaspersoft-third-party</id>
 			<url>
@@ -68,32 +64,32 @@
 			</url>
 		</repository>
 	</repositories>
-	<!--<pluginRepositories>-->
-		<!--<pluginRepository>-->
-			<!--<snapshots>-->
-				<!--<enabled>false</enabled>-->
-			<!--</snapshots>-->
-			<!--<id>central</id>-->
-			<!--<name>plugins-release</name>-->
-			<!--<url>http://repo.n4systems.net/artifactory/plugins-release</url>-->
-		<!--</pluginRepository>-->
-		<!--<pluginRepository>-->
-			<!--<snapshots />-->
-			<!--<id>snapshots</id>-->
-			<!--<name>plugins-snapshot</name>-->
-			<!--<url>http://repo.n4systems.net/artifactory/plugins-snapshot</url>-->
-		<!--</pluginRepository>-->
-	<!--</pluginRepositories>-->
-	<!--<distributionManagement>-->
-		<!--<repository>-->
-			<!--<id>repo.n4systems.net-releases</id>-->
-			<!--<url>http://repo.n4systems.net/artifactory/libs-release-local</url>-->
-		<!--</repository>-->
-		<!--<snapshotRepository>-->
-			<!--<id>repo.n4systems.net-snapshots</id>-->
-			<!--<url>http://repo.n4systems.net/artifactory/libs-snapshot-local</url>-->
-		<!--</snapshotRepository>-->
-	<!--</distributionManagement>-->
+	<pluginRepositories>
+		<pluginRepository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>central</id>
+			<name>plugins-release</name>
+			<url>http://repo.n4systems.net/artifactory/plugins-release</url>
+		</pluginRepository>
+		<pluginRepository>
+			<snapshots />
+			<id>snapshots</id>
+			<name>plugins-snapshot</name>
+			<url>http://repo.n4systems.net/artifactory/plugins-snapshot</url>
+		</pluginRepository>
+	</pluginRepositories>
+	<distributionManagement>
+		<repository>
+			<id>repo.n4systems.net-releases</id>
+			<url>http://repo.n4systems.net/artifactory/libs-release-local</url>
+		</repository>
+		<snapshotRepository>
+			<id>repo.n4systems.net-snapshots</id>
+			<url>http://repo.n4systems.net/artifactory/libs-snapshot-local</url>
+		</snapshotRepository>
+	</distributionManagement>
 	<build>
 		<pluginManagement>
 			<plugins>
