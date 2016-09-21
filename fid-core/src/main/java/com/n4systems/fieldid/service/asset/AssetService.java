@@ -1025,12 +1025,15 @@ public class AssetService extends CrudService<Asset> {
     }
 
     public Long getAssetCountByOrg(long orgId) {
-        BaseOrg org = orgService.findById(orgId);
+        QueryBuilder<BaseOrg> orgQuery = createTenantSecurityBuilder(BaseOrg.class, true).addSimpleWhere("id", orgId);
+
+        BaseOrg org = persistenceService.find(orgQuery);
+
 
         if(org == null) return null;
 
-        QueryBuilder<Asset> query = createUserSecurityBuilder(Asset.class)
-                .addSimpleWhere("owner", org);
+        QueryBuilder<Asset> query = createTenantSecurityBuilder(Asset.class)
+                .addSimpleWhere("owner.id", org.getId());
 
         return persistenceService.count(query);
     }
