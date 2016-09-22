@@ -1032,7 +1032,7 @@ public class AssetService extends CrudService<Asset> {
 
         if(org == null) return null;
 
-        QueryBuilder<Asset> query = createTenantSecurityBuilder(Asset.class)
+        QueryBuilder<Asset> query = createTenantSecurityBuilder(Asset.class, true)
                 .addSimpleWhere("owner.id", org.getId());
 
         return persistenceService.count(query);
