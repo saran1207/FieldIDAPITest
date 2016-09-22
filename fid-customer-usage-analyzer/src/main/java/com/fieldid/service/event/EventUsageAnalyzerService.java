@@ -30,7 +30,7 @@ public class EventUsageAnalyzerService extends AbstractJDBCAnalyzerService {
             "INNER JOIN tenants t " +
             "ON e.tenant_id = t.id " +
             "WHERE t.disabled = 0 " +
-                "AND me.workflow_state <> 'OPEN' " +
+                "AND me.workflow_state = 'COMPLETED' " +
             "GROUP BY t.name;";
 
     private static final String EVENT_COUNT_BY_TENANT_LAST_MONTH_SQL =
@@ -41,7 +41,7 @@ public class EventUsageAnalyzerService extends AbstractJDBCAnalyzerService {
             "INNER JOIN tenants t " +
             "ON e.tenant_id = t.id " +
             "WHERE t.disabled = 0 " +
-                "AND me.workflow_state <> 'OPEN' " +
+                "AND me.workflow_state = 'COMPLETED' " +
                 "AND me.completedDate >= ? " +
             "GROUP BY t.name;";
 
@@ -53,7 +53,7 @@ public class EventUsageAnalyzerService extends AbstractJDBCAnalyzerService {
             "INNER JOIN tenants t " +
             "ON e.tenant_id = t.id " +
             "WHERE t.disabled = 0 " +
-                "AND me.workflow_state <> 'OPEN' " +
+                "AND me.workflow_state = 'COMPLETED' " +
                 "AND me.completedDate >= ? " +
                 "AND me.completedDate < ? " +
             "GROUP BY t.name;";

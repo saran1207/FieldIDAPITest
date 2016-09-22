@@ -8,10 +8,10 @@
 		<groupId>com.fieldid</groupId>
 		<version>2016.5.0-SNAPSHOT</version>
 	</parent>
+	<name>Customer Usage Analyzer</name>
 	<artifactId>fid-customer-usage-analyzer</artifactId>
 	<packaging>jar</packaging>
 
-	<name>fid-customer-usage-analyzer</name>
 	<description>Spring Boot standalone for analyzing customer usage over a large time period.</description>
 
 	<dependencyManagement>

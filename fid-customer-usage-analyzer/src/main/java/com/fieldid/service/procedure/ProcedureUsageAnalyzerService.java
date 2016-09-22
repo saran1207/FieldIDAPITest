@@ -47,8 +47,8 @@ public class ProcedureUsageAnalyzerService extends AbstractJDBCAnalyzerService {
             "WHERE t.disabled = 0 " +
                 "AND p.state = 'ACTIVE' " +
                 "AND p.workflow_state <> 'OPEN' " +
-                "AND p.unlock_date >= ? " +
-                "AND p.unlock_date < ? " +
+                "AND (p.unlock_date >= ? OR p.lock_date >= ?) " +
+                "AND (p.unlock_date < ? OR p.lock_date < ?) " +
             "GROUP BY t.name;";
 
     public List<CountByTenant> getTotalProcedureCountByTenant() {
@@ -67,10 +67,12 @@ public class ProcedureUsageAnalyzerService extends AbstractJDBCAnalyzerService {
     public List<CountByTenant> getMonthlyProcedureCountByTenant(int monthsBack) {
         LocalDate todaysDate = LocalDate.now();
 
-        LocalDateTime[] range = new LocalDateTime[2];
+        LocalDateTime[] range = new LocalDateTime[4];
 
         range[0] = LocalDateTime.of(todaysDate.getYear(), todaysDate.getMonthValue(), 1, 0, 0).minusMonths(monthsBack);
-        range[1] = range[0].plusMonths(1);
+        range[1] = range[0];
+        range[2] = range[0].plusMonths(1);
+        range[3] = range[2];
 
         return template.query(MONTHLY_COUNT_BY_TENANT_SQL,
                 range,
