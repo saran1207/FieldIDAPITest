@@ -130,7 +130,7 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 		List<ApiOrgImage> orgImages = new ArrayList<>();
 
 		// parse the id from the org
-		Pattern p = Pattern.compile("^.*/" + s3Service.CUSTOMER_FILE_PREFIX + "(\\d+)\\." + s3Service.CUSTOMER_FILE_EXT + "$");
+		Pattern p = Pattern.compile("^.*/" + S3Service.CUSTOMER_FILE_PREFIX + "(\\d+)\\." + S3Service.CUSTOMER_FILE_EXT + "$");
 		for (S3ObjectSummary image: s3Images) {
 			Matcher m = p.matcher(image.getKey());
 			if (m.matches()) {
