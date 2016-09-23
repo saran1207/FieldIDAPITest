@@ -368,8 +368,12 @@ public class SvgGenerationService extends FieldIdPersistenceService {
                 .forEach(isolationPoint -> {
                     try {
                         ImageAnnotation annotation = isolationPoint.getAnnotation();
-                        byte[] singleAnnotation = exportToSvg(new DOMSource(generateArrowStyleAnnotatedImage(annotation)));
-                        uploadSvg(definition, singleAnnotation, annotation.getImage().getFileName() + "_" + annotation.getId() + ".svg");
+                        Document document = generateArrowStyleAnnotatedImage(annotation);
+
+                        if(document != null) {
+                            byte[] singleAnnotation = exportToSvg(new DOMSource(generateArrowStyleAnnotatedImage(annotation)));
+                            uploadSvg(definition, singleAnnotation, annotation.getImage().getFileName() + "_" + annotation.getId() + ".svg");
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -382,30 +386,35 @@ public class SvgGenerationService extends FieldIdPersistenceService {
 
         byte [] bytes = s3Service.downloadProcedureDefinitionImage((ProcedureDefinitionImage) annotation.getImage());
 
-        //convert image to be scaled down to jasper size
-        bytes = imageService.scaleImage(bytes, DEFAULT_JASPER_WIDTH, DEFAULT_JASPER_HEIGHT, DEFAULT_OUTPUT_QUALITY);
+        if(bytes != null) {
 
-        BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(bytes));
+            //convert image to be scaled down to jasper size
+            bytes = imageService.scaleImage(bytes, DEFAULT_JASPER_WIDTH, DEFAULT_JASPER_HEIGHT, DEFAULT_OUTPUT_QUALITY);
 
-        Integer width = bufferedImage.getWidth();
-        Integer height = bufferedImage.getHeight();
+            BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(bytes));
 
-        Element svg = createSvgElement(doc, width, height);
+            Integer width = bufferedImage.getWidth();
+            Integer height = bufferedImage.getHeight();
 
-        if(annotation.isRenderAnnotation()) {
-            svg.appendChild(createArrowMarkerDefinition(doc));
+            Element svg = createSvgElement(doc, width, height);
+
+            if (annotation.isRenderAnnotation()) {
+                svg.appendChild(createArrowMarkerDefinition(doc));
+            }
+
+            svg.appendChild(createImageElement(doc, bytes));
+
+            if (annotation.isRenderAnnotation()) {
+                svg.appendChild(createArrowAnnotation(doc, annotation, height, width));
+            }
+
+            doc.appendChild(svg);
+
+            //printDocument(doc, System.out);
+            return doc;
         }
 
-        svg.appendChild(createImageElement(doc, bytes));
-
-        if(annotation.isRenderAnnotation()) {
-            svg.appendChild(createArrowAnnotation(doc, annotation, height, width));
-        }
-
-        doc.appendChild(svg);
-
-        //printDocument(doc, System.out);
-        return doc;
+        return null;
     }
 
     private Element createArrowMarkerDefinition(Document doc) {

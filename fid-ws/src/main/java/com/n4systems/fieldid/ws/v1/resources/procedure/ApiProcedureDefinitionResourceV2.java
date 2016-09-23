@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.ws.v1.resources.procedure;
 
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
@@ -105,7 +106,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/")
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, noRollbackFor = AmazonS3Exception.class)
     public ListResponse<ApiProcedureDefinitionV2> findForAsset(
             @PathParam("assetId") String assetId,
             @DefaultValue("0") @QueryParam("page") int page,
@@ -682,6 +683,8 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
                     }
 
                     convertedImage.setData(imageData);
+                } catch (AmazonS3Exception ase) {
+                    log.warn("Could not find images...", ase);
                 } catch (IOException ioe) {
                     log.warn("IOException downloading procedure def image: " + image.getId(), ioe);
                 } catch (Exception e) {
