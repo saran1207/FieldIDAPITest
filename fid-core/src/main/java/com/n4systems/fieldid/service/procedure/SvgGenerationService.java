@@ -139,38 +139,43 @@ public class SvgGenerationService extends FieldIdPersistenceService {
         //Not sure why we're fetching the image from S3, when we are trying to build the SVG now.
         byte [] bytes = s3Service.downloadProcedureDefinitionImage(image);
 
-        //convert image to be scaled down to jasper size
-        bytes = imageService.scaleImage(bytes, DEFAULT_JASPER_WIDTH, DEFAULT_JASPER_HEIGHT, DEFAULT_OUTPUT_QUALITY);
+        if(bytes != null) {
 
-        BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(bytes));
+            //convert image to be scaled down to jasper size
+            bytes = imageService.scaleImage(bytes, DEFAULT_JASPER_WIDTH, DEFAULT_JASPER_HEIGHT, DEFAULT_OUTPUT_QUALITY);
 
-        Integer width = bufferedImage.getWidth();
-        Integer height = bufferedImage.getHeight();
+            BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(bytes));
 
-        Element svg = createSvgElement(doc, width, height);
+            Integer width = bufferedImage.getWidth();
+            Integer height = bufferedImage.getHeight();
 
-        doc.appendChild(svg);
+            Element svg = createSvgElement(doc, width, height);
 
-        Element defs = doc.createElement("defs");
+            doc.appendChild(svg);
 
-        svg.appendChild(defs);
+            Element defs = doc.createElement("defs");
 
-        //Ensure we only add annotations that are supposed to render.... presumably we could have some that are NOT
-        //supposed to render mixed in.
-        for(ImageAnnotation annotation: image.getAnnotations().stream().filter(ImageAnnotation::isRenderAnnotation).collect(Collectors.toList())) {
-            defs.appendChild(createAnnotationDefinition(doc, annotation, width, height));
+            svg.appendChild(defs);
+
+            //Ensure we only add annotations that are supposed to render.... presumably we could have some that are NOT
+            //supposed to render mixed in.
+            for (ImageAnnotation annotation : image.getAnnotations().stream().filter(ImageAnnotation::isRenderAnnotation).collect(Collectors.toList())) {
+                defs.appendChild(createAnnotationDefinition(doc, annotation, width, height));
+            }
+
+            Element imageElement = createImageElement(doc, bytes, height, width);
+
+            svg.appendChild(imageElement);
+
+            //Again, only annotations that are supposed to render.
+            for (ImageAnnotation annotation : image.getAnnotations().stream().filter(ImageAnnotation::isRenderAnnotation).collect(Collectors.toList())) {
+                svg.appendChild(createAnnotation(doc, annotation, height, width));
+            }
+
+            return doc;
         }
 
-        Element imageElement = createImageElement(doc, bytes, height, width);
-
-        svg.appendChild(imageElement);
-
-        //Again, only annotations that are supposed to render.
-        for(ImageAnnotation annotation: image.getAnnotations().stream().filter(ImageAnnotation::isRenderAnnotation).collect(Collectors.toList())) {
-            svg.appendChild(createAnnotation(doc, annotation, height, width));
-        }
-
-        return doc;
+        return null;
     }
 
     private Document getDocument() throws ParserConfigurationException {

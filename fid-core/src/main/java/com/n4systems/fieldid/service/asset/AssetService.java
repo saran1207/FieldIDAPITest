@@ -1034,6 +1034,8 @@ public class AssetService extends CrudService<Asset> {
 
         QueryBuilder<Asset> query = createTenantSecurityBuilder(Asset.class)
                 .addSimpleWhere("owner.id", org.getId());
+        //This would fix the problem, but would only work for the current user...
+        //.applyFilter(new OwnerAndDownFilter(org));
 
         return persistenceService.count(query);
     }
