@@ -10,6 +10,7 @@ import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.api.HasTenant;
 import com.n4systems.model.parents.AbstractEntity;
+import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.*;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 
 public abstract class CrudResource<M extends AbstractEntity, A extends GeneratedMessage, B extends GeneratedMessage.Builder> extends FieldIdPersistenceService {
 
+	private Logger logger = Logger.getLogger(CrudResource.class);
 	private Mapper<M, B> modelToMessageBuilderMapper;
 	private Mapper<A, M> messageToModelMapper;
 
@@ -65,6 +67,11 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Transactional(readOnly = true)
 	public Messages.ListResponseMessage findAll(@QueryParam("page") int page, @QueryParam("pageSize") int pageSize) {
+		String logInfo = getLogInfo();
+		String apiCall = listResponseType.getDescriptor().getName();
+		String logMessage = logInfo + apiCall + " FIND All";
+		logger.info(logMessage);
+
 		List<A> items = crudService()
 				.findAll(page, pageSize)
 				.stream()
@@ -92,6 +99,11 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Transactional(readOnly = true)
 	public A find(@PathParam("id") String id) {
+		String logInfo = getLogInfo();
+		String apiCall = listResponseType.getDescriptor().getName();
+		String logMessage = logInfo + apiCall + " FIND with id " + id;
+		logger.info(logMessage);
+
 		return toMessage(testNotFound(crudService().findByPublicId(id)));
 	}
 
@@ -100,6 +112,11 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Transactional
 	public A save(A message) {
+		String logInfo = getLogInfo();
+		String apiCall = listResponseType.getDescriptor().getName();
+		String logMessage = logInfo + apiCall + " CREATE with json: " + message.toString();
+		logger.info(logMessage);
+
 		return toMessage(crudService().save(toModel(message)));
 	}
 
@@ -109,6 +126,20 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Transactional
 	public A update(@PathParam("id") String id, A message) {
+		String logInfo = getLogInfo();
+		String apiCall = listResponseType.getDescriptor().getName();
+		String logMessage = logInfo + apiCall + " UPDATE with id: " + id + " and json: " + message.toString();
+		logger.info(logMessage);
+
 		return toMessage(crudService().update(merge(message, testNotFound(crudService().findByPublicId(id)))));
+	}
+
+	public String getLogInfo() {
+		String user = getCurrentUser().getUserID();
+		String tenant = getCurrentTenant().getDisplayName();
+
+		String message = user + " from tenant " + tenant + " made the API Call: ";
+
+		return message;
 	}
 }
