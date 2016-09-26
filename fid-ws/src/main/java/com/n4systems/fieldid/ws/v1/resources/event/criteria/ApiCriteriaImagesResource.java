@@ -57,31 +57,37 @@ public class ApiCriteriaImagesResource extends FieldIdPersistenceService {
 
 		CriteriaResult criteriaResult = persistenceService.find(builder);
 
-        for (CriteriaResultImage criteriaResultImage : criteriaResult.getCriteriaImages()) {
-            if (imageMd5sum.equals(criteriaResultImage.getMd5sum())) {
-                logger.warn("Duplicate criteria image detected: " + apiCriteriaImage.getCriteriaResultSid());
-                return;
-            }
-        }
+		if(criteriaResult != null) {
+			for (CriteriaResultImage criteriaResultImage : criteriaResult.getCriteriaImages()) {
+				if (imageMd5sum.equals(criteriaResultImage.getMd5sum())) {
+					logger.warn("Duplicate criteria image detected: " + apiCriteriaImage.getCriteriaResultSid());
+					return;
+				}
+			}
 
-		CriteriaResultImage criteriaResultImage = new CriteriaResultImage();
-		criteriaResultImage.setCriteriaResult(criteriaResult);
-        criteriaResultImage.setMd5sum(imageMd5sum);
-		criteriaResultImage.setFileName(apiCriteriaImage.getFileName());
-		criteriaResultImage.setContentType(FileTypeMap.getDefaultFileTypeMap().getContentType(apiCriteriaImage.getFileName()));
-		criteriaResultImage.setComments(apiCriteriaImage.getComments());
-		criteriaResult.getCriteriaImages().add(criteriaResultImage);		
+			CriteriaResultImage criteriaResultImage = new CriteriaResultImage();
+			criteriaResultImage.setCriteriaResult(criteriaResult);
+			criteriaResultImage.setMd5sum(imageMd5sum);
+			criteriaResultImage.setFileName(apiCriteriaImage.getFileName());
+			criteriaResultImage.setContentType(FileTypeMap.getDefaultFileTypeMap().getContentType(apiCriteriaImage.getFileName()));
+			criteriaResultImage.setComments(apiCriteriaImage.getComments());
+			criteriaResult.getCriteriaImages().add(criteriaResultImage);
 
-		persistenceService.update(criteriaResult);
-		s3Service.uploadCriteriaResultImage(criteriaResultImage, apiCriteriaImage.getImage());
-		
-		logger.info("Saved Criteria Image for CriteriaResult: " + apiCriteriaImage.getCriteriaResultSid());
+			persistenceService.update(criteriaResult);
+			s3Service.uploadCriteriaResultImage(criteriaResultImage, apiCriteriaImage.getImage());
+
+			logger.info("Saved Criteria Image for CriteriaResult: " + apiCriteriaImage.getCriteriaResultSid());
+		} else {
+			//TODO Probably want to emit a real error that goes all the way up to the caller...
+			logger.error("Tried to save a Criteria Image for a non-existing Criteria Result!!  CriteriaResult SID: " + apiCriteriaImage.getCriteriaResultSid());
+		}
 	}
 
 	@PUT
 	@Path("multi")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
+	//TODO Probably want to make this return something so we can handle the Response...
 	public void saveMultiAddEventCriteriaImage(ApiMultiEventCriteriaImage multiEventCriteriaImage) {
 		ApiCriteriaImage apiCriteriaImage = multiEventCriteriaImage.getCriteriaImageTemplate();
 		for(String criteriaResultId : multiEventCriteriaImage.getCriteriaResultIds()) {
