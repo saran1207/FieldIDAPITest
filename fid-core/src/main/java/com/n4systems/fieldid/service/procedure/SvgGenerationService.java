@@ -139,38 +139,43 @@ public class SvgGenerationService extends FieldIdPersistenceService {
         //Not sure why we're fetching the image from S3, when we are trying to build the SVG now.
         byte [] bytes = s3Service.downloadProcedureDefinitionImage(image);
 
-        //convert image to be scaled down to jasper size
-        bytes = imageService.scaleImage(bytes, DEFAULT_JASPER_WIDTH, DEFAULT_JASPER_HEIGHT, DEFAULT_OUTPUT_QUALITY);
+        if(bytes != null) {
 
-        BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(bytes));
+            //convert image to be scaled down to jasper size
+            bytes = imageService.scaleImage(bytes, DEFAULT_JASPER_WIDTH, DEFAULT_JASPER_HEIGHT, DEFAULT_OUTPUT_QUALITY);
 
-        Integer width = bufferedImage.getWidth();
-        Integer height = bufferedImage.getHeight();
+            BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(bytes));
 
-        Element svg = createSvgElement(doc, width, height);
+            Integer width = bufferedImage.getWidth();
+            Integer height = bufferedImage.getHeight();
 
-        doc.appendChild(svg);
+            Element svg = createSvgElement(doc, width, height);
 
-        Element defs = doc.createElement("defs");
+            doc.appendChild(svg);
 
-        svg.appendChild(defs);
+            Element defs = doc.createElement("defs");
 
-        //Ensure we only add annotations that are supposed to render.... presumably we could have some that are NOT
-        //supposed to render mixed in.
-        for(ImageAnnotation annotation: image.getAnnotations().stream().filter(ImageAnnotation::isRenderAnnotation).collect(Collectors.toList())) {
-            defs.appendChild(createAnnotationDefinition(doc, annotation, width, height));
+            svg.appendChild(defs);
+
+            //Ensure we only add annotations that are supposed to render.... presumably we could have some that are NOT
+            //supposed to render mixed in.
+            for (ImageAnnotation annotation : image.getAnnotations().stream().filter(ImageAnnotation::isRenderAnnotation).collect(Collectors.toList())) {
+                defs.appendChild(createAnnotationDefinition(doc, annotation, width, height));
+            }
+
+            Element imageElement = createImageElement(doc, bytes, height, width);
+
+            svg.appendChild(imageElement);
+
+            //Again, only annotations that are supposed to render.
+            for (ImageAnnotation annotation : image.getAnnotations().stream().filter(ImageAnnotation::isRenderAnnotation).collect(Collectors.toList())) {
+                svg.appendChild(createAnnotation(doc, annotation, height, width));
+            }
+
+            return doc;
         }
 
-        Element imageElement = createImageElement(doc, bytes, height, width);
-
-        svg.appendChild(imageElement);
-
-        //Again, only annotations that are supposed to render.
-        for(ImageAnnotation annotation: image.getAnnotations().stream().filter(ImageAnnotation::isRenderAnnotation).collect(Collectors.toList())) {
-            svg.appendChild(createAnnotation(doc, annotation, height, width));
-        }
-
-        return doc;
+        return null;
     }
 
     private Document getDocument() throws ParserConfigurationException {
@@ -368,8 +373,12 @@ public class SvgGenerationService extends FieldIdPersistenceService {
                 .forEach(isolationPoint -> {
                     try {
                         ImageAnnotation annotation = isolationPoint.getAnnotation();
-                        byte[] singleAnnotation = exportToSvg(new DOMSource(generateArrowStyleAnnotatedImage(annotation)));
-                        uploadSvg(definition, singleAnnotation, annotation.getImage().getFileName() + "_" + annotation.getId() + ".svg");
+                        Document document = generateArrowStyleAnnotatedImage(annotation);
+
+                        if(document != null) {
+                            byte[] singleAnnotation = exportToSvg(new DOMSource(generateArrowStyleAnnotatedImage(annotation)));
+                            uploadSvg(definition, singleAnnotation, annotation.getImage().getFileName() + "_" + annotation.getId() + ".svg");
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -382,30 +391,35 @@ public class SvgGenerationService extends FieldIdPersistenceService {
 
         byte [] bytes = s3Service.downloadProcedureDefinitionImage((ProcedureDefinitionImage) annotation.getImage());
 
-        //convert image to be scaled down to jasper size
-        bytes = imageService.scaleImage(bytes, DEFAULT_JASPER_WIDTH, DEFAULT_JASPER_HEIGHT, DEFAULT_OUTPUT_QUALITY);
+        if(bytes != null) {
 
-        BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(bytes));
+            //convert image to be scaled down to jasper size
+            bytes = imageService.scaleImage(bytes, DEFAULT_JASPER_WIDTH, DEFAULT_JASPER_HEIGHT, DEFAULT_OUTPUT_QUALITY);
 
-        Integer width = bufferedImage.getWidth();
-        Integer height = bufferedImage.getHeight();
+            BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(bytes));
 
-        Element svg = createSvgElement(doc, width, height);
+            Integer width = bufferedImage.getWidth();
+            Integer height = bufferedImage.getHeight();
 
-        if(annotation.isRenderAnnotation()) {
-            svg.appendChild(createArrowMarkerDefinition(doc));
+            Element svg = createSvgElement(doc, width, height);
+
+            if (annotation.isRenderAnnotation()) {
+                svg.appendChild(createArrowMarkerDefinition(doc));
+            }
+
+            svg.appendChild(createImageElement(doc, bytes));
+
+            if (annotation.isRenderAnnotation()) {
+                svg.appendChild(createArrowAnnotation(doc, annotation, height, width));
+            }
+
+            doc.appendChild(svg);
+
+            //printDocument(doc, System.out);
+            return doc;
         }
 
-        svg.appendChild(createImageElement(doc, bytes));
-
-        if(annotation.isRenderAnnotation()) {
-            svg.appendChild(createArrowAnnotation(doc, annotation, height, width));
-        }
-
-        doc.appendChild(svg);
-
-        //printDocument(doc, System.out);
-        return doc;
+        return null;
     }
 
     private Element createArrowMarkerDefinition(Document doc) {

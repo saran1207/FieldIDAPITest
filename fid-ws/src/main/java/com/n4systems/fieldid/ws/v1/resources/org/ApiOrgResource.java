@@ -76,7 +76,7 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 		apiOrg.setActive(baseOrg.isActive());
 		apiOrg.setName(baseOrg.getName());
 
-		if (versionLessThan(1, 8, 0)) {
+		if (versionLessThan(1, 8, 0) && !versionEqualOrGreaterThan(2014, 1, 0)) {
 			apiOrg.setImage(loadOrgImage(baseOrg));
 		}
 		apiOrg.setAddress(convertAddress(baseOrg.getAddressInfo()));
@@ -130,7 +130,7 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 		List<ApiOrgImage> orgImages = new ArrayList<>();
 
 		// parse the id from the org
-		Pattern p = Pattern.compile("^.*/" + s3Service.CUSTOMER_FILE_PREFIX + "(\\d+)\\." + s3Service.CUSTOMER_FILE_EXT + "$");
+		Pattern p = Pattern.compile("^.*/" + S3Service.CUSTOMER_FILE_PREFIX + "(\\d+)\\." + S3Service.CUSTOMER_FILE_EXT + "$");
 		for (S3ObjectSummary image: s3Images) {
 			Matcher m = p.matcher(image.getKey());
 			if (m.matches()) {
@@ -155,12 +155,16 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 	
 	private byte[] loadOrgImage(BaseOrg baseOrg) {
         byte[] image = null;
-        try {
-            image = s3Service.downloadCustomerLogo(baseOrg.getId());
-        } catch(Exception e) {
-            logger.warn("Unable to load organization image at: " + baseOrg.getId(), e);
-        }
-        return image;
+		if(s3Service.customerLogoExists(baseOrg.getId())) {
+			try {
+				image = s3Service.downloadCustomerLogo(baseOrg.getId());
+			} catch (Exception e) {
+				logger.warn("Unable to load organization image at: " + baseOrg.getId(), e);
+			}
+			return image;
+		} else {
+			return new byte[0];
+		}
 	}
 
 	private String convertAddress(AddressInfo addressInfo) {		
