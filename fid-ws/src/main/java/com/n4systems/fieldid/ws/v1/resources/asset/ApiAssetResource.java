@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.ws.v1.resources.asset;
 
+import com.n4systems.exceptions.UsedOnMasterEventException;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.LastEventDateService;
@@ -39,8 +40,10 @@ import rfid.ejb.entity.InfoOptionBean;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -185,6 +188,41 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		for(ApiAsset asset : assets) {
 			saveAsset(asset);
 		}
+	}
+
+	@DELETE
+	@Path("superSecretAssatDeleter")
+	@Consumes(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Transactional
+	public Response deleteAssets(String idList) {
+		if(idList != null && !idList.isEmpty()) {
+			List<Long> assetIds = Arrays.stream(idList.split("\\n")).map(Long::parseLong).collect(Collectors.toList());
+
+			List<Long> subAssetIds = new ArrayList<>();
+
+			for(Long id : assetIds) {
+				Asset asset = assetService.findById(id);
+				if(asset != null) {
+					try {
+						assetService.archive(asset, getCurrentUser());
+					} catch (UsedOnMasterEventException e) {
+						logger.error("Could not archive Asset with ID " + id + " because of UsedOnMasterEventException");
+						subAssetIds.add(id);
+					}
+				} else {
+					logger.warn("That's strange... could not archive Asset with ID " + id + " because it is either already archived or does not exist... yet.");
+					logger.warn("Are you from the future?");
+				}
+			}
+
+			if(!subAssetIds.isEmpty()) {
+				logger.info("There were one or more assets which couldn't be unlocked with this method... they've been sent back to be run again");
+				return Response.status(420).entity(subAssetIds).build();
+			}
+		}
+
+		return Response.ok().build();
 	}
 
     @Path("{assetId}/procedures")
