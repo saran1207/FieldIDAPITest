@@ -191,7 +191,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	}
 
 	@DELETE
-	@Path("superSecretAssatDeleter")
+	@Path("secretAssetDeleter/pleaseDelete")
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional
