@@ -190,14 +190,19 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		}
 	}
 
-	@DELETE
+	@PUT
 	@Path("secretAssetDeleter/pleaseDelete")
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional
 	public Response deleteAssets(String idList) {
+        logger.warn("Getting ready to delete your list of Assets... I imagine it's pretty big");
+
+
 		if(idList != null && !idList.isEmpty()) {
 			List<Long> assetIds = Arrays.stream(idList.split("\\n")).map(Long::parseLong).collect(Collectors.toList());
+
+            logger.info("There are " + assetIds.size() + " to process... is that number correct?");
 
 			List<Long> subAssetIds = new ArrayList<>();
 
@@ -222,7 +227,8 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			}
 		}
 
-		return Response.ok().build();
+
+		return Response.ok().entity("There is nothing to return.  All Assets were deleted or did not exist in the system.").build();
 	}
 
     @Path("{assetId}/procedures")
