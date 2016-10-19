@@ -5,6 +5,7 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.LastEventDateService;
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
+import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.fieldid.ws.v1.resources.assetattachment.ApiAssetAttachment;
@@ -52,7 +53,8 @@ import java.util.stream.Collectors;
 public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	private static Logger logger = Logger.getLogger(ApiAssetResource.class);
 	
-	@Autowired private AssetService assetService;	
+	@Autowired private AssetService assetService;
+	@Autowired private ProcedureService procedureService;
 	@Autowired private AssetSaveServiceSpring assetSaveService;
 	@Autowired private ApiEventHistoryResource apiEventHistoryResource;
 	@Autowired private ApiEventScheduleResource apiEventScheduleResource;
@@ -267,6 +269,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 
 		apiAsset.setSchedules(apiEventScheduleResource.findAllSchedules(asset.getId(), syncDuration));
         apiAsset.setProcedures(procedureResource.getOpenAndLockedProcedures(asset.getId()));
+		apiAsset.setLocked(procedureService.isLocked(asset));
 		if (downloadEvents) {
 			apiAsset.setEvents(apiSavedEventResource.findLastEventOfEachType(asset.getId()));
 		}
