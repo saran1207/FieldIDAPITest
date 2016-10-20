@@ -14,12 +14,13 @@
 		<module>fid-ws</module>
         <module>fid-migrations</module>
         <module>fid-index-validator</module>
-        <module>fid-pub-ws</module>
+        <!--<module>fid-pub-ws</module>-->
 		<module>fid-mobile-ws</module>
 		<module>fid-data-migrator</module>
 		<module>fid-customer-usage-analyzer</module>
 	</modules>
     <properties>
+		<spring.boot.version>1.3.2.RELEASE</spring.boot.version>
         <hibernate.version>5.0.7.Final</hibernate.version>
         <spring.version>4.2.1.RELEASE</spring.version>
         <commons.io.version>1.3.2</commons.io.version>
