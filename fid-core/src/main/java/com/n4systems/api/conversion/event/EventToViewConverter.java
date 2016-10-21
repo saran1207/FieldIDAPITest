@@ -49,6 +49,8 @@ public class EventToViewConverter implements ModelToViewConverter<ThingEvent, Ev
 		convertOwnerFields(model.getOwner(), view);
 		convertBook(model, view);
 		convertAssetStatus(model, view);
+		convertAssetType(model, view);
+		convertAssetTypeGroup(model, view);
         convertEventStatus(model, view);
 		convertNextDate(model, view);
 		convertCriteriaResults(model, view);
@@ -170,6 +172,18 @@ public class EventToViewConverter implements ModelToViewConverter<ThingEvent, Ev
 	protected void convertAssetStatus(AssetEvent model, EventView view) {
 		if (model.getAssetStatus() != null) {
 			view.setAssetStatus(model.getAssetStatus().getName());
+		}
+	}
+
+	protected void convertAssetType(ThingEvent model, EventView view) {
+		if (model.getAsset() != null && model.getAsset().getType() != null) {
+			view.setAssetType(model.getAsset().getType().getName());
+		}
+	}
+
+	protected void convertAssetTypeGroup(ThingEvent model, EventView view) {
+		if (model.getAsset() != null && model.getAsset().getType() != null && model.getAsset().getType().getGroup() != null) {
+			view.setAssetTypeGroup(model.getAsset().getType().getGroup().getName());
 		}
 	}
 
