@@ -24,6 +24,7 @@ import com.n4systems.mail.MailManager;
 import com.n4systems.mail.MailManagerFactory;
 import com.n4systems.notifiers.EmailNotifier;
 import com.n4systems.notifiers.Notifier;
+import com.n4systems.services.AuthService;
 import com.n4systems.services.EventScheduleService;
 import com.n4systems.services.EventScheduleServiceImpl;
 import com.n4systems.services.SecurityContext;
@@ -139,6 +140,11 @@ public class ServiceLocator implements ApplicationContextAware {
     public static EventScheduleService getEventScheduleService() {
         return new EventScheduleServiceImpl(getPersistenceManager());
     }
+
+	public static AuthService getAuthService() {
+		AuthService authService = getBean(AuthService.class);
+		return authService;
+	}
 
     public static S3Service getS3Service() {
         S3Service s3Service = getBean(S3Service.class);
