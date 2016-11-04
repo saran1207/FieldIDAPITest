@@ -10,10 +10,7 @@ import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.security.OwnerAndDownWithPrimaryFilter;
 import com.n4systems.util.collections.OrgList;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClause;
-import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.util.persistence.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +23,20 @@ public class OrgService extends CrudService<BaseOrg> {
 	public OrgService() {
 		super(BaseOrg.class);
 	}
+
+	public List<Long> getIdOfAllVisibleOrgs() {
+        //If this doesn't work, we actually have to individually grab all visible:
+        // - PrimaryOrg
+        // - InternalOrg
+        // - DivisionOrg
+        // - CustomerOrg
+        QueryBuilder<Long> query = new QueryBuilder<>(BaseOrg.class, securityContext.getUserSecurityFilter());
+
+        query.setSelectArgument(new NewObjectSelect(Long.class, "id"));
+
+        return persistenceService.findAll(query);
+    }
+
 
     @Transactional(readOnly = true)
     public List<PrimaryOrg> getActivePrimaryOrgs() {

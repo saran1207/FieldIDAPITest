@@ -3,6 +3,7 @@ package com.n4systems.fieldid.ws.v1.resources.org;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
 import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiPlaceEventHistoryResource;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiPlaceEventTypeResource;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -50,6 +52,9 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
     //TODO Need to make use of this.
     @Autowired
     private ApiSavedPlaceEventResource savedPlaceEventResource;
+
+	@Autowired
+	private OrgService orgService;
 
 	public ApiOrgResource() {
 		super(BaseOrg.class, true);
@@ -108,6 +113,16 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 		apiOrg.setOfflineAssetCount(assetService.getOfflineAssetCountByOrg(baseOrg.getId()));
 
 		return apiOrg;
+	}
+
+	@GET
+	@Path("visibleOrgs")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Transactional(readOnly = true)
+	public Response findVisibleOrgIds() {
+		List<Long> results = orgService.getIdOfAllVisibleOrgs();
+
+		return Response.ok().entity(results).build();
 	}
 
 	/*
