@@ -159,6 +159,18 @@ public class AnalyzerService {
             writer.write("\n\n\n");
         }
 
+        logger.info("Annually over the past 3 years...");
+        writer.write("Annually over the past 3 years...\n");
+        for (int i = 0; i < 3; i++) {
+            writer.write("For the year of " + localDate.minusYears(i).getYear() + ":\n");
+            writer.write("--------------------------------------------------------------------------------------\n");
+            writer.write(String.format(outputHeaderFormat, "Tenant Name", "Events"));
+            writer.write("--------------------------------------------------------------------------------------\n");
+            printResults(eventService.getTotalEventCountByTenantByYear(i), writer);
+            writer.write("--------------------------------------------------------------------------------------\n");
+            writer.write("\n\n\n");
+        }
+
         logger.info("Event Analysis End");
         writer.write("Event Analysis End\n");
     }

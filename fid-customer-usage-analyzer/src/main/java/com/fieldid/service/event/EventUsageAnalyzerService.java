@@ -45,7 +45,7 @@ public class EventUsageAnalyzerService extends AbstractJDBCAnalyzerService {
                 "AND me.completedDate >= ? " +
             "GROUP BY t.name;";
 
-    private static final String EVENT_COUNT_BY_TENANT_BY_MONTH_SQL =
+    private static final String EVENT_COUNT_BY_TIME_PERIOD =
             "SELECT count(e.id) as the_count, t.name as tenant_name " +
             "FROM events e " +
             "INNER JOIN masterevents me " +
@@ -78,7 +78,22 @@ public class EventUsageAnalyzerService extends AbstractJDBCAnalyzerService {
 
         logger.info("For the month of " + range[0].getMonth().toString());
 
-        return template.query(EVENT_COUNT_BY_TENANT_BY_MONTH_SQL,
+        return template.query(EVENT_COUNT_BY_TIME_PERIOD,
+                              range,
+                              ((resultSet, i) -> mapTheRow(resultSet, logger)));
+    }
+
+    public List<CountByTenant> getTotalEventCountByTenantByYear(int yearsBack) {
+        LocalDate todaysDate = LocalDate.now();
+
+        LocalDateTime[] range = new LocalDateTime[2];
+
+        range[0] = LocalDateTime.of(todaysDate.getYear(), 1, 1, 0, 0).minusYears(yearsBack);
+        range[1] = range[0].plusYears(1);
+
+        logger.info("For the year of " + range[0].getYear());
+
+        return template.query(EVENT_COUNT_BY_TIME_PERIOD,
                               range,
                               ((resultSet, i) -> mapTheRow(resultSet, logger)));
     }
