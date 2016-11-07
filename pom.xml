@@ -14,7 +14,7 @@
 		<module>fid-ws</module>
         <module>fid-migrations</module>
         <module>fid-index-validator</module>
-        <!--<module>fid-pub-ws</module>-->
+        <module>fid-pub-ws</module>
 		<module>fid-mobile-ws</module>
 		<module>fid-data-migrator</module>
 		<module>fid-customer-usage-analyzer</module>
