@@ -216,6 +216,9 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 					} catch (UsedOnMasterEventException e) {
 						logger.error("Could not archive Asset with ID " + id + " because of UsedOnMasterEventException");
 						subAssetIds.add(id);
+					} catch (Exception e) {
+						logger.error("Could not archive Asset with ID " + id + " because of an unexpected Exception", e);
+						subAssetIds.add(id);
 					}
 				} else {
 					logger.warn("That's strange... could not archive Asset with ID " + id + " because it is either already archived or does not exist... yet.");
