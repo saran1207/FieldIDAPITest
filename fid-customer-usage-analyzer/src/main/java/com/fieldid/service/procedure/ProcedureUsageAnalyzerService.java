@@ -1,6 +1,6 @@
 package com.fieldid.service.procedure;
 
-import com.fieldid.model.CountByTenant;
+import com.fieldid.model.CountByUnit;
 import com.fieldid.service.base.AbstractJDBCAnalyzerService;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -17,6 +17,15 @@ import java.util.List;
 @Service
 public class ProcedureUsageAnalyzerService extends AbstractJDBCAnalyzerService {
     private static final Logger logger = Logger.getLogger(ProcedureUsageAnalyzerService.class);
+
+    private static final String PROCEDURE_COUNT_SQL =
+            "SELECT COUNT(p.id) as the_count " +
+                    "FROM procedures p " +
+                    "INNER JOIN tenants t " +
+                    "ON p.tenant_id = t.id " +
+                    "WHERE t.disabled = 0 " +
+                    "AND p.state = 'ACTIVE' " +
+                    "AND p.workflow_state <> 'OPEN';";
 
     private static final String COUNT_BY_TENANT_SQL =
             "SELECT COUNT(p.id) as the_count, t.name as tenant_name " +
@@ -51,11 +60,26 @@ public class ProcedureUsageAnalyzerService extends AbstractJDBCAnalyzerService {
                 "AND (p.unlock_date < ? OR p.lock_date < ?) " +
             "GROUP BY t.name;";
 
-    public List<CountByTenant> getTotalProcedureCountByTenant() {
+    private static final String PROCEDURE_COUNT_BY_TIME_PERIOD =
+            "SELECT COUNT(p.id) as the_count  " +
+                    "FROM procedures p " +
+                    "INNER JOIN tenants t " +
+                    "ON p.tenant_id = t.id " +
+                    "WHERE t.disabled = 0 " +
+                    "AND p.state = 'ACTIVE' " +
+                    "AND p.workflow_state <> 'OPEN' " +
+                    "AND (p.unlock_date >= ? OR p.lock_date >= ?) " +
+                    "AND (p.unlock_date < ? OR p.lock_date < ?);";
+
+    public List<CountByUnit> getTotalProcedureCount() {
+        return template.query(PROCEDURE_COUNT_SQL, ((resultSet, i) -> mapNonTenantRow(resultSet, "INFINITE", logger)));
+    }
+
+    public List<CountByUnit> getTotalProcedureCountByTenant() {
         return template.query(COUNT_BY_TENANT_SQL, ((resultSet, i) -> mapTheRow(resultSet, logger)));
     }
 
-    public List<CountByTenant> getPastMonthProcedureCountByTenant() {
+    public List<CountByUnit> getPastMonthProcedureCountByTenant() {
         String[] duplicate = new String[2];
         duplicate[0] = LocalDateTime.now().minusMonths(1).format(dateTimeFormat);
         duplicate[1] = LocalDateTime.now().minusMonths(1).format(dateTimeFormat);
@@ -64,7 +88,7 @@ public class ProcedureUsageAnalyzerService extends AbstractJDBCAnalyzerService {
                               ((resultSet, i) -> mapTheRow(resultSet, logger)));
     }
 
-    public List<CountByTenant> getMonthlyProcedureCountByTenant(int monthsBack) {
+    public List<CountByUnit> getMonthlyProcedureCountByTenant(int monthsBack) {
         LocalDate todaysDate = LocalDate.now();
 
         LocalDateTime[] range = new LocalDateTime[4];
@@ -78,4 +102,40 @@ public class ProcedureUsageAnalyzerService extends AbstractJDBCAnalyzerService {
                 range,
                 ((resultSet, i) -> mapTheRow(resultSet, logger)));
     }
+
+    public List<CountByUnit> getMonthlyProcedureCount(int monthsBack) {
+        LocalDate todaysDate = LocalDate.now();
+
+        LocalDateTime[] range = new LocalDateTime[4];
+
+        range[0] = LocalDateTime.of(todaysDate.getYear(), todaysDate.getMonthValue(), 1, 0, 0).minusMonths(monthsBack);
+        range[1] = range[0];
+        range[2] = range[0].plusMonths(1);
+        range[3] = range[2];
+
+        logger.info("For the month of " + range[0].getMonth().toString());
+
+        return template.query(PROCEDURE_COUNT_BY_TIME_PERIOD,
+                range,
+                ((resultSet, i) -> mapNonTenantRow(resultSet, range[0].getMonth().toString(), logger)));
+    }
+
+    public List<CountByUnit> getYearlyProcedureCount(int monthsBack) {
+        LocalDate todaysDate = LocalDate.now();
+
+        LocalDateTime[] range = new LocalDateTime[4];
+
+        range[0] = LocalDateTime.of(todaysDate.getYear(), todaysDate.getMonthValue(), 1, 0, 0).minusYears(monthsBack);
+        range[1] = range[0];
+        range[2] = range[0].plusYears(1);
+        range[3] = range[2];
+
+        logger.info("For the month of " + range[0].getMonth().toString());
+
+        return template.query(PROCEDURE_COUNT_BY_TIME_PERIOD,
+                range,
+                ((resultSet, i) -> mapNonTenantRow(resultSet, Integer.toString(range[0].getYear()), logger)));
+    }
+
+
 }

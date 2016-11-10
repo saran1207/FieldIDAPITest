@@ -1,6 +1,6 @@
 package com.fieldid.service;
 
-import com.fieldid.model.CountByTenant;
+import com.fieldid.model.CountByUnit;
 import com.fieldid.service.asset.AssetUsageAnalyzerService;
 import com.fieldid.service.event.EventUsageAnalyzerService;
 import com.fieldid.service.procedure.ProcedureUsageAnalyzerService;
@@ -61,37 +61,63 @@ public class AnalyzerService {
         logger.info("Procedures Analysis Start");
         writer.write("Procedures Analysis Start\n");
 
+//        logger.info("Since the beginning of time...");
+//        writer.write("Since the beginning of time...\n");
+//        writer.write("--------------------------------------------------------------------------------------\n");
+//        writer.write(String.format(outputHeaderFormat, "Tenant Name", "Procedures"));
+//        writer.write("--------------------------------------------------------------------------------------\n");
+//        printResults(procedureService.getTotalProcedureCountByTenant(), writer);
+//        writer.write("--------------------------------------------------------------------------------------\n");
+//        writer.write("\n\n\n");
+//
+//        logger.info("In the last month by Tenant...");
+//        writer.write("In the last month by Tenant...\n");
+//        writer.write("--------------------------------------------------------------------------------------\n");
+//        writer.write(String.format(outputHeaderFormat, "Tenant Name", "Procedures"));
+//        writer.write("--------------------------------------------------------------------------------------\n");
+//        printResults(procedureService.getPastMonthProcedureCountByTenant(), writer);
+//        writer.write("--------------------------------------------------------------------------------------\n");
+//        writer.write("\n\n\n");
+//
+//        LocalDate localDate = LocalDate.now();
+//
+//        logger.info("Each month for the last year by Tenant...");
+//        writer.write("Each month for the last year by Tenant...\n");
+//        for (int i = 0; i < 13; i++) {
+//            writer.write("For the month of " + localDate.minusMonths(i).getMonth().name() + ":\n");
+//            writer.write("--------------------------------------------------------------------------------------\n");
+//            writer.write(String.format(outputHeaderFormat, "Tenant Name", "Procedures"));
+//            writer.write("--------------------------------------------------------------------------------------\n");
+//            printResults(procedureService.getMonthlyProcedureCountByTenant(i), writer);
+//            writer.write("--------------------------------------------------------------------------------------\n");
+//            writer.write("\n\n\n");
+//        }
+
         logger.info("Since the beginning of time...");
-        writer.write("Since the beginning of time...\n");
-        writer.write("--------------------------------------------------------------------------------------\n");
-        writer.write(String.format(outputHeaderFormat, "Tenant Name", "Procedures"));
-        writer.write("--------------------------------------------------------------------------------------\n");
-        printResults(procedureService.getTotalProcedureCountByTenant(), writer);
-        writer.write("--------------------------------------------------------------------------------------\n");
-        writer.write("\n\n\n");
+        writer.write("There have been " + procedureService.getTotalProcedureCount().get(0).getCount() +
+                     " Procedures performed since the beginning of time\n\n");
 
-        logger.info("In the last month...");
-        writer.write("In the last month...\n");
+        logger.info("In the past 12 months...");
+        writer.write("In the past 12 months...\n");
         writer.write("--------------------------------------------------------------------------------------\n");
-        writer.write(String.format(outputHeaderFormat, "Tenant Name", "Procedures"));
+        writer.write(String.format(outputHeaderFormat, "Month", "Events"));
         writer.write("--------------------------------------------------------------------------------------\n");
-        printResults(procedureService.getPastMonthProcedureCountByTenant(), writer);
-        writer.write("--------------------------------------------------------------------------------------\n");
-        writer.write("\n\n\n");
-
-        LocalDate localDate = LocalDate.now();
-
-        logger.info("Each month for the last year...");
-        writer.write("Each month for the last year...\n");
         for (int i = 0; i < 13; i++) {
-            writer.write("For the month of " + localDate.minusMonths(i).getMonth().name() + ":\n");
-            writer.write("--------------------------------------------------------------------------------------\n");
-            writer.write(String.format(outputHeaderFormat, "Tenant Name", "Procedures"));
-            writer.write("--------------------------------------------------------------------------------------\n");
-            printResults(procedureService.getMonthlyProcedureCountByTenant(i), writer);
-            writer.write("--------------------------------------------------------------------------------------\n");
-            writer.write("\n\n\n");
+            printResults(procedureService.getMonthlyProcedureCount(i), writer);
         }
+        writer.write("--------------------------------------------------------------------------------------\n");
+        writer.write("\n\n\n");
+
+        logger.info("Annually over the past 3 years...");
+        writer.write("Annually over the past 3 years...\n");
+        writer.write("--------------------------------------------------------------------------------------\n");
+        writer.write(String.format(outputHeaderFormat, "Year", "Events"));
+        writer.write("--------------------------------------------------------------------------------------\n");
+        for (int i = 0; i < 3; i++) {
+            printResults(procedureService.getYearlyProcedureCount(i), writer);
+        }
+        writer.write("--------------------------------------------------------------------------------------\n");
+        writer.write("\n\n\n");
 
         logger.info("Procedures Analysis End");
         writer.write("Procedures Analysis End\n");
@@ -101,21 +127,47 @@ public class AnalyzerService {
         logger.info("Procedure Definitions Analysis Start");
         writer.write("Procedure Definitions Analysis Start\n");
 
+//        logger.info("Since the beginning of time by Tenant...");
+//        writer.write("Since the beginning of time by Tenant...\n");
+//        writer.write("--------------------------------------------------------------------------------------\n");
+//        writer.write(String.format(outputHeaderFormat, "Tenant Name", "Procedure Definitions"));
+//        writer.write("--------------------------------------------------------------------------------------\n");
+//        printResults(procedureDefinitionService.getTotalProcedureDefinitionCountByTenant(), writer);
+//        writer.write("--------------------------------------------------------------------------------------\n");
+//        writer.write("\n\n\n");
+//
+//        logger.info("In the last month by Tenant...");
+//        writer.write("In the last month by Tenant...\n");
+//        writer.write("--------------------------------------------------------------------------------------\n");
+//        writer.write(String.format(outputHeaderFormat, "Tenant Name", "Procedure Definitions"));
+//        writer.write("--------------------------------------------------------------------------------------\n");
+//        printResults(procedureDefinitionService.getPastMonthProcedureDefinitionCountByTenant(), writer);
+//        writer.write("--------------------------------------------------------------------------------------\n");
+//        writer.write("\n\n\n");
+
         logger.info("Since the beginning of time...");
-        writer.write("Since the beginning of time...\n");
+        writer.write("There have been " + procedureDefinitionService.getTotalProcedureDefinitionCount().get(0).getCount() +
+                " Procedure Definitions authored since the beginning of time\n\n");
+
+        logger.info("In the past 12 months...");
+        writer.write("In the past 12 months...\n");
         writer.write("--------------------------------------------------------------------------------------\n");
-        writer.write(String.format(outputHeaderFormat, "Tenant Name", "Procedure Definitions"));
+        writer.write(String.format(outputHeaderFormat, "Month", "Events"));
         writer.write("--------------------------------------------------------------------------------------\n");
-        printResults(procedureDefinitionService.getTotalProcedureDefinitionCountByTenant(), writer);
+        for (int i = 0; i < 13; i++) {
+            printResults(procedureDefinitionService.getTotalProcedureDefinitionCountByMonth(i), writer);
+        }
         writer.write("--------------------------------------------------------------------------------------\n");
         writer.write("\n\n\n");
 
-        logger.info("In the last month...");
-        writer.write("In the last month...\n");
+        logger.info("Annually over the past 3 years...");
+        writer.write("Annually over the past 3 years...\n");
         writer.write("--------------------------------------------------------------------------------------\n");
-        writer.write(String.format(outputHeaderFormat, "Tenant Name", "Procedure Definitions"));
+        writer.write(String.format(outputHeaderFormat, "Year", "Events"));
         writer.write("--------------------------------------------------------------------------------------\n");
-        printResults(procedureDefinitionService.getPastMonthProcedureDefinitionCountByTenant(), writer);
+        for (int i = 0; i < 3; i++) {
+            printResults(procedureDefinitionService.getTotalProcedureDefinitionCountByYear(i), writer);
+        }
         writer.write("--------------------------------------------------------------------------------------\n");
         writer.write("\n\n\n");
 
@@ -127,49 +179,75 @@ public class AnalyzerService {
         logger.info("Event Analysis Start");
         writer.write("Event Analysis Start\n");
 
+//        logger.info("Since the beginning of time by Tenant...");
+//        writer.write("Since the beginning of time by Tenant...\n");
+//        writer.write("--------------------------------------------------------------------------------------\n");
+//        writer.write(String.format(outputHeaderFormat, "Tenant Name", "Events"));
+//        writer.write("--------------------------------------------------------------------------------------\n");
+//        printResults(eventService.getTotalEventCountByTenant(), writer);
+//        writer.write("--------------------------------------------------------------------------------------\n");
+//        writer.write("\n\n\n");
+//
+//        logger.info("In the last month by Tenant...");
+//        writer.write("In the last month by Tenant...\n");
+//        writer.write("--------------------------------------------------------------------------------------\n");
+//        writer.write(String.format(outputHeaderFormat, "Tenant Name", "Events"));
+//        writer.write("--------------------------------------------------------------------------------------\n");
+//        printResults(eventService.getPastMonthEventCountByTenant(), writer);
+//        writer.write("--------------------------------------------------------------------------------------\n");
+//        writer.write("\n\n\n");
+//
+//        LocalDate localDate = LocalDate.now();
+//
+//        logger.info("In the past 12 months by Tenant...");
+//        writer.write("In the past 12 months by Tenant...\n");
+//        for (int i = 0; i < 13; i++) {
+//            writer.write("For the month of " + localDate.minusMonths(i).getMonth().name() + ":\n");
+//            writer.write("--------------------------------------------------------------------------------------\n");
+//            writer.write(String.format(outputHeaderFormat, "Tenant Name", "Events"));
+//            writer.write("--------------------------------------------------------------------------------------\n");
+//            printResults(eventService.getTotalEventCountByTenantByMonth(i), writer);
+//            writer.write("--------------------------------------------------------------------------------------\n");
+//            writer.write("\n\n\n");
+//        }
+//
+//        logger.info("Annually over the past 3 years by Tenant...");
+//        writer.write("Annually over the past 3 years by Tenant...\n");
+//        for (int i = 0; i < 3; i++) {
+//            writer.write("For the year of " + localDate.minusYears(i).getYear() + ":\n");
+//            writer.write("--------------------------------------------------------------------------------------\n");
+//            writer.write(String.format(outputHeaderFormat, "Tenant Name", "Events"));
+//            writer.write("--------------------------------------------------------------------------------------\n");
+//            printResults(eventService.getTotalEventCountByTenantByYear(i), writer);
+//            writer.write("--------------------------------------------------------------------------------------\n");
+//            writer.write("\n\n\n");
+//        }
+
         logger.info("Since the beginning of time...");
-        writer.write("Since the beginning of time...\n");
-        writer.write("--------------------------------------------------------------------------------------\n");
-        writer.write(String.format(outputHeaderFormat, "Tenant Name", "Events"));
-        writer.write("--------------------------------------------------------------------------------------\n");
-        printResults(eventService.getTotalEventCountByTenant(), writer);
-        writer.write("--------------------------------------------------------------------------------------\n");
-        writer.write("\n\n\n");
-
-        logger.info("In the last month...");
-        writer.write("In the last month...\n");
-        writer.write("--------------------------------------------------------------------------------------\n");
-        writer.write(String.format(outputHeaderFormat, "Tenant Name", "Events"));
-        writer.write("--------------------------------------------------------------------------------------\n");
-        printResults(eventService.getPastMonthEventCountByTenant(), writer);
-        writer.write("--------------------------------------------------------------------------------------\n");
-        writer.write("\n\n\n");
-
-        LocalDate localDate = LocalDate.now();
+        writer.write("There have been " + eventService.getTotalEventCount().get(0).getCount() +
+                " Events performed since the beginning of time\n\n");
 
         logger.info("In the past 12 months...");
         writer.write("In the past 12 months...\n");
+        writer.write("--------------------------------------------------------------------------------------\n");
+        writer.write(String.format(outputHeaderFormat, "Month", "Events"));
+        writer.write("--------------------------------------------------------------------------------------\n");
         for (int i = 0; i < 13; i++) {
-            writer.write("For the month of " + localDate.minusMonths(i).getMonth().name() + ":\n");
-            writer.write("--------------------------------------------------------------------------------------\n");
-            writer.write(String.format(outputHeaderFormat, "Tenant Name", "Events"));
-            writer.write("--------------------------------------------------------------------------------------\n");
-            printResults(eventService.getTotalEventCountByTenantByMonth(i), writer);
-            writer.write("--------------------------------------------------------------------------------------\n");
-            writer.write("\n\n\n");
+            printResults(eventService.getTotalEventCountByMonth(i), writer);
         }
+        writer.write("--------------------------------------------------------------------------------------\n");
+        writer.write("\n\n\n");
 
         logger.info("Annually over the past 3 years...");
         writer.write("Annually over the past 3 years...\n");
+        writer.write("--------------------------------------------------------------------------------------\n");
+        writer.write(String.format(outputHeaderFormat, "Year", "Events"));
+        writer.write("--------------------------------------------------------------------------------------\n");
         for (int i = 0; i < 3; i++) {
-            writer.write("For the year of " + localDate.minusYears(i).getYear() + ":\n");
-            writer.write("--------------------------------------------------------------------------------------\n");
-            writer.write(String.format(outputHeaderFormat, "Tenant Name", "Events"));
-            writer.write("--------------------------------------------------------------------------------------\n");
-            printResults(eventService.getTotalEventCountByTenantByYear(i), writer);
-            writer.write("--------------------------------------------------------------------------------------\n");
-            writer.write("\n\n\n");
+            printResults(eventService.getTotalEventCountByYear(i), writer);
         }
+        writer.write("--------------------------------------------------------------------------------------\n");
+        writer.write("\n\n\n");
 
         logger.info("Event Analysis End");
         writer.write("Event Analysis End\n");
@@ -179,29 +257,58 @@ public class AnalyzerService {
         logger.info("Asset Analysis Start");
         writer.write("Asset Analysis Start\n");
 
+//        logger.info("Since the beginning of time...");
+//        writer.write("Since the beginning of time...\n");
+//        writer.write("--------------------------------------------------------------------------------------\n");
+//        writer.write(String.format(outputHeaderFormat, "Tenant Name", "Assets"));
+//        writer.write("--------------------------------------------------------------------------------------\n");
+//        printResults(assetService.getTotalAssetCountByTenant(), writer);
+//        writer.write("--------------------------------------------------------------------------------------\n");
+//        writer.write("\n\n\n");
+//
+//        logger.info("In the last month...");
+//        writer.write("In the last month...\n");
+//        writer.write("--------------------------------------------------------------------------------------\n");
+//        writer.write(String.format(outputHeaderFormat, "Tenant Name", "Assets"));
+//        writer.write("--------------------------------------------------------------------------------------\n");
+//        printResults(assetService.getPastMonthAssetCountByTenant(), writer);
+//        writer.write("--------------------------------------------------------------------------------------\n");
+//        writer.write("\n\n\n");
+
         logger.info("Since the beginning of time...");
-        writer.write("Since the beginning of time...\n");
+        writer.write("There have been " + assetService.getTotalAssetCount().get(0).getCount() +
+                " Assets identified since the beginning of time\n\n");
+
+        logger.info("In the past 12 months...");
+        writer.write("In the past 12 months...");
         writer.write("--------------------------------------------------------------------------------------\n");
-        writer.write(String.format(outputHeaderFormat, "Tenant Name", "Assets"));
+        writer.write(String.format(outputHeaderFormat, "Month", "Events"));
         writer.write("--------------------------------------------------------------------------------------\n");
-        printResults(assetService.getTotalAssetCountByTenant(), writer);
+        for (int i = 0; i < 13; i++) {
+            printResults(assetService.getAssetCountByMonth(i), writer);
+        }
         writer.write("--------------------------------------------------------------------------------------\n");
         writer.write("\n\n\n");
 
-        logger.info("In the last month...");
-        writer.write("In the last month...\n");
+        logger.info("Annually over the past 3 years...");
+        writer.write("Annually over the past 3 years...\n");
         writer.write("--------------------------------------------------------------------------------------\n");
-        writer.write(String.format(outputHeaderFormat, "Tenant Name", "Assets"));
+        writer.write(String.format(outputHeaderFormat, "Year", "Events"));
         writer.write("--------------------------------------------------------------------------------------\n");
-        printResults(assetService.getPastMonthAssetCountByTenant(), writer);
+        for (int i = 0; i < 3; i++) {
+            printResults(assetService.getAssetCountByYear(i), writer);
+        }
         writer.write("--------------------------------------------------------------------------------------\n");
         writer.write("\n\n\n");
+
+
+
 
         logger.info("Asset Analysis End");
         writer.write("Asset Analysis End\n");
     }
 
-    private void printResults(List<CountByTenant> countOfSomeSort, BufferedWriter writer) {
+    private void printResults(List<CountByUnit> countOfSomeSort, BufferedWriter writer) {
         logger.info("There are " + countOfSomeSort.size() + " results!");
 
         countOfSomeSort.forEach(

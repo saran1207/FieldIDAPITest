@@ -6,11 +6,11 @@ package com.fieldid.model;
  *
  * Created by Jordan Heath on 2016-09-20.
  */
-public class CountByTenant {
+public class CountByUnit {
     private String name;
     private long count;
 
-    public CountByTenant(String name, long count) {
+    public CountByUnit(String name, long count) {
         this.name = name;
         this.count = count;
     }
