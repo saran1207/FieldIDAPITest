@@ -51,12 +51,15 @@ public class CriteriaRuleValidator {
                   .forEach(rule -> validateRuleAdherence(sectionName, rule, result, errors));
         } else
         if(result instanceof OneClickCriteriaResult) {
-            logger.info("One Click Criteria Id: " + result.getCriteria().getId());
-            result.getCriteria()
-                  .getRules()
-                  .stream()
-                  .filter(rule -> ((OneClickCriteriaRule)rule).getButton().getId().equals(((OneClickCriteriaResult)result).getButton().getId()))
-                  .forEach(rule -> validateRuleAdherence(sectionName, rule, result, errors));
+            try {
+                result.getCriteria()
+                      .getRules()
+                      .stream()
+                      .filter(rule -> ((OneClickCriteriaRule)rule).getButton().getId().equals(((OneClickCriteriaResult)result).getButton().getId()))
+                      .forEach(rule -> validateRuleAdherence(sectionName, rule, result, errors));
+            }catch (Exception e) {
+                logger.error("Error Processing rules for OneClickCriteria Id: " + result.getCriteria().getId());
+            }
         } else
         if(result instanceof NumberFieldCriteriaResult && ((NumberFieldCriteriaResult) result).getValue() != null) {
             result.getCriteria()
