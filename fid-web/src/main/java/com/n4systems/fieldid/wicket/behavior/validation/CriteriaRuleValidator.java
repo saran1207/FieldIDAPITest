@@ -40,6 +40,7 @@ public class CriteriaRuleValidator {
     }
 
     private static void processRules(List<String> errors, CriteriaResult result, String sectionName) {
+
         if(result instanceof SelectCriteriaResult) {
             result.getCriteria()
                   .getRules()
@@ -50,6 +51,7 @@ public class CriteriaRuleValidator {
                   .forEach(rule -> validateRuleAdherence(sectionName, rule, result, errors));
         } else
         if(result instanceof OneClickCriteriaResult) {
+            logger.info("One Click Criteria Id: " + result.getCriteria().getId());
             result.getCriteria()
                   .getRules()
                   .stream()
