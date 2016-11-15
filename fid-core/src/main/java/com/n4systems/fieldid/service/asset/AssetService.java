@@ -853,10 +853,21 @@ public class AssetService extends CrudService<Asset> {
 
         Asset parentAsset = parentAsset(asset);
         if (parentAsset != null) {
-            SubAsset subAssetToRemove = parentAsset.getSubAssets().get(parentAsset.getSubAssets().indexOf(new SubAsset(asset, parentAsset)));
-            persistenceService.delete(subAssetToRemove);
-            parentAsset.getSubAssets().remove(subAssetToRemove);
-            update(parentAsset);//, archivedBy);
+            if(parentAsset.getSubAssets() == null || parentAsset.getSubAssets().isEmpty()) {
+                logger.error("Parent Asset with ID " + parentAsset.getId() + " has an empty SubAsset set, yet has subassets!!!");
+            }
+
+            final Long assetId = asset.getId();
+
+            Optional<SubAsset> removeMe = parentAsset.getSubAssets().stream().filter(subAsset -> Objects.equals(subAsset.getAsset().getId(), assetId)).findFirst();
+
+            if(removeMe.isPresent()) {
+                persistenceService.delete(removeMe.get());
+                parentAsset.getSubAssets().remove(removeMe.get());
+                update(parentAsset);//, archivedBy);
+            } else {
+                logger.warn("Although Asset(" + assetId + ") claims to be a child of MasteAsset(" + parentAsset.getId() + "), that appears to be a lie.");
+            }
         }
 
         asset.archiveEntity();
