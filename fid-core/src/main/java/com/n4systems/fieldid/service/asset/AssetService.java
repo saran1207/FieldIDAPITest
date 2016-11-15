@@ -852,24 +852,35 @@ public class AssetService extends CrudService<Asset> {
             asset.getSubAssets().clear();
         }
 
-        Asset parentAsset = parentAsset(asset);
-        if (parentAsset != null) {
-            if(parentAsset.getSubAssets() == null || parentAsset.getSubAssets().isEmpty()) {
-                logger.error("Parent Asset with ID " + parentAsset.getId() + " has an empty SubAsset set, yet has subassets!!!");
-            }
+        //FIXME Instead of reading the Master Asset to figure out if the Asset in question is a SubAsset, we should do things differently:
+        // - Try to read a SubAsset which references the Asset in question as the SubAsset in the relationship
+        // - If the SubAsset exists, delete it with persistenceService.remove(...)
+        // - Continue with normal operations from here
 
-            final Long assetId = asset.getId();
+        //TODO Better make sure that we don't actually need to update the MasterAsset... I'm pretty sure we don't
 
-            Optional<SubAsset> removeMe = parentAsset.getSubAssets().stream().filter(subAsset -> Objects.equals(subAsset.getAsset().getId(), assetId)).findFirst();
+        deleteSubAsset(asset);
 
-            if(removeMe.isPresent()) {
-                persistenceService.delete(removeMe.get());
-                parentAsset.getSubAssets().remove(removeMe.get());
-                update(parentAsset);//, archivedBy);
-            } else {
-                logger.warn("Although Asset(" + assetId + ") claims to be a child of MasteAsset(" + parentAsset.getId() + "), that appears to be a lie.");
-            }
-        }
+//        Asset parentAsset = parentAsset(asset);
+//        if (parentAsset != null) {
+//
+//
+//            if(parentAsset.getSubAssets() == null || parentAsset.getSubAssets().isEmpty()) {
+//                logger.error("Parent Asset with ID " + parentAsset.getId() + " has an empty SubAsset set, yet has SubAssets!!!");
+//            }
+//
+//            final Long assetId = asset.getId();
+//
+//            Optional<SubAsset> removeMe = parentAsset.getSubAssets().stream().filter(subAsset -> Objects.equals(subAsset.getAsset().getId(), assetId)).findFirst();
+//
+//            if(removeMe.isPresent()) {
+//                persistenceService.delete(removeMe.get());
+//                parentAsset.getSubAssets().remove(removeMe.get());
+//                update(parentAsset);//, archivedBy);
+//            } else {
+//                logger.warn("Although Asset(" + assetId + ") claims to be a child of MasterAsset(" + parentAsset.getId() + "), that appears to be a lie.");
+//            }
+//        }
 
         asset.archiveEntity();
         asset.archiveIdentifier();
@@ -881,6 +892,19 @@ public class AssetService extends CrudService<Asset> {
         archiveProcedureAudits(asset);
 
         return save(asset);//, archivedBy);
+    }
+
+    private void deleteSubAsset(Asset asset) {
+        QueryBuilder<SubAsset> query = createUserSecurityBuilder(SubAsset.class);
+        query.addSimpleWhere("asset", asset);
+
+        List<SubAsset> subAssets = persistenceService.findAll(query);
+
+        if(subAssets != null && !subAssets.isEmpty()) {
+            for(SubAsset subAsset : subAssets) {
+                persistenceService.delete(subAsset);
+            }
+        }
     }
 
     private void archiveProcedureAudits(Asset asset) {
