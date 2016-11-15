@@ -837,6 +837,7 @@ public class AssetService extends CrudService<Asset> {
         return asset;
     }
 
+    @Transactional
     public Asset archive(Asset asset, User archivedBy) throws UsedOnMasterEventException {
         asset = persistenceService.reattach(asset);
         asset = fillInSubAssetsOnAsset(asset);
