@@ -51,15 +51,11 @@ public class CriteriaRuleValidator {
                   .forEach(rule -> validateRuleAdherence(sectionName, rule, result, errors));
         } else
         if(result instanceof OneClickCriteriaResult) {
-            try {
-                result.getCriteria()
-                      .getRules()
-                      .stream()
-                      .filter(rule -> ((OneClickCriteriaRule)rule).getButton().getId().equals(((OneClickCriteriaResult)result).getButton().getId()))
-                      .forEach(rule -> validateRuleAdherence(sectionName, rule, result, errors));
-            }catch (Exception e) {
-                logger.error("Error Processing rules for OneClickCriteria Id: " + result.getCriteria().getId());
-            }
+            result.getCriteria()
+                  .getRules()
+                  .stream()
+                  .filter(rule -> ((OneClickCriteriaRule) rule).getButton().getId().equals(resolveOneClickResultsWithNullState((OneClickCriteriaResult) result)))
+                    .forEach(rule -> validateRuleAdherence(sectionName, rule, result, errors));
         } else
         if(result instanceof NumberFieldCriteriaResult && ((NumberFieldCriteriaResult) result).getValue() != null) {
             result.getCriteria()
@@ -106,5 +102,16 @@ public class CriteriaRuleValidator {
 
     private static String getCriteriaErrorMessage(String key, CriteriaResult criteriaResult, String sectionName) {
         return new FIDLabelModel(key, criteriaResult.getCriteria().getDisplayName(), sectionName).getObject();
+    }
+
+    //When the OneClickCriteria are not displayed (eg the customer does not scroll through the list of sections)
+    //the default button is never bound to the model so we need to check for null.
+    //Note we are not setting the value here, that happens in EventCreationService.defaultOneClickResultsWithNullState()
+    private static Long resolveOneClickResultsWithNullState(OneClickCriteriaResult result) {
+        if (result.getButton() != null)
+            return result.getButton().getId();
+        else
+            return ((OneClickCriteria) result.getCriteria()).getButtonGroup().getAvailableButtons().get(0).getId();
+
     }
 }
