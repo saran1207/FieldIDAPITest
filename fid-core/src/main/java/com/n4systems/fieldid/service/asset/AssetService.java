@@ -861,27 +861,6 @@ public class AssetService extends CrudService<Asset> {
 
         deleteSubAsset(asset);
 
-//        Asset parentAsset = parentAsset(asset);
-//        if (parentAsset != null) {
-//
-//
-//            if(parentAsset.getSubAssets() == null || parentAsset.getSubAssets().isEmpty()) {
-//                logger.error("Parent Asset with ID " + parentAsset.getId() + " has an empty SubAsset set, yet has SubAssets!!!");
-//            }
-//
-//            final Long assetId = asset.getId();
-//
-//            Optional<SubAsset> removeMe = parentAsset.getSubAssets().stream().filter(subAsset -> Objects.equals(subAsset.getAsset().getId(), assetId)).findFirst();
-//
-//            if(removeMe.isPresent()) {
-//                persistenceService.delete(removeMe.get());
-//                parentAsset.getSubAssets().remove(removeMe.get());
-//                update(parentAsset);//, archivedBy);
-//            } else {
-//                logger.warn("Although Asset(" + assetId + ") claims to be a child of MasterAsset(" + parentAsset.getId() + "), that appears to be a lie.");
-//            }
-//        }
-
         asset.archiveEntity();
         asset.archiveIdentifier();
 
@@ -894,8 +873,14 @@ public class AssetService extends CrudService<Asset> {
         return save(asset);//, archivedBy);
     }
 
+    /**
+     * Find any delete any SubAssets which reference this Asset as the "Sub" portion of the SubAsset.  There should
+     * only be one... but you never know if the user has some messed up data.
+     *
+     * @param asset - The Asset for which you want to demolish any SubAsset relationships of which it is the "asset."
+     */
     private void deleteSubAsset(Asset asset) {
-        QueryBuilder<SubAsset> query = createUserSecurityBuilder(SubAsset.class);
+        QueryBuilder<SubAsset> query = new QueryBuilder<>(SubAsset.class, new OpenSecurityFilter());
         query.addSimpleWhere("asset", asset);
 
         List<SubAsset> subAssets = persistenceService.findAll(query);
