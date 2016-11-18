@@ -855,6 +855,7 @@ public class S3Service extends FieldIdPersistenceService {
                 criteriaResultImage.getFileName());
     }
 
+    //FIXME This method appears to fail sometimes... maybe all the time.
     public void deleteCriteriaResultImage(CriteriaResultImage criteriaResultImage) {
         removeResource(null, CRITERIA_RESULT_IMAGE_PATH_MEDIUM,
                 criteriaResultImage.getCriteriaResult().getEvent().getId(),
