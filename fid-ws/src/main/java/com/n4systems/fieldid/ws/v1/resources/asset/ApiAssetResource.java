@@ -195,7 +195,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	@PUT
 	@Path("secretAssetDeleter/pleaseDelete")
 	@Consumes(MediaType.TEXT_PLAIN)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
 	@Transactional
 	public Response deleteAssets(String idList) {
         logger.warn("Getting ready to delete your list of Assets... I imagine it's pretty big");
@@ -228,7 +228,17 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 
 			if(!subAssetIds.isEmpty()) {
 				logger.info("There were one or more assets which couldn't be unlocked with this method... they've been sent back to be run again");
-				return Response.status(420).entity(subAssetIds).build();
+				StringBuilder result = new StringBuilder(String.format("%d", subAssetIds.get(0)));
+				if(subAssetIds.size() > 1) {
+					for (int i = 1; i < subAssetIds.size(); i++) {
+						result.append("\n").append(String.format("%d", subAssetIds.get(i)));
+					}
+				}
+
+				return Response.status(420)
+							   .type(MediaType.TEXT_PLAIN)
+							   .entity(result.toString())
+							   .build();
 			}
 		}
 
