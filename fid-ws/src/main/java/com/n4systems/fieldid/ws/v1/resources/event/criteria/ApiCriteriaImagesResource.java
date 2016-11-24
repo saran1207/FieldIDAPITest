@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.ws.v1.resources.event.criteria;
 
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.CriteriaResult;
@@ -76,14 +77,17 @@ public class ApiCriteriaImagesResource extends FieldIdPersistenceService {
 			criteriaResultImage.setComments(apiCriteriaImage.getComments());
 
 			//In order to properly manipulate this collection, we need to pull it from the object...
-			List<CriteriaResultImage> criteriaResultImages = criteriaResult.getCriteriaImages();
+			//TODO We have to copy the list before calling add(index, object) due to this bug https://hibernate.atlassian.net/browse/HHH-10375
+			List<CriteriaResultImage> criteriaResultImages = Lists.newArrayList();
+			criteriaResultImages.addAll(criteriaResult.getCriteriaImages());
 
 			//Add to it...
 			criteriaResultImages.add(criteriaResultImage);
 
 			//Then set it back on the CriteriaResult... that's because inside this setter, we actually reset the
 			//collection.  Hibernate prefers we do things that way.
-			criteriaResult.setCriteriaImages(criteriaResultImages);
+			criteriaResult.getCriteriaImages().clear();
+			criteriaResult.getCriteriaImages().addAll(criteriaResultImages);
 
 			persistenceService.update(criteriaResult);
 			s3Service.uploadCriteriaResultImage(criteriaResultImage, apiCriteriaImage.getImage());
