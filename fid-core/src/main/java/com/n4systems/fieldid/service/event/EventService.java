@@ -457,7 +457,7 @@ public class EventService extends FieldIdPersistenceService {
                 )
         ).values().stream()
                 // Map them into full thing events and return a list
-                .map((e) -> persistenceService.find(PlaceEvent.class, e.get().getId()))
+                .map((e) -> (PlaceEvent) persistenceService.find(Event.class, e.get().getId()))
                 .collect(Collectors.toList());
 
         return lastEventsByType;
