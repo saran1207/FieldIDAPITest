@@ -194,15 +194,14 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 
 	@PUT
 	@Path("secretAssetDeleter/pleaseDelete")
-	@Consumes(MediaType.TEXT_PLAIN)
-	@Produces(MediaType.TEXT_PLAIN)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
-	public Response deleteAssets(String idList) {
+	public Response deleteAssets(List<String> idList) {
         logger.warn("Getting ready to delete your list of Assets... I imagine it's pretty big");
 
 
 		if(idList != null && !idList.isEmpty()) {
-			List<Long> assetIds = Arrays.stream(idList.split("\\n")).map(Long::parseLong).collect(Collectors.toList());
+			List<Long> assetIds = idList.stream().map(Long::parseLong).collect(Collectors.toList());
 
             logger.info("There are " + assetIds.size() + " to process... is that number correct?");
 
@@ -228,16 +227,19 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 
 			if(!subAssetIds.isEmpty()) {
 				logger.info("There were one or more assets which couldn't be unlocked with this method... they've been sent back to be run again");
-				StringBuilder result = new StringBuilder(String.format("%d", subAssetIds.get(0)));
-				if(subAssetIds.size() > 1) {
-					for (int i = 1; i < subAssetIds.size(); i++) {
-						result.append("\n").append(String.format("%d", subAssetIds.get(i)));
-					}
-				}
+
+				//We need that as strings for transport... just for safety.
+				List<String> result = subAssetIds.stream().map(id -> String.format("%d", id)).collect(Collectors.toList());
+
+//				StringBuilder result = new StringBuilder(String.format("%d", subAssetIds.get(0)));
+//				if(subAssetIds.size() > 1) {
+//					for (int i = 1; i < subAssetIds.size(); i++) {
+//						result.append("\n").append(String.format("%d", subAssetIds.get(i)));
+//					}
+//				}
 
 				return Response.status(420)
-							   .type(MediaType.TEXT_PLAIN)
-							   .entity(result.toString())
+							   .entity(result)
 							   .build();
 			}
 		}

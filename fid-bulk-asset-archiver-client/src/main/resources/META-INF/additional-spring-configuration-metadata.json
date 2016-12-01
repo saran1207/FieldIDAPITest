@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "fieldid.webservice.authkey",
+      "type": "java.lang.String",
+      "description": "Description for fieldid.webservice.authkey."
+    },
+    {
+      "name": "fieldid.webservice.endpoint",
+      "type": "java.lang.String",
+      "description": "Description for fieldid.webservice.endpoint."
+    }
+  ]
+}
