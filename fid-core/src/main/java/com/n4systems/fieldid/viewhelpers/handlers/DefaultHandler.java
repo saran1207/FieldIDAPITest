@@ -1,10 +1,10 @@
 package com.n4systems.fieldid.viewhelpers.handlers;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import com.n4systems.fieldid.service.download.TableGenerationContext;
 import com.n4systems.fieldid.service.download.WebOutputHandler;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * The default CustomizableSearchAction OutputHandler.  Provides handling of Dates and other special types.

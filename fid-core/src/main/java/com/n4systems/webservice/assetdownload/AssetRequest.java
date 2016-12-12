@@ -1,9 +1,9 @@
 package com.n4systems.webservice.assetdownload;
 
+import com.n4systems.webservice.dto.RequestInformation;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.n4systems.webservice.dto.RequestInformation;
 
 public class AssetRequest extends RequestInformation {
 	private boolean withPreviousEvents = false;

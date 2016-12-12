@@ -1,10 +1,10 @@
 package com.n4systems.export.converters;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.SubAsset;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+
+import javax.persistence.EntityManager;
 
 public class SubAssetConverter extends ExportConverter {
 	private final EntityManager em;

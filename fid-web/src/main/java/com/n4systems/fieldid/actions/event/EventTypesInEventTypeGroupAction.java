@@ -2,7 +2,6 @@ package com.n4systems.fieldid.actions.event;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
-import com.n4systems.model.EventType;
 import com.n4systems.model.ThingEventType;
 import com.n4systems.model.event.EventTypesByEventGroupIdLoader;
 

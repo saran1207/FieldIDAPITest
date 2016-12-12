@@ -1,18 +1,13 @@
 package com.n4systems.persistence.utils;
 
-import static org.easymock.EasyMock.*;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import org.junit.Test;
-
 import com.n4systems.util.reflection.beans.ReflectionTestBeanA;
 import com.n4systems.util.reflection.beans.ReflectionTestBeanB;
 import com.n4systems.util.reflection.beans.ReflectionTestBeanC;
+import org.junit.Test;
+
+import java.util.*;
+
+import static org.easymock.EasyMock.*;
 
 public class PostFetcherTest {
 	

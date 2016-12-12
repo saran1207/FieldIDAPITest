@@ -1,11 +1,5 @@
 package com.n4systems.fieldid.actions.downloaders;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProjectManager;
 import com.n4systems.model.FileAttachment;
@@ -13,6 +7,12 @@ import com.n4systems.model.Project;
 import com.n4systems.reporting.PathHandler;
 import org.apache.log4j.Logger;
 import rfid.web.helper.Constants;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
 public class DownloadProjectNoteFile extends DownloadAction {
 

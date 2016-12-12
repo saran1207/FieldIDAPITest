@@ -1,12 +1,12 @@
 package com.n4systems.persistence.utils;
 
-import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.n4systems.model.safetynetwork.IdLoader;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.loaders.Loader;
+
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LazyLoadingList<T> extends AbstractList<T> {
 

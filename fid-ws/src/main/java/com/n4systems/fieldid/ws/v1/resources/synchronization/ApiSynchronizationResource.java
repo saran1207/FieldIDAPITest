@@ -3,8 +3,8 @@ package com.n4systems.fieldid.ws.v1.resources.synchronization;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
+import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
-import com.n4systems.fieldid.ws.v1.resources.procedure.ApiProcedureResource;
 import com.n4systems.model.Asset;
 import com.n4systems.model.SubAsset;
 import com.n4systems.model.ThingEvent;
@@ -35,7 +35,7 @@ public class ApiSynchronizationResource extends FieldIdPersistenceService {
 	private static Logger logger = Logger.getLogger(ApiSynchronizationResource.class);
 
 	@Autowired private OfflineProfileService offlineProfileService;
-    @Autowired private ApiProcedureResource procedureResource;
+    @Autowired private ProcedureService procedureService;
 	
 	@GET
 	@Consumes(MediaType.TEXT_PLAIN)
@@ -44,7 +44,7 @@ public class ApiSynchronizationResource extends FieldIdPersistenceService {
 	public ListResponse<ApiSynchronizationAsset> synchronize() {
 		OfflineProfile profile = offlineProfileService.find(getCurrentUser());
 
-		Set<ApiSynchronizationAsset> assets = new HashSet<ApiSynchronizationAsset>();
+		Set<ApiSynchronizationAsset> assets = new HashSet<>();
 		if (profile != null) {		
 			assets.addAll(getOfflineProfileAssets(profile));
 			assets.addAll(getOfflineProfileOrgs(profile));
@@ -53,7 +53,7 @@ public class ApiSynchronizationResource extends FieldIdPersistenceService {
         assets.addAll(getAssignedOpenProcedureAssets(profile));
 		assets.addAll(getLinkedAssets(assets));
 		
-		ListResponse<ApiSynchronizationAsset> response = new ListResponse<ApiSynchronizationAsset>();
+		ListResponse<ApiSynchronizationAsset> response = new ListResponse<>();
 		response.getList().addAll(assets);
 		response.setTotal(response.getList().size());
 		return response;
@@ -78,10 +78,8 @@ public class ApiSynchronizationResource extends FieldIdPersistenceService {
                 ? getSyncEndDate(OfflineProfile.DEFAULT_SYNC_DURATION, startDate)
                 : getSyncEndDate(profile.getSyncDuration(), startDate);
 
-        QueryBuilder<Procedure> query = procedureResource.createOpenAssignedProcedureBuilder(startDate, endDate);
-
-        List<ApiSynchronizationAsset> assets = new ArrayList<ApiSynchronizationAsset>();
-        List<Procedure> openProcedures = persistenceService.findAll(query);
+        List<ApiSynchronizationAsset> assets = new ArrayList<>();
+        List<Procedure> openProcedures = procedureService.findAllOpenAssignedProcedures(startDate, endDate);
         for (Procedure openProcedure : openProcedures) {
             assets.add(convert(openProcedure.getAsset()));
         }
@@ -89,7 +87,7 @@ public class ApiSynchronizationResource extends FieldIdPersistenceService {
     }
 
     private List<ApiSynchronizationAsset> getOfflineProfileAssets(OfflineProfile profile) {
-		List<ApiSynchronizationAsset> assets = new ArrayList<ApiSynchronizationAsset>();
+		List<ApiSynchronizationAsset> assets = new ArrayList<>();
 		if (!profile.getAssets().isEmpty()) {
 			QueryBuilder<ApiSynchronizationAsset> builder = createBuilder();
 			builder.addWhere(WhereClauseFactory.create(Comparator.IN, "mobileGUID", profile.getAssets()));
@@ -99,7 +97,7 @@ public class ApiSynchronizationResource extends FieldIdPersistenceService {
 	}
 	
 	private List<ApiSynchronizationAsset> getOfflineProfileOrgs(OfflineProfile profile) {
-		List<ApiSynchronizationAsset> assets = new ArrayList<ApiSynchronizationAsset>();
+		List<ApiSynchronizationAsset> assets = new ArrayList<>();
 		for (Long orgId: profile.getOrganizations()) {
 			QueryBuilder<ApiSynchronizationAsset> builder = createBuilder();
 			
@@ -115,7 +113,7 @@ public class ApiSynchronizationResource extends FieldIdPersistenceService {
 	}
 	
 	private List<ApiSynchronizationAsset> getAssignedOpenEventAssets(OfflineProfile profile) {
-		List<ApiSynchronizationAsset> assets = new ArrayList<ApiSynchronizationAsset>();		
+		List<ApiSynchronizationAsset> assets = new ArrayList<>();
 		Date startDate = new LocalDate().toDate();
 		Date endDate = profile == null 
 			? getSyncEndDate(OfflineProfile.DEFAULT_SYNC_DURATION, startDate)
@@ -151,29 +149,28 @@ public class ApiSynchronizationResource extends FieldIdPersistenceService {
 	
 	private List<ApiSynchronizationAsset> getLinkedAssets(Set<ApiSynchronizationAsset> assets) {
 		if (assets.isEmpty()) {
-			return new ArrayList<ApiSynchronizationAsset>();
+			return new ArrayList<>();
 		}
 		
-		List<String> assetIds = new ArrayList<String>();
+		List<String> assetIds = new ArrayList<>();
 		for(ApiSynchronizationAsset asset: assets) {
 			assetIds.add(asset.getAssetId());
 		}
 		
 		QueryBuilder<ApiSynchronizationAsset> builder = createSubAssetBuilder();
 		builder.addWhere(WhereClauseFactory.create(Comparator.IN, "masterAsset.mobileGUID", assetIds));
-		
-		List<ApiSynchronizationAsset> linkedAssets = persistenceService.findAll(builder);
-		return linkedAssets;
+
+		return persistenceService.findAll(builder);
 	}	
 	
 	private QueryBuilder<ApiSynchronizationAsset> createBuilder() {
-		QueryBuilder<ApiSynchronizationAsset> builder = new QueryBuilder<ApiSynchronizationAsset>(Asset.class, securityContext.getUserSecurityFilter());
+		QueryBuilder<ApiSynchronizationAsset> builder = new QueryBuilder<>(Asset.class, securityContext.getUserSecurityFilter());
 		builder.setSelectArgument(new NewObjectSelect(ApiSynchronizationAsset.class, "mobileGUID", "modified"));
 		return builder;
 	}
 	
 	private QueryBuilder<ApiSynchronizationAsset> createSubAssetBuilder() {
-		QueryBuilder<ApiSynchronizationAsset> builder = new QueryBuilder<ApiSynchronizationAsset>(SubAsset.class, new OpenSecurityFilter());
+		QueryBuilder<ApiSynchronizationAsset> builder = new QueryBuilder<>(SubAsset.class, new OpenSecurityFilter());
 		builder.setSelectArgument(new NewObjectSelect(ApiSynchronizationAsset.class, "asset.mobileGUID", "asset.modified"));
 		return builder;
 	}

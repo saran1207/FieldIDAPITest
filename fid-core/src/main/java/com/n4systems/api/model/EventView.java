@@ -40,6 +40,12 @@ public class EventView extends ExternalModelView {
 	@SerializableField(title = "Asset Status", order = 800, validators = { AssetStatusExistsValidator.class })
 	private String assetStatus;
 
+	@SerializableField(title = "Asset Type", order = 800)
+	private String assetType;
+
+	@SerializableField(title = "Asset Type Group", order = 800)
+	private String assetTypeGroup;
+
     @SerializableField(title = "Event Status", order = 850, validators = { EventStatusExistsValidator.class })
     private String eventStatus;
 
@@ -137,7 +143,23 @@ public class EventView extends ExternalModelView {
 		this.assetStatus = assetStatus;
 	}
 
-    public String getEventStatus() {
+	public String getAssetTypeGroup() {
+		return assetTypeGroup;
+	}
+
+	public void setAssetTypeGroup(String assetTypeGroup) {
+		this.assetTypeGroup = assetTypeGroup;
+	}
+
+	public String getAssetType() {
+		return assetType;
+	}
+
+	public void setAssetType(String assetType) {
+		this.assetType = assetType;
+	}
+
+	public String getEventStatus() {
         return eventStatus;
     }
 

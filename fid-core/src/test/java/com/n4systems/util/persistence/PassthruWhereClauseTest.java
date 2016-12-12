@@ -1,11 +1,11 @@
 package com.n4systems.util.persistence;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 import javax.persistence.Query;
 
-import org.junit.Test;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 
 public class PassthruWhereClauseTest {
 

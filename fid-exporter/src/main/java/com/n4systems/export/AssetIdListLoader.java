@@ -1,13 +1,12 @@
 package com.n4systems.export;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
 import com.n4systems.model.Asset;
 import com.n4systems.model.SubAsset;
 import com.n4systems.persistence.loaders.Loader;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.util.List;
 
 public class AssetIdListLoader extends Loader<List<IdWrapper>> {
 	private final long tenantId;

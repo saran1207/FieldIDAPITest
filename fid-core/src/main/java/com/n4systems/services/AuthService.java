@@ -2,7 +2,9 @@ package com.n4systems.services;
 
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
@@ -33,13 +35,21 @@ public class AuthService extends FieldIdPersistenceService {
 	}
 
 	@Transactional(readOnly = true)
-	public boolean exceededRequestLimit(String consumerKey, String tokenKey, long limit) {
+	public boolean exceededRequestLimit(String consumerKey, String tokenKey) {
+		//Find current hit count
 		String stmt = "SELECT COUNT(*) FROM `request_log` WHERE `consumer_key` = ? AND `token_key` = ?";
 		Query query = getEntityManager().createNativeQuery(stmt);
 		query.setParameter(1, consumerKey);
 		query.setParameter(2, tokenKey);
 		Long requests = ((BigInteger) query.getSingleResult()).longValue();
-		return requests > limit;
+
+		//Find tenant CAP
+		String stmt2 = "SELECT api_limit FROM `tenant_settings` WHERE `consumer_key` = ?";
+		Query query2 = getEntityManager().createNativeQuery(stmt2);
+		query2.setParameter(1, consumerKey);
+		Long apiLimit = ((BigInteger) query2.getSingleResult()).longValue();
+
+		return requests > apiLimit;
 	}
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)

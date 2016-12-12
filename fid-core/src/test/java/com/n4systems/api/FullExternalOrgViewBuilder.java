@@ -1,9 +1,9 @@
 package com.n4systems.api;
 
-import java.util.UUID;
-
 import com.n4systems.api.model.FullExternalOrgView;
 import com.n4systems.model.builders.BaseBuilder;
+
+import java.util.UUID;
 
 public class FullExternalOrgViewBuilder extends BaseBuilder<FullExternalOrgView> {
 	private boolean isCustomer;

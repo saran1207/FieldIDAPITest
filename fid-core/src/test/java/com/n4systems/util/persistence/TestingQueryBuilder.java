@@ -1,12 +1,11 @@
 package com.n4systems.util.persistence;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.security.ManualSecurityFilter;
 import com.n4systems.tools.Pager;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 public class TestingQueryBuilder<E> extends QueryBuilder<E> {
 

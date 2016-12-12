@@ -15,6 +15,7 @@ import com.n4systems.fieldid.service.event.AssignmentEscalationRuleProcessingSer
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.LastEventDateService;
 import com.n4systems.fieldid.service.event.NotifyEventAssigneeService;
+import com.n4systems.fieldid.service.pentaho.PentahoService;
 import com.n4systems.fieldid.service.procedure.*;
 import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.fieldid.service.sendsearch.SendSearchService;
@@ -23,6 +24,7 @@ import com.n4systems.mail.MailManager;
 import com.n4systems.mail.MailManagerFactory;
 import com.n4systems.notifiers.EmailNotifier;
 import com.n4systems.notifiers.Notifier;
+import com.n4systems.services.AuthService;
 import com.n4systems.services.EventScheduleService;
 import com.n4systems.services.EventScheduleServiceImpl;
 import com.n4systems.services.SecurityContext;
@@ -139,6 +141,11 @@ public class ServiceLocator implements ApplicationContextAware {
         return new EventScheduleServiceImpl(getPersistenceManager());
     }
 
+	public static AuthService getAuthService() {
+		AuthService authService = getBean(AuthService.class);
+		return authService;
+	}
+
     public static S3Service getS3Service() {
         S3Service s3Service = getBean(S3Service.class);
         return s3Service;
@@ -188,6 +195,10 @@ public class ServiceLocator implements ApplicationContextAware {
     public static ProcedureDefinitionService getProcedureDefinitionService() {
         return getBean(ProcedureDefinitionService.class);
     }
+
+	public static PentahoService getPentahoService() {
+		return getBean(PentahoService.class);
+	}
 
     public static SvgGenerationService getSvgGenerationService() {
         return getBean(SvgGenerationService.class);

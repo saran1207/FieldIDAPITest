@@ -1,12 +1,12 @@
 package com.n4systems.ejb;
 
-import java.util.List;
-
 import com.n4systems.exceptions.AssetAlreadyAttachedException;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.model.*;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.tools.Pager;
+
+import java.util.List;
 
 public interface ProjectManager {
 	public int attachAsset(Asset asset, Project project, Long modifiedBy) throws AssetAlreadyAttachedException;

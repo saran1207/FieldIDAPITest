@@ -1,10 +1,10 @@
 package com.n4systems.persistence.loaders;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.persistence.QueryBuilder;
+
+import javax.persistence.EntityManager;
 
 abstract public class PaginatedLoader<T> extends SecurityFilteredLoader<Pager<T>> {
 	private static final int FIRST_PAGE = 1;

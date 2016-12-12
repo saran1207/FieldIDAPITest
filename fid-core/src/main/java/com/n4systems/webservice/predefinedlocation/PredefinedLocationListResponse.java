@@ -1,9 +1,9 @@
 package com.n4systems.webservice.predefinedlocation;
 
+import com.n4systems.webservice.dto.AbstractListResponse;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.n4systems.webservice.dto.AbstractListResponse;
 
 public class PredefinedLocationListResponse extends AbstractListResponse {
 	private List<PredefinedLocationServiceDTO> locations = new ArrayList<PredefinedLocationServiceDTO>();

@@ -1,9 +1,11 @@
 package com.n4systems.fieldid.ws.v1.resources.asset;
 
+import com.n4systems.exceptions.UsedOnMasterEventException;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.LastEventDateService;
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
+import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.fieldid.ws.v1.resources.assetattachment.ApiAssetAttachment;
@@ -39,8 +41,10 @@ import rfid.ejb.entity.InfoOptionBean;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,7 +53,8 @@ import java.util.stream.Collectors;
 public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	private static Logger logger = Logger.getLogger(ApiAssetResource.class);
 	
-	@Autowired private AssetService assetService;	
+	@Autowired private AssetService assetService;
+	@Autowired private ProcedureService procedureService;
 	@Autowired private AssetSaveServiceSpring assetSaveService;
 	@Autowired private ApiEventHistoryResource apiEventHistoryResource;
 	@Autowired private ApiEventScheduleResource apiEventScheduleResource;
@@ -187,6 +192,62 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		}
 	}
 
+	@PUT
+	@Path("secretAssetDeleter/pleaseDelete")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Transactional
+	public Response deleteAssets(List<String> idList) {
+        logger.warn("Getting ready to delete your list of Assets... I imagine it's pretty big");
+
+
+		if(idList != null && !idList.isEmpty()) {
+			List<Long> assetIds = idList.stream().map(Long::parseLong).collect(Collectors.toList());
+
+            logger.info("There are " + assetIds.size() + " to process... is that number correct?");
+
+			List<Long> subAssetIds = new ArrayList<>();
+
+			for(Long id : assetIds) {
+				Asset asset = assetService.findById(id);
+				if(asset != null) {
+					try {
+						assetService.archive(asset, getCurrentUser());
+					} catch (UsedOnMasterEventException e) {
+						logger.error("Could not archive Asset with ID " + id + " because of UsedOnMasterEventException");
+						subAssetIds.add(id);
+					} catch (Exception e) {
+						logger.error("Could not archive Asset with ID " + id + " because of an unexpected Exception", e);
+						subAssetIds.add(id);
+					}
+				} else {
+					logger.warn("That's strange... could not archive Asset with ID " + id + " because it is either already archived or does not exist... yet.");
+					logger.warn("Are you from the future?");
+				}
+			}
+
+			if(!subAssetIds.isEmpty()) {
+				logger.info("There were one or more assets which couldn't be unlocked with this method... they've been sent back to be run again");
+
+				//We need that as strings for transport... just for safety.
+				List<String> result = subAssetIds.stream().map(id -> String.format("%d", id)).collect(Collectors.toList());
+
+//				StringBuilder result = new StringBuilder(String.format("%d", subAssetIds.get(0)));
+//				if(subAssetIds.size() > 1) {
+//					for (int i = 1; i < subAssetIds.size(); i++) {
+//						result.append("\n").append(String.format("%d", subAssetIds.get(i)));
+//					}
+//				}
+
+				return Response.status(420)
+							   .entity(result)
+							   .build();
+			}
+		}
+
+
+		return Response.ok().entity("There is nothing to return.  All Assets were deleted or did not exist in the system.").build();
+	}
+
     @Path("{assetId}/procedures")
     public ApiProcedureDefinitionResourceV2 assetProcedureDefinitions() {
         return procedureDefinitionResource;
@@ -223,6 +284,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 
 		apiAsset.setSchedules(apiEventScheduleResource.findAllSchedules(asset.getId(), syncDuration));
         apiAsset.setProcedures(procedureResource.getOpenAndLockedProcedures(asset.getId()));
+		apiAsset.setLocked(procedureService.isLocked(asset));
 		if (downloadEvents) {
 			apiAsset.setEvents(apiSavedEventResource.findLastEventOfEachType(asset.getId()));
 		}

@@ -29,12 +29,12 @@ public class Language extends BaseEntity implements UnsecuredEntity, Comparable{
         this.locale = locale;
     }
 
-    public String getDisplayLanguage() {
-        return locale.getDisplayLanguage();
+    public String getDisplayName() {
+        return locale.getDisplayName();
     }
 
     @Override
     public int compareTo(Object otherLanguage) {
-        return this.getDisplayLanguage().compareTo(((Language)otherLanguage).getDisplayLanguage());
+        return this.getDisplayName().compareTo(((Language)otherLanguage).getDisplayName());
     }
 }

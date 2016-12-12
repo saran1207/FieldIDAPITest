@@ -1,18 +1,17 @@
 package com.n4systems.model.criteria;
 
-import static org.junit.Assert.*;
+import com.n4systems.model.ButtonGroup;
+import com.n4systems.model.OneClickCriteria;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.builders.OneClickCriteriaBuilder;
+import com.n4systems.model.builders.TenantBuilder;
+import com.n4systems.model.builders.UserBuilder;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
-import com.n4systems.model.ButtonGroup;
-import com.n4systems.model.OneClickCriteria;
-import com.n4systems.model.builders.OneClickCriteriaBuilder;
-import com.n4systems.model.builders.UserBuilder;
-import org.junit.Test;
-
-import com.n4systems.model.Tenant;
-import com.n4systems.model.builders.TenantBuilder;
+import static org.junit.Assert.*;
 
 public class CriteriaCleanerTest {
 	private static final String displayText = "display_text";

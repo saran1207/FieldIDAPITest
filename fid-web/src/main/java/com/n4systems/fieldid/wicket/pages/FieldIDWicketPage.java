@@ -6,10 +6,9 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.model.security.SecurityFilter;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import rfid.web.helper.SessionUser;
-import org.apache.wicket.request.http.handler.RedirectRequestHandler;
-
 
 import javax.servlet.http.HttpServletRequest;
 

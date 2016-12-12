@@ -1,14 +1,15 @@
 package com.n4systems.model;
 
-import static com.n4systems.model.builders.FileAttachmentBuilder.*;
-import static com.n4systems.model.builders.EventBuilder.*;
-import static org.junit.Assert.*;
+import com.n4systems.test.helpers.FluentArrayList;
+import org.junit.Test;
 
 import java.util.List;
 
-import org.junit.Test;
-
-import com.n4systems.test.helpers.FluentArrayList;
+import static com.n4systems.model.builders.EventBuilder.anEvent;
+import static com.n4systems.model.builders.FileAttachmentBuilder.aNonImageFile;
+import static com.n4systems.model.builders.FileAttachmentBuilder.anImageFile;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 public class AbstractEventTest {

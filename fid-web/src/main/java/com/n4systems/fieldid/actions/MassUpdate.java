@@ -1,9 +1,5 @@
 package com.n4systems.fieldid.actions;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
@@ -12,6 +8,10 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.persistence.search.BaseSearchDefiner;
 import com.n4systems.util.persistence.search.ImmutableBaseSearchDefiner;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MassUpdate extends AbstractAction  {
 	private static final long serialVersionUID = 1L;

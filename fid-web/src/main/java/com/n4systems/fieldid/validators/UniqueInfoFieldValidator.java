@@ -1,13 +1,13 @@
 package com.n4systems.fieldid.validators;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.fieldid.viewhelpers.TrimmedString;
 import com.opensymphony.xwork2.validator.ValidationException;
 import com.opensymphony.xwork2.validator.validators.FieldValidatorSupport;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class UniqueInfoFieldValidator extends FieldValidatorSupport {
 

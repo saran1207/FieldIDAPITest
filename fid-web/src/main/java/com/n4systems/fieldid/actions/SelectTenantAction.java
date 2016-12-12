@@ -1,11 +1,5 @@
 package com.n4systems.fieldid.actions;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.actions.helpers.AbstractActionTenantContextInitializer;
@@ -14,6 +8,11 @@ import com.n4systems.fieldid.actions.helpers.UnbrandedDomainException;
 import com.n4systems.fieldid.permissions.NoValidTenantSelectedException;
 import com.n4systems.model.Tenant;
 import com.n4systems.services.TenantFinder;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SelectTenantAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;

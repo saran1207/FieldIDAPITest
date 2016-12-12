@@ -1,12 +1,11 @@
 package com.n4systems.fieldidadmin.utils;
 
-import java.io.File;
-import java.io.IOException;
-
-import org.apache.log4j.Logger;
-
 import com.n4systems.model.Tenant;
 import com.n4systems.reporting.PathHandler;
+import org.apache.log4j.Logger;
+
+import java.io.File;
+import java.io.IOException;
 
 public class TenantPathUpdater {
 	

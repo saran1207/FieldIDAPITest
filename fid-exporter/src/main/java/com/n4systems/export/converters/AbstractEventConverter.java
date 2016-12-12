@@ -1,13 +1,16 @@
 package com.n4systems.export.converters;
 
+import com.n4systems.model.AbstractEvent;
+import com.n4systems.model.Criteria;
+import com.n4systems.model.CriteriaResult;
+import com.n4systems.model.CriteriaSection;
+import com.thoughtworks.xstream.converters.MarshallingContext;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import com.n4systems.model.*;
-import com.thoughtworks.xstream.converters.MarshallingContext;
-import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 public abstract class AbstractEventConverter<T extends AbstractEvent> extends AbstractEntityConverter<T> {
 

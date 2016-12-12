@@ -1,20 +1,19 @@
 package com.n4systems.fieldid.utils;
 
-import static com.n4systems.fieldid.utils.FlashScopeMarshaller.*;
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.Collection;
-
-import javax.servlet.http.HttpSession;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.n4systems.fieldid.actions.api.FlashScopeAware;
 import com.n4systems.test.helpers.FluentArrayList;
 import com.opensymphony.xwork2.ValidationAwareSupport;
+import org.junit.Before;
+import org.junit.Test;
+
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import static com.n4systems.fieldid.utils.FlashScopeMarshaller.FLASH_ERRORS;
+import static com.n4systems.fieldid.utils.FlashScopeMarshaller.FLASH_MESSAGES;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 
 
 public class FlashScopeMarshallerTest {

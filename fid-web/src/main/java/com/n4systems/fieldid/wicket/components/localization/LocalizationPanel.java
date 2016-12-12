@@ -73,7 +73,7 @@ public class LocalizationPanel extends Panel {
                 }.setReuseItems(true))
                 .add(chooseLanguage = new FidDropDownChoice<Locale>("language", new PropertyModel(this, "language"), getLanguages() , new IChoiceRenderer<Locale>() {
                     @Override public Object getDisplayValue(Locale object) {
-                        return object.getDisplayLanguage();
+                        return object.getDisplayName();
                     }
 
                     @Override public String getIdValue(Locale object, int index) {

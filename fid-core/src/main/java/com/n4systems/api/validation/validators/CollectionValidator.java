@@ -1,12 +1,12 @@
 package com.n4systems.api.validation.validators;
 
-import java.util.Collection;
-import java.util.Map;
-
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.exporting.beanutils.SerializableField;
 import com.n4systems.model.security.SecurityFilter;
+
+import java.util.Collection;
+import java.util.Map;
 
 public class CollectionValidator<T, C extends Collection<T>> implements FieldValidator {
 

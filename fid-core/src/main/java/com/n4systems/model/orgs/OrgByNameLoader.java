@@ -1,13 +1,13 @@
 package com.n4systems.model.orgs;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import com.n4systems.services.TenantFinder;
 import com.n4systems.util.StringUtils;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+
+import javax.persistence.EntityManager;
 
 public class OrgByNameLoader extends SecurityFilteredLoader<BaseOrg> {
 	private final TenantFinder tenantFinder;

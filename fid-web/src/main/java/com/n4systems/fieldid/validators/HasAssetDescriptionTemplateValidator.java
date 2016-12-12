@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.validators;
 
-import java.util.List;
-
 import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
+
+import java.util.List;
 
 public interface HasAssetDescriptionTemplateValidator {
 	public String getDescriptionTemplate();

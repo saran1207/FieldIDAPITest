@@ -1,8 +1,8 @@
 package com.n4systems.model.utils;
 
-import java.io.Serializable;
-
 import org.joda.time.LocalDate;
+
+import java.io.Serializable;
 
 
 public interface DateRangeFormatter extends Serializable {

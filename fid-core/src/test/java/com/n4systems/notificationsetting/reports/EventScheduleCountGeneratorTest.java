@@ -1,8 +1,17 @@
 package com.n4systems.notificationsetting.reports;
 
-import static com.n4systems.model.builders.NotificationSettingBuilder.*;
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
+import com.n4systems.ejb.MailManagerTestDouble;
+import com.n4systems.model.ThingEvent;
+import com.n4systems.model.event.SmartFailedEventListLoader;
+import com.n4systems.model.eventschedulecount.EventScheduleCount;
+import com.n4systems.model.eventschedulecount.OverdueEventScheduleCountListLoader;
+import com.n4systems.model.eventschedulecount.UpcomingEventScheduleCountListLoader;
+import com.n4systems.model.notificationsettings.NotificationSetting;
+import com.n4systems.test.helpers.FluentArrayList;
+import com.n4systems.util.mail.TemplateMailMessage;
+import com.n4systems.util.time.Clock;
+import com.n4systems.util.time.StoppedClock;
+import org.junit.Test;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,20 +19,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import com.n4systems.model.Event;
-import com.n4systems.model.ThingEvent;
-import com.n4systems.model.event.SmartFailedEventListLoader;
-import com.n4systems.model.eventschedulecount.EventScheduleCount;
-import com.n4systems.model.eventschedulecount.OverdueEventScheduleCountListLoader;
-import com.n4systems.model.eventschedulecount.UpcomingEventScheduleCountListLoader;
-import org.junit.Test;
-
-import com.n4systems.ejb.MailManagerTestDouble;
-import com.n4systems.model.notificationsettings.NotificationSetting;
-import com.n4systems.test.helpers.FluentArrayList;
-import com.n4systems.util.mail.TemplateMailMessage;
-import com.n4systems.util.time.Clock;
-import com.n4systems.util.time.StoppedClock;
+import static com.n4systems.model.builders.NotificationSettingBuilder.aNotificationSetting;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 public class EventScheduleCountGeneratorTest {
 

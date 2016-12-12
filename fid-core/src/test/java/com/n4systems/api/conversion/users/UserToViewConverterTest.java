@@ -1,15 +1,14 @@
 package com.n4systems.api.conversion.users;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-
-import org.junit.Test;
-
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.model.UserView;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.user.User;
 import com.n4systems.security.UserType;
+import org.junit.Test;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 
 public class UserToViewConverterTest {
 	

@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.admin.languages;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.admin.FieldIDAdminPage;
 import com.n4systems.model.localization.Language;
 import com.n4systems.services.localization.LocalizationService;
@@ -12,6 +13,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -30,8 +32,10 @@ public class ConfigureLanguagesPage extends FieldIDAdminPage {
     @SpringBean
     private LocalizationService localizationService;
 
-    private String code;
-    private RequiredTextField<String> codeField;
+    private String language;
+    private String country;
+    private RequiredTextField<String> languageField;
+    private TextField<String> countryField;
     private FIDFeedbackPanel feedbackPanel;
     private WebMarkupContainer languageList;
 
@@ -43,7 +47,7 @@ public class ConfigureLanguagesPage extends FieldIDAdminPage {
             @Override
             protected void populateItem(final ListItem<Language> item) {
                 item.add(new Label("code", new PropertyModel<String>(item.getModel(), "locale.language")));
-                item.add(new Label("displayName", new PropertyModel<String>(item.getModel(), "displayLanguage")));
+                item.add(new Label("displayName", new PropertyModel<String>(item.getModel(), "displayName")));
                 item.add(new AjaxLink<Void>("remove") {
 
                     @Override
@@ -60,36 +64,49 @@ public class ConfigureLanguagesPage extends FieldIDAdminPage {
         feedbackPanel.setOutputMarkupId(true);
 
         Form<Void> form;
-        add(form = new Form<Void>("form"));
-
-        form.add(codeField = new RequiredTextField<String>("code", new PropertyModel<String>(this, "code")));
-
-        codeField.add(new AbstractValidator<String>() {
+        add(form = new Form<Void>("form") {
             @Override
-            protected void onValidate(IValidatable<String> validatable) {
-                String languageCode = validatable.getValue();
-                if(Lists.newArrayList(Locale.getISOLanguages()).contains(languageCode)) {
-                    Locale locale = new Locale(languageCode);
-                    if(localizationService.hasSystemLanguage(locale)) {
-                        ValidationError error = new ValidationError();
-                        error.addMessageKey("error.language_exists");
-                        validatable.error(error);
+            protected void onValidate() {
+                String language = languageField.getRawInput();
+                String country = countryField.getRawInput();
+
+                if (Lists.newArrayList(Locale.getISOLanguages()).contains(language)) {
+
+                    Locale locale = null;
+
+                    if (country != null) {
+                        if (Lists.newArrayList(Locale.getISOCountries()).contains(country)) {
+                            locale = new Locale(language, country);
+                        } else {
+                            error(new FIDLabelModel("error.invalid_country_code").getObject());
+                        }
+                    } else {
+                        locale = new Locale(language);
+                    }
+                    if (locale != null && localizationService.hasSystemLanguage(locale)) {
+                        error(new FIDLabelModel("error.language_exists").getObject());
                     }
                 } else {
-                    ValidationError error = new ValidationError();
-                    error.addMessageKey("error.invalid_language_code");
-                    validatable.error(error);
+                    error(new FIDLabelModel("error.invalid_language_code").getObject());
                 }
             }
         });
 
+        form.add(languageField = new RequiredTextField<>("language", new PropertyModel<>(this, "language")));
+        form.add(countryField = new TextField<>("country", new PropertyModel<>(this, "country")));
+
         form.add(new AjaxSubmitLink("add") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                Locale locale = new Locale(code);
+                Locale locale;
+                if (country == null) {
+                    locale = new Locale(language);
+                } else {
+                    locale = new Locale(language,country);
+                }
                 localizationService.addSystemLanguage(new Language(locale));
-                code = null;
-                codeField.clearInput();
+                language = null;
+                languageField.clearInput();
                 target.add(languageList, feedbackPanel);
             }
 

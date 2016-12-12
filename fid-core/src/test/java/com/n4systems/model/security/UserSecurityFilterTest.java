@@ -1,18 +1,20 @@
 package com.n4systems.model.security;
 
-import static com.n4systems.model.builders.CustomerOrgBuilder.*;
-import static com.n4systems.model.builders.DivisionOrgBuilder.*;
-import static com.n4systems.model.builders.SecondaryOrgBuilder.*;
-import static com.n4systems.model.builders.UserBuilder.*;
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
 import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.TestingQueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import org.junit.Test;
+
+import static com.n4systems.model.builders.CustomerOrgBuilder.aPrimaryCustomerOrg;
+import static com.n4systems.model.builders.CustomerOrgBuilder.aSecondaryCustomerOrg;
+import static com.n4systems.model.builders.DivisionOrgBuilder.aPrimaryDivisionOrg;
+import static com.n4systems.model.builders.DivisionOrgBuilder.aSecondaryDivisionOrg;
+import static com.n4systems.model.builders.SecondaryOrgBuilder.aSecondaryOrg;
+import static com.n4systems.model.builders.UserBuilder.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 
 

@@ -1,16 +1,14 @@
 package com.n4systems.ejb.legacy.impl;
 
-import java.util.Date;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
-import rfid.ejb.PopulatorCriteria;
-import rfid.ejb.entity.PopulatorLogBean;
-
 import com.n4systems.ejb.legacy.PopulatorLog;
 import com.n4systems.tools.Page;
 import com.n4systems.tools.Pager;
+import rfid.ejb.PopulatorCriteria;
+import rfid.ejb.entity.PopulatorLogBean;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.util.Date;
 
  
 public class PopulatorLogManager implements PopulatorLog {

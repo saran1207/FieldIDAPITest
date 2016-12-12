@@ -1,8 +1,8 @@
 package com.n4systems.util.persistence;
 
-import javax.persistence.Query;
-
 import com.n4systems.exceptions.InvalidQueryException;
+
+import javax.persistence.Query;
 
 // XXX this is a hack to create a sub select where clause.  It's got logic copied from WhereParameter
 // really where parameter should be able to handle a sub select QueryBuilder as a value

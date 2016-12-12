@@ -1,14 +1,13 @@
 package com.n4systems.service.ordermapper;
 
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.util.Map;
-
+import com.n4systems.rmi.RemoteOrderManager;
 import org.jboss.soa.esb.actions.AbstractActionLifecycle;
 import org.jboss.soa.esb.helpers.ConfigTree;
 import org.jboss.soa.esb.message.Message;
 
-import com.n4systems.rmi.RemoteOrderManager;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.util.Map;
 
 public class OrderJMSListenerAction extends AbstractActionLifecycle {
 	private static final String RMI_NAME = "RemoteOrderManager";

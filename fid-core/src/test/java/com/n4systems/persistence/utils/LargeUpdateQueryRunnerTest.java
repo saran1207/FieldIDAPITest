@@ -1,19 +1,18 @@
 package com.n4systems.persistence.utils;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
+import com.n4systems.test.helpers.FluentArrayList;
+import com.n4systems.testutils.TestHelper;
+import org.junit.Test;
 
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import javax.persistence.Query;
-
-import org.junit.Test;
-
-import com.n4systems.test.helpers.FluentArrayList;
-import com.n4systems.testutils.TestHelper;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 public class LargeUpdateQueryRunnerTest {

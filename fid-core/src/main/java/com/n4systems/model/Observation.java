@@ -6,6 +6,9 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import java.util.UUID;
 
+import javax.persistence.*;
+import java.util.UUID;
+
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "observations")

@@ -46,9 +46,9 @@ public class SelectLanguagePanel extends Panel {
             public Object getDisplayValue(Locale locale) {
                 Locale userLocale = FieldIDSession.get().getUserLocale();
                 if(userLocale != null)
-                    return locale.getDisplayLanguage(userLocale);
+                    return locale.getDisplayName(userLocale);
                 else
-                    return locale.getDisplayLanguage();
+                    return locale.getDisplayName();
             }
 
             @Override

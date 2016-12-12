@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.wicket.components;
 
-import java.io.Serializable;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
+
+import java.io.Serializable;
 
 
 /**

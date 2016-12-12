@@ -1,13 +1,13 @@
 package com.n4systems.fieldid.actions.asset;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.orgs.BaseOrg;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 public class AssetView implements Serializable, HasOwner {
 	private static final long serialVersionUID = 1L;

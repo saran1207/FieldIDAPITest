@@ -56,7 +56,7 @@ public class LanguageConfigurationPage extends FieldIDFrontEndPage {
                 new IChoiceRenderer<Locale>() {
                     @Override
                     public Object getDisplayValue(Locale locale) {
-                        return locale.getDisplayLanguage();
+                        return locale.getDisplayName();
                     }
 
                     @Override

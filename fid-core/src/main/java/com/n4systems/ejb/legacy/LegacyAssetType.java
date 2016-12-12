@@ -3,18 +3,17 @@
  */
 package com.n4systems.ejb.legacy;
 
-import java.io.File;
-import java.util.Collection;
-import java.util.List;
-
-import com.n4systems.model.AssetType;
-import rfid.ejb.entity.InfoFieldBean;
-
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ImageAttachmentException;
 import com.n4systems.exceptions.InvalidQueryException;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.util.ListingPair;
+import rfid.ejb.entity.InfoFieldBean;
+
+import java.io.File;
+import java.util.Collection;
+import java.util.List;
 
 public interface LegacyAssetType {
 	 

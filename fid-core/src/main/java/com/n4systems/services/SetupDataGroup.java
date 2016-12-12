@@ -1,19 +1,7 @@
 package com.n4systems.services;
 
 
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AssetTypeGroup;
-import com.n4systems.model.AssetTypeSchedule;
-import com.n4systems.model.AssociatedEventType;
-import com.n4systems.model.AutoAttributeCriteria;
-import com.n4systems.model.AutoAttributeDefinition;
-import com.n4systems.model.EventBook;
-import com.n4systems.model.EventType;
-import com.n4systems.model.Project;
-import com.n4systems.model.Button;
-import com.n4systems.model.ButtonGroup;
-import com.n4systems.model.UnitOfMeasure;
+import com.n4systems.model.*;
 import com.n4systems.model.commenttemplate.CommentTemplate;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.CustomerOrg;

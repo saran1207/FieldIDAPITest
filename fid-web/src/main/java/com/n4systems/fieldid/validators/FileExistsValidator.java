@@ -1,9 +1,9 @@
 package com.n4systems.fieldid.validators;
 
-import java.io.File;
-
 import com.opensymphony.xwork2.validator.ValidationException;
 import com.opensymphony.xwork2.validator.validators.FieldValidatorSupport;
+
+import java.io.File;
 
 public class FileExistsValidator extends FieldValidatorSupport {
 

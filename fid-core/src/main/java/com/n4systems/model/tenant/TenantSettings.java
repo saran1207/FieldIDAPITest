@@ -53,6 +53,9 @@ public class TenantSettings extends EntityWithTenant {
 	@Column(name="public_api_enabled")
 	private boolean publicApiEnabled;
 
+	@Column(name="api_limit")
+	private int apiLimit;
+
 	@Embedded
 	@AttributeOverrides({
 		@AttributeOverride(name = "key", column = @Column(name = "consumer_key")),
@@ -192,5 +195,13 @@ public class TenantSettings extends EntityWithTenant {
 
 	public void setAuthConsumer(KeyPair authConsumer) {
 		this.authConsumer = authConsumer;
+	}
+
+	public int getApiLimit() {
+		return apiLimit;
+	}
+
+	public void setApiLimit(int apiLimit) {
+		this.apiLimit = apiLimit;
 	}
 }

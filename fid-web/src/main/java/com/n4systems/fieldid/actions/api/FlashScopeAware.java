@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.actions.api;
 
-import java.util.Collection;
-
 import com.opensymphony.xwork2.ValidationAware;
+
+import java.util.Collection;
 
 public interface FlashScopeAware extends ValidationAware {
 	

@@ -1,10 +1,10 @@
 package com.n4systems.model.eventtype;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.exceptions.NotImplementedException;
 import com.n4systems.model.AssociatedEventType;
 import com.n4systems.persistence.savers.Saver;
+
+import javax.persistence.EntityManager;
 
 public class AssociatedEventTypeSaver extends Saver<AssociatedEventType> {
 

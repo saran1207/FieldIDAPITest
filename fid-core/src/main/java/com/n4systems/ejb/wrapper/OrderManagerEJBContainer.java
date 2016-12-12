@@ -1,23 +1,22 @@
 package com.n4systems.ejb.wrapper;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.impl.OrderManagerImpl;
 import com.n4systems.exceptions.OrderProcessingException;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
+import com.n4systems.model.Order.OrderType;
 import com.n4systems.model.OrderKey;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.Order.OrderType;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.plugins.integration.OrderResolver;
+
+import javax.persistence.EntityManager;
+import java.util.List;
+import java.util.Map;
 
 public class OrderManagerEJBContainer extends EJBTransactionEmulator<OrderManager> implements OrderManager {
 

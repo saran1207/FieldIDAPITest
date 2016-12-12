@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.ws.v1.resources.event.criteria;
 
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.CriteriaResult;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.activation.FileTypeMap;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 @Component
 @Path("criteriaImage")
@@ -37,7 +39,9 @@ public class ApiCriteriaImagesResource extends FieldIdPersistenceService {
 
 		//Remove it's link from the Criteria Result Object
 		CriteriaResult result = criteriaResultImage.getCriteriaResult();
-		result.getCriteriaImages().remove(criteriaResultImage);
+		List<CriteriaResultImage> criteriaResultImages = result.getCriteriaImages();
+		criteriaResultImages.remove(criteriaResultImage);
+		result.setCriteriaImages(criteriaResultImages);
 		persistenceService.update(result);
 
 		//Remove it completely
@@ -71,7 +75,19 @@ public class ApiCriteriaImagesResource extends FieldIdPersistenceService {
 			criteriaResultImage.setFileName(apiCriteriaImage.getFileName());
 			criteriaResultImage.setContentType(FileTypeMap.getDefaultFileTypeMap().getContentType(apiCriteriaImage.getFileName()));
 			criteriaResultImage.setComments(apiCriteriaImage.getComments());
-			criteriaResult.getCriteriaImages().add(criteriaResultImage);
+
+			//In order to properly manipulate this collection, we need to pull it from the object...
+			//TODO We have to copy the list before calling add(index, object) due to this bug https://hibernate.atlassian.net/browse/HHH-10375
+			List<CriteriaResultImage> criteriaResultImages = Lists.newArrayList();
+			criteriaResultImages.addAll(criteriaResult.getCriteriaImages());
+
+			//Add to it...
+			criteriaResultImages.add(criteriaResultImage);
+
+			//Then set it back on the CriteriaResult... that's because inside this setter, we actually reset the
+			//collection.  Hibernate prefers we do things that way.
+			criteriaResult.getCriteriaImages().clear();
+			criteriaResult.getCriteriaImages().addAll(criteriaResultImages);
 
 			persistenceService.update(criteriaResult);
 			s3Service.uploadCriteriaResultImage(criteriaResultImage, apiCriteriaImage.getImage());

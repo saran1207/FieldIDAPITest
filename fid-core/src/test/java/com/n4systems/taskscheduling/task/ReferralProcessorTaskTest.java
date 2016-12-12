@@ -1,10 +1,5 @@
 package com.n4systems.taskscheduling.task;
 
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
-import static org.easymock.EasyMock.*;
-
 import com.n4systems.model.Tenant;
 import com.n4systems.model.builders.TenantBuilder;
 import com.n4systems.model.builders.UserBuilder;
@@ -16,6 +11,12 @@ import com.n4systems.persistence.savers.Saver;
 import com.n4systems.testutils.DummySaver;
 import com.n4systems.testutils.DummyTransaction;
 import com.n4systems.testutils.DummyTransactionManager;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class ReferralProcessorTaskTest {
 	private Tenant referralTenant;

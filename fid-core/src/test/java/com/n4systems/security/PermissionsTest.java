@@ -1,10 +1,9 @@
 package com.n4systems.security;
 
-import static org.junit.Assert.*;
-
+import com.n4systems.model.user.User;
 import org.junit.Test;
 
-import com.n4systems.model.user.User;
+import static org.junit.Assert.assertFalse;
 
 
 

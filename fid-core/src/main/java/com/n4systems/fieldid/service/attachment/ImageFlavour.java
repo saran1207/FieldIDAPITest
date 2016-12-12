@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.service.attachment;
 
 import com.n4systems.fieldid.service.images.ImageService;
-import com.n4systems.model.attachment.Attachment;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.regex.Matcher;

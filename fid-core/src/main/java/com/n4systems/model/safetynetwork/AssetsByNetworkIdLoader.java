@@ -13,9 +13,8 @@ import com.n4systems.util.persistence.SubSelectInClause;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
+import java.util.List;
 
 public class AssetsByNetworkIdLoader extends ListLoader<Asset> {
 

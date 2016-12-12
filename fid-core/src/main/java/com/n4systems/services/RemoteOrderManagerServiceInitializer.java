@@ -1,13 +1,12 @@
 package com.n4systems.services;
 
+import com.n4systems.rmi.RemoteOrderManager;
+import com.n4systems.rmi.RemoteOrderManagerImpl;
+import org.apache.log4j.Logger;
+
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-
-import org.apache.log4j.Logger;
-
-import com.n4systems.rmi.RemoteOrderManager;
-import com.n4systems.rmi.RemoteOrderManagerImpl;
 
 public class RemoteOrderManagerServiceInitializer implements Initializer {
 	private static final String RMI_NAME = "RemoteOrderManager";

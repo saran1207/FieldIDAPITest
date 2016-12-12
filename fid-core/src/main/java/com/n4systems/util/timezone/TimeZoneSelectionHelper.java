@@ -1,9 +1,9 @@
 package com.n4systems.util.timezone;
 
+import com.n4systems.model.api.Listable;
+
 import java.util.SortedSet;
 import java.util.TreeSet;
-
-import com.n4systems.model.api.Listable;
 
 public class TimeZoneSelectionHelper {
 

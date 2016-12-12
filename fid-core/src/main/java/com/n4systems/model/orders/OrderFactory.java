@@ -2,8 +2,8 @@ package com.n4systems.model.orders;
 
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
-import com.n4systems.model.Tenant;
 import com.n4systems.model.Order.OrderType;
+import com.n4systems.model.Tenant;
 import com.n4systems.util.StringUtils;
 
 public class OrderFactory {

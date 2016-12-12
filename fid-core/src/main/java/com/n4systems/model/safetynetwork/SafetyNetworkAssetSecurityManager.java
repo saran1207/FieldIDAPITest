@@ -1,12 +1,11 @@
 package com.n4systems.model.safetynetwork;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.n4systems.model.Asset;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.orgs.ExternalOrg;
 import com.n4systems.model.orgs.InternalOrg;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Contains the logic for testing Safety Network security against assets.

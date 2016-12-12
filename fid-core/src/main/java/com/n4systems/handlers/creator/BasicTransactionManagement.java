@@ -1,9 +1,9 @@
 package com.n4systems.handlers.creator;
 
-import static com.n4systems.exceptions.Exceptions.*;
-
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
+
+import static com.n4systems.exceptions.Exceptions.convertToRuntimeException;
 
 public abstract class BasicTransactionManagement {
 

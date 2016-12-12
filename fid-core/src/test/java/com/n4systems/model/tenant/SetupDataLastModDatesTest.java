@@ -1,11 +1,11 @@
 package com.n4systems.model.tenant;
 
 
-import static org.junit.Assert.*;
-
+import com.n4systems.model.Tenant;
 import org.junit.Test;
 
-import com.n4systems.model.Tenant;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 public class SetupDataLastModDatesTest {
 	@Test

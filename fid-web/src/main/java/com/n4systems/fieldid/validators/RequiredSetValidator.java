@@ -1,10 +1,10 @@
 package com.n4systems.fieldid.validators;
 
-import java.util.Collection;
-
 import com.n4systems.model.api.Retirable;
 import com.opensymphony.xwork2.validator.ValidationException;
 import com.opensymphony.xwork2.validator.validators.FieldValidatorSupport;
+
+import java.util.Collection;
 
 public class RequiredSetValidator extends FieldValidatorSupport {
 

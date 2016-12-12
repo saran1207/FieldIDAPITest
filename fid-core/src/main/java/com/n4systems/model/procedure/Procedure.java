@@ -2,7 +2,9 @@ package com.n4systems.model.procedure;
 
 import com.n4systems.model.Asset;
 import com.n4systems.model.GpsLocation;
+import com.n4systems.model.PlatformType;
 import com.n4systems.model.ProcedureWorkflowState;
+import com.n4systems.model.api.HasCreatedModifiedPlatform;
 import com.n4systems.model.api.HasGpsLocation;
 import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.orgs.BaseOrg;
@@ -23,7 +25,7 @@ import java.util.UUID;
 @Table(name = "procedures")
 @Cacheable
 @org.hibernate.annotations.Cache(region = "ProcedureCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Procedure extends ArchivableEntityWithTenant implements NetworkEntity<Procedure>, HasGpsLocation {
+public class Procedure extends ArchivableEntityWithTenant implements NetworkEntity<Procedure>, HasGpsLocation, HasCreatedModifiedPlatform {
 
     public static final SecurityDefiner createSecurityDefiner() {
         return new SecurityDefiner("tenant.id", "asset.owner", null, "state", false);
@@ -100,6 +102,20 @@ public class Procedure extends ArchivableEntityWithTenant implements NetworkEnti
 
     @Transient
     private Boolean assigneeOrDateChanged = Boolean.FALSE;
+
+    @Column(name="modified_platform", length = 200)
+    private String modifiedPlatform;
+
+    @Column(name="created_platform", length = 200)
+    private String createdPlatform;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="modified_platform_type")
+    private PlatformType modifiedPlatformType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="created_platform_type")
+    private PlatformType createdPlatformType;
 
     public List<IsolationPointResult> getLockResults() {
         return lockResults;
@@ -324,5 +340,45 @@ public class Procedure extends ArchivableEntityWithTenant implements NetworkEnti
 
     public void setAssigneeOrDateChanged() {
         this.assigneeOrDateChanged = Boolean.TRUE;
+    }
+
+    @Override
+    public String getModifiedPlatform() {
+        return modifiedPlatform;
+    }
+
+    @Override
+    public void setModifiedPlatform(String modifiedPlatform) {
+        this.modifiedPlatform = modifiedPlatform;
+    }
+
+    @Override
+    public String getCreatedPlatform() {
+        return createdPlatform;
+    }
+
+    @Override
+    public void setCreatedPlatform(String createdPlatform) {
+        this.createdPlatform = createdPlatform;
+    }
+
+    @Override
+    public PlatformType getModifiedPlatformType() {
+        return modifiedPlatformType;
+    }
+
+    @Override
+    public void setModifiedPlatformType(PlatformType platformType) {
+        this.modifiedPlatformType = platformType;
+    }
+
+    @Override
+    public PlatformType getCreatedPlatformType() {
+        return createdPlatformType;
+    }
+
+    @Override
+    public void setCreatedPlatformType(PlatformType platformType) {
+        this.createdPlatformType = platformType;
     }
 }

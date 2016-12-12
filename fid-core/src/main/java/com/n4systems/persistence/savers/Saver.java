@@ -1,12 +1,12 @@
 package com.n4systems.persistence.savers;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.deleters.Deleter;
+
+import javax.persistence.EntityManager;
 
 abstract public class Saver<T extends Saveable> implements Deleter<T> {
 	

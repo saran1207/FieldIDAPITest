@@ -26,7 +26,14 @@
 
     <div wicket:id="feedbackPanel"/>
     <form wicket:id="form">
-        <input wicket:id="code" type="text">
+        <div class="control-group">
+            <label wicket:label="language"><wicket:message key="label.language"/></label>
+            <input wicket:id="language" type="text">
+        </div>
+        <div class="control-group">
+            <label wicket:label="country"><wicket:message key="label.country"/></label>
+            <input wicket:id="country" type="text">
+        </div>
         <a wicket:id="add" type="submit"><wicket:message key="label.add"/></a>
     </form>
 

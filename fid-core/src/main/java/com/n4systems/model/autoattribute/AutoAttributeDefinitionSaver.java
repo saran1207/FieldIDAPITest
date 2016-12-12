@@ -1,10 +1,10 @@
 package com.n4systems.model.autoattribute;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.persistence.savers.Saver;
+
+import javax.persistence.EntityManager;
 
 public class AutoAttributeDefinitionSaver extends Saver<AutoAttributeDefinition> {
 

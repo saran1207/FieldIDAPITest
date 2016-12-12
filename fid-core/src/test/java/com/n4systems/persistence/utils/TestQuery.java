@@ -1,19 +1,9 @@
 package com.n4systems.persistence.utils;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.persistence.FlushModeType;
-import javax.persistence.LockModeType;
-import javax.persistence.Parameter;
-import javax.persistence.Query;
-import javax.persistence.TemporalType;
-
 import com.n4systems.exceptions.NotImplementedException;
+
+import javax.persistence.*;
+import java.util.*;
 
 public class TestQuery implements Query {
 

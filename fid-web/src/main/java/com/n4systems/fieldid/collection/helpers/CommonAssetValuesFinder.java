@@ -1,10 +1,10 @@
 package com.n4systems.fieldid.collection.helpers;
 
-import static com.n4systems.fieldid.collection.helpers.CommonAssetValues.*;
+import com.n4systems.model.Asset;
 
 import java.util.List;
 
-import com.n4systems.model.Asset;
+import static com.n4systems.fieldid.collection.helpers.CommonAssetValues.NO_COMMON_VALUES;
 
 public class CommonAssetValuesFinder {
 

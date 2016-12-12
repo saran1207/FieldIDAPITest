@@ -1,13 +1,13 @@
 package com.n4systems.api.model;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import com.n4systems.api.validation.validators.AutoAttributeInputsValidator;
 import com.n4systems.api.validation.validators.AutoAttributeOutputsValidator;
 import com.n4systems.api.validation.validators.NotNullValidator;
 import com.n4systems.exporting.beanutils.MapSerializationHandler;
 import com.n4systems.exporting.beanutils.SerializableField;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 
 public class AutoAttributeView extends ExternalModelView {

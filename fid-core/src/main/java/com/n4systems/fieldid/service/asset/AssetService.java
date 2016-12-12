@@ -837,6 +837,7 @@ public class AssetService extends CrudService<Asset> {
         return asset;
     }
 
+    @Transactional
     public Asset archive(Asset asset, User archivedBy) throws UsedOnMasterEventException {
         asset = persistenceService.reattach(asset);
         asset = fillInSubAssetsOnAsset(asset);
@@ -851,13 +852,14 @@ public class AssetService extends CrudService<Asset> {
             asset.getSubAssets().clear();
         }
 
-        Asset parentAsset = parentAsset(asset);
-        if (parentAsset != null) {
-            SubAsset subAssetToRemove = parentAsset.getSubAssets().get(parentAsset.getSubAssets().indexOf(new SubAsset(asset, parentAsset)));
-            persistenceService.delete(subAssetToRemove);
-            parentAsset.getSubAssets().remove(subAssetToRemove);
-            update(parentAsset);//, archivedBy);
-        }
+        //FIXME Instead of reading the Master Asset to figure out if the Asset in question is a SubAsset, we should do things differently:
+        // - Try to read a SubAsset which references the Asset in question as the SubAsset in the relationship
+        // - If the SubAsset exists, delete it with persistenceService.remove(...)
+        // - Continue with normal operations from here
+
+        //TODO Better make sure that we don't actually need to update the MasterAsset... I'm pretty sure we don't
+
+        deleteSubAsset(asset);
 
         asset.archiveEntity();
         asset.archiveIdentifier();
@@ -869,6 +871,25 @@ public class AssetService extends CrudService<Asset> {
         archiveProcedureAudits(asset);
 
         return save(asset);//, archivedBy);
+    }
+
+    /**
+     * Find any delete any SubAssets which reference this Asset as the "Sub" portion of the SubAsset.  There should
+     * only be one... but you never know if the user has some messed up data.
+     *
+     * @param asset - The Asset for which you want to demolish any SubAsset relationships of which it is the "asset."
+     */
+    private void deleteSubAsset(Asset asset) {
+        QueryBuilder<SubAsset> query = new QueryBuilder<>(SubAsset.class, new OpenSecurityFilter());
+        query.addSimpleWhere("asset", asset);
+
+        List<SubAsset> subAssets = persistenceService.findAll(query);
+
+        if(subAssets != null && !subAssets.isEmpty()) {
+            for(SubAsset subAsset : subAssets) {
+                persistenceService.delete(subAsset);
+            }
+        }
     }
 
     private void archiveProcedureAudits(Asset asset) {
