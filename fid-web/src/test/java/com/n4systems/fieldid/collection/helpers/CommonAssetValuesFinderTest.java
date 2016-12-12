@@ -1,21 +1,19 @@
 package com.n4systems.fieldid.collection.helpers;
 
-import static com.n4systems.fieldid.collection.helpers.CommonAssetValues.*;
-import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
-import static com.n4systems.model.builders.UserBuilder.*;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.builders.AssetBuilder;
-import org.junit.Test;
-
-
 import com.n4systems.model.location.Location;
 import com.n4systems.test.helpers.FluentArrayList;
+import org.junit.Test;
+
+import java.util.ArrayList;
+
+import static com.n4systems.fieldid.collection.helpers.CommonAssetValues.*;
+import static com.n4systems.model.builders.PrimaryOrgBuilder.aPrimaryOrg;
+import static com.n4systems.model.builders.UserBuilder.anEmployee;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
 
 
 public class CommonAssetValuesFinderTest {

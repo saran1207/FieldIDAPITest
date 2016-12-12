@@ -1,11 +1,11 @@
 package com.n4systems.model.builders;
 
+import com.n4systems.model.Criteria;
+import com.n4systems.model.CriteriaSection;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import com.n4systems.model.Criteria;
-import com.n4systems.model.CriteriaSection;
 
 public class CriteriaSectionBuilder extends EntityWithTenantBuilder<CriteriaSection> {
 

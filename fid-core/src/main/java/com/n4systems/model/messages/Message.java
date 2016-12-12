@@ -1,16 +1,10 @@
 package com.n4systems.model.messages;
 
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.parents.EntityWithOwner;
+
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name="messages")

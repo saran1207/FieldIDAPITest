@@ -3,9 +3,6 @@ package com.n4systems.fieldid.migrator;
 //import org.hibernate.ejb.Ejb3Configuration;
 //import org.hibernate.tool.hbm2ddl.SchemaExport;
 
-import java.util.List;
-import java.util.Properties;
-
 public class SchemaTool {
 	
 	public static void main(String[] args) {

@@ -15,13 +15,11 @@ import com.n4systems.model.utils.PlainDate;
 import com.n4systems.services.reporting.UpcomingScheduledLotoRecord;
 import com.n4systems.util.persistence.*;
 import org.apache.commons.lang.time.DateUtils;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class ProcedureService extends FieldIdPersistenceService {
 
@@ -44,7 +42,15 @@ public class ProcedureService extends FieldIdPersistenceService {
     }
 
     public Long createSchedule(Procedure openProcedure) {
-        return persistenceService.save(openProcedure);
+        return saveProcedure(openProcedure);
+    }
+
+    public Long saveProcedure(Procedure procedure) {
+        return persistenceService.save(procedure);
+    }
+
+    public Procedure updateProcedure(Procedure procedure) {
+        return persistenceService.saveOrUpdate(procedure);
     }
 
     public Procedure updateSchedule(Procedure procedure) {
@@ -115,14 +121,20 @@ public class ProcedureService extends FieldIdPersistenceService {
     }
 
     public Procedure getLockedProcedure(Asset asset) {
+        return persistenceService.find(getLockedProcedureByAssetQueryBuilder(asset));
+    }
+
+    public Boolean isLocked(Asset asset) {
+        return persistenceService.exists(getLockedProcedureByAssetQueryBuilder(asset));
+    }
+
+    private QueryBuilder<Procedure> getLockedProcedureByAssetQueryBuilder(Asset asset) {
         QueryBuilder<Procedure> query = createTenantSecurityBuilder(Procedure.class);
         query.addSimpleWhere("asset", asset);
         query.addSimpleWhere("workflowState", ProcedureWorkflowState.LOCKED);
         query.setOrder("modified", false);
         query.setLimit(1);
-        Procedure procedure = persistenceService.find(query);
-
-        return procedure;
+        return query;
     }
 
     public Long getAllProceduresForAssetTypeCount(AssetType assetType) {
@@ -214,5 +226,77 @@ public class ProcedureService extends FieldIdPersistenceService {
 
         List<Procedure> procedures = persistenceService.findAll(builder);
         return procedures;
+    }
+
+    public Long getTotalProcedureCount(Date startDate, Date endDate) {
+        return persistenceService.count(createOpenAssignedProcedureBuilder(startDate, endDate));
+    }
+
+    public List<Procedure> findAllOpenAssignedProcedures(Date startDate, Date endDate, int page, int pageSize) {
+        return persistenceService.findAll(createOpenAssignedProcedureBuilder(startDate, endDate), page, pageSize);
+    }
+
+    public List<Procedure> findAllOpenAssignedProcedures(Date startDate, Date endDate) {
+        return persistenceService.findAll(createOpenAssignedProcedureBuilder(startDate, endDate));
+    }
+
+    public List<Procedure> findAllOpenAndLockedProceduresForAsset(Long assetId) {
+        QueryBuilder<Procedure> query = createOpenAssignedProcedureBuilder(null, null);
+        query.addSimpleWhere("asset.id", assetId);
+
+        return persistenceService.findAll(query);
+    }
+
+    private QueryBuilder<Procedure> createOpenAssignedProcedureBuilder(Date startDate, Date endDate) {
+        User user = getCurrentUser();
+        QueryBuilder<Procedure> query = createUserSecurityBuilder(Procedure.class)
+                .addOrder("dueDate")
+                .addWhere(WhereParameter.Comparator.IN, "workflowState", "workflowState", Arrays.asList(ProcedureWorkflowState.ACTIVE_STATES));
+
+        if (startDate != null) {
+            query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GE, "startDate", "dueDate", startDate));
+
+        }
+
+        if (endDate != null) {
+            query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.LT, "endDate", "dueDate", endDate));	//excludes end date.
+        }
+
+        return query;
+    }
+
+    //TODO Track down and fix the duplicate causing this issue... it's not important right now, but it bothers me.
+    @SuppressWarnings("Duplicates") //This is duplicated elsewhere still...
+    public List<Long> findAssignedActiveProcedureCounts(int year, int month) {
+        List<Long> counts = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, 1);
+        int days = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        for(int i = 1; i <= days; i++) {
+            Date startDate = new DateTime(year, month + 1, i, 0, 0).toDate();
+            Date endDate = new DateTime(year, month + 1, i, 0, 0).plusDays(1).toDate();
+            User user = getCurrentUser();
+
+            QueryBuilder<Procedure> query = createUserSecurityBuilder(Procedure.class)
+                    .addOrder("dueDate")
+                    .addWhere(WhereParameter.Comparator.IN, "workflowState", "workflowState", Arrays.asList(ProcedureWorkflowState.ACTIVE_STATES))
+                    .addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GE, "startDate", "dueDate", startDate))
+                    .addWhere(WhereClauseFactory.create(WhereParameter.Comparator.LT, "endDate", "dueDate", endDate));
+
+            if (user.getGroups().isEmpty()) {
+                query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignee.id", user.getId()));
+            } else {
+                // WE need to do AND ( assignee.id = user.GetId() OR assignedGroup.id = user.getGroup().getId() )
+                WhereParameterGroup group = new WhereParameterGroup();
+                group.setChainOperator(WhereClause.ChainOp.AND);
+                group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignee.id", user.getId(), WhereClause.ChainOp.OR));
+                group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.IN, "assignedGroup", user.getGroups(), WhereClause.ChainOp.OR));
+                query.addWhere(group);
+            }
+
+            Long count = persistenceService.count(query);
+            counts.add(count);
+        }
+        return counts;
     }
 }

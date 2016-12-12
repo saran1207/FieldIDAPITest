@@ -2,7 +2,6 @@ package com.n4systems.model.builders;
 
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeSchedule;
-import com.n4systems.model.EventType;
 import com.n4systems.model.ThingEventType;
 
 public class AssetTypeScheduleBuilder extends BaseBuilder<AssetTypeSchedule> {

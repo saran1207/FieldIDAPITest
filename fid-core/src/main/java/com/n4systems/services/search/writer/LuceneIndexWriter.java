@@ -111,10 +111,11 @@ public abstract class LuceneIndexWriter<T extends BaseEntity> extends IndexWrite
     protected Object parseInfoOptionValue(InfoOptionBean infoOption) {
         //We need to scrub the field of special characters
         String strValue = StringUtils.clean(infoOption.getName());
+        if (strValue == null) return null;
         strValue = strValue.replace("/", " ");
         strValue = strValue.replace(",", " ");
-
         if (strValue == null) return null;
+
 
         Object value;
         if (infoOption.getInfoField().getFieldType().equals(InfoFieldBean.DATEFIELD_FIELD_TYPE)) {

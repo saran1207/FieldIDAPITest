@@ -71,6 +71,7 @@ public class CopyEventFactory {
 		copyTo.setWorkflowState(copyFrom.getWorkflowState());
 		copyTo.setDueDate(copyFrom.getDueDate());
 		copyTo.setProject(copyFrom.getProject());
+		copyTo.setAssignedTo(copyFrom.getAssignedTo());
     }
 
 	protected static List<SubEvent> copySubEvents( List<SubEvent> oldSubEvents) {

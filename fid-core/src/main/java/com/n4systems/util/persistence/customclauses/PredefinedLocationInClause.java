@@ -1,12 +1,11 @@
 package com.n4systems.util.persistence.customclauses;
 
-import java.util.List;
-
-import javax.persistence.Query;
-
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.util.persistence.FromTable;
 import com.n4systems.util.persistence.WhereClause;
+
+import javax.persistence.Query;
+import java.util.List;
 
 public class PredefinedLocationInClause implements WhereClause<List<Long>> {
 	private static final long serialVersionUID = 1L;

@@ -1,19 +1,19 @@
 package com.n4systems.model.messages;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
-import javax.persistence.EntityManager;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.FieldIdTransaction;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.util.persistence.OrderClause;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.TestingQueryBuilder;
+import org.junit.Before;
+import org.junit.Test;
+
+import javax.persistence.EntityManager;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 public class PaginatedMessageLoaderTest {

@@ -1,33 +1,21 @@
 package com.n4systems.ws.resources;
 
-import javax.ws.rs.ext.ContextResolver;
-import javax.ws.rs.ext.Provider;
-import javax.xml.bind.JAXBContext;
-
 import com.n4systems.ws.model.assettype.WsAssetStatus;
 import com.n4systems.ws.model.autoattribute.WsAutoAttributeCriteria;
 import com.n4systems.ws.model.autoattribute.WsAutoAttributeDefinition;
 import com.n4systems.ws.model.commenttemplate.WsCommentTemplate;
 import com.n4systems.ws.model.eventbook.WsEventBook;
-import com.n4systems.ws.model.eventtype.WsComboBoxCriteria;
-import com.n4systems.ws.model.eventtype.WsCriteria;
-import com.n4systems.ws.model.eventtype.WsDateFieldCriteria;
-import com.n4systems.ws.model.eventtype.WsEventForm;
-import com.n4systems.ws.model.eventtype.WsEventStatus;
-import com.n4systems.ws.model.eventtype.WsEventType;
-import com.n4systems.ws.model.eventtype.WsNumberFieldCriteria;
-import com.n4systems.ws.model.eventtype.WsOneClickCriteria;
-import com.n4systems.ws.model.eventtype.WsScoreCriteria;
-import com.n4systems.ws.model.eventtype.WsSelectCriteria;
-import com.n4systems.ws.model.eventtype.WsSignatureCriteria;
-import com.n4systems.ws.model.eventtype.WsTextFieldCriteria;
-import com.n4systems.ws.model.eventtype.WsUnitOfMeasureCriteria;
+import com.n4systems.ws.model.eventtype.*;
 import com.n4systems.ws.model.lastmod.WsLastModified;
 import com.n4systems.ws.model.org.WsOrg;
 import com.n4systems.ws.model.setupdata.WsUser;
 import com.n4systems.ws.model.unitofmeasure.WsUnitOfMeasure;
 import com.sun.jersey.api.json.JSONConfiguration;
 import com.sun.jersey.api.json.JSONJAXBContext;
+
+import javax.ws.rs.ext.ContextResolver;
+import javax.ws.rs.ext.Provider;
+import javax.xml.bind.JAXBContext;
 
 @Provider
 public class JAXBContextResolver implements ContextResolver<JAXBContext> {

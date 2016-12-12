@@ -1,15 +1,13 @@
 package com.n4systems.model.utils;
 
-import static com.n4systems.model.builders.OrgBuilder.*;
-import static com.n4systems.model.builders.UserBuilder.*;
-import static org.junit.Assert.*;
-
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.user.User;
 import org.junit.Before;
 import org.junit.Test;
 
-
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.user.User;
+import static com.n4systems.model.builders.OrgBuilder.*;
+import static com.n4systems.model.builders.UserBuilder.anEmployee;
+import static org.junit.Assert.assertTrue;
 
 
 

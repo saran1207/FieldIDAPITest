@@ -1,10 +1,9 @@
 package com.n4systems.persistence.archivers;
 
-import java.util.Set;
-
-
 import com.n4systems.model.Event;
 import com.n4systems.model.user.User;
+
+import java.util.Set;
 
 public class EventListArchiver extends EntityListArchiver<Event> {
 	

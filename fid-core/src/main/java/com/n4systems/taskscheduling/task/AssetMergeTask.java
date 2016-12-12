@@ -1,13 +1,11 @@
 package com.n4systems.taskscheduling.task;
 
 import com.n4systems.ejb.AssetManager;
-import org.apache.log4j.Logger;
-
-
 import com.n4systems.model.Asset;
 import com.n4systems.model.user.User;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.MailMessage;
+import org.apache.log4j.Logger;
 
 public class AssetMergeTask implements Runnable {
 	private static final Logger logger = Logger.getLogger(AssetMergeTask.class);

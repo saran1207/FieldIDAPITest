@@ -1,14 +1,13 @@
 package com.n4systems.model.orders;
 
-import static org.junit.Assert.*;
-
+import com.n4systems.model.LineItem;
+import com.n4systems.model.Order.OrderType;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.builders.TenantBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.model.LineItem;
-import com.n4systems.model.Tenant;
-import com.n4systems.model.Order.OrderType;
-import com.n4systems.model.builders.TenantBuilder;
+import static org.junit.Assert.*;
 
 public class OrderFactoryTest {
 	private OrderFactory orderFactory;

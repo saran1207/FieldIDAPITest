@@ -38,6 +38,7 @@ public class ApiAsset extends ApiReadWriteModelWithOwner {
 	private List<ApiEventHistory> eventHistory;
 	private List<ApiSavedEvent> events;
     private List<ApiProcedure> procedures;
+	private Boolean locked;
 
 	public String getIdentifier() {
 		return identifier;
@@ -239,4 +240,11 @@ public class ApiAsset extends ApiReadWriteModelWithOwner {
         this.procedures = procedures;
     }
 
+	public Boolean isLocked() {
+		return locked;
+	}
+
+	public void setLocked(Boolean locked) {
+		this.locked = locked;
+	}
 }

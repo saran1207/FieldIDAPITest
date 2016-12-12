@@ -1,16 +1,8 @@
 package com.n4systems.fieldid.actions.orgs;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
-import com.n4systems.fieldid.actions.utils.CustomerOrgLister;
-import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
-import com.n4systems.fieldid.actions.utils.InternalOrgLister;
-import com.n4systems.fieldid.actions.utils.OrgType;
-import com.n4systems.fieldid.actions.utils.OwnerPicker;
+import com.n4systems.fieldid.actions.utils.*;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -20,6 +12,10 @@ import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.SimpleListable;
 import com.opensymphony.xwork2.Preparable;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class OrgListAction extends AbstractAction implements Preparable {
 

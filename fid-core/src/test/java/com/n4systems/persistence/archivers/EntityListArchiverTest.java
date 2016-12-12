@@ -1,19 +1,16 @@
 package com.n4systems.persistence.archivers;
 
-import static org.easymock.EasyMock.*;
+import com.n4systems.model.builders.UserBuilder;
+import com.n4systems.model.parents.ArchivableEntityWithTenant;
+import com.n4systems.model.user.User;
+import org.junit.Test;
 
+import javax.persistence.EntityManager;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
-import org.junit.Test;
-
-
-import com.n4systems.model.builders.UserBuilder;
-import com.n4systems.model.parents.ArchivableEntityWithTenant;
-import com.n4systems.model.user.User;
+import static org.easymock.EasyMock.*;
 
 public class EntityListArchiverTest {
 

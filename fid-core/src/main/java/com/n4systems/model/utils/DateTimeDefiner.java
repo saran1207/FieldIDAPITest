@@ -1,10 +1,9 @@
 package com.n4systems.model.utils;
 
-import java.util.TimeZone;
-
-
 import com.n4systems.model.user.User;
 import com.n4systems.util.DateTimeDefinition;
+
+import java.util.TimeZone;
 
 public class DateTimeDefiner implements DateTimeDefinition {
 

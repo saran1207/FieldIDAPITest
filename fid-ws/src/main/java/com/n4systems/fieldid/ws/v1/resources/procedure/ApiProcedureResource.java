@@ -6,15 +6,11 @@ import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
-import com.n4systems.model.Asset;
 import com.n4systems.model.GpsLocation;
 import com.n4systems.model.ProcedureWorkflowState;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.procedure.*;
-import com.n4systems.model.user.User;
-import com.n4systems.util.persistence.*;
 import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,7 +58,8 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
             procedure.setCreated(new Date());
             procedure.setModified(new Date());
 
-            persistenceService.save(procedure);
+
+            procedureService.saveProcedure(procedure);
         }
 
 
@@ -70,7 +67,7 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
             throw new IllegalStateException("Attempt to lock procedure that is not in OPEN state. Actual state: " + procedure.getWorkflowState());
         }
 
-        List<IsolationPointResult> convertedResults = convertToEntity(apiProcedure.getIsolationPointResults().stream().sorted((result1, result2) -> result1.getCheckCheckTime().compareTo(result2.getCheckCheckTime())).collect(Collectors.toList()));
+        List<IsolationPointResult> convertedResults = convertToEntity(apiProcedure.getIsolationPointResults().stream().sorted(Comparator.comparing(ApiIsolationPointResult::getCheckCheckTime)).collect(Collectors.toList()));
         procedure.setLockResults(convertedResults);
         procedure.setLockedBy(getCurrentUser());
         procedure.setLockDate(convertedResults.get(convertedResults.size() - 1).getCheckCheckTime());
@@ -91,7 +88,7 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
             }
         }
 
-        persistenceService.update(procedure);
+        procedureService.updateProcedure(procedure);
     }
 
     @PUT
@@ -110,13 +107,13 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
             return;
         }
 
-        List<IsolationPointResult> convertedResults = convertToEntity(apiProcedure.getIsolationPointResults().stream().sorted((result1, result2) -> result1.getCheckCheckTime().compareTo(result2.getCheckCheckTime())).collect(Collectors.toList()));
+        List<IsolationPointResult> convertedResults = convertToEntity(apiProcedure.getIsolationPointResults().stream().sorted(Comparator.comparing(ApiIsolationPointResult::getCheckCheckTime)).collect(Collectors.toList()));
         procedure.setUnlockResults(convertedResults);
         procedure.setUnlockedBy(getCurrentUser());
         procedure.setUnlockDate(convertedResults.get(convertedResults.size() - 1).getCheckCheckTime());
         procedure.setWorkflowState(ProcedureWorkflowState.UNLOCKED);
 
-        persistenceService.update(procedure);
+        procedureService.updateProcedure(procedure);
     }
 
     @GET
@@ -129,44 +126,14 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
             @QueryParam("endDate") Date endDate,
             @DefaultValue("0") @QueryParam("page") int page,
             @DefaultValue("25") @QueryParam("pageSize") int pageSize) {
-        QueryBuilder<Procedure> query = createOpenAssignedProcedureBuilder(startDate, endDate);
-
-        List<Procedure> procedures = persistenceService.findAll(query, page, pageSize);
-        Long total = persistenceService.count(query);
+        List<Procedure> procedures = procedureService.findAllOpenAssignedProcedures(startDate, endDate, page, pageSize);
+        Long total = procedureService.getTotalProcedureCount(startDate, endDate);
         List<ApiProcedure> apiSchedules = convertProcedures(procedures);
-        ListResponse<ApiProcedure> response = new ListResponse<ApiProcedure>(apiSchedules, page, pageSize, total);
+        ListResponse<ApiProcedure> response = new ListResponse<>(apiSchedules, page, pageSize, total);
 
         logger.info("findAssignedProcedures: >= startDate: " + startDate + " < endDate: " + endDate);
 
         return response;
-    }
-
-    public QueryBuilder<Procedure> createOpenAssignedProcedureBuilder(Date startDate, Date endDate) {
-        User user = getCurrentUser();
-        QueryBuilder<Procedure> query = createUserSecurityBuilder(Procedure.class)
-                .addOrder("dueDate")
-                .addWhere(WhereParameter.Comparator.IN, "workflowState", "workflowState", Arrays.asList(ProcedureWorkflowState.ACTIVE_STATES));
-
-        if (startDate != null) {
-            query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GE, "startDate", "dueDate", startDate));
-
-        }
-
-        if (endDate != null) {
-            query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.LT, "endDate", "dueDate", endDate));	//excludes end date.
-        }
-
-        if (user.getGroups().isEmpty()) {
-            query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignee.id", user.getId()));
-        } else {
-            // WE need to do AND ( assignee.id = user.GetId() OR assignedGroup.id = user.getGroup().getId() )
-            WhereParameterGroup group = new WhereParameterGroup();
-            group.setChainOperator(WhereClause.ChainOp.AND);
-            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignee.id", user.getId(), WhereClause.ChainOp.OR));
-            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.IN, "assignedGroup", user.getGroups(), WhereClause.ChainOp.OR));
-            query.addWhere(group);
-        }
-        return query;
     }
 
 
@@ -181,9 +148,10 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
     }
 
     private List<IsolationPointResult> convertToEntity(List<ApiIsolationPointResult> isolationPointResults) {
-        List<IsolationPointResult> convertedResults = new ArrayList<IsolationPointResult>();
+        List<IsolationPointResult> convertedResults = new ArrayList<>();
         for (ApiIsolationPointResult isolationPointResult : isolationPointResults) {
             IsolationPointResult result = new IsolationPointResult();
+            //FIXME Jesus... stop it with the PersistenceService shit!!
             result.setIsolationPoint(persistenceService.findUsingTenantOnlySecurityWithArchived(IsolationPoint.class, isolationPointResult.getIsolationPointId()));
 
             // TODO: We're not actually doing device/lock picking at this point. Patents?
@@ -203,22 +171,13 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
         return convertedResults;
     }
 
-    private Asset findAsset(String guid) {
-        QueryBuilder<Asset> assetFinder = createTenantSecurityBuilder(Asset.class, true);
-        assetFinder.addSimpleWhere("mobileGUID", guid);
-        return persistenceService.find(assetFinder);
-    }
-
     public List<ApiProcedure> getOpenAndLockedProcedures(Long assetId) {
-        QueryBuilder<Procedure> query = createOpenAssignedProcedureBuilder(null, null);
-        query.addSimpleWhere("asset.id", assetId);
-
-        List<Procedure> procedures = persistenceService.findAll(query);
+        List<Procedure> procedures = procedureService.findAllOpenAndLockedProceduresForAsset(assetId);
         return convertProcedures(procedures);
     }
 
     private List<ApiProcedure> convertProcedures(List<Procedure> procedures) {
-        List<ApiProcedure> convertedProcedures = new ArrayList<ApiProcedure>();
+        List<ApiProcedure> convertedProcedures = new ArrayList<>();
         for (Procedure procedure : procedures) {
             convertedProcedures.add(convert(procedure));
         }
@@ -242,7 +201,7 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
     }
 
     private List<ApiIsolationPointResult> convert(List<IsolationPointResult> lockResults) {
-        List<ApiIsolationPointResult> apiResults = new ArrayList<ApiIsolationPointResult>();
+        List<ApiIsolationPointResult> apiResults = new ArrayList<>();
         for (IsolationPointResult lockResult : lockResults) {
             ApiIsolationPointResult apiResult = new ApiIsolationPointResult();
             apiResult.setCheckCheckTime(lockResult.getCheckCheckTime());
@@ -266,36 +225,7 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
     public List<Long> findAssignedActiveProcedureCounts(
             @QueryParam("year") int year,
             @QueryParam("month") int month) {
-        List<Long> counts = new ArrayList<Long>();
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, 1);
-        int days = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-        for(int i = 1; i <= days; i++) {
-            Date startDate = new DateTime(year, month + 1, i, 0, 0).toDate();
-            Date endDate = new DateTime(year, month + 1, i, 0, 0).plusDays(1).toDate();
-            User user = getCurrentUser();
-
-            QueryBuilder<Procedure> query = createUserSecurityBuilder(Procedure.class)
-                    .addOrder("dueDate")
-                    .addWhere(WhereParameter.Comparator.IN, "workflowState", "workflowState", Arrays.asList(ProcedureWorkflowState.ACTIVE_STATES))
-                    .addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GE, "startDate", "dueDate", startDate))
-                    .addWhere(WhereClauseFactory.create(WhereParameter.Comparator.LT, "endDate", "dueDate", endDate));
-
-            if (user.getGroups().isEmpty()) {
-                query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignee.id", user.getId()));
-            } else {
-                // WE need to do AND ( assignee.id = user.GetId() OR assignedGroup.id = user.getGroup().getId() )
-                WhereParameterGroup group = new WhereParameterGroup();
-                group.setChainOperator(WhereClause.ChainOp.AND);
-                group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignee.id", user.getId(), WhereClause.ChainOp.OR));
-                group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.IN, "assignedGroup", user.getGroups(), WhereClause.ChainOp.OR));
-                query.addWhere(group);
-            }
-
-            Long count = persistenceService.count(query);
-            counts.add(count);
-        }
-        return counts;
+        return procedureService.findAssignedActiveProcedureCounts(year, month);
     }
 
 }

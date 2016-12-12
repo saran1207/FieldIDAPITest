@@ -1,15 +1,14 @@
 package com.n4systems.model.safetynetwork;
 
+import com.n4systems.model.orgs.InternalOrg;
+import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.persistence.loaders.ListLoader;
+
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-
-import javax.persistence.EntityManager;
-
-import com.n4systems.model.orgs.InternalOrg;
-import com.n4systems.model.security.SecurityFilter;
-import com.n4systems.persistence.loaders.ListLoader;
 
 public class LinkedOrgListLoader extends ListLoader<InternalOrg> {
 

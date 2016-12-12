@@ -1,12 +1,12 @@
 package com.n4systems.util.timezone;
 
-import java.util.SortedSet;
-import java.util.TreeSet;
-
 import com.n4systems.model.api.Listable;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
+
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 @XStreamAlias("Country")
 public class Country implements Comparable<Country>, Listable<String> {

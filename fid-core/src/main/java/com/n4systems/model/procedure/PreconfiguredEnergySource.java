@@ -1,6 +1,5 @@
 package com.n4systems.model.procedure;
 
-import com.n4systems.model.BaseEntity;
 import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.api.UnsecuredEntity;
 import com.n4systems.model.parents.AbstractEntity;

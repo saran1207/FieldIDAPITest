@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.actions.users;
 
-import com.n4systems.model.user.User;
 import com.n4systems.util.StringUtils;
 
 import java.io.File;

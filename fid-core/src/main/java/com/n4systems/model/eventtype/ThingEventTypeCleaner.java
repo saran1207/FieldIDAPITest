@@ -1,13 +1,16 @@
 package com.n4systems.model.eventtype;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-
 import com.n4systems.fileprocessing.ProofTestType;
-import com.n4systems.model.*;
+import com.n4systems.model.EventForm;
+import com.n4systems.model.EventType;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.ThingEventType;
 import com.n4systems.model.api.Cleaner;
 import com.n4systems.model.api.EntityWithTenantCleaner;
 import com.n4systems.util.ListHelper;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 
 public class ThingEventTypeCleaner extends EntityWithTenantCleaner<EventType> {
 	

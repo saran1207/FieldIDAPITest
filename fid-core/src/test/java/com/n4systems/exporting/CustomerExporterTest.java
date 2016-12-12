@@ -1,15 +1,6 @@
 package com.n4systems.exporting;
 
 
-import static org.easymock.EasyMock.*;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.junit.Test;
-
 import com.n4systems.api.conversion.ModelToViewConverter;
 import com.n4systems.api.model.FullExternalOrgView;
 import com.n4systems.exporting.beanutils.ExportMapMarshaller;
@@ -19,6 +10,14 @@ import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.division.DivisionOrgByCustomerListLoader;
 import com.n4systems.persistence.loaders.ListLoader;
+import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.easymock.EasyMock.*;
 
 public class CustomerExporterTest {
 

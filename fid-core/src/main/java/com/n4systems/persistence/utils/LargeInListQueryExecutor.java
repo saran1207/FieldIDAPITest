@@ -1,12 +1,11 @@
 package com.n4systems.persistence.utils;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.n4systems.util.persistence.QueryBuilder;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-
-import com.n4systems.util.persistence.QueryBuilder;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LargeInListQueryExecutor {
 	protected final static int DEFAULT_MAX_IN_LIST_SIZE = 1000;

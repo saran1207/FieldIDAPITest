@@ -1,10 +1,9 @@
 package com.n4systems.fieldid.permissions;
 
-import static org.junit.Assert.*;
-
+import com.n4systems.model.ExtendedFeature;
 import org.junit.Test;
 
-import com.n4systems.model.ExtendedFeature;
+import static org.junit.Assert.*;
 
 
 public class AnnotationFilterLocatorTest {

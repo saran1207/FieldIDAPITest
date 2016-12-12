@@ -1,9 +1,8 @@
 package com.n4systems.fieldid.utils;
 
-import rfid.web.helper.SessionUser;
-
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
+import rfid.web.helper.SessionUser;
 
 public class EULAInterceptor extends AbstractInterceptor {
 

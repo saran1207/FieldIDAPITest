@@ -2,9 +2,7 @@ package com.n4systems.model.user;
 
 import org.junit.Test;
 
-import com.n4systems.model.user.User;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 public class UserTest {
 	

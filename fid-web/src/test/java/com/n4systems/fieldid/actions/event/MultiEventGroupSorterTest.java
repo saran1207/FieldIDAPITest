@@ -1,21 +1,20 @@
 package com.n4systems.fieldid.actions.event;
 
-import static com.n4systems.model.builders.EventTypeBuilder.*;
-import static com.n4systems.model.builders.EventTypeGroupBuilder.*;
-import static org.junit.Assert.*;
+import com.google.common.collect.ImmutableList;
+import com.n4systems.model.EventType;
+import com.n4systems.model.EventTypeGroup;
+import com.n4systems.model.ThingEventType;
+import com.n4systems.test.helpers.FluentArrayList;
+import com.n4systems.test.helpers.FluentHashSet;
+import org.hamcrest.Matchers;
+import org.junit.Test;
 
 import java.util.Collections;
 import java.util.List;
 
-import com.n4systems.model.EventType;
-import com.n4systems.model.EventTypeGroup;
-import com.n4systems.model.ThingEventType;
-import org.hamcrest.Matchers;
-import org.junit.Test;
-
-import com.google.common.collect.ImmutableList;
-import com.n4systems.test.helpers.FluentArrayList;
-import com.n4systems.test.helpers.FluentHashSet;
+import static com.n4systems.model.builders.EventTypeBuilder.anEventType;
+import static com.n4systems.model.builders.EventTypeGroupBuilder.anEventTypeGroup;
+import static org.junit.Assert.assertThat;
 
 
 public class MultiEventGroupSorterTest {

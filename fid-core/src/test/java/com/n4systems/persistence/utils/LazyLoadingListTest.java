@@ -1,22 +1,20 @@
 package com.n4systems.persistence.utils;
 
-import static com.n4systems.model.builders.EventBuilder.*;
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
-import com.n4systems.model.Event;
-import org.junit.Assert;
-import org.junit.Test;
-
 import com.n4systems.handlers.TestUsesTransactionBase;
+import com.n4systems.model.Event;
 import com.n4systems.model.safetynetwork.IdLoader;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.test.helpers.FluentArrayList;
+import org.junit.Assert;
+import org.junit.Test;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.n4systems.model.builders.EventBuilder.anEvent;
+import static org.junit.Assert.*;
 
 public class LazyLoadingListTest extends TestUsesTransactionBase {
 

@@ -1,9 +1,9 @@
 package com.n4systems.exporting;
 
+import com.n4systems.taskscheduling.task.ImportTask;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import com.n4systems.taskscheduling.task.ImportTask;
 
 public class ImportTaskRegistry {
 	private static final Map<String, ImportTask> taskMap = new HashMap<String, ImportTask>();

@@ -1,19 +1,13 @@
 package com.n4systems.util.reflection;
 
+import com.n4systems.util.ArrayUtils;
+import com.n4systems.util.CollectionFactory;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
-import java.util.StringTokenizer;
-
-import com.n4systems.util.ArrayUtils;
-import com.n4systems.util.CollectionFactory;
+import java.util.*;
 
 /**
  * This is where the magic happens ...

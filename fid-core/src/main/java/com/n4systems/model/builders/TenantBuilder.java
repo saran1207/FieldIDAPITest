@@ -1,10 +1,10 @@
 package com.n4systems.model.builders;
 
+import com.n4systems.model.Tenant;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import com.n4systems.model.Tenant;
 
 public class TenantBuilder extends BaseBuilder<Tenant> {
 

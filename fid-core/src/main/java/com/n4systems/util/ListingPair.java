@@ -1,8 +1,8 @@
 package com.n4systems.util;
 
-import java.io.Serializable;
-
 import com.n4systems.model.api.Listable;
+
+import java.io.Serializable;
 
 public class ListingPair implements Serializable, Comparable<ListingPair>, Listable<Long> {
 

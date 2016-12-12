@@ -1,16 +1,16 @@
 package com.n4systems.exporting.beanutils;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Ordering;
+import com.n4systems.util.reflection.Reflector;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Ordering;
-import com.n4systems.util.reflection.Reflector;
 
 
 public class SerializationHandlerFactory {

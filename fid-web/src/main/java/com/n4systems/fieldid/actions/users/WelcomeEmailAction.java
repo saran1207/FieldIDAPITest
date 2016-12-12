@@ -1,12 +1,11 @@
 package com.n4systems.fieldid.actions.users;
 
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.user.UserWelcomeNotificationProducer;
 import com.n4systems.model.user.User;
+import org.apache.struts2.interceptor.validation.SkipValidation;
 
 public class WelcomeEmailAction extends AbstractCrud {
 

@@ -1,12 +1,11 @@
 package com.n4systems.fieldid.actions.search;
 
+import com.n4systems.model.ExtendedFeature;
+import org.junit.Test;
+
 import static com.n4systems.fieldid.reporting.helpers.ColumnMappingBuilder.aColumnMapping;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-
-import org.junit.Test;
-
-import com.n4systems.model.ExtendedFeature;
 
 public class ProofTestIntegrationColumnFilterTest {
 

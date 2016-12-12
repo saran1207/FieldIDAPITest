@@ -2,11 +2,10 @@ package com.n4systems.tools;
 
 import com.n4systems.persistence.utils.PostFetcher;
 
+import javax.persistence.Query;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
-import javax.persistence.Query;
 
 /**
  * Contains a single 'page' of results from a ejb3 query.  

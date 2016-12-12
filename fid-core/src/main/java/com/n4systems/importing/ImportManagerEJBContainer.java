@@ -1,14 +1,13 @@
 package com.n4systems.importing;
 
-import java.io.File;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.ejb.wrapper.EJBTransactionEmulator;
 import com.n4systems.exceptions.FileImportException;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
+
+import javax.persistence.EntityManager;
+import java.io.File;
 
 public class ImportManagerEJBContainer extends EJBTransactionEmulator<ImportManager> implements ImportManager {
 	@Override

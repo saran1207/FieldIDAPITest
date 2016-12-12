@@ -3,7 +3,6 @@ package com.n4systems.fieldid.wicket.components;
 
 import org.apache.wicket.model.IModel;
 
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 

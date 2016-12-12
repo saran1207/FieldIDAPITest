@@ -1,13 +1,13 @@
 package com.n4systems.util.uri;
 
+import com.n4systems.exceptions.InvalidArgumentException;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import com.n4systems.exceptions.InvalidArgumentException;
 
 public abstract class BaseUrlBuilder implements UrlBuilder {
 	protected static final String URL_ENCODING_CHARACTER_SET = "UTF-8";

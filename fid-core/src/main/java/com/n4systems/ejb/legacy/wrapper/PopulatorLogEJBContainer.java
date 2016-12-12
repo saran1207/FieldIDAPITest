@@ -1,10 +1,5 @@
 package com.n4systems.ejb.legacy.wrapper;
 
-import javax.persistence.EntityManager;
-
-import rfid.ejb.PopulatorCriteria;
-import rfid.ejb.entity.PopulatorLogBean;
-
 import com.n4systems.ejb.legacy.PopulatorLog;
 import com.n4systems.ejb.legacy.impl.PopulatorLogManager;
 import com.n4systems.ejb.wrapper.EJBTransactionEmulator;
@@ -12,6 +7,10 @@ import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.tools.Pager;
+import rfid.ejb.PopulatorCriteria;
+import rfid.ejb.entity.PopulatorLogBean;
+
+import javax.persistence.EntityManager;
 
 public class PopulatorLogEJBContainer extends EJBTransactionEmulator<PopulatorLog> implements PopulatorLog {
 

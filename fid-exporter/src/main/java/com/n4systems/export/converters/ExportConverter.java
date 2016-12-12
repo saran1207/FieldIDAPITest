@@ -1,13 +1,13 @@
 package com.n4systems.export.converters;
 
-import java.util.Iterator;
-
 import com.n4systems.exceptions.NotImplementedException;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+
+import java.util.Iterator;
 
 public abstract class ExportConverter implements Converter {
 	

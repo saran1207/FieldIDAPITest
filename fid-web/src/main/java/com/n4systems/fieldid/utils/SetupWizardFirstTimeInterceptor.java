@@ -1,11 +1,10 @@
 package com.n4systems.fieldid.utils;
 
-import rfid.web.helper.SessionUser;
-
 import com.n4systems.fieldid.ui.seenit.SeenItRegistry;
 import com.n4systems.model.ui.seenit.SeenItItem;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
+import rfid.web.helper.SessionUser;
 
 public class SetupWizardFirstTimeInterceptor extends AbstractInterceptor {
 

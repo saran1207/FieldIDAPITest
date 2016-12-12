@@ -410,7 +410,7 @@ public class EventService extends FieldIdPersistenceService {
     }
 
     public List<ThingEvent> getLastEventOfEachType(Long assetId) {
-		QueryBuilder<EventIdTypeAndCompletedView> builder = new QueryBuilder<>(ThingEvent.class, securityContext.getUserSecurityFilter());
+		QueryBuilder<EventIdTypeAndCompletedView> builder = new QueryBuilder<>(ThingEvent.class, securityContext.getTenantSecurityFilter());
         builder.setSelectArgument(new NewObjectSelect(EventIdTypeAndCompletedView.class, "id", "type.id", "completedDate"));
 		builder.addWhere(WhereClauseFactory.create("asset.id", assetId));
         builder.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.COMPLETED));
@@ -442,7 +442,7 @@ public class EventService extends FieldIdPersistenceService {
     public List<PlaceEvent> getLastPlaceEventOfEachType(Long placeId) {
         //Pretty much a copy of the method above, but I couldn't use Generics here, because the QueryBuilder can't figure
         //out security-related stuff for it.  But maybe I'm just missing a key step in doing it that way!!
-        QueryBuilder<EventIdTypeAndCompletedView> builder = new QueryBuilder<>(PlaceEvent.class, securityContext.getUserSecurityFilter());
+        QueryBuilder<EventIdTypeAndCompletedView> builder = new QueryBuilder<>(PlaceEvent.class, securityContext.getTenantSecurityFilter());
         builder.setSelectArgument(new NewObjectSelect(EventIdTypeAndCompletedView.class, "id", "type.id", "completedDate"));
         builder.addWhere(WhereClauseFactory.create("place.id", placeId));
         builder.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.COMPLETED));
@@ -457,7 +457,7 @@ public class EventService extends FieldIdPersistenceService {
                 )
         ).values().stream()
                 // Map them into full thing events and return a list
-                .map((e) -> persistenceService.find(PlaceEvent.class, e.get().getId()))
+                .map((e) -> (PlaceEvent) persistenceService.find(Event.class, e.get().getId()))
                 .collect(Collectors.toList());
 
         return lastEventsByType;

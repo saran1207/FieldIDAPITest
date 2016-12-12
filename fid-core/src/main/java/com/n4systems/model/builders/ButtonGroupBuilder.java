@@ -1,13 +1,13 @@
 package com.n4systems.model.builders;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import com.google.common.collect.Lists;
 import com.n4systems.model.Button;
 import com.n4systems.model.ButtonGroup;
 import com.n4systems.model.EventResult;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ButtonGroupBuilder extends EntityWithTenantBuilder<ButtonGroup> {
 

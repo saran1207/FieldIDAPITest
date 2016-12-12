@@ -1,6 +1,5 @@
 package com.n4systems.model.search;
 
-import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.columns.ColumnMapping;
 
 public class ColumnMappingConverter {

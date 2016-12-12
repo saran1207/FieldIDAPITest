@@ -1,19 +1,7 @@
 package com.n4systems.ws.model.eventtype;
 
 import com.n4systems.exceptions.NotImplementedException;
-import com.n4systems.model.ComboBoxCriteria;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.CriteriaType;
-import com.n4systems.model.DateFieldCriteria;
-import com.n4systems.model.NumberFieldCriteria;
-import com.n4systems.model.OneClickCriteria;
-import com.n4systems.model.Score;
-import com.n4systems.model.ScoreCriteria;
-import com.n4systems.model.SelectCriteria;
-import com.n4systems.model.SignatureCriteria;
-import com.n4systems.model.Button;
-import com.n4systems.model.TextFieldCriteria;
-import com.n4systems.model.UnitOfMeasureCriteria;
+import com.n4systems.model.*;
 import com.n4systems.ws.model.WsModelConverter;
 
 public class WsCriteriaConverter extends WsModelConverter<Criteria, WsCriteria> {

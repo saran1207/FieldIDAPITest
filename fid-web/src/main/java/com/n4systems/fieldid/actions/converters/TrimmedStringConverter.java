@@ -1,10 +1,9 @@
 package com.n4systems.fieldid.actions.converters;
 
-import java.util.Map;
-
+import com.n4systems.fieldid.viewhelpers.TrimmedString;
 import org.apache.struts2.util.StrutsTypeConverter;
 
-import com.n4systems.fieldid.viewhelpers.TrimmedString;
+import java.util.Map;
 
 public class TrimmedStringConverter extends StrutsTypeConverter {
 

@@ -1,11 +1,11 @@
 package com.n4systems.model.location;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import com.n4systems.util.persistence.QueryBuilder;
+
+import javax.persistence.EntityManager;
 
 public class PredefinedLocationByIdLoader extends SecurityFilteredLoader<PredefinedLocation> {
 

@@ -1,18 +1,5 @@
 package com.n4systems.exporting;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.junit.Test;
-
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.autoattribute.AutoAttributeToModelConverter;
 import com.n4systems.api.model.AutoAttributeView;
@@ -26,6 +13,14 @@ import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.persistence.savers.Saver;
 import com.n4systems.testutils.DummyTransaction;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.*;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 
 public class AutoAttributeImporterTest {
 	/*

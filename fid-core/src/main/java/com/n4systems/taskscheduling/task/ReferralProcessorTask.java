@@ -1,10 +1,5 @@
 package com.n4systems.taskscheduling.task;
 
-import java.util.Date;
-
-import org.apache.log4j.Logger;
-
-
 import com.n4systems.model.Tenant;
 import com.n4systems.model.signup.SignupReferral;
 import com.n4systems.model.signup.SignupReferralSaver;
@@ -14,6 +9,9 @@ import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.persistence.savers.Saver;
+import org.apache.log4j.Logger;
+
+import java.util.Date;
 
 public class ReferralProcessorTask implements Runnable {
 	private static final Logger logger = Logger.getLogger(ReferralProcessorTask.class);

@@ -42,7 +42,9 @@ import java.util.stream.Collectors;
 public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
     private static final Logger logger = Logger.getLogger(AssignmentEscalationRuleService.class);
     private static final String CLEAR_RULES_FOR_EVENT_SQL = "DELETE FROM escalation_rule_execution_queue WHERE event_id = :eventId";
+    private static final String CLEAR_RULES_FOR_EVENT_HQL = "delete from EscalationRuleExecutionQueueItem WHERE eventId= :eventId";
     private static final String CLEAR_QUEUE_ITEMS_FOR_RULE_SQL = "DELETE FROM escalation_rule_execution_queue WHERE rule_id = :ruleId";
+    private static final String CLEAR_QUEUE_ITEMS_FOR_RULE_HQL = "delete from EscalationRuleExecutionQueueItem WHERE rule.id = :ruleId";
 
     private static final SimpleDateFormat DATETIME_FORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm");
     private static final SimpleDateFormat ALL_DAY_DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd");
@@ -634,6 +636,11 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
         return true;
     }
 
+    //FIXME I think this black magic with SQL finally came back to bite us in the ass.
+    //As more people use these rules, the more these methods below get called... theoretically, this means they chew
+    //through our connection pool at a faster rate.  As such, we're probably going to need to roll these over to using
+    //HQL, which will NOT require any of this transaction propagation magic.
+
     /**
      * This method clears away all Queue Items for a given Event ID.  This is used when an Event is completed or
      * otherwise closed.  It may turn out to be more reliable to perform this action inside of a trigger.
@@ -644,10 +651,12 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
 		WEB-5861: This was causing a hibernate exception when called from the webservice.  Something about a collection not being associated with the session.
 		Forcing a new transaction *should* fix it
 	 */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+//    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     public void clearEscalationRulesForEvent(Long eventId) {
-        Query deleteQuery = getEntityManager().createNativeQuery(CLEAR_RULES_FOR_EVENT_SQL);
-        deleteQuery.setParameter("eventId", eventId);
+        Query deleteQuery = persistenceService.createQuery(CLEAR_RULES_FOR_EVENT_HQL, Collections.singletonMap("eventId", eventId));
+//        Query deleteQuery = getEntityManager().createNativeQuery(CLEAR_RULES_FOR_EVENT_SQL);
+//        deleteQuery.setParameter("eventId", eventId);
 
         int queueItemsDeleted = deleteQuery.executeUpdate();
 
@@ -660,10 +669,12 @@ public class AssignmentEscalationRuleService extends FieldIdPersistenceService {
      *
      * @param ruleId - A Long representing the ID of a Rule which may have active Queue Items that need to be cleared.
      */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+//    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     private void clearQueueItemsForRule(Long ruleId) {
-        Query deleteQuery = getEntityManager().createNativeQuery(CLEAR_QUEUE_ITEMS_FOR_RULE_SQL);
-        deleteQuery.setParameter("ruleId", ruleId);
+        Query deleteQuery = persistenceService.createQuery(CLEAR_QUEUE_ITEMS_FOR_RULE_HQL, Collections.singletonMap("rule.id", ruleId));
+//        Query deleteQuery = getEntityManager().createNativeQuery(CLEAR_QUEUE_ITEMS_FOR_RULE_SQL);
+//        deleteQuery.setParameter("ruleId", ruleId);
 
         int queueItemsDeleted = deleteQuery.executeUpdate();
 

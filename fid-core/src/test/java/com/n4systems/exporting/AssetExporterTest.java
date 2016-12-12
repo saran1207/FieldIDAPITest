@@ -1,6 +1,14 @@
 package com.n4systems.exporting;
 
-import static org.easymock.EasyMock.*;
+import com.n4systems.api.conversion.ConversionException;
+import com.n4systems.api.conversion.ModelToViewConverter;
+import com.n4systems.api.model.AssetView;
+import com.n4systems.exporting.beanutils.ExportMapMarshaller;
+import com.n4systems.exporting.beanutils.MarshalingException;
+import com.n4systems.exporting.io.MapWriter;
+import com.n4systems.model.Asset;
+import com.n4systems.persistence.loaders.ListLoader;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -8,16 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.n4systems.api.model.AssetView;
-import com.n4systems.model.Asset;
-import org.junit.Test;
-
-import com.n4systems.api.conversion.ConversionException;
-import com.n4systems.api.conversion.ModelToViewConverter;
-import com.n4systems.exporting.beanutils.ExportMapMarshaller;
-import com.n4systems.exporting.beanutils.MarshalingException;
-import com.n4systems.exporting.io.MapWriter;
-import com.n4systems.persistence.loaders.ListLoader;
+import static org.easymock.EasyMock.*;
 
 public class AssetExporterTest {
 

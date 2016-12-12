@@ -1,7 +1,6 @@
 package com.n4systems.model.asset;
 
 import com.n4systems.model.AssetType;
-import com.n4systems.model.Event;
 import com.n4systems.model.ThingEvent;
 
 import java.io.Serializable;

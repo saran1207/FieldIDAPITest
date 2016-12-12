@@ -1,19 +1,17 @@
 package com.n4systems.model.utils;
 
-import static com.n4systems.model.builders.InfoFieldBuilder.*;
-import static com.n4systems.model.builders.AssetTypeBuilder.*;
-import static com.n4systems.model.builders.TenantBuilder.*;
-import static org.junit.Assert.*;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.Tenant;
+import org.junit.Test;
+import rfid.ejb.entity.InfoFieldBean;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
-
-import rfid.ejb.entity.InfoFieldBean;
-
-import com.n4systems.model.AssetType;
-import com.n4systems.model.Tenant;
+import static com.n4systems.model.builders.AssetTypeBuilder.anAssetType;
+import static com.n4systems.model.builders.InfoFieldBuilder.anInfoField;
+import static com.n4systems.model.builders.TenantBuilder.aTenant;
+import static org.junit.Assert.*;
 
 
 

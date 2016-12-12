@@ -1,8 +1,8 @@
 package com.n4systems.model.eventschedule;
 
-import java.util.Date;
-
 import com.n4systems.persistence.Transaction;
+
+import java.util.Date;
 
 
 public class NextEventDateByEventPassthruLoader extends NextEventDateByEventLoader {

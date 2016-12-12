@@ -1,22 +1,20 @@
 package com.n4systems.services.signature;
 
 
+import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.model.SignatureCriteriaResult;
+import com.n4systems.model.Tenant;
+import com.n4systems.reporting.PathHandler;
+import com.n4systems.services.date.DateService;
+import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.UUID;
-
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
-import com.n4systems.fieldid.service.amazon.S3Service;
-import com.n4systems.services.date.DateService;
-import org.apache.commons.io.IOUtils;
-
-import com.n4systems.model.SignatureCriteriaResult;
-import com.n4systems.model.Tenant;
-import com.n4systems.reporting.PathHandler;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
 
 
 public class SignatureService {

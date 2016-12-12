@@ -1,13 +1,10 @@
 package com.n4systems.util.chart;
 
-import static org.junit.Assert.*;
-
-import org.joda.time.DateTimeConstants;
-import org.joda.time.Days;
-import org.joda.time.LocalDate;
-import org.joda.time.Months;
-import org.joda.time.Years;
+import org.joda.time.*;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 public class ChartGranularityTest {

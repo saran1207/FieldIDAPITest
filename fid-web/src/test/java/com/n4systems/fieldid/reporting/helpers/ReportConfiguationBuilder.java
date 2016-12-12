@@ -1,13 +1,13 @@
 package com.n4systems.fieldid.reporting.helpers;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.n4systems.model.builders.BaseBuilder;
 import com.n4systems.model.search.ColumnMappingGroupView;
 import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.search.ReportConfiguration;
 import com.n4systems.util.persistence.search.SortDirection;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReportConfiguationBuilder extends BaseBuilder<ReportConfiguration> {     
 

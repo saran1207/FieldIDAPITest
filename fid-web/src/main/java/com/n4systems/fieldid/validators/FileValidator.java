@@ -1,13 +1,12 @@
 package com.n4systems.fieldid.validators;
 
-import java.io.File;
-
-import org.apache.commons.io.FileUtils;
-
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.actions.shared.UploadFileAction;
 import com.opensymphony.xwork2.validator.ValidationException;
 import com.opensymphony.xwork2.validator.validators.FieldValidatorSupport;
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
 
 public class FileValidator extends FieldValidatorSupport {
 

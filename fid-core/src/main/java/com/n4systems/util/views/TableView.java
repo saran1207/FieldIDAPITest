@@ -1,10 +1,6 @@
 package com.n4systems.util.views;
 
-import java.util.AbstractCollection;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class TableView extends AbstractCollection<List<Object>> {
 	private static final Object DEFAULT_VALUE = null;

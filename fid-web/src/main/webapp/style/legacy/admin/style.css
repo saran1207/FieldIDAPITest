@@ -231,7 +231,15 @@ ul.options {
     margin-bottom:20px;
 }
 
-floatRight {
+.floatRight {
 	float: right;
 }
 
+.control-group label {
+	display: inline-block;
+	margin: 10px 0;
+	padding-right: 10px;
+	text-align: left;
+	vertical-align: middle;
+	width: 50px;
+}

@@ -1,8 +1,6 @@
 package com.n4systems.fieldidadmin.actions;
 
 import com.n4systems.model.EventTypeGroup;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
 import com.n4systems.model.PrintOut;
 import com.n4systems.model.PrintOut.PrintOutType;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -10,6 +8,7 @@ import com.n4systems.tools.Pager;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.Preparable;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
+import org.apache.struts2.interceptor.validation.SkipValidation;
 
 public class DefaultPrintOutCrud extends AbstractAdminAction implements Preparable {
 

@@ -1,6 +1,5 @@
 package com.n4systems.handlers;
 
-import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventTypeService;
 import com.n4systems.model.*;
 import com.n4systems.model.eventtype.CommonAssetTypeLoader;

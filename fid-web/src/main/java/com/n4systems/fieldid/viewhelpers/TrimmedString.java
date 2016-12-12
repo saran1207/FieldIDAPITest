@@ -1,9 +1,9 @@
 package com.n4systems.fieldid.viewhelpers;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.lang.builder.EqualsBuilder;
 
 
 public class TrimmedString{

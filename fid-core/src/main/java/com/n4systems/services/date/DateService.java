@@ -6,8 +6,6 @@ import com.n4systems.util.DateHelper;
 import com.n4systems.util.DateTimeDefinition;
 import com.n4systems.util.chart.RangeType;
 import org.joda.time.*;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import java.util.Date;
 import java.util.TimeZone;

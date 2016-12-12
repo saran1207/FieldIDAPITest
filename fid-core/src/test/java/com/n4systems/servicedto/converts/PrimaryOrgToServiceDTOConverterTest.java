@@ -1,15 +1,13 @@
 package com.n4systems.servicedto.converts;
 
-import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.servicedto.converts.PrimaryOrgToServiceDTOConverter;
 import com.n4systems.webservice.dto.TenantServiceDTO;
+import org.junit.Test;
+
+import static com.n4systems.model.builders.PrimaryOrgBuilder.aPrimaryOrg;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 
 public class PrimaryOrgToServiceDTOConverterTest {

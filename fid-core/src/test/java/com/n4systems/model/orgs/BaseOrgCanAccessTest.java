@@ -1,11 +1,10 @@
 package com.n4systems.model.orgs;
 
-import static org.junit.Assert.*;
-
+import com.n4systems.model.builders.OrgBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.model.builders.OrgBuilder;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the canAccess rules for BaseOrg.

@@ -64,15 +64,15 @@ public class CopyEventFactoryTest {
 		List<Recommendation> recommendations = new ArrayList<Recommendation>();
 		Recommendation r = new Recommendation();
 		r.setText( "woot" );
-		r.setId( 1L );
-		recommendations.add( r );
+		r.setId(1L);
+		recommendations.add(r);
 		
 		List<Recommendation> copiedRecommendations = CopyEventFactory.copyRecommendations( recommendations );
 		
 		assertEquals( recommendations.size(), copiedRecommendations.size() );
 		Recommendation copiedRecommendation = copiedRecommendations.iterator().next();
-		assertEquals( r.getText(), copiedRecommendation.getText() );
-		assertEquals( r, copiedRecommendation );
+		assertEquals(r.getText(), copiedRecommendation.getText());
+		assertEquals(r, copiedRecommendation);
 		
 		copiedRecommendation.setId( 4L );
 		assertFalse( r.equals( copiedRecommendation ) );

@@ -1,11 +1,11 @@
 package com.n4systems.testutils;
 
-import javax.persistence.EntityManager;
-
 import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.savers.Saver;
+
+import javax.persistence.EntityManager;
 
 public class DummySaver<T extends Saveable> extends Saver<T> {
 

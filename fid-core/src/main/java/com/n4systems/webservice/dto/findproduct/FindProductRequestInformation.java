@@ -1,8 +1,8 @@
 package com.n4systems.webservice.dto.findproduct;
 
-import java.util.Date;
-
 import com.n4systems.webservice.dto.RequestInformation;
+
+import java.util.Date;
 
 public class FindProductRequestInformation extends RequestInformation {
 

@@ -1,9 +1,9 @@
 package com.n4systems.caching;
 
+import com.n4systems.caching.safetynetwork.VendorListCacheStore;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import com.n4systems.caching.safetynetwork.VendorListCacheStore;
 
 
 public class Cache {

@@ -1,9 +1,8 @@
 package com.n4systems.testutils;
 
+import com.n4systems.persistence.PersistenceManagerTestController;
 import org.junit.After;
 import org.junit.Before;
-
-import com.n4systems.persistence.PersistenceManagerTestController;
 
 public abstract class UsesDummyPersistenceManager {
 

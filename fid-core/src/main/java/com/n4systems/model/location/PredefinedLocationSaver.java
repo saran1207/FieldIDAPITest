@@ -1,12 +1,11 @@
 package com.n4systems.model.location;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.savers.Saver;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 public class PredefinedLocationSaver extends Saver<PredefinedLocation> {
 
