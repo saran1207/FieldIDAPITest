@@ -14,6 +14,7 @@ import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.orgs.OrgIdTree;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
@@ -113,6 +114,18 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 		apiOrg.setOfflineAssetCount(assetService.getOfflineAssetCountByOrg(baseOrg.getId()));
 
 		return apiOrg;
+	}
+
+	@GET
+	@Path("visibleOrgsTree")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Transactional(readOnly = true)
+	public Response findVisibleOrgsTree() {
+		List<OrgIdTree> results = orgService.getIdVisibleOrgsIdTree();
+
+		System.out.println("TEST");
+
+		return Response.ok().entity(results).build();
 	}
 
 	@GET

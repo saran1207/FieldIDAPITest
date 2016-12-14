@@ -37,6 +37,85 @@ public class OrgService extends CrudService<BaseOrg> {
         return persistenceService.findAll(query);
     }
 
+    public List<OrgIdTree> getIdVisibleOrgsIdTree() {
+
+        QueryBuilder<BaseOrg> query = new QueryBuilder<>(BaseOrg.class, securityContext.getUserSecurityFilter());
+
+        //The Final Tree
+        List<OrgIdTree> tree = new ArrayList<>();
+
+        //List of all visible Orgs
+        List<BaseOrg> visibleOrgs = persistenceService.findAll(query);
+
+        //Let's get the Root of the tree for what the user can see
+        BaseOrg root = securityContext.getUserSecurityFilter().getOwner();
+
+        //Let's create the root of Final Tree
+        OrgIdTree treeRoot = new OrgIdTree();
+        treeRoot.setId(root.getId());
+
+        //Add the root to the list
+        tree.add(treeRoot);
+
+        if(root.isPrimary()) {
+            //Build the multiple headed tree
+            for(BaseOrg org:visibleOrgs) {
+                if(org.getParent() != null && org.getParent().equals(root)) {
+                    //Add it to the children of the Primary head
+                    if(org.isCustomer()) {
+                        OrgIdTree child = new OrgIdTree();
+                        child.setId(org.getId());
+
+                        treeRoot.getChildren().add(child);
+                    }
+                    //Add it as the extra heads (Secondary's) to the tree
+                    if(org.isSecondary()) {
+                        OrgIdTree secondary = new OrgIdTree();
+                        secondary.setId(org.getId());
+
+                        tree.add(secondary);
+                    }
+                }
+            }
+
+            //Build the children for the Secondary Org heads
+            for(OrgIdTree head:tree) {
+                if(head.getId()!=treeRoot.getId()) {
+                    for(BaseOrg orgs:visibleOrgs) {
+                        if(orgs.getParent() != null && orgs.isCustomer() && orgs.getParent().getId().equals(head.getId())) {
+                            OrgIdTree child = new OrgIdTree();
+                            child.setId(orgs.getId());
+
+                            head.getChildren().add(child);
+                        }
+                    }
+                }
+            }
+
+        } else if(root.isSecondary()) {
+            //Build the single headed tree
+
+            for(BaseOrg orgs:visibleOrgs) {
+                if(orgs.getParent() != null && orgs.isCustomer() && orgs.getParent().getId().equals(treeRoot.getId())) {
+                    OrgIdTree child = new OrgIdTree();
+                    child.setId(orgs.getId());
+
+                    treeRoot.getChildren().add(child);
+                }
+            }
+        } else if(root.isCustomer()) {
+            //Build the single node tree
+
+            //the tree is the root
+        } else if(root.isDivision()) {
+            //Created a seperate else statement if we ever want to change the division to be handled differently
+            //Single node (the parent of the division)
+
+            //the tree is the root
+        }
+
+        return tree;
+    }
 
     @Transactional(readOnly = true)
     public List<PrimaryOrg> getActivePrimaryOrgs() {
