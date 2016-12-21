@@ -1,6 +1,7 @@
 package com.n4systems.services.search;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.model.Event;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.WorkflowState;
@@ -17,7 +18,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Transactional
@@ -39,7 +40,7 @@ public class EventIndexerService extends FieldIdPersistenceService {
         long startTime = System.currentTimeMillis();
         logger.info(getClass().getSimpleName() +": Running");
 
-        QueryBuilder<EventIndexQueueItem> query = new QueryBuilder<EventIndexQueueItem>(EventIndexQueueItem.class);
+        QueryBuilder<EventIndexQueueItem> query = new QueryBuilder<>(EventIndexQueueItem.class);
         query.setLimit(configService.getInteger(ConfigEntry.EVENT_INDEX_SIZE));
 
         List<EventIndexQueueItem> items = persistenceService.findAll(query);
@@ -56,12 +57,24 @@ public class EventIndexerService extends FieldIdPersistenceService {
     }
 
     private void processIndexQueueItem(EventIndexQueueItem item) {
+        Event processMe;
+
         switch(item.getType()) {
             case EVENT_INSERT:
-                updateIndex(persistenceService.findNonSecure(ThingEvent.class, item.getItemId()), false);
+                processMe = persistenceService.findNonSecure(Event.class, item.getItemId());
+                if(processMe instanceof ThingEvent) {
+                    updateIndex((ThingEvent) processMe, false);
+                } else {
+                    logger.warn("An Event which is NOT a ThingEvent with ID " + item.getItemId() + " tried to be processed for insert as a ThingEvent");
+                }
                 break;
             case EVENT_UPDATE:
-                updateIndex(persistenceService.findNonSecure(ThingEvent.class, item.getItemId()), true);
+                processMe = persistenceService.findNonSecure(Event.class, item.getItemId());
+                if(processMe instanceof ThingEvent) {
+                    updateIndex((ThingEvent) processMe, true);
+                } else {
+                    logger.warn("An Event which is NOT a ThingEvent with ID " + item.getItemId() + " tried to be processed for update as a ThingEvent");
+                }
                 break;
             case TENANT:
                 updateTenant(persistenceService.findNonSecure(Tenant.class, item.getItemId()));
@@ -71,7 +84,7 @@ public class EventIndexerService extends FieldIdPersistenceService {
 
     private void updateIndex(ThingEvent event, boolean update) {
         if (event != null && event.getWorkflowState() == WorkflowState.COMPLETED) {
-            eventIndexWriter.index(event.getTenant(), Arrays.asList(event), update);
+            eventIndexWriter.index(event.getTenant(), Collections.singletonList(event), update);
         }
     }
 
@@ -90,7 +103,7 @@ public class EventIndexerService extends FieldIdPersistenceService {
     }
 
     private boolean queueItemExists(Long id, EventIndexQueueItem.EventIndexQueueItemType type) {
-        QueryBuilder<EventIndexQueueItem> builder = new QueryBuilder<EventIndexQueueItem>(EventIndexQueueItem.class, new OpenSecurityFilter());
+        QueryBuilder<EventIndexQueueItem> builder = new QueryBuilder<>(EventIndexQueueItem.class, new OpenSecurityFilter());
         builder.addSimpleWhere("itemId", id);
         builder.addSimpleWhere("type", type);
 
