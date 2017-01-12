@@ -34,6 +34,7 @@ import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.event.QuickEventPage;
 import com.n4systems.fieldid.wicket.pages.identify.components.*;
 import com.n4systems.fieldid.wicket.pages.identify.components.multi.MultiIdentifyStatusDisplayPanel;
+import com.n4systems.fieldid.wicket.pages.massevent.SelectMassEventPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.*;
 import com.n4systems.model.asset.AssetAttachment;
@@ -399,7 +400,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
                 public void onSubmit() {
                     performSingleOrMultiSave(assetModel);
                     if (multiAssetConfig.isConfigurationComplete()) {
-                        setResponsePage(new PerformMultiEventOnIdentifiedAssetsPage(createdAssetIds));
+                        setResponsePage(new SelectMassEventPage(createdAssetIds));
                     } else {
                         setResponsePage(QuickEventPage.class, PageParametersBuilder.id(createdOrEditedAsset.getId()));
                     }
