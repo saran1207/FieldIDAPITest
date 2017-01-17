@@ -51,6 +51,8 @@ public class ChangeAdminUser extends FieldIDAdminPage {
                     }
                 };
 
+                newAdmin = userList.getObject().get(0);
+
                 DropDownChoice<User> newAdminSelect = new FidDropDownChoice<User>("newAdmin", new PropertyModel<User>(ChangeAdminUser.this, "newAdmin"), userList, new IChoiceRenderer<User>() {
                     @Override
                     public Object getDisplayValue(User object) {
