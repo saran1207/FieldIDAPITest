@@ -57,6 +57,9 @@
     <div>
         <a href='/fieldid/w/admin/lotoPrintoutSelection?id=${primaryOrg.tenant.id}'><@s.text name="feature.select_loto_printout_templates"/></a>
     </div>
+	<div>
+		<a href='/fieldid/w/admin/changeAdmin?id=${primaryOrg.tenant.id}'><@s.text name="feature.change_admin_user"/></a>
+	</div>
 	</#if>
 </div>
 

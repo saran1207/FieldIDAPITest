@@ -7,6 +7,7 @@ import com.n4systems.fieldid.wicket.pages.OopsPage;
 import com.n4systems.fieldid.wicket.pages.SecretTestPage;
 import com.n4systems.fieldid.wicket.pages.SelectLanguagePage;
 import com.n4systems.fieldid.wicket.pages.admin.adminusers.AdminUserPage;
+import com.n4systems.fieldid.wicket.pages.admin.adminusers.ChangeAdminUser;
 import com.n4systems.fieldid.wicket.pages.admin.config.ConfigPage;
 import com.n4systems.fieldid.wicket.pages.admin.languages.ConfigureLanguagesPage;
 import com.n4systems.fieldid.wicket.pages.admin.printouts.LotoPrintoutListPage;
@@ -294,6 +295,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("admin/changeAdminPassword", ChangeAdminPasswordPage.class);
         mountPage("admin/lotoPrintoutSelection", LotoPrintoutListPage.class);
         mountPage("admin/config", ConfigPage.class);
+        mountPage("admin/changeAdmin", ChangeAdminUser.class);
 
         mountPage("secret/test", SecretTestPage.class);
         mountPage("assetSummary", AssetSummaryPage.class);

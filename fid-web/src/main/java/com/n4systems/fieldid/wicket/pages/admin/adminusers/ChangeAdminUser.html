@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+<head>
+    <style type="text/css">
+
+        .control-group .label {
+            width: 100px;
+        }
+
+    </style>
+</head>
+<wicket:extend>
+
+    <div wicket:id="feedbackPanel"/>
+
+    <form wicket:id="form">
+        <div class="control-group">
+            <label class="wideLabel"><wicket:message key="label.current_admin"/></label>
+            <span><span wicket:id="currentAdmin"/> (<span wicket:id="currentAdminUserId"/>) </span>
+        </div>
+        <div class="control-group">
+            <label class="wideLabel" wicket:label="newAdmin"><wicket:message key="label.change_admin_to"/></label>
+            <select wicket:id="newAdmin"/>
+        </div>
+
+        <a wicket:id="save" type="submit"><wicket:message key="label.save"/></a>
+        &nbsp;&nbsp;&nbsp;
+        <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
+
+    </form>
+
+</wicket:extend>
+</html>
