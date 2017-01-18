@@ -64,7 +64,7 @@ public class ChangeAdminUser extends FieldIDAdminPage {
                         return object.getID() + "";
                     }
                 });
-                newAdminSelect.setNullValid(true);
+                newAdminSelect.setRequired(true);
                 add(newAdminSelect);
 
                 add(new SubmitLink("save"));
@@ -83,6 +83,7 @@ public class ChangeAdminUser extends FieldIDAdminPage {
 
                 redirect("/admin/organizationEdit.action?id=" + tenantId);
             }
+
         });
 
     }
