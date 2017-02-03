@@ -113,7 +113,7 @@ public class ProcedureAuditEventService extends FieldIdPersistenceService {
             query.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "procedureDefinition.developedBy", "sortJoin", true));
         }
 
-        return persistenceService.findAll(query);
+        return persistenceService.findAllPaginated(query, first, count);
     }
 
     public List<ProcedureAuditEvent> getAllAuditProcedures(String sTerm, Date fromDate, Date toDate, String order, boolean ascending, int first, int count, BaseOrg owner) {
@@ -165,7 +165,7 @@ public class ProcedureAuditEventService extends FieldIdPersistenceService {
             query.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "procedureDefinition.developedBy", "sortJoin", true));
         }
 
-        return persistenceService.findAll(query);
+        return persistenceService.findAllPaginated(query, first, count);
     }
 
     public List<ProcedureAuditEvent> getAllCompletedAuditsForAsset(Asset asset) {
