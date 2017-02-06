@@ -6,6 +6,7 @@ import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.fieldid.service.admin.AdminUserService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.admin.AdminUser;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.orgs.BaseOrg;
@@ -254,13 +255,6 @@ public class UserService extends CrudService<User> {
             }
         }
         return builder;
-    }
-
-    public AdminUser getAdminUser(Long userId) {
-        QueryBuilder<AdminUser> builder = createUserSecurityBuilder(AdminUser.class, true);
-        builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "id", userId));
-        AdminUser user = persistenceService.find(builder);
-        return user;
     }
 
     public User getUser(Long userId) {
@@ -535,6 +529,23 @@ public class UserService extends CrudService<User> {
                                  .stream()
                                  .filter(u -> Permissions.hasOneOf(u.getPermissions(), Permissions.CERTIFY_PROCEDURE))
                                  .count();
+    }
+
+    // The following method is for use in the admin console, where there is no user security context set
+    public User getAdminUser(Long tenantId) {
+        QueryBuilder<User> builder = new QueryBuilder<>(User.class, new OpenSecurityFilter());
+        builder.addSimpleWhere("tenant.id", tenantId);
+        builder.addSimpleWhere("userType", UserType.ADMIN);
+        User user = persistenceService.find(builder);
+        return user;
+    }
+
+    // The following method is for use in the admin console, where there is no user security context set
+    public List<User> getAdministrationUsersByTenant(Long tenantId) {
+        QueryBuilder<User> builder = new QueryBuilder<>(User.class, new OpenSecurityFilter());
+        builder.addSimpleWhere("tenant.id", tenantId);
+        builder.addSimpleWhere("userType", UserType.FULL);
+        return persistenceService.findAll(builder);
     }
 
 }

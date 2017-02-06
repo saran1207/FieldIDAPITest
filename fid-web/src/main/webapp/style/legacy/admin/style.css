@@ -243,3 +243,8 @@ ul.options {
 	vertical-align: middle;
 	width: 50px;
 }
+
+.control-group .wideLabel {
+	width: 100px;
+	font-weight: bold;
+}
