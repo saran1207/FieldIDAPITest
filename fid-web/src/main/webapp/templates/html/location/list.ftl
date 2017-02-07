@@ -17,6 +17,9 @@ ${action.setPageType('predefined_locations', 'location_list')!}
 	      	});
 	 	    jQuery('#editLevel').click(function(){
 	 		  		var nodeId = jQuery('#nodeList').getSelectedNode().id;
+					if (nodeId == undefined) {
+                        nodeId = -1;
+					}
 		       		redirect("<@s.url action="predefinedLocationLevels" />" + "?uniqueID="+nodeId);
 	      	});
 	   
