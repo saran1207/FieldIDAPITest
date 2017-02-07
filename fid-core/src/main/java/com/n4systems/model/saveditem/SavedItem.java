@@ -33,7 +33,6 @@ public abstract class SavedItem<T extends SearchCriteria> extends EntityWithTena
 	private String description;
     
     @OneToMany(mappedBy = "savedItem", fetch = FetchType.LAZY, orphanRemoval = true)
-	@org.hibernate.annotations.Cache(region = "SetupDataCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private List<SendSavedItemSchedule> sendSchedules = new ArrayList<SendSavedItemSchedule>();
 
     public SavedItem() {

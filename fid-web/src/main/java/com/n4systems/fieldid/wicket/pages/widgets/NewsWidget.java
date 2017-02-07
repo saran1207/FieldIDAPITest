@@ -31,7 +31,8 @@ public class NewsWidget extends Widget<WidgetConfiguration> {
     public void renderHead(IHeaderResponse response) {
         response.renderCSSReference("style/legacy/dashboard/widgets/news.css");
         response.renderJavaScriptReference("javascript/jquery-ui-1.8.20.no-autocomplete.min.js");
-        response.renderJavaScriptReference("javascript/jquery.zrssfeed.js");
+        response.renderJavaScriptReference("javascript/moment.min.js");
+        response.renderJavaScriptReference("javascript/jquery.rss.js");
         response.renderOnDomReadyJavaScript(getRssSetUpScript());
     }
 
@@ -40,11 +41,12 @@ public class NewsWidget extends Widget<WidgetConfiguration> {
         
         String feed = configService.getString(ConfigEntry.RSS_FEED);
 
-        jsBuffer.append("$('#"+fieldIdNews.getMarkupId()+"').rssfeed('" + feed + "', {");
-        jsBuffer.append("	limit: 3, content: false, dateformat: 'D, M d', snippet: false, ");
-        jsBuffer.append("	header: false, titletag: 'div', newimage: '../images/new.png', ");
-        jsBuffer.append("	linktarget: '_blank',");
-        jsBuffer.append("	ssl: true");
+        jsBuffer.append("$('#"+fieldIdNews.getMarkupId()+"').rss('" + feed + "', {");
+        //jsBuffer.append("	limit: 3, content: false, dateformat: 'D, M d', snippet: false, ");
+        //jsBuffer.append("	header: false, titletag: 'div', newimage: '../images/new.png', ");
+        //jsBuffer.append("	linktarget: '_blank',");
+        //jsBuffer.append("	ssl: true");
+        //jsBuffer.append("entryTemplate:'<li><a href=\"{url}\">{title}</a> {date} <br/></li>'");
    		jsBuffer.append("},");
    		jsBuffer.append(rssCallbackJs);
    		jsBuffer.append(");");
