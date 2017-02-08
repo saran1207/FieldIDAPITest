@@ -13,7 +13,7 @@ import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.EntityWithTenant;
 import org.apache.commons.lang.StringUtils;
-import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -34,10 +34,11 @@ public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
 
     private Tree tree;
     private String input;
-    private Component text;
-    private final HiddenField _type;
-    private final HiddenField _entityId;
-    private WebMarkupContainer icon;
+    private TextField text;
+    private HiddenField _type;
+    private HiddenField _entityId;
+    private WebMarkupContainer searchIcon;
+    private WebMarkupContainer clearIcon;
     private boolean includeLocations = false;
     private String entityId;
     private String entityType;
@@ -85,26 +86,42 @@ public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
         add(text = new TextField("text", new PropertyModel(this, "input")));
         text.add(new Watermark(getWatermarkText()));
         add(_type = new HiddenField("type", new PropertyModel(this, "entityType")));
-        add(_entityId = new HiddenField("entityId", new PropertyModel(this,"entityId")));
+        add(_entityId = new HiddenField("entityId", new PropertyModel(this, "entityId")));
         add(tree = new Tree("tree") {
-            @Override protected List<JsonTreeNode> getNodes(String search) {
+            @Override
+            protected List<JsonTreeNode> getNodes(String search) {
                 return buildJsonTree(getOrgLocationTree(search));
             }
 
-            @Override protected List<JsonTreeNode> getChildNodes(Long parentNodeId,String type) {
-                return buildJsonTree(getOrgLocationTree(parentNodeId,getNodeType(type)));
+            @Override
+            protected List<JsonTreeNode> getChildNodes(Long parentNodeId, String type) {
+                return buildJsonTree(getOrgLocationTree(parentNodeId, getNodeType(type)));
             }
 
         });
 
-        icon = new WebMarkupContainer("icon") {
+        searchIcon = new WebMarkupContainer("searchIcon") {
             @Override protected void onComponentTag(ComponentTag tag) {
                 super.onComponentTag(tag);
                 tag.put("onClick",String.format("%s.toggleTree()",tree.getJsVariableName()));
             }
         };
 
-        add(icon);
+        clearIcon = new WebMarkupContainer("clearIcon");
+        clearIcon.add(new AjaxEventBehavior("onclick") {
+            @Override
+            protected void onEvent(AjaxRequestTarget target) {
+                text.clearInput();
+                setEmptyString();
+                onChanged(target);
+                target.add(text);
+            }
+        });
+        clearIcon.setVisible(showClearIcon());
+
+        add(searchIcon);
+        add(clearIcon);
+
         setOutputMarkupPlaceholderTag(true);
     }
 
@@ -192,8 +209,12 @@ public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
         }
     }
 
-    public void setIconVisible(boolean visible) {
-        icon.setVisible(visible);
+    public void setSearchIconVisible(boolean visible) {
+        searchIcon.setVisible(visible);
+    }
+
+    protected boolean showClearIcon() {
+        return false;
     }
 
     public void setTextEnabled(boolean enabled) {
@@ -241,12 +262,12 @@ public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
 
     public void disableTextBox() {
         text.setEnabled(false);
-        icon.setVisible(false);
+        searchIcon.setVisible(false);
     }
 
     public void enableTextBox() {
         text.setEnabled(true);
-        icon.setVisible(true);
+        searchIcon.setVisible(true);
     }
 
     public String getInput() {
