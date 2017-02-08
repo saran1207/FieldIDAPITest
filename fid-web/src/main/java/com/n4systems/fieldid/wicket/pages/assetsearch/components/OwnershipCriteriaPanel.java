@@ -52,6 +52,14 @@ public class OwnershipCriteriaPanel<T extends SearchCriteria> extends Panel {
         BaseOrg temp = ownerModel.getObject();
 
         locationPicker = new OrgLocationPicker("location", Model.of(temp), predefinedLocationModel){
+
+            @Override
+            protected void onChanged(AjaxRequestTarget target) {
+                if(getTextString() == null || getTextString().equals("")) {
+                    predefinedLocationModel.setObject(null);
+                }
+            }
+
             @Override
             public String getWatermarkText() {
                 return new FIDLabelModel("message.locationpicker_watermark").getObject();
