@@ -114,7 +114,7 @@ public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
                 text.clearInput();
                 setEmptyString();
                 onChanged(target);
-                target.add(text);
+                target.add(OrgLocationPicker.this);
             }
         });
         clearIcon.setVisible(showClearIcon());
