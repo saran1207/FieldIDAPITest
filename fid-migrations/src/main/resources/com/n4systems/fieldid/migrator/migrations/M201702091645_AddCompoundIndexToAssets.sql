@@ -1,0 +1,1 @@
+ALTER TABLE `assets` ADD INDEX `index_owner_id_tenant_id_mobileguid_state` (`owner_id`, `tenant_id`, `mobileguid`, `state` );
