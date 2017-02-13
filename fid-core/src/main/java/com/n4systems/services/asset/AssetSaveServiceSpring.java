@@ -45,6 +45,12 @@ public class AssetSaveServiceSpring extends FieldIdPersistenceService {
     public Asset createWithHistory(Asset asset, List<AssetAttachment> uploadedAttachments, byte[] imageData, String assetImageName) {
         Asset createdAsset = create(asset, uploadedAttachments, imageData, assetImageName);
 
+        createAssetHistory(asset);
+
+        return createdAsset;
+    }
+
+    public void createAssetHistory(Asset asset) {
         AddAssetHistory addAssetHistory = assetService.getAddAssetHistory();
 
         if (addAssetHistory == null) {
@@ -62,8 +68,6 @@ public class AssetSaveServiceSpring extends FieldIdPersistenceService {
         addAssetHistory.setAssignedUser(asset.getAssignedUser());
 
         persistenceService.saveOrUpdate(addAssetHistory);
-
-        return createdAsset;
     }
 
     private List<InfoOptionBean> reconcileInfoOptions(Collection<InfoOptionBean> options) {

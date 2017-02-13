@@ -611,6 +611,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             }
 
             Asset newAsset = assetSaveService.create(assetToCreate, attachments, assetImageBytes, clientFileName);
+            assetSaveService.createAssetHistory(newAsset);
             createdAssetIds.add(newAsset.getId());
             saveSchedulesForAsset(newAsset);
         }
