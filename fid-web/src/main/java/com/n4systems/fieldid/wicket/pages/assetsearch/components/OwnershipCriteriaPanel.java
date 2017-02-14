@@ -71,6 +71,7 @@ public class OwnershipCriteriaPanel<T extends SearchCriteria> extends Panel {
             }
 
         }.withLocations();
+        locationPicker.setVisible(FieldIDSession.get().getSecurityGuard().isAdvancedLocationEnabled());
         add(locationPicker);
 
         //Freeform Location
