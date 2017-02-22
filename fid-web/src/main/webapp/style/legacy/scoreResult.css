@@ -26,6 +26,10 @@
     padding:3px;
 }
 
+.result-config .rightColumn .narrow {
+    width: 100px;
+}
+
 .observation-result-config .rightColumn {
     padding:3px;
 }
