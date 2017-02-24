@@ -255,6 +255,7 @@ public abstract class EventPage<T extends Event> extends FieldIDTemplatePage {
                     return new FIDLabelModel("message.locationpicker_watermark").getObject();
                 }
             }.withLocations();
+            locationPicker.setVisible(FieldIDSession.get().getSecurityGuard().isAdvancedLocationEnabled());
             ownerSection.add(locationPicker);
 
             //Freeform Location
