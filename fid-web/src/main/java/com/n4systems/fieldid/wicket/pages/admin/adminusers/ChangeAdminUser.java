@@ -76,9 +76,14 @@ public class ChangeAdminUser extends FieldIDAdminPage {
             protected void onSubmit() {
 
                 currentAdmin.setUserType(UserType.FULL);
-                userService.update(currentAdmin);
-
                 newAdmin.setUserType(UserType.ADMIN);
+
+                //All admin users must belong to the primary
+                if(!newAdmin.getOwner().isPrimary()) {
+                    newAdmin.setOwner(currentAdmin.getOwner());
+                }
+
+                userService.update(currentAdmin);
                 userService.update(newAdmin);
 
                 redirect("/admin/organizationEdit.action?id=" + tenantId);
