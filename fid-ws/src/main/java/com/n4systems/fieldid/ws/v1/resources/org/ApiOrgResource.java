@@ -113,6 +113,8 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 		apiOrg.setAssetCount(assetService.getAssetCountByOrg(baseOrg.getId()));
 		apiOrg.setOfflineAssetCount(assetService.getOfflineAssetCountByOrg(baseOrg.getId()));
 
+		logger.info(apiOrg);
+
 		return apiOrg;
 	}
 
