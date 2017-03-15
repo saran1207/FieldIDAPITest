@@ -65,7 +65,13 @@ public abstract class SetupDataResource<A, E extends AbstractEntity> extends Api
 			@DefaultValue("0") @QueryParam("page") int page,
 			@DefaultValue("500") @QueryParam("pageSize") int pageSize) {
 
-		ListResponse<A> response = getApiPage(after, page, pageSize);
+		ListResponse<A> response = null;
+
+		try {
+			response = getApiPage(after, page, pageSize);
+		}catch (Exception e) {
+			logger.error(e.getStackTrace());
+		}
 		return response;
 	}
 
