@@ -5,7 +5,6 @@ import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiEventType;
 import com.n4systems.fieldid.ws.v1.resources.model.ApiReadonlyModel;
 import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedPlaceEvent;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class ApiOrg extends ApiReadonlyModel {
@@ -141,24 +140,6 @@ public class ApiOrg extends ApiReadonlyModel {
 		this.offlineAssetCount = offlineAssetCount;
 		return this;
 	}
-
-	@Override
-	public String toString() {
-		return "ApiOrg{" +
-				"name='" + name + '\'' +
-				", parentId=" + parentId +
-				", secondaryId=" + secondaryId +
-				", customerId=" + customerId +
-				", divisionId=" + divisionId +
-				", address='" + address + '\'' +
-				", placeEventHistory=" + eventHistory.size() +
-				", eventTypes=" + eventTypes.size() +
-				", events=" + events.size() +
-				", schedules=" + schedules.size() +
-				", assetCount=" + assetCount +
-				", offlineAssetCount=" + offlineAssetCount +
-				'}';
-	}
 }
 
 class ContactInformation {
@@ -252,6 +233,4 @@ class ContactInformation {
 	public void setFax1(String fax1) {
 		this.fax1 = fax1;
 	}
-
-
 }

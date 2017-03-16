@@ -12,7 +12,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,9 +25,6 @@ import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 @Component
 public abstract class SetupDataResource<A, E extends AbstractEntity> extends ApiResource<A, E> {
-
-	private static Logger logger = Logger.getLogger(SetupDataResource.class);
-
 	private final Class<E> entityClass;
 	private final boolean allowArchived;
 	
@@ -65,13 +61,7 @@ public abstract class SetupDataResource<A, E extends AbstractEntity> extends Api
 			@DefaultValue("0") @QueryParam("page") int page,
 			@DefaultValue("500") @QueryParam("pageSize") int pageSize) {
 
-		ListResponse<A> response = null;
-
-		try {
-			response = getApiPage(after, page, pageSize);
-		}catch (Exception e) {
-			logger.error(e.getStackTrace());
-		}
+		ListResponse<A> response = getApiPage(after, page, pageSize);
 		return response;
 	}
 
@@ -79,8 +69,6 @@ public abstract class SetupDataResource<A, E extends AbstractEntity> extends Api
 		QueryBuilder<E> builder = createFindAllBuilder(after);
 		List<E> entityModels = persistenceService.findAll(builder, page, pageSize);
 		Long total = persistenceService.count(builder);
-
-		logger.info("ApiPage: " + entityClass.getName() + " page: " + page + " pageSize: " + pageSize + " total:" + total);
 
 		List<A> apiModels = convertAllEntitiesToApiModels(entityModels);
 		return new ListResponse<A>(apiModels, page, pageSize, total);
