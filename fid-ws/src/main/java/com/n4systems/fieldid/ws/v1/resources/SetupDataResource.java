@@ -76,17 +76,17 @@ public abstract class SetupDataResource<A, E extends AbstractEntity> extends Api
 		Instant b = Instant.now();
 		List<E> entityModels = persistenceService.findAll(builder, page, pageSize);
 		Instant a = Instant.now();
-		logger.info("List Query: " + Duration.between(b,a).toNanos());
+		logger.info("List Query: " + Duration.between(b,a).toMillis());
 
 		Instant b1 = Instant.now();
 		Long total = persistenceService.count(builder);
 		Instant a1 = Instant.now();
-		logger.info("Count Query: " + Duration.between(b1,a1).toNanos());
+		logger.info("Count Query: " + Duration.between(b1,a1).toMillis());
 
 		Instant b2 = Instant.now();
 		List<A> apiModels = convertAllEntitiesToApiModels(entityModels);
 		Instant a2 = Instant.now();
-		logger.info("Convert Entities: " + Duration.between(b2,a2).toNanos());
+		logger.info("Convert Entities: " + Duration.between(b2,a2).toMillis());
 		return new ListResponse<A>(apiModels, page, pageSize, total);
 	}
 
