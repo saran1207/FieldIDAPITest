@@ -111,15 +111,19 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 		convertContactInformation(apiOrg, baseOrg);
 
         apiOrg.setEventHistory(eventHistoryResource.findAllEventHistory(baseOrg.getId()));
+		logger.info("Event History: " + Duration.between(b, Instant.now()).toMillis());
         apiOrg.setEventTypes(baseOrg.getEventTypes().stream().map(eventTypeResource::convertToApiPlaceEvent).collect(Collectors.toList()));
+		logger.info("Place Event Type : " + Duration.between(b, Instant.now()).toMillis());
         apiOrg.setEvents(savedPlaceEventResource.findLastEventOfEachType(baseOrg.getId()));
+		logger.info("Place Event: " + Duration.between(b, Instant.now()).toMillis());
 		apiOrg.setSchedules(savedPlaceEventResource.findAllOpenEvents(baseOrg));
+		logger.info("Place Event Schedule: " + Duration.between(b, Instant.now()).toMillis());
 		apiOrg.setAssetCount(assetService.getAssetCountByOrg(baseOrg.getId()));
+		logger.info("Asset Count: " + Duration.between(b, Instant.now()).toMillis());
 		apiOrg.setOfflineAssetCount(assetService.getOfflineAssetCountByOrg(baseOrg.getId()));
+		logger.info("Offline Asset Count: " + Duration.between(b, Instant.now()).toMillis());
 
-		Instant a = Instant.now();
-
-		logger.info("Convert Org: " + baseOrg.getId() + " " + baseOrg.getName() + " - " + Duration.between(b, a).toMillis());
+		logger.info("Convert Org: " + baseOrg.getId() + " " + baseOrg.getName() + " - " + Duration.between(b, Instant.now()).toMillis());
 
 		return apiOrg;
 	}
