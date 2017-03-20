@@ -4,10 +4,13 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.parents.EntityWithTenant;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,13 +19,26 @@ import java.util.stream.Collectors;
 @Component
 public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPersistenceService {
 
+    private static Logger logger = Logger.getLogger(ApiResource.class);
+
     @Autowired
     private HttpServletRequest request;
 
+    protected final Class<E> entityClass;
+
 	protected abstract A convertEntityToApiModel(E entityModel);
 
+    protected ApiResource(Class<E> entityClass) {
+        this.entityClass =entityClass;
+    }
+
 	protected List<A> convertAllEntitiesToApiModels(List<E> entityModels) {
-		return entityModels.stream().map(this::convertEntityToApiModel).collect(Collectors.toList());
+        Instant b = Instant.now();
+		List<A> list = entityModels.stream().map(this::convertEntityToApiModel).collect(Collectors.toList());
+        Instant a = Instant.now();
+        logger.info("Convert Entities: " + entityClass.getName() + " - " + Duration.between(b, a).toMillis());
+
+        return list;
 	}
 
     protected <T extends EntityWithTenant> T findEntity(Class<T> entityClass, Long id) {
