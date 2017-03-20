@@ -72,6 +72,7 @@ public abstract class SetupDataResource<A, E extends AbstractEntity> extends Api
 	}
 
 	protected ListResponse<A> getApiPage(DateParam after, int page, int pageSize) {
+		logger.info(entityClass.getName());
 		QueryBuilder<E> builder = createFindAllBuilder(after);
 		Instant b = Instant.now();
 		List<E> entityModels = persistenceService.findAll(builder, page, pageSize);
