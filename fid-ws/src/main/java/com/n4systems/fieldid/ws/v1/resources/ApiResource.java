@@ -24,19 +24,14 @@ public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPe
     @Autowired
     private HttpServletRequest request;
 
-    protected final Class<E> entityClass;
-
 	protected abstract A convertEntityToApiModel(E entityModel);
-
-    protected ApiResource(Class<E> entityClass) {
-        this.entityClass =entityClass;
-    }
 
 	protected List<A> convertAllEntitiesToApiModels(List<E> entityModels) {
         Instant b = Instant.now();
 		List<A> list = entityModels.stream().map(this::convertEntityToApiModel).collect(Collectors.toList());
         Instant a = Instant.now();
-        logger.info("Convert Entities: " + entityClass.getName() + " - " + Duration.between(b, a).toMillis());
+
+        logger.info("Convert Entities: " + this.getClass().getName() + " - " + Duration.between(b, a).toMillis());
 
         return list;
 	}

@@ -31,11 +31,11 @@ public abstract class SetupDataResource<A, E extends AbstractEntity> extends Api
 
 	private static Logger logger = Logger.getLogger(SetupDataResource.class);
 
-	//private final Class<E> entityClass;
+	private final Class<E> entityClass;
 	private final boolean allowArchived;
 	
 	protected SetupDataResource(Class<E> entityClass, boolean allowArchived) {
-		super(entityClass);
+		this.entityClass = entityClass;
 		this.allowArchived = allowArchived;
 	}
 	
@@ -84,7 +84,10 @@ public abstract class SetupDataResource<A, E extends AbstractEntity> extends Api
 		Instant a1 = Instant.now();
 		logger.info("Count Query: " + Duration.between(b1,a1).toMillis());
 
+		Instant b2 = Instant.now();
 		List<A> apiModels = convertAllEntitiesToApiModels(entityModels);
+		Instant a2 = Instant.now();
+		logger.info("Convert Entities: " + Duration.between(b2,a2).toMillis());
 		return new ListResponse<A>(apiModels, page, pageSize, total);
 	}
 
