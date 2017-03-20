@@ -19,20 +19,13 @@ import java.util.stream.Collectors;
 @Component
 public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPersistenceService {
 
-    private static Logger logger = Logger.getLogger(ApiResource.class);
-
     @Autowired
     private HttpServletRequest request;
 
 	protected abstract A convertEntityToApiModel(E entityModel);
 
 	protected List<A> convertAllEntitiesToApiModels(List<E> entityModels) {
-        Instant b = Instant.now();
 		List<A> list = entityModels.stream().map(this::convertEntityToApiModel).collect(Collectors.toList());
-        Instant a = Instant.now();
-
-        logger.info("Convert Entities: " + this.getClass().getName() + " - " + Duration.between(b, a).toMillis());
-
         return list;
 	}
 

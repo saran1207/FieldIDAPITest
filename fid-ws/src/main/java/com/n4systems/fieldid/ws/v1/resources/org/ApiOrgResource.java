@@ -26,6 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -76,6 +78,8 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 
 	@Override
 	protected ApiOrg convertEntityToApiModel(BaseOrg baseOrg) {
+		Instant b = Instant.now();
+
 		ApiOrg apiOrg = new ApiOrg();
 		apiOrg.setSid(baseOrg.getId());
 		apiOrg.setModified(baseOrg.getModified());
@@ -112,6 +116,10 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 		apiOrg.setSchedules(savedPlaceEventResource.findAllOpenEvents(baseOrg));
 		apiOrg.setAssetCount(assetService.getAssetCountByOrg(baseOrg.getId()));
 		apiOrg.setOfflineAssetCount(assetService.getOfflineAssetCountByOrg(baseOrg.getId()));
+
+		Instant a = Instant.now();
+
+		logger.info("Convert Org: " + baseOrg.getId() + " " + baseOrg.getName() + " - " + Duration.between(b, a).toMillis());
 
 		return apiOrg;
 	}
