@@ -1,7 +1,5 @@
 package com.n4systems.fieldid.ws.v1.resources;
 
-import java.time.Duration;
-import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +12,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,9 +25,6 @@ import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 @Component
 public abstract class SetupDataResource<A, E extends AbstractEntity> extends ApiResource<A, E> {
-
-	private static Logger logger = Logger.getLogger(SetupDataResource.class);
-
 	private final Class<E> entityClass;
 	private final boolean allowArchived;
 	
@@ -72,22 +66,11 @@ public abstract class SetupDataResource<A, E extends AbstractEntity> extends Api
 	}
 
 	protected ListResponse<A> getApiPage(DateParam after, int page, int pageSize) {
-		logger.info(entityClass.getName());
 		QueryBuilder<E> builder = createFindAllBuilder(after);
-		Instant b = Instant.now();
 		List<E> entityModels = persistenceService.findAll(builder, page, pageSize);
-		Instant a = Instant.now();
-		logger.info("List Query: " + Duration.between(b,a).toMillis());
-
-		Instant b1 = Instant.now();
 		Long total = persistenceService.count(builder);
-		Instant a1 = Instant.now();
-		logger.info("Count Query: " + Duration.between(b1,a1).toMillis());
 
-		Instant b2 = Instant.now();
 		List<A> apiModels = convertAllEntitiesToApiModels(entityModels);
-		Instant a2 = Instant.now();
-		logger.info("Convert Entities: " + Duration.between(b2,a2).toMillis());
 		return new ListResponse<A>(apiModels, page, pageSize, total);
 	}
 

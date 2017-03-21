@@ -26,8 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -78,8 +76,6 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 
 	@Override
 	protected ApiOrg convertEntityToApiModel(BaseOrg baseOrg) {
-		Instant b = Instant.now();
-
 		ApiOrg apiOrg = new ApiOrg();
 		apiOrg.setSid(baseOrg.getId());
 		apiOrg.setModified(baseOrg.getModified());
@@ -111,19 +107,11 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 		convertContactInformation(apiOrg, baseOrg);
 
         apiOrg.setEventHistory(eventHistoryResource.findAllEventHistory(baseOrg.getId()));
-		logger.info("Event History: " + Duration.between(b, Instant.now()).toMillis());
         apiOrg.setEventTypes(baseOrg.getEventTypes().stream().map(eventTypeResource::convertToApiPlaceEvent).collect(Collectors.toList()));
-		logger.info("Place Event Type : " + Duration.between(b, Instant.now()).toMillis());
         apiOrg.setEvents(savedPlaceEventResource.findLastEventOfEachType(baseOrg.getId()));
-		logger.info("Place Event: " + Duration.between(b, Instant.now()).toMillis());
 		apiOrg.setSchedules(savedPlaceEventResource.findAllOpenEvents(baseOrg));
-		logger.info("Place Event Schedule: " + Duration.between(b, Instant.now()).toMillis());
 		apiOrg.setAssetCount(assetService.getAssetCountByOrg(baseOrg.getId()));
-		logger.info("Asset Count: " + Duration.between(b, Instant.now()).toMillis());
 		apiOrg.setOfflineAssetCount(assetService.getOfflineAssetCountByOrg(baseOrg.getId()));
-		logger.info("Offline Asset Count: " + Duration.between(b, Instant.now()).toMillis());
-
-		logger.info("Convert Org: " + baseOrg.getId() + " " + baseOrg.getName() + " - " + Duration.between(b, Instant.now()).toMillis());
 
 		return apiOrg;
 	}

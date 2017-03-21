@@ -4,13 +4,10 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.parents.EntityWithTenant;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,8 +22,7 @@ public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPe
 	protected abstract A convertEntityToApiModel(E entityModel);
 
 	protected List<A> convertAllEntitiesToApiModels(List<E> entityModels) {
-		List<A> list = entityModels.stream().map(this::convertEntityToApiModel).collect(Collectors.toList());
-        return list;
+		return entityModels.stream().map(this::convertEntityToApiModel).collect(Collectors.toList());
 	}
 
     protected <T extends EntityWithTenant> T findEntity(Class<T> entityClass, Long id) {
