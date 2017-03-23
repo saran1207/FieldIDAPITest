@@ -838,7 +838,7 @@ public class AssetService extends CrudService<Asset> {
     }
 
     @Transactional
-    public Asset archive(Asset asset, User archivedBy) throws UsedOnMasterEventException {
+    public Asset archive(Asset asset) throws UsedOnMasterEventException {
         asset = persistenceService.reattach(asset);
         asset = fillInSubAssetsOnAsset(asset);
         if (!testArchive(asset).validToDelete()) {
@@ -852,44 +852,23 @@ public class AssetService extends CrudService<Asset> {
             asset.getSubAssets().clear();
         }
 
-        //FIXME Instead of reading the Master Asset to figure out if the Asset in question is a SubAsset, we should do things differently:
-        // - Try to read a SubAsset which references the Asset in question as the SubAsset in the relationship
-        // - If the SubAsset exists, delete it with persistenceService.remove(...)
-        // - Continue with normal operations from here
-
-        //TODO Better make sure that we don't actually need to update the MasterAsset... I'm pretty sure we don't
-
-        deleteSubAsset(asset);
-
         asset.archiveEntity();
         asset.archiveIdentifier();
 
         archiveEvents(asset);
         detachFromProjects(asset);
+        
+        removeFromOfflineProfiles(asset);
 
         archiveProcedures(asset);
         archiveProcedureAudits(asset);
 
-        return save(asset);//, archivedBy);
+        return save(asset);
     }
 
-    /**
-     * Find any delete any SubAssets which reference this Asset as the "Sub" portion of the SubAsset.  There should
-     * only be one... but you never know if the user has some messed up data.
-     *
-     * @param asset - The Asset for which you want to demolish any SubAsset relationships of which it is the "asset."
-     */
-    private void deleteSubAsset(Asset asset) {
-        QueryBuilder<SubAsset> query = new QueryBuilder<>(SubAsset.class, new OpenSecurityFilter());
-        query.addSimpleWhere("asset", asset);
-
-        List<SubAsset> subAssets = persistenceService.findAll(query);
-
-        if(subAssets != null && !subAssets.isEmpty()) {
-            for(SubAsset subAsset : subAssets) {
-                persistenceService.delete(subAsset);
-            }
-        }
+    private void removeFromOfflineProfiles(Asset asset) {
+        String queryString = "DELETE FROM offline_profiles_assets WHERE assets = '" + asset.getMobileGUID() + "'";
+        getEntityManager().createNativeQuery(queryString).executeUpdate();
     }
 
     private void archiveProcedureAudits(Asset asset) {

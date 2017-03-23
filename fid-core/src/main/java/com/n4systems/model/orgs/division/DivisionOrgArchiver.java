@@ -16,6 +16,7 @@ import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.loaders.LoaderFactory;
 
+@Deprecated
 public class DivisionOrgArchiver {
 	
 	private static final Logger logger = Logger.getLogger(DivisionOrgArchiver.class);

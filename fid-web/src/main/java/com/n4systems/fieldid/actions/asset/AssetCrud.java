@@ -661,7 +661,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	public String doDelete() {
 		testExistingAsset();
 		try {
-            assetService.archive(asset, fetchCurrentUser());
+            assetService.archive(asset);
 			addFlashMessageText("message.assetdeleted");
 			return SUCCESS;
 		} catch (UsedOnMasterEventException e) {

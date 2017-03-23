@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 
 import java.util.List;
 
+@Deprecated
 public class CustomerOrgArchiver {
 
 	private static final Logger logger = Logger.getLogger(CustomerOrgArchiver.class);
