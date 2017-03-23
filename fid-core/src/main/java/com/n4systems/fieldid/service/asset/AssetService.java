@@ -1047,21 +1047,9 @@ public class AssetService extends CrudService<Asset> {
 
         if(org == null || userProfile == null) return null;
 
-        Long assetCount = 0L;
+        List<Asset> offlineAssets = findByMobileId(Lists.newArrayList(userProfile.getAssets()));
 
-        for(String mobileId : userProfile.getAssets()) {
-            if(isMobileAssetOffline(mobileId, org)) assetCount++;
-        }
-
-        return assetCount;
-    }
-
-    private boolean isMobileAssetOffline(String mobileId, BaseOrg org) {
-        QueryBuilder<Asset> query = createUserSecurityBuilder(Asset.class)
-                .addSimpleWhere("owner", org)
-                .addSimpleWhere("mobileGUID", mobileId);
-
-        return persistenceService.exists(query);
+        return offlineAssets.stream().filter(asset -> asset.getOwner().getId() == orgId).count();
     }
 
     public List<String> getAssetMobileGUIDsByOrg(Long orgId) {
