@@ -8,11 +8,7 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.PlaceEvent;
 import com.n4systems.model.PlaceEventType;
 import com.n4systems.model.WorkflowState;
-import com.n4systems.model.api.Archivable;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.orgs.CustomerOrg;
-import com.n4systems.model.orgs.DivisionOrg;
-import com.n4systems.model.orgs.PrimaryOrgChildren;
+import com.n4systems.model.orgs.*;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserQueryHelper;
 import com.n4systems.security.UserType;
@@ -30,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Transactional
 public class PlaceService extends FieldIdPersistenceService {
@@ -95,7 +92,7 @@ public class PlaceService extends FieldIdPersistenceService {
             query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "workflowStatesList", "workflowState", workflowStates));
         }
 
-        return persistenceService.findAllPaginated(query,first,count);
+        return persistenceService.findAllPaginated(query, first, count);
     }
 
     @Deprecated
@@ -121,7 +118,7 @@ public class PlaceService extends FieldIdPersistenceService {
         QueryBuilder<PlaceEvent> query = createUserSecurityBuilder(PlaceEvent.class);
         query.addSimpleWhere("place",org);
         query.setOrder("dueDate",true);
-        query.addSimpleWhere("workflowState",WorkflowState.OPEN);
+        query.addSimpleWhere("workflowState", WorkflowState.OPEN);
         return persistenceService.findAll(query);
     }
 
@@ -134,13 +131,36 @@ public class PlaceService extends FieldIdPersistenceService {
     }
 
     public void archive(BaseOrg org) {
-        Preconditions.checkArgument(org instanceof CustomerOrg || org instanceof BaseOrg);
         Set<BaseOrg> orgsToUpdate = archiveOrgs(org);
         persistenceService.update(Lists.newArrayList(orgsToUpdate));
+        removeOrgsFromOfflineProfiles(orgsToUpdate);
+    }
+
+    private void removeOrgsFromOfflineProfiles(Set<BaseOrg> orgsToUpdate) {
+       String orgIdList = orgsToUpdate.stream().filter(org -> !org.isPrimary()).map(org -> String.valueOf(org.getId())).collect(Collectors.joining(", "));
+
+       String queryString = "DELETE FROM offline_profiles_orgs WHERE organizations IN (" + orgIdList + ")";
+
+       getEntityManager().createNativeQuery(queryString).executeUpdate();
+    }
+
+    public void unarchive(BaseOrg org) {
+        org.activateEntity();
+        persistenceService.update(org);
     }
 
     private Set<BaseOrg> archiveOrgs(BaseOrg... orgs) {
-        return archiveOrgs(new HashSet<BaseOrg>(), Lists.newArrayList(orgs));
+        Set<BaseOrg> orgsToUpdate = archiveOrgs(new HashSet<BaseOrg>(), Lists.newArrayList(orgs));
+        //We need to update the modifed on the parent so that mobile will know to sync down the changes.
+        for (BaseOrg org:orgs) {
+            BaseOrg parent = org.getParent();
+            if (parent != null) {
+                parent.touch();
+                orgsToUpdate.add(parent);
+            }
+        }
+
+        return orgsToUpdate;
     }
 
     private Set<BaseOrg> archiveOrgs(Set<BaseOrg> orgsToUpdate, List<? extends BaseOrg> orgs) {
@@ -151,21 +171,20 @@ public class PlaceService extends FieldIdPersistenceService {
             }
             persistenceService.update(users);
 
-            archiveOrgs(orgsToUpdate,getChildOrgs(org));
+            archiveOrgs(orgsToUpdate, getChildOrgs(org));
 
-            BaseOrg parent = org.getParent();
-            if (parent!=null) {
-                parent.touch();
-                orgsToUpdate.add(parent);
-            }
-            org.setState(Archivable.EntityState.ARCHIVED);
+            org.archiveEntity();
             orgsToUpdate.add(org);
         }
         return orgsToUpdate;
     }
 
     private List<? extends BaseOrg> getChildOrgs(BaseOrg org) {
-        if (org instanceof CustomerOrg) {
+        if (org instanceof SecondaryOrg) {
+            QueryBuilder<CustomerOrg> builder = createUserSecurityBuilder(CustomerOrg.class);
+            builder.addSimpleWhere("parent.id", org.getId());
+            return persistenceService.findAll(builder);
+        } else if (org instanceof CustomerOrg) {
             QueryBuilder<DivisionOrg> builder = createUserSecurityBuilder(DivisionOrg.class);
             builder.addSimpleWhere("parent.id", org.getId());
             return persistenceService.findAll(builder);

@@ -308,6 +308,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
                     return new FIDLabelModel("message.locationpicker_watermark").getObject();
                 }
             }.withLocations();
+            locationPicker.setVisible(FieldIDSession.get().getSecurityGuard().isAdvancedLocationEnabled());
             add(locationPicker);
 
             //Freeform Location
@@ -611,6 +612,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             }
 
             Asset newAsset = assetSaveService.create(assetToCreate, attachments, assetImageBytes, clientFileName);
+            assetSaveService.createAssetHistory(newAsset);
             createdAssetIds.add(newAsset.getId());
             saveSchedulesForAsset(newAsset);
         }

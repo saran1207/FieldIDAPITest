@@ -328,7 +328,7 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDTemplatePag
         }.withAutoUpdate();
 
         ownerPicker.setEnabled(!assetOwnerUpdate);
-        ownerPicker.setIconVisible(!assetOwnerUpdate);
+        ownerPicker.setSearchIconVisible(!assetOwnerUpdate);
         ownerPicker.setTextEnabled(!assetOwnerUpdate);
         ownerPicker.setEmptyString();
         ownerPicker.setOutputMarkupId(true);
@@ -339,7 +339,7 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDTemplatePag
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 ownerPicker.setEnabled(!assetOwnerUpdate);
-                ownerPicker.setIconVisible(!assetOwnerUpdate);
+                ownerPicker.setSearchIconVisible(!assetOwnerUpdate);
                 ownerPicker.setTextEnabled(!assetOwnerUpdate);
                 if(assetOwnerUpdate) {
                     ownerPicker.setEmptyString();
@@ -363,7 +363,7 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDTemplatePag
             }
         }.withLocations();
         locationPicker.setEnabled(!locationUpdate);
-        locationPicker.setIconVisible(!locationUpdate);
+        locationPicker.setSearchIconVisible(!locationUpdate);
         locationPicker.setTextEnabled(!locationUpdate);
         locationPicker.setOutputMarkupId(true);
         ownerSection.add(locationPicker);
@@ -377,7 +377,7 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDTemplatePag
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 locationPicker.setEnabled(!locationUpdate);
-                locationPicker.setIconVisible(!locationUpdate);
+                locationPicker.setSearchIconVisible(!locationUpdate);
                 locationPicker.setTextEnabled(!locationUpdate);
                 freeformLocation.setEnabled(!locationUpdate);
                 target.add(locationPicker, freeformLocation);

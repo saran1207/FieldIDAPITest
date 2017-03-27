@@ -96,12 +96,12 @@
                     <div wicket:id="owner"/>
                 </div>
 
-                <div class="control-group">
+                <div class="control-group" wicket:enclosure="location">
                     <label><wicket:message key="label.location"/></label>
                     <div wicket:id="location"/>
                 </div>
                 <div class="control-group">
-                    <label for="freeformLocation" class="label freeFormLabel"><wicket:message key="label.freeform_location"/></label>
+                    <label wicket:for="freeformLocation" class="label freeFormLabel"><wicket:message key="label.freeform_location"/></label>
                     <input wicket:id="freeformLocation" type="text">
                 </div>
 

@@ -31,11 +31,17 @@ public class OwnershipCriteriaPanel<T extends SearchCriteria> extends Panel {
         add(new OrgLocationPicker("owner", ownerModel) {
             @Override
             protected void onChanged(AjaxRequestTarget target) {
-                if(getTextString() != null && getTextString().equals("")) {
+                if(getTextString() == null || getTextString().equals("")) {
+                    ownerModel.setObject(null);
                     locationPicker.setLocationOwner(null);
                 } else {
                     locationPicker.setLocationOwner(getOwner());
                 }
+            }
+
+            @Override
+            protected boolean showClearIcon() {
+                return true;
             }
         }.withAutoUpdate());
 
@@ -46,11 +52,26 @@ public class OwnershipCriteriaPanel<T extends SearchCriteria> extends Panel {
         BaseOrg temp = ownerModel.getObject();
 
         locationPicker = new OrgLocationPicker("location", Model.of(temp), predefinedLocationModel){
+
+            @Override
+            protected void onChanged(AjaxRequestTarget target) {
+                if(getTextString() == null || getTextString().equals("")) {
+                    predefinedLocationModel.setObject(null);
+                }
+            }
+
             @Override
             public String getWatermarkText() {
                 return new FIDLabelModel("message.locationpicker_watermark").getObject();
             }
+
+            @Override
+            protected boolean showClearIcon() {
+                return true;
+            }
+
         }.withLocations();
+        locationPicker.setVisible(FieldIDSession.get().getSecurityGuard().isAdvancedLocationEnabled());
         add(locationPicker);
 
         //Freeform Location

@@ -17,6 +17,8 @@ import org.apache.log4j.Logger;
 
 import java.util.List;
 
+@Deprecated
+//This class uses the legacy service we should be using AssetSaveServiceSpring
 public class AssetSaveService {
 	private static Logger logger = Logger.getLogger(AssetSaveService.class);
 	private final LegacyAsset assetManager;

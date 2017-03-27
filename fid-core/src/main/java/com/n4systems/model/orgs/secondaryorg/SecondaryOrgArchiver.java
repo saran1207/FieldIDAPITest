@@ -16,7 +16,7 @@ import com.n4systems.persistence.loaders.LoaderFactory;
 import org.apache.log4j.Logger;
 
 import java.util.List;
-
+@Deprecated
 public class SecondaryOrgArchiver {
 	
 	private static final Logger logger = Logger.getLogger(SecondaryOrgArchiver.class);

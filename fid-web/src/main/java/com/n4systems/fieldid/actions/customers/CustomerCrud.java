@@ -183,17 +183,12 @@ public class CustomerCrud extends AbstractCrud {
 			return ERROR;
 		}
 
-		// if the address info was created by our loadMemberFields, 
-		// we need to nullify it or it'll screw with the delete process
-		if (customer.getAddressInfo().isNew()) {
-			customer.setAddressInfo(null);
-		}
-
 		try {
-			
-			CustomerOrgArchiver archiver = new CustomerOrgArchiver();
-			archiver.archiveCustomer(customer, saver, new UserSaver(), getLoaderFactory(), getSecurityFilter(), active);
-			
+			if (!active) {
+				placeService.archive(customer);
+			} else {
+				placeService.unarchive(customer);
+			}
 		} catch (Exception e) {
 			logger.error("Failed updating customer", e);
 			addFlashErrorText("error.updatingcustomer");

@@ -182,13 +182,18 @@ ul.floatingDropdown ul li a:visited {
 	border: 1px solid #c7c7c9;
 }
 .form-horizontal.compact .org-location input[type="text"] {
-	width: 183px;
+	width: 163px;
 	border: none;
 }
 .form-horizontal.compact .org-location .entypo-search {
 	margin-left: 0;
 	margin-right: 3px;
 }
+.form-horizontal.compact .org-location .entypo-x {
+	margin-left: 0;
+	margin-right: 0;
+}
+
 .form-horizontal.compact .org-location .tree {
 	right: -1px;
 	*left: auto;

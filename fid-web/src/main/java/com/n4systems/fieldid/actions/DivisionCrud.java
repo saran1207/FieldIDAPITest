@@ -5,14 +5,13 @@ import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.DivisionOrgPaginatedLoader;
 import com.n4systems.model.orgs.OrgSaver;
-import com.n4systems.model.orgs.division.DivisionOrgArchiver;
-import com.n4systems.model.user.UserSaver;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ConfigEntry;
@@ -22,6 +21,7 @@ import com.opensymphony.xwork2.validator.annotations.Validation;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Validation
 @UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_END_USERS})
@@ -34,6 +34,9 @@ public class DivisionCrud extends AbstractCrud {
 	private OrgSaver saver;
 	private Pager<DivisionOrg> page;
 	private Pager<DivisionOrg> archivedPage;
+
+	@Autowired
+	private PlaceService placeService;
 	
 	public DivisionCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -131,16 +134,14 @@ public class DivisionCrud extends AbstractCrud {
 			return ERROR;
 		}
 		
-		// if the address info was created by our loadMemberFields, 
-		// we need to nullify it or it'll screw with the delete process
-		if (division.getAddressInfo() !=null && division.getAddressInfo().isNew()) {
-			division.setAddressInfo(null);
-		}
-		
 		try {
-			DivisionOrgArchiver archiver = new DivisionOrgArchiver();
-			archiver.archiveDivision(division, saver, new UserSaver(), getLoaderFactory(), getSecurityFilter(), active);
-			
+
+			if (!active) {
+				placeService.archive(division);
+			} else {
+				placeService.unarchive(division);
+			}
+
 		} catch (Exception e) {
 			logger.error("Failed updating division", e);
 			addFlashErrorText("error.updatingdivision");

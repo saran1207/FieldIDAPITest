@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import com.n4systems.fieldid.service.org.PlaceService;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import rfid.web.helper.Constants;
 
 import com.n4systems.ejb.PersistenceManager;
@@ -28,11 +30,9 @@ import com.n4systems.model.orgs.SecondaryOrgByNameLoader;
 import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
 import com.n4systems.model.orgs.division.DivisionOrgByCustomerListLoader;
 import com.n4systems.model.orgs.secondaryorg.CustomerOrgByOwnerListLoader;
-import com.n4systems.model.orgs.secondaryorg.SecondaryOrgArchiver;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserByOwnerListLoader;
-import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
@@ -63,6 +63,10 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 	private Country country;
 	private Region region;
 	private OrgSaver saver = new OrgSaver();
+
+	@Autowired
+	private PlaceService placeService;
+
 	
 	public OrganizationalCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -192,16 +196,12 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 			addFlashError("Organizational Units not found");
 			return ERROR;
 		}
-		
-		// if the address info was created by our loadMemberFields, 
-		// we need to nullify it or it'll screw with the delete process
-		if (organization.getAddressInfo().isNew()) {
-			organization.setAddressInfo(null);
-		}
-		
 		try {
-			SecondaryOrgArchiver archiver = new SecondaryOrgArchiver();
-			archiver.archiveSecondaryOrg(organization, saver, new UserSaver(), getLoaderFactory(), getSecurityFilter(), active);
+			if (!active) {
+				placeService.archive(organization);
+			} else {
+				placeService.unarchive(organization);
+			}
         } catch (Exception e) {
 			logger.error("Failed updating customer", e);
 			addFlashErrorText("error.updatingcustomer");

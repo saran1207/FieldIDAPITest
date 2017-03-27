@@ -211,7 +211,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 				Asset asset = assetService.findById(id);
 				if(asset != null) {
 					try {
-						assetService.archive(asset, getCurrentUser());
+						assetService.archive(asset);
 					} catch (UsedOnMasterEventException e) {
 						logger.error("Could not archive Asset with ID " + id + " because of UsedOnMasterEventException");
 						subAssetIds.add(id);
