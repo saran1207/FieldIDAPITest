@@ -13,6 +13,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.DateHelper;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -144,7 +145,8 @@ public class ExportAction extends AbstractAction {
 	
 	private Date getToDate() {
 		try {
-			return StringUtils.isBlank(to) ? new Date(Long.MAX_VALUE) : new SimpleDateFormat(getSessionUser().getDateFormat()).parse(to);
+			return StringUtils.isBlank(to) ? new Date(Long.MAX_VALUE) :
+					DateHelper.getEndOfDay(new SimpleDateFormat(getSessionUser().getDateFormat()).parse(to));
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return new Date(Long.MAX_VALUE);		
@@ -153,7 +155,8 @@ public class ExportAction extends AbstractAction {
 	
 	private Date getFromDate() {
 		try {
-			return StringUtils.isBlank(from) ? new Date(0) : new SimpleDateFormat(getSessionUser().getDateFormat()).parse(from);
+			return StringUtils.isBlank(from) ? new Date(0) :
+					DateHelper.getBeginingOfDay(new SimpleDateFormat(getSessionUser().getDateFormat()).parse(from));
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return new Date(0);		
