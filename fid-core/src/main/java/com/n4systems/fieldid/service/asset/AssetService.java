@@ -1005,11 +1005,15 @@ public class AssetService extends CrudService<Asset> {
     }
 
     public List<Asset> findByMobileId(List<String> mobileIds) {
-        QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
-        builder.addWhere(WhereClauseFactory.create(Comparator.IN, "mobileGUID", mobileIds));
+        if (mobileIds.isEmpty()) {
+            return Lists.newArrayList();
+        } else {
+            QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
+            builder.addWhere(WhereClauseFactory.create(Comparator.IN, "mobileGUID", mobileIds));
 
-        List<Asset> assets = persistenceService.findAll(builder);
-        return assets;
+            List<Asset> assets = persistenceService.findAll(builder);
+            return assets;
+        }
     }
 
     public byte[] loadAssetProfileImage(Asset asset) {
