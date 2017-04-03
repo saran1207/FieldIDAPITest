@@ -42,7 +42,7 @@ public class EventReportMapProducer extends AbsractEventReportMapProducer {
 
 		add("assignedUserName", assignedUserName());
 
-		add("eventOrganizationName", event.getOwner() == null ? "" : event.getOwner().getName());
+		add("eventOrganizationName", event.getOwner().getParent() == null ? "" : event.getOwner().getParent().getDisplayName());
 
 		add("priority", event.getPriority() != null ? event.getPriority().getName() : "");
 		add("assignee", event.getAssignee() != null ? event.getAssignee().getFullName() : "");
