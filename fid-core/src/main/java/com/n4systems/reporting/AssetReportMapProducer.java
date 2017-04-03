@@ -73,7 +73,7 @@ public class AssetReportMapProducer extends ReportMapProducer {
 		add("productImage", assetTypeImagePath(assetType));
         add("assetProfileImage", assetProfileImagePath(asset));
 		add("ownerLogo", getCustomerLogo(asset.getOwner()));
-        add("assetOrganizationName", asset.getOwner() == null ? "" : asset.getOwner().getName());
+        add("assetOrganizationName", asset.getOwner().getParent() == null ? "" : asset.getOwner().getParent().getDisplayName());
         add("latitude", asset.getGpsLocation() != null ? asset.getGpsLocation().getLatitude() : "");
         add("longitude", asset.getGpsLocation() != null ? asset.getGpsLocation().getLongitude() : "");
 
