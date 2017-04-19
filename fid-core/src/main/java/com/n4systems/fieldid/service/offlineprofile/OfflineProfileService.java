@@ -45,4 +45,15 @@ public class OfflineProfileService extends FieldIdPersistenceService {
 	public void update(OfflineProfile profile) {
 		persistenceService.update(profile);
 	}
+
+	@Transactional
+	public void delete(OfflineProfile profile) {
+		//Clear the assets and orgs
+		profile.getAssets().clear();
+		profile.getOrganizations().clear();
+		persistenceService.update(profile);
+
+		//delete the profile
+		persistenceService.delete(profile);
+	}
 }

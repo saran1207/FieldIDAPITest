@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 import static com.n4systems.model.builders.AssetTypeBuilder.anAssetType;
+import static com.n4systems.model.builders.OrgBuilder.aPrimaryOrg;
 import static com.n4systems.model.builders.SubAssetBuilder.aSubAsset;
 
 public class AssetBuilder extends EntityWithOwnerBuilder<Asset> {
@@ -33,7 +34,7 @@ public class AssetBuilder extends EntityWithOwnerBuilder<Asset> {
 	private String nonIntegrationOrderNumber;
 
     public static AssetBuilder anAsset() {
-		return new AssetBuilder(null, null, anAssetType().build(), null, null, new Location(), null, NOT_ASSIGNED, true, null, null, new ArrayList<SubAsset>(), null, null, null);
+		return new AssetBuilder(null, aPrimaryOrg().build(), anAssetType().build(), null, null, new Location(), null, NOT_ASSIGNED, true, null, null, new ArrayList<SubAsset>(), null, null, null);
 	}
 
     public AssetBuilder(){}

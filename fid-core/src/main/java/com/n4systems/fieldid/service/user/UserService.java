@@ -4,11 +4,11 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.fieldid.service.admin.AdminUserService;
+import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.Tenant;
-import com.n4systems.model.admin.AdminUser;
 import com.n4systems.model.api.Archivable;
+import com.n4systems.model.offlineprofile.OfflineProfile;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.ExternalOrgFilter;
 import com.n4systems.model.orgs.InternalOrgFilter;
@@ -47,6 +47,7 @@ public class UserService extends CrudService<User> {
     @Autowired private UserGroupService userGroupService;
     @Autowired private ConfigService configService;
     @Autowired protected AdminUserService adminUserService;
+    @Autowired protected OfflineProfileService offlineProfileService;
 
     public UserService() {
         super(User.class);
@@ -426,6 +427,13 @@ public class UserService extends CrudService<User> {
     }
 
     public void archive(User user) {
+        //Clear their offline profiles, if they exist
+        OfflineProfile profile = offlineProfileService.find(user);
+        if(!profile.equals(null)) {
+            offlineProfileService.delete(profile);
+        }
+
+        //Archive the user
         user.archiveUser();
         persistenceService.update(user);
     }
