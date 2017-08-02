@@ -103,7 +103,7 @@ public class ThingEventSummaryPage extends EventSummaryPage {
 
     @Override
     protected Component createTitleLabel(String labelId) {
-        return new ThingEventHeaderPanel(labelId, assetModel, true);
+        return new ThingEventHeaderPanel(labelId, eventModel, assetModel, true);
     }
 
     @Override
