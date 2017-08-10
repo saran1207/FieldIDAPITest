@@ -1146,7 +1146,13 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     private S3Object getObject(String path) {
-        return getClient().getObject(getBucket(), path);
+        S3Object object = null;
+        try {
+            object = getClient().getObject(getBucket(), path);
+        } catch (Exception e) {
+            logger.error("Downloading this object failed from s3: " + path);
+        }
+        return object;
     }
 
     private ObjectMetadata getObjectMetadata(String path) {
