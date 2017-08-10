@@ -1148,6 +1148,9 @@ public class S3Service extends FieldIdPersistenceService {
     private S3Object getObject(String path) {
         S3Object object = null;
         try {
+            if(path.contains("procedure_definitions")) {
+                logger.info("Downloading procedure definition object from s3: " + path);
+            }
             object = getClient().getObject(getBucket(), path);
         } catch (Exception e) {
             logger.error("Downloading this object failed from s3: " + path);
