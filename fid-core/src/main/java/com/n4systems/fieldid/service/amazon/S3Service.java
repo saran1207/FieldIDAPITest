@@ -1041,8 +1041,12 @@ public class S3Service extends FieldIdPersistenceService {
         InputStream resourceInput = null;
         try {
             S3Object resource = getObject(createResourcePath(tenantId, path, pathArgs));
-            resourceInput = resource.getObjectContent();
-            return IOUtils.toByteArray(resourceInput);
+            if(resource != null) {
+                resourceInput = resource.getObjectContent();
+                return IOUtils.toByteArray(resourceInput);
+            } else {
+                return null;
+            }
         } catch (AmazonS3Exception e) {
             //We should be logging errors when they happen.  Handling things quietly is a bad idea.
             logger.error("Error processing file contents!!", e);
@@ -1146,7 +1150,16 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     private S3Object getObject(String path) {
-        return getClient().getObject(getBucket(), path);
+        S3Object object = null;
+        try {
+            if(path.contains("procedure_definitions")) {
+                logger.info("Downloading procedure definition object from s3: " + path);
+            }
+            object = getClient().getObject(getBucket(), path);
+        } catch (Exception e) {
+            logger.error("Downloading this object failed from s3: " + path);
+        }
+        return object;
     }
 
     private ObjectMetadata getObjectMetadata(String path) {

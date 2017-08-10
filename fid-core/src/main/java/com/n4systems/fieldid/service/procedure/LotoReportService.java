@@ -152,7 +152,7 @@ public class LotoReportService extends FieldIdPersistenceService {
             //the exception we encounter. That effectively makes it so that the end of the method for the happy path is
             //here and the end of the method for the unhappy path is the bottom of the method.
             return;
-        } catch (JRException | IOException e) {
+        } catch (Exception e) {
             //If either of these happen, it was in relation to the actual generation of the report. Again, we should log
             //this, but both of these exceptions basically have the same flavour of Awful and mean more or less the same
             //thing: there was a problem that caused the report not to print.  Maybe we couldn't read the Jasper files,
