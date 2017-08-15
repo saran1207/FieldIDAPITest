@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.masterevent;
 
 import com.n4systems.fieldid.service.event.AssociatedEventTypesService;
+import com.n4systems.fieldid.wicket.behavior.ConfirmBehavior;
 import com.n4systems.fieldid.wicket.behavior.validation.DisableNavigationConfirmationBehavior;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -28,14 +29,28 @@ public class SelectSubEventPanel extends Panel {
             protected void populateItem(ListItem<AssociatedEventType> item) {
                 EventType eventType = item.getModelObject().getEventType();
 
-                item.add(new Link<Void>("selectEventTypeLink") {
+                boolean duplicateSubEvent = false;
+                for(SubEvent subEvent : masterEventModel.getObject().getSubEvents()) {
+                    if (subEvent.getType().getId().equals(eventType.getId()) && subEvent.getAsset().equals(asset)) {
+                        duplicateSubEvent = true;
+                        break;
+                    }
+                }
+
+                Link selectEventTypelink = new Link<Void>("selectEventTypeLink") {
                     @Override
                     public void onClick() {
                         onPerformSubEvent(masterEventModel);
                         setResponsePage(new PerformSubEventPage(masterEventModel, asset.getId(), eventType.getId()));
                     }
-                }.add(new FlatLabel("name", new PropertyModel<String>(eventType, "displayName")))
-                .add(new DisableNavigationConfirmationBehavior()));
+                };
+
+                if (duplicateSubEvent)
+                    selectEventTypelink.add(new ConfirmBehavior(new FIDLabelModel("message.confirm_create_duplicate_sub_event")));
+
+                item.add(selectEventTypelink.add(new FlatLabel("name", new PropertyModel<String>(eventType, "displayName")))
+                        .add(new DisableNavigationConfirmationBehavior()));
+
             }
         });
     }
