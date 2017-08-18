@@ -16,4 +16,13 @@ public interface UIConstants {
 			"'${walkmeURL}'; " +
 			"var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(walkme, s); " +
 			"window._walkmeConfig = {smartLoad:true}; })();";
+
+	public static final String SLAASK_JS_URL = "https://cdn.slaask.com/chat.js";
+	public static final String SLAASK_JS_SCRIPT =
+			"_slaask.identify('${UserName}', {\n" +
+			"email: '${User_Email}',\n" +
+			"plan: 'enterprise'\n" +
+			"});\n" +
+			"_slaask.init('368e32312430d2d2b55f5177bb368f2f');";
+
 }

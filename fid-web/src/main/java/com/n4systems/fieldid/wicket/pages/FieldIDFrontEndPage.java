@@ -470,6 +470,11 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
         response.renderJavaScript(BASE_WALKME_SCRIPT.replace("${walkmeURL}",
                 configService.getConfig().getWeb().getWalkmeUrl()), "WALKME_INTEGRATION");
+
+        response.renderJavaScriptReference(SLAASK_JS_URL);
+        response.renderJavaScript(SLAASK_JS_SCRIPT.replace("${UserName}",
+                getSessionUser().getUserID()).replace("${User_Email}", getSessionUser().getEmailAddress()),
+                null);
     }
 
     protected void renderJqueryJavaScriptReference(IHeaderResponse response) {

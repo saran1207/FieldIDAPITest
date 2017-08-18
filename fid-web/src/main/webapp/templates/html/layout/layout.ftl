@@ -32,5 +32,11 @@
                 </#if>
             </script>
         </footer>
+
+		<script src="${action.getSlaaskJsURL()}"></script>
+		<script>
+			${action.getSlaaskScript()}
+		</script>
+
 	</body>
 </html>
