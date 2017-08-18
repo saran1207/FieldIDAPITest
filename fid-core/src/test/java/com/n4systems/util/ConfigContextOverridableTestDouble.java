@@ -100,6 +100,7 @@ public class ConfigContextOverridableTestDouble extends ConfigService {
 		addConfigurationValue(ConfigEntry.FOOTER_SCRIPT, "");
 		addConfigurationValue(ConfigEntry.STRUTS_HEADER_SCRIPT, "");
 		addConfigurationValue(ConfigEntry.STRUTS_FOOTER_SCRIPT, "");
+		addConfigurationValue(ConfigEntry.WALKME_URL, "https://cdn.walkme.com/users/26c14c64cb82417eb296e56958e4c8c9/test/walkme_26c14c64cb82417eb296e56958e4c8c9_https.js");
 	}
 
 	@Override
