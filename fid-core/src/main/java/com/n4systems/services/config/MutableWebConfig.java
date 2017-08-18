@@ -61,5 +61,8 @@ public class MutableWebConfig extends WebConfig {
 	public void setSafetyNetworkVideoUrl(String safetyNetworkVideoUrl) {
 		this.safetyNetworkVideoUrl = safetyNetworkVideoUrl;
 	}
+	public void setWalkmeUrl(String walkmeUrl) {
+		this.walkmeUrl = walkmeUrl;
+	}
 
 }
