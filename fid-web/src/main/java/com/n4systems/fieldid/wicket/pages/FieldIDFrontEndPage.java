@@ -467,6 +467,9 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         if (headerScript != null && !headerScript.isEmpty()) {
             response.renderOnDomReadyJavaScript(headerScript);
         }
+
+        response.renderJavaScript(BASE_WALKME_SCRIPT.replace("${walkmeURL}",
+                configService.getConfig().getWeb().getWalkmeUrl()), "WALKME_INTEGRATION");
     }
 
     protected void renderJqueryJavaScriptReference(IHeaderResponse response) {
