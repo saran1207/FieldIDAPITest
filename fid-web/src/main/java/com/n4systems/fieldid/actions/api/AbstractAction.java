@@ -669,7 +669,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
         return interpolator.toString();
     }
 
-	public String getWalkmeHeaderJs() {
+	public String getWalkmeJs() {
 		return BASE_WALKME_SCRIPT.replace("${walkmeURL}", configService.getConfig().getWeb().getWalkmeUrl());
 	}
 

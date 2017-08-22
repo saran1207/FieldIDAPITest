@@ -27,10 +27,6 @@
         ${action.getCustomJs()}
     </script>
 
-	<script type="text/javascript" id ="WALKME_INTEGRATION">
-		${action.getWalkmeHeaderJs()}
-	</script>
-
 </head>
 <div id="pageHeader" class="frontPageHeader struts-header">
 
