@@ -157,7 +157,15 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
                         configService.getConfig().getWeb().getWalkmeUrl()) +
                 "</script>";
 
-        add(new Label("footer-js-container", walkmeScript).setEscapeModelStrings(false));
+        String slasskJsInclude = "<script type='text/javascript' src='" + SLAASK_JS_URL + "'></script>";
+        String slaaskJsInlineScript = "<script type='text/javascript'>" +
+                SLAASK_JS_SCRIPT.replace("${UserName}",
+                        getSessionUser().getUserID()).replace("${User_Email}", getSessionUser().getEmailAddress()) +
+                "</script>";
+
+        add(new Label("footer-js-container",
+                walkmeScript + "\n\n" + slasskJsInclude + "\n" + slaaskJsInlineScript).
+                setEscapeModelStrings(false));
 
         add(createHeaderLink("headerLink", "headerLinkLabel"));
         add(createRelogLink());
