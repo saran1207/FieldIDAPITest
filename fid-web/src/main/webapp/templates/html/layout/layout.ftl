@@ -33,10 +33,8 @@
             </script>
         </footer>
 
-		<script src="${action.getSlaaskJsURL()}"></script>
-		<script>
-			${action.getSlaaskScript()}
+        <script type="text/javascript" id ="WALKME_INTEGRATION">
+			${action.getWalkmeJs()}
 		</script>
-
 	</body>
 </html>

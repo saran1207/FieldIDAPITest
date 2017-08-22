@@ -152,6 +152,13 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
             add(new Label("footerScript").setVisible(false));
         }
 
+        String walkmeScript = "<script type='text/javascript' id ='WALKME_INTEGRATION'>" +
+                BASE_WALKME_SCRIPT.replace("${walkmeURL}",
+                        configService.getConfig().getWeb().getWalkmeUrl()) +
+                "</script>";
+
+        add(new Label("footer-js-container", walkmeScript).setEscapeModelStrings(false));
+
         add(createHeaderLink("headerLink", "headerLinkLabel"));
         add(createRelogLink());
     }
@@ -433,14 +440,6 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         if (headerScript != null && !headerScript.isEmpty()) {
             response.renderOnDomReadyJavaScript(headerScript);
         }
-
-        response.renderJavaScript(BASE_WALKME_SCRIPT.replace("${walkmeURL}",
-                configService.getConfig().getWeb().getWalkmeUrl()), "WALKME_INTEGRATION");
-
-        response.renderJavaScriptReference(SLAASK_JS_URL);
-        response.renderJavaScript(SLAASK_JS_SCRIPT.replace("${UserName}",
-                getSessionUser().getUserID()).replace("${User_Email}", getSessionUser().getEmailAddress()),
-                null);
 
     }
 
