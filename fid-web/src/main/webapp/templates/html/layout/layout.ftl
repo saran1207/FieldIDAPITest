@@ -32,5 +32,9 @@
                 </#if>
             </script>
         </footer>
+
+        <script type="text/javascript" id ="WALKME_INTEGRATION">
+			${action.getWalkmeJs()}
+		</script>
 	</body>
 </html>
