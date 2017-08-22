@@ -20,6 +20,7 @@ public class SessionUser implements DateTimeDefinition {
 	private String userID;
 	private String firstName;
 	private String lastName;
+	private String emailAddress;
 	private Byte langID;
 	private Long id;
 	private int permissions;
@@ -49,6 +50,7 @@ public class SessionUser implements DateTimeDefinition {
 		this.userID = user.getUserID();
 		this.firstName = user.getFirstName();
 		this.lastName = user.getLastName();
+		this.emailAddress = user.getEmailAddress();
 		this.id = user.getId();
 		this.fromQuickLogin = true;
 		this.permissions = user.getPermissions();
@@ -83,6 +85,8 @@ public class SessionUser implements DateTimeDefinition {
 	public String getLastName() {
 		return this.lastName;
 	}
+
+	public String getEmailAddress() { return this.emailAddress; }
 
 	public Byte getLangID() {
 		return this.langID;

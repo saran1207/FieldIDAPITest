@@ -36,5 +36,11 @@
         <script type="text/javascript" id ="WALKME_INTEGRATION">
 			${action.getWalkmeJs()}
 		</script>
+
+        <script src="${action.getSlaaskJsURL()}"></script>
+        <script>
+			${action.getSlaaskScript()}
+		</script>
+
 	</body>
 </html>

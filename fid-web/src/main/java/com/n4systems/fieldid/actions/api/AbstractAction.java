@@ -673,6 +673,15 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		return BASE_WALKME_SCRIPT.replace("${walkmeURL}", configService.getConfig().getWeb().getWalkmeUrl());
 	}
 
+	public String getSlaaskJsURL() {
+		return SLAASK_JS_URL;
+	}
+
+	public String getSlaaskScript() {
+		return SLAASK_JS_SCRIPT.replace("${UserName}",
+				getSessionUser().getUserID()).replace("${User_Email}", getSessionUser().getEmailAddress());
+	}
+
     public boolean isMultiLanguage() {
         return getTenant().getSettings().getTranslatedLanguages().size() > 0;
     }
