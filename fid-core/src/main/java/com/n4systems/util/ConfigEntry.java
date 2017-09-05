@@ -95,7 +95,8 @@ public enum ConfigEntry {
 	WEB_TOTAL_INSPECTION_BUTTONS			(r -> r.getLimit().getWebTotalInspectionButtons()),
 	REPORTING_MAX_REPORTS_PER_FILE			(r -> r.getLimit().getReportingMaxReportsPerFile()),
 	REGION									(r -> r.getAws().getRegion()),
-	EVENT_TYPE_EXPORT_LIMIT					(r -> r.getLimit().getEventTypeExportLimit());
+	EVENT_TYPE_EXPORT_LIMIT					(r -> r.getLimit().getEventTypeExportLimit()),
+	WALKME_URL								(r -> r.getWeb().getWalkmeUrl());
 
 
 	private final Function<RootConfig, ?> rootConfigAdapter;

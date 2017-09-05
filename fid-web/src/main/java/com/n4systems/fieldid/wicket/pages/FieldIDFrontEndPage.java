@@ -164,6 +164,21 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             add(new Label("footerScript").setVisible(false));
         }
 
+        String walkmeScript = "<script type='text/javascript' id ='WALKME_INTEGRATION'>" +
+                BASE_WALKME_SCRIPT.replace("${walkmeURL}",
+                        configService.getConfig().getWeb().getWalkmeUrl()) +
+                "</script>";
+
+        String slasskJsInclude = "<script type='text/javascript' src='" + SLAASK_JS_URL + "'></script>";
+        String slaaskJsInlineScript = "<script type='text/javascript'>" +
+                SLAASK_JS_SCRIPT.replace("${UserName}",
+                getSessionUser().getUserID()).replace("${User_Email}", getSessionUser().getEmailAddress()) +
+                "</script>";
+
+        add(new Label("footer-js-container",
+                walkmeScript + "\n\n" + slasskJsInclude + "\n" + slaaskJsInlineScript).
+                setEscapeModelStrings(false));
+
         add(createBackToLink("backToLink", "backToLinkLabel"));
         add(createRelogLink());
     }
@@ -467,6 +482,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         if (headerScript != null && !headerScript.isEmpty()) {
             response.renderOnDomReadyJavaScript(headerScript);
         }
+
     }
 
     protected void renderJqueryJavaScriptReference(IHeaderResponse response) {

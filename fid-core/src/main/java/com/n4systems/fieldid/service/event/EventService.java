@@ -312,7 +312,13 @@ public class EventService extends FieldIdPersistenceService {
 
     private void populateSubEventTransientResults(ThingEvent event) {
         if (event.getThingType().isMaster()) {
-            event.getSubEvents().stream().forEach(subEvent -> new EditExistingEventTransientResultPopulator().populateTransientCriteriaResultsForEvent(subEvent));
+            event.getSubEvents().stream().forEach(subEvent -> {
+                //TODO Subevents without a form lead to a LazyInitializationException in
+                // AbstractEvent.storeTransientCriteriaResults unless we do this since the results collection
+                // doesn't get loaded.
+                subEvent.getResults().size(); // Read the collection in case subevent lacks a form
+                new EditExistingEventTransientResultPopulator().populateTransientCriteriaResultsForEvent(subEvent);
+            });
         }
     }
 

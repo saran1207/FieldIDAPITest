@@ -429,7 +429,7 @@ public class UserService extends CrudService<User> {
     public void archive(User user) {
         //Clear their offline profiles, if they exist
         OfflineProfile profile = offlineProfileService.find(user);
-        if(!profile.equals(null)) {
+        if(profile != null) {
             offlineProfileService.delete(profile);
         }
 
