@@ -349,6 +349,8 @@ public class FieldIDWicketApp extends WebApplication {
 
         mountPage("oops", OopsPage.class);
 
+        mountPage("startEvent", StartEventPage.class);
+
         mountResource("/signature/${eventId}/${criteriaId}", new SignatureResourceReference());
         mountResource("/temporarySignature/${fileId}", new TemporarySignatureResourceReference());
 
