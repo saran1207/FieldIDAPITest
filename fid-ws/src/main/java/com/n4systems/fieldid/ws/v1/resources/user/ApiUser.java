@@ -29,6 +29,9 @@ public class ApiUser extends ApiReadonlyModelWithOwner {
 	private ApiTenant tenant;
 	private String identifier;
 	private List<Long> groupIds;
+	private Long secondaryId;
+	private Long customerId;
+	private Long divisionId;
 	
 	public String getUserId() {
 		return userId;
@@ -209,4 +212,27 @@ public class ApiUser extends ApiReadonlyModelWithOwner {
         return groupIds.get(0);
     }
 
+	public Long getSecondaryId() {
+		return secondaryId;
+	}
+
+	public void setSecondaryId(Long secondaryId) {
+		this.secondaryId = secondaryId;
+	}
+
+	public Long getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(Long customerId) {
+		this.customerId = customerId;
+	}
+
+	public Long getDivisionId() {
+		return divisionId;
+	}
+
+	public void setDivisionId(Long divisionId) {
+		this.divisionId = divisionId;
+	}
 }
