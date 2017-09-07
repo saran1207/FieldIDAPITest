@@ -20,6 +20,7 @@ import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ProcedureSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
+import com.n4systems.fieldid.wicket.pages.event.StartEventPage;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
 import com.n4systems.fieldid.wicket.pages.loto.ProcedureAuditListPage;
 import com.n4systems.fieldid.wicket.pages.loto.ProcedureWaitingApprovalsPage;
@@ -516,7 +517,9 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
             add(new SavedItemsDropdown("savedItemsDropdown"));
 
             // menu bar links: Start Event, Search, Reporting, Places, LOTO, Safety Network, Jobs, Setup
-            add(new WebMarkupContainer("startEventLinkContainer").setVisible(sessionUser.hasAccess("createevent") && inspectionEnabled));
+            BookmarkablePageLink startEventLink = new BookmarkablePageLink<Void>("startEventLinkContainer", StartEventPage.class);
+            startEventLink.setVisible(sessionUser.hasAccess("createevent") && inspectionEnabled);
+            add(startEventLink);
 
             add(new BookmarkablePageLink<Void>("assetSearchLink", SearchPage.class));
 

@@ -1,0 +1,58 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+
+    <div class="eventRow">
+        <div class="eventOption">
+            <div class="optionContent">
+                <div class="heading singleEvent"><h2><wicket:message key="label.perform_event_single_asset"/></h2></div>
+                <p><wicket:message key="label.perform_event_single_asset.full"/></p>
+            </div>
+            <div class="searchAction">
+                <div id="assetSearch">
+                    <form wicket:id="singleAssetSearchForm">
+                        <input type="text" wicket:id="singleAssetSearchText"/>
+                        <input type="submit" wicket:message="value:hbutton.load"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="eventOption">
+            <div class="optionContent">
+                <div class="heading multipleEvents"><h2><wicket:message key="label.multi_event"/></h2></div>
+                <p>
+                    <span wicket:id="label_multi_event.full"/>
+                </p>
+            </div>
+            <div class="eventAction">
+                <button onclick="redirect('/fieldid/w/selectAssets')"><wicket:message key="label.select_your_assets_now"/></button>
+            </div>
+        </div>
+    </div>
+    <div class="eventRow">
+        <div class="eventOption">
+            <div class="optionContent">
+                <div class="heading import"><h2><wicket:message key="label.import"/></h2></div>
+                <p>
+                    <wicket:message key="message.import_events"/>
+                </p>
+            </div>
+            <div class="eventAction">
+                <button onclick="redirect('/fieldid/eventImportExport.action')"><wicket:message key="label.start_now"/></button>
+            </div>
+        </div>
+
+        <div class="eventOption" wicket:id="multipleProofTestsContainer">
+            <div class="optionContent">
+                <div class="heading multipleProofTests"><h2><wicket:message key="label.multi_proof_test"/></h2></div>
+                <p>
+                    <span wicket:id="label_multi_proof_test_event.full"/>
+                </p>
+            </div>
+            <div class="eventAction">
+                <button onclick="redirect('/fieldid/multiProofTest.action')"><wicket:message key="label.start_now"/></button>
+            </div>
+        </div>
+
+    </div>
+</wicket:extend>
+</html>
