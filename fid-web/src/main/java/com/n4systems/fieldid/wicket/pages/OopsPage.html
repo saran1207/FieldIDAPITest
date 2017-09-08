@@ -1,1 +1,16 @@
-Placeholder
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+    <title>Oops!</title>
+
+    <div id="errorContainer" class="errorContainer">
+        <h2 style="text-align: center;"><span wicket:id="errorTitle"></span></h2>
+        <div id="errorList" class="errorList">
+            <span class="errorMessage" wicket:id="messageText"></span>
+        </div>
+        <p>
+            <span wicket:id="helpText"></span>
+        </p>
+        <p wicket:id="homeButton"><wicket:message key="label.return_to"/> <a href="/fieldid/w/dashboard" ><wicket:message key="label.home"/></a></p>
+    </div>
+</wicket:extend>
+</html>

@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.wicket.components.event.criteria.signature.resource.SignatureResourceReference;
 import com.n4systems.fieldid.wicket.components.event.criteria.signature.resource.TemporarySignatureResourceReference;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.OopsPage;
 import com.n4systems.fieldid.wicket.pages.SecretTestPage;
@@ -93,6 +94,7 @@ import com.n4systems.fieldid.wicket.pages.useraccount.UserAccountSearchPage;
 import com.n4systems.fieldid.wicket.pages.useraccount.mobileofflineprofile.MobileOfflineProfilePage;
 import com.n4systems.fieldid.wicket.pages.useraccount.notificationsettings.AddEditNotificationSettingPage;
 import com.n4systems.fieldid.wicket.pages.useraccount.notificationsettings.NotificationSettingsListPage;
+import com.n4systems.fieldid.wicket.pages.OopsPageErrorType;
 import com.n4systems.fieldid.wicket.resources.CacheInSessionLocalizer;
 import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
 import com.n4systems.fieldid.wicket.resources.TenantOverridesResourceLoader;
@@ -392,7 +394,8 @@ public class FieldIDWicketApp extends WebApplication {
                     if (Permissions.hasOneOf(FieldIDSession.get().getSessionUser().getPermissions(), filter.userRequiresOneOf()))
                         return true;
                     else
-                        throw new RestartResponseException(OopsPage.class);
+                        throw new RestartResponseException(OopsPage.class,
+                                PageParametersBuilder.param(OopsPage.PARAM_ERROR_TYPE_KEY, OopsPageErrorType.NEEDS_PERMISSION));
                 }
             }
         });

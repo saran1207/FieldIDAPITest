@@ -108,7 +108,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     public static final String BOTTOM_PANEL_ID="bottomPanel";
 
     @SpringBean
-	private ConfigService configService;
+	protected ConfigService configService;
 
 	@SpringBean
 	private UserLimitService userLimitService;
