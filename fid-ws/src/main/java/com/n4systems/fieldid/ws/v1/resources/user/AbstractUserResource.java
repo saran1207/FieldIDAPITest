@@ -47,6 +47,41 @@ public abstract class AbstractUserResource extends SetupDataResource<ApiUser, Us
 		apiUser.setModified(user.getModified());
 		apiUser.setActive(user.isActive());
 		apiUser.setOwnerId(user.getOwner().getId());
+
+		//Adding new secondary, customer and division id's.
+		if(user.getOwner().isSecondary()) {
+			apiUser.setSecondaryId(user.getOwner().getSecondaryOrg().getID());
+			apiUser.setCustomerId(null);
+			apiUser.setDivisionId(null);
+		} else if(user.getOwner().isCustomer()) {
+			//check if it's a customer under Primary or Secondary
+			if(user.getOwner().getSecondaryOrg() == null) {
+				//it's under Primary
+				apiUser.setSecondaryId(null);
+			} else {
+				//it's under a Secondary
+				apiUser.setSecondaryId(user.getOwner().getSecondaryOrg().getID());
+			}
+			apiUser.setCustomerId(user.getOwner().getCustomerOrg().getID());
+			apiUser.setDivisionId(null);
+		} else if(user.getOwner().isDivision()) {
+			//check if it's a customer under Primary or Secondary
+			if(user.getOwner().getSecondaryOrg() == null) {
+				//it's under Primary
+				apiUser.setSecondaryId(null);
+			} else {
+				//it's under a Secondary
+				apiUser.setSecondaryId(user.getOwner().getSecondaryOrg().getID());
+			}
+			apiUser.setCustomerId(user.getOwner().getCustomerOrg().getID());
+			apiUser.setDivisionId(user.getOwner().getDivisionOrg().getID());
+		} else {
+			//It's Primary
+			apiUser.setSecondaryId(null);
+			apiUser.setCustomerId(null);
+			apiUser.setDivisionId(null);
+		}
+
 		apiUser.setUserId(user.getUserID());
 		apiUser.setName(user.getDisplayName());
 		apiUser.setAuthKey(user.getAuthKey());
