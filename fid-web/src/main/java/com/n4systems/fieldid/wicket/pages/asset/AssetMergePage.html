@@ -1,0 +1,108 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" >
+<wicket:extend>
+    <div id="steps">
+        <div class="step" wicket:id="step1Container">
+            <h2>1. <wicket:message key="label.duplicate_asset"/></h2>
+            <div class="stepContent" wicket:id="step1ToggledContainer">
+                <p class="instructions">
+                    <wicket:message key="instruction.select_duplicate_asset"/>
+                </p>
+                <table class="list">
+                    <tr>
+                        <th><span wicket:id="identifierLabel"/></th>
+                        <th><wicket:message key="label.rfidnumber"/></th>
+                        <th><wicket:message key="label.customername"/></th>
+                        <th><wicket:message key="label.assettype"/></th>
+                        <th><wicket:message key="label.identifieddate"/></th>
+                    </tr>
+                    <tr>
+                        <td><span wicket:id="losingAsset.identifier"/></td>
+                        <td><span wicket:id="losingAsset.rfidNumber"/></td>
+                        <td><span wicket:id="losingAsset.owner.name"/></td>
+                        <td><span wicket:id="losingAsset.type.name"/></td>
+                        <td><span wicket:id="losingAsset.identified"/></td>
+                    </tr>
+                </table>
+                <div class="stepAction">
+                    <input type="submit" wicket:id="step1Button" wicket:message="value:label.confirm_as_losing_asset"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="step stepClosed" wicket:id="step2Container">
+            <h2>2. <wicket:message key="label.select_asset_you_want_to_keep"/></h2>
+
+            <div class="stepContent" wicket:id="step2ToggledContainer">
+                <p class="instructions">
+                    <wicket:message key="instruction.select_asset_you_want_to_keep"/>
+                </p>
+                <div id="assetLookup">
+                    <div id="assetSearch">
+                        <label class="label"><wicket:message key="label.smartsearch"/></label>
+                        <input type="text" name="search">
+                        <input type="submit" name="load" wicket:message="value:hbutton.load"/>
+                    </div>
+                        <div id="results" class="hidden">
+                        </div>
+                </div>
+                <div class="stepAction">
+                    <a href="javascript:void(0);" wicket:id="step2Button"><wicket:message key="label.back_to_step"/> 1</a>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="step stepClosed">
+            <h2>3. <wicket:message key="label.confirm_merger"/></h2>
+
+            <div class="stepContent" id="step3" style="display:none">
+                <p class="instructions">
+                    <wicket:message key="instruction.confirm_merger"/>
+                </p>
+                <table id="mergeSummary" class="list">
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th><wicket:message key="label.assettype"/></th>
+                        <th>${identifierLabel}</th>
+                        <th><wicket:message key="label.rfidnumber"/></th>
+                        <th><wicket:message key="label.reference_number"/></th>
+                        <th><wicket:message key="label.owner"/></th>
+                        <th><wicket:message key="label.assetstatus"/></th>
+                        <th><wicket:message key="label.nextscheduleddate"/></th>
+                    </tr>
+                    <tr>
+                        <td><wicket:message key="label.loser"/></td>
+                        <td>${losingAsset.type.name?html}</td>
+                        <td>${(losingAsset.rfidNumber?html)!}</td>
+                        <td>${(losingAsset.customerRefNumber?html)!}</td>
+                        <td>${losingAsset.identifier?html}</td>
+                        <td>${(losingAsset.owner.name?html)!}</td>
+
+                        <td>${action.formatDate(action.getNextScheduledEventDate(asset.id),false)}</td>
+                    </tr>
+                    <tr id="winningAsset">
+                    </tr>
+                </table>
+
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="helpfulHints">
+        <h3><wicket:message key="label.what_will_be_copied"/></h3>
+        <p><wicket:message key="label.what_will_be_copied.full"/></p>
+
+        <h3><wicket:message key="label.what_will_be_deleted"/></h3>
+        <p><wicket:message key="label.what_will_be_deleted.full"/></p>
+
+        <h3><wicket:message key="label.can_it_be_undone"/></h3>
+        <p><wicket:message key="label.can_it_be_undone.full"/></p>
+
+        <h3><wicket:message key="label.when_will_the_asset_be_merged"/></h3>
+        <p><wicket:message key="label.when_will_the_asset_be_merged.full"/></p>
+    </div>
+
+</wicket:extend>
+</html>
