@@ -1,6 +1,6 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" >
 <wicket:extend>
-    <div id="steps">
+    <div wicket:id="steps" class="steps">
         <div class="step" wicket:id="step1Container">
             <h2>1. <wicket:message key="label.duplicate_asset"/></h2>
             <div class="stepContent" wicket:id="step1ToggledContainer">
@@ -38,24 +38,58 @@
                 </p>
                 <div id="assetLookup">
                     <div id="assetSearch">
-                        <label class="label"><wicket:message key="label.smartsearch"/></label>
-                        <input type="text" name="search">
-                        <input type="submit" name="load" wicket:message="value:hbutton.load"/>
+                        <form method="get" wicket:id="assetSearchForm" class="simpleInputForm">
+                            <label class="label"><wicket:message key="label.smartsearch"/></label>
+                            <input type="text" wicket:id="assetSearchTerm">
+                            <input type="submit" wicket:id="performAssetSearch" wicket:message="value:hbutton.load"/>
+                        </form>
                     </div>
-                        <div id="results" class="hidden">
+                    <div wicket:id="foundSearchResult">
+                        <h2 class="clean" style="margin-top: 5px;" wicket:id="multipleResultsLabel"><wicket:message key="label.found_multiple_assets"/></h2>
+                        <table cellspacing="0" class="list">
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th><wicket:message key="label.assettype"/></th>
+                                <th><span wicket:id="searchIdentifierLabel"></span></th>
+                                <th><wicket:message key="label.rfidnumber"/></th>
+                                <th><wicket:message key="label.reference_number"/></th>
+                                <th><wicket:message key="label.owner"/></th>
+                                <th><wicket:message key="label.assetstatus"/></th>
+                                <th><wicket:message key="label.nextscheduleddate"/></th>
+                            </tr>
+                            <tr wicket:id="result.dataView">
+                                <td class="selectAction"><button wicket:id="selectedWinningAsset" class="assetLink">
+                                    <wicket:message key="label.select"/></button></td>
+                                <td><span wicket:id="result.assetType"></span></td>
+                                <td><span wicket:id="result.identifier"></span></td>
+                                <td><span wicket:id="result.rfidnumber"></span></td>
+                                <td><span wicket:id="result.referenceNumber"></span></td>
+                                <td><span wicket:id="result.owner"></span></td>
+                                <td><span wicket:id="result.assetStatus"></span></td>
+                                <td><span wicket:id="result.nextScheduledDate"></span></td>
+                            </tr>
+                        </table>
+                        <div wicket:id="resultTableNavigator"></div>
+                    </div>
+                    <div wicket:id="notFoundSearchResult">
+                        <div class="emptyList">
+                            <h2><wicket:message key="label.noresults"/></h2>
+                            <p><wicket:message key="message.emptyassetlistoftype"/>
+                            </p>
                         </div>
+                    </div>
                 </div>
                 <div class="stepAction">
-                    <a href="javascript:void(0);" wicket:id="step2Button"><wicket:message key="label.back_to_step"/> 1</a>
+                    <a href="javascript:void(0);" wicket:id="backToStep1Button"><wicket:message key="label.back_to_step"/> 1</a>
                 </div>
             </div>
         </div>
 
 
-        <div class="step stepClosed">
+        <div class="step stepClosed" wicket:id="step3Container">
             <h2>3. <wicket:message key="label.confirm_merger"/></h2>
 
-            <div class="stepContent" id="step3" style="display:none">
+            <div class="stepContent" id="step3" wicket:id="step3ToggledContainer">
                 <p class="instructions">
                     <wicket:message key="instruction.confirm_merger"/>
                 </p>
@@ -63,7 +97,7 @@
                     <tr>
                         <th>&nbsp;</th>
                         <th><wicket:message key="label.assettype"/></th>
-                        <th>${identifierLabel}</th>
+                        <th><span wicket:id="identiferLabel"/></th>
                         <th><wicket:message key="label.rfidnumber"/></th>
                         <th><wicket:message key="label.reference_number"/></th>
                         <th><wicket:message key="label.owner"/></th>
@@ -72,25 +106,40 @@
                     </tr>
                     <tr>
                         <td><wicket:message key="label.loser"/></td>
-                        <td>${losingAsset.type.name?html}</td>
-                        <td>${(losingAsset.rfidNumber?html)!}</td>
-                        <td>${(losingAsset.customerRefNumber?html)!}</td>
-                        <td>${losingAsset.identifier?html}</td>
-                        <td>${(losingAsset.owner.name?html)!}</td>
-
-                        <td>${action.formatDate(action.getNextScheduledEventDate(asset.id),false)}</td>
+                        <td><span wicket:id="confirm.losingAsset.type.name"/></td>
+                        <td><span wicket:id="confirm.losingAsset.identifier"/></td>
+                        <td><span wicket:id="confirm.losingAsset.rfidNumber"/></td>
+                        <td><span wicket:id="confirm.losingAsset.referenceNumber"/></td>
+                        <td><span wicket:id="confirm.losingAsset.owner.name"/></td>
+                        <td><span wicket:id="confirm.losingAsset.assetStatus"/></td>
+                        <td><span wicket:id="confirm.losingAsset.nextScheduledDate"/></td>
                     </tr>
-                    <tr id="winningAsset">
+                    <tr>
+                        <td><wicket:message key="label.winner"/></td>
+                        <td><span wicket:id="confirm.winningAsset.type.name"/></td>
+                        <td><span wicket:id="confirm.winningAsset.identifier"/></td>
+                        <td><span wicket:id="confirm.winningAsset.rfidNumber"/></td>
+                        <td><span wicket:id="confirm.winningAsset.referenceNumber"/></td>
+                        <td><span wicket:id="confirm.winningAsset.owner.name"/></td>
+                        <td><span wicket:id="confirm.winningAsset.assetStatus"/></td>
+                        <td><span wicket:id="confirm.winningAsset.nextScheduledDate"/></td>
                     </tr>
                 </table>
 
-
+                <div class="stepAction">
+                    <input type="submit" wicket:message="value:label.merge" wicket:id="mergeAssets"/>
+                    <a href="javascript:void(0);" wicket:id="backToStep2Button"><wicket:message key="label.back_to_step"/> 2</a>
+                </div>
             </div>
         </div>
-
+        <div id="cancelButton" class="stepAction" >
+            <div align="right">
+                <input type="submit" wicket:message="value:label.cancel_merge" wicket:id="cancelMergeAssetsPage"/>
+            </div>
+        </div>
     </div>
 
-    <div class="helpfulHints">
+    <div class="helpfulHints" wicket:id="hints">
         <h3><wicket:message key="label.what_will_be_copied"/></h3>
         <p><wicket:message key="label.what_will_be_copied.full"/></p>
 
@@ -102,6 +151,21 @@
 
         <h3><wicket:message key="label.when_will_the_asset_be_merged"/></h3>
         <p><wicket:message key="label.when_will_the_asset_be_merged.full"/></p>
+    </div>
+
+
+    <div class="step" wicket:id="completedMessage">
+        <h2><wicket:message key="label.you_are_done"/></h2>
+        <div class="stepContent">
+            <p>
+                <wicket:message key="message.assets_being_merged"/>
+            </p>
+            <p>
+                <wicket:message key="label.go_to_winning_asset_page"/>
+                <a href="javascript:void(0)" wicket:id="goToWinningAssetButton">
+                    <wicket:container wicket:id="goToWinningAssetLabel"/></a>
+            </p>
+        </div>
     </div>
 
 </wicket:extend>
