@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.asset;
 
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.exceptions.MissingEntityException;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.table.StyledAjaxPagingNavigator;
@@ -16,18 +17,17 @@ import com.n4systems.model.Event;
 import com.n4systems.model.eventschedule.NextEventScheduleLoader;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.persistence.loaders.LoaderFactory;
+import com.n4systems.security.Permissions;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.AssetMergeTask;
 import com.n4systems.util.FieldIdDateFormatter;
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -44,7 +44,7 @@ import org.apache.wicket.util.convert.IConverter;
 import java.util.Date;
 import java.util.Locale;
 
-//@UserPermissionFilter(userRequiresOneOf={Permissions.TAG})
+@UserPermissionFilter(userRequiresOneOf={Permissions.TAG})
 public class AssetMergePage extends FieldIDFrontEndPage {
 
     private static final Logger logger = Logger.getLogger(AssetMergePage.class);
@@ -63,10 +63,15 @@ public class AssetMergePage extends FieldIDFrontEndPage {
     private CompoundPropertyModel<Asset> winningAsset;
 
     private WebMarkupContainer stepsContainer;
+
     private WebMarkupContainer step1Container;
     private WebMarkupContainer step1ToggledContainer;
+
     private WebMarkupContainer step2Container;
     private WebMarkupContainer step2ToggledContainer;
+    private AjaxButton assetSearchButton;
+    private TextField assetSearchTerm;
+
     private WebMarkupContainer step3Container;
     private WebMarkupContainer step3ToggledContainer;
 
@@ -97,6 +102,13 @@ public class AssetMergePage extends FieldIDFrontEndPage {
         super.renderHead(response);
         response.renderCSS(".emptyList h2 {color: #333;}", "legacyStyle");
         response.renderCSSReference("style/legacy/steps.css");
+        /* Function to enable/disable the winner asset search button based on the search term field not being empty */
+        response.renderJavaScript("function setAssetSearchButtonStatus(searchTermField) {" +
+                        "var searchButton = document.getElementById('" + assetSearchButton.getMarkupId() + "'); " +
+                        "if (searchTermField.value.length < 1) {" +
+                            "searchButton.setAttribute('disabled','disabled');} " +
+                            "else {searchButton.removeAttribute('disabled');} }",
+                null);
     }
 
     @Override
@@ -201,9 +213,16 @@ public class AssetMergePage extends FieldIDFrontEndPage {
         multipleResultsMsg.setOutputMarkupPlaceholderTag(true);
 
         Form assetSearchForm = new Form("assetSearchForm");
-        TextField assetSearchTerm = new TextField("assetSearchTerm", new Model<String>(""));
+        assetSearchTerm = new TextField("assetSearchTerm", new Model<String>(""));
+        assetSearchTerm.add(new AttributeAppender("onkeyup", new Model("setAssetSearchButtonStatus(this);"), ";"));
+        // onpaste and oncut events are called before the element is updated so a brief pause is added
+        // to wait till after the update is done
+        assetSearchTerm.add(new AttributeAppender("onpaste",
+                new Model("var e = this; setTimeout(function(){setAssetSearchButtonStatus(e);}, 4);"), ";"));
+        assetSearchTerm.add(new AttributeAppender("oncut",
+                new Model("var e = this; setTimeout(function(){setAssetSearchButtonStatus(e);}, 4);"), ";"));
         assetSearchForm.add(assetSearchTerm);
-        AjaxButton assetSearchButton = new AjaxButton("performAssetSearch", assetSearchForm) {
+        assetSearchButton = new AjaxButton("performAssetSearch", assetSearchForm) {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form form) {
                 processAssetSearch(searchDataProvider, foundSearchResult, assetSearchTerm, foundSearchResult,
@@ -213,22 +232,8 @@ public class AssetMergePage extends FieldIDFrontEndPage {
             protected void onError(AjaxRequestTarget target, Form<?> form) {
             }
         };
-        assetSearchButton.setEnabled(false);
         assetSearchForm.add(assetSearchButton);
 
-        assetSearchTerm.add(new OnChangeAjaxBehavior() {
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                boolean enableControl = false;
-                Object modelObject = getComponent().getDefaultModelObject();
-                if (modelObject != null && !modelObject.toString().trim().isEmpty())
-                    enableControl = true;
-                if (assetSearchButton.isEnabled() != enableControl) {
-                    assetSearchButton.setEnabled(enableControl);
-                    target.add(assetSearchButton);
-                }
-            }
-        });
         step2ToggledContainer.add(assetSearchForm);
 
         foundSearchResult.add(multipleResultsMsg);

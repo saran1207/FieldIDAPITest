@@ -1,9 +1,9 @@
 package com.n4systems.fieldid.wicket.components.assetsearch.results;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
+import com.n4systems.fieldid.wicket.pages.asset.AssetMergePage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.event.QuickEventPage;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
@@ -35,7 +35,7 @@ public class AssetActionsCell extends Panel {
         BookmarkablePageLink startEventLink = new BookmarkablePageLink("startEventLink", QuickEventPage.class, PageParametersBuilder.id(rowModel.getObject().getId()));
 
         BookmarkablePageLink editAssetLink = new BookmarkablePageLink<Void>("editAssetLink", IdentifyOrEditAssetPage.class, PageParametersBuilder.id(rowModel.getObject().getId()));
-        NonWicketLink mergeAssetLink = new NonWicketLink("mergeAssetLink", "assetMergeAdd.action?uniqueID="+rowModel.getObject().getId());
+        BookmarkablePageLink mergeAssetLink = new BookmarkablePageLink<Void>("mergeAssetLink", AssetMergePage.class, PageParametersBuilder.uniqueId(rowModel.getObject().getId()));
 
         boolean hasCreateEvent = FieldIDSession.get().getSessionUser().hasAccess("createevent");
         boolean hasTag = FieldIDSession.get().getSessionUser().hasAccess("tag");

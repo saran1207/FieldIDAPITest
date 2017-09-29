@@ -30,6 +30,7 @@ import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.model.user.GroupedVisibleUsersModel;
 import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.asset.AssetMergePage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.event.QuickEventPage;
 import com.n4systems.fieldid.wicket.pages.identify.components.*;
@@ -61,6 +62,7 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -423,7 +425,13 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
                 }
             });
 
-            actionsContainer.add(new NonWicketLink("mergeLink", "assetMergeAdd.action?uniqueID="+assetModel.getObject().getId()).setVisible(!assetModel.getObject().isNew()));
+            actionsContainer.add(new Link("mergeLink") {
+                @Override
+                public void onClick() {
+                    setResponsePage(AssetMergePage.class, PageParametersBuilder.param("uniqueID", assetModel.getObject().getId()));
+                }
+            }.setVisible(!assetModel.getObject().isNew()));
+
             actionsContainer.add(new NonWicketLink("deleteLink", "assetConfirmDelete.action?uniqueID="+assetModel.getObject().getId()).setVisible(!assetModel.getObject().isNew()));
 
             actionsContainer.setOutputMarkupId(true);

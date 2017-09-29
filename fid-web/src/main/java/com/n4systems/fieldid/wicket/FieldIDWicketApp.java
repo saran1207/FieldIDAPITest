@@ -230,7 +230,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("reporting", ReportPage.class);
         mountPage("procedure", ProcedureSearchPage.class);
 
-        mountPage("advancedAssetSearch", AdvancedAssetSearchPage.class);
+        //TODO: Revisit formal deprication process.  This class is not used.
+        //mountPage("advancedAssetSearch", AdvancedAssetSearchPage.class);
         mountPage("advancedEventSearch", AdvancedEventSearchPage.class);
 
         mountPage("procedureDef", ProcedureDefinitionPage.class);

@@ -6,8 +6,8 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.LatentImage;
-import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.asset.AssetMergePage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.event.QuickEventPage;
 import com.n4systems.model.Asset;
@@ -46,7 +46,13 @@ public class AssetDetailsPanel extends SearchItemDetailsPanel {
         });
 
         add(new BookmarkablePageLink("startEventLink", QuickEventPage.class, PageParametersBuilder.id(assetId)).setVisible(hasCreateEvent));
-        add(new NonWicketLink("mergeLink", "assetMergeAdd.action?uniqueID=" + assetId, new AttributeAppender("class", "mattButtonRight")).setVisible(hasEditEvent));
+        add(new Link("mergeLink") {
+            @Override
+            public void onClick() {
+                setResponsePage(AssetMergePage.class, PageParametersBuilder.param("uniqueID", assetId));
+            }
+        }.add(new AttributeAppender("class", "mattButtonRight")).setVisible(hasEditEvent));
+
     }
 
     protected String getIdentifier(SearchResult result) {
