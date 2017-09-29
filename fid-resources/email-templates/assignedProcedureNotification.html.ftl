@@ -167,7 +167,7 @@
         <td>
             <span class="preheader">${subHeadingMessage}</span>
             <div align="center">
-                <img align="center" src="http://ce711d17a6fff7097cbb-77686725d730a71bab41d58d2c98ad28.r84.cf2.rackcdn.com/masterlock-fid-logo3.png" class="logo-height">
+                <img align="center" src="https://s3.amazonaws.com/fieldid_reports/prod/logo-w-www.png" class="logo-height">
             </div>
 
             <table cellpadding="0" cellspacing="0" border="0" align="center" width="600">
@@ -228,7 +228,7 @@
                 </tr>
                 <tr>
                     <td width="60%" height="70" valign="middle" style="padding-bottom:20px;">
-                        <span class="footer-font footer-large">Sent to ${userEmail} by Master Lock Field iD</span>
+                        <span class="footer-font footer-large">Sent to ${userEmail} by eCompliance | Field iD</span>
                         <br/>
                         <span class="footer-font footer-small">111 Queen Street East Suite 240<br>Toronto, Ontario, Canada, M5C 1S6</span>
                         <br/>
