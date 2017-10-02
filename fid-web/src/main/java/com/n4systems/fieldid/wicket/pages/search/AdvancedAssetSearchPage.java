@@ -14,6 +14,7 @@ import org.apache.wicket.model.IModel;
 
 import java.util.Set;
 
+@Deprecated
 public class AdvancedAssetSearchPage extends AdvancedSearchPage {
 
     public AdvancedAssetSearchPage() {
