@@ -71,6 +71,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -541,6 +542,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
             add(createSetupLinkContainer(sessionUser));
 
             add(createSmartSearch("smartSearch"));
+            add(new HiddenField<String>("walkMeUserEmailAddress", Model.of(getSessionUser().getEmailAddress())).setMarkupId("walkMeUserEmailAddress"));
         }
 
         private void addSpeedIdentifyLinks(SessionUser sessionUser) {
