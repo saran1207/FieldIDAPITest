@@ -297,5 +297,5 @@
 		
 	</div>
 
-    <input id="walkmeEmailAddress" type="hidden" value="${sessionUser.getEmailAddress()}"/>
+    <input id="walkMeUserEmailAddress" type="hidden" value="${sessionUser.getEmailAddress()}"/>
 </div>

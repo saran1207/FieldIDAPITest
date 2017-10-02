@@ -542,7 +542,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
             add(createSetupLinkContainer(sessionUser));
 
             add(createSmartSearch("smartSearch"));
-            add(new HiddenField<String>("walkmeEmailAddress", Model.of(getSessionUser().getEmailAddress())).setMarkupId("walkmeEmailAddress"));
+            add(new HiddenField<String>("walkMeUserEmailAddress", Model.of(getSessionUser().getEmailAddress())).setMarkupId("walkMeUserEmailAddress"));
         }
 
         private void addSpeedIdentifyLinks(SessionUser sessionUser) {

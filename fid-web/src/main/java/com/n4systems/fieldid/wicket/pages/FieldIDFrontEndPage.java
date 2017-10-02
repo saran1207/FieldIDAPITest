@@ -649,7 +649,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
             add(createSmartSearch("smartSearch"));
 
-            add(new HiddenField<String>("walkmeEmailAddress", Model.of(getSessionUser().getEmailAddress())).setMarkupId("walkmeEmailAddress"));
+            add(new HiddenField<String>("walkMeUserEmailAddress", Model.of(getSessionUser().getEmailAddress())).setMarkupId("walkMeUserEmailAddress"));
         }
 
 
