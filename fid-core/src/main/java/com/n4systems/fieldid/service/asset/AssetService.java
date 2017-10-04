@@ -537,12 +537,16 @@ public class AssetService extends CrudService<Asset> {
                 "rfidNumber", "rfidNumber", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
         group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ,
                 "customerRefNumber", "customerRefNumber", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
-        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ,
-                "type_id", "type.id", assetTypeId, null, ChainOp.AND));
-        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.NE,
-                "id", "id", excludeAssetId, null, ChainOp.AND));
-
         builder.addWhere(group);
+
+        WhereParameterGroup group2 = new WhereParameterGroup("restrictsearch");
+        group2.setChainOperator(ChainOp.AND);
+        group2.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ,
+                "type_id", "type.id", assetTypeId, null, ChainOp.AND));
+        group2.addClause(WhereClauseFactory.create(WhereParameter.Comparator.NE,
+                "id", "id", excludeAssetId, null, ChainOp.AND));
+        builder.addWhere(group2);
+
         builder.addOrder("type", "created");
 
         return persistenceService.count(builder).intValue();
@@ -567,11 +571,16 @@ public class AssetService extends CrudService<Asset> {
                 "rfidNumber", "rfidNumber", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
         group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ,
                 "customerRefNumber", "customerRefNumber", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
-        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ,
-                "type_id", "type.id", assetTypeId, null, ChainOp.AND));
-        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.NE,
-                "id", "id", excludeAssetId, null, ChainOp.AND));
         builder.addWhere(group);
+
+        WhereParameterGroup group2 = new WhereParameterGroup("restrictsearch");
+        group2.setChainOperator(ChainOp.AND);
+        group2.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ,
+                "type_id", "type.id", assetTypeId, null, ChainOp.AND));
+        group2.addClause(WhereClauseFactory.create(WhereParameter.Comparator.NE,
+                "id", "id", excludeAssetId, null, ChainOp.AND));
+        builder.addWhere(group2);
+
         builder.addOrder("type", "created");
 
         return persistenceService.findAllPaginated(builder, first, pageSize);
