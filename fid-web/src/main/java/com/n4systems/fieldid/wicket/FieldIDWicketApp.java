@@ -1,7 +1,9 @@
 package com.n4systems.fieldid.wicket;
 
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.wicket.components.event.criteria.signature.resource.SignatureResourceReference;
 import com.n4systems.fieldid.wicket.components.event.criteria.signature.resource.TemporarySignatureResourceReference;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.OopsPage;
 import com.n4systems.fieldid.wicket.pages.SecretTestPage;
@@ -15,6 +17,7 @@ import com.n4systems.fieldid.wicket.pages.admin.security.ChangeAdminPasswordPage
 import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.TenantUserListPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
+import com.n4systems.fieldid.wicket.pages.asset.AssetMergePage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.*;
 import com.n4systems.fieldid.wicket.pages.escalationrules.ManageEscalationRules;
@@ -92,13 +95,16 @@ import com.n4systems.fieldid.wicket.pages.useraccount.UserAccountSearchPage;
 import com.n4systems.fieldid.wicket.pages.useraccount.mobileofflineprofile.MobileOfflineProfilePage;
 import com.n4systems.fieldid.wicket.pages.useraccount.notificationsettings.AddEditNotificationSettingPage;
 import com.n4systems.fieldid.wicket.pages.useraccount.notificationsettings.NotificationSettingsListPage;
+import com.n4systems.fieldid.wicket.pages.OopsPageErrorType;
 import com.n4systems.fieldid.wicket.resources.CacheInSessionLocalizer;
 import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
 import com.n4systems.fieldid.wicket.resources.TenantOverridesResourceLoader;
 import com.n4systems.fieldid.wicket.util.PagePerformanceListener;
 import com.n4systems.fieldid.wicket.util.PlainDateConverter;
 import com.n4systems.model.utils.PlainDate;
+import com.n4systems.security.Permissions;
 import org.apache.wicket.*;
+import org.apache.wicket.authorization.strategies.page.AbstractPageAuthorizationStrategy;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
@@ -224,7 +230,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("reporting", ReportPage.class);
         mountPage("procedure", ProcedureSearchPage.class);
 
-        mountPage("advancedAssetSearch", AdvancedAssetSearchPage.class);
+        //TODO: Revisit formal deprication process.  This class is not used.
+        //mountPage("advancedAssetSearch", AdvancedAssetSearchPage.class);
         mountPage("advancedEventSearch", AdvancedEventSearchPage.class);
 
         mountPage("procedureDef", ProcedureDefinitionPage.class);
@@ -349,6 +356,10 @@ public class FieldIDWicketApp extends WebApplication {
 
         mountPage("oops", OopsPage.class);
 
+        mountPage("startEventAssetSearch", StartEventPage.class);
+
+        mountPage("AssetMerge", AssetMergePage.class);
+
         mountResource("/signature/${eventId}/${criteriaId}", new SignatureResourceReference());
         mountResource("/temporarySignature/${fileId}", new TemporarySignatureResourceReference());
 
@@ -376,6 +387,22 @@ public class FieldIDWicketApp extends WebApplication {
 
         getResourceSettings().setCachingStrategy(new QueryStringWithVersionResourceCachingStrategy(new MessageDigestResourceVersion()));
 
+        getSecuritySettings().setAuthorizationStrategy(new AbstractPageAuthorizationStrategy() {
+            @Override
+            protected <T extends Page> boolean isPageAuthorized(Class<T> pageClass) {
+
+                UserPermissionFilter filter = pageClass.getAnnotation(UserPermissionFilter.class);
+                if (filter == null || filter.open())
+                    return true;
+                else {
+                    if (Permissions.hasOneOf(FieldIDSession.get().getSessionUser().getPermissions(), filter.userRequiresOneOf()))
+                        return true;
+                    else
+                        throw new RestartResponseException(OopsPage.class,
+                                PageParametersBuilder.param(OopsPage.PARAM_ERROR_TYPE_KEY, OopsPageErrorType.NEEDS_PERMISSION));
+                }
+            }
+        });
     }
 
     private String getTemplateFolder() {

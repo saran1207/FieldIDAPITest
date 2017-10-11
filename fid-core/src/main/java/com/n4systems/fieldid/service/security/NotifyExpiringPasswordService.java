@@ -83,7 +83,7 @@ public class NotifyExpiringPasswordService extends FieldIdPersistenceService {
     }
 
     private TemplateMailMessage createMailMessage() {
-        String subject = "Master Lock FieldiD - Password Expiry Notice";
+        String subject = "eCompliance | FieldiD - Password Expiry Notice";
         TemplateMailMessage msg = new TemplateMailMessage(subject, NOTIFY_EXPIRING_PASSWORD_TEMPLATE);
         msg.setSubject(subject);
         return msg;
