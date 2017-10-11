@@ -82,7 +82,7 @@
             <div>
                 <p><span wicket:id="versionLabel"></span></p>
             </div>
-            <div class="poweredBy"><a href="http://www.fieldid.com/" target="_blank"><img src="/fieldid/img/powered-by-fieldid.png" border="0"/></a></div>	</div>
+            <div class="poweredBy"><a href="http://www.fieldid.com/" target="_blank"><img src="/fieldid/img/powered-by-fieldid.gif" border="0"/></a></div>	</div>
         </div>
 
 		<div class="loginLinkSection" style="display:none;">
@@ -150,8 +150,8 @@
                                 </a>
                             </li>
 
-                            <li wicket:id="startEventLinkContainer">
-                                <a href="/fieldid/startEvent.action" class="speedLink textLink" id="menuEvent"><wicket:message key="speed.event"/></a>
+                            <li >
+                                <a wicket:id="startEventLinkContainer" class="speedLink textLink" id="menuEvent"><wicket:message key="speed.event"/></a>
                             </li>
                             <li>
                                 <a wicket:id="assetSearchLink" class="speedLink textLink" id="menuAssets"><wicket:message key="speed.search"/></a>
@@ -286,6 +286,7 @@
             </div>
         </div>
         <div id="headerPadding"></div>
+        <input wicket:id="walkMeUserEmailAddress" type="hidden"/>
     </wicket:fragment>
 
 

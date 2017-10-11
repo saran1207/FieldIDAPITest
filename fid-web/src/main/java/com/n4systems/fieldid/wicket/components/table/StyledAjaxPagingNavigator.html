@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<html xmlns:wicket="http://wicket.apache.org">
+<body>
+<wicket:panel>
+    <div class="paginationWrapper">
+        <ul class="pagination">
+            <li><a wicket:id="first" class="first hideablePaginationLink">First</a></li>
+            <li><a wicket:id="prev" class="prev hideablePaginationLink">&lt;Prev</a></li>
+            <li wicket:id="navigation">
+                <a wicket:id="pageLink" href="#"><label wicket:id="pageNumber">5</label></a>
+            </li>
+            <li><a wicket:id="next" class="next hideablePaginationLink">Next&gt;</a></li>
+            <li><a wicket:id="last" class="last hideablePaginationLink">Last</a></li>
+            <li><span><wicket:message key="label.goto_page"/></span></li>
+            <li><input wicket:id="currentPageNumber" type="text" size="3" class="gotoPage"/></li>
+            <li><span><wicket:message key="label.of_pages"/></span></li>
+        </ul>
+    </div>
+</wicket:panel>
+</body>
+</html>

@@ -73,7 +73,7 @@
 	<footer class="footer-global">
 		<div class="content-wrap">
             <span wicket:id="versionLabel"></span>
-			<img src="/fieldid/img/powered-by-fieldid.png" alt="powered by Field ID">
+			<img src="/fieldid/img/powered-by-fieldid.gif" alt="powered by Field ID">
 		</div>
         <script wicket:id="footerScript"></script>
 	</footer>
@@ -129,8 +129,8 @@
                 <li wicket:id="identifyMenuContainer">
                     <a wicket:id="identifyLink"><wicket:message key="speed.identify"/></a>
                 </li>
-                <li wicket:id="startEventLinkContainer">
-                    <a href="/fieldid/startEvent.action"><wicket:message key="speed.event"/></a>
+                <li >
+                    <a wicket:id="startEventLinkContainer" class="speedLink textLink" id="menuEvent"><wicket:message key="speed.event"/></a>
                 </li>
                 <li>
                     <a wicket:id="assetSearchLink"><wicket:message key="speed.search"/></a>
@@ -260,6 +260,7 @@
             </div>
         </div><!-- /.content-wrap -->
     </nav><!-- /.nav-main -->
+    <input wicket:id="walkMeUserEmailAddress" type="hidden"/>
 </wicket:fragment>
 </html>
 

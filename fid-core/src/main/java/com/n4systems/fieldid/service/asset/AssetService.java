@@ -519,6 +519,73 @@ public class AssetService extends CrudService<Asset> {
 
     }
 
+    public int findExactAssetSizeByIdentifierSmartSearchAndAssetType(String searchValue, Long assetTypeId, Long excludeAssetId) {
+        return findExactAssetSizeByIdentifierSmartSearchAndAssetType(
+                searchValue, assetTypeId, excludeAssetId, securityContext.getUserSecurityFilter());
+    }
+
+    public int findExactAssetSizeByIdentifierSmartSearchAndAssetType(
+            String searchValue, Long assetTypeId, Long excludeAssetId, UserSecurityFilter filter) {
+
+        QueryBuilder<Asset> builder = new QueryBuilder<>(Asset.class, filter);
+
+        //TODO Can probably drop that "IGNORE_CASE" crap... the DB always ignores case... that's part of the config.
+        WhereParameterGroup group = new WhereParameterGroup("smartsearch");
+        group.addClause(WhereClauseFactory.create(Comparator.EQ,
+                "identifier", "identifier", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
+        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ,
+                "rfidNumber", "rfidNumber", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
+        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ,
+                "customerRefNumber", "customerRefNumber", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
+        builder.addWhere(group);
+
+        WhereParameterGroup group2 = new WhereParameterGroup("restrictsearch");
+        group2.setChainOperator(ChainOp.AND);
+        group2.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ,
+                "type_id", "type.id", assetTypeId, null, ChainOp.AND));
+        group2.addClause(WhereClauseFactory.create(WhereParameter.Comparator.NE,
+                "id", "id", excludeAssetId, null, ChainOp.AND));
+        builder.addWhere(group2);
+
+        builder.addOrder("type", "created");
+
+        return persistenceService.count(builder).intValue();
+    }
+
+    public List<Asset> findExactAssetByIdentifierSmartSearchAndAssetType(
+            String searchValue, Long assetTypeId, Long excludeAssetId, int first, int pageSize) {
+        return findExactAssetByIdentifierSmartSearchAndAssetType(
+                searchValue, assetTypeId, excludeAssetId, first, pageSize, securityContext.getUserSecurityFilter());
+    }
+
+    private List<Asset> findExactAssetByIdentifierSmartSearchAndAssetType(
+            String searchValue, Long assetTypeId, Long excludeAssetId, int first, int pageSize, UserSecurityFilter filter) {
+
+        QueryBuilder<Asset> builder = new QueryBuilder<>(Asset.class, filter);
+
+        //TODO Can probably drop that "IGNORE_CASE" crap... the DB always ignores case... that's part of the config.
+        WhereParameterGroup group = new WhereParameterGroup("smartsearch");
+        group.addClause(WhereClauseFactory.create(Comparator.EQ,
+                "identifier", "identifier", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
+        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ,
+                "rfidNumber", "rfidNumber", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
+        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ,
+                "customerRefNumber", "customerRefNumber", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
+        builder.addWhere(group);
+
+        WhereParameterGroup group2 = new WhereParameterGroup("restrictsearch");
+        group2.setChainOperator(ChainOp.AND);
+        group2.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ,
+                "type_id", "type.id", assetTypeId, null, ChainOp.AND));
+        group2.addClause(WhereClauseFactory.create(WhereParameter.Comparator.NE,
+                "id", "id", excludeAssetId, null, ChainOp.AND));
+        builder.addWhere(group2);
+
+        builder.addOrder("type", "created");
+
+        return persistenceService.findAllPaginated(builder, first, pageSize);
+    }
+
     private void moveRfidFromAssets(Asset asset/*, User modifiedBy*/) {
 //        AssetSaver saver = new AssetSaver();
 //        saver.setModifiedBy(modifiedBy);

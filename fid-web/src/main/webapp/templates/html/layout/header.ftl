@@ -97,7 +97,7 @@
 					
 					<#if sessionUser.hasAccess("createevent") && sessionUser.tenant.settings.isInspectionsEnabled()>
 						<li>
-							<a href="<@s.url action="startEvent" namespace="/"/>" class="speedLink textLink" id="menuEvent"><@s.text name="speed.event"/></a>
+							<a href="/fieldid/w/startEventAssetSearch" class="speedLink textLink" id="menuEvent"><@s.text name="speed.event"/></a>
 						</li>
 					</#if>
 
@@ -296,5 +296,6 @@
 		</div>
 		
 	</div>
-	
+
+    <input id="walkMeUserEmailAddress" type="hidden" value="${sessionUser.getEmailAddress()}"/>
 </div>
