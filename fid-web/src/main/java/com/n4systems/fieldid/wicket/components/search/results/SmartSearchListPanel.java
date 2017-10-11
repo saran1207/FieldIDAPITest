@@ -1,15 +1,20 @@
 package com.n4systems.fieldid.wicket.components.search.results;
 
 import com.google.common.collect.Lists;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.table.SimpleDefaultDataTable;
 import com.n4systems.fieldid.wicket.data.FieldIDDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Asset;
+import com.n4systems.util.FieldIdDateFormatter;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
@@ -69,6 +74,18 @@ public class SmartSearchListPanel extends Panel {
 
         //Asset Status
         columns.add(new PropertyColumn<Asset>(new FIDLabelModel("label.assetstatus"),"assetStatus", "assetStatus.name"));
+
+        //Identified date
+        columns.add(new PropertyColumn<Asset>(new FIDLabelModel("label.identified"), "identified", "identified") {
+                @Override
+                public void populateItem(final Item<ICellPopulator<Asset>> cellItem, final String componentId,
+                                          final IModel<Asset> rowModel) {
+                    String formattedVaue = (new FieldIdDateFormatter(rowModel.getObject().getIdentified(),
+                            FieldIDSession.get().getSessionUser(), false, false)).format();
+                    cellItem.add(new Label(componentId, Model.of(formattedVaue)));
+                }
+            }
+        );
 
         //Next Scheduled Date
         columns.add(new SmartSearchNextScheduledDateColumn(new FIDLabelModel("label.nextscheduleddate"),"", ""));
