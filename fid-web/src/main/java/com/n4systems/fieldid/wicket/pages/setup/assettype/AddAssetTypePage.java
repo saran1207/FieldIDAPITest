@@ -38,6 +38,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.AbstractValidator;
+import org.apache.wicket.validation.validator.StringValidator;
 import org.apache.wicket.validation.validator.UrlValidator;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
@@ -160,7 +161,8 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
                     assetTypeService.getAssetTypeGroupsByOrder(), new ListableChoiceRenderer<>()).setNullValid(true));
             add(imagePanel = new AssetTypeImagePanel("image", model));
             add(attributePanel = new AssetTypeAttributePanel("attributes", model));
-            add(new TextField<>("descriptionTemplate", new PropertyModel<String>(model, "descriptionTemplate")));
+            add(new TextField<>("descriptionTemplate", new PropertyModel<String>(model, "descriptionTemplate")).
+                    add(StringValidator.maximumLength(255)).add(new AttributeModifier("maxlength", "255")));
             add(new AjaxLink<Void>("templateExample") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
