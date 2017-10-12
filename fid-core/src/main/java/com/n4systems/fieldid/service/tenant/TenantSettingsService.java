@@ -21,8 +21,8 @@ public class TenantSettingsService extends FieldIdPersistenceService {
 		return persistenceService.find(createTenantSecurityBuilder(TenantSettings.class));
 	}
 	
-	public void update(TenantSettings tenantSettings) {
-		persistenceService.update(tenantSettings);
+	public TenantSettings update(TenantSettings tenantSettings) {
+		return persistenceService.update(tenantSettings);
 	}
 	
 	// uggh...this is used when the security context was initialized when the tenantId was not known, but later on during the request it is. 

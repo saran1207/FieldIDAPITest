@@ -44,7 +44,8 @@ public class LanguageConfigurationPage extends FieldIDFrontEndPage {
         add(form = new Form<Void>("form") {
             @Override
             protected void onSubmit() {
-                tenantSettingsService.update(tenantSettingsModel.getObject());
+                TenantSettings updatedSettings = tenantSettingsService.update(tenantSettingsModel.getObject());
+                getTenant().setSettings(updatedSettings);
                 FieldIDSession.get().info(new FIDLabelModel("mesasge.updated_configured_languages").getObject());
                 setResponsePage(getPageClass());
             }
