@@ -70,6 +70,9 @@ public class SmartSearchListPanel extends Panel {
         //Asset Status
         columns.add(new PropertyColumn<Asset>(new FIDLabelModel("label.assetstatus"),"assetStatus", "assetStatus.name"));
 
+        //Identified date
+        columns.add(new SmartSearchIdentifiedDateColumn(new FIDLabelModel("label.identified"), "identified", "identified"));
+
         //Next Scheduled Date
         columns.add(new SmartSearchNextScheduledDateColumn(new FIDLabelModel("label.nextscheduleddate"),"", ""));
 
