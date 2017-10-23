@@ -1096,18 +1096,14 @@ public class AssetService extends CrudService<Asset> {
     }
 
     public Long getAssetCountByOrg(long orgId) {
-        QueryBuilder<BaseOrg> orgQuery = createTenantSecurityBuilder(BaseOrg.class, true).addSimpleWhere("id", orgId);
-
+        QueryBuilder<BaseOrg> orgQuery = createTenantSecurityBuilder(BaseOrg.class, false).addSimpleWhere("id", orgId);
         BaseOrg org = persistenceService.find(orgQuery);
 
+        if(org == null) {
+            return null;
+        }
 
-        if(org == null) return null;
-
-        QueryBuilder<Asset> query = createTenantSecurityBuilder(Asset.class)
-                .addSimpleWhere("owner.id", org.getId());
-        //This would fix the problem, but would only work for the current user...
-        //.applyFilter(new OwnerAndDownFilter(org));
-
+        QueryBuilder<Asset> query = createTenantSecurityBuilder(Asset.class).applyFilter(new OwnerAndDownFilter(org));
         return persistenceService.count(query);
     }
 
