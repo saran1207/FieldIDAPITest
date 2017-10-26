@@ -6,6 +6,8 @@ var editNameUrl = "";
 var cancelNameUrl = "";
 var editSignUpUrl = "";
 var cancelSignUpUrl = "";
+var editSalesforceIdUrl = "";
+var cancelSalesforceIdUrl = "";
 
 function editNote( id ) {
 	var params = new Object();
@@ -95,8 +97,31 @@ function cancelName( id ) {
 	getResponse(cancelNameUrl, "get", params);
 }
 
+function editSalesforceId( id ) {
+    var params = new Object();
+    params.id = id;
+    getResponse(editSalesforceIdUrl, "get", params);
+}
+
+function cancelSalesforceId( id ) {
+    var params = new Object();
+    params.id = id;
+    getResponse(cancelSalesforceIdUrl, "get", params);
+}
+
+function updateSalesforceId() {
+    $( 'salesforceForm' ).request(getStandardCallbacks());
+}
+
 function updateName() {
 	$( 'nameForm' ).request(getStandardCallbacks());
+}
+
+function doSubmitSalesforceId(event) {
+    if (event.keyCode == 13) {
+        updateSalesforceId();
+        return false;
+    }
 }
 
 function doSubmit(event) { 

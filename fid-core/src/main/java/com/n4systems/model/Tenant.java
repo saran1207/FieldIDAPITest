@@ -22,7 +22,7 @@ import java.util.UUID;
 @org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Tenant extends BaseEntity implements Listable<Long>, NamedEntity, Saveable, Comparable<Tenant> {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Column(nullable=false, length=255)
 	public static SecurityDefiner createSecurityDefiner() {
 		return new SecurityDefiner("id", null, null, null);
@@ -30,7 +30,10 @@ public class Tenant extends BaseEntity implements Listable<Long>, NamedEntity, S
 	
 	@Column(nullable=false)
 	private String name;
-	
+
+	@Column(name="salesforceId")
+	public String salesforceId = "";
+
 	@Column(nullable=false)
 	private boolean disabled;
 	
@@ -85,6 +88,14 @@ public class Tenant extends BaseEntity implements Listable<Long>, NamedEntity, S
 	
 	public void setName(String name) {
 		this.name = (name != null) ? name.toLowerCase() : null;
+	}
+
+	public String getSalesforceId() {
+		return salesforceId;
+	}
+
+	public void setSalesforceId(String salesforceId) {
+		this.salesforceId = salesforceId;
 	}
 
 	@Override

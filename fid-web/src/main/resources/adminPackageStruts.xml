@@ -450,16 +450,6 @@
 			<result name="success" type="freemarker">/admin/templates/ajax/organization/updateStatus.ftl</result>
 		</action>
 
-		<action name="editTenantName" method="doEditTenantName"
-			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
-			<result name="success" type="freemarker">/admin/templates/ajax/organization/editName.ftl</result>
-		</action>
-
-		<action name="cancelTenantName" method="doCancelTenantName"
-			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
-			<result name="success" type="freemarker">/admin/templates/ajax/organization/displayName.ftl</result>
-		</action>
-
 		<action name="editSignUp" method="doEditSignUp"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
 			<result name="success" type="freemarker">/admin/templates/ajax/organization/editSignUp.ftl</result>
@@ -475,11 +465,36 @@
 			<result name="success" type="freemarker">/admin/templates/ajax/organization/displaySignUp.ftl</result>
 		</action>
 
+		<action name="editTenantName" method="doEditTenantName"
+				class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="success" type="freemarker">/admin/templates/ajax/organization/editName.ftl</result>
+		</action>
+
+		<action name="cancelTenantName" method="doCancelTenantName"
+				class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="success" type="freemarker">/admin/templates/ajax/organization/displayName.ftl</result>
+		</action>
+
 		<action name="updateTenantName" method="doUpdateTenantName"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
             <result name="success" type="freemarker">/admin/templates/ajax/organization/displayName.ftl</result>
             <result name="input" type="freemarker">/admin/templates/ajax/organization/editName.ftl</result>
             <result name="error" type="freemarker">/admin/templates/ajax/organization/editName.ftl</result>
+		</action>
+
+		<action name="editSalesforceId" method="doEditSalesforceId"
+				class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="success" type="freemarker">/admin/templates/ajax/organization/editSalesforce.ftl</result>
+		</action>
+
+		<action name="cancelSalesforceId" method="doCancelSalesforceId"
+				class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="success" type="freemarker">/admin/templates/ajax/organization/displaySalesforce.ftl</result>
+		</action>
+
+		<action name="updateSalesforceId" method="doUpdateSalesforceId"
+				class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="success" type="freemarker">/admin/templates/ajax/organization/displaySalesforce.ftl</result>
 		</action>
 
 		<action name="cancelNote" method="doCancelNote"

@@ -1,0 +1,1 @@
+ALTER TABLE tenants ADD COLUMN salesforceId VARCHAR(50) DEFAULT '';

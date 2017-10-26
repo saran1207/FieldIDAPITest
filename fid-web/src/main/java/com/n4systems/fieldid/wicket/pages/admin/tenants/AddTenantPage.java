@@ -16,10 +16,7 @@ import org.apache.log4j.Logger;
 import org.apache.wicket.extensions.model.AbstractCheckBoxModel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.RequiredTextField;
-import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -57,6 +54,7 @@ public class AddTenantPage extends FieldIDAdminPage {
             getMarkupId();
 
 			add(new RequiredTextField<String>("tenant.name"));
+			add(new TextField<String>("tenant.salesforceId"));
 			add(new RequiredTextField<Integer>("tenant.settings.userLimits.maxEmployeeUsers", Integer.class));
 			add(new RequiredTextField<Integer>("tenant.settings.userLimits.maxLiteUsers", Integer.class));
 			add(new RequiredTextField<Integer>("tenant.settings.userLimits.maxReadOnlyUsers", Integer.class));
