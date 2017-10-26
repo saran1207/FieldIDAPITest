@@ -8,7 +8,9 @@
 		cancelPlanUrl = '<@s.url action="cancelPlan" namespace="/adminAjax"/>';
 		editNameUrl = '<@s.url action="editTenantName" namespace="/adminAjax"/>';
 		cancelNameUrl = '<@s.url action="cancelTenantName" namespace="/adminAjax"/>';
-        editSignUpUrl = '<@s.url action="editSignUp" namespace="/adminAjax"/>';
+        editSalesforceIdUrl = '<@s.url action="editSalesforceId" namespace="/adminAjax"/>';
+        cancelSalesforceIdUrl = '<@s.url action="cancelSalesforceId" namespace="/adminAjax"/>';
+		editSignUpUrl = '<@s.url action="editSignUp" namespace="/adminAjax"/>';
         cancelSignUpUrl = '<@s.url action="cancelSignUp" namespace="/adminAjax"/>';
 	</script>
 </head>
@@ -39,7 +41,11 @@
 	<div id="tenantName">
 		<#include "_nameDisplay.ftl"/>
 	</div>
-	
+
+	<div id="salesforceId">
+		<#include "_salesforceDisplay.ftl"/>
+	</div>
+
 	<div id="orgStatus">
 		<#include "_status.ftl"/>
 	</div>
