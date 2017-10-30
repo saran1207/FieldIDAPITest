@@ -1,0 +1,59 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" >
+<wicket:extend>
+    <div class="leftBox">
+
+        <div class="infoSet">
+            <h2>1. <wicket:message key="label.select_asset_type"/></h2>
+            <p><wicket:message key="message.select_asset_type"/></p>
+            <select wicket:id="assetTypesSelectionList"></select>
+        </div>
+
+        <div class="infoSet">
+            <h2>2. <wicket:message key="label.download_template"/></h2>
+            <p><wicket:message key="message.download_template"/></p>
+            <div id="templateLink">
+                <p id="assetTemplate">
+                    <a wicket:id="downloadTemplateLink"><wicket:message key="label_download_excel"/></a>
+                </p>
+            </div>
+        </div>
+
+        <div class="infoSet">
+            <h2>3. <wicket:message key="label.upload"/></h2>
+            <p><wicket:message key="message.upload"/></p>
+
+            <form method="post" wicket:id="fileUploadForm" class="fullForm fluentSets" enctype="multipart/form-data">
+                <span class="fieldHolder">
+                    <input type="file" wicket:id="fileToUpload" size="30"/>
+                </span>
+                <input type="submit" wicket:message="value:label.start_import" />
+                <span id="or"><wicket:message key="label.or" /></span>
+                <a href="/fieldid/w/dashboard"><wicket:message key="label.cancel" /></a>
+            </form>
+        </div>
+
+    </div>
+
+    <div class="rightBox">
+        <div class="formatDate">
+            <h4><wicket:message key="label.formatting_dates"/></h4>
+            <span><wicket:message key="message.formatting_dates"/></span>
+        </div>
+        <div class="faq">
+            <div class="faqSection">
+                <h4><wicket:message key="label.import_export_question.1" /></h4>
+                <span><wicket:message key="label.import_export_answer.1" /></span>
+            </div>
+            <div class="faqSection">
+                <h4><wicket:message key="label.import_export_question.2" /></h4>
+                <span><wicket:message key="label.import_export_answer.2" /></span>
+            </div>
+            <div class="faqSection">
+                <h4><wicket:message key="label.import_export_question.3" /></h4>
+                <span><wicket:message key="label.import_export_answer.3" /></span>
+            </div>
+        </div>
+    </div>
+
+</wicket:extend>
+</html>
