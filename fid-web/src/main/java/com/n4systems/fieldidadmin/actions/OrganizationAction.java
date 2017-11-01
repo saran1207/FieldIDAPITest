@@ -215,6 +215,22 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	}
 
 	@SkipValidation
+	public String doEditSalesforceId() {
+		return SUCCESS;
+	}
+
+	@SkipValidation
+	public String doCancelSalesforceId() {
+		return SUCCESS;
+	}
+
+	@SkipValidation
+	public String doUpdateSalesforceId() {
+		updateTenant();
+		return SUCCESS;
+	}
+
+	@SkipValidation
 	public String doEditPlan() {
 		return SUCCESS;
 	}
@@ -474,6 +490,10 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	public void setTenantName(String name) {
 		tenant.setName(name);
 	}
+
+	public String getSalesforceId() { return tenant.getSalesforceId(); }
+
+	public void setSalesforceId(String salesforceId) { tenant.setSalesforceId(salesforceId); }
 
 	public boolean isValidTenantName() {
 		String regex = "^[A-Za-z0-9][A-Za-z0-9\\-]+[A-Za-z0-9]$";
