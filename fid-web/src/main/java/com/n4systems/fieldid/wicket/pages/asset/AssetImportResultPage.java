@@ -5,18 +5,15 @@ import com.n4systems.exporting.ImportTaskRegistry;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
 import com.n4systems.taskscheduling.task.ImportTask;
-import org.apache.commons.lang3.tuple.Triple;
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -50,7 +47,7 @@ public class AssetImportResultPage extends FieldIDFrontEndPage {
            seem to get recognized as a feedback panel for our error message. */
         remove(getTopFeedbackPanel());
         FeedbackPanel feedbackPanel = new FeedbackPanel("topFeedbackPanel");
-        feedbackPanel.add(new SimpleAttributeModifier("style", "text-align: center; color:red; padding: 0px 10px"));
+        feedbackPanel.add(new AttributeAppender("style", new Model("text-align: center; color:red; padding: 0px 10px"), " "));
         add(feedbackPanel);
 
         if (!importResultsStatus.isSuccess()) {
