@@ -280,7 +280,7 @@ public class IsolationPointEditor extends Panel {
         if(IsolationPointSourceType.N.equals(sourceType)) {
             //Render these invisible...
             deviceComboBox.setVisible(false);
-            imagePanel.setVisible(false);
+            imagePanel.setVisible(true);
             electronicIdentifier.setVisible(false);
             sourceText.setVisible(false);
             lockField.setVisible(false);

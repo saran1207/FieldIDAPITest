@@ -341,7 +341,7 @@ h3 {
          It is used when we're displaying notes instead of isolation points in the list.
     */
     .isolation-point-table .notes {
-        width: 690px;
+        width: 634px;
         padding-left: 22px;
     }
 	
