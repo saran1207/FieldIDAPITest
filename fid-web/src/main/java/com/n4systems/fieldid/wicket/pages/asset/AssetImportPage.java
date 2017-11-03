@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.asset;
 
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
+import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
@@ -40,6 +41,7 @@ public class AssetImportPage extends FieldIDFrontEndPage {
     private IModel<User> currentUserModel;
     private IModel<SessionUser> sessionUserModel;
     private IModel<SecurityFilter> securityFilterModel;
+    private IModel<SystemSecurityGuard> securityGuardModel;
     private IModel<WebSessionMap> webSessionMapModel;
     private List<String> titleLabelsByTabIndex;
 
@@ -62,7 +64,8 @@ public class AssetImportPage extends FieldIDFrontEndPage {
         super.renderHead(response);
         response.renderCSSReference("style/legacy/pageStyles/import.css");
         response.renderCSSReference("style/wicketTabbedPanel.css");
-        response.renderCSS("div#pageContent {display: none}", "hideUnused");
+        response.renderCSS("div#pageContent {display: none}", null);
+        response.renderCSS(".wicket-tabbed-panel-content {margin-top: 14px;}", null);
     }
 
     @Override
@@ -80,7 +83,7 @@ public class AssetImportPage extends FieldIDFrontEndPage {
         tabs.add(new AbstractTab(new FIDLabelModel("nav.add_with_order")) {
             public Panel getPanel(String panelId)
             {
-                return new AddAssetWithOrderPage(panelId);
+                return new AddAssetWithOrderPage(panelId, securityFilterModel, securityGuardModel, sessionUserModel);
             }
         });
         titleLabelsByTabIndex.add(new FIDLabelModel("nav.add_with_order").getObject());
@@ -108,16 +111,6 @@ public class AssetImportPage extends FieldIDFrontEndPage {
     private void createModels() {
         currentTitleModel = new IModel<String>() {
             public String getObject() {
-                /*switch (currentlySelectedTab) {
-                    case 0:
-                        return "First tab";
-                    case 1:
-                        return "Second tab";
-                    case 2:
-                        return "Third tab";
-                    default:
-                        return "No tab";
-                }*/
                 if (currentlySelectedTab >=0 && currentlySelectedTab < titleLabelsByTabIndex.size())
                     return titleLabelsByTabIndex.get(currentlySelectedTab);
                 else
@@ -145,6 +138,13 @@ public class AssetImportPage extends FieldIDFrontEndPage {
                 return getSecurityFilter();
             }
             public void setObject(final SecurityFilter object) { }
+            public void detach() {}
+        };
+        securityGuardModel = new IModel<SystemSecurityGuard>() {
+            public SystemSecurityGuard getObject() {
+                return getSecurityGuard();
+            }
+            public void setObject(final SystemSecurityGuard object) { }
             public void detach() {}
         };
         webSessionMapModel = new IModel<WebSessionMap>() {

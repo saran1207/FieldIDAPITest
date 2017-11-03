@@ -1,0 +1,33 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" >
+<wicket:panel>
+    <div>
+    <div wicket:id="resultsTable">
+        <h2 class="orderTitle" ><wicket:message key="label.lineitems"/></h2>
+        <table class="list">
+            <tr>
+                <th class="lineAddLink" ></th>
+                <th class="linePcode" ><wicket:message key="label.assetcode"/></th>
+                <th><wicket:message key="label.description"/></th>
+                <th class="lineQty" ><wicket:message key="label.quantity"/></th>
+                <th class="lineIdent" ><wicket:message key="label.identifiedassets"/></th>
+            </tr>
+            <tr wicket:id="shopOrderListItems">
+                <td class="lineAddLink" >
+                    <a wicket:id="identifyLink"><wicket:message key="label.identify"/></a>
+                </td>
+                <td wicket:id="assetCode" class="linePcode" ></td>
+                <td wicket:id="description"></td>
+                <td wicket:id="quantity" class="lineQty" ></td>
+                <td wicket:id="identifiedAssetCount" class="lineIdent" ></td>
+            </tr>
+        </table>
+    </div>
+    <div wicket:id="emptyList" class="emptyList" >
+        <h2><wicket:message key="label.noresults"/></h2>
+        <p>
+            <wicket:message key="message.emptylineitemlist" />
+        </p>
+    </div>
+        </div>
+</wicket:panel>
+</html>

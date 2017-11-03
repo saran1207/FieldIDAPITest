@@ -1,6 +1,7 @@
 /* Styles to use Wicket tab panel in title section of page */
 div.wicket-tabpanel div.tab-row {
     padding-bottom: 2px;
+    margin-bottom: -3px;
 }
 div.wicket-tabpanel-right div.tab-row {
     float:right
