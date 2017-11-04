@@ -5,13 +5,11 @@ import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
 import org.apache.log4j.Logger;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -23,7 +21,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import rfid.web.helper.SessionUser;
 
-import java.security.Security;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,7 +80,7 @@ public class AssetImportPage extends FieldIDFrontEndPage {
         tabs.add(new AbstractTab(new FIDLabelModel("nav.add_with_order")) {
             public Panel getPanel(String panelId)
             {
-                return new AddAssetWithOrderPage(panelId, securityFilterModel, securityGuardModel, sessionUserModel);
+                return new AddAssetWithOrderPanel(panelId, securityFilterModel, securityGuardModel, sessionUserModel);
             }
         });
         titleLabelsByTabIndex.add(new FIDLabelModel("nav.add_with_order").getObject());

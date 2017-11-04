@@ -1,9 +1,9 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" >
 <wicket:panel>
-    <div class="wicket-tabbed-panel-content">
+    <div class="wicket-tabbed-panel-content" style="border-bottom: 1px solid #E8EDFF; padding: 5px 15px;">
         <form method="get" wicket:id="searchOrderForm" class="simple">
             <select wicket:id="tagOptions"></select>
-            <input type="text" wicket:id="orderNumber"/>
+            <input type="text" wicket:id="orderNumber" style="width: 350px"/>
             <input type="submit" wicket:message="value:label.load"/>
         </form>
         <!--@s.form method="get" action="searchOrder" theme="simple" cssClass="simple">

@@ -5,6 +5,7 @@ import com.n4systems.ejb.legacy.Option;
 import com.n4systems.exceptions.OrderProcessingException;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
@@ -15,13 +16,12 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.security.SecurityFilter;
-import com.n4systems.model.user.User;
 import com.n4systems.plugins.PluginFactory;
 import com.n4systems.plugins.integration.OrderResolver;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.FieldIdDateFormatter;
 import org.apache.log4j.Logger;
-import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -43,15 +43,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * Created by agrabovskis on 2017-10-31.
  */
 @UserPermissionFilter(userRequiresOneOf={Permissions.TAG})
-public class AddAssetWithOrderPage extends Panel {
+public class AddAssetWithOrderPanel extends Panel {
 
-    private static final Logger logger = Logger.getLogger(AddAssetWithOrderPage.class);
+    private static final Logger logger = Logger.getLogger(AddAssetWithOrderPanel.class);
 
     private IModel<SecurityFilter> securityFilterModel;
     private IModel<SystemSecurityGuard> securityGuardModel;
@@ -65,9 +64,9 @@ public class AddAssetWithOrderPage extends Panel {
     private WebMarkupContainer orderDetailsSection;
     private WebMarkupContainer errorResultSection;
 
-    public AddAssetWithOrderPage(String id, IModel<SecurityFilter> securityFilterModel,
-                                 IModel<SystemSecurityGuard> securityGuardModel,
-                                 IModel<SessionUser> sessionUserModel) {
+    public AddAssetWithOrderPanel(String id, IModel<SecurityFilter> securityFilterModel,
+                                  IModel<SystemSecurityGuard> securityGuardModel,
+                                  IModel<SessionUser> sessionUserModel) {
 
         super(id);
         this.securityFilterModel = securityFilterModel;
