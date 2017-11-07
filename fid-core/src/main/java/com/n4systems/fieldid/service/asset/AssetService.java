@@ -2,10 +2,7 @@ package com.n4systems.fieldid.service.asset;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.n4systems.exceptions.InvalidArgumentException;
-import com.n4systems.exceptions.InvalidQueryException;
-import com.n4systems.exceptions.SubAssetUniquenessException;
-import com.n4systems.exceptions.UsedOnMasterEventException;
+import com.n4systems.exceptions.*;
 import com.n4systems.fieldid.LegacyMethod;
 import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
@@ -931,6 +928,42 @@ public class AssetService extends CrudService<Asset> {
         archiveProcedureAudits(asset);
 
         return save(asset);
+    }
+
+    /**
+     * Connect an asset to a customer order
+     * @param asset
+     * @param customerOrder
+     * @throws Exception
+     */
+    public void connectToCustomerOrder(Asset asset, Order customerOrder) throws Exception {
+        if (asset == null || asset.isNew()) {
+            throw new MissingEntityException();
+        }
+
+        if (customerOrder == null || customerOrder.getId() == null) {
+            throw new Exception("error.noorder");
+        }
+
+        asset.setCustomerOrder(customerOrder);
+        asset.setPurchaseOrder(customerOrder.getPoNumber());
+        asset.setOwner(customerOrder.getOwner());
+
+        //processOrderMasters();
+        //asset.setCustomerOrder(customerOrder);
+
+        // update the asset
+        try {
+            //getAssetSaveService().setAsset(asset).update();
+            persistenceService.update(asset);
+            //String updateMessage = getText("message.assetupdated.customer", Arrays.asList(asset.getIdentifier(), asset.getOwner().getName()));
+           //return("message.assetupdated.customer");
+
+        } catch (Exception e) {
+            logger.error("Failed connecting customer order to asset", e);
+            throw new Exception("error.assetsave");
+        }
+
     }
 
     private void removeFromOfflineProfiles(Asset asset) {

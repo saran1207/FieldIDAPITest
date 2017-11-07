@@ -23,6 +23,9 @@ public class SmartSearchDataProvider extends FieldIDDataProvider<Asset>{
         this.searchTerm = searchTerm;
     }
 
+    public void setSearchTerm(String searchTerm) {
+        this.searchTerm = searchTerm;
+    }
 
     @Override
     public Iterator<? extends Asset> iterator(int first, int count) {

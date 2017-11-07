@@ -5,10 +5,12 @@ import com.n4systems.ejb.legacy.Option;
 import com.n4systems.exceptions.OrderProcessingException;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.fieldid.wicket.components.GoogleMap;
+import com.n4systems.fieldid.wicket.components.table.StyledAjaxPagingNavigator;
+import com.n4systems.fieldid.wicket.data.SmartSearchDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
+import com.n4systems.model.Asset;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
 import com.n4systems.model.TagOption;
@@ -21,7 +23,9 @@ import com.n4systems.plugins.integration.OrderResolver;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.FieldIdDateFormatter;
 import org.apache.log4j.Logger;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.Session;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -29,6 +33,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
@@ -224,7 +229,7 @@ public class AddAssetWithOrderPanel extends Panel {
 
         private IModel<Order> orderModel;
         private Panel shopOrderListSection;
-        private WebMarkupContainer customerOrderListSection;
+        private Panel customerOrderListSection;
 
         public OrderDetailsPanel(String id, IModel<Order> orderModel, LineItemIDataProvider lineItemIDataProvider) {
 
@@ -280,41 +285,29 @@ public class AddAssetWithOrderPanel extends Panel {
             }));
 
             shopOrderListSection = new ShopOrderListPanel("shopOrderList", orderModel, lineItemIDataProvider);
+            shopOrderListSection.setVisible(false);
             add(shopOrderListSection);
-            customerOrderListSection = createCustomerOrderSection();
+            customerOrderListSection = new CustomerOrderPanel("customerOrderList", securityGuardModel);
             add(customerOrderListSection);
+            customerOrderListSection.setVisible(false);
 
         }
 
-       /* public void onConfigure() {
-            System.out.println("Panel.onConfigure");
-            Order order = orderModel.getObject();
-            setVisible(order != null);
-        }*/
-
-
-
-        private WebMarkupContainer createCustomerOrderSection() {
-            WebMarkupContainer customerOrderSection = new WebMarkupContainer("customerOrderList");
-            return customerOrderSection;
-        }
-
-        public void onBeforeRender() {
-       /*     System.out.println("OrderDetailsPanel.onBeforeRender");
+        @Override
+        public void onConfigure() {
+            System.out.println("OrderDetailsPanel.onConfigure");
             shopOrderListSection.setVisible(false);
             customerOrderListSection.setVisible(false);
             Order order = orderModel.getObject();
-            System.out.println("... retrieved order is " + order);
             if (order != null) {
-                if (order.getOrderType() == Order.OrderType.SHOP)
+                if (order.getOrderType().equals(Order.OrderType.SHOP))
                     shopOrderListSection.setVisible(true);
-                else if (order.getOrderType() == Order.OrderType.CUSTOMER)
+                else
+                if (order.getOrderType().equals(Order.OrderType.CUSTOMER))
                     customerOrderListSection.setVisible(true);
             }
-            else
-                System.out.println("... details section both hidden");*/
-            super.onBeforeRender();
         }
+
         private String blankIfNull(String str) {
             return str == null ? "" : str;
         }
@@ -378,6 +371,111 @@ public class AddAssetWithOrderPanel extends Panel {
             return str == null ? "" : str;
         }
     }
+
+    private class CustomerOrderPanel extends Panel {
+
+        private SmartSearchDataProvider searchDataProvider;
+        private IModel<SystemSecurityGuard> securityGuardModel;
+        private WebMarkupContainer orderResultSection;
+        private WebMarkupContainer noResutsSection;
+
+        public CustomerOrderPanel(String id, IModel<SystemSecurityGuard> securityGuardModel) {
+            super(id);
+            this.securityGuardModel = securityGuardModel;
+            searchDataProvider = new SmartSearchDataProvider(null);
+            addComponents();
+        }
+        private void addComponents() {
+            TextField assetSearchTerm = new TextField("assetSearchTerm", new Model<String>(""));
+            Form assetSearchForm = new Form("assetSearchForm") {
+                @Override
+                protected void onSubmit() {
+                    System.out.println("Perform asset search called");
+                    Object searchTerm = assetSearchTerm.getModel().getObject();
+                    if (searchTerm != null && !searchTerm.toString().isEmpty()) {
+                        searchDataProvider.setSearchTerm(searchTerm.toString());
+                        System.out.println("Searching returned " + searchDataProvider.size());
+                        if (searchDataProvider.size() > 0) {
+                            orderResultSection.setVisible(true);
+                            noResutsSection.setVisible(false);
+                        }
+                        else {
+                            orderResultSection.setVisible(false);
+                            noResutsSection.setVisible(true);
+                        }
+                    }
+                    //processAssetSearch(searchDataProvider, foundSearchResult, assetSearchTerm, foundSearchResult,
+                    //        notFoundSearchResult, multipleResultsMsg, target);
+                }
+            };
+
+            //assetSearchTerm.add(new AttributeAppender("onkeyup", new Model("setAssetSearchButtonStatus(this);"), ";"));
+            // onpaste and oncut events are called before the element is updated so a brief pause is added
+            // to wait till after the update is done
+            //assetSearchTerm.add(new AttributeAppender("onpaste",
+            //        new Model("var e = this; setTimeout(function(){setAssetSearchButtonStatus(e);}, 4);"), ";"));
+            //assetSearchTerm.add(new AttributeAppender("oncut",
+            //        new Model("var e = this; setTimeout(function(){setAssetSearchButtonStatus(e);}, 4);"), ";"));
+            assetSearchForm.add(assetSearchTerm);
+
+            add(assetSearchForm);
+
+            orderResultSection = createCustomerOrderResultsSection("customerOrderResultList");
+            orderResultSection.setOutputMarkupId(true);
+            add(orderResultSection);
+            orderResultSection.setVisible(false);
+
+            noResutsSection = new WebMarkupContainer("noResultsSection");
+            add(noResutsSection);
+            noResutsSection.setVisible(false);
+        }
+
+        private WebMarkupContainer createCustomerOrderResultsSection(String id) {
+            WebMarkupContainer orderResultsSection = new WebMarkupContainer(id);
+
+            FeedbackPanel feedbackPanel = new FeedbackPanel("feedbackPanel");
+            feedbackPanel.setOutputMarkupId(true);
+            add(feedbackPanel);
+            orderResultsSection.add(new Label("identifierLabel", securityGuardModel.getObject().getPrimaryOrg().getIdentifierLabel()));
+
+            final DataView<Asset> dataView =
+                    new DataView<Asset>("result.list", searchDataProvider) {
+                        @Override
+                        public void populateItem(final Item<Asset> item) {
+                            Asset asset = item.getModelObject();
+                            final Long selectedAssetId = asset.getID();
+                            item.add(new AjaxLink("connectAsset") {
+                                @Override
+                                public void onClick(AjaxRequestTarget target) {
+                                    System.out.println("User has clicked on asset " + selectedAssetId);
+                                    //winningAsset.setObject(assetManager.findAssetAllFields(selectedAssetId, getSecurityFilter()));
+                                   // closeContainer(target, step2Container, step2ToggledContainer);
+                                   // openContainer(target, step3Container, step3ToggledContainer);
+                                    info("INFO MESSAGE");
+                                    error("User clicked on asset " + selectedAssetId);
+                                    target.add(feedbackPanel);
+                                }
+                            });
+                            item.add(new Label("result.identifier", asset.getIdentifier()));
+                            item.add(new Label("result.rfidNumber", asset.getRfidNumber()));
+                            item.add(new Label("result.ownerName", asset.getOwner().getName()));
+                            item.add(new Label("result.typeName", asset.getType().getName()));
+                            item.add(new Label("result.customerRefNumber", asset.getCustomerRefNumber()));
+                        }
+                    };
+            dataView.setOutputMarkupId(true);
+            dataView.setItemsPerPage(10);
+            orderResultsSection.add(dataView);
+            orderResultsSection.add(new StyledAjaxPagingNavigator("resultTableNavigator", dataView, orderResultsSection) {
+                @Override
+                protected void onAjaxEvent(AjaxRequestTarget target) {
+                    target.add(orderResultsSection);
+                }
+            });
+
+            return orderResultsSection;
+        }
+     }
 
 
     private class LineItemIDataProvider implements IDataProvider<LineItem> {
