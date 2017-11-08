@@ -936,34 +936,23 @@ public class AssetService extends CrudService<Asset> {
      * @param customerOrder
      * @throws Exception
      */
-    public void connectToCustomerOrder(Asset asset, Order customerOrder) throws Exception {
+    public void connectToCustomerOrder(Asset asset, Order customerOrder) {
+        /* Code based on AssetCrud.doConnectToCustomerOrder */
         if (asset == null || asset.isNew()) {
+            logger.error("Connect to customer order failed on missing asset");
             throw new MissingEntityException();
         }
 
         if (customerOrder == null || customerOrder.getId() == null) {
-            throw new Exception("error.noorder");
+            logger.error("Connect to customer order failed on missing customer order");
+            throw new MissingEntityException();
         }
 
         asset.setCustomerOrder(customerOrder);
         asset.setPurchaseOrder(customerOrder.getPoNumber());
         asset.setOwner(customerOrder.getOwner());
 
-        //processOrderMasters();
-        //asset.setCustomerOrder(customerOrder);
-
-        // update the asset
-        try {
-            //getAssetSaveService().setAsset(asset).update();
-            persistenceService.update(asset);
-            //String updateMessage = getText("message.assetupdated.customer", Arrays.asList(asset.getIdentifier(), asset.getOwner().getName()));
-           //return("message.assetupdated.customer");
-
-        } catch (Exception e) {
-            logger.error("Failed connecting customer order to asset", e);
-            throw new Exception("error.assetsave");
-        }
-
+        persistenceService.update(asset);
     }
 
     private void removeFromOfflineProfiles(Asset asset) {

@@ -16,6 +16,7 @@ import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.saveditems.SavedItemsDropdown;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.asset.AssetImportPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ProcedureSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
@@ -270,6 +271,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("assetsEventsLink", AssetsAndEventsPage.class));
         subMenuContainer.add(createAssetEventsSubMenu());
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("importLink", ImportPage.class));
+        subMenuContainer.add(new BookmarkablePageLink<WebPage>("assetImportLink", AssetImportPage.class));
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("templatesLink", TemplatesPage.class));
         subMenuContainer.add(createTemplatesSubMenu());
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("widgetsLink", WidgetsPage.class));

@@ -5,6 +5,7 @@ import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
@@ -14,6 +15,7 @@ import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -41,14 +43,25 @@ public class AssetImportPage extends FieldIDFrontEndPage {
     private IModel<SystemSecurityGuard> securityGuardModel;
     private IModel<WebSessionMap> webSessionMapModel;
     private List<String> titleLabelsByTabIndex;
+    private FeedbackPanel feedbackPanel;
 
     public AssetImportPage(PageParameters params) {
         super(params);
         currentlySelectedTab = 0;
         titleLabelsByTabIndex = new ArrayList<String>();
         preSelectedAssetTypeId = params.get(ASSET_TYPE_ID_KEY);
-        System.out.println("AssetImportPage, asset type id passed in " + preSelectedAssetTypeId);
         createModels();
+        addFeedbackPanel();
+    }
+
+    private void addFeedbackPanel() {
+         /* Existing top feedback panel is in the correct place for our error message but doesn't
+            seem to get recognized as a feedback panel for our error message. */
+        remove(getTopFeedbackPanel());
+        feedbackPanel = new FeedbackPanel("topFeedbackPanel");
+        feedbackPanel.setOutputMarkupId(true);
+        //feedbackPanel.add(new AttributeAppender("style", new Model("text-align: center; color:red; padding: 0px 10px"), " "));
+        add(feedbackPanel);
     }
 
     @Override
@@ -63,10 +76,18 @@ public class AssetImportPage extends FieldIDFrontEndPage {
         response.renderCSSReference("style/wicketTabbedPanel.css");
         response.renderCSS("div#pageContent {display: none}", null);
         response.renderCSS(".wicket-tabbed-panel-content {margin-top: 14px;}", null);
+        response.renderCSS("li .feedbackPanelINFO {padding: 10px 0px 10px 0px;\n" +
+                "text-align: center;\n" +
+                "border: 1px solid #5fb336;\n" +
+                "background-color: #e3f4db;\n" +
+                "font-size: 13px;\n" +
+                "display: block;\n" +
+                "color: #333333;}", null);
     }
 
     @Override
     protected void addNavBar(String navBarId) {
+
         List<AbstractTab> tabs = new ArrayList<AbstractTab>();
         tabs.add(new AbstractTab(new FIDLabelModel("label.import")) {
             public Panel getPanel(String panelId)
@@ -77,14 +98,16 @@ public class AssetImportPage extends FieldIDFrontEndPage {
         });
         titleLabelsByTabIndex.add(new FIDLabelModel("title.asset_import").getObject());
 
-        tabs.add(new AbstractTab(new FIDLabelModel("nav.add_with_order")) {
-            public Panel getPanel(String panelId)
-            {
-                return new AddAssetWithOrderPanel(panelId, securityFilterModel, securityGuardModel, sessionUserModel);
-            }
-        });
-        titleLabelsByTabIndex.add(new FIDLabelModel("nav.add_with_order").getObject());
-
+        /* 'Add with Order' requires the integration feature to be enabled */
+        boolean isIntegrationEnabled = getSecurityGuard().isExtendedFeatureEnabled(ExtendedFeature.Integration);
+        if (isIntegrationEnabled) {
+            tabs.add(new AbstractTab(new FIDLabelModel("nav.add_with_order")) {
+                public Panel getPanel(String panelId) {
+                    return new AddAssetWithOrderPanel(panelId, securityFilterModel, securityGuardModel, sessionUserModel);
+                }
+            });
+            titleLabelsByTabIndex.add(new FIDLabelModel("nav.add_with_order").getObject());
+        }
         tabs.add(new AbstractTab(new FIDLabelModel("nav.add")) {
             public Panel getPanel(String panelId)
             {
@@ -104,7 +127,7 @@ public class AssetImportPage extends FieldIDFrontEndPage {
     }
 
     /* Create models for use by component panels to get values obtainable from this page.
-     * This avoids adding theses objects to the serialized state of the panels  */
+     * This avoids adding these objects to the serialized state of the panels  */
     private void createModels() {
         currentTitleModel = new IModel<String>() {
             public String getObject() {

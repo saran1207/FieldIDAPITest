@@ -5,6 +5,7 @@ import com.n4systems.ejb.legacy.Option;
 import com.n4systems.exceptions.OrderProcessingException;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.wicket.components.table.StyledAjaxPagingNavigator;
 import com.n4systems.fieldid.wicket.data.SmartSearchDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -26,6 +27,7 @@ import org.apache.log4j.Logger;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -44,10 +46,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import rfid.web.helper.SessionUser;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by agrabovskis on 2017-10-31.
@@ -106,9 +105,6 @@ public class AddAssetWithOrderPanel extends Panel {
 
         Form orderSearchForm = new Form("searchOrderForm") {
             public void onSubmit() {
-                System.out.println("Search order form submit clicked");
-                System.out.println("... order number " + orderNumberModel.getObject());
-                System.out.println("... selected tag " + selectedTag.getObject());
                 boolean orderFound = findOrder(selectedTag.getObject(), orderNumberModel.getObject(), selectedOrderIModel, lineItemDataProdiver);
                 if (orderFound) {
                     errorResultSection.setVisible(false);
@@ -175,7 +171,6 @@ public class AddAssetWithOrderPanel extends Panel {
 
     private boolean findOrder(TagOption tagOption, String orderNumber, IModel<Order> selectedOrderModel, LineItemIDataProvider lineItemDataProvider) {
 
-        System.out.println("Looking for order " + tagOption + ", " + orderNumber);
         selectedOrderModel.setObject(null);
 
         Order.OrderType orderType = tagOption.getOptionKey().getOrderType();
@@ -206,7 +201,6 @@ public class AddAssetWithOrderPanel extends Panel {
         }
 
         if(order != null) {
-            System.out.println("Found order");
             lineItemDataProvider.setLineItems(orderManager.findLineItems(order));
         }
         else
@@ -287,15 +281,13 @@ public class AddAssetWithOrderPanel extends Panel {
             shopOrderListSection = new ShopOrderListPanel("shopOrderList", orderModel, lineItemIDataProvider);
             shopOrderListSection.setVisible(false);
             add(shopOrderListSection);
-            customerOrderListSection = new CustomerOrderPanel("customerOrderList", securityGuardModel);
+            customerOrderListSection = new CustomerOrderPanel("customerOrderList", orderModel, securityGuardModel);
             add(customerOrderListSection);
             customerOrderListSection.setVisible(false);
-
         }
 
         @Override
         public void onConfigure() {
-            System.out.println("OrderDetailsPanel.onConfigure");
             shopOrderListSection.setVisible(false);
             customerOrderListSection.setVisible(false);
             Order order = orderModel.getObject();
@@ -374,13 +366,17 @@ public class AddAssetWithOrderPanel extends Panel {
 
     private class CustomerOrderPanel extends Panel {
 
+        @SpringBean
+        private AssetService assetService;
         private SmartSearchDataProvider searchDataProvider;
+        private IModel<Order> orderModel;
         private IModel<SystemSecurityGuard> securityGuardModel;
         private WebMarkupContainer orderResultSection;
         private WebMarkupContainer noResutsSection;
 
-        public CustomerOrderPanel(String id, IModel<SystemSecurityGuard> securityGuardModel) {
+        public CustomerOrderPanel(String id, IModel<Order> orderModel, IModel<SystemSecurityGuard> securityGuardModel) {
             super(id);
+            this.orderModel = orderModel;
             this.securityGuardModel = securityGuardModel;
             searchDataProvider = new SmartSearchDataProvider(null);
             addComponents();
@@ -390,11 +386,9 @@ public class AddAssetWithOrderPanel extends Panel {
             Form assetSearchForm = new Form("assetSearchForm") {
                 @Override
                 protected void onSubmit() {
-                    System.out.println("Perform asset search called");
                     Object searchTerm = assetSearchTerm.getModel().getObject();
                     if (searchTerm != null && !searchTerm.toString().isEmpty()) {
                         searchDataProvider.setSearchTerm(searchTerm.toString());
-                        System.out.println("Searching returned " + searchDataProvider.size());
                         if (searchDataProvider.size() > 0) {
                             orderResultSection.setVisible(true);
                             noResutsSection.setVisible(false);
@@ -404,8 +398,10 @@ public class AddAssetWithOrderPanel extends Panel {
                             noResutsSection.setVisible(true);
                         }
                     }
-                    //processAssetSearch(searchDataProvider, foundSearchResult, assetSearchTerm, foundSearchResult,
-                    //        notFoundSearchResult, multipleResultsMsg, target);
+                    else {
+                        orderResultSection.setVisible(false);
+                        noResutsSection.setVisible(true);
+                    }
                 }
             };
 
@@ -432,10 +428,8 @@ public class AddAssetWithOrderPanel extends Panel {
 
         private WebMarkupContainer createCustomerOrderResultsSection(String id) {
             WebMarkupContainer orderResultsSection = new WebMarkupContainer(id);
+            orderResultsSection.setOutputMarkupId(true);
 
-            FeedbackPanel feedbackPanel = new FeedbackPanel("feedbackPanel");
-            feedbackPanel.setOutputMarkupId(true);
-            add(feedbackPanel);
             orderResultsSection.add(new Label("identifierLabel", securityGuardModel.getObject().getPrimaryOrg().getIdentifierLabel()));
 
             final DataView<Asset> dataView =
@@ -447,13 +441,13 @@ public class AddAssetWithOrderPanel extends Panel {
                             item.add(new AjaxLink("connectAsset") {
                                 @Override
                                 public void onClick(AjaxRequestTarget target) {
-                                    System.out.println("User has clicked on asset " + selectedAssetId);
-                                    //winningAsset.setObject(assetManager.findAssetAllFields(selectedAssetId, getSecurityFilter()));
-                                   // closeContainer(target, step2Container, step2ToggledContainer);
-                                   // openContainer(target, step3Container, step3ToggledContainer);
-                                    info("INFO MESSAGE");
-                                    error("User clicked on asset " + selectedAssetId);
-                                    target.add(feedbackPanel);
+                                    Asset asset = assetService.getAsset(selectedAssetId);
+                                    assetService.connectToCustomerOrder(asset, orderModel.getObject());
+                                    Session.get().info(new FIDLabelModel("message.assetupdated.customer",
+                                            asset.getIdentifier(), asset.getOwner().getName()).getObject());
+                                    orderResultsSection.setVisible(false);
+                                    target.add(orderResultsSection);
+                                    target.addChildren(getPage(), FeedbackPanel.class);
                                 }
                             });
                             item.add(new Label("result.identifier", asset.getIdentifier()));
