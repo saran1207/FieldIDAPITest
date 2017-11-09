@@ -552,7 +552,8 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
             identifyMenuContainer.setVisible(sessionUser.hasAccess("tag"));
 
             if (getSecurityGuard().isIntegrationEnabled()) {
-                identifyMenuContainer.add(new ExternalLink("identifyLink", "/fieldid/identify.action"));
+                identifyMenuContainer.add(new BookmarkablePageLink<Void>("identifyLink", AssetImportPage.class,
+                        PageParametersBuilder.param(AssetImportPage.INITIAL_TAB, AssetImportPage.ADD_WITH_ORDER_TAB)));
             } else {
                 identifyMenuContainer.add(new BookmarkablePageLink("identifyLink", IdentifyOrEditAssetPage.class));
             }

@@ -84,7 +84,7 @@
 						</#if>
 						<li>
                             <#if securityGuard.integrationEnabled>
-                                <a href="<@s.url action="identify" namespace="/"/>" class="speedLink textLink" id="menuIdentify">
+                                <a href="/fieldid/w/assetImport?initialTab=addWithOrder" class="speedLink textLink" id="menuIdentify">
                                     <@s.text name="speed.identify"/>
                                 </a>
                             <#else>

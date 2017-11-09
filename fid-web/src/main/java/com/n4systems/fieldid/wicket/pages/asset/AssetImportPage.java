@@ -33,6 +33,8 @@ public class AssetImportPage extends FieldIDFrontEndPage {
     private static final Logger logger = Logger.getLogger(AssetImportPage.class);
 
     public static String ASSET_TYPE_ID_KEY = "assetTypeId";
+    public static String INITIAL_TAB = "initialTab";
+    public static String ADD_WITH_ORDER_TAB = "addWithOrder";
 
     private StringValue preSelectedAssetTypeId;
     private int currentlySelectedTab;
@@ -44,29 +46,35 @@ public class AssetImportPage extends FieldIDFrontEndPage {
     private IModel<WebSessionMap> webSessionMapModel;
     private List<String> titleLabelsByTabIndex;
     private FeedbackPanel feedbackPanel;
+    private boolean setAddWithOrderAsInitial;
 
     public AssetImportPage(PageParameters params) {
         super(params);
         currentlySelectedTab = 0;
         titleLabelsByTabIndex = new ArrayList<String>();
         preSelectedAssetTypeId = params.get(ASSET_TYPE_ID_KEY);
+        StringValue initialTabSelection = params.get(INITIAL_TAB);
+            if (!initialTabSelection.isNull() && ADD_WITH_ORDER_TAB.equals(initialTabSelection.toString()))
+            setAddWithOrderAsInitial = true;
+        else
+            setAddWithOrderAsInitial = false;
         createModels();
         addFeedbackPanel();
     }
 
     private void addFeedbackPanel() {
-         /* Existing top feedback panel is in the correct place for our error message but doesn't
-            seem to get recognized as a feedback panel for our error message. */
+         /* Existing top feedback panel is in the correct place for our messages but doesn't
+            get recognized as a feedback panel for our messages. */
         remove(getTopFeedbackPanel());
         feedbackPanel = new FeedbackPanel("topFeedbackPanel");
         feedbackPanel.setOutputMarkupId(true);
-        //feedbackPanel.add(new AttributeAppender("style", new Model("text-align: center; color:red; padding: 0px 10px"), " "));
         add(feedbackPanel);
     }
 
     @Override
     protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, currentTitleModel); // new FIDLabelModel("title.asset_import"));
+        /* Title will change depending on which tab is selected so provide title through a model */
+        return new Label(labelId, currentTitleModel);
     }
 
     @Override
@@ -88,6 +96,7 @@ public class AssetImportPage extends FieldIDFrontEndPage {
     @Override
     protected void addNavBar(String navBarId) {
 
+        int preSelectedTab = -1;
         List<AbstractTab> tabs = new ArrayList<AbstractTab>();
         tabs.add(new AbstractTab(new FIDLabelModel("label.import")) {
             public Panel getPanel(String panelId)
@@ -107,6 +116,8 @@ public class AssetImportPage extends FieldIDFrontEndPage {
                 }
             });
             titleLabelsByTabIndex.add(new FIDLabelModel("nav.add_with_order").getObject());
+            if (setAddWithOrderAsInitial)
+                preSelectedTab = 1;
         }
         tabs.add(new AbstractTab(new FIDLabelModel("nav.add")) {
             public Panel getPanel(String panelId)
@@ -122,7 +133,9 @@ public class AssetImportPage extends FieldIDFrontEndPage {
             }
         };
         tabbedPanel.add(new AttributeAppender("class", new Model("wicket-tabpanel-right wicket-tabpanel"), " "));
-
+        if (preSelectedTab > -1) {
+                tabbedPanel.setSelectedTab(preSelectedTab);
+        }
         add(tabbedPanel);
     }
 

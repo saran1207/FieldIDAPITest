@@ -360,7 +360,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("startEventAssetSearch", StartEventPage.class);
 
         mountPage("AssetMerge", AssetMergePage.class);
-        mountPage("AssetImport", AssetImportPage.class);
+        mountPage("assetImport", AssetImportPage.class);
 
         mountResource("/signature/${eventId}/${criteriaId}", new SignatureResourceReference());
         mountResource("/temporarySignature/${fileId}", new TemporarySignatureResourceReference());
