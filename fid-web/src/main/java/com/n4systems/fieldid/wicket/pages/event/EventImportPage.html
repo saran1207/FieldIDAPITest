@@ -1,0 +1,86 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<wicket:extend>
+<div>
+    <div class="leftBox">
+
+        <div class="infoSet">
+            <h2>1.
+                <wicket:message key="label.select_event_type"/>
+            </h2>
+            <p><wicket:message key="message.select_event_type"/></p>
+                <select wicket:id="eventTypesSelectionList"></select>
+        </div>
+
+        <div class="infoSet">
+            <h2>2.
+                <wicket:message key="label.download_event_type_template"/>
+            </h2>
+            <p>
+                <wicket:message key="message.download_event_type_template"/>
+            </p>
+            <div id="templateLink">
+                <p>
+                    <a wicket:id="downloadTemplateLink">
+                        <wicket:message key="label_download_excel_with_observations"/>
+                    </a>
+                    <br/>
+                    <a wicket:id="downloadMinimalTemplateLink">
+                        <wicket:message key="label_download_excel_without_observations"/>
+                    </a>
+                </p>
+            </div>
+        </div>
+
+        <div class="infoSet">
+            <h2>3.
+                <wicket:message key="label.upload"/>
+            </h2>
+            <p>
+                <wicket:message key="message.event_types_upload"/>
+            </p>
+
+            <form method="post" wicket:id="fileUploadForm" class="fullForm fluentSets" enctype="multipart/form-data">
+                <span class="fieldHolder">
+                    <input type="file" wicket:id="fileToUpload" size="30"/>
+                </span>
+                <input type="submit" wicket:message="value:label.start_import"/>
+                <span id="or"><wicket:message key="label.or"/></span>
+                <a href="/fieldid/w/startEventAssetSearch">
+                    <wicket:message key="label.cancel"/>
+                </a>
+            </form>
+        </div>
+
+    </div>
+
+    <div class="rightBox">
+        <div class="formatDate">
+            <h4>
+                <wicket:message key="label.formatting_dates"/>
+            </h4>
+            <span><wicket:message key="message.formatting_dates"/></span>
+        </div>
+        <div class="faq">
+            <div class="faqSection">
+                <h4>
+                    <wicket:message key="label.import_export_question.6"/>
+                </h4>
+                <span><wicket:message key="label.import_export_answer.6"/></span>
+            </div>
+            <div class="faqSection">
+                <h4>
+                    <wicket:message key="label.import_export_question.7"/>
+                </h4>
+                <span><wicket:message key="label.import_export_answer.7"/></span>
+            </div>
+            <div class="faqSection">
+                <h4>
+                    <wicket:message key="label.import_export_question.2"/>
+                </h4>
+                <span><wicket:message key="label.import_export_answer.2"/></span>
+            </div>
+        </div>
+    </div>
+</div>
+</wicket:extend>
+</html>
