@@ -338,7 +338,15 @@ public class AddAssetWithOrderPanel extends Panel {
                                     (new Integer(orderManager.countAssetsTagged(lineItem))).toString()));
                         }
                     };
+            lineItemsView.setOutputMarkupId(true);
+            lineItemsView.setItemsPerPage(10);
             resultsTableSection.add(lineItemsView);
+            resultsTableSection.add(new StyledAjaxPagingNavigator("resultTableNavigator", lineItemsView, resultsTableSection) {
+                @Override
+                protected void onAjaxEvent(AjaxRequestTarget target) {
+                    target.add(resultsTableSection);
+                }
+            });
 
             emptyListSection = new WebMarkupContainer("emptyList");
             emptyListSection.setOutputMarkupId(true);
@@ -405,13 +413,6 @@ public class AddAssetWithOrderPanel extends Panel {
                 }
             };
 
-            //assetSearchTerm.add(new AttributeAppender("onkeyup", new Model("setAssetSearchButtonStatus(this);"), ";"));
-            // onpaste and oncut events are called before the element is updated so a brief pause is added
-            // to wait till after the update is done
-            //assetSearchTerm.add(new AttributeAppender("onpaste",
-            //        new Model("var e = this; setTimeout(function(){setAssetSearchButtonStatus(e);}, 4);"), ";"));
-            //assetSearchTerm.add(new AttributeAppender("oncut",
-            //        new Model("var e = this; setTimeout(function(){setAssetSearchButtonStatus(e);}, 4);"), ";"));
             assetSearchForm.add(assetSearchTerm);
 
             add(assetSearchForm);
@@ -432,7 +433,7 @@ public class AddAssetWithOrderPanel extends Panel {
 
             orderResultsSection.add(new Label("identifierLabel", securityGuardModel.getObject().getPrimaryOrg().getIdentifierLabel()));
 
-            final DataView<Asset> dataView =
+            final DataView<Asset> lineItemsView =
                     new DataView<Asset>("result.list", searchDataProvider) {
                         @Override
                         public void populateItem(final Item<Asset> item) {
@@ -457,10 +458,10 @@ public class AddAssetWithOrderPanel extends Panel {
                             item.add(new Label("result.customerRefNumber", asset.getCustomerRefNumber()));
                         }
                     };
-            dataView.setOutputMarkupId(true);
-            dataView.setItemsPerPage(10);
-            orderResultsSection.add(dataView);
-            orderResultsSection.add(new StyledAjaxPagingNavigator("resultTableNavigator", dataView, orderResultsSection) {
+            lineItemsView.setOutputMarkupId(true);
+            lineItemsView.setItemsPerPage(10);
+            orderResultsSection.add(lineItemsView);
+            orderResultsSection.add(new StyledAjaxPagingNavigator("resultTableNavigator", lineItemsView, orderResultsSection) {
                 @Override
                 protected void onAjaxEvent(AjaxRequestTarget target) {
                     target.add(orderResultsSection);
@@ -484,7 +485,7 @@ public class AddAssetWithOrderPanel extends Panel {
         }
         @Override
         public Iterator<? extends LineItem> iterator(int first, int count) {
-            return lineItems.iterator();
+            return lineItems.listIterator(first);
         }
 
         @Override

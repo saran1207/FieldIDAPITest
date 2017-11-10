@@ -81,7 +81,7 @@ public class AssetImportPage extends FieldIDFrontEndPage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderCSSReference("style/legacy/pageStyles/import.css");
-        response.renderCSSReference("style/wicketTabbedPanel.css");
+        response.renderCSSReference("style/legacy/component/wicketTabbedPanel.css");
         response.renderCSS("div#pageContent {display: none}", null);
         response.renderCSS(".wicket-tabbed-panel-content {margin-top: 14px;}", null);
         response.renderCSS("li .feedbackPanelINFO {padding: 10px 0px 10px 0px;\n" +
