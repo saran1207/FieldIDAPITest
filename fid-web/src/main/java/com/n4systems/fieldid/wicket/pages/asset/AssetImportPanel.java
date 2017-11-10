@@ -122,11 +122,8 @@ public class AssetImportPanel extends Panel {
 
             @Override
             public void onClick() {
-                System.out.println("Download template onClick");
                 AssetType assetType = getSelectedAssetType();
-                System.out.println("... selected asset type " + assetType.getName());
                 AbstractResourceStreamWriter rStream = doDownloadExample(assetType);
-                System.out.println("... of type " + rStream.getContentType());
                 ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(rStream, getExportFileName(assetType));
                 getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
             }
@@ -137,12 +134,10 @@ public class AssetImportPanel extends Panel {
         Form fileUploadForm = new Form("fileUploadForm") {
             @Override
             protected void onSubmit() {
-                System.out.println("File upload submitted");
                 ImportResultStatus result;
                 FileUpload fileUpload = fileUploadField.getFileUpload();
                 if (fileUpload != null) {
                     try {
-                        System.out.println("Uploading " + fileUploadField.getFileUpload().getClientFileName());
                         InputStream inputStream = fileUploadField.getFileUpload().getInputStream();
                         result = doImport(inputStream, getSelectedAssetType());
                     } catch (IOException ex) {
@@ -175,7 +170,6 @@ public class AssetImportPanel extends Panel {
     }
 
     private AbstractResourceStreamWriter doDownloadExample(AssetType assetType) {
-        System.out.println("Called doDownloadExample");
         AssetExporter exporter = new AssetExporter(getLoaderFactory().createPassthruListLoader(Arrays.asList(createExampleAsset(assetType))));
 
         AbstractResourceStreamWriter rStream = new AbstractResourceStreamWriter() {
@@ -276,10 +270,8 @@ public class AssetImportPanel extends Panel {
     private ImportResultStatus runImport(InputStream importDoc, AssetType type, ImportTaskRegistry taskRegistry) {
         String taskId = null;
         try {
-            System.out.println("RunImport starting");
             // This case shouldn't happen since the form should not allow you to submit when one is already registered
             if (isImportRunning(taskRegistry)) {
-                System.out.println("Import already running");
                 return new ImportResultStatus(false, null,
                         new FIDLabelModel("error.import_already_running").getObject(), null);
             } else {
@@ -291,34 +283,28 @@ public class AssetImportPanel extends Panel {
             List<ValidationResult> failedImportValidationResults = importer.readAndValidate();
 
             if (!failedImportValidationResults.isEmpty()) {
-                System.out.println("Import validation failed");
                 return new ImportResultStatus(false, failedImportValidationResults,
                         new FIDLabelModel("label.validation_failed").getObject(),null);
             }
             taskId = executeImportTask(importer, type, taskRegistry);
         } catch (EmptyDocumentException e) {
-            System.out.println("Import EmptyDocumentException");
             return new ImportResultStatus(false, null,
                     new FIDLabelModel("error.empty_import_document").getObject(), null);
         } catch (InvalidTitleException e) {
-            System.out.println("Import InvalidTitleException");
             return new ImportResultStatus(false, null,
                     new FIDLabelModel("error.bad_file_format", ArrayUtils.newArray(e.getTitle())).getObject(), null);
         } catch (Exception e) {
             // if the file is not an excel file, the exception that comes back will be a BifException contained inside an IOException
             if (e.getCause() instanceof BiffException) {
                 logger.warn(String.format("Import failed for User [%s]", getCurrentUser().toString()), e.getCause());
-                System.out.println("Import BiffException");
                 return new ImportResultStatus(false, null,
                         new FIDLabelModel("error.unsupported_content_type").getObject(), null);
             } else {
                 // we don't know exactly what happened here, log it and fail generically
-                System.out.println("Import generic failure");
                 logger.error(String.format("Import failed for User [%s]", getCurrentUser().toString()), e);
                 return new ImportResultStatus(false, null, new FIDLabelModel("error.import_failed").getObject(), null);
             }
         }
-        System.out.println("Import successfully submitted");
         return new ImportResultStatus(true, null, null, taskId); // SUCCESS;
     }
 
