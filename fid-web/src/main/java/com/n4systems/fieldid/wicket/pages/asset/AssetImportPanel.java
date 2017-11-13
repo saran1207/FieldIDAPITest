@@ -1,15 +1,14 @@
 package com.n4systems.fieldid.wicket.pages.asset;
 
-import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.exporting.AssetExporter;
-import com.n4systems.exporting.ImportTaskRegistry;
 import com.n4systems.exporting.Importer;
-import com.n4systems.exporting.ImporterFactory;
-import com.n4systems.exporting.beanutils.InvalidTitleException;
-import com.n4systems.exporting.beanutils.MarshalingException;
 import com.n4systems.exporting.io.*;
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.widgets.EntityImportInitiator;
+import com.n4systems.fieldid.wicket.pages.widgets.ImportResultPage;
+import com.n4systems.fieldid.wicket.pages.widgets.ImportResultStatus;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
@@ -27,10 +26,7 @@ import com.n4systems.notifiers.notifications.AssetImportSuccessNotification;
 import com.n4systems.notifiers.notifications.ImportFailureNotification;
 import com.n4systems.notifiers.notifications.ImportSuccessNotification;
 import com.n4systems.persistence.loaders.LoaderFactory;
-import com.n4systems.taskscheduling.TaskExecutor;
-import com.n4systems.taskscheduling.task.ImportTask;
 import com.n4systems.util.ArrayUtils;
-import jxl.read.biff.BiffException;
 import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -43,7 +39,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
 import org.apache.wicket.util.string.StringValue;
 import rfid.ejb.entity.InfoFieldBean;
@@ -52,13 +50,13 @@ import rfid.web.helper.SessionUser;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 /**
- * Created by agrabovskis on 2017-10-31.
+ * Component to handle asset import, including starting the import as well as generating a sample input Excel file
+ * for the selected asset type.
  */
 public class AssetImportPanel extends Panel {
 
@@ -139,7 +137,21 @@ public class AssetImportPanel extends Panel {
                 if (fileUpload != null) {
                     try {
                         InputStream inputStream = fileUploadField.getFileUpload().getInputStream();
-                        result = doImport(inputStream, getSelectedAssetType());
+                        EntityImportInitiator importService = new EntityImportInitiator(getWebSessionMap(), getCurrentUser(), getSessionUser(), getSecurityFilter()) {
+                            @Override
+                            protected ImportSuccessNotification createSuccessNotification() {
+                                return new AssetImportSuccessNotification(getCurrentUser(), getSelectedAssetType());
+                            }
+                            @Override
+                            protected ImportFailureNotification createFailureNotification() {
+                                return new AssetImportFailureNotification(getCurrentUser(), getSelectedAssetType());
+                            }
+                            @Override
+                            protected Importer createImporter(MapReader reader) {
+                                return getImporterFactory().createAssetImporter(reader, getCurrentUser(), getSelectedAssetType());
+                            }
+                        };
+                        result = importService.doImport(inputStream);
                     } catch (IOException ex) {
                         logger.error("Exception reading input file", ex);
                         result = new ImportResultStatus(false, null,
@@ -150,7 +162,19 @@ public class AssetImportPanel extends Panel {
                     result = new ImportResultStatus(false, null,
                             new FIDLabelModel("error.file_required").getObject(), null);
                 }
-                AssetImportResultPage resultPage = new AssetImportResultPage(selectedAssetType.getObject().getId(), result);
+                String selectedAssetTypeId = selectedAssetType.getObject().getId().toString();
+                ImportResultPage resultPage = new ImportResultPage(result) {
+
+                    @Override
+                    protected PageParameters getRerunParameters() {
+                        return PageParametersBuilder.param(
+                                AssetImportPage.ASSET_TYPE_ID_KEY, selectedAssetTypeId);
+                    }
+                    @Override
+                    protected Class<? extends IRequestablePage> getRerunPageClass() {
+                        return AssetImportPage.class;
+                    }
+                };
                 setResponsePage(resultPage);
             }
         };
@@ -245,116 +269,6 @@ public class AssetImportPanel extends Panel {
     private String getExportFileName(AssetType assetType) {
         return ContentType.EXCEL.prepareFileName(new FIDLabelModel("label.export_file.asset",
                 ArrayUtils.newArray(assetType.getName())).getObject());
-    }
-
-    public ImportResultStatus doImport(InputStream importDoc, AssetType type) {
-        if (importDoc == null) {
-            //TODO handle missing input file, maybe disable import button?
-            return new ImportResultStatus(false, null,
-                    new FIDLabelModel("error.file_required").getObject(), null);
-        }
-        else {
-            return runImport(importDoc, type, new ImportTaskRegistry());
-        }
-    }
-
-    /**
-     *
-     * @param importDoc
-     * @param type
-     * @return a tuple containing
-     *  1) boolean - success/failure,
-     *  2) list of validation failures (if any),
-     *  3) Error message if import failed
-     */
-    private ImportResultStatus runImport(InputStream importDoc, AssetType type, ImportTaskRegistry taskRegistry) {
-        String taskId = null;
-        try {
-            // This case shouldn't happen since the form should not allow you to submit when one is already registered
-            if (isImportRunning(taskRegistry)) {
-                return new ImportResultStatus(false, null,
-                        new FIDLabelModel("error.import_already_running").getObject(), null);
-            } else {
-                taskRegistry.remove(getImportTaskId());
-                getWebSessionMap().clearImportTaskId();
-            }
-
-            Importer importer = createAndValidateImporter(importDoc, type);
-            List<ValidationResult> failedImportValidationResults = importer.readAndValidate();
-
-            if (!failedImportValidationResults.isEmpty()) {
-                return new ImportResultStatus(false, failedImportValidationResults,
-                        new FIDLabelModel("label.validation_failed").getObject(),null);
-            }
-            taskId = executeImportTask(importer, type, taskRegistry);
-        } catch (EmptyDocumentException e) {
-            return new ImportResultStatus(false, null,
-                    new FIDLabelModel("error.empty_import_document").getObject(), null);
-        } catch (InvalidTitleException e) {
-            return new ImportResultStatus(false, null,
-                    new FIDLabelModel("error.bad_file_format", ArrayUtils.newArray(e.getTitle())).getObject(), null);
-        } catch (Exception e) {
-            // if the file is not an excel file, the exception that comes back will be a BifException contained inside an IOException
-            if (e.getCause() instanceof BiffException) {
-                logger.warn(String.format("Import failed for User [%s]", getCurrentUser().toString()), e.getCause());
-                return new ImportResultStatus(false, null,
-                        new FIDLabelModel("error.unsupported_content_type").getObject(), null);
-            } else {
-                // we don't know exactly what happened here, log it and fail generically
-                logger.error(String.format("Import failed for User [%s]", getCurrentUser().toString()), e);
-                return new ImportResultStatus(false, null, new FIDLabelModel("error.import_failed").getObject(), null);
-            }
-        }
-        return new ImportResultStatus(true, null, null, taskId); // SUCCESS;
-    }
-
-    private Importer createAndValidateImporter(InputStream importDoc, AssetType type)
-            throws IOException, ParseException, MarshalingException {
-
-        MapReader mapReader = new ExcelXSSFMapReader(importDoc, getSessionUser().getTimeZone());
-        Importer importer = createImporter(mapReader, type);
-        return importer;
-    }
-
-    private String executeImportTask(Importer importer, AssetType type, ImportTaskRegistry taskRegistry) {
-        ImportTask task = new ImportTask(importer, createSuccessNotification(type), createFailureNotification(type));
-
-        TaskExecutor.getInstance().execute(task);
-
-        // don't register the task and id until after we've sent
-        // to the executor, in case it was rejected
-        String taskId = task.getId();
-        setImportTaskId(taskId);
-        taskRegistry.register(task);
-        return taskId;
-    }
-
-    private Importer createImporter(MapReader reader, AssetType type) {
-        return getImporterFactory().createAssetImporter(reader, getCurrentUser(), type);
-    }
-
-    protected ImporterFactory getImporterFactory() {
-        return new ImporterFactory(getSecurityFilter());
-    }
-
-    private boolean isImportRunning(ImportTaskRegistry taskRegistry) {
-        return (getImportTaskId() != null && !(taskRegistry.get(getImportTaskId())).isCompleted());
-    }
-
-    private String getImportTaskId() {
-        return getWebSessionMap().getImportTaskId();
-    }
-
-    private void setImportTaskId(String taskId) {
-        getWebSessionMap().setImportTaskId(taskId);
-    }
-
-    private ImportSuccessNotification createSuccessNotification(AssetType type) {
-        return new AssetImportSuccessNotification(getCurrentUser(), type);
-    }
-
-    private ImportFailureNotification createFailureNotification(AssetType type) {
-        return new AssetImportFailureNotification(getCurrentUser(), type);
     }
 
     private BaseOrg getSessionUserOwner() {

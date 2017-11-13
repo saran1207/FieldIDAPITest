@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.pages.asset;
+package com.n4systems.fieldid.wicket.pages.widgets;
 
 import com.n4systems.api.validation.ValidationResult;
 
