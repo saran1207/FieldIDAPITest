@@ -12,6 +12,8 @@ import com.n4systems.security.Permissions;
 import org.apache.log4j.Logger;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
+import org.apache.wicket.extensions.markup.html.tabs.ITab;
+import org.apache.wicket.extensions.markup.html.tabs.PanelCachingTab;
 import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
@@ -91,30 +93,31 @@ public class AssetImportPage extends FieldIDFrontEndPage {
                 "font-size: 13px;\n" +
                 "display: block;\n" +
                 "color: #333333;}", null);
+        response.renderCSS("li .feedbackPanelERROR {text-align: center: display:block; color: red;}", null);
     }
 
     @Override
     protected void addNavBar(String navBarId) {
 
         int preSelectedTab = -1;
-        List<AbstractTab> tabs = new ArrayList<AbstractTab>();
-        tabs.add(new AbstractTab(new FIDLabelModel("label.import")) {
+        List<ITab> tabs = new ArrayList<ITab>();
+        tabs.add(new PanelCachingTab(new AbstractTab(new FIDLabelModel("label.import")) {
             public Panel getPanel(String panelId)
             {
                 return new AssetImportPanel(panelId, preSelectedAssetTypeId, currentUserModel, sessionUserModel,
                         securityFilterModel, webSessionMapModel);
             }
-        });
+        }));
         titleLabelsByTabIndex.add(new FIDLabelModel("title.asset_import").getObject());
 
         /* 'Add with Order' requires the integration feature to be enabled */
         boolean isIntegrationEnabled = getSecurityGuard().isExtendedFeatureEnabled(ExtendedFeature.Integration);
         if (isIntegrationEnabled) {
-            tabs.add(new AbstractTab(new FIDLabelModel("nav.add_with_order")) {
+            tabs.add(new PanelCachingTab(new AbstractTab(new FIDLabelModel("nav.add_with_order")) {
                 public Panel getPanel(String panelId) {
                     return new AddAssetWithOrderPanel(panelId, securityFilterModel, securityGuardModel, sessionUserModel);
                 }
-            });
+            }));
             titleLabelsByTabIndex.add(new FIDLabelModel("nav.add_with_order").getObject());
             if (setAddWithOrderAsInitial)
                 preSelectedTab = 1;
@@ -139,7 +142,7 @@ public class AssetImportPage extends FieldIDFrontEndPage {
         add(tabbedPanel);
     }
 
-    /* Create models for use by component panels to get values obtainable from this page.
+    /* Create models for use by component panels as callbacks to get values obtainable only from this page.
      * This avoids adding these objects to the serialized state of the panels  */
     private void createModels() {
         currentTitleModel = new IModel<String>() {

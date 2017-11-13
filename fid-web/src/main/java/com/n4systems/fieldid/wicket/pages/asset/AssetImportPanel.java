@@ -28,6 +28,8 @@ import com.n4systems.notifiers.notifications.ImportSuccessNotification;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.util.ArrayUtils;
 import org.apache.log4j.Logger;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -73,16 +75,16 @@ public class AssetImportPanel extends Panel {
                             IModel<SessionUser> sessionUserModel, IModel<SecurityFilter> securityFilterModel,
                             IModel<WebSessionMap> webSessionMapModel) {
         super(id);
+        this.currentUserModel = currentUserModel;
+        this.sessionUserModel = sessionUserModel;
+        this.securityFilterModel = securityFilterModel;
+        this.webSessionMapModel = webSessionMapModel;
         if (preSelectedAssetTypeId != null && !preSelectedAssetTypeId.isEmpty()) {
             selectedAssetType = Model.of(getAssetType(new Long(preSelectedAssetTypeId.toString())));
         }
         else {
             selectedAssetType = Model.of((AssetType)null);
         }
-        this.currentUserModel = currentUserModel;
-        this.sessionUserModel = sessionUserModel;
-        this.securityFilterModel = securityFilterModel;
-        this.webSessionMapModel = webSessionMapModel;
         addComponents();
     }
 
@@ -93,7 +95,12 @@ public class AssetImportPanel extends Panel {
                 new LoadableDetachableModel<List<AssetType>>() {
                     @Override
                     protected List<AssetType> load() {
-                        return getLoaderFactory().createAssetTypeListLoader().load();
+                        List<AssetType> types = getLoaderFactory().createAssetTypeListLoader().load();
+                        if (selectedAssetType.getObject() == null) {
+                            // If no selection default to first item in this list
+                            selectedAssetType.setObject(types.get(0));
+                        }
+                        return types;
                     }
                 },
                 new IChoiceRenderer<AssetType>() {
@@ -107,13 +114,15 @@ public class AssetImportPanel extends Panel {
                         return object.getId().toString();
                     }
                 }
-        ) {
+        );
+        assetTypeSelection.add(new OnChangeAjaxBehavior() {
             @Override
-            protected boolean wantOnSelectionChangedNotifications() {
-                return true;
+            protected void onUpdate(AjaxRequestTarget target) {
+              /* This behavior added to make wicket update the selection list model through ajax as opposed to the
+                 regular http request/response cycle which will lose any selection in the upload file field. */
             }
-
-        };
+        });
+        assetTypeSelection.setOutputMarkupId(true);
         add(assetTypeSelection);
 
         Link downloadTemplateLink = new Link("downloadTemplateLink") {
@@ -129,6 +138,7 @@ public class AssetImportPanel extends Panel {
         add(downloadTemplateLink);
 
         final FileUploadField fileUploadField = new FileUploadField("fileToUpload");
+
         Form fileUploadForm = new Form("fileUploadForm") {
             @Override
             protected void onSubmit() {
@@ -136,7 +146,7 @@ public class AssetImportPanel extends Panel {
                 FileUpload fileUpload = fileUploadField.getFileUpload();
                 if (fileUpload != null) {
                     try {
-                        InputStream inputStream = fileUploadField.getFileUpload().getInputStream();
+                        InputStream inputStream = fileUpload.getInputStream();
                         EntityImportInitiator importService = new EntityImportInitiator(getWebSessionMap(), getCurrentUser(), getSessionUser(), getSecurityFilter()) {
                             @Override
                             protected ImportSuccessNotification createSuccessNotification() {
@@ -186,11 +196,15 @@ public class AssetImportPanel extends Panel {
     private AssetType getSelectedAssetType() {
         Long id = selectedAssetType.getObject().getId();
         // Get fully populated AssetType object
-        return getAssetType(id);
+        return getAssetTypeWithPrefetches(id);
+    }
+
+    private AssetType getAssetTypeWithPrefetches(Long id) {
+        return getLoaderFactory().createAssetTypeLoader().setStandardPostFetches().setId(id).load();
     }
 
     private AssetType getAssetType(Long id) {
-        return getLoaderFactory().createAssetTypeLoader().setStandardPostFetches().setId(id).load();
+        return getLoaderFactory().createAssetTypeLoader().setId(id).load();
     }
 
     private AbstractResourceStreamWriter doDownloadExample(AssetType assetType) {
@@ -207,7 +221,7 @@ public class AssetImportPanel extends Panel {
 
                 } catch (Exception e) {
                     logger.error("Failed generating example asset export", e);
-                    //TODO handle this error?
+                    throw new RuntimeException(e);
                 } finally {
                     StreamUtils.close(writer);
                 }

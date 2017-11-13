@@ -1,6 +1,8 @@
 package com.n4systems.api.validation;
 
-public class ValidationResult {
+import java.io.Serializable;
+
+public class ValidationResult implements Serializable {
 	
 	public static ValidationResult pass() {
 		return new ValidationResult(true, null);

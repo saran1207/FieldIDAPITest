@@ -52,7 +52,6 @@ abstract public class ImportResultPage extends FieldIDFrontEndPage {
         add(feedbackPanel);
 
         if (!importResultsStatus.isSuccess()) {
-            System.out.println("error message to write");
             error(importResultsStatus.getErrorMessage());
         }
 
