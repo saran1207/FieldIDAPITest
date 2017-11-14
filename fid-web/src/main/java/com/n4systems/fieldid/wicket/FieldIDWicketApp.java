@@ -17,6 +17,7 @@ import com.n4systems.fieldid.wicket.pages.admin.security.ChangeAdminPasswordPage
 import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.TenantUserListPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
+import com.n4systems.fieldid.wicket.pages.asset.AssetImportPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetMergePage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.event.EventImportPage;
@@ -360,6 +361,7 @@ public class FieldIDWicketApp extends WebApplication {
 
         mountPage("AssetMerge", AssetMergePage.class);
         mountPage("eventImport", EventImportPage.class);
+        mountPage("assetImport", AssetImportPage.class);
 
         mountResource("/signature/${eventId}/${criteriaId}", new SignatureResourceReference());
         mountResource("/temporarySignature/${fileId}", new TemporarySignatureResourceReference());

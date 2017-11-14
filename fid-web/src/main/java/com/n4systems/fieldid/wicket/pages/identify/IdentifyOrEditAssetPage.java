@@ -30,6 +30,7 @@ import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.model.user.GroupedVisibleUsersModel;
 import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.asset.AssetImportPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetMergePage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.event.QuickEventPage;
@@ -139,7 +140,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
         Form modalContainerForm = new Form("modalContainerForm");
         modalContainerForm.add(multipleWindow = new DialogModalWindow("multiAssetConfigurationWindow", Model.of("Multiple Assets...")));
         add(modalContainerForm);
-        add(new NonWicketLink("importPageLink", "assetImportExport.action", new AttributeModifier("class", "mattButton")));
+        add(new BookmarkablePageLink<Void>("importPageLink", AssetImportPage.class).add(new AttributeModifier("class", "mattButton")));
         feedbackPanel = new FIDFeedbackPanel("feedbackPanel");
 
         add(feedbackPanel);
