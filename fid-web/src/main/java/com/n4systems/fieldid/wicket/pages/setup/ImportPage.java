@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.setup;
 
 import com.n4systems.fieldid.wicket.pages.asset.AssetImportPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -11,7 +12,12 @@ public class ImportPage extends SetupPage {
 
     public ImportPage() {
         add(new ImportOwnersForm("importOwnersForm"));
-        add(new BookmarkablePageLink<AssetImportPage>("importAssetsButton", AssetImportPage.class));
+        add(new AjaxLink<AssetImportPage>("importAssetsButton") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                getRequestCycle().setResponsePage(AssetImportPage.class);
+            }
+        });
         add(new ImportEventsForm("importEventsForm"));
         add(new ImportAutoAttributesForm("importAutoAttributesForm"));
         add(new ImportUsersForm("importUsersForm"));
