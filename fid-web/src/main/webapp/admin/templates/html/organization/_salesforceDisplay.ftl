@@ -1,4 +1,4 @@
-<label class="bold">Salesforce ID: </label>${tenant.salesforceId}
+<label class="bold">Salesforce ID: </label>${tenant.salesforceId!}
 <#if superUser>
 |
 <a href="javascript:void(0);" onClick="editSalesforceId(${id});">
