@@ -2,11 +2,19 @@ package com.n4systems.fieldid.wicket.pages.event;
 
 import com.n4systems.api.model.EventView;
 import com.n4systems.exporting.EventExporter;
+import com.n4systems.exporting.Importer;
 import com.n4systems.exporting.beanutils.*;
 import com.n4systems.exporting.io.ExcelXSSFMapWriter;
+import com.n4systems.exporting.io.MapReader;
 import com.n4systems.exporting.io.MapWriter;
+import com.n4systems.fieldid.actions.utils.WebSessionMap;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.widgets.EntityImportInitiator;
+import com.n4systems.fieldid.wicket.pages.widgets.ImportResultPage;
+import com.n4systems.fieldid.wicket.pages.widgets.ImportResultStatus;
 import com.n4systems.model.*;
 import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.model.eventschedule.NextEventDateByEventLoader;
@@ -14,9 +22,14 @@ import com.n4systems.model.eventschedule.NextEventDateByEventPassthruLoader;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.model.utils.StreamUtils;
+import com.n4systems.notifiers.notifications.EventImportFailureNotification;
+import com.n4systems.notifiers.notifications.EventImportSuccessNotification;
+import com.n4systems.notifiers.notifications.ImportFailureNotification;
+import com.n4systems.notifiers.notifications.ImportSuccessNotification;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
+import com.n4systems.security.Permissions;
 import com.n4systems.util.ArrayUtils;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -26,22 +39,26 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
+import org.apache.wicket.util.string.StringValue;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.*;
 
-/**
- * Created by agrabovskis on 2017-10-31.
- */
+
+@UserPermissionFilter(userRequiresOneOf={Permissions.CREATE_EVENT})
 public class EventImportPage extends FieldIDFrontEndPage {
 
     private static final Logger logger = Logger.getLogger(EventImportPage.class);
@@ -51,20 +68,31 @@ public class EventImportPage extends FieldIDFrontEndPage {
 
     public EventImportPage(PageParameters params) {
         super(params);
-        selectedEventType = Model.of((ThingEventType) null);
+        StringValue uniqueId = params.get("uniqueID");
+        if (uniqueId != null && !uniqueId.isEmpty())
+            selectedEventType = Model.of(getThingEventType(uniqueId.toLong()));
+        else
+            selectedEventType = Model.of((ThingEventType) null);
         addComponents();
     }
 
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        //response.renderCSSReference("style/legacy/fieldid.css");
         response.renderCSSReference("style/legacy/pageStyles/import.css");
     }
 
     @Override
     protected Label createTitleLabel(String labelId) {
         return new Label(labelId, new FIDLabelModel("label.import_events"));
+    }
+
+    private ThingEventType getSelectedEventType() {
+        return selectedEventType.getObject();
+    }
+
+    private ThingEventType getPopulatedSelectedEventType() {
+        return getPopulatedEventType(getSelectedEventType());
     }
 
     private void addComponents() {
@@ -77,7 +105,10 @@ public class EventImportPage extends FieldIDFrontEndPage {
                         QueryBuilder<ThingEventType> thingEventTypeQueryBuilder =
                                 new QueryBuilder<ThingEventType>(ThingEventType.class, getSecurityFilter());
                         thingEventTypeQueryBuilder.addOrder("name");
-                        return PersistenceManager.findAll(thingEventTypeQueryBuilder);
+                        List<ThingEventType> types = PersistenceManager.findAll(thingEventTypeQueryBuilder);
+                        if (selectedEventType.getObject() == null && types.size() > 0)
+                            selectedEventType.setObject(types.get(0));
+                        return types;
                     }
                 },
                 new IChoiceRenderer<ThingEventType>() {
@@ -104,15 +135,10 @@ public class EventImportPage extends FieldIDFrontEndPage {
 
             @Override
             public void onClick() {
-                System.out.println("Download template onClick");
                 ThingEventType eventType = getPopulatedEventType(selectedEventType.getObject());
-                if (eventType != null) {
-                    System.out.println("... selected event type " + eventType.getName());
-                    AbstractResourceStreamWriter rStream = doDownloadExample(eventType, true);
-                    System.out.println("... of type " + rStream.getContentType());
-                    ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(rStream, getExportFileName(eventType));
-                    getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
-                }
+                AbstractResourceStreamWriter rStream = doDownloadExample(eventType, true);
+                ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(rStream, getExportFileName(eventType));
+                getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
             }
         };
         add(downloadTemplateLink);
@@ -121,15 +147,10 @@ public class EventImportPage extends FieldIDFrontEndPage {
 
             @Override
             public void onClick() {
-                System.out.println("Download minimal template onClick");
                 ThingEventType eventType = getPopulatedEventType(selectedEventType.getObject());
-                if (eventType != null) {
-                    System.out.println("... selected event type " + eventType.getName());
-                    AbstractResourceStreamWriter rStream = doDownloadExample(eventType, false);
-                    System.out.println("... of type " + rStream.getContentType());
-                    ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(rStream, getExportFileName(eventType));
-                    getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
-                }
+                AbstractResourceStreamWriter rStream = doDownloadExample(eventType, false);
+                ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(rStream, getExportFileName(eventType));
+                getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
             }
         };
         add(downloadMinimalTemplateLink);
@@ -138,14 +159,26 @@ public class EventImportPage extends FieldIDFrontEndPage {
         Form fileUploadForm = new Form("fileUploadForm") {
             @Override
             protected void onSubmit() {
-                System.out.println("File upload submitted");
-                /*ImportResultStatus result;
+                ImportResultStatus result;
                 FileUpload fileUpload = fileUploadField.getFileUpload();
                 if (fileUpload != null) {
                     try {
-                        System.out.println("Uploading " + fileUploadField.getFileUpload().getClientFileName());
-                        InputStream inputStream = fileUploadField.getFileUpload().getInputStream();
-                        result = doImport(inputStream, getSelectedAssetType());
+                        InputStream inputStream = fileUpload.getInputStream();
+                        EntityImportInitiator importService = new EntityImportInitiator(getWebSessionMap(), getCurrentUser(), getSessionUser(), getSecurityFilter()) {
+                            @Override
+                            protected ImportSuccessNotification createSuccessNotification() {
+                                return new EventImportSuccessNotification(getCurrentUser(), getPopulatedSelectedEventType());
+                            }
+                            @Override
+                            protected ImportFailureNotification createFailureNotification() {
+                                return new EventImportFailureNotification(getCurrentUser(), getPopulatedSelectedEventType());
+                            }
+                            @Override
+                            protected Importer createImporter(MapReader reader) {
+                                return getImporterFactory().createEventImporter(reader, getCurrentUser(), getPopulatedSelectedEventType());
+                            }
+                        };
+                        result = importService.doImport(inputStream);
                     } catch (IOException ex) {
                         logger.error("Exception reading input file", ex);
                         result = new ImportResultStatus(false, null,
@@ -156,13 +189,28 @@ public class EventImportPage extends FieldIDFrontEndPage {
                     result = new ImportResultStatus(false, null,
                             new FIDLabelModel("error.file_required").getObject(), null);
                 }
-                AssetImportResultPage resultPage = new AssetImportResultPage(selectedAssetType.getObject().getId(), result);
-                setResponsePage(resultPage);*/
+                Long selectedEventTypeId = getSelectedEventType().getId();
+                ImportResultPage resultPage = new ImportResultPage(result) {
+
+                    @Override
+                    protected PageParameters getRerunParameters() {
+                        return PageParametersBuilder.uniqueId(selectedEventTypeId);
+                    }
+                    @Override
+                    protected Class<? extends IRequestablePage> getRerunPageClass() {
+                        return EventImportPage.class;
+                    }
+                };
+                setResponsePage(resultPage);
             }
         };
         fileUploadForm.setMultiPart(true);
         fileUploadForm.add(fileUploadField);
         add(fileUploadForm);
+    }
+
+    private ThingEventType getThingEventType(Long id) {
+        return getLoaderFactory().createFilteredIdLoader(ThingEventType.class).setId(id).load();
     }
 
     private ThingEventType getPopulatedEventType(ThingEventType type ) {
@@ -201,7 +249,7 @@ public class EventImportPage extends FieldIDFrontEndPage {
                         ((ExcelXSSFMapWriter) writer).writeToStream(getResponse().getOutputStream());
 
                     } catch (Exception e) {
-                        logger.error("Failed generating example asset export", e);
+                        logger.error("Failed generating example event export", e);
                         //TODO handle this error?
                     } finally {
                         StreamUtils.close(writer);
@@ -217,7 +265,7 @@ public class EventImportPage extends FieldIDFrontEndPage {
             return rStream;
         }
         catch(Exception ex) {
-            logger.error("Attempt to create event download example exel file failed", ex);
+            logger.error("Attempt to create event download example excel file failed", ex);
             throw new RuntimeException(ex);
         }
     }
@@ -257,6 +305,7 @@ public class EventImportPage extends FieldIDFrontEndPage {
 
         return (statuses.isEmpty()) ? null : statuses.get(0);
     }
+
     private Set<CriteriaResult> createExampleResults(ThingEventType type) throws InstantiationException, IllegalAccessException {
         Set<CriteriaResult> results = new HashSet<CriteriaResult>();
 
@@ -284,145 +333,16 @@ public class EventImportPage extends FieldIDFrontEndPage {
                 ArrayUtils.newArray(eventType.getName())).getObject());
     }
 
-    /*public ImportResultStatus doImport(InputStream importDoc, AssetType type) {
-        if (importDoc == null) {
-            //TODO handle missing input file, maybe disable import button?
-            return new ImportResultStatus(false, null,
-                    new FIDLabelModel("error.file_required").getObject(), null);
-        }
-        else {
-            return runImport(importDoc, type, new ImportTaskRegistry());
-        }
-    }*/
-
-
-    /**
-     *
-     * @param importDoc
-     * @param type
-     * @return a tuple containing
-     *  1) boolean - success/failure,
-     *  2) list of validation failures (if any),
-     *  3) Error message if import failed
-     */
-   /* private ImportResultStatus runImport(InputStream importDoc, AssetType type, ImportTaskRegistry taskRegistry) {
-        String taskId = null;
-        try {
-            System.out.println("RunImport starting");
-            // This case shouldn't happen since the form should not allow you to submit when one is already registered
-            if (isImportRunning(taskRegistry)) {
-                System.out.println("Import already running");
-                return new ImportResultStatus(false, null,
-                        new FIDLabelModel("error.import_already_running").getObject(), null);
-            } else {
-                taskRegistry.remove(getImportTaskId());
-                getWebSessionMap().clearImportTaskId();
-            }
-
-            Importer importer = createAndValidateImporter(importDoc, type);
-            List<ValidationResult> failedImportValidationResults = importer.readAndValidate();
-
-            if (!failedImportValidationResults.isEmpty()) {
-                System.out.println("Import validation failed");
-                return new ImportResultStatus(false, failedImportValidationResults,
-                        new FIDLabelModel("label.validation_failed").getObject(),null);
-            }
-            taskId = executeImportTask(importer, type, taskRegistry);
-        } catch (EmptyDocumentException e) {
-            System.out.println("Import EmptyDocumentException");
-            return new ImportResultStatus(false, null,
-                    new FIDLabelModel("error.empty_import_document").getObject(), null);
-        } catch (InvalidTitleException e) {
-            System.out.println("Import InvalidTitleException");
-            return new ImportResultStatus(false, null,
-                    new FIDLabelModel("error.bad_file_format", ArrayUtils.newArray(e.getTitle())).getObject(), null);
-        } catch (Exception e) {
-            // if the file is not an excel file, the exception that comes back will be a BifException contained inside an IOException
-            if (e.getCause() instanceof BiffException) {
-                logger.warn(String.format("Import failed for User [%s]", getCurrentUser().toString()), e.getCause());
-                System.out.println("Import BiffException");
-                return new ImportResultStatus(false, null,
-                        new FIDLabelModel("error.unsupported_content_type").getObject(), null);
-            } else {
-                // we don't know exactly what happened here, log it and fail generically
-                System.out.println("Import generic failure");
-                logger.error(String.format("Import failed for User [%s]", getCurrentUser().toString()), e);
-                return new ImportResultStatus(false, null, new FIDLabelModel("error.import_failed").getObject(), null);
-            }
-        }
-        System.out.println("Import successfully submitted");
-        return new ImportResultStatus(true, null, null, taskId); // SUCCESS;
-    }
-
-    private Importer createAndValidateImporter(InputStream importDoc, AssetType type)
-            throws IOException, ParseException, MarshalingException {
-
-        MapReader mapReader = new ExcelXSSFMapReader(importDoc, getSessionUser().getTimeZone());
-        Importer importer = createImporter(mapReader, type);
-        return importer;
-    }
-
-    private String executeImportTask(Importer importer, AssetType type, ImportTaskRegistry taskRegistry) {
-        ImportTask task = new ImportTask(importer, createSuccessNotification(type), createFailureNotification(type));
-
-        TaskExecutor.getInstance().execute(task);
-
-        // don't register the task and id until after we've sent
-        // to the executor, in case it was rejected
-        String taskId = task.getId();
-        setImportTaskId(taskId);
-        taskRegistry.register(task);
-        return taskId;
-    }
-
-    private Importer createImporter(MapReader reader, AssetType type) {
-        return getImporterFactory().createAssetImporter(reader, getCurrentUser(), type);
-    }
-
-    protected ImporterFactory getImporterFactory() {
-        return new ImporterFactory(getSecurityFilter());
-    }
-
-    private boolean isImportRunning(ImportTaskRegistry taskRegistry) {
-        return (getImportTaskId() != null && !(taskRegistry.get(getImportTaskId())).isCompleted());
-    }
-
-    private String getImportTaskId() {
-        return getWebSessionMap().getImportTaskId();
-    }
-
-    private void setImportTaskId(String taskId) {
-        getWebSessionMap().setImportTaskId(taskId);
-    }
-
-    private ImportSuccessNotification createSuccessNotification(AssetType type) {
-        return new AssetImportSuccessNotification(getCurrentUser(), type);
-    }
-
-    private ImportFailureNotification createFailureNotification(AssetType type) {
-        return new AssetImportFailureNotification(getCurrentUser(), type);
-    }
-
-    private BaseOrg getSessionUserOwner() {
-        return getSessionUser().getOwner();
-    }
-
-    public LoaderFactory getLoaderFactory() {
-        if (loaderFactory == null) {
-            loaderFactory = new LoaderFactory(getSecurityFilter());
-        }
-        return loaderFactory;
-    }*/
-
-    //public WebSessionMap getWebSessionMap() {
-    //    return webSessionMapModel.getObject();
-    // }
-
     private LoaderFactory getLoaderFactory() {
         if (loaderFactory == null) {
             loaderFactory = new LoaderFactory(getSecurityFilter());
         }
         return loaderFactory;
+    }
+
+    @Override
+    public WebSessionMap getWebSessionMap() {
+        return new WebSessionMap(getServletRequest().getSession(false));
     }
 }
 
