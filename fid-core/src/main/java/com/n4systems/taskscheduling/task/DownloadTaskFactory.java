@@ -62,8 +62,8 @@ public class DownloadTaskFactory {
 		return task;
 	}
 	
-	public AssetExportTask createAssetExportTask(DownloadLink link, String downloadUrl, ListLoader<Asset> productLoader) {
-		AssetExportTask task = new AssetExportTask(link, downloadUrl, linkSaver, createMailManager(), exporterFactory.createAssetExporter(productLoader));
+	public AssetExportTask createAssetExportTask(DownloadLink link, String downloadUrl, ListLoader<Asset> productLoader, boolean includeImportFields) {
+		AssetExportTask task = new AssetExportTask(link, downloadUrl, linkSaver, createMailManager(), exporterFactory.createAssetExporter(productLoader, includeImportFields));
 		return task;
 	}
 

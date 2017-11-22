@@ -23,6 +23,10 @@ public class AssetExporter implements Exporter {
 		this(assetLoader, new ExportMapMarshaller<AssetView>(AssetView.class), new AssetToViewConverter());
 	}
 
+	public AssetExporter(ListLoader<Asset> assetLoader, boolean includeImportFields) {
+		this(assetLoader, new ExportMapMarshaller<AssetView>(AssetView.class), new AssetToViewConverter(includeImportFields));
+	}
+
 	@Override
 	public void export(MapWriter mapWriter) throws ExportException {
 		AssetView view;

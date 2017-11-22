@@ -10,13 +10,42 @@
         </div>
 
         <div class="infoSet">
-            <h2>2. <wicket:message key="label.download_template"/></h2>
-            <p><wicket:message key="message.download_template"/></p>
-            <div id="templateLink">
-                <p id="assetTemplate">
-                    <a wicket:id="downloadTemplateLink"><wicket:message key="label_download_excel"/></a>
-                </p>
+            <h2>2. <wicket:message key="label.export_data_or_blank_template"/></h2>
+
+            <div>
+            <wicket:container wicket:id="downloadChoiceContainer">
+                <div>
+                <label style="font-weight: bold;"><input wicket:id="downloadDataChoice" type="radio" name="downloadTypeChoice" style="margin-right:5px;"/>
+                    <wicket:message key="label.export_data"/></label>
+                    <div wicket:id="downloadDataContainer" class="downloadContainer">
+                        <p><wicket:message key="message.download_data"/></p>
+                        <div class="control-group" style="margin-left:20px;">
+                            <label wicket:for="owner" style="float: left; line-height: 25px; font-size: 13px;"><wicket:message key="label.owner"/></label>
+                            <div wicket:id="owner" class="popup"></div>
+                        </div>
+                        <div id="templateLink" style="clear:both;">
+                            <p id="assetTemplate">
+                                <a wicket:id="downloadDataLink"><wicket:message key="label_download_data_excel"/></a>
+                            </p>
+                        </div>
+                    </div>
+                    </div>
+                <div style="clear:both;">
+
+                <label style="font-weight: bold;"><input wicket:id="downloadTemplateChoice" type="radio" name="downloadTypeChoice"  style="margin-right:5px;"/>
+                    <wicket:message key="label.download_template"/></label>
+                    <div wicket:id="downloadTemplateContainer" style="margin-top: 5px;" class="downloadContainer">
+                        <p><wicket:message key="message.download_template"/></p>
+                        <div id="templateLink">
+                            <p id="assetTemplate">
+                                <a wicket:id="downloadTemplateLink"><wicket:message key="label_download_excel"/></a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </wicket:container>
             </div>
+
         </div>
 
         <div class="infoSet">
@@ -56,5 +85,6 @@
         </div>
     </div>
 </div>
+    <div wicket:id="downloadNotificationModalWindow" ></div>
 </wicket:panel>
 </html>

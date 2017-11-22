@@ -1,0 +1,29 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<wicket:panel>
+
+    <div id="modalBox_message">
+<!--
+        <h3>
+            <wicket:message key="message.downloadbeinggenerated"/>
+        </h3>-->
+        <p>
+            <wicket:message key="message.download_change_name"/>
+        </p>
+        <p style="padding-left 10px; padding-top: 10px;"><span id="label" style="font-size: 1.2em; font-weight: bold;"><wicket:message key="label.downloadname"/></span>&nbsp;<span class="egColor"><wicket:message
+                key="message.downloadname"/></span></p>
+
+        <form wicket:id="form">
+            <input type="text" wicket:id="fileName" maxlength="255" style="margin: 5px 0 25px 0; font-size: 1.2em; border: 1px solid #9C9C9C; color: #555555; overflow: hidden; padding: 4px; width: 400px;"/>
+            <div class="formActions">
+                <input type="button" wicket:id="saveDownload" wicket:message="value:hbutton.savetomydownloads" style="text-align:left"/>
+                &nbsp;
+                <wicket:message key="label.or"/>
+                &nbsp;
+                <a href="javascript:void(0);" wicket:id="saveCloseMessage">
+                    <wicket:message key="hbutton.saveclosemessage"/>
+                </a>
+            </div>
+        </form>
+    </div>
+</wicket:panel>
+</html>

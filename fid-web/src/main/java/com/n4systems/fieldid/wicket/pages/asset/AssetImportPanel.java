@@ -4,8 +4,10 @@ import com.n4systems.exporting.AssetExporter;
 import com.n4systems.exporting.Importer;
 import com.n4systems.exporting.io.*;
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
+import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.widgets.DownloadExportNotificationWindow;
 import com.n4systems.fieldid.wicket.pages.widgets.EntityImportInitiator;
 import com.n4systems.fieldid.wicket.pages.widgets.ImportResultPage;
 import com.n4systems.fieldid.wicket.pages.widgets.ImportResultStatus;
@@ -14,6 +16,8 @@ import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.downloadlink.ContentType;
+import com.n4systems.model.downloadlink.DownloadCoordinator;
+import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
@@ -25,22 +29,34 @@ import com.n4systems.notifiers.notifications.AssetImportFailureNotification;
 import com.n4systems.notifiers.notifications.AssetImportSuccessNotification;
 import com.n4systems.notifiers.notifications.ImportFailureNotification;
 import com.n4systems.notifiers.notifications.ImportSuccessNotification;
+import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
+import com.n4systems.persistence.savers.SaverFactory;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ArrayUtils;
+import com.n4systems.util.ConfigurationProvider;
+import com.n4systems.util.uri.ActionURLBuilder;
 import org.apache.log4j.Logger;
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
+import org.apache.wicket.Session;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.request.Url;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -52,20 +68,28 @@ import rfid.web.helper.SessionUser;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 /**
- * Component to handle asset import, including starting the import as well as generating a sample input Excel file
- * for the selected asset type.
+ * Component to handle asset export/import with the following three functions
+ * 1) generate a sample input Excel file for the selected asset type
+ * 2) generate an input Excel file containing the data for all Assets of the selected asset type, filtered by owner
+ * 3) start an import using a specified input file
  */
 public class AssetImportPanel extends Panel {
 
     private static final Logger logger = Logger.getLogger(AssetImportPanel.class);
 
+    private DownloadExportNotificationWindow downloadExportNotification;
+    private IModel<Long> downloadFileIdModel;
+    private IModel<String> downloadFileNameModel;
+
     private LoaderFactory loaderFactory;
     private IModel<AssetType> selectedAssetType;
+    private IModel<BaseOrg> selectedOrgModel ;
     private IModel<User> currentUserModel;
     private IModel<SessionUser> sessionUserModel;
     private IModel<SecurityFilter> securityFilterModel;
@@ -85,11 +109,27 @@ public class AssetImportPanel extends Panel {
         else {
             selectedAssetType = Model.of((AssetType)null);
         }
+        selectedOrgModel = Model.of((BaseOrg)null);
+        downloadFileIdModel = new Model<Long>().of((Long)null);
+        downloadFileNameModel = new Model<String>().of("");
         addComponents();
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.renderCSS(".disabled {opacity: 0.5; pointer-events: none}", null);
+        response.renderCSS(".downloadContainer {margin-top: 5px; margin-bottom: 15px; clear:both;}", null);
     }
 
     private void addComponents() {
 
+        /* Modal window showing the user the export name */
+        downloadExportNotification = new DownloadExportNotificationWindow("downloadNotificationModalWindow",
+                getLoaderFactory(), downloadFileIdModel, downloadFileNameModel);
+        add(downloadExportNotification);
+
+        // Section 1
         final DropDownChoice<AssetType> assetTypeSelection = new DropDownChoice<AssetType>("assetTypesSelectionList",
                 selectedAssetType,
                 new LoadableDetachableModel<List<AssetType>>() {
@@ -125,18 +165,47 @@ public class AssetImportPanel extends Panel {
         assetTypeSelection.setOutputMarkupId(true);
         add(assetTypeSelection);
 
-        Link downloadTemplateLink = new Link("downloadTemplateLink") {
+        // Section 2
 
+        Model<Integer> choiceSelectionModel = new Model<Integer>(2);
+        RadioGroup downloadChoiceSelectionGroup = new RadioGroup("downloadChoiceContainer", choiceSelectionModel);
+
+
+        Component downloadDataContainer = createDownloadDataDetails("downloadDataContainer");
+        Component downloadTemplateContainer = createDownloadTemplateContainer("downloadTemplateContainer");
+
+        Radio dataRadioChoice = new Radio("downloadDataChoice", new Model<Integer>(1));
+        dataRadioChoice.add(new AjaxEventBehavior("onclick") {
             @Override
-            public void onClick() {
-                AssetType assetType = getSelectedAssetType();
-                AbstractResourceStreamWriter rStream = doDownloadExample(assetType);
-                ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(rStream, getExportFileName(assetType));
-                getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
+            protected void onEvent(AjaxRequestTarget target) {
+                downloadTemplateContainer.add(AttributeModifier.append("class","disabled"));
+                removeCssAttribute(downloadDataContainer, "disabled");
+                target.add(downloadTemplateContainer);
+                target.add(downloadDataContainer);
             }
-        };
-        add(downloadTemplateLink);
+        });
+        downloadChoiceSelectionGroup.add(dataRadioChoice);
+        downloadChoiceSelectionGroup.add(downloadDataContainer);
 
+        Radio templateRadioChoice = new Radio("downloadTemplateChoice", new Model<Integer>(2));
+        templateRadioChoice.add(new AjaxEventBehavior("onclick") {
+            @Override
+            protected void onEvent(AjaxRequestTarget target) {
+                removeCssAttribute(downloadTemplateContainer, "disabled");
+                downloadDataContainer.add(AttributeModifier.append("class", "disabled"));
+                target.add(downloadTemplateContainer);
+                target.add(downloadDataContainer);
+            }
+        });
+        downloadChoiceSelectionGroup.add(templateRadioChoice);
+        downloadChoiceSelectionGroup.add(downloadTemplateContainer);
+
+        add(downloadChoiceSelectionGroup);
+
+        // Hide based on initial selection
+        downloadDataContainer.add(AttributeModifier.append("class", "disabled"));
+
+        // Section 3
         final FileUploadField fileUploadField = new FileUploadField("fileToUpload");
 
         Form fileUploadForm = new Form("fileUploadForm") {
@@ -191,6 +260,84 @@ public class AssetImportPanel extends Panel {
         fileUploadForm.setMultiPart(true);
         fileUploadForm.add(fileUploadField);
         add(fileUploadForm);
+    }
+
+    private Component createDownloadDataDetails(String id) {
+        WebMarkupContainer container = new WebMarkupContainer(id);
+        container.setOutputMarkupId(true);
+        OrgLocationPicker orgPicker = new OrgLocationPicker("owner", selectedOrgModel);
+        container.add(orgPicker);
+
+        AjaxLink downloadDataLink = new AjaxLink("downloadDataLink") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                AssetType assetType = getSelectedAssetType();
+                System.out.println("Download full data link for asset type " + assetType.getName() +
+                " and org " + selectedOrgModel.getObject() + ", " + orgPicker.getModelObject());
+                submitAssetExport(target);
+            }
+        };
+        container.add(downloadDataLink);
+        return container;
+    }
+
+    private Component createDownloadTemplateContainer(String id) {
+
+        WebMarkupContainer container = new WebMarkupContainer(id);
+        container.setOutputMarkupId(true);
+
+        Link downloadTemplateLink = new Link("downloadTemplateLink") {
+
+            @Override
+            public void onClick() {
+                AssetType assetType = getSelectedAssetType();
+                AbstractResourceStreamWriter rStream = doDownloadExample(assetType);
+                ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(rStream, getExportFileName(assetType));
+                getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
+            }
+        };
+        container.add(downloadTemplateLink);
+        return container;
+    }
+
+    private void submitAssetExport(AjaxRequestTarget target) {
+
+        try {
+            String downloadFileName = new FIDLabelModel("label.export_file.asset", selectedAssetType.getObject().getName()).getObject();
+            DownloadLink downloadLink = getDownloadCoordinator().generateAssetExport(downloadFileName, getDownloadLinkUrl(),
+                    createAssetListLoader(selectedAssetType.getObject(), selectedOrgModel.getObject()));
+            downloadFileNameModel.setObject(downloadFileName);
+            downloadFileIdModel.setObject(downloadLink.getId());
+            downloadExportNotification.show(target);
+        } catch (RuntimeException e) {
+            logger.error("Unable to execute Asset data export", e);
+            Session.get().error(new FIDLabelModel("error.export_failed.asset").getObject());
+            target.addChildren(getPage(), FeedbackPanel.class);
+        }
+    }
+
+    private DownloadCoordinator getDownloadCoordinator() {
+        DownloadCoordinator downloadCoordinator = new DownloadCoordinator(getCurrentUser(), new SaverFactory().createDownloadLinkSaver());
+        return downloadCoordinator;
+    }
+    private ListLoader<Asset> createAssetListLoader(AssetType assetType, BaseOrg baseOrg) {
+        return getLoaderFactory().createAssetListLoader(assetType, baseOrg);
+    }
+
+    private String getDownloadLinkUrl() {
+        return new ActionURLBuilder(getBaseURI(), getConfigContext()).setAction("showDownloads").build() + "?fileId=";
+    }
+
+    private URI getBaseURI() {
+
+        // creates a URI based on the current url, and resolved against the context path which should be /fieldid.  We add on the extra / since we currently need it.
+        String fullPath = getRequestCycle().getUrlRenderer().renderFullUrl(Url.parse(getRequest().getContextPath()));
+         return URI.create(fullPath + "/");
+    }
+
+    private ConfigurationProvider getConfigContext() {
+        return ConfigService.getInstance();
     }
 
     private AssetType getSelectedAssetType() {
@@ -285,6 +432,29 @@ public class AssetImportPanel extends Panel {
                 ArrayUtils.newArray(assetType.getName())).getObject());
     }
 
+    private void removeCssAttribute(Component component, String cssClass) {
+        Object markupClasses = component.getMarkupAttributes().get("class");
+        if (markupClasses == null)
+            return; // No classes
+        String currentClasses = markupClasses.toString().trim();
+        System.out.println("component current classes '" + currentClasses + "'" + ", looking for '" + cssClass + "'");
+        if (currentClasses.isEmpty())
+            return;
+        String newClasses;
+        if (currentClasses.equals(cssClass))
+            /* Specified class is the only class currently specified */
+            newClasses = "";
+        else
+        if (currentClasses.startsWith(cssClass + " "))
+            /* Specified class is the first class of several */
+            newClasses = currentClasses.replaceFirst(cssClass + " ", "");
+        else
+            /* Specified class is after the first class or does not appear at all */
+            newClasses = currentClasses.replaceFirst(" " + cssClass, "");
+
+        component.add(AttributeModifier.replace("class", newClasses));
+    }
+
     private BaseOrg getSessionUserOwner() {
         return getSessionUser().getOwner();
     }
@@ -296,7 +466,7 @@ public class AssetImportPanel extends Panel {
         return loaderFactory;
     }
 
-    public WebSessionMap getWebSessionMap() {
+    private WebSessionMap getWebSessionMap() {
         return webSessionMapModel.getObject();
     }
 

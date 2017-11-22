@@ -74,11 +74,12 @@ public class DownloadCoordinator {
 		return link;
 	}
 	
-	public void generateAssetExport(String name, String downloadUrl, ListLoader<Asset> assetLoader) {
+	public DownloadLink generateAssetExport(String name, String downloadUrl, ListLoader<Asset> assetLoader) {
 		DownloadLink link = createDownloadLink(name, ContentType.EXCEL);
-		AssetExportTask task = taskFactory.createAssetExportTask(link, downloadUrl, assetLoader);
+		AssetExportTask task = taskFactory.createAssetExportTask(link, downloadUrl, assetLoader, true);
 		
 		executor.execute(task);
+		return link;
 	}
 
 	public DownloadLink generateUserExport(String name, String downloadUrl, ListLoader<User> userListLoader, SecurityFilter securityFilter) {
