@@ -89,7 +89,7 @@ public class AssetImportPanel extends Panel {
 
     private LoaderFactory loaderFactory;
     private IModel<AssetType> selectedAssetType;
-    private IModel<BaseOrg> selectedOrgModel ;
+    private IModel<BaseOrg> selectedOrgModel;
     private IModel<User> currentUserModel;
     private IModel<SessionUser> sessionUserModel;
     private IModel<SecurityFilter> securityFilterModel;
@@ -160,6 +160,7 @@ public class AssetImportPanel extends Panel {
             protected void onUpdate(AjaxRequestTarget target) {
               /* This behavior added to make wicket update the selection list model through ajax as opposed to the
                  regular http request/response cycle which will lose any selection in the upload file field. */
+                target.addChildren(getPage(), FeedbackPanel.class);
             }
         });
         assetTypeSelection.setOutputMarkupId(true);
@@ -178,6 +179,7 @@ public class AssetImportPanel extends Panel {
         dataRadioChoice.add(new AjaxEventBehavior("onclick") {
             @Override
             protected void onEvent(AjaxRequestTarget target) {
+                target.addChildren(getPage(), FeedbackPanel.class);
                 downloadTemplateContainer.add(AttributeModifier.append("class","disabled"));
                 removeCssAttribute(downloadDataContainer, "disabled");
                 target.add(downloadTemplateContainer);
@@ -191,6 +193,7 @@ public class AssetImportPanel extends Panel {
         templateRadioChoice.add(new AjaxEventBehavior("onclick") {
             @Override
             protected void onEvent(AjaxRequestTarget target) {
+                target.addChildren(getPage(), FeedbackPanel.class);
                 removeCssAttribute(downloadTemplateContainer, "disabled");
                 downloadDataContainer.add(AttributeModifier.append("class", "disabled"));
                 target.add(downloadTemplateContainer);
@@ -265,17 +268,20 @@ public class AssetImportPanel extends Panel {
     private Component createDownloadDataDetails(String id) {
         WebMarkupContainer container = new WebMarkupContainer(id);
         container.setOutputMarkupId(true);
-        OrgLocationPicker orgPicker = new OrgLocationPicker("owner", selectedOrgModel);
+        OrgLocationPicker orgPicker = new OrgLocationPicker("owner", selectedOrgModel).withAutoUpdate();
         container.add(orgPicker);
 
         AjaxLink downloadDataLink = new AjaxLink("downloadDataLink") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                AssetType assetType = getSelectedAssetType();
-                System.out.println("Download full data link for asset type " + assetType.getName() +
-                " and org " + selectedOrgModel.getObject() + ", " + orgPicker.getModelObject());
-                submitAssetExport(target);
+                if (selectedOrgModel.getObject() == null) {
+                    Session.get().error(new FIDLabelModel("error.owner_required").getObject());
+                    target.addChildren(getPage(), FeedbackPanel.class);
+                }
+                else {
+                    submitAssetExport(target);
+                }
             }
         };
         container.add(downloadDataLink);

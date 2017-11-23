@@ -87,11 +87,11 @@ public class DownloadTaskFactoryTest extends ConfigContextRequiredTestCase {
 		
 		DownloadTaskFactory dtf = new DownloadTaskFactory(linkSaver, exporterFactory);
 		
-		expect(exporterFactory.createAssetExporter(loader, false)).andReturn(exporter);
+		expect(exporterFactory.createAssetExporter(loader)).andReturn(exporter);
 		
 		replay(exporterFactory);
 		
-		AssetExportTask task = dtf.createAssetExportTask(link, "url", loader, false);
+		AssetExportTask task = dtf.createAssetExportTask(link, "url", loader);
 		
 		verify(exporterFactory);
 		

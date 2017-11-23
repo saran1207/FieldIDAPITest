@@ -23,10 +23,6 @@ public class ExporterFactory {
 		return new AssetExporter(assetLoader);
 	}
 
-	public AssetExporter createAssetExporter(ListLoader<Asset> assetLoader, boolean includeImportFields) {
-		return new AssetExporter(assetLoader, includeImportFields);
-	}
-
 //	public EventExporter createEventExporter(ListLoader<Event> eventLoader, NextEventDateByEventLoader nextDateLoader) {
 //		return new EventExporter(eventLoader, nextDateLoader);
 //	}

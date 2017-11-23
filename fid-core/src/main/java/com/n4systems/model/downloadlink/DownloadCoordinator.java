@@ -76,7 +76,7 @@ public class DownloadCoordinator {
 	
 	public DownloadLink generateAssetExport(String name, String downloadUrl, ListLoader<Asset> assetLoader) {
 		DownloadLink link = createDownloadLink(name, ContentType.EXCEL);
-		AssetExportTask task = taskFactory.createAssetExportTask(link, downloadUrl, assetLoader, true);
+		AssetExportTask task = taskFactory.createAssetExportTask(link, downloadUrl, assetLoader);
 		
 		executor.execute(task);
 		return link;

@@ -12,28 +12,13 @@ import com.n4systems.model.orgs.PrimaryOrg;
 
 public class AssetToViewConverter implements ModelToViewConverter<Asset, AssetView> {
 	private final InfoOptionMapConverter optionConverter;
-	private boolean includeImportFields;
 	
 	public AssetToViewConverter() {
-
 		this(new InfoOptionMapConverter());
-	}
-
-	public AssetToViewConverter(boolean includeImportFields) {
-
-		this(new InfoOptionMapConverter(), includeImportFields);
 	}
 	
 	public AssetToViewConverter(InfoOptionMapConverter optionConverter) {
-
 		this.optionConverter = optionConverter;
-		includeImportFields = false;
-	}
-
-	public AssetToViewConverter(InfoOptionMapConverter optionConverter, boolean includeImportFields) {
-
-		this.optionConverter = optionConverter;
-		this.includeImportFields = includeImportFields;
 	}
 
 	@Override
@@ -69,9 +54,8 @@ public class AssetToViewConverter implements ModelToViewConverter<Asset, AssetVi
 		}
 
 		view.getAttributes().putAll(optionConverter.toMap(model.getInfoOptions()));
-		if (includeImportFields) {
-			view.setGlobalId(model.getGlobalId());
-		}
+
+		view.setGlobalId(model.getMobileGUID());
 		
 		return view;
 	}

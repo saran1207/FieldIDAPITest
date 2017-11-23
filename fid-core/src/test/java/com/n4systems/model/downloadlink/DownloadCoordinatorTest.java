@@ -178,7 +178,7 @@ public class DownloadCoordinatorTest {
 		
 		expect(linkFactory.createDownloadLink((User)anyObject(), (String)anyObject(), (ContentType)anyObject())).andReturn(link);
 		
-		expect(taskFactory.createAssetExportTask(link, url, loader, true)).andReturn(task);
+		expect(taskFactory.createAssetExportTask(link, url, loader)).andReturn(task);
 		
 		executor.execute(task);
 		
