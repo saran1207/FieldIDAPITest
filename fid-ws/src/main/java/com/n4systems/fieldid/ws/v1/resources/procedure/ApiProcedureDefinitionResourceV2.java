@@ -654,7 +654,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         List<IsolationPoint> isolationPoints = definition.getUnlockIsolationPoints();
 
         for (IsolationPoint point : isolationPoints) {
-            if (point.getSourceType() != IsolationPointSourceType.N && point.getAnnotation() != null) {
+            if (point.getAnnotation() != null) {
                 ApiProcedureDefinitionImage convertedImage = new ApiProcedureDefinitionImage();
                 EditableImage image = point.getAnnotation().getImage();
 
