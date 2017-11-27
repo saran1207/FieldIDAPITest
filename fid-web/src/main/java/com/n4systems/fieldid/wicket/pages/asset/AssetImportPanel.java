@@ -268,7 +268,12 @@ public class AssetImportPanel extends Panel {
     private Component createDownloadDataDetails(String id) {
         WebMarkupContainer container = new WebMarkupContainer(id);
         container.setOutputMarkupId(true);
-        OrgLocationPicker orgPicker = new OrgLocationPicker("owner", selectedOrgModel).withAutoUpdate();
+        OrgLocationPicker orgPicker = new OrgLocationPicker("owner", selectedOrgModel) {
+            @Override
+            protected boolean showClearIcon() {
+                return true;
+            }
+        }.withAutoUpdate();
         container.add(orgPicker);
 
         AjaxLink downloadDataLink = new AjaxLink("downloadDataLink") {

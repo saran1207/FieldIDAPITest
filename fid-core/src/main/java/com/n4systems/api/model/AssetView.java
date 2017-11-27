@@ -54,10 +54,7 @@ public class AssetView extends ExternalModelView {
 	@SerializableField(title = "A:", order = 1200, handler = MapSerializationHandler.class, validators = { NotNullValidator.class, AssetViewAttributesValidator.class })
 	private Map<String, String> attributes = new LinkedHashMap<String, String>();
 
-	@SerializableField(title=ARCHIVE_FIELD, order = 1300, validators = {})
-	private String archive;
-
-	@SerializableField(title=SYSTEM_ID_FIELD, order = 9999999, validators = {ExternalUserGlobalIdValidator.class})
+	@SerializableField(title=SYSTEM_ID_FIELD, order = 9999999, validators = {ExternalAssetMobileGuidValidator.class})
 	private String globalId;
 	public AssetView() {}
 
@@ -175,14 +172,6 @@ public class AssetView extends ExternalModelView {
 
 	public void setAttributes(Map<String, String> attributes) {
 		this.attributes = attributes;
-	}
-
-	public String getArchive() {
-		return archive;
-	}
-
-	public void setArchive(String archive) {
-		this.archive = archive;
 	}
 
 	@Override

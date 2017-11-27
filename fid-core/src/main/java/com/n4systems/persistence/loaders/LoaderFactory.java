@@ -328,6 +328,10 @@ public class LoaderFactory implements Serializable {
 		return new GlobalIdLoader<T>(filter, clazz);
 	}
 
+	public AssetByMobileGuidLoader createAssetByMobileGuidLoader() {
+		return new AssetByMobileGuidLoader(filter);
+	}
+
 	public HasLinkedAssetsLoader createHasLinkedAssetsLoader() {
 		return new HasLinkedAssetsLoader(filter);
 	}

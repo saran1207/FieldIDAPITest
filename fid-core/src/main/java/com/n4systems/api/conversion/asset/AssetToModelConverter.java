@@ -6,6 +6,7 @@ import com.n4systems.api.conversion.event.LocationSpecification;
 import com.n4systems.api.model.AssetView;
 import com.n4systems.api.validation.validators.LocationValidator;
 import com.n4systems.model.*;
+import com.n4systems.model.asset.AssetByMobileGuidLoader;
 import com.n4systems.model.assetstatus.AssetStatusByNameLoader;
 import com.n4systems.model.infooption.InfoOptionConversionException;
 import com.n4systems.model.infooption.InfoOptionMapConverter;
@@ -25,20 +26,20 @@ import java.util.Date;
 import java.util.TreeSet;
 
 public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetView> {
+	private final AssetByMobileGuidLoader externalIdLoader;
 	private final OrgByNameLoader orgLoader;
 	private final NonIntegrationOrderManager nonIntegrationOrderManager;
 	private final AssetStatusByNameLoader assetStatusLoader;
 	private final InfoOptionMapConverter optionConverter;
     private final UserByFullNameLoader userLoader;
-
-
     private AssetType type;
 	private User identifiedBy;
     private final PredefinedLocationTreeLoader predefinedLocationTreeLoader;
 
-    public AssetToModelConverter(OrgByNameLoader orgLoader, NonIntegrationOrderManager nonIntegrationOrderManager,
+    public AssetToModelConverter(AssetByMobileGuidLoader externalIdLoader, OrgByNameLoader orgLoader, NonIntegrationOrderManager nonIntegrationOrderManager,
                                  AssetStatusByNameLoader assetStatusLoader, InfoOptionMapConverter optionConverter,
                                  PredefinedLocationTreeLoader predefinedLocationTreeLoader, UserByFullNameLoader userLoader) {
+		this.externalIdLoader = externalIdLoader;
 		this.orgLoader = orgLoader;
 		this.nonIntegrationOrderManager = nonIntegrationOrderManager;
 		this.assetStatusLoader = assetStatusLoader;
@@ -49,8 +50,10 @@ public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetV
 	
 	@Override
 	public Asset toModel(AssetView view, Transaction transaction) throws ConversionException {
-		Asset model = new Asset();
-		
+
+		boolean edit = view.getGlobalId() != null;
+		Asset model = (edit) ? loadModel(view.getGlobalId(), transaction) : new Asset();
+
 		PrimaryOrg primaryOrg = identifiedBy.getOwner().getPrimaryOrg();
 
 		if (view.getIdentified() != null) {
@@ -95,7 +98,13 @@ public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetV
 		} catch (InfoOptionConversionException e) {
 			throw new ConversionException(e);
 		}
-		
+
+		//if (YNValidator.YNField.isYes(view.getArchive())) {
+		//	model.archiveUser();
+		//}
+		model.setMobileGUID(view.getGlobalId());
+		model.setGlobalId(view.getGlobalId());
+
 		return model;
 	}
 
@@ -147,5 +156,13 @@ public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetV
 	public void setIdentifiedBy(User identifiedBy) {
 		this.identifiedBy = identifiedBy;
 	}
-	
+
+	private Asset loadModel(String externalId, Transaction transaction) throws ConversionException {
+		Asset model = externalIdLoader.setMobileGuid(externalId).load(transaction);
+
+		if (model == null) {
+			throw new ConversionException("No model found for external id [" + externalId + "]");
+		}
+		return model;
+	}
 }
