@@ -1,15 +1,23 @@
 package com.n4systems.fieldid.wicket.pages.setup;
 
+import com.n4systems.fieldid.wicket.pages.asset.AssetImportPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 
 public class ImportPage extends SetupPage {
 
     public ImportPage() {
         add(new ImportOwnersForm("importOwnersForm"));
-        add(new ImportAssetsForm("importAssetsForm"));
+        add(new AjaxLink<AssetImportPage>("importAssetsButton") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                getRequestCycle().setResponsePage(AssetImportPage.class);
+            }
+        });
         add(new ImportEventsForm("importEventsForm"));
         add(new ImportAutoAttributesForm("importAutoAttributesForm"));
         add(new ImportUsersForm("importUsersForm"));
@@ -22,12 +30,12 @@ public class ImportPage extends SetupPage {
         }
     }
 
-    class ImportAssetsForm extends Form {
+    /*class ImportAssetsForm extends Form {
         public ImportAssetsForm(String id) {
             super(id);
             add(createRedirectingAjaxButton("importAssetsButton", "/assetImportExport.action"));
         }
-    }
+    }*/
 
     class ImportEventsForm extends Form {
         public ImportEventsForm(String id) {

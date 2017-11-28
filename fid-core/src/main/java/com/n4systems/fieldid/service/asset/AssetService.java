@@ -2,10 +2,7 @@ package com.n4systems.fieldid.service.asset;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.n4systems.exceptions.InvalidArgumentException;
-import com.n4systems.exceptions.InvalidQueryException;
-import com.n4systems.exceptions.SubAssetUniquenessException;
-import com.n4systems.exceptions.UsedOnMasterEventException;
+import com.n4systems.exceptions.*;
 import com.n4systems.fieldid.LegacyMethod;
 import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
@@ -931,6 +928,31 @@ public class AssetService extends CrudService<Asset> {
         archiveProcedureAudits(asset);
 
         return save(asset);
+    }
+
+    /**
+     * Connect an asset to a customer order
+     * @param asset
+     * @param customerOrder
+     * @throws Exception
+     */
+    public void connectToCustomerOrder(Asset asset, Order customerOrder) {
+        /* Code based on AssetCrud.doConnectToCustomerOrder */
+        if (asset == null || asset.isNew()) {
+            logger.error("Connect to customer order failed on missing asset");
+            throw new MissingEntityException();
+        }
+
+        if (customerOrder == null || customerOrder.getId() == null) {
+            logger.error("Connect to customer order failed on missing customer order");
+            throw new MissingEntityException();
+        }
+
+        asset.setCustomerOrder(customerOrder);
+        asset.setPurchaseOrder(customerOrder.getPoNumber());
+        asset.setOwner(customerOrder.getOwner());
+
+        persistenceService.update(asset);
     }
 
     private void removeFromOfflineProfiles(Asset asset) {

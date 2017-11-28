@@ -1,0 +1,56 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<wicket:panel>
+    <div id="assetLookup">
+        <h2 class="orderTitle"><wicket:message key="label.attachassettoorder"/></h2>
+        <div id="assetSearch">
+            <form method="get" wicket:id="assetSearchForm" class="simpleInputForm"
+                  style="border-bottom: 1px solid #D0DAFD; padding: 5px 15px;">
+                <label class="label">
+                    <wicket:message key="label.smartsearch"/>
+                </label>
+                <input type="text" wicket:id="assetSearchTerm">
+                <input type="submit" wicket:message="value:hbutton.load"/>
+            </form>
+        </div>
+        <div wicket:id="customerOrderResultList">
+            <table class="list">
+                <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th><label wicket:id="identifierLabel"/></th>
+                    <th><wicket:message key="label.rfidnumber"/></th>
+                    <th><wicket:message key="label.customer"/></th>
+                    <th><wicket:message key="label.assettype"/></th>
+                    <th><wicket:message key="label.customer_reference"/></th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr wicket:id="result.list">
+                        <td>
+                          <!--  <@s.url id="baseActionUrl" action="marryCustomerOrder" namespace="/ajax" uniqueID="${asset.id}" />
+                            <a class="assetLink" href="" onclick="marryCustomerOrder('${baseActionUrl}'); return false;" >
+                                <@s.text name="label.connectorder" />
+                            </a>-->
+                            <a href="javascript:void(0);" wicket:id="connectAsset" class="assetLink">
+                            <wicket:message key="label.connectorder"/></a>
+                        </td>
+                        <td><label wicket:id="result.identifier"/></td>
+                        <td><label wicket:id="result.rfidNumber"/></td>
+                        <td><label wicket:id="result.ownerName"/></td>
+                        <td><label wicket:id="result.typeName"/></td>
+                        <td><label wicket:id="result.customerRefNumber"/></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div wicket:id="resultTableNavigator"></div>
+        </div>
+
+        <div wicket:id="noResultsSection" class="emptyList" >
+            <h2><wicket:message key="label.noresults"/></h2>
+            <p>
+                <wicket:message key="message.emptyassetlist" />
+            </p>
+        </div>
+    </div>
+</wicket:panel>
+</html>

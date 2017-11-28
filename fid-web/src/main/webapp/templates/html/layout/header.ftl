@@ -84,7 +84,7 @@
 						</#if>
 						<li>
                             <#if securityGuard.integrationEnabled>
-                                <a href="<@s.url action="identify" namespace="/"/>" class="speedLink textLink" id="menuIdentify">
+                                <a href="/fieldid/w/assetImport?initialTab=addWithOrder" class="speedLink textLink" id="menuIdentify">
                                     <@s.text name="speed.identify"/>
                                 </a>
                             <#else>
@@ -217,7 +217,7 @@
 										<a href="<@s.url value="/w/setup/import" />" ><@s.text name="nav.import"/> » </a>
 										<ul class="sub_menu">
 											<li><a href="<@s.url action='customerImportExport' namespace='/'/>"><@s.text name="label.import_owners"/></a></li>
-											<li><a href="<@s.url action='assetImportExport' namespace='/'/>"><@s.text name="label.import_assets"/></a></li>
+											<li><a href="/fieldid/w/assetImport"><@s.text name="label.import_assets"/></a></li>
 											<li><a href="<@s.url action='eventImportExport' namespace='/'/>"><@s.text name="label.import_events"/></a></li>
 											<li><a href="<@s.url action='autoAttributeImportExport' namespace='/'/>"><@s.text name="label.import_auto_attributes"/></a></li>
 											<li><a href="<@s.url action='userImportExport' namespace='/'/>"><@s.text name="label.import_users"/></a></li>

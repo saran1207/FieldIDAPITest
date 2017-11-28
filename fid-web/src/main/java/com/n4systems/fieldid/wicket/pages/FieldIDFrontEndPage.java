@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages;
 
 import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.UIConstants;
+import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.version.FieldIdVersion;
@@ -17,6 +18,7 @@ import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.saveditems.SavedItemsDropdown;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.asset.AssetImportPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ProcedureSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
@@ -123,7 +125,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     private TopFeedbackPanel topFeedbackPanel;
     private ModalWindow languageSelectionModalWindow;
     private final SelectLanguagePanel selectLanguagePanel;
-
+    private WebSessionMap webSessionMap;
 
     public FieldIDFrontEndPage() {
         this(null);
@@ -304,6 +306,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("assetsEventsLink", AssetsAndEventsPage.class));
         subMenuContainer.add(createAssetEventsSubMenu());
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("importLink", ImportPage.class));
+        subMenuContainer.add(new BookmarkablePageLink<WebPage>("assetImportLink", AssetImportPage.class));
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("templatesLink", TemplatesPage.class));
         subMenuContainer.add(createTemplatesSubMenu());
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("widgetsLink", WidgetsPage.class));
@@ -658,7 +661,8 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             identifyMenuContainer.setVisible(sessionUser.hasAccess("tag"));
 
             if (getSecurityGuard().isIntegrationEnabled()) {
-                identifyMenuContainer.add(new ExternalLink("identifyLink", "/fieldid/identify.action"));
+                identifyMenuContainer.add(new BookmarkablePageLink<Void>("identifyLink", AssetImportPage.class,
+                        PageParametersBuilder.param(AssetImportPage.INITIAL_TAB, AssetImportPage.ADD_WITH_ORDER_TAB)));
             } else {
                 identifyMenuContainer.add(new BookmarkablePageLink("identifyLink", IdentifyOrEditAssetPage.class));
             }
@@ -699,7 +703,12 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         }
     }
 
-
+    public WebSessionMap getWebSessionMap() {
+        if( webSessionMap == null ) {
+            webSessionMap = new WebSessionMap(getServletRequest().getSession(false));
+        }
+        return webSessionMap;
+    }
 
 
 }
