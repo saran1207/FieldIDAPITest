@@ -218,7 +218,7 @@
 										<ul class="sub_menu">
 											<li><a href="<@s.url action='customerImportExport' namespace='/'/>"><@s.text name="label.import_owners"/></a></li>
 											<li><a href="/fieldid/w/assetImport"><@s.text name="label.import_assets"/></a></li>
-											<li><a href="<@s.url action='eventImportExport' namespace='/'/>"><@s.text name="label.import_events"/></a></li>
+											<li><a href="/fieldid/w/eventImport"><@s.text name="label.import_events"/></a></li>
 											<li><a href="<@s.url action='autoAttributeImportExport' namespace='/'/>"><@s.text name="label.import_auto_attributes"/></a></li>
 											<li><a href="<@s.url action='userImportExport' namespace='/'/>"><@s.text name="label.import_users"/></a></li>
 										</ul>

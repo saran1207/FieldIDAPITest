@@ -21,6 +21,7 @@ import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ProcedureSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
+import com.n4systems.fieldid.wicket.pages.event.EventImportPage;
 import com.n4systems.fieldid.wicket.pages.event.StartEventPage;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
 import com.n4systems.fieldid.wicket.pages.loto.ProcedureAuditListPage;
@@ -272,6 +273,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         subMenuContainer.add(createAssetEventsSubMenu());
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("importLink", ImportPage.class));
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("assetImportLink", AssetImportPage.class));
+        subMenuContainer.add(new BookmarkablePageLink<WebPage>("eventImportLink", EventImportPage.class));
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("templatesLink", TemplatesPage.class));
         subMenuContainer.add(createTemplatesSubMenu());
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("widgetsLink", WidgetsPage.class));
