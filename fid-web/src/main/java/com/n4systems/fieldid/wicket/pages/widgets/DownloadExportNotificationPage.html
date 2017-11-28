@@ -1,0 +1,32 @@
+<wicket:extend>
+
+    <div id="modalBox_message">
+
+        <h3><wicket:message key="message.downloadbeinggenerated"/></h3>
+
+        <p>
+            <wicket:message key="message.download_change_name"/>
+        </p>
+
+        <form wicket:id="renameForm">
+
+            <p>
+                <span id="label"><wicket:message key="label.downloadname"/></span>
+                <span class="egColor"><wicket:message key="message.downloadname"/></span>
+            </p>
+
+            <input class="reportName" type="text" wicket:id="name"/>
+
+            <div class="formActions">
+                <input type="submit" wicket:message="value:hbutton.savetomydownloads" wicket:id="saveAndGoToDownloadsButton">
+
+                <wicket:message key="label.or"/>
+
+                <a wicket:id="saveAndCloseLink"><wicket:message key="hbutton.saveclosemessage"/></a>
+            </div>
+
+        </form>
+
+    </div>
+
+</wicket:extend>

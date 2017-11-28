@@ -7,7 +7,8 @@ import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
-import com.n4systems.fieldid.wicket.pages.widgets.DownloadExportNotificationWindow;
+import com.n4systems.fieldid.wicket.pages.OopsPage;
+import com.n4systems.fieldid.wicket.pages.widgets.DownloadExportNotificationPage;
 import com.n4systems.fieldid.wicket.pages.widgets.EntityImportInitiator;
 import com.n4systems.fieldid.wicket.pages.widgets.ImportResultPage;
 import com.n4systems.fieldid.wicket.pages.widgets.ImportResultStatus;
@@ -39,11 +40,11 @@ import com.n4systems.util.uri.ActionURLBuilder;
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
-import org.apache.wicket.Session;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.*;
@@ -83,9 +84,10 @@ public class AssetImportPanel extends Panel {
 
     private static final Logger logger = Logger.getLogger(AssetImportPanel.class);
 
-    private DownloadExportNotificationWindow downloadExportNotification;
-    private IModel<Long> downloadFileIdModel;
-    private IModel<String> downloadFileNameModel;
+    private static final String COLORBOX_CLASS = "colorboxLink";
+    private static final String JQUERY_COLORBOX_CMD = "jQuery('."+COLORBOX_CLASS+"').colorbox({maxHeight: '600px', width: '600px', height:'360px', ajax: true, iframe: true});";
+
+    private IModel<DownloadLink> downloadLinkModel;
 
     private LoaderFactory loaderFactory;
     private IModel<AssetType> selectedAssetType;
@@ -110,8 +112,7 @@ public class AssetImportPanel extends Panel {
             selectedAssetType = Model.of((AssetType)null);
         }
         selectedOrgModel = Model.of((BaseOrg)null);
-        downloadFileIdModel = new Model<Long>().of((Long)null);
-        downloadFileNameModel = new Model<String>().of("");
+        downloadLinkModel = new Model<DownloadLink>().of((DownloadLink) null);
         addComponents();
     }
 
@@ -123,11 +124,6 @@ public class AssetImportPanel extends Panel {
     }
 
     private void addComponents() {
-
-        /* Modal window showing the user the export name */
-        downloadExportNotification = new DownloadExportNotificationWindow("downloadNotificationModalWindow",
-                getLoaderFactory(), downloadFileIdModel, downloadFileNameModel);
-        add(downloadExportNotification);
 
         // Section 1
         final DropDownChoice<AssetType> assetTypeSelection = new DropDownChoice<AssetType>("assetTypesSelectionList",
@@ -171,9 +167,8 @@ public class AssetImportPanel extends Panel {
         Model<Integer> choiceSelectionModel = new Model<Integer>(2);
         RadioGroup downloadChoiceSelectionGroup = new RadioGroup("downloadChoiceContainer", choiceSelectionModel);
 
-
-        Component downloadDataContainer = createDownloadDataDetails("downloadDataContainer");
-        Component downloadTemplateContainer = createDownloadTemplateContainer("downloadTemplateContainer");
+        final Component downloadDataContainer = createDownloadDataDetails("downloadDataContainer");
+        final Component downloadTemplateContainer = createDownloadTemplateContainer("downloadTemplateContainer");
 
         Radio dataRadioChoice = new Radio("downloadDataChoice", new Model<Integer>(1));
         dataRadioChoice.add(new AjaxEventBehavior("onclick") {
@@ -181,9 +176,10 @@ public class AssetImportPanel extends Panel {
             protected void onEvent(AjaxRequestTarget target) {
                 target.addChildren(getPage(), FeedbackPanel.class);
                 downloadTemplateContainer.add(AttributeModifier.append("class","disabled"));
-                removeCssAttribute(downloadDataContainer, "disabled");
+                removeCssClass(downloadDataContainer, "disabled");
                 target.add(downloadTemplateContainer);
                 target.add(downloadDataContainer);
+                target.appendJavaScript(JQUERY_COLORBOX_CMD); // Enable JQuery colorbox on link
             }
         });
         downloadChoiceSelectionGroup.add(dataRadioChoice);
@@ -194,7 +190,7 @@ public class AssetImportPanel extends Panel {
             @Override
             protected void onEvent(AjaxRequestTarget target) {
                 target.addChildren(getPage(), FeedbackPanel.class);
-                removeCssAttribute(downloadTemplateContainer, "disabled");
+                removeCssClass(downloadTemplateContainer, "disabled");
                 downloadDataContainer.add(AttributeModifier.append("class", "disabled"));
                 target.add(downloadTemplateContainer);
                 target.add(downloadDataContainer);
@@ -266,29 +262,41 @@ public class AssetImportPanel extends Panel {
     }
 
     private Component createDownloadDataDetails(String id) {
+
         WebMarkupContainer container = new WebMarkupContainer(id);
         container.setOutputMarkupId(true);
+
+        final Link downloadDataLink = new Link("downloadDataLink") {
+
+            @Override
+            public void onClick() {
+                submitAssetExport();
+            }
+        };
+
+        downloadDataLink.setOutputMarkupId(true);
+        downloadDataLink.add(new AttributeModifier("class", "disabled") {
+            @Override
+            public boolean isEnabled(Component component) {
+                return selectedOrgModel.getObject() == null;
+            }
+        });
+        downloadDataLink.add(new AttributeAppender("class", new Model<>(COLORBOX_CLASS), " "));
+
         OrgLocationPicker orgPicker = new OrgLocationPicker("owner", selectedOrgModel) {
             @Override
             protected boolean showClearIcon() {
                 return true;
             }
-        }.withAutoUpdate();
-        container.add(orgPicker);
-
-        AjaxLink downloadDataLink = new AjaxLink("downloadDataLink") {
-
             @Override
-            public void onClick(AjaxRequestTarget target) {
-                if (selectedOrgModel.getObject() == null) {
-                    Session.get().error(new FIDLabelModel("error.owner_required").getObject());
-                    target.addChildren(getPage(), FeedbackPanel.class);
-                }
-                else {
-                    submitAssetExport(target);
-                }
+            protected void onChanged(AjaxRequestTarget target) {
+                if (getModelObject() != null)
+                    target.appendJavaScript(JQUERY_COLORBOX_CMD);
+                target.add(downloadDataLink);
             }
-        };
+        }.withAutoUpdate();
+
+        container.add(orgPicker);
         container.add(downloadDataLink);
         return container;
     }
@@ -312,19 +320,21 @@ public class AssetImportPanel extends Panel {
         return container;
     }
 
-    private void submitAssetExport(AjaxRequestTarget target) {
+    private void submitAssetExport() {
 
         try {
             String downloadFileName = new FIDLabelModel("label.export_file.asset", selectedAssetType.getObject().getName()).getObject();
             DownloadLink downloadLink = getDownloadCoordinator().generateAssetExport(downloadFileName, getDownloadLinkUrl(),
                     createAssetListLoader(selectedAssetType.getObject(), selectedOrgModel.getObject()));
-            downloadFileNameModel.setObject(downloadFileName);
-            downloadFileIdModel.setObject(downloadLink.getId());
-            downloadExportNotification.show(target);
+            downloadLinkModel.setObject(downloadLink);
+            DownloadExportNotificationPage downloadWindow = new DownloadExportNotificationPage(
+                    downloadLinkModel);
+            setResponsePage(downloadWindow);
         } catch (RuntimeException e) {
+            System.out.println("submitAssetExport exception " + e);
             logger.error("Unable to execute Asset data export", e);
-            Session.get().error(new FIDLabelModel("error.export_failed.asset").getObject());
-            target.addChildren(getPage(), FeedbackPanel.class);
+            throw new RestartResponseException(OopsPage.class,
+                    PageParametersBuilder.param(OopsPage.PARAM_ERROR_TYPE_KEY, new FIDLabelModel("error.export_failed.asset").getObject()));
         }
     }
 
@@ -443,7 +453,7 @@ public class AssetImportPanel extends Panel {
                 ArrayUtils.newArray(assetType.getName())).getObject());
     }
 
-    private void removeCssAttribute(Component component, String cssClass) {
+    private void removeCssClass(Component component, String cssClass) {
         Object markupClasses = component.getMarkupAttributes().get("class");
         if (markupClasses == null)
             return; // No classes
@@ -463,6 +473,7 @@ public class AssetImportPanel extends Panel {
             /* Specified class is after the first class or does not appear at all */
             newClasses = currentClasses.replaceFirst(" " + cssClass, "");
 
+        System.out.println("component new classes '" + newClasses + "'");
         component.add(AttributeModifier.replace("class", newClasses));
     }
 
