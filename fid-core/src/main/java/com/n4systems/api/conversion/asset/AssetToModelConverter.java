@@ -99,9 +99,6 @@ public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetV
 			throw new ConversionException(e);
 		}
 
-		//if (YNValidator.YNField.isYes(view.getArchive())) {
-		//	model.archiveUser();
-		//}
 		model.setMobileGUID(view.getGlobalId());
 		model.setGlobalId(view.getGlobalId());
 
@@ -162,6 +159,10 @@ public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetV
 
 		if (model == null) {
 			throw new ConversionException("No model found for external id [" + externalId + "]");
+		}
+		if (!model.getType().getId().equals(getType().getId())) {
+			throw new ConversionException("Loaded model for external id [" + externalId +
+					"] has asset type " + model.getType().getName() + " which does not match asset type " + getType().getName());
 		}
 		return model;
 	}

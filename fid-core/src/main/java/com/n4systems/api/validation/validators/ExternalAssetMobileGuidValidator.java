@@ -3,6 +3,8 @@ package com.n4systems.api.validation.validators;
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.exporting.beanutils.SerializableField;
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.asset.AssetByMobileGuidLoader;
 import com.n4systems.model.security.SecurityFilter;
 
@@ -18,7 +20,14 @@ public class ExternalAssetMobileGuidValidator implements FieldValidator {
 		}
 
 		AssetByMobileGuidLoader idExistsLoader = getMobileGuidExistsLoader(filter);
-		if (idExistsLoader.setMobileGuid((String)mobileGuid).load() != null) {
+		Asset asset = idExistsLoader.setMobileGuid((String)mobileGuid).load();
+		if (asset != null) {
+			Object assetType = validationContext.get(AssetViewValidator.ASSET_TYPE_KEY);
+			if (assetType != null && assetType instanceof AssetType) {
+				if (!((AssetType)assetType).getId().equals(asset.getType().getId())) {
+					return ValidationResult.fail(ExternalAssetMobileGuidCorrectAssetTypeFail, fieldName, mobileGuid, asset.getType().getName());
+				}
+			}
 			return ValidationResult.pass();
 		} else {
 			return ValidationResult.fail(ExternalAssetMobileGuidValidatorFail, fieldName, mobileGuid);
