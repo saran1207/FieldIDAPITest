@@ -42,6 +42,11 @@ public class AssetImporter extends AbstractImporter<AssetView> {
 		validator.getValidationContext().put(AssetViewValidator.ASSET_TYPE_KEY, converter.getType());
 	}
 
+	/**
+	 * Create versions of the eventScheduleManager and AssetSaveService that will use the same transaction
+	 * as that provided by the import framework for all db interactions.
+	 * @param transaction
+	 */
 	@Override
 	protected void preImport(Transaction transaction) {
 		if (eventScheduleManager == null)

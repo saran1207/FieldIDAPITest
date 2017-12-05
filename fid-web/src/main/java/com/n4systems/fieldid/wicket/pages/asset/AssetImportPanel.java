@@ -4,6 +4,7 @@ import com.n4systems.exporting.AssetExporter;
 import com.n4systems.exporting.Importer;
 import com.n4systems.exporting.io.*;
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
+import com.n4systems.fieldid.wicket.components.form.IndicatingAjaxSubmitLink;
 import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
@@ -44,6 +45,7 @@ import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -96,6 +98,7 @@ public class AssetImportPanel extends Panel {
     private IModel<SessionUser> sessionUserModel;
     private IModel<SecurityFilter> securityFilterModel;
     private IModel<WebSessionMap> webSessionMapModel;
+    private WebMarkupContainer loadingWheel;
 
     public AssetImportPanel(String id, StringValue preSelectedAssetTypeId, IModel<User> currentUserModel,
                             IModel<SessionUser> sessionUserModel, IModel<SecurityFilter> securityFilterModel,
@@ -119,6 +122,7 @@ public class AssetImportPanel extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
+        response.renderCSSReference("style/legacy/pageStyles/loadingPage.css");
         response.renderCSS(".disabled {opacity: 0.5; pointer-events: none}", null);
         response.renderCSS(".downloadContainer {margin-top: 5px; margin-bottom: 15px; clear:both;}", null);
     }
@@ -207,12 +211,16 @@ public class AssetImportPanel extends Panel {
         // Section 3
         final FileUploadField fileUploadField = new FileUploadField("fileToUpload");
 
-        Form fileUploadForm = new Form("fileUploadForm") {
+        Form fileUploadForm = new Form("fileUploadForm");
+
+        fileUploadForm.add(new IndicatingAjaxSubmitLink("fileUploadSubmit") {
             @Override
-            protected void onSubmit() {
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 ImportResultStatus result;
                 FileUpload fileUpload = fileUploadField.getFileUpload();
                 if (fileUpload != null) {
+                    loadingWheel.setVisible(true);
+                    target.add(loadingWheel);
                     try {
                         InputStream inputStream = fileUpload.getInputStream();
                         EntityImportInitiator importService = new EntityImportInitiator(getWebSessionMap(), getCurrentUser(), getSessionUser(), getSecurityFilter()) {
@@ -237,6 +245,7 @@ public class AssetImportPanel extends Panel {
                     }
                 }
                 else {
+                    logger.error("Input file required");
                     result = new ImportResultStatus(false, null,
                             new FIDLabelModel("error.file_required").getObject(), null);
                 }
@@ -253,12 +262,25 @@ public class AssetImportPanel extends Panel {
                         return AssetImportPage.class;
                     }
                 };
+                logger.info("import validation completed, displaying results");
                 setResponsePage(resultPage);
             }
-        };
+
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+
+            }
+        });
+
         fileUploadForm.setMultiPart(true);
         fileUploadForm.add(fileUploadField);
         add(fileUploadForm);
+
+        loadingWheel = new WebMarkupContainer("loadingWheel");
+        loadingWheel.setOutputMarkupId(true);
+        loadingWheel.setOutputMarkupPlaceholderTag(true);
+        loadingWheel.setVisible(false);
+        add(loadingWheel);
     }
 
     private Component createDownloadDataDetails(String id) {

@@ -56,7 +56,7 @@
                 <span class="fieldHolder">
                     <input type="file" wicket:id="fileToUpload" size="30"/>
                 </span>
-                <input type="submit" wicket:message="value:label.start_import" />
+                <input type="submit" wicket:id="fileUploadSubmit" wicket:message="value:label.start_import" />
                 <span id="or"><wicket:message key="label.or" /></span>
                 <a href="/fieldid/w/dashboard"><wicket:message key="label.cancel" /></a>
             </form>
@@ -85,6 +85,8 @@
         </div>
     </div>
 </div>
-  <!--  <div wicket:id="downloadNotificationModalWindow" ></div>-->
+    <div wicket:id="loadingWheel" class="prominent centerWheel">
+        <img src="fieldid/images/indicator.gif"/>
+    </div>
 </wicket:panel>
 </html>
