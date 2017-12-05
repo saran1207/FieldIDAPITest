@@ -22,8 +22,7 @@ import com.n4systems.model.user.UserByFullNameLoader;
 import com.n4systems.persistence.Transaction;
 import rfid.ejb.entity.InfoOptionBean;
 
-import java.util.Date;
-import java.util.TreeSet;
+import java.util.*;
 
 public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetView> {
 	private final AssetByMobileGuidLoader externalIdLoader;
@@ -94,7 +93,15 @@ public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetV
 		try {
 			// this could throw an exception if a select box info option could not be resolved.  It
 			// will not throw on missing but required info fields.  We let the validators take care of that part.
-			model.getInfoOptions().addAll(optionConverter.convertAssetAttributes(view.getAttributes(), type));
+			if (model.isNew()) {
+				model.getInfoOptions().addAll(optionConverter.convertAssetAttributes(view.getAttributes(), type));
+			}
+			else {
+				/* Update infoOptions in the model from those in the view  */
+				List<InfoOptionBean> updatedInfoOptions = optionConverter.convertAssetAttributes(view.getAttributes(), type);
+				Map<String, String> updatedInfoOptionsMap = optionConverter.toMap(updatedInfoOptions);
+				model.getInfoOptions().forEach((option) -> option.setName(updatedInfoOptionsMap.get(option.getInfoField().getName())));
+			}
 		} catch (InfoOptionConversionException e) {
 			throw new ConversionException(e);
 		}

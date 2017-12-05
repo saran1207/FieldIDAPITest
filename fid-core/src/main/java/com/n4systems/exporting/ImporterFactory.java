@@ -124,7 +124,7 @@ public class ImporterFactory {
 	}
 	
 	public AssetImporter createAssetImporter(MapReader reader, User identifiedBy, AssetType type) {
-		return new AssetImporter(reader, createViewValidator(), createAssetSaveService(identifiedBy), createAssetToModelConverter(identifiedBy, type));
+		return new AssetImporter(reader, createViewValidator(), identifiedBy, createAssetToModelConverter(identifiedBy, type));
 	}
 
 	public EventImporter createEventImporter(MapReader reader, User modifiedBy, ThingEventType type) {
