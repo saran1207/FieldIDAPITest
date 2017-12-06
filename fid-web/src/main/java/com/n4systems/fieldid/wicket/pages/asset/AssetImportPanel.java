@@ -4,7 +4,6 @@ import com.n4systems.exporting.AssetExporter;
 import com.n4systems.exporting.Importer;
 import com.n4systems.exporting.io.*;
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
-import com.n4systems.fieldid.wicket.components.form.IndicatingAjaxSubmitLink;
 import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
@@ -44,8 +43,10 @@ import org.apache.wicket.Component;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.IAjaxCallDecorator;
+import org.apache.wicket.ajax.calldecorator.AjaxCallDecorator;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -122,9 +123,10 @@ public class AssetImportPanel extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/legacy/pageStyles/loadingPage.css");
         response.renderCSS(".disabled {opacity: 0.5; pointer-events: none}", null);
         response.renderCSS(".downloadContainer {margin-top: 5px; margin-bottom: 15px; clear:both;}", null);
+        response.renderCSS(".busyIndicator {display: block; position: fixed; left: 50%; top: 50%; opacity : 0.8;}", null);
+        response.renderCSS(".hideElement {display: none;}", null);
     }
 
     private void addComponents() {
@@ -213,15 +215,14 @@ public class AssetImportPanel extends Panel {
 
         Form fileUploadForm = new Form("fileUploadForm");
 
-        fileUploadForm.add(new IndicatingAjaxSubmitLink("fileUploadSubmit") {
+        AjaxButton fileUploadButton =new AjaxButton("fileUploadSubmit") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 ImportResultStatus result;
                 FileUpload fileUpload = fileUploadField.getFileUpload();
                 if (fileUpload != null) {
-                    loadingWheel.setVisible(true);
-                    target.add(loadingWheel);
                     try {
+                        logger.info("Beginning import of file " + fileUpload.getClientFileName());
                         InputStream inputStream = fileUpload.getInputStream();
                         EntityImportInitiator importService = new EntityImportInitiator(getWebSessionMap(), getCurrentUser(), getSessionUser(), getSecurityFilter()) {
                             @Override
@@ -243,6 +244,9 @@ public class AssetImportPanel extends Panel {
                         result = new ImportResultStatus(false, null,
                                 new FIDLabelModel("error.io_error_reading_import_file").getObject(), null);
                     }
+                    finally {
+                        logger.info("Import validation phase completed");
+                    }
                 }
                 else {
                     logger.error("Input file required");
@@ -262,7 +266,6 @@ public class AssetImportPanel extends Panel {
                         return AssetImportPage.class;
                     }
                 };
-                logger.info("import validation completed, displaying results");
                 setResponsePage(resultPage);
             }
 
@@ -270,8 +273,19 @@ public class AssetImportPanel extends Panel {
             protected void onError(AjaxRequestTarget target, Form<?> form) {
 
             }
-        });
+            @Override
+            protected IAjaxCallDecorator getAjaxCallDecorator() {
+                return new AjaxCallDecorator() {
+                    @Override
+                    public CharSequence decorateScript(Component component, CharSequence script) {
+                        /* When this button is clicked show the busy indicator */
+                        return "document.getElementById('"+ loadingWheel.getMarkupId()+"').className='busyIndicator';"+script;
+                    }
+                };
+            }
+        };
 
+        fileUploadForm.add(fileUploadButton);
         fileUploadForm.setMultiPart(true);
         fileUploadForm.add(fileUploadField);
         add(fileUploadForm);
@@ -279,7 +293,6 @@ public class AssetImportPanel extends Panel {
         loadingWheel = new WebMarkupContainer("loadingWheel");
         loadingWheel.setOutputMarkupId(true);
         loadingWheel.setOutputMarkupPlaceholderTag(true);
-        loadingWheel.setVisible(false);
         add(loadingWheel);
     }
 
@@ -353,7 +366,6 @@ public class AssetImportPanel extends Panel {
                     downloadLinkModel);
             setResponsePage(downloadWindow);
         } catch (RuntimeException e) {
-            System.out.println("submitAssetExport exception " + e);
             logger.error("Unable to execute Asset data export", e);
             throw new RestartResponseException(OopsPage.class,
                     PageParametersBuilder.param(OopsPage.PARAM_ERROR_TYPE_KEY, new FIDLabelModel("error.export_failed.asset").getObject()));
@@ -480,7 +492,6 @@ public class AssetImportPanel extends Panel {
         if (markupClasses == null)
             return; // No classes
         String currentClasses = markupClasses.toString().trim();
-        System.out.println("component current classes '" + currentClasses + "'" + ", looking for '" + cssClass + "'");
         if (currentClasses.isEmpty())
             return;
         String newClasses;
@@ -495,7 +506,6 @@ public class AssetImportPanel extends Panel {
             /* Specified class is after the first class or does not appear at all */
             newClasses = currentClasses.replaceFirst(" " + cssClass, "");
 
-        System.out.println("component new classes '" + newClasses + "'");
         component.add(AttributeModifier.replace("class", newClasses));
     }
 
