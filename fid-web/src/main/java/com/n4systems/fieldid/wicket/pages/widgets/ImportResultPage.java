@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.widgets;
 
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.exporting.ImportTaskRegistry;
+import com.n4systems.fieldid.wicket.components.table.StyledAjaxPagingNavigator;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.taskscheduling.task.ImportTask;
@@ -13,9 +14,10 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.data.DataView;
+import org.apache.wicket.markup.repeater.data.ListDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.component.IRequestablePage;
@@ -29,6 +31,7 @@ import org.odlabs.wiquery.ui.progressbar.ProgressBar;
 abstract public class ImportResultPage extends FieldIDFrontEndPage {
 
     private static final Logger logger = Logger.getLogger(ImportResultPage.class);
+    private static final int VALIDATION_ERRORS_PAGE_SIZE = 10;
 
     public ImportResultPage(ImportResultStatus importResultsStatus) {
         super(null);
@@ -40,6 +43,7 @@ abstract public class ImportResultPage extends FieldIDFrontEndPage {
         super.renderHead(response);
         response.renderCSSReference("style/legacy/pageStyles/import.css");
         response.renderCSS(".ui-progressbar-value {background: #79c5e5;}", "legacyStyle");
+        response.renderCSS(".pagination {margin-left: 15px; float: left;}", null);
     }
 
     private void addComponents(final ImportResultStatus importResultsStatus) {
@@ -56,15 +60,29 @@ abstract public class ImportResultPage extends FieldIDFrontEndPage {
         }
 
         WebMarkupContainer validationErrorsSection = new WebMarkupContainer("validationErrorsSection");
+        validationErrorsSection.setOutputMarkupId(true);
+        validationErrorsSection.setOutputMarkupPlaceholderTag(true);
+
         if (importResultsStatus.getValidationResults() != null && importResultsStatus.getValidationResults().size() > 0) {
-            ListView<ValidationResult> validationErrorsListView =
-                    new ListView<ValidationResult>("validationErrors", importResultsStatus.getValidationResults()) {
-              protected void populateItem(ListItem<ValidationResult> item) {
-                  item.add(new Label("validationErrorRow", new Integer(item.getModelObject().getRow()).toString()));
-                  item.add(new Label("validationErrorMsg", item.getModelObject().getMessage()));
-              }
-            };
-            validationErrorsSection.add(validationErrorsListView);
+
+            final DataView<ValidationResult> dataView =
+                    new DataView<ValidationResult>("validationErrors",
+                            new ListDataProvider(importResultsStatus.getValidationResults())) {
+                        @Override
+                        public void populateItem(final Item<ValidationResult> item) {
+                            item.add(new Label("validationErrorRow", new Integer(item.getModelObject().getRow()).toString()));
+                            item.add(new Label("validationErrorMsg", item.getModelObject().getMessage()));
+                        }
+                    };
+            dataView.setOutputMarkupId(true);
+            dataView.setItemsPerPage(VALIDATION_ERRORS_PAGE_SIZE);
+            validationErrorsSection.add(dataView);
+            validationErrorsSection.add(new StyledAjaxPagingNavigator("errorsTableNavigator", dataView, validationErrorsSection) {
+                @Override
+                protected void onAjaxEvent(AjaxRequestTarget target) {
+                    target.add(validationErrorsSection);
+                }
+            });
         }
         else {
             validationErrorsSection.setVisible(false);
@@ -151,7 +169,10 @@ abstract public class ImportResultPage extends FieldIDFrontEndPage {
     }
 
     private int getCurrentPercentDone(ImportTask importTask) {
-        return importTask.getCurrentRow() * 100 / importTask.getTotalRows();
+        if (importTask.getTotalRows() == 0)
+            return 100;
+        else
+            return importTask.getCurrentRow() * 100 / importTask.getTotalRows();
     }
 
     /**

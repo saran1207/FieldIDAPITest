@@ -1,5 +1,7 @@
 package com.n4systems.persistence.loaders;
 
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.api.Exportable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.asset.*;
@@ -326,6 +328,10 @@ public class LoaderFactory implements Serializable {
 		return new GlobalIdLoader<T>(filter, clazz);
 	}
 
+	public AssetByMobileGuidLoader createAssetByMobileGuidLoader() {
+		return new AssetByMobileGuidLoader(filter);
+	}
+
 	public HasLinkedAssetsLoader createHasLinkedAssetsLoader() {
 		return new HasLinkedAssetsLoader(filter);
 	}
@@ -558,4 +564,10 @@ public class LoaderFactory implements Serializable {
 		return new AssetsByIdOwnerTypeLoader(filter);
 	}
 
+	public ListLoader<Asset> createAssetListLoader() {
+		return new AssetListLoader(filter);
+	}
+	public ListLoader<Asset> createAssetListLoader(AssetType assetType, BaseOrg baseOrg) {
+		return new AssetListLoader(filter, assetType, baseOrg);
+	}
 }

@@ -69,6 +69,7 @@ public class AssetImportPage extends FieldIDFrontEndPage {
             get recognized as a feedback panel for our messages. */
         remove(getTopFeedbackPanel());
         feedbackPanel = new FeedbackPanel("topFeedbackPanel");
+        feedbackPanel.add(new AttributeAppender("style", new Model("text-align: center; color:red; padding: 0px 10px"), " "));
         feedbackPanel.setOutputMarkupId(true);
         add(feedbackPanel);
     }
@@ -101,14 +102,14 @@ public class AssetImportPage extends FieldIDFrontEndPage {
 
         int preSelectedTab = -1;
         List<ITab> tabs = new ArrayList<ITab>();
-        tabs.add(new PanelCachingTab(new AbstractTab(new FIDLabelModel("label.import")) {
+        tabs.add(new PanelCachingTab(new AbstractTab(new FIDLabelModel("nav.import_export")) {
             public Panel getPanel(String panelId)
             {
                 return new AssetImportPanel(panelId, preSelectedAssetTypeId, currentUserModel, sessionUserModel,
                         securityFilterModel, webSessionMapModel);
             }
         }));
-        titleLabelsByTabIndex.add(new FIDLabelModel("title.asset_import").getObject());
+        titleLabelsByTabIndex.add(new FIDLabelModel("title.asset_import_export").getObject());
 
         /* 'Add with Order' requires the integration feature to be enabled */
         boolean isIntegrationEnabled = getSecurityGuard().isExtendedFeatureEnabled(ExtendedFeature.Integration);

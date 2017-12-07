@@ -22,7 +22,7 @@ public class ExporterFactory {
 	public AssetExporter createAssetExporter(ListLoader<Asset> assetLoader) {
 		return new AssetExporter(assetLoader);
 	}
-	
+
 //	public EventExporter createEventExporter(ListLoader<Event> eventLoader, NextEventDateByEventLoader nextDateLoader) {
 //		return new EventExporter(eventLoader, nextDateLoader);
 //	}

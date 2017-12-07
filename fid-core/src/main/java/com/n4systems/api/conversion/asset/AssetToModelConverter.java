@@ -6,6 +6,7 @@ import com.n4systems.api.conversion.event.LocationSpecification;
 import com.n4systems.api.model.AssetView;
 import com.n4systems.api.validation.validators.LocationValidator;
 import com.n4systems.model.*;
+import com.n4systems.model.asset.AssetByMobileGuidLoader;
 import com.n4systems.model.assetstatus.AssetStatusByNameLoader;
 import com.n4systems.model.infooption.InfoOptionConversionException;
 import com.n4systems.model.infooption.InfoOptionMapConverter;
@@ -21,24 +22,23 @@ import com.n4systems.model.user.UserByFullNameLoader;
 import com.n4systems.persistence.Transaction;
 import rfid.ejb.entity.InfoOptionBean;
 
-import java.util.Date;
-import java.util.TreeSet;
+import java.util.*;
 
 public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetView> {
+	private final AssetByMobileGuidLoader externalIdLoader;
 	private final OrgByNameLoader orgLoader;
 	private final NonIntegrationOrderManager nonIntegrationOrderManager;
 	private final AssetStatusByNameLoader assetStatusLoader;
 	private final InfoOptionMapConverter optionConverter;
     private final UserByFullNameLoader userLoader;
-
-
     private AssetType type;
 	private User identifiedBy;
     private final PredefinedLocationTreeLoader predefinedLocationTreeLoader;
 
-    public AssetToModelConverter(OrgByNameLoader orgLoader, NonIntegrationOrderManager nonIntegrationOrderManager,
+    public AssetToModelConverter(AssetByMobileGuidLoader externalIdLoader, OrgByNameLoader orgLoader, NonIntegrationOrderManager nonIntegrationOrderManager,
                                  AssetStatusByNameLoader assetStatusLoader, InfoOptionMapConverter optionConverter,
                                  PredefinedLocationTreeLoader predefinedLocationTreeLoader, UserByFullNameLoader userLoader) {
+		this.externalIdLoader = externalIdLoader;
 		this.orgLoader = orgLoader;
 		this.nonIntegrationOrderManager = nonIntegrationOrderManager;
 		this.assetStatusLoader = assetStatusLoader;
@@ -49,8 +49,10 @@ public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetV
 	
 	@Override
 	public Asset toModel(AssetView view, Transaction transaction) throws ConversionException {
-		Asset model = new Asset();
-		
+
+		boolean edit = view.getGlobalId() != null;
+		Asset model = (edit) ? loadModel(view.getGlobalId(), transaction) : new Asset();
+
 		PrimaryOrg primaryOrg = identifiedBy.getOwner().getPrimaryOrg();
 
 		if (view.getIdentified() != null) {
@@ -91,11 +93,22 @@ public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetV
 		try {
 			// this could throw an exception if a select box info option could not be resolved.  It
 			// will not throw on missing but required info fields.  We let the validators take care of that part.
-			model.getInfoOptions().addAll(optionConverter.convertAssetAttributes(view.getAttributes(), type));
+			if (model.isNew()) {
+				model.getInfoOptions().addAll(optionConverter.convertAssetAttributes(view.getAttributes(), type));
+			}
+			else {
+				/* Update infoOptions in the model from those in the view  */
+				List<InfoOptionBean> updatedInfoOptions = optionConverter.convertAssetAttributes(view.getAttributes(), type);
+				Map<String, String> updatedInfoOptionsMap = optionConverter.toMap(updatedInfoOptions);
+				model.getInfoOptions().forEach((option) -> option.setName(updatedInfoOptionsMap.get(option.getInfoField().getName())));
+			}
 		} catch (InfoOptionConversionException e) {
 			throw new ConversionException(e);
 		}
-		
+
+		model.setMobileGUID(view.getGlobalId());
+		model.setGlobalId(view.getGlobalId());
+
 		return model;
 	}
 
@@ -147,5 +160,17 @@ public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetV
 	public void setIdentifiedBy(User identifiedBy) {
 		this.identifiedBy = identifiedBy;
 	}
-	
+
+	private Asset loadModel(String externalId, Transaction transaction) throws ConversionException {
+		Asset model = externalIdLoader.setMobileGuid(externalId).load(transaction);
+
+		if (model == null) {
+			throw new ConversionException("No model found for external id [" + externalId + "]");
+		}
+		if (!model.getType().getId().equals(getType().getId())) {
+			throw new ConversionException("Loaded model for external id [" + externalId +
+					"] has asset type " + model.getType().getName() + " which does not match asset type " + getType().getName());
+		}
+		return model;
+	}
 }
