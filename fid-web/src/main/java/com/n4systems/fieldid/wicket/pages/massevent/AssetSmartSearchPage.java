@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.massevent;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.SetFocusOnLoadBehavior;
 import com.n4systems.fieldid.wicket.components.IdentifierLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
@@ -65,19 +66,23 @@ public class AssetSmartSearchPage extends FieldIDTemplatePage {
 
         form.add(queryField = new TextField<String>("query", new PropertyModel<>(this, "query")));
         queryField.setOutputMarkupId(true);
-        form.add(new AjaxSubmitLink("submitLink") {
+        queryField.add(new SetFocusOnLoadBehavior());
+        AjaxSubmitLink submitLink = new AjaxSubmitLink("submitLink") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 resultList.setVisible(true);
                 target.add(resultList, feedbackPanel, getTopFeedbackPanel(), blankSlate);
                 target.appendJavaScript("$('#" + queryField.getMarkupId() + "').val('');");
+                setFocusToQueryEntryField(target);
             }
 
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
 
             }
-        });
+        };
+        form.add(submitLink);
+        form.setDefaultButton(submitLink);
 
         add(blankSlate = new WebMarkupContainer("blankSlate") {
             @Override
@@ -124,6 +129,7 @@ public class AssetSmartSearchPage extends FieldIDTemplatePage {
                             error(new FIDLabelModel("error.asset_limit_reached", getMassActionLimit()).getObject());
                             target.add(feedbackPanel, getTopFeedbackPanel());
                         }
+                        setFocusToQueryEntryField(target);
                     }
                 });
             }
@@ -192,6 +198,7 @@ public class AssetSmartSearchPage extends FieldIDTemplatePage {
                             selectedAssetsList.remove(asset);
                         info(new FIDLabelModel("message.asset_remove").getObject());
                         target.add(performEventLink, numberOfAssetsSelected, selectedList, getTopFeedbackPanel(), blankSlate);
+                        setFocusToQueryEntryField(target);
                     }
                 });
             }
@@ -257,5 +264,9 @@ public class AssetSmartSearchPage extends FieldIDTemplatePage {
             massActionLimit = configService.getLong(ConfigEntry.MASS_ACTIONS_LIMIT, getTenantId());
         }
         return massActionLimit;
+    }
+
+    private void setFocusToQueryEntryField(AjaxRequestTarget target) {
+        target.appendJavaScript("$('#" + queryField.getMarkupId() + "').focus();");
     }
 }
