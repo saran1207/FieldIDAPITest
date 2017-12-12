@@ -59,7 +59,7 @@ public class AssetExporter implements Exporter {
 			try {
 				mapWriter.writeTitlesOnly(getTitleFields(assetType));
 			} catch (Exception e) {
-				throw new ExportException(String.format("Unable to export Asset [%s]", "?"), e);
+				throw new ExportException(String.format("Unable to export empty Asset of type [%s]", assetType), e);
 			}
 		}
 	}
