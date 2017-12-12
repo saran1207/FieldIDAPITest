@@ -1,6 +1,7 @@
 package com.n4systems.model.downloadlink;
 
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.security.SecurityFilter;
@@ -74,9 +75,9 @@ public class DownloadCoordinator {
 		return link;
 	}
 	
-	public DownloadLink generateAssetExport(String name, String downloadUrl, ListLoader<Asset> assetLoader) {
+	public DownloadLink generateAssetExport(String name, String downloadUrl, ListLoader<Asset> assetLoader, AssetType assetType) {
 		DownloadLink link = createDownloadLink(name, ContentType.EXCEL);
-		AssetExportTask task = taskFactory.createAssetExportTask(link, downloadUrl, assetLoader);
+		AssetExportTask task = taskFactory.createAssetExportTask(link, downloadUrl, assetLoader, assetType);
 		
 		executor.execute(task);
 		return link;

@@ -32,7 +32,7 @@ public class AssetExporterTest {
 		AssetView view = new AssetView();
 		Map<String, Object> beanMap = new HashMap<String, Object>();
 		
-		AssetExporter exporter = new AssetExporter(assetLoader, marshaler, converter);
+		AssetExporter exporter = new AssetExporter(assetLoader, marshaler, converter, null);
 		
 		expect(assetLoader.load()).andReturn(assets);
 		expect(converter.toView(assets.get(0))).andReturn(view);

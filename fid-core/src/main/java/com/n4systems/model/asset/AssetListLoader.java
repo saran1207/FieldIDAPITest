@@ -7,12 +7,8 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.util.persistence.*;
 
-import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by agrabovskis on 2017-11-17.
@@ -46,12 +42,11 @@ public class AssetListLoader extends ListLoader<Asset> {
         }
         if (assetType != null || baseOrg != null)
             builder.addWhere(group);
-        EntityGraph<Asset> entityGraph = em.createEntityGraph(Asset.class);
-        entityGraph.addAttributeNodes("infoOptions");
-        entityGraph.addSubgraph("type").addAttributeNodes("infoFields");
-        Query query = builder.createQuery(em);
-        query.setHint("javax.persistence.loadgraph", entityGraph);
-        List<Asset> result = query.getResultList();
+
+        builder.getPostFetchPaths().add("infoOptions");
+        builder.getPostFetchPaths().add("type.infoFields");
+
+        List<Asset> result = builder.getResultList(em);
         return result;
     }
 }

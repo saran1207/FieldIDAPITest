@@ -1,6 +1,7 @@
 package com.n4systems.exporting;
 
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.security.SecurityFilter;
@@ -19,8 +20,8 @@ public class ExporterFactory {
 		return new AutoAttributeExporter(autoAttribLoader);
 	}
 	
-	public AssetExporter createAssetExporter(ListLoader<Asset> assetLoader) {
-		return new AssetExporter(assetLoader);
+	public AssetExporter createAssetExporter(ListLoader<Asset> assetLoader, AssetType assetType) {
+		return new AssetExporter(assetLoader, assetType);
 	}
 
 //	public EventExporter createEventExporter(ListLoader<Event> eventLoader, NextEventDateByEventLoader nextDateLoader) {

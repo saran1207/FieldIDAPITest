@@ -3,6 +3,7 @@ package com.n4systems.exporting.io;
 import com.n4systems.util.MapUtils;
 
 import java.io.*;
+import java.util.List;
 import java.util.Map;
 
 
@@ -121,4 +122,8 @@ public class CsvMapWriter implements MapWriter {
 		}
 	}
 
+	@Override
+	public void writeTitlesOnly(List<String> titles) throws IOException {
+		throw(new UnsupportedOperationException());
+	}
 }

@@ -325,7 +325,12 @@ public class AssetImportPanel extends Panel {
             }
             @Override
             protected void onChanged(AjaxRequestTarget target) {
-                if (getModelObject() != null)
+                /* Workaround - OrgLocationPicker does not set model to null if clear icon is clicked so check to
+                * see if input field is empty and clear out model based on that */
+                String text = getTextString();
+                if (text == null || text.isEmpty())
+                    AssetImportPanel.this.selectedOrgModel.setObject(null);
+                else
                     target.appendJavaScript(JQUERY_COLORBOX_CMD);
                 target.add(downloadDataLink);
             }
@@ -360,7 +365,8 @@ public class AssetImportPanel extends Panel {
         try {
             String downloadFileName = new FIDLabelModel("label.export_file.asset", selectedAssetType.getObject().getName()).getObject();
             DownloadLink downloadLink = getDownloadCoordinator().generateAssetExport(downloadFileName, getDownloadLinkUrl(),
-                    createAssetListLoader(selectedAssetType.getObject(), selectedOrgModel.getObject()));
+                    createAssetListLoader(selectedAssetType.getObject(), selectedOrgModel.getObject()),
+                    getAssetTypeWithPrefetches(selectedAssetType.getObject().getId()));
             downloadLinkModel.setObject(downloadLink);
             DownloadExportNotificationPage downloadWindow = new DownloadExportNotificationPage(
                     downloadLinkModel);
@@ -409,7 +415,7 @@ public class AssetImportPanel extends Panel {
         return getLoaderFactory().createAssetTypeLoader().setId(id).load();
     }
 
-    private AbstractResourceStreamWriter doDownloadExample(AssetType assetType) {
+    private AbstractResourceStreamWriter doDownloadExample(final AssetType assetType) {
         AssetExporter exporter = new AssetExporter(getLoaderFactory().createPassthruListLoader(Arrays.asList(createExampleAsset(assetType))));
 
         AbstractResourceStreamWriter rStream = new AbstractResourceStreamWriter() {
@@ -439,6 +445,7 @@ public class AssetImportPanel extends Panel {
 
     private Asset createExampleAsset(AssetType assetType) {
         Asset example = new Asset();
+        example.setType(assetType);
 
         example.setIdentifier(new FIDLabelModel("example.asset.identifier").getObject());
         example.setRfidNumber(new FIDLabelModel("example.asset.rfidNumber").getObject());

@@ -5,13 +5,11 @@ import com.n4systems.api.conversion.ModelToViewConverter;
 import com.n4systems.api.model.AssetView;
 import com.n4systems.model.Asset;
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.infooption.InfoOptionConversionException;
 import com.n4systems.model.infooption.InfoOptionMapConverter;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import org.apache.log4j.Logger;
 import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -71,18 +69,19 @@ public class AssetToViewConverter implements ModelToViewConverter<Asset, AssetVi
 			}
 		}
 
-		Collection<InfoFieldBean> typeInfoOptions = model.getType().getInfoFields();
-		Set<InfoOptionBean> assetInfoOptions = model.getInfoOptions();
-		try {
-			Map<String, String> infoOptionsOriginalMap = optionConverter.toMap(assetInfoOptions);
-			List<InfoOptionBean> convertedOptions = optionConverter.convertAssetAttributes(infoOptionsOriginalMap, model.getType());
-			convertedOptions.forEach((infoOption) -> convertToDisplayFormat(infoOption));
-			view.getAttributes().putAll(optionConverter.toMap(convertedOptions));
+		Collection<InfoFieldBean> requiredInfoOptions = model.getType().getInfoFields();
+		Map<String, String> providedInfoOptionsMap = optionConverter.toMap(model.getInfoOptions());
+		Map<String, String> finalOptionsMap = new LinkedHashMap<String, String>(requiredInfoOptions.size());
+
+		for (InfoFieldBean field: requiredInfoOptions) {
+			String optionValue = providedInfoOptionsMap.get(field.getName());
+			if (optionValue != null) {
+				finalOptionsMap.put(field.getName(), convertToDisplayFormat(field, optionValue));
+			} else {
+				finalOptionsMap.put(field.getName(), "");
+			}
 		}
-		catch(InfoOptionConversionException ex) {
-			logger.error("Error in converting infoOption", ex);
-			throw new ConversionException(ex);
-		}
+		view.getAttributes().putAll(finalOptionsMap);
 
 		view.setGlobalId(model.getMobileGUID());
 		
@@ -101,17 +100,15 @@ public class AssetToViewConverter implements ModelToViewConverter<Asset, AssetVi
 		}
 	}
 
-	private void convertToDisplayFormat(InfoOptionBean infoOptionBean) {
-		String value = infoOptionBean.getName();
-		if (value != null) {
-			if (InfoFieldBean.DATEFIELD_FIELD_TYPE.equals(infoOptionBean.getInfoField().getFieldType())) {
-				try {
-					infoOptionBean.setName(df.get().format(new Date(Long.parseLong(value.toString()))));
-				} catch (NumberFormatException e) {
-					logger.warn("can't parse date InfoOption value of '" + value.toString() + "'");
-				}
+	private String convertToDisplayFormat(InfoFieldBean infoFieldBean, String value) {
+		if (InfoFieldBean.DATEFIELD_FIELD_TYPE.equals(infoFieldBean.getFieldType())) {
+			try {
+				return df.get().format(new Date(Long.parseLong(value.toString())));
+			} catch (NumberFormatException e) {
+				logger.warn("can't parse date InfoOption value of '" + value.toString() + "'");
 			}
 		}
+		return value;
 	}
 
 }
