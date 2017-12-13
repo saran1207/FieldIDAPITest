@@ -20,6 +20,7 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserByFullNameLoader;
 import com.n4systems.persistence.Transaction;
+import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 import java.util.*;
@@ -76,7 +77,6 @@ public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetV
 		model.setPurchaseOrder(view.getPurchaseOrder());
 		model.setComments(view.getComments());
 		model.setAssetStatus(resolveAssetStatus(view.getStatus(), transaction));
-		model.setInfoOptions(new TreeSet<InfoOptionBean>());
 		model.setPublished(primaryOrg.isAutoPublish());
         if(view.getAssignedUser() != null) {
             model.setAssignedUser(resolveAssignedUser(view, transaction));
@@ -94,13 +94,13 @@ public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetV
 			// this could throw an exception if a select box info option could not be resolved.  It
 			// will not throw on missing but required info fields.  We let the validators take care of that part.
 			if (model.isNew()) {
+				model.setInfoOptions(new TreeSet<InfoOptionBean>());
 				model.getInfoOptions().addAll(optionConverter.convertAssetAttributes(view.getAttributes(), type));
 			}
 			else {
-				/* Update infoOptions in the model from those in the view  */
-				List<InfoOptionBean> updatedInfoOptions = optionConverter.convertAssetAttributes(view.getAttributes(), type);
-				Map<String, String> updatedInfoOptionsMap = optionConverter.toMap(updatedInfoOptions);
-				model.getInfoOptions().forEach((option) -> option.setName(updatedInfoOptionsMap.get(option.getInfoField().getName())));
+				/* Replace infoOptions in the model from those in the view */
+				model.getInfoOptions().clear();
+				model.getInfoOptions().addAll(optionConverter.convertAssetAttributes(view.getAttributes(), type));
 			}
 		} catch (InfoOptionConversionException e) {
 			throw new ConversionException(e);

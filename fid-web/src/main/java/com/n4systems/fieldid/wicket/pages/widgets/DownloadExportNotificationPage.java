@@ -54,7 +54,6 @@ public class DownloadExportNotificationPage extends FieldIDAuthenticatedPage {
 
         @Override
         protected void onSubmit() {
-            System.out.println("RenameDownloadForm.onSubmit clicked");
             DownloadLinkSaver downloadLinkSaver = new DownloadLinkSaver();
             downloadLinkSaver.update(downloadLink.getObject());
         }
