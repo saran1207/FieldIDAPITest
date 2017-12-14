@@ -5,7 +5,7 @@ package com.n4systems.fieldid;
  * so if a wicket page and a struts page need something you can share it here. 
  */
 public interface UIConstants {
-	public static final String DEFAULT_SUPPORT_URL = "http://help.fieldid.com/";
+	public static final String DEFAULT_SUPPORT_URL = "https://support.ecompliance.com/hc/en-us/articles/115015728427";
 
 	/**
 	 * Javascript to be inserted in each page's head section to allow walkme content to be automatically added.
