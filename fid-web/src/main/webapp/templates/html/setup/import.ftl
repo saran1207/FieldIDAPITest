@@ -4,7 +4,7 @@ ${action.setPageType('setup','import')!}
 <head> 
 	<@n4.includeStyle href="settings" type="page"/>
 	<script type="text/javascript">
-		importAssets = '<@s.url action="assetImportExport" />';
+		importAssets = '/fieldid/w/AssetImport';
 		importEvents = '<@s.url action="eventImportExport" />';
 		importAutoAttributes = '<@s.url action="autoAttributeImportExport" />'; 		
 			
