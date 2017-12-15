@@ -3,12 +3,14 @@ package com.n4systems.fieldid.wicket.pages.asset;
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.wicket.FieldIDWicketApp;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
+import com.n4systems.services.SecurityContext;
 import org.apache.log4j.Logger;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
@@ -22,9 +24,12 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
+import org.springframework.aop.scope.ScopedObject;
 import rfid.web.helper.SessionUser;
 
+import java.security.Security;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,8 +49,10 @@ public class AssetImportPage extends FieldIDFrontEndPage {
     private IModel<User> currentUserModel;
     private IModel<SessionUser> sessionUserModel;
     private IModel<SecurityFilter> securityFilterModel;
+    private IModel<SecurityContext> nonProxySecurityContextModel;
     private IModel<SystemSecurityGuard> securityGuardModel;
     private IModel<WebSessionMap> webSessionMapModel;
+
     private List<String> titleLabelsByTabIndex;
     private FeedbackPanel feedbackPanel;
     private boolean setAddWithOrderAsInitial;
@@ -106,7 +113,7 @@ public class AssetImportPage extends FieldIDFrontEndPage {
             public Panel getPanel(String panelId)
             {
                 return new AssetImportPanel(panelId, preSelectedAssetTypeId, currentUserModel, sessionUserModel,
-                        securityFilterModel, webSessionMapModel);
+                        securityFilterModel, webSessionMapModel, nonProxySecurityContextModel);
             }
         }));
         titleLabelsByTabIndex.add(new FIDLabelModel("title.asset_import_export").getObject());
@@ -182,6 +189,18 @@ public class AssetImportPage extends FieldIDFrontEndPage {
                 return getSecurityGuard();
             }
             public void setObject(final SystemSecurityGuard object) { }
+            public void detach() {}
+        };
+        nonProxySecurityContextModel = new IModel<SecurityContext>() {
+            public SecurityContext getObject() {
+                /* Security context obtained from Spring will be a proxy object - get the actual object since it will
+                   be used in a different thread without a Spring application context. */
+                SecurityContext securityContext =
+                        (SecurityContext) ((ScopedObject) ((FieldIDWicketApp)getApplication()).getApplicationContext()
+                                .getBean(SecurityContext.class)).getTargetObject();
+                return securityContext;
+            }
+            public void setObject(final SecurityContext object) { }
             public void detach() {}
         };
         webSessionMapModel = new IModel<WebSessionMap>() {

@@ -8,37 +8,49 @@ import com.n4systems.api.validation.Validator;
 import com.n4systems.api.validation.validators.AssetViewValidator;
 import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.impl.EventScheduleManagerImpl;
-import com.n4systems.ejb.legacy.impl.LegacyAssetManager;
+import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.exporting.io.MapReader;
+import com.n4systems.fieldid.service.asset.AssetImportService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.Transaction;
-import com.n4systems.services.asset.AssetSaveService;
 
 import java.util.List;
 
+import com.n4systems.services.SecurityContext;
+import org.apache.log4j.Logger;
+
 public class AssetImporter extends AbstractImporter<AssetView> {
-	private AssetSaveService saver;
+
+	private Logger logger = Logger.getLogger(AssetImporter.class);
+
+	private AssetImportService saver;
 	private final AssetToModelConverter converter;
 	private EventScheduleManager eventScheduleManager;
 	private User user;
+	private SecurityContext securityContext;
+	private SecurityContext localSecurityContext;
 
-	
-	public AssetImporter(MapReader mapReader, Validator<ExternalModelView> validator, AssetSaveService saver, AssetToModelConverter converter, EventScheduleManager eventScheduleManager) {
+	public AssetImporter(MapReader mapReader, Validator<ExternalModelView> validator, AssetImportService saver,
+						 AssetToModelConverter converter, EventScheduleManager eventScheduleManager,
+						 SecurityContext securityContext) {
 		super(AssetView.class, mapReader, validator);
 		this.saver = saver;
 		this.converter = converter;
 		this.eventScheduleManager = eventScheduleManager;
+		this.securityContext = securityContext;
 		validator.getValidationContext().put(AssetViewValidator.ASSET_TYPE_KEY, converter.getType());
 	}
 	
-	public AssetImporter(MapReader mapReader, Validator<ExternalModelView> validator, User user, AssetToModelConverter converter) {
+	public AssetImporter(MapReader mapReader, Validator<ExternalModelView> validator, User user,
+						 AssetToModelConverter converter, SecurityContext securityContext) {
 		super(AssetView.class, mapReader, validator);
 		saver = null;
 		this.converter = converter;
 		eventScheduleManager = null;
 		this.user = user;
+		this.securityContext = securityContext;
 		validator.getValidationContext().put(AssetViewValidator.ASSET_TYPE_KEY, converter.getType());
 	}
 
@@ -49,23 +61,39 @@ public class AssetImporter extends AbstractImporter<AssetView> {
 	 */
 	@Override
 	protected void preImport(Transaction transaction) {
+		/* Create SecurityContext object without Spring proxy for use in this non Spring thread */
+		localSecurityContext = new SecurityContext();
+		localSecurityContext.set(securityContext);
+		System.out.println("AssetImporter.preImport, security context " + localSecurityContext.hashCode() +
+		 ", userfilter " + securityContext.getUserSecurityFilter() + ", tenant filter " + localSecurityContext.getTenantSecurityFilter());
+
 		if (eventScheduleManager == null)
 			eventScheduleManager = new EventScheduleManagerImpl(transaction.getEntityManager());
 		if (saver == null)
-			saver = new AssetSaveService(new LegacyAssetManager(transaction.getEntityManager()), user);
+			saver = new AssetImportService(transaction.getEntityManager(), localSecurityContext);
 	}
 
 	@Override
 	protected void importView(Transaction transaction, AssetView view) throws ConversionException {
 		Asset asset = converter.toModel(view, transaction);
 		if (asset.isNew()) {
-			saver.setAsset(asset);
-			asset = saver.createWithoutHistory();
+			try {
+				saver.create(asset);
+			}
+			catch(SubAssetUniquenessException ex) {
+				logger.error("Error in creating asset", ex);
+				throw new ConversionException(ex);
+			}
 			autoScheduleEvents(asset);
 		}
 		else {
-			saver.setAsset(asset);
-			saver.update();
+			try {
+				saver.updateWithSubassets(asset);
+			}
+			catch(SubAssetUniquenessException ex) {
+				logger.error("Error in updating asset", ex);
+				throw new ConversionException(ex);
+			}
 		}
 	}
 

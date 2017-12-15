@@ -33,6 +33,7 @@ import com.n4systems.notifiers.notifications.ImportSuccessNotification;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.persistence.savers.SaverFactory;
+import com.n4systems.services.SecurityContext;
 import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ArrayUtils;
 import com.n4systems.util.ConfigurationProvider;
@@ -99,16 +100,18 @@ public class AssetImportPanel extends Panel {
     private IModel<SessionUser> sessionUserModel;
     private IModel<SecurityFilter> securityFilterModel;
     private IModel<WebSessionMap> webSessionMapModel;
+    private IModel<SecurityContext> nonProxySecurityContextModel;
     private WebMarkupContainer loadingWheel;
 
     public AssetImportPanel(String id, StringValue preSelectedAssetTypeId, IModel<User> currentUserModel,
                             IModel<SessionUser> sessionUserModel, IModel<SecurityFilter> securityFilterModel,
-                            IModel<WebSessionMap> webSessionMapModel) {
+                            IModel<WebSessionMap> webSessionMapModel, IModel<SecurityContext> nonProxySecurityContextModel) {
         super(id);
         this.currentUserModel = currentUserModel;
         this.sessionUserModel = sessionUserModel;
         this.securityFilterModel = securityFilterModel;
         this.webSessionMapModel = webSessionMapModel;
+        this.nonProxySecurityContextModel = nonProxySecurityContextModel;
         if (preSelectedAssetTypeId != null && !preSelectedAssetTypeId.isEmpty()) {
             selectedAssetType = Model.of(getAssetType(new Long(preSelectedAssetTypeId.toString())));
         }
@@ -235,7 +238,7 @@ public class AssetImportPanel extends Panel {
                             }
                             @Override
                             protected Importer createImporter(MapReader reader) {
-                                return getImporterFactory().createAssetImporter(reader, getCurrentUser(), getSelectedAssetType());
+                                return getImporterFactory().createAssetImporter(reader, getCurrentUser(), getSelectedAssetType(), nonProxySecurityContextModel.getObject());
                             }
                         };
                         result = importService.doImport(inputStream);
@@ -538,6 +541,6 @@ public class AssetImportPanel extends Panel {
         return sessionUserModel.getObject();
     }
     private SecurityFilter getSecurityFilter() {
-        return securityFilterModel.getObject();
+         return securityFilterModel.getObject();
     }
 }

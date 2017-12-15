@@ -99,8 +99,49 @@ public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetV
 			}
 			else {
 				/* Replace infoOptions in the model from those in the view */
-				model.getInfoOptions().clear();
-				model.getInfoOptions().addAll(optionConverter.convertAssetAttributes(view.getAttributes(), type));
+				List<InfoOptionBean> updatedOptions = optionConverter.convertAssetAttributes(view.getAttributes(), type);
+				List<InfoOptionBean> cleansedOptions = cleanseNonStaticInfoOptionIds(updatedOptions);
+				//model.getInfoOptions().clear();
+				//model.getInfoOptions().addAll(cleansedOptions);
+				//model.setInfoOptions(new HashSet<InfoOptionBean>(cleansedOptions));
+				Map<String, InfoOptionBean> cleansedOptionsByName = new HashMap();
+				cleansedOptions.forEach((option) -> cleansedOptionsByName.put(option.getInfoField().getName(), option));
+				Map<String, InfoOptionBean> existingOptionsByName = new HashMap();
+				model.getInfoOptions().forEach((option) -> existingOptionsByName.put(option.getInfoField().getName(), option));
+				for(InfoFieldBean infoField: model.getType().getInfoFields()) {
+					boolean optionExistsInNew = cleansedOptionsByName.containsKey(infoField.getName());
+					boolean optionExistsInOld = existingOptionsByName.containsKey(infoField.getName());
+					if (optionExistsInOld && !optionExistsInNew) {
+						System.out.println("AssetToModelConverter - option has to be removed ");
+						model.getInfoOptions().remove(existingOptionsByName.get(infoField.getName()));
+					}
+					else
+					if (!optionExistsInOld && optionExistsInNew) {
+						System.out.println("AssetToModelConverter - option has to be added");
+						InfoOptionBean option = cleansedOptionsByName.get(infoField.getName());
+						Long uniqueId = option.getUniqueID();
+						if (uniqueId != null && !transaction.getEntityManager().contains(option))
+							/* Attach detached entity */
+							option = transaction.getEntityManager().find(InfoOptionBean.class, option.getUniqueID());
+						else
+							option = cleansedOptionsByName.get(infoField.getName());
+						model.getInfoOptions().add(option);
+					}
+					else
+					if (optionExistsInNew && optionExistsInOld) {
+						System.out.println("AssetToModelConverter - option exists in both");
+						if (!cleansedOptionsByName.get(infoField.getName()).getName().equals(existingOptionsByName.get(infoField.getName()).getName())) {
+							System.out.println("AssetToModelConverter - option has to be modified");
+							model.getInfoOptions().remove(existingOptionsByName.get(infoField.getName()));
+							InfoOptionBean option = cleansedOptionsByName.get(infoField.getName());
+							if (option.getUniqueID() != null && !transaction.getEntityManager().contains(option)) {
+								System.out.println("... update to static option");
+								option = transaction.getEntityManager().find(InfoOptionBean.class, option.getUniqueID());
+							}
+							model.getInfoOptions().add(option);
+						}
+					}
+				}
 			}
 		} catch (InfoOptionConversionException e) {
 			throw new ConversionException(e);
@@ -162,7 +203,7 @@ public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetV
 	}
 
 	private Asset loadModel(String externalId, Transaction transaction) throws ConversionException {
-		Asset model = externalIdLoader.setMobileGuid(externalId).load(transaction);
+		Asset model = externalIdLoader.setMobileGuid(externalId).addPostFetchFields("infoOptions").load(transaction);
 
 		if (model == null) {
 			throw new ConversionException("No model found for external id [" + externalId + "]");
@@ -172,5 +213,14 @@ public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetV
 					"] has asset type " + model.getType().getName() + " which does not match asset type " + getType().getName());
 		}
 		return model;
+	}
+
+	private List<InfoOptionBean> cleanseNonStaticInfoOptionIds(List<InfoOptionBean> enteredInfoOptions) {
+		for (InfoOptionBean enteredInfoOption : enteredInfoOptions) {
+			if (!enteredInfoOption.isStaticData()) {
+				enteredInfoOption.setUniqueID(null);
+			}
+		}
+		return enteredInfoOptions;
 	}
 }

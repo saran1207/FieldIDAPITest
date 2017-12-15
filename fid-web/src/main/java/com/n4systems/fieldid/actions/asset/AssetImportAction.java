@@ -22,8 +22,10 @@ import com.n4systems.notifiers.notifications.AssetImportSuccessNotification;
 import com.n4systems.notifiers.notifications.ImportFailureNotification;
 import com.n4systems.notifiers.notifications.ImportSuccessNotification;
 import com.n4systems.security.Permissions;
+import com.n4systems.services.SecurityContext;
 import com.n4systems.util.ArrayUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
@@ -38,7 +40,9 @@ import java.util.List;
 @UserPermissionFilter(userRequiresOneOf={Permissions.TAG})
 public class AssetImportAction extends AbstractImportAction {
 	private Logger logger = Logger.getLogger(AssetImportAction.class);
-	
+
+	@Autowired
+	private SecurityContext securityContext;
 	private AssetType type;
 	private List<AssetType> assetTypes;
 	private InputStream exampleExportFileStream;
@@ -50,7 +54,7 @@ public class AssetImportAction extends AbstractImportAction {
 
 	@Override
 	protected Importer createImporter(MapReader reader) {
-		return getImporterFactory().createAssetImporter(reader, getCurrentUser(), type);
+		return getImporterFactory().createAssetImporter(reader, getCurrentUser(), type, securityContext);
 	}
 	
 	@Override

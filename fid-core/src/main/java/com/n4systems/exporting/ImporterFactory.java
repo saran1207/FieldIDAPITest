@@ -25,6 +25,7 @@ import com.n4systems.model.tenant.UserLimits;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.persistence.savers.SaverFactory;
+import com.n4systems.services.SecurityContext;
 import com.n4systems.services.asset.AssetSaveService;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.utils.email.WelcomeNotifier;
@@ -123,8 +124,8 @@ public class ImporterFactory {
 		return new UserImporter(reader, createViewValidator(), userLimits, saverFactory.createUserSaver(), createUserToModelConverter(), emailNotifier, timeZoneId, passwordPolicy);	
 	}
 	
-	public AssetImporter createAssetImporter(MapReader reader, User identifiedBy, AssetType type) {
-		return new AssetImporter(reader, createViewValidator(), identifiedBy, createAssetToModelConverter(identifiedBy, type));
+	public AssetImporter createAssetImporter(MapReader reader, User identifiedBy, AssetType type, SecurityContext securityContext) {
+		return new AssetImporter(reader, createViewValidator(), identifiedBy, createAssetToModelConverter(identifiedBy, type), securityContext);
 	}
 
 	public EventImporter createEventImporter(MapReader reader, User modifiedBy, ThingEventType type) {
