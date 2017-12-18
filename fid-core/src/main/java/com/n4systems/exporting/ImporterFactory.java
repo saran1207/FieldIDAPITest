@@ -8,7 +8,6 @@ import com.n4systems.api.conversion.orgs.CustomerOrgToModelConverter;
 import com.n4systems.api.conversion.orgs.DivisionOrgToModelConverter;
 import com.n4systems.api.conversion.users.UserToModelConverter;
 import com.n4systems.api.validation.ViewValidator;
-import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.handlers.creator.EventPersistenceFactory;
 import com.n4systems.handlers.creator.events.factory.ProductionEventPersistenceFactory;
@@ -26,8 +25,6 @@ import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.persistence.savers.SaverFactory;
 import com.n4systems.services.SecurityContext;
-import com.n4systems.services.asset.AssetSaveService;
-import com.n4systems.util.ServiceLocator;
 import com.n4systems.utils.email.WelcomeNotifier;
 
 import java.util.TimeZone;
@@ -82,14 +79,6 @@ public class ImporterFactory {
 
 	protected NonIntegrationOrderManager createNonIntegrationOrderManager() {
 		return new NonIntegrationOrderManager(saverFactory.createNonIntegrationLineItemSaver());
-	}
-
-	protected AssetSaveService createAssetSaveService(User user) {
-		return new AssetSaveService(createLegacyAsset(), user);
-	}
-
-	protected LegacyAsset createLegacyAsset() {
-		return ServiceLocator.getLegacyAssetManager();
 	}
 
 	protected EventPersistenceFactory createEventPersistenceFactory() {
