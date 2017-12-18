@@ -1,0 +1,46 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<wicket:extend>
+    <div wicket:id="validationErrorsSection" class="validationErrors">
+        <h2>
+            <wicket:message key="label.validation_problems"/>
+        </h2>
+        <p>
+            <wicket:message key="message.validation_problems"/>
+        </p>
+        <table class="list">
+            <tr>
+                <th>
+                    <wicket:message key="label.row"/>
+                </th>
+                <th>
+                    <wicket:message key="label.problem"/>
+                </th>
+            </tr>
+            <tr wicket:id="validationErrors">
+                <td><span wicket:id="validationErrorRow"></span></td>
+                <td><span wicket:id="validationErrorMsg"></span></td>
+            </tr>
+        </table>
+        <div class="errorActions">
+            <input type="submit" wicket:id="reuploadImportFile" wicket:message="value:button.re_upload_import_file"/>
+            <span id="or"><wicket:message key="label.or" /></span>
+            <a href="/fieldid/w/dashboard"><wicket:message key="label.cancel" /></a>
+        </div>
+    </div>
+
+    <div wicket:id="importProgressSection" class="importProgress">
+        <div>
+            <h2><wicket:message key="label.import_status" /></h2>
+        </div>
+        <div class="progressBarContainer" wicket:id="progressBarContainer">
+            <label wicket:id="taskStatusLabel" class="statusLabel"></label>
+            <div class="percentBar">
+                <div wicket:id="importProgressBar" class="percentBarUsed"/>
+            </div>
+            <div class="taskCount" wicket:id="importTaskCount"></div>
+            <div class="importMessage"><wicket:message key="label.import_status_message"/></div>
+        </div>
+    </div>
+
+</wicket:extend>
+</html>

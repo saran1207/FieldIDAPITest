@@ -1,16 +1,30 @@
 package com.n4systems.fieldid.wicket.pages.setup;
 
+import com.n4systems.fieldid.wicket.pages.asset.AssetImportPage;
+import com.n4systems.fieldid.wicket.pages.event.EventImportPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 
 public class ImportPage extends SetupPage {
 
     public ImportPage() {
         add(new ImportOwnersForm("importOwnersForm"));
-        add(new ImportAssetsForm("importAssetsForm"));
-        add(new ImportEventsForm("importEventsForm"));
+        add(new AjaxLink<AssetImportPage>("importAssetsButton") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                getRequestCycle().setResponsePage(AssetImportPage.class);
+            }
+        });
+        add(new AjaxLink<EventImportPage>("importEventsButton") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                getRequestCycle().setResponsePage(EventImportPage.class);
+            }
+        });
         add(new ImportAutoAttributesForm("importAutoAttributesForm"));
         add(new ImportUsersForm("importUsersForm"));
     }
@@ -19,20 +33,6 @@ public class ImportPage extends SetupPage {
         public ImportOwnersForm(String id) {
             super(id);
             add(createRedirectingAjaxButton("importOwnersButton", "/customerImportExport.action"));
-        }
-    }
-
-    class ImportAssetsForm extends Form {
-        public ImportAssetsForm(String id) {
-            super(id);
-            add(createRedirectingAjaxButton("importAssetsButton", "/assetImportExport.action"));
-        }
-    }
-
-    class ImportEventsForm extends Form {
-        public ImportEventsForm(String id) {
-            super(id);
-            add(createRedirectingAjaxButton("importEventsButton", "/eventImportExport.action"));
         }
     }
 

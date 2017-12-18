@@ -17,8 +17,10 @@ import com.n4systems.fieldid.wicket.pages.admin.security.ChangeAdminPasswordPage
 import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.TenantUserListPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
+import com.n4systems.fieldid.wicket.pages.asset.AssetImportPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetMergePage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
+import com.n4systems.fieldid.wicket.pages.event.EventImportPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.*;
 import com.n4systems.fieldid.wicket.pages.escalationrules.ManageEscalationRules;
 import com.n4systems.fieldid.wicket.pages.event.*;
@@ -51,7 +53,6 @@ import com.n4systems.fieldid.wicket.pages.saveditems.ShareSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.AddSendSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.EditSendSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.ManageSendItemSchedulesPage;
-import com.n4systems.fieldid.wicket.pages.search.AdvancedAssetSearchPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
 import com.n4systems.fieldid.wicket.pages.search.SmartSearchListPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
@@ -359,6 +360,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("startEventAssetSearch", StartEventPage.class);
 
         mountPage("AssetMerge", AssetMergePage.class);
+        mountPage("eventImport", EventImportPage.class);
+        mountPage("assetImport", AssetImportPage.class);
 
         mountResource("/signature/${eventId}/${criteriaId}", new SignatureResourceReference());
         mountResource("/temporarySignature/${fileId}", new TemporarySignatureResourceReference());

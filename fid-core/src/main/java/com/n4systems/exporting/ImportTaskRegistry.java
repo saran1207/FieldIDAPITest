@@ -2,11 +2,13 @@ package com.n4systems.exporting;
 
 import com.n4systems.taskscheduling.task.ImportTask;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ImportTaskRegistry {
-	private static final Map<String, ImportTask> taskMap = new HashMap<String, ImportTask>();
+	/* Use synchronized map to guard against multiple users running imports at the same time */
+	private static final Map<String, ImportTask> taskMap = Collections.synchronizedMap(new HashMap<String, ImportTask>());
 	
 	public ImportTaskRegistry() {}
 	
