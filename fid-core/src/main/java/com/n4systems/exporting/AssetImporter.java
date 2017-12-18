@@ -13,11 +13,13 @@ import com.n4systems.exporting.io.MapReader;
 import com.n4systems.fieldid.service.asset.AssetImportService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.ThingEvent;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.Transaction;
 
 import java.util.List;
 
+import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.services.SecurityContext;
 import org.apache.log4j.Logger;
 
@@ -28,29 +30,30 @@ public class AssetImporter extends AbstractImporter<AssetView> {
 	private AssetImportService saver;
 	private final AssetToModelConverter converter;
 	private EventScheduleManager eventScheduleManager;
-	private User user;
 	private SecurityContext securityContext;
 	private SecurityContext localSecurityContext;
+	private SecurityFilter securityFilter;
 
 	public AssetImporter(MapReader mapReader, Validator<ExternalModelView> validator, AssetImportService saver,
 						 AssetToModelConverter converter, EventScheduleManager eventScheduleManager,
-						 SecurityContext securityContext) {
+						 SecurityContext securityContext, SecurityFilter securityFilter) {
 		super(AssetView.class, mapReader, validator);
 		this.saver = saver;
 		this.converter = converter;
 		this.eventScheduleManager = eventScheduleManager;
 		this.securityContext = securityContext;
+		this.securityFilter = securityFilter;
 		validator.getValidationContext().put(AssetViewValidator.ASSET_TYPE_KEY, converter.getType());
 	}
 	
-	public AssetImporter(MapReader mapReader, Validator<ExternalModelView> validator, User user,
-						 AssetToModelConverter converter, SecurityContext securityContext) {
+	public AssetImporter(MapReader mapReader, Validator<ExternalModelView> validator,
+						 AssetToModelConverter converter, SecurityContext securityContext, SecurityFilter securityFilter) {
 		super(AssetView.class, mapReader, validator);
 		saver = null;
 		this.converter = converter;
 		eventScheduleManager = null;
-		this.user = user;
 		this.securityContext = securityContext;
+		this.securityFilter = securityFilter;
 		validator.getValidationContext().put(AssetViewValidator.ASSET_TYPE_KEY, converter.getType());
 	}
 
@@ -62,15 +65,16 @@ public class AssetImporter extends AbstractImporter<AssetView> {
 	@Override
 	protected void preImport(Transaction transaction) {
 		/* Create SecurityContext object without Spring proxy for use in this non Spring thread */
-		localSecurityContext = new SecurityContext();
-		localSecurityContext.set(securityContext);
-		System.out.println("AssetImporter.preImport, security context " + localSecurityContext.hashCode() +
-		 ", userfilter " + securityContext.getUserSecurityFilter() + ", tenant filter " + localSecurityContext.getTenantSecurityFilter());
+		localSecurityContext = securityContext;
 
 		if (eventScheduleManager == null)
 			eventScheduleManager = new EventScheduleManagerImpl(transaction.getEntityManager());
 		if (saver == null)
 			saver = new AssetImportService(transaction.getEntityManager(), localSecurityContext);
+
+		/* Set asset type object in converter to one obtained in this transaction */
+		converter.setType(new LoaderFactory(securityFilter).createAssetTypeLoader().
+				setStandardPostFetches().setId(converter.getType().getId()).load(transaction.getEntityManager()));
 	}
 
 	@Override

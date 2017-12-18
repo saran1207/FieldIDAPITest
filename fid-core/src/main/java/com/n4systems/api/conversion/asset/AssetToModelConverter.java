@@ -98,48 +98,44 @@ public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetV
 				model.getInfoOptions().addAll(optionConverter.convertAssetAttributes(view.getAttributes(), type));
 			}
 			else {
-				/* Replace infoOptions in the model from those in the view */
-				List<InfoOptionBean> updatedOptions = optionConverter.convertAssetAttributes(view.getAttributes(), type);
-				List<InfoOptionBean> cleansedOptions = cleanseNonStaticInfoOptionIds(updatedOptions);
-				//model.getInfoOptions().clear();
-				//model.getInfoOptions().addAll(cleansedOptions);
-				//model.setInfoOptions(new HashSet<InfoOptionBean>(cleansedOptions));
-				Map<String, InfoOptionBean> cleansedOptionsByName = new HashMap();
-				cleansedOptions.forEach((option) -> cleansedOptionsByName.put(option.getInfoField().getName(), option));
-				Map<String, InfoOptionBean> existingOptionsByName = new HashMap();
-				model.getInfoOptions().forEach((option) -> existingOptionsByName.put(option.getInfoField().getName(), option));
-				for(InfoFieldBean infoField: model.getType().getInfoFields()) {
-					boolean optionExistsInNew = cleansedOptionsByName.containsKey(infoField.getName());
-					boolean optionExistsInOld = existingOptionsByName.containsKey(infoField.getName());
-					if (optionExistsInOld && !optionExistsInNew) {
-						System.out.println("AssetToModelConverter - option has to be removed ");
-						model.getInfoOptions().remove(existingOptionsByName.get(infoField.getName()));
+				/* Replace original infoOptions in the model with the updated infoOptions in the view */
+				Map<String, InfoOptionBean> originalOptionsMap = new HashMap();
+				model.getInfoOptions().forEach((option) -> originalOptionsMap.put(option.getInfoField().getName(), option));
+
+				Map<String, InfoOptionBean> updatedOptionsMap = new HashMap();
+				optionConverter.convertAssetAttributes(view.getAttributes(), type).forEach((option) ->
+						updatedOptionsMap.put(option.getInfoField().getName(), option));
+
+				/* There are five possible scenarios. (Defined options refer to those in AssetType.getInfoFields())
+					(1) updated option does not exist in original options
+						- add the updated option
+					(2) original option does not exist in updated options
+						- remove the original option
+					(3) option exists in both updated and original options and the value is the same
+						- do nothing
+					(4) option exists in both updated and original options and the value is different
+						- remove original option and add updated option
+					(5) a defined option does not exist in either updated or original options
+						- do nothing
+				  */
+
+				for(InfoFieldBean fieldInfo: type.getInfoFields()) {
+					InfoOptionBean updatedOption = updatedOptionsMap.get(fieldInfo.getName());
+					InfoOptionBean originalOption =  originalOptionsMap.get(fieldInfo.getName());
+					if (updatedOption != null && originalOption == null) {
+						/* Scenario 1 */
+						model.getInfoOptions().add(updatedOption);
 					}
 					else
-					if (!optionExistsInOld && optionExistsInNew) {
-						System.out.println("AssetToModelConverter - option has to be added");
-						InfoOptionBean option = cleansedOptionsByName.get(infoField.getName());
-						Long uniqueId = option.getUniqueID();
-						if (uniqueId != null && !transaction.getEntityManager().contains(option))
-							/* Attach detached entity */
-							option = transaction.getEntityManager().find(InfoOptionBean.class, option.getUniqueID());
-						else
-							option = cleansedOptionsByName.get(infoField.getName());
-						model.getInfoOptions().add(option);
+					if (updatedOption == null && originalOption != null) {
+						/* Scenario 2 */
+						model.getInfoOptions().remove(originalOption);
 					}
 					else
-					if (optionExistsInNew && optionExistsInOld) {
-						System.out.println("AssetToModelConverter - option exists in both");
-						if (!cleansedOptionsByName.get(infoField.getName()).getName().equals(existingOptionsByName.get(infoField.getName()).getName())) {
-							System.out.println("AssetToModelConverter - option has to be modified");
-							model.getInfoOptions().remove(existingOptionsByName.get(infoField.getName()));
-							InfoOptionBean option = cleansedOptionsByName.get(infoField.getName());
-							if (option.getUniqueID() != null && !transaction.getEntityManager().contains(option)) {
-								System.out.println("... update to static option");
-								option = transaction.getEntityManager().find(InfoOptionBean.class, option.getUniqueID());
-							}
-							model.getInfoOptions().add(option);
-						}
+					if (updatedOption != null && originalOption != null && !updatedOption.getName().equals(originalOption.getName())) {
+						/* Scenario 4 */
+						model.getInfoOptions().remove(originalOption);
+						model.getInfoOptions().add(updatedOption);
 					}
 				}
 			}
@@ -215,12 +211,4 @@ public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetV
 		return model;
 	}
 
-	private List<InfoOptionBean> cleanseNonStaticInfoOptionIds(List<InfoOptionBean> enteredInfoOptions) {
-		for (InfoOptionBean enteredInfoOption : enteredInfoOptions) {
-			if (!enteredInfoOption.isStaticData()) {
-				enteredInfoOption.setUniqueID(null);
-			}
-		}
-		return enteredInfoOptions;
-	}
 }

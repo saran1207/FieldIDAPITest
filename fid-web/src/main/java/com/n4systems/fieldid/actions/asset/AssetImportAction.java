@@ -54,7 +54,7 @@ public class AssetImportAction extends AbstractImportAction {
 
 	@Override
 	protected Importer createImporter(MapReader reader) {
-		return getImporterFactory().createAssetImporter(reader, getCurrentUser(), type, securityContext);
+		return getImporterFactory().createAssetImporter(reader, getCurrentUser(), type, securityContext, getSecurityFilter());
 	}
 	
 	@Override

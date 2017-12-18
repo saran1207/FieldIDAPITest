@@ -227,7 +227,8 @@ public class AssetImportPanel extends Panel {
                     try {
                         logger.info("Beginning import of file " + fileUpload.getClientFileName());
                         InputStream inputStream = fileUpload.getInputStream();
-                        EntityImportInitiator importService = new EntityImportInitiator(getWebSessionMap(), getCurrentUser(), getSessionUser(), getSecurityFilter()) {
+                        EntityImportInitiator importService = new EntityImportInitiator(getWebSessionMap(),
+                                getCurrentUser(), getSessionUser(), getSecurityFilter()) {
                             @Override
                             protected ImportSuccessNotification createSuccessNotification() {
                                 return new AssetImportSuccessNotification(getCurrentUser(), getSelectedAssetType());
@@ -238,7 +239,9 @@ public class AssetImportPanel extends Panel {
                             }
                             @Override
                             protected Importer createImporter(MapReader reader) {
-                                return getImporterFactory().createAssetImporter(reader, getCurrentUser(), getSelectedAssetType(), nonProxySecurityContextModel.getObject());
+                                return getImporterFactory().createAssetImporter(reader, getCurrentUser(),
+                                        getSelectedAssetType(), nonProxySecurityContextModel.getObject(),
+                                        getSecurityFilter());
                             }
                         };
                         result = importService.doImport(inputStream);

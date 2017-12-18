@@ -124,8 +124,8 @@ public class ImporterFactory {
 		return new UserImporter(reader, createViewValidator(), userLimits, saverFactory.createUserSaver(), createUserToModelConverter(), emailNotifier, timeZoneId, passwordPolicy);	
 	}
 	
-	public AssetImporter createAssetImporter(MapReader reader, User identifiedBy, AssetType type, SecurityContext securityContext) {
-		return new AssetImporter(reader, createViewValidator(), identifiedBy, createAssetToModelConverter(identifiedBy, type), securityContext);
+	public AssetImporter createAssetImporter(MapReader reader, User identifiedBy, AssetType type, SecurityContext securityContext, SecurityFilter securityFilter) {
+		return new AssetImporter(reader, createViewValidator(), createAssetToModelConverter(identifiedBy, type), securityContext, securityFilter);
 	}
 
 	public EventImporter createEventImporter(MapReader reader, User modifiedBy, ThingEventType type) {
