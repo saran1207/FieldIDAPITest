@@ -183,9 +183,8 @@ public class AssetImportPanel extends Panel {
         dataRadioChoice.add(new AjaxEventBehavior("onclick") {
             @Override
             protected void onEvent(AjaxRequestTarget target) {
+                choiceSelectionModel.setObject((Integer)dataRadioChoice.getModelObject());
                 target.addChildren(getPage(), FeedbackPanel.class);
-                downloadTemplateContainer.add(AttributeModifier.append("class","disabled"));
-                removeCssClass(downloadDataContainer, "disabled");
                 target.add(downloadTemplateContainer);
                 target.add(downloadDataContainer);
                 target.appendJavaScript(JQUERY_COLORBOX_CMD); // Enable JQuery colorbox on link
@@ -194,13 +193,13 @@ public class AssetImportPanel extends Panel {
         downloadChoiceSelectionGroup.add(dataRadioChoice);
         downloadChoiceSelectionGroup.add(downloadDataContainer);
 
+
         Radio templateRadioChoice = new Radio("downloadTemplateChoice", new Model<Integer>(2));
         templateRadioChoice.add(new AjaxEventBehavior("onclick") {
             @Override
             protected void onEvent(AjaxRequestTarget target) {
+                choiceSelectionModel.setObject((Integer)templateRadioChoice.getModelObject());
                 target.addChildren(getPage(), FeedbackPanel.class);
-                removeCssClass(downloadTemplateContainer, "disabled");
-                downloadDataContainer.add(AttributeModifier.append("class", "disabled"));
                 target.add(downloadTemplateContainer);
                 target.add(downloadDataContainer);
             }
@@ -210,8 +209,19 @@ public class AssetImportPanel extends Panel {
 
         add(downloadChoiceSelectionGroup);
 
-        // Hide based on initial selection
-        downloadDataContainer.add(AttributeModifier.append("class", "disabled"));
+        downloadDataContainer.add(new AttributeAppender("class", " disabled") {
+            @Override
+            public boolean isEnabled(Component component) {
+                return !(choiceSelectionModel.getObject().equals(dataRadioChoice.getModelObject()));
+            }
+        });
+
+        downloadTemplateContainer.add(new AttributeAppender("class", " disabled") {
+            @Override
+            public boolean isEnabled(Component component) {
+                 return !(choiceSelectionModel.getObject().equals(templateRadioChoice.getModelObject()));
+            }
+        });
 
         // Section 3
         final FileUploadField fileUploadField = new FileUploadField("fileToUpload");
@@ -498,28 +508,6 @@ public class AssetImportPanel extends Panel {
     private String getExportFileName(AssetType assetType) {
         return ContentType.EXCEL.prepareFileName(new FIDLabelModel("label.export_file.asset",
                 ArrayUtils.newArray(assetType.getName())).getObject());
-    }
-
-    private void removeCssClass(Component component, String cssClass) {
-        Object markupClasses = component.getMarkupAttributes().get("class");
-        if (markupClasses == null)
-            return; // No classes
-        String currentClasses = markupClasses.toString().trim();
-        if (currentClasses.isEmpty())
-            return;
-        String newClasses;
-        if (currentClasses.equals(cssClass))
-            /* Specified class is the only class currently specified */
-            newClasses = "";
-        else
-        if (currentClasses.startsWith(cssClass + " "))
-            /* Specified class is the first class of several */
-            newClasses = currentClasses.replaceFirst(cssClass + " ", "");
-        else
-            /* Specified class is after the first class or does not appear at all */
-            newClasses = currentClasses.replaceFirst(" " + cssClass, "");
-
-        component.add(AttributeModifier.replace("class", newClasses));
     }
 
     private BaseOrg getSessionUserOwner() {
