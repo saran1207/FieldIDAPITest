@@ -1154,4 +1154,8 @@ public class AssetService extends CrudService<Asset> {
                                  .map(Asset::getMobileGUID)
                                  .collect(Collectors.toList());
     }
+
+    protected void setMixpanelService(MixpanelService mixpanelService) {
+        this.mixpanelService = mixpanelService;
+    }
 }

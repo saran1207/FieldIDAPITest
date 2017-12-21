@@ -65,7 +65,8 @@ public class AssetImporter extends AbstractImporter<AssetView> {
 	@Override
 	protected void preImport(Transaction transaction) {
 		/* Create SecurityContext object without Spring proxy for use in this non Spring thread */
-		localSecurityContext = securityContext;
+		localSecurityContext = new SecurityContext();
+		localSecurityContext.set(securityContext);
 
 		if (eventScheduleManager == null)
 			eventScheduleManager = new EventScheduleManagerImpl(transaction.getEntityManager());
