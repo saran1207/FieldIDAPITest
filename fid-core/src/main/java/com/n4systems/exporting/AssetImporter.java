@@ -14,7 +14,7 @@ import com.n4systems.fieldid.service.asset.AssetImportService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.security.SecurityFilter;
-import com.n4systems.model.user.User;
+import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.persistence.Transaction;
 
 import java.util.List;
@@ -66,7 +66,8 @@ public class AssetImporter extends AbstractImporter<AssetView> {
 	protected void preImport(Transaction transaction) {
 		/* Create SecurityContext object without Spring proxy for use in this non Spring thread */
 		localSecurityContext = new SecurityContext();
-		localSecurityContext.set(securityContext);
+		localSecurityContext.setUserSecurityFilter(new UserSecurityFilter(securityContext.getUserSecurityFilter()));
+		localSecurityContext.setTenantSecurityFilter(securityContext.getTenantSecurityFilter());
 
 		if (eventScheduleManager == null)
 			eventScheduleManager = new EventScheduleManagerImpl(transaction.getEntityManager());

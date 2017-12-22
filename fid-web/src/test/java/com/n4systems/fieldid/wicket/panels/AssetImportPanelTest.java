@@ -1,10 +1,12 @@
 package com.n4systems.fieldid.wicket.panels;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.asset.AssetImportPanel;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.assettype.AssetTypeListLoader;
+import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import org.apache.wicket.Component;
@@ -35,6 +37,12 @@ import java.util.MissingResourceException;
 public class AssetImportPanelTest {
 
     public static final String ASSET_IMPORT_PANEL_ID = "assetImportPanel";
+    public static final String DOWNLOAD_DATA_CONTAINER_WICKET_ID = "downloadDataContainer";
+    public static final String DOWNLOAD_TEMPLATE_CONTAINER_WICKET_ID = "downloadTemplateContainer";
+    public static final String DOWNLOAD_DATA_CHOICE_WICKET_ID = "assetImportPanel:downloadChoiceContainer:downloadDataChoice";
+    public static final String DOWNLOAD_TEMPLATE_CHOICE_WICKET_ID = "assetImportPanel:downloadChoiceContainer:downloadTemplateChoice";
+    public static final String DOWNLOAD_DATA_LINK_WICKET_ID = "downloadDataLink";
+    public static final String DOWNLOAD_OWNER_WICKET_ID = "assetImportPanel:downloadChoiceContainer:downloadDataContainer:owner";
     private WicketTester tester;
 
     @Before
@@ -103,23 +111,54 @@ public class AssetImportPanelTest {
         tester.startComponentInPage(assetImportPanel);
 
         String body = tester.getLastResponseAsString();
-        assertEquals(true, containsDisabledCssClass(body, "downloadDataContainer"));
-        assertEquals(false, containsDisabledCssClass(body, "downloadTemplateContainer"));
+        assertEquals(true, containsDisabledCssClass(body, DOWNLOAD_DATA_CONTAINER_WICKET_ID));
+        assertEquals(false, containsDisabledCssClass(body, DOWNLOAD_TEMPLATE_CONTAINER_WICKET_ID));
+        assertEquals(true, containsDisabledCssClass(body, DOWNLOAD_DATA_LINK_WICKET_ID));
 
-        Component dataChoiceRadioButton = tester.getComponentFromLastRenderedPage("assetImportPanel:downloadChoiceContainer:downloadDataChoice");
+        Component dataChoiceRadioButton = tester.getComponentFromLastRenderedPage(DOWNLOAD_DATA_CHOICE_WICKET_ID);
         tester.executeAjaxEvent(dataChoiceRadioButton, "onclick");
 
         body = tester.getLastResponseAsString();
-        assertEquals(false, containsDisabledCssClass(body, "downloadDataContainer"));
-        assertEquals(true, containsDisabledCssClass(body, "downloadTemplateContainer"));
+        assertEquals(false, containsDisabledCssClass(body, DOWNLOAD_DATA_CONTAINER_WICKET_ID));
+        assertEquals(true, containsDisabledCssClass(body, DOWNLOAD_TEMPLATE_CONTAINER_WICKET_ID));
+        assertEquals(true, containsDisabledCssClass(body, DOWNLOAD_DATA_LINK_WICKET_ID));
 
-        Component templateChoiceRadioButton = tester.getComponentFromLastRenderedPage("assetImportPanel:downloadChoiceContainer:downloadTemplateChoice");
+        Component templateChoiceRadioButton = tester.getComponentFromLastRenderedPage(DOWNLOAD_TEMPLATE_CHOICE_WICKET_ID);
         tester.executeAjaxEvent(templateChoiceRadioButton, "onclick");
-        tester.getLastRenderedPage().renderPage();
 
         body = tester.getLastResponseAsString();
-        assertEquals(containsDisabledCssClass(body, "downloadDataContainer"), true);
-        assertEquals(containsDisabledCssClass(body, "downloadTemplateContainer"), false);
+        assertEquals(true, containsDisabledCssClass(body, DOWNLOAD_DATA_CONTAINER_WICKET_ID));
+        assertEquals(false, containsDisabledCssClass(body, DOWNLOAD_TEMPLATE_CONTAINER_WICKET_ID));
+        assertEquals(true, containsDisabledCssClass(body, DOWNLOAD_DATA_LINK_WICKET_ID));
+    }
+
+    /**
+     * Clicking the data export radio button with a customer selection should cause the download data link to
+     * become enabled.
+     */
+    @Test
+    public void verifyDataDownloadLinkEnabling() {
+
+        AssetImportPanel assetImportPanel = createAssetImportPanel();
+        tester.startComponentInPage(assetImportPanel);
+
+        String body = tester.getLastResponseAsString();
+        assertEquals(true, containsDisabledCssClass(body, DOWNLOAD_DATA_CONTAINER_WICKET_ID));
+        assertEquals(false, containsDisabledCssClass(body, DOWNLOAD_TEMPLATE_CONTAINER_WICKET_ID));
+        assertEquals(true, containsDisabledCssClass(body, DOWNLOAD_DATA_LINK_WICKET_ID));
+
+        CustomerOrg customer = new CustomerOrg();
+        customer.setId(1L);
+        customer.setName("test customer");
+        assetImportPanel.getSelectedOrgModel().setObject(customer);
+
+        Component dataChoiceRadioButton = tester.getComponentFromLastRenderedPage(DOWNLOAD_DATA_CHOICE_WICKET_ID);
+        tester.executeAjaxEvent(dataChoiceRadioButton, "onclick");
+
+        body = tester.getLastResponseAsString();
+        assertEquals(false, containsDisabledCssClass(body, DOWNLOAD_DATA_CONTAINER_WICKET_ID));
+        assertEquals(true, containsDisabledCssClass(body, DOWNLOAD_TEMPLATE_CONTAINER_WICKET_ID));
+        assertEquals(false, containsDisabledCssClass(body, DOWNLOAD_DATA_LINK_WICKET_ID));
     }
 
     private boolean containsDisabledCssClass(String body, String tag) {
@@ -127,6 +166,7 @@ public class AssetImportPanelTest {
         if (i > -1) {
             i = body.indexOf("class=\"", i);
             int j = body.indexOf("\"", i+7);
+
             String cssClasses = body.substring(i+7, j);
             return  (cssClasses.equals("disabled") || cssClasses.startsWith("disabled ")
                     || cssClasses.contains(" disabled ") || cssClasses.endsWith(" disabled"));

@@ -534,4 +534,8 @@ public class AssetImportPanel extends Panel {
     private SecurityFilter getSecurityFilter() {
          return securityFilterModel.getObject();
     }
+
+    public IModel<BaseOrg> getSelectedOrgModel() {
+        return selectedOrgModel;
+    }
 }
