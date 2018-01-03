@@ -114,6 +114,12 @@ public class ExcelXSSFMapWriter implements MapWriter {
     }
 
     @Override
+    public void writeTitlesOnly(List<String> titles) throws IOException {
+        this.titles = titles;
+        writeTitles();
+    }
+
+    @Override
     public void close() throws IOException {
         if(workbook != null) {
             workbook.close();

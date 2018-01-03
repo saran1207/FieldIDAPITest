@@ -55,6 +55,8 @@ public interface FieldValidator {
 	public static final String MaxEmployeeUersFail = "You can not import more than %d administration (full) users. (Attempted to import %d)";
     public static final String NotANumberFail = "'%s' is not a valid number for criteria '%s'";
 	public static final String InvalidScoreFail = "You must enter a valid score for criteria '%s'. Value was '%s' but expecting one of %s";
+	public static final String ExternalAssetMobileGuidValidatorFail = "Could not find %s '%s'";
+    public static final String ExternalAssetMobileGuidCorrectAssetTypeFail = "%s '%s' has incorrect Asset Type %s";
 	
 	public <V extends ExternalModelView> ValidationResult validate(Object fieldValue, V view, String fieldName, SecurityFilter filter, SerializableField field, Map<String, Object> validationContext);
 }

@@ -21,6 +21,7 @@
                 <td><span wicket:id="validationErrorMsg"></span></td>
             </tr>
         </table>
+        <div wicket:id="errorsTableNavigator"></div>
         <div class="errorActions">
             <input type="submit" wicket:id="reuploadImportFile" wicket:message="value:button.re_upload_import_file"/>
             <span id="or"><wicket:message key="label.or" /></span>
@@ -34,7 +35,7 @@
         </div>
         <div class="progressBarContainer" wicket:id="progressBarContainer">
             <label wicket:id="taskStatusLabel" class="statusLabel"></label>
-            <div class="percentBar">
+            <div class="percentBar" style="margin-left:40px;">
                 <div wicket:id="importProgressBar" class="percentBarUsed"/>
             </div>
             <div class="taskCount" wicket:id="importTaskCount"></div>

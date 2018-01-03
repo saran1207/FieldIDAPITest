@@ -24,7 +24,11 @@ public class AssetToViewConverterTest {
 	private AssetToViewConverter converter = new AssetToViewConverter();
 	
 	private Asset createAsset() {
-		Asset model = anAsset().ofType(AssetTypeBuilder.anAssetType().build())
+		AssetType assetType = AssetTypeBuilder.anAssetType().build();
+		InfoFieldBeanBuilder fieldBuilder = InfoFieldBeanBuilder.aTextField();
+		assetType.getInfoFields().add(fieldBuilder.named("Field1").build());
+		assetType.getInfoFields().add(fieldBuilder.named("Field2").build());
+		Asset model = anAsset().ofType(assetType)
 			.withOwner(OrgBuilder.aCustomerOrg().build()).withIdentifier("12345")
 			.withAdvancedLocation(onlyFreeformLocation("loc123")).build();
 		model.setRfidNumber("rf1234");
@@ -44,7 +48,6 @@ public class AssetToViewConverterTest {
 		model.setShopOrder(line);
 		
 		InfoOptionBeanBuilder optionBuilder = InfoOptionBeanBuilder.aDynamicInfoOption();
-		InfoFieldBeanBuilder fieldBuilder = InfoFieldBeanBuilder.aTextField();
 		
 		model.getInfoOptions().add(optionBuilder.withName("Opt1").forField(fieldBuilder.named("Field1").build()).build());
 		model.getInfoOptions().add(optionBuilder.withName("Opt2").forField(fieldBuilder.named("Field2").build()).build());

@@ -10,6 +10,7 @@ import jxl.write.biff.RowsExceededException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -98,5 +99,10 @@ public class ExcelMapWriter implements MapWriter {
 		checkArgument(manager!=null);
 		this.excelSheetManager = manager;
 		return this;
+	}
+
+	@Override
+	public void writeTitlesOnly(List<String> titles) throws IOException {
+		throw(new UnsupportedOperationException());
 	}
 }

@@ -11,7 +11,10 @@ import java.util.Map;
 
 @SuppressWarnings("serial")
 public class AssetView extends ExternalModelView {
-	
+
+	public static final String ARCHIVE_FIELD="Archive";
+	public static final String SYSTEM_ID_FIELD = "System ID";
+
 	@SerializableField(title = "ID Number", order = 100, validators = { NotNullValidator.class, AssetViewToAssetIdentifierLengthValidator.class })
 	private String identifier;
 
@@ -51,6 +54,8 @@ public class AssetView extends ExternalModelView {
 	@SerializableField(title = "A:", order = 1200, handler = MapSerializationHandler.class, validators = { NotNullValidator.class, AssetViewAttributesValidator.class })
 	private Map<String, String> attributes = new LinkedHashMap<String, String>();
 
+	@SerializableField(title=SYSTEM_ID_FIELD, order = 9999999, validators = {ExternalAssetMobileGuidValidator.class})
+	private String globalId;
 	public AssetView() {}
 
 	public String getIdentifier() {
@@ -171,12 +176,11 @@ public class AssetView extends ExternalModelView {
 
 	@Override
 	public String getGlobalId() {
-		return null;
+		return globalId;
 	}
 
 	@Override
 	public void setGlobalId(String globalId) {
-
+		this.globalId = globalId;
 	}
-
 }

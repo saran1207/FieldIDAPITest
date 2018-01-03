@@ -8,7 +8,6 @@ import com.n4systems.api.conversion.orgs.CustomerOrgToModelConverter;
 import com.n4systems.api.conversion.orgs.DivisionOrgToModelConverter;
 import com.n4systems.api.conversion.users.UserToModelConverter;
 import com.n4systems.api.validation.ViewValidator;
-import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.handlers.creator.EventPersistenceFactory;
 import com.n4systems.handlers.creator.events.factory.ProductionEventPersistenceFactory;
@@ -25,8 +24,7 @@ import com.n4systems.model.tenant.UserLimits;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.persistence.savers.SaverFactory;
-import com.n4systems.services.asset.AssetSaveService;
-import com.n4systems.util.ServiceLocator;
+import com.n4systems.services.SecurityContext;
 import com.n4systems.utils.email.WelcomeNotifier;
 
 import java.util.TimeZone;
@@ -67,7 +65,8 @@ public class ImporterFactory {
 	}
 
 	protected AssetToModelConverter createAssetToModelConverter(User identifiedBy, AssetType type) {
-		AssetToModelConverter converter = new AssetToModelConverter(loaderFactory.createOrgByNameLoader(),
+		AssetToModelConverter converter = new AssetToModelConverter(loaderFactory.createAssetByMobileGuidLoader(),
+																	loaderFactory.createOrgByNameLoader(),
                                                                     createNonIntegrationOrderManager(),
                                                                     loaderFactory.createAssetStatusByNameLoader(),
                                                                     new InfoOptionMapConverter(),
@@ -80,14 +79,6 @@ public class ImporterFactory {
 
 	protected NonIntegrationOrderManager createNonIntegrationOrderManager() {
 		return new NonIntegrationOrderManager(saverFactory.createNonIntegrationLineItemSaver());
-	}
-
-	protected AssetSaveService createAssetSaveService(User user) {
-		return new AssetSaveService(createLegacyAsset(), user);
-	}
-
-	protected LegacyAsset createLegacyAsset() {
-		return ServiceLocator.getLegacyAssetManager();
 	}
 
 	protected EventPersistenceFactory createEventPersistenceFactory() {
@@ -122,8 +113,8 @@ public class ImporterFactory {
 		return new UserImporter(reader, createViewValidator(), userLimits, saverFactory.createUserSaver(), createUserToModelConverter(), emailNotifier, timeZoneId, passwordPolicy);	
 	}
 	
-	public AssetImporter createAssetImporter(MapReader reader, User identifiedBy, AssetType type) {
-		return new AssetImporter(reader, createViewValidator(), createAssetSaveService(identifiedBy), createAssetToModelConverter(identifiedBy, type));
+	public AssetImporter createAssetImporter(MapReader reader, User identifiedBy, AssetType type, SecurityContext securityContext, SecurityFilter securityFilter) {
+		return new AssetImporter(reader, createViewValidator(), createAssetToModelConverter(identifiedBy, type), securityContext, securityFilter);
 	}
 
 	public EventImporter createEventImporter(MapReader reader, User modifiedBy, ThingEventType type) {

@@ -61,4 +61,7 @@ public class MixpanelService extends FieldIdPersistenceService {
         }
     }
 
+    public void setConfigService(ConfigService configService) {
+        this.configService = configService;
+    }
 }
