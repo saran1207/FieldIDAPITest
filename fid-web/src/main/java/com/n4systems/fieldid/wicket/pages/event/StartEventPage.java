@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.event;
 
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.wicket.behavior.SetFocusOnLoadBehavior;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
@@ -43,6 +44,8 @@ public class StartEventPage extends FieldIDFrontEndPage {
         add(new Label("label_multi_event.full", new StringResourceModel("label.multi_event.full",
                  this,null, new Object[]{getMaxAssetsFromMassEvent()})));
         final TextField<String> searchTerm = new TextField<String>("singleAssetSearchText", Model.of(""));
+        searchTerm.setOutputMarkupId(true);
+        searchTerm.add(new SetFocusOnLoadBehavior());
         Form singleAssetSearchForm = new Form("singleAssetSearchForm") {
           @Override
           protected void onSubmit() {
