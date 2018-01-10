@@ -82,6 +82,17 @@ public class UserService extends CrudService<User> {
 		return super.findAll(createUserQueryBuilder(true, false), page, pageSize);
 	}
 
+	@Override
+    @Transactional
+    public User deleteByPublicId(String id) {
+        User user = findByPublicId(id);
+        if (user == null)
+            return null;
+        user.archiveUser();
+        user = update(user);
+        return user;
+    }
+
 	public List<User> getExpiringPasswordUsersByTenant(Long tenantId, int expiringDays) {
 
         List<User> finalListOfUsers = new ArrayList<>();

@@ -134,6 +134,25 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 		return toMessage(crudService().update(merge(message, testNotFound(crudService().findByPublicId(id)))));
 	}
 
+	@DELETE
+	@Path("{id}")
+	@Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
+	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
+	@Transactional
+	public A delete(@PathParam("id") String id) {
+		String logInfo = getLogInfo();
+		String apiCall = listResponseType.getDescriptor().getName();
+		String logMessage = logInfo + apiCall + " DELETE for id: " + id;
+		logger.info(logMessage);
+
+		try {
+			return toMessage(testNotFound(crudService().deleteByPublicId(id)));
+		}
+		catch(UnsupportedOperationException ex) {
+			throw new NotAllowedException("DELETE not allowed for this entity type");
+		}
+	}
+
 	public String getLogInfo() {
 		String user = getCurrentUser().getUserID();
 		String tenant = getCurrentTenant().getDisplayName();
