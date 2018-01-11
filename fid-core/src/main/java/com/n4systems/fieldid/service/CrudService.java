@@ -60,6 +60,7 @@ public abstract class CrudService<T extends AbstractEntity> extends FieldIdPersi
 		return persistenceService.update(model);
 	}
 
+	@Transactional
 	public T deleteByPublicId(String id) {
 		throw new UnsupportedOperationException(); // delete operation not supported for all entity types
 	}
