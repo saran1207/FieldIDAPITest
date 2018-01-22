@@ -3,6 +3,8 @@ package com.n4systems.services.config;
 public class AwsConfig {
 	protected String accessKeyId;
 	protected String secretAccessKey;
+	protected String mobileAccessKeyId;
+	protected String mobileSecretAccessKey;
 	protected String endpoint;
 	protected String mainBucket;
 	protected String lotoReportsBucket;
@@ -21,6 +23,8 @@ public class AwsConfig {
 		this.uploadTimeout = orig.uploadTimeout;
 		this.secretAccessKey = orig.secretAccessKey;
 		this.region = orig.region;
+		this.mobileAccessKeyId = orig.mobileAccessKeyId;
+		this.mobileSecretAccessKey = orig.mobileSecretAccessKey;
 	}
 
 	public String getAccessKeyId() {
@@ -55,6 +59,14 @@ public class AwsConfig {
 		return region;
 	}
 
+	public String getMobileAccessKeyId() {
+		return mobileAccessKeyId;
+	}
+
+	public String getMobileSecretAccessKey() {
+		return mobileSecretAccessKey;
+	}
+
 	@Override
 	public String toString() {
 		return "\t\taccessKeyId: '" + accessKeyId + "'\n" +
@@ -64,6 +76,8 @@ public class AwsConfig {
 				"\t\tlotoReportsBucket: '" + lotoReportsBucket + "'\n" +
 				"\t\tuploadMaxFileSizeBytes: '" + uploadMaxFileSizeBytes + "'\n" +
 				"\t\tuploadTimeout: '" + uploadTimeout + "'\n" +
-				"\t\tregion: '" + region + "'\n";
+				"\t\tregion: '" + region + "'\n" +
+				"\t\tmobileAccessKeyId: '" + mobileAccessKeyId + "'\n" +
+				"\t\tmobileSecretAccessKey: '" + mobileSecretAccessKey + "'\n";
 	}
 }

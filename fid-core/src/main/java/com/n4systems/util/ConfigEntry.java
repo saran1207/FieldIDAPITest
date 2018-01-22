@@ -14,6 +14,8 @@ public enum ConfigEntry {
 	AMAZON_S3_UPLOAD_MAX_FILE_SIZE_BYTES	(r -> r.getAws().getUploadMaxFileSizeBytes()),
 	AMAZON_S3_UPLOAD_TIMEOUT_MILLISECONDS	(r -> r.getAws().getUploadTimeout()),
 	AMAZON_SECRET_ACCESS_KEY				(r -> r.getAws().getSecretAccessKey()),
+	AMAZON_MOBILE_ACCESS_KEY_ID             (r -> r.getAws().getMobileAccessKeyId()),
+	AMAZON_MOBILE_SECRET_ACCESS_KEY_ID      (r -> r.getAws().getMobileSecretAccessKey()),
 	APPTEGIC_DATASET						(r -> r.getWeb().getApptegicDataset()),
 	APPTEGIC_ENABLED						(r -> r.getWeb().getApptegicEnabled()),
 	ASSET_INDEX_ENABLED						(r -> r.getIndexing().getAssetIndexEnabled()),
