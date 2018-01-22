@@ -1,0 +1,26 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" >
+<wicket:extend>
+    <thead>
+    <tr>
+        <th><wicket:message key="label.name" /></th>
+        <th><wicket:message key="label.id" /></th>
+        <th><wicket:message key="label.organization" /></th>
+        <th><wicket:message key="label.created" /></th>
+        <th><wicket:message key="label.last_modified" /></th>
+        <th></th>
+        <th>&nbsp;</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr wicket:id="result.list">
+        <td><span wicket:id="result.name"></span></td>
+        <td><label wicket:id="result.id"/></td>
+        <td><label wicket:id="result.organization"/></td>
+        <td><label wicket:id="result.created"/></td>
+        <td><label wicket:id="result.last_modified"/></td>
+        <td><span wicket:id="result.editAction"></span></td>
+        <td></td>
+    </tr>
+    </tbody>
+</wicket:extend>
+</html>

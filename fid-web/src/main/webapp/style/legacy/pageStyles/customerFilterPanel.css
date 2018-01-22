@@ -1,0 +1,63 @@
+.listFilter {
+    background-color: #EEEEEE;
+    padding: 10px;
+    border-top : 1px solid #CCCCCC;
+    border-bottom : 1px solid #CCCCCC;
+}
+
+.listFilterHeader h2{
+    padding: 0;
+}
+
+.listFilterHeader h2, .listFilterHeader span{
+    display: inline;
+}
+
+.listFilterForm {
+    padding-bottom: 5px;
+}
+
+.nameFilter {
+    width: 250px;
+}
+
+.idFilter {
+    width: 100px;
+}
+
+.orgFilter {
+    width: 200px;
+}
+
+.labelAndInputField {
+    width: auto;
+    float: left;
+}
+
+.labelField {
+    width: auto;
+    margin-right: 10px;
+    margin-top: 5px;
+    font-weight: bold;
+    display: block;
+    float: left;
+}
+
+.inputField {
+    border : 1px solid #9C9C9C;
+    color : #555555;
+    overflow : hidden;
+    padding : 4px;
+    margin-right: 10px;
+}
+
+.wwctrl select {
+    border : 1px solid #9C9C9C;
+    color : #555555;
+    padding : 4px;
+}
+
+div.formFilterAction {
+    padding: 8px 10px 0 0;
+    clear: none;
+}

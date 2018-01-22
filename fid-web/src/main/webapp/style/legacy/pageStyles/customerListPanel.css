@@ -1,0 +1,30 @@
+
+.textContainer{
+    background-image: url(../../../images/owner-bs-icon.png);
+    background-repeat: no-repeat;
+    background-position: left 11.5px;
+    margin-left: 90px;
+    padding-left: 90px;
+}
+
+.textContainer p{
+    padding: 5px;
+}
+
+.textContainer h1{
+    padding: 5px;
+}
+
+
+.initialMessage{
+    border:1px solid #CCCCCC;
+    background-color: #EEEEEE;
+    padding: 30px;
+}
+
+.textContainer .h1 {
+    font-weight: bold;
+    color: #333;
+    text-align: left;
+    font-size: 1.5em;
+}

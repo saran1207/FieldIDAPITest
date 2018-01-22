@@ -1,0 +1,41 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<wicket:panel>
+
+    <div class="listFilter">
+        <div class="listFilterHeader">
+            <h2>
+                <wicket:message key="label.filter"/>
+            </h2>
+            &nbsp;
+            <span class="egColor"><wicket:message key="message.filter_customers"/></span>
+        </div>
+        <form wicket:id="listFilterForm" method="get" class="listFilterForm">
+            <div class="labelAndInputField">
+                <label wicket:for="nameFilter" class="labelField">
+                    <wicket:message key="label.name"></wicket:message>
+                    :</label>
+                <input wicket:id="nameFilter" type="text" class="inputField nameFilter"/>
+            </div>
+            <div class="labelAndInputField">
+                <label wicket:for="idFilter" class="labelField">
+                    <wicket:message key="label.id"></wicket:message>
+                    :</label>
+                <input wicket:id="idFilter" type="text" class="inputField idFilter"/>
+            </div>
+            <div class="labelAndInputField">
+                <label wicket:for="orgFilter" class="labelField">
+                    <wicket:message key="label.organization"></wicket:message>
+                    :</label>
+                <select wicket:id="orgFilter" class="inputField orgFilter"></select>
+            </div>
+            <div class="formFilterAction">
+                <input type="submit" wicket:id="filterSubmit" wicket:message="value:hbutton.filter"/>
+                <span><wicket:message key="label.or"/></span>
+                <a href="javascript:void(0);" wicket:id="clearSubmit" class="assetLink">
+                    <wicket:message key="hbutton.clear"/>
+                </a>
+            </div>
+        </form>
+    </div>
+</wicket:panel>
+</html>
