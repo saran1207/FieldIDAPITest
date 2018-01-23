@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.ws.v1.resources.user;
 
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
 import com.n4systems.fieldid.ws.v1.resources.offlineprofile.ApiOfflineProfileResource;
@@ -22,8 +23,9 @@ public abstract class AbstractUserResource extends SetupDataResource<ApiUser, Us
 
 	@Autowired private OfflineProfileService offlineProfileService;
 	@Autowired private ApiOfflineProfileResource apiOfflineProfileResource;
-	@Autowired private ApiTenantResource apiTenantResource; 
-	
+	@Autowired private ApiTenantResource apiTenantResource;
+	@Autowired protected S3Service s3Service;
+
 	public AbstractUserResource() {
 		super(User.class, true);
 	}
@@ -110,7 +112,10 @@ public abstract class AbstractUserResource extends SetupDataResource<ApiUser, Us
 		if (offlineProfile != null) {
 			apiUser.setOfflineProfile(apiOfflineProfileResource.convertEntityToApiModel(offlineProfile));
 		}
-		
+
+		apiUser.setMobileAccessKeyId(s3Service.getMobileAccessKey());
+		apiUser.setMobileSecretAccessKey(s3Service.getMobileSecretAccessKey());
+
 		return apiUser;
 	}
 

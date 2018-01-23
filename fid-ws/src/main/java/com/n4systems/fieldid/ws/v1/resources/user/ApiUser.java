@@ -32,6 +32,8 @@ public class ApiUser extends ApiReadonlyModelWithOwner {
 	private Long secondaryId;
 	private Long customerId;
 	private Long divisionId;
+	private String mobileAccessKeyId;
+	private String mobileSecretAccessKey;
 	
 	public String getUserId() {
 		return userId;
@@ -234,5 +236,21 @@ public class ApiUser extends ApiReadonlyModelWithOwner {
 
 	public void setDivisionId(Long divisionId) {
 		this.divisionId = divisionId;
+	}
+
+	public String getMobileAccessKeyId() {
+		return mobileAccessKeyId;
+	}
+
+	public void setMobileAccessKeyId(String mobileAccessKeyId) {
+		this.mobileAccessKeyId = mobileAccessKeyId;
+	}
+
+	public String getMobileSecretAccessKey() {
+		return mobileSecretAccessKey;
+	}
+
+	public void setMobileSecretAccessKey(String mobileSecretAccessKey) {
+		this.mobileSecretAccessKey = mobileSecretAccessKey;
 	}
 }

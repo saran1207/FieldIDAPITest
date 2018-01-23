@@ -55,6 +55,22 @@ public class OopsPage extends FieldIDFrontEndPage {
                 homeButton.setVisible(true);
                 break;
 
+            case PAGE_NOT_FOUND:
+                errorTitleLabel = new Label("errorTitle", new FIDLabelModel("title.oops_page_does_not_exist"));
+                messageTextLabel = new Label("messageText", new FIDLabelModel("message.cannot_find_page"));
+                helpTextLabel = new Label("helpText", new FIDLabelModel("message.help_fix_issue",
+                        new Object[]{getHelpUrl()}));
+                helpTextLabel.setEscapeModelStrings(false);
+                break;
+
+            case ACCESS_RESTRICTED:
+                errorTitleLabel = new Label("errorTitle", new FIDLabelModel("title.oops_access_restricted"));
+                messageTextLabel = new Label("messageText", new FIDLabelModel("message.access_restricted"));
+                helpTextLabel = new Label("helpText", new FIDLabelModel("message.help_fix_issue",
+                        new Object[]{getHelpUrl()}));
+                helpTextLabel.setEscapeModelStrings(false);
+                break;
+
             default:
                 errorTitleLabel = new Label("errorTitle", new FIDLabelModel("title.oops_something_went_wrong"));
                 messageTextLabel = new Label("messageText", new FIDLabelModel("message.problem_has_occured"));
