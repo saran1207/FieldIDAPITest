@@ -6,6 +6,8 @@ import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
+import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.security.Permissions;
 import org.apache.log4j.Logger;
@@ -44,6 +46,8 @@ public class CustomerImportPage extends FieldIDFrontEndPage {
     private List<String> titleLabelsByTabIndex;
     private int currentlySelectedTab;
     private IModel<String> currentTitleModel;
+    private IModel<User> currentUserModel;
+    private IModel<SecurityFilter> securityFilterModel;
     private IModel<WebSessionMap> webSessionMapModel;
     private String initialTabSelection;
     private FeedbackPanel feedbackPanel;
@@ -141,7 +145,7 @@ public class CustomerImportPage extends FieldIDFrontEndPage {
         tabs.add(new PanelCachingTab(new AbstractTab(new FIDLabelModel("nav.import_export")) {
             public Panel getPanel(String panelId)
             {
-                return new CustomerImportPanel(panelId);
+                return new CustomerImportPanel(panelId, currentUserModel, securityFilterModel);
             }
         }));
         titleLabelsByTabIndex.add(new FIDLabelModel("title.customer_import_export").getObject());
@@ -183,6 +187,20 @@ public class CustomerImportPage extends FieldIDFrontEndPage {
 
             public void detach() {
             }
+        };
+        currentUserModel = new IModel<User>() {
+            public User getObject() {
+                return getCurrentUser();
+            }
+            public void setObject(final User object) { }
+            public void detach() {}
+        };
+        securityFilterModel = new IModel<SecurityFilter>() {
+            public SecurityFilter getObject() {
+                return getSecurityFilter();
+            }
+            public void setObject(final SecurityFilter object) { }
+            public void detach() {}
         };
         webSessionMapModel = new IModel<WebSessionMap>() {
             public WebSessionMap getObject() {
