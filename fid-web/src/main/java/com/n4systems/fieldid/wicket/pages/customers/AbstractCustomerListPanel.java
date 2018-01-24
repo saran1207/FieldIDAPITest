@@ -5,6 +5,7 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.wicket.components.table.StyledAjaxPagingNavigator;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.pages.WicketTabPanelAjaxUpdate;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
@@ -30,7 +31,7 @@ import java.util.Iterator;
 
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_END_USERS})
-abstract public class AbstractCustomerListPanel extends Panel implements WicketPanelAjaxUpdate {
+abstract public class AbstractCustomerListPanel extends Panel implements WicketTabPanelAjaxUpdate {
 
     final private static int CUSTOMERS_PER_PAGE = 20;
 
@@ -254,7 +255,7 @@ abstract public class AbstractCustomerListPanel extends Panel implements WicketP
         target.add(customResultPanel);
     }
 
-    public void onAjaxUpdate(AjaxRequestTarget target) {
+    public void onWicketTabAjaxUpdate(AjaxRequestTarget target) {
         regenerateResults(target);
     }
 

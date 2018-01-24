@@ -3,6 +3,9 @@ package com.n4systems.fieldid.wicket.pages.customers;
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.pages.WicketLinkGeneratorClickHandler;
+import com.n4systems.fieldid.wicket.pages.WicketLinkGeneratorComponent;
+import com.n4systems.fieldid.wicket.pages.WicketLinkGeneratorDescriptor;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.security.Permissions;
@@ -33,7 +36,7 @@ public class CustomerListPanel extends AbstractCustomerListPanel {
         if (customer.isArchived())
             item.add(new Label("result.name", Model.of(customer.getName())));
         else {
-            item.add(new WicketLinkGeneratorWidget("result.name",
+            item.add(new WicketLinkGeneratorComponent("result.name",
                     Arrays.asList(new WicketLinkGeneratorDescriptor(
                             "customerShow.action?uniqueID=" + customer.getId(), null, customer.getName(), null))));
         }
@@ -56,7 +59,7 @@ public class CustomerListPanel extends AbstractCustomerListPanel {
         item.add(new Label("result.last_modified", Model.of(modified)));
 
         if (customer.isLinked()) {
-            item.add(new WicketLinkGeneratorWidget("result.editAction",
+            item.add(new WicketLinkGeneratorComponent("result.editAction",
                     Arrays.asList(
                             new WicketLinkGeneratorDescriptor(
                                     "customerEdit.action?uniqueID=" + customer.getId(), null,
@@ -72,7 +75,7 @@ public class CustomerListPanel extends AbstractCustomerListPanel {
                     doUnarchive(customer);
                 }
             };
-            item.add(new WicketLinkGeneratorWidget("result.editAction",
+            item.add(new WicketLinkGeneratorComponent("result.editAction",
                     Arrays.asList(
                             new WicketLinkGeneratorDescriptor(
                                     null,
@@ -86,7 +89,7 @@ public class CustomerListPanel extends AbstractCustomerListPanel {
                     doArchive(customer);
                 }
             };
-            item.add(new WicketLinkGeneratorWidget("result.editAction",
+            item.add(new WicketLinkGeneratorComponent("result.editAction",
                     Arrays.asList(
                             new WicketLinkGeneratorDescriptor(
                                     "customerEdit.action?uniqueID=" + customer.getId(), null,

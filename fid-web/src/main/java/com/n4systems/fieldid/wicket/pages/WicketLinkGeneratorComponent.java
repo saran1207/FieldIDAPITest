@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.pages.customers;
+package com.n4systems.fieldid.wicket.pages;
 
 import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
 import org.apache.wicket.AttributeModifier;
@@ -13,13 +13,16 @@ import org.apache.wicket.util.resource.StringResourceStream;
 import java.util.List;
 
 /**
- * A widget that takes a descriptor list and generates a series of links.
+ * A widget that takes a descriptor list and generates corresponding links in a Panel component.
+ * Intended to be used where the number of links to create is only known at run time and thus is
+ * best created by application code.
+ *
  */
-public class WicketLinkGeneratorWidget extends Panel implements IMarkupResourceStreamProvider, IMarkupCacheKeyProvider {
+public class WicketLinkGeneratorComponent extends Panel implements IMarkupResourceStreamProvider, IMarkupCacheKeyProvider {
 
     private List<WicketLinkGeneratorDescriptor> descriptorList;
 
-    public WicketLinkGeneratorWidget(String id, List<WicketLinkGeneratorDescriptor> descriptorList) {
+    public WicketLinkGeneratorComponent(String id, List<WicketLinkGeneratorDescriptor> descriptorList) {
         super(id);
         this.descriptorList = descriptorList;
         createComponents();
@@ -51,18 +54,16 @@ public class WicketLinkGeneratorWidget extends Panel implements IMarkupResourceS
         String markup = "<wicket:panel><div>";
         int i = 0;
         for (WicketLinkGeneratorDescriptor descriptor: descriptorList) {
-            if (descriptor.getLinkUrl() != null) {
-                //System.out.println("Generating markup for link 'link" + i + "'");
+            if (descriptor.getLinkUrl() != null && descriptor.getLinkOnClickHandler() == null) {
                 String absolutePath = ContextAbsolutizer.toContextAbsoluteUrl(descriptor.getLinkUrl());
                 markup+="<a href=\"" + absolutePath + "\"";
                 if (descriptor.getJsOnClickContent() != null) {
-                    //System.out.println(" has onClick content " + descriptor.getJsOnClickContent());
                     markup += " onclick=\"" + descriptor.getJsOnClickContent() + "\"";
                 }
                 markup+= ">" + (descriptor.getLabel() != null ? descriptor.getLabel() : "") + "</a>";
             }
             else
-            if (descriptor.getLinkOnClickHandler() != null) {
+            if (descriptor.getLinkOnClickHandler() != null && descriptor.getLinkUrl() == null) {
                 markup+="<a wicket:id=\"link" + i + "\">" +
                         (descriptor.getLabel() != null ? descriptor.getLabel() : "") + "</a>";
             }
@@ -73,7 +74,6 @@ public class WicketLinkGeneratorWidget extends Panel implements IMarkupResourceS
             i++;
         }
         markup+="</div></wicket:panel>";
-        //System.out.println("Writing markup '" + markup + "'");
         StringResourceStream resourceStream = new StringResourceStream(markup);
 
         return resourceStream;

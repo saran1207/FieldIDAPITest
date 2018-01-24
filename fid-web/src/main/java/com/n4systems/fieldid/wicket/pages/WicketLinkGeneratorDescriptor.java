@@ -1,12 +1,10 @@
-package com.n4systems.fieldid.wicket.pages.customers;
+package com.n4systems.fieldid.wicket.pages;
 
 
 import java.io.Serializable;
 
 /**
- * Describes a link to be rendered by the widget. If the linkUrl is null then the label
- * value will be written out as is without any href. This can be used to place arbitrary
- * text beside a link.
+ * Describes a link to be rendered by the widget.
  */
 public class WicketLinkGeneratorDescriptor implements Serializable {
 
@@ -17,8 +15,10 @@ public class WicketLinkGeneratorDescriptor implements Serializable {
 
     /**
      * Values to be used to generate a link. If any value is not applicable set it to null.
-     * @param linkUrl a url link to be placed in the generated html (can't specify both this and linkOnClickHandler)
-     * @param linkOnClickHandler a callback to be called when the link is clicked (can't specify both this and linkUrl)
+     * @param linkUrl if specified create n href with this url link in the generated html (can't specify both this and
+     *                linkOnClickHandler)
+     * @param linkOnClickHandler if specified create a Wicket link in the generated html with this being a callback
+     *                           to be called when the link is clicked (can't specify both this and linkUrl)
      * @param label the link label text. If linkUrl and linkOnClickHandler are not specified this is rendered as text
      * @param jsOnClickContent javascript to be placed in link's onClick handler - useful for confirm dialogs
      */

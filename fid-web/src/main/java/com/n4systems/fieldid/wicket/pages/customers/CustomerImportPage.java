@@ -5,6 +5,7 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.WicketTabPanelAjaxUpdate;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
@@ -29,6 +30,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
+import rfid.web.helper.SessionUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +49,7 @@ public class CustomerImportPage extends FieldIDFrontEndPage {
     private int currentlySelectedTab;
     private IModel<String> currentTitleModel;
     private IModel<User> currentUserModel;
+    private IModel<SessionUser> sessionUserModel;
     private IModel<SecurityFilter> securityFilterModel;
     private IModel<WebSessionMap> webSessionMapModel;
     private String initialTabSelection;
@@ -145,7 +148,8 @@ public class CustomerImportPage extends FieldIDFrontEndPage {
         tabs.add(new PanelCachingTab(new AbstractTab(new FIDLabelModel("nav.import_export")) {
             public Panel getPanel(String panelId)
             {
-                return new CustomerImportPanel(panelId, currentUserModel, securityFilterModel);
+                return new CustomerImportPanel(panelId, currentUserModel, sessionUserModel,
+                        securityFilterModel, webSessionMapModel);
             }
         }));
         titleLabelsByTabIndex.add(new FIDLabelModel("title.customer_import_export").getObject());
@@ -159,8 +163,8 @@ public class CustomerImportPage extends FieldIDFrontEndPage {
                 target.add(feedbackPanel);
                 currentlySelectedTab = getSelectedTab();
                 Object panel = tabs.get(getSelectedTab()).getPanel(TabbedPanel.TAB_PANEL_ID);
-                if (panel instanceof WicketPanelAjaxUpdate) {
-                    ((WicketPanelAjaxUpdate)panel).onAjaxUpdate(target);
+                if (panel instanceof WicketTabPanelAjaxUpdate) {
+                    ((WicketTabPanelAjaxUpdate)panel).onWicketTabAjaxUpdate(target);
                 }
             }
         };
@@ -195,6 +199,13 @@ public class CustomerImportPage extends FieldIDFrontEndPage {
             public void setObject(final User object) { }
             public void detach() {}
         };
+        sessionUserModel = new IModel<SessionUser>() {
+            public SessionUser getObject() {
+                return getSessionUser();
+            }
+            public void setObject(final SessionUser object) { }
+            public void detach() {}
+        };
         securityFilterModel = new IModel<SecurityFilter>() {
             public SecurityFilter getObject() {
                 return getSecurityFilter();
@@ -222,5 +233,6 @@ public class CustomerImportPage extends FieldIDFrontEndPage {
         }
         return loaderFactory;
     }
+
 }
 

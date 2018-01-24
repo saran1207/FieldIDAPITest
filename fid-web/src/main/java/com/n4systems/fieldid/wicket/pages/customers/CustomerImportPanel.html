@@ -1,6 +1,5 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" >
-<wicket:panel>
-    <div>
+<wicket:extend>
         <div class="leftBox">
 
             <div class="infoSet">
@@ -31,16 +30,14 @@
                     <wicket:message key="message.job_sites_upload"/>
                 </p>
 
-                <!--<form method="post" wicket:id="fileUploadForm" class="fullForm fluentSets" enctype="multipart/form-data">
-                    <span class="fieldHolder">
-                        <input type="file" wicket:id="fileToUpload" size="30"/>
-                    </span>
-                    <input type="submit" wicket:message="value:label.start_import"/>
-                    <span id="or"><wicket:message key="label.or"/></span>
-                    <a href="/fieldid/w/startEventAssetSearch">
-                        <wicket:message key="label.cancel"/>
-                    </a>
-                </form>-->
+                <form method="post" wicket:id="fileUploadForm" class="fullForm fluentSets" enctype="multipart/form-data">
+                <span class="fieldHolder">
+                    <input type="file" wicket:id="fileToUpload" size="30"/>
+                </span>
+                    <input type="submit" wicket:id="fileUploadSubmit" wicket:message="value:label.start_import" />
+                    <span id="or"><wicket:message key="label.or" /></span>
+                    <a href="/fieldid/w/dashboard"><wicket:message key="label.cancel" /></a>
+                </form>
             </div>
 
         </div>
@@ -73,6 +70,5 @@
                 </div>
             </div>
         </div>
-    </div>
-</wicket:panel>
+</wicket:extend>
 </html>
