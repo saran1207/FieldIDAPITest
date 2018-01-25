@@ -31,6 +31,19 @@ public class PersistenceService extends FieldIdService {
     @PersistenceContext
     private EntityManager em;
 
+    public PersistenceService() {
+        super();
+    }
+
+    /**
+     * This constructor allows us to override the injected entity manager
+     * @param em
+     */
+    public PersistenceService(EntityManager em) {
+        super();
+        this.em = em;
+    }
+
     // Once all web calls are successfully ported to open session in view (used now in wicket)
     // there should be no need to reattach anything.
     @Deprecated

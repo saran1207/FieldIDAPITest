@@ -3,6 +3,7 @@ package com.n4systems.taskscheduling.task;
 import com.n4systems.exporting.ExporterFactory;
 import com.n4systems.mail.MailManager;
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -62,8 +63,8 @@ public class DownloadTaskFactory {
 		return task;
 	}
 	
-	public AssetExportTask createAssetExportTask(DownloadLink link, String downloadUrl, ListLoader<Asset> productLoader) {
-		AssetExportTask task = new AssetExportTask(link, downloadUrl, linkSaver, createMailManager(), exporterFactory.createAssetExporter(productLoader));
+	public AssetExportTask createAssetExportTask(DownloadLink link, String downloadUrl, ListLoader<Asset> productLoader, AssetType assetType) {
+		AssetExportTask task = new AssetExportTask(link, downloadUrl, linkSaver, createMailManager(), exporterFactory.createAssetExporter(productLoader, assetType));
 		return task;
 	}
 

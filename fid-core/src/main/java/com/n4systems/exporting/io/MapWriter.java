@@ -2,6 +2,7 @@ package com.n4systems.exporting.io;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 public interface MapWriter extends Closeable {
@@ -16,4 +17,11 @@ public interface MapWriter extends Closeable {
 	 * @throws IOException
 	 */
 	public void write(Map<String, Object> row) throws IOException;
+
+	/**
+	 * Writes a single row of titles to the stream.
+	 * @param titles 		A list of field titles.
+	 * @throws IOException
+	 */
+	public void writeTitlesOnly(List<String> titles) throws IOException;
 }

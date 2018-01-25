@@ -114,6 +114,8 @@ import org.apache.wicket.request.resource.caching.version.MessageDigestResourceV
 import org.apache.wicket.settings.IRequestLoggerSettings;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.file.IResourceFinder;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 public class FieldIDWicketApp extends WebApplication {
 
@@ -441,5 +443,7 @@ public class FieldIDWicketApp extends WebApplication {
         return new DynamicWebApplicationPath(getServletContext());
     }
 
-
+    public ApplicationContext getApplicationContext() {
+        return WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+    }
 }
