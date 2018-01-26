@@ -50,7 +50,8 @@ public class StartEventPage extends FieldIDFrontEndPage {
           @Override
           protected void onSubmit() {
               setResponsePage(SmartSearchListPage.class,
-                      PageParametersBuilder.param("searchTerm", searchTerm.getModelObject()));
+                      PageParametersBuilder.param("searchTerm",
+                              searchTerm.getModelObject() != null ? searchTerm.getModelObject() : ""));
           }
         };
         singleAssetSearchForm.add(searchTerm);
