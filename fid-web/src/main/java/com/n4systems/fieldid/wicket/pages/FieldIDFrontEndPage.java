@@ -341,7 +341,9 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         Form<?> form = new Form<Void>("userForm") {
             @Override
             protected void onSubmit() {
-                setResponsePage(SmartSearchListPage.class, PageParametersBuilder.param("searchTerm", autoCompleteSearch.getAutocompleteField().getConvertedInput()));
+                String convertedInput = autoCompleteSearch.getAutocompleteField().getConvertedInput();
+                if (convertedInput != null)
+                    setResponsePage(SmartSearchListPage.class, PageParametersBuilder.param("searchTerm", convertedInput));
             }
         };
 
