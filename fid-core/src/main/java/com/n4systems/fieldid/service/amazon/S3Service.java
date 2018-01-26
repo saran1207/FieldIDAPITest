@@ -1200,28 +1200,6 @@ public class S3Service extends FieldIdPersistenceService {
         return secretKey;
     }
 
-    public String getMobileAccessKey() {
-        String accessKey = configService.getString(ConfigEntry.AMAZON_MOBILE_ACCESS_KEY_ID);
-        try {
-            return Base64.getEncoder().encodeToString(accessKey.getBytes("UTF-8"));
-        }
-        catch(Exception e){
-            logger.warn(e);
-            return "";
-        }
-    }
-
-    public String getMobileSecretAccessKey() {
-        String secretKey = configService.getString(ConfigEntry.AMAZON_MOBILE_SECRET_ACCESS_KEY_ID);
-        try {
-            return Base64.getEncoder().encodeToString(secretKey.getBytes("UTF-8"));
-        }
-        catch(Exception e){
-            logger.warn(e);
-            return "";
-        }
-    }
-
     protected String getUploadTimeoutMilliseconds() {
         String uploadTimeoutMilliseconds = configService.getString(ConfigEntry.AMAZON_S3_UPLOAD_TIMEOUT_MILLISECONDS);
         return uploadTimeoutMilliseconds;

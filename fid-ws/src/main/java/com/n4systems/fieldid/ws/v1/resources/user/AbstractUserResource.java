@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.ws.v1.resources.user;
 
-import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
 import com.n4systems.fieldid.ws.v1.resources.offlineprofile.ApiOfflineProfileResource;
@@ -9,6 +8,8 @@ import com.n4systems.model.offlineprofile.OfflineProfile;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.security.Permissions;
+import com.n4systems.services.config.ConfigService;
+import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -24,7 +25,7 @@ public abstract class AbstractUserResource extends SetupDataResource<ApiUser, Us
 	@Autowired private OfflineProfileService offlineProfileService;
 	@Autowired private ApiOfflineProfileResource apiOfflineProfileResource;
 	@Autowired private ApiTenantResource apiTenantResource;
-	@Autowired protected S3Service s3Service;
+	@Autowired private ConfigService configService;
 
 	public AbstractUserResource() {
 		super(User.class, true);
@@ -113,8 +114,8 @@ public abstract class AbstractUserResource extends SetupDataResource<ApiUser, Us
 			apiUser.setOfflineProfile(apiOfflineProfileResource.convertEntityToApiModel(offlineProfile));
 		}
 
-		apiUser.setMobileAccessKeyId(s3Service.getMobileAccessKey());
-		apiUser.setMobileSecretAccessKey(s3Service.getMobileSecretAccessKey());
+		apiUser.setMobileAccessKeyId(configService.getString(ConfigEntry.AMAZON_MOBILE_ACCESS_KEY_ID));
+		apiUser.setMobileSecretAccessKey(configService.getString(ConfigEntry.AMAZON_MOBILE_SECRET_ACCESS_KEY_ID));
 
 		return apiUser;
 	}
