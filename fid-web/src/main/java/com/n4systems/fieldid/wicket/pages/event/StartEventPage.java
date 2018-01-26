@@ -68,14 +68,18 @@ public class StartEventPage extends FieldIDFrontEndPage {
                  this,null, new Object[]{getMaxAssetsFromMassEvent()})));
         final TextField<String> searchTerm = new TextField<String>("singleAssetSearchText", Model.of(""));
         searchTerm.setOutputMarkupId(true);
-        searchTerm.setRequired(true);
         searchTerm.add(new SetFocusOnLoadBehavior());
         Form singleAssetSearchForm = new Form("singleAssetSearchForm") {
           @Override
           protected void onSubmit() {
-              setResponsePage(SmartSearchListPage.class,
-                      PageParametersBuilder.param("searchTerm",
-                              searchTerm.getModelObject() != null ? searchTerm.getModelObject() : ""));
+              if (searchTerm.getModelObject() == null) {
+                  error(new FIDLabelModel("error.enterSmartSearchTermForSingleAsset").getObject());
+              }
+              else {
+                  setResponsePage(SmartSearchListPage.class,
+                          PageParametersBuilder.param("searchTerm",
+                                  searchTerm.getModelObject()));
+              }
           }
         };
         singleAssetSearchForm.add(searchTerm);
