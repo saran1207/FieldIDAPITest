@@ -3,12 +3,14 @@ package com.n4systems.fieldid.wicket.pages.customers;
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.pages.WicketAjaxLinkGeneratorClickHandler;
 import com.n4systems.fieldid.wicket.pages.WicketLinkGeneratorClickHandler;
 import com.n4systems.fieldid.wicket.pages.WicketLinkGeneratorComponent;
 import com.n4systems.fieldid.wicket.pages.WicketLinkGeneratorDescriptor;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.security.Permissions;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
@@ -46,10 +48,10 @@ public class CustomerArchivedListPanel extends AbstractCustomerListPanel {
                             new WicketLinkGeneratorDescriptor(null, null,
                                     new FIDLabelModel("label.linked_customer").getObject(), null))));
         } else if (customer.isArchived()) {
-            WicketLinkGeneratorClickHandler unarchiveLinkClickHandler = new WicketLinkGeneratorClickHandler() {
+            WicketAjaxLinkGeneratorClickHandler unarchiveLinkClickHandler = new WicketAjaxLinkGeneratorClickHandler() {
                 @Override
-                public void onClick() {
-                    doUnarchive(customer);
+                public void onClick(AjaxRequestTarget target) {
+                    doUnarchive(customer, target);
                 }
             };
             item.add(new WicketLinkGeneratorComponent("result.editAction",
@@ -59,10 +61,10 @@ public class CustomerArchivedListPanel extends AbstractCustomerListPanel {
                                     unarchiveLinkClickHandler,
                                     new FIDLabelModel("label.unarchive").getObject(), null))));
         } else {
-            WicketLinkGeneratorClickHandler archiveLinkClickHandler = new WicketLinkGeneratorClickHandler() {
+            WicketAjaxLinkGeneratorClickHandler archiveLinkClickHandler = new WicketAjaxLinkGeneratorClickHandler() {
                 @Override
-                public void onClick() {
-                    doArchive(customer);
+                public void onClick(AjaxRequestTarget target) {
+                    doArchive(customer, target);
                 }
             };
             item.add(new WicketLinkGeneratorComponent("result.editAction",

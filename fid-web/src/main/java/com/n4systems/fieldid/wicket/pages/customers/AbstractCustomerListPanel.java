@@ -18,6 +18,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
@@ -189,7 +190,7 @@ abstract public class AbstractCustomerListPanel extends Panel implements WicketT
 
     /**
      * Override to create a custom no result section. The implementor has
-     * to control this section visibility. The default is an empty no visible panel.
+     * to control this section visibility. The default is an empty not visible panel.
      * @param id wicket markup id
      * @return the created component
      */
@@ -198,10 +199,10 @@ abstract public class AbstractCustomerListPanel extends Panel implements WicketT
     }
 
     /**
-     * Override to show/hide the custom result section
+     * Override to control the visibility of the custom result section
      * @param resultCount
      * @param filteringResult
-     * @return
+     * @return true to show the section, false to hide it
      */
     protected boolean showCustomResultSection(int resultCount, boolean filteringResult) {
         return false;
@@ -255,6 +256,14 @@ abstract public class AbstractCustomerListPanel extends Panel implements WicketT
         target.add(customResultPanel);
     }
 
+    protected void refreshResults(AjaxRequestTarget target) {
+        target.add(resultsPanel);
+    }
+
+    /**
+     * Called when this panel is accessed via selection of its tab in a tabbed panel
+     * @param target
+     */
     public void onWicketTabAjaxUpdate(AjaxRequestTarget target) {
         regenerateResults(target);
     }
@@ -271,15 +280,19 @@ abstract public class AbstractCustomerListPanel extends Panel implements WicketT
         return new FieldIdDateFormatter(date, webSessionMapModel.getObject().getSessionUser(), convertTimeZone, showTime).format();
     }
 
-    protected void doArchive(CustomerOrg customer) {
+    protected void doArchive(CustomerOrg customer, AjaxRequestTarget target) {
         if (setCustomerActive(customer, false)) {
             Session.get().info("Archive successful");
+            refreshResults(target);
+            target.addChildren(getPage(), FeedbackPanel.class);
         }
     }
 
-    protected void doUnarchive(CustomerOrg customer) {
+    protected void doUnarchive(CustomerOrg customer, AjaxRequestTarget target) {
         if (setCustomerActive(customer, true)) {
             Session.get().info("Unarchive successful");
+            refreshResults(target);
+            target.addChildren(getPage(), FeedbackPanel.class);
         }
     }
 

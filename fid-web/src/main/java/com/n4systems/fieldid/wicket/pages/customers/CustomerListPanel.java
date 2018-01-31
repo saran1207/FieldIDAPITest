@@ -3,13 +3,14 @@ package com.n4systems.fieldid.wicket.pages.customers;
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.WicketLinkGeneratorClickHandler;
+import com.n4systems.fieldid.wicket.pages.WicketAjaxLinkGeneratorClickHandler;
 import com.n4systems.fieldid.wicket.pages.WicketLinkGeneratorComponent;
 import com.n4systems.fieldid.wicket.pages.WicketLinkGeneratorDescriptor;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.security.Permissions;
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -23,7 +24,7 @@ import java.util.Arrays;
  * Created by agrabovskis on 2018-01-18.
  */
 @UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_END_USERS})
-public class CustomerListPanel extends AbstractCustomerListPanel {
+abstract public class CustomerListPanel extends AbstractCustomerListPanel {
 
 
     public CustomerListPanel(String id, IModel<WebSessionMap> webSessionMapModel, LoaderFactory loaderFactory) {
@@ -69,46 +70,62 @@ public class CustomerListPanel extends AbstractCustomerListPanel {
         }
         else
         if (customer.isArchived()) {
-            WicketLinkGeneratorClickHandler unarchiveLinkClickHandler = new WicketLinkGeneratorClickHandler() {
-                @Override
-                public void onClick() {
-                    doUnarchive(customer);
-                }
-            };
+             item.add(new WicketLinkGeneratorComponent("result.editAction",
+                    Arrays.asList(
+                            new WicketLinkGeneratorDescriptor(
+                                    null,
+                                    new WicketAjaxLinkGeneratorClickHandler() {
+                                        @Override
+                                        public void onClick(AjaxRequestTarget target) {
+                                            doUnarchive(customer, target);
+                                        }
+                                    },
+                                    new FIDLabelModel("label.unarchive").getObject(), null))));
+        }
+        else {
             item.add(new WicketLinkGeneratorComponent("result.editAction",
                     Arrays.asList(
                             new WicketLinkGeneratorDescriptor(
                                     null,
-                                    unarchiveLinkClickHandler,
-                                    new FIDLabelModel("label.unarchive").getObject(), null))));
-        }
-        else {
-            WicketLinkGeneratorClickHandler archiveLinkClickHandler = new WicketLinkGeneratorClickHandler() {
-                @Override
-                public void onClick() {
-                    doArchive(customer);
-                }
-            };
-            item.add(new WicketLinkGeneratorComponent("result.editAction",
-                    Arrays.asList(
-                            new WicketLinkGeneratorDescriptor(
-                                    "customerEdit.action?uniqueID=" + customer.getId(), null,
+                                    new WicketAjaxLinkGeneratorClickHandler() {
+                                        @Override
+                                        public void onClick(AjaxRequestTarget target) {
+                                            invokeCustomerEdit(customer.getId(), target);
+                                        }
+                                    },
                                     new FIDLabelModel("label.edit").getObject(), null),
                             new WicketLinkGeneratorDescriptor(null, null,
                                     " | ", null),
                             new WicketLinkGeneratorDescriptor(
                                     null,
-                                    archiveLinkClickHandler,
+                                    new WicketAjaxLinkGeneratorClickHandler() {
+                                        @Override
+                                        public void onClick(AjaxRequestTarget target) {
+                                            doArchive(customer, target);
+                                        }
+                                    },
                                     new FIDLabelModel("label.archive").getObject(),
                                     getArchiveConfirmJsFunction(customer.getId())))));
         }
     }
+
+    /**
+     * Action to take when the 'edit' link is clicked for a customer in the list.
+     * @param customerId
+     */
+    abstract protected void invokeCustomerEdit(Long customerId, AjaxRequestTarget target);
 
     @Override
     protected boolean isArchivedOnly() {
         return false;
     }
 
+    /**
+     * If there are no non archived customers in the system display a panel with a link to create
+     * a customer instead of the regular no results section.
+     * @param id wicket markup id
+     * @return
+     */
     @Override
     protected Component createCustomNoResultSection(String id) {
         return new CustomerCreatePanel(id);

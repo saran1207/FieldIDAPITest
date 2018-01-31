@@ -52,6 +52,7 @@ public class CustomerImportPage extends FieldIDFrontEndPage {
     private IModel<SessionUser> sessionUserModel;
     private IModel<SecurityFilter> securityFilterModel;
     private IModel<WebSessionMap> webSessionMapModel;
+    private IModel<Long> customerSelectedForEditModel;
     private String initialTabSelection;
     private FeedbackPanel feedbackPanel;
 
@@ -62,6 +63,7 @@ public class CustomerImportPage extends FieldIDFrontEndPage {
         currentlySelectedTab = 0;
         titleLabelsByTabIndex = new ArrayList<String>();
         StringValue tabSelection = params.get(INITIAL_TAB_SELECTION_KEY);
+        System.out.println("CustomerImportPage.constructor initial tab selection " + tabSelection);
         if (tabSelection != null)
             initialTabSelection = tabSelection.toString();
         createModels();
@@ -121,9 +123,41 @@ public class CustomerImportPage extends FieldIDFrontEndPage {
         int preSelectedTab = -1;
         final List<ITab> tabs = new ArrayList<ITab>();
 
+        final AjaxTabbedPanel tabbedPanel = new AjaxTabbedPanel("navBar", tabs) {
+            @Override
+            protected void onAjaxUpdate(AjaxRequestTarget target) {
+                System.out.println("tabbedPanel.onAjaxUpdate");
+                customerSelectedForEditModel.setObject(null); // cleanup any old value
+                Session.get().cleanupFeedbackMessages();
+                target.add(feedbackPanel);
+                currentlySelectedTab = getSelectedTab();
+                Object panel = tabs.get(getSelectedTab()).getPanel(TabbedPanel.TAB_PANEL_ID);
+                if (panel instanceof WicketTabPanelAjaxUpdate) {
+                    ((WicketTabPanelAjaxUpdate)panel).onWicketTabAjaxUpdate(target);
+                }
+            }
+        };
+
+        tabbedPanel.add(new AttributeAppender("class", new Model("wicket-tabpanel"), " "));
+        if (preSelectedTab > -1) {
+            tabbedPanel.setSelectedTab(preSelectedTab);
+        }
+        add(tabbedPanel);
+
         tabs.add(new PanelCachingTab(new AbstractTab(new FIDLabelModel("nav.view_all")) {
             public Panel getPanel(String panelId) {
-                return new CustomerListPanel(panelId, webSessionMapModel, getLoaderFactory());
+                return new CustomerListPanel(panelId, webSessionMapModel, getLoaderFactory()) {
+
+                    @Override
+                    protected void invokeCustomerEdit(Long customerId, AjaxRequestTarget target) {
+                        System.out.println("Invoking customer edit for " + customerId);
+                        customerSelectedForEditModel.setObject(customerId);
+                        tabbedPanel.setSelectedTab(2);
+                        target.add(tabbedPanel);
+                        ((WicketTabPanelAjaxUpdate) tabs.get(2).getPanel(TabbedPanel.TAB_PANEL_ID)).
+                                onWicketTabAjaxUpdate(target);
+                    }
+                };
             }
         }));
         titleLabelsByTabIndex.add(new FIDLabelModel("title.customer_list_customer").getObject());
@@ -140,7 +174,8 @@ public class CustomerImportPage extends FieldIDFrontEndPage {
         tabs.add(new AbstractTab(new FIDLabelModel("nav.add")) {
             public Panel getPanel(String panelId)
             {
-                return new CustomerEditPanel(panelId);
+                return new CustomerEditPanel(panelId, customerSelectedForEditModel,
+                        sessionUserModel, webSessionMapModel, getLoaderFactory());
             }
         });
         titleLabelsByTabIndex.add("");
@@ -153,27 +188,14 @@ public class CustomerImportPage extends FieldIDFrontEndPage {
             }
         }));
         titleLabelsByTabIndex.add(new FIDLabelModel("title.customer_import_export").getObject());
+
         if (SHOW_IMPORTEXPORT_PAGE.equals(initialTabSelection))
             preSelectedTab = 3;
 
-        AjaxTabbedPanel tabbedPanel = new AjaxTabbedPanel("navBar", tabs) {
-            @Override
-            protected void onAjaxUpdate(AjaxRequestTarget target) {
-                Session.get().cleanupFeedbackMessages();
-                target.add(feedbackPanel);
-                currentlySelectedTab = getSelectedTab();
-                Object panel = tabs.get(getSelectedTab()).getPanel(TabbedPanel.TAB_PANEL_ID);
-                if (panel instanceof WicketTabPanelAjaxUpdate) {
-                    ((WicketTabPanelAjaxUpdate)panel).onWicketTabAjaxUpdate(target);
-                }
-            }
-        };
-
-        tabbedPanel.add(new AttributeAppender("class", new Model("wicket-tabpanel"), " "));
         if (preSelectedTab > -1) {
             tabbedPanel.setSelectedTab(preSelectedTab);
         }
-        add(tabbedPanel);
+
     }
     /* Create models for use by component panels as callbacks to get values obtainable only from this page.
      * This avoids adding these objects to the serialized state of the panels  */
@@ -220,6 +242,7 @@ public class CustomerImportPage extends FieldIDFrontEndPage {
             public void setObject(final WebSessionMap object) { }
             public void detach() {}
         };
+        customerSelectedForEditModel = Model.of((Long) null);
     }
 
     @Override

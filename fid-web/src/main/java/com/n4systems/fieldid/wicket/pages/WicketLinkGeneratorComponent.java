@@ -3,9 +3,10 @@ package com.n4systems.fieldid.wicket.pages;
 import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.IMarkupCacheKeyProvider;
 import org.apache.wicket.markup.IMarkupResourceStreamProvider;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.StringResourceStream;
@@ -32,11 +33,11 @@ public class WicketLinkGeneratorComponent extends Panel implements IMarkupResour
 
         int i = 0;
         for (WicketLinkGeneratorDescriptor descriptor: descriptorList) {
-            if (descriptor.getLinkOnClickHandler() != null) {
-                Link link = new Link("link" + i) {
+            if (descriptor.getLinkOnClickHandler() instanceof WicketAjaxLinkGeneratorClickHandler) {
+                AjaxLink link = new AjaxLink("link" + i) {
                     @Override
-                    public void onClick() {
-                        descriptor.getLinkOnClickHandler().onClick();
+                    public void onClick(AjaxRequestTarget target) {
+                        ((WicketAjaxLinkGeneratorClickHandler)descriptor.getLinkOnClickHandler()).onClick(target);
                     }
                 };
                 add(link);
