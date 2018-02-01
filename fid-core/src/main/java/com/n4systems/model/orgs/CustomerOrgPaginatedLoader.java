@@ -8,9 +8,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
-import java.io.Serializable;
-
-public class CustomerOrgPaginatedLoader extends PaginatedLoader<CustomerOrg> implements Serializable {
+public class CustomerOrgPaginatedLoader extends PaginatedLoader<CustomerOrg> {
 
 	private String nameFilter;
 	private String idFilter;

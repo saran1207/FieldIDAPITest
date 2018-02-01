@@ -13,7 +13,17 @@
         <td><span wicket:id="result.name"></span></td>
         <td><label wicket:id="result.id"/></td>
         <td><label wicket:id="result.organization"/></td>
-        <td><span wicket:id="result.editAction"></span></td>
+        <td><wicket:container wicket:id="result.editActions">
+            <!--customer linked-->
+            <span wicket:id="customerLinkedMsg"><wicket:message key="label.linked_customer"/></span>
+            <!--customer archived-->
+            <a href="javascript:void(0)" wicket:id="customerUnarchiveLink"><wicket:message key="label.unarchive" /></a>
+            <!--regular customer-->
+            <wicket:container wicket:id="customerEditActions">
+                <a href="javascript:void(0)" wicket:id="customerEditLink"> <wicket:message key="label.edit" /></a> |
+                <a href="<javascript:void(0)" wicket:id="customerArchiveLink"> <wicket:message key="label.archive" /></a>
+            </wicket:container>
+        </wicket:container></td>
     </tr>
     </tbody>
 </wicket:extend>

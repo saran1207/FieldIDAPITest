@@ -5,7 +5,7 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.wicket.components.table.StyledAjaxPagingNavigator;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.WicketTabPanelAjaxUpdate;
+import com.n4systems.fieldid.wicket.pages.WicketPanelAjaxUpdate;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
@@ -25,6 +25,7 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.Date;
@@ -32,11 +33,11 @@ import java.util.Iterator;
 
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_END_USERS})
-abstract public class AbstractCustomerListPanel extends Panel implements WicketTabPanelAjaxUpdate {
+abstract public class BaseCustomerListPanel extends Panel implements WicketPanelAjaxUpdate {
 
     final private static int CUSTOMERS_PER_PAGE = 20;
 
-    private static final Logger logger = Logger.getLogger(AbstractCustomerListPanel.class);
+    private static final Logger logger = Logger.getLogger(BaseCustomerListPanel.class);
 
     @SpringBean
     private PlaceService placeService;
@@ -48,11 +49,11 @@ abstract public class AbstractCustomerListPanel extends Panel implements WicketT
 
     private IModel<WebSessionMap> webSessionMapModel;
     private LoaderFactory loaderFactory;
-    private CustomerOrgPaginatedLoader customerLoader;
+    private IModel<CustomerOrgPaginatedLoader> customerLoaderModel;
     private boolean filteringResult = false;
     private int currentResultCount;
 
-    public AbstractCustomerListPanel(String id, IModel<WebSessionMap> webSessionMapModel, LoaderFactory loaderFactory) {
+    public BaseCustomerListPanel(String id, IModel<WebSessionMap> webSessionMapModel, LoaderFactory loaderFactory) {
         super(id);
         this.webSessionMapModel = webSessionMapModel;
         this.loaderFactory = loaderFactory;
@@ -124,8 +125,8 @@ abstract public class AbstractCustomerListPanel extends Panel implements WicketT
             @Override
             public Iterator iterator(int first, int count) {
                 int currentPage = first / CUSTOMERS_PER_PAGE + 1;
-                customerLoader.setPage(currentPage);
-                return customerLoader.load().getList().iterator();
+                customerLoaderModel.getObject().setPage(currentPage);
+                return customerLoaderModel.getObject().load().getList().iterator();
              }
 
             /* Gets total number of items in the collection represented by the DataProvider */
@@ -231,25 +232,35 @@ abstract public class AbstractCustomerListPanel extends Panel implements WicketT
     abstract void populateItemInTable(final Item<CustomerOrg> item);
 
     private void initializeCustomerLoader() {
-        customerLoader = getLoaderFactory().createCustomerOrgPaginatedLoader();
-        customerLoader.setPostFetchFields("modifiedBy", "createdBy");
-        customerLoader.setPageSize(CUSTOMERS_PER_PAGE);
-        customerLoader.setArchivedOnly(isArchivedOnly());
-        customerLoader.setNameFilter(null);
-        customerLoader.setIdFilter(null);
-        customerLoader.setOrgFilter(null);
-        currentResultCount = (int) customerLoader.load().getTotalResults();
+
+        customerLoaderModel = new LoadableDetachableModel<CustomerOrgPaginatedLoader>() {
+
+            protected CustomerOrgPaginatedLoader load() {
+                System.out.println("customerLoaderModel.load");
+                CustomerOrgPaginatedLoader loader = getLoaderFactory().createCustomerOrgPaginatedLoader();
+                loader.setPostFetchFields("modifiedBy", "createdBy");
+                loader.setPageSize(CUSTOMERS_PER_PAGE);
+                loader.setArchivedOnly(isArchivedOnly());
+                return loader;
+            }
+        };
+        customerLoaderModel.getObject().setNameFilter(null);
+        customerLoaderModel.getObject().setIdFilter(null);
+        customerLoaderModel.getObject().setOrgFilter(null);
+        currentResultCount = (int) customerLoaderModel.getObject().load().getTotalResults();
     }
 
     abstract protected boolean isArchivedOnly();
 
     private void regenerateResults(AjaxRequestTarget target) {
+        System.out.println("BaseCustomerListPanel.regenerateResults");
         filteringResult = (filterPanel.getNameFilter() != null) || (filterPanel.getIdFilter() != null) ||
                 (filterPanel.getOrgFilter() != null);
-        customerLoader.setNameFilter(filterPanel.getNameFilter());
-        customerLoader.setIdFilter(filterPanel.getIdFilter());
-        customerLoader.setOrgFilter(filterPanel.getOrgFilter());
-        currentResultCount = (int) customerLoader.load().getTotalResults();
+
+        customerLoaderModel.getObject().setNameFilter(filterPanel.getNameFilter());
+        customerLoaderModel.getObject().setIdFilter(filterPanel.getIdFilter());
+        customerLoaderModel.getObject().setOrgFilter(filterPanel.getOrgFilter());
+        currentResultCount = (int) customerLoaderModel.getObject().load().getTotalResults();
         target.add(resultsPanel);
         target.add(noResultsPanel);
         target.add(filterPanel);
@@ -310,7 +321,7 @@ abstract public class AbstractCustomerListPanel extends Panel implements WicketT
                 else {
                     placeService.unarchive(customer);
                 }
-                currentResultCount = (int) customerLoader.load().getTotalResults();
+                currentResultCount = (int) customerLoaderModel.getObject().load().getTotalResults();
                 return true;
             } catch (Exception e) {
                 logger.error("Failed updating customer", e);
@@ -323,4 +334,10 @@ abstract public class AbstractCustomerListPanel extends Panel implements WicketT
     protected PlaceService getPlaceService() {
         return placeService;
     }
+
+    /**
+     * Action to take when the 'edit' link is clicked for a customer in the list.
+     * @param customerId
+     */
+    abstract protected void invokeCustomerEdit(Long customerId, AjaxRequestTarget target);
 }

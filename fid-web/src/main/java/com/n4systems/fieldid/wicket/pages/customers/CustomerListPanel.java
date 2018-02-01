@@ -2,8 +2,6 @@ package com.n4systems.fieldid.wicket.pages.customers;
 
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.WicketAjaxLinkGeneratorClickHandler;
 import com.n4systems.fieldid.wicket.pages.WicketLinkGeneratorComponent;
 import com.n4systems.fieldid.wicket.pages.WicketLinkGeneratorDescriptor;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -11,7 +9,11 @@ import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.security.Permissions;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.IAjaxCallDecorator;
+import org.apache.wicket.ajax.calldecorator.AjaxCallDecorator;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
@@ -24,7 +26,7 @@ import java.util.Arrays;
  * Created by agrabovskis on 2018-01-18.
  */
 @UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_END_USERS})
-abstract public class CustomerListPanel extends AbstractCustomerListPanel {
+abstract public class CustomerListPanel extends BaseCustomerListPanel {
 
 
     public CustomerListPanel(String id, IModel<WebSessionMap> webSessionMapModel, LoaderFactory loaderFactory) {
@@ -49,71 +51,86 @@ abstract public class CustomerListPanel extends AbstractCustomerListPanel {
         if (customer.getCreatedBy() != null)
             created = customer.getCreatedBy().getFullName() + ", ";
         if (customer.getCreated() != null)
-            created+=formatDateTime(customer.getCreated());
+            created += formatDateTime(customer.getCreated());
         item.add(new Label("result.created", Model.of(created)));
 
         String modified = "";
         if (customer.getModifiedBy() != null)
             modified = customer.getModifiedBy().getFullName() + ", ";
         if (customer.getModified() != null)
-            modified+=formatDateTime(customer.getModified());
+            modified += formatDateTime(customer.getModified());
         item.add(new Label("result.last_modified", Model.of(modified)));
 
-        if (customer.isLinked()) {
-            item.add(new WicketLinkGeneratorComponent("result.editAction",
-                    Arrays.asList(
-                            new WicketLinkGeneratorDescriptor(
-                                    "customerEdit.action?uniqueID=" + customer.getId(), null,
-                                    new FIDLabelModel("label.edit").getObject(), null),
-                            new WicketLinkGeneratorDescriptor(null, null,
-                                    " | " + new FIDLabelModel("label.linked_customer").getObject(), null))));
-        }
-        else
-        if (customer.isArchived()) {
-             item.add(new WicketLinkGeneratorComponent("result.editAction",
-                    Arrays.asList(
-                            new WicketLinkGeneratorDescriptor(
-                                    null,
-                                    new WicketAjaxLinkGeneratorClickHandler() {
-                                        @Override
-                                        public void onClick(AjaxRequestTarget target) {
-                                            doUnarchive(customer, target);
-                                        }
-                                    },
-                                    new FIDLabelModel("label.unarchive").getObject(), null))));
-        }
-        else {
-            item.add(new WicketLinkGeneratorComponent("result.editAction",
-                    Arrays.asList(
-                            new WicketLinkGeneratorDescriptor(
-                                    null,
-                                    new WicketAjaxLinkGeneratorClickHandler() {
-                                        @Override
-                                        public void onClick(AjaxRequestTarget target) {
-                                            invokeCustomerEdit(customer.getId(), target);
-                                        }
-                                    },
-                                    new FIDLabelModel("label.edit").getObject(), null),
-                            new WicketLinkGeneratorDescriptor(null, null,
-                                    " | ", null),
-                            new WicketLinkGeneratorDescriptor(
-                                    null,
-                                    new WicketAjaxLinkGeneratorClickHandler() {
-                                        @Override
-                                        public void onClick(AjaxRequestTarget target) {
-                                            doArchive(customer, target);
-                                        }
-                                    },
-                                    new FIDLabelModel("label.archive").getObject(),
-                                    getArchiveConfirmJsFunction(customer.getId())))));
-        }
-    }
+        /* Edit actions to be displayed depend on the attributes of the customer */
+        final WebMarkupContainer editActions = new WebMarkupContainer("result.editActions");
+        item.add(editActions);
 
-    /**
-     * Action to take when the 'edit' link is clicked for a customer in the list.
-     * @param customerId
-     */
-    abstract protected void invokeCustomerEdit(Long customerId, AjaxRequestTarget target);
+        final WebMarkupContainer linkedActions = new WebMarkupContainer("customerLinkedActions") {
+            @Override
+            public boolean isVisible() {
+                return customer.isLinked();
+            }
+        };
+        editActions.add(linkedActions);
+        linkedActions.add(new AjaxLink("customerEditLink") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                invokeCustomerEdit(customer.getId(), target);
+            }
+        });
+
+        editActions.add(new AjaxLink("customerUnarchiveLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                doUnarchive(customer, target);
+            }
+
+            @Override
+            public boolean isVisible() {
+                return customer.isArchived() && !customer.isLinked();
+            }
+        });
+
+        final WebMarkupContainer regularCustomerActions = new WebMarkupContainer("customerEditActions") {
+            @Override
+            public boolean isVisible() {
+                return !customer.isArchived() && !customer.isLinked();
+            }
+        };
+        editActions.add(regularCustomerActions);
+        regularCustomerActions.add(new AjaxLink("customerEditLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                invokeCustomerEdit(customer.getId(), target);
+            }
+        });
+        final AjaxLink customerArchiveLink = new AjaxLink("customerArchiveLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                doArchive(customer, target);
+            }
+
+            @Override
+            public IAjaxCallDecorator getAjaxCallDecorator() {
+                return new AjaxCallDecorator() {
+                    @Override
+                    public CharSequence decorateScript(Component c, CharSequence script) {
+                        Long assetCount = getPlaceService().getAssetCount(customer.getId());
+                        if(assetCount != null && assetCount > 0) {
+                            return "alert('" + getString("CUSTOMER_OWNS_ASSETS") + "'); return false;";
+                        } else {
+                            return new StringBuilder("if(!confirm('").append(
+                                    getString("CUSTOMER_ARCHIVE_WARNING")).
+                                    append("')) { return false; };").append(script);
+
+                        }
+                    }
+                };
+            }
+        };
+        regularCustomerActions.add(customerArchiveLink);
+    }
 
     @Override
     protected boolean isArchivedOnly() {
@@ -144,15 +161,6 @@ abstract public class CustomerListPanel extends AbstractCustomerListPanel {
     @Override
     protected boolean showFilterSection(int resultCount, boolean filteringResult) {
         return (resultCount > 0) || (resultCount == 0 && filteringResult);
-    }
-
-    protected String getArchiveConfirmJsFunction(Long customerId) {
-        Long assetCount = getPlaceService().getAssetCount(customerId);
-        if(assetCount != null && assetCount > 0) {
-            return "alert('" + getString("CUSTOMER_OWNS_ASSETS") + "'); return false;";
-        } else {
-            return "return confirm('" + getString("CUSTOMER_ARCHIVE_WARNING") + "');";
-        }
     }
 
     private class CustomerCreatePanel extends Panel {

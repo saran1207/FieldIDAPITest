@@ -5,8 +5,9 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
-import com.n4systems.fieldid.wicket.pages.WicketTabPanelAjaxUpdate;
+import com.n4systems.fieldid.wicket.pages.WicketPanelAjaxUpdate;
 import com.n4systems.model.AddressInfo;
+import com.n4systems.model.Contact;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -43,7 +44,7 @@ import java.util.List;
 /**
  * Panel to either edit an existing Customer or create a new one
  */
-public class CustomerEditPanel extends Panel implements WicketTabPanelAjaxUpdate {
+abstract public class CustomerEditPanel extends Panel implements WicketPanelAjaxUpdate {
 
     private static final Logger logger = Logger.getLogger(CustomerEditPanel.class);
 
@@ -62,6 +63,7 @@ public class CustomerEditPanel extends Panel implements WicketTabPanelAjaxUpdate
     private Form form;
     private boolean userHasSelectedImageFile;
     private boolean userHasRemovedImageFile;
+    private boolean removeSavedImageFile;
 
     public CustomerEditPanel(String id,  IModel<Long> customerSelectedForEditModel,
                              IModel<SessionUser> sessionUserModel, IModel<WebSessionMap> webSessionMapModel,
@@ -86,12 +88,21 @@ public class CustomerEditPanel extends Panel implements WicketTabPanelAjaxUpdate
     protected void onBeforeRender() {
         System.out.println("CustomerEditPanel.onBeforeRender with customer " + customerSelectedForEditModel.getObject());
         Long customerId = customerSelectedForEditModel.getObject();
-        if (customerId != null)
+        if (customerId != null) {
             currentCustomer = (CustomerOrg) orgService.findById(customerId);
+            if (currentCustomer.getAddressInfo() == null) {
+                currentCustomer.setAddressInfo(new AddressInfo());
+            }
+            if (currentCustomer.getContact() == null) {
+                currentCustomer.setContact(new Contact());
+            }
+        }
         else
             currentCustomer = null;
+
         userHasSelectedImageFile = false;
         userHasRemovedImageFile = false;
+        removeSavedImageFile = false;
         super.onBeforeRender();
     }
 
@@ -143,7 +154,7 @@ public class CustomerEditPanel extends Panel implements WicketTabPanelAjaxUpdate
                 if (currentCustomer != null && currentCustomer.getContact() != null)
                      return currentCustomer.getContact().getName();
                 else
-                    return "";
+                    return null;
             }
         };
         final IModel<String> customerAccountManagerEmailModel = new LoadableDetachableModel<String>() {
@@ -151,7 +162,7 @@ public class CustomerEditPanel extends Panel implements WicketTabPanelAjaxUpdate
                 if (currentCustomer != null && currentCustomer.getContact() != null)
                     return currentCustomer.getContact().getEmail();
                 else
-                    return "";
+                    return null;
             }
         };
         final IModel<String> customerAddressInfoStreetAddressModel = new LoadableDetachableModel<String>() {
@@ -159,7 +170,7 @@ public class CustomerEditPanel extends Panel implements WicketTabPanelAjaxUpdate
                 if (currentCustomer != null && currentCustomer.getAddressInfo() != null)
                     return currentCustomer.getAddressInfo().getStreetAddress();
                 else
-                    return "";
+                    return null;
             }
         };
         final IModel<String> customerAddressInfoCityModel = new LoadableDetachableModel<String>() {
@@ -167,7 +178,7 @@ public class CustomerEditPanel extends Panel implements WicketTabPanelAjaxUpdate
                 if (currentCustomer != null && currentCustomer.getAddressInfo() != null)
                     return currentCustomer.getAddressInfo().getCity();
                 else
-                    return "";
+                    return null;
             }
         };
         final IModel<String> customerAddressInfoStateModel = new LoadableDetachableModel<String>() {
@@ -175,7 +186,7 @@ public class CustomerEditPanel extends Panel implements WicketTabPanelAjaxUpdate
                 if (currentCustomer != null && currentCustomer.getAddressInfo() != null)
                     return currentCustomer.getAddressInfo().getState();
                 else
-                    return "";
+                    return null;
             }
         };;
         final IModel<String> customerAddressInfoZipModel = new LoadableDetachableModel<String>() {
@@ -183,7 +194,7 @@ public class CustomerEditPanel extends Panel implements WicketTabPanelAjaxUpdate
                 if (currentCustomer != null && currentCustomer.getAddressInfo() != null)
                     return currentCustomer.getAddressInfo().getZip();
                 else
-                    return "";
+                    return null;
             }
         };;
         final IModel<String> customerAddressInfoCountryModel = new LoadableDetachableModel<String>() {
@@ -191,7 +202,7 @@ public class CustomerEditPanel extends Panel implements WicketTabPanelAjaxUpdate
                 if (currentCustomer != null && currentCustomer.getAddressInfo() != null)
                     return currentCustomer.getAddressInfo().getCountry();
                 else
-                    return "";
+                    return null;
             }
         };;
         final IModel<String> customerAddressInfoPhone1Model = new LoadableDetachableModel<String>() {
@@ -199,7 +210,7 @@ public class CustomerEditPanel extends Panel implements WicketTabPanelAjaxUpdate
                 if (currentCustomer != null && currentCustomer.getAddressInfo() != null)
                     return currentCustomer.getAddressInfo().getPhone1();
                 else
-                    return "";
+                    return null;
             }
         };;
         final IModel<String> customerAddressInfoPhone2Model = new LoadableDetachableModel<String>() {
@@ -207,7 +218,7 @@ public class CustomerEditPanel extends Panel implements WicketTabPanelAjaxUpdate
                 if (currentCustomer != null && currentCustomer.getAddressInfo() != null)
                     return currentCustomer.getAddressInfo().getPhone2();
                 else
-                    return "";
+                    return null;
             }
         };
         final IModel<String> customerAddressInfoFax1Model = new LoadableDetachableModel<String>() {
@@ -215,7 +226,7 @@ public class CustomerEditPanel extends Panel implements WicketTabPanelAjaxUpdate
                 if (currentCustomer != null && currentCustomer.getAddressInfo() != null)
                     return currentCustomer.getAddressInfo().getFax1();
                 else
-                    return "";
+                    return null;
             }
         };
 
@@ -235,12 +246,15 @@ public class CustomerEditPanel extends Panel implements WicketTabPanelAjaxUpdate
                 System.out.println("org unit " + orgUnitValue.getObject().getName());
                 System.out.println("customer name " + customerNameModel.getObject());
                 System.out.println("customer notes " + customerNotesModel.getObject());
-                //FileUpload fileUpload = fileUploadField.getFileUpload();
 
                 /* Select/create customer to update/create */
-                CustomerOrg customer = (currentCustomer != null) ? currentCustomer : new CustomerOrg();
-                customer.setAddressInfo(new AddressInfo());
-                customer.setTenant(getWebSessionMap().getSecurityGuard().getTenant());
+                CustomerOrg customer;
+                if (currentCustomer != null)
+                    customer = currentCustomer;
+                else {
+                    customer = new CustomerOrg();
+                    customer.setTenant(getWebSessionMap().getSecurityGuard().getTenant());
+                }
                 customer.setParent((InternalOrg) orgService.findById(orgUnitValue.getObject().getId()));
 
                 customer.setCode(customerIdModel.getObject());
@@ -250,22 +264,25 @@ public class CustomerEditPanel extends Panel implements WicketTabPanelAjaxUpdate
                 customer.getContact().setName(customerContactNameModel.getObject());
                 customer.getContact().setEmail(customerAccountManagerEmailModel.getObject());
 
-                AddressInfo addressInfo = customer.getAddressInfo();
-                addressInfo.setStreetAddress(customerAddressInfoStreetAddressModel.getObject());
-                addressInfo.setCity(customerAddressInfoCityModel.getObject());
-                addressInfo.setState(customerAddressInfoStateModel.getObject());
-                addressInfo.setZip(customerAddressInfoZipModel .getObject());
-                addressInfo.setCountry(customerAddressInfoCountryModel.getObject());
-                addressInfo.setPhone1(customerAddressInfoPhone1Model.getObject());
-                addressInfo.setPhone2(customerAddressInfoPhone2Model.getObject());
-                addressInfo.setFax1(customerAddressInfoFax1Model.getObject());
+                if (customer.getLinkedOrg() == null) {
+                    AddressInfo addressInfo = customer.getAddressInfo();
+                    addressInfo.setStreetAddress(customerAddressInfoStreetAddressModel.getObject());
+                    addressInfo.setCity(customerAddressInfoCityModel.getObject());
+                    addressInfo.setState(customerAddressInfoStateModel.getObject());
+                    addressInfo.setZip(customerAddressInfoZipModel.getObject());
+                    addressInfo.setCountry(customerAddressInfoCountryModel.getObject());
+                    addressInfo.setPhone1(customerAddressInfoPhone1Model.getObject());
+                    addressInfo.setPhone2(customerAddressInfoPhone2Model.getObject());
+                    addressInfo.setFax1(customerAddressInfoFax1Model.getObject());
+                }
 
                 boolean savingCustomer = false;
                 boolean savingImage = false;
                 try {
                     System.out.println("Saving customer");
                     savingCustomer = true;
-                    //orgService.saveOrUpdate(customer);
+                    customer.touch();
+                    currentCustomer = (CustomerOrg) orgService.saveOrUpdate(customer);
                     savingCustomer = false;
                     FileUpload fileUpload =
                             (fileUploadModel.getObject() != null && fileUploadModel.getObject().size() > 0)
@@ -274,9 +291,13 @@ public class CustomerEditPanel extends Panel implements WicketTabPanelAjaxUpdate
                     if (fileUpload != null) {
                         System.out.println("fileUpload is " + fileUpload.getClientFileName());
                         savingImage = true;
-                        //processCustomerImage(customer, false, true,
-                        //        fileUpload.getClientFileName(),
-                        //        fileUpload.getInputStream());
+                        addCustomerImage(customer, fileUpload.getClientFileName(), fileUpload.getInputStream());
+                    }
+                    else
+                    if (removeSavedImageFile) {
+                        System.out.println("removing existing customer logo");
+                        savingImage = true;
+                        removeCustomerImage(customer);
                     }
                 }
                 catch(Exception ex) {
@@ -296,6 +317,7 @@ public class CustomerEditPanel extends Panel implements WicketTabPanelAjaxUpdate
                     error(new FIDLabelModel("error.savingcustomer").getObject());
                 }
                 info(new FIDLabelModel("message.saved").getObject());
+                postSaveAction(currentCustomer.getId());
             }
         };
         form.setOutputMarkupId(true);
@@ -402,6 +424,8 @@ public class CustomerEditPanel extends Panel implements WicketTabPanelAjaxUpdate
                 System.out.println("clicked remove image button");
                 userHasSelectedImageFile = false;
                 userHasRemovedImageFile = true;
+                if (customerLogoUrlModel.getObject() != null)
+                    removeSavedImageFile = true;
                 customerLogoUrlModel.setObject(null);
                 target.add(this);
                 target.add(customerLogoImage);
@@ -513,16 +537,11 @@ public class CustomerEditPanel extends Panel implements WicketTabPanelAjaxUpdate
         add(form);
     }
 
-    private void processCustomerImage(CustomerOrg customer,
-                              boolean removeImage,
-                              boolean newImage,
+    private void addCustomerImage(CustomerOrg customer,
                               String fileName,
                               InputStream inputStream) throws IOException {
-        if (removeImage) {
-            System.out.println("Removing customer logo for " + customer.getId());
-            s3Service.removeCustomerLogo(customer.getId());
-        }
-        if (newImage == true && inputStream != null) {
+
+        if (inputStream != null) {
             System.out.println("Adding customer logo for " + customer.getId());
             File uploadedImage = new File(fileName);
             FileUtils.copyInputStreamToFile(inputStream, uploadedImage);
@@ -531,6 +550,13 @@ public class CustomerEditPanel extends Panel implements WicketTabPanelAjaxUpdate
             uploadedImage.delete();
         }
     }
+
+    private void removeCustomerImage(CustomerOrg customer) {
+        System.out.println("Removing customer logo for " + customer.getId());
+        s3Service.removeCustomerLogo(customer.getId());
+    }
+
+    protected abstract void postSaveAction(Long customerId);
 
     private String getCustomerLogoUrl(Long customerId) {
         if (customerId == null)
