@@ -114,7 +114,7 @@ public class CustomerImportPanel extends BaseImportExportPanel {
 
     @Override
     protected Class<? extends IRequestablePage> getImportRerunPageClass() {
-        return CustomerImportPage.class;
+        return CustomerActionsPage.class;
     }
 
     @Override

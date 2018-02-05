@@ -5,7 +5,6 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.WicketPanelAjaxUpdate;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
@@ -20,7 +19,6 @@ import org.apache.wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.extensions.markup.html.tabs.PanelCachingTab;
-import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -37,13 +35,13 @@ import java.util.List;
 
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_END_USERS})
-public class CustomerImportPage extends FieldIDFrontEndPage {
+public class CustomerActionsPage extends FieldIDFrontEndPage {
 
     public static final String INITIAL_TAB_SELECTION_KEY = "InitialTabSelection";
     public static final String SHOW_CUSTOMERLIST_PAGE = "ShowCustomerListPage";
     public static final String SHOW_IMPORTEXPORT_PAGE = "ShowImportExportPage";
 
-    private static final Logger logger = Logger.getLogger(CustomerImportPage.class);
+    private static final Logger logger = Logger.getLogger(CustomerActionsPage.class);
 
     private List<String> titleLabelsByTabIndex;
     private int currentlySelectedTab;
@@ -52,13 +50,23 @@ public class CustomerImportPage extends FieldIDFrontEndPage {
     private IModel<SessionUser> sessionUserModel;
     private IModel<SecurityFilter> securityFilterModel;
     private IModel<WebSessionMap> webSessionMapModel;
+
+    /**
+     * The currently selected customerOrg. This is set in one of the following three cases since they change the focus
+     * to an individual customer:
+     * 1) In the 'View All' tab the user clicks the show customer link
+     * 2) In the 'View All' tab the user clicks the edit link
+     * 3) In the 'Add' tab the user clicks the 'save link
+     * The selected customerOrg is reset to null if the user clicks on the 'View All', 'View Archived', 'Import/Export
+     * or 'Add' tabs since the focus is no longer on an individual customer.
+     */
     private IModel<Long> customerSelectedForEditModel;
     private String initialTabSelection;
     private FeedbackPanel feedbackPanel;
 
     private LoaderFactory loaderFactory;
 
-    public CustomerImportPage(PageParameters params) {
+    public CustomerActionsPage(PageParameters params) {
         super(params);
         currentlySelectedTab = 0;
         titleLabelsByTabIndex = new ArrayList<String>();
@@ -97,10 +105,10 @@ public class CustomerImportPage extends FieldIDFrontEndPage {
                 "color: #333333;}", null);
         response.renderCSS("li .feedbackPanelERROR {text-align: center: display:block; color: red;}", null);
 
-         /* We want the first three tabs to appear on the left and the last two on the right */
+         /* We want the first four tabs to appear on the left (though all might not be visible) and the last two on the right */
         response.renderCSS(".tab-row {width: 100%; padding-top:10px;}", null);
-        response.renderCSS("div.wicket-tabpanel div.tab-row li.tab3 {float: right}", null);
-        response.renderCSS("div.wicket-tabpanel div.tab-row li.tab4.last {float: right}", null);
+        response.renderCSS("div.wicket-tabpanel div.tab-row li.tab4 {float: right}", null);
+        response.renderCSS("div.wicket-tabpanel div.tab-row li.tab5.last {float: right}", null);
 
     }
 
@@ -136,12 +144,12 @@ public class CustomerImportPage extends FieldIDFrontEndPage {
         final int NO_TAB_SELECTION = -1;
         final int VIEW_ALL_TAB_INDEX = 0;
         final int VIEW_ARCHIVED_TAB_INDEX = 1;
-        //final int VIEW_TAB_INDEX = 3;
-        final int EDIT_TAB_INDEX= 2;
+        final int VIEW_TAB_INDEX = 2;
+        final int EDIT_TAB_INDEX= 3;
         //final int DIVISION_TAB_INDEX = 5;
         //final int USERS_TAB_INDEX = 6;
-        //final int ADD_TAB_INDEX = 7;
-        final int IMPORT_EXPORT_TAB_INDEX = 4;
+        final int ADD_TAB_INDEX = 4;
+        final int IMPORT_EXPORT_TAB_INDEX = 5;
 
         int preSelectedTab = NO_TAB_SELECTION;
         final List<ITab> tabs = new ArrayList<ITab>();
@@ -149,15 +157,13 @@ public class CustomerImportPage extends FieldIDFrontEndPage {
         final AjaxTabbedPanel tabbedPanel = new AjaxTabbedPanel("navBar", tabs) {
             @Override
             protected void onAjaxUpdate(AjaxRequestTarget target) {
-                System.out.println("tabbedPanel.onAjaxUpdate");
-                customerSelectedForEditModel.setObject(null); // cleanup any old value
+                System.out.println("tabbedPanel.onAjaxUpdate, current tab " + getSelectedTab() + ", previous tab " + currentlySelectedTab);
+                int newTab = getSelectedTab();
+                if (newTab == VIEW_ALL_TAB_INDEX || newTab == VIEW_ARCHIVED_TAB_INDEX || newTab == ADD_TAB_INDEX || newTab == IMPORT_EXPORT_TAB_INDEX)
+                    customerSelectedForEditModel.setObject(null); // cleanup any old value
                 Session.get().cleanupFeedbackMessages();
                 target.add(feedbackPanel);
                 currentlySelectedTab = getSelectedTab();
-                Object panel = tabs.get(getSelectedTab()).getPanel(TabbedPanel.TAB_PANEL_ID);
-                if (panel instanceof WicketPanelAjaxUpdate) {
-                    ((WicketPanelAjaxUpdate)panel).onWicketTabAjaxUpdate(target);
-                }
             }
         };
 
@@ -178,8 +184,14 @@ public class CustomerImportPage extends FieldIDFrontEndPage {
                         customerSelectedForEditModel.setObject(customerId);
                         tabbedPanel.setSelectedTab(EDIT_TAB_INDEX);
                         target.add(tabbedPanel);
-                        ((WicketPanelAjaxUpdate) tabs.get(EDIT_TAB_INDEX).getPanel(TabbedPanel.TAB_PANEL_ID)).
-                                onWicketTabAjaxUpdate(target);
+                    }
+
+                    @Override
+                    protected void invokeCustomerShow(Long customerId, AjaxRequestTarget target) {
+                        System.out.println("Invoking customer show for " + customerId);
+                        customerSelectedForEditModel.setObject(customerId);
+                        tabbedPanel.setSelectedTab(VIEW_TAB_INDEX);
+                        target.add(tabbedPanel);
                     }
                 };
             }
@@ -198,13 +210,40 @@ public class CustomerImportPage extends FieldIDFrontEndPage {
                         customerSelectedForEditModel.setObject(customerId);
                         tabbedPanel.setSelectedTab(EDIT_TAB_INDEX);
                         target.add(tabbedPanel);
-                        ((WicketPanelAjaxUpdate) tabs.get(EDIT_TAB_INDEX).getPanel(TabbedPanel.TAB_PANEL_ID)).
-                                onWicketTabAjaxUpdate(target);
+                    }
+
+                    @Override
+                    protected void invokeCustomerShow(Long customerId, AjaxRequestTarget target) {
+                        System.out.println("Invoking customer show for " + customerId);
+                        customerSelectedForEditModel.setObject(customerId);
+                        tabbedPanel.setSelectedTab(VIEW_TAB_INDEX);
+                        target.add(tabbedPanel);
                     }
                 };
             }
         }));
         titleLabelsByTabIndex.add(new FIDLabelModel("title.customer_list_archived_customer").getObject());
+
+        tabs.add(new AbstractTab(new FIDLabelModel("nav.view")) {
+            @Override
+            public Panel getPanel(String panelId)
+            {
+                return new CustomerShowPanel(panelId, customerSelectedForEditModel, securityFilterModel) {
+                    @Override
+                    protected void postArchiveAction(AjaxRequestTarget target) {
+                        System.out.println("Invoking postArchiveAction");
+                        customerSelectedForEditModel.setObject(null);
+                        tabbedPanel.setSelectedTab(VIEW_ALL_TAB_INDEX);
+                        target.add(tabbedPanel);
+                    }
+                };
+            }
+            @Override
+            public boolean isVisible() {
+                return customerSelectedForEditModel.getObject() != null;
+            }
+        });
+        titleLabelsByTabIndex.add(new FIDLabelModel("title.customer_show_customer").getObject());
 
         tabs.add(new AbstractTab(new FIDLabelModel("nav.edit")) {
             @Override
@@ -213,7 +252,11 @@ public class CustomerImportPage extends FieldIDFrontEndPage {
                 return new CustomerEditPanel(panelId, customerSelectedForEditModel,
                         sessionUserModel, webSessionMapModel, getLoaderFactory()) {
                     @Override
-                    protected void postSaveAction(Long customerId) {
+                    protected void postSaveAction(Long customerId, AjaxRequestTarget target) {
+                        System.out.println("Invoking postSaveAction");
+                        customerSelectedForEditModel.setObject(customerId);
+                        tabbedPanel.setSelectedTab(VIEW_TAB_INDEX);
+                        target.add(tabbedPanel);
 
                     }
                 };
@@ -233,8 +276,11 @@ public class CustomerImportPage extends FieldIDFrontEndPage {
                 return new CustomerEditPanel(panelId, customerSelectedForEditModel,
                         sessionUserModel, webSessionMapModel, getLoaderFactory()) {
                     @Override
-                    protected void postSaveAction(Long customerId) {
-
+                    protected void postSaveAction(Long customerId, AjaxRequestTarget target) {
+                        System.out.println("Invoking postSaveAction");
+                        customerSelectedForEditModel.setObject(customerId);
+                        tabbedPanel.setSelectedTab(VIEW_TAB_INDEX);
+                        target.add(tabbedPanel);
                     }
                 };
             }

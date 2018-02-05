@@ -2,10 +2,10 @@ package com.n4systems.fieldid.wicket.pages.customers;
 
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.fieldid.wicket.pages.WicketLinkGeneratorComponent;
-import com.n4systems.fieldid.wicket.pages.WicketLinkGeneratorDescriptor;
-import com.n4systems.model.orgs.CustomerOrg;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+
 import com.n4systems.persistence.loaders.LoaderFactory;
+import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.security.Permissions;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -20,7 +20,6 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import java.util.Arrays;
 
 /**
  * Created by agrabovskis on 2018-01-18.
@@ -36,13 +35,26 @@ abstract public class CustomerListPanel extends BaseCustomerListPanel {
     @Override
     void populateItemInTable(Item<CustomerOrg> item) {
         final CustomerOrg customer = item.getModelObject();
-        if (customer.isArchived())
-            item.add(new Label("result.name", Model.of(customer.getName())));
-        else {
-            item.add(new WicketLinkGeneratorComponent("result.name",
-                    Arrays.asList(new WicketLinkGeneratorDescriptor(
-                            "customerShow.action?uniqueID=" + customer.getId(), null, customer.getName(), null))));
-        }
+
+        WebMarkupContainer nameSection = new WebMarkupContainer("result.name");
+        item.add(nameSection);
+
+        nameSection.add(new Label("customerName", Model.of(customer.getName())){
+            @Override
+            public boolean isVisible() {
+                return customer.isArchived();
+            }
+        });
+        nameSection.add(new AjaxLink("customerShowLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                invokeCustomerShow(customer.getId(), target);
+            }
+            @Override
+            public boolean isVisible() {
+                return !customer.isArchived();
+            }
+        }.add(new Label("label", Model.of(customer.getName()))));
 
         item.add(new Label("result.id", customer.getCode()));
         item.add(new Label("result.organization", customer.getInternalOrg().getName()));
@@ -118,10 +130,10 @@ abstract public class CustomerListPanel extends BaseCustomerListPanel {
                     public CharSequence decorateScript(Component c, CharSequence script) {
                         Long assetCount = getPlaceService().getAssetCount(customer.getId());
                         if(assetCount != null && assetCount > 0) {
-                            return "alert('" + getString("CUSTOMER_OWNS_ASSETS") + "'); return false;";
+                            return "alert('" + new FIDLabelModel("message.customer_owns_assets").getObject() + "'); return false;";
                         } else {
                             return new StringBuilder("if(!confirm('").append(
-                                    getString("CUSTOMER_ARCHIVE_WARNING")).
+                                    new FIDLabelModel("message.customer_archive_warning").getObject()).
                                     append("')) { return false; };").append(script);
 
                         }

@@ -5,7 +5,6 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
-import com.n4systems.fieldid.wicket.pages.WicketPanelAjaxUpdate;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
 import com.n4systems.model.api.Listable;
@@ -22,11 +21,13 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -42,9 +43,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Panel to either edit an existing Customer or create a new one
+ * Panel to either edit an existing CustomerOrg or create a new one
  */
-abstract public class CustomerEditPanel extends Panel implements WicketPanelAjaxUpdate {
+abstract public class CustomerEditPanel extends Panel {
 
     private static final Logger logger = Logger.getLogger(CustomerEditPanel.class);
 
@@ -86,7 +87,6 @@ abstract public class CustomerEditPanel extends Panel implements WicketPanelAjax
 
     @Override
     protected void onBeforeRender() {
-        System.out.println("CustomerEditPanel.onBeforeRender with customer " + customerSelectedForEditModel.getObject());
         Long customerId = customerSelectedForEditModel.getObject();
         if (customerId != null) {
             currentCustomer = (CustomerOrg) orgService.findById(customerId);
@@ -112,8 +112,7 @@ abstract public class CustomerEditPanel extends Panel implements WicketPanelAjax
 
         final IModel<String> customerIdModel = new LoadableDetachableModel<String>() {
             protected String load() {
-                System.out.println("customerIdModel.load");
-                return currentCustomer != null ? currentCustomer.getCode() : "";
+                return currentCustomer != null ? currentCustomer.getCode() : null;
             }
         };
         final IModel<ListingPair> orgUnitValue = new LoadableDetachableModel<ListingPair>() {
@@ -130,19 +129,18 @@ abstract public class CustomerEditPanel extends Panel implements WicketPanelAjax
         };
         final IModel<String> customerNameModel = new LoadableDetachableModel<String>() {
             protected String load() {
-                return currentCustomer != null ? currentCustomer.getName() : "";
+                return currentCustomer != null ? currentCustomer.getName() : null;
             }
         };
         final IModel<String> customerNotesModel = new LoadableDetachableModel<String>() {
             protected String load() {
-                return currentCustomer != null ? currentCustomer.getNotes() : "";
+                return currentCustomer != null ? currentCustomer.getNotes() : null;
             }
         };
         final IModel<String> customerLogoUrlModel = new LoadableDetachableModel<String>() {
             @Override
             protected String load() {
                 if (currentCustomer != null) {
-                    System.out.println("Customer logo url '" + getCustomerLogoUrl(currentCustomer.getId()) + "'");
                     return getCustomerLogoUrl(currentCustomer.getId());
                 }
                 else
@@ -237,15 +235,15 @@ abstract public class CustomerEditPanel extends Panel implements WicketPanelAjax
 
         /* Create the form and define its submission action */
 
-        form = new Form("customerForm") {
+        form = new Form("customerForm");
+
+        form.add(new AjaxSubmitLink("formSubmitLink", form) {
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+            }
 
             @Override
-            public void onSubmit() {
-                System.out.println("Form submitted ");
-                System.out.println("customer id " + customerIdModel.getObject());
-                System.out.println("org unit " + orgUnitValue.getObject().getName());
-                System.out.println("customer name " + customerNameModel.getObject());
-                System.out.println("customer notes " + customerNotesModel.getObject());
+            public void onSubmit(AjaxRequestTarget target, Form form) {
 
                 /* Select/create customer to update/create */
                 CustomerOrg customer;
@@ -279,7 +277,6 @@ abstract public class CustomerEditPanel extends Panel implements WicketPanelAjax
                 boolean savingCustomer = false;
                 boolean savingImage = false;
                 try {
-                    System.out.println("Saving customer");
                     savingCustomer = true;
                     customer.touch();
                     currentCustomer = (CustomerOrg) orgService.saveOrUpdate(customer);
@@ -287,7 +284,6 @@ abstract public class CustomerEditPanel extends Panel implements WicketPanelAjax
                     FileUpload fileUpload =
                             (fileUploadModel.getObject() != null && fileUploadModel.getObject().size() > 0)
                                     ? fileUploadModel.getObject().get(0) : null;
-                    System.out.println("selected? " + userHasSelectedImageFile + ", removed? " + userHasRemovedImageFile);
                     if (fileUpload != null) {
                         System.out.println("fileUpload is " + fileUpload.getClientFileName());
                         savingImage = true;
@@ -317,9 +313,11 @@ abstract public class CustomerEditPanel extends Panel implements WicketPanelAjax
                     error(new FIDLabelModel("error.savingcustomer").getObject());
                 }
                 info(new FIDLabelModel("message.saved").getObject());
-                postSaveAction(currentCustomer.getId());
+                target.addChildren(getPage(), FeedbackPanel.class);
+                postSaveAction(currentCustomer.getId(), target);
             }
-        };
+        });
+
         form.setOutputMarkupId(true);
         form.setMultiPart(true);
 
@@ -376,15 +374,7 @@ abstract public class CustomerEditPanel extends Panel implements WicketPanelAjax
         final TextArea customerNotes = new TextArea("customerNotes", customerNotesModel);
         form.add(customerNotes);
 
-        final FileUploadField fileUploadField = new FileUploadField("fileToUpload", fileUploadModel) {
-            @Override
-            public void updateModel() {
-                super.updateModel();
-                System.out.println("file upload field - update model");
-                System.out.println("model is " + this.getModel());
-                System.out.println("model object is " + this.getModelObject());
-            }
-        };
+        final FileUploadField fileUploadField = new FileUploadField("fileToUpload", fileUploadModel);
         fileUploadField.setOutputMarkupId(true);
         fileUploadField.setOutputMarkupPlaceholderTag(true);
         fileUploadField.add(new AttributeModifier("class", "hideElement") {
@@ -421,7 +411,6 @@ abstract public class CustomerEditPanel extends Panel implements WicketPanelAjax
         final AjaxLink removeImageButton = new AjaxLink("removeImageButton") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                System.out.println("clicked remove image button");
                 userHasSelectedImageFile = false;
                 userHasRemovedImageFile = true;
                 if (customerLogoUrlModel.getObject() != null)
@@ -443,7 +432,6 @@ abstract public class CustomerEditPanel extends Panel implements WicketPanelAjax
 
         fileUploadField.add(new FileSelectionIndicator() {
             public void onFileSelectionEvent(AjaxRequestTarget target) {
-                System.out.println("User has selected a file");
                 userHasSelectedImageFile = true;
                 target.add(removeImageButton);
                 target.add(uploadInfo);
@@ -526,10 +514,10 @@ abstract public class CustomerEditPanel extends Panel implements WicketPanelAjax
         AjaxLink cancelButton = new AjaxLink("cancelButton") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                getRequestCycle().setResponsePage(CustomerImportPage.class,
+                getRequestCycle().setResponsePage(CustomerActionsPage.class,
                         PageParametersBuilder.param(
-                                CustomerImportPage.INITIAL_TAB_SELECTION_KEY,
-                                CustomerImportPage.SHOW_CUSTOMERLIST_PAGE));
+                                CustomerActionsPage.INITIAL_TAB_SELECTION_KEY,
+                                CustomerActionsPage.SHOW_CUSTOMERLIST_PAGE));
             }
         };
         form.add(cancelButton);
@@ -542,21 +530,18 @@ abstract public class CustomerEditPanel extends Panel implements WicketPanelAjax
                               InputStream inputStream) throws IOException {
 
         if (inputStream != null) {
-            System.out.println("Adding customer logo for " + customer.getId());
             File uploadedImage = new File(fileName);
             FileUtils.copyInputStreamToFile(inputStream, uploadedImage);
-            System.out.println("upload file is " + uploadedImage.getName() + ", " + uploadedImage.getPath());
             s3Service.uploadCustomerLogo(uploadedImage, customer.getId());
             uploadedImage.delete();
         }
     }
 
     private void removeCustomerImage(CustomerOrg customer) {
-        System.out.println("Removing customer logo for " + customer.getId());
         s3Service.removeCustomerLogo(customer.getId());
     }
 
-    protected abstract void postSaveAction(Long customerId);
+    protected abstract void postSaveAction(Long customerId, AjaxRequestTarget target);
 
     private String getCustomerLogoUrl(Long customerId) {
         if (customerId == null)
@@ -573,16 +558,6 @@ abstract public class CustomerEditPanel extends Panel implements WicketPanelAjax
             internalOrgList = ListHelper.longListableToListingPair(orgListables);
         }
         return internalOrgList;
-    }
-
-    /**
-     * User has reached this page by clicking the tab panel
-     * @param target
-     */
-    public void onWicketTabAjaxUpdate(AjaxRequestTarget target) {
-        System.out.println("CustomerEditPanel.onWicketTabAjaxUpdate");
-        System.out.println("    for customer id " + customerSelectedForEditModel.getObject());
-        target.add(form);
     }
 
     private SessionUser getSessionUser() {
@@ -603,7 +578,7 @@ abstract public class CustomerEditPanel extends Panel implements WicketPanelAjax
      * This behavior is used to inform this page when the user selects a file in the image file selection field.
      * The regular Wicket Ajax onchange behaviors do not work with a FileUploadField so this approach is followed.
      */
-    //TODO Wicket upgrade may impact this
+    //TODO Wicket upgrade may provide an easier way of doing this
     private abstract class FileSelectionIndicator extends AbstractDefaultAjaxBehavior {
         @Override
         public void respond( AjaxRequestTarget target )

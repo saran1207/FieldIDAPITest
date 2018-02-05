@@ -46,18 +46,7 @@
                         <img wicket:id="customerLogoImage" width="150"/>
                         <a href="javascript:void(0)" wicket:id="removeImageButton">
                             <wicket:message key ="label.remove"/></a>
-					<!--<#if !logoImageDirectory?exists || logoImageDirectory.length() == 0  || removeImage >
-						<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" />"  scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="300" height="25" ></iframe>
-                        <span id="uploadInfo"><@s.text name="label.org_image_looks_best"/></span>
-					</#if>
-					<span id="imageUploaded" <#if (action.fieldErrors['logoImageContentType'])?exists>class="inputError" title="${action.fieldErrors['uploadedImageContentType']}"</#if> <#if  !logoImageDirectory?exists || logoImageDirectory.length()  == 0  || removeImage >style="display:none;"</#if> >
-                        <img src="${logoImageDirectory!""}" width="150px" <#if newImage > style="display:none"</#if> id="previewImage"/>
-						<@s.hidden name="removeImage" id="removeImage"/>  <a href="removeImage" id="removeImageLink" onclick="removeUploadImage(); return false;"><@s.text name="label.remove"/></a>
-						<@s.hidden name="newImage" id="newImage"/>
-						<@s.hidden name="logoImageDirectory" id="imageDirectory"/>
-                         span
 
-					<!--</span>-->
                     </span>
                 </div>
             </div>
@@ -106,7 +95,7 @@
             </div>
         </div>
         <div class="formAction" >
-            <input type="submit"  wicket:message="value:label.save" id="saveButton"/>
+            <input type="submit" wicket:id="formSubmitLink" wicket:message="value:label.save" id="saveButton"/>
 
             <wicket:message key="label.or"/>
 

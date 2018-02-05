@@ -1,13 +1,12 @@
 package com.n4systems.fieldid.wicket.pages.setup;
 
 import com.n4systems.fieldid.wicket.pages.asset.AssetImportPage;
-import com.n4systems.fieldid.wicket.pages.customers.CustomerImportPage;
+import com.n4systems.fieldid.wicket.pages.customers.CustomerActionsPage;
 import com.n4systems.fieldid.wicket.pages.event.EventImportPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 
 public class ImportPage extends SetupPage {
@@ -16,7 +15,7 @@ public class ImportPage extends SetupPage {
         add(new AjaxLink<AssetImportPage>("importOwnersButton") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                getRequestCycle().setResponsePage(CustomerImportPage.class);
+                getRequestCycle().setResponsePage(CustomerActionsPage.class);
             }
         });
         add(new AjaxLink<AssetImportPage>("importAssetsButton") {

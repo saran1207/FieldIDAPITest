@@ -5,7 +5,6 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.wicket.components.table.StyledAjaxPagingNavigator;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.WicketPanelAjaxUpdate;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
@@ -33,7 +32,7 @@ import java.util.Iterator;
 
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_END_USERS})
-abstract public class BaseCustomerListPanel extends Panel implements WicketPanelAjaxUpdate {
+abstract public class BaseCustomerListPanel extends Panel {
 
     final private static int CUSTOMERS_PER_PAGE = 20;
 
@@ -271,14 +270,6 @@ abstract public class BaseCustomerListPanel extends Panel implements WicketPanel
         target.add(resultsPanel);
     }
 
-    /**
-     * Called when this panel is accessed via selection of its tab in a tabbed panel
-     * @param target
-     */
-    public void onWicketTabAjaxUpdate(AjaxRequestTarget target) {
-        regenerateResults(target);
-    }
-
     private LoaderFactory getLoaderFactory() {
         return loaderFactory;
     }
@@ -340,4 +331,11 @@ abstract public class BaseCustomerListPanel extends Panel implements WicketPanel
      * @param customerId
      */
     abstract protected void invokeCustomerEdit(Long customerId, AjaxRequestTarget target);
+
+    /**
+     * Action to take when the 'show' ink is clicked for a customer in the list.
+     * @param customerId
+     * @param target
+     */
+    abstract protected void invokeCustomerShow(Long customerId, AjaxRequestTarget target);
 }
