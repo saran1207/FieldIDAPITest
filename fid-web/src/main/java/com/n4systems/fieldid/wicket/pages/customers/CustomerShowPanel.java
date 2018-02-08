@@ -71,7 +71,6 @@ abstract public class CustomerShowPanel extends Panel {
 
     @Override
     protected void onBeforeRender() {
-        System.out.println("CustomerShowPanel.onBeforeRender with customer " + customerSelectedForEditModel.getObject());
         Long customerId = customerSelectedForEditModel.getObject();
         currentCustomer = (CustomerOrg) orgService.findById(customerId);
         super.onBeforeRender();
@@ -331,6 +330,13 @@ abstract public class CustomerShowPanel extends Panel {
             }
         });
 
+        add(new AjaxLink("mergeLink") {
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    mergeInvokedAction(target);
+                }
+            });
+
         add(new Link("addUserLink") {
             @Override
             public void onClick() {
@@ -455,4 +461,5 @@ abstract public class CustomerShowPanel extends Panel {
     }
 
     abstract protected void postArchiveAction(AjaxRequestTarget target);
+    abstract protected void mergeInvokedAction(AjaxRequestTarget target);
 }

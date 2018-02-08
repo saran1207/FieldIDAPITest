@@ -40,6 +40,7 @@ abstract public class CustomerArchivedListPanel extends BaseCustomerListPanel {
                 return customer.isArchived();
             }
         });
+        //TODO copied from struts version but all customers here should have EntityState archived.
         nameSection.add(new AjaxLink("customerShowLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -75,6 +76,7 @@ abstract public class CustomerArchivedListPanel extends BaseCustomerListPanel {
             }
         });
 
+        //TODO copied from struts version but all customers here should have EntityState archived.
         final WebMarkupContainer regularCustomerActions = new WebMarkupContainer("customerEditActions") {
             @Override
             public boolean isVisible() {

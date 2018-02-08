@@ -39,6 +39,7 @@ abstract public class CustomerListPanel extends BaseCustomerListPanel {
         WebMarkupContainer nameSection = new WebMarkupContainer("result.name");
         item.add(nameSection);
 
+        //TODO copied from Struts action but shouldn't all customerOrg entities here be non archived?
         nameSection.add(new Label("customerName", Model.of(customer.getName())){
             @Override
             public boolean isVisible() {
@@ -92,6 +93,7 @@ abstract public class CustomerListPanel extends BaseCustomerListPanel {
             }
         });
 
+        //TODO copied from Struts action but shouldn't all customerOrg entities here be non archived?
         editActions.add(new AjaxLink("customerUnarchiveLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {

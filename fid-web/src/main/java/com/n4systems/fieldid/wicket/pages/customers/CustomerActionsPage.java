@@ -10,6 +10,7 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.security.Permissions;
+import org.apache.commons.lang.mutable.MutableBoolean;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
@@ -40,6 +41,8 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
     public static final String INITIAL_TAB_SELECTION_KEY = "InitialTabSelection";
     public static final String SHOW_CUSTOMERLIST_PAGE = "ShowCustomerListPage";
     public static final String SHOW_IMPORTEXPORT_PAGE = "ShowImportExportPage";
+    public static final String SHOW_CUSTOMERVIEW_PAGE = "ShowCustomerViewPage";
+    public static final String INITIAL_CUSTOMER_ID = "id";
 
     private static final Logger logger = Logger.getLogger(CustomerActionsPage.class);
 
@@ -61,7 +64,9 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
      * or 'Add' tabs since the focus is no longer on an individual customer.
      */
     private IModel<Long> customerSelectedForEditModel;
+
     private String initialTabSelection;
+    private Long initialCustomerId;
     private FeedbackPanel feedbackPanel;
 
     private LoaderFactory loaderFactory;
@@ -71,9 +76,11 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
         currentlySelectedTab = 0;
         titleLabelsByTabIndex = new ArrayList<String>();
         StringValue tabSelection = params.get(INITIAL_TAB_SELECTION_KEY);
-        System.out.println("CustomerImportPage.constructor initial tab selection " + tabSelection);
-        if (tabSelection != null)
+        if (tabSelection != null && !tabSelection.isEmpty())
             initialTabSelection = tabSelection.toString();
+        StringValue customerIdSelection = params.get(INITIAL_CUSTOMER_ID);
+        if (customerIdSelection != null && !customerIdSelection.isEmpty())
+            initialCustomerId = new Long(customerIdSelection.toString());
         createModels();
         addFeedbackPanel();
     }
@@ -107,8 +114,8 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
 
          /* We want the first four tabs to appear on the left (though all might not be visible) and the last two on the right */
         response.renderCSS(".tab-row {width: 100%; padding-top:10px;}", null);
-        response.renderCSS("div.wicket-tabpanel div.tab-row li.tab4 {float: right}", null);
-        response.renderCSS("div.wicket-tabpanel div.tab-row li.tab5.last {float: right}", null);
+        response.renderCSS("div.wicket-tabpanel div.tab-row li.tab7 {float: right}", null);
+        response.renderCSS("div.wicket-tabpanel div.tab-row li.tab8.last {float: right}", null);
 
     }
 
@@ -139,6 +146,12 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
          * 3) If the user is on the 'View', 'Edit', 'Division' or 'Users' tab and they click on any of these four tabs
          *    they remain visible. If they click on any of the other tabs ('View All', 'View Archived', 'Import/Export'
          *    or 'Add' these tabs become invisible again.
+         *
+         * Note about the 'Edit' tab. Normally this tab has an edit panel. However, if the user clicks the 'merge'
+         * link in the 'View' tab focus switches to the 'Edit' tab but its contents are a merge panel. So there are
+         * two 'Edit' tabs and we show the appropriate one based on the user's actions. If while in the merge panel
+         * the user clicks the tabs mentioned in (3) above the contents of the 'Edit' tab switch back to the
+         * edit panel.
          */
 
         final int NO_TAB_SELECTION = -1;
@@ -146,24 +159,30 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
         final int VIEW_ARCHIVED_TAB_INDEX = 1;
         final int VIEW_TAB_INDEX = 2;
         final int EDIT_TAB_INDEX= 3;
-        //final int DIVISION_TAB_INDEX = 5;
-        //final int USERS_TAB_INDEX = 6;
-        final int ADD_TAB_INDEX = 4;
-        final int IMPORT_EXPORT_TAB_INDEX = 5;
+        final int MERGE_TAB_INDEX = 4;
+        final int DIVISION_TAB_INDEX = 5;
+        final int USERS_TAB_INDEX = 6;
+        final int ADD_TAB_INDEX = 7;
+        final int IMPORT_EXPORT_TAB_INDEX = 8;
 
         int preSelectedTab = NO_TAB_SELECTION;
+
+        final MutableBoolean showMergeTab = new MutableBoolean(false);
+
         final List<ITab> tabs = new ArrayList<ITab>();
 
         final AjaxTabbedPanel tabbedPanel = new AjaxTabbedPanel("navBar", tabs) {
             @Override
             protected void onAjaxUpdate(AjaxRequestTarget target) {
-                System.out.println("tabbedPanel.onAjaxUpdate, current tab " + getSelectedTab() + ", previous tab " + currentlySelectedTab);
                 int newTab = getSelectedTab();
-                if (newTab == VIEW_ALL_TAB_INDEX || newTab == VIEW_ARCHIVED_TAB_INDEX || newTab == ADD_TAB_INDEX || newTab == IMPORT_EXPORT_TAB_INDEX)
+                if (newTab == VIEW_ALL_TAB_INDEX || newTab == VIEW_ARCHIVED_TAB_INDEX || newTab == ADD_TAB_INDEX
+                        || newTab == IMPORT_EXPORT_TAB_INDEX)
                     customerSelectedForEditModel.setObject(null); // cleanup any old value
                 Session.get().cleanupFeedbackMessages();
                 target.add(feedbackPanel);
                 currentlySelectedTab = getSelectedTab();
+                if (currentlySelectedTab != MERGE_TAB_INDEX)
+                    showMergeTab.setValue(false);
             }
         };
 
@@ -180,17 +199,17 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
 
                     @Override
                     protected void invokeCustomerEdit(Long customerId, AjaxRequestTarget target) {
-                        System.out.println("Invoking customer edit for " + customerId);
                         customerSelectedForEditModel.setObject(customerId);
                         tabbedPanel.setSelectedTab(EDIT_TAB_INDEX);
+                        currentlySelectedTab = EDIT_TAB_INDEX;
                         target.add(tabbedPanel);
                     }
 
                     @Override
                     protected void invokeCustomerShow(Long customerId, AjaxRequestTarget target) {
-                        System.out.println("Invoking customer show for " + customerId);
                         customerSelectedForEditModel.setObject(customerId);
                         tabbedPanel.setSelectedTab(VIEW_TAB_INDEX);
+                        currentlySelectedTab = EDIT_TAB_INDEX;
                         target.add(tabbedPanel);
                     }
                 };
@@ -204,19 +223,21 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
             public Panel getPanel(String panelId) {
                 return new CustomerArchivedListPanel(panelId, webSessionMapModel, getLoaderFactory()){
 
+                    //TODO copied from struts version but all customers here should have EntityState archived.
+
                     @Override
                     protected void invokeCustomerEdit(Long customerId, AjaxRequestTarget target) {
-                        System.out.println("Invoking customer edit for " + customerId);
                         customerSelectedForEditModel.setObject(customerId);
                         tabbedPanel.setSelectedTab(EDIT_TAB_INDEX);
+                        currentlySelectedTab = EDIT_TAB_INDEX;
                         target.add(tabbedPanel);
                     }
 
                     @Override
                     protected void invokeCustomerShow(Long customerId, AjaxRequestTarget target) {
-                        System.out.println("Invoking customer show for " + customerId);
                         customerSelectedForEditModel.setObject(customerId);
                         tabbedPanel.setSelectedTab(VIEW_TAB_INDEX);
+                        currentlySelectedTab = EDIT_TAB_INDEX;
                         target.add(tabbedPanel);
                     }
                 };
@@ -230,10 +251,18 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
             {
                 return new CustomerShowPanel(panelId, customerSelectedForEditModel, securityFilterModel) {
                     @Override
+                    protected void mergeInvokedAction(AjaxRequestTarget target) {
+                        showMergeTab.setValue(true);
+                        tabbedPanel.setSelectedTab(MERGE_TAB_INDEX);
+                        currentlySelectedTab = MERGE_TAB_INDEX;
+                        target.add(tabbedPanel);
+                    }
+
+                    @Override
                     protected void postArchiveAction(AjaxRequestTarget target) {
-                        System.out.println("Invoking postArchiveAction");
                         customerSelectedForEditModel.setObject(null);
                         tabbedPanel.setSelectedTab(VIEW_ALL_TAB_INDEX);
+                        currentlySelectedTab = VIEW_ALL_TAB_INDEX;
                         target.add(tabbedPanel);
                     }
                 };
@@ -244,6 +273,10 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
             }
         });
         titleLabelsByTabIndex.add(new FIDLabelModel("title.customer_show_customer").getObject());
+        if (SHOW_CUSTOMERVIEW_PAGE.equals(initialTabSelection)) {
+            preSelectedTab = VIEW_TAB_INDEX;
+            customerSelectedForEditModel.setObject(initialCustomerId);
+        }
 
         tabs.add(new AbstractTab(new FIDLabelModel("nav.edit")) {
             @Override
@@ -253,9 +286,9 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
                         sessionUserModel, webSessionMapModel, getLoaderFactory()) {
                     @Override
                     protected void postSaveAction(Long customerId, AjaxRequestTarget target) {
-                        System.out.println("Invoking postSaveAction");
                         customerSelectedForEditModel.setObject(customerId);
                         tabbedPanel.setSelectedTab(VIEW_TAB_INDEX);
+                        currentlySelectedTab = VIEW_TAB_INDEX;
                         target.add(tabbedPanel);
 
                     }
@@ -263,11 +296,51 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
             }
             @Override
             public boolean isVisible() {
-                //System.out.println("Is edit tab visible?");
-                return customerSelectedForEditModel.getObject() != null;
+                return customerSelectedForEditModel.getObject() != null && !showMergeTab.booleanValue();
             }
         });
         titleLabelsByTabIndex.add("");
+
+        tabs.add(new AbstractTab(new FIDLabelModel("nav.edit")) {
+            @Override
+            public Panel getPanel(String panelId)
+            {
+                return new CustomerMergePanel(panelId, customerSelectedForEditModel, sessionUserModel, getLoaderFactory()) {
+
+                };
+            }
+            @Override
+            public boolean isVisible() {
+                return customerSelectedForEditModel.getObject() != null && showMergeTab.booleanValue();
+            }
+        });
+        titleLabelsByTabIndex.add("");
+
+        tabs.add(new AbstractTab(new FIDLabelModel("nav.divisions")) {
+            @Override
+            public Panel getPanel(String panelId)
+            {
+                return new CustomerDivisionsPanel(panelId) ;
+            }
+            @Override
+            public boolean isVisible() {
+                return customerSelectedForEditModel.getObject() != null;
+            }
+        });
+        titleLabelsByTabIndex.add(new FIDLabelModel("title.customer_divisions").getObject());
+
+        tabs.add(new AbstractTab(new FIDLabelModel("nav.users")) {
+            @Override
+            public Panel getPanel(String panelId)
+            {
+                return new CustomerUsersPanel(panelId) ;
+            }
+            @Override
+            public boolean isVisible() {
+                return customerSelectedForEditModel.getObject() != null;
+            }
+        });
+        titleLabelsByTabIndex.add(new FIDLabelModel("title.customer_users").getObject());
 
         tabs.add(new AbstractTab(new FIDLabelModel("nav.add")) {
             @Override
@@ -277,9 +350,9 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
                         sessionUserModel, webSessionMapModel, getLoaderFactory()) {
                     @Override
                     protected void postSaveAction(Long customerId, AjaxRequestTarget target) {
-                        System.out.println("Invoking postSaveAction");
                         customerSelectedForEditModel.setObject(customerId);
                         tabbedPanel.setSelectedTab(VIEW_TAB_INDEX);
+                        currentlySelectedTab = VIEW_TAB_INDEX;
                         target.add(tabbedPanel);
                     }
                 };

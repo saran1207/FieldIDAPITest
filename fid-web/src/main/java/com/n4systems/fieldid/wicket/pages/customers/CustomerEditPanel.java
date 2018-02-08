@@ -285,13 +285,12 @@ abstract public class CustomerEditPanel extends Panel {
                             (fileUploadModel.getObject() != null && fileUploadModel.getObject().size() > 0)
                                     ? fileUploadModel.getObject().get(0) : null;
                     if (fileUpload != null) {
-                        System.out.println("fileUpload is " + fileUpload.getClientFileName());
+                        logger.info("fileUpload is " + fileUpload.getClientFileName());
                         savingImage = true;
                         addCustomerImage(customer, fileUpload.getClientFileName(), fileUpload.getInputStream());
                     }
                     else
                     if (removeSavedImageFile) {
-                        System.out.println("removing existing customer logo");
                         savingImage = true;
                         removeCustomerImage(customer);
                     }
@@ -299,16 +298,13 @@ abstract public class CustomerEditPanel extends Panel {
                 catch(Exception ex) {
                     if (savingCustomer) {
                         logger.error("Attempt to create customer failed ", ex);
-                        System.out.println("Attempt to create customer failed " + ex);
                     }
                     else
                     if (savingImage) {
                         logger.error("Update of customer image failed", ex);
-                        System.out.println("Update of customer image failed on " + ex);
                     }
                     else {
                         logger.error("Update of customer failed", ex);
-                        System.out.println("Update of customer failed on " + ex);
                     }
                     error(new FIDLabelModel("error.savingcustomer").getObject());
                 }

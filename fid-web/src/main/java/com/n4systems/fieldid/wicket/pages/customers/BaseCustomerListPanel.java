@@ -235,7 +235,6 @@ abstract public class BaseCustomerListPanel extends Panel {
         customerLoaderModel = new LoadableDetachableModel<CustomerOrgPaginatedLoader>() {
 
             protected CustomerOrgPaginatedLoader load() {
-                System.out.println("customerLoaderModel.load");
                 CustomerOrgPaginatedLoader loader = getLoaderFactory().createCustomerOrgPaginatedLoader();
                 loader.setPostFetchFields("modifiedBy", "createdBy");
                 loader.setPageSize(CUSTOMERS_PER_PAGE);
@@ -252,7 +251,6 @@ abstract public class BaseCustomerListPanel extends Panel {
     abstract protected boolean isArchivedOnly();
 
     private void regenerateResults(AjaxRequestTarget target) {
-        System.out.println("BaseCustomerListPanel.regenerateResults");
         filteringResult = (filterPanel.getNameFilter() != null) || (filterPanel.getIdFilter() != null) ||
                 (filterPanel.getOrgFilter() != null);
 

@@ -12,7 +12,7 @@
 	<div class="useractions merge">
 		<!--<p><a href="<@s.url action="mergeCustomers" uniqueID="${customer.id}"/>"><@s.text name="label.merge"/></a></p>-->
         <p>
-            <a href="javascript:void(0)"><wicket:message key="label.merge"/></a>
+            <a href="javascript:void(0)" wicket:id="mergeLink"><wicket:message key="label.merge"/></a>
         </p>
 	</div>
 	<!--<#if userLimitService.readOnlyUsersEnabled>-->
