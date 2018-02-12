@@ -56,7 +56,7 @@
 			</div>
 			<div class="customerLinks">
 				<!--<a href='<@s.url action="divisions" customerId="${customer.id}"/>'>${divisionCount} <@s.text name="label.divisions"/></a>-->
-                <a href="javascript:void(0)"><wicket:container wicket:id="divisionsLinkLabel" /></a>
+                <a wicket:id="showDivisionsLink" href="javascript:void(0)"><wicket:container wicket:id="divisionsLinkLabel" /></a>
 				<!--<a href='<@s.url action="customersUsers" customerId="${customer.id}"/>'>${userCount} <@s.text name="label.user_accounts"/></a>-->
                 <a href="javascript:void(0)"><wicket:container wicket:id="usersLinkLabel" /></a>
 			</div>

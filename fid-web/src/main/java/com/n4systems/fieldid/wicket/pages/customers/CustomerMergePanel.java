@@ -214,7 +214,10 @@ public class CustomerMergePanel extends Panel {
                 List<CustomerOrg> customers = getCustomers(customerSearchTerm.getModelObject());
                 customerSearchResultCount.setValue(customers.size());
                 customerSearchResult.clear();
-                customerSearchResult.addAll(customers);
+                if (customerSearchResultCount.intValue() > MAX_CUSTOMER_RESULTS)
+                    customerSearchResult.addAll(customers.subList(0, MAX_CUSTOMER_RESULTS));
+                else
+                    customerSearchResult.addAll(customers);
                 target.add(step2ToggledContainer);
             }
             @Override

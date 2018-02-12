@@ -1,0 +1,71 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" >
+
+<wicket:panel>
+
+        <div wicket:id="divisionList">
+            <div wicket:id="resultTableNavigatorTop"></div>
+            <table  class="list clearBoth">
+                <tr>
+                    <th><wicket:message key="label.name" /></th>
+                    <th><wicket:message key="label.division_id" /></th>
+                    <th></th>
+                </tr>
+                <tr wicket:id="result.list">
+                    <td>
+                        <a href="javascript:void(0)" wicket:id="divisionEditLink"><wicket:container wicket:id="label" /></a>
+                    </td>
+                    <td><span wicket:id="divisionId"></span></td>
+                    <td>
+                        <a href="javascript:void(0)" wicket:id="divisionEditLink2"><wicket:message key="label.edit" /></a> |
+                        <a href="javascript:void(0)" wicket:id="divisionArchiveLink"><wicket:message key="label.archive"/></a>
+                    </td>
+            <!--<#list page.getList() as division >
+                <tr id="division_${division.id}" >
+                    <td>
+                        <a href="<@s.url action="divisionEdit" uniqueID="${division.id}" includeParams="get"/>" >${(division.name?html)!}</a>
+                    </td>
+                    <td>${(division.code?html)!}</td>
+                    <td>
+                        <a href="<@s.url action="divisionEdit" uniqueID="${division.id}" includeParams="get"/>"><@s.text name="label.edit"/></a> |
+                        <a href="<@s.url action="divisionArchive" uniqueID="${division.id}" includeParams="get"/>" onclick="return confirm('<@s.text name="label.areyousurearchivecustomer" />');" ><@s.text name="label.archive" /></a>
+                    </td>
+                </tr>
+            </#list>-->
+                </tr>
+            </table>
+            <div wicket:id="resultTableNavigatorBottom"></div>
+        </div>
+
+        <div wicket:id="noResults" class="emptyList" >
+            <h2><wicket:message key="label.noresults" /></h2>
+            <p>
+                <wicket:message key="label.emptydivisionlist" />
+            </p>
+        </div>
+
+    <div wicket:id="archiveDisplayControl">
+        <a wicket:id="expand_archived_list" href="javascript:void(0);"><img id="plus" class="link_img" src="/fieldid/images/plus.png" alt="+"/><wicket:message key="label.showarchiveddivisions"/></a>
+        <a wicket:id="collapse_archived_list" href="javascript:void(0);"><img id="minus" class="link_img" src="/fieldid/images/minus.png" alt="-"/><wicket:message key="label.hidearchiveddivisions"/></a>
+    </div>
+
+    <div wicket:id="archivedList">
+        <div wicket:id="resultTableNavigatorTop"></div>
+        <table class="list">
+            <tr>
+                <th><wicket:message key="label.name" /></th>
+                <th><wicket:message key="label.division_id" /></th>
+                <th></th>
+            </tr>
+            <tr wicket:id="result.list">
+                <td><span wicket:id="divisionName"></span></td>
+                <td><span wicket:id="divisionId"></span></td>
+                <td>
+                    <a wicket:id="divisionUnarchiveLink" href="javascript:void(0);"><wicket:message key="label.unarchive"/></a>
+                </td>
+            </tr>
+        </table>
+        <div wicket:id="resultTableNavigatorBottom"></div>
+    </div>
+
+</wicket:panel>
+</html>

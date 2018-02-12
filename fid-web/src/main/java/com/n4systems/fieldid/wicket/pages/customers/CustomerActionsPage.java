@@ -251,6 +251,13 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
             {
                 return new CustomerShowPanel(panelId, customerSelectedForEditModel, securityFilterModel) {
                     @Override
+                    protected void listDivisionsAction(AjaxRequestTarget target) {
+                        tabbedPanel.setSelectedTab(DIVISION_TAB_INDEX);
+                        currentlySelectedTab = DIVISION_TAB_INDEX;
+                        target.add(tabbedPanel);
+                    }
+
+                    @Override
                     protected void mergeInvokedAction(AjaxRequestTarget target) {
                         showMergeTab.setValue(true);
                         tabbedPanel.setSelectedTab(MERGE_TAB_INDEX);
@@ -320,7 +327,7 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
             @Override
             public Panel getPanel(String panelId)
             {
-                return new CustomerDivisionsPanel(panelId) ;
+                return new CustomerDivisionsPanel(panelId, customerSelectedForEditModel, getLoaderFactory());
             }
             @Override
             public boolean isVisible() {

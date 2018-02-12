@@ -387,7 +387,12 @@ abstract public class CustomerShowPanel extends Panel {
         customerDetailsSection.add(new Label("customerName", customerNameModel));
         customerDetailsSection.add(new Label("customerId", customerIdModel));
         customerDetailsSection.add(new Label("customerOrganization", customerOrganizationModel));
-        customerDetailsSection.add(new Label("divisionsLinkLabel", customerDivisionsLinkLabelModel));
+        customerDetailsSection.add(new AjaxLink("showDivisionsLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                listDivisionsAction(target);
+            }
+        }.add(new Label("divisionsLinkLabel", customerDivisionsLinkLabelModel)));
         customerDetailsSection.add(new Label("usersLinkLabel", customerUsersLinkLabelModel));
         add(customerDetailsSection);
 
@@ -462,4 +467,5 @@ abstract public class CustomerShowPanel extends Panel {
 
     abstract protected void postArchiveAction(AjaxRequestTarget target);
     abstract protected void mergeInvokedAction(AjaxRequestTarget target);
+    abstract protected void listDivisionsAction(AjaxRequestTarget target);
 }
