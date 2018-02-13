@@ -328,12 +328,12 @@ abstract public class BaseCustomerListPanel extends Panel {
      * Action to take when the 'edit' link is clicked for a customer in the list.
      * @param customerId
      */
-    abstract protected void invokeCustomerEdit(Long customerId, AjaxRequestTarget target);
+    abstract protected void invokeCustomerEdit(Long customerId);
 
     /**
      * Action to take when the 'show' ink is clicked for a customer in the list.
      * @param customerId
      * @param target
      */
-    abstract protected void invokeCustomerShow(Long customerId, AjaxRequestTarget target);
+    abstract protected void invokeCustomerShow(Long customerId);
 }

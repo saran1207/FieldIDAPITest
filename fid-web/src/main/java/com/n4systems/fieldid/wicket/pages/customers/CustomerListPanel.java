@@ -15,6 +15,7 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
@@ -46,10 +47,10 @@ abstract public class CustomerListPanel extends BaseCustomerListPanel {
                 return customer.isArchived();
             }
         });
-        nameSection.add(new AjaxLink("customerShowLink") {
+        nameSection.add(new Link("customerShowLink") {
             @Override
-            public void onClick(AjaxRequestTarget target) {
-                invokeCustomerShow(customer.getId(), target);
+            public void onClick() {
+                invokeCustomerShow(customer.getId());
             }
             @Override
             public boolean isVisible() {
@@ -85,11 +86,11 @@ abstract public class CustomerListPanel extends BaseCustomerListPanel {
             }
         };
         editActions.add(linkedActions);
-        linkedActions.add(new AjaxLink("customerEditLink") {
+        linkedActions.add(new Link("customerEditLink") {
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
-                invokeCustomerEdit(customer.getId(), target);
+            public void onClick() {
+                invokeCustomerEdit(customer.getId());
             }
         });
 
@@ -113,10 +114,10 @@ abstract public class CustomerListPanel extends BaseCustomerListPanel {
             }
         };
         editActions.add(regularCustomerActions);
-        regularCustomerActions.add(new AjaxLink("customerEditLink") {
+        regularCustomerActions.add(new Link("customerEditLink") {
             @Override
-            public void onClick(AjaxRequestTarget target) {
-                invokeCustomerEdit(customer.getId(), target);
+            public void onClick() {
+                invokeCustomerEdit(customer.getId());
             }
         });
         final AjaxLink customerArchiveLink = new AjaxLink("customerArchiveLink") {

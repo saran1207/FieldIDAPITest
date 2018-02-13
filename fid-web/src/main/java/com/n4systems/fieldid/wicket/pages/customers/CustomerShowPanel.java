@@ -17,16 +17,12 @@ import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.IAjaxCallDecorator;
-import org.apache.wicket.ajax.calldecorator.AjaxCallDecorator;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -301,39 +297,38 @@ abstract public class CustomerShowPanel extends Panel {
 
         /* Create controls */
 
-        add(new AjaxLink("archiveLink") {
+        add(new Link("archiveLink") {
             @Override
-            public void onClick(AjaxRequestTarget target) {
-                doArchive(currentCustomer, target);
-                postArchiveAction(target);
+            public void onClick() {
+                doArchive(currentCustomer);
+                postArchiveAction();
             }
-
+        }.add(new AttributeAppender("onclick", new IModel() {
             @Override
-            public IAjaxCallDecorator getAjaxCallDecorator() {
-                return new AjaxCallDecorator() {
-                    @Override
-                    public CharSequence decorateScript(Component c, CharSequence script) {
-                        // note: existing script is
-                        //      onclick="return confirm('<@s.text name="label.areyousurearchivecustomer" />');
-                        Long assetCount = getPlaceService().getAssetCount(currentCustomer.getId());
-                        if (assetCount != null && assetCount > 0) {
-                            return "alert('" +
-                                    new FIDLabelModel("message.customer_owns_assets").getObject() + "'); return false;";
-                        } else {
-                            return new StringBuilder("if(!confirm('").append(
-                                    new FIDLabelModel("message.customer_archive_warning").getObject()).
-                                    append("')) { return false; };").append(script);
+            public Object getObject() {
+                Long assetCount = getPlaceService().getAssetCount(currentCustomer.getId());
+                if (assetCount != null && assetCount > 0) {
+                    return "alert('" +
+                            new FIDLabelModel("message.customer_owns_assets").getObject() + "'); return false;";
+                } else {
+                    return new StringBuilder("if(!confirm('").append(
+                            new FIDLabelModel("message.customer_archive_warning").getObject()).
+                            append("')) { return false; };");
 
-                        }
-                    }
-                };
+                }
             }
-        });
+            @Override
+            public void setObject(Object object) {
+            }
+            @Override
+            public void detach() {
+            }
+        })));
 
-        add(new AjaxLink("mergeLink") {
+        add(new Link("mergeLink") {
                 @Override
-                public void onClick(AjaxRequestTarget target) {
-                    mergeInvokedAction(target);
+                public void onClick() {
+                    mergeInvokedAction();
                 }
             });
 
@@ -387,10 +382,10 @@ abstract public class CustomerShowPanel extends Panel {
         customerDetailsSection.add(new Label("customerName", customerNameModel));
         customerDetailsSection.add(new Label("customerId", customerIdModel));
         customerDetailsSection.add(new Label("customerOrganization", customerOrganizationModel));
-        customerDetailsSection.add(new AjaxLink("showDivisionsLink") {
+        customerDetailsSection.add(new Link("showDivisionsLink") {
             @Override
-            public void onClick(AjaxRequestTarget target) {
-                listDivisionsAction(target);
+            public void onClick() {
+                listDivisionsAction();
             }
         }.add(new Label("divisionsLinkLabel", customerDivisionsLinkLabelModel)));
         customerDetailsSection.add(new Label("usersLinkLabel", customerUsersLinkLabelModel));
@@ -452,10 +447,10 @@ abstract public class CustomerShowPanel extends Panel {
         return placeService;
     }
 
-    private void doArchive(CustomerOrg customer, AjaxRequestTarget target) {
+    private void doArchive(CustomerOrg customer) {
         placeService.archive(customer);
         Session.get().info("Archive successful");
-        target.addChildren(getPage(), FeedbackPanel.class);
+        //target.addChildren(getPage(), FeedbackPanel.class);
     }
 
     private String replaceCR(String string) {
@@ -465,7 +460,7 @@ abstract public class CustomerShowPanel extends Panel {
             return string.replace("\n", "<br />");
     }
 
-    abstract protected void postArchiveAction(AjaxRequestTarget target);
-    abstract protected void mergeInvokedAction(AjaxRequestTarget target);
-    abstract protected void listDivisionsAction(AjaxRequestTarget target);
+    abstract protected void postArchiveAction();
+    abstract protected void mergeInvokedAction();
+    abstract protected void listDivisionsAction();
 }

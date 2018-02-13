@@ -16,10 +16,10 @@ import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.extensions.markup.html.tabs.PanelCachingTab;
+import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -27,6 +27,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import rfid.web.helper.SessionUser;
@@ -171,18 +172,19 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
 
         final List<ITab> tabs = new ArrayList<ITab>();
 
-        final AjaxTabbedPanel tabbedPanel = new AjaxTabbedPanel("navBar", tabs) {
+        final TabbedPanel tabbedPanel = new TabbedPanel("navBar", tabs) {
+
             @Override
-            protected void onAjaxUpdate(AjaxRequestTarget target) {
+            protected void onBeforeRender() {
                 int newTab = getSelectedTab();
                 if (newTab == VIEW_ALL_TAB_INDEX || newTab == VIEW_ARCHIVED_TAB_INDEX || newTab == ADD_TAB_INDEX
                         || newTab == IMPORT_EXPORT_TAB_INDEX)
                     customerSelectedForEditModel.setObject(null); // cleanup any old value
                 Session.get().cleanupFeedbackMessages();
-                target.add(feedbackPanel);
                 currentlySelectedTab = getSelectedTab();
                 if (currentlySelectedTab != MERGE_TAB_INDEX)
                     showMergeTab.setValue(false);
+                super.onBeforeRender();
             }
         };
 
@@ -198,19 +200,19 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
                 return new CustomerListPanel(panelId, webSessionMapModel, getLoaderFactory()) {
 
                     @Override
-                    protected void invokeCustomerEdit(Long customerId, AjaxRequestTarget target) {
+                    protected void invokeCustomerEdit(Long customerId) {
                         customerSelectedForEditModel.setObject(customerId);
                         tabbedPanel.setSelectedTab(EDIT_TAB_INDEX);
                         currentlySelectedTab = EDIT_TAB_INDEX;
-                        target.add(tabbedPanel);
+                        RequestCycle.get().setResponsePage( CustomerActionsPage.this.getPage() );
                     }
 
                     @Override
-                    protected void invokeCustomerShow(Long customerId, AjaxRequestTarget target) {
+                    protected void invokeCustomerShow(Long customerId) {
                         customerSelectedForEditModel.setObject(customerId);
                         tabbedPanel.setSelectedTab(VIEW_TAB_INDEX);
                         currentlySelectedTab = EDIT_TAB_INDEX;
-                        target.add(tabbedPanel);
+                        RequestCycle.get().setResponsePage( CustomerActionsPage.this.getPage() );
                     }
                 };
             }
@@ -226,19 +228,19 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
                     //TODO copied from struts version but all customers here should have EntityState archived.
 
                     @Override
-                    protected void invokeCustomerEdit(Long customerId, AjaxRequestTarget target) {
+                    protected void invokeCustomerEdit(Long customerId) {
                         customerSelectedForEditModel.setObject(customerId);
                         tabbedPanel.setSelectedTab(EDIT_TAB_INDEX);
                         currentlySelectedTab = EDIT_TAB_INDEX;
-                        target.add(tabbedPanel);
+                        RequestCycle.get().setResponsePage( CustomerActionsPage.this.getPage() );
                     }
 
                     @Override
-                    protected void invokeCustomerShow(Long customerId, AjaxRequestTarget target) {
+                    protected void invokeCustomerShow(Long customerId) {
                         customerSelectedForEditModel.setObject(customerId);
                         tabbedPanel.setSelectedTab(VIEW_TAB_INDEX);
                         currentlySelectedTab = EDIT_TAB_INDEX;
-                        target.add(tabbedPanel);
+                        RequestCycle.get().setResponsePage( CustomerActionsPage.this.getPage() );
                     }
                 };
             }
@@ -251,26 +253,26 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
             {
                 return new CustomerShowPanel(panelId, customerSelectedForEditModel, securityFilterModel) {
                     @Override
-                    protected void listDivisionsAction(AjaxRequestTarget target) {
+                    protected void listDivisionsAction() {
                         tabbedPanel.setSelectedTab(DIVISION_TAB_INDEX);
                         currentlySelectedTab = DIVISION_TAB_INDEX;
-                        target.add(tabbedPanel);
+                        RequestCycle.get().setResponsePage( CustomerActionsPage.this.getPage() );
                     }
 
                     @Override
-                    protected void mergeInvokedAction(AjaxRequestTarget target) {
+                    protected void mergeInvokedAction() {
                         showMergeTab.setValue(true);
                         tabbedPanel.setSelectedTab(MERGE_TAB_INDEX);
                         currentlySelectedTab = MERGE_TAB_INDEX;
-                        target.add(tabbedPanel);
+                        RequestCycle.get().setResponsePage( CustomerActionsPage.this.getPage() );
                     }
 
                     @Override
-                    protected void postArchiveAction(AjaxRequestTarget target) {
+                    protected void postArchiveAction() {
                         customerSelectedForEditModel.setObject(null);
                         tabbedPanel.setSelectedTab(VIEW_ALL_TAB_INDEX);
                         currentlySelectedTab = VIEW_ALL_TAB_INDEX;
-                        target.add(tabbedPanel);
+                        RequestCycle.get().setResponsePage( CustomerActionsPage.this.getPage() );
                     }
                 };
             }
@@ -296,8 +298,8 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
                         customerSelectedForEditModel.setObject(customerId);
                         tabbedPanel.setSelectedTab(VIEW_TAB_INDEX);
                         currentlySelectedTab = VIEW_TAB_INDEX;
-                        target.add(tabbedPanel);
-
+                        //target.add(tabbedPanel);
+                        RequestCycle.get().setResponsePage( CustomerActionsPage.this.getPage() );
                     }
                 };
             }
@@ -360,7 +362,8 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
                         customerSelectedForEditModel.setObject(customerId);
                         tabbedPanel.setSelectedTab(VIEW_TAB_INDEX);
                         currentlySelectedTab = VIEW_TAB_INDEX;
-                        target.add(tabbedPanel);
+                        //target.add(tabbedPanel);
+                        RequestCycle.get().setResponsePage( CustomerActionsPage.this.getPage() );
                     }
                 };
             }
