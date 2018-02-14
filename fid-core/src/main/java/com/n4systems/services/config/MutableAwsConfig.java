@@ -10,6 +10,14 @@ public class MutableAwsConfig extends AwsConfig {
 		this.secretAccessKey = secretAccessKey;
 	}
 
+	public void setMobileAccessKeyId(String mobileAcessKeyId) {
+		this.mobileAccessKeyId = mobileAcessKeyId;
+	}
+
+	public void setMobileSecretAccessKey(String mobileSecretAccessKey) {
+		this.mobileSecretAccessKey = mobileSecretAccessKey;
+	}
+
 	public void setEndpoint(String endpoint) {
 		this.endpoint = endpoint;
 	}
