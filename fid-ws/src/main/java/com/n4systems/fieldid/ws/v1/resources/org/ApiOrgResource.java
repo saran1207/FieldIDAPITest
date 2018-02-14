@@ -106,10 +106,10 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
 		//Add Contact Information (put together from Contact and AddressInfo)
 		convertContactInformation(apiOrg, baseOrg);
 
-        apiOrg.setEventHistory(eventHistoryResource.findAllEventHistory(baseOrg.getId()));
+        //apiOrg.setEventHistory(eventHistoryResource.findAllEventHistory(baseOrg.getId()));
         apiOrg.setEventTypes(baseOrg.getEventTypes().stream().map(eventTypeResource::convertToApiPlaceEvent).collect(Collectors.toList()));
-        apiOrg.setEvents(savedPlaceEventResource.findLastEventOfEachType(baseOrg.getId()));
-		apiOrg.setSchedules(savedPlaceEventResource.findAllOpenEvents(baseOrg));
+        //apiOrg.setEvents(savedPlaceEventResource.findLastEventOfEachType(baseOrg.getId()));
+		//apiOrg.setSchedules(savedPlaceEventResource.findAllOpenEvents(baseOrg));
 		apiOrg.setAssetCount(assetService.getAssetCountByOrg(baseOrg.getId()));
 		apiOrg.setOfflineAssetCount(assetService.getOfflineAssetCountByOrg(baseOrg.getId()));
 
