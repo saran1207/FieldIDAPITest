@@ -240,61 +240,42 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 			: null;
 	}
 
-    public void loadAttachmentData(ApiAssetAttachment apiAssetAttachment, Asset asset){
-        AssetAttachment attachment = convertApiModelToEntity(apiAssetAttachment, asset);
-        apiAssetAttachment.setData(loadAttachmentData(attachment));
-    }
-	
-	private byte[] loadAttachmentData(AssetAttachment attachment) {
-        S3Service s3Service = ServiceLocator.getS3Service();
+    public void loadAssetAttachmentData(ApiAssetAttachment apiAssetAttachment, Asset asset) {
+		AssetAttachment attachment = convertApiModelToEntity(apiAssetAttachment, asset);
+		S3Service s3Service = ServiceLocator.getS3Service();
 		byte[] data = null;
-        String fileName = attachment.getFileName().substring(attachment.getFileName().lastIndexOf('/') + 1);
-        if(s3Service.assetAttachmentExists(attachment)){
-            try {
-                data = s3Service.downloadAssetAttachmentBytes(attachment);
-            } catch(Exception e) {
-                String assetAttachmentUrl = attachment.getFileName();
-                logger.warn("Unable to load remote asset attachment at: " + assetAttachmentUrl, e);
-            }
-        }
-        //check to see if a file attachment exists
-        else if(s3Service.fileAttachmentExists(attachment.getMobileId(), fileName)){
-            try {
-                data = s3Service.downloadFileAttachmentBytes(attachment.getMobileId(), fileName);
-            } catch(Exception e) {
-                String assetAttachmentUrl = attachment.getFileName();
-                logger.warn("Unable to load remote file attachment at: " + assetAttachmentUrl, e);
-            }
-        }
+		try {
+			data = s3Service.downloadAssetAttachmentBytes(attachment);
+		} catch(Exception e) {
+			String assetAttachmentUrl = attachment.getFileName();
+			logger.warn("Unable to load remote asset attachment at: " + assetAttachmentUrl, e);
+		}
+		apiAssetAttachment.setData(data);
+	}
 
-        if(data == null && attachment.getId() != null){
-            File attachmentFile = PathHandler.getAssetAttachmentFile(attachment);
-            if (attachmentFile.exists()) {
-                try {
-                    data = FileUtils.readFileToByteArray(attachmentFile);
-                } catch(Exception e) {
-                    logger.warn("Unable to load local asset attachment at: " + attachmentFile, e);
-                }
-            }
-        }
-		return data;
+	public void loadFileAttachmentData(ApiAssetAttachment apiAssetAttachment, Asset asset) {
+		AssetAttachment attachment = convertApiModelToEntity(apiAssetAttachment, asset);
+		S3Service s3Service = ServiceLocator.getS3Service();
+		byte[] data = null;
+		String fileName = attachment.getFileName().substring(attachment.getFileName().lastIndexOf('/') + 1);
+		try {
+			data = s3Service.downloadFileAttachmentBytes(attachment.getMobileId(), fileName);
+		} catch(Exception e) {
+			String assetAttachmentUrl = attachment.getFileName();
+			logger.warn("Unable to load remote asset attachment at: " + assetAttachmentUrl, e);
+		}
+		apiAssetAttachment.setData(data);
 	}
 
     private URL getAttachmentUrl(AssetAttachment attachment){
         S3Service s3Service = ServiceLocator.getS3Service();
-        URL url = null;
-        if(s3Service.assetAttachmentExists(attachment)){
-            url = s3Service.getAssetAttachmentUrl(attachment);
-        }
+        URL url = s3Service.getAssetAttachmentUrl(attachment);
         return url;
     }
 
     private URL getAttachmentUrl(FileAttachment attachment){
         S3Service s3Service = ServiceLocator.getS3Service();
-        URL url = null;
-        if(s3Service.fileAttachmentExists(attachment)){
-            url = s3Service.getFileAttachmentUrl(attachment);
-        }
+		URL url = s3Service.getFileAttachmentUrl(attachment);
         return url;
     }
 }
