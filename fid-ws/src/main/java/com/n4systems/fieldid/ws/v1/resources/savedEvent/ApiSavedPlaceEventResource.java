@@ -9,6 +9,7 @@ import com.n4systems.model.PlaceEventType;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.model.orgs.BaseOrg;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -27,12 +28,19 @@ public class ApiSavedPlaceEventResource extends ApiResource<ApiSavedPlaceEvent, 
     @Autowired
     private EventService eventService;
 
+    @Transactional
     public List<ApiSavedPlaceEvent> findLastEventOfEachType(Long placeId) {
         List<PlaceEvent> events = eventService.getLastPlaceEventOfEachType(placeId);
         return convertAllEntitiesToApiModels(events);
     }
 
     public List<ApiSavedPlaceEvent> findAllOpenEvents(BaseOrg baseOrg) {
+        List<PlaceEvent> events = eventService.getAllOpenPlaceEvents(baseOrg);
+        return convertAllEntitiesToApiModels(events);
+    }
+
+    @Transactional
+    public List<ApiSavedPlaceEvent> findAllOpenEvents(Long baseOrg) {
         List<PlaceEvent> events = eventService.getAllOpenPlaceEvents(baseOrg);
         return convertAllEntitiesToApiModels(events);
     }

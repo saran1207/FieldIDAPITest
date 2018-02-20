@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.ws.v1.resources.event;
 
 /**
- * This is the base class for Place Events, holding the ID field of the Place/BaseOrg.  Both ApiPlaceEvent and
+ * This is the base class for Place Events, holding the ID field of the Place/BaseOrg.  Both ApiPlaceEventInfo and
  * ApiSavedPlaceEvent extend this class.
  *
  * Created by Jordan Heath on 2015-10-22.

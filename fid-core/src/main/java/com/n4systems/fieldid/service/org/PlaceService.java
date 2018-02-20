@@ -4,13 +4,11 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
-import com.n4systems.model.Asset;
-import com.n4systems.model.PlaceEvent;
-import com.n4systems.model.PlaceEventType;
-import com.n4systems.model.WorkflowState;
+import com.n4systems.model.*;
 import com.n4systems.model.orgs.*;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserQueryHelper;
+import com.n4systems.persistence.utils.PostFetcher;
 import com.n4systems.security.UserType;
 import com.n4systems.util.persistence.JoinClause;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -119,7 +117,17 @@ public class PlaceService extends FieldIdPersistenceService {
         query.addSimpleWhere("place",org);
         query.setOrder("dueDate",true);
         query.addSimpleWhere("workflowState", WorkflowState.OPEN);
-        return persistenceService.findAll(query);
+        List<PlaceEvent> events = persistenceService.findAll(query);
+        return events;
+    }
+
+    public List<PlaceEvent> getOpenEventsFor(Long org) {
+        QueryBuilder<PlaceEvent> query = createUserSecurityBuilder(PlaceEvent.class);
+        query.addSimpleWhere("place.id",org);
+        query.setOrder("dueDate",true);
+        query.addSimpleWhere("workflowState", WorkflowState.OPEN);
+        List<PlaceEvent> events = persistenceService.findAll(query);
+        return events;
     }
 
     public List<PlaceEvent> getOpenEventsFor(BaseOrg org, int days) {

@@ -56,7 +56,7 @@ public class ApiPlaceEventResource extends FieldIdPersistenceService {
     @Transactional
     public void saveEvent(ApiPlaceEvent apiEvent) {
         if(apiEvent.getSid() == null) {
-            throw new NullPointerException("ApiPlaceEvent has null sid");
+            throw new NullPointerException("ApiPlaceEventInfo has null sid");
         }
 
         PlaceEvent existingEvent;

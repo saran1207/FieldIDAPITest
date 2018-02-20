@@ -1,10 +1,7 @@
 package com.n4systems.fieldid.ws.v1.resources.eventhistory;
 
-import com.n4systems.fieldid.ws.v1.resources.ApiResource;
-import com.n4systems.model.PlaceEvent;
-import com.n4systems.model.WorkflowState;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClauseFactory;
+import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedPlaceEventResource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.GET;
@@ -12,7 +9,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
 
 /**
  * This service returns the event history for one Place/Org.
@@ -21,34 +17,22 @@ import java.util.List;
  */
 @Component
 @Path("placeEventHistory")
-public class ApiPlaceEventHistoryResource extends ApiResource<ApiPlaceEventHistory, PlaceEvent> {
+public class ApiPlaceEventHistoryResource {
+
+    @Autowired
+    private ApiPlaceEventInfoResource placeEventResource;
+
+    @Autowired
+    private ApiSavedPlaceEventResource savedPlaceEventResource;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<ApiPlaceEventHistory> findAllEventHistory(@QueryParam("id") Long placeId) {
-        QueryBuilder<PlaceEvent> builder = createUserSecurityBuilder(PlaceEvent.class);
-        builder.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.COMPLETED));
-        builder.addWhere(WhereClauseFactory.create("place.id", placeId));
-        builder.addOrder("completedDate", false);
+    public ApiPlaceEventHistory findAllEventHistory(@QueryParam("id") Long placeId) {
 
-        List<PlaceEvent> events = persistenceService.findAll(builder);
-        List<ApiPlaceEventHistory> apiEventHistory = convertAllEntitiesToApiModels(events);
+        ApiPlaceEventHistory apiEventHistory = new ApiPlaceEventHistory();
+        apiEventHistory.setPlaceEvents(placeEventResource.getPlaceEvents(placeId));
+        apiEventHistory.setEvents(savedPlaceEventResource.findLastEventOfEachType(placeId));
+        apiEventHistory.setSchedules(savedPlaceEventResource.findAllOpenEvents(placeId));
         return apiEventHistory;
-    }
-
-    @Override
-    protected ApiPlaceEventHistory convertEntityToApiModel(PlaceEvent entityModel) {
-        ApiPlaceEventHistory history = new ApiPlaceEventHistory();
-
-        history.setPlaceId(entityModel.getPlace().getId());
-        history.setEventId(entityModel.getMobileGUID());
-        history.setEventTypeId(entityModel.getType().getId());
-        history.setEventTypeName(entityModel.getEventType().getName());
-        history.setEventDate(entityModel.getDate());
-        history.setPerformedBy(entityModel.getPerformedBy().getId());
-        history.setStatus(entityModel.getEventResult().getDisplayName());
-        history.setPrintable(entityModel.isPrintable());
-
-        return history;
     }
 }

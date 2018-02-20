@@ -8,6 +8,7 @@ import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.util.EditExistingEventTransientResultPopulator;
 import com.n4systems.fieldid.service.event.util.ExistingEventTransientCriteriaResultPopulator;
+import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.api.Archivable.EntityState;
@@ -21,6 +22,7 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.model.utils.PlainDate;
+import com.n4systems.persistence.utils.PostFetcher;
 import com.n4systems.services.date.DateService;
 import com.n4systems.services.reporting.*;
 import com.n4systems.services.tenant.Tenant30DayCountRecord;
@@ -35,6 +37,7 @@ import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.SortTerm;
 import com.n4systems.util.time.DateUtil;
 import org.apache.commons.lang.time.DateUtils;
+import org.apache.poi.ss.formula.functions.Even;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +45,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.*;
+import java.util.concurrent.Callable;
 import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 
@@ -54,6 +58,7 @@ public class EventService extends FieldIdPersistenceService {
     @Autowired private DateService dateService;
     @Autowired private PriorityCodeService priorityCodeService;
     @Autowired private NotifyEventAssigneeService notifyEventAssigneeService;
+    @Autowired private PlaceService placeService;
 
     @Transactional(readOnly = true)
     public List<ThingEvent> getThingEventsByType(Long eventTypeId, Date from, Date to, int page, int pageSize) {
@@ -438,12 +443,20 @@ public class EventService extends FieldIdPersistenceService {
         return lastEventsByType;
 	}
 
+	public PlaceEvent getPlaceEventById(Long id) {
+        QueryBuilder<PlaceEvent> query = createUserSecurityBuilder(PlaceEvent.class);
+        query.addSimpleWhere("id",id);
+        PlaceEvent lastEvent = persistenceService.find(query);
+        return lastEvent;
+    }
+
     public List<PlaceEvent> getAllOpenPlaceEvents(BaseOrg baseOrg) {
-        QueryBuilder<PlaceEvent> builder = createUserSecurityBuilder(PlaceEvent.class);
-        builder.addSimpleWhere("place", baseOrg);
-        builder.addSimpleWhere("workflowState", WorkflowState.OPEN);
-        return persistenceService.findAll(builder);
+        return placeService.getOpenEventsFor(baseOrg);
 	}
+
+    public List<PlaceEvent> getAllOpenPlaceEvents(Long baseOrg) {
+        return placeService.getOpenEventsFor(baseOrg);
+    }
 
     public List<PlaceEvent> getLastPlaceEventOfEachType(Long placeId) {
         //Pretty much a copy of the method above, but I couldn't use Generics here, because the QueryBuilder can't figure
@@ -463,7 +476,7 @@ public class EventService extends FieldIdPersistenceService {
                 )
         ).values().stream()
                 // Map them into full thing events and return a list
-                .map((e) -> (PlaceEvent) persistenceService.find(Event.class, e.get().getId()))
+                .map((e) -> getPlaceEventById(e.get().getId()))
                 .collect(Collectors.toList());
 
         return lastEventsByType;

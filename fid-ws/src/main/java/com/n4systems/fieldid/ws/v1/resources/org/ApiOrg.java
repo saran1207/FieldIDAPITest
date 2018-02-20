@@ -16,10 +16,7 @@ public class ApiOrg extends ApiReadonlyModel {
 	private Long divisionId;
 	private byte[] image;
 	private String address;
-    private List<ApiPlaceEventHistory> eventHistory;
     private List<ApiEventType> eventTypes;
-    private List<ApiSavedPlaceEvent> events;
-	private List<ApiSavedPlaceEvent> schedules;
 	private Long assetCount;
 	private Long offlineAssetCount;
 
@@ -91,14 +88,6 @@ public class ApiOrg extends ApiReadonlyModel {
 		return address;
 	}
 
-    public List<ApiPlaceEventHistory> getEventHistory() {
-        return eventHistory;
-    }
-
-    public void setEventHistory(List<ApiPlaceEventHistory> eventHistory) {
-        this.eventHistory = eventHistory;
-    }
-
     public List<ApiEventType> getEventTypes() {
         return eventTypes;
     }
@@ -106,22 +95,6 @@ public class ApiOrg extends ApiReadonlyModel {
     public void setEventTypes(List<ApiEventType> eventTypes) {
         this.eventTypes = eventTypes;
     }
-
-    public List<ApiSavedPlaceEvent> getEvents() {
-        return events;
-    }
-
-    public void setEvents(List<ApiSavedPlaceEvent> events) {
-        this.events = events;
-    }
-
-	public List<ApiSavedPlaceEvent> getSchedules() {
-		return schedules;
-	}
-
-	public void setSchedules(List<ApiSavedPlaceEvent> schedules) {
-		this.schedules = schedules;
-	}
 
 	public Long getAssetCount() {
 		return assetCount;

@@ -1,81 +1,39 @@
 package com.n4systems.fieldid.ws.v1.resources.eventhistory;
 
-import java.util.Date;
+import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedPlaceEvent;
+
+import java.util.List;
 
 /**
  * Created by Jordan Heath on 2015-10-23.
  */
 public class ApiPlaceEventHistory {
-    private Long placeId;
-    private String eventId;
-    private Long eventTypeId;
-    private String eventTypeName;
-    private Date eventDate;
-    private Long performedBy;
-    private String status;
-    private boolean printable;
+    private List<ApiPlaceEventInfo> placeEvents;
+    private List<ApiSavedPlaceEvent> events;
+    private List<ApiSavedPlaceEvent> schedules;
 
-    public Long getPlaceId() {
-        return placeId;
+    public List<ApiPlaceEventInfo> getPlaceEvents() {
+        return placeEvents;
     }
 
-    public void setPlaceId(Long placeId) {
-        this.placeId = placeId;
+    public void setPlaceEvents(List<ApiPlaceEventInfo> placeEvents) {
+        this.placeEvents = placeEvents;
     }
 
-    public String getEventId() {
-        return eventId;
+    public List<ApiSavedPlaceEvent> getEvents() {
+        return events;
     }
 
-    public void setEventId(String eventId) {
-        this.eventId = eventId;
+    public void setEvents(List<ApiSavedPlaceEvent> events) {
+        this.events = events;
     }
 
-    public Long getEventTypeId() {
-        return eventTypeId;
+    public List<ApiSavedPlaceEvent> getSchedules() {
+        return schedules;
     }
 
-    public void setEventTypeId(Long eventTypeId) {
-        this.eventTypeId = eventTypeId;
+    public void setSchedules(List<ApiSavedPlaceEvent> schedules) {
+        this.schedules = schedules;
     }
 
-    public String getEventTypeName() {
-        return eventTypeName;
-    }
-
-    public void setEventTypeName(String eventTypeName) {
-        this.eventTypeName = eventTypeName;
-    }
-
-    public Date getEventDate() {
-        return eventDate;
-    }
-
-    public void setEventDate(Date eventDate) {
-        this.eventDate = eventDate;
-    }
-
-    public Long getPerformedBy() {
-        return performedBy;
-    }
-
-    public void setPerformedBy(Long performedBy) {
-        this.performedBy = performedBy;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public boolean isPrintable() {
-        return printable;
-    }
-
-    public void setPrintable(boolean printable) {
-        this.printable = printable;
-    }
 }
