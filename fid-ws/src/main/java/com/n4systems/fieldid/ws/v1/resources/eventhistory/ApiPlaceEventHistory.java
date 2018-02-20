@@ -8,16 +8,16 @@ import java.util.List;
  * Created by Jordan Heath on 2015-10-23.
  */
 public class ApiPlaceEventHistory {
-    private List<ApiPlaceEventInfo> placeEvents;
+    private List<ApiPlaceEventInfo> eventHistory;
     private List<ApiSavedPlaceEvent> events;
     private List<ApiSavedPlaceEvent> schedules;
 
-    public List<ApiPlaceEventInfo> getPlaceEvents() {
-        return placeEvents;
+    public List<ApiPlaceEventInfo> getEventHistory() {
+        return eventHistory;
     }
 
-    public void setPlaceEvents(List<ApiPlaceEventInfo> placeEvents) {
-        this.placeEvents = placeEvents;
+    public void setEventHistory(List<ApiPlaceEventInfo> eventHistory) {
+        this.eventHistory = eventHistory;
     }
 
     public List<ApiSavedPlaceEvent> getEvents() {

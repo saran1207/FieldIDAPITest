@@ -30,7 +30,7 @@ public class ApiPlaceEventHistoryResource {
     public ApiPlaceEventHistory findAllEventHistory(@QueryParam("id") Long placeId) {
 
         ApiPlaceEventHistory apiEventHistory = new ApiPlaceEventHistory();
-        apiEventHistory.setPlaceEvents(placeEventResource.getPlaceEvents(placeId));
+        apiEventHistory.setEventHistory(placeEventResource.getPlaceEvents(placeId));
         apiEventHistory.setEvents(savedPlaceEventResource.findLastEventOfEachType(placeId));
         apiEventHistory.setSchedules(savedPlaceEventResource.findAllOpenEvents(placeId));
         return apiEventHistory;
