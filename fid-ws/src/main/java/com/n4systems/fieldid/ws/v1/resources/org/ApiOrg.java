@@ -16,7 +16,6 @@ public class ApiOrg extends ApiReadonlyModel {
 	private Long divisionId;
 	private byte[] image;
 	private String address;
-    private List<ApiEventType> eventTypes;
 	private Long assetCount;
 	private Long offlineAssetCount;
 
@@ -88,15 +87,7 @@ public class ApiOrg extends ApiReadonlyModel {
 		return address;
 	}
 
-    public List<ApiEventType> getEventTypes() {
-        return eventTypes;
-    }
-
-    public void setEventTypes(List<ApiEventType> eventTypes) {
-        this.eventTypes = eventTypes;
-    }
-
-	public Long getAssetCount() {
+    public Long getAssetCount() {
 		return assetCount;
 	}
 

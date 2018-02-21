@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.ws.v1.resources.eventhistory;
 
+import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiEventType;
 import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedPlaceEvent;
 
 import java.util.List;
@@ -11,6 +12,7 @@ public class ApiPlaceEventHistory {
     private List<ApiPlaceEventInfo> eventHistory;
     private List<ApiSavedPlaceEvent> events;
     private List<ApiSavedPlaceEvent> schedules;
+    private List<ApiEventType> eventTypes;
 
     public List<ApiPlaceEventInfo> getEventHistory() {
         return eventHistory;
@@ -36,4 +38,11 @@ public class ApiPlaceEventHistory {
         this.schedules = schedules;
     }
 
+    public List<ApiEventType> getEventTypes() {
+        return eventTypes;
+    }
+
+    public void setEventTypes(List<ApiEventType> eventTypes) {
+        this.eventTypes = eventTypes;
+    }
 }
