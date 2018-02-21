@@ -9,6 +9,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,6 +33,7 @@ public class ApiPlaceEventInfoResource extends ApiResource<ApiPlaceEventInfo, Pl
 
     }
 
+    @Transactional
     protected List<ApiEventType> getPlaceEventTypes(Long placeId) {
         QueryBuilder<BaseOrg> query = new QueryBuilder<>(BaseOrg.class, securityContext.getTenantSecurityFilter());
         query.addSimpleWhere("id", placeId);
