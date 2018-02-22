@@ -27,16 +27,19 @@ public class ApiPlaceEventHistoryResource {
     @Autowired
     private ApiSavedPlaceEventResource savedPlaceEventResource;
 
+    @Autowired
+    private ApiPlaceEventTypeResource placeEventTypeResource;
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public ApiPlaceEventHistory findAllEventHistory(@QueryParam("id") Long placeId) {
 
         ApiPlaceEventHistory apiEventHistory = new ApiPlaceEventHistory();
 
-        apiEventHistory.setEventTypes(placeEventResource.getPlaceEventTypes(placeId));
         apiEventHistory.setEventHistory(placeEventResource.getPlaceEvents(placeId));
         apiEventHistory.setEvents(savedPlaceEventResource.findLastEventOfEachType(placeId));
         apiEventHistory.setSchedules(savedPlaceEventResource.findAllOpenEvents(placeId));
+        apiEventHistory.setEventTypes(placeEventTypeResource.getPlaceEventTypes(placeId));
         return apiEventHistory;
     }
 }

@@ -1,8 +1,10 @@
 package com.n4systems.fieldid.service.event;
 
+import com.fasterxml.jackson.databind.deser.Deserializers;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.utils.PostFetcher;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -10,10 +12,7 @@ import com.n4systems.util.persistence.WhereParameter;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Transactional
 public class EventTypeService extends FieldIdPersistenceService {
@@ -29,6 +28,14 @@ public class EventTypeService extends FieldIdPersistenceService {
     public List<PlaceEventType> getPlaceEventTypes(Long eventTypeGroupId, String nameFilter) {
         QueryBuilder<PlaceEventType> query = createEventTypeQuery(PlaceEventType.class, eventTypeGroupId, nameFilter);
         return postFetchForStruts(persistenceService.findAll(query));
+    }
+
+    public List<PlaceEventType> getPlaceEventTypesForPlace(Long placeId) {
+        QueryBuilder<BaseOrg> queryBuilder = createTenantSecurityBuilder(BaseOrg.class);
+        queryBuilder.addSimpleWhere("id", placeId);
+        List<PlaceEventType> results = new ArrayList<>(persistenceService.find(queryBuilder).getEventTypes());
+
+        return results;
     }
 
     public List<ThingEventType> getThingEventTypes(Long eventTypeGroupId, String nameFilter) {
