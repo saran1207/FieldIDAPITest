@@ -16,6 +16,8 @@ public class SystemConfig {
 	protected String unbrandedSubdomain;
 	protected String defaultProductTypeName;
 	protected String defaultTimezoneId;
+	protected String newRelicLicenseKey;
+	protected String newRelicApplicationId;
 
 	public SystemConfig() {}
 
@@ -35,6 +37,9 @@ public class SystemConfig {
 		this.unbrandedSubdomain = other.unbrandedSubdomain;
 		this.defaultProductTypeName = other.defaultProductTypeName;
 		this.defaultTimezoneId = other.defaultTimezoneId;
+		this.newRelicLicenseKey = other.newRelicLicenseKey;
+		this.newRelicApplicationId = other.newRelicApplicationId;
+
 	}
 
 	public String getNodeName() {
@@ -100,6 +105,14 @@ public class SystemConfig {
 		return defaultTimezoneId;
 	}
 
+	public String getNewRelicLicenseKey() {
+		return newRelicLicenseKey;
+	}
+
+	public String getNewRelicApplicationId() {
+		return newRelicApplicationId;
+	}
+
 	@Override
 	public String toString() {
 		return  "\t\tnodeName: '" + nodeName + "'\n" +
@@ -116,6 +129,8 @@ public class SystemConfig {
 				"\t\tdownloadTTLDays: " + downloadTTLDays + '\n' +
 				"\t\tunbrandedSubdomain: '" + unbrandedSubdomain + "'\n" +
 				"\t\tdefaultProductTypeName: '" + defaultProductTypeName + "'\n" +
-				"\t\tdefaultTimezoneId: '" + defaultTimezoneId + "'\n";
+				"\t\tdefaultTimezoneId: '" + defaultTimezoneId + "'\n" +
+				"\t\tnewRelicLicenseKey: '" + newRelicLicenseKey + "'\n" +
+				"\t\tnewRelicApplicationId: '" + newRelicApplicationId + "'\n";
 	}
 }

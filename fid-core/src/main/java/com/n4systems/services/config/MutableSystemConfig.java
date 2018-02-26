@@ -62,4 +62,8 @@ public class MutableSystemConfig extends SystemConfig {
 	public void setDefaultTimezoneId(String defaultTimezoneId) {
 		this.defaultTimezoneId = defaultTimezoneId;
 	}
+
+	public void setNewRelicLicenseKey(String newRelicLicenseKey) { this.newRelicLicenseKey = newRelicLicenseKey; }
+
+	public void setNewRelicApplicationId(String newRelicApplicationId) { this.newRelicApplicationId = newRelicApplicationId; }
 }
