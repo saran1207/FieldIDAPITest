@@ -68,6 +68,8 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
         expect(configService.getString(eq(ConfigEntry.HEADER_SCRIPT), anyLong())).andReturn("");
         MutableRootConfig mrc = new MutableRootConfig();
         mrc.getWeb().setWalkmeUrl("test"); // Needed by FieldIDTemplatePage.renderHead to create walkme script element
+        mrc.getSystem().setNewRelicApplicationId("testID");
+        mrc.getSystem().setNewRelicLicenseKey("testLicenseKey");
 		expect(configService.getConfig()).andReturn(new RootConfig(mrc));
         expect(configService.getConfig()).andReturn(new RootConfig(mrc)); // Second call needed due to walkme script
 
