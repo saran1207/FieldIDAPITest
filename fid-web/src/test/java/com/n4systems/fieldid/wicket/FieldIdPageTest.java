@@ -71,7 +71,11 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
         mrc.getSystem().setNewRelicApplicationId("testID");
         mrc.getSystem().setNewRelicLicenseKey("testLicenseKey");
 		expect(configService.getConfig()).andReturn(new RootConfig(mrc));
-        expect(configService.getConfig()).andReturn(new RootConfig(mrc)); // Second call needed due to walkme script
+
+        //Extra additions for walkme, and newrelicappid and newreliclicensekey
+        expect(configService.getConfig()).andReturn(new RootConfig(mrc));
+        expect(configService.getConfig()).andReturn(new RootConfig(mrc));
+        expect(configService.getConfig()).andReturn(new RootConfig(mrc));
 
         replay(configService);
 	}
