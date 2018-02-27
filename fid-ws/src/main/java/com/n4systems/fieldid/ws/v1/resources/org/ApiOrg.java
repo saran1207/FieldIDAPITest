@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.ws.v1.resources.org;
 
 import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiPlaceEventHistory;
+import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiPlaceEventHistoryV1;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiEventType;
 import com.n4systems.fieldid.ws.v1.resources.model.ApiReadonlyModel;
 import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedPlaceEvent;
@@ -16,6 +17,10 @@ public class ApiOrg extends ApiReadonlyModel {
 	private Long divisionId;
 	private byte[] image;
 	private String address;
+    private List<ApiPlaceEventHistoryV1> eventHistory;
+    private List<ApiEventType> eventTypes;
+    private List<ApiSavedPlaceEvent> events;
+	private List<ApiSavedPlaceEvent> schedules;
 	private Long assetCount;
 	private Long offlineAssetCount;
 
@@ -87,7 +92,39 @@ public class ApiOrg extends ApiReadonlyModel {
 		return address;
 	}
 
-    public Long getAssetCount() {
+    public List<ApiPlaceEventHistoryV1> getEventHistory() {
+        return eventHistory;
+    }
+
+    public void setEventHistory(List<ApiPlaceEventHistoryV1> eventHistory) {
+        this.eventHistory = eventHistory;
+    }
+
+    public List<ApiEventType> getEventTypes() {
+        return eventTypes;
+    }
+
+    public void setEventTypes(List<ApiEventType> eventTypes) {
+        this.eventTypes = eventTypes;
+    }
+
+    public List<ApiSavedPlaceEvent> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<ApiSavedPlaceEvent> events) {
+        this.events = events;
+    }
+
+	public List<ApiSavedPlaceEvent> getSchedules() {
+		return schedules;
+	}
+
+	public void setSchedules(List<ApiSavedPlaceEvent> schedules) {
+		this.schedules = schedules;
+	}
+
+	public Long getAssetCount() {
 		return assetCount;
 	}
 
