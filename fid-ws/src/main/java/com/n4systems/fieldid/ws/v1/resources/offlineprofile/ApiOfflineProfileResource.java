@@ -135,7 +135,7 @@ public class ApiOfflineProfileResource extends ApiResource<ApiOfflineProfile, Of
 		List<BaseOrg> allOrgsUnderOnwer = orgService.getOwnerAndDownOrgs(org);
 
 		for(BaseOrg lowerOrgs:allOrgsUnderOnwer) {
-			if (profile.getOrganizations().remove(lowerOrgs)) {
+			if (profile.getOrganizations().remove(lowerOrgs.getId())) {
 				List<String> assetIds = assetService.getAssetMobileGUIDsByOrg(lowerOrgs.getId());
 
 				if(assetIds != null) {
