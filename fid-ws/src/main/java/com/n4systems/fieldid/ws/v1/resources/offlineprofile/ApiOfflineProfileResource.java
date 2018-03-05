@@ -2,12 +2,14 @@ package com.n4systems.fieldid.ws.v1.resources.offlineprofile;
 
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
+import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.model.Asset;
 import com.n4systems.model.offlineprofile.OfflineProfile;
 import com.n4systems.model.offlineprofile.OfflineProfile.SyncDuration;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.util.persistence.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,7 @@ public class ApiOfflineProfileResource extends ApiResource<ApiOfflineProfile, Of
 	
 	@Autowired private OfflineProfileService offlineProfileService;
 	@Autowired private AssetService assetService;
+	@Autowired private OrgService orgService;
 	
 	@PUT
 	@Path("asset/{assetId}")
@@ -67,17 +70,36 @@ public class ApiOfflineProfileResource extends ApiResource<ApiOfflineProfile, Of
 		if (org == null) {
 			throw new NotFoundException("Organization", orgId);
 		}
-		
+
+		//Add top level org to OfflineProfile
 		profile.getOrganizations().add(orgId);
 
-		List<String> assetIds = assetService.getAssetMobileGUIDsByOrg(orgId);
+		//Add all lower level orgs to OfflineProfile
+		List<BaseOrg> allOrgsUnderOnwer = orgService.getOwnerAndDownOrgs(org);
 
+		for(BaseOrg orgBelow:allOrgsUnderOnwer) {
+			profile.getOrganizations().add(orgBelow.getId());
+		}
+
+		//Add assets of top level org to offline profile
+		List<String> assetIds = assetService.getAssetMobileGUIDsByOrg(orgId);
 		if(assetIds != null) {
 			//We do this just to ensure there are no duplicates.
 			profile.getAssets().removeAll(assetIds);
 
 			//Now that we know there are no duplicates, add everything.
 			profile.getAssets().addAll(assetIds);
+		}
+
+		//Add assets of lower level orgs to offline profile
+		for(BaseOrg orgBelow:allOrgsUnderOnwer) {
+			List<String> newAssetIds = assetService.getAssetMobileGUIDsByOrg(orgBelow.getId());
+
+			//We do this just to ensure there are no duplicates.
+			profile.getAssets().removeAll(newAssetIds);
+
+			//Now that we know there are no duplicates, add everything.
+			profile.getAssets().addAll(newAssetIds);
 		}
 
 		offlineProfileService.update(profile);
@@ -92,7 +114,8 @@ public class ApiOfflineProfileResource extends ApiResource<ApiOfflineProfile, Of
 		if (profile == null) {
 			return;
 		}
-		
+
+		//Delete profile for top level org
 		if (profile.getOrganizations().remove(orgId)) {
 			List<String> assetIds = assetService.getAssetMobileGUIDsByOrg(orgId);
 
@@ -102,6 +125,26 @@ public class ApiOfflineProfileResource extends ApiResource<ApiOfflineProfile, Of
 				}
 			} else {
 				offlineProfileService.update(profile);
+			}
+		}
+
+		//Delete profile for all orgs below this top one
+
+		BaseOrg org = persistenceService.find(BaseOrg.class, orgId);
+		//Add all lower level orgs to OfflineProfile
+		List<BaseOrg> allOrgsUnderOnwer = orgService.getOwnerAndDownOrgs(org);
+
+		for(BaseOrg lowerOrgs:allOrgsUnderOnwer) {
+			if (profile.getOrganizations().remove(lowerOrgs)) {
+				List<String> assetIds = assetService.getAssetMobileGUIDsByOrg(lowerOrgs.getId());
+
+				if(assetIds != null) {
+					if(profile.getAssets().removeAll(assetIds)) {
+						offlineProfileService.update(profile);
+					}
+				} else {
+					offlineProfileService.update(profile);
+				}
 			}
 		}
 	}

@@ -188,6 +188,12 @@ public class OrgService extends CrudService<BaseOrg> {
         return persistenceService.findAll(query);
     }
 
+    public List<BaseOrg> getOwnerAndDownOrgs(BaseOrg currentOrg) {
+        QueryBuilder<BaseOrg> query = createUserSecurityBuilder(BaseOrg.class);
+        query.applyFilter(new OwnerAndDownFilter(currentOrg));
+        return persistenceService.findAll(query);
+    }
+
     public OrgList search(String term, int threshold) {
         OrgQueryParser orgQueryParser = new OrgQueryParser(term);
 
