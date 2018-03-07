@@ -83,14 +83,15 @@ public class AssetImporter extends AbstractImporter<AssetView> {
 	protected void importView(Transaction transaction, AssetView view) throws ConversionException {
 		Asset asset = converter.toModel(view, transaction);
 		if (asset.isNew()) {
+			Asset createdAsset;
 			try {
-				saver.create(asset);
+				createdAsset = saver.create(asset);
 			}
 			catch(SubAssetUniquenessException ex) {
 				logger.error("Error in creating asset", ex);
 				throw new ConversionException(ex);
 			}
-			autoScheduleEvents(asset);
+			autoScheduleEvents(createdAsset);
 		}
 		else {
 			try {

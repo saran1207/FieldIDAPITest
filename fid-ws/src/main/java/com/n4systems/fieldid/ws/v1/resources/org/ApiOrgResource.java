@@ -6,6 +6,7 @@ import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
 import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiPlaceEventHistoryResource;
+import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiPlaceEventHistoryResourceV1;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiPlaceEventTypeResource;
 import com.n4systems.fieldid.ws.v1.resources.model.DateParam;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
@@ -42,7 +43,7 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
     private S3Service s3Service;
 
     @Autowired
-    private ApiPlaceEventHistoryResource eventHistoryResource;
+    private ApiPlaceEventHistoryResourceV1 eventHistoryResource;
 
     @Autowired
     private ApiPlaceEventTypeResource eventTypeResource;

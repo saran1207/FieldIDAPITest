@@ -51,6 +51,12 @@ public class ApiEventBookResource extends SetupDataResource<ApiEventBook, EventB
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public void saveEventBook(ApiEventBook apiEventBook) {
+		if (apiEventBook.getName() == null || apiEventBook.getOwnerId() == null || apiEventBook.getSid() == null) {
+			logger.error("Event book create from " + getCurrentUser().getTenant().getName() +
+					":" + getCurrentUser().getUserID() + " has missing values - name:" + apiEventBook.getName() + ", ownerId:"
+					+ apiEventBook.getOwnerId() + ", sid:" + apiEventBook.getSid());
+			throw new RuntimeException("Event book create has null attributes");
+		}
 		EventBook eventBook = convertApiEventBook(apiEventBook);		
 		persistenceService.save(eventBook);
 		logger.info("saved event book: " + apiEventBook.getName());

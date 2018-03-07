@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.ws.v1.resources.org;
 
 import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiPlaceEventHistory;
+import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiPlaceEventHistoryV1;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiEventType;
 import com.n4systems.fieldid.ws.v1.resources.model.ApiReadonlyModel;
 import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedPlaceEvent;
@@ -16,7 +17,7 @@ public class ApiOrg extends ApiReadonlyModel {
 	private Long divisionId;
 	private byte[] image;
 	private String address;
-    private List<ApiPlaceEventHistory> eventHistory;
+    private List<ApiPlaceEventHistoryV1> eventHistory;
     private List<ApiEventType> eventTypes;
     private List<ApiSavedPlaceEvent> events;
 	private List<ApiSavedPlaceEvent> schedules;
@@ -91,11 +92,11 @@ public class ApiOrg extends ApiReadonlyModel {
 		return address;
 	}
 
-    public List<ApiPlaceEventHistory> getEventHistory() {
+    public List<ApiPlaceEventHistoryV1> getEventHistory() {
         return eventHistory;
     }
 
-    public void setEventHistory(List<ApiPlaceEventHistory> eventHistory) {
+    public void setEventHistory(List<ApiPlaceEventHistoryV1> eventHistory) {
         this.eventHistory = eventHistory;
     }
 

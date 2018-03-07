@@ -44,7 +44,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -280,7 +279,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	}
 	
 	protected ApiAsset convertToApiAsset(Asset asset, boolean downloadEvents, boolean downloadImageAttachments, SyncDuration syncDuration) {
-		ApiAsset apiAsset = convertEntityToApiModel(asset);
+		ApiAsset apiAsset = convertEntityToApiModel(asset, downloadImageAttachments);
 
 		apiAsset.setSchedules(apiEventScheduleResource.findAllSchedules(asset.getId(), syncDuration));
         apiAsset.setProcedures(procedureResource.getOpenAndLockedProcedures(asset.getId()));
@@ -288,18 +287,15 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		if (downloadEvents) {
 			apiAsset.setEvents(apiSavedEventResource.findLastEventOfEachType(asset.getId()));
 		}
-        if(downloadImageAttachments){
-            //Assert.isNotNull(apiAttachment.getData());
-            apiAsset.getAttachments()
-                    .stream()
-                    .filter(ApiAssetAttachment::isImage)
-                    .forEach(apiAttachment -> apiAttachmentResource.loadAttachmentData(apiAttachment, asset));
-        }
 		return apiAsset;
 	}
 
 	@Override
 	protected ApiAsset convertEntityToApiModel(Asset asset) {
+		return convertEntityToApiModel(asset, false);
+	}
+
+	protected ApiAsset convertEntityToApiModel(Asset asset, boolean downloadAttachmentImageData) {
 		ApiAsset apiAsset = new ApiAsset();
 		apiAsset.setSid(asset.getMobileGUID());
 		apiAsset.setModified(asset.getModified());
@@ -354,8 +350,18 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
         List<AssetAttachment> assetAttachments = assetService.findAssetAttachments(asset);
         List<FileAttachment> typeAttachments = asset.getType().getAttachments();
         List<ApiAssetAttachment> apiAssetAttachments = apiAttachmentResource.convertAllAssetAttachments(assetAttachments);
+        if (downloadAttachmentImageData) {
+			apiAssetAttachments.stream()
+					.filter(attachment -> attachment.isImage())
+					.forEach(attachment -> apiAttachmentResource.loadAssetAttachmentData(attachment, asset));
+		}
         List<ApiAssetAttachment> apiFileAttachments = apiAttachmentResource.convertAllFileAttachments(typeAttachments);
-        apiAsset.setAttachments(ListUtils.union(apiAssetAttachments, apiFileAttachments));
+        if (downloadAttachmentImageData) {
+			apiFileAttachments.stream()
+					.filter(attachment -> attachment.isImage())
+					.forEach(attachment -> apiAttachmentResource.loadFileAttachmentData(attachment, asset));
+		}
+		apiAsset.setAttachments(ListUtils.union(apiAssetAttachments, apiFileAttachments));
 		
 		return apiAsset;
 	}

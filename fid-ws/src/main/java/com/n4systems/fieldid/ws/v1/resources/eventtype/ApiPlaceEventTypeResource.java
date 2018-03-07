@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.ws.v1.resources.eventtype;
 
 import com.google.common.collect.Lists;
+import com.n4systems.fieldid.service.event.EventTypeService;
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.criteria.*;
 import com.n4systems.fieldid.ws.v1.resources.model.DateParam;
@@ -8,6 +9,7 @@ import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.Path;
 import java.util.ArrayList;
@@ -19,6 +21,9 @@ public class ApiPlaceEventTypeResource extends SetupDataResource<ApiEventType, P
 
 	@Autowired
 	private ApiCriteriaRuleResource criteriaRuleResource;
+
+	@Autowired
+	private EventTypeService eventTypeService;
 
 	public ApiPlaceEventTypeResource() {
 		super(PlaceEventType.class, true);
@@ -41,6 +46,13 @@ public class ApiPlaceEventTypeResource extends SetupDataResource<ApiEventType, P
 			apiModels = convertAllEntitiesToApiModels(placeEventTypes.subList(startIndex, endIndex));
 		}
 		return new ListResponse<>(apiModels, page, pageSize, placeEventTypes.size());
+	}
+
+	@Transactional
+	public List<ApiEventType> getPlaceEventTypes(Long placeId) {
+		List<PlaceEventType> events = eventTypeService.getPlaceEventTypesForPlace(placeId);
+		return convertAllEntitiesToApiModels(events);
+
 	}
 
     public ApiEventType convertToApiPlaceEvent(PlaceEventType type) {

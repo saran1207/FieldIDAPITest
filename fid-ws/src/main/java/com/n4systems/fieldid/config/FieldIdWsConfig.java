@@ -22,6 +22,8 @@ import com.n4systems.fieldid.ws.v1.resources.eventattachment.ApiEventAttachmentR
 import com.n4systems.fieldid.ws.v1.resources.eventbook.ApiEventBookResource;
 import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiEventHistoryResource;
 import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiPlaceEventHistoryResource;
+import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiPlaceEventHistoryResourceV1;
+import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiPlaceEventInfoResource;
 import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventScheduleResource;
 import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiTriggerEventResource;
 import com.n4systems.fieldid.ws.v1.resources.eventstatus.ApiEventStatusResource;
@@ -33,6 +35,7 @@ import com.n4systems.fieldid.ws.v1.resources.location.ApiPredefinedLocationResou
 import com.n4systems.fieldid.ws.v1.resources.logging.ApiLoggingResource;
 import com.n4systems.fieldid.ws.v1.resources.offlineprofile.ApiOfflineProfileResource;
 import com.n4systems.fieldid.ws.v1.resources.org.ApiOrgResource;
+import com.n4systems.fieldid.ws.v1.resources.org.ApiOrgResourceV2;
 import com.n4systems.fieldid.ws.v1.resources.procedure.*;
 import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedEventFormResource;
 import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedEventResource;
@@ -66,6 +69,11 @@ public class FieldIdWsConfig {
 	@Bean
 	public ApiOrgResource apiOrgResource() {
 		return new ApiOrgResource();
+	}
+
+	@Bean
+	public ApiOrgResourceV2 apiOrgResourceV2() {
+		return new ApiOrgResourceV2();
 	}
 
 	@Bean
@@ -222,7 +230,12 @@ public class FieldIdWsConfig {
     public ApiPlaceEventResource apiPlaceEventResource() {
         return new ApiPlaceEventResource();
     }
-	
+
+    @Bean
+	public ApiPlaceEventInfoResource apiPlaceEventInfoResource() {
+		return new ApiPlaceEventInfoResource();
+	}
+
 	@Bean
 	public ApiSavedEventFormResource apiSavedEventFormResource() {
 		return new ApiSavedEventFormResource();
@@ -297,6 +310,11 @@ public class FieldIdWsConfig {
     public ApiPlaceEventHistoryResource apiPlaceEventHistoryResource() {
         return new ApiPlaceEventHistoryResource();
     }
+
+	@Bean
+	public ApiPlaceEventHistoryResourceV1 apiPlaceEventHistoryResourceV1() {
+		return new ApiPlaceEventHistoryResourceV1();
+	}
 
     @Bean
     public ApiPlaceEventTypeResource apiPlaceEventTypeResource() {
