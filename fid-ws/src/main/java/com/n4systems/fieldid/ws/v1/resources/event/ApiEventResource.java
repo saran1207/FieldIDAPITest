@@ -63,6 +63,12 @@ public class ApiEventResource extends FieldIdPersistenceService {
         if (existingEvent == null || existingEvent.getWorkflowState() == WorkflowState.OPEN) {
         	createEvent(apiEvent, existingEvent);
         } else {
+			/* Load the lazy results collection. If this is not done here a problem is encountered
+			   under Hibernate 5.0.7 when a result is deleted from the collection in
+			   ApiExistingEventFormResultResource.convertApiEventFormResults, the error being a
+			   Hibernate assertion failure complaining no owner is associated with the collection.
+			 */
+			for(CriteriaResult result: existingEvent.getResults()) {}
         	updateEvent(apiEvent, existingEvent);
         }		
 	}	
