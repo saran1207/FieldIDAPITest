@@ -347,22 +347,24 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		apiAsset.setAttributeValues(findAllAttributeValues(asset));		
 		apiAsset.setEventHistory(apiEventHistoryResource.findAllEventHistory(asset.getMobileGUID()));
 
-        List<AssetAttachment> assetAttachments = assetService.findAssetAttachments(asset);
-        List<FileAttachment> typeAttachments = asset.getType().getAttachments();
-        List<ApiAssetAttachment> apiAssetAttachments = apiAttachmentResource.convertAllAssetAttachments(assetAttachments);
-        if (downloadAttachmentImageData) {
+		//All or Nothing for setting asset attachments for when the flag is set.
+		List<ApiAssetAttachment> finalList = new ArrayList<>();
+		if(downloadAttachmentImageData) {
+			List<AssetAttachment> assetAttachments = assetService.findAssetAttachments(asset);
+			List<FileAttachment> typeAttachments = asset.getType().getAttachments();
+			List<ApiAssetAttachment> apiAssetAttachments = apiAttachmentResource.convertAllAssetAttachments(assetAttachments);
 			apiAssetAttachments.stream()
-					.filter(attachment -> attachment.isImage())
-					.forEach(attachment -> apiAttachmentResource.loadAssetAttachmentData(attachment, asset));
-		}
-        List<ApiAssetAttachment> apiFileAttachments = apiAttachmentResource.convertAllFileAttachments(typeAttachments);
-        if (downloadAttachmentImageData) {
+						.filter(attachment -> attachment.isImage())
+						.forEach(attachment -> apiAttachmentResource.loadAssetAttachmentData(attachment, asset));
+			List<ApiAssetAttachment> apiFileAttachments = apiAttachmentResource.convertAllFileAttachments(typeAttachments);
 			apiFileAttachments.stream()
-					.filter(attachment -> attachment.isImage())
-					.forEach(attachment -> apiAttachmentResource.loadFileAttachmentData(attachment, asset));
+						.filter(attachment -> attachment.isImage())
+						.forEach(attachment -> apiAttachmentResource.loadFileAttachmentData(attachment, asset));
+			finalList = ListUtils.union(apiAssetAttachments, apiFileAttachments);
 		}
-		apiAsset.setAttachments(ListUtils.union(apiAssetAttachments, apiFileAttachments));
-		
+
+		apiAsset.setAttachments(finalList);
+
 		return apiAsset;
 	}
 	
