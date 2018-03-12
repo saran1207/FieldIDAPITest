@@ -117,8 +117,8 @@ public class TaskAction extends AbstractAdminAction {
 
 		Session s = (Session)persistenceEJBContainer.getEntityManager().getDelegate();
 		SessionFactory sf = s.getSessionFactory();
-		sf.getCache().evictEntityRegions();
-		sf.getCache().evictCollectionRegions();
+		sf.getCache().evictAllRegions();
+		logger.info("Cleared Hibernate 2nd level cache");
 
 		return SUCCESS;
 	}
