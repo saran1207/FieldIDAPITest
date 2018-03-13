@@ -34,6 +34,11 @@ public class ApiCriteriaImagesResource extends FieldIdPersistenceService {
 		builder.addWhere(WhereClauseFactory.create("mobileGUID", sid));
 		CriteriaResultImage criteriaResultImage = persistenceService.find(builder);
 
+		if (criteriaResultImage == null) {
+			logger.info("Unable to delete Criteria Image '" + sid + "' since it does not exist.");
+			return; // Do nothing
+		}
+
 		//Remove it from S3
 		s3Service.deleteCriteriaResultImage(criteriaResultImage);
 
@@ -41,8 +46,6 @@ public class ApiCriteriaImagesResource extends FieldIdPersistenceService {
 		CriteriaResult result = criteriaResultImage.getCriteriaResult();
 		List<CriteriaResultImage> criteriaResultImages = result.getCriteriaImages();
 		criteriaResultImages.remove(criteriaResultImage);
-		result.setCriteriaImages(criteriaResultImages);
-		persistenceService.update(result);
 
 		//Remove it completely
 		persistenceService.remove(criteriaResultImage);
