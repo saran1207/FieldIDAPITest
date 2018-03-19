@@ -33,8 +33,8 @@ public class CatchAllExceptionMapper implements ExceptionMapper<Throwable> {
 		String tenantId;
 		String userId;
 		try {
-			tenantId = securityContext.getTenantSecurityFilter().getTenantId().toString();
-			userId = securityContext.getUserSecurityFilter().getUserId().toString();
+			tenantId = securityContext.getUserSecurityFilter().getUser().getTenant().getName();
+			userId = securityContext.getUserSecurityFilter().getUser().getUserID();
 		}
 		catch(Exception ex) {
 			tenantId = "unknown";
