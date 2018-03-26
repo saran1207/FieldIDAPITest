@@ -146,6 +146,15 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             }
         });
 
+        languageSelectionModalWindow.setWindowClosedCallback(new ModalWindow.WindowClosedCallback() {
+            @Override
+            public void onClose(AjaxRequestTarget target) {
+                /* The google translate widget needs to be moved from the language preference dialog back to the
+                   main page. */
+                target.appendJavaScript("$('#google_translate_element').detach().prependTo('#google_translate_element_container');");
+            }
+        });
+
 
         add(new Header("mainHeader"));
         add(new DebugBar("debugBar"));

@@ -1,5 +1,6 @@
 <wicket:panel xmlns:wicket="http://www.w3.org/1999/html">
 
+    <div style="overflow: hidden; border-style: solid; border-color: black; border-width: 1px; padding: 10px">
     <form wicket:id="form">
         <h2><wicket:message key="title.language_preference"/></h2>
         
@@ -8,7 +9,69 @@
         
         <select class="languageSelect" wicket:id="language"/>
         
-        <a class="btn btn-green btn-sml" wicket:id="submit"><wicket:message key="label.save"></wicket:message></a>
+        <a class="btn btn-green btn-sml" wicket:id="submit" style="float:right"><wicket:message key="label.save"></wicket:message></a>
     </form>
+    </div>
+
+    <div id="google_translate_element_pref_container" style="margin-top: 20px; border-style: solid; border-color: black; border-width: 1px; padding: 10px">
+        <p><wicket:message key="label.google_translate_option"></wicket:message></p>
+
+    <div id="google_translate_element_pref"></div>
+
+    </div>
+
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            console.log("SelectLanaguage window is ready");
+        });
+
+        /* Function needs to be inline here for when running in a ColorBox iFrame under Struts */
+        function showGoogleTranslateOption() {
+            var userLang = navigator.language || navigator.userLanguage || navigator.languages;
+            if (!Array.isArray(userLang) && userLang.substr(0, 2) != "en")
+                return true;
+            else
+                return false;
+        }
+
+        /* Function needs to be inline here for when running in a ColorBox iFrame under Struts */
+        function googleTranslateElementInitPref() {
+            console.log("googleTranslateElementInitPref invoked");
+            var ele = document.getElementById("google_translate_element_pref");
+            console.log("... translate pref element is " + ele);
+            new google.translate.TranslateElement({
+                        pageLanguage: 'en',
+                        layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
+                    },
+                    'google_translate_element_pref');
+        }
+
+        /* Function needs to be inline here for when running in a ColorBox iFrame under Struts */
+        function loadGoogleTranslatePref() {
+            var googleTranslateScript = document.createElement('script');
+            googleTranslateScript.type = 'text/javascript';
+            googleTranslateScript.async = true;
+            googleTranslateScript.src = 'http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInitPref';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0] ).appendChild(googleTranslateScript);
+        }
+
+        if (!showGoogleTranslateOption()) {
+            document.getElementById("google_translate_element_pref_container").style.display = "none";
+        }
+        else {
+            /* Only one google translate widget is allowed on a page so move the existing one on the page footer,
+            * unless this popup was already invoked in which case the widget was already moved */
+            var translateWidget = $('#google_translate_element');
+            if (translateWidget.length == 1) {
+                $('#google_translate_element').detach().prependTo('#google_translate_element_pref');
+            }
+            else {
+                /*  If running in Struts this panel is in an ColorBox iFrame and has no access to the google translate widget on
+                    the main page so we have to create a new one. */
+                loadGoogleTranslatePref();
+            }
+        }
+    </script>
 
 </wicket:panel>
