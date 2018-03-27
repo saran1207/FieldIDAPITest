@@ -44,10 +44,11 @@
             document.getElementById("google_translate_element_pref_container").style.display = "none";
 
 
-        if (runningInIframe && widgetCopied) {
+        if (runningInIframe && widgetCopied)
             window.parent.reloadGoogleTranslate = true;
+        else
+            window.parent.reloadGoogleTranslate = false;
 
-    }
     </script>
 
 </wicket:panel>

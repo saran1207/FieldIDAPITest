@@ -47,9 +47,19 @@
                                 jQuery("#selectLanguageLink").colorbox(
                                 		{iframe: true,
 											onClosed: function() {
-												if (window.parent.reloadGoogleTranslate != null)
-													/* Recreate the google translate widget */
-                                                    window.parent.location.reload();
+												if (window.parent.reloadGoogleTranslate != null && window.parent.reloadGoogleTranslate == true) {
+													/* Recreate the google translate widget since it was moved to the iFrame */
+													var parent = window.parent.document.getElementById('google_translate_element_container');
+													/* Remove existing child nodes since they are not needed */
+													var i;
+													for (i = parent.childNodes.length; i > 0 ; i--) {
+                                                        parent.removeChild(parent.childNodes[i-1]);
+                                                    }
+													var newWidget = window.parent.document.createElement('div');
+													newWidget.id='google_translate_element';
+													parent.appendChild(newWidget);
+                                                    loadGoogleTranslate();
+                                                }
                                             },
                                           	href: '<@s.url value="/w/selectLanguage" />',
 											width: '500px',
