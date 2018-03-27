@@ -33,4 +33,5 @@ public interface SystemSecurityGuard {
     public boolean isCriteriaTrendsEnabled();
     public boolean isUserGroupFilteringEnabled();
 	public boolean isLotoAssetSearchEnabled();
+	public boolean isGoogleTranslateEnabled();
 }

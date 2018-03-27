@@ -16,7 +16,8 @@ public enum ExtendedFeature {
     AdvancedEventSearch("feature.advanced_event_search"),
     CriteriaTrends("feature.criteria_trends"),
     UserGroupFiltering("feature.user_group_filtering"),
-	LotoAssetSearch("feature.loto_asset_search");
+	LotoAssetSearch("feature.loto_asset_search"),
+	GoogleTranslate("feature.google_translate");
 	
 	private String label;
 	

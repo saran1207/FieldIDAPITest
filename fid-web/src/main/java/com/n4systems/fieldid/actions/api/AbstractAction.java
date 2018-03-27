@@ -698,4 +698,8 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	public boolean isSuperUser() {
 		return getSession().getAdminUser().getType().equals(AdminUserType.SUPER);
 	}
+
+	public boolean isGoogleTranslateAllowed() {
+		return getSecurityGuard().isGoogleTranslateEnabled();
+	}
 }

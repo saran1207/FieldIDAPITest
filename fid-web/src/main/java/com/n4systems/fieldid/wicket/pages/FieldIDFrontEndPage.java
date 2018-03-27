@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.UIConstants;
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.version.FieldIdVersion;
 import com.n4systems.fieldid.wicket.FieldIDSession;
@@ -119,6 +120,9 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
     @SpringBean
     private S3Service s3Service;
+
+    @SpringBean
+    private OrgService orgService;
 
     private Asset smartSearchAsset;
     private Component titleLabel;
@@ -512,6 +516,17 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
         if (headerScript != null && !headerScript.isEmpty()) {
             response.renderOnDomReadyJavaScript(headerScript);
+        }
+
+        if (orgService.getPrimaryOrgForTenant(getTenant().getId()).hasExtendedFeature(ExtendedFeature.GoogleTranslate)) {
+            response.renderOnDomReadyJavaScript(
+                    "if (isGoogleTranslateAllowedForCurrentLanguage())\n" +
+                            "loadGoogleTranslate();\n" +
+                            "else\n" +
+                            "hideGoogleTranslateWidget();");
+        }
+        else {
+            response.renderOnDomReadyJavaScript("hideGoogleTranslateWidget();");
         }
 
     }

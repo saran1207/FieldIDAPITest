@@ -44,7 +44,16 @@
                         <script type="text/javascript">
 
                             jQuery(document).ready(function(){
-                                jQuery("#selectLanguageLink").colorbox({iframe: true, href: '<@s.url value="/w/selectLanguage" />', width: '500px', height:'380px'});
+                                jQuery("#selectLanguageLink").colorbox(
+                                		{iframe: true,
+											onClosed: function() {
+												if (window.parent.reloadGoogleTranslate != null)
+													/* Recreate the google translate widget */
+                                                    window.parent.location.reload();
+                                            },
+                                          	href: '<@s.url value="/w/selectLanguage" />',
+											width: '500px',
+											height:'380px'});
                             });
 
                         </script>

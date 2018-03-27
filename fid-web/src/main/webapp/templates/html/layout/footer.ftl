@@ -6,8 +6,15 @@
 			</p>
 			<@n4.includeScript src="lang/googleTranslate.js"/>
             <div id="google_translate_element_container" style="visibility:hidden">
-            	<div id="google_translate_element"></div>
-				<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+				<#if action.isGoogleTranslateAllowed()>
+            		<div id="google_translate_element"></div>
+					<script type="text/javascript">
+                        if (isGoogleTranslateAllowedForCurrentLanguage())
+                        	loadGoogleTranslate();
+                        else
+                        	hideGoogleTranslateWidget();
+					</script>
+				</#if>
 			</div>
 		</div>
 		<#include "_poweredBy.ftl"/>

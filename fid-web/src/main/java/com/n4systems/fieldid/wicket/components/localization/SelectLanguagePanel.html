@@ -22,56 +22,32 @@
 
     <script type="text/javascript">
 
-        $(document).ready(function() {
-            console.log("SelectLanaguage window is ready");
-        });
-
-        /* Function needs to be inline here for when running in a ColorBox iFrame under Struts */
-        function showGoogleTranslateOption() {
-            var userLang = navigator.language || navigator.userLanguage || navigator.languages;
-            if (!Array.isArray(userLang) && userLang.substr(0, 2) != "en")
-                return true;
+        var runningInIframe = false;
+        var widgetCopied = false;
+        var translateWidget = $('#google_translate_element');
+        if (translateWidget.length == 0) {
+            /*  If running in Struts this panel is in an ColorBox iFrame and the google translate widget
+                is in the parent of this iFrame. */
+            runningInIframe = true;
+            translateWidget = $('#google_translate_element', window.parent.document);
+        }
+        if (translateWidget.length > 0) {
+            if (translateWidget.contents().length > 0) {
+                translateWidget.detach().prependTo('#google_translate_element_pref');
+                widgetCopied = true;
+            }
             else
-                return false;
+                document.getElementById("google_translate_element_pref_container").style.display = "none";
         }
-
-        /* Function needs to be inline here for when running in a ColorBox iFrame under Struts */
-        function googleTranslateElementInitPref() {
-            console.log("googleTranslateElementInitPref invoked");
-            var ele = document.getElementById("google_translate_element_pref");
-            console.log("... translate pref element is " + ele);
-            new google.translate.TranslateElement({
-                        pageLanguage: 'en',
-                        layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
-                    },
-                    'google_translate_element_pref');
-        }
-
-        /* Function needs to be inline here for when running in a ColorBox iFrame under Struts */
-        function loadGoogleTranslatePref() {
-            var googleTranslateScript = document.createElement('script');
-            googleTranslateScript.type = 'text/javascript';
-            googleTranslateScript.async = true;
-            googleTranslateScript.src = 'http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInitPref';
-            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0] ).appendChild(googleTranslateScript);
-        }
-
-        if (!showGoogleTranslateOption()) {
+        else
+            /* No widget found so don't display google translate section */
             document.getElementById("google_translate_element_pref_container").style.display = "none";
-        }
-        else {
-            /* Only one google translate widget is allowed on a page so move the existing one on the page footer,
-            * unless this popup was already invoked in which case the widget was already moved */
-            var translateWidget = $('#google_translate_element');
-            if (translateWidget.length == 1) {
-                $('#google_translate_element').detach().prependTo('#google_translate_element_pref');
-            }
-            else {
-                /*  If running in Struts this panel is in an ColorBox iFrame and has no access to the google translate widget on
-                    the main page so we have to create a new one. */
-                loadGoogleTranslatePref();
-            }
-        }
+
+
+        if (runningInIframe && widgetCopied) {
+            window.parent.reloadGoogleTranslate = true;
+
+    }
     </script>
 
 </wicket:panel>
