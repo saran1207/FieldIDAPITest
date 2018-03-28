@@ -180,6 +180,9 @@ public class DateTimePicker extends Panel {
         response.renderCSSReference("style/legacy/datetimepicker.css");
         response.renderCSSReference("style/legacy/jquery-redmond/jquery-ui-1.8.13.custom.css");
         response.renderJavaScriptReference("javascript/jquery-ui-timepicker-addon.js");
+
+        /* If Google Translate is enabled the jQuery based datepicker will not work */
+        response.renderOnLoadJavaScript("$('#ui-datepicker-div').addClass('notranslate');");
     }
 
     private String getInitDatePickerJS() {
