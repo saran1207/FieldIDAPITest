@@ -22,6 +22,12 @@
 
     <script type="text/javascript">
 
+        /* Only one Google Translate widget can exist on any page. Since this dialog appears in an already existing page
+           we need to take the widget on that page and move it into this dialog. When this dialog closes code elsewhere
+           will either copy the widget back (Wicket) or recreate it (Struts) on that page. With Struts we need to
+           recreate it due to problems trying to copy it back from the iFrame used by Colorbox. If Google Translate is
+           not enabled there is no widget on the main page so nothing needs to be done. */
+
         var runningInIframe = false;
         var widgetCopied = false;
         var translateWidget = $('#google_translate_element');
@@ -37,6 +43,7 @@
                 widgetCopied = true;
             }
             else
+                /* Empty div with no widget so google translate isn't active */
                 document.getElementById("google_translate_element_pref_container").style.display = "none";
         }
         else
@@ -44,6 +51,7 @@
             document.getElementById("google_translate_element_pref_container").style.display = "none";
 
 
+        /* Set a flag so code running in Struts will know the translate widget needs to be recreated */
         if (runningInIframe && widgetCopied)
             window.parent.reloadGoogleTranslate = true;
         else
