@@ -1,15 +1,17 @@
 <wicket:panel xmlns:wicket="http://www.w3.org/1999/html">
 
-    <div style="overflow: hidden; border-style: solid; border-color: black; border-width: 1px; padding: 10px">
+    <div style="border-style: solid; border-color: black; border-width: 1px; padding: 10px">
     <form wicket:id="form">
         <h2><wicket:message key="title.language_preference"/></h2>
         
         <p><wicket:message key="message.language_prefrence1"/></p>
         <p><wicket:message key="message.language_prefrence2"/></p>
         
+
         <select class="languageSelect" wicket:id="language"/>
-        
-        <a class="btn btn-green btn-sml" wicket:id="submit" style="float:right"><wicket:message key="label.save"></wicket:message></a>
+        <div style="text-align: right">
+        <a class="btn btn-green btn-sml" wicket:id="submit" ><wicket:message key="label.save"></wicket:message></a>
+        </div>
     </form>
     </div>
 
