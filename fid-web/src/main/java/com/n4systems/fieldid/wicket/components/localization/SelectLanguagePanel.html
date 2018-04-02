@@ -10,8 +10,9 @@
 
         <select class="languageSelect" wicket:id="language"/>
         <div style="text-align: right">
-        <a class="btn btn-green btn-sml" wicket:id="submit" ><wicket:message key="label.save"></wicket:message></a>
+            <a class="btn btn-green btn-sml" style="margin: 1px;" wicket:id="submit" ><wicket:message key="label.save"></wicket:message></a>
         </div>
+        <div style="clear:both"></div> <!-- Force submit button to stay within parent div -->
     </form>
     </div>
 
