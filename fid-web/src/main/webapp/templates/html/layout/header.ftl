@@ -46,6 +46,24 @@
                             jQuery(document).ready(function(){
                                 jQuery("#selectLanguageLink").colorbox(
                                 		{iframe: true,
+											onComplete: function() {
+												<#if action.isGoogleTranslateAllowed()>
+													var container = jQuery('#google_translate_element');
+													if (container != null) {
+														var h = container.height();
+														if (h != null && h > 0) {
+                                                            /* We have added a google translate section but since it was
+                                                               added via javascript colorbox's sizing didn't include it so
+                                                               manually add sufficient space for this section */
+                                                        	var originalHeight = jQuery('#colorbox', window.parent.document).height();
+															jQuery(this).colorbox.resize({
+																width: 500,
+																height: originalHeight + 155
+															});
+														}
+                                                	}
+                                                </#if>
+											},
 											onClosed: function() {
 												<#if action.isGoogleTranslateAllowed()>
 													if (window.parent.reloadGoogleTranslate != null && window.parent.reloadGoogleTranslate == true) {
