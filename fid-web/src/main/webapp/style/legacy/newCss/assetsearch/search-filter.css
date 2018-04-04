@@ -148,12 +148,6 @@ ul.floatingDropdown ul li a:visited {
 	padding-bottom: 50px;
 	*z-index: 5;
 }
-	.search-config .btn-primary {
-		position: fixed;
-		left: 340px;
-		top: 206px;
-		z-index: 1;
-	}
 #left-panel.filters .content.filters {
 	display: block;
 }
@@ -174,6 +168,13 @@ ul.floatingDropdown ul li a:visited {
 	margin-left: 14px;
 }
 
+#left-panel #search-button-container {
+    position: fixed;
+    left: 26px;
+    top: 206px;
+    z-index: 1;
+    width: 378px;
+}
 
 /* Popups & Location picker within forms 
 -----------------------------------------*/
