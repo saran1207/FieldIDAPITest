@@ -75,7 +75,10 @@ ul.floatingDropdown ul li a:visited {
 	bottom: 8px;
 	left: 30px;
 }
-#page.with-left-panel .centre,
+#page.with-left-panel .centre {
+	left: 425px;
+	position: fixed;
+}
 #page.with-left-panel #bottom-panel {
 	left: 425px;
 }
@@ -84,7 +87,7 @@ ul.floatingDropdown ul li a:visited {
 /* ACTION BUTTONS BAR 
 ----------------------*/ 
 .sub-menu {
-	position: relative;
+	position: fixed;
 	padding: 0;
 	background-color: #ffffff;
 	/*margin-top: 14px;*/
