@@ -2,7 +2,6 @@ package com.n4systems.model.localization;
 
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.security.SecurityDefiner;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,8 +10,6 @@ import java.util.Map;
 
 @Entity
 @Table(name = "translations")
-@Cacheable
-@org.hibernate.annotations.Cache(region = "SetupDataCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Translation implements Serializable, Saveable {
 
     private @EmbeddedId CompoundKey id = new CompoundKey();

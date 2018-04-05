@@ -66,4 +66,6 @@ public class MutableSystemConfig extends SystemConfig {
 	public void setNewRelicLicenseKey(String newRelicLicenseKey) { this.newRelicLicenseKey = newRelicLicenseKey; }
 
 	public void setNewRelicApplicationId(String newRelicApplicationId) { this.newRelicApplicationId = newRelicApplicationId; }
+
+	public void setMinimumAppVersion(String minimumAppVersion) { this.minimumAppVersion = minimumAppVersion; }
 }

@@ -33,6 +33,7 @@ import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiPlaceEventTypeResource
 import com.n4systems.fieldid.ws.v1.resources.hello.ApiHelloResource;
 import com.n4systems.fieldid.ws.v1.resources.location.ApiPredefinedLocationResource;
 import com.n4systems.fieldid.ws.v1.resources.logging.ApiLoggingResource;
+import com.n4systems.fieldid.ws.v1.resources.minimumversion.ApiMinimumVersionResource;
 import com.n4systems.fieldid.ws.v1.resources.offlineprofile.ApiOfflineProfileResource;
 import com.n4systems.fieldid.ws.v1.resources.org.ApiOrgResource;
 import com.n4systems.fieldid.ws.v1.resources.org.ApiOrgResourceV2;
@@ -262,10 +263,15 @@ public class FieldIdWsConfig {
 	}
 	
 	@Bean
+	public ApiMinimumVersionResource apiMinimumVersionResource() {
+		return new ApiMinimumVersionResource();
+	}
+
+	@Bean
 	public ApiHelloResource apiHelloResource() {
 		return new ApiHelloResource();
 	}
-	
+
 	@Bean
 	public ApiLoggingResource apiLoggingResource() {
 		return new ApiLoggingResource();
