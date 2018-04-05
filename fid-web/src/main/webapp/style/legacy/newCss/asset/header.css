@@ -64,12 +64,10 @@
     float:right;
     padding-top: 0;
     margin-top: 0;
-    width: 95px;
 }
 
 .actionButtons .actions .mattButton {
     font-size: 12px;
-    width: 65px;
 }
 
 .actionButtons .actions .mattButton img{
