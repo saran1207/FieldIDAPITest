@@ -35,7 +35,16 @@ public class ApiEventBookResource extends SetupDataResource<ApiEventBook, EventB
 		apiBook.setSid(book.getMobileId());
 		apiBook.setModified(book.getModified());
 		apiBook.setActive(book.isOpen());
-		apiBook.setOwnerId(book.getOwner().getId());
+
+		//if the owner is not set (which is a bug, as it should ALWAYS be set)
+		if(book.getOwner() == null) {
+			//Send it with the ownership of the PRIMARY organization (fail safe to make sure it's still accessable)
+			apiBook.setOwnerId(getCurrentUser().getOwner().getPrimaryOrg().getId());
+		} else {
+			//Otherwise, we're good.
+			apiBook.setOwnerId(book.getOwner().getId());
+		}
+
 		apiBook.setName(book.getName());
 		return apiBook;
 	}
