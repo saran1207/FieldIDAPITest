@@ -19,10 +19,13 @@ import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPag
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
 import org.apache.log4j.Logger;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -191,5 +194,15 @@ public class PublishedProcedureActionsCell extends Panel {
         recurringSchedulesLink.setVisible(hasPublishedProcedureDefinition
                 && procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED));
         return recurringSchedulesLink;
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        /* Add the hover text for the print button. We can't do this using the TipsyBehavior since the button is in
+           a Wicket enclosure. */
+        response.renderJavaScript(
+                "$(document).ready(function(event){$('.lotoHoverTextButton').tipsy({gravity: 'e', fade:true, delayIn:250, live:true})});",
+                "LOTO_PRINT_TIPSY_JS");
+        super.renderHead(response);
     }
 }

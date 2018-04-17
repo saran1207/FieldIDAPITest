@@ -98,7 +98,6 @@ public class SelectLanguagePanel extends Panel {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.renderCSSReference("style/legacy/newCss/component/buttons.css");
         response.renderCSSReference("style/legacy/modal/select-language.css");
     }
 }

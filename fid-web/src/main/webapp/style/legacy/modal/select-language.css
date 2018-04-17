@@ -1,4 +1,4 @@
-body {
+.wicket-modal {
     font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
 }
 .wicket-modal h2 {
@@ -22,4 +22,17 @@ body {
 }
 div.dialog-modal div.w_caption {
     padding-bottom: 0;
+}
+
+.btn-green {
+    background: #60986b;
+    border-color: #568860;
+}
+.btn-green:hover {
+    -webkit-box-shadow: inset 0 0 18px #42694a;
+    box-shadow: inset 0 0 18px #42694a;
+}
+.btn-sml {
+    padding: 5px 12px;
+    font-size: 12px;
 }

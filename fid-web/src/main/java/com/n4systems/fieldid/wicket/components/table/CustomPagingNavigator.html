@@ -5,7 +5,9 @@
     <a wicket:id="first" class="first">&laquo;</a>
     <a wicket:id="prev" class="prev">&lsaquo;</a>
 	<span wicket:id="navigation" class="goto">
-		<a wicket:id="pageLink" href="#"><span wicket:id="pageNumber">5</span></a>
+        <!--Do not allow Google Translate to translate the page number since it causes the creation of
+            duplicate buttons with no text besides the correct buttons-->
+		<a wicket:id="pageLink" href="#" class="notranslate"><span wicket:id="pageNumber">5</span></a>
 	</span>
     <a wicket:id="next" class="next">&rsaquo;</a>
     <a wicket:id="last" class="last">&raquo;</a>
