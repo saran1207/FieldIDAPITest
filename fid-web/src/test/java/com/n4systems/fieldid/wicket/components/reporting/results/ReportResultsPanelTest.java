@@ -65,7 +65,7 @@ public class ReportResultsPanelTest extends FieldIdPanelTest<ReportResultsPanelH
 	@SuppressWarnings({"serial", "deprecation"})
 	@Override
 	public ReportResultsPanel createFixture(String id) {
-		return new ReportResultsPanel(id, new Model<EventReportCriteria>(model)) {
+		return new ReportResultsPanel(true, id, new Model<EventReportCriteria>(model)) {
 			@Override protected SerializableSecurityGuard getSecurityGuard() {
 				return new SerializableSecurityGuard(TenantBuilder.n4(), PrimaryOrgBuilder.aPrimaryOrg().build());
 			}

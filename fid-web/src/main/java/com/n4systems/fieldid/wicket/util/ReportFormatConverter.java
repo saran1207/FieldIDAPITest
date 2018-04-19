@@ -34,15 +34,25 @@ public class ReportFormatConverter {
             FIDLabelModel columnLabelModel = new FIDLabelModel(enabledColumn.getLabel());
 
             if (!disableSorting && enabledColumn.isSortable()) {
-                convertedColumns.add(new FieldIdPropertyColumn(columnLabelModel, enabledColumn, index, true));
+                convertedColumns.add(createSortableColumn(columnLabelModel, enabledColumn, index));
             } else {
-                convertedColumns.add(new FieldIdPropertyColumn(columnLabelModel, enabledColumn, index));
+                convertedColumns.add(createNonSortableColumn(columnLabelModel, enabledColumn, index));
             }
 
             index++;
         }
 
         return convertedColumns;
+    }
+
+    protected FieldIdPropertyColumn createSortableColumn(
+            FIDLabelModel columnLabelModel, ColumnMappingView enabledColumn, int index) {
+        return new FieldIdPropertyColumn(columnLabelModel, enabledColumn, index, true);
+    }
+
+    protected FieldIdPropertyColumn createNonSortableColumn(
+            FIDLabelModel columnLabelModel, ColumnMappingView enabledColumn, int index) {
+        return new FieldIdPropertyColumn(columnLabelModel, enabledColumn, index);
     }
 
     protected Long getId(BaseEntity entity) {

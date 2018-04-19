@@ -81,7 +81,7 @@ public class ProcedureAuditListPanel extends Panel {
             @Override
             public void populateItem(final Item<ICellPopulator<ProcedureAuditEvent>> item, final String componentId, final IModel<ProcedureAuditEvent> rowModel)
             {
-                item.add(new Label(componentId, createLabelModel(rowModel))).add(new AttributeAppender("class", new Model<String>("procedure-code"), ""));
+                item.add(new Label(componentId, createLabelModel(rowModel))).add(new AttributeAppender("class", new Model<String>("procedure-code notranslate"), " "));
 
                 if(rowModel.getObject().getDueDate().before(new Date())) {
                     item.add(new AttributeAppender("class", new Model<String>("overdue"), " "));

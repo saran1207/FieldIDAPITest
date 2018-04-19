@@ -11,8 +11,8 @@ import org.apache.wicket.model.IModel;
 
 public class ProcedureResultsPanel extends SRSResultsPanel<ProcedureCriteria,HasGpsLocation> {
 
-    public ProcedureResultsPanel(String id, IModel<ProcedureCriteria> criteriaModel) {
-        super(id, criteriaModel);
+    public ProcedureResultsPanel(boolean googleTranslateEnabled, String id, IModel<ProcedureCriteria> criteriaModel) {
+        super(googleTranslateEnabled, id, criteriaModel);
     }
 
     @Override

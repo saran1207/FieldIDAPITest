@@ -20,7 +20,7 @@ public class ProcedureAssetCell extends Panel {
 
         add(new BookmarkablePageLink<Void>("assetLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(procedureModel.getObject().getAsset().getId()))
                         .add(new Label("name", procedureModel.getObject().getEquipmentNumber()))
-                        .add(new AttributeAppender("class", new Model<String>("equipment-number"), ""))
+                        .add(new AttributeAppender("class", new Model<String>("equipment-number notranslate"), " "))
         );
     }
 }

@@ -54,7 +54,7 @@ public class ProcedureListPanel extends Panel {
             @Override
             public void populateItem(final Item<ICellPopulator<ProcedureDefinition>> item, final String componentId, final IModel<ProcedureDefinition> rowModel)
             {
-                item.add(new Label(componentId, createLabelModel(rowModel))).add(new AttributeAppender("class", new Model<String>("procedure-code"), ""));
+                item.add(new Label(componentId, createLabelModel(rowModel))).add(new AttributeAppender("class", new Model<String>("procedure-code notranslate"), " "));
             }
         });
 

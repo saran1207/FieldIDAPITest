@@ -518,7 +518,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             response.renderOnDomReadyJavaScript(headerScript);
         }
 
-        if (orgService.getPrimaryOrgForTenant(getTenant().getId()).hasExtendedFeature(ExtendedFeature.GoogleTranslate)) {
+        if (isGoogleTranslateEnabled()) {
             response.renderOnDomReadyJavaScript(
                     "if (isGoogleTranslateAllowedForCurrentLanguage())\n" +
                             "loadGoogleTranslate();\n" +
@@ -529,6 +529,11 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             response.renderOnDomReadyJavaScript("hideGoogleTranslateWidget();");
         }
 
+    }
+
+    public boolean isGoogleTranslateEnabled() {
+        return orgService.getPrimaryOrgForTenant(getTenant().getId()).
+                hasExtendedFeature(ExtendedFeature.GoogleTranslate);
     }
 
     protected void renderJqueryJavaScriptReference(IHeaderResponse response) {
