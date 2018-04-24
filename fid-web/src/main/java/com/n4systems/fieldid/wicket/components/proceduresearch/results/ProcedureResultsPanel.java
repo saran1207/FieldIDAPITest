@@ -1,9 +1,14 @@
 package com.n4systems.fieldid.wicket.components.proceduresearch.results;
 
+import com.n4systems.fieldid.permissions.SerializableSecurityGuard;
+import com.n4systems.fieldid.wicket.components.reporting.columns.display.FieldIdPropertyColumn;
 import com.n4systems.fieldid.wicket.components.search.results.SRSResultsPanel;
 import com.n4systems.fieldid.wicket.data.FieldIdAPIDataProvider;
 import com.n4systems.fieldid.wicket.data.ProcedureDataProvider;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.util.ReportFormatConverter;
 import com.n4systems.model.api.HasGpsLocation;
+import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.search.ProcedureCriteria;
 import com.n4systems.util.views.RowView;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
@@ -36,4 +41,18 @@ public class ProcedureResultsPanel extends SRSResultsPanel<ProcedureCriteria,Has
         };
     }
 
+    @Override
+    protected ReportFormatConverter getReportFormatConverter(SerializableSecurityGuard securityGuard) {
+        return new ReportFormatConverter(securityGuard) {
+            @Override
+            protected FieldIdPropertyColumn createSortableColumn(FIDLabelModel columnLabelModel, ColumnMappingView enabledColumn, int index) {
+                return new ProcedureResultsPropertyColumn(googleTranslateEnabled, columnLabelModel, enabledColumn, index, true);
+            }
+
+            @Override
+            protected FieldIdPropertyColumn createNonSortableColumn(FIDLabelModel columnLabelModel, ColumnMappingView enabledColumn, int index) {
+                return new ProcedureResultsPropertyColumn(googleTranslateEnabled, columnLabelModel, enabledColumn, index);
+            }
+        };
+    }
 }

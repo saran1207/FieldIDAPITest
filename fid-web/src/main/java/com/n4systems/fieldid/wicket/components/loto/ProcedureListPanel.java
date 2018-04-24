@@ -98,7 +98,7 @@ public class ProcedureListPanel extends Panel {
             @Override
             public void populateItem(final Item<ICellPopulator<ProcedureDefinition>> item, final String componentId, final IModel<ProcedureDefinition> rowModel)
             {
-                item.add(new Label(componentId, createLabelModel(rowModel))).add(new AttributeAppender("class", new Model<String>("developed-by"), ""));
+                item.add(new Label(componentId, createLabelModel(rowModel))).add(new AttributeAppender("class", new Model<String>("developed-by notranslate"), " "));
             }
         });
         columns.add(new ProcedureDateColumn(new FIDLabelModel("label.created"), "created", "created"));

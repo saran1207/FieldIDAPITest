@@ -64,7 +64,13 @@ public class EventTypeGroupPanel extends Panel {
 
         columns.add(new PropertyColumn<EventTypeGroup>(new FIDLabelModel("label.report_title"),"reportTitle", "reportTitle"));
 
-        columns.add(new PropertyColumn<EventTypeGroup>(new FIDLabelModel("label.createdby"), "createdBy.firstName, createdBy.lastName", "createdBy.fullName"));
+        columns.add(new PropertyColumn<EventTypeGroup>(new FIDLabelModel("label.createdby"), "createdBy.firstName, createdBy.lastName", "createdBy.fullName") {
+            @Override
+            public void populateItem(Item<ICellPopulator<EventTypeGroup>> item, String componentId, IModel<EventTypeGroup> rowModel) {
+                item.add(new Label(componentId, createLabelModel(rowModel))).
+                        add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+            }
+        });
 
         columns.add(new PropertyColumn<EventTypeGroup>(new FIDLabelModel("label.created_on"), "created", "created") {
             @Override
@@ -74,7 +80,13 @@ public class EventTypeGroupPanel extends Panel {
             }
         });
 
-        columns.add(new PropertyColumn<EventTypeGroup>(new FIDLabelModel("label.modifiedby"), "modifiedBy.firstName, modifiedBy.lastName", "modifiedBy.fullName"));
+        columns.add(new PropertyColumn<EventTypeGroup>(new FIDLabelModel("label.modifiedby"), "modifiedBy.firstName, modifiedBy.lastName", "modifiedBy.fullName") {
+            @Override
+            public void populateItem(Item<ICellPopulator<EventTypeGroup>> item, String componentId, IModel<EventTypeGroup> rowModel) {
+                item.add(new Label(componentId, createLabelModel(rowModel))).
+                        add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+            }
+        });
 
         columns.add(new PropertyColumn<EventTypeGroup>(new FIDLabelModel("label.modified_on"), "modified", "modified") {
             @Override

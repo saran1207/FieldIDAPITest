@@ -33,12 +33,8 @@ public class ReportResultsPropertyColumn extends FieldIdPropertyColumn {
             ICellPopulator<RowView> modelObject = item.getModelObject();
             if (modelObject instanceof ReportResultsPropertyColumn) {
                 String propertyExpression = ((ReportResultsPropertyColumn) modelObject).getPropertyExpression();
-                System.out.println("propertyExpression '" + propertyExpression + "'");
-                if ("performedBy.displayName".equals(propertyExpression) ||
-                        "assigneeName".equals(propertyExpression) ||
-                        "asset.identifiedBy.displayName".equals(propertyExpression) ||
-                        "createdBy.displayName".equals(propertyExpression) ||
-                        "modifiedBy.displayName".equals(propertyExpression)) {
+                boolean translate = "eventResult.displayName".equals(propertyExpression) || "workflowState".equals(propertyExpression);
+                if (!translate) {
                     item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
                 }
             }

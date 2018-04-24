@@ -18,12 +18,16 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -106,7 +110,13 @@ public class AssetEventsPage extends AssetPage{
         add(eventPanel = new EventListPanel("eventPanel", dataProvider) {
             @Override
             protected void addCustomColumns(List<IColumn<? extends Event>> columns) {
-                columns.add(new PropertyColumn<ThingEvent>(new FIDLabelModel("label.assetstatus"), "assetStatus", "assetStatus.displayName"));
+                columns.add(new PropertyColumn<ThingEvent>(new FIDLabelModel("label.assetstatus"), "assetStatus", "assetStatus.displayName") {
+                    @Override
+                    public void populateItem(Item<ICellPopulator<ThingEvent>> item, String componentId, IModel<ThingEvent> rowModel) {
+                        super.populateItem(item, componentId, rowModel);
+                        item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+                    }
+                });
             }
 
             @Override

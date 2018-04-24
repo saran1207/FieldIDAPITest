@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.components.assetsearch.results;
+package com.n4systems.fieldid.wicket.components.proceduresearch.results;
 
 import com.n4systems.fieldid.wicket.components.reporting.columns.display.FieldIdPropertyColumn;
 import com.n4systems.model.search.ColumnMappingView;
@@ -13,16 +13,16 @@ import org.apache.wicket.model.Model;
 /**
  * Override the FieldIdPropertyColumn to provide formatting unique to the Asset Search Results page
  */
-public class AssetSearchResultsPropertyColumn extends FieldIdPropertyColumn {
+public class ProcedureResultsPropertyColumn extends FieldIdPropertyColumn {
 
     private boolean googleTranslateEnabled;
 
-    public AssetSearchResultsPropertyColumn(boolean googleTranslateEnabled, IModel<String> displayModel, ColumnMappingView column, int index, boolean sortable) {
+    public ProcedureResultsPropertyColumn(boolean googleTranslateEnabled, IModel<String> displayModel, ColumnMappingView column, int index, boolean sortable) {
         super(displayModel, column, index, sortable);
         this.googleTranslateEnabled =  googleTranslateEnabled;
     }
 
-    public AssetSearchResultsPropertyColumn(boolean googleTranslateEnabled, IModel<String> displayModel, ColumnMappingView column, int index) {
+    public ProcedureResultsPropertyColumn(boolean googleTranslateEnabled, IModel<String> displayModel, ColumnMappingView column, int index) {
         super(displayModel, column, index);
         this.googleTranslateEnabled = googleTranslateEnabled;
     }
@@ -31,12 +31,12 @@ public class AssetSearchResultsPropertyColumn extends FieldIdPropertyColumn {
     public void populateItem(Item<ICellPopulator<RowView>> item, String componentId, IModel<RowView> rowModel) {
         if (googleTranslateEnabled) {
             ICellPopulator<RowView> modelObject = item.getModelObject();
-            if (modelObject instanceof AssetSearchResultsPropertyColumn) {
-                String propertyExpression = ((AssetSearchResultsPropertyColumn) modelObject).getPropertyExpression();
-                boolean translateValue = "published".equals(propertyExpression) ||
-                        ("assignedUser.displayName".equals(propertyExpression) &&
-                                rowModel.getObject().getValues().get(item.getIndex() - 1).toString().isEmpty());
-                if (!translateValue) {
+            if (modelObject instanceof ProcedureResultsPropertyColumn) {
+                String propertyExpression = ((ProcedureResultsPropertyColumn) modelObject).getPropertyExpression();
+                if ("assigneeName".equals(propertyExpression) ||
+                        "lockedBy.fullName".equals(propertyExpression) ||
+                        "unlockedBy.fullName".equals(propertyExpression) ||
+                        "asset.identifiedBy.fullName".equals(propertyExpression)) {
                     item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
                 }
             }

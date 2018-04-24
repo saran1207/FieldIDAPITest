@@ -58,8 +58,8 @@ ${action.setPageType('event_type', 'list')!}
                 </#if>
 				</td>
 				<td><#if eventType.group?exists><a href="<@s.url value="/w/setup/eventTypeGroupView" uniqueID="${eventType.group.id}" />">${eventType.group.name!}</a></#if></td>
-				<td><#if eventType.createdBy?exists>${eventType.createdBy.fullName!},&nbsp;</#if>${action.formatDateTime(eventType.created)}</td>
-				<td><#if eventType.modifiedBy?exists>${eventType.modifiedBy.fullName!},&nbsp;</#if>${action.formatDateTime(eventType.modified)}</td>
+				<td><#if eventType.createdBy?exists><span class="notranslate">${eventType.createdBy.fullName!},&nbsp;</span></#if><span>${action.formatDateTime(eventType.created)}</span></td>
+				<td><#if eventType.modifiedBy?exists><span class="notranslate">${eventType.modifiedBy.fullName!},&nbsp;</span></#if><span>${action.formatDateTime(eventType.modified)}</span></td>
 				<td>
 					<a href="<@s.url action="eventTypeEdit" uniqueID="${eventType.id}" />"><@s.text name="label.edit" /></a> |
 					<a href="<@s.url action="eventTypeCopy" uniqueID="${eventType.id}" />"><@s.text name="label.copy" /></a>

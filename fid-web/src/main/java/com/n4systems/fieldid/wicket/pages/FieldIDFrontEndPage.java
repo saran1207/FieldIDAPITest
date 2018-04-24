@@ -131,6 +131,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     private ModalWindow languageSelectionModalWindow;
     private final SelectLanguagePanel selectLanguagePanel;
     private WebSessionMap webSessionMap;
+    private Boolean googleTranslateEnabled = null;
 
     public FieldIDFrontEndPage() {
         this(null);
@@ -532,8 +533,10 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     }
 
     public boolean isGoogleTranslateEnabled() {
-        return orgService.getPrimaryOrgForTenant(getTenant().getId()).
+        if (googleTranslateEnabled == null)
+            googleTranslateEnabled = orgService.getPrimaryOrgForTenant(getTenant().getId()).
                 hasExtendedFeature(ExtendedFeature.GoogleTranslate);
+        return googleTranslateEnabled.booleanValue();
     }
 
     protected void renderJqueryJavaScriptReference(IHeaderResponse response) {
