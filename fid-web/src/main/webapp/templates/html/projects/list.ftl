@@ -98,15 +98,15 @@ ${action.setPageType('job', 'list')!}
 		<#list page.getList() as project > 
 			<tr id="project_${project.id}" >
 				<td>${project.eventJob?string(action.getText("label.eventjob"), action.getText("label.assetjob"))}</td>
-				<td>${project.projectID?html}</td>
-				<td><a href="<@s.url action="job" uniqueID="${project.id}" />" >${project.name?html}</td>
-				<td>${(project.owner.internalOrg.name?html)!}&nbsp;</td>
-				<td>${(project.owner.customerOrg.name?html)!}&nbsp;</td>
-				<td>${(project.owner.divisionOrg.name?html)!}&nbsp;</td>
-				<td>${action.formatDateTime(project.started)}&nbsp;</td>
-				<td>${action.formatDateTime(project.estimatedCompletion)}&nbsp;</td>
-				<td>${action.formatDateTime(project.actualCompletion)}&nbsp;</td>
-				<td>${project.status?html}&nbsp;</td>
+				<td class="notranslate">${project.projectID?html}</td>
+				<td class="notranslate"><a href="<@s.url action="job" uniqueID="${project.id}" />" >${project.name?html}</td>
+				<td class="notranslate">${(project.owner.internalOrg.name?html)!}&nbsp;</td>
+				<td class="notranslate">${(project.owner.customerOrg.name?html)!}&nbsp;</td>
+				<td class="notranslate">${(project.owner.divisionOrg.name?html)!}&nbsp;</td>
+				<td class="notranslate">${action.formatDateTime(project.started)}&nbsp;</td>
+				<td class="notranslate">${action.formatDateTime(project.estimatedCompletion)}&nbsp;</td>
+				<td class="notranslate">${action.formatDateTime(project.actualCompletion)}&nbsp;</td>
+				<td class="notranslate">${project.status?html}&nbsp;</td>
 				<td><#if project.open><@s.text name="label.open" /><#else><@s.text name="label.closed" /></#if></td>
 				<#if sessionUser.hasAccess("managejobs") >
 					<td>

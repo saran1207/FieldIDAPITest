@@ -33,10 +33,8 @@ public class ProcedureResultsPropertyColumn extends FieldIdPropertyColumn {
             ICellPopulator<RowView> modelObject = item.getModelObject();
             if (modelObject instanceof ProcedureResultsPropertyColumn) {
                 String propertyExpression = ((ProcedureResultsPropertyColumn) modelObject).getPropertyExpression();
-                if ("assigneeName".equals(propertyExpression) ||
-                        "lockedBy.fullName".equals(propertyExpression) ||
-                        "unlockedBy.fullName".equals(propertyExpression) ||
-                        "asset.identifiedBy.fullName".equals(propertyExpression)) {
+                boolean translate = "workflowState".equals(propertyExpression);
+                if (!translate) {
                     item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
                 }
             }

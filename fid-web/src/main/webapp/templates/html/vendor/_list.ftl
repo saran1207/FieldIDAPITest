@@ -20,16 +20,16 @@
 		
 		<#list page.list as asset>
 		<tr>
-			<td>
+			<td class="notranslate">
 				<a href='<@s.url value="showNetworkAsset.action" uniqueID="${asset.id}"/>' >${asset.identifier}</a>
 			</td>
 			<#if asset.rfidNumber??>
-				<td>${asset.rfidNumber}</td>
+				<td class="notranslate">${asset.rfidNumber}</td>
 			<#else>
 				<td>&nbsp;</td>
 			</#if>			
-			<td>${asset.type.name}</td>
-			<td>${asset.description!}&nbsp;</td>
+			<td class="notranslate">${asset.type.name}</td>
+			<td class="notranslate">${asset.description!}&nbsp;</td>
 			<td>
 			    <#if action.isAssetAlreadyRegistered(asset)>
                     <@s.text name="label.already_registered"/>

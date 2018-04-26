@@ -16,10 +16,10 @@
 
         <#list bulkRegisterData.items as item>
         <tr>
-            <td>
+            <td class="notranslate">
                 ${item.assetType.name}
             </td>
-            <td>
+            <td class="notranslate">
                 ${item.count}
             </td>
             <td>

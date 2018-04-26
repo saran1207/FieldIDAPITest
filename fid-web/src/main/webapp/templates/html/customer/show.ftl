@@ -7,7 +7,7 @@
 
 <#include '_customerInfo.ftl'>
 
-<div id="mainContent">
+<div id="mainContent" class="notranslate">
 
 	<h1>${customer.name}</h1>
 	<p class="customerConnection">

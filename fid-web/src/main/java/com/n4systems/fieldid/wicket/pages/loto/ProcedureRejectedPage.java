@@ -14,12 +14,16 @@ import com.n4systems.model.procedure.PublishedState;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.ContextImage;
+import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -107,9 +111,30 @@ public class ProcedureRejectedPage extends ProcedureApprovalsPage implements IAj
         add(procedureListPanel = new ProcedureListPanel("procedureListPanel", dataProvider) {
             @Override
             protected void addCustomColumns(List<IColumn<? extends ProcedureDefinition>> columns) {
-                columns.add(new ProcedureRejectedDateColumn(new FIDLabelModel("label.rejected_on"), "rejectedDate", "rejectedDate"));
-                columns.add(new PropertyColumn<ProcedureDefinition>(new FIDLabelModel("label.rejected_by"),"rejectedBy.firstName", "rejectedBy.fullName"));
-                columns.add(new PropertyColumn<ProcedureDefinition>(new FIDLabelModel("label.rejectedReason"),"rejectedReason", "rejectedReason"));
+                columns.add(new ProcedureRejectedDateColumn(new FIDLabelModel("label.rejected_on"), "rejectedDate", "rejectedDate") {
+                    @Override
+                    public void populateItem(final Item<ICellPopulator<ProcedureDefinition>> item, final String componentId, final IModel<ProcedureDefinition> rowModel)
+                    {
+                        super.populateItem(item, componentId, rowModel);
+                        item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+                    }
+                });
+                columns.add(new PropertyColumn<ProcedureDefinition>(new FIDLabelModel("label.rejected_by"),"rejectedBy.firstName", "rejectedBy.fullName") {
+                    @Override
+                    public void populateItem(final Item<ICellPopulator<ProcedureDefinition>> item, final String componentId, final IModel<ProcedureDefinition> rowModel)
+                    {
+                        super.populateItem(item, componentId, rowModel);
+                        item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+                    }
+                });
+                columns.add(new PropertyColumn<ProcedureDefinition>(new FIDLabelModel("label.rejectedReason"),"rejectedReason", "rejectedReason") {
+                    @Override
+                    public void populateItem(final Item<ICellPopulator<ProcedureDefinition>> item, final String componentId, final IModel<ProcedureDefinition> rowModel)
+                    {
+                        super.populateItem(item, componentId, rowModel);
+                        item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+                    }
+                });
          }
 
             @Override

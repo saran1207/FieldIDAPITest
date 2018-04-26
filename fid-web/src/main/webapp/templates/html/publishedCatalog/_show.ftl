@@ -13,7 +13,7 @@
 </head>
 <div class="safetyNetworkSplash">
 	<h1 class="safetyNetworkHeadings"><@s.text name="label.view_catalog"/></h1>
-	<div id="steps">
+	<div id="steps" class="notranslate">
 		<div class="step">
 			<h2>1. <@s.text name="label.catalog_import"/> <#assign tenant=linkedTenant/><#include "../common/_displayTenantLogo.ftl"/></h2>
 			<div class="stepContent"  id="step1">

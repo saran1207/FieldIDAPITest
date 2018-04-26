@@ -54,7 +54,8 @@ public class ProcedureListPanel extends Panel {
             @Override
             public void populateItem(final Item<ICellPopulator<ProcedureDefinition>> item, final String componentId, final IModel<ProcedureDefinition> rowModel)
             {
-                item.add(new Label(componentId, createLabelModel(rowModel))).add(new AttributeAppender("class", new Model<String>("procedure-code notranslate"), " "));
+                super.populateItem(item, componentId, rowModel);
+                item.add(new AttributeAppender("class", new Model<String>("procedure-code notranslate"), " "));
             }
         });
 
@@ -65,31 +66,55 @@ public class ProcedureListPanel extends Panel {
             @Override
             public void populateItem(final Item<ICellPopulator<ProcedureDefinition>> item, final String componentId, final IModel<ProcedureDefinition> rowModel)
             {
-                item.add(new Label(componentId, createLabelModel(rowModel))).add(new AttributeAppender("class", new Model<String>("revision-number"), ""));
+                super.populateItem(item, componentId, rowModel);
+                item.add(new AttributeAppender("class", new Model<String>("revision-number notranslate"), " "));
             }
         });
 
-        columns.add(new PropertyColumn<ProcedureDefinition>(new FIDLabelModel("label.reference#"), "asset.customerRefNumber", "asset.customerRefNumber"));
+        columns.add(new PropertyColumn<ProcedureDefinition>(new FIDLabelModel("label.reference#"), "asset.customerRefNumber", "asset.customerRefNumber") {
+            @Override
+            public void populateItem(final Item<ICellPopulator<ProcedureDefinition>> item, final String componentId, final IModel<ProcedureDefinition> rowModel)
+            {
+                super.populateItem(item, componentId, rowModel);
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+            }
+        });
 
-        columns.add(new ProcedureAssetColumn(new FIDLabelModel("label.equipment_#"),"equipmentNumber", "equipmentNumber"));
+        columns.add(new ProcedureAssetColumn(new FIDLabelModel("label.equipment_#"),"equipmentNumber", "equipmentNumber") {
+            @Override
+            public void populateItem(final Item<ICellPopulator<ProcedureDefinition>> item, final String componentId, final IModel<ProcedureDefinition> rowModel)
+            {
+                super.populateItem(item, componentId, rowModel);
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+            }
+        });
 
         columns.add(new PropertyColumn<ProcedureDefinition>(new FIDLabelModel("label.equipment_location"),"equipmentLocation", "equipmentLocation")
         {
             @Override
             public void populateItem(final Item<ICellPopulator<ProcedureDefinition>> item, final String componentId, final IModel<ProcedureDefinition> rowModel)
             {
-                item.add(new Label(componentId, createLabelModel(rowModel))).add(new AttributeAppender("class", new Model<String>("equipment-loc"), ""));
+                super.populateItem(item, componentId, rowModel);
+                item.add(new AttributeAppender("class", new Model<String>("equipment-loc notranslate"), " "));
             }
         });
 
-        columns.add(new PropertyColumn<ProcedureDefinition>(new FIDLabelModel("label.equipment_type"),"asset.type.name", "asset.type.name"));
+        columns.add(new PropertyColumn<ProcedureDefinition>(new FIDLabelModel("label.equipment_type"),"asset.type.name", "asset.type.name") {
+            @Override
+            public void populateItem(final Item<ICellPopulator<ProcedureDefinition>> item, final String componentId, final IModel<ProcedureDefinition> rowModel)
+            {
+                super.populateItem(item, componentId, rowModel);
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+            }
+        });
 
         columns.add(new PropertyColumn<ProcedureDefinition>(new FIDLabelModel("label.building"),"building", "building")
         {
             @Override
             public void populateItem(final Item<ICellPopulator<ProcedureDefinition>> item, final String componentId, final IModel<ProcedureDefinition> rowModel)
             {
-                item.add(new Label(componentId, createLabelModel(rowModel))).add(new AttributeAppender("class", new Model<String>("building"), ""));
+                super.populateItem(item, componentId, rowModel);
+                item.add(new AttributeAppender("class", new Model<String>("building notranslate"), " "));
             }
         });
 
@@ -98,10 +123,18 @@ public class ProcedureListPanel extends Panel {
             @Override
             public void populateItem(final Item<ICellPopulator<ProcedureDefinition>> item, final String componentId, final IModel<ProcedureDefinition> rowModel)
             {
-                item.add(new Label(componentId, createLabelModel(rowModel))).add(new AttributeAppender("class", new Model<String>("developed-by notranslate"), " "));
+                super.populateItem(item, componentId, rowModel);
+                item.add(new AttributeAppender("class", new Model<String>("developed-by notranslate"), " "));
             }
         });
-        columns.add(new ProcedureDateColumn(new FIDLabelModel("label.created"), "created", "created"));
+        columns.add(new ProcedureDateColumn(new FIDLabelModel("label.created"), "created", "created") {
+            @Override
+            public void populateItem(final Item<ICellPopulator<ProcedureDefinition>> item, final String componentId, final IModel<ProcedureDefinition> rowModel)
+            {
+                super.populateItem(item, componentId, rowModel);
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+            }
+        });
 
         addCustomColumns(columns);
         addActionColumn(columns);

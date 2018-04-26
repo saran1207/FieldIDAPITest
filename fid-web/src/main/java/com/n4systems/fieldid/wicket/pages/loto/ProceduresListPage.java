@@ -56,12 +56,9 @@ public class ProceduresListPage extends LotoPage {
                         item.add(new Label("dateUnlocked", new DayDisplayModel(new PropertyModel<Date>(procedure, "unlockDate"), true, getCurrentUser().getTimeZone())));
                     }
                 }
-                item.add((new Label("lockedBy", new PropertyModel<String>(procedure, "lockedBy.displayName"))).
-                        add(new AttributeAppender("class", new Model<String>("notranslate"), " ")));
-                item.add((new Label("unlockedBy", new PropertyModel<String>(procedure, "unlockedBy.displayName"))).
-                        add(new AttributeAppender("class", new Model<String>("notranslate"), " ")));
-                item.add((new Label("procedureCode", new PropertyModel<String>(procedure, "type.procedureCode"))).
-                        add(new AttributeAppender("class", new Model<String>("notranslate"), " ")));
+                item.add(new Label("lockedBy", new PropertyModel<String>(procedure, "lockedBy.displayName")));
+                item.add(new Label("unlockedBy", new PropertyModel<String>(procedure, "unlockedBy.displayName")));
+                item.add(new Label("procedureCode", new PropertyModel<String>(procedure, "type.procedureCode")));
                 item.add(new Label("procedureType", new PropertyModel<String>(procedure, "type.procedureType.label")));
                 item.add(new Label("revision", new PropertyModel<Long>(procedure, "type.revisionNumber")));
                 item.add(new Label("state", new PropertyModel<Long>(procedure, "workflowState.label")));
