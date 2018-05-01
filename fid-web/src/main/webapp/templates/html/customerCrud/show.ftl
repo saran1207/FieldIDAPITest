@@ -41,15 +41,15 @@ ${action.setPageType('customer','show')!}
 		</#if>
 		
 		<div class="details <#if !logoImageDirectory?exists>noImage</#if>">
-			<h3 class="customerName">${customerName!}</h3>
+			<h3 class="customerName notranslate">${customerName!}</h3>
 					
 			<div class="customerDetails">
 				<label class="label" for="id"><@s.text name="label.id"/></label>:
-				<span>${customerId!}</span>
+				<span class="notranslate">${customerId!}</span>
 			</div>
 			<div class="customerDetails">
 				<label class="label" for="organization"><@s.text name="label.organizationalunit"/></label>:
-				<span>${customer.parent.name!}</span>
+				<span class="notranslate">${customer.parent.name!}</span>
 			</div>
 			<div class="customerLinks"> 
 				<a href='<@s.url action="divisions" customerId="${customer.id}"/>'>${divisionCount} <@s.text name="label.divisions"/></a>
@@ -59,7 +59,7 @@ ${action.setPageType('customer','show')!}
 		
 		<div class="notes">
 			<label><@s.text name="label.notes" /></label>
-			<div class="noteText">${action.replaceCR((customer.notes?html)!"")}</div>
+			<div class="noteText notranslate">${action.replaceCR((customer.notes?html)!"")}</div>
 		</div>
 
 	</div>
@@ -68,44 +68,44 @@ ${action.setPageType('customer','show')!}
 		<h2><@s.text name="label.contact_information"/></h2>
 		<p>
 			<label for="contactName"><@s.text name="label.contactname"/></label>
-			<span class="fieldValue">${contactName!}</span>
+			<span class="fieldValue notranslate">${contactName!}</span>
 		</p>
 		<p>
 			<label for="contactEmail"><@s.text name="label.email_address"/></label>
-			<span class="fieldValue"><a href="mailto:${accountManagerEmail!}">${accountManagerEmail!}</a></span>
+			<span class="fieldValue notranslate"><a href="mailto:${accountManagerEmail!}">${accountManagerEmail!}</a></span>
 			
 		</p>
 		<p>
 			<label for="streetAddress"><@s.text name="label.streetaddress"/></label>
-			<span class="fieldValue">${addressInfo.streetAddress!}</span>
+			<span class="fieldValue notranslate">${addressInfo.streetAddress!}</span>
 		</p>
 		<p>
 			<label for="city"><@s.text name="label.city"/></label>
-			<span class="fieldValue">${addressInfo.city!}</span>
+			<span class="fieldValue notranslate">${addressInfo.city!}</span>
 		</p>
 		<p>
 			<label for="state"><@s.text name="label.state"/></label>
-			<span class="fieldValue">${addressInfo.state!}</span>
+			<span class="fieldValue notranslate">${addressInfo.state!}</span>
 		</p>
 		<p>
 			<label for="zip"><@s.text name="label.zip"/></label>
-			<span class="fieldValue">${addressInfo.zip!}</span>
+			<span class="fieldValue notranslate">${addressInfo.zip!}</span>
 		</p>
 		<p>
 			<label for="country"><@s.text name="label.country"/></label>
-			<span class="fieldValue">${addressInfo.country!}</span>
+			<span class="fieldValue notranslate">${addressInfo.country!}</span>
 		</p>
 		<p>
 			<label for="phone1"><@s.text name="label.phone1"/></label>
-			<span class="fieldValue">${addressInfo.phone1!}</span>
+			<span class="fieldValue notranslate">${addressInfo.phone1!}</span>
 		</p>
 		<p>
 			<label for="phone2"><@s.text name="label.phone2"/></label>
-			<span class="fieldValue">${addressInfo.phone2!}</span>
+			<span class="fieldValue notranslate">${addressInfo.phone2!}</span>
 		</p>
 		<p>
 			<label for="fax"><@s.text name="label.fax"/></label>
-			<span class="fieldValue">${addressInfo.fax1!}</span>
+			<span class="fieldValue notranslate">${addressInfo.fax1!}</span>
 		</p>
 	</div>
 </div>

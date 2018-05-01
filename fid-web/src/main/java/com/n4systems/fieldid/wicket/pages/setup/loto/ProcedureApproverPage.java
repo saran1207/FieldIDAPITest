@@ -53,26 +53,50 @@ public class ProcedureApproverPage extends FieldIDTemplatePage {
                 columns.add(new UserNameLinkColumn(new FIDLabelModel("label.name_first_last"), "firstName, lastName") {
                     @Override
                     public void populateItem(Item<ICellPopulator<User>> cellItem, String componentId, IModel<User> rowModel) {
-                        cellItem.add(new UserNameLinkCell(componentId, rowModel)).
-                                add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+                        super.populateItem(cellItem, componentId, rowModel);
+                        cellItem.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
                     }
                 });
                 columns.add(new PropertyColumn<User>(new FIDLabelModel("label.username"), "userID", "userID") {
                     @Override
                     public void populateItem(Item<ICellPopulator<User>> item, String componentId, IModel<User> rowModel) {
-                        item.add(new Label(componentId, createLabelModel(rowModel))).
-                                add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+                        super.populateItem(item, componentId, rowModel);
+                        item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
                     }
                 });
-                columns.add(new UserGroupColumn(new FIDLabelModel("label.user_group")));
-                columns.add(new PropertyColumn<>(new FIDLabelModel("label.organization"), "owner", "owner.rootOrgName"));
-                columns.add(new PropertyColumn<>(new FIDLabelModel("label.customer"), "owner.customerOrg", "owner.customerOrg.name"));
-                columns.add(new PropertyColumn<>(new FIDLabelModel("label.division"), "owner.divisionOrg", "owner.divisionOrg.name"));
+                columns.add(new UserGroupColumn(new FIDLabelModel("label.user_group")) {
+                    @Override
+                    public void populateItem(Item<ICellPopulator<User>> cellItem, String componentId, IModel<User> rowModel) {
+                        super.populateItem(cellItem, componentId, rowModel);
+                        cellItem.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+                    }
+                });
+                columns.add(new PropertyColumn<User>(new FIDLabelModel("label.organization"), "owner", "owner.rootOrgName") {
+                    @Override
+                    public void populateItem(Item item, String componentId, IModel rowModel) {
+                        super.populateItem(item, componentId, rowModel);
+                        item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+                    }
+                });
+                columns.add(new PropertyColumn<User>(new FIDLabelModel("label.customer"), "owner.customerOrg", "owner.customerOrg.name"){
+                    @Override
+                    public void populateItem(Item<ICellPopulator<User>> item, String componentId, IModel<User> rowModel) {
+                        super.populateItem(item, componentId, rowModel);
+                        item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+                    }
+                });
+                columns.add(new PropertyColumn<User>(new FIDLabelModel("label.division"), "owner.divisionOrg", "owner.divisionOrg.name") {
+                    @Override
+                    public void populateItem(Item<ICellPopulator<User>> item, String componentId, IModel<User> rowModel) {
+                        super.populateItem(item, componentId, rowModel);
+                        item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+                    }
+                });
                 columns.add(new PropertyColumn<User>(new FIDLabelModel("label.emailaddress"), "emailAddress", "emailAddress") {
                     @Override
                     public void populateItem(Item<ICellPopulator<User>> item, String componentId, IModel<User> rowModel) {
-                        item.add(new Label(componentId, createLabelModel(rowModel))).
-                                add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+                        super.populateItem(item, componentId, rowModel);
+                        item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
                     }
                 });
                 if(Permissions.hasOneOf(getCurrentUser().getPermissions(), Permissions.MANAGE_SYSTEM_USERS)) {

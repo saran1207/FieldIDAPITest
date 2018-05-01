@@ -32,21 +32,45 @@ public class ArchivedUsersListPage extends UsersListPage {
         columns.add(new PropertyColumn<User>(new FIDLabelModel("label.name_first_last"), "firstName, lastName", "fullName") {
             @Override
             public void populateItem(Item<ICellPopulator<User>> cellItem, String componentId, IModel<User> rowModel) {
-                cellItem.add(new Label(componentId, createLabelModel(rowModel))).
-                        add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+                super.populateItem(cellItem, componentId, rowModel);
+                cellItem.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
             }
         });
-        columns.add(new PropertyColumn<User>(new FIDLabelModel("label.organization"), "owner", "owner.name"));
-        columns.add(new PropertyColumn<User>(new FIDLabelModel("label.customer"), "owner.customerOrg", "owner.customerOrg.name"));
-        columns.add(new PropertyColumn<User>(new FIDLabelModel("label.division"), "owner.divisionOrg", "owner.divisionOrg.name"));
+        columns.add(new PropertyColumn<User>(new FIDLabelModel("label.organization"), "owner", "owner.name") {
+            @Override
+            public void populateItem(Item<ICellPopulator<User>> cellItem, String componentId, IModel<User> rowModel) {
+                super.populateItem(cellItem, componentId, rowModel);
+                cellItem.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+            }
+        });
+        columns.add(new PropertyColumn<User>(new FIDLabelModel("label.customer"), "owner.customerOrg", "owner.customerOrg.name") {
+            @Override
+            public void populateItem(Item<ICellPopulator<User>> cellItem, String componentId, IModel<User> rowModel) {
+                super.populateItem(cellItem, componentId, rowModel);
+                cellItem.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+            }
+        });
+        columns.add(new PropertyColumn<User>(new FIDLabelModel("label.division"), "owner.divisionOrg", "owner.divisionOrg.name") {
+            @Override
+            public void populateItem(Item<ICellPopulator<User>> cellItem, String componentId, IModel<User> rowModel) {
+                super.populateItem(cellItem, componentId, rowModel);
+                cellItem.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+            }
+        });
         columns.add(new PropertyColumn<User>(new FIDLabelModel("label.emailaddress"), "emailAddress", "emailAddress") {
             @Override
             public void populateItem(Item<ICellPopulator<User>> cellItem, String componentId, IModel<User> rowModel) {
-                cellItem.add(new Label(componentId, createLabelModel(rowModel))).
-                        add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+                super.populateItem(cellItem, componentId, rowModel);
+                cellItem.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
             }
         });
-        columns.add(new PropertyColumn<User>(new FIDLabelModel("label.lastlogin"), "created"));
+        columns.add(new PropertyColumn<User>(new FIDLabelModel("label.lastlogin"), "created") {
+            @Override
+            public void populateItem(Item<ICellPopulator<User>> cellItem, String componentId, IModel<User> rowModel) {
+                super.populateItem(cellItem, componentId, rowModel);
+                cellItem.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+            }
+        });
         columns.add(new ArchivedUsersListActionColumn() {
             @Override
             protected void onError(AjaxRequestTarget target, String message) {

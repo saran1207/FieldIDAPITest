@@ -56,7 +56,7 @@ ${action.setPageType('predefined_locations', 'location_list')!}
 		<@s.submit id="editLocation" name="edit" key="label.edit_location"/>
 	</div>
 
-	<div class="treeBox">
+	<div class="treeBox notranslate">
 		<div class="infoSet">
 			<div class="fieldHolder">
 				<@n4.hierarchicalList id="nodeList" name="heirarchicalList" nodesList=helper.predefinedLocationTree value="${parentId!}"/>

@@ -8,7 +8,7 @@ ${action.setPageType('asset_code_mapping','list')!}
 	
 	<#list assetCodeMappings as assetCodeMapping >
 		<tr >
-			<td>${assetCodeMapping.assetCode}</td>
+			<td class="notranslate">${assetCodeMapping.assetCode}</td>
 			<td>
 				<a href="<@s.url value="assetCodeMappingEdit.action" uniqueID="${assetCodeMapping.uniqueID}" />" ><@s.text name="label.edit" /></a>&nbsp;&nbsp;
 				<a href="<@s.url value="assetCodeMappingRemove.action" uniqueID="${assetCodeMapping.uniqueID}" />" onclick="return confirm('<@s.text name="label.areyousure" />');" ><@s.text name="label.remove" /></a>

@@ -45,4 +45,19 @@ public class AssetSearchResultsPropertyColumn extends FieldIdPropertyColumn {
         label.setEscapeModelStrings(false);
         item.add(label);
     }
+
+    @Override
+    public String getCssClass() {
+        /* Turn off google translation for custom attributes */
+        String cssClass = super.getCssClass();
+        if (getGroupKey() == null || getGroupKey().equals("custom_created_columns")) {
+            if (cssClass != null && !cssClass.isEmpty()) {
+                cssClass+=" notranslate";
+            }
+            else {
+                cssClass = "notranslate";
+            }
+        }
+        return cssClass;
+    }
 }

@@ -181,12 +181,19 @@ public abstract class EventBooksListPage extends FieldIDTemplatePage {
             {
                 item.add(new EventBooksEditCell(componentId,
                                                 rowModel));
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
             }
         });
 
         columns.add(new PropertyColumn<EventBook>(new FIDLabelModel("label.jobsite"),
                                                   "owner.name",
-                                                  "owner.name"));
+                                                  "owner.name") {
+            @Override
+            public void populateItem(Item<ICellPopulator<EventBook>> item, String componentId, IModel<EventBook> rowModel) {
+                super.populateItem(item, componentId, rowModel);
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+            }
+        });
 
         columns.add(new PropertyColumn<EventBook>(new FIDLabelModel("label.createdby"),
                 "createdBy.firstName, createdBy.lastName",
@@ -200,7 +207,13 @@ public abstract class EventBooksListPage extends FieldIDTemplatePage {
 
         columns.add(new PropertyColumn<EventBook>(new FIDLabelModel("label.created_on"),
                                                   "created",
-                                                  "created"));
+                                                  "created") {
+            @Override
+            public void populateItem(Item<ICellPopulator<EventBook>> item, String componentId, IModel<EventBook> rowModel) {
+                super.populateItem(item, componentId, rowModel);
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+            }
+        });
 
         columns.add(new PropertyColumn<EventBook>(new FIDLabelModel("label.modifiedby"),
                 "modifiedBy.firstName, modifiedBy.lastName",

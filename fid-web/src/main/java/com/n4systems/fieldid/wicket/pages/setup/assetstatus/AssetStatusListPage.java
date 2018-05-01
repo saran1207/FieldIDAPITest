@@ -124,7 +124,13 @@ public abstract class AssetStatusListPage extends FieldIDTemplatePage {
     private List<IColumn<AssetStatus>> getAssetStatusColumns() {
         List<IColumn<AssetStatus>> columns = Lists.newArrayList();
 
-        columns.add(new PropertyColumn<AssetStatus>(new FIDLabelModel("label.name"), "name", "name"));
+        columns.add(new PropertyColumn<AssetStatus>(new FIDLabelModel("label.name"), "name", "name") {
+            @Override
+            public void populateItem(Item<ICellPopulator<AssetStatus>> item, String componentId, IModel<AssetStatus> rowModel) {
+                super.populateItem(item, componentId, rowModel);
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+            }
+        });
 
         columns.add(new PropertyColumn<AssetStatus>(new FIDLabelModel("label.createdby"), "createdBy.lastName", "createdBy.displayName") {
             @Override
@@ -139,6 +145,7 @@ public abstract class AssetStatusListPage extends FieldIDTemplatePage {
             public void populateItem(Item<ICellPopulator<AssetStatus>> item, String componentId, IModel<AssetStatus> rowModel) {
                 Date created = rowModel.getObject().getCreated();
                 item.add(new Label(componentId, new DayDisplayModel(Model.of(created)).includeTime().withTimeZone(FieldIDSession.get().getSessionUser().getTimeZone())));
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
             }
         });
 
@@ -155,6 +162,7 @@ public abstract class AssetStatusListPage extends FieldIDTemplatePage {
             public void populateItem(Item<ICellPopulator<AssetStatus>> item, String componentId, IModel<AssetStatus> rowModel) {
                 Date modified = rowModel.getObject().getModified();
                 item.add(new Label(componentId, new DayDisplayModel(Model.of(modified)).includeTime().withTimeZone(FieldIDSession.get().getSessionUser().getTimeZone())));
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
             }
         });
 
