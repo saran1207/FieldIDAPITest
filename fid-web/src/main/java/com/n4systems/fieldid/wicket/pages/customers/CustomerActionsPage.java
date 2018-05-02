@@ -342,7 +342,7 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
             @Override
             public Panel getPanel(String panelId)
             {
-                return new CustomerUsersPanel(panelId) ;
+                return new CustomerUsersPanel(panelId, customerSelectedForEditModel, sessionUserModel, getLoaderFactory());
             }
             @Override
             public boolean isVisible() {

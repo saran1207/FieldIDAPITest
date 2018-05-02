@@ -2,6 +2,7 @@
 div.wicket-tabpanel div.tab-row {
     padding-bottom: 2px;
     margin-bottom: -3px;
+    overflow: hidden;
 }
 div.wicket-tabpanel-right div.tab-row {
     float:right
@@ -10,6 +11,7 @@ div.wicket-tabpanel div.tab-panel {
     border-top: 1px solid #999999;
     clear: both;
     min-height: 550px;
+    padding-top: 5px;
 }
 
 /* Wicket tab panel styles */
