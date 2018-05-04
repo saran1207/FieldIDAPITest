@@ -5,28 +5,30 @@
       lang="en">
 
 <wicket:panel>
-    <div class="upcomingEvent" name="upcomingLoto" wicket:id="upcomingLoto">
-        <div wicket:id="scheduleIcon"></div>
-        <div class="scheduleInfo notranslate">
-            <div class="eventType" wicket:id="upcomingEventType"/>
-            <div class="eventDate">
+    <div style="display: table; width: 645px;">
+    <div style="display: table-row;" name="upcomingLoto" wicket:id="upcomingLoto">
+        <div style="display: table-cell; width: 35px;" wicket:id="scheduleIcon"></div>
+        <div style="display: table-cell; vertical-align: middle;"class="notranslate">
+            <div style="font-weight: bold;" wicket:id="upcomingEventType"/>
+            <div>
                 <abbr wicket:id="upcomingLotoDate"></abbr>
                 <span wicket:id="onDate"></span>
             </div>
         </div>
-        <div wicket:id="editLoto"/>
+        <div  style="display: table-cell; " wicket:id="editLoto"/>
     </div>
-    <div class="upcomingEvent" name="upcomingEventsList" wicket:id="upcomingEventsList">
-        <div wicket:id="scheduleIcon"></div>
-        <div class="scheduleInfo notranslate">
-            <div class="eventType" name="upcomingEventType" wicket:id="upcomingEventType"/>
-            <div class="eventDate" name="eventDate">
+    <div style="display: table-row;" name="upcomingEventsList" wicket:id="upcomingEventsList">
+        <div style="display: table-cell; width:35px;" wicket:id="scheduleIcon"></div>
+        <div style="display: table-cell; vertical-align: middle; width: 100%;" class="notranslate">
+            <div style="font-weight: bold;" class="eventType" name="upcomingEventType" wicket:id="upcomingEventType"/>
+            <div name="eventDate">
                 <abbr wicket:id="upcomingEventDate" name="upcomingEventDate"></abbr>
                 <span wicket:id="onDate" name="onDate"></span>
             </div>
          </div>
-        <div wicket:id="openActions" name="openActions"/>
+        <div style="display: table-cell; " wicket:id="openActions" name="openActions"/>
     </div>
+        </div>
 </wicket:panel>
 
 </html>

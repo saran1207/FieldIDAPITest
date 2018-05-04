@@ -9,6 +9,7 @@ import com.n4systems.fieldid.wicket.pages.masterevent.EditMasterEventPage;
 import com.n4systems.model.Event;
 import com.n4systems.model.ThingEvent;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -51,4 +52,10 @@ public class EventActionsCell extends Panel {
                 .add(new AttributeModifier("class", viewButtonStyle)));
     }
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.renderJavaScriptReference("javascript/dropdownMenu.js", "dropdownMenuJS");
+        response.renderCSSReference("style/legacy/component/dropdownMenu.css");
+    }
 }
