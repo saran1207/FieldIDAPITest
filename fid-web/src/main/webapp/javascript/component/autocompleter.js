@@ -30,5 +30,5 @@ jQuery(document).ready(function() {
 });
 
 function displayString (item) {
-   return "<a>" + item.assetType + " : " + "<span class='strong'>" + item.label + "</span> / RIFD: " + item.rfidNumber + " / REF: " + item.customerRefNumber + "</a>";
+   return "<a class='notranslate'>" + item.assetType + " : " + "<span class='strong'>" + item.label + "</span> / RIFD: " + item.rfidNumber + " / REF: " + item.customerRefNumber + "</a>";
 }
