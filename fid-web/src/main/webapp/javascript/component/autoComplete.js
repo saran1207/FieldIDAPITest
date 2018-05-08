@@ -134,6 +134,7 @@ var autoCompleter = (function() {
 			$('.tipsy').remove();  // make sure all pre-existing tooltips are removed.
 			// hack to remove jquery styling because rounded corners mucks up the border.
 			$('.ui-autocomplete').removeClass('ui-corner-all');
+			$('.ui-autocomplete').addClass('notranslate');
 		});
 		auto.bind("autocompleteclose", function(event, ui) {
 			$("#"+id).focus();
