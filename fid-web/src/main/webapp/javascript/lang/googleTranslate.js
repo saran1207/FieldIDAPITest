@@ -10,7 +10,7 @@ function loadGoogleTranslate() {
 function googleTranslateElementInit() {
     new google.translate.TranslateElement({
         pageLanguage: 'en',
-        includedLanguages: 'en,es,fr,de,ar',
+        includedLanguages: 'en,es,fr,de',
         layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
     }, 'google_translate_element');
 }

@@ -27,6 +27,13 @@ jQuery(document).ready(function() {
             .append(displayString(item))
             .appendTo( ul );
     };
+    jQuery("#searchText").bind("autocompleteopen", function(event, ui) {
+        /* Position the popup menu so its right edge matches the right edge of the search box container */
+        var menuWidth = jQuery('.ui-autocomplete:visible').outerWidth();
+        var rightEdge = jQuery('#smartSearchContainer').offset().left + jQuery('#smartSearchContainer').outerWidth();
+        var popupLeftEdge = rightEdge - menuWidth;
+        jQuery('.ui-autocomplete:visible').css('left', popupLeftEdge);
+    });
 });
 
 function displayString (item) {
