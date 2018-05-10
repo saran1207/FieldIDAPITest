@@ -11,8 +11,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 /**
- * The Divisions panel has two sets of content. One is to list the current divisions and the other is to add/edit a
- * division.
+ * The Divisions panel has two sets of content. One is to list the current divisions (divided into active and archived)
+ * and the other is to add/edit a division.
  */
 public class CustomerDivisionsPanel extends Panel {
 

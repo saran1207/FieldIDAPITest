@@ -125,7 +125,6 @@ public class CustomerUsersPanel extends Panel {
                         item.add(new Link("viewUserLink") {
                             @Override
                             public void onClick() {
-                                System.out.println("view link clicked");
                                 //<a href="<@s.url action="viewUser" uniqueID="${user.id!}" includeParams="get"/>" >${user.userID?html!}</a>
                                 setResponsePage(ViewUserPage.class, PageParametersBuilder.param("uniqueID", user.getId()));
                             }

@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.setup;
 
 import com.n4systems.fieldid.wicket.pages.asset.AssetImportPage;
 import com.n4systems.fieldid.wicket.pages.customers.CustomerActionsPage;
+import com.n4systems.fieldid.wicket.pages.customers.CustomerDivisionsListPanel;
 import com.n4systems.fieldid.wicket.pages.event.EventImportPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -12,7 +13,7 @@ import org.apache.wicket.request.flow.RedirectToUrlException;
 public class ImportPage extends SetupPage {
 
     public ImportPage() {
-        add(new AjaxLink<AssetImportPage>("importOwnersButton") {
+        add(new AjaxLink<CustomerActionsPage>("importOwnersButton") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 getRequestCycle().setResponsePage(CustomerActionsPage.class);

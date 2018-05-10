@@ -44,15 +44,15 @@
 			</div>
 
 		<div wicket:id="customerDetailsSection" class="details"> <!--class="details <#if !logoImageDirectory?exists>noImage</#if>"-->
-			<h3 class="customerName"><span wicket:id="customerName"></span></h3>
+			<h3 class="customerName notranslate"><span wicket:id="customerName"></span></h3>
 
 			<div class="customerDetails">
 				<label class="label"><wicket:message key="label.id"/></label>:
-				<span wicket:id="customerId"></span>
+				<span wicket:id="customerId" class="notranslate"></span>
 			</div>
 			<div class="customerDetails">
 				<label class="label"><wicket:message key="label.organizationalunit"/></label>:
-				<span wicket:id="customerOrganization"></span>
+				<span wicket:id="customerOrganization" class="notranslate"></span>
 			</div>
 			<div class="customerLinks">
 				<!--<a href='<@s.url action="divisions" customerId="${customer.id}"/>'>${divisionCount} <@s.text name="label.divisions"/></a>-->
@@ -65,7 +65,7 @@
 		<div class="notes">
 			<label><wicket:message key="label.notes"/></label>
 			<!--<div class="noteText">${action.replaceCR((customer.notes?html)!"")}</div>-->
-            <div wicket:id="customerNotes" class="noteText">CUSTOMER NOTES GO HERE</div>
+            <div wicket:id="customerNotes" class="noteText notranslate">CUSTOMER NOTES GO HERE</div>
 		</div>
 
 	</div>
@@ -74,44 +74,44 @@
 		<h2><wicket:message key="label.contact_information"/></h2>
 		<p>
 			<label><wicket:message key="label.contactname"/></label>
-			<span wicket:id="contactName" class="fieldValue"></span>
+			<span wicket:id="contactName" class="fieldValue notranslate"></span>
 		</p>
 		<p>
 			<label for="contactEmail"><wicket:message key="label.email_address"/></label>
 			<!--<span id="contactEmail" class="fieldValue"><a href="mailto:${accountManagerEmail!}">${accountManagerEmail!}</a></span>-->
-			<span id="contactEmail" class="fieldValue"><a wicket:id="contactEmailLink"><wicket:container wicket:id="contactEmailLinkLabel"/></a></span>
+			<span id="contactEmail" class="fieldValue notranslate"><a wicket:id="contactEmailLink"><wicket:container wicket:id="contactEmailLinkLabel"/></a></span>
 		</p>
 		<p>
 			<label><wicket:message key="label.streetaddress"/></label>
-			<span wicket:id="streetAddress" class="fieldValue"></span>
+			<span wicket:id="streetAddress" class="fieldValue notranslate"></span>
 		</p>
 		<p>
 			<label><wicket:message key="label.city"/></label>
-			<span wicket:id="city" class="fieldValue">${addressInfo.city!}</span>
+			<span wicket:id="city" class="fieldValue notranslate">${addressInfo.city!}</span>
 		</p>
 		<p>
 			<label><wicket:message key="label.state"/></label>
-			<span wicket:id="state" class="fieldValue">${addressInfo.state!}</span>
+			<span wicket:id="state" class="fieldValue notranslate">${addressInfo.state!}</span>
 		</p>
 		<p>
 			<label><wicket:message key="label.zip"/></label>
-			<span wicket:id="zip" class="fieldValue">${addressInfo.zip!}</span>
+			<span wicket:id="zip" class="fieldValue notranslate">${addressInfo.zip!}</span>
 		</p>
 		<p>
 			<label><wicket:message key="label.country"/></label>
-			<span wicket:id="country" class="fieldValue">${addressInfo.country!}</span>
+			<span wicket:id="country" class="fieldValue notranslate">${addressInfo.country!}</span>
 		</p>
 		<p>
 			<label><wicket:message key="label.phone1"/></label>
-			<span wicket:id="phone1" class="fieldValue">${addressInfo.phone1!}</span>
+			<span wicket:id="phone1" class="fieldValue notranslate">${addressInfo.phone1!}</span>
 		</p>
 		<p>
 			<label><wicket:message key="label.phone2"/></label>
-			<span wicket:id="phone2" class="fieldValue">${addressInfo.phone2!}</span>
+			<span wicket:id="phone2" class="fieldValue notranslate">${addressInfo.phone2!}</span>
 		</p>
 		<p>
 			<label><wicket:message key="label.fax"/></label>
-			<span wicket:id="fax" class="fieldValue">${addressInfo.fax1!}</span>
+			<span wicket:id="fax" class="fieldValue notranslate">${addressInfo.fax1!}</span>
 		</p>
 	</div>
 </div>

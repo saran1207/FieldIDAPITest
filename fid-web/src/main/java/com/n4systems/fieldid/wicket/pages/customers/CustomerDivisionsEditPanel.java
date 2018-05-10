@@ -74,8 +74,6 @@ abstract public class CustomerDivisionsEditPanel extends Panel {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 
-                System.out.println("form submitted");
-                System.out.println("... object is " + currentDivision.getObject());
                 target.addChildren(getPage(), FeedbackPanel.class);
                 try {
                     orgService.saveOrUpdate((DivisionOrg) currentDivision.getObject());
@@ -99,7 +97,6 @@ abstract public class CustomerDivisionsEditPanel extends Panel {
         form.add(new AjaxSubmitLink("cancel") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                System.out.println("Cancel link clicked");
                 postCancelAction(target);
             }
 

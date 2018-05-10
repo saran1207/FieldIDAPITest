@@ -141,7 +141,6 @@ abstract public class CustomerDivisionsListPanel extends Panel {
                         item.add(new AjaxLink("divisionEditLink") {
                             @Override
                             public void onClick(AjaxRequestTarget target) {
-                                System.out.println("Edit link clicked");
                                 invokeEdit(division, target);
                             }
                         }.add(new Label("label", Model.of(division.getName()))));
@@ -149,7 +148,6 @@ abstract public class CustomerDivisionsListPanel extends Panel {
                         item.add(new AjaxLink("divisionEditLink2") {
                             @Override
                             public void onClick(AjaxRequestTarget target) {
-                                System.out.println("Edit2 link clicked");
                                 invokeEdit(division, target);
                             }
                         });
@@ -351,7 +349,7 @@ abstract public class CustomerDivisionsListPanel extends Panel {
         /* Gets total number of items in the collection represented by the DataProvider */
         @Override
         public int size() {
-            return currentResultCount;
+            return currentCount;
         }
 
         @Override

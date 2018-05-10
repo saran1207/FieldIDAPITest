@@ -187,7 +187,7 @@
 										<a href="<@s.url value="/w/setup/ownersUsersLocations" />" ><@s.text name="nav.owners_users_loc"/> » </a>
 										<ul class="sub_menu">
 											<#if sessionUser.hasAccess("manageendusers") >
-												<li><a href="<@s.url action='customerList' namespace='/' />" ><@s.text name="label.customers"/></a></li>
+												<li><a href="/fieldid/w/customerActions?InitialTabSelection=ShowImportExportPage/>" ><@s.text name="label.customers"/></a></li>
 												<li><a href="/fieldid/w/setup/usersList" ><@s.text name="label.users"/></a></li>
                                                 <li><a href="/fieldid/w/setup/userGroups" ><@s.text name="label.user_groups"/></a></li>
                                                 <#if sessionUser.tenant.settings.userLimits.maxReadOnlyUsers != 0>
@@ -216,7 +216,7 @@
 									<li>
 										<a href="<@s.url value="/w/setup/import" />" ><@s.text name="nav.import"/> » </a>
 										<ul class="sub_menu">
-											<li><a href="/fieldid/w/customerImport"><@s.text name="label.import_owners"/></a></li>
+											<li><a href="/fieldid/w/customerActions?InitialTabSelection=ShowImportExportPage"><@s.text name="label.import_owners"/></a></li>
 											<li><a href="/fieldid/w/assetImport"><@s.text name="label.import_assets"/></a></li>
 											<li><a href="/fieldid/w/eventImport"><@s.text name="label.import_events"/></a></li>
 											<li><a href="<@s.url action='autoAttributeImportExport' namespace='/'/>"><@s.text name="label.import_auto_attributes"/></a></li>

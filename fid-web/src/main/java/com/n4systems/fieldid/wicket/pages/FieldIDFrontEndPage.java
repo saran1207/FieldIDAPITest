@@ -424,7 +424,9 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 	    boolean canManageSystemUsers = getSessionUser().hasAccess("managesystemusers");
         boolean advancedLocationEnabled = FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.AdvancedLocation);
 
-        container.add(new WebMarkupContainer("manageCustomersContainer").setVisible(getSessionUser().hasAccess("manageendusers")));
+        container.add(new BookmarkablePageLink<CustomerActionsPage>("manageCustomersLink", CustomerActionsPage.class,
+                PageParametersBuilder.param(CustomerActionsPage.INITIAL_TAB_SELECTION_KEY, CustomerActionsPage.SHOW_CUSTOMERLIST_PAGE)).
+                setVisible(getSessionUser().hasAccess("manageendusers")));
         container.add(new BookmarkablePageLink<UsersListPage>("manageUsersLink", UsersListPage.class).setVisible(canManageSystemUsers));
         container.add(new BookmarkablePageLink<UserGroupsPage>("userGroupsLink", UserGroupsPage.class).setVisible(canManageSystemUsers));
         container.add(new BookmarkablePageLink<UserRequestListPage>("userRegistrationsLink", UserRequestListPage.class).setVisible(canManageSystemUsers && userLimitService.isReadOnlyUsersEnabled()));
