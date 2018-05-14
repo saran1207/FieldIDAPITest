@@ -1,10 +1,12 @@
 package com.n4systems.fieldid.wicket.pages.customers;
 
+import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.Form;
@@ -28,11 +30,15 @@ abstract public class CustomerDivisionsEditPanel extends Panel {
 
     private CompoundPropertyModel currentDivision;
     private IModel<Long> customerSelectedForEditModel;
+    private IModel<WebSessionMap> webSessionMapModel;
 
-    public CustomerDivisionsEditPanel(String id, CompoundPropertyModel currentDivision, IModel<Long> customerSelectedForEditModel) {
+    public CustomerDivisionsEditPanel(String id, CompoundPropertyModel currentDivision,
+                                      IModel<Long> customerSelectedForEditModel,
+                                      IModel<WebSessionMap> webSessionMapModel) {
         super(id);
         this.currentDivision = currentDivision;
         this.customerSelectedForEditModel = customerSelectedForEditModel;
+        this.webSessionMapModel = webSessionMapModel;
         addComponents();
     }
 
@@ -48,6 +54,8 @@ abstract public class CustomerDivisionsEditPanel extends Panel {
         if (currentDivision.getObject() == null) {
             DivisionOrg division = new DivisionOrg();
             division.setParent((CustomerOrg) orgService.findById(customerSelectedForEditModel.getObject()));
+            division.setTenant(getWebSessionMap().getSecurityGuard().getTenant());
+            currentDivision.setObject(division);
         }
     }
 
@@ -94,18 +102,16 @@ abstract public class CustomerDivisionsEditPanel extends Panel {
             }
         });
 
-        form.add(new AjaxSubmitLink("cancel") {
+        form.add(new AjaxLink("cancel") {
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+            public void onClick(AjaxRequestTarget target) {
                 postCancelAction(target);
             }
-
-            @Override
-            protected void onError(AjaxRequestTarget target, Form<?> form) {
-
-            }
-
         });
+    }
+
+    private WebSessionMap getWebSessionMap() {
+        return webSessionMapModel.getObject();
     }
 
     abstract void postCancelAction(AjaxRequestTarget target);

@@ -260,6 +260,13 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
                     }
 
                     @Override
+                    protected void listUsersAction() {
+                        tabbedPanel.setSelectedTab(USERS_TAB_INDEX);
+                        currentlySelectedTab = USERS_TAB_INDEX;
+                        RequestCycle.get().setResponsePage( CustomerActionsPage.this.getPage() );
+                    }
+
+                    @Override
                     protected void mergeInvokedAction() {
                         showMergeTab.setValue(true);
                         tabbedPanel.setSelectedTab(MERGE_TAB_INDEX);
@@ -298,7 +305,6 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
                         customerSelectedForEditModel.setObject(customerId);
                         tabbedPanel.setSelectedTab(VIEW_TAB_INDEX);
                         currentlySelectedTab = VIEW_TAB_INDEX;
-                        //target.add(tabbedPanel);
                         RequestCycle.get().setResponsePage( CustomerActionsPage.this.getPage() );
                     }
                 };
@@ -329,7 +335,7 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
             @Override
             public Panel getPanel(String panelId)
             {
-                return new CustomerDivisionsPanel(panelId, customerSelectedForEditModel, getLoaderFactory());
+                return new CustomerDivisionsPanel(panelId, customerSelectedForEditModel, webSessionMapModel, getLoaderFactory());
             }
             @Override
             public boolean isVisible() {
@@ -362,7 +368,6 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
                         customerSelectedForEditModel.setObject(customerId);
                         tabbedPanel.setSelectedTab(VIEW_TAB_INDEX);
                         currentlySelectedTab = VIEW_TAB_INDEX;
-                        //target.add(tabbedPanel);
                         RequestCycle.get().setResponsePage( CustomerActionsPage.this.getPage() );
                     }
                 };

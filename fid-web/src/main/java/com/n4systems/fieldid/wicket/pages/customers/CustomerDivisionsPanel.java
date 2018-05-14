@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.customers;
 
+import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -16,17 +17,21 @@ import org.apache.wicket.model.Model;
  */
 public class CustomerDivisionsPanel extends Panel {
 
+    /* This panel can operate in one of two modes - list of all divisions or a panel to add/edit a division */
     private enum DivisionSubPanel {EDIT_DIVISION, LIST_DIVISIONS}
 
     private IModel<Long> customerSelectedForEditModel;
+    private IModel<WebSessionMap> webSessionMapModel;
     private LoaderFactory loaderFactory;
     private IModel<DivisionSubPanel> currentlyDisplayedPage;
     private CompoundPropertyModel currentDivision;
 
-    public CustomerDivisionsPanel(String id, IModel<Long> customerSelectedForEditModel, LoaderFactory loaderFactory) {
+    public CustomerDivisionsPanel(String id, IModel<Long> customerSelectedForEditModel,
+                                  IModel<WebSessionMap> webSessionMapModel, LoaderFactory loaderFactory) {
         super(id);
         currentlyDisplayedPage = Model.of(DivisionSubPanel.LIST_DIVISIONS);
         this.customerSelectedForEditModel = customerSelectedForEditModel;
+        this.webSessionMapModel = webSessionMapModel;
         this.loaderFactory = loaderFactory;
         currentDivision = new CompoundPropertyModel<>(new DivisionOrg());
         addComponents();
@@ -34,7 +39,7 @@ public class CustomerDivisionsPanel extends Panel {
 
     private void addComponents() {
 
-        final WebMarkupContainer customerListSection = new WebMarkupContainer("customerListSection") {
+        final WebMarkupContainer customerListSection = new WebMarkupContainer("divisionListSection") {
             @Override
             public boolean isVisible() {
                 return currentlyDisplayedPage.getObject() == DivisionSubPanel.LIST_DIVISIONS;
@@ -43,7 +48,7 @@ public class CustomerDivisionsPanel extends Panel {
         customerListSection.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
         add(customerListSection);
 
-        final WebMarkupContainer customerAddSection = new WebMarkupContainer("customerAddSection") {
+        final WebMarkupContainer customerAddSection = new WebMarkupContainer("divisionAddSection") {
             @Override
             public boolean isVisible() {
                 return currentlyDisplayedPage.getObject() == DivisionSubPanel.EDIT_DIVISION;
@@ -53,7 +58,7 @@ public class CustomerDivisionsPanel extends Panel {
         add(customerAddSection);
 
         final CustomerDivisionsListPanel customerDivisionsListPanel =
-                new CustomerDivisionsListPanel("customerListPanel", customerSelectedForEditModel, loaderFactory) {
+                new CustomerDivisionsListPanel("divisionListPanel", customerSelectedForEditModel, loaderFactory) {
                     @Override
                     void invokeEdit(DivisionOrg division, AjaxRequestTarget target) {
                         currentlyDisplayedPage.setObject(DivisionSubPanel.EDIT_DIVISION);
@@ -64,8 +69,10 @@ public class CustomerDivisionsPanel extends Panel {
                 };
         customerListSection.add(customerDivisionsListPanel);
 
-        final CustomerDivisionsEditPanel customerDivisionsAddPanel =
-                new CustomerDivisionsEditPanel("customerAddPanel", currentDivision, customerSelectedForEditModel) {
+        /* Add this normally hidden panel which will handle both division add and edit */
+        final CustomerDivisionsEditPanel customerDivisionsAddEditPanel =
+                new CustomerDivisionsEditPanel("divisionAddPanel", currentDivision, customerSelectedForEditModel,
+                        webSessionMapModel) {
                     @Override
                     void postCancelAction(AjaxRequestTarget target) {
                         currentlyDisplayedPage.setObject(DivisionSubPanel.LIST_DIVISIONS);
@@ -75,12 +82,13 @@ public class CustomerDivisionsPanel extends Panel {
 
                     @Override
                     void postSaveAction(AjaxRequestTarget target) {
+                        customerDivisionsListPanel.updateSectionCounts();
                         currentlyDisplayedPage.setObject(DivisionSubPanel.LIST_DIVISIONS);
                         target.add(customerListSection);
                         target.add(customerAddSection);
                     }
                 };
-        customerAddSection.add(customerDivisionsAddPanel);
+        customerAddSection.add(customerDivisionsAddEditPanel);
 
         customerListSection.add(new AjaxLink("addDivision") {
             @Override

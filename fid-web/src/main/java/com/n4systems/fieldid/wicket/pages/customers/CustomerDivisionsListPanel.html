@@ -19,18 +19,6 @@
                         <a href="javascript:void(0)" wicket:id="divisionEditLink2"><wicket:message key="label.edit" /></a> |
                         <a href="javascript:void(0)" wicket:id="divisionArchiveLink"><wicket:message key="label.archive"/></a>
                     </td>
-            <!--<#list page.getList() as division >
-                <tr id="division_${division.id}" >
-                    <td>
-                        <a href="<@s.url action="divisionEdit" uniqueID="${division.id}" includeParams="get"/>" >${(division.name?html)!}</a>
-                    </td>
-                    <td>${(division.code?html)!}</td>
-                    <td>
-                        <a href="<@s.url action="divisionEdit" uniqueID="${division.id}" includeParams="get"/>"><@s.text name="label.edit"/></a> |
-                        <a href="<@s.url action="divisionArchive" uniqueID="${division.id}" includeParams="get"/>" onclick="return confirm('<@s.text name="label.areyousurearchivecustomer" />');" ><@s.text name="label.archive" /></a>
-                    </td>
-                </tr>
-            </#list>-->
                 </tr>
             </table>
             <div wicket:id="resultTableNavigatorBottom"></div>

@@ -49,9 +49,11 @@ abstract public class CustomerDivisionsListPanel extends Panel {
     @SpringBean
     private PlaceService placeService;
 
-    private int currentResultCount = 0;
-    private int currentArchivedResultCount = 0;
+    private IDataProvider divisionDataProvider;
+    private IDataProvider archivedDivisionDataProvider;
+
     private boolean expandArchiveResults = false;
+
 
     public CustomerDivisionsListPanel(String id, IModel<Long> customerSelectedForEditModel, LoaderFactory loaderFactory) {
         super(id);
@@ -75,7 +77,8 @@ abstract public class CustomerDivisionsListPanel extends Panel {
                 return loader;
             }
         };
-        currentResultCount = (int) divisionLoaderModel.getObject().load().getTotalResults();
+
+        divisionDataProvider = new DivisionDataProvider(divisionLoaderModel, pageSize);
 
         final IModel<DivisionOrgPaginatedLoader> archivedDivisionLoaderModel =
                 new LoadableDetachableModel<DivisionOrgPaginatedLoader>() {
@@ -88,14 +91,15 @@ abstract public class CustomerDivisionsListPanel extends Panel {
                         return loader;
                     }
                 };
-        currentArchivedResultCount = (int) archivedDivisionLoaderModel.getObject().load().getTotalResults();
+
+        archivedDivisionDataProvider = new DivisionDataProvider(archivedDivisionLoaderModel, pageSize);
 
         /* Create the top level containers */
 
         final WebMarkupContainer resultList = new WebMarkupContainer("divisionList") {
             @Override
             public boolean isVisible() {
-                return currentResultCount > 0;
+                return divisionDataProvider.size() > 0;
             }
         };
         resultList.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
@@ -104,7 +108,7 @@ abstract public class CustomerDivisionsListPanel extends Panel {
         final WebMarkupContainer noResults = new WebMarkupContainer("noResults") {
             @Override
             public boolean isVisible() {
-                return currentResultCount == 0;
+                return divisionDataProvider.size() == 0;
             }
         };
         noResults.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
@@ -113,7 +117,7 @@ abstract public class CustomerDivisionsListPanel extends Panel {
         final WebMarkupContainer archiveDisplayControl = new WebMarkupContainer("archiveDisplayControl") {
             @Override
             public boolean isVisible() {
-                return currentArchivedResultCount > 0;
+                return archivedDivisionDataProvider.size() > 0;
             }
         };
         archiveDisplayControl.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
@@ -122,15 +126,13 @@ abstract public class CustomerDivisionsListPanel extends Panel {
         WebMarkupContainer archivedResultsSection = new WebMarkupContainer("archivedList") {
             @Override
             public boolean isVisible() {
-                return expandArchiveResults && currentArchivedResultCount > 0;
+                return expandArchiveResults && archivedDivisionDataProvider.size() > 0;
             }
         };
         archivedResultsSection.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
         add(archivedResultsSection);
 
         /* Create the non archived results section content */
-
-        final IDataProvider divisionDataProvider = new DivisionDataProvider(divisionLoaderModel, currentResultCount, pageSize);
 
         final DataView<DivisionOrg> lineItemsView =
                 new DataView<DivisionOrg>("result.list", divisionDataProvider) {
@@ -165,9 +167,8 @@ abstract public class CustomerDivisionsListPanel extends Panel {
                             @Override
                             public void onClick(AjaxRequestTarget target) {
                                 if (doArchive(division)) {
-                                    divisionLoaderModel.detach();
-                                    archivedDivisionLoaderModel.detach();
-                                    expandArchiveResults = true;
+                                    divisionDataProvider.detach();
+                                    archivedDivisionDataProvider.detach();
                                     target.add(resultList);
                                     target.add(noResults);
                                     target.add(archiveDisplayControl);
@@ -232,9 +233,6 @@ abstract public class CustomerDivisionsListPanel extends Panel {
 
         /* Create the archived results section contents */
 
-        final IDataProvider archivedDivisionDataProvider =
-                new DivisionDataProvider(archivedDivisionLoaderModel, currentArchivedResultCount, pageSize);
-
         final DataView<DivisionOrg> archivedLineItemsView =
                 new DataView<DivisionOrg>("result.list", archivedDivisionDataProvider) {
                     @Override
@@ -277,6 +275,13 @@ abstract public class CustomerDivisionsListPanel extends Panel {
                 target.add(resultList);
             }
         });
+
+    }
+
+    /* Detach the models so next access will refresh division and archive division counts */
+    public void updateSectionCounts() {
+        divisionDataProvider.detach();
+        archivedDivisionDataProvider.detach();
     }
 
     private boolean doArchive(DivisionOrg division) {
@@ -325,17 +330,18 @@ abstract public class CustomerDivisionsListPanel extends Panel {
     private class DivisionDataProvider implements IDataProvider<DivisionOrg> {
 
         private IModel<DivisionOrgPaginatedLoader> loader;
-        private int currentCount;
         private int pageSize;
+        private int size = -1;
 
-        public DivisionDataProvider(IModel<DivisionOrgPaginatedLoader> loader, int currentCount, int pageSize) {
+        public DivisionDataProvider(IModel<DivisionOrgPaginatedLoader> loader, int pageSize) {
             this.loader = loader;
-            this.currentCount = currentCount;
             this.pageSize = pageSize;
         }
 
         @Override
         public void detach() {
+            size = -1;
+            loader.detach();
         }
 
         /* Gets an iterator for the subset of total data */
@@ -349,7 +355,10 @@ abstract public class CustomerDivisionsListPanel extends Panel {
         /* Gets total number of items in the collection represented by the DataProvider */
         @Override
         public int size() {
-            return currentCount;
+            if (size == -1) {
+                size = (int) loader.getObject().load().getTotalResults();
+            }
+            return size;
         }
 
         @Override

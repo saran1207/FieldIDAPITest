@@ -388,7 +388,12 @@ abstract public class CustomerShowPanel extends Panel {
                 listDivisionsAction();
             }
         }.add(new Label("divisionsLinkLabel", customerDivisionsLinkLabelModel)));
-        customerDetailsSection.add(new Label("usersLinkLabel", customerUsersLinkLabelModel));
+        customerDetailsSection.add(new Link("showUsersLink") {
+            @Override
+            public void onClick() {
+                listUsersAction();
+            }
+        }.add(new Label("usersLinkLabel", customerUsersLinkLabelModel)));
         add(customerDetailsSection);
 
 
@@ -463,4 +468,5 @@ abstract public class CustomerShowPanel extends Panel {
     abstract protected void postArchiveAction();
     abstract protected void mergeInvokedAction();
     abstract protected void listDivisionsAction();
+    abstract protected void listUsersAction();
 }
