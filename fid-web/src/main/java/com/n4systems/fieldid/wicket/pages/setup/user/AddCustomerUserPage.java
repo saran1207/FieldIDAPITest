@@ -1,11 +1,12 @@
 package com.n4systems.fieldid.wicket.pages.setup.user;
 
 import com.n4systems.fieldid.service.org.OrgService;
-import com.n4systems.fieldid.service.user.UserListFilterCriteria;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.user.UserFormAccountPanel;
 import com.n4systems.fieldid.wicket.components.user.UserFormPermissionsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.customers.CustomerActionsPage;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.security.UserType;
 import org.apache.wicket.Component;
@@ -36,7 +37,10 @@ public class AddCustomerUserPage extends UserPage {
     @Override
     protected void doSave() {
         create();
-        redirect("/customersUsers.action?uniqueID=" + customerOrg.getId());
+        getRequestCycle().setResponsePage(CustomerActionsPage.class,
+                PageParametersBuilder.param(CustomerActionsPage.INITIAL_TAB_SELECTION_KEY,
+                                            CustomerActionsPage.SHOW_CUSTOMER_USERS_PAGE).
+                        add(CustomerActionsPage.INITIAL_CUSTOMER_ID, customerOrg.getId().toString()));
     }
 
     @Override

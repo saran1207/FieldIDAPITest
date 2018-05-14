@@ -43,6 +43,7 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
     public static final String SHOW_CUSTOMERLIST_PAGE = "ShowCustomerListPage";
     public static final String SHOW_IMPORTEXPORT_PAGE = "ShowImportExportPage";
     public static final String SHOW_CUSTOMERVIEW_PAGE = "ShowCustomerViewPage";
+    public static final String SHOW_CUSTOMER_USERS_PAGE = "ShowCustomerUsersPage";
     public static final String INITIAL_CUSTOMER_ID = "id";
 
     private static final Logger logger = Logger.getLogger(CustomerActionsPage.class);
@@ -194,6 +195,7 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
         }
         add(tabbedPanel);
 
+        /* View All tab */
         tabs.add(new PanelCachingTab(new AbstractTab(new FIDLabelModel("nav.view_all")) {
             @Override
             public Panel getPanel(String panelId) {
@@ -221,6 +223,7 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
         if (SHOW_CUSTOMERLIST_PAGE.equals(initialTabSelection))
             preSelectedTab = VIEW_ALL_TAB_INDEX;
 
+        /* View archived tab */
         tabs.add(new PanelCachingTab(new AbstractTab(new FIDLabelModel("nav.view_all_archived")) {
             public Panel getPanel(String panelId) {
                 return new CustomerArchivedListPanel(panelId, webSessionMapModel, getLoaderFactory()){
@@ -247,6 +250,7 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
         }));
         titleLabelsByTabIndex.add(new FIDLabelModel("title.customer_list_archived_customer").getObject());
 
+        /* View an individual customer tab */
         tabs.add(new AbstractTab(new FIDLabelModel("nav.view")) {
             @Override
             public Panel getPanel(String panelId)
@@ -294,6 +298,7 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
             customerSelectedForEditModel.setObject(initialCustomerId);
         }
 
+        /* Edit a customer tab (may contain edit a specific customer or merge a customer) */
         tabs.add(new AbstractTab(new FIDLabelModel("nav.edit")) {
             @Override
             public Panel getPanel(String panelId)
@@ -331,6 +336,7 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
         });
         titleLabelsByTabIndex.add("");
 
+        /* Show divisions for a customer tab */
         tabs.add(new AbstractTab(new FIDLabelModel("nav.divisions")) {
             @Override
             public Panel getPanel(String panelId)
@@ -344,6 +350,7 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
         });
         titleLabelsByTabIndex.add(new FIDLabelModel("title.customer_divisions").getObject());
 
+        /* Show users for a customer tab */
         tabs.add(new AbstractTab(new FIDLabelModel("nav.users")) {
             @Override
             public Panel getPanel(String panelId)
@@ -357,6 +364,7 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
         });
         titleLabelsByTabIndex.add(new FIDLabelModel("title.customer_users").getObject());
 
+        /* Add a customer tab */
         tabs.add(new AbstractTab(new FIDLabelModel("nav.add")) {
             @Override
             public Panel getPanel(String panelId)
@@ -375,6 +383,7 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
         });
         titleLabelsByTabIndex.add("");
 
+        /* Import/Export a customer tab */
         tabs.add(new PanelCachingTab(new AbstractTab(new FIDLabelModel("nav.import_export")) {
             @Override
             public Panel getPanel(String panelId)
@@ -385,8 +394,14 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
         }));
         titleLabelsByTabIndex.add(new FIDLabelModel("title.customer_import_export").getObject());
 
+
         if (SHOW_IMPORTEXPORT_PAGE.equals(initialTabSelection))
             preSelectedTab = IMPORT_EXPORT_TAB_INDEX;
+        else
+        if (SHOW_CUSTOMER_USERS_PAGE.equals(initialTabSelection)) {
+            customerSelectedForEditModel.setObject(initialCustomerId);
+            preSelectedTab = USERS_TAB_INDEX;
+        }
 
         if (preSelectedTab != NO_TAB_SELECTION) {
             tabbedPanel.setSelectedTab(preSelectedTab);
