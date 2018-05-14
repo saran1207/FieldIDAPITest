@@ -11,7 +11,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 /**
- * Override the FieldIdPropertyColumn to provide formatting unique to the Asset Search Results page
+ * Override the FieldIdPropertyColumn to provide formatting unique to the Procedure Search Results page
  */
 public class ProcedureResultsPropertyColumn extends FieldIdPropertyColumn {
 
