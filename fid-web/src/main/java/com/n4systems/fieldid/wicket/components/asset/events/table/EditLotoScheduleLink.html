@@ -6,17 +6,20 @@
 
 <wicket:panel>
     <span class="actions">
-        <ul>
-            <li>
+        <div style="display:table-row;">
+            <div style="display:table-cell;">
                 <a class="mattButtonLeft" wicket:id="editLink"><wicket:message key="label.edit"/></a>
-            </li>
-            <li class="menu" wicket:id="deleteContainer">
-                <a class="mattButtonRight" href="javascript:void(0);"><img src="/fieldid/images/menu-down.png"/></a>
-                <ul class="menu-items">
-                    <li><a wicket:id="deleteLink"><wicket:message key="label.delete"/></a></li>
-                </ul>
-            </li>
-        </ul>
+            </div>
+            <div style="display: table-cell;">
+                <div class="dropdown-menu-container" wicket:id="deleteContainer">
+                    <a class="dropdown-menu-button mattButtonRight" href="javascript:void(0);" onclick="toggleDropdownMenu(this);">
+                        <img class="dropdown-menu-button-image" src="/fieldid/images/menu-down.png"/></a>
+                    <div class="dropdown-menu-content">
+                        <a wicket:id="deleteLink"><wicket:message key="label.delete"/></a>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div wicket:id="procedurePicker"/>
     </span>
 </wicket:panel>

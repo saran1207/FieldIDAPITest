@@ -69,7 +69,7 @@
 			</div>
 			<div class="infoSet">
 				<label class="label" for="parentOrgId"><@s.text name="label.organizationalunit"/> <#include "../common/_requiredMarker.ftl"/></label>
-				<@s.select  name="parentOrgId" list="parentOrgs" listKey="id" listValue="name" />
+				<@s.select  name="parentOrgId" list="parentOrgs" listKey="id" listValue="name" cssClass="notranslate" />
 			</div>
 			<div class="infoSet">
 				<label class="label" for="customerName"><@s.text name="label.name"/> <#include "../common/_requiredMarker.ftl"/></label>

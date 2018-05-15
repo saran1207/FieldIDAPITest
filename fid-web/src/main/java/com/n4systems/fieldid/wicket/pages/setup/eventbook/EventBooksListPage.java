@@ -22,6 +22,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
@@ -180,24 +181,49 @@ public abstract class EventBooksListPage extends FieldIDTemplatePage {
             {
                 item.add(new EventBooksEditCell(componentId,
                                                 rowModel));
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
             }
         });
 
         columns.add(new PropertyColumn<EventBook>(new FIDLabelModel("label.jobsite"),
                                                   "owner.name",
-                                                  "owner.name"));
+                                                  "owner.name") {
+            @Override
+            public void populateItem(Item<ICellPopulator<EventBook>> item, String componentId, IModel<EventBook> rowModel) {
+                super.populateItem(item, componentId, rowModel);
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+            }
+        });
 
         columns.add(new PropertyColumn<EventBook>(new FIDLabelModel("label.createdby"),
                 "createdBy.firstName, createdBy.lastName",
-                "createdBy.fullName"));
+                "createdBy.fullName") {
+            @Override
+            public void populateItem(Item<ICellPopulator<EventBook>> item, String componentId, IModel<EventBook> rowModel) {
+                super.populateItem(item, componentId, rowModel);
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+            }
+        });
 
         columns.add(new PropertyColumn<EventBook>(new FIDLabelModel("label.created_on"),
                                                   "created",
-                                                  "created"));
+                                                  "created") {
+            @Override
+            public void populateItem(Item<ICellPopulator<EventBook>> item, String componentId, IModel<EventBook> rowModel) {
+                super.populateItem(item, componentId, rowModel);
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+            }
+        });
 
         columns.add(new PropertyColumn<EventBook>(new FIDLabelModel("label.modifiedby"),
                 "modifiedBy.firstName, modifiedBy.lastName",
-                "modifiedBy.fullName"));
+                "modifiedBy.fullName") {
+            @Override
+            public void populateItem(Item<ICellPopulator<EventBook>> item, String componentId, IModel<EventBook> rowModel) {
+                super.populateItem(item, componentId, rowModel);
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+            }
+        });
 
         columns.add(new PropertyColumn<EventBook>(new FIDLabelModel("label.modified_on"),
                 "modified",

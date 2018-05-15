@@ -8,11 +8,11 @@ ${action.setPageType('organization','list')!}
 <div class="multiColumn fluidSets">
 	<div class="infoSet infoBlock borderLess">
 		<label for="name" class="label"><@s.text name="label.name"/></label>
-		<span class="fieldHolder">${primaryOrg.name?html}</span>
+		<span class="fieldHolder notranslate">${primaryOrg.name?html}</span>
 	</div>
 	<div class="infoSet infoBlock borderLess">
 		<label for="name" class="label"><@s.text name="label.name_on_pdf_reports"/></label>
-		<span class="fieldHolder">
+		<span class="fieldHolder notranslate">
 			${primaryOrg.certificateName?html}	
 		</span>
 	</div>

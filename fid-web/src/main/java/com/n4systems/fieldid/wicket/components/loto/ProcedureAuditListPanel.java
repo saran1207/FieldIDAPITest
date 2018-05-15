@@ -57,16 +57,28 @@ public class ProcedureAuditListPanel extends Panel {
         cal.add(Calendar.DATE, 7);
         final Date date7DaysFromNow = cal.getTime();
 
-        columns.add(new ProcedureAuditDateColumn(new FIDLabelModel("label.schedule_date"),"dueDate", "dueDate"));
+        columns.add(new ProcedureAuditDateColumn(new FIDLabelModel("label.schedule_date"),"dueDate", "dueDate") {
+            @Override
+            public void populateItem(Item<ICellPopulator<ProcedureAuditEvent>> item, String id, IModel<ProcedureAuditEvent> procedureModel) {
+                super.populateItem(item, id, procedureModel);
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+            }
+        });
 
-        columns.add(new ProcedureAuditDueDateColumn(new FIDLabelModel("label.due"),"dueDate", "dueDate"));
+        columns.add(new ProcedureAuditDueDateColumn(new FIDLabelModel("label.due"),"dueDate", "dueDate") {
+            @Override
+            public void populateItem(Item<ICellPopulator<ProcedureAuditEvent>> item, String id, IModel<ProcedureAuditEvent> procedureModel) {
+                super.populateItem(item, id, procedureModel);
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+            }
+        });
 
         columns.add(new PropertyColumn<ProcedureAuditEvent>(new FIDLabelModel("label.assigned_to"),"assignedUserOrGroup.displayName", "assignedUserOrGroup.displayName")
         {
             @Override
             public void populateItem(final Item<ICellPopulator<ProcedureAuditEvent>> item, final String componentId, final IModel<ProcedureAuditEvent> rowModel)
             {
-                item.add(new Label(componentId, createLabelModel(rowModel))).add(new AttributeAppender("class", new Model<String>("developed-by"), ""));
+                item.add(new Label(componentId, createLabelModel(rowModel))).add(new AttributeAppender("class", new Model<String>("developed-by notranslate"), " "));
 
                 if(rowModel.getObject().getDueDate().before(new Date())) {
                     item.add(new AttributeAppender("class", new Model<String>("overdue"), " "));
@@ -81,7 +93,7 @@ public class ProcedureAuditListPanel extends Panel {
             @Override
             public void populateItem(final Item<ICellPopulator<ProcedureAuditEvent>> item, final String componentId, final IModel<ProcedureAuditEvent> rowModel)
             {
-                item.add(new Label(componentId, createLabelModel(rowModel))).add(new AttributeAppender("class", new Model<String>("procedure-code"), ""));
+                item.add(new Label(componentId, createLabelModel(rowModel))).add(new AttributeAppender("class", new Model<String>("procedure-code notranslate"), " "));
 
                 if(rowModel.getObject().getDueDate().before(new Date())) {
                     item.add(new AttributeAppender("class", new Model<String>("overdue"), " "));
@@ -106,14 +118,20 @@ public class ProcedureAuditListPanel extends Panel {
             }
         });
 
-        columns.add(new ProcedureAudiAssetColumn(new FIDLabelModel("label.equipment_#"),"procedureDefinition.equipmentNumber", "procedureDefinition.equipmentNumber"));
+        columns.add(new ProcedureAudiAssetColumn(new FIDLabelModel("label.equipment_#"),"procedureDefinition.equipmentNumber", "procedureDefinition.equipmentNumber") {
+            @Override
+            public void populateItem(Item<ICellPopulator<ProcedureAuditEvent>> item, String id, IModel<ProcedureAuditEvent> procedureModel) {
+                super.populateItem(item, id, procedureModel);
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+            }
+        });
 
         columns.add(new PropertyColumn<ProcedureAuditEvent>(new FIDLabelModel("label.equipment_location"),"procedureDefinition.equipmentLocation", "procedureDefinition.equipmentLocation")
         {
             @Override
             public void populateItem(final Item<ICellPopulator<ProcedureAuditEvent>> item, final String componentId, final IModel<ProcedureAuditEvent> rowModel)
             {
-                item.add(new Label(componentId, createLabelModel(rowModel))).add(new AttributeAppender("class", new Model<String>("equipment-loc"), ""));
+                item.add(new Label(componentId, createLabelModel(rowModel))).add(new AttributeAppender("class", new Model<String>("equipment-loc notranslate"), " "));
 
                 if(rowModel.getObject().getDueDate().before(new Date())) {
                     item.add(new AttributeAppender("class", new Model<String>("overdue"), " "));
@@ -129,6 +147,7 @@ public class ProcedureAuditListPanel extends Panel {
             public void populateItem(final Item<ICellPopulator<ProcedureAuditEvent>> item, final String componentId, final IModel<ProcedureAuditEvent> rowModel)
             {
                 item.add(new Label(componentId, createLabelModel(rowModel)));
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
 
                 if(rowModel.getObject().getDueDate().before(new Date())) {
                     item.add(new AttributeAppender("class", new Model<String>("overdue"), " "));
@@ -143,7 +162,7 @@ public class ProcedureAuditListPanel extends Panel {
             @Override
             public void populateItem(final Item<ICellPopulator<ProcedureAuditEvent>> item, final String componentId, final IModel<ProcedureAuditEvent> rowModel)
             {
-                item.add(new Label(componentId, createLabelModel(rowModel))).add(new AttributeAppender("class", new Model<String>("building"), " "));
+                item.add(new Label(componentId, createLabelModel(rowModel))).add(new AttributeAppender("class", new Model<String>("building notranslate"), " "));
 
                 if(rowModel.getObject().getDueDate().before(new Date())) {
                     item.add(new AttributeAppender("class", new Model<String>("overdue"), " "));

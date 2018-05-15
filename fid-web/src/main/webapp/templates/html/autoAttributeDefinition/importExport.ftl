@@ -23,7 +23,7 @@ ${action.setPageType('auto_attribute', 'import_export')!}
 		<h2>1. <@s.text name="label.select_import_type"><@s.param><@s.text name="label.autoattribute"/></@s.param></@s.text></h2>
 		<p>
 			<@s.text name="message.select_import_type"><@s.param><@s.text name="label.autoattribute"/></@s.param></@s.text>
-			<@s.select theme="fieldid" id="assetTypeSelect" list="assetTypes" name="assetTypeId" listValue="name" listKey="autoAttributeCriteria.id" onchange="updateUploadForm()" />
+			<@s.select theme="fieldid" id="assetTypeSelect" list="assetTypes" name="assetTypeId" listValue="name" listKey="autoAttributeCriteria.id" onchange="updateUploadForm()" cssClass="notranslate" />
 		</p>
 	</div> 
 

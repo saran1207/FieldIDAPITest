@@ -1,16 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+
 <wicket:panel>
-    <span class="actions">
-        <ul>
-            <li>
+    <span class="actions compoundActionButton">
+         <div style="display:table-row;">
+             <div style="display:table-cell;" class="_defaultActionButtonContainer">
                 <a wicket:id="viewLink"><wicket:message key="label.view"/></a>
-            </li>
-            <li wicket:id="menu" class="menu">
-                <a class="mattButtonRight" href="javascript:void(0);"><img src="/fieldid/images/menu-down.png"/></a>
-                <ul class="menu-items">
-                    <li><a wicket:id="editLink"><wicket:message key="label.edit"/></a></li>
-                    <li><a wicket:id="printReportLink"><wicket:message key="label.print"/></a></li>
-                </ul>
-            </li>
-        </ul>
+             </div>
+             <div style="display: table-cell;">
+                <div class="dropdown-menu-container" wicket:id="menu">
+                    <a class="dropdown-menu-button mattButtonRight" href="javascript:void(0);"
+                        onclick="toggleDropdownMenu(this);">
+                        <img class="dropdown-menu-button-image" src="/fieldid/images/menu-down.png"/></a>
+                    <div class="dropdown-menu-content">
+                        <a wicket:id="editLink"><wicket:message key="label.edit"/></a>
+                        <a wicket:id="printReportLink"><wicket:message key="label.print"/></a>
+                    </div>
+                </div>
+             </div>
+        </div>
     </span>
 </wicket:panel>
+
+</html>

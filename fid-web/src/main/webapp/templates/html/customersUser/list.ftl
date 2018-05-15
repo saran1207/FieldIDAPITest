@@ -29,12 +29,12 @@ ${action.setPageType('customer', 'users')!}
                 <#if user.userType = 'PERSON'>
                     <td>&nbsp;</td>
                 <#else>
-                    <td><a href="<@s.url action="viewUser" uniqueID="${user.id!}" includeParams="get"/>" >${user.userID?html!}</a> </td>
+                    <td class="notranslate"><a href="<@s.url action="viewUser" uniqueID="${user.id!}" includeParams="get"/>" >${user.userID?html!}</a> </td>
                 </#if>
-				<td>${user.userLabel?html! }</td>
-				<td>${(user.owner.divisionOrg.name)!?html}</td>
-				<td>${user.emailAddress?html! } </td>
-				<td>${(action.dateCreated(user)??)?string(action.formatDateTime(action.dateCreated(user)), "--")}</td>		
+				<td class="notranslate">${user.userLabel?html! }</td>
+				<td class="notranslate">${(user.owner.divisionOrg.name)!?html}</td>
+				<td class="notranslate">${user.emailAddress?html! } </td>
+				<td class="notranslate">${(action.dateCreated(user)??)?string(action.formatDateTime(action.dateCreated(user)), "--")}</td>
 				<td>
 					<a href="<@s.url action="customersUserArchive" uniqueID="${(user.id)!}" includeParams="get"/>"><@s.text name="label.archive" /></a>
 				</td>

@@ -8,6 +8,7 @@ import com.n4systems.fieldid.wicket.pages.setup.assettypegroup.ConfirmDeleteAsse
 import com.n4systems.fieldid.wicket.pages.setup.assettypegroup.EditAssetTypeGroupPage;
 import com.n4systems.fieldid.wicket.pages.setup.assettypegroup.ViewAssetTypeGroupPage;
 import com.n4systems.model.AssetTypeGroup;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -17,6 +18,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -49,9 +51,11 @@ public class AssetTypeGroupListPanel extends Panel {
                 nameLink.add(new Label("name", new PropertyModel<String>(assetTypeGroup, "displayName")));
 
                 item.add(nameLink);
-                item.add(new Label("createdBy", new PropertyModel<String>(assetTypeGroup, "createdBy.displayName")).setVisible(assetTypeGroup.getCreatedBy() != null ));
+                item.add((new Label("createdBy", new PropertyModel<String>(assetTypeGroup, "createdBy.displayName")).setVisible(assetTypeGroup.getCreatedBy() != null )).
+                        add(new AttributeAppender("class", new Model<String>("notranslate"), " ")));
                 item.add(new Label("createdDate", new DayDisplayModel(new PropertyModel<Date>(assetTypeGroup, "created"), true, timeZone)));
-                item.add(new Label("modifiedBy", new PropertyModel<String>(assetTypeGroup, "modifiedBy.displayName")).setVisible(assetTypeGroup.getModifiedBy() != null));
+                item.add((new Label("modifiedBy", new PropertyModel<String>(assetTypeGroup, "modifiedBy.displayName")).setVisible(assetTypeGroup.getModifiedBy() != null)).
+                        add(new AttributeAppender("class", new Model<String>("notranslate"), " ")));
                 item.add(new Label("modifiedDate", new DayDisplayModel(new PropertyModel<Date>(assetTypeGroup, "modified"), true, timeZone)));
 
                 item.add(new BookmarkablePageLink<Void>("edit", EditAssetTypeGroupPage.class, PageParametersBuilder.uniqueId(assetTypeGroupId)));

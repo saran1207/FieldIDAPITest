@@ -16,6 +16,10 @@
     width: 80px;
 }
 
+.actions.compoundActionButton ul {
+    width: auto;
+}
+
 .menu-items {
     display:none; 		/* made visible by jquery click*/
     position: absolute;

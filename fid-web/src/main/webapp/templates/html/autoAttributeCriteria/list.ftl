@@ -9,7 +9,7 @@ ${action.setPageType('auto_attribute', 'list')!}
 	<tr>
 	<#list assetTypes as assetType >
 	<tr >
-		<td>
+		<td class="notranslate">
 			<a href="<@s.url action="autoAttributeCriteriaOpen" uniqueID="${(assetType.id)!}" />" > ${assetType.name! } </a>
 		</td>
 	</tr>

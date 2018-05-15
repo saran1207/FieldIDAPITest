@@ -1,11 +1,14 @@
 package com.n4systems.fieldid.wicket.pages.setup;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.tenant.SystemSettingsService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.wicket.*;
 import com.n4systems.fieldid.wicket.pages.setup.SystemSettingsPageTest.SystemsSettingsPageHarness;
+import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.tenant.SystemSettings;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -16,6 +19,7 @@ import org.junit.runner.RunWith;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static org.easymock.EasyMock.anyLong;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.junit.Assert.assertEquals;
@@ -27,6 +31,7 @@ public class SystemSettingsPageTest extends FieldIdPageTest<SystemsSettingsPageH
 	private UserLimitService userLimitService;
 	private S3Service s3Service;
 	private TenantSettingsService tenantSettingsService;
+	private OrgService orgService;
 
 	@Override
 	@Before
@@ -37,6 +42,7 @@ public class SystemSettingsPageTest extends FieldIdPageTest<SystemsSettingsPageH
 		systemSettingsService = wire(SystemSettingsService.class, "systemSettingsService");
 		userLimitService = wire(UserLimitService.class);
 		s3Service = wire(S3Service.class);
+		orgService = wire(OrgService.class);
 	}
 
 	@Test
@@ -52,6 +58,11 @@ public class SystemSettingsPageTest extends FieldIdPageTest<SystemsSettingsPageH
 		replay(userLimitService);
 		expect(s3Service.getBrandingLogoURL()).andReturn(new URL("http://www.fieldid.com"));
 		replay(s3Service);
+		PrimaryOrg primaryOrg = wire(PrimaryOrg.class);
+		expect(primaryOrg.hasExtendedFeature(ExtendedFeature.GoogleTranslate)).andReturn(false);
+		replay(primaryOrg);
+		expect(orgService.getPrimaryOrgForTenant(anyLong())).andReturn(primaryOrg);
+		replay(orgService);
 
 		renderFixture(this);
 

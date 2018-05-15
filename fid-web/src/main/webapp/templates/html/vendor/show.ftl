@@ -12,9 +12,9 @@
 
 <#include '_vendorinfo.ftl'>
 
-<div id="mainContent">
+<div id="mainContent" class="notranslate">
 	<#include "../common/_formErrors.ftl"/>
-	<h1 class="safetyNetworkHeadings">${vendor.name}<h1>
+	<h1 class="safetyNetworkHeadings notranslate">${vendor.name}<h1>
 	<p class="vendorConnection"><@s.text name="label.vendor_connection"/></p>
 	<div id="registerAssets">
 		<h3 class="vendorHeadings">

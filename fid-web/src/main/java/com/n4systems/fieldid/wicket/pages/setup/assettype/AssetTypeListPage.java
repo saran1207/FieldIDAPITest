@@ -62,6 +62,7 @@ public class AssetTypeListPage extends FieldIDFrontEndPage {
     }
     @Override
     public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
         response.renderCSSReference("style/legacy/newCss/assetType/assetTypeFilter.css");
     }
 }

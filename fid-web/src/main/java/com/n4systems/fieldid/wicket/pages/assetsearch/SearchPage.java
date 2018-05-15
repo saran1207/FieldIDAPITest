@@ -94,7 +94,7 @@ public class SearchPage extends AbstractSearchPage<AssetSearchCriteria> {
 
     @Override
     protected Component createResultsPanel(String id, Model<AssetSearchCriteria> criteriaModel) {
-        return new AssetSearchResultsPanel(id, criteriaModel) {
+        return new AssetSearchResultsPanel(isGoogleTranslateEnabled(), id, criteriaModel) {
             @Override protected void updateSelectionStatus(AjaxRequestTarget target) {
                 super.updateSelectionStatus(target);
                 target.add(searchMenu);

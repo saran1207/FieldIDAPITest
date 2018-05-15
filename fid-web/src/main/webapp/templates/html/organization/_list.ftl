@@ -7,7 +7,7 @@
 		</tr>
 		<#list page.getList() as organization > 
 			<tr id="organization_${organization.id}" >
-				<td>${organization.name?html}</td>
+				<td class="notranslate">${organization.name?html}</td>
 				<td>
 					<#if !organization.archived>
 						<a href="<@s.url action="organizationEdit" uniqueID="${organization.id}"/>"><@s.text name="label.edit"/></a>

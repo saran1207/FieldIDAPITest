@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components.search.results;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.search.ColumnMappingGroupView;
 import com.n4systems.model.search.ColumnMappingView;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -30,7 +31,12 @@ public class ColumnGroupPanel extends Panel {
 	    add(new ListView<ColumnMappingView>("columns", columnsModel)  {		
 	        @Override
 	        protected void populateItem(ListItem<ColumnMappingView> item) {
+				ColumnMappingView columnMappingView = model.getObject().getMappings().get(item.getIndex());
+
                 item.add(new Label("checkboxLabel", new FIDLabelModel(new PropertyModel<String>(item.getModel(), "label"))));
+				if (columnMappingView != null && (columnMappingView.getGroupKey() == null || columnMappingView.getGroupKey().equals("custom_created_columns"))) {
+					item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+				}
                 item.add(new CheckBox(COLUMN_CHECKBOX_ID, new PropertyModel<Boolean>(item.getModel(), "enabled")).setOutputMarkupId(true));
 	        }	        
 	    }.setVisible(!noColumns));

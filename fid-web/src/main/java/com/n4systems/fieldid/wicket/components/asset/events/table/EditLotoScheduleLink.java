@@ -7,6 +7,7 @@ import com.n4systems.model.ProcedureWorkflowState;
 import com.n4systems.model.procedure.Procedure;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -62,4 +63,11 @@ public class EditLotoScheduleLink extends Panel {
     }
 
     public void onProcedureScheduleUpdated(AjaxRequestTarget target) {}
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.renderJavaScriptReference("javascript/dropdownMenu.js", "dropdownMenuJS");
+        response.renderCSSReference("style/legacy/component/dropdownMenu.css");
+    }
 }

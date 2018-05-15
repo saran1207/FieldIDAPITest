@@ -101,7 +101,6 @@ public class EventTypeGroupAddPage extends EventTypeGroupPage {
         response.renderCSSReference("style/legacy/newCss/event/event_base.css");
         response.renderCSSReference("style/legacy/newCss/event/event_schedule.css");
         response.renderCSSReference("style/legacy/pageStyles/eventTypeGroup.css");
-        response.renderJavaScriptReference("javascript/prototype.js");
         response.renderJavaScriptReference("javascript/eventTypeGroup.js");
     }
 

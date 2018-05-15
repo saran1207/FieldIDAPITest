@@ -39,16 +39,18 @@ public abstract class SRSResultsPanel<T extends SearchCriteria, S extends HasGps
     protected IModel<T> criteriaModel;
     protected Component map;
     protected WebMarkupContainer resultButtons;
+    protected boolean googleTranslateEnabled;
 
-    public SRSResultsPanel(String id, final IModel<T> criteriaModel) {
+    public SRSResultsPanel(boolean googleTranslateEnabled, String id, final IModel<T> criteriaModel) {
         super(id);
+        this.googleTranslateEnabled = googleTranslateEnabled;
         this.criteriaModel = criteriaModel;
         setOutputMarkupId(true);
 
         selectedRows = criteriaModel.getObject().getSelection();
 
         final T reportCriteria = criteriaModel.getObject();
-        ReportFormatConverter converter = new ReportFormatConverter(getSecurityGuard());
+        ReportFormatConverter converter = getReportFormatConverter(getSecurityGuard());
 
         boolean isTextSearch = criteriaModel.getObject().getQuery() != null;
         List<IColumn<RowView>> convertedColumns = converter.convertColumns(reportCriteria, isTextSearch);
@@ -126,6 +128,14 @@ public abstract class SRSResultsPanel<T extends SearchCriteria, S extends HasGps
             }
         }.setOutputMarkupId(true));
         add(resultButtons.setVisible(true));
+    }
+
+    /**
+     * Override to provide a customer report format converter
+     * @return
+     */
+    protected ReportFormatConverter getReportFormatConverter(SerializableSecurityGuard securityGuard) {
+        return new ReportFormatConverter(securityGuard);
     }
 
     protected boolean isMapButtonVisible() {

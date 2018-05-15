@@ -9,7 +9,7 @@
         <div class="infoSet">
             <h2>1. <wicket:message key="label.select_asset_type"/></h2>
             <p><wicket:message key="message.select_asset_type"/></p>
-            <select wicket:id="assetTypesSelectionList"></select>
+            <span class="notranslate"><select wicket:id="assetTypesSelectionList"></select></span>
         </div>
 
         <div class="infoSet">
@@ -24,7 +24,7 @@
                         <p><wicket:message key="message.download_data"/></p>
                         <div class="control-group" style="margin-left:20px;">
                             <label wicket:for="owner" style="float: left; line-height: 25px; font-size: 13px;"><wicket:message key="label.owner"/></label>
-                            <div wicket:id="owner" class="popup"></div>
+                            <div wicket:id="owner" class="popup notranslate"></div>
                         </div>
                         <div id="templateLink" style="clear:both;">
                             <p id="assetTemplate">

@@ -128,12 +128,20 @@ var autoCompleter = (function() {
 
 		auto.bind("autocompleteopen", function(event, ui) {
 			var menu = $('.ui-autocomplete:visible');
-			menu.css('width',Math.max(menu.width()+10,300)); // add room because we've styled it with extra padding between description and result columns.
+			var newMenuWidth = Math.max(menu.width()+10,300); // add room because we've styled it with extra padding between description and result columns.
+			menu.css('width', newMenuWidth);
+
+			/* position the popup so its right edge matches the right edge of the search box container */
+			var rightEdge = $('#smartSearch.auto-complete-container').offset().left + $('#smartSearch.auto-complete-container').outerWidth();
+			var popupLeftEdge = rightEdge - newMenuWidth;
+			$('.ui-autocomplete').css('left', popupLeftEdge);
+
 			auto.initialized=true;
 			$('.ui-autocomplete .link').tipsy({gravity: 'n', fade:true, delayIn:355});
 			$('.tipsy').remove();  // make sure all pre-existing tooltips are removed.
 			// hack to remove jquery styling because rounded corners mucks up the border.
 			$('.ui-autocomplete').removeClass('ui-corner-all');
+			$('.ui-autocomplete').addClass('notranslate');
 		});
 		auto.bind("autocompleteclose", function(event, ui) {
 			$("#"+id).focus();

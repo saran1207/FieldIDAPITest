@@ -20,6 +20,7 @@ import com.n4systems.model.*;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -132,6 +133,13 @@ public class OpenActionsCell extends Panel {
         dialogWindow.setInitialHeight(500);
         dialogWindow.setTitle(new FIDLabelModel("label.action"));
         return dialogWindow;
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.renderJavaScriptReference("javascript/dropdownMenu.js", "dropdownMenuJS");
+        response.renderCSSReference("style/legacy/component/dropdownMenu.css");
     }
 
 }

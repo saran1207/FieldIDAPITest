@@ -12,11 +12,15 @@ import com.n4systems.model.procedure.PublishedState;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.ContextImage;
+import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
@@ -129,7 +133,14 @@ public class DraftListAllPage extends ProceduresAllListPage implements IAjaxIndi
         add(procedureDefinitionListPanel = new ProcedureListPanel("procedureDefinitionListPanel", dataProvider) {
             @Override
             protected void addCustomColumns(List<IColumn<? extends ProcedureDefinition>> columns) {
-                columns.add(new ProcedureDateColumn(new FIDLabelModel("label.modified"), "modified", "modified", true));
+                columns.add(new ProcedureDateColumn(new FIDLabelModel("label.modified"), "modified", "modified", true) {
+                    @Override
+                    public void populateItem(final Item<ICellPopulator<ProcedureDefinition>> item, final String componentId, final IModel<ProcedureDefinition> rowModel)
+                    {
+                        super.populateItem(item, componentId, rowModel);
+                        item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+                    }
+                });
             }
 
             @Override

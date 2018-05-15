@@ -31,7 +31,7 @@
 			</li>
 		<#else>
 			<#list vendorConnections as connection>
-				<li>
+				<li class="notranslate">
 					<a href="<@s.url action="showVendor.action" uniqueID="${connection.connectedOrg.id}"/>">${(connection.connectedOrg.primaryOrg.name?html)!}</a>
 				</li>
 			</#list>
@@ -46,7 +46,7 @@
 			</li>
 		<#else>
 			<#list customerConnections as connection>
-				<li>
+				<li class="notranslate">
 					<a href="<@s.url action="showCustomer" uniqueID="${connection.connectedOrg.id}"/>">${(connection.connectedOrg.primaryOrg.name?html)!}</a>
 				</li>
 			</#list>

@@ -1,14 +1,65 @@
 <wicket:panel xmlns:wicket="http://www.w3.org/1999/html">
 
+    <div style="border-style: solid; border-color: black; border-width: 1px; padding: 10px">
     <form wicket:id="form">
         <h2><wicket:message key="title.language_preference"/></h2>
         
         <p><wicket:message key="message.language_prefrence1"/></p>
         <p><wicket:message key="message.language_prefrence2"/></p>
         
-        <select class="languageSelect" wicket:id="language"/>
-        
-        <a class="btn btn-green btn-sml" wicket:id="submit"><wicket:message key="label.save"></wicket:message></a>
+
+        <span class="notranslate"><select class="languageSelect" wicket:id="language"/></span>
+        <div style="text-align: right">
+            <a class="btn btn-green btn-sml" style="margin: 1px;" wicket:id="submit" ><wicket:message key="label.save"></wicket:message></a>
+        </div>
+        <div style="clear:both"></div> <!-- Force submit button to stay within parent div -->
     </form>
+    </div>
+
+    <div id="google_translate_element_pref_container" style="margin-top: 20px; border-style: solid; border-color: black; border-width: 1px; padding: 10px">
+        <p><wicket:message key="label.google_translate_option"></wicket:message></p>
+
+    <div id="google_translate_element_pref"></div>
+
+    </div>
+
+    <script type="text/javascript">
+
+        /* Only one Google Translate widget can exist on any page. Since this dialog appears in an already existing page
+           we need to take the widget on that page and move it into this dialog. When this dialog closes code elsewhere
+           will either copy the widget back (Wicket) or recreate it (Struts) on that page. With Struts we need to
+           recreate it due to problems trying to copy it back from the iFrame used by Colorbox. If Google Translate is
+           not enabled there is no widget on the main page so nothing needs to be done. */
+
+        var runningInIframe = false;
+        var widgetCopied = false;
+        var translateWidget = $('#google_translate_element');
+        if (translateWidget.length == 0) {
+            /*  If running in Struts this panel is in an ColorBox iFrame and the google translate widget
+                is in the parent of this iFrame. */
+            runningInIframe = true;
+            translateWidget = $('#google_translate_element', window.parent.document);
+        }
+        if (translateWidget.length > 0) {
+            if (translateWidget.contents().length > 0) {
+                translateWidget.detach().prependTo('#google_translate_element_pref');
+                widgetCopied = true;
+            }
+            else
+                /* Empty div with no widget so google translate isn't active */
+                document.getElementById("google_translate_element_pref_container").style.display = "none";
+        }
+        else
+            /* No widget found so don't display google translate section */
+            document.getElementById("google_translate_element_pref_container").style.display = "none";
+
+
+        /* Set a flag so code running in Struts will know the translate widget needs to be recreated */
+        if (runningInIframe && widgetCopied)
+            window.parent.reloadGoogleTranslate = true;
+        else
+            window.parent.reloadGoogleTranslate = false;
+
+    </script>
 
 </wicket:panel>

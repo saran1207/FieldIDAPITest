@@ -19,7 +19,7 @@ ${action.setPageType('event_type', 'list')!}
 	<@s.form id="listFilterForm" method="get">
 		<@s.textfield key="label.name" name="nameFilter" id="nameFilter" labelposition="left" />
         <@s.select key="label.type" name="typeFilter" id="typeFilter" list="types" headerKey="" headerValue="All" labelposition="left"/>
-		<@s.select key="label.eventtypegroup" name="groupFilter" id="groupFilter" list="eventTypeGroups" listKey="id" listValue="name" headerKey="" headerValue="All" labelposition="left"/>
+		<@s.select key="label.eventtypegroup" name="groupFilter" id="groupFilter" list="eventTypeGroups" listKey="id" listValue="name" headerKey="" headerValue="All" labelposition="left" cssClass="notranslate"/>
 		<div class="formAction filterAction">
 			<@s.submit key="hbutton.filter" />
 			<span><@s.text name="label.or" /></span>
@@ -42,7 +42,7 @@ ${action.setPageType('event_type', 'list')!}
 		
 		<#list eventTypes as eventType>
 			<tr>
-				<td><a href="<@s.url action="eventType" uniqueID="${eventType.id}" />">${eventType.name}</a></td>
+				<td class="notranslate"><a href="<@s.url action="eventType" uniqueID="${eventType.id}" />">${eventType.name}</a></td>
 				<td>
 					<#if eventType.thingEventType >
                         <@s.text name="label.asset_event"/>
@@ -57,9 +57,9 @@ ${action.setPageType('event_type', 'list')!}
                     <@s.text name="label.procedure_audit"/>
                 </#if>
 				</td>
-				<td><#if eventType.group?exists><a href="<@s.url value="/w/setup/eventTypeGroupView" uniqueID="${eventType.group.id}" />">${eventType.group.name!}</a></#if></td>
-				<td><#if eventType.createdBy?exists>${eventType.createdBy.fullName!},&nbsp;</#if>${action.formatDateTime(eventType.created)}</td>
-				<td><#if eventType.modifiedBy?exists>${eventType.modifiedBy.fullName!},&nbsp;</#if>${action.formatDateTime(eventType.modified)}</td>
+				<td class="notranslate"><#if eventType.group?exists><a href="<@s.url value="/w/setup/eventTypeGroupView" uniqueID="${eventType.group.id}" />">${eventType.group.name!}</a></#if></td>
+				<td class="notranslate"><#if eventType.createdBy?exists><span class="notranslate">${eventType.createdBy.fullName!},&nbsp;</span></#if><span>${action.formatDateTime(eventType.created)}</span></td>
+				<td class="notranslate"><#if eventType.modifiedBy?exists><span class="notranslate">${eventType.modifiedBy.fullName!},&nbsp;</span></#if><span>${action.formatDateTime(eventType.modified)}</span></td>
 				<td>
 					<a href="<@s.url action="eventTypeEdit" uniqueID="${eventType.id}" />"><@s.text name="label.edit" /></a> |
 					<a href="<@s.url action="eventTypeCopy" uniqueID="${eventType.id}" />"><@s.text name="label.copy" /></a>

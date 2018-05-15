@@ -1,0 +1,8 @@
+.goog-te-combo {
+    /* Component of Google translate widget. Settings in global.css interfere with its sizing */
+    width: auto;
+}
+.goog-logo-link img {
+    /* Component of Google translate widget. Settings in global.css interfere with its placement */
+    float: none;
+}

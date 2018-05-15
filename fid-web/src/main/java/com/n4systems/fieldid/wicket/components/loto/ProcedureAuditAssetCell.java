@@ -21,7 +21,7 @@ public class ProcedureAuditAssetCell extends Panel {
         add(new BookmarkablePageLink<Void>("assetLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(procedureModel.getObject().getProcedureDefinition().getAsset().getId()))
                         .setParameter("name", procedureModel.getObject().getProcedureDefinition().getEquipmentNumber())
                         .add(new Label("name", procedureModel.getObject().getProcedureDefinition().getEquipmentNumber()))
-                        .add(new AttributeAppender("class", new Model<String>("equipment-number"), " "))
+                        .add(new AttributeAppender("class", new Model<String>("equipment-number notranslate"), " "))
         );
     }
 }

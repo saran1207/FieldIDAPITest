@@ -15,8 +15,10 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.model.AssetStatus;
+import com.n4systems.model.EventBook;
 import com.n4systems.model.api.Archivable;
 import org.apache.wicket.Component;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
@@ -122,25 +124,45 @@ public abstract class AssetStatusListPage extends FieldIDTemplatePage {
     private List<IColumn<AssetStatus>> getAssetStatusColumns() {
         List<IColumn<AssetStatus>> columns = Lists.newArrayList();
 
-        columns.add(new PropertyColumn<AssetStatus>(new FIDLabelModel("label.name"), "name", "name"));
+        columns.add(new PropertyColumn<AssetStatus>(new FIDLabelModel("label.name"), "name", "name") {
+            @Override
+            public void populateItem(Item<ICellPopulator<AssetStatus>> item, String componentId, IModel<AssetStatus> rowModel) {
+                super.populateItem(item, componentId, rowModel);
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+            }
+        });
 
-        columns.add(new PropertyColumn<AssetStatus>(new FIDLabelModel("label.createdby"), "createdBy.lastName", "createdBy.displayName"));
+        columns.add(new PropertyColumn<AssetStatus>(new FIDLabelModel("label.createdby"), "createdBy.lastName", "createdBy.displayName") {
+            @Override
+            public void populateItem(Item<ICellPopulator<AssetStatus>> item, String componentId, IModel<AssetStatus> rowModel) {
+                super.populateItem(item, componentId, rowModel);
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+            }
+        });
 
         columns.add(new PropertyColumn<AssetStatus>(new FIDLabelModel("label.created"), "created", "created") {
             @Override
             public void populateItem(Item<ICellPopulator<AssetStatus>> item, String componentId, IModel<AssetStatus> rowModel) {
                 Date created = rowModel.getObject().getCreated();
                 item.add(new Label(componentId, new DayDisplayModel(Model.of(created)).includeTime().withTimeZone(FieldIDSession.get().getSessionUser().getTimeZone())));
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
             }
         });
 
-        columns.add(new PropertyColumn<AssetStatus>(new FIDLabelModel("label.modifiedby"), "modifiedBy.lastName", "modifiedBy.displayName"));
+        columns.add(new PropertyColumn<AssetStatus>(new FIDLabelModel("label.modifiedby"), "modifiedBy.lastName", "modifiedBy.displayName") {
+            @Override
+            public void populateItem(Item<ICellPopulator<AssetStatus>> item, String componentId, IModel<AssetStatus> rowModel) {
+                super.populateItem(item, componentId, rowModel);
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+            }
+        });
 
         columns.add(new PropertyColumn<AssetStatus>(new FIDLabelModel("label.modified"), "modified", "modified") {
             @Override
             public void populateItem(Item<ICellPopulator<AssetStatus>> item, String componentId, IModel<AssetStatus> rowModel) {
                 Date modified = rowModel.getObject().getModified();
                 item.add(new Label(componentId, new DayDisplayModel(Model.of(modified)).includeTime().withTimeZone(FieldIDSession.get().getSessionUser().getTimeZone())));
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
             }
         });
 
