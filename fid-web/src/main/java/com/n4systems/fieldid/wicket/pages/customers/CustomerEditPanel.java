@@ -513,7 +513,7 @@ abstract public class CustomerEditPanel extends Panel {
                 getRequestCycle().setResponsePage(CustomerActionsPage.class,
                         PageParametersBuilder.param(
                                 CustomerActionsPage.INITIAL_TAB_SELECTION_KEY,
-                                CustomerActionsPage.SHOW_CUSTOMERLIST_PAGE));
+                                CustomerActionsPage.SHOW_CUSTOMER_LIST_PAGE));
             }
         };
         form.add(cancelButton);

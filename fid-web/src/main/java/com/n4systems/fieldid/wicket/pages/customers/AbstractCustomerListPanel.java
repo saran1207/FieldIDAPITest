@@ -32,11 +32,11 @@ import java.util.Iterator;
 
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_END_USERS})
-abstract public class BaseCustomerListPanel extends Panel {
+abstract public class AbstractCustomerListPanel extends Panel {
 
     final private static int CUSTOMERS_PER_PAGE = 20;
 
-    private static final Logger logger = Logger.getLogger(BaseCustomerListPanel.class);
+    private static final Logger logger = Logger.getLogger(AbstractCustomerListPanel.class);
 
     @SpringBean
     private PlaceService placeService;
@@ -52,7 +52,7 @@ abstract public class BaseCustomerListPanel extends Panel {
     private boolean filteringResult = false;
     private int currentResultCount;
 
-    public BaseCustomerListPanel(String id, IModel<WebSessionMap> webSessionMapModel, LoaderFactory loaderFactory) {
+    public AbstractCustomerListPanel(String id, IModel<WebSessionMap> webSessionMapModel, LoaderFactory loaderFactory) {
         super(id);
         this.webSessionMapModel = webSessionMapModel;
         this.loaderFactory = loaderFactory;

@@ -40,10 +40,14 @@ import java.util.List;
 public class CustomerActionsPage extends FieldIDFrontEndPage {
 
     public static final String INITIAL_TAB_SELECTION_KEY = "InitialTabSelection";
-    public static final String SHOW_CUSTOMERLIST_PAGE = "ShowCustomerListPage";
+    public static final String SHOW_CUSTOMER_LIST_PAGE = "ShowListPage";
+    public static final String SHOW_CUSTOMER_LIST_ARCHIVED_PAGE = "ShowArchivedPage";
+    public static final String SHOW_CUSTOMER_VIEW_PAGE = "ShowViewPage";
+    public static final String SHOW_CUSTOMER_EDIT_PAGE = "ShowEditPage";
+    public static final String SHOW_CUSTOMER_DIVISIONS_PAGE = "ShowDivisionsPage";
+    public static final String SHOW_CUSTOMER_USERS_PAGE = "ShowUsersPage";
+    public static final String SHOW_CUSTOMER_ADD_PAGE = "ShowAddPage";
     public static final String SHOW_IMPORTEXPORT_PAGE = "ShowImportExportPage";
-    public static final String SHOW_CUSTOMERVIEW_PAGE = "ShowCustomerViewPage";
-    public static final String SHOW_CUSTOMER_USERS_PAGE = "ShowCustomerUsersPage";
     public static final String INITIAL_CUSTOMER_ID = "id";
 
     private static final Logger logger = Logger.getLogger(CustomerActionsPage.class);
@@ -73,6 +77,10 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
 
     private LoaderFactory loaderFactory;
 
+    /**
+     * Tabbed page with the various actions available for customers.
+     * @param params - optional and may be used to specify the initial tab selection and/or customer selection.
+     */
     public CustomerActionsPage(PageParameters params) {
         super(params);
         currentlySelectedTab = 0;
@@ -90,7 +98,7 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
 
     private void addFeedbackPanel() {
          /* Existing top feedback panel is in the correct place for our messages but doesn't
-            get recognized as a feedback panel for our messages. */
+            get recognized as a feedback panel for our messages so we need to add our own. */
         remove(getTopFeedbackPanel());
         feedbackPanel = new FeedbackPanel("topFeedbackPanel");
         feedbackPanel.add(new AttributeAppender("style", new Model("text-align: center; color:red; padding: 0px 10px"), " "));
@@ -162,7 +170,7 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
         final int VIEW_TAB_INDEX = 2;
         final int EDIT_TAB_INDEX= 3;
         final int MERGE_TAB_INDEX = 4;
-        final int DIVISION_TAB_INDEX = 5;
+        final int DIVISIONS_TAB_INDEX = 5;
         final int USERS_TAB_INDEX = 6;
         final int ADD_TAB_INDEX = 7;
         final int IMPORT_EXPORT_TAB_INDEX = 8;
@@ -195,7 +203,11 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
         }
         add(tabbedPanel);
 
-        /* View All tab */
+        /* Create the tabs */
+
+        /**
+         * View All tab
+         */
         tabs.add(new PanelCachingTab(new AbstractTab(new FIDLabelModel("nav.view_all")) {
             @Override
             public Panel getPanel(String panelId) {
@@ -203,54 +215,48 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
 
                     @Override
                     protected void invokeCustomerEdit(Long customerId) {
-                        customerSelectedForEditModel.setObject(customerId);
-                        tabbedPanel.setSelectedTab(EDIT_TAB_INDEX);
-                        currentlySelectedTab = EDIT_TAB_INDEX;
-                        RequestCycle.get().setResponsePage( CustomerActionsPage.this.getPage() );
+                        changeSelectedPage(tabbedPanel, customerId, EDIT_TAB_INDEX);
                     }
 
                     @Override
                     protected void invokeCustomerShow(Long customerId) {
-                        customerSelectedForEditModel.setObject(customerId);
-                        tabbedPanel.setSelectedTab(VIEW_TAB_INDEX);
-                        currentlySelectedTab = EDIT_TAB_INDEX;
-                        RequestCycle.get().setResponsePage( CustomerActionsPage.this.getPage() );
+                        changeSelectedPage(tabbedPanel, customerId, VIEW_TAB_INDEX);
                     }
                 };
             }
         }));
         titleLabelsByTabIndex.add(new FIDLabelModel("title.customer_list_customer").getObject());
-        if (SHOW_CUSTOMERLIST_PAGE.equals(initialTabSelection))
+        if (SHOW_CUSTOMER_LIST_PAGE.equals(initialTabSelection)) {
             preSelectedTab = VIEW_ALL_TAB_INDEX;
+        }
 
-        /* View archived tab */
+        /**
+         * View archived tab
+         */
         tabs.add(new PanelCachingTab(new AbstractTab(new FIDLabelModel("nav.view_all_archived")) {
             public Panel getPanel(String panelId) {
                 return new CustomerArchivedListPanel(panelId, webSessionMapModel, getLoaderFactory()){
 
-                    //TODO copied from struts version but all customers here should have EntityState archived.
-
                     @Override
                     protected void invokeCustomerEdit(Long customerId) {
-                        customerSelectedForEditModel.setObject(customerId);
-                        tabbedPanel.setSelectedTab(EDIT_TAB_INDEX);
-                        currentlySelectedTab = EDIT_TAB_INDEX;
-                        RequestCycle.get().setResponsePage( CustomerActionsPage.this.getPage() );
+                        changeSelectedPage(tabbedPanel, customerId, EDIT_TAB_INDEX);
                     }
 
                     @Override
                     protected void invokeCustomerShow(Long customerId) {
-                        customerSelectedForEditModel.setObject(customerId);
-                        tabbedPanel.setSelectedTab(VIEW_TAB_INDEX);
-                        currentlySelectedTab = EDIT_TAB_INDEX;
-                        RequestCycle.get().setResponsePage( CustomerActionsPage.this.getPage() );
+                        changeSelectedPage(tabbedPanel, customerId, VIEW_TAB_INDEX);
                     }
                 };
             }
         }));
         titleLabelsByTabIndex.add(new FIDLabelModel("title.customer_list_archived_customer").getObject());
+        if (SHOW_CUSTOMER_LIST_ARCHIVED_PAGE.equals(initialTabSelection)) {
+            preSelectedTab = VIEW_ARCHIVED_TAB_INDEX;
+        }
 
-        /* View an individual customer tab */
+        /**
+         * View tab - view an individual customer
+         */
         tabs.add(new AbstractTab(new FIDLabelModel("nav.view")) {
             @Override
             public Panel getPanel(String panelId)
@@ -258,32 +264,23 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
                 return new CustomerShowPanel(panelId, customerSelectedForEditModel, securityFilterModel) {
                     @Override
                     protected void listDivisionsAction() {
-                        tabbedPanel.setSelectedTab(DIVISION_TAB_INDEX);
-                        currentlySelectedTab = DIVISION_TAB_INDEX;
-                        RequestCycle.get().setResponsePage( CustomerActionsPage.this.getPage() );
+                        changeSelectedPage(tabbedPanel, DIVISIONS_TAB_INDEX);
                     }
 
                     @Override
                     protected void listUsersAction() {
-                        tabbedPanel.setSelectedTab(USERS_TAB_INDEX);
-                        currentlySelectedTab = USERS_TAB_INDEX;
-                        RequestCycle.get().setResponsePage( CustomerActionsPage.this.getPage() );
+                        changeSelectedPage(tabbedPanel, USERS_TAB_INDEX);
                     }
 
                     @Override
                     protected void mergeInvokedAction() {
                         showMergeTab.setValue(true);
-                        tabbedPanel.setSelectedTab(MERGE_TAB_INDEX);
-                        currentlySelectedTab = MERGE_TAB_INDEX;
-                        RequestCycle.get().setResponsePage( CustomerActionsPage.this.getPage() );
+                        changeSelectedPage(tabbedPanel, MERGE_TAB_INDEX);
                     }
 
                     @Override
                     protected void postArchiveAction() {
-                        customerSelectedForEditModel.setObject(null);
-                        tabbedPanel.setSelectedTab(VIEW_ALL_TAB_INDEX);
-                        currentlySelectedTab = VIEW_ALL_TAB_INDEX;
-                        RequestCycle.get().setResponsePage( CustomerActionsPage.this.getPage() );
+                        changeSelectedPage(tabbedPanel, null, VIEW_ALL_TAB_INDEX);
                     }
                 };
             }
@@ -293,12 +290,14 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
             }
         });
         titleLabelsByTabIndex.add(new FIDLabelModel("title.customer_show_customer").getObject());
-        if (SHOW_CUSTOMERVIEW_PAGE.equals(initialTabSelection)) {
+        if (SHOW_CUSTOMER_VIEW_PAGE.equals(initialTabSelection)) {
             preSelectedTab = VIEW_TAB_INDEX;
             customerSelectedForEditModel.setObject(initialCustomerId);
         }
 
-        /* Edit a customer tab (may contain edit a specific customer or merge a customer) */
+        /**
+         * Edit Tab (this tab has two implementations) - edit a customer
+         */
         tabs.add(new AbstractTab(new FIDLabelModel("nav.edit")) {
             @Override
             public Panel getPanel(String panelId)
@@ -307,10 +306,7 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
                         sessionUserModel, webSessionMapModel, getLoaderFactory()) {
                     @Override
                     protected void postSaveAction(Long customerId, AjaxRequestTarget target) {
-                        customerSelectedForEditModel.setObject(customerId);
-                        tabbedPanel.setSelectedTab(VIEW_TAB_INDEX);
-                        currentlySelectedTab = VIEW_TAB_INDEX;
-                        RequestCycle.get().setResponsePage( CustomerActionsPage.this.getPage() );
+                        changeSelectedPage(tabbedPanel, customerId, VIEW_TAB_INDEX);
                     }
                 };
             }
@@ -320,7 +316,14 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
             }
         });
         titleLabelsByTabIndex.add("");
+        if (SHOW_CUSTOMER_EDIT_PAGE.equals(initialTabSelection)) {
+            preSelectedTab = EDIT_TAB_INDEX;
+            customerSelectedForEditModel.setObject(initialCustomerId);
+        }
 
+        /**
+         * Edit tab (this tab has two implementations) - merge a customer
+         */
         tabs.add(new AbstractTab(new FIDLabelModel("nav.edit")) {
             @Override
             public Panel getPanel(String panelId)
@@ -336,7 +339,9 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
         });
         titleLabelsByTabIndex.add("");
 
-        /* Show divisions for a customer tab */
+        /**
+         * Divisions tab - show divisions for a customer
+         */
         tabs.add(new AbstractTab(new FIDLabelModel("nav.divisions")) {
             @Override
             public Panel getPanel(String panelId)
@@ -349,8 +354,14 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
             }
         });
         titleLabelsByTabIndex.add(new FIDLabelModel("title.customer_divisions").getObject());
+        if (SHOW_CUSTOMER_DIVISIONS_PAGE.equals(initialTabSelection)) {
+            customerSelectedForEditModel.setObject(initialCustomerId);
+            preSelectedTab = DIVISIONS_TAB_INDEX;
+        }
 
-        /* Show users for a customer tab */
+        /**
+         * Users tab - show users for a customer
+         */
         tabs.add(new AbstractTab(new FIDLabelModel("nav.users")) {
             @Override
             public Panel getPanel(String panelId)
@@ -363,8 +374,14 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
             }
         });
         titleLabelsByTabIndex.add(new FIDLabelModel("title.customer_users").getObject());
+        if (SHOW_CUSTOMER_USERS_PAGE.equals(initialTabSelection)) {
+            customerSelectedForEditModel.setObject(initialCustomerId);
+            preSelectedTab = USERS_TAB_INDEX;
+        }
 
-        /* Add a customer tab */
+        /**
+         * Add tab - create a customer
+         */
         tabs.add(new AbstractTab(new FIDLabelModel("nav.add")) {
             @Override
             public Panel getPanel(String panelId)
@@ -373,17 +390,19 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
                         sessionUserModel, webSessionMapModel, getLoaderFactory()) {
                     @Override
                     protected void postSaveAction(Long customerId, AjaxRequestTarget target) {
-                        customerSelectedForEditModel.setObject(customerId);
-                        tabbedPanel.setSelectedTab(VIEW_TAB_INDEX);
-                        currentlySelectedTab = VIEW_TAB_INDEX;
-                        RequestCycle.get().setResponsePage( CustomerActionsPage.this.getPage() );
+                        changeSelectedPage(tabbedPanel, customerId, VIEW_TAB_INDEX);
                     }
                 };
             }
         });
         titleLabelsByTabIndex.add("");
+        if (SHOW_CUSTOMER_ADD_PAGE.equals(initialTabSelection)) {
+            preSelectedTab = ADD_TAB_INDEX;
+        }
 
-        /* Import/Export a customer tab */
+        /**
+         * Import/Export tab - import/export a customer
+         */
         tabs.add(new PanelCachingTab(new AbstractTab(new FIDLabelModel("nav.import_export")) {
             @Override
             public Panel getPanel(String panelId)
@@ -393,21 +412,31 @@ public class CustomerActionsPage extends FieldIDFrontEndPage {
             }
         }));
         titleLabelsByTabIndex.add(new FIDLabelModel("title.customer_import_export").getObject());
-
-
-        if (SHOW_IMPORTEXPORT_PAGE.equals(initialTabSelection))
+        if (SHOW_IMPORTEXPORT_PAGE.equals(initialTabSelection)) {
             preSelectedTab = IMPORT_EXPORT_TAB_INDEX;
-        else
-        if (SHOW_CUSTOMER_USERS_PAGE.equals(initialTabSelection)) {
-            customerSelectedForEditModel.setObject(initialCustomerId);
-            preSelectedTab = USERS_TAB_INDEX;
         }
 
+
+        /* Set initial tab selection */
         if (preSelectedTab != NO_TAB_SELECTION) {
             tabbedPanel.setSelectedTab(preSelectedTab);
         }
 
     }
+
+    private void changeSelectedPage(TabbedPanel tabbedPanel, Long customerId, int newIndex) {
+        customerSelectedForEditModel.setObject(customerId);
+        tabbedPanel.setSelectedTab(newIndex);
+        currentlySelectedTab = newIndex;
+        RequestCycle.get().setResponsePage( CustomerActionsPage.this.getPage() );
+    }
+
+    private void changeSelectedPage(TabbedPanel tabbedPanel, int newIndex) {
+        tabbedPanel.setSelectedTab(newIndex);
+        currentlySelectedTab = newIndex;
+        RequestCycle.get().setResponsePage( CustomerActionsPage.this.getPage() );
+    }
+
     /* Create models for use by component panels as callbacks to get values obtainable only from this page.
      * This avoids attempting to add these objects to the serialized state of the panels */
     private void createModels() {

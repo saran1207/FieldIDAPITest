@@ -372,7 +372,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         boolean advancedLocationEnabled = FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.AdvancedLocation);
 
         container.add(new BookmarkablePageLink<CustomerActionsPage>("manageCustomersLink", CustomerActionsPage.class,
-                PageParametersBuilder.param(CustomerActionsPage.INITIAL_TAB_SELECTION_KEY, CustomerActionsPage.SHOW_CUSTOMERLIST_PAGE)).
+                PageParametersBuilder.param(CustomerActionsPage.INITIAL_TAB_SELECTION_KEY, CustomerActionsPage.SHOW_CUSTOMER_LIST_PAGE)).
                 setVisible(getSessionUser().hasAccess("manageendusers")));
         container.add(new BookmarkablePageLink<UsersListPage>("manageUsersLink", UsersListPage.class).setVisible(canManageSystemUsers));
         container.add(new BookmarkablePageLink<UserGroupsPage>("userGroupsLink", UserGroupsPage.class).setVisible(canManageSystemUsers));

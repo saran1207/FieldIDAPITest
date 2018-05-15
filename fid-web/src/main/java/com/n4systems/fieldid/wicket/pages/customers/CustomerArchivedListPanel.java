@@ -23,7 +23,7 @@ import org.apache.wicket.model.Model;
  * Created by agrabovskis on 2018-01-03.
  */
 @UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_END_USERS})
-abstract public class CustomerArchivedListPanel extends BaseCustomerListPanel {
+abstract public class CustomerArchivedListPanel extends AbstractCustomerListPanel {
 
     public CustomerArchivedListPanel(String id, IModel<WebSessionMap> webSessionMapModel, LoaderFactory loaderFactory) {
         super(id, webSessionMapModel, loaderFactory);

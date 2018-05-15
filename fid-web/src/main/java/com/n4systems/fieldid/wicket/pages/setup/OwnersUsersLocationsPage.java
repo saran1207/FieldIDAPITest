@@ -22,7 +22,7 @@ public class OwnersUsersLocationsPage extends SetupPage {
         boolean advancedLocationEnabled = FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.AdvancedLocation);
 
 	    add(new BookmarkablePageLink<CustomerActionsPage>("manageCustomersLink", CustomerActionsPage.class,
-                PageParametersBuilder.param(CustomerActionsPage.INITIAL_TAB_SELECTION_KEY, CustomerActionsPage.SHOW_CUSTOMERLIST_PAGE)).
+                PageParametersBuilder.param(CustomerActionsPage.INITIAL_TAB_SELECTION_KEY, CustomerActionsPage.SHOW_CUSTOMER_LIST_PAGE)).
                 setVisible(getSessionUser().hasAccess("manageendusers")));
         add(new BookmarkablePageLink<UsersListPage>("manageUsersLink", UsersListPage.class).setVisible(canManageSystemUsers));
         add(new BookmarkablePageLink<UserGroupsPage>("userGroupsLink", UserGroupsPage.class).setVisible(canManageSystemUsers));

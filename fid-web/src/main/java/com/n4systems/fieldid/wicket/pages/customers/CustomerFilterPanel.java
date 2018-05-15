@@ -40,7 +40,6 @@ abstract public class CustomerFilterPanel extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        /*response.renderCSSReference("style/legacy/pageStyles/listFilter.css");*/
         response.renderCSSReference("style/legacy/pageStyles/customerFilterPanel.css");
     }
 
@@ -94,7 +93,7 @@ abstract public class CustomerFilterPanel extends Panel {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                 nameFilterValue.setObject("");
+                nameFilterValue.setObject("");
                 idFilterValue.setObject("");
                 orgFilterValue.setObject(null);
                 target.add(nameFilter);

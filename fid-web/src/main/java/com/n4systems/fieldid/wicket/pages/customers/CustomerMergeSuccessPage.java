@@ -49,7 +49,7 @@ public class CustomerMergeSuccessPage extends FieldIDFrontEndPage {
             @Override
             public void onClick() {
                 PageParameters params = new PageParameters();
-                params.add(CustomerActionsPage.INITIAL_TAB_SELECTION_KEY, CustomerActionsPage.SHOW_CUSTOMERVIEW_PAGE);
+                params.add(CustomerActionsPage.INITIAL_TAB_SELECTION_KEY, CustomerActionsPage.SHOW_CUSTOMER_VIEW_PAGE);
                 params.add(CustomerActionsPage.INITIAL_CUSTOMER_ID, winningCustomerId);
                 getRequestCycle().setResponsePage(CustomerActionsPage.class, params);
             }
