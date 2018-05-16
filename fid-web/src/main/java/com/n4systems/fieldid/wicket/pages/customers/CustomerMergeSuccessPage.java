@@ -37,11 +37,14 @@ public class CustomerMergeSuccessPage extends FieldIDFrontEndPage {
 
     @Override
     protected Label createTitleLabel(String labelId) {
-        String title = MessageFormat.format("{0} {1} {2} {3}",
+        String title = MessageFormat.format(
+                "{0} <span class='notranslate'>{1}</span> {2} <span class='notranslate'>{3}</span>",
                 getString("title.merge_customers"), losingCustomerName,
                 getString("label.into"), winningCustomerName);
 
-        return new Label(labelId, title);
+        Label titleLabel = new Label(labelId, title);
+        titleLabel.setEscapeModelStrings(false);
+        return titleLabel;
     }
 
     private void addComponents() {

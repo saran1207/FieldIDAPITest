@@ -30,7 +30,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.convert.IConverter;
-import org.codehaus.xfire.transport.Session;
 import rfid.web.helper.SessionUser;
 
 import java.text.MessageFormat;
@@ -150,7 +149,7 @@ public class CustomerMergePanel extends Panel {
             public String getObject() {
                 return MessageFormat.format(getString("label.duplicate_customer"), losingCustomer.getObject().getName());
             }
-        }));
+        }).setEscapeModelStrings(false));
 
         WebMarkupContainer step1ToggledContainer = createHideableWebMarkupContainer("step1ToggledContainer", SECTIONS.STEP1);
         step1Container.add(step1ToggledContainer);
@@ -161,7 +160,7 @@ public class CustomerMergePanel extends Panel {
                     return MessageFormat.format(getString("instruction.select_duplicate_customer"),
                             losingCustomer.getObject().getName(), losingCustomer.getObject().getName());
             }
-        }));
+        }).setEscapeModelStrings(false));
 
         step1ToggledContainer.add(new AjaxLink("step1Button") {
             @Override
@@ -378,7 +377,7 @@ public class CustomerMergePanel extends Panel {
                 .withNameFilter(searchTerm)
                 .setPostFetchFields("createdBy")
                 .load();
-        customersList.remove(losingCustomer);
+        customersList.remove(losingCustomer.getObject());
         return customersList;
     }
 
