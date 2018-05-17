@@ -1,11 +1,12 @@
 package com.n4systems.fieldid.wicket.pages.setup.user;
 
 import com.n4systems.fieldid.service.org.OrgService;
-import com.n4systems.fieldid.service.user.UserListFilterCriteria;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.user.UserFormAccountPanel;
 import com.n4systems.fieldid.wicket.components.user.UserFormPermissionsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.customers.CustomerActionsPage;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.security.UserType;
 import org.apache.wicket.Component;
@@ -36,7 +37,10 @@ public class AddCustomerUserPage extends UserPage {
     @Override
     protected void doSave() {
         create();
-        redirect("/customersUsers.action?uniqueID=" + customerOrg.getId());
+        getRequestCycle().setResponsePage(CustomerActionsPage.class,
+                PageParametersBuilder.param(CustomerActionsPage.INITIAL_TAB_SELECTION_KEY,
+                                            CustomerActionsPage.SHOW_CUSTOMER_USERS_PAGE).
+                        add(CustomerActionsPage.INITIAL_CUSTOMER_ID, customerOrg.getId().toString()));
     }
 
     @Override
@@ -57,14 +61,50 @@ public class AddCustomerUserPage extends UserPage {
     @Override
     protected void addNavBar(String navBarId) {
         add(new NavigationBar(navBarId,
-                aNavItem().label(new FIDLabelModel("nav.view_all")).page("customerList.action").build(),
-                aNavItem().label(new FIDLabelModel("nav.view_all_archived")).page("archivedCustomerList.action").build(),
-                aNavItem().label(new FIDLabelModel("nav.view")).page("customerShow.action?uniqueID=" + customerOrg.getId()).build(),
-                aNavItem().label(new FIDLabelModel("nav.edit")).page("customerEdit.action?uniqueID=" + customerOrg.getId()).build(),
-                aNavItem().label(new FIDLabelModel("nav.divisions")).page("divisions.action?customerId=" + customerOrg.getId()).build(),
-                aNavItem().label(new FIDLabelModel("nav.users")).page("customersUsers.action?customerId=" + customerOrg.getId()).build(),
-                aNavItem().label("nav.add").page("customerEdit.action").onRight().build(),
-                aNavItem().label("nav.import_export").page("userImportExport.action").onRight().build()
+                aNavItem().label(new FIDLabelModel("nav.view_all")).
+                        page(CustomerActionsPage.class).
+                        params(PageParametersBuilder.param(
+                                CustomerActionsPage.INITIAL_TAB_SELECTION_KEY,
+                                CustomerActionsPage.SHOW_CUSTOMER_LIST_PAGE)).build(),
+                aNavItem().label(new FIDLabelModel("nav.view_all_archived")).
+                        page(CustomerActionsPage.class).
+                        params(PageParametersBuilder.param(
+                                CustomerActionsPage.INITIAL_TAB_SELECTION_KEY,
+                                CustomerActionsPage.SHOW_CUSTOMER_LIST_ARCHIVED_PAGE)).build(),
+                aNavItem().label(new FIDLabelModel("nav.view")).
+                        page(CustomerActionsPage.class).
+                        params(PageParametersBuilder.param(
+                                CustomerActionsPage.INITIAL_TAB_SELECTION_KEY,
+                                CustomerActionsPage.SHOW_CUSTOMER_VIEW_PAGE).
+                                add(CustomerActionsPage.INITIAL_CUSTOMER_ID, customerOrg.getId().toString())).build(),
+                aNavItem().label(new FIDLabelModel("nav.edit")).
+                        page(CustomerActionsPage.class).
+                        params(PageParametersBuilder.param(
+                                CustomerActionsPage.INITIAL_TAB_SELECTION_KEY,
+                                CustomerActionsPage.SHOW_CUSTOMER_EDIT_PAGE).
+                                add(CustomerActionsPage.INITIAL_CUSTOMER_ID, customerOrg.getId().toString())).build(),
+                aNavItem().label(new FIDLabelModel("nav.divisions")).
+                        page(CustomerActionsPage.class).
+                        params(PageParametersBuilder.param(
+                                CustomerActionsPage.INITIAL_TAB_SELECTION_KEY,
+                                CustomerActionsPage.SHOW_CUSTOMER_DIVISIONS_PAGE).
+                                add(CustomerActionsPage.INITIAL_CUSTOMER_ID, customerOrg.getId().toString())).build(),
+                aNavItem().label(new FIDLabelModel("nav.users")).
+                        page(CustomerActionsPage.class).
+                        params(PageParametersBuilder.param(
+                                CustomerActionsPage.INITIAL_TAB_SELECTION_KEY,
+                                CustomerActionsPage.SHOW_CUSTOMER_USERS_PAGE).
+                                add(CustomerActionsPage.INITIAL_CUSTOMER_ID, customerOrg.getId().toString())).build(),
+                aNavItem().label("nav.add").
+                        page(CustomerActionsPage.class).
+                        params(PageParametersBuilder.param(
+                                CustomerActionsPage.INITIAL_TAB_SELECTION_KEY,
+                                CustomerActionsPage.SHOW_CUSTOMER_ADD_PAGE)).onRight().build(),
+                aNavItem().label("nav.import_export").
+                        page(CustomerActionsPage.class).
+                        params(PageParametersBuilder.param(
+                                CustomerActionsPage.INITIAL_TAB_SELECTION_KEY,
+                                CustomerActionsPage.SHOW_IMPORTEXPORT_PAGE)).onRight().build()
         ));
     }
 }

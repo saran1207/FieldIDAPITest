@@ -188,7 +188,9 @@
                         <li class="dropdown-secondary">
                             <a wicket:id="ownersUsersLocLink"><wicket:message key="nav.owners_users_loc"/></a>
                             <ul wicket:id="ownersSubMenuContainer">
-                                <li wicket:id="manageCustomersContainer"><a href="/fieldid/customerList.action" ><wicket:message key="label.customers"/></a></li>
+                                <wicket:enclosure>
+                                    <li><a wicket:id="manageCustomersLink" ><wicket:message key="label.customers"/></a></li>
+                                </wicket:enclosure>
                                 <wicket:enclosure>
                                     <li><a wicket:id="manageUsersLink"><wicket:message key="label.users"/></a></li>
                                 </wicket:enclosure>
@@ -216,7 +218,7 @@
                         <li class="dropdown-secondary">
                             <a wicket:id="importLink"><wicket:message key="nav.import"/></a>
                             <ul>
-                                <li><a href="/fieldid/customerImportExport.action"><wicket:message key="label.import_owners"/></a></li>
+                                <li><a wicket:id="customerImportLink"><wicket:message key="label.import_owners"/></a></li>
                                 <li><a wicket:id="assetImportLink"><wicket:message key="label.import_assets"/></a></li>
                                 <li><a wicket:id="eventImportLink"><wicket:message key="label.import_events"/></a></li>
                                 <li><a href="/fieldid/autoAttributeImportExport.action"><wicket:message key="label.import_auto_attributes"/></a></li>

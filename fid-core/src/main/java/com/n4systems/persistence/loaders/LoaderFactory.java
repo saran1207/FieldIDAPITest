@@ -570,4 +570,8 @@ public class LoaderFactory implements Serializable {
 	public ListLoader<Asset> createAssetListLoader(AssetType assetType, BaseOrg baseOrg) {
 		return new AssetListLoader(filter, assetType, baseOrg);
 	}
+
+	public UserPaginatedLoader createUserPaginatedLoader() {
+		return new UserPaginatedLoader(filter);
+	}
 }

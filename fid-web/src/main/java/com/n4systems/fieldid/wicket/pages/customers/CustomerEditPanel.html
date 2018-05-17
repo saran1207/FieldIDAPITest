@@ -1,0 +1,114 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" >
+<wicket:panel>
+    <form wicket:id="customerForm" style="padding-top: 5px;" class="fullForm fluidSets" enctype="multipart/form-data">
+
+        <div wicket:id="linkedCustomerInstructions">
+            <p class="instructions">
+                <wicket:message key="instructions.linked_customer_edit"/>
+            </p>
+        </div>
+        <div class="multiColumn">
+            <div class="fieldGroup fieldGroupGap">
+                <h2><wicket:message key="label.details"/></h2>
+                <div class="infoSet">
+                    <label class="label" wicket:for="customerId"><wicket:message key="label.id"></wicket:message>
+                        <span class="required"><wicket:message key="indicator.required"/></span></label>
+                    <span class="fieldHolder">
+                        <input type="text" wicket:id="customerId" size="30"/>
+                    </span>
+                </div>
+                <div class="infoSet">
+                    <label class="label" wicket:for="parentOrgId"><wicket:message key="label.organizationalunit"/>
+                        <span class="required"><wicket:message key="indicator.required"/></span></label>
+                    <span class="fieldHolder">
+                        <select wicket:id="parentOrgId"></select>
+                    </span>
+                </div>
+                <div class="infoSet">
+                    <label class="label" wicket:for="customerName"><wicket:message key="label.name"/> <span class="required"><wicket:message key="indicator.required"/></span></label>
+                    <span class="fieldHolder">
+                        <input type="text" wicket:id="customerName" size="50" cssClass="linkedCustomerControlled" />
+                    </span>
+                </div>
+                <div class="infoSet">
+                    <label class="label" wicket:for="customerNotes"><wicket:message key="label.notes"/></label>
+                    <span class="fieldHolder">
+                        <textarea wicket:id="customerNotes" />
+                    </span>
+                </div>
+                <div class="infoSet">
+                    <label class="label" for="imageUploadField"><wicket:message key="label.logo_image"/></label>
+
+                    <span id="imageUploadField" class="fieldHolder">
+
+                        <input type="file" wicket:id="fileToUpload" size="30" />
+                        <div><span wicket:id="uploadInfo"><wicket:message key="label.org_image_looks_best"/></span></div>
+                        <img wicket:id="customerLogoImage" width="150"/>
+                        <a href="javascript:void(0)" wicket:id="removeImageButton">
+                            <wicket:message key ="label.remove"/></a>
+
+                    </span>
+                </div>
+            </div>
+            <div class="fieldGroup">
+                <h2><wicket:message key="label.contact_information"/></h2>
+                <div class="infoSet">
+                    <label class="label" wicket:for="contactName"><wicket:message key="label.contactname"/></label>
+                    <span class="fieldHolder"><input type="text" wicket:id="contactName" /></span>
+                </div>
+                <div class="infoSet">
+                    <label class="label" wicket:for="accountManagerEmail"><wicket:message key="label.email_address"/></label>
+                    <span class="fieldHolder"><input type="text" wicket:id="accountManagerEmail" /></span>
+                </div>
+                <div class="infoSet">
+                    <label class="label" wicket:for="addressInfo.streetAddress"><wicket:message key="label.streetaddress"/></label>
+                    <span class="fieldHolder"><input type="text" wicket:id="addressInfo.streetAddress" cssClass="linkedCustomerControlled"/></span>
+                </div>
+                <div class="infoSet">
+                    <label class="label" wicket:for="addressInfo.city"><wicket:message key="label.city"/></label>
+                    <span class="fieldHolder"><input type="text" wicket:id="addressInfo.city" cssClass="linkedCustomerControlled" /></span>
+                </div>
+                <div class="infoSet">
+                    <label class="label" wicket:for="addressInfo.state"><wicket:message key="label.state"/></label>
+                    <span class="fieldHolder"><input type="text" wicket:id="addressInfo.state" cssClass="linkedCustomerControlled"/></span>
+                </div>
+                <div class="infoSet">
+                    <label class="label" wicket:for="addressInfo.zip"><wicket:message key="label.zip"/></label>
+                    <span class="fieldHolder"><input type="text" wicket:id="addressInfo.zip" cssClass="linkedCustomerControlled" /></span>
+                </div>
+                <div class="infoSet">
+                    <label class="label" wicket:for="addressInfo.country"><wicket:message key="label.country"/></label>
+                    <span class="fieldHolder"><input type="text" wicket:id="addressInfo.country" cssClass="linkedCustomerControlled" /></span>
+                </div>
+                <div class="infoSet">
+                    <label class="label" wicket:for="addressInfo.phone1"><wicket:message key="label.phone1"/></label>
+                    <span class="fieldHolder"><input type="text" wicket:id="addressInfo.phone1" cssClass="linkedCustomerControlled"/></span>
+                </div>
+                <div class="infoSet">
+                    <label class="label" wicket:for="addressInfo.phone2"><wicket:message key="label.phone2"/></label>
+                    <span class="fieldHolder"><input type="text" wicket:id="addressInfo.phone2" cssClass="linkedCustomerControlled" /></span>
+                </div>
+                <div class="infoSet">
+                    <label class="label" wicket:for="addressInfo.fax1"><wicket:message key="label.fax"/></label>
+                    <span class="fieldHolder"><input type="text" wicket:id="addressInfo.fax1" cssClass="linkedCustomerControlled"/></span>
+                </div>
+            </div>
+        </div>
+        <div class="formAction" >
+            <input type="submit" wicket:id="formSubmitLink" wicket:message="value:label.save" id="saveButton"/>
+
+            <wicket:message key="label.or"/>
+
+      <!--  <#if uniqueID?exists>
+            <a href="<@s.url action="customerShow" uniqueID="${uniqueID!}" currentPage="${currentPage!}" listFilter="${listFilter!}"/>" ><@s.text name="hbutton.cancel" /></a>
+            <#else>
+                <a href="<@s.url action="customerList" currentPage="${currentPage}" listFilter="${listFilter!}"/>" ><@s.text name="label.cancel"/></a>
+        </#if>-->
+
+            <a href="javascript:void(0)" wicket:id="cancelButton">
+                <wicket:message key ="label.cancel"/></a>
+
+        </div>
+    </form>
+</wicket:panel>
+</html>

@@ -1,0 +1,19 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" >
+<wicket:panel>
+
+    <div wicket:id="divisionListSection">
+        <div class="useractions addicon">
+            <p><a ref="javascript:void(0)" wicket:id="addDivision"><wicket:message key="label.add_division"/></a></p>
+        </div>
+        <wicket:container wicket:id="divisionListPanel"></wicket:container>
+    </div>
+
+    <div wicket:id="divisionAddSection">
+        <div class="secondaryNav">
+            <a ref="javascript:void(0)" wicket:id="listDivisions">&#171; <wicket:message key="label.view_all_divisions"/></a>
+        </div>
+        <wicket:container wicket:id="divisionAddPanel"></wicket:container>
+    </div>
+
+</wicket:panel>
+</html>
