@@ -3,7 +3,7 @@ function loadGoogleTranslate() {
     var googleTranslateScript = document.createElement('script');
     googleTranslateScript.type = 'text/javascript';
     googleTranslateScript.async = true;
-    googleTranslateScript.src = 'http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+    googleTranslateScript.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
     document.getElementById('google_translate_element_container').appendChild(googleTranslateScript);
 }
 
