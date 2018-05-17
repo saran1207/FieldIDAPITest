@@ -34,8 +34,16 @@
 	    <!--[if lte IE 8]>
 	        <link wicket:id="dropDownIECss" type="text/css" href="/fieldid/style/legacy/dropdown/ie.css" rel="stylesheet" media="all"/>
 	    <![endif]-->
+        <link rel="stylesheet" type="text/css" href="/fieldid/style/legacy/component/googleTranslate.css"/>
+        <script type="text/javascript" src="/fieldid/javascript/lang/googleTranslate.js"></script>
         <span wicket:id="customJsPanel"></span>
 
+        <style>
+            .ui-autocomplete {
+                /* Needed for smart search popup */
+                box-sizing: border-box;
+            }
+        </style>
     </head>
 
     <body id="fieldidBody">
@@ -79,8 +87,11 @@
         <div id="bottom-panel" wicket:id="bottomPanel"/>
 
         <div id="pageFooter">
-            <div>
+            <div style="float:left">
                 <p><span wicket:id="versionLabel"></span></p>
+                <div id="google_translate_element_container" style="visibility:hidden">
+                    <div id="google_translate_element"></div>
+                </div>
             </div>
             <div class="poweredBy"><a href="http://www.fieldid.com/" target="_blank"><img src="/fieldid/img/powered-by-fieldid.gif" border="0"/></a></div>	</div>
         </div>
@@ -117,7 +128,7 @@
                 <div id="listContainer">
                     <ul class="listOfLinks">
                         <li>
-                            Welcome, <a href="/fieldid/myAccount.action"><span wicket:id="loggedInUsernameLabel"></span></a>
+                            Welcome, <a href="/fieldid/myAccount.action" class="notranslate"><span wicket:id="loggedInUsernameLabel"></span></a>
                         </li>
                         <li wicket:enclosure="languageSelection">
                             <a wicket:id="languageSelection"><wicket:message key="label.language"/></a>

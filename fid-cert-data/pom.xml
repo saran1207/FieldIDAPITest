@@ -3,7 +3,7 @@
   <parent>
     <artifactId>fieldid-root</artifactId>
     <groupId>com.fieldid</groupId>
-    <version>2018.3.20-SNAPSHOT</version>
+    <version>2018.5.16-SNAPSHOT</version>
   </parent>
   <groupId>com.fieldid</groupId>
   <artifactId>fid-cert-data</artifactId>

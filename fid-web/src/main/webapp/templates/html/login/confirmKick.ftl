@@ -21,7 +21,19 @@
 			<@s.submit key="label.yes_kick_other_user" id="kickOtherUserOut"/> <@s.text name="label.or"/> <a href="<@s.url action="logout"/>" ><@s.text name="label.cancel_and_sign_in"/></a>
 		</div>
 	</@s.form>
-	
+
+	<@n4.includeScript src="lang/googleTranslate.js"/>
+	<div id="google_translate_element_container" style="visibility:hidden">
+		<#if action.isGoogleTranslateAllowed()>
+        	<div id="google_translate_element"></div>
+        	<script type="text/javascript">
+            	if (isGoogleTranslateAllowedForCurrentLanguage())
+                	loadGoogleTranslate();
+            	else
+                	hideGoogleTranslateWidget();
+        	</script>
+		</#if>
+	</div>
 
 </div>
 

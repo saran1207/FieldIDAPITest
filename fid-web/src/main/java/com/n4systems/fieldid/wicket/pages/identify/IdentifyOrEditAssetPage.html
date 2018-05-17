@@ -21,7 +21,7 @@
     <form wicket:id="identifyAssetForm" class="form-horizontal">
         <div class="primary-selection">  
             <label><wicket:message key="label.assettype"/></label>
-            <select wicket:id="assetType"></select>
+            <span class="notranslate"><select wicket:id="assetType"></select></span>
         </div>
 
         <div class="column-left">
@@ -87,18 +87,18 @@
                 <legend>Owner</legend>
                 <div class="control-group" wicket:id="assignedToContainer">
                     <label><wicket:message key="label.assignedto"/></label>
-                    <select wicket:id="assignedToSelect"/>
+                    <span class="notranslate"><select wicket:id="assignedToSelect"/></span>
                     <a class="links" wicket:id="assignToMeLink"><wicket:message key="label.assign_to_me"/></a>
                 </div>
 
                 <div class="control-group">
                     <label>* <wicket:message key="label.owner"/></label>
-                    <div wicket:id="owner"/>
+                    <div class="notranslate" wicket:id="owner"/>
                 </div>
 
                 <div class="control-group" wicket:enclosure="location">
                     <label><wicket:message key="label.location"/></label>
-                    <div wicket:id="location"/>
+                    <div class="notranslate" wicket:id="location"/>
                 </div>
                 <div class="control-group">
                     <label wicket:for="freeformLocation" class="label freeFormLabel"><wicket:message key="label.freeform_location"/></label>
@@ -112,12 +112,12 @@
                 <legend>Asset Details</legend>
                 <div class="control-group">
                     <label><wicket:message key="label.assetstatus"/></label>
-                    <select wicket:id="assetStatusSelect"/>
+                    <span class="notranslate"><select wicket:id="assetStatusSelect"/></span>
                 </div>
 
                 <div class="control-group">
                     <!-- label included in the wicket -->
-                    <div wicket:id="comments"/>
+                    <div class="notranslate" wicket:id="comments"/>
                 </div>
 
                 <div class="control-group" wicket:id="visibilityContainer">

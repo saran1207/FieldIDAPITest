@@ -7,8 +7,8 @@
                 <div class="heading singleEvent"><h2><wicket:message key="label.perform_event_single_asset"/></h2></div>
                 <p><wicket:message key="label.perform_event_single_asset.full"/></p>
             </div>
-            <div class="searchAction">
-                <div id="assetSearch">
+            <div class="eventAction">
+                <div id="assetSearch" class="eventActionWrapper">
                     <form wicket:id="singleAssetSearchForm">
                         <input type="text" wicket:id="singleAssetSearchText"/>
                         <input type="submit" wicket:message="value:hbutton.load"/>
@@ -24,7 +24,9 @@
                 </p>
             </div>
             <div class="eventAction">
-                <button onclick="redirect('/fieldid/w/selectAssets')"><wicket:message key="label.select_your_assets_now"/></button>
+                <div class="eventActionWrapper">
+                    <button onclick="redirect('/fieldid/w/selectAssets')"><wicket:message key="label.select_your_assets_now"/></button>
+                </div>
             </div>
         </div>
     </div>
@@ -37,7 +39,9 @@
                 </p>
             </div>
             <div class="eventAction">
-                <button onclick="redirect('/fieldid/w/eventImport')"><wicket:message key="label.start_now"/></button>
+                <div class="eventActionWrapper">
+                    <button onclick="redirect('/fieldid/w/eventImport')"><wicket:message key="label.start_now"/></button>
+                </div>
             </div>
         </div>
 
@@ -49,7 +53,9 @@
                 </p>
             </div>
             <div class="eventAction">
-                <button onclick="redirect('/fieldid/multiProofTest.action')"><wicket:message key="label.start_now"/></button>
+                <div class="eventActionWrapper">
+                    <button onclick="redirect('/fieldid/multiProofTest.action')"><wicket:message key="label.start_now"/></button>
+                </div>
             </div>
         </div>
 

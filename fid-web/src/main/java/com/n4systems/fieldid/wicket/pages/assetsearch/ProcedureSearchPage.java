@@ -77,7 +77,7 @@ public class ProcedureSearchPage extends AbstractSearchPage<ProcedureCriteria> {
 
     @Override
     protected Component createResultsPanel(String id, Model<ProcedureCriteria> criteriaModel) {
-        return new ProcedureResultsPanel(id, criteriaModel);
+        return new ProcedureResultsPanel(isGoogleTranslateEnabled(), id, criteriaModel);
     }
 
     @Override

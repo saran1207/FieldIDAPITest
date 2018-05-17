@@ -29,7 +29,10 @@
 
 	<!-- Feature detection library -->
 	<script src="/fieldid/javascript/vendors/modernizr-2.6.2.js"></script>
-	<!-- Custom javascript configured by tenant -->
+
+    <link rel="stylesheet" type="text/css" href="/fieldid/style/legacy/component/googleTranslate.css"/>
+    <script type="text/javascript" src="/fieldid/javascript/lang/googleTranslate.js"></script>
+	<!-- Custom javascript configured by tenant-->
 	<span wicket:id="customJsPanel"></span>
 
 </head>
@@ -72,8 +75,13 @@
     </wrapper>
 	<footer class="footer-global">
 		<div class="content-wrap">
-            <span wicket:id="versionLabel"></span>
-			<img src="/fieldid/img/powered-by-fieldid.gif" alt="powered by Field ID">
+            <div style="float:left">
+                <span wicket:id="versionLabel"></span>
+                <div id="google_translate_element_container" style="visibility:hidden">
+                    <div id="google_translate_element"></div>
+                </div>
+            </div>
+            <img src="/fieldid/img/powered-by-fieldid.gif" alt="powered by Field ID">
 		</div>
         <script wicket:id="footerScript"></script>
 	</footer>
@@ -103,7 +111,7 @@
     <nav class="nav-user js-nav-user js-page-actions">
         <ul class="content-wrap nav-list">
             <li class="username">
-                <wicket:message key="label.welcome"/>,  <a href="/fieldid/myAccount.action"><span wicket:id="loggedInUsernameLabel">N4 Systems</span></a>
+                <wicket:message key="label.welcome"/>,  <a href="/fieldid/myAccount.action" class="notranslate"><span wicket:id="loggedInUsernameLabel">N4 Systems</span></a>
             </li>
             <li wicket:enclosure="languageSelection">
                 <a wicket:id="languageSelection"><wicket:message key="label.language"/></a>
@@ -253,8 +261,9 @@
                     </ul>
                 </li>
             </ul>
-            <div wicket:id="smartSearchContainer" class="search js-smart-search" id="smartSearchContainer">
-                <form wicket:id="userForm">
+            <div wicket:id="smartSearchContainer" class="search js-smart-search" id="smartSearchContainer"
+                 style="float: unset; text-align:right;">
+                <form wicket:id="userForm" style="overflow: hidden;">
                     <div wicket:id = "autocompletesearch" id="smartSearch"/>
                 </form>
             </div>

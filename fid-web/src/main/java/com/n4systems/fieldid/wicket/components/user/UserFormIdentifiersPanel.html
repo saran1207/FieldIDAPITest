@@ -11,7 +11,7 @@
 
         <div class="control-group user-group" wicket:enclosure="group">
             <label class="label"><wicket:message key="label.user_group"/></label>
-            <select wicket:id="group"/>
+            <span class="notranslate"><select wicket:id="group"/></span>
         </div>
 
         <div class="control-group">
@@ -50,7 +50,7 @@
                 <input type="file" wicket:id="digitalSignature">
                 <span wicket:enclosure="digitalSignature"><wicket:message key="label.signature_size"/></span>
                 <span class="displaySignature" wicket:id="fileDisplay">
-                    <img src="/fieldid/images/attachment-icon.png" class="attachmentImage"> <label wicket:id="fileName" class="fileName"/> <a wicket:id="removeLink" class="removeLink"><wicket:message key="label.remove"/></a>
+                    <img src="/fieldid/images/attachment-icon.png" class="attachmentImage"> <label wicket:id="fileName" class="fileName notranslate"/> <a wicket:id="removeLink" class="removeLink"><wicket:message key="label.remove"/></a>
                 </span>
             </form>
         </div>

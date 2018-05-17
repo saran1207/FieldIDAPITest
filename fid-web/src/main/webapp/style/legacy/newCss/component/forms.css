@@ -141,6 +141,14 @@ Can be a warning or error message, or help text. */
 	margin: 6px 0;
 	position: relative;
 }
+.control-group:after {
+	/* force control-group div to contain its child elements by adding hidden content to clear the div */
+	content: ".";
+	visibility: hidden;
+	display: block;
+	clear: both;
+	height: 0;
+	font-size: 0; }
 .control-group input,
 .control-group select,
 .control-group textarea,

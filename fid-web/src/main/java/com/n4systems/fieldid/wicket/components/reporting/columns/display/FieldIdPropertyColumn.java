@@ -41,4 +41,7 @@ public class FieldIdPropertyColumn extends PropertyColumn<RowView> {
         return new Model<String>(rowModel.getObject().getStringValues().get(index));
     }
 
+    public String getGroupKey() {
+        return column.getGroupKey();
+    }
 }

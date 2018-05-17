@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.asset;
 
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.mixpanel.MixpanelService;
+import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.asset.HeaderPanel;
@@ -12,20 +13,21 @@ import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.data.EventByNetworkIdProvider;
 import com.n4systems.fieldid.wicket.data.FieldIDDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
-import com.n4systems.model.ThingEvent;
-import com.n4systems.model.WorkflowState;
+import com.n4systems.model.*;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -44,6 +46,8 @@ public class AssetEventsPage extends AssetPage{
     private MixpanelService mixpanelService;
     @SpringBean
     private EventService eventService;
+    @SpringBean
+    private OrgService orgService;
 
     private boolean open = true;
     private boolean completed = true;
@@ -106,7 +110,13 @@ public class AssetEventsPage extends AssetPage{
         add(eventPanel = new EventListPanel("eventPanel", dataProvider) {
             @Override
             protected void addCustomColumns(List<IColumn<? extends Event>> columns) {
-                columns.add(new PropertyColumn<ThingEvent>(new FIDLabelModel("label.assetstatus"), "assetStatus", "assetStatus.displayName"));
+                columns.add(new PropertyColumn<ThingEvent>(new FIDLabelModel("label.assetstatus"), "assetStatus", "assetStatus.displayName") {
+                    @Override
+                    public void populateItem(Item<ICellPopulator<ThingEvent>> item, String componentId, IModel<ThingEvent> rowModel) {
+                        super.populateItem(item, componentId, rowModel);
+                        item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+                    }
+                });
             }
 
             @Override
@@ -189,6 +199,24 @@ public class AssetEventsPage extends AssetPage{
         response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false", GoogleMap.GOOGLE_MAP_API_ID);
         response.renderJavaScriptReference("javascript/googleMaps.js", GoogleMap.GOOGLE_MAPS_JS_ID);
 
+        /* Javascript function to fix alignment of action options when google translate is active */
+        if (orgService.getPrimaryOrgForTenant(getTenant().getId()).hasExtendedFeature(ExtendedFeature.GoogleTranslate)) {
+            response.renderOnLoadJavaScript(
+                    /* Upon a change to the label by Google Translate see if the max width of any of the buttons has been
+                       increased. If so then increase the action button cell's width in the first row to allow enough room in the
+                       action button cell in all of the rows.
+                     */
+                    "    if (isGoogleTranslateAllowedForCurrentLanguage()) {\n" +
+                    "       var maxWidth = '0px';\n" +
+                    "       $('td .compoundActionButton ._defaultActionButtonContainer a').bind('DOMSubtreeModified', function () {\n" +
+                    "           if (maxWidth < $(this).css('width')) {\n" +
+                    "               maxWidth = $(this).css('width');\n" +
+                                    /* Value of 28px is the width of the dropdown arrow which is an img and doesn't change */
+                    "               var newWidth = (parseInt(maxWidth.replace(/px/, '')) + 28) + 'px';\n" +
+                    "               $('.actions.compoundActionButton').first().parent().parent().css('width',newWidth);\n" +
+                    "       }});\n" +
+                    "    }");
+        }
     }
 
     public FIDFeedbackPanel getFeedbackPanel() {

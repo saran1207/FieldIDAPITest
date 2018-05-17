@@ -500,3 +500,16 @@ input.wavy-underline {
 .googleMap .others {
     font-style: italic;
 }
+
+/* Disable google translate original text popup */
+.goog-tooltip {
+	display: none !important;
+}
+.goog-tooltip:hover {
+	display: none !important;
+}
+.goog-text-highlight {
+	background-color: transparent !important;
+	border: none !important;
+	box-shadow: none !important;
+}

@@ -19,15 +19,15 @@
 	<#list page.list as customer>
 	
 		<tr>
-			<td>
+			<td class="notranslate">
 				<#if customer.archived>
 					${customer.name}
 				<#else>
 					<a href="<@s.url value="customerShow.action" uniqueID="${customer.id}" />" >${customer.name}</a>
 				</#if>
 			</td>
-			<td>${customer.code!}</td>
-			<td>${customer.getInternalOrg().name}</td>
+			<td class="notranslate">${customer.code!}</td>
+			<td class="notranslate">${customer.getInternalOrg().name}</td>
 			<td>
 				<#if customer.linked >
 					<@s.text name="label.linked_customer" />

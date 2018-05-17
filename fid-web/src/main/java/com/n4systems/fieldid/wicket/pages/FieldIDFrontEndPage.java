@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.UIConstants;
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.version.FieldIdVersion;
 import com.n4systems.fieldid.wicket.FieldIDSession;
@@ -120,6 +121,9 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     @SpringBean
     private S3Service s3Service;
 
+    @SpringBean
+    private OrgService orgService;
+
     private Asset smartSearchAsset;
     private Component titleLabel;
 	private Component topTitleLabel;
@@ -127,6 +131,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     private ModalWindow languageSelectionModalWindow;
     private final SelectLanguagePanel selectLanguagePanel;
     private WebSessionMap webSessionMap;
+    private Boolean googleTranslateEnabled = null;
 
     public FieldIDFrontEndPage() {
         this(null);
@@ -143,6 +148,15 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             public void onLanguageSelection(AjaxRequestTarget target) {
                 languageSelectionModalWindow.close(target);
                 setResponsePage(getPageClass(), getPageParameters());
+            }
+        });
+
+        languageSelectionModalWindow.setWindowClosedCallback(new ModalWindow.WindowClosedCallback() {
+            @Override
+            public void onClose(AjaxRequestTarget target) {
+                /* The google translate widget needs to be moved from the language preference dialog back to the
+                   main page. */
+                target.appendJavaScript("$('#google_translate_element').detach().prependTo('#google_translate_element_container');");
             }
         });
 
@@ -505,6 +519,24 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             response.renderOnDomReadyJavaScript(headerScript);
         }
 
+        if (isGoogleTranslateEnabled()) {
+            response.renderOnDomReadyJavaScript(
+                    "if (isGoogleTranslateAllowedForCurrentLanguage())\n" +
+                            "loadGoogleTranslate();\n" +
+                            "else\n" +
+                            "hideGoogleTranslateWidget();");
+        }
+        else {
+            response.renderOnDomReadyJavaScript("hideGoogleTranslateWidget();");
+        }
+
+    }
+
+    public boolean isGoogleTranslateEnabled() {
+        if (googleTranslateEnabled == null)
+            googleTranslateEnabled = orgService.getPrimaryOrgForTenant(getTenant().getId()).
+                hasExtendedFeature(ExtendedFeature.GoogleTranslate);
+        return googleTranslateEnabled.booleanValue();
     }
 
     protected void renderJqueryJavaScriptReference(IHeaderResponse response) {

@@ -75,7 +75,10 @@ ul.floatingDropdown ul li a:visited {
 	bottom: 8px;
 	left: 30px;
 }
-#page.with-left-panel .centre,
+#page.with-left-panel .centre {
+	left: 425px;
+	position: fixed;
+}
 #page.with-left-panel #bottom-panel {
 	left: 425px;
 }
@@ -84,7 +87,7 @@ ul.floatingDropdown ul li a:visited {
 /* ACTION BUTTONS BAR 
 ----------------------*/ 
 .sub-menu {
-	position: relative;
+	position: fixed;
 	padding: 0;
 	background-color: #ffffff;
 	/*margin-top: 14px;*/
@@ -145,12 +148,6 @@ ul.floatingDropdown ul li a:visited {
 	padding-bottom: 50px;
 	*z-index: 5;
 }
-	.search-config .btn-primary {
-		position: fixed;
-		left: 340px;
-		top: 206px;
-		z-index: 1;
-	}
 #left-panel.filters .content.filters {
 	display: block;
 }
@@ -171,6 +168,13 @@ ul.floatingDropdown ul li a:visited {
 	margin-left: 14px;
 }
 
+#left-panel #search-button-container {
+    position: fixed;
+    left: 26px;
+    top: 206px;
+    z-index: 1;
+    width: 378px;
+}
 
 /* Popups & Location picker within forms 
 -----------------------------------------*/

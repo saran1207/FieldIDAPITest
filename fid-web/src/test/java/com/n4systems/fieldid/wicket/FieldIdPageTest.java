@@ -1,9 +1,12 @@
 package com.n4systems.fieldid.wicket;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
+import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.model.user.User;
 import com.n4systems.services.config.ConfigService;
@@ -26,6 +29,7 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
     protected S3Service s3Service;
     private ConfigData configData;
     private TenantSettingsService tenantSettingsService;
+    private OrgService orgService;
 
 
     @Override
@@ -36,6 +40,7 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
         userLimitService = wire(UserLimitService.class);
         s3Service = wire(S3Service.class);
         tenantSettingsService = wire(TenantSettingsService.class);
+        orgService = wire(OrgService.class);
         configData = new ConfigData();
 
     }
@@ -98,6 +103,14 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
     protected void expectingTenantSettingsService() {
         expect(tenantSettingsService.getTenantSettings()).andReturn(new TenantSettings());
         replay(tenantSettingsService);
+    }
+
+    protected void expectingOrgService() {
+        PrimaryOrg primaryOrg = wire(PrimaryOrg.class);
+        expect(primaryOrg.hasExtendedFeature(ExtendedFeature.GoogleTranslate)).andReturn(false);
+        replay(primaryOrg);
+        expect(orgService.getPrimaryOrgForTenant(anyLong())).andReturn(primaryOrg);
+        replay(orgService);
     }
 
     protected ConfigData withRssFeed(String rssFeed) {

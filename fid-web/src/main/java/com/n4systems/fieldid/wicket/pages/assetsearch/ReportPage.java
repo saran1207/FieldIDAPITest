@@ -98,7 +98,7 @@ public class ReportPage extends AbstractSearchPage<EventReportCriteria> {
 
     @Override
     protected Component createResultsPanel(String id, Model<EventReportCriteria> criteriaModel) {
-        return new ReportResultsPanel(id, criteriaModel) {
+        return new ReportResultsPanel(isGoogleTranslateEnabled(), id, criteriaModel) {
             @Override protected void updateSelectionStatus(AjaxRequestTarget target) {
                 super.updateSelectionStatus(target);
                 target.add(searchMenu);

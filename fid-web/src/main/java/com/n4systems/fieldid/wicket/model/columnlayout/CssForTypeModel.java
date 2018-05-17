@@ -6,7 +6,7 @@ import org.apache.wicket.model.IModel;
 
 public class CssForTypeModel implements IModel<String> {
 
-    private static final String CUSTOM_GROUP_KEY = "custom_fields";
+    private static final String CUSTOM_GROUP_KEY = "custom_fields notranslate";
 
     private IModel<ColumnMapping> mappingViewModel;
     private String cssPrefix;

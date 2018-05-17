@@ -47,7 +47,7 @@
 
 <#assign bulkRegister = true>
 
-<div id="steps">
+<div id="steps" class="notranslate">
 	<div class="step">
 		<@s.form id="step1form" theme="fieldid" cssClass="fullForm fluidSets">
 			<#include "_step1.ftl" />

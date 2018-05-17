@@ -1,19 +1,23 @@
 package com.n4systems.fieldid.wicket.components.assetsearch.results;
 
 import com.google.gson.JsonObject;
+import com.n4systems.fieldid.permissions.SerializableSecurityGuard;
 import com.n4systems.fieldid.service.search.columns.AssetTextOrFilterSearchService;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.GpsModel;
+import com.n4systems.fieldid.wicket.components.reporting.columns.display.FieldIdPropertyColumn;
 import com.n4systems.fieldid.wicket.components.search.results.SRSResultsPanel;
 import com.n4systems.fieldid.wicket.data.AssetSearchDataProvider;
 import com.n4systems.fieldid.wicket.data.FieldIdAPIDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
+import com.n4systems.fieldid.wicket.util.ReportFormatConverter;
 import com.n4systems.model.GpsBounds;
 import com.n4systems.model.GpsLocation;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.eventschedule.NextEventScheduleLoader;
 import com.n4systems.model.search.AssetSearchCriteria;
+import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.services.reporting.AssetSearchRecord;
 import com.n4systems.services.search.MappedResults;
 import com.n4systems.util.views.RowView;
@@ -45,9 +49,24 @@ public class AssetSearchResultsPanel extends SRSResultsPanel<AssetSearchCriteria
 
     private @SpringBean AssetTextOrFilterSearchService assetTextOrFilterSearchService;
 
-    public AssetSearchResultsPanel(String id, final IModel<AssetSearchCriteria> criteriaModel) {
-        super(id, criteriaModel);
+    public AssetSearchResultsPanel(boolean googleTranslateEnabled, String id, final IModel<AssetSearchCriteria> criteriaModel) {
+        super(googleTranslateEnabled, id, criteriaModel);
         resultButtons.setVisible(true);
+    }
+
+    @Override
+    protected ReportFormatConverter getReportFormatConverter(SerializableSecurityGuard securityGuard) {
+        return new ReportFormatConverter(securityGuard) {
+            @Override
+            protected FieldIdPropertyColumn createSortableColumn(FIDLabelModel columnLabelModel, ColumnMappingView enabledColumn, int index) {
+                return new AssetSearchResultsPropertyColumn(googleTranslateEnabled, columnLabelModel, enabledColumn, index, true);
+            }
+
+            @Override
+            protected FieldIdPropertyColumn createNonSortableColumn(FIDLabelModel columnLabelModel, ColumnMappingView enabledColumn, int index) {
+                return new AssetSearchResultsPropertyColumn(googleTranslateEnabled, columnLabelModel, enabledColumn, index);
+            }
+        };
     }
 
     @Override

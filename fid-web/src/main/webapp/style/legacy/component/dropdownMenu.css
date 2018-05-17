@@ -1,0 +1,32 @@
+.dropdown-menu-container {
+    position: relative;
+    display: inline-block;
+}
+.dropdown-menu-button-image {
+    vertical-align: unset;
+}
+.dropdown-menu-content {
+    /* Dropdown content */
+    display: none;
+    position: absolute;
+    background: white;
+    color: black;
+    top: 100%;
+    left: -46px;
+    border-width: 1px 1px 1px 1px;
+    border-color: #777;
+    border-style: solid;
+    border-radius: 0px 3px 3px 3px;
+    box-shadow: 2px 2px 2px #BBB;
+    padding-bottom: 3px;
+    z-index: 123;
+}
+.dropdown-menu-content a {
+    /* links inside the dropdown */
+    padding: 8px;
+    display: block;
+}
+.dropdown-menu-show {
+    /* Class to dropdown-menu-show dropdown content */
+    display:block;
+}

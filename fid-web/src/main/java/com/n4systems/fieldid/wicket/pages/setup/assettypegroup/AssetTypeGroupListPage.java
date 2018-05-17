@@ -79,6 +79,7 @@ public class AssetTypeGroupListPage extends FieldIDTemplatePage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
         response.renderCSSReference("style/legacy/newCss/assetTypeGroup/assetTypeGroupListPage.css");
     }
 }

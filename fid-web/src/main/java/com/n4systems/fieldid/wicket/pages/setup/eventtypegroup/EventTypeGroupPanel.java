@@ -60,27 +60,53 @@ public class EventTypeGroupPanel extends Panel {
     private List<IColumn<? extends EventTypeGroup>> getEventTypeGroupTableColumns() {
         List<IColumn<? extends EventTypeGroup>> columns = Lists.newArrayList();
 
-        columns.add(new EventTypeGroupColumn(new FIDLabelModel("label.name"),"name", "name"));
+        columns.add(new EventTypeGroupColumn(new FIDLabelModel("label.name"),"name", "name") {
+            @Override
+            public void populateItem(Item<ICellPopulator<EventTypeGroup>> item, String id, IModel<EventTypeGroup> eventTypeGroupModel) {
+                super.populateItem(item, id, eventTypeGroupModel);
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+            }
+        });
 
-        columns.add(new PropertyColumn<EventTypeGroup>(new FIDLabelModel("label.report_title"),"reportTitle", "reportTitle"));
+        columns.add(new PropertyColumn<EventTypeGroup>(new FIDLabelModel("label.report_title"),"reportTitle", "reportTitle") {
+            @Override
+            public void populateItem(Item<ICellPopulator<EventTypeGroup>> item, String id, IModel<EventTypeGroup> eventTypeGroupModel) {
+                super.populateItem(item, id, eventTypeGroupModel);
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+            }
+        });
 
-        columns.add(new PropertyColumn<EventTypeGroup>(new FIDLabelModel("label.createdby"), "createdBy.firstName, createdBy.lastName", "createdBy.fullName"));
+        columns.add(new PropertyColumn<EventTypeGroup>(new FIDLabelModel("label.createdby"), "createdBy.firstName, createdBy.lastName", "createdBy.fullName") {
+            @Override
+            public void populateItem(Item<ICellPopulator<EventTypeGroup>> item, String id, IModel<EventTypeGroup> eventTypeGroupModel) {
+                super.populateItem(item, id, eventTypeGroupModel);
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+            }
+        });
 
         columns.add(new PropertyColumn<EventTypeGroup>(new FIDLabelModel("label.created_on"), "created", "created") {
             @Override
             public void populateItem(Item<ICellPopulator<EventTypeGroup>> item, String componentId, IModel<EventTypeGroup> rowModel) {
                 Date created = rowModel.getObject().getCreated();
                 item.add(new Label(componentId, new DayDisplayModel(Model.of(created)).includeTime().withTimeZone(FieldIDSession.get().getSessionUser().getTimeZone())));
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
             }
         });
 
-        columns.add(new PropertyColumn<EventTypeGroup>(new FIDLabelModel("label.modifiedby"), "modifiedBy.firstName, modifiedBy.lastName", "modifiedBy.fullName"));
+        columns.add(new PropertyColumn<EventTypeGroup>(new FIDLabelModel("label.modifiedby"), "modifiedBy.firstName, modifiedBy.lastName", "modifiedBy.fullName"){
+            @Override
+            public void populateItem(Item<ICellPopulator<EventTypeGroup>> item, String id, IModel<EventTypeGroup> eventTypeGroupModel) {
+                super.populateItem(item, id, eventTypeGroupModel);
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
+            }
+        });
 
         columns.add(new PropertyColumn<EventTypeGroup>(new FIDLabelModel("label.modified_on"), "modified", "modified") {
             @Override
             public void populateItem(Item<ICellPopulator<EventTypeGroup>> item, String componentId, IModel<EventTypeGroup> rowModel) {
                 Date modified = rowModel.getObject().getModified();
                 item.add(new Label(componentId, new DayDisplayModel(Model.of(modified)).includeTime().withTimeZone(FieldIDSession.get().getSessionUser().getTimeZone())));
+                item.add(new AttributeAppender("class", new Model<String>("notranslate"), " "));
             }
         });
 

@@ -31,7 +31,10 @@
 			showButtonPanel: true,
 			dateFormat: "${sessionUser.jqueryDateFormat}", 
 			changeMonth: true,
-			changeYear: true
+			changeYear: true,
+			beforeShow: function(input, inst) {
+				jQuery('#ui-datepicker-div').addClass("notranslate");
+			}
 		});
 	}
 </script>

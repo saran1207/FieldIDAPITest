@@ -5,10 +5,10 @@
       lang="en">
 
 <wicket:panel>
-    <h1>
+    <h1 class="notranslate">
         <span class="greyText" name="assetType"><span wicket:id="assetType"/> / </span><span name="assetId" wicket:id="assetIdentifier"/><span class="greyText" name="assetStatus" wicket:enclosure="assetStatus"> / <span id="assetStatus" wicket:id="assetStatus"/></span>
     </h1>
-    <div class="ownerInfo" name="ownerInfo">
+    <div class="ownerInfo notranslate" name="ownerInfo">
         <img src="/fieldid/images/location-icon.png"/> <span wicket:id="ownerInfo"/>
     </div>
 
@@ -42,7 +42,7 @@
     <div wicket:id="schedulePicker"></div>
     <div wicket:id="procedurePicker"></div>
     <div wicket:id="labelAndLinkContainer">
-        <span wicket:id="workflowState"></span>
+        <span class="notranslate" wicket:id="workflowState"></span>
         <a wicket:id="viewLink"><wicket:message key="label.view_progress"/></a>
     </div>
 </wicket:panel>

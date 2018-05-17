@@ -35,7 +35,7 @@
 		<div id="listContainer">
 			<ul class="listOfLinks">				
 				<li class="first">
-					<@s.text name="label.welcome"/>, <a href="<@s.url action="myAccount" namespace="/"/>">${sessionUser.name}</a>
+					<@s.text name="label.welcome"/>, <a class="notranslate" href="<@s.url action="myAccount" namespace="/"/>">${sessionUser.name}</a>
                 </li>
                 <#if action.isMultiLanguage()>
                     <li>
@@ -44,7 +44,46 @@
                         <script type="text/javascript">
 
                             jQuery(document).ready(function(){
-                                jQuery("#selectLanguageLink").colorbox({iframe: true, href: '<@s.url value="/w/selectLanguage" />', width: '500px', height:'380px'});
+                                jQuery("#selectLanguageLink").colorbox(
+                                		{iframe: true,
+											onComplete: function() {
+												<#if action.isGoogleTranslateAllowed()>
+													var container = jQuery('#google_translate_element');
+													if (container != null) {
+														var h = container.height();
+														if (h != null && h > 0) {
+                                                            /* We have added a google translate section but since it was
+                                                               added via javascript colorbox's sizing didn't include it so
+                                                               manually add sufficient space for this section */
+                                                        	var originalHeight = jQuery('#colorbox', window.parent.document).height();
+															jQuery(this).colorbox.resize({
+																width: 500,
+																height: originalHeight + 155
+															});
+														}
+                                                	}
+                                                </#if>
+											},
+											onClosed: function() {
+												<#if action.isGoogleTranslateAllowed()>
+													if (window.parent.reloadGoogleTranslate != null && window.parent.reloadGoogleTranslate == true) {
+														/* Recreate the google translate widget since it was moved to the iFrame */
+														var parent = window.parent.document.getElementById('google_translate_element_container');
+														/* Remove existing child nodes since they are not needed */
+														var i;
+														for (i = parent.childNodes.length; i > 0 ; i--) {
+                                                        	parent.removeChild(parent.childNodes[i-1]);
+                                                    	}
+														var newWidget = window.parent.document.createElement('div');
+														newWidget.id='google_translate_element';
+														parent.appendChild(newWidget);
+                                                    	loadGoogleTranslate();
+                                                	}
+                                                </#if>
+                                            },
+                                          	href: '<@s.url value="/w/selectLanguage" />',
+											width: '500px',
+											height:'380px'});
                             });
 
                         </script>

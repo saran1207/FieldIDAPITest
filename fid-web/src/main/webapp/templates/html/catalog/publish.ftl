@@ -23,7 +23,7 @@
 							<#list assetTypes as assetType>
 								<div class="customSelectionType">
 									<@s.checkbox name="publishedAssetTypeIds['${assetType.id}']" />
-									<label>${assetType.name?html}</label>
+									<label class="notranslate">${assetType.name?html}</label>
 								</div>
 							</#list>
 								
@@ -34,7 +34,7 @@
 							<#list eventTypes as eventType>
 								<div class="customSelectionType">
 									<@s.checkbox name="publishedEventTypeIds['${eventType.id}']" />
-									<label>${eventType.name?html}</label>
+									<label class="notranslate">${eventType.name?html}</label>
 								</div>
 							</#list>
 						</div>	

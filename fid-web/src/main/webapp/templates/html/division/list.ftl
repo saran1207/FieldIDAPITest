@@ -29,10 +29,10 @@ ${action.setPageType('customer', 'divisions')!}
 		</tr>
 		<#list page.getList() as division > 
 			<tr id="division_${division.id}" >
-				<td>
+				<td class="notranslate">
 					<a href="<@s.url action="divisionEdit" uniqueID="${division.id}" includeParams="get"/>" >${(division.name?html)!}</a>
 				</td>
-				<td>${(division.code?html)!}</td>
+				<td class="notranslate">${(division.code?html)!}</td>
 				<td>
 					<a href="<@s.url action="divisionEdit" uniqueID="${division.id}" includeParams="get"/>"><@s.text name="label.edit"/></a> |
                     <a href="<@s.url action="divisionArchive" uniqueID="${division.id}" includeParams="get"/>" onclick="return confirm('<@s.text name="label.areyousurearchivecustomer" />');" ><@s.text name="label.archive" /></a>
