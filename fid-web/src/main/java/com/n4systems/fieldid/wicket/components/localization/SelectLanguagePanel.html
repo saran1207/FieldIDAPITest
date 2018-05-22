@@ -1,6 +1,6 @@
 <wicket:panel xmlns:wicket="http://www.w3.org/1999/html">
 
-    <div style="border-style: solid; border-color: black; border-width: 1px; padding: 10px">
+    <div wicket:id="languageSelectionSection" style="border-style: solid; border-color: black; border-width: 1px; padding: 10px">
     <form wicket:id="form">
         <h2><wicket:message key="title.language_preference"/></h2>
         
@@ -33,12 +33,12 @@
 
         var runningInIframe = false;
         var widgetCopied = false;
-        var translateWidget = $('#google_translate_element');
+        var translateWidget = jQuery('#google_translate_element');
         if (translateWidget.length == 0) {
             /*  If running in Struts this panel is in an ColorBox iFrame and the google translate widget
                 is in the parent of this iFrame. */
             runningInIframe = true;
-            translateWidget = $('#google_translate_element', window.parent.document);
+            translateWidget = jQuery('#google_translate_element', window.parent.document);
         }
         if (translateWidget.length > 0) {
             if (translateWidget.contents().length > 0) {
