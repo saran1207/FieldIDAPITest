@@ -122,9 +122,11 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
     protected Component titleLabel;
 	protected Component topTitleLabel;
     private TopFeedbackPanel topFeedbackPanel;
+    private Component languageSelectionLink;
     private ModalWindow languageSelectionModalWindow;
     private final SelectLanguagePanel selectLanguagePanel;
     protected boolean showTitle = true;
+    private Boolean googleTranslateEnabled = null;
 
     public FieldIDTemplatePage() {
         this(null);
@@ -491,8 +493,13 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
             response.renderOnDomReadyJavaScript(
                     "if (isGoogleTranslateAllowedForCurrentLanguage())\n" +
                         "loadGoogleTranslate();\n" +
-                    "else\n" +
-                        "hideGoogleTranslateWidget();");
+                    "else {\n" +
+                        "hideGoogleTranslateWidget();\n" +
+                            // If there are no languages in our translation facility then only if Google Translate is
+                            // active should the language dialog be available.
+                            (!selectLanguagePanel.hasLanguagesToDisplay() ?
+                                "document.getElementById('" + languageSelectionLink.getMarkupId() + "').style.display = 'none';\n" : "") +
+                    "}");
         }
         else {
             response.renderOnDomReadyJavaScript("hideGoogleTranslateWidget();");
@@ -500,8 +507,15 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
 
     }
 
+    public boolean isGoogleTranslateEnabled() {
+        if (googleTranslateEnabled == null)
+            googleTranslateEnabled = orgService.getPrimaryOrgForTenant(getTenant().getId()).
+                    hasExtendedFeature(ExtendedFeature.GoogleTranslate);
+        return googleTranslateEnabled.booleanValue();
+    }
+
     protected void renderJqueryJavaScriptReference(IHeaderResponse response) {
-        response.renderJavaScriptReference(CoreJavaScriptResourceReference.get());
+        response.renderJavaScriptReference(CoreJavaScriptResourceReference.get(), "CoreJS");
     }
 
     protected Long getTenantId() {
@@ -553,12 +567,13 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
             add(new Label("loggedInUsernameLabel", sessionUser.getName()));
             addSpeedIdentifyLinks(sessionUser);
 
-            add(new AjaxLink<Void>("languageSelection") {
+            languageSelectionLink = new AjaxLink<Void>("languageSelection") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
                     languageSelectionModalWindow.show(target);
                 }
-            }.setVisible(selectLanguagePanel.hasLanguagesToDisplay()));
+            }.setVisible(selectLanguagePanel.hasLanguagesToDisplay() || isGoogleTranslateEnabled());
+            add(languageSelectionLink);
 
             add(new ExternalLink("support", getSupportUrl(), new FIDLabelModel("label.support").getObject()));
 

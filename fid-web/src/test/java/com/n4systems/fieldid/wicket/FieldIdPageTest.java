@@ -107,9 +107,9 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
 
     protected void expectingOrgService() {
         PrimaryOrg primaryOrg = wire(PrimaryOrg.class);
-        expect(primaryOrg.hasExtendedFeature(ExtendedFeature.GoogleTranslate)).andReturn(false);
+        expect(primaryOrg.hasExtendedFeature(ExtendedFeature.GoogleTranslate)).andStubReturn(false);
         replay(primaryOrg);
-        expect(orgService.getPrimaryOrgForTenant(anyLong())).andReturn(primaryOrg);
+        expect(orgService.getPrimaryOrgForTenant(anyLong())).andStubReturn(primaryOrg);
         replay(orgService);
     }
 

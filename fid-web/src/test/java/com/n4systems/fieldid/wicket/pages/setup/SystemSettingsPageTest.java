@@ -59,9 +59,9 @@ public class SystemSettingsPageTest extends FieldIdPageTest<SystemsSettingsPageH
 		expect(s3Service.getBrandingLogoURL()).andReturn(new URL("http://www.fieldid.com"));
 		replay(s3Service);
 		PrimaryOrg primaryOrg = wire(PrimaryOrg.class);
-		expect(primaryOrg.hasExtendedFeature(ExtendedFeature.GoogleTranslate)).andReturn(false);
+		expect(primaryOrg.hasExtendedFeature(ExtendedFeature.GoogleTranslate)).andStubReturn(false);
 		replay(primaryOrg);
-		expect(orgService.getPrimaryOrgForTenant(anyLong())).andReturn(primaryOrg);
+		expect(orgService.getPrimaryOrgForTenant(anyLong())).andStubReturn(primaryOrg);
 		replay(orgService);
 
 		renderFixture(this);
