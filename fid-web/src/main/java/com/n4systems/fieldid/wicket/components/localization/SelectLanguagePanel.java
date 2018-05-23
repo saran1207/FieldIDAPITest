@@ -12,11 +12,13 @@ import com.n4systems.services.localization.LocalizationService;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.odlabs.wiquery.core.resources.CoreJavaScriptResourceReference;
 
 import java.util.List;
 import java.util.Locale;
@@ -39,7 +41,24 @@ public class SelectLanguagePanel extends Panel {
     public SelectLanguagePanel(String id) {
         super(id);
 
-        add(form = new Form<Void>("form"));
+        /* This panel can include two language selection options
+            1) Our original translation facility
+            2) Google translate
+
+            The code here only handles option (1) above. Option (2) is handled totally by Javascript in the
+            associated HTML page.
+         */
+
+        WebMarkupContainer languageSelectionSection = new WebMarkupContainer("languageSelectionSection") {
+            @Override
+            public boolean isVisible() {
+                return super.isVisible() && hasLanguagesToDisplay();
+            }
+        };
+
+        languageSelectionSection.add(form = new Form<Void>("form"));
+        add(languageSelectionSection);
+
         language = FieldIDSession.get().getUserLocale();
         form.add(chooseLanguage = new FidDropDownChoice<Locale>("language", new PropertyModel<Locale>(this, "language"), getAvailableLanguages(), new IChoiceRenderer<Locale>() {
             @Override
@@ -99,5 +118,6 @@ public class SelectLanguagePanel extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         response.renderCSSReference("style/legacy/modal/select-language.css");
+        response.renderJavaScriptReference(CoreJavaScriptResourceReference.get(), "CoreJS");
     }
 }
