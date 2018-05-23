@@ -55,8 +55,10 @@ public class SelectLanguagePanel extends Panel {
                 return super.isVisible() && hasLanguagesToDisplay();
             }
         };
-        add(languageSelectionSection);
+
         languageSelectionSection.add(form = new Form<Void>("form"));
+        add(languageSelectionSection);
+
         language = FieldIDSession.get().getUserLocale();
         form.add(chooseLanguage = new FidDropDownChoice<Locale>("language", new PropertyModel<Locale>(this, "language"), getAvailableLanguages(), new IChoiceRenderer<Locale>() {
             @Override
