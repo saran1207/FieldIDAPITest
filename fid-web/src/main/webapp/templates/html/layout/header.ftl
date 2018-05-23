@@ -45,7 +45,9 @@
 
                             jQuery(document).ready(function(){
 
-								if (isGoogleTranslateAllowedForCurrentLanguage()) {
+								var googleTranslateEnabled = ${action.isGoogleTranslateAllowed()?c};
+                                var multiLanguage = ${action.isMultiLanguage()?c};
+								if ( (googleTranslateEnabled && isGoogleTranslateAllowedForCurrentLanguage()) || multiLanguage) {
 
                                 	jQuery("#selectLanguageLink").colorbox(
                                 		{iframe: true,
