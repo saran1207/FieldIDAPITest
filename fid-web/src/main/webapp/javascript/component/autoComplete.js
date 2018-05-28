@@ -131,11 +131,14 @@ var autoCompleter = (function() {
 			var newMenuWidth = Math.max(menu.width()+10,300); // add room because we've styled it with extra padding between description and result columns.
 			menu.css('width', newMenuWidth);
 
-			/* position the popup so its right edge matches the right edge of the search box container */
-			var rightEdge = $('#smartSearch.auto-complete-container').offset().left + $('#smartSearch.auto-complete-container').outerWidth();
-			var popupLeftEdge = rightEdge - newMenuWidth;
-			$('.ui-autocomplete').css('left', popupLeftEdge);
-
+			var targetParent = $(event.target).parent();
+			if (targetParent.hasClass('autocomplete-right-justify')) {
+				/* Normally the popup is positioned so its left edge matches the search box container's left edge but in this case position the
+				   popup so its right edge matches the right edge of the search box container */
+				var rightEdge = $('#smartSearch.auto-complete-container').offset().left + $('#smartSearch.auto-complete-container').outerWidth();
+				var popupLeftEdge = rightEdge - newMenuWidth;
+				$('.ui-autocomplete').css('left', popupLeftEdge);
+			}
 			auto.initialized=true;
 			$('.ui-autocomplete .link').tipsy({gravity: 'n', fade:true, delayIn:355});
 			$('.tipsy').remove();  // make sure all pre-existing tooltips are removed.

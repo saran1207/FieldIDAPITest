@@ -37,14 +37,19 @@
 				<li class="first">
 					<@s.text name="label.welcome"/>, <a class="notranslate" href="<@s.url action="myAccount" namespace="/"/>">${sessionUser.name}</a>
                 </li>
-                <#if action.isMultiLanguage()>
+                <#if action.isMultiLanguage() || action.isGoogleTranslateAllowed()>
                     <li>
                         <a id="selectLanguageLink" href="javascript:void(0);"><@s.text name="label.language"/></a>
 
                         <script type="text/javascript">
 
                             jQuery(document).ready(function(){
-                                jQuery("#selectLanguageLink").colorbox(
+
+								var googleTranslateEnabled = ${action.isGoogleTranslateAllowed()?c};
+                                var multiLanguage = ${action.isMultiLanguage()?c};
+								if ( (googleTranslateEnabled && isGoogleTranslateAllowedForCurrentLanguage()) || multiLanguage) {
+
+                                	jQuery("#selectLanguageLink").colorbox(
                                 		{iframe: true,
 											onComplete: function() {
 												<#if action.isGoogleTranslateAllowed()>
@@ -84,6 +89,10 @@
                                           	href: '<@s.url value="/w/selectLanguage" />',
 											width: '500px',
 											height:'380px'});
+								}
+								else {
+                                    document.getElementById("selectLanguageLink").style.display = "none";
+								}
                             });
 
                         </script>
