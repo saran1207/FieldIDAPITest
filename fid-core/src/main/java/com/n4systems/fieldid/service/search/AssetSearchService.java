@@ -17,17 +17,15 @@ import com.n4systems.util.persistence.search.terms.HasGpsTerm;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
-import java.util.Map;
-import java.util.HashMap;
 
 @Transactional(readOnly = true)
 public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset, AssetSearchRecord> {
+
+    @Autowired
+    private AssetService assetService;
 
     @Autowired
     private LocalizationService localizationService;
@@ -113,27 +111,13 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
 
     @Override
     protected List<Asset> convertResults(AssetSearchCriteria criteriaModel, List results) {
-        //We need the orginal attribute name and not the translated name for custom search columns
+        //We need the original attribute name and not the translated name for custom search columns
         if (localizationService.hasTranslations(getCurrentUser().getLanguage())) {
-            List<Asset> convertedResults = new ArrayList<>();
-            for (Object result : results) {
-                Asset asset = (Asset) result;
-
-                for(InfoOptionBean infoOption : asset.getInfoOptions()) {
-                    InfoFieldBean infoField = infoOption.getInfoField();
-
-                    String query = "SELECT name from " + InfoFieldBean.class.getName() + " WHERE uniqueID = :id";
-                    Map<String, Object> params = new HashMap<>();
-                    params.put("id", infoField.getUniqueID());
-
-                    String name = (String) persistenceService.runQuery(query, params).get(0);
-                    infoField.setName(name);
-                }
-                convertedResults.add(asset);
-            }
-            return convertedResults;
+            return assetService.getUntranslatedCustomSearchColumnNames(results);
         }
-        return super.convertResults(criteriaModel, results);
+        else {
+            return super.convertResults(criteriaModel, results);
+        }
     }
 
     public MappedResults<AssetSearchRecord> performMapSearch(AssetSearchCriteria criteria) {

@@ -1,11 +1,13 @@
 package com.n4systems.fieldid.service.search.columns;
 
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.LastEventDateService;
 import com.n4systems.fieldid.service.search.AssetSearchService;
 import com.n4systems.fieldid.service.search.SearchResult;
 import com.n4systems.model.Asset;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.SearchCriteria;
+import com.n4systems.services.localization.LocalizationService;
 import com.n4systems.services.reporting.AssetSearchRecord;
 import com.n4systems.services.search.AssetFullTextSearchService;
 import com.n4systems.services.search.MappedResults;
@@ -24,6 +26,8 @@ public class AssetTextOrFilterSearchService extends TextOrFilterSearchService<As
     private @Autowired AssetFullTextSearchService fullTextSearchService;
     private @Autowired AssetSearchService searchService;
     private @Autowired LastEventDateService lastEventDateService;
+    private @Autowired LocalizationService localizationService;
+    private @Autowired AssetService assetService;
 
     @Override
     protected List<Long> textIdSearch(AssetSearchCriteria criteria) {
@@ -74,9 +78,19 @@ public class AssetTextOrFilterSearchService extends TextOrFilterSearchService<As
 
 
         SearchResult<Asset> searchResult = new SearchResult<>();
-        searchResult.setResults(entities);
+        searchResult.setResults(convertResults(entities));
         searchResult.setTotalResultCount(entities.size());
         return searchResult;
+    }
+
+    private List<Asset> convertResults(List<Asset> assets) {
+        //We need the original attribute name and not the translated name for custom search columns
+        if (localizationService.hasTranslations(getCurrentUser().getLanguage())) {
+            return assetService.getUntranslatedCustomSearchColumnNames(assets);
+        }
+        else {
+            return assets;
+        }
     }
 
     @Override
