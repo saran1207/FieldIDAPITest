@@ -6,8 +6,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import java.util.UUID;
 
-import javax.persistence.*;
-import java.util.UUID;
+import org.apache.log4j.Logger;
 
 @SuppressWarnings("serial")
 @Entity
@@ -17,6 +16,8 @@ import java.util.UUID;
 @Cacheable
 @org.hibernate.annotations.Cache(region = "EventCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 abstract public class Observation extends EntityWithTenant {
+
+	public static final Logger logger = Logger.getLogger(Observation.class);
 
 	public enum Type { 
 		RECOMMENDATION("Recommendations"), DEFICIENCY("Deficiencies");
@@ -78,6 +79,19 @@ abstract public class Observation extends EntityWithTenant {
 	}
 
 	public void setText(String text) {
+		if (text != null && !text.isEmpty()) {
+			try {
+				int fieldMaxSize = Observation.class.getDeclaredField("text").getAnnotation(Column.class).length();
+				int fieldSize = text.length();
+				if (fieldSize > fieldMaxSize) {
+					text = text.substring(0, fieldMaxSize);
+					logger.warn("Observation class - text field was truncated to " + text.length());
+				}
+			}
+			catch (NoSuchFieldException ex) {
+				logger.error(ex);
+			}
+		}
 		this.text = text;
 	}
 

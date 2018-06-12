@@ -4,6 +4,7 @@ import com.n4systems.model.api.HasFileAttachments;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.util.StringUtils;
+import org.apache.log4j.Logger;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 @org.hibernate.annotations.Cache(region = "EventCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public abstract class AbstractEvent<T extends EventType, R extends EntityWithTenant> extends EntityWithTenant implements HasFileAttachments {
 	private static final long serialVersionUID = 1L;
+    private static final Logger logger = Logger.getLogger(AbstractEvent.class);
 
 	@Column(length=5000)
 	private String comments;
@@ -158,6 +160,20 @@ public abstract class AbstractEvent<T extends EventType, R extends EntityWithTen
 	}
 
 	public void setComments( String comments ) {
+
+        if (comments != null && !comments.isEmpty()) {
+            try {
+                int fieldMaxSize = AbstractEvent.class.getDeclaredField("comments").getAnnotation(Column.class).length();
+                int fieldSize = comments.length();
+                if (fieldSize > fieldMaxSize) {
+                    comments = comments.substring(0, fieldMaxSize);
+                    logger.warn("AbstractEvent - comments field was truncated to " + comments.length());
+                }
+            }
+            catch (NoSuchFieldException ex) {
+                logger.error(ex);
+            }
+        }
 		this.comments = comments;
 	}
 

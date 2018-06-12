@@ -4,6 +4,7 @@ import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.log4j.Logger;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -13,6 +14,7 @@ import java.io.Serializable;
 @Embeddable
 public class Location implements Serializable {
 
+	private static final Logger logger = Logger.getLogger(Location.class);
 	private static final PredefinedLocation noPredefinedLocation = null;
 
 //    @Deprecated  // should support use of full locations in all newer supported devices/platforms.
@@ -25,6 +27,7 @@ public class Location implements Serializable {
 	@ManyToOne
 	private PredefinedLocation predefinedLocation;
 
+	private static final int LOCATION_FIELD_LENGTH = 255;
 	@Column(name = "location")
 	private String freeformLocation;
 
@@ -57,7 +60,13 @@ public class Location implements Serializable {
 	}
 
 	public void setFreeformLocation(String freeformLocation) {
-		this.freeformLocation = (freeformLocation == null) ? "" : freeformLocation;
+		freeformLocation = (freeformLocation == null) ? "" : freeformLocation;
+		int fieldSize = freeformLocation.length();
+		if (fieldSize > LOCATION_FIELD_LENGTH) {
+			freeformLocation = freeformLocation.substring(0, LOCATION_FIELD_LENGTH);
+			logger.warn("freeformLocation field was truncated to " + LOCATION_FIELD_LENGTH);
+		}
+		this.freeformLocation = freeformLocation;
 	}
 	
 	@Override
