@@ -172,7 +172,7 @@ public class ProcedureDefinitionServiceTest extends FieldIdServiceTest {
         expect(persistenceService.find(anyObject(Class.class), anyLong())).andReturn(null);
         replay(securityContext, persistenceService);
 
-        s3Service.copyProcedureDefImageToTemp(isA(ProcedureDefinitionImage.class), isA(ProcedureDefinitionImage.class) );
+        expect(s3Service.copyProcedureDefImageToTemp(isA(ProcedureDefinitionImage.class), isA(ProcedureDefinitionImage.class) )).andReturn(true);
         replay(s3Service);
 
         ProcedureDefinition result = procedureDefinitionService.cloneProcedureDefinition(source);
