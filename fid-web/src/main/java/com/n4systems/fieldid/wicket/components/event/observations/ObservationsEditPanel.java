@@ -7,7 +7,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -74,11 +73,6 @@ public abstract class ObservationsEditPanel<T extends Observation> extends Panel
         TextArea<String> commentsArea = new TextArea<String>("comments", new PropertyModel<String>(this, "comments"));
         commentsArea.add(StringValidator.maximumLength(2048));
         form.add(commentsArea);
-        commentsArea.add(new AjaxFormComponentUpdatingBehavior("onblur") {
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-            }
-        });
         
         form.add(new AjaxSubmitLink("saveButton") {
             @Override
