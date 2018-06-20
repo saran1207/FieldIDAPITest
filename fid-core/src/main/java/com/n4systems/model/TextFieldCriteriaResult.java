@@ -30,8 +30,8 @@ public class TextFieldCriteriaResult extends CriteriaResult {
                 value = value.substring(0, VALUE_FIELD_LENGTH);
                 logger.warn("TextFieldCriteriaResult value field was truncated to " + VALUE_FIELD_LENGTH);
             }
-            this.value = value;
         }
+        this.value = value;
     }
 
 	@Override
