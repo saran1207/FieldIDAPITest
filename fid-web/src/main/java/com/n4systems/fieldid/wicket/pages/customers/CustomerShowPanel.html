@@ -1,0 +1,119 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" >
+<wicket:panel>
+<div class="viewactions">
+	<!--<#if !customer.linked >-->
+		<div class="useractions delete">
+			<p>
+				<!--<a href="<@s.url value="customerArchive.action" uniqueID="${customer.id}" />" onclick="return confirm('<@s.text name="label.areyousurearchivecustomer" />');" ><@s.text name="label.archive" /></a>-->
+		        <a href="javascript:void(0)" wicket:id="archiveLink"><wicket:message key="label.archive"/></a>
+            <p>
+		</div>
+	<!--</#if>-->
+	<div class="useractions merge">
+		<!--<p><a href="<@s.url action="mergeCustomers" uniqueID="${customer.id}"/>"><@s.text name="label.merge"/></a></p>-->
+        <p>
+            <a href="javascript:void(0)" wicket:id="mergeLink"><wicket:message key="label.merge"/></a>
+        </p>
+	</div>
+	<!--<#if userLimitService.readOnlyUsersEnabled>-->
+		<div class="useractions addUser">
+          <!--  <p><a href="<@s.url value='/w/setup/addCustomerUser?customerId=${customer.id}'/>"><@s.text name="label.add_user"/></a></p>-->
+            <p>
+                <a href="javascript:void(0)" wicket:id="addUserLink"><wicket:message key="label.add_user"/></a>
+            </p>
+		</div>
+	<!--</#if>
+	<#if securityGuard.emailAlertsEnabled>-->
+		<div class="useractions email">
+			<!--<p><a href="<@s.url value="/w/setup/notificationsList"/>"><@s.text name="label.setup_email_settings"/></a></p>-->
+            <p>
+                <a href="javascript:void(0)" wicket:id="setupEmailSettingsLink"><wicket:message key="label.setup_email_settings"/></a>
+            </p>
+		</div>
+	<!--</#if>-->
+
+
+</div>
+
+<div class="viewRow" >
+	<div class="userDetails viewSection smallViewSection">
+		<h2><wicket:message key="label.details"/></h2>
+
+			<div wicket:id="logoSection" class="logo">
+				<span></span><img wicket:id="customerLogoImage" wicket:message="alt:label.organizationalunit"/>
+			</div>
+
+		<div wicket:id="customerDetailsSection" class="details"> <!--class="details <#if !logoImageDirectory?exists>noImage</#if>"-->
+			<h3 class="customerName notranslate"><span wicket:id="customerName"></span></h3>
+
+			<div class="customerDetails">
+				<label class="label"><wicket:message key="label.id"/></label>:
+				<span wicket:id="customerId" class="notranslate"></span>
+			</div>
+			<div class="customerDetails">
+				<label class="label"><wicket:message key="label.organizationalunit"/></label>:
+				<span wicket:id="customerOrganization" class="notranslate"></span>
+			</div>
+			<div class="customerLinks">
+				<!--<a href='<@s.url action="divisions" customerId="${customer.id}"/>'>${divisionCount} <@s.text name="label.divisions"/></a>-->
+                <a wicket:id="showDivisionsLink" href="javascript:void(0)"><wicket:container wicket:id="divisionsLinkLabel" /></a>
+				<!--<a href='<@s.url action="customersUsers" customerId="${customer.id}"/>'>${userCount} <@s.text name="label.user_accounts"/></a>-->
+                <a wicket:id="showUsersLink" href="javascript:void(0)"><wicket:container wicket:id="usersLinkLabel" /></a>
+			</div>
+		</div>
+
+		<div class="notes">
+			<label><wicket:message key="label.notes"/></label>
+			<!--<div class="noteText">${action.replaceCR((customer.notes?html)!"")}</div>-->
+            <div wicket:id="customerNotes" class="noteText notranslate">CUSTOMER NOTES GO HERE</div>
+		</div>
+
+	</div>
+
+	<div class="userDetails viewSection smallViewSection">
+		<h2><wicket:message key="label.contact_information"/></h2>
+		<p>
+			<label><wicket:message key="label.contactname"/></label>
+			<span wicket:id="contactName" class="fieldValue notranslate"></span>
+		</p>
+		<p>
+			<label for="contactEmail"><wicket:message key="label.email_address"/></label>
+			<!--<span id="contactEmail" class="fieldValue"><a href="mailto:${accountManagerEmail!}">${accountManagerEmail!}</a></span>-->
+			<span id="contactEmail" class="fieldValue notranslate"><a wicket:id="contactEmailLink"><wicket:container wicket:id="contactEmailLinkLabel"/></a></span>
+		</p>
+		<p>
+			<label><wicket:message key="label.streetaddress"/></label>
+			<span wicket:id="streetAddress" class="fieldValue notranslate"></span>
+		</p>
+		<p>
+			<label><wicket:message key="label.city"/></label>
+			<span wicket:id="city" class="fieldValue notranslate">${addressInfo.city!}</span>
+		</p>
+		<p>
+			<label><wicket:message key="label.state"/></label>
+			<span wicket:id="state" class="fieldValue notranslate">${addressInfo.state!}</span>
+		</p>
+		<p>
+			<label><wicket:message key="label.zip"/></label>
+			<span wicket:id="zip" class="fieldValue notranslate">${addressInfo.zip!}</span>
+		</p>
+		<p>
+			<label><wicket:message key="label.country"/></label>
+			<span wicket:id="country" class="fieldValue notranslate">${addressInfo.country!}</span>
+		</p>
+		<p>
+			<label><wicket:message key="label.phone1"/></label>
+			<span wicket:id="phone1" class="fieldValue notranslate">${addressInfo.phone1!}</span>
+		</p>
+		<p>
+			<label><wicket:message key="label.phone2"/></label>
+			<span wicket:id="phone2" class="fieldValue notranslate">${addressInfo.phone2!}</span>
+		</p>
+		<p>
+			<label><wicket:message key="label.fax"/></label>
+			<span wicket:id="fax" class="fieldValue notranslate">${addressInfo.fax1!}</span>
+		</p>
+	</div>
+</div>
+</wicket:panel>
+</html>
