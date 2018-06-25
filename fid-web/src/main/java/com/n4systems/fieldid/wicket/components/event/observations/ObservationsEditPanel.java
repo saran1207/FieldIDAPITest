@@ -7,7 +7,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.IAjaxCallDecorator;
+import org.apache.wicket.ajax.calldecorator.AjaxCallDecorator;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -74,12 +75,7 @@ public abstract class ObservationsEditPanel<T extends Observation> extends Panel
         TextArea<String> commentsArea = new TextArea<String>("comments", new PropertyModel<String>(this, "comments"));
         commentsArea.add(StringValidator.maximumLength(2048));
         form.add(commentsArea);
-        commentsArea.add(new AjaxFormComponentUpdatingBehavior("onblur") {
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-            }
-        });
-        
+
         form.add(new AjaxSubmitLink("saveButton") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
@@ -92,6 +88,11 @@ public abstract class ObservationsEditPanel<T extends Observation> extends Panel
             protected void onError(AjaxRequestTarget target, Form<?> form) {
                 target.add(feedbackPanel);
             }
+
+            @Override
+            protected IAjaxCallDecorator getAjaxCallDecorator() {
+                return new ActionButtonStateController();
+            }
         });
 
         form.add(new AjaxLink<Void>("clearLink") {
@@ -99,7 +100,14 @@ public abstract class ObservationsEditPanel<T extends Observation> extends Panel
             public void onClick(AjaxRequestTarget target) {
                 getTransientObservations().clear();
                 comments = null;
+                /* Adding ObservationsEditPanel will refresh the markup so no need to remove the data-wicket-blocked
+                   attribute and the 'disabled' css classes. */
                 target.add(ObservationsEditPanel.this);
+            }
+
+            @Override
+            protected IAjaxCallDecorator getAjaxCallDecorator() {
+                return new ActionButtonStateController();
             }
         });
 
@@ -107,6 +115,10 @@ public abstract class ObservationsEditPanel<T extends Observation> extends Panel
             @Override
             public void onClick(AjaxRequestTarget target) {
                 onClose(target);
+            }
+            @Override
+            protected IAjaxCallDecorator getAjaxCallDecorator() {
+                return new ActionButtonStateController();
             }
         });
     }
@@ -177,4 +189,16 @@ public abstract class ObservationsEditPanel<T extends Observation> extends Panel
         super.renderHead(response);
         response.renderCSSReference("style/legacy/newCss/component/matt_buttons.css");
     }
+
+    private class ActionButtonStateController extends AjaxCallDecorator {
+        @Override
+        public CharSequence decorateScript(Component c, CharSequence script) {
+            String latchCmd = "var locked = document.getElementById('observationActionButtonsContainer').hasAttribute('data-wicket-blocked');" +
+                    " if (locked) { return false; } " +
+                    " document.getElementById('observationActionButtonsContainer').setAttribute('data-wicket-blocked', 'data-wicket-blocked'); " +
+                    " $('.observationActionButton').addClass('btn-disabled'); " +
+                    " $('.observationActionLink').addClass('link-disabled'); ";
+            return latchCmd + script;
+        }
+    };
 }

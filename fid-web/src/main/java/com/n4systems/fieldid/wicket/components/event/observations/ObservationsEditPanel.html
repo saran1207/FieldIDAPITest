@@ -18,13 +18,13 @@
 
         </p>
 
-        <div class="observation-actions observationActions">
-            <a wicket:id="saveButton" class="btn-primary"><wicket:message key="label.store"/></a>
+        <div class="observation-actions observationActions" id="observationActionButtonsContainer">
+            <a wicket:id="saveButton" class="btn-primary observationActionButton"><wicket:message key="label.store"/></a>
             <div class="observation-actions-text observationsActionsText">
                 <wicket:message key="label.or"/>
-                <a wicket:id="clearLink"><wicket:message key="label.clear"/></a>
+                <a wicket:id="clearLink" class="observationActionLink"><wicket:message key="label.clear"/></a>
                 <wicket:message key="label.or"/>
-                <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+                <a wicket:id="cancelLink" class="observationActionLink"><wicket:message key="label.cancel"/></a>
             </div>
         </div>
 

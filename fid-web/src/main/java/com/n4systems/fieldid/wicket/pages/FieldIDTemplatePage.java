@@ -6,6 +6,7 @@ import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.version.FieldIdVersion;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.CachingStrategyLink;
 import com.n4systems.fieldid.wicket.components.CustomJavascriptPanel;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.asset.AutoCompleteSmartSearch;
@@ -158,6 +159,8 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         add(new CustomJavascriptPanel("customJsPanel"));
         add(new GoogleAnalyticsContainer("googleAnalyticsScripts"));
 
+        addCssContainers();
+
         add(new WebMarkupContainer("metaIE").add(new AttributeAppender("content", getMetaIE())));
 
         add(topFeedbackPanel = new TopFeedbackPanel("topFeedbackPanel"));
@@ -187,6 +190,10 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
 
         add(createHeaderLink("headerLink", "headerLinkLabel"));
         add(createRelogLink());
+    }
+
+    private void addCssContainers() {
+        add(new CachingStrategyLink("globalCss"));
     }
 
     @Override
