@@ -978,7 +978,10 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
             isolationPoint.setLockDefinition(source.getLockDefinition());
         }
         if(source.getAnnotation() != null) {
-            isolationPoint.setAnnotation(cloneImageAnnotation(source.getAnnotation(), clonedImages));
+            ImageAnnotation imageAnnotation = cloneImageAnnotation(source.getAnnotation(), clonedImages);
+            if (imageAnnotation != null) {
+                isolationPoint.setAnnotation(imageAnnotation);
+            }
         }
         isolationPoint.setFwdIdx(source.getFwdIdx());
         isolationPoint.setRevIdx(source.getRevIdx());
@@ -998,7 +1001,12 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     private ImageAnnotation cloneImageAnnotation(ImageAnnotation from, Map<String, ProcedureDefinitionImage> clonedImages) {
         Preconditions.checkArgument(from != null, "can't use null isolation annotation when cloning.");
 
-        ImageAnnotation to = cloneImageAnnotation(from, clonedImages.get(from.getImage().getFileName()) );
+        EditableImage image = clonedImages.get(from.getImage().getFileName());
+        if (image == null) {
+            /* Can't clone an annotation with a missing image */
+            return null;
+        }
+        ImageAnnotation to = cloneImageAnnotation(from, image);
         to.setTempId(atomicLongService.getNext());
 
         return to;
@@ -1023,8 +1031,21 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         for (ProcedureDefinitionImage image:from.getImages()) {
             ProcedureDefinitionImage imageCopy = cloneEditableImage(image);
             imageCopy.setProcedureDefinition(to);
-            result.put(image.getFileName(), imageCopy);
-            s3Service.copyProcedureDefImageToTemp(image, imageCopy);
+            try {
+                boolean copySuccess = s3Service.copyProcedureDefImageToTemp(image, imageCopy);
+                if (copySuccess) {
+                    /* Only add image to new ProcedureDefinition if it exists in S3 */
+                    result.put(image.getFileName(), imageCopy);
+                }
+                else {
+                    logger.error("Clone of image '" + image.getFileName() + "' for procedure '" +
+                            from.getProcedureCode() + "' failed due to missing image");
+                }
+            }
+            catch(Exception ex) {
+                logger.error("Clone of image '" + image.getFileName() + "' for procedure '" +
+                        from.getProcedureCode() + "' failed", ex);
+            }
         }
         return result;
     }
