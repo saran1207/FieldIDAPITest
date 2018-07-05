@@ -4,10 +4,12 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetIdentifierService;
 import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.fieldid.service.escalationrule.AssignmentEscalationRuleService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.org.OrgService;
+import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.utils.CopyEventFactory;
 import com.n4systems.fieldid.wicket.FieldIDSession;
@@ -91,6 +93,8 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
     @SpringBean private UserGroupService userGroupService;
     @SpringBean private AssignmentEscalationRuleService ruleService;
     @SpringBean private EventScheduleService eventScheduleService;
+    @SpringBean private RecurringScheduleService recurringScheduleService;
+    @SpringBean private AssetTypeService assetTypeService;
 
     EventSchedulesPanel eventSchedulesPanel;
     AttributesEditPanel attributesEditPanel;
@@ -567,6 +571,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
     }
 
     private void saveSchedulesForAsset(Asset asset) {
+        /* Schedule triggered events */
         for (ThingEvent eventToSchedule : schedulesToAdd) {
             ThingEvent copiedEvent = CopyEventFactory.copyEvent(eventToSchedule);
 
@@ -578,6 +583,14 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             copiedEvent.setOwner(asset.getOwner());
 
             eventScheduleService.createSchedule(copiedEvent);
+        }
+        /* Schedule initial recurring events */
+        AssetType assetType = asset.getType();
+        List<RecurringAssetTypeEvent> recurringAssetTypeEvents =
+                recurringScheduleService.getRecurringAssetTypeEvents(assetType);
+
+        for(RecurringAssetTypeEvent recurringAssetTypeEvent: recurringAssetTypeEvents) {
+            assetTypeService.scheduleInitialEvents(recurringAssetTypeEvent);
         }
     }
 
