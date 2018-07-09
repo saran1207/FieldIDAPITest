@@ -16,6 +16,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class EditEventPage extends ThingEventPage {
 
@@ -71,6 +72,9 @@ public class EditEventPage extends ThingEventPage {
             fileDataContainer = proofTestEditPanel.getFileDataContainer();
         }
 
+        /* Explicitly set modifiedBy just in case updates made by the user didn't include a field on the events table */
+        editedEvent.setModifiedBy(getCurrentUser());
+        editedEvent.setModified(new Date());
         return eventCreationService.updateEvent(editedEvent, fileDataContainer, fileAttachments);
     }
 
