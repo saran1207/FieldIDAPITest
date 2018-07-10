@@ -15,7 +15,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import java.util.ArrayList;
+import java.util.Date;
 
 public class EditMasterEventPage extends MasterEventPage {
 
@@ -88,6 +88,8 @@ public class EditMasterEventPage extends MasterEventPage {
             fileDataContainer = proofTestEditPanel.getFileDataContainer();
         }
 
+        event.getObject().setModifiedBy(getCurrentUser());
+        event.getObject().setModified(new Date());
         return eventCreationService.updateEvent(event.getObject(), fileDataContainer, fileAttachments);
     }
 
