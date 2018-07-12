@@ -644,21 +644,33 @@ public class S3Service extends FieldIdPersistenceService {
         return image;
     }
 
-    public void copyProcedureDefImageToTemp(ProcedureDefinitionImage from, ProcedureDefinitionImage to) {
+    /**
+     * Copy a procedure image to a temp location
+     *
+     * @param from object containing path of the image to copy
+     * @param to object to receive the path of the temp file
+     * @return true if image copied successfully, false if it could not be found on S3
+     */
+    public boolean copyProcedureDefImageToTemp(ProcedureDefinitionImage from, ProcedureDefinitionImage to) {
         String tempFileName = uuidService.createUuid();
         to.setTempFileName(tempFileName);
 
-        String contentType = getObjectMetadata(createResourcePath(from.getTenant().getId(),
-                PROCEDURE_DEFINITION_IMAGE_PATH,
-                from.getProcedureDefinition().getAsset().getId(),
-                from.getProcedureDefinition().getId(),
-                from.getFileName()).toString()).getContentType();
-        to.setContentType(contentType);
+        try {
+            String contentType = getObjectMetadata(createResourcePath(from.getTenant().getId(),
+                    PROCEDURE_DEFINITION_IMAGE_PATH,
+                    from.getProcedureDefinition().getAsset().getId(),
+                    from.getProcedureDefinition().getId(),
+                    from.getFileName()).toString()).getContentType();
+            to.setContentType(contentType);
 
-        copyProcedureDefinitionImageToTemp(from, tempFileName, PROCEDURE_DEFINITION_IMAGE_PATH, PROCEDURE_DEFINITION_IMAGE_TEMP);
-        copyProcedureDefinitionImageToTemp(from, tempFileName, PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM, PROCEDURE_DEFINITION_IMAGE_TEMP_MEDIUM);
-        copyProcedureDefinitionImageToTemp(from, tempFileName, PROCEDURE_DEFINITION_IMAGE_PATH_THUMB, PROCEDURE_DEFINITION_IMAGE_TEMP_THUMB);
-
+            copyProcedureDefinitionImageToTemp(from, tempFileName, PROCEDURE_DEFINITION_IMAGE_PATH, PROCEDURE_DEFINITION_IMAGE_TEMP);
+            copyProcedureDefinitionImageToTemp(from, tempFileName, PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM, PROCEDURE_DEFINITION_IMAGE_TEMP_MEDIUM);
+            copyProcedureDefinitionImageToTemp(from, tempFileName, PROCEDURE_DEFINITION_IMAGE_PATH_THUMB, PROCEDURE_DEFINITION_IMAGE_TEMP_THUMB);
+            return true;
+        }
+        catch(AmazonS3Exception ex) {
+            return handleAmazonS3Exception(ex, false);
+        }
     }
 
     private void copyProcedureDefinitionImageToTemp(ProcedureDefinitionImage image, String tempFileName, String source, String dest) {

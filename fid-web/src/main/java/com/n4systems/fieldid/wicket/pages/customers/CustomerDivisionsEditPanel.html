@@ -1,0 +1,71 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" >
+<wicket:panel>
+
+   <form wicket:id="form" style="padding-top: 5px;" class="fullForm fluidSets">
+   <div class="multiColumn">
+      <div class="fieldGroup fieldGroupGap">
+         <h2><wicket:message key="label.details"/></h2>
+         <div class="infoSet">
+            <label class="label" wicket:for="divisionID"><wicket:message key="label.division_id"/> <span class="required"><wicket:message key="indicator.required"/></span></label>
+            <span class="fieldHolder"><input type="text" wicket:id="divisionID" /></span>
+         </div>
+         <div class="infoSet">
+            <label class="label" wicket:for="name"><wicket:message key="label.name"/> <span class="required"><wicket:message key="indicator.required"/></span></label>
+            <span class="fieldHolder"><input type="text" wicket:id="name" /></span>
+         </div>
+         <div class="infoSet">
+            <label class="label" wicket:for="divisionNotes"><wicket:message key="label.notes"/></label>
+            <span class="fieldHolder"><input type="text" wicket:id="divisionNotes" /></span>
+         </div>
+      </div>
+      <div class="fieldGroup">
+         <h2><wicket:message key="label.contact_information"/></h2>
+         <div class="infoSet">
+            <label class="label" wicket:for="contact.name"><wicket:message key="label.contactname"/></label>
+            <span class="fieldHolder"><input type="text" wicket:id="contact.name" /></span>
+         </div>
+         <div class="infoSet">
+            <label class="label" wicket:for="contact.email"><wicket:message key="label.contactemail"/></label>
+            <span class="fieldHolder"><input type="text" wicket:id="contact.email" /></span>
+         </div>
+         <div class="infoSet">
+            <label class="label" wicket:for="addressInfo.streetAddress"><wicket:message key="label.streetaddress"/></label>
+            <span class="fieldHolder"><input type="text" wicket:id="addressInfo.streetAddress" /></span>
+         </div>
+         <div class="infoSet">
+            <label class="label" wicket:for="addressInfo.city"><wicket:message key="label.city"/></label>
+            <span class="fieldHolder"><input type="text" wicket:id="addressInfo.city" /></span>
+         </div>
+         <div class="infoSet">
+            <label class="label" wicket:for="addressInfo.state"><wicket:message key="label.state"/></label>
+            <span class="fieldHolder"><input type="text" wicket:id="addressInfo.state" /></span>
+         </div>
+         <div class="infoSet">
+            <label class="label" wicket:for="addressInfo.zip"><wicket:message key="label.zip"/></label>
+            <span class="fieldHolder"><input type="text" wicket:id="addressInfo.zip" /></span>
+         </div>
+         <div class="infoSet">
+            <label class="label" wicket:for="addressInfo.country"><wicket:message key="label.country"/></label>
+            <span class="fieldHolder"><input type="text" wicket:id="addressInfo.country" /></span>
+         </div>
+         <div class="infoSet">
+            <label class="label" wicket:for="addressInfo.phone1"><wicket:message key="label.phone1"/></label>
+            <span class="fieldHolder"><input type="text" wicket:id="addressInfo.phone1" /></span>
+         </div>
+         <div class="infoSet">
+            <label class="label" wicket:for="addressInfo.phone2"><wicket:message key="label.phone2"/></label>
+            <span class="fieldHolder"><input type="text" wicket:id="addressInfo.phone2" /></span>
+         </div>
+         <div class="infoSet">
+            <label class="label" wicket:for="addressInfo.fax1"><wicket:message key="label.fax"/></label>
+            <span class="fieldHolder"><input type="text" wicket:id="addressInfo.fax1" /></span>
+         </div>
+      </div>
+   </div>
+   <div class="formAction" >
+      <input type="submit" wicket:id="submit" wicket:message="value:label.save" /> <wicket:message key="label.or"/>
+      <a href="javascript:void(0)" wicket:id="cancel"><wicket:message key="label.cancel"/></a>
+   </div>
+</form>
+</wicket:panel>
+</html>

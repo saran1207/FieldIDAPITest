@@ -1,0 +1,41 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" >
+<wicket:panel>
+    <div wicket:id="addUserSection" class="useractions addUser">
+        <p><a ref="javascript:void(0)" wicket:id="addUser"><wicket:message key="label.add_user"/></a></p>
+    </div>
+
+    <div wicket:id="userList">
+        <div wicket:id="resultTableNavigatorTop"></div>
+        <table class="list">
+            <tr>
+                <th><wicket:message key="label.userid"/></th>
+                <th><wicket:message key="label.username"/></th>
+                <th><wicket:message key="label.division_name"/></th>
+                <th><wicket:message key="label.emailaddress"/></th>
+                <th><wicket:message key="label.lastlogin"/></th>
+                <th></th>
+            </tr>
+            <tr wicket:id="result.list">
+                <td class="notranslate"><a href="javascript:void(0)" wicket:id="viewUserLink"><wicket:container wicket:id="label" /></a></td>
+                <td class="notranslate"><span wicket:id="userName"></span></td>
+                <td class="notranslate"><span wicket:id="userDivision"></span></td>
+                <td class="notranslate"><span wicket:id="userEmail"></span></td>
+               <!--${(action.dateCreated(user)??)?string(action.formatDateTime(action.dateCreated(user)), "--")}-->
+                <td class="notranslate"><span wicket:id="lastLogin"></span></td>
+                <td>
+                   <!-- <a href="<@s.url action="customersUserArchive" uniqueID="${(user.id)!}" includeParams="get"/>"><@s.text name="label.archive" /></a>-->
+                    <a ref="javascript:void(0)" wicket:id="archiveLink"><wicket:message key="label.archive"></wicket:message></a>
+                </td>
+            </tr>
+        </table>
+        <div wicket:id="resultTableNavigatorBottom"></div>
+    </div>
+
+    <div wicket:id="noResults" class="emptyList" >
+        <h2><wicket:message key="label.noresults" /></h2>
+        <p>
+            <wicket:message key="label.emptylistusers" />
+        </p>
+    </div>
+</wicket:panel>
+</html>

@@ -1,0 +1,42 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" >
+<wicket:extend>
+    <thead>
+    <tr>
+        <th><wicket:message key="label.name" /></th>
+        <th><wicket:message key="label.id" /></th>
+        <th><wicket:message key="label.organization" /></th>
+        <th><wicket:message key="label.created" /></th>
+        <th><wicket:message key="label.last_modified" /></th>
+        <th></th>
+        <th>&nbsp;</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr wicket:id="result.list">
+        <td class="notranslate"><wicket:container wicket:id="result.name">
+            <span wicket:id="customerName"></span>
+            <a href="javascript:void(0)" wicket:id="customerShowLink"><wicket:container wicket:id="label" /></a>
+        </wicket:container></td>
+        <td class="notranslate"><label wicket:id="result.id"/></td>
+        <td class="notranslate"><label wicket:id="result.organization"/></td>
+        <td class="notranslate"><label wicket:id="result.created"/></td>
+        <td class="notranslate"><label wicket:id="result.last_modified"/></td>
+        <td><wicket:container wicket:id="result.editActions">
+            <!--customer linked-->
+            <wicket:container wicket:id="customerLinkedActions">
+                <a href="javascript:void(0)" wicket:id="customerEditLink"><wicket:message key="label.edit"/></a> |
+                <wicket:message key="label.linked_customer"/>
+            </wicket:container>
+            <!--customer archived-->
+            <a href="javascript:void(0)" wicket:id="customerUnarchiveLink"><wicket:message key="label.unarchive"/></a>
+            <!--regular customer-->
+            <wicket:container wicket:id="customerEditActions">
+                <a href="javascript:void(0)" wicket:id="customerEditLink"><wicket:message key="label.edit" /></a> |
+                <a href="javascript:void(0)" wicket:id="customerArchiveLink"><wicket:message key="label.archive"/></a>
+            </wicket:container>
+        </wicket:container></td>
+        <td></td>
+    </tr>
+    </tbody>
+</wicket:extend>
+</html>

@@ -17,7 +17,9 @@ ${action.setPageType('my_account', 'exportEvent')!}
 	
 		<div class="infoSet" style="overflow:visible; padding: 30px 0px 30px 0px;">
 			<label for="eventTypeId" class="label"><@s.text name="label.event_type"/> <#include "../common/_requiredMarker.ftl"/></label>
-			<@s.select cssClass="chzn-select" id="eventTypeId" list="eventTypes" name="eventTypeId" listValue="name" listKey="id" label="Event Type"/>
+			<span class="notranslate">
+				<@s.select cssClass="chzn-select" id="eventTypeId" list="eventTypes" name="eventTypeId" listValue="name" listKey="id" label="Event Type"/>
+			</span>
 		</div>					
 
 		<div class="infoSet" style="overflow:visible">

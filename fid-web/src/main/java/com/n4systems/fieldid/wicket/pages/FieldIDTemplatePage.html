@@ -3,7 +3,7 @@
 <head>
 	<meta wicket:id="metaIE" http-equiv="X-UA-Compatible"><!-- WHAT IS THIS USED FOR? -->
 	<meta charset="utf-8">
-	<title>Field ID: <span wicket:id="topTitleLabel"></span></title>
+	<title class="notranslate">Field ID: <span wicket:id="topTitleLabel"></span></title>
 	
 	<!-- TODO: update jquery library
 	<script src="http://code.jquery.com/jquery-1.9.0.js"></script> -->
@@ -18,7 +18,7 @@
 	<link rel="shortcut icon" href="/fieldid/images/favicon.ico" type="image/x-icon" />
 
 	<!-- Global CSS files used for all pages -->
-	<link rel="stylesheet" href="/fieldid/style/global.css">
+	<link wicket:id="globalCss" rel="stylesheet" href="/fieldid/style/global.css">
 	<!--[if IE]>
         <link rel="stylesheet" href="/fieldid/style/ie-all.css">
     <![endif]-->
@@ -188,7 +188,9 @@
                         <li class="dropdown-secondary">
                             <a wicket:id="ownersUsersLocLink"><wicket:message key="nav.owners_users_loc"/></a>
                             <ul wicket:id="ownersSubMenuContainer">
-                                <li wicket:id="manageCustomersContainer"><a href="/fieldid/customerList.action" ><wicket:message key="label.customers"/></a></li>
+                                <wicket:enclosure>
+                                    <li><a wicket:id="manageCustomersLink" ><wicket:message key="label.customers"/></a></li>
+                                </wicket:enclosure>
                                 <wicket:enclosure>
                                     <li><a wicket:id="manageUsersLink"><wicket:message key="label.users"/></a></li>
                                 </wicket:enclosure>
@@ -216,7 +218,7 @@
                         <li class="dropdown-secondary">
                             <a wicket:id="importLink"><wicket:message key="nav.import"/></a>
                             <ul>
-                                <li><a href="/fieldid/customerImportExport.action"><wicket:message key="label.import_owners"/></a></li>
+                                <li><a wicket:id="customerImportLink"><wicket:message key="label.import_owners"/></a></li>
                                 <li><a wicket:id="assetImportLink"><wicket:message key="label.import_assets"/></a></li>
                                 <li><a wicket:id="eventImportLink"><wicket:message key="label.import_events"/></a></li>
                                 <li><a href="/fieldid/autoAttributeImportExport.action"><wicket:message key="label.import_auto_attributes"/></a></li>

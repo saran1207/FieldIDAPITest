@@ -50,6 +50,7 @@ import rfid.ejb.entity.AddAssetHistory;
 import rfid.ejb.entity.AssetCodeMapping;
 import rfid.ejb.entity.AssetExtension;
 import rfid.ejb.entity.InfoOptionBean;
+import rfid.ejb.entity.InfoFieldBean;
 
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -1157,5 +1158,32 @@ public class AssetService extends CrudService<Asset> {
 
     protected void setMixpanelService(MixpanelService mixpanelService) {
         this.mixpanelService = mixpanelService;
+    }
+
+    /**
+     * If localization is turned on the name field in InfoFieldBean objects will be translated but
+     * in some places we need the untranslated version of the name - like when it is used as a lookup value
+     * @param results
+     * @return
+     */
+    public List<Asset> getUntranslatedCustomSearchColumnNames(List results) {
+        //We need the original attribute name and not the translated name for custom search columns
+        List<Asset> convertedResults = new ArrayList<>();
+        for (Object result : results) {
+            Asset asset = (Asset) result;
+
+            for(InfoOptionBean infoOption : asset.getInfoOptions()) {
+                InfoFieldBean infoField = infoOption.getInfoField();
+
+                String query = "SELECT name from " + InfoFieldBean.class.getName() + " WHERE uniqueID = :id";
+                Map<String, Object> params = new HashMap<>();
+                params.put("id", infoField.getUniqueID());
+
+                String name = (String) persistenceService.runQuery(query, params).get(0);
+                infoField.setName(name);
+            }
+            convertedResults.add(asset);
+        }
+        return convertedResults;
     }
 }

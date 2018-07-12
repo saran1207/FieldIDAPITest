@@ -1,0 +1,11 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" >
+<wicket:panel>
+    <div class="initialMessage">
+        <div class="textContainer" >
+            <p class="h1"><wicket:message key="label.create_owner"/></p>
+            <p><wicket:message key="label.create_owner_message" /></p>
+        </div>
+        <input type="submit" wicket:message="value:label.create_owner_now" onclick="return redirect('/fieldid/customerEdit.action');"/>
+    </div>
+</wicket:panel>
+</html>

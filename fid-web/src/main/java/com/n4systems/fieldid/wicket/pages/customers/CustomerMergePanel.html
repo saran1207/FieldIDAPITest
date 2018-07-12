@@ -1,0 +1,114 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<wicket:panel>
+    <div wicket:id="steps" class="steps">
+        <div wicket:id="step1Container" class="step">
+            <h2>1. <span wicket:id="step1Title"></span></h2>
+            <div class="stepContent" wicket:id="step1ToggledContainer">
+                <p class="instructions">
+                    <span wicket:id="step1Instructions"></span>
+                </p>
+                <div class="stepAction">
+                    <input type="submit" wicket:id="step1Button" wicket:message="value:label.confirm_as_losing_customer"/>
+                </div>
+            </div>
+        </div>
+
+        <div wicket:id="step2Container" class="step" >
+            <h2>2. <wicket:message key="label.select_customer_you_want_to_keep"/></h2>
+
+            <div class="stepContent" wicket:id="step2ToggledContainer">
+                <p class="instructions">
+                    <wicket:message key="instruction.select_customer_you_want_to_keep"/>
+                </p>
+
+                <form method="get" wicket:id="customerSearchForm" class="simpleInputForm">
+                    <label wicket:for="customerSearchTerm" class="label"><wicket:message key="label.name"/></label>
+                    <input type="text" wicket:id="customerSearchTerm">
+                    <input type="submit" wicket:id="performCustomerSearch" wicket:message="value:hbutton.search"/>
+                </form>
+
+                <div wicket:id="foundSearchResult">
+                  <table cellspacing="0" class="list">
+                        <tr>
+                            <th></th>
+                            <th><wicket:message key="label.name" /></th>
+                            <th><wicket:message key="label.id" /></th>
+                            <th><wicket:message key="label.organization" /></th>
+                            <th><wicket:message key="label.created" /></th>
+                        </tr>
+                        <tr wicket:id="result.dataView">
+                            <td class="selectAction"><button wicket:id="selectedWinningCustomer">
+                                <wicket:message key="label.select"/></button></td>
+                            <td class="notranslate"><span wicket:id="result.name"></span></td>
+                            <td class="notranslate"><span wicket:id="result.id"></span></td>
+                            <td class="notranslate"><span wicket:id="result.internalOrg.name"></span></td>
+                            <td class="notranslate"><span wicket:id="result.created"></span></td>
+                        </tr>
+                    </table>
+                </div>
+                <div wicket:id="tooManySearchResults">
+                    <span wicket:id="tooManySearchResultsMsg"></span>
+                </div>
+                <div wicket:id="notFoundSearchResult">
+                    <p><wicket:message key="label.no_results"/></p>
+                </div>
+                <div class="stepAction">
+                    <a href="javascript:void(0);" wicket:id="backToStep1Button"><wicket:message key="label.back_to_step"/> 1</a>
+                </div>
+            </div>
+        </div>
+
+        <div wicket:id="step3Container" class="step stepClosed">
+            <h2>3. <wicket:message key="label.confirm_merger"/></h2>
+
+            <div class="stepContent" wicket:id="step3ToggledContainer">
+                <p class="instructions">
+                    <wicket:message key="instruction.confirm_customer_merger"/>
+                </p>
+                <table id="mergeSummary" class="list">
+                    <tr>
+                        <th></th>
+                        <th><wicket:message key="label.name" /></th>
+                        <th><wicket:message key="label.id" /></th>
+                        <th><wicket:message key="label.created" /></th>
+                    </tr>
+                    <tr>
+                        <td><wicket:message key="label.loser"/></td>
+                        <td class="notranslate"><span wicket:id="losingCustomer.name"></span></td>
+                        <td class="notranslate"><span wicket:id="losingCustomer.id"></span></td>
+                        <td class="notranslate"><span wicket:id="losingCustomer.created"></span></td>
+                    </tr>
+                    <tr>
+                        <td><wicket:message key="label.winner"/></td>
+                        <td class="notranslate"><span wicket:id="winningCustomer.name"></span></td>
+                        <td class="notranslate"><span wicket:id="winningCustomer.id"></span></td>
+                        <td class="notranslate"><span wicket:id="winningCustomer.created"></span></td>
+                    </tr>
+                </table>
+
+                <div class="stepAction">
+                    <input type="submit" wicket:message="value:label.merge" wicket:id="mergeCustomers"/>
+                    <span><wicket:message key="label.or"/></span>
+                    <a href="javascript:void(0);" wicket:id="backToStep2Button"><wicket:message key="label.back_to_step"/> 2</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="helpfulHints">
+        <h3><wicket:message key="label.what_will_be_copied"/></h3>
+        <p><wicket:message key="label.what_will_be_copied.full"/></p>
+
+        <h3><wicket:message key="label.what_will_be_deleted"/></h3>
+        <p><wicket:message key="label.what_will_be_deleted.full"/></p>
+
+        <h3><wicket:message key="label.can_it_be_undone"/></h3>
+        <p><wicket:message key="label.can_it_be_undone.full"/></p>
+
+        <h3><wicket:message key="label.when_will_the_asset_be_merged"/></h3>
+        <p><wicket:message key="label.when_will_the_asset_be_merged.full"/></p>
+    </div>
+
+</wicket:panel>
+</html>

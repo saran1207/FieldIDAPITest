@@ -94,6 +94,10 @@
 		@include btn-hover($red, 20%);
 	}
 
+.btn-disabled {
+	background: $gray;
+	border-color: darken($gray, 5%);
+}
 
 // Button styled as link
 // ----------------------

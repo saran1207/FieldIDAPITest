@@ -165,7 +165,7 @@ public class AssetTypeService extends CrudService<AssetType> {
      * @see #addRecurringEvent(com.n4systems.model.AssetType, com.n4systems.model.RecurringAssetTypeEvent)
      * @param recurringEvent
      */
-    private void scheduleInitialEvents(RecurringAssetTypeEvent recurringEvent) {
+    public void scheduleInitialEvents(RecurringAssetTypeEvent recurringEvent) {
         for (LocalDateTime dateTime : recurringScheduleService.getBoundedScheduledTimesIterator(recurringEvent.getRecurrence())) {
             recurringScheduleService.scheduleAnEventFor(recurringEvent, dateTime);
         }
