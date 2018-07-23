@@ -34,6 +34,7 @@ public class ApiUser extends ApiReadonlyModelWithOwner {
 	private Long divisionId;
 	private String mobileAccessKeyId;
 	private String mobileSecretAccessKey;
+	private int mobileMaxOfflineDays;
 	
 	public String getUserId() {
 		return userId;
@@ -252,5 +253,13 @@ public class ApiUser extends ApiReadonlyModelWithOwner {
 
 	public void setMobileSecretAccessKey(String mobileSecretAccessKey) {
 		this.mobileSecretAccessKey = mobileSecretAccessKey;
+	}
+
+	public int getMobileMaxOfflineDays() {
+		return mobileMaxOfflineDays;
+	}
+
+	public void setMobileMaxOfflineDays(int mobileMaxOfflineDays) {
+		this.mobileMaxOfflineDays = mobileMaxOfflineDays;
 	}
 }

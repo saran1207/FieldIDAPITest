@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.AccountPolicy;
 import com.n4systems.model.security.KeyPair;
+import com.n4systems.model.security.OfflinePolicy;
 import com.n4systems.model.security.PasswordPolicy;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -62,6 +63,9 @@ public class TenantSettings extends EntityWithTenant {
 		@AttributeOverride(name = "secret", column = @Column(name = "consumer_secret"))
 	})
 	private KeyPair authConsumer = new KeyPair();
+
+	@Embedded
+	private OfflinePolicy offlinePolicy;
 
 	@Override
 	protected void onUpdate() {
@@ -203,5 +207,13 @@ public class TenantSettings extends EntityWithTenant {
 
 	public void setApiLimit(int apiLimit) {
 		this.apiLimit = apiLimit;
+	}
+
+	public OfflinePolicy getOfflinePolicy() {
+		return offlinePolicy;
+	}
+
+	public void setOfflinePolicy(OfflinePolicy offlinePolicy) {
+		this.offlinePolicy = offlinePolicy;
 	}
 }

@@ -1,0 +1,1 @@
+ALTER TABLE tenant_settings ADD COLUMN maxOfflineDays SMALLINT DEFAULT 30;
