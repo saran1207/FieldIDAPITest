@@ -1,13 +1,10 @@
 package com.n4systems.fieldid.ws.v1.resources.authentication;
 
-import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.ws.v1.exceptions.ForbiddenException;
 import com.n4systems.fieldid.ws.v1.resources.user.ApiUser;
 import com.n4systems.fieldid.ws.v1.resources.user.ApiUserResource;
 import com.n4systems.model.builders.UserBuilder;
-import com.n4systems.model.security.OfflinePolicy;
-import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.model.user.User;
 import com.n4systems.services.SecurityContext;
 import org.junit.Before;
@@ -22,7 +19,6 @@ public class AuthenticationResourceTest {
 	private UserService userService;
 	private ApiUserResource apiUserResource;
 	private SecurityContext securityContext;
-	private TenantSettingsService tenantSettingsService;
 	
 	@Before
 	public void before() {
@@ -30,12 +26,11 @@ public class AuthenticationResourceTest {
 		userService = createMock(UserService.class);
 		apiUserResource = createMock(ApiUserResource.class);
 		securityContext = createMock(SecurityContext.class);
-		tenantSettingsService = createMock(TenantSettingsService.class);
 
 		fixture.userService = userService;
 		fixture.apiUserResource = apiUserResource;
 		fixture.securityContext = securityContext;
-		fixture.tenantSettingsService = tenantSettingsService;
+
 	}
 	
 	@Test(expected = ForbiddenException.class)
@@ -83,12 +78,6 @@ public class AuthenticationResourceTest {
 		
 		expect(apiUserResource.convertEntityToApiModel(user)).andReturn(apiUser);
 		replay(apiUserResource);
-
-		OfflinePolicy offlinePolicy = new OfflinePolicy();
-		TenantSettings tenantSettings = new TenantSettings();
-		tenantSettings.setOfflinePolicy(offlinePolicy);
-		expect(tenantSettingsService.getTenantSettings()).andReturn(tenantSettings);
-		replay(tenantSettingsService);
 
 		assertSame(apiUser, fixture.authenticate(tenant, userId, pass));
 	}

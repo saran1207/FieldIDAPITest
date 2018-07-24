@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.ws.v1.resources.authentication;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
-import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.ws.v1.exceptions.ForbiddenException;
 import com.n4systems.fieldid.ws.v1.resources.user.ApiUser;
@@ -26,7 +25,6 @@ public class AuthenticationResource extends FieldIdPersistenceService {
 	@Autowired protected UserService userService;
 	@Autowired protected ApiUserResource apiUserResource;
 	@Autowired protected SecurityContext securityContext;
-	@Autowired protected TenantSettingsService tenantSettingsService;
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -76,7 +74,6 @@ public class AuthenticationResource extends FieldIdPersistenceService {
 		securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(user.getTenant().getId()));
 		
 		ApiUser apiUser = apiUserResource.convertEntityToApiModel(user);
-		apiUser.setMobileMaxOfflineDays(tenantSettingsService.getTenantSettings().getOfflinePolicy().getMaxOfflineDays());
 		return apiUser;
 	}
 	

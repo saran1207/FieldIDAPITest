@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.ws.v1.resources.user;
 
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
+import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
 import com.n4systems.fieldid.ws.v1.resources.offlineprofile.ApiOfflineProfileResource;
 import com.n4systems.fieldid.ws.v1.resources.tenant.ApiTenantResource;
@@ -26,6 +27,7 @@ public abstract class AbstractUserResource extends SetupDataResource<ApiUser, Us
 	@Autowired private ApiOfflineProfileResource apiOfflineProfileResource;
 	@Autowired private ApiTenantResource apiTenantResource;
 	@Autowired private ConfigService configService;
+	@Autowired protected TenantSettingsService tenantSettingsService;
 
 	public AbstractUserResource() {
 		super(User.class, true);
@@ -116,6 +118,7 @@ public abstract class AbstractUserResource extends SetupDataResource<ApiUser, Us
 
 		apiUser.setMobileAccessKeyId(configService.getString(ConfigEntry.AMAZON_MOBILE_ACCESS_KEY_ID));
 		apiUser.setMobileSecretAccessKey(configService.getString(ConfigEntry.AMAZON_MOBILE_SECRET_ACCESS_KEY_ID));
+		apiUser.setMobileMaxOfflineDays(tenantSettingsService.getTenantSettings().getOfflinePolicy().getMaxOfflineDays());
 
 		return apiUser;
 	}
