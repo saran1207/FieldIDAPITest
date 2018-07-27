@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>fieldid-root</artifactId>
 		<groupId>com.fieldid</groupId>
-		<version>2018.7.11-SNAPSHOT</version>
+		<version>2018.7.30-SNAPSHOT</version>
 	</parent>
 	<artifactId>fid-exporter</artifactId>
 	<name>Export Util</name>
