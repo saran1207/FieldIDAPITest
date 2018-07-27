@@ -50,6 +50,7 @@ import com.n4systems.fieldid.wicket.pages.setup.loto.PrintoutTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.loto.ProcedureApproverPage;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
 import com.n4systems.fieldid.wicket.pages.setup.security.AccountPolicyPage;
+import com.n4systems.fieldid.wicket.pages.setup.security.OfflinePolicyPage;
 import com.n4systems.fieldid.wicket.pages.setup.security.PasswordPolicyPage;
 import com.n4systems.fieldid.wicket.pages.setup.translations.AssetTypeGroupTranslationsPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UserGroupsPage;
@@ -391,7 +392,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     private void createSecuritySubMenu(WebMarkupContainer container) {
 		container.add(new BookmarkablePageLink<ColumnsLayoutPage>("passwordPolicyLink", PasswordPolicyPage.class));
 		container.add(new BookmarkablePageLink<ColumnsLayoutPage>("accountPolicyLink", AccountPolicyPage.class));
-
+        container.add(new BookmarkablePageLink<ColumnsLayoutPage>("offlinePolicyLink", OfflinePolicyPage.class));
 	}
 
 	private Component createTemplatesSubMenu() {

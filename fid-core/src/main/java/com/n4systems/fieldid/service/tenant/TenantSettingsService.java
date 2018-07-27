@@ -3,6 +3,7 @@ package com.n4systems.fieldid.service.tenant;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.event.UsageBasedEventThresholdAlert;
 import com.n4systems.model.security.AccountPolicy;
+import com.n4systems.model.security.OfflinePolicy;
 import com.n4systems.model.security.PasswordPolicy;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.TenantSettings;
@@ -42,7 +43,13 @@ public class TenantSettingsService extends FieldIdPersistenceService {
 		TenantSettings tenantSettings = getTenantSettings();
 		tenantSettings.setPasswordPolicy(passwordPolicy);
 		update(tenantSettings);
-	}	
+	}
+
+	public void updateTenantOfflinePolicySettings(OfflinePolicy offlinePolicy) {
+		TenantSettings tenantSettings = getTenantSettings();
+		tenantSettings.setOfflinePolicy(offlinePolicy);
+		update(tenantSettings);
+	}
 	
 	public void updateUserLimits(UserLimits userLimits) {
 		TenantSettings tenantSettings = getTenantSettings();
