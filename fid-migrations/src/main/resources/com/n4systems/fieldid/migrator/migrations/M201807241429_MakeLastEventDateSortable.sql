@@ -1,1 +1,0 @@
-update column_mappings set sortable = 1 where label = 'label.networklasteventdate';
