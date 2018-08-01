@@ -78,7 +78,7 @@ public class AuthenticationResourceTest {
 		
 		expect(apiUserResource.convertEntityToApiModel(user)).andReturn(apiUser);
 		replay(apiUserResource);
-		
+
 		assertSame(apiUser, fixture.authenticate(tenant, userId, pass));
 	}
 }
