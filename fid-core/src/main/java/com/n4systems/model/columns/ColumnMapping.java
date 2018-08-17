@@ -22,6 +22,9 @@ public abstract class ColumnMapping extends AbstractEntity implements Comparable
     @Column(name="sortable")
     private boolean sortable;
 
+    @Column(name="ignoreSortAlias")
+    private Boolean ignoreSortAlias;
+
     @Column(name="join_expression")
     private String joinExpression;
 
@@ -92,6 +95,14 @@ public abstract class ColumnMapping extends AbstractEntity implements Comparable
 
     public void setSortExpression(String sortExpression) {
         this.sortExpression = sortExpression;
+    }
+
+    public Boolean isIgnoreSortAlias() {
+        return ignoreSortAlias;
+    }
+
+    public void setIgnoreSortAlias(Boolean ignoreSortAlias) {
+        this.ignoreSortAlias = ignoreSortAlias;
     }
 
     public ColumnMappingGroup getGroup() {

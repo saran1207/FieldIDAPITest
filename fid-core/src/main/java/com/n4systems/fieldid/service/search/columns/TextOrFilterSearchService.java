@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.n4systems.ejb.PageHolder;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.search.SearchResult;
+import com.n4systems.model.Asset;
 import com.n4systems.model.api.HasGpsLocation;
 import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.parents.EntityWithTenant;

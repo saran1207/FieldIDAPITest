@@ -9,7 +9,9 @@ public class ColumnMappingConverter {
         if (id == null) {
             id = mapping.getGroup().getGroupKey() + mapping.getLabel();
         }
-        return new ColumnMappingView(id, mapping.getLabel(), mapping.getPathExpression(), mapping.getSortExpression(), mapping.getOutputHandler(), mapping.isSortable(), true, mapping.getDefaultOrder(), null, mapping.getGroup().getGroupKey(), mapping.getId(), mapping.getJoinExpression());
+        return new ColumnMappingView(id, mapping.getLabel(), mapping.getPathExpression(), mapping.getSortExpression(),
+                mapping.getOutputHandler(), mapping.isSortable(), true, mapping.getDefaultOrder(), null,
+                mapping.getGroup().getGroupKey(), mapping.getId(), mapping.getJoinExpression(), mapping.isIgnoreSortAlias());
     }
 
 }
