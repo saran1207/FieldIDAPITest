@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>fieldid-root</artifactId>
 		<groupId>com.fieldid</groupId>
-		<version>2018.8.13-SNAPSHOT</version>
+		<version>2018.8.24-SNAPSHOT</version>
 	</parent>
 	<name>Customer Usage Analyzer</name>
 	<artifactId>fid-customer-usage-analyzer</artifactId>
