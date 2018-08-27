@@ -131,7 +131,7 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false", GOOGLE_MAP_API_ID);
+        response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyBcMtP_Yxr_RrU8TnYeFrGqJylMmDlFlHI", GOOGLE_MAP_API_ID);
         response.renderJavaScriptReference("javascript/googleMaps.js", GOOGLE_MAPS_JS_ID);
         if (isMapVisible()) {
             response.renderOnDomReadyJavaScript(String.format(CREATE_AND_SHOW_JS, getJsVar(), getGson().toJson(new GoogleMapOptions())));
