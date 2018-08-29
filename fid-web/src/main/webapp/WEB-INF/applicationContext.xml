@@ -100,4 +100,25 @@
 	<bean id="productCodeMappingMnager" class="com.n4systems.ejb.legacy.wrapper.AssetCodeMappingEJBContainer" />
 	<bean id="importManager" class="com.n4systems.importing.ImportManagerEJBContainer"/-->
 
+    <!--SSO-->
+    <bean id="SsoMetadataDao" class="com.n4systems.dao.SsoMetadataDaoImpl"/>
+    <bean id="SsoMetadataServices" class = "com.n4systems.services.sso.SsoMetadataServicesImpl"/>
+
+    <!-- Initialization of OpenSAML library-->
+    <bean class="org.springframework.security.saml.SAMLBootstrap"/>
+
+    <!-- Initialization of the velocity engine -->
+    <bean id="velocityEngine" class="org.springframework.security.saml.util.VelocityFactory" factory-method="getEngine"/>
+
+    <!--Only using IDP initiated IDP - no need for a key manager-->
+    <bean id="keyManager" class="org.springframework.security.saml.key.EmptyKeyManager"/>
+
+    <bean id="parserPool" class="org.opensaml.xml.parse.StaticBasicParserPool" init-method="initialize"/>
+    <bean id="parserPoolHolder" class="org.springframework.security.saml.parser.ParserPoolHolder"/>
+
+    <bean id="metadata" class="com.n4systems.services.sso.SSOCachingMetadataManager">
+        <property name="RefreshCheckInterval" value="90000"/>
+        <property name="RefreshRequired" value="true"/>
+    </bean>
+
 </beans>

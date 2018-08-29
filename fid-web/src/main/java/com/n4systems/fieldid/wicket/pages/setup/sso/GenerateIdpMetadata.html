@@ -1,0 +1,33 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<wicket:extend>
+    <div class="post-title"><h2 class="label label-green">Specify the Metadata for your IDP</h2></div>
+    <div class="post-body">
+        <div wicket:id="feedbackPanel"></div>
+        <form wicket:id="metadataForm">
+            <div>
+                <label wicket:for="idpUrl">IDP Url:</label>
+                <input wicket:id="idpUrl" type="text"/>
+            </div>
+            <br/>
+            <div>
+                <div><label wicket:for="serializedMetadata">Metadata:</label>
+                    <input type="button" wicket:id="getMetadata" value="Get Metadata from IDP"/>
+                    <label wicket:for="refreshInterval">Load Timeout(ms):</label>
+                    <input wicket:id="refreshInterval" type="number"/>
+                </div>
+                <div>
+                    <label wicket:for="entityId">Entity Id:</label>
+                    <input wicket:id="entityId" type="text"/>
+                </div>
+                <br/>
+                <span>Serialized metadata</span>
+                <br/>
+                <textarea wicket:id="serializedMetadata" rows="40" cols="80"></textarea>
+            </div>
+            <br/>
+            <input type="submit" class="button" value="Add metadata"/>
+        </form>
+        <p><a href="#" wicket:id="backLink">&lt;&lt Back</a></p>
+    </div>
+</wicket:extend>
+</html>

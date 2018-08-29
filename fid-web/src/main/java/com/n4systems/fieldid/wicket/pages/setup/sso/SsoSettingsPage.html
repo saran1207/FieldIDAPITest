@@ -1,0 +1,28 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+
+	<div class="control-group">
+		<input type="checkbox" wicket:id="enableSSO" />
+		<label class="label">
+			<wicket:message key="label.enable_sso"/>
+		</label>
+		<p><wicket:message key="label.enable_sso_desc"/></p>
+	</div>
+
+	<fieldset>
+		<legend><wicket:message key="label.sso_providers_section"></wicket:message></legend>
+		<p>
+			<strong><wicket:message key="label.identity_providers"></wicket:message></strong><br/>
+		<ul>
+			<li>
+				<span wicket:id="idpProvider"/>
+				<input type="button" wicket:id="createIdp" value="Create new"/>
+				<input type="button" wicket:id="displayIdp" value="Display"/>
+				<input type="button" wicket:id="deleteIdp" value="Delete"/>
+			</li>
+		</ul>
+		</p>
+	</fieldset>
+
+</wicket:extend>
+</html>

@@ -1,0 +1,26 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<wicket:extend>
+Identity Provider Metadata
+<br>
+
+<table>
+    <tr>
+        <td><strong>Entity ID:</strong></td>
+        <td><span wicket:id="metadata.idpEntityId"/></td>
+    </tr>
+    <tr>
+        <td><strong>IDP Url:</strong></td>
+        <td><span wicket:id="metadata.idpUrl"/></td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <label wicket:for="serializedMetadata">Metadata:</label><br>
+            <textarea wicket:id="serializedMetadata" readonly="readonly" rows="40" cols="80"></textarea>
+        </td>
+    </tr>
+    </table>
+
+    <p><a href="#" wicket:id="backLink">&lt;&lt Back</a></p>
+
+</wicket:extend>
+</html>
