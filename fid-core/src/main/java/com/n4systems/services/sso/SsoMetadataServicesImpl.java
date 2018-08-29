@@ -3,6 +3,7 @@ package com.n4systems.services.sso;
 import com.n4systems.dao.SsoMetadataDao;
 import com.n4systems.model.sso.IdpProvidedMetadata;
 import com.n4systems.model.sso.SsoIdpMetadata;
+import com.n4systems.model.sso.SsoSpMetadata;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.log4j.Logger;
@@ -16,9 +17,12 @@ import org.opensaml.xml.parse.StaticBasicParserPool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.saml.key.KeyManager;
 import org.springframework.security.saml.metadata.ExtendedMetadata;
+import org.springframework.security.saml.metadata.ExtendedMetadataDelegate;
+import org.springframework.security.saml.metadata.MetadataGenerator;
 import org.springframework.security.saml.metadata.MetadataManager;
 import org.springframework.security.saml.util.SAMLUtil;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Iterator;
 import java.util.Timer;
@@ -45,6 +49,7 @@ public class SsoMetadataServicesImpl implements SsoMetadataServices {
     private KeyManager keyManager;
 
     @Override
+    @Transactional
     public SsoIdpMetadata addIdp(SsoIdpMetadata idpMetadata) {
 
         ssoMetadataDao.addIdp(idpMetadata);
@@ -58,6 +63,8 @@ public class SsoMetadataServicesImpl implements SsoMetadataServices {
             metadataManager.addMetadataProvider(provider);
             metadataManager.setRefreshRequired(true);
             metadataManager.refreshMetadata();
+            logger.info("Added IDP '" + idpMetadata.getSsoEntity().getEntityId() + "' for tenant " +
+                idpMetadata.getTenant().getName());
         }
         catch (MetadataProviderException ex) {
             logger.error("Unable to add IDP", ex);
@@ -68,20 +75,20 @@ public class SsoMetadataServicesImpl implements SsoMetadataServices {
     }
 
     @Override
+    @Transactional
     public void deleteIdp(String entityId) {
 
         Iterator<MetadataProvider> iter = metadataManager.getProviders().iterator();
         while (iter.hasNext()) {
             MetadataProvider provider = iter.next();
-            System.out.println("Looking at provider: " + provider);
             try {
                 if (provider.getEntityDescriptor(entityId) != null) {
-                    System.out.println("... its descriptor: " + provider.getEntityDescriptor(entityId));
                     metadataManager.removeMetadataProvider(provider);
-                    metadataManager.setHostedSPName(null);
+                    //metadataManager.setHostedSPName(null);
                     ssoMetadataDao.deleteIdp(entityId);
                     metadataManager.setRefreshRequired(true);
                     metadataManager.refreshMetadata();
+                    logger.info("Deleted IDP '" + entityId + "'");
                 }
             }
             catch(MetadataProviderException ex) {
@@ -120,5 +127,106 @@ public class SsoMetadataServicesImpl implements SsoMetadataServices {
         System.out.println("entity descriptor: " + entityDescriptor.toString());
         provider.destroy();
         return entityDescriptor;
+    }
+
+    @Override
+    public SsoSpMetadata addSp(SsoSpMetadata spMetadata) {
+        spMetadata.setSerializedMetadata(generateSp(spMetadata));
+
+        try {
+            ssoMetadataDao.addSp(spMetadata);
+
+            DatabaseSpMetadataProvider provider =
+                    new DatabaseSpMetadataProvider(ssoMetadataDao, spMetadata.getSsoEntity().getEntityId(), parserPool);
+            ExtendedMetadataDelegate delegate =
+                    new ExtendedMetadataDelegate(provider, provider.getExtendedMetadata(spMetadata.getSsoEntity().getEntityId()));
+            delegate.initialize();
+            metadataManager.addMetadataProvider(delegate);
+            metadataManager.setHostedSPName(spMetadata.getSsoEntity().getEntityId());
+            metadataManager.setRefreshRequired(true);
+            metadataManager.refreshMetadata();
+            logger.info("Added SP '" + spMetadata.getSsoEntity().getEntityId() + "' for tenant " +
+                    spMetadata.getTenant().getName());
+        }
+        catch(MetadataProviderException ex) {
+            logger.error("Unable to add SP metadata",ex);
+            throw new RuntimeException(ex);
+        }
+
+        return spMetadata;
+    }
+
+    @Override
+    @Transactional
+    public void deleteSp(String entityId) {
+        Iterator<MetadataProvider> iter = metadataManager.getProviders().iterator();
+        while (iter.hasNext()) {
+            MetadataProvider provider = iter.next();
+            try {
+                if (provider.getEntityDescriptor(entityId) != null) {
+                    metadataManager.removeMetadataProvider(provider);
+                    //metadataManager.setHostedSPName(null);
+                    ssoMetadataDao.deleteSp(entityId);
+                    metadataManager.setRefreshRequired(true);
+                    metadataManager.refreshMetadata();
+                    logger.info("Deleted SP '" + entityId + "'");
+                }
+            }
+            catch(MetadataProviderException ex) {
+                logger.error("Unable to delete SP", ex);
+                /* This is not an expected error so show user an Oops error */
+                throw new RuntimeException(ex);
+            }
+        }
+    }
+
+    private String generateSp(SsoSpMetadata spMetadata) {
+
+        MetadataGenerator generator = new MetadataGenerator();
+
+        generator.setAssertionConsumerIndex(spMetadata.getAssertionConsumerIndex());
+        generator.setBindingsHoKSSO(spMetadata.getBindingsHoKSSO());
+        generator.setBindingsSLO(spMetadata.getBindingsSLO());
+        generator.setBindingsSSO(spMetadata.getBindingsSSO());
+        generator.setEntityBaseURL(spMetadata.getEntityBaseURL());
+        generator.setEntityId(spMetadata.getSsoEntity().getEntityId());
+        generator.setIncludeDiscoveryExtension(spMetadata.isIncludeDiscoveryExtension());
+        generator.setKeyManager(keyManager);
+        generator.setNameID(spMetadata.getNameID());
+        generator.setRequestSigned(spMetadata.isRequestSigned());
+        generator.setWantAssertionSigned(spMetadata.isWantAssertionSigned());
+
+        ExtendedMetadata extendedMetadata = new ExtendedMetadata();
+
+        extendedMetadata.setSigningKey(spMetadata.getSigningKey());
+        extendedMetadata.setEncryptionKey(spMetadata.getEncryptionKey());
+        extendedMetadata.setTlsKey(spMetadata.getTlsKey());
+        extendedMetadata.setIdpDiscoveryEnabled(spMetadata.isIdpDiscoveryEnabled());
+        extendedMetadata.setIdpDiscoveryURL(spMetadata.getIdpDiscoveryURL());
+        extendedMetadata.setIdpDiscoveryResponseURL(spMetadata.getIdpDiscoveryResponseURL());
+        extendedMetadata.setAlias(spMetadata.getAlias());
+        extendedMetadata.setSecurityProfile(spMetadata.getSecurityProfile());
+        extendedMetadata.setSslSecurityProfile(spMetadata.getSslSecurityProfile());
+        extendedMetadata.setRequireLogoutRequestSigned(spMetadata.isRequireLogoutRequestSigned());
+        extendedMetadata.setRequireLogoutResponseSigned(spMetadata.isRequireLogoutResponseSigned());
+        extendedMetadata.setRequireArtifactResolveSigned(spMetadata.isRequireArtifactResolveSigned());
+        extendedMetadata.setSslHostnameVerification(spMetadata.getSslHostnameVerification());
+        extendedMetadata.setSignMetadata(spMetadata.isSignMetadata());
+        extendedMetadata.setSigningAlgorithm(spMetadata.getSigningAlgorithm());
+
+        generator.setExtendedMetadata(extendedMetadata);
+
+        final EntityDescriptor generatedDescriptor = generator.generateMetadata();
+        final ExtendedMetadata generatedExtendedMetadata = generator.generateExtendedMetadata();
+
+        String serializedMetadata = "";
+        try {
+            serializedMetadata = SAMLUtil.getMetadataAsString(metadataManager, keyManager, generatedDescriptor, generatedExtendedMetadata);
+        }
+        catch(MarshallingException ex) {
+            logger.error("Attempt to get serialized metadata failed",ex);
+            throw new RuntimeException(ex);
+        }
+        return serializedMetadata;
     }
 }

@@ -2,6 +2,7 @@ package com.n4systems.services.sso;
 
 import com.n4systems.model.sso.IdpProvidedMetadata;
 import com.n4systems.model.sso.SsoIdpMetadata;
+import com.n4systems.model.sso.SsoSpMetadata;
 
 /**
  * Created by agrabovskis on 2018-08-28.
@@ -13,4 +14,8 @@ public interface SsoMetadataServices {
     public SsoIdpMetadata addIdp(SsoIdpMetadata idpMetadataDto);
 
     public void deleteIdp(String entityId);
+
+    public SsoSpMetadata addSp(SsoSpMetadata spMetadata);
+
+    public void deleteSp(String entityId);
 }

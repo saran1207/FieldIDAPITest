@@ -3,6 +3,7 @@ package com.n4systems.dao;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.sso.SsoEntity;
 import com.n4systems.model.sso.SsoIdpMetadata;
+import com.n4systems.model.sso.SsoSpMetadata;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -91,5 +92,70 @@ public class SsoMetadataDaoImpl implements SsoMetadataDao {
         SsoEntity ssoEntity = entityManager.find(SsoEntity.class, idp.getSsoEntity().getEntityId());
         entityManager.remove(idp);
         entityManager.remove(ssoEntity);
+    }
+
+    @Override
+    public SsoSpMetadata getSp(String entityId) {
+        SsoEntity ssoEntity = entityManager.find(SsoEntity.class, entityId);
+        if (ssoEntity == null)
+            return null;
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<SsoSpMetadata> query = builder.createQuery(SsoSpMetadata.class);
+        Root<SsoSpMetadata> root = query.from(SsoSpMetadata.class);
+        query.select(root);
+        Predicate predicate = builder.equal(root.get("ssoEntity"), ssoEntity);
+        query.where(predicate);
+        Query q = entityManager.createQuery(query);
+        try {
+            SsoSpMetadata result = (SsoSpMetadata) q.getSingleResult();
+            return result;
+        }
+        catch(NoResultException ex) {
+            return null;
+        }
+    }
+
+    @Override
+    public SsoSpMetadata getSpByTenant(long tenantId) {
+        Tenant tenant = entityManager.find(Tenant.class, tenantId);
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<SsoSpMetadata> query = builder.createQuery(SsoSpMetadata.class);
+        Root<SsoSpMetadata> root = query.from(SsoSpMetadata.class);
+        query.select(root);
+        Predicate predicate = builder.equal(root.get("tenant"), tenant);
+        query.where(predicate);
+        Query q = entityManager.createQuery(query);
+        try {
+            SsoSpMetadata result = (SsoSpMetadata) q.getSingleResult();
+            return result;
+        }
+        catch(NoResultException ex) {
+            return null;
+        }
+    }
+
+    @Override
+    @Transactional
+    public SsoSpMetadata addSp(SsoSpMetadata spMetadata) {
+        SsoEntity ssoEntity = spMetadata.getSsoEntity();
+        entityManager.persist(ssoEntity);
+        spMetadata.setSsoEntity(ssoEntity);
+        entityManager.persist(spMetadata);
+        return spMetadata;
+    }
+
+    @Override
+    @Transactional
+    public SsoSpMetadata updateSp(SsoSpMetadata spMetadata) {
+        return entityManager.merge(spMetadata);
+    }
+
+    @Override
+    @Transactional
+    public void deleteSp(String entityId) {
+        SsoSpMetadata sp = getSp(entityId);
+        SsoEntity ssoEntity = entityManager.find(SsoEntity.class, sp.getSsoEntity().getEntityId());
+        entityManager.remove(ssoEntity);
+        entityManager.remove(sp);
     }
 }
