@@ -1,22 +1,27 @@
 package com.n4systems.fieldid.service.search.columns;
 
 import com.n4systems.fieldid.service.asset.AssetService;
-import com.n4systems.fieldid.service.event.LastEventDateService;
 import com.n4systems.fieldid.service.search.AssetSearchService;
 import com.n4systems.fieldid.service.search.SearchResult;
 import com.n4systems.model.Asset;
+import com.n4systems.model.Event;
+import com.n4systems.model.WorkflowState;
+import com.n4systems.model.api.Archivable;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.SearchCriteria;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.services.localization.LocalizationService;
 import com.n4systems.services.reporting.AssetSearchRecord;
 import com.n4systems.services.search.AssetFullTextSearchService;
 import com.n4systems.services.search.MappedResults;
 import com.n4systems.services.search.SearchResults;
 import com.n4systems.services.search.field.AssetIndexField;
+import com.n4systems.util.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +30,6 @@ public class AssetTextOrFilterSearchService extends TextOrFilterSearchService<As
 
     private @Autowired AssetFullTextSearchService fullTextSearchService;
     private @Autowired AssetSearchService searchService;
-    private @Autowired LastEventDateService lastEventDateService;
     private @Autowired LocalizationService localizationService;
     private @Autowired AssetService assetService;
 
@@ -100,12 +104,29 @@ public class AssetTextOrFilterSearchService extends TextOrFilterSearchService<As
 
     @Override
     protected SearchResult<Asset> filterSearch(AssetSearchCriteria criteriaModel, Integer pageNumber, Integer pageSize) {
-        return searchService.performRegularSearch(criteriaModel, pageNumber, pageSize);
+        if (criteriaModel.sortingByNetworkLastEventDate())
+            return searchService.performRegularSearch(criteriaModel,
+                    new MultipleSelectClause().addSubQuery(createNetworkLastEventDateSubQuery("obj")).addSimpleSelect("obj"),
+                    pageNumber, pageSize, new GetEntityFromResultTransformer(Asset.class));
+        else
+            return searchService.performRegularSearch(criteriaModel, pageNumber, pageSize);
     }
 
     private int getResultCount(SearchCriteria searchCriteria) {
         SearchResults count = fullTextSearchService.count(searchCriteria.getQuery());
         return count.getCount();
+    }
+
+    private QueryBuilder<Date> createNetworkLastEventDateSubQuery(String mainQueryAlias) {
+        QueryBuilder<Date> qBuilder = new QueryBuilder<Date>(Event.class, new OpenSecurityFilter(), "i");
+
+        qBuilder.setMaxSelect("completedDate");
+        qBuilder.addSimpleWhere("state", Archivable.EntityState.ACTIVE);
+        qBuilder.addSimpleWhere("workflowState", WorkflowState.COMPLETED);
+        qBuilder.addWhere(new CorrelatedSubQueryWhereClause(
+                CorrelatedSubQueryWhereClause.Comparator.EQ, mainQueryAlias, "asset.networkId", "networkId", WhereClause.ChainOp.AND));
+        qBuilder.setQueryAlias("networkLastEventDate");
+        return qBuilder;
     }
 
 }

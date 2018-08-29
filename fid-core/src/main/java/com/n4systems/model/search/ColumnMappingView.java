@@ -19,11 +19,14 @@ public class ColumnMappingView implements Comparable<ColumnMappingView>, Seriali
     private String groupKey;
     private Long dbColumnId;
     private String joinExpression;
+	private Boolean ignoreSortAlias;
 
     private String localizedLabel;
 	
 	
-	public ColumnMappingView(String id, String label, String pathExpression, String sortExpression, String outputHandler, boolean sortable, boolean enabled, int order, String requiredExtendedFeature, String groupKey, Long dbColumnId, String joinExpression) {
+	public ColumnMappingView(String id, String label, String pathExpression, String sortExpression, String outputHandler,
+							 boolean sortable, boolean enabled, int order, String requiredExtendedFeature, String groupKey,
+							 Long dbColumnId, String joinExpression, Boolean ignoreSortAlias) {
 		this.id = id;
 		this.label = label;
 		this.pathExpression = pathExpression;
@@ -36,6 +39,7 @@ public class ColumnMappingView implements Comparable<ColumnMappingView>, Seriali
         this.groupKey = groupKey;
         this.dbColumnId = dbColumnId;
         this.joinExpression = joinExpression;
+		this.ignoreSortAlias = ignoreSortAlias;
 	}
 	
 	public int compareTo(ColumnMappingView mapping) {
@@ -141,7 +145,19 @@ public class ColumnMappingView implements Comparable<ColumnMappingView>, Seriali
         return localizedLabel;
     }
 
-    public void setLocalizedLabel(String localizedLabel) {
+	public Boolean isIgnoreSortAlias() {
+		if (ignoreSortAlias == null)
+			return Boolean.FALSE;
+		else
+			return ignoreSortAlias;
+	}
+
+	public void setIgnoreSortAlias(Boolean ignoreSortAlias) {
+		this.ignoreSortAlias = ignoreSortAlias;
+	}
+
+	public void setLocalizedLabel(String localizedLabel) {
         this.localizedLabel = localizedLabel;
     }
+
 }

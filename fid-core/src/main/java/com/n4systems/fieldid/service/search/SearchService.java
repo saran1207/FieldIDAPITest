@@ -15,10 +15,7 @@ import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.services.date.DateService;
 import com.n4systems.services.search.MappedResults;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.QueryFilter;
-import com.n4systems.util.persistence.WhereClause;
-import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.search.JoinTerm;
 import com.n4systems.util.persistence.search.ResultTransformer;
 import com.n4systems.util.persistence.search.SortDirection;
@@ -99,14 +96,19 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
     }
 
     public SearchResult<M> performRegularSearch(T criteriaModel) {
-        return performFilterSearch(criteriaModel, null, null);
+        return performFilterSearch(criteriaModel, null, null, null, null);
+    }
+
+    public SearchResult<M> performRegularSearch(T criteriaModel, SelectClause selectClause, Integer pageNumber,
+                                                Integer pageSize, org.hibernate.transform.ResultTransformer transformer) {
+        return performFilterSearch(criteriaModel, selectClause, pageNumber, pageSize, transformer);
     }
 
     public SearchResult<M> performRegularSearch(T criteriaModel, Integer pageNumber, Integer pageSize) {
-        return performFilterSearch(criteriaModel, pageNumber, pageSize);
+        return performFilterSearch(criteriaModel, null, pageNumber, pageSize, null);
     }
-
-    private SearchResult<M> performFilterSearch(T criteriaModel, Integer pageNumber, Integer pageSize) {
+    private SearchResult<M> performFilterSearch(T criteriaModel, SelectClause selectClause, Integer pageNumber,
+                                                Integer pageSize, org.hibernate.transform.ResultTransformer transformer) {
 		// create our base query builder (no sort terms yet)
 		QueryBuilder<M> searchBuilder = createBaseSearchQueryBuilder(criteriaModel);
 
@@ -114,7 +116,10 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
 		int totalResultCount = findCount(searchBuilder).intValue();
 
 		// Set builder back to simple select after finding count
-        searchBuilder.setSimpleSelect();
+        if (selectClause == null)
+            searchBuilder.setSimpleSelect();
+        else
+            searchBuilder.setSelectArgument(selectClause);
 
         // now we can add in our sort terms
 		addSortTermsToBuilder(searchBuilder, criteriaModel);
@@ -124,7 +129,14 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
 
         List<M> queryResults;
         if (pageNumber!=null && pageSize!=null) {
-            queryResults = persistenceService.findAll(searchBuilder, pageNumber, pageSize);
+            if (selectClause == null) {
+                queryResults = persistenceService.findAll(searchBuilder, pageNumber, pageSize);
+            }
+            else {
+                /* The presence of a select clause means the result won't be a simple object but rather a tuple of
+                   objects which need to be converted to the entity we are expecting. */
+                queryResults = persistenceService.findAllTransformed(searchBuilder, pageNumber, pageSize, transformer);
+            }
         } else {
             queryResults = persistenceService.findAll(searchBuilder);
         }
@@ -242,7 +254,12 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
         if (sortColumn.getJoinExpression() == null) {
             String[] sortExpressions = sortColumn.getSortExpression().split(",");
             for (String sortExpression : sortExpressions) {
-                searchBuilder.getOrderArguments().add(new SortTerm(sortExpression.replaceAll("\\{.*\\}", ""), sortDirection).toSortField());
+                SortTerm sortTerm = new SortTerm(sortExpression.replaceAll("\\{.*\\}", ""), sortDirection);
+                if (sortColumn.isIgnoreSortAlias()) {
+                    sortTerm.setAlwaysDropAlias(true);
+                }
+                searchBuilder.getOrderArguments().add(
+                        sortTerm.toSortField());
             }
         } else {
             String[] sortExpressions = sortColumn.getSortExpression().split(",");

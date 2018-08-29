@@ -20,6 +20,7 @@ import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
+import org.hibernate.transform.ResultTransformer;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
@@ -155,11 +156,24 @@ public class PersistenceService extends FieldIdService {
         return findAllPaginated(queryBuilder, page*pageSize, pageSize);
     }
 
+    @Transactional(readOnly = true)
+    public <T> List<T> findAllTransformed(QueryBuilder<T> queryBuilder, int page, int pageSize, ResultTransformer transformer) throws InvalidQueryException {
+        return findAllPaginatedTransformed(queryBuilder, page*pageSize, pageSize, transformer);
+    }
+
 	@Transactional(readOnly = true)
 	public <T> List<T> findAllPaginated(QueryBuilder<T> queryBuilder, int first, int count) throws InvalidQueryException {
 		Query query = queryBuilder.createQuery(em).setFirstResult(first).setMaxResults(count);
 		return query.getResultList();
 	}
+
+    @Transactional(readOnly = true)
+    public <T> List<T> findAllPaginatedTransformed(QueryBuilder<T> queryBuilder, int first, int count, ResultTransformer transformer) throws InvalidQueryException {
+        Query query = queryBuilder.createQuery(em).setFirstResult(first).setMaxResults(count);
+        /* Result Transformer can only be set on the Hibernate Query class */
+        query.unwrap(org.hibernate.Query.class).setResultTransformer(transformer);
+        return query.getResultList();
+    }
 
 	@Transactional
 	public <T> List<T> findAllNonSecure(Class<T> clazz) throws InvalidQueryException {
