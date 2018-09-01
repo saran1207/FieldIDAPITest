@@ -13,10 +13,16 @@ import java.util.Collection;
  */
 @Entity
 @Table(name="sso_sp_metadata")
+@NamedEntityGraph(
+        name = "lazyCollections",
+        attributeNodes = {
+                @NamedAttributeNode("bindingsSLO")
+        }
+)
 public class SsoSpMetadata implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private Long id;
 

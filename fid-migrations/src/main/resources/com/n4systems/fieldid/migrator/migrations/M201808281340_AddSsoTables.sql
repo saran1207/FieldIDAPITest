@@ -28,7 +28,7 @@ create table sso_sp_bindings_sso (
 create table sso_sp_name_id (
   id bigint not null,
   name_id varchar(255)
-)
+);
 create table sso_sp_metadata (
   id bigint AUTO_INCREMENT,
   alias varchar(255),
@@ -62,12 +62,12 @@ create table sso_sp_metadata (
   tenant_id bigint not null,
   primary key (id)
 );
-alter table sso_sp_bindings_hok_sso add constraint sso_sp_metadata_hok_sso_constraint foreign key (id) references sso_sp_metadata;
-alter table sso_sp_bindings_slo add constraint sso_sp_metadata_slo_constraint foreign key (id) references sso_sp_metadata;
-alter table sso_sp_bindings_sso add constraint sso_sp_metadata_sso_constraint foreign key (id) references sso_sp_metadata;
-alter table sso_sp_metadata add constraint sso_sp_metadata_tenant_constraint foreign key (tenant_id) references tenant;
-alter table sso_sp_metadata add constraint sso_sp_metadata_entity_constraint foreign key (sso_entity_id) references sso_entity;
-alter table sso_sp_name_id add constraint sso_sp_metadata_name_id_constraint foreign key (id) references sso_sp_metadata;
+alter table sso_sp_bindings_hok_sso add constraint sso_sp_metadata_hok_sso_constraint foreign key (id) references sso_sp_metadata(id);
+alter table sso_sp_bindings_slo add constraint sso_sp_metadata_slo_constraint foreign key (id) references sso_sp_metadata(id);
+alter table sso_sp_bindings_sso add constraint sso_sp_metadata_sso_constraint foreign key (id) references sso_sp_metadata(id);
+alter table sso_sp_metadata add constraint sso_sp_metadata_tenant_constraint foreign key (tenant_id) references tenants(id);
+alter table sso_sp_metadata add constraint sso_sp_metadata_entity_constraint foreign key (sso_entity_id) references sso_entity(sso_entity_id);
+alter table sso_sp_name_id add constraint sso_sp_metadata_name_id_constraint foreign key (id) references sso_sp_metadata(id);
 
 /*-- rollback
 

@@ -6,6 +6,8 @@ import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
 import com.n4systems.dao.SsoMetadataDao;
 import com.n4systems.model.sso.SsoIdpMetadata;
+import com.n4systems.model.sso.SsoSpMetadata;
+import com.n4systems.services.sso.SsoMetadataServices;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -21,6 +23,9 @@ public class SsoSettingsPage extends FieldIDTemplatePage {
 
     @SpringBean
     private SsoMetadataDao ssoMetadataDao;
+
+    @SpringBean
+    private SsoMetadataServices ssoMetadataServices;
 
     public SsoSettingsPage() {
     	super();
@@ -63,8 +68,6 @@ public class SsoSettingsPage extends FieldIDTemplatePage {
         AjaxLink displayIdpLink = new AjaxLink("displayIdp") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                System.out.println("displayIdp button clicked for entity '" + idpEntityIdModel.getObject() + "'");
-
                 PageParameters params = new PageParameters();
                 params.set(DisplayIdpMetadata.ENTITY_ID_KEY, idpEntityIdModel.getObject());
                 getRequestCycle().setResponsePage(DisplayIdpMetadata.class, params);
@@ -75,8 +78,7 @@ public class SsoSettingsPage extends FieldIDTemplatePage {
         AjaxLink deleteIdpLink = new AjaxLink("deleteIdp") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                System.out.println("deleteIdp button clicked");
-                ssoMetadataDao.deleteIdp(idpEntityIdModel.getObject());
+                ssoMetadataServices.deleteIdp(idpEntityIdModel.getObject());
                 getRequestCycle().setResponsePage(SsoSettingsPage.class);
             }
         };
@@ -92,6 +94,65 @@ public class SsoSettingsPage extends FieldIDTemplatePage {
             idpEntityNameLabel.setVisible(false);
             displayIdpLink.setVisible(false);
             deleteIdpLink.setVisible(false);
+        }
+
+        Model<String> spEntityIdModel = new Model(null);
+        SsoSpMetadata sp = ssoMetadataDao.getSpByTenant(tenantId);
+        if (sp != null)
+            spEntityIdModel.setObject(sp.getSsoEntity().getEntityId());
+
+        AjaxLink createSpLink = new AjaxLink("createSp") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                setResponsePage(GenerateSpMetadata.class, null);
+            }
+        };
+        add(createSpLink);
+
+        Label spEntityNameLabel = new Label("spProvider", spEntityIdModel);
+        add(spEntityNameLabel);
+
+        AjaxLink displaySpLink = new AjaxLink("displaySp") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                PageParameters params = new PageParameters();
+                params.set(DisplaySpMetadata.ENTITY_ID_KEY, spEntityIdModel.getObject());
+                getRequestCycle().setResponsePage(DisplaySpMetadata.class, params);
+            }
+        };
+        add(displaySpLink);
+
+        AjaxLink reviseSpLink = new AjaxLink("reviseSp") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                PageParameters params = new PageParameters();
+                params.set(ReviseSpMetadata.ENTITY_ID_KEY, spEntityIdModel.getObject());
+                getRequestCycle().setResponsePage(ReviseSpMetadata.class, params);
+            }
+        };
+        add(reviseSpLink);
+
+        AjaxLink deleteSpLink = new AjaxLink("deleteSp") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                ssoMetadataServices.deleteSp(spEntityIdModel.getObject());
+                getRequestCycle().setResponsePage(SsoSettingsPage.class);
+            }
+        };
+        add(deleteSpLink);
+        if (spEntityIdModel.getObject() != null) {
+            createSpLink.setVisible(false);
+            spEntityNameLabel.setVisible(true);
+            displaySpLink.setVisible(true);
+            reviseSpLink.setVisible(true);
+            deleteSpLink.setVisible(true);
+        }
+        else {
+            createSpLink.setVisible(true);
+            spEntityNameLabel.setVisible(false);
+            displaySpLink.setVisible(false);
+            reviseSpLink.setVisible(false);
+            deleteSpLink.setVisible(false);
         }
     }
 

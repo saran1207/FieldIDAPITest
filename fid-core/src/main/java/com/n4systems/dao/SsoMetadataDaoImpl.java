@@ -15,6 +15,9 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Data Access Object to interact with the SSO tables.
@@ -70,6 +73,17 @@ public class SsoMetadataDaoImpl implements SsoMetadataDao {
     }
 
     @Override
+    public List<SsoIdpMetadata> getIdp() {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<SsoIdpMetadata> query = builder.createQuery(SsoIdpMetadata.class);
+        Root<SsoIdpMetadata> root = query.from(SsoIdpMetadata.class);
+        query.select(root);
+        Query q = entityManager.createQuery(query);
+        List<SsoIdpMetadata> list = q.getResultList();
+        return list;
+    }
+
+    @Override
     @Transactional
     public SsoIdpMetadata addIdp(SsoIdpMetadata idpMetadata) {
         SsoEntity ssoEntity = idpMetadata.getSsoEntity();
@@ -106,6 +120,7 @@ public class SsoMetadataDaoImpl implements SsoMetadataDao {
         Predicate predicate = builder.equal(root.get("ssoEntity"), ssoEntity);
         query.where(predicate);
         Query q = entityManager.createQuery(query);
+        q.setHint("javax.persistence.fetchgraph", entityManager.getEntityGraph("lazyCollections"));
         try {
             SsoSpMetadata result = (SsoSpMetadata) q.getSingleResult();
             return result;
@@ -125,6 +140,7 @@ public class SsoMetadataDaoImpl implements SsoMetadataDao {
         Predicate predicate = builder.equal(root.get("tenant"), tenant);
         query.where(predicate);
         Query q = entityManager.createQuery(query);
+        q.setHint("javax.persistence.fetchgraph", entityManager.getEntityGraph("lazyCollections"));
         try {
             SsoSpMetadata result = (SsoSpMetadata) q.getSingleResult();
             return result;
@@ -135,8 +151,21 @@ public class SsoMetadataDaoImpl implements SsoMetadataDao {
     }
 
     @Override
+    public List<SsoSpMetadata> getSp() {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<SsoSpMetadata> query = builder.createQuery(SsoSpMetadata.class);
+        Root<SsoSpMetadata> root = query.from(SsoSpMetadata.class);
+        query.select(root);
+        Query q = entityManager.createQuery(query);
+        q.setHint("javax.persistence.fetchgraph", entityManager.getEntityGraph("lazyCollections"));
+        List<SsoSpMetadata> list = q.getResultList();
+        return list;
+    }
+
+    @Override
     @Transactional
     public SsoSpMetadata addSp(SsoSpMetadata spMetadata) {
+        spMetadata.setId(null);
         SsoEntity ssoEntity = spMetadata.getSsoEntity();
         entityManager.persist(ssoEntity);
         spMetadata.setSsoEntity(ssoEntity);
@@ -155,7 +184,7 @@ public class SsoMetadataDaoImpl implements SsoMetadataDao {
     public void deleteSp(String entityId) {
         SsoSpMetadata sp = getSp(entityId);
         SsoEntity ssoEntity = entityManager.find(SsoEntity.class, sp.getSsoEntity().getEntityId());
-        entityManager.remove(ssoEntity);
         entityManager.remove(sp);
+        entityManager.remove(ssoEntity);
     }
 }

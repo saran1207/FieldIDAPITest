@@ -1,0 +1,27 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<wicket:extend>
+    <style>
+        td label {
+            font-weight: bold;
+            vertical-align: baseline
+        }
+        td {
+            padding: 4px 10px 4px 5px;
+        }
+        .small {
+            font-size: smaller;
+            text-align: left;
+            font-weight: normal;
+            vertical-align: baseline
+        }
+    </style>
+<H2>Generate SP Metadata</H2>
+<div class="post-title"><h2 class="label label-green">Metadata generation</h2></div>
+<p class="quiet large">Generate new metadata for service provider for tenant<span wicket:id="tenantName"></span></p>
+<div class="post-body">
+    <p><a href="#" wicket:id="backLink">&lt;&lt Back</a></p>
+    <span wicket:id="spMetatdata"></span>
+</div>
+
+</wicket:extend>
+</html>

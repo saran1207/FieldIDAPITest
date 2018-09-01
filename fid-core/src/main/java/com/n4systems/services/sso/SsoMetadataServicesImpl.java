@@ -158,6 +158,15 @@ public class SsoMetadataServicesImpl implements SsoMetadataServices {
 
     @Override
     @Transactional
+    public SsoSpMetadata updateSp(SsoSpMetadata spMetadata) {
+        logger.info("Revising SP '" + spMetadata.getSsoEntity().getEntityId() + "' for tenant '" + spMetadata.getTenant().getName() + "'");
+        deleteSp(spMetadata.getSsoEntity().getEntityId());
+        addSp(spMetadata);
+        return spMetadata;
+    }
+
+    @Override
+    @Transactional
     public void deleteSp(String entityId) {
         Iterator<MetadataProvider> iter = metadataManager.getProviders().iterator();
         while (iter.hasNext()) {

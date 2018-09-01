@@ -81,7 +81,6 @@ public class GenerateIdpMetadata extends FieldIDTemplatePage {
                         new Integer(loadTimeoutModel.getObject()));
                 entityIdModel.setObject(metadata.getEntityId());
                 serializedMetadataModel.setObject(metadata.getSerializedMetadata());
-                System.out.println("Obtained metadata from IDP " + metadata.getEntityId());
                 ajaxRequestTarget.add(entityIdField);
                 ajaxRequestTarget.add(serializedMetadataField);
             }

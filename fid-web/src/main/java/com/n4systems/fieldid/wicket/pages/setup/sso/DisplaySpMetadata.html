@@ -1,0 +1,46 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<wicket:extend>
+Service Provider Metadata
+<br>
+<!--<textarea wicket:id="serializedMetadata" rows="40" cols="80"></textarea>-->
+
+<table>
+    <tr>
+        <td><strong>Local entity:</strong></td>
+        <td><span wicket:id="metadata.local"/></td>
+    </tr>
+    <tr>
+        <td><strong>Entity ID:</strong></td>
+        <td><span wicket:id="metadata.entityId"/></td>
+    </tr>
+    <tr>
+        <td><strong>Match on UserId:</strong></td>
+        <td><span wicket:id="matchOnUserId"/></td>
+    </tr>
+    <tr>
+        <td><strong>Match on Email Address:</strong></td>
+        <td><span wicket:id="matchOnEmailAddress"/></td>
+    </tr>
+  <!--  <tr>
+        <td><strong>Signing key:</strong></td>
+        <td><span wicket:id="metadata.signingKey"/></td>
+    </tr>
+    <tr>
+        <td><strong>Encryption key:</strong></td>
+        <td><span wicket:id="metadata.encryptionKey"/></td>
+    </tr>-->
+    <tr>
+        <td colspan="2">
+            <label wicket:for="serializedMetadata">Metadata:</label><br>
+            <textarea wicket:id="serializedMetadata" readonly="readonly" rows="40" cols="80"></textarea>
+        </td>
+    </tr>
+    <tr>
+        <td><a href="#" wicket:id="downloadMetadata">Download Metadata</a></td>
+    </tr>
+    </table>
+
+    <p><a href="#" wicket:id="backLink">&lt;&lt Back</a></p>
+
+</wicket:extend>
+</html>

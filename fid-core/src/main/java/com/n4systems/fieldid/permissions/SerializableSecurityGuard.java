@@ -146,4 +146,9 @@ public class SerializableSecurityGuard implements SystemSecurityGuard, Serializa
 	public boolean isGoogleTranslateEnabled() {
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.GoogleTranslate);
 	}
+
+	@Override
+	public boolean isSSOEnabled() {
+		return primaryOrg.hasExtendedFeature(ExtendedFeature.SSO);
+	}
 }

@@ -17,5 +17,7 @@ public interface SsoMetadataServices {
 
     public SsoSpMetadata addSp(SsoSpMetadata spMetadata);
 
+    public SsoSpMetadata updateSp(SsoSpMetadata spMetadata);
+
     public void deleteSp(String entityId);
 }
