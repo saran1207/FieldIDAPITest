@@ -1,6 +1,6 @@
-package com.n4systems.services.sso;
+package com.n4systems.fieldid.sso;
 
-import com.n4systems.dao.SsoMetadataDao;
+import com.n4systems.sso.dao.SsoMetadataDao;
 import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 import org.opensaml.xml.XMLObject;
 import org.opensaml.xml.io.UnmarshallingException;

@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.setup.sso;
 
-import com.n4systems.dao.SsoMetadataDao;
+import com.n4systems.sso.dao.SsoMetadataDao;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.model.sso.SsoSpMetadata;
 import org.apache.wicket.markup.html.basic.Label;

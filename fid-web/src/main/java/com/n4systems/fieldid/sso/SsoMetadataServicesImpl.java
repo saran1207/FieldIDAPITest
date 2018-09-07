@@ -1,6 +1,6 @@
-package com.n4systems.services.sso;
+package com.n4systems.fieldid.sso;
 
-import com.n4systems.dao.SsoMetadataDao;
+import com.n4systems.sso.dao.SsoMetadataDao;
 import com.n4systems.model.sso.IdpProvidedMetadata;
 import com.n4systems.model.sso.SsoIdpMetadata;
 import com.n4systems.model.sso.SsoSpMetadata;
@@ -13,7 +13,6 @@ import org.opensaml.saml2.metadata.provider.MetadataProvider;
 import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 import org.opensaml.xml.io.MarshallingException;
 import org.opensaml.xml.parse.ParserPool;
-import org.opensaml.xml.parse.StaticBasicParserPool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.saml.key.KeyManager;
 import org.springframework.security.saml.metadata.ExtendedMetadata;

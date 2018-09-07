@@ -1,4 +1,4 @@
-package com.n4systems.dao;
+package com.n4systems.sso.dao;
 
 import com.n4systems.model.sso.SsoIdpMetadata;
 import com.n4systems.model.sso.SsoSpMetadata;

@@ -69,6 +69,8 @@ alter table sso_sp_metadata add constraint sso_sp_metadata_tenant_constraint for
 alter table sso_sp_metadata add constraint sso_sp_metadata_entity_constraint foreign key (sso_entity_id) references sso_entity(sso_entity_id);
 alter table sso_sp_name_id add constraint sso_sp_metadata_name_id_constraint foreign key (id) references sso_sp_metadata(id);
 
+alter table tenant_settings add column sso_enabled tinyint(1) default 0;
+
 /*-- rollback
 
 --alter table sso_idp_metadata drop foreign key idp_metadata_entity_constraint;

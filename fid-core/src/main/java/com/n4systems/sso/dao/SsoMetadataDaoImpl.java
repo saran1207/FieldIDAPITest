@@ -1,4 +1,4 @@
-package com.n4systems.dao;
+package com.n4systems.sso.dao;
 
 import com.n4systems.model.Tenant;
 import com.n4systems.model.sso.SsoEntity;
@@ -15,9 +15,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Data Access Object to interact with the SSO tables.

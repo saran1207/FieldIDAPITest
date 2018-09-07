@@ -1,4 +1,4 @@
-package com.n4systems.services.sso;
+package com.n4systems.fieldid.sso;
 
 import com.n4systems.model.sso.IdpProvidedMetadata;
 import com.n4systems.model.sso.SsoIdpMetadata;

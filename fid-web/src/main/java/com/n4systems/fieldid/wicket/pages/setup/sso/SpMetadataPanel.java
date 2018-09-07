@@ -37,7 +37,7 @@ abstract public class SpMetadataPanel extends Panel {
         final TextField<String> userIdAttributeName;
         final BooleanDropDownChoice matchOnEmailAddress;
         final TextField<String> emailAddressAttributeName;
-        //TextField<String> alias;
+        TextField<String> alias;
 /*        StringDropDownChoice signingKeyChoice;
         StringDropDownChoice encryptionKeyChoice;*/
         final StringDropDownChoice securityProfileChoice;
@@ -110,8 +110,8 @@ abstract public class SpMetadataPanel extends Panel {
         matchOnEmailAddress = new BooleanDropDownChoice("matchOnEmailAddress", Model.of(spMetadata.isMatchOnEmailAddress()), trueFalseOptions);
         emailAddressAttributeName = new TextField<String>("emailAddressAttributeName", Model.of(spMetadata.getEmailAddressAttributeName()));
 
-        //alias = new TextField("alias", Model.of(spMetadata.getAlias()));
-        //alias.setConvertEmptyInputStringToNull(true);
+        alias = new TextField("alias", Model.of(spMetadata.getAlias()));
+        alias.setConvertEmptyInputStringToNull(true);
         /*signingKeyChoice = new StringDropDownChoice("signingKey", Model.of(availableKeysModelList.getKeyIfOnlyOne()),
                 availableKeysModelList.getAvailableKeys());
         encryptionKeyChoice = new StringDropDownChoice("encryptionKey", Model.of(availableKeysModelList.getKeyIfOnlyOne()),
@@ -272,7 +272,7 @@ abstract public class SpMetadataPanel extends Panel {
                 }*/
 
                 // Alias
-                /*spMetadata.setAlias(alias.getModelObject());*/
+                spMetadata.setAlias(alias.getModelObject());
 
                 // Security settings
                 spMetadata.setSecurityProfile(securityProfileChoice.getModelObject());
@@ -321,7 +321,7 @@ abstract public class SpMetadataPanel extends Panel {
         metadataForm.add(userIdAttributeName);
         metadataForm.add(matchOnEmailAddress);
         metadataForm.add(emailAddressAttributeName);
-        //metadataForm.add(alias);
+        metadataForm.add(alias);
         /*metadataForm.add(signingKeyChoice);
         metadataForm.add(encryptionKeyChoice);*/
         metadataForm.add(securityProfileChoice);

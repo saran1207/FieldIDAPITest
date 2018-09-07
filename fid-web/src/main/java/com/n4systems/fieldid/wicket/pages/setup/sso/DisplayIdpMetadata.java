@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.setup.sso;
 
-import com.n4systems.dao.SsoMetadataDao;
+import com.n4systems.sso.dao.SsoMetadataDao;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.model.sso.SsoIdpMetadata;
 import org.apache.wicket.markup.html.basic.Label;
@@ -28,7 +28,6 @@ public class DisplayIdpMetadata extends FieldIDTemplatePage {
     public DisplayIdpMetadata(final PageParameters parameters) {
         super(parameters);
         String entityId = parameters.get(ENTITY_ID_KEY).toString();
-        System.out.println("Display metadata for '" + entityId + "'");
         addComponents(entityId);
     }
 

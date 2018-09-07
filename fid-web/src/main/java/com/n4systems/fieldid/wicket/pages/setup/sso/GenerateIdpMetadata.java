@@ -4,7 +4,7 @@ import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.model.sso.IdpProvidedMetadata;
 import com.n4systems.model.sso.SsoEntity;
 import com.n4systems.model.sso.SsoIdpMetadata;
-import com.n4systems.services.sso.SsoMetadataServices;
+import com.n4systems.fieldid.sso.SsoMetadataServices;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.form.Form;

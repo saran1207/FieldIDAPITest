@@ -1,12 +1,14 @@
-package com.n4systems.services.sso;
+package com.n4systems.fieldid.sso;
 
-import com.n4systems.dao.SsoMetadataDao;
+import com.n4systems.sso.dao.SsoMetadataDao;
 import com.n4systems.model.sso.SsoSpMetadata;
 import org.opensaml.saml2.metadata.provider.MetadataProvider;
 import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 import org.opensaml.xml.XMLObject;
 import org.opensaml.xml.io.UnmarshallingException;
 import org.opensaml.xml.parse.ParserPool;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.saml.metadata.ExtendedMetadata;
 
 import java.io.ByteArrayInputStream;
@@ -16,6 +18,8 @@ import java.io.InputStream;
  * Created by agrabovskis on 2018-08-07.
  */
 public class DatabaseSpMetadataProvider extends DatabaseMetadataProvider implements MetadataProvider {
+
+    static public Logger logger = LoggerFactory.getLogger(DatabaseSpMetadataProvider.class);
 
     private SsoMetadataDao ssoMetadataDao;
 
@@ -35,8 +39,7 @@ public class DatabaseSpMetadataProvider extends DatabaseMetadataProvider impleme
         }
         catch (UnmarshallingException e) {
             String errMsg = "Unable to read IDP metadata";
-            //log.error(errMsg, e);
-            System.out.print(errMsg);
+            logger.error(errMsg, e);
             throw new MetadataProviderException(errMsg, e);
         }
     }
@@ -46,6 +49,7 @@ public class DatabaseSpMetadataProvider extends DatabaseMetadataProvider impleme
         SsoSpMetadata spMetadata = ssoMetadataDao.getSp(entityID);
         ExtendedMetadata extendedMetadata = new ExtendedMetadata();
 
+        extendedMetadata.setLocal(true); // SP is always local
         extendedMetadata.setSigningKey(spMetadata.getSigningKey());
         extendedMetadata.setEncryptionKey(spMetadata.getEncryptionKey());
         extendedMetadata.setTlsKey(spMetadata.getTlsKey());

@@ -4,10 +4,13 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:task="http://www.springframework.org/schema/task" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:security="http://www.springframework.org/schema/security"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 	   http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd        
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
-       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
     <!-- EJB EJBContainerS -->
     
@@ -100,9 +103,10 @@
 	<bean id="productCodeMappingMnager" class="com.n4systems.ejb.legacy.wrapper.AssetCodeMappingEJBContainer" />
 	<bean id="importManager" class="com.n4systems.importing.ImportManagerEJBContainer"/-->
 
-    <!--SSO-->
-    <bean id="SsoMetadataDao" class="com.n4systems.dao.SsoMetadataDaoImpl"/>
-    <bean id="SsoMetadataServices" class = "com.n4systems.services.sso.SsoMetadataServicesImpl"/>
+    <!--SSO begin-->
+
+    <bean id="SsoMetadataDao" class="com.n4systems.sso.dao.SsoMetadataDaoImpl"/>
+    <bean id="SsoMetadataServices" class = "com.n4systems.fieldid.sso.SsoMetadataServicesImpl"/>
 
     <!-- Initialization of OpenSAML library-->
     <bean class="org.springframework.security.saml.SAMLBootstrap"/>
@@ -116,9 +120,150 @@
     <bean id="parserPool" class="org.opensaml.xml.parse.StaticBasicParserPool" init-method="initialize"/>
     <bean id="parserPoolHolder" class="org.springframework.security.saml.parser.ParserPoolHolder"/>
 
-    <bean id="metadata" class="com.n4systems.services.sso.SSOCachingMetadataManager">
+    <bean id="metadata" class="com.n4systems.fieldid.sso.SSOCachingMetadataManager">
         <property name="RefreshCheckInterval" value="90000"/>
         <property name="RefreshRequired" value="true"/>
     </bean>
+
+    <!-- Secured pages with SAML as entry point -->
+    <security:http entry-point-ref="samlEntryPoint" use-expressions="false">
+        <security:custom-filter after="BASIC_AUTH_FILTER" ref="samlFilter"/>
+        <!--CSRF is turned on by default starting with Spring security 4-->
+        <security:csrf disabled="true"></security:csrf>
+    </security:http>
+
+    <!-- Filters for processing of SAML messages -->
+    <bean id="samlFilter" class="org.springframework.security.web.FilterChainProxy">
+        <security:filter-chain-map request-matcher="ant">
+            <security:filter-chain pattern="/saml/SSO/**" filters="samlWebSSOProcessingFilter"/>
+            <security:filter-chain pattern="/saml/SSOHoK/**" filters="samlWebSSOHoKProcessingFilter"/>
+        </security:filter-chain-map>
+    </bean>
+
+    <!-- Handler deciding where to redirect user after successful login -->
+    <bean id="successRedirectHandler"
+          class="com.n4systems.fieldid.sso.SamlLogonResultHandler">
+    </bean>
+
+    <bean id="failureRedirectHandler"
+          class="com.n4systems.fieldid.sso.SamlLogonResultHandler">
+    </bean>
+
+    <security:authentication-manager alias="authenticationManager">
+        <!-- Register authentication manager for SAML provider -->
+        <security:authentication-provider ref="samlAuthenticationProvider"/>
+    </security:authentication-manager>
+    <!-- Logger for SAML messages and events -->
+    <bean id="samlLogger" class="org.springframework.security.saml.log.SAMLDefaultLogger">
+        <!-- Enable these to see the actual SAML Messages in logs -->
+        <property name="logMessages" value="true"/>
+        <property name="logErrors" value="true"/>
+    </bean>
+
+    <!-- Entry point to initialize authentication, default values taken from properties file -->
+    <bean id="samlEntryPoint" class="org.springframework.security.saml.SAMLEntryPoint">
+        <property name="defaultProfileOptions">
+            <bean class="org.springframework.security.saml.websso.WebSSOProfileOptions">
+                <property name="includeScoping" value="false"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="userDetails" class="com.n4systems.fieldid.sso.UserDetailsService"></bean>
+
+    <!-- SAML Authentication Provider responsible for validating of received SAML messages -->
+    <bean id="samlAuthenticationProvider" class="com.n4systems.fieldid.sso.ApplicationAuthenticationProvider">
+        <!-- OPTIONAL property: can be used to store/load user data after login -->
+        <property name="userDetails" ref="userDetails" />
+    </bean>
+
+    <!-- Provider of default SAML Context -->
+    <bean id="contextProvider" class="org.springframework.security.saml.context.SAMLContextProviderImpl"/>
+
+    <!-- Processing filter for WebSSO profile messages -->
+    <bean id="samlWebSSOProcessingFilter" class="org.springframework.security.saml.SAMLProcessingFilter">
+        <property name="authenticationManager" ref="authenticationManager"/>
+        <property name="authenticationSuccessHandler" ref="successRedirectHandler"/>
+        <property name="authenticationFailureHandler" ref="failureRedirectHandler"/>
+    </bean>
+
+    <!-- Processing filter for WebSSO Holder-of-Key profile -->
+    <bean id="samlWebSSOHoKProcessingFilter" class="org.springframework.security.saml.SAMLWebSSOHoKProcessingFilter">
+        <property name="authenticationManager" ref="authenticationManager"/>
+        <property name="authenticationSuccessHandler" ref="successRedirectHandler"/>
+        <property name="authenticationFailureHandler" ref="failureRedirectHandler"/>
+    </bean>
+
+    <!-- Class loading incoming SAML messages from httpRequest stream -->
+    <bean id="processor" class="org.springframework.security.saml.processor.SAMLProcessorImpl">
+        <constructor-arg>
+            <list>
+                <ref bean="redirectBinding"/>
+                <ref bean="postBinding"/>
+                <ref bean="artifactBinding"/>
+                <ref bean="soapBinding"/>
+                <ref bean="paosBinding"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <!-- SAML 2.0 WebSSO Assertion Consumer -->
+    <bean id="webSSOprofileConsumer" class="org.springframework.security.saml.websso.WebSSOProfileConsumerImpl"/>
+
+    <!-- SAML 2.0 Holder-of-Key WebSSO Assertion Consumer -->
+    <bean id="hokWebSSOprofileConsumer" class="org.springframework.security.saml.websso.WebSSOProfileConsumerHoKImpl"/>
+
+    <!-- SAML 2.0 Web SSO profile -->
+    <bean id="webSSOprofile" class="org.springframework.security.saml.websso.WebSSOProfileImpl"/>
+
+    <!-- SAML 2.0 Holder-of-Key Web SSO profile -->
+    <bean id="hokWebSSOProfile" class="org.springframework.security.saml.websso.WebSSOProfileConsumerHoKImpl"/>
+
+    <!-- SAML 2.0 ECP profile -->
+    <bean id="ecpprofile" class="org.springframework.security.saml.websso.WebSSOProfileECPImpl"/>
+
+    <!-- Bindings, encoders and decoders used for creating and parsing messages -->
+    <bean id="postBinding" class="org.springframework.security.saml.processor.HTTPPostBinding">
+        <constructor-arg ref="parserPool"/>
+        <constructor-arg ref="velocityEngine"/>
+    </bean>
+
+    <bean id="redirectBinding" class="org.springframework.security.saml.processor.HTTPRedirectDeflateBinding">
+        <constructor-arg ref="parserPool"/>
+    </bean>
+
+    <bean id="artifactBinding" class="org.springframework.security.saml.processor.HTTPArtifactBinding">
+        <constructor-arg ref="parserPool"/>
+        <constructor-arg ref="velocityEngine"/>
+        <constructor-arg>
+            <bean class="org.springframework.security.saml.websso.ArtifactResolutionProfileImpl">
+                <constructor-arg>
+                    <bean class="org.apache.commons.httpclient.HttpClient">
+                        <constructor-arg>
+                            <bean class="org.apache.commons.httpclient.MultiThreadedHttpConnectionManager"/>
+                        </constructor-arg>
+                    </bean>
+                </constructor-arg>
+                <property name="processor">
+                    <bean class="org.springframework.security.saml.processor.SAMLProcessorImpl">
+                        <constructor-arg ref="soapBinding"/>
+                    </bean>
+                </property>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean id="soapBinding" class="org.springframework.security.saml.processor.HTTPSOAP11Binding">
+        <constructor-arg ref="parserPool"/>
+    </bean>
+
+    <bean id="paosBinding" class="org.springframework.security.saml.processor.HTTPPAOS11Binding">
+        <constructor-arg ref="parserPool"/>
+    </bean>
+
+    <!-- Initialization of OpenSAML library-->
+    <bean class="org.springframework.security.saml.SAMLBootstrap"/>
+
+    <!--SSO end-->
 
 </beans>

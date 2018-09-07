@@ -3,7 +3,7 @@ package com.n4systems.fieldid.wicket.pages.setup.sso;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.model.sso.SsoEntity;
 import com.n4systems.model.sso.SsoSpMetadata;
-import com.n4systems.services.sso.SsoMetadataServices;
+import com.n4systems.fieldid.sso.SsoMetadataServices;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -72,7 +72,7 @@ public class GenerateSpMetadata extends FieldIDTemplatePage {
         spMetadata.setUserIdAttributeName("UserID");
         spMetadata.setMatchOnEmailAddress(true);
         spMetadata.setEmailAddressAttributeName("EmailAddress");
-        spMetadata.setAlias(null);
+        spMetadata.setAlias(getTenant().getName());
 
         spMetadata.setTenant(getTenant());
         spMetadata.setTlsKey(null);

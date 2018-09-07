@@ -429,6 +429,36 @@ public class UserService extends CrudService<User> {
         return !persistenceService.exists(queryBuilder);
     }
 
+    public User findUserByUserID(String tenantName, String userId) {
+        QueryBuilder<User> builder = new QueryBuilder<>(User.class, new OpenSecurityFilter());
+        UserQueryHelper.applyFullyActiveFilter(builder);
+
+        builder.addWhere(WhereClauseFactory.createCaseInsensitive("tenant.name", tenantName));
+        builder.addWhere(WhereClauseFactory.createCaseInsensitive("userID", userId));
+        User user = persistenceService.find(builder);
+        return user;
+    }
+
+    public List<User> findUsersByEmailAddress(String tenantName, String emailAddress) {
+        QueryBuilder<User> builder = new QueryBuilder<>(User.class, new OpenSecurityFilter());
+        UserQueryHelper.applyFullyActiveFilter(builder);
+
+        builder.addWhere(WhereClauseFactory.createCaseInsensitive("tenant.name", tenantName));
+        builder.addWhere(WhereClauseFactory.createCaseInsensitive("emailAddress", emailAddress));
+        return persistenceService.findAll(builder);
+    }
+
+    public User findUserByUserIDAndEmailAddress(String tenantName, String userId, String emailAddress) {
+        QueryBuilder<User> builder = new QueryBuilder<>(User.class, new OpenSecurityFilter());
+        UserQueryHelper.applyFullyActiveFilter(builder);
+
+        builder.addWhere(WhereClauseFactory.createCaseInsensitive("tenant.name", tenantName));
+        builder.addWhere(WhereClauseFactory.createCaseInsensitive("userID", userId));
+        builder.addWhere(WhereClauseFactory.createCaseInsensitive("emailAddress", emailAddress));
+        User user = persistenceService.find(builder);
+        return user;
+    }
+
     public List<User> findUsersByEmailAddress(String emailAddress) {
         QueryBuilder<User> builder = new QueryBuilder<User>(User.class, new OpenSecurityFilter());
         builder.addSimpleWhere("emailAddress", emailAddress);

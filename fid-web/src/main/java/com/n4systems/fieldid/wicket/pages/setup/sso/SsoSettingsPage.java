@@ -1,19 +1,22 @@
 package com.n4systems.fieldid.wicket.pages.setup.sso;
 
+import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
-import com.n4systems.dao.SsoMetadataDao;
+import com.n4systems.sso.dao.SsoMetadataDao;
 import com.n4systems.model.sso.SsoIdpMetadata;
 import com.n4systems.model.sso.SsoSpMetadata;
-import com.n4systems.services.sso.SsoMetadataServices;
+import com.n4systems.model.tenant.TenantSettings;
+import com.n4systems.fieldid.sso.SsoMetadataServices;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -26,6 +29,9 @@ public class SsoSettingsPage extends FieldIDTemplatePage {
 
     @SpringBean
     private SsoMetadataServices ssoMetadataServices;
+
+    @SpringBean
+    private TenantSettingsService tenantSettingsService;
 
     public SsoSettingsPage() {
     	super();
@@ -45,7 +51,18 @@ public class SsoSettingsPage extends FieldIDTemplatePage {
     }
 
     private void addComponents() {
-        add(new CheckBox("enableSSO"));
+
+        final IModel<Boolean> ssoEnabledSetting = new Model(tenantSettingsService.getTenantSettings().isSsoEnabled());
+
+        add(new AjaxCheckBox("enableSSO", ssoEnabledSetting) {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                System.out.println("enabled button clicked. " + ssoEnabledSetting.getObject());
+                TenantSettings tenantSettings = tenantSettingsService.getTenantSettings();
+                tenantSettings.setSsoEnabled(ssoEnabledSetting.getObject());
+                tenantSettingsService.update(tenantSettings);
+            }
+        }.setOutputMarkupId(true));
 
         long tenantId = getTenantId();
 
