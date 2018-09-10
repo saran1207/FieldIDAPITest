@@ -229,6 +229,9 @@
 											<li><a href="<@s.url action='quickSetupWizard/startWizard' namespace='/'/>"><@s.text name="label.quick_setup_wizard"/></a></li>
 											<li><a href="<@s.url action='branding' namespace='/'/>"><@s.text name="title.manage_branding.plural"/></a></li>
 											<li><a href="<@s.url value='/w/setup/yourPlan'/>"><@s.text name="title.manage_field_id_plan.plural"/></a></li>
+											<#if action.isSsoFeatureEnabled()>
+												<li><a href="<@s.url value='/w/setup/ssoSettings'/>"><@s.text name="title.sso_settings"/></a></li>
+											</#if>
 										</ul>
 									</li>
 									<li>

@@ -2,32 +2,33 @@
 <wicket:extend>
     <div class="post-title"><h2 class="label label-green">Specify the Metadata for your IDP</h2></div>
     <div class="post-body">
-        <div wicket:id="feedbackPanel"></div>
         <form wicket:id="metadataForm">
-            <div>
-                <label wicket:for="idpUrl">IDP Url:</label>
-                <input wicket:id="idpUrl" type="text"/>
-            </div>
-            <br/>
-            <div>
-                <div><label wicket:for="serializedMetadata">Metadata:</label>
-                    <input type="button" wicket:id="getMetadata" value="Get Metadata from IDP"/>
+            <fieldset style="margin-left: 20px; margin: 8px; border: 1px solid silver; padding: 20px; border-radius: 4px;">
+                <legend>Get Metadata from URL</legend>
+                <div>
+                    <label wicket:for="idpLoadUrl">IDP Metadata Url:</label>
+                    <input wicket:id="idpLoadUrl" type="text" style="width: 30%;"/>
                     <label wicket:for="refreshInterval">Load Timeout(ms):</label>
                     <input wicket:id="refreshInterval" type="number"/>
+                    <div>
+                        <input type="button" wicket:id="getMetadata" class="btn-primary" value="Get Metadata from IDP"/>
+                    </div>
                 </div>
+            </fieldset>
+            <div>
                 <div>
                     <label wicket:for="entityId">Entity Id:</label>
-                    <input wicket:id="entityId" type="text"/>
+                    <input wicket:id="entityId" type="text" style="width: 30%;"/>
                 </div>
                 <br/>
-                <span>Serialized metadata</span>
+                <span>Metadata:</span>
                 <br/>
-                <textarea wicket:id="serializedMetadata" rows="40" cols="80"></textarea>
+                <textarea wicket:id="serializedMetadata" rows="40"  style="width: 80%;"></textarea>
             </div>
             <br/>
-            <input type="submit" class="button" value="Add metadata"/>
+            <input type="submit" class="btn-primary" value="Add metadata" style="margin-right: 10px;"/><a href="#" wicket:id="backLink">Cancel</a>
         </form>
-        <p><a href="#" wicket:id="backLink">&lt;&lt Back</a></p>
+
     </div>
 </wicket:extend>
 </html>

@@ -88,6 +88,7 @@ import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigur
 import com.n4systems.fieldid.wicket.pages.setup.security.AccountPolicyPage;
 import com.n4systems.fieldid.wicket.pages.setup.security.OfflinePolicyPage;
 import com.n4systems.fieldid.wicket.pages.setup.security.PasswordPolicyPage;
+import com.n4systems.fieldid.wicket.pages.setup.sso.SsoSettingsPage;
 import com.n4systems.fieldid.wicket.pages.setup.translations.*;
 import com.n4systems.fieldid.wicket.pages.setup.user.*;
 import com.n4systems.fieldid.wicket.pages.setup.userregistration.UserRequestListPage;
@@ -104,7 +105,6 @@ import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
 import com.n4systems.fieldid.wicket.resources.TenantOverridesResourceLoader;
 import com.n4systems.fieldid.wicket.util.PagePerformanceListener;
 import com.n4systems.fieldid.wicket.util.PlainDateConverter;
-import com.n4systems.model.security.OfflinePolicy;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.security.Permissions;
 import org.apache.wicket.*;
@@ -134,6 +134,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/templates", TemplatesPage.class);
         mountPage("setup/widgets", WidgetsPage.class);
         mountPage("setup/systemSettings", SystemSettingsPage.class);
+        mountPage("setup/ssoSettings", SsoSettingsPage.class);
         mountPage("setup/yourPlan", YourPlanPage.class);
         mountPage("setup/identifierOverrides", IdentifierOverridesPage.class);
         mountPage("setup/passwordPolicy", PasswordPolicyPage.class);

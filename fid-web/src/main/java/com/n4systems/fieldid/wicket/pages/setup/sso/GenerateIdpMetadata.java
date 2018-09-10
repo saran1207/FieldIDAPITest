@@ -7,6 +7,7 @@ import com.n4systems.model.sso.SsoIdpMetadata;
 import com.n4systems.fieldid.sso.SsoMetadataServices;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.NumberTextField;
 import org.apache.wicket.markup.html.form.TextArea;
@@ -30,23 +31,16 @@ public class GenerateIdpMetadata extends FieldIDTemplatePage {
     @SpringBean
     private SsoMetadataServices metadataServices;
 
+    private FeedbackPanel feedbackPanel;
 
     public GenerateIdpMetadata(final PageParameters parameters) {
         super(parameters);
         addComponents();
-        //metadataManager = (MetadataManager) ((WicketApplication)getApplication()).getAppCtx().getBean("metadata");
-    }
+     }
 
     private void addComponents() {
 
-        Link backLink = new Link("backLink") {
-            public void onClick() {
-                setResponsePage(SsoSettingsPage.class);
-            }
-        };
-        add(backLink);
-
-        add(new FeedbackPanel("feedbackPanel"));
+        addFeedbackPanel();
 
         final Model<String> idpUrlModel = Model.of("https://idp.ssocircle.com");
         final Model<String> loadTimeoutModel = Model.of("15000");
@@ -54,18 +48,26 @@ public class GenerateIdpMetadata extends FieldIDTemplatePage {
         final Model<String> serializedMetadataModel = Model.of("");
 
         final TextField entityIdField = new TextField<String>("entityId", entityIdModel);
+        entityIdField.setRequired(true);
         entityIdField.setOutputMarkupId(true);
 
         final TextArea serializedMetadataField = new TextArea<String>("serializedMetadata",
                 serializedMetadataModel);
+        serializedMetadataField.setRequired(true);
         serializedMetadataField.setOutputMarkupId(true);
+
+        Link backLink = new Link("backLink") {
+            public void onClick() {
+                setResponsePage(SsoSettingsPage.class);
+            }
+        };
 
         Form metadataForm = new Form("metadataForm") {
             @Override
             protected void onSubmit() {
                 SsoIdpMetadata idpMetadata = new SsoIdpMetadata();
                 idpMetadata.setTenant(getTenant());
-                idpMetadata.setIdpUrl(idpUrlModel.getObject());
+                idpMetadata.setIdpUrl("");
                 idpMetadata.setSsoEntity(new SsoEntity(entityIdModel.getObject()));
                 idpMetadata.setSerializedMetadata(serializedMetadataModel.getObject());
                 metadataServices.addIdp(idpMetadata);
@@ -73,10 +75,13 @@ public class GenerateIdpMetadata extends FieldIDTemplatePage {
             }
         };
         add(metadataForm);
-        metadataForm.add(new TextField<String>("idpUrl", idpUrlModel));
+        metadataForm.add(new TextField<String>("idpLoadUrl", idpUrlModel));
         metadataForm.add(new AjaxLink("getMetadata") {
             @Override
             public void onClick(AjaxRequestTarget ajaxRequestTarget) {
+                metadataForm.clearInput();
+                feedbackPanel.getFeedbackMessages().clear();
+                ajaxRequestTarget.add(feedbackPanel);
                 IdpProvidedMetadata metadata = metadataServices.getMetadataFromIdp(idpUrlModel.getObject(),
                         new Integer(loadTimeoutModel.getObject()));
                 entityIdModel.setObject(metadata.getEntityId());
@@ -88,6 +93,16 @@ public class GenerateIdpMetadata extends FieldIDTemplatePage {
         metadataForm.add(new NumberTextField("refreshInterval", loadTimeoutModel));
         metadataForm.add(entityIdField);
         metadataForm.add(serializedMetadataField);
+        metadataForm.add(backLink);
     }
 
+    private void addFeedbackPanel() {
+         /* Existing top feedback panel is in the correct place for our messages but doesn't
+            get recognized as a feedback panel for our messages. */
+        remove(getTopFeedbackPanel());
+        feedbackPanel = new FeedbackPanel("topFeedbackPanel");
+        feedbackPanel.add(new AttributeAppender("style", new Model("text-align: center; color:red; padding: 0px 10px"), " "));
+        feedbackPanel.setOutputMarkupId(true);
+        add(feedbackPanel);
+    }
 }

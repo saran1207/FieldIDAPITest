@@ -34,8 +34,7 @@ public class DisplayIdpMetadata extends FieldIDTemplatePage {
     private void addComponents(String entityId) {
 
         SsoIdpMetadata idpMetadata = ssoMetadataDao.getIdp(entityId);
-        add(new Label("metadata.idpEntityId", Model.of(idpMetadata.getSsoEntity().getEntityId())));
-        add(new Label("metadata.idpUrl", Model.of(idpMetadata.getIdpUrl())));
+        add(new Label("idpEntityId", Model.of(idpMetadata.getSsoEntity().getEntityId())));
 
         TextArea serializedMetadataField = new TextArea<String>("serializedMetadata",
                 Model.of(idpMetadata.getSerializedMetadata()));
