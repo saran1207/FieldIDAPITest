@@ -47,6 +47,7 @@ public class WebSessionMap extends AbstractMap<String, Object> implements Serial
 	public static final String BOOTED = "booted";
 	public static final String SUDO_AUTH = "sudoAuth";
 	public static final String CONCURRENT_SESSION_ID = "concurrentSessionId";
+	public static final String SSO_AUTHENTICATE = "ssoAuthenticate";
 	
 	public WebSessionMap() {
 		this(ServletActionContext.getRequest().getSession(false));

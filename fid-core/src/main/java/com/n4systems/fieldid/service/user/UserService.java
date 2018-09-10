@@ -276,6 +276,20 @@ public class UserService extends CrudService<User> {
         return user;
     }
 
+    /**
+     * Similar to getUser except no security filter is used. Intended to be used before
+     * the session is fully built.
+     * @param userId
+     * @return
+     */
+    public User getUserNoSecurityFilter(Long userId) {
+        QueryBuilder<User> builder = new QueryBuilder<>(User.class, new OpenSecurityFilter());
+        UserQueryHelper.applyFullyActiveFilter(builder);
+        builder.addWhere(WhereClauseFactory.create("id", userId));
+        User user = persistenceService.find(builder);
+        return user;
+    }
+
     public void moveSavedItem(Long userId, int fromIndex, int toIndex) {
         User user = getUser(userId);
         SavedItem savedItem = user.getSavedItems().get(fromIndex);
@@ -443,8 +457,8 @@ public class UserService extends CrudService<User> {
         QueryBuilder<User> builder = new QueryBuilder<>(User.class, new OpenSecurityFilter());
         UserQueryHelper.applyFullyActiveFilter(builder);
 
-        builder.addWhere(WhereClauseFactory.createCaseInsensitive("tenant.name", tenantName));
-        builder.addWhere(WhereClauseFactory.createCaseInsensitive("emailAddress", emailAddress));
+        builder.addWhere(WhereClauseFactory.create("tenant.name", tenantName));
+        builder.addWhere(WhereClauseFactory.create("emailAddress", emailAddress));
         return persistenceService.findAll(builder);
     }
 
@@ -452,9 +466,9 @@ public class UserService extends CrudService<User> {
         QueryBuilder<User> builder = new QueryBuilder<>(User.class, new OpenSecurityFilter());
         UserQueryHelper.applyFullyActiveFilter(builder);
 
-        builder.addWhere(WhereClauseFactory.createCaseInsensitive("tenant.name", tenantName));
-        builder.addWhere(WhereClauseFactory.createCaseInsensitive("userID", userId));
-        builder.addWhere(WhereClauseFactory.createCaseInsensitive("emailAddress", emailAddress));
+        builder.addWhere(WhereClauseFactory.create("tenant.name", tenantName));
+        builder.addWhere(WhereClauseFactory.create("userID", userId));
+        builder.addWhere(WhereClauseFactory.create("emailAddress", emailAddress));
         User user = persistenceService.find(builder);
         return user;
     }

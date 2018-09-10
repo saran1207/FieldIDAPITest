@@ -11,6 +11,7 @@ import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.service.admin.AdminUserService;
 import com.n4systems.fieldid.service.mixpanel.MixpanelService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
+import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.servlets.ConcurrentLoginSessionListener;
 import com.n4systems.fieldid.utils.UrlArchive;
 import com.n4systems.model.user.User;
@@ -26,6 +27,7 @@ public class LoginAction extends AbstractAction {
 
 	private static final Logger logger = Logger.getLogger(LoginAction.class);
 	private static final long serialVersionUID = 1L;
+	private static final int SSO_TIME_DIFFERENCE_ALLOWED = 300000;
 
 	protected UserManager userManager;
 
@@ -43,6 +45,9 @@ public class LoginAction extends AbstractAction {
 
 	@Autowired
 	private AdminUserService adminUserService;
+
+	@Autowired
+	private UserService userService;
 	
 	public LoginAction(UserManager userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -67,6 +72,16 @@ public class LoginAction extends AbstractAction {
 		return SUCCESS;
 	}
 
+	private boolean isSsoAuthenticationValid() {
+		Long ssoAuthenticatedTime = (Long) getSession().get(WebSessionMap.SSO_AUTHENTICATE);
+		if (ssoAuthenticatedTime == null)
+			return false;
+		Long currentTime = (new Date()).getTime();
+		Long timeDifference = currentTime - ssoAuthenticatedTime;
+		logger.info("SSO Login, authentication completed " + timeDifference + " ms ago");
+		return timeDifference < SSO_TIME_DIFFERENCE_ALLOWED;
+	}
+
 	private void checkRememberMe() {
 		signIn.populateFromRememberMe(createCookieFactory());
 	}
@@ -74,17 +89,22 @@ public class LoginAction extends AbstractAction {
 	public String doCreate() {		
 		User loginUser = null;
 
-		if (!signIn.isValid(this)) {
-			return INPUT;
-		}
+        boolean ssoAuthentication = isSsoAuthenticationValid();
+		if (!ssoAuthentication) {
+			if (!signIn.isValid(this)) {
+				return INPUT;
+			}
 
-		try {
-			loginUser = findUser();
-		} catch (LoginException e) {
-			handleFailedLoginAttempt(e);				
-			return INPUT;
+			try {
+				loginUser = findUser();
+			} catch (LoginException e) {
+				handleFailedLoginAttempt(e);
+				return INPUT;
+			}
 		}
-
+		else {
+			loginUser = userService.getUserNoSecurityFilter(getSession().getUserId());
+		}
 		WebSessionMap currentSession = getSession();
 		currentSession.setUserId(loginUser.getId());
 
@@ -96,7 +116,7 @@ public class LoginAction extends AbstractAction {
 				return "confirmKick";
 			}
 		}
-		return signIn(loginUser);
+		return signIn(loginUser, ssoAuthentication);
 	}
 
 	private WebSessionMap getConcurrentSession(User loginUser, WebSessionMap currentSession) {
@@ -181,17 +201,19 @@ public class LoginAction extends AbstractAction {
         }
 	}
 
-	private String signIn(User loginUser) {		
-		// if password expired, jump to reset password page (which requires username & resetkey)
-		PasswordHelper passwordHelper = new PasswordHelper(tenantSettingsService.getTenantSettings().getPasswordPolicy());
-		if (passwordHelper.isPasswordExpired(loginUser)) {
-			resetPasswordKey = loginUser.createResetPasswordKey();	// need this in order to get to "reset password" screen.
-			userManager.updateUser(loginUser);
-			return REDIRECT_TO_URL;					
+	private String signIn(User loginUser, boolean ssoAuthentication) {
+
+		if (!ssoAuthentication) {
+			// if password expired, jump to reset password page (which requires username & resetkey)
+			PasswordHelper passwordHelper = new PasswordHelper(tenantSettingsService.getTenantSettings().getPasswordPolicy());
+			if (passwordHelper.isPasswordExpired(loginUser)) {
+				resetPasswordKey = loginUser.createResetPasswordKey();    // need this in order to get to "reset password" screen.
+				userManager.updateUser(loginUser);
+				return REDIRECT_TO_URL;
+			}
 		}
-		
 		logUserIn(loginUser);
-		
+
 		if (previousUrl != null) {
 			return "redirect";
 		}
@@ -209,7 +231,7 @@ public class LoginAction extends AbstractAction {
 
 		User loginUser = persistenceManager.find(User.class, getSession().getUserId());
 		if (loginUser != null) {
-			return signIn(loginUser);
+			return signIn(loginUser, isSsoAuthenticationValid());
 		}
 		return ERROR;
 	}
