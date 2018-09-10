@@ -1,7 +1,11 @@
 package com.n4systems.fieldid.sso;
 
+import com.n4systems.fieldid.service.org.OrgService;
+import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.user.UserService;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.sso.SsoIdpMetadata;
 import com.n4systems.model.sso.SsoSpMetadata;
 import com.n4systems.model.user.User;
@@ -28,6 +32,12 @@ public class ApplicationAuthenticationProvider extends SAMLAuthenticationProvide
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private OrgService orgService;
+
+    @Autowired
+    private TenantSettingsService tenantSettingsService;
+
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         logger.info("SSO authenticate request received " + ((authentication != null) ? authentication.getName() : ""));
@@ -53,6 +63,25 @@ public class ApplicationAuthenticationProvider extends SAMLAuthenticationProvide
             throw new SessionAuthenticationException("Incoming SSO authentication request for SP '" + localEntityId +
                     "' should be from IDP '" + ssoIdpMetadata.getSsoEntity().getEntityId() +
                     "' but it is instead from IDP '" + peerEntityId + "'");
+
+        /* Verify that this tenant is allowed to use SSO */
+        PrimaryOrg primaryOrg = orgService.getPrimaryOrgForTenantNoSecurityFilter(expectedTenant.getId());
+        if (primaryOrg != null) {
+            if (!primaryOrg.hasExtendedFeature(ExtendedFeature.SSO))
+                throw new SessionAuthenticationException("Incoming SSO authentication request for SP '" + localEntityId +
+                        "' from IDP '" + ssoIdpMetadata.getSsoEntity().getEntityId() +
+                        "' but tenant '" + expectedTenant.getName() + "' does not have SSO extended feature");
+        }
+        else
+            throw new SessionAuthenticationException("Incoming SSO authentication request for SP '" + localEntityId +
+                    "' from IDP '" + ssoIdpMetadata.getSsoEntity().getEntityId() +
+                    "' but tenant '" + expectedTenant.getName() + "' has no primary org");
+
+        /* Verify tenant has SSO set as active */
+        if (!tenantSettingsService.getTenantSettings(expectedTenant.getId()).isSsoEnabled())
+            throw new SessionAuthenticationException("Incoming SSO authentication request for SP '" + localEntityId +
+                    "' from IDP '" + ssoIdpMetadata.getSsoEntity().getEntityId() +
+                    "' but tenant '" + expectedTenant.getName() + "' does not have SSO activated in SSO settings");
 
         /* Get the corresponding FieldId user (if it exists) */
         User fieldIdUser;

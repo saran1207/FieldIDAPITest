@@ -75,7 +75,6 @@ public class SamlLogonResultHandler implements AuthenticationFailureHandler, Aut
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         logger.info("authentication success " + authentication.toString());
-        System.out.println("authentication success");
         SamlUserDetails details = (SamlUserDetails) authentication.getDetails();
         HttpSession session = request.getSession();
         //loginToFieldId(request, response, details.getUserIdInFieldId());
@@ -107,7 +106,6 @@ public class SamlLogonResultHandler implements AuthenticationFailureHandler, Aut
     private void redirectToHomepage(HttpServletRequest request, HttpServletResponse response) {
         try {
             SAMLMessageContext context = contextProvider.getLocalEntity(request, response);
-            System.out.println("Local entity id: " + context.getLocalEntityId());
             response.sendRedirect(ssoMetadataDao.getSp(context.getLocalEntityId()).getEntityBaseURL() + "/w/dashboard");
         } catch (Exception ex) {
             System.out.println("SAMLLogonFailureHandler failed getting context");
