@@ -6,7 +6,6 @@ import com.n4systems.model.sso.SsoSpMetadata;
 import com.n4systems.fieldid.sso.SsoMetadataServices;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.Url;
@@ -40,13 +39,6 @@ public class GenerateSpMetadata extends FieldIDTemplatePage {
         String tenantName = getTenant().getName();
         add(new Label("tenantName", tenantName));
 
-        Link backLink = new Link("backLink") {
-            public void onClick() {
-                getRequestCycle().setResponsePage(SsoSettingsPage.class);
-            }
-        };
-        add(backLink);
-
         /* Spring SAML sample app sets initial values for these fields:
             sets entity base URL
             signing key - apollo
@@ -66,8 +58,8 @@ public class GenerateSpMetadata extends FieldIDTemplatePage {
                 ":" + originalUrl.getPort() + getRequest().getContextPath()).toString();
 
         SsoSpMetadata spMetadata = new SsoSpMetadata();
-        spMetadata.setSsoEntity(new SsoEntity("urn:test:arvid:sandbox:" + tenantName));
-        spMetadata.setEntityBaseURL(baseUrl); //http://localhost:8080/sso-sandbox");
+        spMetadata.setSsoEntity(new SsoEntity(baseUrl));
+        spMetadata.setEntityBaseURL(baseUrl);
         spMetadata.setMatchOnUserId(true);
         spMetadata.setUserIdAttributeName("UserID");
         spMetadata.setMatchOnEmailAddress(true);
@@ -86,6 +78,10 @@ public class GenerateSpMetadata extends FieldIDTemplatePage {
 
 
         SpMetadataPanel spPanel = new SpMetadataPanel("spMetatdata", spMetadata, false) {
+            @Override
+            void cancel() {
+                getRequestCycle().setResponsePage(SsoSettingsPage.class);
+            }
             @Override
             void submitForm(SsoSpMetadata submittedSpMetadata) {
                 saveMetadata(submittedSpMetadata);

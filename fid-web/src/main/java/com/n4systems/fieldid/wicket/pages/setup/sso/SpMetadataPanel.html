@@ -1,388 +1,300 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <wicket:panel>
+    <style>
+        .metadataLabel {
+            float: left;
+            width: 400px;
+            text-align: right;
+            margin-right: 0.5em;
+            white-space: nowrap;
+            overflow: hidden;
+            font-weight: bold;
+        }
+        .metadataInput {
+            padding-left: 0.5em;
+        }
+        .metadataSecondColLabel {
+            padding-left: 10px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .metadataDesc {
+            float: left;
+            margin-top: 10px;
+            margin-left: 405px;
+            padding-left: 0.5em;
+            overflow: hidden;
+        }
+        .inputLine {
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+    </style>
     <form wicket:id="metadataForm">
-        <table>
-            <tr>
-                <td></td>
-            </tr>
-            <tr>
-                <td><label for="entityId">Entity ID:</label></td>
-                <td>
-                    <input wicket:id="entityId" type="text" id="entityId"/>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <div class="small">Entity ID is a unique identifier for an identity or service provider. Value is included in the
-                        generated metadata.
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td><label for="baseURL">Entity base URL:</label></td>
-                <td>
-                    <input wicket:id="baseURL" type="text" id="baseURL"/>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <div class="small">Base to generate URLs for this server. For example: https://myServer:443/saml-app. The public
-                        address your server will be accessed from should be used here.
-                    </div>
-                </td>
-            </tr>
 
-            <tr>
-                <td><label wicket:for="matchOnUserId">Match on User Id:</label></td>
-                <td>
-                    <select wicket:id="matchOnUserId">
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                    </select>
-                    <label wicket:for="userIdAttributeName"><wicket:message key="attributeName"></wicket:message></label>
-                    <input wicket:id="userIdAttributeName" type="text"/>
-                </td>
-            </tr>
-            <tr>
-                <td><label wicket:for="matchOnEmailAddress">Match on Email Address:</label></td>
-                <td>
-                    <select wicket:id="matchOnEmailAddress">
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                    </select>
-                    <label wicket:for="emailAddressAttributeName"><wicket:message key="attributeName"></wicket:message></label>
-                    <input wicket:id="emailAddressAttributeName" type="text"/>
-                </td>
-            </tr>
-            <tr>
-                <td><label for="alias">Entity alias:</label></td>
-                <td>
-                    <input wicket:id="alias" type="text" id="alias"/>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <div class="small">Alias is an internal mechanism allowing collocating multiple service providers on one server.
-                        When set, alias must be unique.
-                    </div>
-                </td>
-            </tr>
-        <!--    <tr>
-                <td><label for="signingKey">Signing key:</label></td>
-                <td>
-                    <select wicket:id="signingKey" id="signingKey" items="${availableKeys}"/>
-                </td>
-            </tr>-->
-       <!--     <tr>
-                <td></td>
-                <td>
-                    <div class="small">Key used for digital signatures of SAML messages. Public key will be included in the metadata.</div>
-                </td>
-            </tr>
-            <tr>
-                <td><label for="encryptionKey">Encryption key:</label></td>
-                <td>
-                    <select wicket:id="encryptionKey" id="encryptionKey"/>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <div class="small">Key used for digital encryption of SAML messages. Public key will be included in the metadata.</div>
-                </td>
-            </tr>-->
-            <tr>
-                <td><label for="securityProfile">Signature security profile:</label></td>
-                <td>
-                    <select wicket:id="securityProfile" id="securityProfile">
-                        <option value="metaiop">MetaIOP</option>
-                        <option value="pkix">PKIX</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <div class="small">
-                        Security profile determines how is trust of digital signatures handled:
-                        <ul>
-                            <li>
-                                In <a href="http://wiki.oasis-open.org/security/SAML2MetadataIOP">MetaIOP</a> mode certificate is
-                                deemed
-                                valid when it's declared in the metadata or extended metadata of the peer entity. No validation of
-                                the certificate is
-                                performed (e.g. revocation) and no certificate chains are evaluated. The value is recommended as a
-                                default.
-                            </li>
-                            <li>
-                                PKIX profile verifies credentials against a set of trust anchors. Certificates present in the
-                                metadata or extended metadata of the peer entity are treated as trust anchors, together with all
-                                keys in
-                                the keystore. Certificate chains are verified in this mode.
-                            </li>
-                        </ul>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td><label for="sslSecurityProfile">SSL/TLS security profile:</label></td>
-                <td>
-                    <select wicket:id="sslSecurityProfile" id="sslSecurityProfile">
-                        <option value="pkix">PKIX</option>
-                        <option value="metaiop">MetaIOP</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <div class="small">
-                        SSL/TLS Security profile determines how is trust of peer's SSL/TLS certificate (e.g. during Artifact
-                        resolution) handled:
-                        <ul>
-                            <li>
-                                PKIX profile verifies peer's certificate against a set of trust anchors. All certificates defined in
-                                metadata,
-                                extended metadata or present in the keystore are considered as trusted anchors (certification
-                                authorities)
-                                for PKIX validation.
-                            </li>
-                            <li>
-                                In MetaIOP mode server's SSL/TLS certificate is trusted when it's explicitly declared in metadata or
-                                extended metadata of
-                                the peer.
-                            </li>
-                        </ul>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td><label wicket:for="sslHostnameVerification">SSL/TLS hostname verification:</label></td>
-                <td>
-                    <select wicket:id="sslHostnameVerification">
-                        <option value="default">Standard hostname verifier</option>
-                        <option
-                                value="defaultAndLocalhost">Standard hostname verifier (skips verification for localhost)</option>
-                        <option value="strict">Strict hostname verifier</option>
-                        <option value="allowAll">Disable hostname verification (allow all)</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <div class="small">Algorithm for verification of match between hostname in URL and hostname in the presented certificate.
-                    </div>
-                </td>
-            </tr>
-    <!--        <tr>
-                <td><label wicket:for="tlsKey">SSL/TLS client authentication:</label></td>
-                <td>
-                    <select wicket:id="tlsKey">
-                        <option value="">None</option>
-                        <options items="${availableKeys}"/>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <div class="small">Key used to authenticate this instance for SSL/TLS connections.</div>
-                </td>
-            </tr>-->
-          <!--  <tr>
-                <td><label wicket:for="signMetadata">Sign metadata:</label></td>
-                <td>
-                    <select wicket:id="signMetadata">
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <div class="small">If true the generated metadata will be digitally signed using the specified signature key.
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td><label wicket:for="signingAlgorithm">Signing algorithm:</label></td>
-                <td>
-                    <input cssClass="text" wicket:id="signingAlgorithm"/>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <div class="small">Algorithm used for creation of digital signature on metadata. Typical values are
-                        "http://www.w3.org/2000/09/xmldsig#rsa-sha1",
-                        "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" and "http://www.w3.org/2001/04/xmldsig-more#rsa-sha512"
-                    </div>
-                </td>
-            </tr>-->
-            <tr>
-                <td><label wicket:for="requestSigned">Sign sent AuthNRequests:</label></td>
-                <td>
-                    <select wicket:id="requestSigned">
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td><label wicket:for="wantAssertionSigned">Require signed authentication Assertion:</label></td>
-                <td>
-                    <select wicket:id="wantAssertionSigned">
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td><label wicket:for="requireLogoutRequestSigned">Require signed LogoutRequest:</label></td>
-                <td>
-                    <select wicket:id="requireLogoutRequestSigned">
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td><label wicket:for="requireLogoutResponseSigned">Require signed LogoutResponse:</label></td>
-                <td>
-                    <select wicket:id="requireLogoutResponseSigned">
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td><label wicket:for="requireArtifactResolveSigned">Require signed ArtifactResolve:</label></td>
-                <td>
-                    <select wicket:id="requireArtifactResolveSigned">
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td><label>Single sign-on bindings:</label></td>
-                <td>
-                    <wicket:container wicket:id="ssoDefaultBindingGroup">
-                        <table>
-                            <tr>
-                                <th>Default</th>
-                                <th>Included</th>
-                                <th>Name</th>
-                            </tr>
-                            <tr>
-                                <td><input type="radio" wicket:id="radio_sso_0"/></td>
-                                <td><input type="checkbox" wicket:id="sso_0"/></td>
-                                <td><label wicket:for="sso_0">SSO HTTP-POST</label></td>
-                            </tr>
-                            <tr>
-                                <td><input type="radio" wicket:id="radio_sso_1"/></td>
-                                <td><input type="checkbox" wicket:id="sso_1"/></td>
-                                <td><label wicket:for="sso_1">SSO Artifact</label></td>
-                            </tr>
-                            <tr>
-                                <td><input type="radio" wicket:id="radio_sso_2"/></td>
-                                <td><input type="checkbox" wicket:id="sso_2"/></td>
-                                <td><label wicket:for="sso_2">SSO PAOS</label></td>
-                            </tr>
-                            <tr>
-                                <td><input type="radio" wicket:id="radio_sso_3"/></td>
-                                <td><input type="checkbox" wicket:id="sso_3"/></td>
-                                <td><label wicket:for="sso_3">HoK SSO Artifact</label></td>
-                            </tr>
-                            <tr>
-                                <td><input type="radio" wicket:id="radio_sso_4"/></td>
-                                <td><input type="checkbox" wicket:id="sso_4"/></td>
-                                <td><label wicket:for="sso_4">HoK SSO HTTP-POST</label></td>
-                            </tr>
-                        </table>
-                    </wicket:container>
-                </td>
-            </tr>
-            <tr>
-                <td><label>Supported NameIDs:</label></td>
-                <td>
+        <div class="inputLine">
+            <div>
+                <label for="entityId" class="metadataLabel">Entity ID:</label>
+                <input wicket:id="entityId" type="text" id="entityId" class="metadataInput" style="width: 300px;"/>
+            </div>
+            <div class="small metadataDesc">Entity ID is a unique identifier for an identity or service provider. Value is included in the
+                generated metadata.
+            </div>
+        </div>
+
+        <div class="inputLine">
+            <div>
+                <label for="baseURL" class="metadataLabel">Entity base URL:</label>
+                <input wicket:id="baseURL" type="text" id="baseURL" class="metadataInput" style="width: 300px;"/>
+            </div>
+            <div class="small metadataDesc">Base to generate URLs for this server. For example: https://myServer:443/saml-app. The public
+                address your server will be accessed from should be used here.
+            </div>
+        </div>
+
+        <div class="inputLine">
+            <div>
+                <label wicket:for="matchOnUserId" class="metadataLabel">Match on User Id:</label>
+                <select wicket:id="matchOnUserId" class="metadataInput" >
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+                <label wicket:for="userIdAttributeName" class="metadataSecondColLabel">
+                    <wicket:message key="attributeName"></wicket:message>
+                </label>
+                <input wicket:id="userIdAttributeName" type="text"/>
+            </div>
+        </div>
+
+        <div class="inputLine">
+            <div>
+                <label wicket:for="matchOnEmailAddress" class="metadataLabel">Match on Email Address:</label>
+                <select wicket:id="matchOnEmailAddress" class="metadataInput" >
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+                <label wicket:for="emailAddressAttributeName" class="metadataSecondColLabel">
+                    <wicket:message key="attributeName"></wicket:message>
+                </label>
+                <input wicket:id="emailAddressAttributeName" type="text"/>
+            </div>
+        </div>
+
+        <div class="inputLine">
+            <div>
+                <label for="alias" class="metadataLabel">Entity alias:</label>
+                <input wicket:id="alias" type="text" id="alias" class="metadataInput"/>
+            </div>
+            <div class="small metadataDesc">Alias is an internal mechanism allowing collocating multiple service providers on one server.
+                When set, alias must be unique.
+            </div>
+        </div>
+
+        <div class="inputLine">
+            <div><label for="securityProfile" class="metadataLabel">Signature security profile:</label>
+                <select wicket:id="securityProfile" id="securityProfile" class="metadataInput">
+                    <option value="metaiop">MetaIOP</option>
+                    <option value="pkix">PKIX</option>
+                </select>
+            </div>
+            <div class="small metadataDesc">
+                Security profile determines how is trust of digital signatures handled:
+                <ul>
+                    <li>
+                        In <a href="http://wiki.oasis-open.org/security/SAML2MetadataIOP">MetaIOP</a> mode certificate is
+                        deemed
+                        valid when it's declared in the metadata or extended metadata of the peer entity. No validation of
+                        the certificate is
+                        performed (e.g. revocation) and no certificate chains are evaluated. The value is recommended as a
+                        default.
+                    </li>
+                    <li>
+                        PKIX profile verifies credentials against a set of trust anchors. Certificates present in the
+                        metadata or extended metadata of the peer entity are treated as trust anchors, together with all
+                        keys in
+                        the keystore. Certificate chains are verified in this mode.
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="inputLine">
+            <div>
+                <label for="sslSecurityProfile" class="metadataLabel">SSL/TLS security profile:</label>
+                <select wicket:id="sslSecurityProfile" id="sslSecurityProfile" class="metadataInput">
+                    <option value="pkix">PKIX</option>
+                    <option value="metaiop">MetaIOP</option>
+                </select>
+            </div>
+            <div class="small metadataDesc">
+                SSL/TLS Security profile determines how is trust of peer's SSL/TLS certificate (e.g. during Artifact
+                resolution) handled:
+                <ul>
+                    <li>
+                        PKIX profile verifies peer's certificate against a set of trust anchors. All certificates defined in
+                        metadata,
+                        extended metadata or present in the keystore are considered as trusted anchors (certification
+                        authorities)
+                        for PKIX validation.
+                    </li>
+                    <li>
+                        In MetaIOP mode server's SSL/TLS certificate is trusted when it's explicitly declared in metadata or
+                        extended metadata of
+                        the peer.
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="inputLine">
+            <div>
+                <label wicket:for="sslHostnameVerification" class="metadataLabel">SSL/TLS hostname verification:</label>
+                <select wicket:id="sslHostnameVerification" class="metadataInput">
+                    <option value="default">Standard hostname verifier</option>
+                    <option value="defaultAndLocalhost">Standard hostname verifier (skips verification for localhost)</option>
+                    <option value="strict">Strict hostname verifier</option>
+                    <option value="allowAll">Disable hostname verification (allow all)</option>
+                </select>
+            </div>
+            <div class="small metadataDesc">
+                Algorithm for verification of match between hostname in URL and hostname in the presented certificate.
+            </div>
+        </div>
+
+        <div class="inputLine">
+            <div>
+                <label wicket:for="signingAlgorithm" class="metadataLabel">Signing algorithm:</label>
+                <input cssClass="text" wicket:id="signingAlgorithm" class="metadataInput"/>
+            </div>
+            <div class="small metadataDesc">Algorithm used for creation of digital signature on metadata. Typical values are
+                "http://www.w3.org/2000/09/xmldsig#rsa-sha1",
+                "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" and "http://www.w3.org/2001/04/xmldsig-more#rsa-sha512"
+            </div>
+        </div>
+
+        <div class="inputLine">
+            <div>
+                <label wicket:for="requestSigned" class="metadataLabel">Sign sent AuthNRequests:</label>
+                <select wicket:id="requestSigned" class="metadataInput">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="inputLine">
+            <div>
+                <label wicket:for="wantAssertionSigned" class="metadataLabel">Require signed authentication Assertion:</label>
+                <select wicket:id="wantAssertionSigned" class="metadataInput">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="inputLine">
+            <div>
+                <label wicket:for="requireLogoutRequestSigned" class="metadataLabel">Require signed LogoutRequest:</label>
+                <select wicket:id="requireLogoutRequestSigned" class="metadataInput">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="inputLine">
+            <div>
+                <label wicket:for="requireLogoutResponseSigned" class="metadataLabel">Require signed LogoutResponse:</label>
+                <select wicket:id="requireLogoutResponseSigned" class="metadataInput">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="inputLine">
+            <div>
+                <label wicket:for="requireArtifactResolveSigned" class="metadataLabel">Require signed ArtifactResolve:</label>
+                <select wicket:id="requireArtifactResolveSigned" class="metadataInput">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="inputLine">
+            <div>
+                <label class="metadataLabel">Single sign-on bindings:</label>
+                <wicket:container wicket:id="ssoDefaultBindingGroup" class="metadataInput">
                     <table>
                         <tr>
-                            <td><input type="checkbox" wicket:id="nameid_0"/></td>
-                            <td><label wicket:for="nameid_0">E-Mail</label></td>
+                            <th>Default</th>
+                            <th>Included</th>
+                            <th>Name</th>
                         </tr>
                         <tr>
-                            <td><input type="checkbox" path="nameID" wicket:id="nameid_1"/></td>
-                            <td><label wicket:for="nameid_1">Transient</label></td>
+                            <td><input type="radio" wicket:id="radio_sso_0"/></td>
+                            <td><input type="checkbox" wicket:id="sso_0"/></td>
+                            <td><label wicket:for="sso_0">SSO HTTP-POST</label></td>
                         </tr>
                         <tr>
-                            <td><input type="checkbox" path="nameID" wicket:id="nameid_2"/></td>
-                            <td><label wicket:for="nameid_2">Persistent</label></td>
+                            <td><input type="radio" wicket:id="radio_sso_1"/></td>
+                            <td><input type="checkbox" wicket:id="sso_1"/></td>
+                            <td><label wicket:for="sso_1">SSO Artifact</label></td>
                         </tr>
                         <tr>
-                            <td><input type="checkbox" wicket:id="nameid_3"/></td>
-                            <td><label wicket:for="nameid_3">Unspecified</label></td>
+                            <td><input type="radio" wicket:id="radio_sso_2"/></td>
+                            <td><input type="checkbox" wicket:id="sso_2"/></td>
+                            <td><label wicket:for="sso_2">SSO PAOS</label></td>
                         </tr>
                         <tr>
-                            <td><input type="checkbox" wicket:id="nameid_4"/></td>
-                            <td><label wicket:for="nameid_4">X509 Subject</label></td>
+                            <td><input type="radio" wicket:id="radio_sso_3"/></td>
+                            <td><input type="checkbox" wicket:id="sso_3"/></td>
+                            <td><label wicket:for="sso_3">HoK SSO Artifact</label></td>
+                        </tr>
+                        <tr>
+                            <td><input type="radio" wicket:id="radio_sso_4"/></td>
+                            <td><input type="checkbox" wicket:id="sso_4"/></td>
+                            <td><label wicket:for="sso_4">HoK SSO HTTP-POST</label></td>
                         </tr>
                     </table>
-                </td>
-            </tr>
-          <!--  <tr>
-                <td><label wicket:for="includeDiscovery">Enable IDP discovery profile:</label></td>
-                <td>
-                    <select wicket:id="includeDiscovery">
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <div class="small">
-                        <a href="http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-idp-discovery.pdf">Discovery
-                            profile</a> enables service provider to determine which identity provider should be used
-                        for a particular user. Spring Security SAML contains it's own discovery service which presents
-                        user with an IDP list to select from.
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td><label wicket:for="customDiscoveryURL">Custom URL for IDP discovery:</label></td>
-                <td>
-                    <input type="text" wicket:id="customDiscoveryURL"/>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <div class="small">When not set local IDP discovery URL is automatically generated when IDP discovery is enabled.</div>
-                </td>
-            </tr>
-            <tr>
-                <td><label wicket:for="includeDiscoveryExtension">Include IDP discovery extension in metadata:</label></td>
-                <td>
-                    <select wicket:id="includeDiscoveryExtension">
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                    </select>
-                </td>
-            </tr>-->
-            <tr>
-                <td>
-                    <br/>
-                    <input type="submit" class="button" wicket:message="value:submitButton"/>
-                </td>
-            </tr>
-        </table>
+                </wicket:container>
+            </div>
+        </div>
+
+        <div class="inputLine">
+            <div>
+                <label class="metadataLabel">Supported NameIDs:</label>
+                <table class="metadataInput">
+                    <tr>
+                        <td><input type="checkbox" wicket:id="nameid_0"/></td>
+                        <td><label wicket:for="nameid_0">E-Mail</label></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" path="nameID" wicket:id="nameid_1"/></td>
+                        <td><label wicket:for="nameid_1">Transient</label></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" path="nameID" wicket:id="nameid_2"/></td>
+                        <td><label wicket:for="nameid_2">Persistent</label></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" wicket:id="nameid_3"/></td>
+                        <td><label wicket:for="nameid_3">Unspecified</label></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" wicket:id="nameid_4"/></td>
+                        <td><label wicket:for="nameid_4">X509 Subject</label></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <br>
+        <div>
+            <input type="submit" class="btn-primary" wicket:message="value:submitButton"/><a href="#" wicket:id="cancelLink">Cancel</a>
+        </div>
+
     </form>
 </wicket:panel>
 </html>

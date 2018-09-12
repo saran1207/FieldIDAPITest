@@ -31,9 +31,6 @@ public class SsoIdpMetadata implements Serializable {
     @OneToOne
     private Tenant tenant;
 
-    @Column(name="idp_url", nullable = false)
-    private String idpUrl;
-
     @Column(name="metadata", length=65000, nullable = false)
     private String serializedMetadata;
 
@@ -59,14 +56,6 @@ public class SsoIdpMetadata implements Serializable {
 
     public void setTenant(Tenant tenant) {
         this.tenant = tenant;
-    }
-
-    public String getIdpUrl() {
-        return idpUrl;
-    }
-
-    public void setIdpUrl(String idpUrl) {
-        this.idpUrl = idpUrl;
     }
 
     public String getSerializedMetadata() {

@@ -42,7 +42,7 @@ public class GenerateIdpMetadata extends FieldIDTemplatePage {
 
         addFeedbackPanel();
 
-        final Model<String> idpUrlModel = Model.of("https://idp.ssocircle.com");
+        final Model<String> idpUrlModel = Model.of("");
         final Model<String> loadTimeoutModel = Model.of("15000");
         final Model<String> entityIdModel = Model.of("");
         final Model<String> serializedMetadataModel = Model.of("");
@@ -67,7 +67,6 @@ public class GenerateIdpMetadata extends FieldIDTemplatePage {
             protected void onSubmit() {
                 SsoIdpMetadata idpMetadata = new SsoIdpMetadata();
                 idpMetadata.setTenant(getTenant());
-                idpMetadata.setIdpUrl("");
                 idpMetadata.setSsoEntity(new SsoEntity(entityIdModel.getObject()));
                 idpMetadata.setSerializedMetadata(serializedMetadataModel.getObject());
                 metadataServices.addIdp(idpMetadata);

@@ -4,7 +4,6 @@ create table sso_entity (
 );
 create table sso_idp_metadata (
   id bigint AUTO_INCREMENT,
-  idp_url varchar(255) not null,
   metadata TEXT not null,
   sso_entity_id varchar(255) not null,
   tenant_id bigint not null,

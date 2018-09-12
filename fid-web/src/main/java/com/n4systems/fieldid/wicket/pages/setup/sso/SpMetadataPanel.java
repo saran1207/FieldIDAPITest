@@ -5,6 +5,7 @@ import com.n4systems.model.sso.SsoEntity;
 import com.n4systems.model.sso.SsoSpMetadata;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.validation.AbstractFormValidator;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -28,7 +29,7 @@ abstract public class SpMetadataPanel extends Panel {
         super(id);
         addComponents(spMetadata, reviseMode);
     }
-    
+
     private void addComponents(final SsoSpMetadata spMetadata, final boolean reviseMode) {
 
         final TextField<String> entityId;
@@ -37,14 +38,11 @@ abstract public class SpMetadataPanel extends Panel {
         final TextField<String> userIdAttributeName;
         final BooleanDropDownChoice matchOnEmailAddress;
         final TextField<String> emailAddressAttributeName;
-        TextField<String> alias;
-/*        StringDropDownChoice signingKeyChoice;
-        StringDropDownChoice encryptionKeyChoice;*/
+        final TextField<String> alias;
         final StringDropDownChoice securityProfileChoice;
         final StringDropDownChoice sslSecurityProfileChoice;
         final StringDropDownChoice sslHostnameVerificationChoice;
-       /* BooleanDropDownChoice signMetadataChoice;
-        TextField<String> signingAlgorithm;*/
+        final TextField<String> signingAlgorithm;
         final BooleanDropDownChoice requestSignedChoice;
         final BooleanDropDownChoice wantAssertionSignedChoice;
         final BooleanDropDownChoice requireLogoutRequestSignedChoice;
@@ -66,14 +64,7 @@ abstract public class SpMetadataPanel extends Panel {
         final ExtendedCheckBox nameid_2_checkbox;
         final ExtendedCheckBox nameid_3_checkbox;
         final ExtendedCheckBox nameid_4_checkbox;
-        /*BooleanDropDownChoice includeDiscoveryChoice;
-        TextField<String> customDiscoveryURL;
-        BooleanDropDownChoice includeDiscoveryExtension;
-        StringDropDownChoice tlsKeyChoice;*/
-
-        /* Create the choices to be displayed in the drop downs */
-      /*  final AvailableKeysModelList availableKeysModelList = new AvailableKeysModelList();
-        availableKeysModelList.load();*/
+        final Link cancelLink;
 
         final Map<Boolean, String> trueFalseOptions = new HashMap<Boolean, String>();
         trueFalseOptions.put(Boolean.TRUE, "Yes");
@@ -93,15 +84,10 @@ abstract public class SpMetadataPanel extends Panel {
         sslHostnameVerificationOptions.put("strict","Strict hostname verifier");
         sslHostnameVerificationOptions.put("allowAll","Disable hostname verification (allow all)");
 
-       /* final Map<String, String> tlsKeyOptions = new HashMap<String, String>();
-        tlsKeyOptions.put("","None");
-        tlsKeyOptions.putAll(availableKeysModelList.getAvailableKeys());*/
-
         /* Create the input fields */
 
         entityId = new TextField("entityId", Model.of(spMetadata.getSsoEntity().getEntityId()));
         entityId.setRequired(true);
-        entityId.setEnabled(!reviseMode);
         baseUrl = new TextField("baseURL", Model.of(spMetadata.getEntityBaseURL()));
         baseUrl.setRequired(true);
 
@@ -112,10 +98,7 @@ abstract public class SpMetadataPanel extends Panel {
 
         alias = new TextField("alias", Model.of(spMetadata.getAlias()));
         alias.setConvertEmptyInputStringToNull(true);
-        /*signingKeyChoice = new StringDropDownChoice("signingKey", Model.of(availableKeysModelList.getKeyIfOnlyOne()),
-                availableKeysModelList.getAvailableKeys());
-        encryptionKeyChoice = new StringDropDownChoice("encryptionKey", Model.of(availableKeysModelList.getKeyIfOnlyOne()),
-                availableKeysModelList.getAvailableKeys());*/
+
         securityProfileChoice = new StringDropDownChoice("securityProfile",
                 Model.of("metaiop"), securityProfileOptions);
         securityProfileChoice.setRequired(true);
@@ -125,10 +108,8 @@ abstract public class SpMetadataPanel extends Panel {
         sslHostnameVerificationChoice = new StringDropDownChoice("sslHostnameVerification",
                 Model.of(sslHostnameVerificationOptions.keySet().iterator().next()), sslHostnameVerificationOptions);
 
-        /*tlsKeyChoice = new StringDropDownChoice("tlsKey", Model.of(spMetadata.getTlsKey()), tlsKeyOptions);*/
-       /* signMetadataChoice = new BooleanDropDownChoice("signMetadata", Model.of(spMetadata.isSignMetadata()), trueFalseOptions);
         signingAlgorithm = new TextField("signingAlgorithm", Model.of(spMetadata.getSigningAlgorithm()));
-        signingAlgorithm.setConvertEmptyInputStringToNull(true);*/
+        signingAlgorithm.setConvertEmptyInputStringToNull(true);
         requestSignedChoice = new BooleanDropDownChoice("requestSigned", Model.of(spMetadata.isRequestSigned()), trueFalseOptions);
         wantAssertionSignedChoice = new BooleanDropDownChoice("wantAssertionSigned", Model.of(spMetadata.isWantAssertionSigned()), trueFalseOptions);
         requireLogoutRequestSignedChoice = new BooleanDropDownChoice("requireLogoutRequestSigned", Model.of(spMetadata.isRequireLogoutRequestSigned()), trueFalseOptions);
@@ -175,10 +156,11 @@ abstract public class SpMetadataPanel extends Panel {
         nameid_4_checkbox = new ExtendedCheckBox("nameid_4", Model.of(Boolean.TRUE),
                 "urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName");
 
-     /*   includeDiscoveryChoice = new BooleanDropDownChoice("includeDiscovery", Model.of(Boolean.FALSE), trueFalseOptions);
-        customDiscoveryURL = new TextField("customDiscoveryURL", Model.of(""));
-        customDiscoveryURL.setConvertEmptyInputStringToNull(true);
-        includeDiscoveryExtension = new BooleanDropDownChoice("includeDiscoveryExtension", Model.of(Boolean.FALSE), trueFalseOptions);*/
+        cancelLink = new Link("cancelLink") {
+            public void onClick() {
+                cancel();
+            }
+        };
 
         Form metadataForm = new Form("metadataForm") {
             @Override
@@ -246,31 +228,6 @@ abstract public class SpMetadataPanel extends Panel {
                     nameIds.add(nameid_4_checkbox.getAssociatedValue());
                 spMetadata.setNameID(nameIds);
 
-                // Keys
-             /*   spMetadata.setSigningKey(signingKeyChoice.getModelObject());
-                spMetadata.setEncryptionKey(encryptionKeyChoice.getModelObject());
-                if (tlsKeyChoice.getModelObject() != null && (tlsKeyChoice.getModelObject().length() > 0))
-                    spMetadata.setTlsKey(tlsKeyChoice.getModelObject());
-                else
-                    spMetadata.setTlsKey(null);
-
-                // Discovery
-                if (includeDiscoveryChoice.getModelObject().equals(Boolean.TRUE)) {
-                    spMetadata.setIdpDiscoveryEnabled(true);
-                    spMetadata.setIncludeDiscoveryExtension(includeDiscoveryExtension.getModelObject());
-                    String customDiscoveryURLValue = customDiscoveryURL.getModelObject();
-                    if (customDiscoveryURLValue != null && customDiscoveryURLValue.length() > 0) {
-                        spMetadata.setIdpDiscoveryURL(customDiscoveryURLValue);
-                    }
-                    String customDiscoveryResponseURLValue = customDiscoveryURL.getModelObject();
-                    if (customDiscoveryURLValue != null && customDiscoveryURLValue.length() > 0) {
-                        spMetadata.setIdpDiscoveryResponseURL(customDiscoveryResponseURLValue);
-                    }
-                } else {
-                    spMetadata.setIdpDiscoveryEnabled(false);
-                    spMetadata.setIncludeDiscoveryExtension(false);
-                }*/
-
                 // Alias
                 spMetadata.setAlias(alias.getModelObject());
 
@@ -282,12 +239,10 @@ abstract public class SpMetadataPanel extends Panel {
                 spMetadata.setRequireArtifactResolveSigned(requireArtifactResolveSignedChoice.getModelObject());
                 spMetadata.setSslHostnameVerification(sslHostnameVerificationChoice.getModelObject());
 
-                // Metadata signing
-            /*    spMetadata.setSignMetadata(signMetadataChoice.getModelObject());
                 String signingAlgorithmValue = signingAlgorithm.getModelObject();
                 if (signingAlgorithmValue != null && (signingAlgorithmValue.length() > 0)) {
                     spMetadata.setSigningAlgorithm(signingAlgorithmValue);
-                }*/
+                }
                 submitForm(spMetadata);
             }
         };
@@ -322,14 +277,10 @@ abstract public class SpMetadataPanel extends Panel {
         metadataForm.add(matchOnEmailAddress);
         metadataForm.add(emailAddressAttributeName);
         metadataForm.add(alias);
-        /*metadataForm.add(signingKeyChoice);
-        metadataForm.add(encryptionKeyChoice);*/
         metadataForm.add(securityProfileChoice);
         metadataForm.add(sslSecurityProfileChoice);
         metadataForm.add(sslHostnameVerificationChoice);
-      /*  metadataForm.add(tlsKeyChoice);
-        metadataForm.add(signMetadataChoice);
-        metadataForm.add(signingAlgorithm);*/
+        metadataForm.add(signingAlgorithm);
         metadataForm.add(requestSignedChoice);
         metadataForm.add(wantAssertionSignedChoice);
         metadataForm.add(requireLogoutRequestSignedChoice);
@@ -341,12 +292,11 @@ abstract public class SpMetadataPanel extends Panel {
         metadataForm.add(nameid_2_checkbox);
         metadataForm.add(nameid_3_checkbox);
         metadataForm.add(nameid_4_checkbox);
-   /*     metadataForm.add(includeDiscoveryChoice);
-        metadataForm.add(customDiscoveryURL);
-        metadataForm.add(includeDiscoveryExtension);*/
+        metadataForm.add(cancelLink);
     }
 
     abstract void submitForm(SsoSpMetadata spMetadata);
+    abstract void cancel();
 
     private class BooleanDropDownChoice extends DropDownChoice<Boolean> {
         public BooleanDropDownChoice(String id, Model<Boolean> model, final Map<Boolean, String> options) {
@@ -412,46 +362,4 @@ abstract public class SpMetadataPanel extends Panel {
         }
     }
 
-    /*private class AvailableKeysModelList extends LoadableDetachableModel<List<String>> {
-
-        private Map<String, String> availableKeys;
-
-        protected List<String> load() {
-            availableKeys = getAvailablePrivateKeys();
-            return new ArrayList(availableKeys.keySet());
-        }
-
-        public String getKeyIfOnlyOne() {
-            if (availableKeys.keySet().size() == 1)
-                return availableKeys.keySet().iterator().next();
-            else
-                return "";
-        }
-
-        public Map<String, String> getAvailableKeys() {
-            return availableKeys;
-        }
-
-        public String getDisplayValue(String key) {
-            return availableKeys.get(key);
-        }
-
-        private Map<String, String> getAvailablePrivateKeys()  {
-            Map<String, String> availableKeys = new HashMap<String, String>();
-            Set<String> aliases = keyManager.getAvailableCredentials();
-            for (String key : aliases) {
-                try {
-                    logger.debug("Found key {}", key);
-                    Credential credential = keyManager.getCredential(key);
-                    if (credential.getPrivateKey() != null) {
-                        logger.debug("Adding private key with alias {} and entityID {}", key, credential.getEntityId());
-                        availableKeys.put(key, key + " (" + credential.getEntityId() + ")");
-                    }
-                } catch (Exception e) {
-                    logger.debug("Error loading key", e);
-                }
-            }
-            return availableKeys;
-        }
-    }*/
 }
