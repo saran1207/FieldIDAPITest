@@ -83,7 +83,6 @@ public class SsoMetadataServicesImpl implements SsoMetadataServices {
             try {
                 if (provider.getEntityDescriptor(entityId) != null) {
                     metadataManager.removeMetadataProvider(provider);
-                    //metadataManager.setHostedSPName(null);
                     ssoMetadataDao.deleteIdp(entityId);
                     metadataManager.setRefreshRequired(true);
                     metadataManager.refreshMetadata();
@@ -118,12 +117,11 @@ public class SsoMetadataServicesImpl implements SsoMetadataServices {
         clientParams.setSoTimeout(requestTimeout);
         HttpClient httpClient = new HttpClient(clientParams);
         httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(requestTimeout);
-        HTTPMetadataProvider provider = new HTTPMetadataProvider(new Timer(true), httpClient, idpUrl + "/idp-meta.xml");
+        HTTPMetadataProvider provider = new HTTPMetadataProvider(new Timer(true), httpClient, idpUrl);
         provider.setParserPool(parserPool);
         provider.initialize();
-        System.out.println("IDP Metadata URI:" + provider.getMetadataURI());
-        EntityDescriptor entityDescriptor = provider.getEntityDescriptor(idpUrl);
-        System.out.println("entity descriptor: " + entityDescriptor.toString());
+        logger.info("Obtaining IDP metadata from " + provider.getMetadataURI());
+        EntityDescriptor entityDescriptor = (EntityDescriptor) provider.getMetadata();
         provider.destroy();
         return entityDescriptor;
     }

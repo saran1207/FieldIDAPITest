@@ -6,6 +6,7 @@ import com.n4systems.model.sso.SsoEntity;
 import com.n4systems.model.sso.SsoIdpMetadata;
 import com.n4systems.fieldid.sso.SsoMetadataServices;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.form.Form;
@@ -74,25 +75,50 @@ public class GenerateIdpMetadata extends FieldIDTemplatePage {
             }
         };
         add(metadataForm);
-        metadataForm.add(new TextField<String>("idpLoadUrl", idpUrlModel));
+        TextField idpLoadUrl = new TextField<String>("idpLoadUrl", idpUrlModel);
+        idpLoadUrl.setOutputMarkupId(true);
+        idpLoadUrl.add(new AjaxFormComponentUpdatingBehavior("onChange") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                // Do nothing, we just need model updated.
+                }
+            }
+        );
+        metadataForm.add(idpLoadUrl);
+        NumberTextField refreshInterval = new NumberTextField("refreshInterval", loadTimeoutModel);
+        refreshInterval.setOutputMarkupId(true);
+        refreshInterval.add(new AjaxFormComponentUpdatingBehavior("onChange") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                // Do nothing, we just need model updated.
+                }
+            }
+        );
+        metadataForm.add(refreshInterval);
+        metadataForm.add(entityIdField);
+        metadataForm.add(serializedMetadataField);
+        metadataForm.add(backLink);
+
         metadataForm.add(new AjaxLink("getMetadata") {
             @Override
             public void onClick(AjaxRequestTarget ajaxRequestTarget) {
                 metadataForm.clearInput();
                 feedbackPanel.getFeedbackMessages().clear();
                 ajaxRequestTarget.add(feedbackPanel);
-                IdpProvidedMetadata metadata = metadataServices.getMetadataFromIdp(idpUrlModel.getObject(),
-                        new Integer(loadTimeoutModel.getObject()));
-                entityIdModel.setObject(metadata.getEntityId());
-                serializedMetadataModel.setObject(metadata.getSerializedMetadata());
-                ajaxRequestTarget.add(entityIdField);
-                ajaxRequestTarget.add(serializedMetadataField);
+                try {
+                    IdpProvidedMetadata metadata = metadataServices.getMetadataFromIdp(idpUrlModel.getObject(),
+                            new Integer(loadTimeoutModel.getObject()));
+                    entityIdModel.setObject(metadata.getEntityId());
+                    serializedMetadataModel.setObject(metadata.getSerializedMetadata());
+                    ajaxRequestTarget.add(entityIdField);
+                    ajaxRequestTarget.add(serializedMetadataField);
+                }
+                catch(Throwable t) {
+                    logger.error("Unable to get metadata from IDP", t);
+                    error("Unable to download IDP metadata from specified URL");
+                }
             }
         });
-        metadataForm.add(new NumberTextField("refreshInterval", loadTimeoutModel));
-        metadataForm.add(entityIdField);
-        metadataForm.add(serializedMetadataField);
-        metadataForm.add(backLink);
     }
 
     private void addFeedbackPanel() {
