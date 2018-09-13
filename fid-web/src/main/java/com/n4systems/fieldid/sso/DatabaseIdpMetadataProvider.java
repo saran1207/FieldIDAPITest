@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.sso;
 
 import com.n4systems.sso.dao.SsoMetadataDao;
+import org.apache.log4j.Logger;
 import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 import org.opensaml.xml.XMLObject;
 import org.opensaml.xml.io.UnmarshallingException;
@@ -10,6 +11,8 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 public class DatabaseIdpMetadataProvider extends DatabaseMetadataProvider {
+
+    private static final Logger logger = Logger.getLogger(DatabaseIdpMetadataProvider.class);
 
     private SsoMetadataDao ssoMetadataDao;
 
@@ -30,15 +33,13 @@ public class DatabaseIdpMetadataProvider extends DatabaseMetadataProvider {
         }
         catch (UnmarshallingException e) {
             String errMsg = "Unable to read IDP metadata";
-            //log.error(errMsg, e);
-            System.out.print(errMsg);
+            logger.error(errMsg, e);
             throw new MetadataProviderException(errMsg, e);
         }
     }
 
     protected String getSerializedIdpMetadata() {
         String metadataStr = ssoMetadataDao.getIdp(getEntityId()).getSerializedMetadata();
-        System.out.println("IDP Serialized metadata is '" + metadataStr + "'");
         return metadataStr;
     }
 }

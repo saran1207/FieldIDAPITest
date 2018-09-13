@@ -43,27 +43,25 @@ public class SamlLogonResultHandler implements AuthenticationFailureHandler, Aut
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        logger.info("authentication success " + authentication.toString());
         SamlUserDetails userDetails = (SamlUserDetails) authentication.getDetails();
         HttpSession session = request.getSession();
         if (!userDetails.isAuthenticated()) {
+            logger.info("SSO user " + userDetails.getUserId() + " reached the success handler but was not authenticated");
             onAuthenticationFailure(request, response, new SessionAuthenticationException("User not authenticated in FieldId"));
         }
         else {
             try {
                User user = userService.findUserByUserID(userDetails.getTenantName(), userDetails.getUserId());
-               String systemProtocol = configService.getString(ConfigEntry.SYSTEM_PROTOCOL);
-               String systemDomain = configService.getString(ConfigEntry.SYSTEM_DOMAIN);
-
-               String newUrl = String.format("%s://%s.%s/fieldid/logIntoSystem.action", systemProtocol, userDetails.getTenantName(), systemDomain);
+               String newUrl = "/fieldid/logIntoSystem.action";
                synchronized (session) {
                    session.setAttribute(WebSessionMap.USER_ID, user.getId());
                    session.setAttribute(WebSessionMap.SSO_AUTHENTICATE, (new Date()).getTime());
                }
+               logger.info("SSO user " + userDetails.getUserId() + " successfully authenticated - being passed to application");
                response.sendRedirect(newUrl);
            }
            catch(Throwable ex) {
-               logger.error("SSO authentication failed", ex);
+               logger.error("SSO authentication success handler failed", ex);
                redirectToHomepage(request, response);
            }
         }
