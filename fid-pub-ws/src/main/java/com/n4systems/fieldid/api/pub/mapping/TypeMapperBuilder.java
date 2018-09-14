@@ -86,6 +86,10 @@ public class TypeMapperBuilder<FromType, ToType> {
 		return add(getter, setter, Converter.convertToBigDecimal(), false);
 	}
 
+	public TypeMapperBuilder<FromType, ToType> addToDouble(GetterReference<FromType, String> getter, SetterReference<ToType, Double> setter) {
+		return add(getter, setter, Converter.convertToDouble(), false);
+	}
+
 	public <Value> TypeMapperBuilder<FromType, ToType> add(GetterReference<FromType, Value> getter, SetterReference<ToType, Value> setter, boolean mapNulls) {
 		return add(getter, setter, Converter.noop(), mapNulls);
 	}

@@ -3,6 +3,7 @@ package com.n4systems.fieldid.service.event;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
+import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.asset.AssetService;
@@ -51,7 +52,7 @@ import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-public class EventService extends FieldIdPersistenceService {
+public class EventService extends CrudService<ThingEvent> {
 
     @Autowired private ReportServiceHelper reportServiceHelper;
     @Autowired private AssetService assetService;
@@ -59,6 +60,10 @@ public class EventService extends FieldIdPersistenceService {
     @Autowired private PriorityCodeService priorityCodeService;
     @Autowired private NotifyEventAssigneeService notifyEventAssigneeService;
     @Autowired private PlaceService placeService;
+
+    public EventService() {
+        super(ThingEvent.class);
+    }
 
     @Transactional(readOnly = true)
     public List<ThingEvent> getThingEventsByType(Long eventTypeId, Date from, Date to, int page, int pageSize) {

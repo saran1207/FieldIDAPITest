@@ -32,7 +32,7 @@ public abstract class AbstractEvent<T extends EventType, R extends EntityWithTen
     @JoinColumn(name="eventform_id")
     private EventForm eventForm;
 
-	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, mappedBy = "event", orphanRemoval = true)
+ 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, mappedBy = "event", orphanRemoval = true)
 	@org.hibernate.annotations.Cache(region = "EventCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	private Set<CriteriaResult> results = new HashSet<CriteriaResult>();
 	

@@ -23,6 +23,10 @@ public interface Converter {
 		return (x) -> (x != null && x.length() > 0) ? new BigDecimal(x) : null;
 	}
 
+	public static ValueConverter<String, Double> convertToDouble() {
+		return (x) -> (x != null && x.length() > 0) ? new Double(x) : null;
+	}
+
 	public static ValueConverter<Date, String> convertDateTimeToString() {
 		return (x) -> (x != null) ? dateTimeFormatter.format(x.toInstant()) : null;
 	}
