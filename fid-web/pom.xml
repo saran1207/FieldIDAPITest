@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>fieldid-root</artifactId>
 		<groupId>com.fieldid</groupId>
-		<version>2018.7.30-SNAPSHOT</version>
+		<version>API_USG_RUPPI_BRANCH-SNAPSHOT</version>
 	</parent>
 	<artifactId>fid-web</artifactId>
 	<packaging>war</packaging>
