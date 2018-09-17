@@ -54,8 +54,7 @@ public class GenerateSpMetadata extends FieldIDTemplatePage {
 
         Url originalUrl = getRequest().getOriginalUrl();
         String baseUrl = (originalUrl.getProtocol() + "://" +
-                originalUrl.getHost() +
-                ":" + originalUrl.getPort() + getRequest().getContextPath()).toString();
+                originalUrl.getHost() + getRequest().getContextPath()).toString();
 
         SsoSpMetadata spMetadata = new SsoSpMetadata();
         spMetadata.setSsoEntity(new SsoEntity(baseUrl));

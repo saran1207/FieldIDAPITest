@@ -14,6 +14,7 @@ import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.servlets.ConcurrentLoginSessionListener;
 import com.n4systems.fieldid.utils.UrlArchive;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.user.User;
 import com.n4systems.util.ConfigEntry;
 import org.apache.log4j.Logger;
@@ -103,7 +104,20 @@ public class LoginAction extends AbstractAction {
 			}
 		}
 		else {
-			loginUser = userService.getUserNoSecurityFilter(getSession().getUserId());
+			Tenant sessionTenant = getSecurityGuard().getTenant();
+			User ssoUser = userService.getUserNoSecurityFilter(getSession().getUserId());
+			/* Check to make sure this SSO user isn't using a service provider definition for
+			   another tenant*/
+			if (ssoUser.getTenant().getId().equals(sessionTenant.getId())) {
+				loginUser = ssoUser;
+			}
+			else {
+				logger.error("SSO " + ssoUser.getUserID() + " attempted to login for tenant " +
+						sessionTenant.getName() + " but belongs to tenant " + ssoUser.getTenant().getName());
+				getSession().put(WebSessionMap.SSO_AUTHENTICATE, null);
+				getSession().setUserId(null);
+				return "error";
+			}
 		}
 		WebSessionMap currentSession = getSession();
 		currentSession.setUserId(loginUser.getId());
