@@ -23,6 +23,7 @@ public class SsoUserDetailsService implements SAMLUserDetailsService {
     public Object loadUserBySAML(SAMLCredential credential) throws UsernameNotFoundException {
 
         List<Attribute> attributes = credential.getAttributes();
+        logger.info("SsoUserDetailsService received " + attributes.size() + " attributes");
         for (Attribute attribute: attributes) {
             logger.info("SsoUserDetailsService: credential attribute: " + attribute.getName());
         }
