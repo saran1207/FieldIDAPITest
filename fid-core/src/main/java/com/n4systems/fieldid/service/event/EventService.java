@@ -448,6 +448,53 @@ public class EventService extends CrudService<ThingEvent> {
         return lastEventsByType;
 	}
 
+    public List<ThingEvent> getLastEventOfEachType(Long assetId, int page, int pageSize) {
+        QueryBuilder<EventIdTypeAndCompletedView> builder = new QueryBuilder<>(ThingEvent.class, securityContext.getTenantSecurityFilter());
+        builder.setSelectArgument(new NewObjectSelect(EventIdTypeAndCompletedView.class, "id", "type.id", "completedDate"));
+        builder.addWhere(WhereClauseFactory.create("asset.id", assetId));
+        builder.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.COMPLETED));
+        List<EventIdTypeAndCompletedView> allEvents = persistenceService.findAll(builder, page, pageSize);
+
+        List<ThingEvent> lastEventsByType = allEvents.stream().collect(
+                Collectors.groupingBy(
+                        // group by event type
+                        EventIdTypeAndCompletedView::getTypeId,
+                        // reduce by the max completed date
+                        Collectors.reducing(BinaryOperator.maxBy(java.util.Comparator.comparing(EventIdTypeAndCompletedView::getCompleted)))
+                )
+                // Returns a Map of event type ids to Optional<EventIdTypeAndCompleted>, extract the values into a new stream
+        ).values().stream()
+                // Map them into full thing events and return a list
+                .map((e) -> persistenceService.find(ThingEvent.class, e.get().getId()))
+                .collect(Collectors.toList());
+
+        return lastEventsByType;
+    }
+
+    public List<ThingEvent> getLastActionItemOfEachType(Long assetId, int page, int pageSize) {
+        QueryBuilder<EventIdTypeAndCompletedView> builder = new QueryBuilder<>(ThingEvent.class, securityContext.getTenantSecurityFilter());
+        builder.setSelectArgument(new NewObjectSelect(EventIdTypeAndCompletedView.class, "id", "type.id", "completedDate"));
+        builder.addWhere(WhereClauseFactory.create("asset.id", assetId));
+        builder.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.COMPLETED));
+        builder.addWhere(WhereParameter.Comparator.NOTNULL, "triggerEvent", "triggerEvent", "");
+        List<EventIdTypeAndCompletedView> allEvents = persistenceService.findAll(builder, page, pageSize);
+
+        List<ThingEvent> lastEventsByType = allEvents.stream().collect(
+                Collectors.groupingBy(
+                        // group by event type
+                        EventIdTypeAndCompletedView::getTypeId,
+                        // reduce by the max completed date
+                        Collectors.reducing(BinaryOperator.maxBy(java.util.Comparator.comparing(EventIdTypeAndCompletedView::getCompleted)))
+                )
+                // Returns a Map of event type ids to Optional<EventIdTypeAndCompleted>, extract the values into a new stream
+        ).values().stream()
+                // Map them into full thing events and return a list
+                .map((e) -> persistenceService.find(ThingEvent.class, e.get().getId()))
+                .collect(Collectors.toList());
+
+        return lastEventsByType;
+    }
+
 	public PlaceEvent getPlaceEventById(Long id) {
         QueryBuilder<PlaceEvent> query = createUserSecurityBuilder(PlaceEvent.class);
         query.addSimpleWhere("id",id);
@@ -842,5 +889,26 @@ public class EventService extends CrudService<ThingEvent> {
         QueryBuilder<ThingEvent> eventsQuery = createTenantSecurityBuilder(ThingEvent.class).addSimpleWhere("asset", asset);
         return persistenceService.findAll(eventsQuery);
     }
+
+    @Override
+    @Transactional
+    public List<ThingEvent> findByAssetId(String id, int page, int pageSize) {
+        Asset asset = assetService.findByPublicId(id);
+        if (asset == null)
+            return null;
+
+        return getLastEventOfEachType(asset.getID(), page, pageSize);
+    }
+
+    @Override
+    @Transactional
+    public List<ThingEvent> findActionItemByAssetId(String id, int page, int pageSize) {
+        Asset asset = assetService.findByPublicId(id);
+        if (asset == null)
+            return null;
+
+        return getLastActionItemOfEachType(asset.getID(), page, pageSize);
+    }
+
 }
 

@@ -10,11 +10,16 @@ import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.api.HasTenant;
 import com.n4systems.model.parents.AbstractEntity;
+import com.n4systems.util.time.DateUtil;
 import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,24 +71,50 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 	@Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Transactional(readOnly = true)
-	public Messages.ListResponseMessage findAll(@QueryParam("page") int page, @QueryParam("pageSize") int pageSize) {
+	public Messages.ListResponseMessage findAll(@QueryParam("page") int page, @QueryParam("pageSize") int pageSize, @QueryParam("delta") String date) {
+		List<M> allItems;
+		List<A> items;
+		Date delta = null;
 		String logInfo = getLogInfo();
 		String apiCall = listResponseType.getDescriptor().getName();
 		String logMessage = logInfo + apiCall + " FIND All";
 		logger.info(logMessage);
 
-		List<A> items = crudService()
-				.findAll(page, pageSize)
-				.stream()
-				.map(m -> toMessage(m))
-				.collect(Collectors.toList());
+		if(date != null) {
+			delta = convertDate(date);
+		}
 
-        return Messages.ListResponseMessage.newBuilder()
-                .setPageSize(pageSize)
-                .setPage(page)
-                .setTotal(crudService().count())
-                .setExtension(listResponseType, items)
-                .build();
+		//ignore the delta value
+		if(delta == null) {
+			allItems = crudService().findAll(page, pageSize);
+
+			items = allItems
+					.stream()
+					.map(m -> toMessage(m))
+					.collect(Collectors.toList());
+
+			return Messages.ListResponseMessage.newBuilder()
+					.setPageSize(pageSize)
+					.setPage(page)
+					.setTotal(crudService().count())
+					.setExtension(listResponseType, items)
+					.build();
+		} else {
+			allItems = crudService()
+					.findAll(page, pageSize, delta);
+
+			items = allItems
+					.stream()
+					.map(m -> toMessage(m))
+					.collect(Collectors.toList());
+
+			return Messages.ListResponseMessage.newBuilder()
+					.setPageSize(pageSize)
+					.setPage(page)
+					.setTotal(crudService().count(delta))
+					.setExtension(listResponseType, items)
+					.build();
+		}
 	}
 
 	protected <M> M testNotFound(M model) {
@@ -153,6 +184,160 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 		}
 	}
 
+	@GET
+	@Path("asset/{assetId}")
+	@Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
+	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
+	@Transactional
+	public Messages.ListResponseMessage findByAssetId(@PathParam("assetId") String id, @QueryParam("page") int page, @QueryParam("pageSize") int pageSize) {
+		List<M> allItems;
+		List<A> items;
+		String logInfo = getLogInfo();
+		String apiCall = listResponseType.getDescriptor().getName();
+		String logMessage = logInfo + apiCall + " FIND with id " + id;
+		logger.info(logMessage);
+
+		try {
+			allItems = crudService().findByAssetId(id, page, pageSize);
+
+			items = allItems
+					.stream()
+					.map(m -> toMessage(m))
+					.collect(Collectors.toList());
+
+			return Messages.ListResponseMessage.newBuilder()
+					.setPageSize(pageSize)
+					.setPage(page)
+					.setTotal(allItems.size())
+					.setExtension(listResponseType, items)
+					.build();
+		}
+		catch(UnsupportedOperationException ex) {
+			throw new NotAllowedException("DELETE not allowed for this entity type");
+		}
+
+	}
+
+	@GET
+	@Path("actionItems")
+	@Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
+	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
+	@Transactional
+	public Messages.ListResponseMessage findAllActionItem(@QueryParam("page") int page, @QueryParam("pageSize") int pageSize,  @QueryParam("delta") String date) {
+		List<M> allItems;
+		List<A> items;
+		Date delta = null;
+
+		String logInfo = getLogInfo();
+		String apiCall = listResponseType.getDescriptor().getName();
+		String logMessage = logInfo + apiCall + " FIND with id ";
+		logger.info(logMessage);
+
+		if(date != null) {
+			delta = convertDate(date);
+		}
+
+		//ignore the delta value
+		if(delta == null) {
+			try {
+				allItems = crudService().findAllActionItem(page, pageSize);
+
+				items = allItems
+						.stream()
+						.map(m -> toMessage(m))
+						.collect(Collectors.toList());
+
+				return Messages.ListResponseMessage.newBuilder()
+						.setPageSize(pageSize)
+						.setPage(page)
+						.setTotal(crudService().countAllActionItem())
+						.setExtension(listResponseType, items)
+						.build();
+			} catch (UnsupportedOperationException ex) {
+				throw new NotAllowedException("DELETE not allowed for this entity type");
+			}
+		} else {
+			try {
+				allItems = crudService().findAllActionItem(page, pageSize, delta);
+
+				items = allItems
+						.stream()
+						.map(m -> toMessage(m))
+						.collect(Collectors.toList());
+
+				return Messages.ListResponseMessage.newBuilder()
+						.setPageSize(pageSize)
+						.setPage(page)
+						.setTotal(crudService().countAllActionItem(delta))
+						.setExtension(listResponseType, items)
+						.build();
+			} catch (UnsupportedOperationException ex) {
+				throw new NotAllowedException("DELETE not allowed for this entity type");
+			}
+		}
+	}
+
+	@GET
+	@Path("actionItems/{id}")
+	@Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
+	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
+	@Transactional(readOnly = true)
+	public A findActionItem(@PathParam("id") String id) {
+		return this.find(id);
+	}
+
+	@POST
+	@Path("actionItems/{id}")
+	@Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
+	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
+	@Transactional
+	public A saveActionItem(A message) {
+		return this.save(message);
+	}
+
+	@PUT
+	@Path("actionItems/{id}")
+	@Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
+	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
+	@Transactional
+	public A updateActionItem(@PathParam("id") String id, A message) {
+		return this.update(id, message);
+	}
+
+	@GET
+	@Path("actionItems/asset/{assetId}")
+	@Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
+	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
+	@Transactional
+	public Messages.ListResponseMessage findActionItemByAssetId(@PathParam("assetId") String id, @QueryParam("page") int page, @QueryParam("pageSize") int pageSize) {
+		List<M> allItems;
+		List<A> items;
+		String logInfo = getLogInfo();
+		String apiCall = listResponseType.getDescriptor().getName();
+		String logMessage = logInfo + apiCall + " FIND with id " + id;
+		logger.info(logMessage);
+
+		try {
+			allItems = crudService().findActionItemByAssetId(id, page, pageSize);
+
+			items = allItems
+					.stream()
+					.map(m -> toMessage(m))
+					.collect(Collectors.toList());
+
+			return Messages.ListResponseMessage.newBuilder()
+					.setPageSize(pageSize)
+					.setPage(page)
+					.setTotal(allItems.size())
+					.setExtension(listResponseType, items)
+					.build();
+		}
+		catch(UnsupportedOperationException ex) {
+			throw new NotAllowedException("DELETE not allowed for this entity type");
+		}
+
+	}
+
 	public String getLogInfo() {
 		String user = getCurrentUser().getUserID();
 		String tenant = getCurrentTenant().getDisplayName();
@@ -160,5 +345,20 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 		String message = user + " from tenant " + tenant + " made the API Call: ";
 
 		return message;
+	}
+
+	public Extension<Messages.ListResponseMessage, List<A>> getListResponseType() {
+		return listResponseType;
+	}
+
+	public Date convertDate(String dateInString) {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date parsedDate;
+		try {
+			parsedDate = formatter.parse(dateInString);
+		} catch (Exception e) {
+			parsedDate = null;
+		}
+		return parsedDate;
 	}
 }

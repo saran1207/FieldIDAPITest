@@ -11,9 +11,9 @@ import com.n4systems.model.Asset;
  */
 public class AssetToMessage<T> extends TypeMapper<Asset, T> {
 
-public AssetToMessage(SetterReference<T, String> assetId, SetterReference<T, String> setIdentifier, SetterReference<T, String> setRfidNumber, SetterReference<T, String> setCustomerRefNumber) {
+public AssetToMessage(SetterReference<T, String> setAssetId, SetterReference<T, String> setIdentifier, SetterReference<T, String> setRfidNumber, SetterReference<T, String> setCustomerRefNumber) {
         super(TypeMapperBuilder.<Asset, T>newBuilder()
-        .add(Asset::getPublicId, assetId)
+        .add(Asset::getPublicId, setAssetId)
         .add(Asset::getIdentifier, setIdentifier)
         .add(Asset::getRfidNumber, setRfidNumber)
         .add(Asset::getCustomerRefNumber, setCustomerRefNumber)

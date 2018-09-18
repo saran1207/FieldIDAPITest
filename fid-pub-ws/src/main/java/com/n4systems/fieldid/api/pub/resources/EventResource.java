@@ -6,19 +6,19 @@ import com.n4systems.fieldid.api.pub.mapping.TypeMapperBuilder;
 import com.n4systems.fieldid.api.pub.mapping.model.marshal.ApiModelWithNameToMessage;
 import com.n4systems.fieldid.api.pub.mapping.model.marshal.AssetToMessage;
 import com.n4systems.fieldid.api.pub.mapping.model.marshal.UserToMessage;
+import com.n4systems.fieldid.api.pub.mapping.model.unmarshal.BaseOrgResolver;
+import com.n4systems.fieldid.api.pub.mapping.model.unmarshal.UserResolver;
 import com.n4systems.fieldid.api.pub.model.Messages;
 import com.n4systems.fieldid.api.pub.model.Messages.EventMessage;
 import com.n4systems.fieldid.api.pub.model.Messages.EventMessage.Builder;
 import com.n4systems.fieldid.service.CrudService;
-import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventService;
-import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.model.*;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.ws.rs.InternalServerErrorException;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 
 /**
  * Created by rrana on 2018-08-23.
@@ -28,9 +28,10 @@ import javax.ws.rs.Path;
 @Component
 public class EventResource extends CrudResource<ThingEvent, EventMessage, Builder> {
 
+    private Logger logger = Logger.getLogger(EventResource.class);
     @Autowired private EventService eventService;
-    @Autowired private UserService userService;
-    @Autowired private AssetService assetService;
+    @Autowired private BaseOrgResolver baseOrgResolver;
+    @Autowired private UserResolver userResolver;
 
     public EventResource() {
         super(Messages.events);
@@ -52,7 +53,7 @@ public class EventResource extends CrudResource<ThingEvent, EventMessage, Builde
     @Override
     protected Mapper<ThingEvent, Builder> createModelToMessageBuilderMapper(TypeMapperBuilder<ThingEvent, Messages.EventMessage.Builder> mapperBuilder) {
         return mapperBuilder
-                .add(ThingEvent::getPublicId, Builder::setId)
+                .add(Event::getPublicId, Builder::setId)
                 .addDateToString(ThingEvent::getCreated, Builder::setCreatedDate)
                 .addDateToString(ThingEvent::getModified, Builder::setModifiedDate)
                 .addDateToString(ThingEvent::getCompletedDate, Builder::setCompletedDate)
@@ -62,7 +63,7 @@ public class EventResource extends CrudResource<ThingEvent, EventMessage, Builde
                 .addModelToMessage(ThingEvent::getPerformedBy, new UserToMessage<>(Builder::setCompletedByUserId, Builder::setCompletedByUserName))
                 .addModelToMessage(ThingEvent::getOwner, new ApiModelWithNameToMessage<>(Builder::setOwnerId, Builder::setOwnerName))
                 .addModelToMessage(ThingEvent::getEventType, new ApiModelWithNameToMessage<>(Builder::setEventTypeId, Builder::setEventTypeName))
-                .addModelToMessage(ThingEvent::getAsset, new AssetToMessage<>(Builder::setId, Builder::setIdentifier, Builder::setRfidNumber, Builder::setCustomerRefNumber))
+                .addModelToMessage(ThingEvent::getAsset, new AssetToMessage<>(Builder::setAssetId, Builder::setIdentifier, Builder::setRfidNumber, Builder::setCustomerRefNumber))
                 .add(ThingEvent::getComments, Builder::setComments)
                 .addToString(ThingEvent::getScore, Builder::setScore)
                 .add(ThingEvent::getEventResult, Builder::setEventResult, this::convertResultToMessage)
@@ -77,6 +78,9 @@ public class EventResource extends CrudResource<ThingEvent, EventMessage, Builde
                 .addToDouble(EventMessage::getScore, ThingEvent::setScore)
                 .add(EventMessage::getEventResult, ThingEvent::setEventResult, this::convertResultToModel)
                 .add(EventMessage::getWorkflowState, ThingEvent::setWorkflowState, this::convertWorkflowStateToModel)
+                .add(EventMessage::getOwnerId, ThingEvent::setOwner, baseOrgResolver)
+                .add(EventMessage::getAssignedToUserId, ThingEvent::setAssignee, userResolver)
+                .add(EventMessage::getCompletedByUserId, ThingEvent::setPerformedBy, userResolver)
                 .build();
     }
 
