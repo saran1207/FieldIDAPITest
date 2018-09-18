@@ -1,31 +1,30 @@
 package com.n4systems.fieldid.wicket.pages.setup.sso;
 
-import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
+import com.n4systems.fieldid.wicket.pages.FieldIDTemplateWithFeedbackPage;
 import com.n4systems.model.sso.SsoEntity;
 import com.n4systems.model.sso.SsoSpMetadata;
 import com.n4systems.fieldid.sso.SsoMetadataServices;
-import org.apache.wicket.behavior.AttributeAppender;
+import com.n4systems.sso.dao.SsoDuplicateEntityIdException;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 
 /**
  * Created by agrabovskis on 2018-07-19.
  */
-public class GenerateSpMetadata extends FieldIDTemplatePage {
+public class GenerateSpMetadata extends FieldIDTemplateWithFeedbackPage {
 
     static public Logger logger = LoggerFactory.getLogger(GenerateSpMetadata.class);
 
     @SpringBean
     private SsoMetadataServices metadataServices;
-
-    private FeedbackPanel feedbackPanel;
 
     public GenerateSpMetadata(final PageParameters parameters) {
         super(parameters);
@@ -33,8 +32,6 @@ public class GenerateSpMetadata extends FieldIDTemplatePage {
     }
 
     private void addComponents() {
-
-        addFeedbackPanel();
 
         String tenantName = getTenant().getName();
         add(new Label("tenantName", tenantName));
@@ -75,6 +72,34 @@ public class GenerateSpMetadata extends FieldIDTemplatePage {
         spMetadata.setRequireLogoutResponseSigned(Boolean.FALSE);
         spMetadata.setRequireArtifactResolveSigned(Boolean.FALSE);
 
+        spMetadata.setSecurityProfile("metaiop");
+        spMetadata.setSslSecurityProfile("pkix");
+        spMetadata.setSslHostnameVerification("default");
+
+        Collection<String> nameId = new ArrayList();
+        nameId.add("urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress");
+        nameId.add("urn:oasis:names:tc:SAML:2.0:nameid-format:transient");
+        nameId.add("urn:oasis:names:tc:SAML:2.0:nameid-format:persistent");
+        nameId.add("urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
+        nameId.add("urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName");
+        spMetadata.setNameID(nameId);
+
+        Collection<String> bindingsSSO = new ArrayList<>();
+        bindingsSSO.add("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
+        bindingsSSO.add("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact");
+        spMetadata.setBindingsSSO(bindingsSSO);
+
+        Collection<String> bindingsHoKSSO = new ArrayList();
+        spMetadata.setBindingsHoKSSO(bindingsHoKSSO);
+
+        Collection<String> bindingsSLO = new ArrayList();
+        spMetadata.setBindingsSLO(bindingsSLO);
+
+        spMetadata.setAssertionConsumerIndex(0);
+
+        spMetadata.setIncludeDiscoveryExtension(false);
+        spMetadata.setIdpDiscoveryEnabled(false);
+        spMetadata.setIdpDiscoveryURL(null);
 
         SpMetadataPanel spPanel = new SpMetadataPanel("spMetatdata", spMetadata, false) {
             @Override
@@ -91,20 +116,15 @@ public class GenerateSpMetadata extends FieldIDTemplatePage {
 
     private void saveMetadata(SsoSpMetadata spMetadata) {
 
-        spMetadata.setLocal(true);
-        metadataServices.addSp(spMetadata);
+        try {
+            spMetadata.setLocal(true);
+            metadataServices.addSp(spMetadata);
 
-        getRequestCycle().setResponsePage(SsoSettingsPage.class);
-    }
-
-    private void addFeedbackPanel() {
-         /* Existing top feedback panel is in the correct place for our messages but doesn't
-            get recognized as a feedback panel for our messages so we need to add our own. */
-        remove(getTopFeedbackPanel());
-        feedbackPanel = new FeedbackPanel("topFeedbackPanel");
-        feedbackPanel.add(new AttributeAppender("style", new Model("text-align: center; color:red; padding: 0px 10px"), " "));
-        feedbackPanel.setOutputMarkupId(true);
-        add(feedbackPanel);
+            getRequestCycle().setResponsePage(SsoSettingsPage.class);
+        }
+        catch(SsoDuplicateEntityIdException ex) {
+            error("Save of Service Provider failed - duplicate entity id");
+        }
     }
 
 }

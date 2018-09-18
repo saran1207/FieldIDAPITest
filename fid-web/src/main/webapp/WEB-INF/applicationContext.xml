@@ -169,7 +169,7 @@
         </property>
     </bean>
 
-    <bean id="userDetails" class="com.n4systems.fieldid.sso.UserDetailsService"></bean>
+    <bean id="userDetails" class="com.n4systems.fieldid.sso.SsoUserDetailsService"></bean>
 
     <!-- SAML Authentication Provider responsible for validating of received SAML messages -->
     <bean id="samlAuthenticationProvider" class="com.n4systems.fieldid.sso.ApplicationAuthenticationProvider">

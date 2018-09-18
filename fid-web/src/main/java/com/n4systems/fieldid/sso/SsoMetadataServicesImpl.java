@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.sso;
 
+import com.n4systems.sso.dao.SsoDuplicateEntityIdException;
 import com.n4systems.sso.dao.SsoMetadataDao;
 import com.n4systems.model.sso.IdpProvidedMetadata;
 import com.n4systems.model.sso.SsoIdpMetadata;
@@ -49,7 +50,7 @@ public class SsoMetadataServicesImpl implements SsoMetadataServices {
 
     @Override
     @Transactional
-    public SsoIdpMetadata addIdp(SsoIdpMetadata idpMetadata) {
+    public SsoIdpMetadata addIdp(SsoIdpMetadata idpMetadata) throws SsoDuplicateEntityIdException {
 
         ssoMetadataDao.addIdp(idpMetadata);
 
@@ -127,7 +128,8 @@ public class SsoMetadataServicesImpl implements SsoMetadataServices {
     }
 
     @Override
-    public SsoSpMetadata addSp(SsoSpMetadata spMetadata) {
+    @Transactional(rollbackFor = SsoDuplicateEntityIdException.class)
+    public SsoSpMetadata addSp(SsoSpMetadata spMetadata) throws SsoDuplicateEntityIdException {
         spMetadata.setSerializedMetadata(generateSp(spMetadata));
 
         try {
@@ -149,17 +151,14 @@ public class SsoMetadataServicesImpl implements SsoMetadataServices {
             logger.error("Unable to add SP metadata",ex);
             throw new RuntimeException(ex);
         }
-
         return spMetadata;
     }
 
+    @Transactional(rollbackFor = SsoDuplicateEntityIdException.class)
     @Override
-    @Transactional
-    public SsoSpMetadata updateSp(SsoSpMetadata spMetadata) {
-        logger.info("Revising SP '" + spMetadata.getSsoEntity().getEntityId() + "' for tenant '" + spMetadata.getTenant().getName() + "'");
+    public SsoSpMetadata updateSp(SsoSpMetadata spMetadata) throws SsoDuplicateEntityIdException {
         deleteSp(spMetadata.getSsoEntity().getEntityId());
-        addSp(spMetadata);
-        return spMetadata;
+        return addSp(spMetadata);
     }
 
     @Override

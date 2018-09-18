@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.saml.SAMLCredential;
 import org.springframework.security.saml.userdetails.SAMLUserDetailsService;
 
-public class UserDetailsService implements SAMLUserDetailsService {
+public class SsoUserDetailsService implements SAMLUserDetailsService {
 
     @Autowired
     private SsoMetadataDao ssoMetadataDao;

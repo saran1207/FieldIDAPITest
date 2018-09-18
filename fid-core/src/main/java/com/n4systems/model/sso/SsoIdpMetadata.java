@@ -31,7 +31,7 @@ public class SsoIdpMetadata implements Serializable {
     @OneToOne
     private Tenant tenant;
 
-    @Column(name="metadata", length=65000, nullable = false)
+    @Column(name="metadata", nullable = false)
     private String serializedMetadata;
 
     public Long getId() {

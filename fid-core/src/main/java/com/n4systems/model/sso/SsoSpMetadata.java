@@ -13,12 +13,30 @@ import java.util.Collection;
  */
 @Entity
 @Table(name="sso_sp_metadata")
-@NamedEntityGraph(
-        name = "lazyCollections",
-        attributeNodes = {
-                @NamedAttributeNode("bindingsSLO")
-        }
-)
+/*
+@NamedEntityGraphs({
+        @NamedEntityGraph(
+                name = "SpLazyCollections01",
+                attributeNodes = {
+                        @NamedAttributeNode("nameID")
+                }),
+        @NamedEntityGraph(
+                name = "SpLazyCollections02",
+                attributeNodes = {
+                        @NamedAttributeNode("bindingsSSO")
+                }),
+        @NamedEntityGraph(
+                name = "SpLazyCollections03",
+                attributeNodes = {
+                        @NamedAttributeNode("bindingsHoKSSO")
+                }),
+        @NamedEntityGraph(
+                name = "SpLazyCollections03",
+                attributeNodes = {
+                        @NamedAttributeNode("bindingsSLO")
+                })
+    })
+*/
 public class SsoSpMetadata implements Serializable {
 
     @Id
@@ -55,7 +73,7 @@ public class SsoSpMetadata implements Serializable {
     @ElementCollection
     @CollectionTable(name = "sso_sp_name_id", joinColumns = @JoinColumn(name = "id"))
     @Column(name="name_id")
-    private Collection<String> NameID;
+    private Collection<String> nameID;
 
     @Column(name="entity_base_url")
     private String entityBaseURL;
@@ -208,11 +226,11 @@ public class SsoSpMetadata implements Serializable {
     }
 
     public Collection<String> getNameID() {
-        return NameID;
+        return nameID;
     }
 
     public void setNameID(Collection<String> nameID) {
-        NameID = nameID;
+        this.nameID = nameID;
     }
 
     public String getEntityBaseURL() {

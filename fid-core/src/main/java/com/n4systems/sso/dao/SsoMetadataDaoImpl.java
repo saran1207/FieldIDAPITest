@@ -4,13 +4,11 @@ import com.n4systems.model.Tenant;
 import com.n4systems.model.sso.SsoEntity;
 import com.n4systems.model.sso.SsoIdpMetadata;
 import com.n4systems.model.sso.SsoSpMetadata;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -83,19 +81,24 @@ public class SsoMetadataDaoImpl implements SsoMetadataDao {
 
     @Override
     @Transactional
-    public SsoIdpMetadata addIdp(SsoIdpMetadata idpMetadata) {
-        SsoEntity ssoEntity = idpMetadata.getSsoEntity();
-        entityManager.persist(ssoEntity);
-        idpMetadata.setSsoEntity(ssoEntity);
-        entityManager.persist(idpMetadata);
-        return idpMetadata;
-    }
-
-    @Override
-    @Transactional
-    public SsoIdpMetadata updateIdp(SsoIdpMetadata idpMetadata) {
-        return entityManager.merge(idpMetadata);
-    }
+    public SsoIdpMetadata addIdp(SsoIdpMetadata idpMetadata) throws SsoDuplicateEntityIdException {
+        try {
+            SsoEntity ssoEntity = idpMetadata.getSsoEntity();
+            entityManager.persist(ssoEntity);
+            idpMetadata.setSsoEntity(ssoEntity);
+            entityManager.persist(idpMetadata);
+            return idpMetadata;
+        }
+        catch(EntityExistsException ex) {
+            throw new SsoDuplicateEntityIdException(ex);
+        }
+        catch(PersistenceException ex) {
+            if (ex.getCause() instanceof ConstraintViolationException)
+                throw new SsoDuplicateEntityIdException(ex);
+            else
+                throw ex;
+        }
+}
 
     @Override
     @Transactional
@@ -107,6 +110,7 @@ public class SsoMetadataDaoImpl implements SsoMetadataDao {
     }
 
     @Override
+    @Transactional
     public SsoSpMetadata getSp(String entityId) {
         SsoEntity ssoEntity = entityManager.find(SsoEntity.class, entityId);
         if (ssoEntity == null)
@@ -118,9 +122,15 @@ public class SsoMetadataDaoImpl implements SsoMetadataDao {
         Predicate predicate = builder.equal(root.get("ssoEntity"), ssoEntity);
         query.where(predicate);
         Query q = entityManager.createQuery(query);
-        q.setHint("javax.persistence.fetchgraph", entityManager.getEntityGraph("lazyCollections"));
         try {
             SsoSpMetadata result = (SsoSpMetadata) q.getSingleResult();
+            if (result != null) {
+                 /* Load the collections */
+                result.getNameID().size();
+                result.getBindingsHoKSSO().size();
+                result.getBindingsSLO().size();
+                result.getBindingsSSO().size();
+            }
             return result;
         }
         catch(NoResultException ex) {
@@ -129,6 +139,7 @@ public class SsoMetadataDaoImpl implements SsoMetadataDao {
     }
 
     @Override
+    @Transactional
     public SsoSpMetadata getSpByTenant(long tenantId) {
         Tenant tenant = entityManager.find(Tenant.class, tenantId);
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
@@ -138,9 +149,15 @@ public class SsoMetadataDaoImpl implements SsoMetadataDao {
         Predicate predicate = builder.equal(root.get("tenant"), tenant);
         query.where(predicate);
         Query q = entityManager.createQuery(query);
-        q.setHint("javax.persistence.fetchgraph", entityManager.getEntityGraph("lazyCollections"));
         try {
             SsoSpMetadata result = (SsoSpMetadata) q.getSingleResult();
+            if (result != null) {
+            /* Load the collections */
+                result.getNameID().size();
+                result.getBindingsHoKSSO().size();
+                result.getBindingsSLO().size();
+                result.getBindingsSSO().size();
+            }
             return result;
         }
         catch(NoResultException ex) {
@@ -155,26 +172,30 @@ public class SsoMetadataDaoImpl implements SsoMetadataDao {
         Root<SsoSpMetadata> root = query.from(SsoSpMetadata.class);
         query.select(root);
         Query q = entityManager.createQuery(query);
-        q.setHint("javax.persistence.fetchgraph", entityManager.getEntityGraph("lazyCollections"));
         List<SsoSpMetadata> list = q.getResultList();
         return list;
     }
 
     @Override
     @Transactional
-    public SsoSpMetadata addSp(SsoSpMetadata spMetadata) {
-        spMetadata.setId(null);
-        SsoEntity ssoEntity = spMetadata.getSsoEntity();
-        entityManager.persist(ssoEntity);
-        spMetadata.setSsoEntity(ssoEntity);
-        entityManager.persist(spMetadata);
-        return spMetadata;
-    }
-
-    @Override
-    @Transactional
-    public SsoSpMetadata updateSp(SsoSpMetadata spMetadata) {
-        return entityManager.merge(spMetadata);
+    public SsoSpMetadata addSp(SsoSpMetadata spMetadata) throws SsoDuplicateEntityIdException {
+        try {
+            spMetadata.setId(null);
+            SsoEntity ssoEntity = spMetadata.getSsoEntity();
+            entityManager.persist(ssoEntity);
+            spMetadata.setSsoEntity(ssoEntity);
+            entityManager.persist(spMetadata);
+            return spMetadata;
+        }
+        catch(EntityExistsException ex) {
+            throw new SsoDuplicateEntityIdException(ex);
+        }
+        catch(PersistenceException ex) {
+            if (ex.getCause() instanceof ConstraintViolationException)
+                throw new SsoDuplicateEntityIdException(ex);
+            else
+                throw ex;
+        }
     }
 
     @Override

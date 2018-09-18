@@ -1,20 +1,19 @@
 package com.n4systems.fieldid.wicket.pages.setup.sso;
 
-import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
+import com.n4systems.fieldid.wicket.pages.FieldIDTemplateWithFeedbackPage;
 import com.n4systems.model.sso.IdpProvidedMetadata;
 import com.n4systems.model.sso.SsoEntity;
 import com.n4systems.model.sso.SsoIdpMetadata;
 import com.n4systems.fieldid.sso.SsoMetadataServices;
+import com.n4systems.sso.dao.SsoDuplicateEntityIdException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.NumberTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -25,14 +24,12 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by agrabovskis on 2018-07-31.
  */
-public class GenerateIdpMetadata extends FieldIDTemplatePage {
+public class GenerateIdpMetadata extends FieldIDTemplateWithFeedbackPage {
 
     static public Logger logger = LoggerFactory.getLogger(GenerateIdpMetadata.class);
 
     @SpringBean
     private SsoMetadataServices metadataServices;
-
-    private FeedbackPanel feedbackPanel;
 
     public GenerateIdpMetadata(final PageParameters parameters) {
         super(parameters);
@@ -40,8 +37,6 @@ public class GenerateIdpMetadata extends FieldIDTemplatePage {
      }
 
     private void addComponents() {
-
-        addFeedbackPanel();
 
         final Model<String> idpUrlModel = Model.of("");
         final Model<String> loadTimeoutModel = Model.of("15000");
@@ -70,8 +65,13 @@ public class GenerateIdpMetadata extends FieldIDTemplatePage {
                 idpMetadata.setTenant(getTenant());
                 idpMetadata.setSsoEntity(new SsoEntity(entityIdModel.getObject()));
                 idpMetadata.setSerializedMetadata(serializedMetadataModel.getObject());
-                metadataServices.addIdp(idpMetadata);
-                getRequestCycle().setResponsePage(SsoSettingsPage.class);
+                try {
+                    metadataServices.addIdp(idpMetadata);
+                    getRequestCycle().setResponsePage(SsoSettingsPage.class);
+                }
+                catch(SsoDuplicateEntityIdException ex) {
+                    error("Add of IDP failed: duplicate entity id");
+                }
             }
         };
         add(metadataForm);
@@ -85,7 +85,7 @@ public class GenerateIdpMetadata extends FieldIDTemplatePage {
             }
         );
         metadataForm.add(idpLoadUrl);
-        NumberTextField refreshInterval = new NumberTextField("refreshInterval", loadTimeoutModel);
+        NumberTextField refreshInterval = new NumberTextField("idpLoadTimeout", loadTimeoutModel);
         refreshInterval.setOutputMarkupId(true);
         refreshInterval.add(new AjaxFormComponentUpdatingBehavior("onChange") {
             @Override
@@ -103,31 +103,37 @@ public class GenerateIdpMetadata extends FieldIDTemplatePage {
             @Override
             public void onClick(AjaxRequestTarget ajaxRequestTarget) {
                 metadataForm.clearInput();
-                feedbackPanel.getFeedbackMessages().clear();
-                ajaxRequestTarget.add(feedbackPanel);
-                try {
-                    IdpProvidedMetadata metadata = metadataServices.getMetadataFromIdp(idpUrlModel.getObject(),
-                            new Integer(loadTimeoutModel.getObject()));
-                    entityIdModel.setObject(metadata.getEntityId());
-                    serializedMetadataModel.setObject(metadata.getSerializedMetadata());
-                    ajaxRequestTarget.add(entityIdField);
-                    ajaxRequestTarget.add(serializedMetadataField);
+                getFeedbackPanel().getFeedbackMessages().clear();
+                ajaxRequestTarget.add(getFeedbackPanel());
+                String idpUrl = idpUrlModel.getObject();
+                String timeoutValue = loadTimeoutModel.getObject();
+
+                boolean canProceed = false;
+                if (idpUrl != null && !idpUrl.isEmpty())
+                    canProceed = true;
+                else
+                    error("Need value for IDP url");
+                if (timeoutValue != null && !timeoutValue.isEmpty())
+                    canProceed = canProceed && true;
+                else {
+                    error("Need value for timeout");
+                    canProceed = false;
                 }
-                catch(Throwable t) {
-                    logger.error("Unable to get metadata from IDP", t);
-                    error("Unable to download IDP metadata from specified URL");
+                if (canProceed) {
+                    try {
+                        IdpProvidedMetadata metadata = metadataServices.getMetadataFromIdp(idpUrlModel.getObject(),
+                                new Integer(loadTimeoutModel.getObject()));
+                        entityIdModel.setObject(metadata.getEntityId());
+                        serializedMetadataModel.setObject(metadata.getSerializedMetadata());
+                        ajaxRequestTarget.add(entityIdField);
+                        ajaxRequestTarget.add(serializedMetadataField);
+                    } catch (Throwable t) {
+                        logger.error("Unable to get metadata from IDP", t);
+                        error("Unable to download IDP metadata from specified URL");
+                    }
                 }
             }
         });
     }
 
-    private void addFeedbackPanel() {
-         /* Existing top feedback panel is in the correct place for our messages but doesn't
-            get recognized as a feedback panel for our messages. */
-        remove(getTopFeedbackPanel());
-        feedbackPanel = new FeedbackPanel("topFeedbackPanel");
-        feedbackPanel.add(new AttributeAppender("style", new Model("text-align: center; color:red; padding: 0px 10px"), " "));
-        feedbackPanel.setOutputMarkupId(true);
-        add(feedbackPanel);
-    }
 }

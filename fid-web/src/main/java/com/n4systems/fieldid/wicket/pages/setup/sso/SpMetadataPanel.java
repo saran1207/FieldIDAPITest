@@ -7,9 +7,7 @@ import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.validation.AbstractFormValidator;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.opensaml.common.xml.SAMLConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,10 +16,6 @@ import java.util.*;
 abstract public class SpMetadataPanel extends Panel {
 
     static public Logger logger = LoggerFactory.getLogger(SpMetadataPanel.class);
-
-    public static enum AllowedSSOBindings {
-        SSO_POST, SSO_PAOS, SSO_ARTIFACT, HOKSSO_POST, HOKSSO_ARTIFACT
-    }
     
     private boolean reviseMode;
     
@@ -42,28 +36,7 @@ abstract public class SpMetadataPanel extends Panel {
         final StringDropDownChoice securityProfileChoice;
         final StringDropDownChoice sslSecurityProfileChoice;
         final StringDropDownChoice sslHostnameVerificationChoice;
-        final TextField<String> signingAlgorithm;
-        final BooleanDropDownChoice requestSignedChoice;
         final BooleanDropDownChoice wantAssertionSignedChoice;
-        final BooleanDropDownChoice requireLogoutRequestSignedChoice;
-        final BooleanDropDownChoice requireLogoutResponseSignedChoice;
-        final BooleanDropDownChoice requireArtifactResolveSignedChoice;
-        final RadioGroup<AllowedSSOBindings> ssoDefautBinding;
-        final Radio<String> radio_sso_0;
-        final Radio<String> radio_sso_1;
-        final Radio<String> radio_sso_2;
-        final Radio<String> radio_sso_3;
-        final Radio<String> radio_sso_4;
-        final ExtendedCheckBox sso_0_checkbox;
-        final ExtendedCheckBox sso_1_checkbox;
-        final ExtendedCheckBox sso_2_checkbox;
-        final ExtendedCheckBox sso_3_checkbox;
-        final ExtendedCheckBox sso_4_checkbox;
-        final ExtendedCheckBox nameid_0_checkbox;
-        final ExtendedCheckBox nameid_1_checkbox;
-        final ExtendedCheckBox nameid_2_checkbox;
-        final ExtendedCheckBox nameid_3_checkbox;
-        final ExtendedCheckBox nameid_4_checkbox;
         final Link cancelLink;
 
         final Map<Boolean, String> trueFalseOptions = new HashMap<Boolean, String>();
@@ -98,63 +71,18 @@ abstract public class SpMetadataPanel extends Panel {
 
         alias = new TextField("alias", Model.of(spMetadata.getAlias()));
         alias.setConvertEmptyInputStringToNull(true);
+        alias.setRequired(true);
 
         securityProfileChoice = new StringDropDownChoice("securityProfile",
-                Model.of("metaiop"), securityProfileOptions);
+                Model.of(spMetadata.getSecurityProfile()), securityProfileOptions);
         securityProfileChoice.setRequired(true);
         sslSecurityProfileChoice = new StringDropDownChoice("sslSecurityProfile",
-                Model.of("pkix"), sslSecurityProfileOptions);
+                Model.of(spMetadata.getSslSecurityProfile()), sslSecurityProfileOptions);
         sslSecurityProfileChoice.setRequired(true);
         sslHostnameVerificationChoice = new StringDropDownChoice("sslHostnameVerification",
-                Model.of(sslHostnameVerificationOptions.keySet().iterator().next()), sslHostnameVerificationOptions);
+                Model.of(spMetadata.getSslHostnameVerification()), sslHostnameVerificationOptions);
 
-        signingAlgorithm = new TextField("signingAlgorithm", Model.of(spMetadata.getSigningAlgorithm()));
-        signingAlgorithm.setConvertEmptyInputStringToNull(true);
-        requestSignedChoice = new BooleanDropDownChoice("requestSigned", Model.of(spMetadata.isRequestSigned()), trueFalseOptions);
         wantAssertionSignedChoice = new BooleanDropDownChoice("wantAssertionSigned", Model.of(spMetadata.isWantAssertionSigned()), trueFalseOptions);
-        requireLogoutRequestSignedChoice = new BooleanDropDownChoice("requireLogoutRequestSigned", Model.of(spMetadata.isRequireLogoutRequestSigned()), trueFalseOptions);
-        requireLogoutResponseSignedChoice = new BooleanDropDownChoice("requireLogoutResponseSigned", Model.of(spMetadata.isRequireLogoutResponseSigned()), trueFalseOptions);
-        requireArtifactResolveSignedChoice = new BooleanDropDownChoice("requireArtifactResolveSigned", Model.of(spMetadata.isRequireArtifactResolveSigned()), trueFalseOptions);
-
-        ssoDefautBinding = new RadioGroup("ssoDefaultBindingGroup", Model.of(AllowedSSOBindings.SSO_POST));
-        ssoDefautBinding.setRequired(true);
-        radio_sso_0 = new Radio("radio_sso_0", Model.of(AllowedSSOBindings.SSO_POST), ssoDefautBinding);
-        ssoDefautBinding.add(radio_sso_0);
-        radio_sso_1 = new Radio("radio_sso_1", Model.of(AllowedSSOBindings.SSO_ARTIFACT), ssoDefautBinding);
-        ssoDefautBinding.add(radio_sso_1);
-        radio_sso_2 = new Radio("radio_sso_2", Model.of(AllowedSSOBindings.SSO_PAOS), ssoDefautBinding);
-        ssoDefautBinding.add(radio_sso_2);
-        radio_sso_3 = new Radio("radio_sso_3", Model.of(AllowedSSOBindings.HOKSSO_ARTIFACT), ssoDefautBinding);
-        ssoDefautBinding.add(radio_sso_3);
-        radio_sso_4 = new Radio("radio_sso_4", Model.of(AllowedSSOBindings.HOKSSO_POST), ssoDefautBinding);
-        ssoDefautBinding.add(radio_sso_4);
-
-        sso_0_checkbox = new ExtendedCheckBox("sso_0", Model.of(Boolean.TRUE),
-                AllowedSSOBindings.SSO_POST.toString());
-        ssoDefautBinding.add(sso_0_checkbox);
-        sso_1_checkbox = new ExtendedCheckBox("sso_1", Model.of(Boolean.TRUE),
-                AllowedSSOBindings.SSO_ARTIFACT.toString());
-        ssoDefautBinding.add(sso_1_checkbox);
-        sso_2_checkbox = new ExtendedCheckBox("sso_2", Model.of(Boolean.FALSE),
-                AllowedSSOBindings.SSO_PAOS.toString());
-        ssoDefautBinding.add(sso_2_checkbox);
-        sso_3_checkbox = new ExtendedCheckBox("sso_3", Model.of(Boolean.FALSE),
-                AllowedSSOBindings.HOKSSO_ARTIFACT.toString());
-        ssoDefautBinding.add(sso_3_checkbox);
-        sso_4_checkbox = new ExtendedCheckBox("sso_4", Model.of(Boolean.FALSE),
-                AllowedSSOBindings.HOKSSO_POST.toString());
-        ssoDefautBinding.add(sso_4_checkbox);
-
-        nameid_0_checkbox = new ExtendedCheckBox("nameid_0", Model.of(Boolean.TRUE),
-                "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress");
-        nameid_1_checkbox = new ExtendedCheckBox("nameid_1", Model.of(Boolean.TRUE),
-                "urn:oasis:names:tc:SAML:2.0:nameid-format:transient");
-        nameid_2_checkbox = new ExtendedCheckBox("nameid_2", Model.of(Boolean.TRUE),
-                "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent");
-        nameid_3_checkbox = new ExtendedCheckBox("nameid_3", Model.of(Boolean.TRUE),
-                "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
-        nameid_4_checkbox = new ExtendedCheckBox("nameid_4", Model.of(Boolean.TRUE),
-                "urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName");
 
         cancelLink = new Link("cancelLink") {
             public void onClick() {
@@ -171,62 +99,7 @@ abstract public class SpMetadataPanel extends Panel {
                 spMetadata.setUserIdAttributeName(userIdAttributeName.getModelObject());
                 spMetadata.setMatchOnEmailAddress(matchOnEmailAddress.getModelObject());
                 spMetadata.setEmailAddressAttributeName(emailAddressAttributeName.getModelObject());
-                spMetadata.setRequestSigned(requestSignedChoice.getModelObject());
                 spMetadata.setWantAssertionSigned(wantAssertionSignedChoice.getModelObject());
-
-                Collection<String> bindingsSSO = new LinkedList<String>();
-                Collection<String> bindingsHoKSSO = new LinkedList<String>();
-                String defaultBinding = ssoDefautBinding.getModelObject().toString();
-                int assertionConsumerIndex = 0;
-
-                // Set default and included bindings
-                List<String> ssoBindings = new ArrayList();
-                if (sso_0_checkbox.isChecked())
-                    ssoBindings.add(sso_0_checkbox.getAssociatedValue());
-                if (sso_1_checkbox.isChecked())
-                    ssoBindings.add(sso_1_checkbox.getAssociatedValue());
-                if (sso_2_checkbox.isChecked())
-                    ssoBindings.add(sso_2_checkbox.getAssociatedValue());
-                if (sso_3_checkbox.isChecked())
-                    ssoBindings.add(sso_3_checkbox.getAssociatedValue());
-                if (sso_4_checkbox.isChecked())
-                    ssoBindings.add(sso_4_checkbox.getAssociatedValue());
-                for (String binding : ssoBindings) {
-                    if (binding.equalsIgnoreCase(defaultBinding)) {
-                        assertionConsumerIndex = bindingsSSO.size() + bindingsHoKSSO.size();
-                    }
-                    if (AllowedSSOBindings.SSO_POST.toString().equalsIgnoreCase(binding)) {
-                        bindingsSSO.add(SAMLConstants.SAML2_POST_BINDING_URI);
-                    } else if (AllowedSSOBindings.SSO_ARTIFACT.toString().equalsIgnoreCase(binding)) {
-                        bindingsSSO.add(SAMLConstants.SAML2_ARTIFACT_BINDING_URI);
-                    } else if (AllowedSSOBindings.SSO_PAOS.toString().equalsIgnoreCase(binding)) {
-                        bindingsSSO.add(SAMLConstants.SAML2_PAOS_BINDING_URI);
-                    } else if (AllowedSSOBindings.HOKSSO_POST.toString().equalsIgnoreCase(binding)) {
-                        bindingsHoKSSO.add(SAMLConstants.SAML2_POST_BINDING_URI);
-                    } else if (AllowedSSOBindings.HOKSSO_ARTIFACT.toString().equalsIgnoreCase(binding)) {
-                        bindingsHoKSSO.add(SAMLConstants.SAML2_ARTIFACT_BINDING_URI);
-                    }
-                }
-
-                // Set bindings
-                spMetadata.setBindingsSSO(bindingsSSO);
-                spMetadata.setBindingsHoKSSO(bindingsHoKSSO);
-                spMetadata.setAssertionConsumerIndex(assertionConsumerIndex);
-
-                // Name IDs
-                List<String> nameIds = new ArrayList<String>();
-
-                if (nameid_0_checkbox.isChecked())
-                    nameIds.add(nameid_0_checkbox.getAssociatedValue());
-                if (nameid_1_checkbox.isChecked())
-                    nameIds.add(nameid_1_checkbox.getAssociatedValue());
-                if (nameid_2_checkbox.isChecked())
-                    nameIds.add(nameid_2_checkbox.getAssociatedValue());
-                if (nameid_3_checkbox.isChecked())
-                    nameIds.add(nameid_3_checkbox.getAssociatedValue());
-                if (nameid_4_checkbox.isChecked())
-                    nameIds.add(nameid_4_checkbox.getAssociatedValue());
-                spMetadata.setNameID(nameIds);
 
                 // Alias
                 spMetadata.setAlias(alias.getModelObject());
@@ -234,40 +107,50 @@ abstract public class SpMetadataPanel extends Panel {
                 // Security settings
                 spMetadata.setSecurityProfile(securityProfileChoice.getModelObject());
                 spMetadata.setSslSecurityProfile(sslSecurityProfileChoice.getModelObject());
-                spMetadata.setRequireLogoutRequestSigned(requireLogoutRequestSignedChoice.getModelObject());
-                spMetadata.setRequireLogoutResponseSigned(requireLogoutResponseSignedChoice.getModelObject());
-                spMetadata.setRequireArtifactResolveSigned(requireArtifactResolveSignedChoice.getModelObject());
                 spMetadata.setSslHostnameVerification(sslHostnameVerificationChoice.getModelObject());
 
-                String signingAlgorithmValue = signingAlgorithm.getModelObject();
-                if (signingAlgorithmValue != null && (signingAlgorithmValue.length() > 0)) {
-                    spMetadata.setSigningAlgorithm(signingAlgorithmValue);
-                }
                 submitForm(spMetadata);
             }
         };
         /* Add form validator */
         metadataForm.add(new AbstractFormValidator() {
 
-            private final FormComponent<Boolean>[] components = new FormComponent[] { matchOnUserId, matchOnEmailAddress };
+            private final FormComponent[] components = new FormComponent[] {
+                    matchOnUserId, userIdAttributeName,
+                    matchOnEmailAddress, emailAddressAttributeName };
             @Override
-            public FormComponent<Boolean >[] getDependentFormComponents() {
+            public FormComponent[] getDependentFormComponents() {
                 return components;
             }
 
             @Override
             public void validate(Form<?> form) {
-                final FormComponent<Boolean> formComponent1 = components[0];
-                final FormComponent<Boolean> formComponent2 = components[1];
+                final FormComponent formComponent1 = components[0];
+                final FormComponent formComponent2 = components[1];
+                final FormComponent formComponent3 = components[2];
+                final FormComponent formComponent4 = components[3];
 
-                if (formComponent1.getConvertedInput() == Boolean.FALSE && formComponent2.getConvertedInput() == Boolean.FALSE)
+                boolean matchSelected = false;
+                if (formComponent1.getConvertedInput() == Boolean.TRUE) {
+                    matchSelected = true;
+                    if (formComponent2.getConvertedInput() == null || ((String) formComponent2.getConvertedInput()).isEmpty()) {
+                        error(formComponent2, "attributeNeedsValue");
+                    }
+                }
+                if (formComponent3.getConvertedInput() == Boolean.TRUE) {
+                    matchSelected = true;
+                    if (formComponent4.getConvertedInput() == null || ((String) formComponent4.getConvertedInput()).isEmpty()) {
+                        error(formComponent4, "attributeNeedsValue");
+                    }
+                }
+
+                if (!matchSelected)
                 {
                     error(formComponent1, "noMatchFieldSelected");
-                    error(formComponent2, "noMatchFieldSelected");
+                    error(formComponent3, "noMatchFieldSelected");
                 }
             }
         });
-
 
         add(metadataForm);
         metadataForm.add(entityId);
@@ -280,18 +163,7 @@ abstract public class SpMetadataPanel extends Panel {
         metadataForm.add(securityProfileChoice);
         metadataForm.add(sslSecurityProfileChoice);
         metadataForm.add(sslHostnameVerificationChoice);
-        metadataForm.add(signingAlgorithm);
-        metadataForm.add(requestSignedChoice);
         metadataForm.add(wantAssertionSignedChoice);
-        metadataForm.add(requireLogoutRequestSignedChoice);
-        metadataForm.add(requireLogoutResponseSignedChoice);
-        metadataForm.add(requireArtifactResolveSignedChoice);
-        metadataForm.add(ssoDefautBinding);
-        metadataForm.add(nameid_0_checkbox);
-        metadataForm.add(nameid_1_checkbox);
-        metadataForm.add(nameid_2_checkbox);
-        metadataForm.add(nameid_3_checkbox);
-        metadataForm.add(nameid_4_checkbox);
         metadataForm.add(cancelLink);
     }
 
@@ -321,27 +193,6 @@ abstract public class SpMetadataPanel extends Panel {
                                 "noDropdownChoice", SpMetadataPanel.this);
                 }
             });
-        }
-    }
-
-    private class ExtendedCheckBox extends CheckBox {
-
-        private String associatedValue;
-
-        public ExtendedCheckBox(final String id, IModel<Boolean> model, String associatedValue) {
-            super(id, model);
-            this.associatedValue = associatedValue;
-        }
-
-        public String getAssociatedValue() {
-            if (getModelObject())
-                return associatedValue;
-            else
-                return null;
-        }
-
-        public boolean isChecked() {
-            return getModelObject();
         }
     }
 

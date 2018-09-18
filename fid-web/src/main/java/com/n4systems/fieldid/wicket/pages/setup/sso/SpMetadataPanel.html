@@ -3,7 +3,7 @@
     <style>
         .metadataLabel {
             float: left;
-            width: 400px;
+            width: 300px;
             text-align: right;
             margin-right: 0.5em;
             white-space: nowrap;
@@ -20,8 +20,8 @@
         }
         .metadataDesc {
             float: left;
-            margin-top: 10px;
-            margin-left: 405px;
+            margin-top: 2px;
+            margin-left: 305px;
             padding-left: 0.5em;
             overflow: hidden;
         }
@@ -34,27 +34,25 @@
 
         <div class="inputLine">
             <div>
-                <label for="entityId" class="metadataLabel">Entity ID:</label>
+                <label for="entityId" class="metadataLabel"><wicket:message key="entityIdLabel"></wicket:message></label>
                 <input wicket:id="entityId" type="text" id="entityId" class="metadataInput" style="width: 300px;"/>
             </div>
-            <div class="small metadataDesc">Entity ID is a unique identifier for an identity or service provider. Value is included in the
-                generated metadata.
+            <div class="small metadataDesc">Unique identifier for this Service Provider
             </div>
         </div>
 
         <div class="inputLine">
             <div>
-                <label for="baseURL" class="metadataLabel">Entity base URL:</label>
+                <label for="baseURL" class="metadataLabel"><wicket:message key="entityBaseUrlLabel"></wicket:message></label>
                 <input wicket:id="baseURL" type="text" id="baseURL" class="metadataInput" style="width: 300px;"/>
             </div>
-            <div class="small metadataDesc">Base to generate URLs for this server. For example: https://myServer:443/saml-app. The public
-                address your server will be accessed from should be used here.
+            <div class="small metadataDesc">Url of your FieldId home page
             </div>
         </div>
 
         <div class="inputLine">
             <div>
-                <label wicket:for="matchOnUserId" class="metadataLabel">Match on User Id:</label>
+                <label wicket:for="matchOnUserId" class="metadataLabel"><wicket:message key="matchOnUserIdLabel"></wicket:message></label>
                 <select wicket:id="matchOnUserId" class="metadataInput" >
                     <option value="true">Yes</option>
                     <option value="false">No</option>
@@ -68,8 +66,8 @@
 
         <div class="inputLine">
             <div>
-                <label wicket:for="matchOnEmailAddress" class="metadataLabel">Match on Email Address:</label>
-                <select wicket:id="matchOnEmailAddress" class="metadataInput" >
+                <label wicket:for="matchOnEmailAddress" class="metadataLabel"><wicket:message key="matchOnEmailAddressLabel"></wicket:message></label>
+                <select wicket:id="matchOnEmailAddress" class="metadataInput">
                     <option value="true">Yes</option>
                     <option value="false">No</option>
                 </select>
@@ -82,16 +80,16 @@
 
         <div class="inputLine">
             <div>
-                <label for="alias" class="metadataLabel">Entity alias:</label>
+                <label for="alias" class="metadataLabel"><wicket:message key="entityAliasLabel"></wicket:message></label>
                 <input wicket:id="alias" type="text" id="alias" class="metadataInput"/>
             </div>
-            <div class="small metadataDesc">Alias is an internal mechanism allowing collocating multiple service providers on one server.
-                When set, alias must be unique.
+            <div class="small metadataDesc">internal mechanism allowing collocating multiple service providers on one server.
+                Set to customer name.
             </div>
         </div>
 
         <div class="inputLine">
-            <div><label for="securityProfile" class="metadataLabel">Signature security profile:</label>
+            <div><label for="securityProfile" class="metadataLabel"><wicket:message key="securityProfileLabel"></wicket:message></label>
                 <select wicket:id="securityProfile" id="securityProfile" class="metadataInput">
                     <option value="metaiop">MetaIOP</option>
                     <option value="pkix">PKIX</option>
@@ -120,7 +118,7 @@
 
         <div class="inputLine">
             <div>
-                <label for="sslSecurityProfile" class="metadataLabel">SSL/TLS security profile:</label>
+                <label for="sslSecurityProfile" class="metadataLabel"><wicket:message key="sslSecurityProfileLabel"></wicket:message></label>
                 <select wicket:id="sslSecurityProfile" id="sslSecurityProfile" class="metadataInput">
                     <option value="pkix">PKIX</option>
                     <option value="metaiop">MetaIOP</option>
@@ -148,12 +146,9 @@
 
         <div class="inputLine">
             <div>
-                <label wicket:for="sslHostnameVerification" class="metadataLabel">SSL/TLS hostname verification:</label>
+                <label wicket:for="sslHostnameVerification" class="metadataLabel"><wicket:message key="hostnameVerificationLabel"></wicket:message></label>
                 <select wicket:id="sslHostnameVerification" class="metadataInput">
-                    <option value="default">Standard hostname verifier</option>
-                    <option value="defaultAndLocalhost">Standard hostname verifier (skips verification for localhost)</option>
-                    <option value="strict">Strict hostname verifier</option>
-                    <option value="allowAll">Disable hostname verification (allow all)</option>
+                    <option value="default"></option>
                 </select>
             </div>
             <div class="small metadataDesc">
@@ -163,28 +158,7 @@
 
         <div class="inputLine">
             <div>
-                <label wicket:for="signingAlgorithm" class="metadataLabel">Signing algorithm:</label>
-                <input cssClass="text" wicket:id="signingAlgorithm" class="metadataInput"/>
-            </div>
-            <div class="small metadataDesc">Algorithm used for creation of digital signature on metadata. Typical values are
-                "http://www.w3.org/2000/09/xmldsig#rsa-sha1",
-                "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" and "http://www.w3.org/2001/04/xmldsig-more#rsa-sha512"
-            </div>
-        </div>
-
-        <div class="inputLine">
-            <div>
-                <label wicket:for="requestSigned" class="metadataLabel">Sign sent AuthNRequests:</label>
-                <select wicket:id="requestSigned" class="metadataInput">
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="inputLine">
-            <div>
-                <label wicket:for="wantAssertionSigned" class="metadataLabel">Require signed authentication Assertion:</label>
+                <label wicket:for="wantAssertionSigned" class="metadataLabel"><wicket:message key="requireSignedAssertionLabel"></wicket:message></label>
                 <select wicket:id="wantAssertionSigned" class="metadataInput">
                     <option value="true">Yes</option>
                     <option value="false">No</option>
@@ -192,107 +166,9 @@
             </div>
         </div>
 
-        <div class="inputLine">
-            <div>
-                <label wicket:for="requireLogoutRequestSigned" class="metadataLabel">Require signed LogoutRequest:</label>
-                <select wicket:id="requireLogoutRequestSigned" class="metadataInput">
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="inputLine">
-            <div>
-                <label wicket:for="requireLogoutResponseSigned" class="metadataLabel">Require signed LogoutResponse:</label>
-                <select wicket:id="requireLogoutResponseSigned" class="metadataInput">
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="inputLine">
-            <div>
-                <label wicket:for="requireArtifactResolveSigned" class="metadataLabel">Require signed ArtifactResolve:</label>
-                <select wicket:id="requireArtifactResolveSigned" class="metadataInput">
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="inputLine">
-            <div>
-                <label class="metadataLabel">Single sign-on bindings:</label>
-                <wicket:container wicket:id="ssoDefaultBindingGroup" class="metadataInput">
-                    <table>
-                        <tr>
-                            <th>Default</th>
-                            <th>Included</th>
-                            <th>Name</th>
-                        </tr>
-                        <tr>
-                            <td><input type="radio" wicket:id="radio_sso_0"/></td>
-                            <td><input type="checkbox" wicket:id="sso_0"/></td>
-                            <td><label wicket:for="sso_0">SSO HTTP-POST</label></td>
-                        </tr>
-                        <tr>
-                            <td><input type="radio" wicket:id="radio_sso_1"/></td>
-                            <td><input type="checkbox" wicket:id="sso_1"/></td>
-                            <td><label wicket:for="sso_1">SSO Artifact</label></td>
-                        </tr>
-                        <tr>
-                            <td><input type="radio" wicket:id="radio_sso_2"/></td>
-                            <td><input type="checkbox" wicket:id="sso_2"/></td>
-                            <td><label wicket:for="sso_2">SSO PAOS</label></td>
-                        </tr>
-                        <tr>
-                            <td><input type="radio" wicket:id="radio_sso_3"/></td>
-                            <td><input type="checkbox" wicket:id="sso_3"/></td>
-                            <td><label wicket:for="sso_3">HoK SSO Artifact</label></td>
-                        </tr>
-                        <tr>
-                            <td><input type="radio" wicket:id="radio_sso_4"/></td>
-                            <td><input type="checkbox" wicket:id="sso_4"/></td>
-                            <td><label wicket:for="sso_4">HoK SSO HTTP-POST</label></td>
-                        </tr>
-                    </table>
-                </wicket:container>
-            </div>
-        </div>
-
-        <div class="inputLine">
-            <div>
-                <label class="metadataLabel">Supported NameIDs:</label>
-                <table class="metadataInput">
-                    <tr>
-                        <td><input type="checkbox" wicket:id="nameid_0"/></td>
-                        <td><label wicket:for="nameid_0">E-Mail</label></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" path="nameID" wicket:id="nameid_1"/></td>
-                        <td><label wicket:for="nameid_1">Transient</label></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" path="nameID" wicket:id="nameid_2"/></td>
-                        <td><label wicket:for="nameid_2">Persistent</label></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" wicket:id="nameid_3"/></td>
-                        <td><label wicket:for="nameid_3">Unspecified</label></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" wicket:id="nameid_4"/></td>
-                        <td><label wicket:for="nameid_4">X509 Subject</label></td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-
         <br>
         <div>
-            <input type="submit" class="btn-primary" wicket:message="value:submitButton"/><a href="#" wicket:id="cancelLink">Cancel</a>
+            <input type="submit" class="btn-primary" wicket:message="value:submitButton" style="margin-right: 10px;"/><a href="#" wicket:id="cancelLink">Cancel</a>
         </div>
 
     </form>
