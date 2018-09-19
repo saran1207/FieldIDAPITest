@@ -65,7 +65,7 @@ public class TenantSettings extends EntityWithTenant {
 	private KeyPair authConsumer = new KeyPair();
 
 	@Embedded
-	private OfflinePolicy offlinePolicy;
+	private OfflinePolicy offlinePolicy = new OfflinePolicy();
 
 	@Override
 	protected void onUpdate() {

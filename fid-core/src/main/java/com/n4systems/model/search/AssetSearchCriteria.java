@@ -21,6 +21,7 @@ import java.util.List;
 public class AssetSearchCriteria extends SearchCriteria {
 
     private static final String LAST_EVENT_DATE_COLUMN = "asset_search_lasteventdate";
+    private static final String NETWORK_LAST_EVENT_DATE_COLUMN = "asset_search_network_lasteventdate";
 
     @Column
     private String rfidNumber;
@@ -205,6 +206,12 @@ public class AssetSearchCriteria extends SearchCriteria {
             }
         }
         return false;
+    }
+
+    @Transient
+    public boolean sortingByNetworkLastEventDate() {
+        ColumnMappingView sortColumn = getSortColumn();
+        return sortColumn != null && NETWORK_LAST_EVENT_DATE_COLUMN.equals(sortColumn.getId());
     }
 
 }
