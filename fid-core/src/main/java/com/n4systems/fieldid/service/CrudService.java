@@ -117,12 +117,12 @@ public abstract class CrudService<T extends AbstractEntity> extends FieldIdPersi
 	}
 
 	@Transactional
-	public List<T> findByAssetId(String assetId, int page, int pageSize) {
+	public List<T> findByAssetId(String assetId, int page, int pageSize, boolean openInspections) {
 		throw new UnsupportedOperationException(); // This operation is not supported for all entity types
 	}
 
 	@Transactional
-	public List<T> findActionItemByAssetId(String assetId, int page, int pageSize) {
+	public List<T> findActionItemByAssetId(String assetId, int page, int pageSize, boolean openActionItems) {
 		throw new UnsupportedOperationException(); // This operation is not supported for all entity types
 	}
 }

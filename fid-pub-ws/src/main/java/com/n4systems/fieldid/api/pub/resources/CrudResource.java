@@ -189,7 +189,7 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 	@Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Transactional
-	public Messages.ListResponseMessage findByAssetId(@PathParam("assetId") String id, @QueryParam("page") int page, @QueryParam("pageSize") int pageSize) {
+	public Messages.ListResponseMessage findByAssetId(@PathParam("assetId") String id, @QueryParam("page") int page, @QueryParam("pageSize") int pageSize, @QueryParam("openInspections") boolean openInspections) {
 		List<M> allItems;
 		List<A> items;
 		String logInfo = getLogInfo();
@@ -198,7 +198,7 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 		logger.info(logMessage);
 
 		try {
-			allItems = crudService().findByAssetId(id, page, pageSize);
+			allItems = crudService().findByAssetId(id, page, pageSize, openInspections);
 
 			items = allItems
 					.stream()
@@ -309,7 +309,7 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 	@Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Transactional
-	public Messages.ListResponseMessage findActionItemByAssetId(@PathParam("assetId") String id, @QueryParam("page") int page, @QueryParam("pageSize") int pageSize) {
+	public Messages.ListResponseMessage findActionItemByAssetId(@PathParam("assetId") String id, @QueryParam("page") int page, @QueryParam("pageSize") int pageSize, @QueryParam("openActionItems") boolean openActionItems) {
 		List<M> allItems;
 		List<A> items;
 		String logInfo = getLogInfo();
@@ -318,7 +318,7 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 		logger.info(logMessage);
 
 		try {
-			allItems = crudService().findActionItemByAssetId(id, page, pageSize);
+			allItems = crudService().findActionItemByAssetId(id, page, pageSize, openActionItems);
 
 			items = allItems
 					.stream()

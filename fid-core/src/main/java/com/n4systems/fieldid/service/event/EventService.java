@@ -448,11 +448,15 @@ public class EventService extends CrudService<ThingEvent> {
         return lastEventsByType;
 	}
 
-    public List<ThingEvent> getLastEventOfEachType(Long assetId, int page, int pageSize) {
+    public List<ThingEvent> getLastEventOfEachType(Long assetId, int page, int pageSize, boolean openInspection) {
         QueryBuilder<EventIdTypeAndCompletedView> builder = new QueryBuilder<>(ThingEvent.class, securityContext.getTenantSecurityFilter());
         builder.setSelectArgument(new NewObjectSelect(EventIdTypeAndCompletedView.class, "id", "type.id", "completedDate"));
         builder.addWhere(WhereClauseFactory.create("asset.id", assetId));
-        builder.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.COMPLETED));
+        if(openInspection) {
+            builder.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.OPEN));
+        } else {
+            builder.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.COMPLETED));
+        }
         List<EventIdTypeAndCompletedView> allEvents = persistenceService.findAll(builder, page, pageSize);
 
         List<ThingEvent> lastEventsByType = allEvents.stream().collect(
@@ -471,11 +475,15 @@ public class EventService extends CrudService<ThingEvent> {
         return lastEventsByType;
     }
 
-    public List<ThingEvent> getLastActionItemOfEachType(Long assetId, int page, int pageSize) {
+    public List<ThingEvent> getLastActionItemOfEachType(Long assetId, int page, int pageSize, boolean openActionItems) {
         QueryBuilder<EventIdTypeAndCompletedView> builder = new QueryBuilder<>(ThingEvent.class, securityContext.getTenantSecurityFilter());
         builder.setSelectArgument(new NewObjectSelect(EventIdTypeAndCompletedView.class, "id", "type.id", "completedDate"));
         builder.addWhere(WhereClauseFactory.create("asset.id", assetId));
-        builder.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.COMPLETED));
+        if(openActionItems) {
+            builder.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.OPEN));
+        } else {
+            builder.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.COMPLETED));
+        }
         builder.addWhere(WhereParameter.Comparator.NOTNULL, "triggerEvent", "triggerEvent", "");
         List<EventIdTypeAndCompletedView> allEvents = persistenceService.findAll(builder, page, pageSize);
 
@@ -892,22 +900,22 @@ public class EventService extends CrudService<ThingEvent> {
 
     @Override
     @Transactional
-    public List<ThingEvent> findByAssetId(String id, int page, int pageSize) {
+    public List<ThingEvent> findByAssetId(String id, int page, int pageSize, boolean openInspections) {
         Asset asset = assetService.findByPublicId(id);
         if (asset == null)
             return null;
 
-        return getLastEventOfEachType(asset.getID(), page, pageSize);
+        return getLastEventOfEachType(asset.getID(), page, pageSize, openInspections);
     }
 
     @Override
     @Transactional
-    public List<ThingEvent> findActionItemByAssetId(String id, int page, int pageSize) {
+    public List<ThingEvent> findActionItemByAssetId(String id, int page, int pageSize, boolean openActionItems) {
         Asset asset = assetService.findByPublicId(id);
         if (asset == null)
             return null;
 
-        return getLastActionItemOfEachType(asset.getID(), page, pageSize);
+        return getLastActionItemOfEachType(asset.getID(), page, pageSize, openActionItems);
     }
 
 }
