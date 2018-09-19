@@ -17,8 +17,11 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.net.SocketTimeoutException;
 
 
 /**
@@ -127,9 +130,14 @@ public class GenerateIdpMetadata extends FieldIDTemplateWithFeedbackPage {
                         serializedMetadataModel.setObject(metadata.getSerializedMetadata());
                         ajaxRequestTarget.add(entityIdField);
                         ajaxRequestTarget.add(serializedMetadataField);
-                    } catch (Throwable t) {
-                        logger.error("Unable to get metadata from IDP", t);
-                        error("Unable to download IDP metadata from specified URL");
+                    } catch (Exception ex) {
+                        logger.error("Metadata load from URL '" + idpUrl + "' failed", ex);
+                        if (ex.getCause() instanceof SocketTimeoutException ||
+                                ex.getCause() instanceof MetadataProviderException &&
+                                        ex.getCause().getCause() instanceof SocketTimeoutException)
+                            error(getString("retrieveTimeoutErrorMsg"));
+                        else
+                            error(getString("retrieveErrorMsg"));
                     }
                 }
             }

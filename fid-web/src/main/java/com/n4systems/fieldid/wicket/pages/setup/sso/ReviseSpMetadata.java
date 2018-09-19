@@ -35,7 +35,7 @@ public class ReviseSpMetadata extends FieldIDTemplateWithFeedbackPage {
 
     private void addComponents(String entityId) {
 
-        SsoSpMetadata spMetadata = metadataDao.getSp(entityId);
+        SsoSpMetadata spMetadata = metadataDao.getSpByEntityId(entityId);
         String tenantName = getTenant().getName();
         add(new Label("tenantName", tenantName));
 

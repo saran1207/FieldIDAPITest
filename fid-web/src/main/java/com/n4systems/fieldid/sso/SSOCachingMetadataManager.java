@@ -22,7 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by agrabovskis on 2018-07-11.
+ * The main manager for the IDP and SP definitions used by the Spring SAML framework. All IDP's and SP's
+ * defined here are the live objects accessed directly by the framework.
  */
 
 public class SSOCachingMetadataManager extends CachingMetadataManager implements Serializable {
@@ -39,6 +40,12 @@ public class SSOCachingMetadataManager extends CachingMetadataManager implements
         super(new ArrayList());
     }
 
+    /**
+     * Take the IDP and SP definitions stored in the database and make them live objects used by the Spring SAML framework.
+     * @throws MetadataProviderException
+     * @throws ResourceException
+     * @throws XMLParserException
+     */
     @PostConstruct
     private void init() throws MetadataProviderException, ResourceException, XMLParserException {
         List<MetadataProvider> providers = new ArrayList();
@@ -58,7 +65,7 @@ public class SSOCachingMetadataManager extends CachingMetadataManager implements
                 logger.error("Attempt to add SSO IDP '" + idp.getSsoEntity().getEntityId() + "' failed", ex);
             }
         }
-        for (SsoSpMetadata sp : ssoMetadataDao.getSp()) {
+        for (SsoSpMetadata sp : ssoMetadataDao.getSpByEntityId()) {
             try {
                 DatabaseSpMetadataProvider provider = new DatabaseSpMetadataProvider(ssoMetadataDao, sp.getSsoEntity().getEntityId(), parserPool);
                 ExtendedMetadataDelegate delegate = new ExtendedMetadataDelegate(provider, provider.getExtendedMetadata(sp.getSsoEntity().getEntityId()));

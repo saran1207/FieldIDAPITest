@@ -31,7 +31,7 @@ public class DisplaySpMetadata extends FieldIDTemplatePage {
     }
 
     private void addComponents(String entityId) {
-        SsoSpMetadata spMetadata = metadataDao.getSp(entityId);
+        SsoSpMetadata spMetadata = metadataDao.getSpByEntityId(entityId);
 
         add(new Label("entityId", Model.of(spMetadata.getSsoEntity().getEntityId())));
 

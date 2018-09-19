@@ -44,58 +44,24 @@ public class SsoMetadataServicesImpl implements SsoMetadataServices {
     @Autowired
     private ParserPool parserPool;
 
-
     @Autowired
     private KeyManager keyManager;
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public SsoIdpMetadata addIdp(SsoIdpMetadata idpMetadata) throws SsoDuplicateEntityIdException {
-
         ssoMetadataDao.addIdp(idpMetadata);
-
-        try {
-            MetadataProvider provider = new DatabaseIdpMetadataProvider(
-                    ssoMetadataDao,
-                    idpMetadata.getSsoEntity().getEntityId(),
-                    parserPool);
-            ((DatabaseIdpMetadataProvider) provider).initialize();
-            metadataManager.addMetadataProvider(provider);
-            metadataManager.setRefreshRequired(true);
-            metadataManager.refreshMetadata();
-            logger.info("Added IDP '" + idpMetadata.getSsoEntity().getEntityId() + "' for tenant " +
+        loadIdpProvider(idpMetadata.getSsoEntity().getEntityId());
+        logger.info("Added IDP '" + idpMetadata.getSsoEntity().getEntityId() + "' for tenant " +
                 idpMetadata.getTenant().getName());
-        }
-        catch (MetadataProviderException ex) {
-            logger.error("Unable to add IDP", ex);
-            /* This is not an expected exception so show user an Oops error */
-            throw new RuntimeException(ex);
-        }
         return idpMetadata;
     }
 
     @Override
     @Transactional
     public void deleteIdp(String entityId) {
-
-        Iterator<MetadataProvider> iter = metadataManager.getProviders().iterator();
-        while (iter.hasNext()) {
-            MetadataProvider provider = iter.next();
-            try {
-                if (provider.getEntityDescriptor(entityId) != null) {
-                    metadataManager.removeMetadataProvider(provider);
-                    ssoMetadataDao.deleteIdp(entityId);
-                    metadataManager.setRefreshRequired(true);
-                    metadataManager.refreshMetadata();
-                    logger.info("Deleted IDP '" + entityId + "'");
-                }
-            }
-            catch(MetadataProviderException ex) {
-                logger.error("Unable to delete IDP", ex);
-                /* This is not an expected error so show user an Oops error */
-                throw new RuntimeException(ex);
-            }
-        }
+        unloadProvider(entityId);
+        ssoMetadataDao.deleteIdpByEntityId(entityId);
     }
 
     @Override
@@ -128,61 +94,28 @@ public class SsoMetadataServicesImpl implements SsoMetadataServices {
     }
 
     @Override
-    @Transactional(rollbackFor = SsoDuplicateEntityIdException.class)
+    @Transactional(rollbackFor = Exception.class)
     public SsoSpMetadata addSp(SsoSpMetadata spMetadata) throws SsoDuplicateEntityIdException {
         spMetadata.setSerializedMetadata(generateSp(spMetadata));
-
-        try {
-            ssoMetadataDao.addSp(spMetadata);
-
-            DatabaseSpMetadataProvider provider =
-                    new DatabaseSpMetadataProvider(ssoMetadataDao, spMetadata.getSsoEntity().getEntityId(), parserPool);
-            ExtendedMetadataDelegate delegate =
-                    new ExtendedMetadataDelegate(provider, provider.getExtendedMetadata(spMetadata.getSsoEntity().getEntityId()));
-            delegate.initialize();
-            metadataManager.addMetadataProvider(delegate);
-            metadataManager.setHostedSPName(spMetadata.getSsoEntity().getEntityId());
-            metadataManager.setRefreshRequired(true);
-            metadataManager.refreshMetadata();
-            logger.info("Added SP '" + spMetadata.getSsoEntity().getEntityId() + "' for tenant " +
-                    spMetadata.getTenant().getName());
-        }
-        catch(MetadataProviderException ex) {
-            logger.error("Unable to add SP metadata",ex);
-            throw new RuntimeException(ex);
-        }
+        ssoMetadataDao.addSp(spMetadata);
+        loadSpProvider(spMetadata.getSsoEntity().getEntityId());
         return spMetadata;
     }
 
-    @Transactional(rollbackFor = SsoDuplicateEntityIdException.class)
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public SsoSpMetadata updateSp(SsoSpMetadata spMetadata) throws SsoDuplicateEntityIdException {
-        deleteSp(spMetadata.getSsoEntity().getEntityId());
+        SsoSpMetadata originalSp = ssoMetadataDao.getSpById(spMetadata.getId());
+        unloadProvider(originalSp.getSsoEntity().getEntityId());
+        deleteSp(originalSp.getSsoEntity().getEntityId());
         return addSp(spMetadata);
     }
 
     @Override
     @Transactional
     public void deleteSp(String entityId) {
-        Iterator<MetadataProvider> iter = metadataManager.getProviders().iterator();
-        while (iter.hasNext()) {
-            MetadataProvider provider = iter.next();
-            try {
-                if (provider.getEntityDescriptor(entityId) != null) {
-                    metadataManager.removeMetadataProvider(provider);
-                    //metadataManager.setHostedSPName(null);
-                    ssoMetadataDao.deleteSp(entityId);
-                    metadataManager.setRefreshRequired(true);
-                    metadataManager.refreshMetadata();
-                    logger.info("Deleted SP '" + entityId + "'");
-                }
-            }
-            catch(MetadataProviderException ex) {
-                logger.error("Unable to delete SP", ex);
-                /* This is not an expected error so show user an Oops error */
-                throw new RuntimeException(ex);
-            }
-        }
+        unloadProvider(entityId);
+        ssoMetadataDao.deleteSpByEntityId(entityId);
     }
 
     private String generateSp(SsoSpMetadata spMetadata) {
@@ -233,5 +166,69 @@ public class SsoMetadataServicesImpl implements SsoMetadataServices {
             throw new RuntimeException(ex);
         }
         return serializedMetadata;
+    }
+
+    @Override
+    public void loadIdpProvider(String entityId) {
+        try {
+            unloadProvider(entityId); // Shouldn't already exist except for error condition
+            MetadataProvider provider = new DatabaseIdpMetadataProvider(
+                    ssoMetadataDao,
+                    entityId,
+                    parserPool);
+            ((DatabaseIdpMetadataProvider) provider).initialize();
+            metadataManager.addMetadataProvider(provider);
+            metadataManager.setRefreshRequired(true);
+            metadataManager.refreshMetadata();
+        }
+        catch (MetadataProviderException ex) {
+            logger.error("Unable to add provider '" + entityId + "'", ex);
+            /* This is not an expected/recoverable exception so show user an Oops page */
+            throw new RuntimeException(ex);
+        }
+    }
+
+    @Override
+    public void loadSpProvider(String entityId) {
+        try {
+            unloadProvider(entityId);
+            DatabaseSpMetadataProvider provider =
+                new DatabaseSpMetadataProvider(ssoMetadataDao, entityId, parserPool);
+            ExtendedMetadataDelegate delegate =
+                new ExtendedMetadataDelegate(provider, provider.getExtendedMetadata(entityId));
+            delegate.initialize();
+            metadataManager.addMetadataProvider(delegate);
+            metadataManager.setRefreshRequired(true);
+            metadataManager.refreshMetadata();
+
+        }
+        catch(MetadataProviderException ex) {
+            logger.error("Unable to add SP metadata",ex);
+            /* This is not an expected/recoverable exception so give user an Oops page */
+            throw new RuntimeException(ex);
+        }
+    }
+
+    @Override
+    public boolean unloadProvider(String entityId) {
+        Iterator<MetadataProvider> iter = metadataManager.getProviders().iterator();
+        while (iter.hasNext()) {
+            MetadataProvider provider = iter.next();
+            try {
+                if (provider.getEntityDescriptor(entityId) != null) {
+                    metadataManager.removeMetadataProvider(provider);
+                    metadataManager.setRefreshRequired(true);
+                    metadataManager.refreshMetadata();
+                    logger.info("Deleted provider '" + entityId + "'");
+                    return true;
+                }
+            }
+            catch(MetadataProviderException ex) {
+                logger.error("Unable to delete provider", ex);
+                /* This is not an expected error so show user an Oops error */
+                throw new RuntimeException(ex);
+            }
+        }
+        return false;
     }
 }

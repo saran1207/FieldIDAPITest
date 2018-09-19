@@ -14,11 +14,13 @@ public interface SsoMetadataDao {
     public SsoIdpMetadata getIdpByTenant(long tenantId);
     public List<SsoIdpMetadata> getIdp();
     public SsoIdpMetadata addIdp(SsoIdpMetadata idpMetadata) throws SsoDuplicateEntityIdException;
-    public void deleteIdp(String entityId);
+    public void deleteIdpByEntityId(String entityId);
 
-    public SsoSpMetadata getSp(String entityId);
+    public SsoSpMetadata getSpById(Long id);
+    public SsoSpMetadata getSpByEntityId(String entityId);
     public SsoSpMetadata getSpByTenant(long tenantId);
-    public List<SsoSpMetadata> getSp();
+    public List<SsoSpMetadata> getSpByEntityId();
     public SsoSpMetadata addSp(SsoSpMetadata spMetadata) throws SsoDuplicateEntityIdException;
-    public void deleteSp(String entityId);
+    public void deleteSpById(Long id);
+    public void deleteSpByEntityId(String entityId);
 }

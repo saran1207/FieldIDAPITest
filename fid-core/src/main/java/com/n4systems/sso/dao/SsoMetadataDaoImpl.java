@@ -80,7 +80,7 @@ public class SsoMetadataDaoImpl implements SsoMetadataDao {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public SsoIdpMetadata addIdp(SsoIdpMetadata idpMetadata) throws SsoDuplicateEntityIdException {
         try {
             SsoEntity ssoEntity = idpMetadata.getSsoEntity();
@@ -102,7 +102,7 @@ public class SsoMetadataDaoImpl implements SsoMetadataDao {
 
     @Override
     @Transactional
-    public void deleteIdp(String entityId) {
+    public void deleteIdpByEntityId(String entityId) {
         SsoIdpMetadata idp = getIdp(entityId);
         SsoEntity ssoEntity = entityManager.find(SsoEntity.class, idp.getSsoEntity().getEntityId());
         entityManager.remove(idp);
@@ -111,7 +111,7 @@ public class SsoMetadataDaoImpl implements SsoMetadataDao {
 
     @Override
     @Transactional
-    public SsoSpMetadata getSp(String entityId) {
+    public SsoSpMetadata getSpByEntityId(String entityId) {
         SsoEntity ssoEntity = entityManager.find(SsoEntity.class, entityId);
         if (ssoEntity == null)
             return null;
@@ -122,20 +122,7 @@ public class SsoMetadataDaoImpl implements SsoMetadataDao {
         Predicate predicate = builder.equal(root.get("ssoEntity"), ssoEntity);
         query.where(predicate);
         Query q = entityManager.createQuery(query);
-        try {
-            SsoSpMetadata result = (SsoSpMetadata) q.getSingleResult();
-            if (result != null) {
-                 /* Load the collections */
-                result.getNameID().size();
-                result.getBindingsHoKSSO().size();
-                result.getBindingsSLO().size();
-                result.getBindingsSSO().size();
-            }
-            return result;
-        }
-        catch(NoResultException ex) {
-            return null;
-        }
+        return getPopulatedSingleResult(q);
     }
 
     @Override
@@ -149,6 +136,10 @@ public class SsoMetadataDaoImpl implements SsoMetadataDao {
         Predicate predicate = builder.equal(root.get("tenant"), tenant);
         query.where(predicate);
         Query q = entityManager.createQuery(query);
+        return getPopulatedSingleResult(q);
+    }
+
+    private SsoSpMetadata getPopulatedSingleResult(Query q) {
         try {
             SsoSpMetadata result = (SsoSpMetadata) q.getSingleResult();
             if (result != null) {
@@ -166,7 +157,12 @@ public class SsoMetadataDaoImpl implements SsoMetadataDao {
     }
 
     @Override
-    public List<SsoSpMetadata> getSp() {
+    public SsoSpMetadata getSpById(Long id) {
+        return entityManager.find(SsoSpMetadata.class, id);
+    }
+
+    @Override
+    public List<SsoSpMetadata> getSpByEntityId() {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<SsoSpMetadata> query = builder.createQuery(SsoSpMetadata.class);
         Root<SsoSpMetadata> root = query.from(SsoSpMetadata.class);
@@ -177,7 +173,7 @@ public class SsoMetadataDaoImpl implements SsoMetadataDao {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public SsoSpMetadata addSp(SsoSpMetadata spMetadata) throws SsoDuplicateEntityIdException {
         try {
             spMetadata.setId(null);
@@ -200,8 +196,16 @@ public class SsoMetadataDaoImpl implements SsoMetadataDao {
 
     @Override
     @Transactional
-    public void deleteSp(String entityId) {
-        SsoSpMetadata sp = getSp(entityId);
+    public void deleteSpById(Long id) {
+        SsoSpMetadata sp = entityManager.find(SsoSpMetadata.class, id);
+        if (sp != null)
+            entityManager.remove(sp);
+    }
+
+    @Override
+    @Transactional
+    public void deleteSpByEntityId(String entityId) {
+        SsoSpMetadata sp = getSpByEntityId(entityId);
         SsoEntity ssoEntity = entityManager.find(SsoEntity.class, sp.getSsoEntity().getEntityId());
         entityManager.remove(sp);
         entityManager.remove(ssoEntity);

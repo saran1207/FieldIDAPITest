@@ -5,7 +5,6 @@ import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.model.user.User;
 import com.n4systems.services.config.ConfigService;
 import com.n4systems.sso.dao.SsoMetadataDao;
-import com.n4systems.util.ConfigEntry;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -76,7 +75,7 @@ public class SamlLogonResultHandler implements AuthenticationFailureHandler, Aut
     private void redirectToHomepage(HttpServletRequest request, HttpServletResponse response) {
         try {
             SAMLMessageContext context = contextProvider.getLocalEntity(request, response);
-            response.sendRedirect(ssoMetadataDao.getSp(context.getLocalEntityId()).getEntityBaseURL() + "/w/dashboard");
+            response.sendRedirect(ssoMetadataDao.getSpByEntityId(context.getLocalEntityId()).getEntityBaseURL() + "/w/dashboard");
         } catch (Exception ex) {
             System.out.println("SAMLLogonFailureHandler failed getting context");
             throw new RuntimeException(ex);

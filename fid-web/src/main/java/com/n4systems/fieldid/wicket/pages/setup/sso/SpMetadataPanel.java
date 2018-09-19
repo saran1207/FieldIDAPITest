@@ -8,11 +8,15 @@ import org.apache.wicket.markup.html.form.validation.AbstractFormValidator;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.validation.validator.StringValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
+/**
+ * Reusable code to add/update a Service Provider definition
+ */
 abstract public class SpMetadataPanel extends Panel {
 
     static public Logger logger = LoggerFactory.getLogger(SpMetadataPanel.class);
@@ -60,17 +64,21 @@ abstract public class SpMetadataPanel extends Panel {
         /* Create the input fields */
 
         entityId = new TextField("entityId", Model.of(spMetadata.getSsoEntity().getEntityId()));
+        entityId.add(StringValidator.maximumLength(255));
         entityId.setRequired(true);
         baseUrl = new TextField("baseURL", Model.of(spMetadata.getEntityBaseURL()));
+        baseUrl.add(StringValidator.maximumLength(255));
         baseUrl.setRequired(true);
 
         matchOnUserId = new BooleanDropDownChoice("matchOnUserId", Model.of(spMetadata.isMatchOnUserId()), trueFalseOptions);
         userIdAttributeName = new TextField("userIdAttributeName", Model.of(spMetadata.getUserIdAttributeName()));
+        userIdAttributeName.add(StringValidator.maximumLength(255));
         matchOnEmailAddress = new BooleanDropDownChoice("matchOnEmailAddress", Model.of(spMetadata.isMatchOnEmailAddress()), trueFalseOptions);
         emailAddressAttributeName = new TextField<String>("emailAddressAttributeName", Model.of(spMetadata.getEmailAddressAttributeName()));
+        emailAddressAttributeName.add(StringValidator.maximumLength(255));
 
         alias = new TextField("alias", Model.of(spMetadata.getAlias()));
-        alias.setConvertEmptyInputStringToNull(true);
+        add(StringValidator.maximumLength(255));
         alias.setRequired(true);
 
         securityProfileChoice = new StringDropDownChoice("securityProfile",

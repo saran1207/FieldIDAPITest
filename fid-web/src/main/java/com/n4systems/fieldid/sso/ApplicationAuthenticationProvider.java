@@ -51,7 +51,7 @@ public class ApplicationAuthenticationProvider extends SAMLAuthenticationProvide
         SAMLMessageContext context = token.getCredentials();
         String localEntityId = context.getLocalEntityId(); /* Service Provider entity id */
         String peerEntityId = context.getPeerEntityId(); /* IDP entity id */
-        SsoSpMetadata ssoSpMetadata = ssoMetadataDao.getSp(localEntityId);
+        SsoSpMetadata ssoSpMetadata = ssoMetadataDao.getSpByEntityId(localEntityId);
         if (ssoSpMetadata == null)
             throw new ProviderNotFoundException(
                     "Incoming SSO authentication request referenced non existent service provider '" + localEntityId + "'");

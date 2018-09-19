@@ -32,7 +32,7 @@ public class DatabaseSpMetadataProvider extends DatabaseMetadataProvider impleme
     @Override
     protected XMLObject doGetMetadata() throws MetadataProviderException {
         try {
-            String metadataStr = ssoMetadataDao.getSp(getEntityId()).getSerializedMetadata();
+            String metadataStr = ssoMetadataDao.getSpByEntityId(getEntityId()).getSerializedMetadata();
             InputStream is = new ByteArrayInputStream(metadataStr.getBytes());
             XMLObject metadata = unmarshallMetadata(is);
             return metadata;
@@ -46,7 +46,7 @@ public class DatabaseSpMetadataProvider extends DatabaseMetadataProvider impleme
 
     public ExtendedMetadata getExtendedMetadata(String entityID) throws MetadataProviderException {
 
-        SsoSpMetadata spMetadata = ssoMetadataDao.getSp(entityID);
+        SsoSpMetadata spMetadata = ssoMetadataDao.getSpByEntityId(entityID);
         ExtendedMetadata extendedMetadata = new ExtendedMetadata();
 
         extendedMetadata.setLocal(true); // SP is always local

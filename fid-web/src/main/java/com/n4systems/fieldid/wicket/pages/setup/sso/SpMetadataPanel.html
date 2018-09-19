@@ -9,6 +9,7 @@
             white-space: nowrap;
             overflow: hidden;
             font-weight: bold;
+            margin-top: 5px;
         }
         .metadataInput {
             padding-left: 0.5em;
@@ -37,7 +38,7 @@
                 <label for="entityId" class="metadataLabel"><wicket:message key="entityIdLabel"></wicket:message></label>
                 <input wicket:id="entityId" type="text" id="entityId" class="metadataInput" style="width: 300px;"/>
             </div>
-            <div class="small metadataDesc">Unique identifier for this Service Provider
+            <div class="small metadataDesc">Unique identifier for this Service Provider.
             </div>
         </div>
 
@@ -46,7 +47,8 @@
                 <label for="baseURL" class="metadataLabel"><wicket:message key="entityBaseUrlLabel"></wicket:message></label>
                 <input wicket:id="baseURL" type="text" id="baseURL" class="metadataInput" style="width: 300px;"/>
             </div>
-            <div class="small metadataDesc">Url of your FieldId home page
+            <div class="small metadataDesc">
+                Url of your FieldId home page.
             </div>
         </div>
 
@@ -62,6 +64,10 @@
                 </label>
                 <input wicket:id="userIdAttributeName" type="text"/>
             </div>
+            <div class="small metadataDesc">
+                If this option is selected the User ID provided by the IDP must match one in FieldID.
+                The IDP attribute name is the name the IDP assigns to the attribute sent to FieldID that contains the User ID value.
+            </div>
         </div>
 
         <div class="inputLine">
@@ -76,6 +82,10 @@
                 </label>
                 <input wicket:id="emailAddressAttributeName" type="text"/>
             </div>
+            <div class="small metadataDesc">
+                If this option is selected the Email Address provided by the IDP must match one in FieldID.
+                The IDP attribute name is the name the IDP assigns to the attribute sent to FieldID that contains the Email Address value.
+            </div>
         </div>
 
         <div class="inputLine">
@@ -83,7 +93,7 @@
                 <label for="alias" class="metadataLabel"><wicket:message key="entityAliasLabel"></wicket:message></label>
                 <input wicket:id="alias" type="text" id="alias" class="metadataInput"/>
             </div>
-            <div class="small metadataDesc">internal mechanism allowing collocating multiple service providers on one server.
+            <div class="small metadataDesc">
                 Set to customer name.
             </div>
         </div>
@@ -103,8 +113,7 @@
                         deemed
                         valid when it's declared in the metadata or extended metadata of the peer entity. No validation of
                         the certificate is
-                        performed (e.g. revocation) and no certificate chains are evaluated. The value is recommended as a
-                        default.
+                        performed (e.g. revocation) and no certificate chains are evaluated.
                     </li>
                     <li>
                         PKIX profile verifies credentials against a set of trust anchors. Certificates present in the

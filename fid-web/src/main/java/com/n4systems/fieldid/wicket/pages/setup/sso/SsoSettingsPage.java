@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.setup.sso;
 
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
+import com.n4systems.fieldid.wicket.FieldIDWicketApp;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
@@ -20,6 +21,11 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.opensaml.saml2.metadata.provider.MetadataProvider;
+import org.opensaml.saml2.metadata.provider.MetadataProviderException;
+import org.springframework.security.saml.metadata.MetadataManager;
+
+import java.util.Iterator;
 
 
 public class SsoSettingsPage extends FieldIDTemplatePage {
@@ -33,9 +39,11 @@ public class SsoSettingsPage extends FieldIDTemplatePage {
     @SpringBean
     private TenantSettingsService tenantSettingsService;
 
+
     public SsoSettingsPage() {
     	super();
-    	addComponents();
+        MetadataManager metadataManager = (MetadataManager) ((FieldIDWicketApp) getApplication()).getApplicationContext().getBean("metadata");
+    	addComponents(metadataManager);
 	}
 
     @Override
@@ -50,7 +58,7 @@ public class SsoSettingsPage extends FieldIDTemplatePage {
         return new FlatLabel(labelId, new FIDLabelModel("title.manage_sso_settings"));
     }
 
-    private void addComponents() {
+    private void addComponents(MetadataManager metadataManager) {
 
         final IModel<Boolean> ssoEnabledSetting = new Model(tenantSettingsService.getTenantSettings().isSsoEnabled());
 
@@ -100,17 +108,40 @@ public class SsoSettingsPage extends FieldIDTemplatePage {
             }
         };
         add(deleteIdpLink);
+
+        Model<String> idpLoadStatusModel = new Model(getString("msg_idp_not_loaded"));
+        String idpEntityId = idpEntityIdModel.getObject();
+        if (idpEntityId != null) {
+            Iterator<MetadataProvider> iter = metadataManager.getProviders().iterator();
+            while (iter.hasNext()) {
+                MetadataProvider provider = iter.next();
+                try {
+                    if (provider.getEntityDescriptor(idpEntityId) != null)
+                       idpLoadStatusModel.setObject(getString("msg_idp_loaded"));
+                }
+                catch(MetadataProviderException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        }
+
+        Label idpLoadStatus = new Label("idpLoadStatus",
+                idpLoadStatusModel);
+        add(idpLoadStatus);
+
         if (idpEntityIdModel.getObject() != null) {
             createIdpLink.setVisible(false);
             idpEntityNameLabel.setVisible(true);
             displayIdpLink.setVisible(true);
             deleteIdpLink.setVisible(true);
+            idpLoadStatus.setVisible(true);
         }
         else {
             createIdpLink.setVisible(true);
             idpEntityNameLabel.setVisible(false);
             displayIdpLink.setVisible(false);
             deleteIdpLink.setVisible(false);
+            idpLoadStatus.setVisible(false);
         }
 
         Model<String> spEntityIdModel = new Model(null);
@@ -157,12 +188,34 @@ public class SsoSettingsPage extends FieldIDTemplatePage {
             }
         };
         add(deleteSpLink);
+
+        Model<String> spLoadStatusModel = new Model(getString("msg_sp_not_loaded"));
+        String spEntityId = spEntityIdModel.getObject();
+        if (spEntityId != null) {
+            Iterator<MetadataProvider> iter = metadataManager.getProviders().iterator();
+            while (iter.hasNext()) {
+                MetadataProvider provider = iter.next();
+                try {
+                    if (provider.getEntityDescriptor(spEntityId) != null)
+                        spLoadStatusModel.setObject(getString("msg_sp_loaded"));
+                }
+                catch(MetadataProviderException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        }
+
+        Label spLoadStatus = new Label("spLoadStatus",
+                spLoadStatusModel);
+        add(spLoadStatus);
+
         if (spEntityIdModel.getObject() != null) {
             createSpLink.setVisible(false);
             spEntityNameLabel.setVisible(true);
             displaySpLink.setVisible(true);
             reviseSpLink.setVisible(true);
             deleteSpLink.setVisible(true);
+            spLoadStatus.setVisible(true);
         }
         else {
             createSpLink.setVisible(true);
@@ -170,6 +223,7 @@ public class SsoSettingsPage extends FieldIDTemplatePage {
             displaySpLink.setVisible(false);
             reviseSpLink.setVisible(false);
             deleteSpLink.setVisible(false);
+            spLoadStatus.setVisible(false);
         }
     }
 

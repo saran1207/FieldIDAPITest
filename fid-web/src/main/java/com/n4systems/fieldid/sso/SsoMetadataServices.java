@@ -21,4 +21,10 @@ public interface SsoMetadataServices {
     public SsoSpMetadata updateSp(SsoSpMetadata spMetadata) throws SsoDuplicateEntityIdException;
 
     public void deleteSp(String entityId);
+
+    public void loadIdpProvider(String entityId);
+
+    public void loadSpProvider(String entityId);
+
+    public boolean unloadProvider(String entityId);
 }
