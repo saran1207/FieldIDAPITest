@@ -121,8 +121,8 @@
     <bean id="parserPoolHolder" class="org.springframework.security.saml.parser.ParserPoolHolder"/>
 
     <bean id="metadata" class="com.n4systems.fieldid.sso.SSOCachingMetadataManager">
-        <property name="RefreshCheckInterval" value="90000"/>
-        <property name="RefreshRequired" value="true"/>
+        <property name="RefreshCheckInterval" value="-1"/>
+        <property name="RefreshRequired" value="false"/>
     </bean>
 
     <!-- Secured pages with SAML as entry point -->
@@ -178,7 +178,7 @@
     </bean>
 
     <!-- Provider of default SAML Context -->
-    <bean id="contextProvider" class="org.springframework.security.saml.context.SAMLContextProviderImpl"/>
+    <bean id="contextProvider" class="com.n4systems.fieldid.sso.ProtocolReplacingSamlContextProviderLB"/>
 
     <!-- Processing filter for WebSSO profile messages -->
     <bean id="samlWebSSOProcessingFilter" class="org.springframework.security.saml.SAMLProcessingFilter">

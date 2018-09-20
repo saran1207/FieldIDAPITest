@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+<wicket:extend>
+    <style>
+        .ssoSettingsButton {
+            background-color: #008bd3;
+            border-color: #007aba;
+            color: white;
+        }
+    </style>
+
+   <h2>SSO Status</h2>
+
+    <div>
+        <label wicket:for="maxAuthenticationAge"><wicket:message key="maxAuthenticationAgeLabel"></wicket:message></label>
+        <input wicket:id="maxAuthenticationAge" type="number"/>
+        <input type="button" wicket:id="updateMaxAuthenticationAge" value="Update" class="ssoSettingsButton"/>
+    </div>
+
+</wicket:extend>
+</html>

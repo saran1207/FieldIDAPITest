@@ -14,6 +14,7 @@ import com.n4systems.fieldid.wicket.pages.admin.config.ConfigPage;
 import com.n4systems.fieldid.wicket.pages.admin.languages.ConfigureLanguagesPage;
 import com.n4systems.fieldid.wicket.pages.admin.printouts.LotoPrintoutListPage;
 import com.n4systems.fieldid.wicket.pages.admin.security.ChangeAdminPasswordPage;
+import com.n4systems.fieldid.wicket.pages.admin.sso.SsoStatusPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.TenantUserListPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
@@ -311,6 +312,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("admin/lotoPrintoutSelection", LotoPrintoutListPage.class);
         mountPage("admin/config", ConfigPage.class);
         mountPage("admin/changeAdmin", ChangeAdminUser.class);
+        mountPage("admin/sso", SsoStatusPage.class);
 
         mountPage("secret/test", SecretTestPage.class);
         mountPage("assetSummary", AssetSummaryPage.class);
