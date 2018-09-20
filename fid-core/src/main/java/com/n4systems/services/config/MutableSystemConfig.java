@@ -68,4 +68,6 @@ public class MutableSystemConfig extends SystemConfig {
 	public void setNewRelicApplicationId(String newRelicApplicationId) { this.newRelicApplicationId = newRelicApplicationId; }
 
 	public void setMinimumAppVersion(String minimumAppVersion) { this.minimumAppVersion = minimumAppVersion; }
+
+	public void setSsoSamlProtocol(String ssoSamlProtocol) { this.ssoSamlProtocol = ssoSamlProtocol; }
 }

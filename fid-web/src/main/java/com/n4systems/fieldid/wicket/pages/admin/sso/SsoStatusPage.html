@@ -10,14 +10,33 @@
             border-color: #007aba;
             color: white;
         }
-    </style>
+        .inputLine {
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        .col1 {
+            float: left;
+            width: 300px;
+            text-align: right;
+            margin-right: 0.5em;
+            white-space: nowrap;
+            overflow: hidden;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+   </style>
 
    <h2>SSO Status</h2>
 
-    <div>
-        <label wicket:for="maxAuthenticationAge"><wicket:message key="maxAuthenticationAgeLabel"></wicket:message></label>
+    <div class="inputLine">
+        <label wicket:for="maxAuthenticationAge" class="col1"><wicket:message key="maxAuthenticationAgeLabel"></wicket:message>:</label>
         <input wicket:id="maxAuthenticationAge" type="number"/>
         <input type="button" wicket:id="updateMaxAuthenticationAge" value="Update" class="ssoSettingsButton"/>
+    </div>
+
+    <div class="inputLine">
+        <label class="col1"><wicket:message key="samlProtocolLabel"></wicket:message>:</label>
+        <label wicket:id="samlProtocol"/>
     </div>
 
 </wicket:extend>
