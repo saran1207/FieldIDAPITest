@@ -42,6 +42,7 @@ public class SsoSettingsPage extends FieldIDTemplatePage {
 
     public SsoSettingsPage() {
     	super();
+        /* Get MetadataManager from the spring context - trying to get it by annotating it as SpringBean doesn't work here */
         MetadataManager metadataManager = (MetadataManager) ((FieldIDWicketApp) getApplication()).getApplicationContext().getBean("metadata");
     	addComponents(metadataManager);
 	}

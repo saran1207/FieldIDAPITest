@@ -24,9 +24,20 @@
             font-weight: bold;
             margin-top: 5px;
         }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th {
+            font-weight: bold;
+            text-align: center;
+            padding: 2px;
+        }
+        td {
+            padding: 2px;
+        }
    </style>
 
-   <h2>SSO Status</h2>
+   <h2><wicket:message key="ssoSettingsLabel"></wicket:message></h2>
 
     <div class="inputLine">
         <label wicket:for="maxAuthenticationAge" class="col1"><wicket:message key="maxAuthenticationAgeLabel"></wicket:message>:</label>
@@ -38,6 +49,23 @@
         <label class="col1"><wicket:message key="samlProtocolLabel"></wicket:message>:</label>
         <label wicket:id="samlProtocol"/>
     </div>
+
+    <h2><wicket:message key="loadedProvidersLabel"></wicket:message></h2>
+    <table style="margin-left:50px; margin-top: 5px;">
+    <tr>
+        <th><wicket:message key="tenantHeaderLabel"></wicket:message></th>
+        <th><wicket:message key="typesHeaderLabel"></wicket:message></th>
+        <th><wicket:message key="entityIdLabel"></wicket:message></th>
+        <th><wicket:message key="baseUrlLabel"></wicket:message></th>
+    </tr>
+        <tr wicket:id="metadataProviderList">
+            <td><span wicket:id="tenant"/></td>
+            <td><span wicket:id="providerType"></span></td>
+            <td><span wicket:id="entityId"/></td>
+            <td><span wicket:id="baseUrl"></span></td>
+        </tr>
+    </table>
+
 
 </wicket:extend>
 </html>

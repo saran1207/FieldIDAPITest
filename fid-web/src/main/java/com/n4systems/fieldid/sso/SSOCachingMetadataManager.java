@@ -12,8 +12,10 @@ import org.opensaml.xml.parse.XMLParserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.saml.metadata.CachingMetadataManager;
 import org.springframework.security.saml.metadata.ExtendedMetadataDelegate;
+import org.springframework.security.saml.websso.WebSSOProfileConsumerImpl;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -33,6 +35,10 @@ public class SSOCachingMetadataManager extends CachingMetadataManager implements
     @Autowired
     private SsoMetadataDao ssoMetadataDao;
 
+    @Autowired
+    @Qualifier("webSSOprofileConsumer")
+    private WebSSOProfileConsumerImpl webSSOProfileConsumerImpl;
+
     @Resource(name="parserPool")
     private ParserPool parserPool;
 
@@ -48,8 +54,16 @@ public class SSOCachingMetadataManager extends CachingMetadataManager implements
      */
     @PostConstruct
     private void init() throws MetadataProviderException, ResourceException, XMLParserException {
+
+        try {
+            webSSOProfileConsumerImpl.setMaxAuthenticationAge(ssoMetadataDao.getSsoGlobalSettings().getMaxAuthenticationAge());
+        }
+        catch(Exception ex) {
+            logger.error("Attempt to set initial max authentication age failed", ex);
+        }
+
         List<MetadataProvider> providers = new ArrayList();
-        for (SsoIdpMetadata idp : ssoMetadataDao.getIdp()) {
+        for (SsoIdpMetadata idp : ssoMetadataDao.getAllIdp()) {
             try {
                 final String serializedMetadata = idp.getSerializedMetadata();
                 MetadataProvider provider = new DatabaseIdpMetadataProvider(ssoMetadataDao, idp.getSsoEntity().getEntityId(), parserPool) {
@@ -65,7 +79,7 @@ public class SSOCachingMetadataManager extends CachingMetadataManager implements
                 logger.error("Attempt to add SSO IDP '" + idp.getSsoEntity().getEntityId() + "' failed", ex);
             }
         }
-        for (SsoSpMetadata sp : ssoMetadataDao.getSpByEntityId()) {
+        for (SsoSpMetadata sp : ssoMetadataDao.getAllSp()) {
             try {
                 DatabaseSpMetadataProvider provider = new DatabaseSpMetadataProvider(ssoMetadataDao, sp.getSsoEntity().getEntityId(), parserPool);
                 ExtendedMetadataDelegate delegate = new ExtendedMetadataDelegate(provider, provider.getExtendedMetadata(sp.getSsoEntity().getEntityId()));

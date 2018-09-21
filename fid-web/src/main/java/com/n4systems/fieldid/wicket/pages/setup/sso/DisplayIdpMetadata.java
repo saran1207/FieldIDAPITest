@@ -33,7 +33,7 @@ public class DisplayIdpMetadata extends FieldIDTemplatePage {
 
     private void addComponents(String entityId) {
 
-        SsoIdpMetadata idpMetadata = ssoMetadataDao.getIdp(entityId);
+        SsoIdpMetadata idpMetadata = ssoMetadataDao.getIdpByEntityId(entityId);
         add(new Label("idpEntityId", Model.of(idpMetadata.getSsoEntity().getEntityId())));
 
         TextArea serializedMetadataField = new TextArea<String>("serializedMetadata",

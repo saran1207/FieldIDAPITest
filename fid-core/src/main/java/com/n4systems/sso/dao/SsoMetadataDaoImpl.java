@@ -2,6 +2,7 @@ package com.n4systems.sso.dao;
 
 import com.n4systems.model.Tenant;
 import com.n4systems.model.sso.SsoEntity;
+import com.n4systems.model.sso.SsoGlobalSettings;
 import com.n4systems.model.sso.SsoIdpMetadata;
 import com.n4systems.model.sso.SsoSpMetadata;
 import org.hibernate.exception.ConstraintViolationException;
@@ -29,7 +30,7 @@ public class SsoMetadataDaoImpl implements SsoMetadataDao {
     }
 
     @Override
-    public SsoIdpMetadata getIdp(String entityId) {
+    public SsoIdpMetadata getIdpByEntityId(String entityId) {
         SsoEntity ssoEntity = entityManager.find(SsoEntity.class, entityId);
         if (ssoEntity == null)
             return null;
@@ -69,7 +70,7 @@ public class SsoMetadataDaoImpl implements SsoMetadataDao {
     }
 
     @Override
-    public List<SsoIdpMetadata> getIdp() {
+    public List<SsoIdpMetadata> getAllIdp() {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<SsoIdpMetadata> query = builder.createQuery(SsoIdpMetadata.class);
         Root<SsoIdpMetadata> root = query.from(SsoIdpMetadata.class);
@@ -103,7 +104,7 @@ public class SsoMetadataDaoImpl implements SsoMetadataDao {
     @Override
     @Transactional
     public void deleteIdpByEntityId(String entityId) {
-        SsoIdpMetadata idp = getIdp(entityId);
+        SsoIdpMetadata idp = getIdpByEntityId(entityId);
         SsoEntity ssoEntity = entityManager.find(SsoEntity.class, idp.getSsoEntity().getEntityId());
         entityManager.remove(idp);
         entityManager.remove(ssoEntity);
@@ -162,7 +163,7 @@ public class SsoMetadataDaoImpl implements SsoMetadataDao {
     }
 
     @Override
-    public List<SsoSpMetadata> getSpByEntityId() {
+    public List<SsoSpMetadata> getAllSp() {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<SsoSpMetadata> query = builder.createQuery(SsoSpMetadata.class);
         Root<SsoSpMetadata> root = query.from(SsoSpMetadata.class);
@@ -209,5 +210,16 @@ public class SsoMetadataDaoImpl implements SsoMetadataDao {
         SsoEntity ssoEntity = entityManager.find(SsoEntity.class, sp.getSsoEntity().getEntityId());
         entityManager.remove(sp);
         entityManager.remove(ssoEntity);
+    }
+
+    @Override
+    public SsoGlobalSettings getSsoGlobalSettings() {
+        return entityManager.find(SsoGlobalSettings.class, new Long(1));
+    }
+
+    @Override
+    @Transactional
+    public SsoGlobalSettings updateSsoGlobalSettings(SsoGlobalSettings ssoGlobalSettings) {
+        return entityManager.merge(ssoGlobalSettings);
     }
 }

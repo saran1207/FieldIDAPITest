@@ -4,6 +4,7 @@ import com.n4systems.fieldid.wicket.pages.FieldIDTemplateWithFeedbackPage;
 import com.n4systems.model.sso.SsoEntity;
 import com.n4systems.model.sso.SsoSpMetadata;
 import com.n4systems.fieldid.sso.SsoMetadataServices;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.sso.dao.SsoDuplicateEntityIdException;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.Url;
@@ -50,7 +51,8 @@ public class GenerateSpMetadata extends FieldIDTemplateWithFeedbackPage {
          */
 
         Url originalUrl = getRequest().getOriginalUrl();
-        String baseUrl = (originalUrl.getProtocol() + "://" +
+        String baseUrl = (ConfigService.getInstance().getConfig().getSystem().getSsoSamlProtocol() +
+                "://" +
                 originalUrl.getHost() + getRequest().getContextPath()).toString();
 
         SsoSpMetadata spMetadata = new SsoSpMetadata();

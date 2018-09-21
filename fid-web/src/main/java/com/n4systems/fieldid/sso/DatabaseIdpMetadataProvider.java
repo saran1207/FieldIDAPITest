@@ -39,7 +39,7 @@ public class DatabaseIdpMetadataProvider extends DatabaseMetadataProvider {
     }
 
     protected String getSerializedIdpMetadata() {
-        String metadataStr = ssoMetadataDao.getIdp(getEntityId()).getSerializedMetadata();
+        String metadataStr = ssoMetadataDao.getIdpByEntityId(getEntityId()).getSerializedMetadata();
         return metadataStr;
     }
 }

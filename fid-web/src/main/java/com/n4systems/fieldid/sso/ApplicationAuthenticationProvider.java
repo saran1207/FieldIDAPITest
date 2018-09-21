@@ -112,6 +112,19 @@ public class ApplicationAuthenticationProvider extends SAMLAuthenticationProvide
                     "' has no match in FieldId");
 
         userDetails.setUserIdInFieldId(fieldIdUser.getId());
+
+        if (fieldIdUser.isLocked())
+            throw new SessionAuthenticationException("Incoming SSO authentication request for SP '" + localEntityId +
+                "' tenant '" + expectedTenant.getName() +
+                "' userId '" + userDetails.getUserId() + "', email '" + userDetails.getEmailAddress() +
+                "' was matched in FieldIs but the userid is locked");
+
+        if (!fieldIdUser.isActive())
+            throw new SessionAuthenticationException("Incoming SSO authentication request for SP '" + localEntityId +
+                    "' tenant '" + expectedTenant.getName() +
+                    "' userId '" + userDetails.getUserId() + "', email '" + userDetails.getEmailAddress() +
+                    "' was matched in FieldIs but the userid is not active");
+
         userDetails.setAuthenticated(true);
         logger.info("Incoming SSO authentication request for SP '" + localEntityId +
                 "' tenant '" + expectedTenant.getName() +
