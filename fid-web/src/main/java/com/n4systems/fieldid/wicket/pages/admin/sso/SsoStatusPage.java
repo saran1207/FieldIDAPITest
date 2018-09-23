@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.admin.sso;
 
+import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.wicket.FieldIDWicketApp;
 import com.n4systems.fieldid.wicket.pages.admin.FieldIDAdminPage;
 import com.n4systems.model.sso.SsoGlobalSettings;
@@ -40,6 +41,9 @@ public class SsoStatusPage extends FieldIDAdminPage {
 
     @SpringBean
     private SsoMetadataDao ssoMetadataDao;
+
+    @SpringBean
+    private TenantSettingsService tenantSettingsService;
 
     public SsoStatusPage() {
         super();
@@ -89,23 +93,34 @@ public class SsoStatusPage extends FieldIDAdminPage {
                     SsoSpMetadata spMetadata = ssoMetadataDao.getSpByEntityId(entityId);
                     if (spMetadata != null) {
                         list.add(new Label("tenant", spMetadata.getTenant().getName()));
+                        list.add(new Label("active",
+                                tenantSettingsService.getTenantSettings(spMetadata.getTenant().getId()).isSsoEnabled()
+                                ? "yes" : "no"));
                         list.add(new Label("providerType", "SP"));
                         list.add(new Label("entityId", entityId));
                         list.add(new Label("baseUrl", spMetadata.getEntityBaseURL()));
+                        list.add(new Label("signAssert",
+                                spMetadata.isWantAssertionSigned() ? "yes" : "no"));
                     }
                     else {
                         SsoIdpMetadata idpMetadata = ssoMetadataDao.getIdpByEntityId(entityId);
                         if (idpMetadata != null) {
                             list.add(new Label("tenant", idpMetadata.getTenant().getName()));
+                            list.add(new Label("active",
+                                    tenantSettingsService.getTenantSettings(idpMetadata.getTenant().getId()).isSsoEnabled()
+                                            ? "yes" : "no"));
                             list.add(new Label("providerType", "IDP"));
                             list.add(new Label("entityId", entityId));
                             list.add(new Label("baseUrl", ""));
+                            list.add(new Label("signAssert", ""));
                         }
                         else {
                             list.add(new Label("tenant", "?"));
+                            list.add(new Label("active", "?"));
                             list.add(new Label("providerType", "?"));
                             list.add(new Label("entityId", entityId));
                             list.add(new Label("baseUrl", ""));
+                            list.add(new Label("signAssert", "?"));
                         }
                     }
 
@@ -114,9 +129,11 @@ public class SsoStatusPage extends FieldIDAdminPage {
             catch(MetadataProviderException ex) {
                 logger.error("Unable to get metadata from provider", ex);
                 list.add(new Label("tenant", "?"));
+                list.add(new Label("active", "?"));
                 list.add(new Label("providerType", "?"));
                 list.add(new Label("entityId", delegate.getDelegate().getClass().getName()));
-                list.add(new Label("baseUrl", ""));
+                list.add(new Label("baseUrl", "?"));
+                list.add(new Label("signAssert", "?"));
             }
             metadataProviderView.add(list);
         }
