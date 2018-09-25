@@ -194,7 +194,7 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 		List<A> items;
 		String logInfo = getLogInfo();
 		String apiCall = listResponseType.getDescriptor().getName();
-		String logMessage = logInfo + apiCall + " FIND with id " + id;
+		String logMessage = logInfo + apiCall + " FIND INSPECTIONS with id " + id;
 		logger.info(logMessage);
 
 		try {
@@ -230,7 +230,7 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 
 		String logInfo = getLogInfo();
 		String apiCall = listResponseType.getDescriptor().getName();
-		String logMessage = logInfo + apiCall + " FIND with id ";
+		String logMessage = logInfo + apiCall + " FIND ALL ACTION ITEMS ";
 		logger.info(logMessage);
 
 		if(date != null) {
@@ -314,7 +314,7 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 		List<A> items;
 		String logInfo = getLogInfo();
 		String apiCall = listResponseType.getDescriptor().getName();
-		String logMessage = logInfo + apiCall + " FIND with id " + id;
+		String logMessage = logInfo + apiCall + " FIND ACTION ITEMS with id " + id;
 		logger.info(logMessage);
 
 		try {
