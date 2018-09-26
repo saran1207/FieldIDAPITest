@@ -21,12 +21,6 @@ public class SsoIdpMetadata implements Serializable {
     @OneToOne
     private SsoEntity ssoEntity;
 
-   /* @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name="idp_tenants",
-        joinColumns = {@JoinColumn(name = "entity_id")},
-        inverseJoinColumns = { @JoinColumn(name = "id")})
-    private List<Tenant> tenants;*/
-
     @JoinColumn(name="tenant_id", unique=true, nullable = false)
     @OneToOne
     private Tenant tenant;

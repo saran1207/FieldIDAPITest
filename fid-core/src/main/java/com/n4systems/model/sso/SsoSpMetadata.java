@@ -13,30 +13,6 @@ import java.util.Collection;
  */
 @Entity
 @Table(name="sso_sp_metadata")
-/*
-@NamedEntityGraphs({
-        @NamedEntityGraph(
-                name = "SpLazyCollections01",
-                attributeNodes = {
-                        @NamedAttributeNode("nameID")
-                }),
-        @NamedEntityGraph(
-                name = "SpLazyCollections02",
-                attributeNodes = {
-                        @NamedAttributeNode("bindingsSSO")
-                }),
-        @NamedEntityGraph(
-                name = "SpLazyCollections03",
-                attributeNodes = {
-                        @NamedAttributeNode("bindingsHoKSSO")
-                }),
-        @NamedEntityGraph(
-                name = "SpLazyCollections03",
-                attributeNodes = {
-                        @NamedAttributeNode("bindingsSLO")
-                })
-    })
-*/
 public class SsoSpMetadata implements Serializable {
 
     @Id
