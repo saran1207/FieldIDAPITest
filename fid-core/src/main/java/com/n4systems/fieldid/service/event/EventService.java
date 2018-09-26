@@ -450,11 +450,12 @@ public class EventService extends CrudService<ThingEvent> {
 
     public List<ThingEvent> getLastEventOfEachType(Long assetId, int page, int pageSize, boolean openInspection) {
         QueryBuilder<EventIdTypeAndCompletedView> builder = new QueryBuilder<>(ThingEvent.class, securityContext.getTenantSecurityFilter());
-        builder.setSelectArgument(new NewObjectSelect(EventIdTypeAndCompletedView.class, "id", "type.id", "completedDate"));
         builder.addWhere(WhereClauseFactory.create("asset.id", assetId));
         if(openInspection) {
+            builder.setSelectArgument(new NewObjectSelect(EventIdTypeAndCompletedView.class, "id", "type.id", "dueDate"));
             builder.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.OPEN));
         } else {
+            builder.setSelectArgument(new NewObjectSelect(EventIdTypeAndCompletedView.class, "id", "type.id", "completedDate"));
             builder.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.COMPLETED));
         }
         List<EventIdTypeAndCompletedView> allEvents = persistenceService.findAll(builder, page, pageSize);
@@ -477,11 +478,12 @@ public class EventService extends CrudService<ThingEvent> {
 
     public List<ThingEvent> getLastActionItemOfEachType(Long assetId, int page, int pageSize, boolean openActionItems) {
         QueryBuilder<EventIdTypeAndCompletedView> builder = new QueryBuilder<>(ThingEvent.class, securityContext.getTenantSecurityFilter());
-        builder.setSelectArgument(new NewObjectSelect(EventIdTypeAndCompletedView.class, "id", "type.id", "completedDate"));
         builder.addWhere(WhereClauseFactory.create("asset.id", assetId));
         if(openActionItems) {
+            builder.setSelectArgument(new NewObjectSelect(EventIdTypeAndCompletedView.class, "id", "type.id", "dueDate"));
             builder.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.OPEN));
         } else {
+            builder.setSelectArgument(new NewObjectSelect(EventIdTypeAndCompletedView.class, "id", "type.id", "completedDate"));
             builder.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.COMPLETED));
         }
         builder.addWhere(WhereParameter.Comparator.NOTNULL, "triggerEvent", "triggerEvent", "");
