@@ -1,0 +1,89 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<wicket:extend>
+    <style>
+        .dataLine {
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        .metadataLabel {
+            float: left;
+            width: 200px;
+            text-align: right;
+            margin-right: 0.5em;
+            white-space: nowrap;
+            overflow: hidden;
+            font-weight: bold;
+        }
+        .metadataSecondColLabel {
+            padding-left: 10px;
+            font-weight: bold;
+            display: inline-block;
+        }
+    </style>
+<h2>Service Provider Definition</h2>
+<br>
+
+    <div class="dataLine">
+        <label class="metadataLabel">Entity ID:</label>
+        <span wicket:id="entityId"/>
+    </div>
+
+    <div class="dataLine">
+        <label class="metadataLabel">Match on UserId:</label>
+        <span wicket:id="matchOnUserId"/>
+    </div>
+    <div class="dataLine">
+        <label class="metadataLabel">UserId SAML attribute:</label>
+        <span wicket:id="userIdMatchAttribute"></span>
+    </div>
+
+    <div class="dataLine">
+        <label class="metadataLabel">Match on Email Address:</label>
+        <span wicket:id="matchOnEmailAddress"/>
+    </div>
+    <div class="dataLine">
+        <label class="metadataLabel">Email Address SAML attribute:</label>
+        <span wicket:id="emailAddressMatchAttribute"></span>
+    </div>
+
+    <div class="dataLine">
+        <label class="metadataLabel">URL:</label>
+        <span wicket:id="entityBaseUrl"></span>
+    </div>
+
+    <div class="dataLine">
+        <label class="metadataLabel">Alias:</label>
+        <span wicket:id="alias"/>
+    </div>
+
+    <div class="dataLine">
+        <label class="metadataLabel">Signature security profile</label>
+        <span wicket:id="securityProfile"></span>
+    </div>
+
+    <div class="dataLine">
+        <label class="metadataLabel">SSL/TLS security profile</label>
+        <span wicket:id="sslSecurityProfile"></span>
+    </div>
+
+    <div class="dataLine">
+        <label class="metadataLabel">SSL Hostname Verification:</label>
+        <span wicket:id="sslHostnameVerification"></span>
+    </div>
+
+    <div class="dataLine">
+        <label class="metadataLabel">Assertions Signed:</label>
+        <span wicket:id="wantAssertionSigned"></span>
+    </div>
+
+    <div>
+        <label wicket:for="serializedMetadata" style="font-weight: bold;">Metadata:</label>
+        <textarea wicket:id="serializedMetadata" readonly="readonly" style="width: 80%; min-height:200px;"></textarea>
+    </div>
+
+    <a href="#" wicket:id="downloadMetadata">Download Metadata</a>
+
+    <p style="margin-top: 20px;"><a href="#" wicket:id="backLink">&lt;&lt Back</a></p>
+
+</wicket:extend>
+</html>

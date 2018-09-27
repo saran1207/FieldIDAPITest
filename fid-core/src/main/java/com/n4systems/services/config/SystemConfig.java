@@ -19,6 +19,7 @@ public class SystemConfig {
 	protected String newRelicLicenseKey;
 	protected String newRelicApplicationId;
 	protected String minimumAppVersion;
+	protected String ssoSamlProtocol = "https";
 
 	public SystemConfig() {}
 
@@ -41,6 +42,7 @@ public class SystemConfig {
 		this.newRelicLicenseKey = other.newRelicLicenseKey;
 		this.newRelicApplicationId = other.newRelicApplicationId;
 		this.minimumAppVersion = other.minimumAppVersion;
+		this.ssoSamlProtocol = other.ssoSamlProtocol;
 	}
 
 	public String getNodeName() {
@@ -118,6 +120,8 @@ public class SystemConfig {
 		return minimumAppVersion;
 	}
 
+	public String getSsoSamlProtocol() { return ssoSamlProtocol; }
+
 	@Override
 	public String toString() {
 		return  "\t\tnodeName: '" + nodeName + "'\n" +
@@ -137,6 +141,7 @@ public class SystemConfig {
 				"\t\tdefaultTimezoneId: '" + defaultTimezoneId + "'\n" +
 				"\t\tnewRelicLicenseKey: '" + newRelicLicenseKey + "'\n" +
 				"\t\tnewRelicApplicationId: '" + newRelicApplicationId + "'\n" +
-				"\t\tminimumAppVersion: '" + minimumAppVersion + "'\n";
+				"\t\tminimumAppVersion: '" + minimumAppVersion + "'\n" +
+				"\t\tssoSamlProtocol: '" + ssoSamlProtocol + "'\n";
 	}
 }

@@ -1,0 +1,185 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<wicket:panel>
+    <style>
+        .metadataLabel {
+            float: left;
+            width: 300px;
+            text-align: right;
+            margin-right: 0.5em;
+            white-space: nowrap;
+            overflow: hidden;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        .metadataInput {
+            padding-left: 0.5em;
+        }
+        .metadataSecondColLabel {
+            padding-left: 10px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .metadataDesc {
+            float: left;
+            margin-top: 2px;
+            margin-left: 305px;
+            padding-left: 0.5em;
+            overflow: hidden;
+        }
+        .inputLine {
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+    </style>
+    <form wicket:id="metadataForm">
+
+        <div class="inputLine">
+            <div>
+                <label for="entityId" class="metadataLabel"><wicket:message key="entityIdLabel"></wicket:message></label>
+                <input wicket:id="entityId" type="text" id="entityId" class="metadataInput" style="width: 300px;"/>
+            </div>
+            <div class="small metadataDesc">Unique identifier for this Service Provider.
+            </div>
+        </div>
+
+        <div class="inputLine">
+            <div>
+                <label for="baseURL" class="metadataLabel"><wicket:message key="entityBaseUrlLabel"></wicket:message></label>
+                <input wicket:id="baseURL" type="text" id="baseURL" class="metadataInput" style="width: 300px;"/>
+            </div>
+            <div class="small metadataDesc">
+                Url of your FieldId home page.
+            </div>
+        </div>
+
+        <div class="inputLine">
+            <div>
+                <label wicket:for="matchOnUserId" class="metadataLabel"><wicket:message key="matchOnUserIdLabel"></wicket:message></label>
+                <select wicket:id="matchOnUserId" class="metadataInput" >
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+                <label wicket:for="userIdAttributeName" class="metadataSecondColLabel">
+                    <wicket:message key="attributeName"></wicket:message>
+                </label>
+                <input wicket:id="userIdAttributeName" type="text"/>
+            </div>
+            <div class="small metadataDesc">
+                If this option is selected the User ID provided by the IDP must match one in FieldID.
+                The IDP attribute name is the name the IDP assigns to the attribute sent to FieldID that contains the User ID value.
+            </div>
+        </div>
+
+        <div class="inputLine">
+            <div>
+                <label wicket:for="matchOnEmailAddress" class="metadataLabel"><wicket:message key="matchOnEmailAddressLabel"></wicket:message></label>
+                <select wicket:id="matchOnEmailAddress" class="metadataInput">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+                <label wicket:for="emailAddressAttributeName" class="metadataSecondColLabel">
+                    <wicket:message key="attributeName"></wicket:message>
+                </label>
+                <input wicket:id="emailAddressAttributeName" type="text"/>
+            </div>
+            <div class="small metadataDesc">
+                If this option is selected the Email Address provided by the IDP must match one in FieldID.
+                The IDP attribute name is the name the IDP assigns to the attribute sent to FieldID that contains the Email Address value.
+            </div>
+        </div>
+
+        <div class="inputLine">
+            <div>
+                <label for="alias" class="metadataLabel"><wicket:message key="entityAliasLabel"></wicket:message></label>
+                <input wicket:id="alias" type="text" id="alias" class="metadataInput"/>
+            </div>
+            <div class="small metadataDesc">
+                Set to customer name.
+            </div>
+        </div>
+
+        <div class="inputLine">
+            <div><label for="securityProfile" class="metadataLabel"><wicket:message key="securityProfileLabel"></wicket:message></label>
+                <select wicket:id="securityProfile" id="securityProfile" class="metadataInput">
+                    <option value="metaiop">MetaIOP</option>
+                    <option value="pkix">PKIX</option>
+                </select>
+            </div>
+            <div class="small metadataDesc">
+                Security profile determines how is trust of digital signatures handled:
+                <ul>
+                    <li>
+                        In <a href="http://wiki.oasis-open.org/security/SAML2MetadataIOP">MetaIOP</a> mode certificate is
+                        deemed
+                        valid when it's declared in the metadata or extended metadata of the peer entity. No validation of
+                        the certificate is
+                        performed (e.g. revocation) and no certificate chains are evaluated.
+                    </li>
+                    <li>
+                        PKIX profile verifies credentials against a set of trust anchors. Certificates present in the
+                        metadata or extended metadata of the peer entity are treated as trust anchors, together with all
+                        keys in
+                        the keystore. Certificate chains are verified in this mode.
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="inputLine">
+            <div>
+                <label for="sslSecurityProfile" class="metadataLabel"><wicket:message key="sslSecurityProfileLabel"></wicket:message></label>
+                <select wicket:id="sslSecurityProfile" id="sslSecurityProfile" class="metadataInput">
+                    <option value="pkix">PKIX</option>
+                    <option value="metaiop">MetaIOP</option>
+                </select>
+            </div>
+            <div class="small metadataDesc">
+                SSL/TLS Security profile determines how is trust of peer's SSL/TLS certificate (e.g. during Artifact
+                resolution) handled:
+                <ul>
+                    <li>
+                        PKIX profile verifies peer's certificate against a set of trust anchors. All certificates defined in
+                        metadata,
+                        extended metadata or present in the keystore are considered as trusted anchors (certification
+                        authorities)
+                        for PKIX validation.
+                    </li>
+                    <li>
+                        In MetaIOP mode server's SSL/TLS certificate is trusted when it's explicitly declared in metadata or
+                        extended metadata of
+                        the peer.
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="inputLine">
+            <div>
+                <label wicket:for="sslHostnameVerification" class="metadataLabel"><wicket:message key="hostnameVerificationLabel"></wicket:message></label>
+                <select wicket:id="sslHostnameVerification" class="metadataInput">
+                    <option value="default"></option>
+                </select>
+            </div>
+            <div class="small metadataDesc">
+                Algorithm for verification of match between hostname in URL and hostname in the presented certificate.
+            </div>
+        </div>
+
+        <div class="inputLine">
+            <div>
+                <label wicket:for="wantAssertionSigned" class="metadataLabel"><wicket:message key="requireSignedAssertionLabel"></wicket:message></label>
+                <select wicket:id="wantAssertionSigned" class="metadataInput">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+        </div>
+
+        <br>
+        <div>
+            <input type="submit" class="btn-primary" wicket:message="value:submitButton" style="margin-right: 10px;"/><a href="#" wicket:id="cancelLink">Cancel</a>
+        </div>
+
+    </form>
+</wicket:panel>
+</html>

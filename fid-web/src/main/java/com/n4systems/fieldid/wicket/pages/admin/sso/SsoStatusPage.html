@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+<wicket:extend>
+    <style>
+        .ssoSettingsButton {
+            background-color: #008bd3;
+            border-color: #007aba;
+            color: white;
+        }
+        .inputLine {
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        .col1 {
+            float: left;
+            width: 300px;
+            text-align: right;
+            margin-right: 0.5em;
+            white-space: nowrap;
+            overflow: hidden;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th {
+            font-weight: bold;
+            text-align: center;
+            padding: 2px;
+        }
+        td {
+            padding: 2px;
+        }
+   </style>
+
+   <h2><wicket:message key="ssoSettingsLabel"></wicket:message></h2>
+
+    <div class="inputLine">
+        <label wicket:for="maxAuthenticationAge" class="col1"><wicket:message key="maxAuthenticationAgeLabel"></wicket:message>:</label>
+        <input wicket:id="maxAuthenticationAge" type="number"/>
+        <input type="button" wicket:id="updateMaxAuthenticationAge" value="Update" class="ssoSettingsButton"/>
+    </div>
+
+    <div class="inputLine">
+        <label class="col1"><wicket:message key="samlProtocolLabel"></wicket:message>:</label>
+        <label wicket:id="samlProtocol"/>
+    </div>
+
+    <h2><wicket:message key="loadedProvidersLabel"></wicket:message></h2>
+    <table style="margin-left:50px; margin-top: 5px;">
+    <tr>
+        <th><wicket:message key="tenantHeaderLabel"></wicket:message></th>
+        <th><wicket:message key="activeLabel"></wicket:message></th>
+        <th><wicket:message key="typesHeaderLabel"></wicket:message></th>
+        <th><wicket:message key="entityIdLabel"></wicket:message></th>
+        <th><wicket:message key="baseUrlLabel"></wicket:message></th>
+        <th><wicket:message key="signAssertLabel"></wicket:message></th>
+    </tr>
+        <tr wicket:id="metadataProviderList">
+            <td><span wicket:id="tenant"></span></td>
+            <td><span wicket:id="active"></span></td>
+            <td><span wicket:id="providerType"></span></td>
+            <td><span wicket:id="entityId"></span></td>
+            <td><span wicket:id="baseUrl"></span></td>
+            <td><span wicket:id="signAssert"></span></td>
+        </tr>
+    </table>
+
+
+</wicket:extend>
+</html>

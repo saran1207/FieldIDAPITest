@@ -702,4 +702,8 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	public boolean isGoogleTranslateAllowed() {
 		return getSecurityGuard().isGoogleTranslateEnabled();
 	}
+
+	public boolean isSsoFeatureEnabled(){
+		return getPrimaryOrg().hasExtendedFeature(ExtendedFeature.SSO);
+	}
 }
