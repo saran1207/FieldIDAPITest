@@ -59,6 +59,52 @@ message AssetMessage {
 	repeated AttributeMessage attributes	= 31;
 }
 
+message EventMessage {
+    optional string id 						= 1;
+	optional string createdDate 			= 2;
+	optional string modifiedDate 			= 3;
+	optional string completedDate           = 4;
+	optional string createdByUserName 		= 5;
+	optional string createdByUserId 		= 6;
+	optional string modifiedByUserName 		= 7;
+	optional string modifiedByUserId 		= 8;
+
+	optional string assignedToUserName	 	= 9;
+	optional string assignedToUserId 		= 10;
+
+	optional string completedByUserName 	= 11;
+   	optional string completedByUserId 		= 12;
+
+    enum EventResult {
+    		PASS 		= 1;
+    		FAIL 	    = 2;
+    		NA 	        = 3;
+    		VOID 		= 4;
+    	}
+    required EventResult eventResult    	= 13;
+
+    enum WorkflowState {
+    		OPEN 		= 1;
+    		COMPLETED 	= 2;
+    		CLOSED 	    = 3;
+    		NONE 		= 4;
+    	}
+    required WorkflowState workflowState	= 14;
+
+	optional string ownerName 				= 15;
+	required string ownerId 				= 16;
+	optional string eventTypeName 			= 17;
+   	optional string eventTypeId 			= 18;
+
+    required string identifier 				= 19;
+   	optional string rfidNumber 				= 20;
+   	optional string customerRefNumber 		= 21;
+	optional string assetId		 			= 22;
+	optional string comments				= 23;
+	optional string score					= 24;
+
+}
+
 message AssetStatusMessage {
 	optional string id 					= 1;
 	optional string createdDate 		= 2;
@@ -275,4 +321,5 @@ extend ListResponseMessage {
 	repeated PredefinedLocationMessage locations			= 1005 [(serialized_name) = "list"];
 	repeated UserMessage users								= 1006 [(serialized_name) = "list"];
 	repeated UserGroupMessage userGroups					= 1007 [(serialized_name) = "list"];
+	repeated EventMessage events							= 1008 [(serialized_name) = "list"];
 }
