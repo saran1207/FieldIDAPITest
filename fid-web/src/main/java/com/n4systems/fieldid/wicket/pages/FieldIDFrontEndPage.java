@@ -52,6 +52,7 @@ import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
 import com.n4systems.fieldid.wicket.pages.setup.security.AccountPolicyPage;
 import com.n4systems.fieldid.wicket.pages.setup.security.OfflinePolicyPage;
 import com.n4systems.fieldid.wicket.pages.setup.security.PasswordPolicyPage;
+import com.n4systems.fieldid.wicket.pages.setup.sso.SsoSettingsPage;
 import com.n4systems.fieldid.wicket.pages.setup.translations.AssetTypeGroupTranslationsPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UserGroupsPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UsersListPage;
@@ -81,6 +82,7 @@ import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -433,7 +435,11 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     	container.add(new BookmarkablePageLink<Void>("systemSettingsLink", SystemSettingsPage.class));
     	container.add(new BookmarkablePageLink<Void>("yourPlanLink", YourPlanPage.class));
 
-    	return container;
+        Link ssoSettingsPageLink = new BookmarkablePageLink<Void>("ssoSettingsLink", SsoSettingsPage.class);
+        container.add(ssoSettingsPageLink);
+        ssoSettingsPageLink.setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.SSO));
+
+        return container;
     }
     
     private Component createOwnersSubMenu() {

@@ -127,4 +127,9 @@ public class AlwaysOffSystemSecurityGuardTestDouble implements SystemSecurityGua
 	public boolean isGoogleTranslateEnabled() {
 		return false;
 	}
+
+	@Override
+	public boolean isSSOEnabled() {
+		return false;
+	}
 }

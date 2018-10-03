@@ -55,6 +55,9 @@
     <li>
         <a href="/fieldid/w/admin/configureLanguages">Languages</a>
     </li>
+    <li>
+        <a href="/fieldid/w/admin/sso">SSO</a>
+    </li>
 	</#if>
 
 </ul>

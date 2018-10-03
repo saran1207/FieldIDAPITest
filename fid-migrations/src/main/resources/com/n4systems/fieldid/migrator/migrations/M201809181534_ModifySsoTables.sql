@@ -1,0 +1,1 @@
+alter table sso_idp_metadata modify metadata MEDIUMTEXT;

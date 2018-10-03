@@ -181,6 +181,19 @@ public class OrgService extends CrudService<BaseOrg> {
         return getPrimaryOrgForTenant(tenantId, true);
     }
 
+    /**
+     * Get primary org for tenant. This method is intended to be used when there may not be
+     * a FieldId session setup (such as in authenticating an incoming SSO request).
+     * @param tenantId
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public PrimaryOrg getPrimaryOrgForTenantNoSecurityFilter(Long tenantId) {
+        QueryBuilder<PrimaryOrg> query =  new QueryBuilder<>(PrimaryOrg.class, new OpenSecurityFilter());
+        query.addSimpleWhere("tenant.id", tenantId);
+        return persistenceService.find(query);
+    }
+
     public List<BaseOrg> getVisibleOrgs() {
         QueryBuilder<BaseOrg> query = createUserSecurityBuilder(BaseOrg.class);
         query.applyFilter(new OwnerAndDownFilter(getCurrentUser().getOwner()));

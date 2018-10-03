@@ -14,6 +14,7 @@ import com.n4systems.fieldid.wicket.pages.admin.config.ConfigPage;
 import com.n4systems.fieldid.wicket.pages.admin.languages.ConfigureLanguagesPage;
 import com.n4systems.fieldid.wicket.pages.admin.printouts.LotoPrintoutListPage;
 import com.n4systems.fieldid.wicket.pages.admin.security.ChangeAdminPasswordPage;
+import com.n4systems.fieldid.wicket.pages.admin.sso.SsoStatusPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.TenantUserListPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
@@ -88,6 +89,7 @@ import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigur
 import com.n4systems.fieldid.wicket.pages.setup.security.AccountPolicyPage;
 import com.n4systems.fieldid.wicket.pages.setup.security.OfflinePolicyPage;
 import com.n4systems.fieldid.wicket.pages.setup.security.PasswordPolicyPage;
+import com.n4systems.fieldid.wicket.pages.setup.sso.SsoSettingsPage;
 import com.n4systems.fieldid.wicket.pages.setup.translations.*;
 import com.n4systems.fieldid.wicket.pages.setup.user.*;
 import com.n4systems.fieldid.wicket.pages.setup.userregistration.UserRequestListPage;
@@ -104,7 +106,6 @@ import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
 import com.n4systems.fieldid.wicket.resources.TenantOverridesResourceLoader;
 import com.n4systems.fieldid.wicket.util.PagePerformanceListener;
 import com.n4systems.fieldid.wicket.util.PlainDateConverter;
-import com.n4systems.model.security.OfflinePolicy;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.security.Permissions;
 import org.apache.wicket.*;
@@ -134,6 +135,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/templates", TemplatesPage.class);
         mountPage("setup/widgets", WidgetsPage.class);
         mountPage("setup/systemSettings", SystemSettingsPage.class);
+        mountPage("setup/ssoSettings", SsoSettingsPage.class);
         mountPage("setup/yourPlan", YourPlanPage.class);
         mountPage("setup/identifierOverrides", IdentifierOverridesPage.class);
         mountPage("setup/passwordPolicy", PasswordPolicyPage.class);
@@ -310,6 +312,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("admin/lotoPrintoutSelection", LotoPrintoutListPage.class);
         mountPage("admin/config", ConfigPage.class);
         mountPage("admin/changeAdmin", ChangeAdminUser.class);
+        mountPage("admin/sso", SsoStatusPage.class);
 
         mountPage("secret/test", SecretTestPage.class);
         mountPage("assetSummary", AssetSummaryPage.class);

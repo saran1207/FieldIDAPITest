@@ -67,6 +67,9 @@ public class TenantSettings extends EntityWithTenant {
 	@Embedded
 	private OfflinePolicy offlinePolicy = new OfflinePolicy();
 
+	@Column(name="sso_enabled", nullable = false)
+	private boolean ssoEnabled = false;
+
 	@Override
 	protected void onUpdate() {
 		super.onUpdate();
@@ -215,5 +218,13 @@ public class TenantSettings extends EntityWithTenant {
 
 	public void setOfflinePolicy(OfflinePolicy offlinePolicy) {
 		this.offlinePolicy = offlinePolicy;
+	}
+
+	public boolean isSsoEnabled() {
+		return ssoEnabled;
+	}
+
+	public void setSsoEnabled(boolean ssoEnabled) {
+		this.ssoEnabled = ssoEnabled;
 	}
 }

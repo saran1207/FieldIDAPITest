@@ -124,5 +124,10 @@ public class PublicApiConfig {
 		return new UserGroupResource();
 	}
 
+	@Bean(initMethod = "init")
+	public EventResource eventResource() {
+		return new EventResource();
+	}
+
 }
 

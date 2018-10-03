@@ -3,8 +3,10 @@ package com.n4systems.fieldid.service;
 import com.n4systems.model.PublicIdEncoder;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereParameter;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 public abstract class CrudService<T extends AbstractEntity> extends FieldIdPersistenceService {
@@ -35,13 +37,57 @@ public abstract class CrudService<T extends AbstractEntity> extends FieldIdPersi
 	}
 
 	@Transactional(readOnly = true)
+	public List<T> findAll(int page, int pageSize, Date delta) {
+		QueryBuilder<T> builder = createUserSecurityBuilder(entity);
+		builder.addWhere(WhereParameter.Comparator.GE, "modified", "modified", delta);
+		return findAll(builder, page, pageSize);
+	}
+
+	@Transactional(readOnly = true)
 	public List<T> findAll(QueryBuilder<T> builder, int page, int pageSize) {
 		return persistenceService.findAll(builder, page, pageSize);
 	}
 
 	@Transactional(readOnly = true)
+	public List<T> findAllActionItem(int page, int pageSize) {
+		QueryBuilder<T> builder = createUserSecurityBuilder(entity);
+		builder.addWhere(WhereParameter.Comparator.NOTNULL, "triggerEvent", "triggerEvent", "");
+		return findAll(builder, page, pageSize);
+	}
+
+	@Transactional(readOnly = true)
+	public List<T> findAllActionItem(int page, int pageSize, Date delta) {
+		QueryBuilder<T> builder = createUserSecurityBuilder(entity);
+		builder.addWhere(WhereParameter.Comparator.GE, "modified", "modified", delta);
+		builder.addWhere(WhereParameter.Comparator.NOTNULL, "triggerEvent", "triggerEvent", "");
+		return findAll(builder, page, pageSize);
+	}
+
+	@Transactional(readOnly = true)
+	public Long countAllActionItem(Date delta) {
+		QueryBuilder<T> builder = createUserSecurityBuilder(entity);
+		builder.addWhere(WhereParameter.Comparator.GE, "modified", "modified", delta);
+		builder.addWhere(WhereParameter.Comparator.NOTNULL, "triggerEvent", "triggerEvent", "");
+		return count(builder);
+	}
+
+	@Transactional(readOnly = true)
+	public Long countAllActionItem() {
+		QueryBuilder<T> builder = createUserSecurityBuilder(entity);
+		builder.addWhere(WhereParameter.Comparator.NOTNULL, "triggerEvent", "triggerEvent", "");
+		return count(builder);
+	}
+
+	@Transactional(readOnly = true)
 	public Long count() {
 		return count(createUserSecurityBuilder(entity));
+	}
+
+	@Transactional(readOnly = true)
+	public Long count(Date delta) {
+		QueryBuilder<T> builder = createUserSecurityBuilder(entity);
+		builder.addWhere(WhereParameter.Comparator.GE, "modified", "modified", delta);
+		return count(builder);
 	}
 
 	@Transactional(readOnly = true)
@@ -68,5 +114,15 @@ public abstract class CrudService<T extends AbstractEntity> extends FieldIdPersi
 	@Transactional
 	public T saveOrUpdate(T model) {
 		return persistenceService.saveOrUpdate(model);
+	}
+
+	@Transactional
+	public List<T> findByAssetId(String assetId, int page, int pageSize, boolean openInspections) {
+		throw new UnsupportedOperationException(); // This operation is not supported for all entity types
+	}
+
+	@Transactional
+	public List<T> findActionItemByAssetId(String assetId, int page, int pageSize, boolean openActionItems) {
+		throw new UnsupportedOperationException(); // This operation is not supported for all entity types
 	}
 }

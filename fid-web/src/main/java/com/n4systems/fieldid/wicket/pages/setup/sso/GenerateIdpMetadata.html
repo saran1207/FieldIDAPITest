@@ -1,0 +1,35 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<wicket:extend>
+    <div class="post-title"><h2 class="label label-green">Provide IDP information</h2></div>
+    <div class="post-body">
+        <form wicket:id="metadataForm">
+            <fieldset style="margin-left: 20px; margin: 8px; border: 1px solid silver; padding: 20px; padding-top:5px; border-radius: 4px;">
+                <H2 style="font-weight: bold">Get IDP information URL</H2>
+                <div style="margin-top: 5px;">
+                    <label wicket:for="idpLoadUrl"><wicket:message key="idpLoadUrlLabel"></wicket:message></label>
+                    <input wicket:id="idpLoadUrl" type="text" style="width: 30%;"/>
+                    <label wicket:for="idpLoadTimeout"><wicket:message key="idpLoadTimeoutLabel"></wicket:message></label>
+                    <input wicket:id="idpLoadTimeout" type="number"/>
+                    <div>
+                        <input type="button" wicket:id="getMetadata" class="btn-primary" value="Get Metadata from IDP"/>
+                    </div>
+                </div>
+            </fieldset>
+            <div>
+                <div>
+                    <label wicket:for="entityId"><wicket:message key="idpEntityIdLabel"></wicket:message></label>
+                    <input wicket:id="entityId" type="text" style="width: 30%;"/>
+                </div>
+                <br/>
+                <div>
+                    <label wicket:for="serializedMetadata"> <wicket:message key="serializedMetadataLabel"></wicket:message></label>
+                    <textarea wicket:id="serializedMetadata" rows="40" style="width: 80%;"></textarea>
+                </div>
+            </div>
+            <br/>
+            <input type="submit" class="btn-primary" value="Save" style="margin-right: 10px;"/><a href="#" wicket:id="backLink">Cancel</a>
+        </form>
+
+    </div>
+</wicket:extend>
+</html>

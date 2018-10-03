@@ -16,6 +16,7 @@ public final class Messages {
     registry.add(com.n4systems.fieldid.api.pub.model.Messages.locations);
     registry.add(com.n4systems.fieldid.api.pub.model.Messages.users);
     registry.add(com.n4systems.fieldid.api.pub.model.Messages.userGroups);
+    registry.add(com.n4systems.fieldid.api.pub.model.Messages.events);
   }
   /**
    * Protobuf enum {@code com.n4systems.fieldid.api.pub.model.AttributeValueType}
@@ -6423,6 +6424,4185 @@ public final class Messages {
     }
 
     // @@protoc_insertion_point(class_scope:com.n4systems.fieldid.api.pub.model.AssetMessage)
+  }
+
+  public interface EventMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.n4systems.fieldid.api.pub.model.EventMessage)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>optional string id = 1;</code>
+     */
+    boolean hasId();
+    /**
+     * <code>optional string id = 1;</code>
+     */
+    java.lang.String getId();
+    /**
+     * <code>optional string id = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getIdBytes();
+
+    /**
+     * <code>optional string createdDate = 2;</code>
+     */
+    boolean hasCreatedDate();
+    /**
+     * <code>optional string createdDate = 2;</code>
+     */
+    java.lang.String getCreatedDate();
+    /**
+     * <code>optional string createdDate = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getCreatedDateBytes();
+
+    /**
+     * <code>optional string modifiedDate = 3;</code>
+     */
+    boolean hasModifiedDate();
+    /**
+     * <code>optional string modifiedDate = 3;</code>
+     */
+    java.lang.String getModifiedDate();
+    /**
+     * <code>optional string modifiedDate = 3;</code>
+     */
+    com.google.protobuf.ByteString
+        getModifiedDateBytes();
+
+    /**
+     * <code>optional string completedDate = 4;</code>
+     */
+    boolean hasCompletedDate();
+    /**
+     * <code>optional string completedDate = 4;</code>
+     */
+    java.lang.String getCompletedDate();
+    /**
+     * <code>optional string completedDate = 4;</code>
+     */
+    com.google.protobuf.ByteString
+        getCompletedDateBytes();
+
+    /**
+     * <code>optional string createdByUserName = 5;</code>
+     */
+    boolean hasCreatedByUserName();
+    /**
+     * <code>optional string createdByUserName = 5;</code>
+     */
+    java.lang.String getCreatedByUserName();
+    /**
+     * <code>optional string createdByUserName = 5;</code>
+     */
+    com.google.protobuf.ByteString
+        getCreatedByUserNameBytes();
+
+    /**
+     * <code>optional string createdByUserId = 6;</code>
+     */
+    boolean hasCreatedByUserId();
+    /**
+     * <code>optional string createdByUserId = 6;</code>
+     */
+    java.lang.String getCreatedByUserId();
+    /**
+     * <code>optional string createdByUserId = 6;</code>
+     */
+    com.google.protobuf.ByteString
+        getCreatedByUserIdBytes();
+
+    /**
+     * <code>optional string modifiedByUserName = 7;</code>
+     */
+    boolean hasModifiedByUserName();
+    /**
+     * <code>optional string modifiedByUserName = 7;</code>
+     */
+    java.lang.String getModifiedByUserName();
+    /**
+     * <code>optional string modifiedByUserName = 7;</code>
+     */
+    com.google.protobuf.ByteString
+        getModifiedByUserNameBytes();
+
+    /**
+     * <code>optional string modifiedByUserId = 8;</code>
+     */
+    boolean hasModifiedByUserId();
+    /**
+     * <code>optional string modifiedByUserId = 8;</code>
+     */
+    java.lang.String getModifiedByUserId();
+    /**
+     * <code>optional string modifiedByUserId = 8;</code>
+     */
+    com.google.protobuf.ByteString
+        getModifiedByUserIdBytes();
+
+    /**
+     * <code>optional string assignedToUserName = 9;</code>
+     */
+    boolean hasAssignedToUserName();
+    /**
+     * <code>optional string assignedToUserName = 9;</code>
+     */
+    java.lang.String getAssignedToUserName();
+    /**
+     * <code>optional string assignedToUserName = 9;</code>
+     */
+    com.google.protobuf.ByteString
+        getAssignedToUserNameBytes();
+
+    /**
+     * <code>optional string assignedToUserId = 10;</code>
+     */
+    boolean hasAssignedToUserId();
+    /**
+     * <code>optional string assignedToUserId = 10;</code>
+     */
+    java.lang.String getAssignedToUserId();
+    /**
+     * <code>optional string assignedToUserId = 10;</code>
+     */
+    com.google.protobuf.ByteString
+        getAssignedToUserIdBytes();
+
+    /**
+     * <code>optional string completedByUserName = 11;</code>
+     */
+    boolean hasCompletedByUserName();
+    /**
+     * <code>optional string completedByUserName = 11;</code>
+     */
+    java.lang.String getCompletedByUserName();
+    /**
+     * <code>optional string completedByUserName = 11;</code>
+     */
+    com.google.protobuf.ByteString
+        getCompletedByUserNameBytes();
+
+    /**
+     * <code>optional string completedByUserId = 12;</code>
+     */
+    boolean hasCompletedByUserId();
+    /**
+     * <code>optional string completedByUserId = 12;</code>
+     */
+    java.lang.String getCompletedByUserId();
+    /**
+     * <code>optional string completedByUserId = 12;</code>
+     */
+    com.google.protobuf.ByteString
+        getCompletedByUserIdBytes();
+
+    /**
+     * <code>required .com.n4systems.fieldid.api.pub.model.EventMessage.EventResult eventResult = 13;</code>
+     */
+    boolean hasEventResult();
+    /**
+     * <code>required .com.n4systems.fieldid.api.pub.model.EventMessage.EventResult eventResult = 13;</code>
+     */
+    com.n4systems.fieldid.api.pub.model.Messages.EventMessage.EventResult getEventResult();
+
+    /**
+     * <code>required .com.n4systems.fieldid.api.pub.model.EventMessage.WorkflowState workflowState = 14;</code>
+     */
+    boolean hasWorkflowState();
+    /**
+     * <code>required .com.n4systems.fieldid.api.pub.model.EventMessage.WorkflowState workflowState = 14;</code>
+     */
+    com.n4systems.fieldid.api.pub.model.Messages.EventMessage.WorkflowState getWorkflowState();
+
+    /**
+     * <code>optional string ownerName = 15;</code>
+     */
+    boolean hasOwnerName();
+    /**
+     * <code>optional string ownerName = 15;</code>
+     */
+    java.lang.String getOwnerName();
+    /**
+     * <code>optional string ownerName = 15;</code>
+     */
+    com.google.protobuf.ByteString
+        getOwnerNameBytes();
+
+    /**
+     * <code>required string ownerId = 16;</code>
+     */
+    boolean hasOwnerId();
+    /**
+     * <code>required string ownerId = 16;</code>
+     */
+    java.lang.String getOwnerId();
+    /**
+     * <code>required string ownerId = 16;</code>
+     */
+    com.google.protobuf.ByteString
+        getOwnerIdBytes();
+
+    /**
+     * <code>optional string eventTypeName = 17;</code>
+     */
+    boolean hasEventTypeName();
+    /**
+     * <code>optional string eventTypeName = 17;</code>
+     */
+    java.lang.String getEventTypeName();
+    /**
+     * <code>optional string eventTypeName = 17;</code>
+     */
+    com.google.protobuf.ByteString
+        getEventTypeNameBytes();
+
+    /**
+     * <code>optional string eventTypeId = 18;</code>
+     */
+    boolean hasEventTypeId();
+    /**
+     * <code>optional string eventTypeId = 18;</code>
+     */
+    java.lang.String getEventTypeId();
+    /**
+     * <code>optional string eventTypeId = 18;</code>
+     */
+    com.google.protobuf.ByteString
+        getEventTypeIdBytes();
+
+    /**
+     * <code>required string identifier = 19;</code>
+     */
+    boolean hasIdentifier();
+    /**
+     * <code>required string identifier = 19;</code>
+     */
+    java.lang.String getIdentifier();
+    /**
+     * <code>required string identifier = 19;</code>
+     */
+    com.google.protobuf.ByteString
+        getIdentifierBytes();
+
+    /**
+     * <code>optional string rfidNumber = 20;</code>
+     */
+    boolean hasRfidNumber();
+    /**
+     * <code>optional string rfidNumber = 20;</code>
+     */
+    java.lang.String getRfidNumber();
+    /**
+     * <code>optional string rfidNumber = 20;</code>
+     */
+    com.google.protobuf.ByteString
+        getRfidNumberBytes();
+
+    /**
+     * <code>optional string customerRefNumber = 21;</code>
+     */
+    boolean hasCustomerRefNumber();
+    /**
+     * <code>optional string customerRefNumber = 21;</code>
+     */
+    java.lang.String getCustomerRefNumber();
+    /**
+     * <code>optional string customerRefNumber = 21;</code>
+     */
+    com.google.protobuf.ByteString
+        getCustomerRefNumberBytes();
+
+    /**
+     * <code>optional string assetId = 22;</code>
+     */
+    boolean hasAssetId();
+    /**
+     * <code>optional string assetId = 22;</code>
+     */
+    java.lang.String getAssetId();
+    /**
+     * <code>optional string assetId = 22;</code>
+     */
+    com.google.protobuf.ByteString
+        getAssetIdBytes();
+
+    /**
+     * <code>optional string comments = 23;</code>
+     */
+    boolean hasComments();
+    /**
+     * <code>optional string comments = 23;</code>
+     */
+    java.lang.String getComments();
+    /**
+     * <code>optional string comments = 23;</code>
+     */
+    com.google.protobuf.ByteString
+        getCommentsBytes();
+
+    /**
+     * <code>optional string score = 24;</code>
+     */
+    boolean hasScore();
+    /**
+     * <code>optional string score = 24;</code>
+     */
+    java.lang.String getScore();
+    /**
+     * <code>optional string score = 24;</code>
+     */
+    com.google.protobuf.ByteString
+        getScoreBytes();
+  }
+  /**
+   * Protobuf type {@code com.n4systems.fieldid.api.pub.model.EventMessage}
+   */
+  public static final class EventMessage extends
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:com.n4systems.fieldid.api.pub.model.EventMessage)
+      EventMessageOrBuilder {
+    // Use EventMessage.newBuilder() to construct.
+    private EventMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private EventMessage(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final EventMessage defaultInstance;
+    public static EventMessage getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public EventMessage getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private EventMessage(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000001;
+              id_ = bs;
+              break;
+            }
+            case 18: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000002;
+              createdDate_ = bs;
+              break;
+            }
+            case 26: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000004;
+              modifiedDate_ = bs;
+              break;
+            }
+            case 34: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000008;
+              completedDate_ = bs;
+              break;
+            }
+            case 42: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000010;
+              createdByUserName_ = bs;
+              break;
+            }
+            case 50: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000020;
+              createdByUserId_ = bs;
+              break;
+            }
+            case 58: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000040;
+              modifiedByUserName_ = bs;
+              break;
+            }
+            case 66: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000080;
+              modifiedByUserId_ = bs;
+              break;
+            }
+            case 74: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000100;
+              assignedToUserName_ = bs;
+              break;
+            }
+            case 82: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000200;
+              assignedToUserId_ = bs;
+              break;
+            }
+            case 90: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000400;
+              completedByUserName_ = bs;
+              break;
+            }
+            case 98: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000800;
+              completedByUserId_ = bs;
+              break;
+            }
+            case 104: {
+              int rawValue = input.readEnum();
+              com.n4systems.fieldid.api.pub.model.Messages.EventMessage.EventResult value = com.n4systems.fieldid.api.pub.model.Messages.EventMessage.EventResult.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(13, rawValue);
+              } else {
+                bitField0_ |= 0x00001000;
+                eventResult_ = value;
+              }
+              break;
+            }
+            case 112: {
+              int rawValue = input.readEnum();
+              com.n4systems.fieldid.api.pub.model.Messages.EventMessage.WorkflowState value = com.n4systems.fieldid.api.pub.model.Messages.EventMessage.WorkflowState.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(14, rawValue);
+              } else {
+                bitField0_ |= 0x00002000;
+                workflowState_ = value;
+              }
+              break;
+            }
+            case 122: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00004000;
+              ownerName_ = bs;
+              break;
+            }
+            case 130: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00008000;
+              ownerId_ = bs;
+              break;
+            }
+            case 138: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00010000;
+              eventTypeName_ = bs;
+              break;
+            }
+            case 146: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00020000;
+              eventTypeId_ = bs;
+              break;
+            }
+            case 154: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00040000;
+              identifier_ = bs;
+              break;
+            }
+            case 162: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00080000;
+              rfidNumber_ = bs;
+              break;
+            }
+            case 170: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00100000;
+              customerRefNumber_ = bs;
+              break;
+            }
+            case 178: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00200000;
+              assetId_ = bs;
+              break;
+            }
+            case 186: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00400000;
+              comments_ = bs;
+              break;
+            }
+            case 194: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00800000;
+              score_ = bs;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.n4systems.fieldid.api.pub.model.Messages.internal_static_com_n4systems_fieldid_api_pub_model_EventMessage_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.n4systems.fieldid.api.pub.model.Messages.internal_static_com_n4systems_fieldid_api_pub_model_EventMessage_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.n4systems.fieldid.api.pub.model.Messages.EventMessage.class, com.n4systems.fieldid.api.pub.model.Messages.EventMessage.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<EventMessage> PARSER =
+        new com.google.protobuf.AbstractParser<EventMessage>() {
+      public EventMessage parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new EventMessage(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<EventMessage> getParserForType() {
+      return PARSER;
+    }
+
+    /**
+     * Protobuf enum {@code com.n4systems.fieldid.api.pub.model.EventMessage.EventResult}
+     */
+    public enum EventResult
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>PASS = 1;</code>
+       */
+      PASS(0, 1),
+      /**
+       * <code>FAIL = 2;</code>
+       */
+      FAIL(1, 2),
+      /**
+       * <code>NA = 3;</code>
+       */
+      NA(2, 3),
+      /**
+       * <code>VOID = 4;</code>
+       */
+      VOID(3, 4),
+      ;
+
+      /**
+       * <code>PASS = 1;</code>
+       */
+      public static final int PASS_VALUE = 1;
+      /**
+       * <code>FAIL = 2;</code>
+       */
+      public static final int FAIL_VALUE = 2;
+      /**
+       * <code>NA = 3;</code>
+       */
+      public static final int NA_VALUE = 3;
+      /**
+       * <code>VOID = 4;</code>
+       */
+      public static final int VOID_VALUE = 4;
+
+
+      public final int getNumber() { return value; }
+
+      public static EventResult valueOf(int value) {
+        switch (value) {
+          case 1: return PASS;
+          case 2: return FAIL;
+          case 3: return NA;
+          case 4: return VOID;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<EventResult>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<EventResult>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<EventResult>() {
+              public EventResult findValueByNumber(int number) {
+                return EventResult.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return com.n4systems.fieldid.api.pub.model.Messages.EventMessage.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final EventResult[] VALUES = values();
+
+      public static EventResult valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private EventResult(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:com.n4systems.fieldid.api.pub.model.EventMessage.EventResult)
+    }
+
+    /**
+     * Protobuf enum {@code com.n4systems.fieldid.api.pub.model.EventMessage.WorkflowState}
+     */
+    public enum WorkflowState
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>OPEN = 1;</code>
+       */
+      OPEN(0, 1),
+      /**
+       * <code>COMPLETED = 2;</code>
+       */
+      COMPLETED(1, 2),
+      /**
+       * <code>CLOSED = 3;</code>
+       */
+      CLOSED(2, 3),
+      /**
+       * <code>NONE = 4;</code>
+       */
+      NONE(3, 4),
+      ;
+
+      /**
+       * <code>OPEN = 1;</code>
+       */
+      public static final int OPEN_VALUE = 1;
+      /**
+       * <code>COMPLETED = 2;</code>
+       */
+      public static final int COMPLETED_VALUE = 2;
+      /**
+       * <code>CLOSED = 3;</code>
+       */
+      public static final int CLOSED_VALUE = 3;
+      /**
+       * <code>NONE = 4;</code>
+       */
+      public static final int NONE_VALUE = 4;
+
+
+      public final int getNumber() { return value; }
+
+      public static WorkflowState valueOf(int value) {
+        switch (value) {
+          case 1: return OPEN;
+          case 2: return COMPLETED;
+          case 3: return CLOSED;
+          case 4: return NONE;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<WorkflowState>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<WorkflowState>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<WorkflowState>() {
+              public WorkflowState findValueByNumber(int number) {
+                return WorkflowState.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return com.n4systems.fieldid.api.pub.model.Messages.EventMessage.getDescriptor().getEnumTypes().get(1);
+      }
+
+      private static final WorkflowState[] VALUES = values();
+
+      public static WorkflowState valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private WorkflowState(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:com.n4systems.fieldid.api.pub.model.EventMessage.WorkflowState)
+    }
+
+    private int bitField0_;
+    public static final int ID_FIELD_NUMBER = 1;
+    private java.lang.Object id_;
+    /**
+     * <code>optional string id = 1;</code>
+     */
+    public boolean hasId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>optional string id = 1;</code>
+     */
+    public java.lang.String getId() {
+      java.lang.Object ref = id_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          id_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string id = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getIdBytes() {
+      java.lang.Object ref = id_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        id_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int CREATEDDATE_FIELD_NUMBER = 2;
+    private java.lang.Object createdDate_;
+    /**
+     * <code>optional string createdDate = 2;</code>
+     */
+    public boolean hasCreatedDate() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional string createdDate = 2;</code>
+     */
+    public java.lang.String getCreatedDate() {
+      java.lang.Object ref = createdDate_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          createdDate_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string createdDate = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getCreatedDateBytes() {
+      java.lang.Object ref = createdDate_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        createdDate_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int MODIFIEDDATE_FIELD_NUMBER = 3;
+    private java.lang.Object modifiedDate_;
+    /**
+     * <code>optional string modifiedDate = 3;</code>
+     */
+    public boolean hasModifiedDate() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional string modifiedDate = 3;</code>
+     */
+    public java.lang.String getModifiedDate() {
+      java.lang.Object ref = modifiedDate_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          modifiedDate_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string modifiedDate = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getModifiedDateBytes() {
+      java.lang.Object ref = modifiedDate_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        modifiedDate_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int COMPLETEDDATE_FIELD_NUMBER = 4;
+    private java.lang.Object completedDate_;
+    /**
+     * <code>optional string completedDate = 4;</code>
+     */
+    public boolean hasCompletedDate() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional string completedDate = 4;</code>
+     */
+    public java.lang.String getCompletedDate() {
+      java.lang.Object ref = completedDate_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          completedDate_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string completedDate = 4;</code>
+     */
+    public com.google.protobuf.ByteString
+        getCompletedDateBytes() {
+      java.lang.Object ref = completedDate_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        completedDate_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int CREATEDBYUSERNAME_FIELD_NUMBER = 5;
+    private java.lang.Object createdByUserName_;
+    /**
+     * <code>optional string createdByUserName = 5;</code>
+     */
+    public boolean hasCreatedByUserName() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional string createdByUserName = 5;</code>
+     */
+    public java.lang.String getCreatedByUserName() {
+      java.lang.Object ref = createdByUserName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          createdByUserName_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string createdByUserName = 5;</code>
+     */
+    public com.google.protobuf.ByteString
+        getCreatedByUserNameBytes() {
+      java.lang.Object ref = createdByUserName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        createdByUserName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int CREATEDBYUSERID_FIELD_NUMBER = 6;
+    private java.lang.Object createdByUserId_;
+    /**
+     * <code>optional string createdByUserId = 6;</code>
+     */
+    public boolean hasCreatedByUserId() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional string createdByUserId = 6;</code>
+     */
+    public java.lang.String getCreatedByUserId() {
+      java.lang.Object ref = createdByUserId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          createdByUserId_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string createdByUserId = 6;</code>
+     */
+    public com.google.protobuf.ByteString
+        getCreatedByUserIdBytes() {
+      java.lang.Object ref = createdByUserId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        createdByUserId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int MODIFIEDBYUSERNAME_FIELD_NUMBER = 7;
+    private java.lang.Object modifiedByUserName_;
+    /**
+     * <code>optional string modifiedByUserName = 7;</code>
+     */
+    public boolean hasModifiedByUserName() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional string modifiedByUserName = 7;</code>
+     */
+    public java.lang.String getModifiedByUserName() {
+      java.lang.Object ref = modifiedByUserName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          modifiedByUserName_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string modifiedByUserName = 7;</code>
+     */
+    public com.google.protobuf.ByteString
+        getModifiedByUserNameBytes() {
+      java.lang.Object ref = modifiedByUserName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        modifiedByUserName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int MODIFIEDBYUSERID_FIELD_NUMBER = 8;
+    private java.lang.Object modifiedByUserId_;
+    /**
+     * <code>optional string modifiedByUserId = 8;</code>
+     */
+    public boolean hasModifiedByUserId() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>optional string modifiedByUserId = 8;</code>
+     */
+    public java.lang.String getModifiedByUserId() {
+      java.lang.Object ref = modifiedByUserId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          modifiedByUserId_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string modifiedByUserId = 8;</code>
+     */
+    public com.google.protobuf.ByteString
+        getModifiedByUserIdBytes() {
+      java.lang.Object ref = modifiedByUserId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        modifiedByUserId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int ASSIGNEDTOUSERNAME_FIELD_NUMBER = 9;
+    private java.lang.Object assignedToUserName_;
+    /**
+     * <code>optional string assignedToUserName = 9;</code>
+     */
+    public boolean hasAssignedToUserName() {
+      return ((bitField0_ & 0x00000100) == 0x00000100);
+    }
+    /**
+     * <code>optional string assignedToUserName = 9;</code>
+     */
+    public java.lang.String getAssignedToUserName() {
+      java.lang.Object ref = assignedToUserName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          assignedToUserName_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string assignedToUserName = 9;</code>
+     */
+    public com.google.protobuf.ByteString
+        getAssignedToUserNameBytes() {
+      java.lang.Object ref = assignedToUserName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        assignedToUserName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int ASSIGNEDTOUSERID_FIELD_NUMBER = 10;
+    private java.lang.Object assignedToUserId_;
+    /**
+     * <code>optional string assignedToUserId = 10;</code>
+     */
+    public boolean hasAssignedToUserId() {
+      return ((bitField0_ & 0x00000200) == 0x00000200);
+    }
+    /**
+     * <code>optional string assignedToUserId = 10;</code>
+     */
+    public java.lang.String getAssignedToUserId() {
+      java.lang.Object ref = assignedToUserId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          assignedToUserId_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string assignedToUserId = 10;</code>
+     */
+    public com.google.protobuf.ByteString
+        getAssignedToUserIdBytes() {
+      java.lang.Object ref = assignedToUserId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        assignedToUserId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int COMPLETEDBYUSERNAME_FIELD_NUMBER = 11;
+    private java.lang.Object completedByUserName_;
+    /**
+     * <code>optional string completedByUserName = 11;</code>
+     */
+    public boolean hasCompletedByUserName() {
+      return ((bitField0_ & 0x00000400) == 0x00000400);
+    }
+    /**
+     * <code>optional string completedByUserName = 11;</code>
+     */
+    public java.lang.String getCompletedByUserName() {
+      java.lang.Object ref = completedByUserName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          completedByUserName_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string completedByUserName = 11;</code>
+     */
+    public com.google.protobuf.ByteString
+        getCompletedByUserNameBytes() {
+      java.lang.Object ref = completedByUserName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        completedByUserName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int COMPLETEDBYUSERID_FIELD_NUMBER = 12;
+    private java.lang.Object completedByUserId_;
+    /**
+     * <code>optional string completedByUserId = 12;</code>
+     */
+    public boolean hasCompletedByUserId() {
+      return ((bitField0_ & 0x00000800) == 0x00000800);
+    }
+    /**
+     * <code>optional string completedByUserId = 12;</code>
+     */
+    public java.lang.String getCompletedByUserId() {
+      java.lang.Object ref = completedByUserId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          completedByUserId_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string completedByUserId = 12;</code>
+     */
+    public com.google.protobuf.ByteString
+        getCompletedByUserIdBytes() {
+      java.lang.Object ref = completedByUserId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        completedByUserId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int EVENTRESULT_FIELD_NUMBER = 13;
+    private com.n4systems.fieldid.api.pub.model.Messages.EventMessage.EventResult eventResult_;
+    /**
+     * <code>required .com.n4systems.fieldid.api.pub.model.EventMessage.EventResult eventResult = 13;</code>
+     */
+    public boolean hasEventResult() {
+      return ((bitField0_ & 0x00001000) == 0x00001000);
+    }
+    /**
+     * <code>required .com.n4systems.fieldid.api.pub.model.EventMessage.EventResult eventResult = 13;</code>
+     */
+    public com.n4systems.fieldid.api.pub.model.Messages.EventMessage.EventResult getEventResult() {
+      return eventResult_;
+    }
+
+    public static final int WORKFLOWSTATE_FIELD_NUMBER = 14;
+    private com.n4systems.fieldid.api.pub.model.Messages.EventMessage.WorkflowState workflowState_;
+    /**
+     * <code>required .com.n4systems.fieldid.api.pub.model.EventMessage.WorkflowState workflowState = 14;</code>
+     */
+    public boolean hasWorkflowState() {
+      return ((bitField0_ & 0x00002000) == 0x00002000);
+    }
+    /**
+     * <code>required .com.n4systems.fieldid.api.pub.model.EventMessage.WorkflowState workflowState = 14;</code>
+     */
+    public com.n4systems.fieldid.api.pub.model.Messages.EventMessage.WorkflowState getWorkflowState() {
+      return workflowState_;
+    }
+
+    public static final int OWNERNAME_FIELD_NUMBER = 15;
+    private java.lang.Object ownerName_;
+    /**
+     * <code>optional string ownerName = 15;</code>
+     */
+    public boolean hasOwnerName() {
+      return ((bitField0_ & 0x00004000) == 0x00004000);
+    }
+    /**
+     * <code>optional string ownerName = 15;</code>
+     */
+    public java.lang.String getOwnerName() {
+      java.lang.Object ref = ownerName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          ownerName_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string ownerName = 15;</code>
+     */
+    public com.google.protobuf.ByteString
+        getOwnerNameBytes() {
+      java.lang.Object ref = ownerName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        ownerName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int OWNERID_FIELD_NUMBER = 16;
+    private java.lang.Object ownerId_;
+    /**
+     * <code>required string ownerId = 16;</code>
+     */
+    public boolean hasOwnerId() {
+      return ((bitField0_ & 0x00008000) == 0x00008000);
+    }
+    /**
+     * <code>required string ownerId = 16;</code>
+     */
+    public java.lang.String getOwnerId() {
+      java.lang.Object ref = ownerId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          ownerId_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string ownerId = 16;</code>
+     */
+    public com.google.protobuf.ByteString
+        getOwnerIdBytes() {
+      java.lang.Object ref = ownerId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        ownerId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int EVENTTYPENAME_FIELD_NUMBER = 17;
+    private java.lang.Object eventTypeName_;
+    /**
+     * <code>optional string eventTypeName = 17;</code>
+     */
+    public boolean hasEventTypeName() {
+      return ((bitField0_ & 0x00010000) == 0x00010000);
+    }
+    /**
+     * <code>optional string eventTypeName = 17;</code>
+     */
+    public java.lang.String getEventTypeName() {
+      java.lang.Object ref = eventTypeName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          eventTypeName_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string eventTypeName = 17;</code>
+     */
+    public com.google.protobuf.ByteString
+        getEventTypeNameBytes() {
+      java.lang.Object ref = eventTypeName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        eventTypeName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int EVENTTYPEID_FIELD_NUMBER = 18;
+    private java.lang.Object eventTypeId_;
+    /**
+     * <code>optional string eventTypeId = 18;</code>
+     */
+    public boolean hasEventTypeId() {
+      return ((bitField0_ & 0x00020000) == 0x00020000);
+    }
+    /**
+     * <code>optional string eventTypeId = 18;</code>
+     */
+    public java.lang.String getEventTypeId() {
+      java.lang.Object ref = eventTypeId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          eventTypeId_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string eventTypeId = 18;</code>
+     */
+    public com.google.protobuf.ByteString
+        getEventTypeIdBytes() {
+      java.lang.Object ref = eventTypeId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        eventTypeId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int IDENTIFIER_FIELD_NUMBER = 19;
+    private java.lang.Object identifier_;
+    /**
+     * <code>required string identifier = 19;</code>
+     */
+    public boolean hasIdentifier() {
+      return ((bitField0_ & 0x00040000) == 0x00040000);
+    }
+    /**
+     * <code>required string identifier = 19;</code>
+     */
+    public java.lang.String getIdentifier() {
+      java.lang.Object ref = identifier_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          identifier_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string identifier = 19;</code>
+     */
+    public com.google.protobuf.ByteString
+        getIdentifierBytes() {
+      java.lang.Object ref = identifier_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        identifier_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int RFIDNUMBER_FIELD_NUMBER = 20;
+    private java.lang.Object rfidNumber_;
+    /**
+     * <code>optional string rfidNumber = 20;</code>
+     */
+    public boolean hasRfidNumber() {
+      return ((bitField0_ & 0x00080000) == 0x00080000);
+    }
+    /**
+     * <code>optional string rfidNumber = 20;</code>
+     */
+    public java.lang.String getRfidNumber() {
+      java.lang.Object ref = rfidNumber_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          rfidNumber_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string rfidNumber = 20;</code>
+     */
+    public com.google.protobuf.ByteString
+        getRfidNumberBytes() {
+      java.lang.Object ref = rfidNumber_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        rfidNumber_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int CUSTOMERREFNUMBER_FIELD_NUMBER = 21;
+    private java.lang.Object customerRefNumber_;
+    /**
+     * <code>optional string customerRefNumber = 21;</code>
+     */
+    public boolean hasCustomerRefNumber() {
+      return ((bitField0_ & 0x00100000) == 0x00100000);
+    }
+    /**
+     * <code>optional string customerRefNumber = 21;</code>
+     */
+    public java.lang.String getCustomerRefNumber() {
+      java.lang.Object ref = customerRefNumber_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          customerRefNumber_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string customerRefNumber = 21;</code>
+     */
+    public com.google.protobuf.ByteString
+        getCustomerRefNumberBytes() {
+      java.lang.Object ref = customerRefNumber_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        customerRefNumber_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int ASSETID_FIELD_NUMBER = 22;
+    private java.lang.Object assetId_;
+    /**
+     * <code>optional string assetId = 22;</code>
+     */
+    public boolean hasAssetId() {
+      return ((bitField0_ & 0x00200000) == 0x00200000);
+    }
+    /**
+     * <code>optional string assetId = 22;</code>
+     */
+    public java.lang.String getAssetId() {
+      java.lang.Object ref = assetId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          assetId_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string assetId = 22;</code>
+     */
+    public com.google.protobuf.ByteString
+        getAssetIdBytes() {
+      java.lang.Object ref = assetId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        assetId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int COMMENTS_FIELD_NUMBER = 23;
+    private java.lang.Object comments_;
+    /**
+     * <code>optional string comments = 23;</code>
+     */
+    public boolean hasComments() {
+      return ((bitField0_ & 0x00400000) == 0x00400000);
+    }
+    /**
+     * <code>optional string comments = 23;</code>
+     */
+    public java.lang.String getComments() {
+      java.lang.Object ref = comments_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          comments_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string comments = 23;</code>
+     */
+    public com.google.protobuf.ByteString
+        getCommentsBytes() {
+      java.lang.Object ref = comments_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        comments_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int SCORE_FIELD_NUMBER = 24;
+    private java.lang.Object score_;
+    /**
+     * <code>optional string score = 24;</code>
+     */
+    public boolean hasScore() {
+      return ((bitField0_ & 0x00800000) == 0x00800000);
+    }
+    /**
+     * <code>optional string score = 24;</code>
+     */
+    public java.lang.String getScore() {
+      java.lang.Object ref = score_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          score_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string score = 24;</code>
+     */
+    public com.google.protobuf.ByteString
+        getScoreBytes() {
+      java.lang.Object ref = score_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        score_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private void initFields() {
+      id_ = "";
+      createdDate_ = "";
+      modifiedDate_ = "";
+      completedDate_ = "";
+      createdByUserName_ = "";
+      createdByUserId_ = "";
+      modifiedByUserName_ = "";
+      modifiedByUserId_ = "";
+      assignedToUserName_ = "";
+      assignedToUserId_ = "";
+      completedByUserName_ = "";
+      completedByUserId_ = "";
+      eventResult_ = com.n4systems.fieldid.api.pub.model.Messages.EventMessage.EventResult.PASS;
+      workflowState_ = com.n4systems.fieldid.api.pub.model.Messages.EventMessage.WorkflowState.OPEN;
+      ownerName_ = "";
+      ownerId_ = "";
+      eventTypeName_ = "";
+      eventTypeId_ = "";
+      identifier_ = "";
+      rfidNumber_ = "";
+      customerRefNumber_ = "";
+      assetId_ = "";
+      comments_ = "";
+      score_ = "";
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      if (!hasEventResult()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasWorkflowState()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasOwnerId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasIdentifier()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, getIdBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, getCreatedDateBytes());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBytes(3, getModifiedDateBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBytes(4, getCompletedDateBytes());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeBytes(5, getCreatedByUserNameBytes());
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeBytes(6, getCreatedByUserIdBytes());
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeBytes(7, getModifiedByUserNameBytes());
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeBytes(8, getModifiedByUserIdBytes());
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        output.writeBytes(9, getAssignedToUserNameBytes());
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        output.writeBytes(10, getAssignedToUserIdBytes());
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        output.writeBytes(11, getCompletedByUserNameBytes());
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        output.writeBytes(12, getCompletedByUserIdBytes());
+      }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        output.writeEnum(13, eventResult_.getNumber());
+      }
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        output.writeEnum(14, workflowState_.getNumber());
+      }
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+        output.writeBytes(15, getOwnerNameBytes());
+      }
+      if (((bitField0_ & 0x00008000) == 0x00008000)) {
+        output.writeBytes(16, getOwnerIdBytes());
+      }
+      if (((bitField0_ & 0x00010000) == 0x00010000)) {
+        output.writeBytes(17, getEventTypeNameBytes());
+      }
+      if (((bitField0_ & 0x00020000) == 0x00020000)) {
+        output.writeBytes(18, getEventTypeIdBytes());
+      }
+      if (((bitField0_ & 0x00040000) == 0x00040000)) {
+        output.writeBytes(19, getIdentifierBytes());
+      }
+      if (((bitField0_ & 0x00080000) == 0x00080000)) {
+        output.writeBytes(20, getRfidNumberBytes());
+      }
+      if (((bitField0_ & 0x00100000) == 0x00100000)) {
+        output.writeBytes(21, getCustomerRefNumberBytes());
+      }
+      if (((bitField0_ & 0x00200000) == 0x00200000)) {
+        output.writeBytes(22, getAssetIdBytes());
+      }
+      if (((bitField0_ & 0x00400000) == 0x00400000)) {
+        output.writeBytes(23, getCommentsBytes());
+      }
+      if (((bitField0_ & 0x00800000) == 0x00800000)) {
+        output.writeBytes(24, getScoreBytes());
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, getIdBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, getCreatedDateBytes());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(3, getModifiedDateBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(4, getCompletedDateBytes());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(5, getCreatedByUserNameBytes());
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(6, getCreatedByUserIdBytes());
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(7, getModifiedByUserNameBytes());
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(8, getModifiedByUserIdBytes());
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(9, getAssignedToUserNameBytes());
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(10, getAssignedToUserIdBytes());
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(11, getCompletedByUserNameBytes());
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(12, getCompletedByUserIdBytes());
+      }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(13, eventResult_.getNumber());
+      }
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(14, workflowState_.getNumber());
+      }
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(15, getOwnerNameBytes());
+      }
+      if (((bitField0_ & 0x00008000) == 0x00008000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(16, getOwnerIdBytes());
+      }
+      if (((bitField0_ & 0x00010000) == 0x00010000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(17, getEventTypeNameBytes());
+      }
+      if (((bitField0_ & 0x00020000) == 0x00020000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(18, getEventTypeIdBytes());
+      }
+      if (((bitField0_ & 0x00040000) == 0x00040000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(19, getIdentifierBytes());
+      }
+      if (((bitField0_ & 0x00080000) == 0x00080000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(20, getRfidNumberBytes());
+      }
+      if (((bitField0_ & 0x00100000) == 0x00100000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(21, getCustomerRefNumberBytes());
+      }
+      if (((bitField0_ & 0x00200000) == 0x00200000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(22, getAssetIdBytes());
+      }
+      if (((bitField0_ & 0x00400000) == 0x00400000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(23, getCommentsBytes());
+      }
+      if (((bitField0_ & 0x00800000) == 0x00800000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(24, getScoreBytes());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static com.n4systems.fieldid.api.pub.model.Messages.EventMessage parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.n4systems.fieldid.api.pub.model.Messages.EventMessage parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.n4systems.fieldid.api.pub.model.Messages.EventMessage parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.n4systems.fieldid.api.pub.model.Messages.EventMessage parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.n4systems.fieldid.api.pub.model.Messages.EventMessage parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static com.n4systems.fieldid.api.pub.model.Messages.EventMessage parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static com.n4systems.fieldid.api.pub.model.Messages.EventMessage parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static com.n4systems.fieldid.api.pub.model.Messages.EventMessage parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static com.n4systems.fieldid.api.pub.model.Messages.EventMessage parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static com.n4systems.fieldid.api.pub.model.Messages.EventMessage parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.n4systems.fieldid.api.pub.model.Messages.EventMessage prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code com.n4systems.fieldid.api.pub.model.EventMessage}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:com.n4systems.fieldid.api.pub.model.EventMessage)
+        com.n4systems.fieldid.api.pub.model.Messages.EventMessageOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.n4systems.fieldid.api.pub.model.Messages.internal_static_com_n4systems_fieldid_api_pub_model_EventMessage_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.n4systems.fieldid.api.pub.model.Messages.internal_static_com_n4systems_fieldid_api_pub_model_EventMessage_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.n4systems.fieldid.api.pub.model.Messages.EventMessage.class, com.n4systems.fieldid.api.pub.model.Messages.EventMessage.Builder.class);
+      }
+
+      // Construct using com.n4systems.fieldid.api.pub.model.Messages.EventMessage.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        id_ = "";
+        bitField0_ = (bitField0_ & ~0x00000001);
+        createdDate_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
+        modifiedDate_ = "";
+        bitField0_ = (bitField0_ & ~0x00000004);
+        completedDate_ = "";
+        bitField0_ = (bitField0_ & ~0x00000008);
+        createdByUserName_ = "";
+        bitField0_ = (bitField0_ & ~0x00000010);
+        createdByUserId_ = "";
+        bitField0_ = (bitField0_ & ~0x00000020);
+        modifiedByUserName_ = "";
+        bitField0_ = (bitField0_ & ~0x00000040);
+        modifiedByUserId_ = "";
+        bitField0_ = (bitField0_ & ~0x00000080);
+        assignedToUserName_ = "";
+        bitField0_ = (bitField0_ & ~0x00000100);
+        assignedToUserId_ = "";
+        bitField0_ = (bitField0_ & ~0x00000200);
+        completedByUserName_ = "";
+        bitField0_ = (bitField0_ & ~0x00000400);
+        completedByUserId_ = "";
+        bitField0_ = (bitField0_ & ~0x00000800);
+        eventResult_ = com.n4systems.fieldid.api.pub.model.Messages.EventMessage.EventResult.PASS;
+        bitField0_ = (bitField0_ & ~0x00001000);
+        workflowState_ = com.n4systems.fieldid.api.pub.model.Messages.EventMessage.WorkflowState.OPEN;
+        bitField0_ = (bitField0_ & ~0x00002000);
+        ownerName_ = "";
+        bitField0_ = (bitField0_ & ~0x00004000);
+        ownerId_ = "";
+        bitField0_ = (bitField0_ & ~0x00008000);
+        eventTypeName_ = "";
+        bitField0_ = (bitField0_ & ~0x00010000);
+        eventTypeId_ = "";
+        bitField0_ = (bitField0_ & ~0x00020000);
+        identifier_ = "";
+        bitField0_ = (bitField0_ & ~0x00040000);
+        rfidNumber_ = "";
+        bitField0_ = (bitField0_ & ~0x00080000);
+        customerRefNumber_ = "";
+        bitField0_ = (bitField0_ & ~0x00100000);
+        assetId_ = "";
+        bitField0_ = (bitField0_ & ~0x00200000);
+        comments_ = "";
+        bitField0_ = (bitField0_ & ~0x00400000);
+        score_ = "";
+        bitField0_ = (bitField0_ & ~0x00800000);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.n4systems.fieldid.api.pub.model.Messages.internal_static_com_n4systems_fieldid_api_pub_model_EventMessage_descriptor;
+      }
+
+      public com.n4systems.fieldid.api.pub.model.Messages.EventMessage getDefaultInstanceForType() {
+        return com.n4systems.fieldid.api.pub.model.Messages.EventMessage.getDefaultInstance();
+      }
+
+      public com.n4systems.fieldid.api.pub.model.Messages.EventMessage build() {
+        com.n4systems.fieldid.api.pub.model.Messages.EventMessage result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public com.n4systems.fieldid.api.pub.model.Messages.EventMessage buildPartial() {
+        com.n4systems.fieldid.api.pub.model.Messages.EventMessage result = new com.n4systems.fieldid.api.pub.model.Messages.EventMessage(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.id_ = id_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.createdDate_ = createdDate_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.modifiedDate_ = modifiedDate_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.completedDate_ = completedDate_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.createdByUserName_ = createdByUserName_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.createdByUserId_ = createdByUserId_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.modifiedByUserName_ = modifiedByUserName_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        result.modifiedByUserId_ = modifiedByUserId_;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000100;
+        }
+        result.assignedToUserName_ = assignedToUserName_;
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000200;
+        }
+        result.assignedToUserId_ = assignedToUserId_;
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+          to_bitField0_ |= 0x00000400;
+        }
+        result.completedByUserName_ = completedByUserName_;
+        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
+          to_bitField0_ |= 0x00000800;
+        }
+        result.completedByUserId_ = completedByUserId_;
+        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
+          to_bitField0_ |= 0x00001000;
+        }
+        result.eventResult_ = eventResult_;
+        if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
+          to_bitField0_ |= 0x00002000;
+        }
+        result.workflowState_ = workflowState_;
+        if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
+          to_bitField0_ |= 0x00004000;
+        }
+        result.ownerName_ = ownerName_;
+        if (((from_bitField0_ & 0x00008000) == 0x00008000)) {
+          to_bitField0_ |= 0x00008000;
+        }
+        result.ownerId_ = ownerId_;
+        if (((from_bitField0_ & 0x00010000) == 0x00010000)) {
+          to_bitField0_ |= 0x00010000;
+        }
+        result.eventTypeName_ = eventTypeName_;
+        if (((from_bitField0_ & 0x00020000) == 0x00020000)) {
+          to_bitField0_ |= 0x00020000;
+        }
+        result.eventTypeId_ = eventTypeId_;
+        if (((from_bitField0_ & 0x00040000) == 0x00040000)) {
+          to_bitField0_ |= 0x00040000;
+        }
+        result.identifier_ = identifier_;
+        if (((from_bitField0_ & 0x00080000) == 0x00080000)) {
+          to_bitField0_ |= 0x00080000;
+        }
+        result.rfidNumber_ = rfidNumber_;
+        if (((from_bitField0_ & 0x00100000) == 0x00100000)) {
+          to_bitField0_ |= 0x00100000;
+        }
+        result.customerRefNumber_ = customerRefNumber_;
+        if (((from_bitField0_ & 0x00200000) == 0x00200000)) {
+          to_bitField0_ |= 0x00200000;
+        }
+        result.assetId_ = assetId_;
+        if (((from_bitField0_ & 0x00400000) == 0x00400000)) {
+          to_bitField0_ |= 0x00400000;
+        }
+        result.comments_ = comments_;
+        if (((from_bitField0_ & 0x00800000) == 0x00800000)) {
+          to_bitField0_ |= 0x00800000;
+        }
+        result.score_ = score_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.n4systems.fieldid.api.pub.model.Messages.EventMessage) {
+          return mergeFrom((com.n4systems.fieldid.api.pub.model.Messages.EventMessage)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.n4systems.fieldid.api.pub.model.Messages.EventMessage other) {
+        if (other == com.n4systems.fieldid.api.pub.model.Messages.EventMessage.getDefaultInstance()) return this;
+        if (other.hasId()) {
+          bitField0_ |= 0x00000001;
+          id_ = other.id_;
+          onChanged();
+        }
+        if (other.hasCreatedDate()) {
+          bitField0_ |= 0x00000002;
+          createdDate_ = other.createdDate_;
+          onChanged();
+        }
+        if (other.hasModifiedDate()) {
+          bitField0_ |= 0x00000004;
+          modifiedDate_ = other.modifiedDate_;
+          onChanged();
+        }
+        if (other.hasCompletedDate()) {
+          bitField0_ |= 0x00000008;
+          completedDate_ = other.completedDate_;
+          onChanged();
+        }
+        if (other.hasCreatedByUserName()) {
+          bitField0_ |= 0x00000010;
+          createdByUserName_ = other.createdByUserName_;
+          onChanged();
+        }
+        if (other.hasCreatedByUserId()) {
+          bitField0_ |= 0x00000020;
+          createdByUserId_ = other.createdByUserId_;
+          onChanged();
+        }
+        if (other.hasModifiedByUserName()) {
+          bitField0_ |= 0x00000040;
+          modifiedByUserName_ = other.modifiedByUserName_;
+          onChanged();
+        }
+        if (other.hasModifiedByUserId()) {
+          bitField0_ |= 0x00000080;
+          modifiedByUserId_ = other.modifiedByUserId_;
+          onChanged();
+        }
+        if (other.hasAssignedToUserName()) {
+          bitField0_ |= 0x00000100;
+          assignedToUserName_ = other.assignedToUserName_;
+          onChanged();
+        }
+        if (other.hasAssignedToUserId()) {
+          bitField0_ |= 0x00000200;
+          assignedToUserId_ = other.assignedToUserId_;
+          onChanged();
+        }
+        if (other.hasCompletedByUserName()) {
+          bitField0_ |= 0x00000400;
+          completedByUserName_ = other.completedByUserName_;
+          onChanged();
+        }
+        if (other.hasCompletedByUserId()) {
+          bitField0_ |= 0x00000800;
+          completedByUserId_ = other.completedByUserId_;
+          onChanged();
+        }
+        if (other.hasEventResult()) {
+          setEventResult(other.getEventResult());
+        }
+        if (other.hasWorkflowState()) {
+          setWorkflowState(other.getWorkflowState());
+        }
+        if (other.hasOwnerName()) {
+          bitField0_ |= 0x00004000;
+          ownerName_ = other.ownerName_;
+          onChanged();
+        }
+        if (other.hasOwnerId()) {
+          bitField0_ |= 0x00008000;
+          ownerId_ = other.ownerId_;
+          onChanged();
+        }
+        if (other.hasEventTypeName()) {
+          bitField0_ |= 0x00010000;
+          eventTypeName_ = other.eventTypeName_;
+          onChanged();
+        }
+        if (other.hasEventTypeId()) {
+          bitField0_ |= 0x00020000;
+          eventTypeId_ = other.eventTypeId_;
+          onChanged();
+        }
+        if (other.hasIdentifier()) {
+          bitField0_ |= 0x00040000;
+          identifier_ = other.identifier_;
+          onChanged();
+        }
+        if (other.hasRfidNumber()) {
+          bitField0_ |= 0x00080000;
+          rfidNumber_ = other.rfidNumber_;
+          onChanged();
+        }
+        if (other.hasCustomerRefNumber()) {
+          bitField0_ |= 0x00100000;
+          customerRefNumber_ = other.customerRefNumber_;
+          onChanged();
+        }
+        if (other.hasAssetId()) {
+          bitField0_ |= 0x00200000;
+          assetId_ = other.assetId_;
+          onChanged();
+        }
+        if (other.hasComments()) {
+          bitField0_ |= 0x00400000;
+          comments_ = other.comments_;
+          onChanged();
+        }
+        if (other.hasScore()) {
+          bitField0_ |= 0x00800000;
+          score_ = other.score_;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasEventResult()) {
+          
+          return false;
+        }
+        if (!hasWorkflowState()) {
+          
+          return false;
+        }
+        if (!hasOwnerId()) {
+          
+          return false;
+        }
+        if (!hasIdentifier()) {
+          
+          return false;
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.n4systems.fieldid.api.pub.model.Messages.EventMessage parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.n4systems.fieldid.api.pub.model.Messages.EventMessage) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private java.lang.Object id_ = "";
+      /**
+       * <code>optional string id = 1;</code>
+       */
+      public boolean hasId() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>optional string id = 1;</code>
+       */
+      public java.lang.String getId() {
+        java.lang.Object ref = id_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            id_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string id = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getIdBytes() {
+        java.lang.Object ref = id_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          id_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string id = 1;</code>
+       */
+      public Builder setId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        id_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string id = 1;</code>
+       */
+      public Builder clearId() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        id_ = getDefaultInstance().getId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string id = 1;</code>
+       */
+      public Builder setIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        id_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object createdDate_ = "";
+      /**
+       * <code>optional string createdDate = 2;</code>
+       */
+      public boolean hasCreatedDate() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional string createdDate = 2;</code>
+       */
+      public java.lang.String getCreatedDate() {
+        java.lang.Object ref = createdDate_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            createdDate_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string createdDate = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getCreatedDateBytes() {
+        java.lang.Object ref = createdDate_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          createdDate_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string createdDate = 2;</code>
+       */
+      public Builder setCreatedDate(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        createdDate_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string createdDate = 2;</code>
+       */
+      public Builder clearCreatedDate() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        createdDate_ = getDefaultInstance().getCreatedDate();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string createdDate = 2;</code>
+       */
+      public Builder setCreatedDateBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        createdDate_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object modifiedDate_ = "";
+      /**
+       * <code>optional string modifiedDate = 3;</code>
+       */
+      public boolean hasModifiedDate() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional string modifiedDate = 3;</code>
+       */
+      public java.lang.String getModifiedDate() {
+        java.lang.Object ref = modifiedDate_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            modifiedDate_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string modifiedDate = 3;</code>
+       */
+      public com.google.protobuf.ByteString
+          getModifiedDateBytes() {
+        java.lang.Object ref = modifiedDate_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          modifiedDate_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string modifiedDate = 3;</code>
+       */
+      public Builder setModifiedDate(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        modifiedDate_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string modifiedDate = 3;</code>
+       */
+      public Builder clearModifiedDate() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        modifiedDate_ = getDefaultInstance().getModifiedDate();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string modifiedDate = 3;</code>
+       */
+      public Builder setModifiedDateBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        modifiedDate_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object completedDate_ = "";
+      /**
+       * <code>optional string completedDate = 4;</code>
+       */
+      public boolean hasCompletedDate() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional string completedDate = 4;</code>
+       */
+      public java.lang.String getCompletedDate() {
+        java.lang.Object ref = completedDate_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            completedDate_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string completedDate = 4;</code>
+       */
+      public com.google.protobuf.ByteString
+          getCompletedDateBytes() {
+        java.lang.Object ref = completedDate_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          completedDate_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string completedDate = 4;</code>
+       */
+      public Builder setCompletedDate(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
+        completedDate_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string completedDate = 4;</code>
+       */
+      public Builder clearCompletedDate() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        completedDate_ = getDefaultInstance().getCompletedDate();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string completedDate = 4;</code>
+       */
+      public Builder setCompletedDateBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
+        completedDate_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object createdByUserName_ = "";
+      /**
+       * <code>optional string createdByUserName = 5;</code>
+       */
+      public boolean hasCreatedByUserName() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>optional string createdByUserName = 5;</code>
+       */
+      public java.lang.String getCreatedByUserName() {
+        java.lang.Object ref = createdByUserName_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            createdByUserName_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string createdByUserName = 5;</code>
+       */
+      public com.google.protobuf.ByteString
+          getCreatedByUserNameBytes() {
+        java.lang.Object ref = createdByUserName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          createdByUserName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string createdByUserName = 5;</code>
+       */
+      public Builder setCreatedByUserName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000010;
+        createdByUserName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string createdByUserName = 5;</code>
+       */
+      public Builder clearCreatedByUserName() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        createdByUserName_ = getDefaultInstance().getCreatedByUserName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string createdByUserName = 5;</code>
+       */
+      public Builder setCreatedByUserNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000010;
+        createdByUserName_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object createdByUserId_ = "";
+      /**
+       * <code>optional string createdByUserId = 6;</code>
+       */
+      public boolean hasCreatedByUserId() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional string createdByUserId = 6;</code>
+       */
+      public java.lang.String getCreatedByUserId() {
+        java.lang.Object ref = createdByUserId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            createdByUserId_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string createdByUserId = 6;</code>
+       */
+      public com.google.protobuf.ByteString
+          getCreatedByUserIdBytes() {
+        java.lang.Object ref = createdByUserId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          createdByUserId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string createdByUserId = 6;</code>
+       */
+      public Builder setCreatedByUserId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000020;
+        createdByUserId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string createdByUserId = 6;</code>
+       */
+      public Builder clearCreatedByUserId() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        createdByUserId_ = getDefaultInstance().getCreatedByUserId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string createdByUserId = 6;</code>
+       */
+      public Builder setCreatedByUserIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000020;
+        createdByUserId_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object modifiedByUserName_ = "";
+      /**
+       * <code>optional string modifiedByUserName = 7;</code>
+       */
+      public boolean hasModifiedByUserName() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>optional string modifiedByUserName = 7;</code>
+       */
+      public java.lang.String getModifiedByUserName() {
+        java.lang.Object ref = modifiedByUserName_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            modifiedByUserName_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string modifiedByUserName = 7;</code>
+       */
+      public com.google.protobuf.ByteString
+          getModifiedByUserNameBytes() {
+        java.lang.Object ref = modifiedByUserName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          modifiedByUserName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string modifiedByUserName = 7;</code>
+       */
+      public Builder setModifiedByUserName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000040;
+        modifiedByUserName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string modifiedByUserName = 7;</code>
+       */
+      public Builder clearModifiedByUserName() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        modifiedByUserName_ = getDefaultInstance().getModifiedByUserName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string modifiedByUserName = 7;</code>
+       */
+      public Builder setModifiedByUserNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000040;
+        modifiedByUserName_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object modifiedByUserId_ = "";
+      /**
+       * <code>optional string modifiedByUserId = 8;</code>
+       */
+      public boolean hasModifiedByUserId() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
+      }
+      /**
+       * <code>optional string modifiedByUserId = 8;</code>
+       */
+      public java.lang.String getModifiedByUserId() {
+        java.lang.Object ref = modifiedByUserId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            modifiedByUserId_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string modifiedByUserId = 8;</code>
+       */
+      public com.google.protobuf.ByteString
+          getModifiedByUserIdBytes() {
+        java.lang.Object ref = modifiedByUserId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          modifiedByUserId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string modifiedByUserId = 8;</code>
+       */
+      public Builder setModifiedByUserId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000080;
+        modifiedByUserId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string modifiedByUserId = 8;</code>
+       */
+      public Builder clearModifiedByUserId() {
+        bitField0_ = (bitField0_ & ~0x00000080);
+        modifiedByUserId_ = getDefaultInstance().getModifiedByUserId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string modifiedByUserId = 8;</code>
+       */
+      public Builder setModifiedByUserIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000080;
+        modifiedByUserId_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object assignedToUserName_ = "";
+      /**
+       * <code>optional string assignedToUserName = 9;</code>
+       */
+      public boolean hasAssignedToUserName() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      /**
+       * <code>optional string assignedToUserName = 9;</code>
+       */
+      public java.lang.String getAssignedToUserName() {
+        java.lang.Object ref = assignedToUserName_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            assignedToUserName_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string assignedToUserName = 9;</code>
+       */
+      public com.google.protobuf.ByteString
+          getAssignedToUserNameBytes() {
+        java.lang.Object ref = assignedToUserName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          assignedToUserName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string assignedToUserName = 9;</code>
+       */
+      public Builder setAssignedToUserName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000100;
+        assignedToUserName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string assignedToUserName = 9;</code>
+       */
+      public Builder clearAssignedToUserName() {
+        bitField0_ = (bitField0_ & ~0x00000100);
+        assignedToUserName_ = getDefaultInstance().getAssignedToUserName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string assignedToUserName = 9;</code>
+       */
+      public Builder setAssignedToUserNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000100;
+        assignedToUserName_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object assignedToUserId_ = "";
+      /**
+       * <code>optional string assignedToUserId = 10;</code>
+       */
+      public boolean hasAssignedToUserId() {
+        return ((bitField0_ & 0x00000200) == 0x00000200);
+      }
+      /**
+       * <code>optional string assignedToUserId = 10;</code>
+       */
+      public java.lang.String getAssignedToUserId() {
+        java.lang.Object ref = assignedToUserId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            assignedToUserId_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string assignedToUserId = 10;</code>
+       */
+      public com.google.protobuf.ByteString
+          getAssignedToUserIdBytes() {
+        java.lang.Object ref = assignedToUserId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          assignedToUserId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string assignedToUserId = 10;</code>
+       */
+      public Builder setAssignedToUserId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000200;
+        assignedToUserId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string assignedToUserId = 10;</code>
+       */
+      public Builder clearAssignedToUserId() {
+        bitField0_ = (bitField0_ & ~0x00000200);
+        assignedToUserId_ = getDefaultInstance().getAssignedToUserId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string assignedToUserId = 10;</code>
+       */
+      public Builder setAssignedToUserIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000200;
+        assignedToUserId_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object completedByUserName_ = "";
+      /**
+       * <code>optional string completedByUserName = 11;</code>
+       */
+      public boolean hasCompletedByUserName() {
+        return ((bitField0_ & 0x00000400) == 0x00000400);
+      }
+      /**
+       * <code>optional string completedByUserName = 11;</code>
+       */
+      public java.lang.String getCompletedByUserName() {
+        java.lang.Object ref = completedByUserName_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            completedByUserName_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string completedByUserName = 11;</code>
+       */
+      public com.google.protobuf.ByteString
+          getCompletedByUserNameBytes() {
+        java.lang.Object ref = completedByUserName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          completedByUserName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string completedByUserName = 11;</code>
+       */
+      public Builder setCompletedByUserName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000400;
+        completedByUserName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string completedByUserName = 11;</code>
+       */
+      public Builder clearCompletedByUserName() {
+        bitField0_ = (bitField0_ & ~0x00000400);
+        completedByUserName_ = getDefaultInstance().getCompletedByUserName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string completedByUserName = 11;</code>
+       */
+      public Builder setCompletedByUserNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000400;
+        completedByUserName_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object completedByUserId_ = "";
+      /**
+       * <code>optional string completedByUserId = 12;</code>
+       */
+      public boolean hasCompletedByUserId() {
+        return ((bitField0_ & 0x00000800) == 0x00000800);
+      }
+      /**
+       * <code>optional string completedByUserId = 12;</code>
+       */
+      public java.lang.String getCompletedByUserId() {
+        java.lang.Object ref = completedByUserId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            completedByUserId_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string completedByUserId = 12;</code>
+       */
+      public com.google.protobuf.ByteString
+          getCompletedByUserIdBytes() {
+        java.lang.Object ref = completedByUserId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          completedByUserId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string completedByUserId = 12;</code>
+       */
+      public Builder setCompletedByUserId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000800;
+        completedByUserId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string completedByUserId = 12;</code>
+       */
+      public Builder clearCompletedByUserId() {
+        bitField0_ = (bitField0_ & ~0x00000800);
+        completedByUserId_ = getDefaultInstance().getCompletedByUserId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string completedByUserId = 12;</code>
+       */
+      public Builder setCompletedByUserIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000800;
+        completedByUserId_ = value;
+        onChanged();
+        return this;
+      }
+
+      private com.n4systems.fieldid.api.pub.model.Messages.EventMessage.EventResult eventResult_ = com.n4systems.fieldid.api.pub.model.Messages.EventMessage.EventResult.PASS;
+      /**
+       * <code>required .com.n4systems.fieldid.api.pub.model.EventMessage.EventResult eventResult = 13;</code>
+       */
+      public boolean hasEventResult() {
+        return ((bitField0_ & 0x00001000) == 0x00001000);
+      }
+      /**
+       * <code>required .com.n4systems.fieldid.api.pub.model.EventMessage.EventResult eventResult = 13;</code>
+       */
+      public com.n4systems.fieldid.api.pub.model.Messages.EventMessage.EventResult getEventResult() {
+        return eventResult_;
+      }
+      /**
+       * <code>required .com.n4systems.fieldid.api.pub.model.EventMessage.EventResult eventResult = 13;</code>
+       */
+      public Builder setEventResult(com.n4systems.fieldid.api.pub.model.Messages.EventMessage.EventResult value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00001000;
+        eventResult_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required .com.n4systems.fieldid.api.pub.model.EventMessage.EventResult eventResult = 13;</code>
+       */
+      public Builder clearEventResult() {
+        bitField0_ = (bitField0_ & ~0x00001000);
+        eventResult_ = com.n4systems.fieldid.api.pub.model.Messages.EventMessage.EventResult.PASS;
+        onChanged();
+        return this;
+      }
+
+      private com.n4systems.fieldid.api.pub.model.Messages.EventMessage.WorkflowState workflowState_ = com.n4systems.fieldid.api.pub.model.Messages.EventMessage.WorkflowState.OPEN;
+      /**
+       * <code>required .com.n4systems.fieldid.api.pub.model.EventMessage.WorkflowState workflowState = 14;</code>
+       */
+      public boolean hasWorkflowState() {
+        return ((bitField0_ & 0x00002000) == 0x00002000);
+      }
+      /**
+       * <code>required .com.n4systems.fieldid.api.pub.model.EventMessage.WorkflowState workflowState = 14;</code>
+       */
+      public com.n4systems.fieldid.api.pub.model.Messages.EventMessage.WorkflowState getWorkflowState() {
+        return workflowState_;
+      }
+      /**
+       * <code>required .com.n4systems.fieldid.api.pub.model.EventMessage.WorkflowState workflowState = 14;</code>
+       */
+      public Builder setWorkflowState(com.n4systems.fieldid.api.pub.model.Messages.EventMessage.WorkflowState value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00002000;
+        workflowState_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required .com.n4systems.fieldid.api.pub.model.EventMessage.WorkflowState workflowState = 14;</code>
+       */
+      public Builder clearWorkflowState() {
+        bitField0_ = (bitField0_ & ~0x00002000);
+        workflowState_ = com.n4systems.fieldid.api.pub.model.Messages.EventMessage.WorkflowState.OPEN;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object ownerName_ = "";
+      /**
+       * <code>optional string ownerName = 15;</code>
+       */
+      public boolean hasOwnerName() {
+        return ((bitField0_ & 0x00004000) == 0x00004000);
+      }
+      /**
+       * <code>optional string ownerName = 15;</code>
+       */
+      public java.lang.String getOwnerName() {
+        java.lang.Object ref = ownerName_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            ownerName_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string ownerName = 15;</code>
+       */
+      public com.google.protobuf.ByteString
+          getOwnerNameBytes() {
+        java.lang.Object ref = ownerName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          ownerName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string ownerName = 15;</code>
+       */
+      public Builder setOwnerName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00004000;
+        ownerName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string ownerName = 15;</code>
+       */
+      public Builder clearOwnerName() {
+        bitField0_ = (bitField0_ & ~0x00004000);
+        ownerName_ = getDefaultInstance().getOwnerName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string ownerName = 15;</code>
+       */
+      public Builder setOwnerNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00004000;
+        ownerName_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object ownerId_ = "";
+      /**
+       * <code>required string ownerId = 16;</code>
+       */
+      public boolean hasOwnerId() {
+        return ((bitField0_ & 0x00008000) == 0x00008000);
+      }
+      /**
+       * <code>required string ownerId = 16;</code>
+       */
+      public java.lang.String getOwnerId() {
+        java.lang.Object ref = ownerId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            ownerId_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string ownerId = 16;</code>
+       */
+      public com.google.protobuf.ByteString
+          getOwnerIdBytes() {
+        java.lang.Object ref = ownerId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          ownerId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string ownerId = 16;</code>
+       */
+      public Builder setOwnerId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00008000;
+        ownerId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string ownerId = 16;</code>
+       */
+      public Builder clearOwnerId() {
+        bitField0_ = (bitField0_ & ~0x00008000);
+        ownerId_ = getDefaultInstance().getOwnerId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string ownerId = 16;</code>
+       */
+      public Builder setOwnerIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00008000;
+        ownerId_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object eventTypeName_ = "";
+      /**
+       * <code>optional string eventTypeName = 17;</code>
+       */
+      public boolean hasEventTypeName() {
+        return ((bitField0_ & 0x00010000) == 0x00010000);
+      }
+      /**
+       * <code>optional string eventTypeName = 17;</code>
+       */
+      public java.lang.String getEventTypeName() {
+        java.lang.Object ref = eventTypeName_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            eventTypeName_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string eventTypeName = 17;</code>
+       */
+      public com.google.protobuf.ByteString
+          getEventTypeNameBytes() {
+        java.lang.Object ref = eventTypeName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          eventTypeName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string eventTypeName = 17;</code>
+       */
+      public Builder setEventTypeName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00010000;
+        eventTypeName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string eventTypeName = 17;</code>
+       */
+      public Builder clearEventTypeName() {
+        bitField0_ = (bitField0_ & ~0x00010000);
+        eventTypeName_ = getDefaultInstance().getEventTypeName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string eventTypeName = 17;</code>
+       */
+      public Builder setEventTypeNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00010000;
+        eventTypeName_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object eventTypeId_ = "";
+      /**
+       * <code>optional string eventTypeId = 18;</code>
+       */
+      public boolean hasEventTypeId() {
+        return ((bitField0_ & 0x00020000) == 0x00020000);
+      }
+      /**
+       * <code>optional string eventTypeId = 18;</code>
+       */
+      public java.lang.String getEventTypeId() {
+        java.lang.Object ref = eventTypeId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            eventTypeId_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string eventTypeId = 18;</code>
+       */
+      public com.google.protobuf.ByteString
+          getEventTypeIdBytes() {
+        java.lang.Object ref = eventTypeId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          eventTypeId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string eventTypeId = 18;</code>
+       */
+      public Builder setEventTypeId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00020000;
+        eventTypeId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string eventTypeId = 18;</code>
+       */
+      public Builder clearEventTypeId() {
+        bitField0_ = (bitField0_ & ~0x00020000);
+        eventTypeId_ = getDefaultInstance().getEventTypeId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string eventTypeId = 18;</code>
+       */
+      public Builder setEventTypeIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00020000;
+        eventTypeId_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object identifier_ = "";
+      /**
+       * <code>required string identifier = 19;</code>
+       */
+      public boolean hasIdentifier() {
+        return ((bitField0_ & 0x00040000) == 0x00040000);
+      }
+      /**
+       * <code>required string identifier = 19;</code>
+       */
+      public java.lang.String getIdentifier() {
+        java.lang.Object ref = identifier_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            identifier_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string identifier = 19;</code>
+       */
+      public com.google.protobuf.ByteString
+          getIdentifierBytes() {
+        java.lang.Object ref = identifier_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          identifier_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string identifier = 19;</code>
+       */
+      public Builder setIdentifier(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00040000;
+        identifier_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string identifier = 19;</code>
+       */
+      public Builder clearIdentifier() {
+        bitField0_ = (bitField0_ & ~0x00040000);
+        identifier_ = getDefaultInstance().getIdentifier();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string identifier = 19;</code>
+       */
+      public Builder setIdentifierBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00040000;
+        identifier_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object rfidNumber_ = "";
+      /**
+       * <code>optional string rfidNumber = 20;</code>
+       */
+      public boolean hasRfidNumber() {
+        return ((bitField0_ & 0x00080000) == 0x00080000);
+      }
+      /**
+       * <code>optional string rfidNumber = 20;</code>
+       */
+      public java.lang.String getRfidNumber() {
+        java.lang.Object ref = rfidNumber_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            rfidNumber_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string rfidNumber = 20;</code>
+       */
+      public com.google.protobuf.ByteString
+          getRfidNumberBytes() {
+        java.lang.Object ref = rfidNumber_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          rfidNumber_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string rfidNumber = 20;</code>
+       */
+      public Builder setRfidNumber(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00080000;
+        rfidNumber_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string rfidNumber = 20;</code>
+       */
+      public Builder clearRfidNumber() {
+        bitField0_ = (bitField0_ & ~0x00080000);
+        rfidNumber_ = getDefaultInstance().getRfidNumber();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string rfidNumber = 20;</code>
+       */
+      public Builder setRfidNumberBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00080000;
+        rfidNumber_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object customerRefNumber_ = "";
+      /**
+       * <code>optional string customerRefNumber = 21;</code>
+       */
+      public boolean hasCustomerRefNumber() {
+        return ((bitField0_ & 0x00100000) == 0x00100000);
+      }
+      /**
+       * <code>optional string customerRefNumber = 21;</code>
+       */
+      public java.lang.String getCustomerRefNumber() {
+        java.lang.Object ref = customerRefNumber_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            customerRefNumber_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string customerRefNumber = 21;</code>
+       */
+      public com.google.protobuf.ByteString
+          getCustomerRefNumberBytes() {
+        java.lang.Object ref = customerRefNumber_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          customerRefNumber_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string customerRefNumber = 21;</code>
+       */
+      public Builder setCustomerRefNumber(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00100000;
+        customerRefNumber_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string customerRefNumber = 21;</code>
+       */
+      public Builder clearCustomerRefNumber() {
+        bitField0_ = (bitField0_ & ~0x00100000);
+        customerRefNumber_ = getDefaultInstance().getCustomerRefNumber();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string customerRefNumber = 21;</code>
+       */
+      public Builder setCustomerRefNumberBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00100000;
+        customerRefNumber_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object assetId_ = "";
+      /**
+       * <code>optional string assetId = 22;</code>
+       */
+      public boolean hasAssetId() {
+        return ((bitField0_ & 0x00200000) == 0x00200000);
+      }
+      /**
+       * <code>optional string assetId = 22;</code>
+       */
+      public java.lang.String getAssetId() {
+        java.lang.Object ref = assetId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            assetId_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string assetId = 22;</code>
+       */
+      public com.google.protobuf.ByteString
+          getAssetIdBytes() {
+        java.lang.Object ref = assetId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          assetId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string assetId = 22;</code>
+       */
+      public Builder setAssetId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00200000;
+        assetId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string assetId = 22;</code>
+       */
+      public Builder clearAssetId() {
+        bitField0_ = (bitField0_ & ~0x00200000);
+        assetId_ = getDefaultInstance().getAssetId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string assetId = 22;</code>
+       */
+      public Builder setAssetIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00200000;
+        assetId_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object comments_ = "";
+      /**
+       * <code>optional string comments = 23;</code>
+       */
+      public boolean hasComments() {
+        return ((bitField0_ & 0x00400000) == 0x00400000);
+      }
+      /**
+       * <code>optional string comments = 23;</code>
+       */
+      public java.lang.String getComments() {
+        java.lang.Object ref = comments_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            comments_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string comments = 23;</code>
+       */
+      public com.google.protobuf.ByteString
+          getCommentsBytes() {
+        java.lang.Object ref = comments_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          comments_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string comments = 23;</code>
+       */
+      public Builder setComments(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00400000;
+        comments_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string comments = 23;</code>
+       */
+      public Builder clearComments() {
+        bitField0_ = (bitField0_ & ~0x00400000);
+        comments_ = getDefaultInstance().getComments();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string comments = 23;</code>
+       */
+      public Builder setCommentsBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00400000;
+        comments_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object score_ = "";
+      /**
+       * <code>optional string score = 24;</code>
+       */
+      public boolean hasScore() {
+        return ((bitField0_ & 0x00800000) == 0x00800000);
+      }
+      /**
+       * <code>optional string score = 24;</code>
+       */
+      public java.lang.String getScore() {
+        java.lang.Object ref = score_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            score_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string score = 24;</code>
+       */
+      public com.google.protobuf.ByteString
+          getScoreBytes() {
+        java.lang.Object ref = score_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          score_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string score = 24;</code>
+       */
+      public Builder setScore(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00800000;
+        score_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string score = 24;</code>
+       */
+      public Builder clearScore() {
+        bitField0_ = (bitField0_ & ~0x00800000);
+        score_ = getDefaultInstance().getScore();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string score = 24;</code>
+       */
+      public Builder setScoreBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00800000;
+        score_ = value;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:com.n4systems.fieldid.api.pub.model.EventMessage)
+    }
+
+    static {
+      defaultInstance = new EventMessage(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:com.n4systems.fieldid.api.pub.model.EventMessage)
   }
 
   public interface AssetStatusMessageOrBuilder extends
@@ -33692,6 +37872,17 @@ public final class Messages {
           .newFileScopedGeneratedExtension(
         com.n4systems.fieldid.api.pub.model.Messages.UserGroupMessage.class,
         com.n4systems.fieldid.api.pub.model.Messages.UserGroupMessage.getDefaultInstance());
+  public static final int EVENTS_FIELD_NUMBER = 1008;
+  /**
+   * <code>extend .com.n4systems.fieldid.api.pub.model.ListResponseMessage { ... }</code>
+   */
+  public static final
+    com.google.protobuf.GeneratedMessage.GeneratedExtension<
+      com.n4systems.fieldid.api.pub.model.Messages.ListResponseMessage,
+      java.util.List<com.n4systems.fieldid.api.pub.model.Messages.EventMessage>> events = com.google.protobuf.GeneratedMessage
+          .newFileScopedGeneratedExtension(
+        com.n4systems.fieldid.api.pub.model.Messages.EventMessage.class,
+        com.n4systems.fieldid.api.pub.model.Messages.EventMessage.getDefaultInstance());
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_com_n4systems_fieldid_api_pub_model_AssetMessage_descriptor;
   private static
@@ -33702,6 +37893,11 @@ public final class Messages {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_com_n4systems_fieldid_api_pub_model_AssetMessage_AttributeMessage_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_n4systems_fieldid_api_pub_model_EventMessage_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_com_n4systems_fieldid_api_pub_model_EventMessage_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_com_n4systems_fieldid_api_pub_model_AssetStatusMessage_descriptor;
   private static
@@ -33811,144 +38007,168 @@ public final class Messages {
       "eMessage\032\202\001\n\020AttributeMessage\022E\n\004type\030\001 " +
       "\001(\01627.com.n4systems.fieldid.api.pub.mode" +
       "l.AttributeValueType\022\n\n\002id\030\002 \001(\t\022\014\n\004name" +
-      "\030\003 \001(\t\022\r\n\005value\030\004 \001(\t\"\303\001\n\022AssetStatusMes" +
-      "sage\022\n\n\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n" +
-      "\014modifiedDate\030\003 \001(\t\022\031\n\021createdByUserName" +
-      "\030\004 \001(\t\022\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modif" +
-      "iedByUserName\030\006 \001(\t\022\030\n\020modifiedByUserId\030",
-      "\007 \001(\t\022\014\n\004name\030\010 \001(\t\"\327\007\n\020AssetTypeMessage" +
-      "\022\n\n\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014mod" +
-      "ifiedDate\030\003 \001(\t\022\031\n\021createdByUserName\030\004 \001" +
-      "(\t\022\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modifiedB" +
-      "yUserName\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001(" +
-      "\t\022\014\n\004name\030\010 \002(\t\022\020\n\010warnings\030\t \001(\t\022\024\n\014ins" +
-      "tructions\030\n \001(\t\022\022\n\ncautionUrl\030\013 \001(\t\022\033\n\023d" +
-      "escriptionTemplate\030\014 \001(\t\022\"\n\032manufactureC" +
-      "ertificateText\030\r \001(\t\022!\n\031hasManufactureCe" +
-      "rtificate\030\016 \001(\010\022\031\n\021allowAssetLinking\030\017 \001",
-      "(\010\022\025\n\rhasProcedures\030\020 \001(\010\022\030\n\020assetTypeGr" +
-      "oupId\030\021 \001(\t\022\032\n\022assetTypeGroupName\030\022 \001(\t\022" +
-      "P\n\tschedules\030\023 \003(\0132=.com.n4systems.field" +
-      "id.api.pub.model.AssetTypeScheduleMessag" +
-      "e\022n\n\024associatedEventTypes\030\024 \003(\0132P.com.n4" +
-      "systems.fieldid.api.pub.model.AssetTypeM" +
-      "essage.AssociatedEventTypeMessage\022g\n\016att" +
-      "ributeTypes\030\025 \003(\0132O.com.n4systems.fieldi" +
-      "d.api.pub.model.AssetTypeMessage.AssetAt" +
-      "tributeTypeMessage\032H\n\032AssociatedEventTyp",
-      "eMessage\022\023\n\013eventTypeId\030\001 \002(\t\022\025\n\reventTy" +
-      "peName\030\002 \002(\t\032\226\001\n\031AssetAttributeTypeMessa" +
-      "ge\022\n\n\002id\030\001 \002(\t\022E\n\004type\030\002 \002(\01627.com.n4sys" +
-      "tems.fieldid.api.pub.model.AttributeValu" +
-      "eType\022\014\n\004name\030\003 \002(\t\022\030\n\020attributeOptions\030" +
-      "\004 \003(\t\"\306\001\n\025AssetTypeGroupMessage\022\n\n\002id\030\001 " +
-      "\001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014modifiedDate" +
-      "\030\003 \001(\t\022\031\n\021createdByUserName\030\004 \001(\t\022\027\n\017cre" +
-      "atedByUserId\030\005 \001(\t\022\032\n\022modifiedByUserName" +
-      "\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001(\t\022\014\n\004name",
-      "\030\010 \002(\t\"\346\002\n\030AssetTypeScheduleMessage\022\n\n\002i" +
-      "d\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014modified" +
-      "Date\030\003 \001(\t\022\031\n\021createdByUserName\030\004 \001(\t\022\027\n" +
-      "\017createdByUserId\030\005 \001(\t\022\032\n\022modifiedByUser" +
-      "Name\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001(\t\022\021\n\t" +
-      "ownerName\030\010 \001(\t\022\017\n\007ownerId\030\t \002(\t\022\025\n\rasse" +
-      "tTypeName\030\n \001(\t\022\023\n\013assetTypeId\030\013 \002(\t\022\025\n\r" +
-      "eventTypeName\030\014 \001(\t\022\023\n\013eventTypeId\030\r \002(\t" +
-      "\022\027\n\017frequencyInDays\030\016 \002(\003\022\024\n\014autoSchedul" +
-      "e\030\017 \002(\010\"\320\003\n\014OwnerMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013",
-      "createdDate\030\002 \001(\t\022\024\n\014modifiedDate\030\003 \001(\t\022" +
-      "\031\n\021createdByUserName\030\004 \001(\t\022\027\n\017createdByU" +
-      "serId\030\005 \001(\t\022\032\n\022modifiedByUserName\030\006 \001(\t\022" +
-      "\030\n\020modifiedByUserId\030\007 \001(\t\022\014\n\004name\030\010 \002(\t\022" +
-      "\022\n\nparentName\030\t \001(\t\022\020\n\010parentId\030\n \001(\t\022\014\n" +
-      "\004code\030\013 \001(\t\022\r\n\005notes\030\014 \001(\t\022\025\n\rstreetAddr" +
-      "ess\030\r \001(\t\022\014\n\004city\030\016 \001(\t\022\r\n\005state\030\017 \001(\t\022\017" +
-      "\n\007country\030\020 \001(\t\022\013\n\003zip\030\021 \001(\t\022\016\n\006phone1\030\022" +
-      " \001(\t\022\016\n\006phone2\030\023 \001(\t\022\014\n\004fax1\030\024 \001(\t\022\020\n\010la" +
-      "titude\030\025 \001(\t\022\021\n\tlongitude\030\026 \001(\t\022\023\n\013conta",
-      "ctName\030\027 \001(\t\022\024\n\014contactEmail\030\030 \001(\t\"\224\002\n\031P" +
-      "redefinedLocationMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013" +
-      "createdDate\030\002 \001(\t\022\024\n\014modifiedDate\030\003 \001(\t\022" +
-      "\031\n\021createdByUserName\030\004 \001(\t\022\027\n\017createdByU" +
-      "serId\030\005 \001(\t\022\032\n\022modifiedByUserName\030\006 \001(\t\022" +
-      "\030\n\020modifiedByUserId\030\007 \001(\t\022\021\n\townerName\030\010" +
-      " \001(\t\022\017\n\007ownerId\030\t \001(\t\022\022\n\nparentName\030\n \001(" +
-      "\t\022\020\n\010parentId\030\013 \001(\t\022\014\n\004name\030\014 \002(\t\"\310\002\n\021Te" +
-      "stSimpleMessage\022\024\n\014double_field\030\001 \001(\001\022\023\n" +
-      "\013float_field\030\002 \001(\002\022\023\n\013int32_field\030\003 \001(\005\022",
-      "\023\n\013int64_field\030\004 \001(\003\022\024\n\014uint32_field\030\005 \001" +
-      "(\r\022\024\n\014uint64_field\030\006 \001(\004\022\024\n\014sint32_field" +
-      "\030\007 \001(\021\022\024\n\014sint64_field\030\010 \001(\022\022\025\n\rfixed32_" +
-      "field\030\t \001(\007\022\025\n\rfixed64_field\030\n \001(\006\022\026\n\016sf" +
-      "ixed32_field\030\013 \001(\017\022\026\n\016sfixed64_field\030\014 \001" +
-      "(\020\022\022\n\nbool_field\030\r \001(\010\022\024\n\014string_field\030\016" +
-      " \001(\t\")\n\021TestNestedMessage\022\024\n\014string_fiel" +
-      "d\030\001 \002(\t\"s\n\024TestContainerMessage\022\023\n\013int32" +
-      "_field\030\001 \002(\005\022F\n\006nested\030\002 \001(\01326.com.n4sys" +
-      "tems.fieldid.api.pub.model.TestNestedMes",
-      "sage\"\371\007\n\013UserMessage\022\n\n\002id\030\001 \001(\t\022\017\n\007crea" +
-      "ted\030\002 \001(\t\022\020\n\010modified\030\003 \001(\t\022\031\n\021createdBy" +
-      "UserName\030\004 \001(\t\022\027\n\017createdByUserId\030\005 \001(\t\022" +
-      "\032\n\022modifiedByUserName\030\006 \001(\t\022\030\n\020modifiedB" +
-      "yUserId\030\007 \001(\t\022\021\n\townerName\030\010 \001(\t\022\017\n\007owne" +
-      "rId\030\t \002(\t\022\016\n\006userID\030\n \001(\t\022\021\n\tfirstName\030\013" +
-      " \001(\t\022\020\n\010lastName\030\014 \001(\t\022\024\n\014emailAddress\030\r" +
-      " \001(\t\022\022\n\ntimeZoneID\030\016 \001(\t\022\020\n\010position\030\017 \001" +
-      "(\t\022\020\n\010initials\030\020 \001(\t\022\033\n\023failedLoginAttem" +
-      "pts\030\021 \001(\005\022\016\n\006locked\030\022 \001(\010\022\023\n\013lockedUntil",
-      "\030\023 \001(\t\022\027\n\017passwordChanged\030\024 \001(\t\022\020\n\010langu" +
-      "age\030\025 \001(\t\022\022\n\nidentifier\030\026 \001(\t\022\021\n\tlastLog" +
-      "in\030\027 \001(\t\022E\n\006groups\030\030 \003(\01325.com.n4systems" +
-      ".fieldid.api.pub.model.UserGroupMessage\022" +
-      "K\n\010userType\030\031 \002(\01629.com.n4systems.fieldi" +
-      "d.api.pub.model.UserMessage.UserType\022X\n\013" +
-      "permissions\030\032 \002(\0132C.com.n4systems.fieldi" +
-      "d.api.pub.model.UserMessage.PermissionsM" +
-      "essage\032\324\001\n\022PermissionsMessage\022\024\n\014createA" +
-      "ssets\030\001 \002(\010\022\032\n\022manageSystemConfig\030\002 \002(\010\022",
-      "\031\n\021manageSystemUsers\030\003 \002(\010\022\026\n\016manageEndU" +
-      "sers\030\004 \002(\010\022\024\n\014createEvents\030\005 \002(\010\022\022\n\nedit" +
-      "Events\030\006 \002(\010\022\022\n\nmanageJobs\030\007 \002(\010\022\033\n\023mana" +
-      "geSafetyNetwork\030\010 \002(\010\"Q\n\010UserType\022\t\n\005ADM" +
-      "IN\020\001\022\016\n\nINSPECTION\020\002\022\r\n\tREPORTING\020\003\022\n\n\006P" +
-      "ERSON\020\004\022\017\n\013USAGE_BASED\020\005\"=\n\020UserGroupMes" +
-      "sage\022\n\n\002id\030\001 \001(\t\022\014\n\004name\030\002 \002(\t\022\017\n\007groupI" +
-      "d\030\003 \001(\t\"L\n\023ListResponseMessage\022\014\n\004page\030\001" +
-      " \002(\005\022\020\n\010pageSize\030\002 \002(\005\022\r\n\005total\030\003 \002(\003*\006\010" +
-      "\350\007\020\321\017*X\n\022AttributeValueType\022\010\n\004TEXT\020\001\022\n\n",
-      "\006SELECT\020\002\022\t\n\005COMBO\020\003\022\010\n\004UNIT\020\004\022\010\n\004DATE\020\005" +
-      "\022\r\n\tDATE_TIME\020\006:8\n\017serialized_name\022\035.goo" +
-      "gle.protobuf.FieldOptions\030\321\206\003 \001(\t:\206\001\n\006as" +
-      "sets\0228.com.n4systems.fieldid.api.pub.mod" +
-      "el.ListResponseMessage\030\350\007 \003(\01321.com.n4sy" +
-      "stems.fieldid.api.pub.model.AssetMessage" +
-      "B\010\212\265\030\004list:\206\001\n\006owners\0228.com.n4systems.fi" +
-      "eldid.api.pub.model.ListResponseMessage\030" +
-      "\351\007 \003(\01321.com.n4systems.fieldid.api.pub.m" +
-      "odel.OwnerMessageB\010\212\265\030\004list:\223\001\n\rassetSta",
-      "tuses\0228.com.n4systems.fieldid.api.pub.mo" +
-      "del.ListResponseMessage\030\352\007 \003(\01327.com.n4s" +
-      "ystems.fieldid.api.pub.model.AssetStatus" +
-      "MessageB\010\212\265\030\004list:\216\001\n\nassetTypes\0228.com.n" +
-      "4systems.fieldid.api.pub.model.ListRespo" +
-      "nseMessage\030\353\007 \003(\01325.com.n4systems.fieldi" +
-      "d.api.pub.model.AssetTypeMessageB\010\212\265\030\004li" +
-      "st:\230\001\n\017assetTypeGroups\0228.com.n4systems.f" +
-      "ieldid.api.pub.model.ListResponseMessage" +
-      "\030\354\007 \003(\0132:.com.n4systems.fieldid.api.pub.",
-      "model.AssetTypeGroupMessageB\010\212\265\030\004list:\226\001" +
-      "\n\tlocations\0228.com.n4systems.fieldid.api." +
-      "pub.model.ListResponseMessage\030\355\007 \003(\0132>.c" +
-      "om.n4systems.fieldid.api.pub.model.Prede" +
-      "finedLocationMessageB\010\212\265\030\004list:\204\001\n\005users" +
-      "\0228.com.n4systems.fieldid.api.pub.model.L" +
-      "istResponseMessage\030\356\007 \003(\01320.com.n4system" +
-      "s.fieldid.api.pub.model.UserMessageB\010\212\265\030" +
-      "\004list:\216\001\n\nuserGroups\0228.com.n4systems.fie" +
-      "ldid.api.pub.model.ListResponseMessage\030\357",
-      "\007 \003(\01325.com.n4systems.fieldid.api.pub.mo" +
-      "del.UserGroupMessageB\010\212\265\030\004listB/\n#com.n4" +
-      "systems.fieldid.api.pub.modelB\010Messages"
+      "\030\003 \001(\t\022\r\n\005value\030\004 \001(\t\"\232\006\n\014EventMessage\022\n" +
+      "\n\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014modif" +
+      "iedDate\030\003 \001(\t\022\025\n\rcompletedDate\030\004 \001(\t\022\031\n\021" +
+      "createdByUserName\030\005 \001(\t\022\027\n\017createdByUser" +
+      "Id\030\006 \001(\t\022\032\n\022modifiedByUserName\030\007 \001(\t\022\030\n\020",
+      "modifiedByUserId\030\010 \001(\t\022\032\n\022assignedToUser" +
+      "Name\030\t \001(\t\022\030\n\020assignedToUserId\030\n \001(\t\022\033\n\023" +
+      "completedByUserName\030\013 \001(\t\022\031\n\021completedBy" +
+      "UserId\030\014 \001(\t\022R\n\013eventResult\030\r \002(\0162=.com." +
+      "n4systems.fieldid.api.pub.model.EventMes" +
+      "sage.EventResult\022V\n\rworkflowState\030\016 \002(\0162" +
+      "?.com.n4systems.fieldid.api.pub.model.Ev" +
+      "entMessage.WorkflowState\022\021\n\townerName\030\017 " +
+      "\001(\t\022\017\n\007ownerId\030\020 \002(\t\022\025\n\reventTypeName\030\021 " +
+      "\001(\t\022\023\n\013eventTypeId\030\022 \001(\t\022\022\n\nidentifier\030\023",
+      " \002(\t\022\022\n\nrfidNumber\030\024 \001(\t\022\031\n\021customerRefN" +
+      "umber\030\025 \001(\t\022\017\n\007assetId\030\026 \001(\t\022\020\n\010comments" +
+      "\030\027 \001(\t\022\r\n\005score\030\030 \001(\t\"3\n\013EventResult\022\010\n\004" +
+      "PASS\020\001\022\010\n\004FAIL\020\002\022\006\n\002NA\020\003\022\010\n\004VOID\020\004\">\n\rWo" +
+      "rkflowState\022\010\n\004OPEN\020\001\022\r\n\tCOMPLETED\020\002\022\n\n\006" +
+      "CLOSED\020\003\022\010\n\004NONE\020\004\"\303\001\n\022AssetStatusMessag" +
+      "e\022\n\n\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014mo" +
+      "difiedDate\030\003 \001(\t\022\031\n\021createdByUserName\030\004 " +
+      "\001(\t\022\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modified" +
+      "ByUserName\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001",
+      "(\t\022\014\n\004name\030\010 \001(\t\"\327\007\n\020AssetTypeMessage\022\n\n" +
+      "\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014modifi" +
+      "edDate\030\003 \001(\t\022\031\n\021createdByUserName\030\004 \001(\t\022" +
+      "\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modifiedByUs" +
+      "erName\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001(\t\022\014" +
+      "\n\004name\030\010 \002(\t\022\020\n\010warnings\030\t \001(\t\022\024\n\014instru" +
+      "ctions\030\n \001(\t\022\022\n\ncautionUrl\030\013 \001(\t\022\033\n\023desc" +
+      "riptionTemplate\030\014 \001(\t\022\"\n\032manufactureCert" +
+      "ificateText\030\r \001(\t\022!\n\031hasManufactureCerti" +
+      "ficate\030\016 \001(\010\022\031\n\021allowAssetLinking\030\017 \001(\010\022",
+      "\025\n\rhasProcedures\030\020 \001(\010\022\030\n\020assetTypeGroup" +
+      "Id\030\021 \001(\t\022\032\n\022assetTypeGroupName\030\022 \001(\t\022P\n\t" +
+      "schedules\030\023 \003(\0132=.com.n4systems.fieldid." +
+      "api.pub.model.AssetTypeScheduleMessage\022n" +
+      "\n\024associatedEventTypes\030\024 \003(\0132P.com.n4sys" +
+      "tems.fieldid.api.pub.model.AssetTypeMess" +
+      "age.AssociatedEventTypeMessage\022g\n\016attrib" +
+      "uteTypes\030\025 \003(\0132O.com.n4systems.fieldid.a" +
+      "pi.pub.model.AssetTypeMessage.AssetAttri" +
+      "buteTypeMessage\032H\n\032AssociatedEventTypeMe",
+      "ssage\022\023\n\013eventTypeId\030\001 \002(\t\022\025\n\reventTypeN" +
+      "ame\030\002 \002(\t\032\226\001\n\031AssetAttributeTypeMessage\022" +
+      "\n\n\002id\030\001 \002(\t\022E\n\004type\030\002 \002(\01627.com.n4system" +
+      "s.fieldid.api.pub.model.AttributeValueTy" +
+      "pe\022\014\n\004name\030\003 \002(\t\022\030\n\020attributeOptions\030\004 \003" +
+      "(\t\"\306\001\n\025AssetTypeGroupMessage\022\n\n\002id\030\001 \001(\t" +
+      "\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014modifiedDate\030\003 " +
+      "\001(\t\022\031\n\021createdByUserName\030\004 \001(\t\022\027\n\017create" +
+      "dByUserId\030\005 \001(\t\022\032\n\022modifiedByUserName\030\006 " +
+      "\001(\t\022\030\n\020modifiedByUserId\030\007 \001(\t\022\014\n\004name\030\010 ",
+      "\002(\t\"\346\002\n\030AssetTypeScheduleMessage\022\n\n\002id\030\001" +
+      " \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014modifiedDat" +
+      "e\030\003 \001(\t\022\031\n\021createdByUserName\030\004 \001(\t\022\027\n\017cr" +
+      "eatedByUserId\030\005 \001(\t\022\032\n\022modifiedByUserNam" +
+      "e\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001(\t\022\021\n\town" +
+      "erName\030\010 \001(\t\022\017\n\007ownerId\030\t \002(\t\022\025\n\rassetTy" +
+      "peName\030\n \001(\t\022\023\n\013assetTypeId\030\013 \002(\t\022\025\n\reve" +
+      "ntTypeName\030\014 \001(\t\022\023\n\013eventTypeId\030\r \002(\t\022\027\n" +
+      "\017frequencyInDays\030\016 \002(\003\022\024\n\014autoSchedule\030\017" +
+      " \002(\010\"\320\003\n\014OwnerMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013cre",
+      "atedDate\030\002 \001(\t\022\024\n\014modifiedDate\030\003 \001(\t\022\031\n\021" +
+      "createdByUserName\030\004 \001(\t\022\027\n\017createdByUser" +
+      "Id\030\005 \001(\t\022\032\n\022modifiedByUserName\030\006 \001(\t\022\030\n\020" +
+      "modifiedByUserId\030\007 \001(\t\022\014\n\004name\030\010 \002(\t\022\022\n\n" +
+      "parentName\030\t \001(\t\022\020\n\010parentId\030\n \001(\t\022\014\n\004co" +
+      "de\030\013 \001(\t\022\r\n\005notes\030\014 \001(\t\022\025\n\rstreetAddress" +
+      "\030\r \001(\t\022\014\n\004city\030\016 \001(\t\022\r\n\005state\030\017 \001(\t\022\017\n\007c" +
+      "ountry\030\020 \001(\t\022\013\n\003zip\030\021 \001(\t\022\016\n\006phone1\030\022 \001(" +
+      "\t\022\016\n\006phone2\030\023 \001(\t\022\014\n\004fax1\030\024 \001(\t\022\020\n\010latit" +
+      "ude\030\025 \001(\t\022\021\n\tlongitude\030\026 \001(\t\022\023\n\013contactN",
+      "ame\030\027 \001(\t\022\024\n\014contactEmail\030\030 \001(\t\"\224\002\n\031Pred" +
+      "efinedLocationMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013cre" +
+      "atedDate\030\002 \001(\t\022\024\n\014modifiedDate\030\003 \001(\t\022\031\n\021" +
+      "createdByUserName\030\004 \001(\t\022\027\n\017createdByUser" +
+      "Id\030\005 \001(\t\022\032\n\022modifiedByUserName\030\006 \001(\t\022\030\n\020" +
+      "modifiedByUserId\030\007 \001(\t\022\021\n\townerName\030\010 \001(" +
+      "\t\022\017\n\007ownerId\030\t \001(\t\022\022\n\nparentName\030\n \001(\t\022\020" +
+      "\n\010parentId\030\013 \001(\t\022\014\n\004name\030\014 \002(\t\"\310\002\n\021TestS" +
+      "impleMessage\022\024\n\014double_field\030\001 \001(\001\022\023\n\013fl" +
+      "oat_field\030\002 \001(\002\022\023\n\013int32_field\030\003 \001(\005\022\023\n\013",
+      "int64_field\030\004 \001(\003\022\024\n\014uint32_field\030\005 \001(\r\022" +
+      "\024\n\014uint64_field\030\006 \001(\004\022\024\n\014sint32_field\030\007 " +
+      "\001(\021\022\024\n\014sint64_field\030\010 \001(\022\022\025\n\rfixed32_fie" +
+      "ld\030\t \001(\007\022\025\n\rfixed64_field\030\n \001(\006\022\026\n\016sfixe" +
+      "d32_field\030\013 \001(\017\022\026\n\016sfixed64_field\030\014 \001(\020\022" +
+      "\022\n\nbool_field\030\r \001(\010\022\024\n\014string_field\030\016 \001(" +
+      "\t\")\n\021TestNestedMessage\022\024\n\014string_field\030\001" +
+      " \002(\t\"s\n\024TestContainerMessage\022\023\n\013int32_fi" +
+      "eld\030\001 \002(\005\022F\n\006nested\030\002 \001(\01326.com.n4system" +
+      "s.fieldid.api.pub.model.TestNestedMessag",
+      "e\"\371\007\n\013UserMessage\022\n\n\002id\030\001 \001(\t\022\017\n\007created" +
+      "\030\002 \001(\t\022\020\n\010modified\030\003 \001(\t\022\031\n\021createdByUse" +
+      "rName\030\004 \001(\t\022\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022" +
+      "modifiedByUserName\030\006 \001(\t\022\030\n\020modifiedByUs" +
+      "erId\030\007 \001(\t\022\021\n\townerName\030\010 \001(\t\022\017\n\007ownerId" +
+      "\030\t \002(\t\022\016\n\006userID\030\n \001(\t\022\021\n\tfirstName\030\013 \001(" +
+      "\t\022\020\n\010lastName\030\014 \001(\t\022\024\n\014emailAddress\030\r \001(" +
+      "\t\022\022\n\ntimeZoneID\030\016 \001(\t\022\020\n\010position\030\017 \001(\t\022" +
+      "\020\n\010initials\030\020 \001(\t\022\033\n\023failedLoginAttempts" +
+      "\030\021 \001(\005\022\016\n\006locked\030\022 \001(\010\022\023\n\013lockedUntil\030\023 ",
+      "\001(\t\022\027\n\017passwordChanged\030\024 \001(\t\022\020\n\010language" +
+      "\030\025 \001(\t\022\022\n\nidentifier\030\026 \001(\t\022\021\n\tlastLogin\030" +
+      "\027 \001(\t\022E\n\006groups\030\030 \003(\01325.com.n4systems.fi" +
+      "eldid.api.pub.model.UserGroupMessage\022K\n\010" +
+      "userType\030\031 \002(\01629.com.n4systems.fieldid.a" +
+      "pi.pub.model.UserMessage.UserType\022X\n\013per" +
+      "missions\030\032 \002(\0132C.com.n4systems.fieldid.a" +
+      "pi.pub.model.UserMessage.PermissionsMess" +
+      "age\032\324\001\n\022PermissionsMessage\022\024\n\014createAsse" +
+      "ts\030\001 \002(\010\022\032\n\022manageSystemConfig\030\002 \002(\010\022\031\n\021",
+      "manageSystemUsers\030\003 \002(\010\022\026\n\016manageEndUser" +
+      "s\030\004 \002(\010\022\024\n\014createEvents\030\005 \002(\010\022\022\n\neditEve" +
+      "nts\030\006 \002(\010\022\022\n\nmanageJobs\030\007 \002(\010\022\033\n\023manageS" +
+      "afetyNetwork\030\010 \002(\010\"Q\n\010UserType\022\t\n\005ADMIN\020" +
+      "\001\022\016\n\nINSPECTION\020\002\022\r\n\tREPORTING\020\003\022\n\n\006PERS" +
+      "ON\020\004\022\017\n\013USAGE_BASED\020\005\"=\n\020UserGroupMessag" +
+      "e\022\n\n\002id\030\001 \001(\t\022\014\n\004name\030\002 \002(\t\022\017\n\007groupId\030\003" +
+      " \001(\t\"L\n\023ListResponseMessage\022\014\n\004page\030\001 \002(" +
+      "\005\022\020\n\010pageSize\030\002 \002(\005\022\r\n\005total\030\003 \002(\003*\006\010\350\007\020" +
+      "\321\017*X\n\022AttributeValueType\022\010\n\004TEXT\020\001\022\n\n\006SE",
+      "LECT\020\002\022\t\n\005COMBO\020\003\022\010\n\004UNIT\020\004\022\010\n\004DATE\020\005\022\r\n" +
+      "\tDATE_TIME\020\006:8\n\017serialized_name\022\035.google" +
+      ".protobuf.FieldOptions\030\321\206\003 \001(\t:\206\001\n\006asset" +
+      "s\0228.com.n4systems.fieldid.api.pub.model." +
+      "ListResponseMessage\030\350\007 \003(\01321.com.n4syste" +
+      "ms.fieldid.api.pub.model.AssetMessageB\010\212" +
+      "\265\030\004list:\206\001\n\006owners\0228.com.n4systems.field" +
+      "id.api.pub.model.ListResponseMessage\030\351\007 " +
+      "\003(\01321.com.n4systems.fieldid.api.pub.mode" +
+      "l.OwnerMessageB\010\212\265\030\004list:\223\001\n\rassetStatus",
+      "es\0228.com.n4systems.fieldid.api.pub.model" +
+      ".ListResponseMessage\030\352\007 \003(\01327.com.n4syst" +
+      "ems.fieldid.api.pub.model.AssetStatusMes" +
+      "sageB\010\212\265\030\004list:\216\001\n\nassetTypes\0228.com.n4sy" +
+      "stems.fieldid.api.pub.model.ListResponse" +
+      "Message\030\353\007 \003(\01325.com.n4systems.fieldid.a" +
+      "pi.pub.model.AssetTypeMessageB\010\212\265\030\004list:" +
+      "\230\001\n\017assetTypeGroups\0228.com.n4systems.fiel" +
+      "did.api.pub.model.ListResponseMessage\030\354\007" +
+      " \003(\0132:.com.n4systems.fieldid.api.pub.mod",
+      "el.AssetTypeGroupMessageB\010\212\265\030\004list:\226\001\n\tl" +
+      "ocations\0228.com.n4systems.fieldid.api.pub" +
+      ".model.ListResponseMessage\030\355\007 \003(\0132>.com." +
+      "n4systems.fieldid.api.pub.model.Predefin" +
+      "edLocationMessageB\010\212\265\030\004list:\204\001\n\005users\0228." +
+      "com.n4systems.fieldid.api.pub.model.List" +
+      "ResponseMessage\030\356\007 \003(\01320.com.n4systems.f" +
+      "ieldid.api.pub.model.UserMessageB\010\212\265\030\004li" +
+      "st:\216\001\n\nuserGroups\0228.com.n4systems.fieldi" +
+      "d.api.pub.model.ListResponseMessage\030\357\007 \003",
+      "(\01325.com.n4systems.fieldid.api.pub.model" +
+      ".UserGroupMessageB\010\212\265\030\004list:\206\001\n\006events\0228" +
+      ".com.n4systems.fieldid.api.pub.model.Lis" +
+      "tResponseMessage\030\360\007 \003(\01321.com.n4systems." +
+      "fieldid.api.pub.model.EventMessageB\010\212\265\030\004" +
+      "listB/\n#com.n4systems.fieldid.api.pub.mo" +
+      "delB\010Messages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -33975,14 +38195,20 @@ public final class Messages {
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_com_n4systems_fieldid_api_pub_model_AssetMessage_AttributeMessage_descriptor,
         new java.lang.String[] { "Type", "Id", "Name", "Value", });
-    internal_static_com_n4systems_fieldid_api_pub_model_AssetStatusMessage_descriptor =
+    internal_static_com_n4systems_fieldid_api_pub_model_EventMessage_descriptor =
       getDescriptor().getMessageTypes().get(1);
+    internal_static_com_n4systems_fieldid_api_pub_model_EventMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_com_n4systems_fieldid_api_pub_model_EventMessage_descriptor,
+        new java.lang.String[] { "Id", "CreatedDate", "ModifiedDate", "CompletedDate", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "AssignedToUserName", "AssignedToUserId", "CompletedByUserName", "CompletedByUserId", "EventResult", "WorkflowState", "OwnerName", "OwnerId", "EventTypeName", "EventTypeId", "Identifier", "RfidNumber", "CustomerRefNumber", "AssetId", "Comments", "Score", });
+    internal_static_com_n4systems_fieldid_api_pub_model_AssetStatusMessage_descriptor =
+      getDescriptor().getMessageTypes().get(2);
     internal_static_com_n4systems_fieldid_api_pub_model_AssetStatusMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_com_n4systems_fieldid_api_pub_model_AssetStatusMessage_descriptor,
         new java.lang.String[] { "Id", "CreatedDate", "ModifiedDate", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "Name", });
     internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_descriptor =
-      getDescriptor().getMessageTypes().get(2);
+      getDescriptor().getMessageTypes().get(3);
     internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_descriptor,
@@ -34000,49 +38226,49 @@ public final class Messages {
         internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeMessage_AssetAttributeTypeMessage_descriptor,
         new java.lang.String[] { "Id", "Type", "Name", "AttributeOptions", });
     internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeGroupMessage_descriptor =
-      getDescriptor().getMessageTypes().get(3);
+      getDescriptor().getMessageTypes().get(4);
     internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeGroupMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeGroupMessage_descriptor,
         new java.lang.String[] { "Id", "CreatedDate", "ModifiedDate", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "Name", });
     internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeScheduleMessage_descriptor =
-      getDescriptor().getMessageTypes().get(4);
+      getDescriptor().getMessageTypes().get(5);
     internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeScheduleMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_com_n4systems_fieldid_api_pub_model_AssetTypeScheduleMessage_descriptor,
         new java.lang.String[] { "Id", "CreatedDate", "ModifiedDate", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "OwnerName", "OwnerId", "AssetTypeName", "AssetTypeId", "EventTypeName", "EventTypeId", "FrequencyInDays", "AutoSchedule", });
     internal_static_com_n4systems_fieldid_api_pub_model_OwnerMessage_descriptor =
-      getDescriptor().getMessageTypes().get(5);
+      getDescriptor().getMessageTypes().get(6);
     internal_static_com_n4systems_fieldid_api_pub_model_OwnerMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_com_n4systems_fieldid_api_pub_model_OwnerMessage_descriptor,
         new java.lang.String[] { "Id", "CreatedDate", "ModifiedDate", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "Name", "ParentName", "ParentId", "Code", "Notes", "StreetAddress", "City", "State", "Country", "Zip", "Phone1", "Phone2", "Fax1", "Latitude", "Longitude", "ContactName", "ContactEmail", });
     internal_static_com_n4systems_fieldid_api_pub_model_PredefinedLocationMessage_descriptor =
-      getDescriptor().getMessageTypes().get(6);
+      getDescriptor().getMessageTypes().get(7);
     internal_static_com_n4systems_fieldid_api_pub_model_PredefinedLocationMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_com_n4systems_fieldid_api_pub_model_PredefinedLocationMessage_descriptor,
         new java.lang.String[] { "Id", "CreatedDate", "ModifiedDate", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "OwnerName", "OwnerId", "ParentName", "ParentId", "Name", });
     internal_static_com_n4systems_fieldid_api_pub_model_TestSimpleMessage_descriptor =
-      getDescriptor().getMessageTypes().get(7);
+      getDescriptor().getMessageTypes().get(8);
     internal_static_com_n4systems_fieldid_api_pub_model_TestSimpleMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_com_n4systems_fieldid_api_pub_model_TestSimpleMessage_descriptor,
         new java.lang.String[] { "DoubleField", "FloatField", "Int32Field", "Int64Field", "Uint32Field", "Uint64Field", "Sint32Field", "Sint64Field", "Fixed32Field", "Fixed64Field", "Sfixed32Field", "Sfixed64Field", "BoolField", "StringField", });
     internal_static_com_n4systems_fieldid_api_pub_model_TestNestedMessage_descriptor =
-      getDescriptor().getMessageTypes().get(8);
+      getDescriptor().getMessageTypes().get(9);
     internal_static_com_n4systems_fieldid_api_pub_model_TestNestedMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_com_n4systems_fieldid_api_pub_model_TestNestedMessage_descriptor,
         new java.lang.String[] { "StringField", });
     internal_static_com_n4systems_fieldid_api_pub_model_TestContainerMessage_descriptor =
-      getDescriptor().getMessageTypes().get(9);
+      getDescriptor().getMessageTypes().get(10);
     internal_static_com_n4systems_fieldid_api_pub_model_TestContainerMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_com_n4systems_fieldid_api_pub_model_TestContainerMessage_descriptor,
         new java.lang.String[] { "Int32Field", "Nested", });
     internal_static_com_n4systems_fieldid_api_pub_model_UserMessage_descriptor =
-      getDescriptor().getMessageTypes().get(10);
+      getDescriptor().getMessageTypes().get(11);
     internal_static_com_n4systems_fieldid_api_pub_model_UserMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_com_n4systems_fieldid_api_pub_model_UserMessage_descriptor,
@@ -34054,13 +38280,13 @@ public final class Messages {
         internal_static_com_n4systems_fieldid_api_pub_model_UserMessage_PermissionsMessage_descriptor,
         new java.lang.String[] { "CreateAssets", "ManageSystemConfig", "ManageSystemUsers", "ManageEndUsers", "CreateEvents", "EditEvents", "ManageJobs", "ManageSafetyNetwork", });
     internal_static_com_n4systems_fieldid_api_pub_model_UserGroupMessage_descriptor =
-      getDescriptor().getMessageTypes().get(11);
+      getDescriptor().getMessageTypes().get(12);
     internal_static_com_n4systems_fieldid_api_pub_model_UserGroupMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_com_n4systems_fieldid_api_pub_model_UserGroupMessage_descriptor,
         new java.lang.String[] { "Id", "Name", "GroupId", });
     internal_static_com_n4systems_fieldid_api_pub_model_ListResponseMessage_descriptor =
-      getDescriptor().getMessageTypes().get(12);
+      getDescriptor().getMessageTypes().get(13);
     internal_static_com_n4systems_fieldid_api_pub_model_ListResponseMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_com_n4systems_fieldid_api_pub_model_ListResponseMessage_descriptor,
@@ -34074,8 +38300,10 @@ public final class Messages {
     locations.internalInit(descriptor.getExtensions().get(6));
     users.internalInit(descriptor.getExtensions().get(7));
     userGroups.internalInit(descriptor.getExtensions().get(8));
+    events.internalInit(descriptor.getExtensions().get(9));
     com.google.protobuf.ExtensionRegistry registry =
         com.google.protobuf.ExtensionRegistry.newInstance();
+    registry.add(com.n4systems.fieldid.api.pub.model.Messages.serializedName);
     registry.add(com.n4systems.fieldid.api.pub.model.Messages.serializedName);
     registry.add(com.n4systems.fieldid.api.pub.model.Messages.serializedName);
     registry.add(com.n4systems.fieldid.api.pub.model.Messages.serializedName);
