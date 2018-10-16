@@ -13,11 +13,14 @@ public class NetworkLastEventDateHandler extends DateTimeHandler {
 	
 	@Override
 	public String handleWeb(Long entityId, Object cell) {
-		Long networkId = (Long)cell;
 
-        Date lastDate = getLastDate(networkId);
+		if (cell instanceof Long) {
+			Long networkId = (Long) cell;
+			Date lastDate = getLastDate(networkId);
+			return super.handleWeb(entityId, lastDate);
+		}
+		else return "";
 		
-		return super.handleWeb(entityId, lastDate);
 	}
 	
 
