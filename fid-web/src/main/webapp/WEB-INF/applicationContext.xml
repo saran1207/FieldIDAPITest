@@ -92,6 +92,8 @@
     <!--  FROM FIELDID ADMIN -->
     <bean id="importManager" class="com.n4systems.importing.ImportManagerEJBContainer"/>
 
+    <bean id="adminReportsService" class="com.n4systems.fieldid.service.admin.AdminReportsService"/>
+
     <!-- bean id="configManager" class="com.n4systems.ejb.wrapper.ConfigManagerEJBContainer" />
 	<bean id="persistenceManager" class="com.n4systems.ejb.wrapper.PersistenceManagerEJBContainer" />
 	<bean id="assetTypeManager" class="com.n4systems.ejb.legacy.wrapper.LegacyAssetTypeEJBContainer" />

@@ -58,6 +58,9 @@
     <li>
         <a href="/fieldid/w/admin/sso">SSO</a>
     </li>
+    <li>
+        <a href="/fieldid/w/admin/reports">Reports</a>
+    </li>
 	</#if>
 
 </ul>
