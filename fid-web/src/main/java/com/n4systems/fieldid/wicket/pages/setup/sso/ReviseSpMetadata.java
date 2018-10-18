@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.wicket.pages.setup.sso;
 
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplateWithFeedbackPage;
+import com.n4systems.security.Permissions;
 import com.n4systems.sso.dao.SsoDuplicateEntityIdException;
 import com.n4systems.sso.dao.SsoMetadataDao;
 import com.n4systems.model.sso.SsoSpMetadata;
@@ -15,6 +17,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by agrabovskis on 2018-07-19.
  */
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_CONFIG})
 public class ReviseSpMetadata extends FieldIDTemplateWithFeedbackPage {
 
     static public Logger logger = LoggerFactory.getLogger(ReviseSpMetadata.class);
@@ -56,6 +59,7 @@ public class ReviseSpMetadata extends FieldIDTemplateWithFeedbackPage {
 
         try {
             spMetadata.setLocal(true);
+            spMetadata.setCreatedBy(getCurrentUser());
             ssoMetadataServices.updateSp(spMetadata);
 
             getRequestCycle().setResponsePage(SsoSettingsPage.class);
