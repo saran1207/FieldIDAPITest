@@ -103,6 +103,8 @@ public class GenerateSpMetadata extends FieldIDTemplateWithFeedbackPage {
         spMetadata.setIdpDiscoveryEnabled(false);
         spMetadata.setIdpDiscoveryURL(null);
 
+        spMetadata.setCreatedBy(getCurrentUser());
+
         SpMetadataPanel spPanel = new SpMetadataPanel("spMetatdata", spMetadata, false) {
             @Override
             void cancel() {

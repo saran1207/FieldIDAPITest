@@ -1,9 +1,11 @@
 package com.n4systems.model.sso;
 
 import com.n4systems.model.Tenant;
+import com.n4systems.model.user.User;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Metadata that defines the IDP for a tenant
@@ -27,6 +29,14 @@ public class SsoIdpMetadata implements Serializable {
 
     @Column(name="metadata", nullable = false)
     private String serializedMetadata;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="created")
+    private Date created;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "createdBy")
+    private User createdBy;
 
     public Long getId() {
         return id;
@@ -58,5 +68,21 @@ public class SsoIdpMetadata implements Serializable {
 
     public void setSerializedMetadata(String serializedMetadata) {
         this.serializedMetadata = serializedMetadata;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
     }
 }

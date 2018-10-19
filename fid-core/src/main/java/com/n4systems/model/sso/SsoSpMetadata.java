@@ -1,12 +1,14 @@
 package com.n4systems.model.sso;
 
 import com.n4systems.model.Tenant;
+import com.n4systems.model.user.User;
 
 import javax.persistence.Entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 
 /**
  * Created by agrabovskis on 2018-08-07.
@@ -128,6 +130,14 @@ public class SsoSpMetadata implements Serializable {
 
     @Column(name = "serialized_metadata", length=65000)
     private String serializedMetadata;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="created")
+    private Date created;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "createdBy")
+    private User createdBy;
 
     public Long getId() {
         return id;
@@ -400,4 +410,21 @@ public class SsoSpMetadata implements Serializable {
     public void setSerializedMetadata(String serializedMetadata) {
         this.serializedMetadata = serializedMetadata;
     }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
+    }
+
 }

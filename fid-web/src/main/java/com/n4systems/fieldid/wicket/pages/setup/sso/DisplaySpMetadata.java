@@ -1,5 +1,9 @@
 package com.n4systems.fieldid.wicket.pages.setup.sso;
 
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.model.DayDisplayModel;
+import com.n4systems.security.Permissions;
 import com.n4systems.sso.dao.SsoMetadataDao;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.model.sso.SsoSpMetadata;
@@ -7,6 +11,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -15,8 +20,9 @@ import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
-
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_CONFIG})
 public class DisplaySpMetadata extends FieldIDTemplatePage {
 
     public static final String ENTITY_ID_KEY = "entityId";
@@ -34,6 +40,11 @@ public class DisplaySpMetadata extends FieldIDTemplatePage {
         SsoSpMetadata spMetadata = metadataDao.getSpByEntityId(entityId);
 
         add(new Label("entityId", Model.of(spMetadata.getSsoEntity().getEntityId())));
+
+        TimeZone timeZone = FieldIDSession.get().getSessionUser().getTimeZone();
+
+        add(new Label("created", new DayDisplayModel(Model.of(spMetadata.getCreated()), true, timeZone)));
+        add(new Label("createdBy", new PropertyModel(Model.of(spMetadata), "createdBy.fullName")));
 
         add(new Label("matchOnUserId", Model.of(spMetadata.isMatchOnUserId())));
         add(new Label("userIdMatchAttribute", Model.of(spMetadata.getUserIdAttributeName())));

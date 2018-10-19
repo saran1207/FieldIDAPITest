@@ -1,11 +1,13 @@
 package com.n4systems.fieldid.wicket.pages.setup.sso;
 
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.wicket.FieldIDWicketApp;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
+import com.n4systems.security.Permissions;
 import com.n4systems.sso.dao.SsoMetadataDao;
 import com.n4systems.model.sso.SsoIdpMetadata;
 import com.n4systems.model.sso.SsoSpMetadata;
@@ -27,7 +29,7 @@ import org.springframework.security.saml.metadata.MetadataManager;
 
 import java.util.Iterator;
 
-
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_CONFIG})
 public class SsoSettingsPage extends FieldIDTemplatePage {
 
     @SpringBean

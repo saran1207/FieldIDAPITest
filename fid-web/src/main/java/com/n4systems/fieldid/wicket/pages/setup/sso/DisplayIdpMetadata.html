@@ -8,7 +8,12 @@
     <br/>
     <span wicket:id="idpEntityId"/>
 </div>
-<br/>
+<div class="control-group" name="createdBy">
+    <label class="label" style="font-weight: bold;"><wicket:message key="label.createdby"/></label>
+    <span class="value">
+        <span wicket:id="createdBy"/>&nbsp;<span wicket:id="created"/>
+    </span>
+</div>
 <div>
     <label wicket:for="serializedMetadata" style="font-weight:bold;">Metadata</label>
     <textarea wicket:id="serializedMetadata" readonly="readonly" style="width: 80%; min-height:300px;"></textarea>
