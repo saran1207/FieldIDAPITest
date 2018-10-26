@@ -13,7 +13,9 @@ import java.util.List;
 public class AdminReportsService extends FieldIdPersistenceService {
 
     public List<String> getUsageReportColumnHeader() {
-        return Arrays.asList("Tenant", "SalesForceId", "Snapshot Date", "*Admin User%", "*Inspection User%", "Completed Events", "*Open Events", "*Overdue Events", "*Assets");
+        return Arrays.asList("Tenant", "SalesForceId", "Snapshot Date", "*Admin User%", "*Inspection User%",
+                "Completed Events", "*Open Events", "*Overdue Events", "*Assets", "Published LOTO", "Draft LOTO",
+                "Performed LOTO", "*Last LOTO Revision");
     }
 
     public TableView getUsageReportData(Date fromDate, Date toDate) {
@@ -60,6 +62,24 @@ public class AdminReportsService extends FieldIdPersistenceService {
          SELECT (select count(*) from assets a WHERE a.tenant_id = t.id AND a.state = 'ACTIVE')
          FROM tenants t where t.disabled = 0
          GROUP by t.name;
+
+	     SELECT (select count(*) from procedure_definitions WHERE state = 'ACtIVE' AND published_state = 'PUBLISHED' and tenant_id = t.id AND origin_date BETWEEN '2017-10-01' AND '2017-10-31')
+         FROM tenants t where t.disabled = 0
+         GROUP BY t.name;
+
+         SELECT (select count(*) from procedure_definitions WHERE state = 'ACtIVE' AND published_state = 'DRAFT' and tenant_id = t.id
+         AND (modified BETWEEN '2018-8-01' AND '2018-6-30' OR created BETWEEN '2018-6-01' AND '2018-6-30'))
+         FROM tenants t where t.disabled = 0
+         GROUP BY t.name;
+
+         SELECT
+         (select count(*) from procedures  p WHERE p.state='ACTIVE' and p.tenant_id = t.id AND p.unlock_date BETWEEN '2017-10-1' AND '2017-10-31') +
+         (select count(*) from procedures p WHERE p.state='ACTIVE' and p.tenant_id = t.id AND p.lock_date BETWEEN '2017-10-1' AND '2017-10-31')
+         FROM tenants t WHERE t.disabled = 0 GROUP BY t.name;
+
+	     SELECT (select max(p.origin_date) from procedure_definitions p WHERE p.state = 'ACtIVE' AND p.published_state = 'PUBLISHED' and tenant_id = t.id)
+         FROM tenants t where t.disabled = 0
+         GROUP BY t.name;
 
         */
 
@@ -179,6 +199,71 @@ public class AdminReportsService extends FieldIdPersistenceService {
         for (Object obj: queryResult) {
             System.out.println("query 7 row[" + i + "] col[" + 8 + "] val " + obj);
             result.setCell(i, 8, obj);
+            i++;
+        }
+
+        Query q8 = getEntityManager().createNativeQuery(
+                "SELECT (select count(*) from procedure_definitions WHERE state = 'ACtIVE' " +
+                        "AND published_state = 'PUBLISHED' AND tenant_id = t.id AND " +
+                        "origin_date BETWEEN :startDate AND :endDate) " +
+                        "FROM tenants t " +
+                        "WHERE t.disabled = 0 GROUP BY t.name;"
+        );
+        q8.setParameter("startDate", fromDate);
+        q8.setParameter("endDate", toDate);
+        queryResult = q8.getResultList();
+        System.out.println("Query 8 Results size " + queryResult.size());
+        i = 0;
+        for (Object obj: queryResult) {
+            System.out.println("query 8 row[" + i + "] col[" + 9 + "] val " + obj);
+            result.setCell(i, 9, obj);
+            i++;
+        }
+
+        Query q9 = getEntityManager().createNativeQuery(
+                "SELECT (SELECT count(*) FROM procedure_definitions WHERE state = 'ACTIVE' " +
+                        "AND published_state = 'DRAFT' AND tenant_id = t.id " +
+                        "AND (modified BETWEEN :startDate AND :endDate OR created BETWEEN :startDate AND :endDate)) " +
+                        "FROM tenants t " +
+                        "WHERE t.disabled = 0 GROUP BY t.name;"
+        );
+        q9.setParameter("startDate", fromDate);
+        q9.setParameter("endDate", toDate);
+        queryResult = q9.getResultList();
+        System.out.println("Query 9 Results size " + queryResult.size());
+        i = 0;
+        for (Object obj: queryResult) {
+            System.out.println("query 9 row[" + i + "] col[" + 10 + "] val " + obj);
+            result.setCell(i, 10, obj);
+            i++;
+        }
+
+        Query q10 = getEntityManager().createNativeQuery(
+                "SELECT  (select count(*) from procedures p WHERE p.state='ACTIVE' and p.tenant_id = t.id AND p.unlock_date BETWEEN :startDate AND :endDate) + " +
+                        "(select count(*) from procedures p WHERE p.state='ACTIVE' and p.tenant_id = t.id AND p.lock_date   BETWEEN :startDate AND :endDate) " +
+                        "FROM tenants t WHERE t.disabled = 0 GROUP BY t.name;"
+        );
+        q10.setParameter("startDate", fromDate);
+        q10.setParameter("endDate", toDate);
+        queryResult = q10.getResultList();
+        System.out.println("Query 10 Results size " + queryResult.size());
+        i = 0;
+        for (Object obj: queryResult) {
+            System.out.println("query 10 row[" + i + "] col[" + 11 + "] val " + obj);
+            result.setCell(i, 11, obj);
+            i++;
+        }
+
+        Query q11 = getEntityManager().createNativeQuery(
+                "SELECT (select date(max(p.origin_date)) from procedure_definitions p WHERE p.state = 'ACtIVE' AND p.published_state = 'PUBLISHED' and tenant_id = t.id) " +
+                        "FROM tenants t where t.disabled = 0 GROUP BY t.name;"
+        );
+        queryResult = q11.getResultList();
+        System.out.println("Query 11 Results size " + queryResult.size());
+        i = 0;
+        for (Object obj: queryResult) {
+            System.out.println("query 11 row[" + i + "] col[" + 12 + "] val " + obj);
+            result.setCell(i, 12, obj);
             i++;
         }
 
