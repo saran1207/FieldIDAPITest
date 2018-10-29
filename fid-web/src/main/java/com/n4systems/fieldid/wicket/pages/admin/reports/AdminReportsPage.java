@@ -6,18 +6,19 @@ import com.n4systems.fieldid.wicket.pages.admin.FieldIDAdminPage;
 import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.util.excel.ExcelXSSFBuilder;
-import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
+import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
+import org.apache.wicket.util.resource.IResourceStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,17 +39,13 @@ public class AdminReportsPage extends FieldIDAdminPage {
 
     private FeedbackPanel feedbackPanel;
 
+    final IModel<Date> fromDateModel = Model.of(new Date());
+    final IModel<Date> toDateModel = Model.of(new Date());
+
     public AdminReportsPage() {
         super();
         addComponents();
     }
-
-   /* @Override
-    protected void onBeforeRender() {
-        System.out.println("AdminReportsPage.onBeforeRender");
-        //Session.get().cleanupFeedbackMessages();
-        super.onBeforeRender();
-    }*/
 
     private void addComponents() {
         addFeedbackPanel();
@@ -63,28 +60,43 @@ public class AdminReportsPage extends FieldIDAdminPage {
     }
 
     private void addUsageReport() {
-        final IModel<Date> fromDateModel = Model.of(new Date());
-        final IModel<Date> toDateModel = Model.of(new Date());
+
+        final AJAXDownload download = new AJAXDownload() {
+            @Override
+            protected IResourceStream getResourceStream() {
+                AbstractResourceStreamWriter rstream = new AbstractResourceStreamWriter() {
+
+                    @Override
+                    public void write(Response output) {
+                        generateUsageReport(output.getOutputStream(), fromDateModel.getObject(), toDateModel.getObject());
+                    }
+                };
+
+                String downloadFileName = "UsageReport." + ContentType.EXCEL.getExtension();
+                ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(rstream, downloadFileName);
+                return handler.getResourceStream();
+            }
+        };
+        add(download);
+
         DateTimePicker fromDatePicker = new AdminConsoleDateTimePicker("usageReportFromDate", fromDateModel).withNoAllDayCheckbox();
         DateTimePicker toDatePicker = new AdminConsoleDateTimePicker("usageReportToDate", toDateModel).withNoAllDayCheckbox();
         add(fromDatePicker);
         add(toDatePicker);
 
-        Link downloadUsageReportLink = new Link("createUsageReport") {
+        AjaxLink downloadUsageReportLink = new AjaxLink("createUsageReport") {
+            /* Use Ajax for the download link so we can clear out any old feedback messages.
+               The normal methods for clearing out the messages don't work with a regular
+               link. */
             @Override
-            public void onClick() {
-                //Session.get().getFeedbackMessages().clear();
-                Session.get().cleanupFeedbackMessages();
-                //target.add(feedbackPanel);
-                //Session.get().dirty();
-                //feedbackPanel.getFeedbackMessagesModel().getObject().clear();
+            public void onClick(AjaxRequestTarget target) {
+
+                target.add(feedbackPanel);
                 final Date fromDate = fromDateModel.getObject();
                 final Date toDate = toDateModel.getObject();
 
                 long diffInMs = toDate.getTime() - fromDate.getTime();
                 long diffInDays = TimeUnit.DAYS.convert(diffInMs, TimeUnit.MILLISECONDS);
-
-                System.out.println("Diff in ms " + diffInMs + ", diff in days " + diffInDays);
 
                 if (diffInMs <= 0) {
                     error(getString("startDateMustBeBeforeEndDateMsg"));
@@ -95,18 +107,7 @@ public class AdminReportsPage extends FieldIDAdminPage {
                             new String[] {new Long(diffInDays).toString(), new Long(MAX_DAYS_IN_REPORT).toString()}));
                 }
                 else {
-                    System.out.println("Processing report");
-                    AbstractResourceStreamWriter rstream = new AbstractResourceStreamWriter() {
-
-                        @Override
-                        public void write(Response output) {
-                            generateUsageReport(output.getOutputStream(), fromDate, toDate);
-                        }
-                    };
-
-                    String downloadFileName = "UsageReport." + ContentType.EXCEL.getExtension();
-                    ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(rstream, downloadFileName);
-                    getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
+                    download.initiate(target);
                 }
             }
         };
@@ -118,7 +119,7 @@ public class AdminReportsPage extends FieldIDAdminPage {
 
         try {
             String SHEET_NAME = "USAGE_REPORT";
-            ExcelXSSFBuilder excelBuilder = new ExcelXSSFBuilder(new DateTimeDefiner("yyyy-MM-dd", TimeZone.getDefault()));
+            ExcelXSSFBuilder excelBuilder = new ExcelXSSFBuilder(new DateTimeDefiner("mm/dd/yyyy", TimeZone.getDefault()));
             excelBuilder.createSheet(SHEET_NAME,
                     adminReportsService.getUsageReportColumnHeader(),
                     adminReportsService.getUsageReportData(fromDate, toDate));
@@ -151,6 +152,57 @@ public class AdminReportsPage extends FieldIDAdminPage {
         protected String getJQueryDateFormat() {
             return "mm/dd/y";
         }
+    }
+
+    /**
+     * This class copied from https://cwiki.apache.org/confluence/display/WICKET/AJAX+update+and+file+download+in+one+blow
+     */
+    abstract public class AJAXDownload extends AbstractAjaxBehavior
+    {
+        private boolean addAntiCache;
+
+        public AJAXDownload() {
+            this(true);
+        }
+
+        public AJAXDownload(boolean addAntiCache) {
+            super();
+            this.addAntiCache = addAntiCache;
+        }
+
+        /**
+         * Call this method to initiate the download.
+         */
+        public void initiate(AjaxRequestTarget target) {
+
+            String url = getCallbackUrl().toString();
+            if (addAntiCache) {
+                url = url + (url.contains("?") ? "&" : "?");
+                url = url + "antiCache=" + System.currentTimeMillis();
+            }
+            // the timeout is needed to let Wicket release the channel
+            target.appendJavaScript("setTimeout(\"window.location.href='" + url + "'\", 100);");
+        }
+
+        public void onRequest() {
+            ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(getResourceStream(),getFileName());
+            handler.setContentDisposition(ContentDisposition.ATTACHMENT);
+            getComponent().getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
+        }
+
+        /**
+         * Override this method for a file name which will let the browser prompt with a save/open dialog.
+
+         */
+        protected String getFileName() {
+            return "UsageReport." + ContentType.EXCEL.getExtension();
+        }
+
+        /**
+         * Hook method providing the actual resource stream.
+         */
+        abstract protected IResourceStream getResourceStream();
+
     }
 
 }
