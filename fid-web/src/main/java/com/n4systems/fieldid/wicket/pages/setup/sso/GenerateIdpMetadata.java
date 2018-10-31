@@ -1,10 +1,12 @@
 package com.n4systems.fieldid.wicket.pages.setup.sso;
 
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplateWithFeedbackPage;
 import com.n4systems.model.sso.IdpProvidedMetadata;
 import com.n4systems.model.sso.SsoEntity;
 import com.n4systems.model.sso.SsoIdpMetadata;
 import com.n4systems.fieldid.sso.SsoMetadataServices;
+import com.n4systems.security.Permissions;
 import com.n4systems.sso.dao.SsoDuplicateEntityIdException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -27,6 +29,7 @@ import java.net.SocketTimeoutException;
 /**
  * Created by agrabovskis on 2018-07-31.
  */
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_CONFIG})
 public class GenerateIdpMetadata extends FieldIDTemplateWithFeedbackPage {
 
     static public Logger logger = LoggerFactory.getLogger(GenerateIdpMetadata.class);
@@ -65,6 +68,7 @@ public class GenerateIdpMetadata extends FieldIDTemplateWithFeedbackPage {
             @Override
             protected void onSubmit() {
                 SsoIdpMetadata idpMetadata = new SsoIdpMetadata();
+                idpMetadata.setCreatedBy(getCurrentUser());
                 idpMetadata.setTenant(getTenant());
                 idpMetadata.setSsoEntity(new SsoEntity(entityIdModel.getObject()));
                 idpMetadata.setSerializedMetadata(serializedMetadataModel.getObject());

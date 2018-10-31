@@ -14,6 +14,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -84,6 +85,7 @@ public class SsoMetadataDaoImpl implements SsoMetadataDao {
     @Transactional(rollbackFor = Exception.class)
     public SsoIdpMetadata addIdp(SsoIdpMetadata idpMetadata) throws SsoDuplicateEntityIdException {
         try {
+            idpMetadata.setCreated(new Date());
             SsoEntity ssoEntity = idpMetadata.getSsoEntity();
             entityManager.persist(ssoEntity);
             idpMetadata.setSsoEntity(ssoEntity);
@@ -178,6 +180,7 @@ public class SsoMetadataDaoImpl implements SsoMetadataDao {
     public SsoSpMetadata addSp(SsoSpMetadata spMetadata) throws SsoDuplicateEntityIdException {
         try {
             spMetadata.setId(null);
+            spMetadata.setCreated(new Date());
             SsoEntity ssoEntity = spMetadata.getSsoEntity();
             entityManager.persist(ssoEntity);
             spMetadata.setSsoEntity(ssoEntity);
