@@ -43,19 +43,28 @@ public class AdminReportsService extends FieldIdPersistenceService {
             (select ts.maxLiteUsers from tenant_settings ts where ts.tenant_id = t.id), -1), 0)
          FROM tenants t WHERE t.disabled=0 GROUP by t.name;
 
-         SELECT (select count(*) from masterevents me
-			inner join events e on e.id = me.id where e.tenant_id = t.id AND me.workflow_state = 'COMPLETED'
-                AND me.completedDate BETWEEN '2010-10-01' AND '2010-10-31')
+         SELECT (select count(*) from thing_events te
+            inner join masterevents me on me.id = te.id
+			inner join events e on e.id = me.id
+			inner join eventtypes et on et.id = e.type_id
+			where e.tenant_id = t.id AND me.state = 'ACTIVE' AND me.workflow_state = 'COMPLETED'
+                AND me.completedDate BETWEEN '2010-10-01' AND '2010-10-31' AND et.action_type = 0)
 		 FROM tenants t
          GROUP by t.name;
 
-         select (select count(*) from masterevents me
-			inner join events e on e.id = me.id where e.tenant_id = t.id AND me.workflow_state = 'OPEN' )
+         select (select count(*) from thing_events te
+            inner join masterevents me on me.id = te.id
+			inner join events e on e.id = me.id
+			inner join eventtypes et on et.id = e.type_id
+			where e.tenant_id = t.id AND me.state = 'ACTIVE' AND me.workflow_state = 'OPEN' AND et.action_type = 0)
          FROM tenants t where t.disabled = 0
          GROUP by t.name;
 
-         SELECT (select count(*) from masterevents me
-		    inner join events e on e.id = me.id where e.tenant_id = t.id AND me.workflow_state = 'OPEN' AND me.dueDate <= CURDATE())
+         SELECT (select count(*) from thing_events te
+            inner join masterevents me on me.id = te.id
+		    inner join events e on e.id = me.id
+		    inner join eventtypes et on et.id = e.type_id
+		    where e.tenant_id = t.id AND me.state = 'ACTIVE' AND me.workflow_state = 'OPEN' AND me.dueDate <= CURDATE() AND et.action_type = 0)
          FROM tenants t where t.disabled = 0
          GROUP by t.name;
 
@@ -134,9 +143,12 @@ public class AdminReportsService extends FieldIdPersistenceService {
         }
 
         q = getEntityManager().createNativeQuery(
-                "SELECT (SELECT count(*) FROM masterevents me " +
-                        "INNER JOIN events e ON e.id = me.id WHERE e.tenant_id = t.id AND me.workflow_state = 'COMPLETED' " +
-                        "                AND me.completedDate BETWEEN :startDate AND :endDate) " +
+                "SELECT (SELECT count(*) FROM thing_events te " +
+                        "INNER JOIN masterevents me ON me.id = te.id " +
+                        "INNER JOIN events e ON e.id = me.id " +
+                        "INNER JOIN eventtypes et ON et.id = e.type_id " +
+                        "WHERE e.tenant_id = t.id AND me.state = 'ACTIVE' AND me.workflow_state = 'COMPLETED' " +
+                        "  AND me.completedDate BETWEEN :startDate AND :endDate AND et.action_type = 0) " +
                         "FROM tenants t " +
                         "WHERE t.disabled=0 GROUP BY t.name;"
         );
@@ -150,8 +162,11 @@ public class AdminReportsService extends FieldIdPersistenceService {
         }
 
         q = getEntityManager().createNativeQuery(
-                "SELECT (SELECT count(*) FROM masterevents me " +
-                        "INNER JOIN events e ON e.id = me.id WHERE e.tenant_id = t.id AND me.workflow_state = 'OPEN') " +
+                "SELECT (SELECT count(*) FROM thing_events te " +
+                        "INNER JOIN masterevents me ON me.id = te.id " +
+                        "INNER JOIN events e ON e.id = me.id " +
+                        "INNER JOIN eventtypes et ON et.id = e.type_id " +
+                        "WHERE e.tenant_id = t.id AND me.state = 'ACTIVE' AND me.workflow_state = 'OPEN' AND et.action_type = 0) " +
                         "FROM tenants t " +
                         "WHERE t.disabled=0 GROUP BY t.name;"
         );
@@ -163,8 +178,12 @@ public class AdminReportsService extends FieldIdPersistenceService {
         }
 
         q = getEntityManager().createNativeQuery(
-                "SELECT (SELECT count(*) FROM masterevents me " +
-                        "INNER JOIN events e ON e.id = me.id WHERE e.tenant_id = t.id AND me.workflow_state = 'OPEN' AND me.dueDate <= CURDATE()) " +
+                "SELECT (SELECT count(*) FROM thing_events te " +
+                        "INNER JOIN masterevents me ON me.id = te.id " +
+                        "INNER JOIN events e ON e.id = me.id " +
+                        "INNER JOIN eventtypes et ON et.id = e.type_id " +
+                        "WHERE e.tenant_id = t.id AND me.state = 'ACTIVE' AND me.workflow_state = 'OPEN' AND me.dueDate <= CURDATE() " +
+                        "     AND et.action_type = 0) " +
                         "FROM tenants t " +
                         "WHERE t.disabled=0 GROUP BY t.name;"
         );
