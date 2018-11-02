@@ -24,6 +24,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.text.MessageFormat;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
@@ -92,8 +94,20 @@ public class AdminReportsPage extends FieldIDAdminPage {
             public void onClick(AjaxRequestTarget target) {
 
                 target.add(feedbackPanel);
-                final Date fromDate = fromDateModel.getObject();
-                final Date toDate = toDateModel.getObject();
+
+                /* The start date needs to be adjusted to be at the beginning of the day and the end date needs
+                   to be adjusted to be at the end of the day. The default time portion returned by the calendar
+                   widget is the current time. */
+
+                final Date fromDate = Date.from(
+                            ZonedDateTime.ofInstant(fromDateModel.getObject().toInstant(),
+                                    ZoneId.systemDefault()).toLocalDate().atStartOfDay(
+                                            ZoneId.systemDefault()).toInstant().atZone(ZoneId.systemDefault()).toInstant());
+
+                final Date toDate = Date.from(
+                        ZonedDateTime.ofInstant(toDateModel.getObject().toInstant(),
+                                ZoneId.systemDefault()).toLocalDate().atStartOfDay(
+                                ZoneId.systemDefault()).plusDays(1).toInstant().atZone(ZoneId.systemDefault()).toInstant());
 
                 long diffInMs = toDate.getTime() - fromDate.getTime();
                 long diffInDays = TimeUnit.DAYS.convert(diffInMs, TimeUnit.MILLISECONDS);
