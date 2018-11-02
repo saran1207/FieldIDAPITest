@@ -49,7 +49,8 @@ public class FieldIDAdminPage extends FieldIDWicketPage {
 			navItemBuilder.page("/admin/taskCrud.action").label("Tasks").cond(isSuperUser).build(),
 			navItemBuilder.page("/w/admin/config").label("Config").cond(isSuperUser).build(),
             navItemBuilder.page("/w/admin/configureLanguages").label("Languages").cond(isSuperUser).build(),
-			navItemBuilder.page("/w/admin/sso").label("SSO").cond(isSuperUser).build()
+			navItemBuilder.page("/w/admin/sso").label("SSO").cond(isSuperUser).build(),
+			navItemBuilder.page("/w/admin/reports").label("Reports").cond(isSuperUser).build()
 		));
 	}
 

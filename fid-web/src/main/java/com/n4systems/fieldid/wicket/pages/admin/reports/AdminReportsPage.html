@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+<wicket:extend>
+    <style>
+        .createReportButton {
+            background-color: #008bd3;
+            border-color: #007aba;
+            color: white;
+            padding: 5px;
+            margin-left: 10px;
+        }
+        .reportsContainer {
+            max-width: 700px;
+        }
+        .reportContainer
+        {
+            margin-left: 50px;
+            padding:16px;
+            border:2px solid lightgrey;
+            border-radius:8px;
+        }
+        .reportLegend
+        {
+            margin-bottom:0px;
+            margin-left:16px;
+        }
+   </style>
+
+   <h2><wicket:message key="reportsLabel"></wicket:message></h2>
+
+    <div class="reportsContainer">
+        <div wicket:id="feedbackPanel" class="feedback-panel" />
+
+        <fieldset class="reportContainer">
+            <legend class="reportLegend"><wicket:message key="usageReportLabel"></wicket:message></legend>
+            <label><wicket:message key="label.fdate"/></label>
+            <span wicket:id="usageReportFromDate"></span>
+            <label><wicket:message key="label.tdate"/></label>
+            <span wicket:id="usageReportToDate"></span>
+            <input type="button" wicket:id="createUsageReport" value="Create" class="createReportButton"/>
+        </fieldset>
+    </div>
+</wicket:extend>
+</html>
