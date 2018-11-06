@@ -14,7 +14,7 @@ public class AdminReportsService extends FieldIdPersistenceService {
 
     public List<String> getUsageReportColumnHeader() {
         return Arrays.asList("Tenant", "SalesForceId", "Snapshot Date", "*Admin User%", "*Inspection User%",
-                "Completed Events", "*Open Events", "*Overdue Events", "*Assets", "Published LOTO", "Draft LOTO",
+                "Completed Events", "*Assets", "Published LOTO", "Draft LOTO",
                 "Performed LOTO", "*Last LOTO Revision");
     }
 
@@ -153,26 +153,6 @@ public class AdminReportsService extends FieldIdPersistenceService {
         placeResultInTable(q.getResultList(), result, 5, rowCount);
 
         q = getEntityManager().createNativeQuery(
-                "SELECT t.name, count(*) FROM tenants t " +
-                    "INNER JOIN events e ON e.tenant_id = t.id " +
-                    "INNER JOIN eventtypes et ON et.id = e.type_id AND et.action_type = 0 " +
-                    "INNER JOIN masterevents me ON me.id = e.id AND me.state = 'ACTIVE' AND me.workflow_state = 'OPEN' " +
-                    "INNER JOIN thing_events te ON te.id = me.id " +
-                    "WHERE t.disabled=0 GROUP BY t.name;"
-        );
-        placeResultInTable(q.getResultList(), result, 6, rowCount);
-
-        q = getEntityManager().createNativeQuery(
-                "SELECT t.name, count(*) FROM tenants t " +
-                        "INNER JOIN events e ON e.tenant_id = t.id " +
-                        "INNER JOIN eventtypes et ON et.id = e.type_id AND et.action_type = 0 " +
-                        "INNER JOIN masterevents me ON me.id = e.id AND me.state = 'ACTIVE' AND me.workflow_state = 'OPEN' AND me.dueDate <= CURDATE() " +
-                        "INNER JOIN thing_events te ON te.id = me.id " +
-                        "WHERE t.disabled=0 GROUP BY t.name;"
-        );
-        placeResultInTable(q.getResultList(), result, 7, rowCount);
-
-        q = getEntityManager().createNativeQuery(
                 "SELECT (select count(*) from assets a WHERE a.tenant_id = t.id AND a.state = 'ACTIVE') " +
                         "FROM tenants t " +
                         "WHERE t.disabled=0 GROUP BY t.name;"
@@ -180,7 +160,7 @@ public class AdminReportsService extends FieldIdPersistenceService {
         queryResult = q.getResultList();
         i = 0;
         for (Object obj: queryResult) {
-            result.setCell(i, 8, obj);
+            result.setCell(i, 6, obj);
             i++;
         }
 
@@ -196,7 +176,7 @@ public class AdminReportsService extends FieldIdPersistenceService {
         queryResult = q.getResultList();
         i = 0;
         for (Object obj: queryResult) {
-            result.setCell(i, 9, obj);
+            result.setCell(i, 7, obj);
             i++;
         }
 
@@ -212,7 +192,7 @@ public class AdminReportsService extends FieldIdPersistenceService {
         queryResult = q.getResultList();
         i = 0;
         for (Object obj: queryResult) {
-            result.setCell(i, 10, obj);
+            result.setCell(i, 8, obj);
             i++;
         }
 
@@ -226,7 +206,7 @@ public class AdminReportsService extends FieldIdPersistenceService {
         queryResult = q.getResultList();
         i = 0;
         for (Object obj: queryResult) {
-            result.setCell(i, 11, obj);
+            result.setCell(i, 9, obj);
             i++;
         }
 
@@ -237,7 +217,7 @@ public class AdminReportsService extends FieldIdPersistenceService {
         queryResult = q.getResultList();
         i = 0;
         for (Object obj: queryResult) {
-            result.setCell(i, 12, obj);
+            result.setCell(i, 10, obj);
             i++;
         }
 
