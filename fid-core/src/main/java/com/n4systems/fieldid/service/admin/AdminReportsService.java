@@ -43,30 +43,27 @@ public class AdminReportsService extends FieldIdPersistenceService {
             (select ts.maxLiteUsers from tenant_settings ts where ts.tenant_id = t.id), -1), 0)
          FROM tenants t WHERE t.disabled=0 GROUP by t.name;
 
-         SELECT (select count(*) from thing_events te
-            inner join masterevents me on me.id = te.id
-			inner join events e on e.id = me.id
-			inner join eventtypes et on et.id = e.type_id
-			where e.tenant_id = t.id AND me.state = 'ACTIVE' AND me.workflow_state = 'COMPLETED'
-                AND me.completedDate BETWEEN '2010-10-01' AND '2010-10-31' AND et.action_type = 0)
-		 FROM tenants t
+         SELECT t.name, count(*)  from  tenants t
+			inner join events e on e.tenant_id = t.id
+            inner join eventtypes et on et.id = e.type_id AND et.action_type = 0
+		     inner join masterevents me on me.id = e.id AND me.state = 'ACTIVE' AND me.workflow_state = 'COMPLETED' AND me.completedDate BETWEEN '2010-10-01' AND '2010-10-31'
+             inner join thing_events te on te.id = me.id
+             WHERE t.disabled = 0
          GROUP by t.name;
 
-         select (select count(*) from thing_events te
-            inner join masterevents me on me.id = te.id
-			inner join events e on e.id = me.id
-			inner join eventtypes et on et.id = e.type_id
-			where e.tenant_id = t.id AND me.state = 'ACTIVE' AND me.workflow_state = 'OPEN' AND et.action_type = 0)
-         FROM tenants t where t.disabled = 0
-         GROUP by t.name;
+        SELECT t.name, count(*) FROM tenants t
+		    INNER JOIN events e ON e.tenant_id = t.id
+            INNER JOIN eventtypes et ON et.id = e.type_id AND et.action_type = 0
+            INNER JOIN masterevents me ON me.id = e.id AND me.state = 'ACTIVE' AND me.workflow_state = 'OPEN'
+            INNER JOIN thing_events te ON te.id = me.id
+        WHERE t.disabled = 0 GROUP by t.name;
 
-         SELECT (select count(*) from thing_events te
-            inner join masterevents me on me.id = te.id
-		    inner join events e on e.id = me.id
-		    inner join eventtypes et on et.id = e.type_id
-		    where e.tenant_id = t.id AND me.state = 'ACTIVE' AND me.workflow_state = 'OPEN' AND me.dueDate <= CURDATE() AND et.action_type = 0)
-         FROM tenants t where t.disabled = 0
-         GROUP by t.name;
+        SELECT t.name, count(*) FROM tenants t
+		    INNER JOIN events e ON e.tenant_id = t.id
+            INNER JOIN eventtypes et ON et.id = e.type_id AND et.action_type = 0
+            INNER JOIN masterevents me ON me.id = e.id AND me.state = 'ACTIVE' AND me.workflow_state = 'OPEN' AND me.dueDate <= CURDATE()
+            INNER JOIN thing_events te ON te.id = me.id
+         WHERE t.disabled = 0 GROUP by t.name;
 
          SELECT (select count(*) from assets a WHERE a.tenant_id = t.id AND a.state = 'ACTIVE')
          FROM tenants t where t.disabled = 0
@@ -109,6 +106,7 @@ public class AdminReportsService extends FieldIdPersistenceService {
             }
             i++;
         }
+        int rowCount = i;
 
         q = getEntityManager().createNativeQuery(
                 "SELECT GREATEST(" +
@@ -143,56 +141,36 @@ public class AdminReportsService extends FieldIdPersistenceService {
         }
 
         q = getEntityManager().createNativeQuery(
-                "SELECT (SELECT count(*) FROM thing_events te " +
-                        "INNER JOIN masterevents me ON me.id = te.id " +
-                        "INNER JOIN events e ON e.id = me.id " +
-                        "INNER JOIN eventtypes et ON et.id = e.type_id " +
-                        "WHERE e.tenant_id = t.id AND me.state = 'ACTIVE' AND me.workflow_state = 'COMPLETED' " +
-                        "  AND me.completedDate BETWEEN :startDate AND :endDate AND et.action_type = 0) " +
-                        "FROM tenants t " +
-                        "WHERE t.disabled=0 GROUP BY t.name;"
+               "SELECT t.name, count(*) from tenants t " +
+                    "inner join events e on e.tenant_id = t.id " +
+                    "inner join eventtypes et on et.id = e.type_id AND et.action_type = 0 " +
+                    "inner join masterevents me on me.id = e.id AND me.state = 'ACTIVE' AND me.workflow_state = 'COMPLETED' AND me.completedDate BETWEEN :startDate AND :endDate " +
+                    "inner join thing_events te on te.id = me.id " +
+                    "WHERE t.disabled=0 GROUP BY t.name;"
         );
         q.setParameter("startDate", fromDate);
         q.setParameter("endDate", toDate);
-        queryResult = q.getResultList();
-        i = 0;
-        for (Object obj: queryResult) {
-            result.setCell(i, 5, obj);
-            i++;
-        }
+        placeResultInTable(q.getResultList(), result, 5, rowCount);
 
         q = getEntityManager().createNativeQuery(
-                "SELECT (SELECT count(*) FROM thing_events te " +
-                        "INNER JOIN masterevents me ON me.id = te.id " +
-                        "INNER JOIN events e ON e.id = me.id " +
-                        "INNER JOIN eventtypes et ON et.id = e.type_id " +
-                        "WHERE e.tenant_id = t.id AND me.state = 'ACTIVE' AND me.workflow_state = 'OPEN' AND et.action_type = 0) " +
-                        "FROM tenants t " +
-                        "WHERE t.disabled=0 GROUP BY t.name;"
+                "SELECT t.name, count(*) FROM tenants t " +
+                    "INNER JOIN events e ON e.tenant_id = t.id " +
+                    "INNER JOIN eventtypes et ON et.id = e.type_id AND et.action_type = 0 " +
+                    "INNER JOIN masterevents me ON me.id = e.id AND me.state = 'ACTIVE' AND me.workflow_state = 'OPEN' " +
+                    "INNER JOIN thing_events te ON te.id = me.id " +
+                    "WHERE t.disabled=0 GROUP BY t.name;"
         );
-        queryResult = q.getResultList();
-        i = 0;
-        for (Object obj: queryResult) {
-            result.setCell(i, 6, obj);
-            i++;
-        }
+        placeResultInTable(q.getResultList(), result, 6, rowCount);
 
         q = getEntityManager().createNativeQuery(
-                "SELECT (SELECT count(*) FROM thing_events te " +
-                        "INNER JOIN masterevents me ON me.id = te.id " +
-                        "INNER JOIN events e ON e.id = me.id " +
-                        "INNER JOIN eventtypes et ON et.id = e.type_id " +
-                        "WHERE e.tenant_id = t.id AND me.state = 'ACTIVE' AND me.workflow_state = 'OPEN' AND me.dueDate <= CURDATE() " +
-                        "     AND et.action_type = 0) " +
-                        "FROM tenants t " +
+                "SELECT t.name, count(*) FROM tenants t " +
+                        "INNER JOIN events e ON e.tenant_id = t.id " +
+                        "INNER JOIN eventtypes et ON et.id = e.type_id AND et.action_type = 0 " +
+                        "INNER JOIN masterevents me ON me.id = e.id AND me.state = 'ACTIVE' AND me.workflow_state = 'OPEN' AND me.dueDate <= CURDATE() " +
+                        "INNER JOIN thing_events te ON te.id = me.id " +
                         "WHERE t.disabled=0 GROUP BY t.name;"
         );
-        queryResult = q.getResultList();
-        i = 0;
-        for (Object obj: queryResult) {
-            result.setCell(i, 7, obj);
-            i++;
-        }
+        placeResultInTable(q.getResultList(), result, 7, rowCount);
 
         q = getEntityManager().createNativeQuery(
                 "SELECT (select count(*) from assets a WHERE a.tenant_id = t.id AND a.state = 'ACTIVE') " +
@@ -264,5 +242,34 @@ public class AdminReportsService extends FieldIdPersistenceService {
         }
 
         return result;
+    }
+
+    /**
+     * The query doesn't return a row when none of the conditions apply but we need to put '0' into the
+     * tableview for this situation. Merge the query result into the tableview matching by tenant name. For
+     * those tableview rows with a tenant name not in the query result insert a value of '0'.
+     *
+     * @param queryResult List<Object[]> where Object[0] is the tenant name and Object[1] is the query's result value.
+     * @param tableView The tableview to insert the results. The cell at column 0 in each row is the tenant name.
+     * @param cellColIndex
+     * @param rowCount The number of rows in the tableview (which is the number of active tenants)
+     */
+    private void placeResultInTable(List<Object[]> queryResult, TableView tableView, int cellColIndex, int rowCount) {
+
+        int cellRowIndex = 0;
+        for (Object[] obj: queryResult) {
+            while (!(tableView.getCell(cellRowIndex, 0)).equals(obj[0]) && cellRowIndex < rowCount) {
+                tableView.setCell(cellRowIndex, cellColIndex, new Integer(0));
+                cellRowIndex++;
+            }
+            if (cellRowIndex < rowCount) {
+                tableView.setCell(cellRowIndex, cellColIndex, obj[1]);
+                cellRowIndex++;
+            }
+        }
+        while(cellRowIndex < rowCount) {
+            tableView.setCell(cellRowIndex, cellColIndex, 0);
+            cellRowIndex++;
+        }
     }
 }
