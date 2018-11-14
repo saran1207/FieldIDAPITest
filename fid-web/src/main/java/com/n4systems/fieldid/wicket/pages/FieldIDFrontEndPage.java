@@ -24,6 +24,7 @@ import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ProcedureSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
+import com.n4systems.fieldid.wicket.pages.autoattributes.AutoAttributeActionsPage;
 import com.n4systems.fieldid.wicket.pages.customers.CustomerActionsPage;
 import com.n4systems.fieldid.wicket.pages.event.EventImportPage;
 import com.n4systems.fieldid.wicket.pages.event.StartEventPage;
@@ -330,6 +331,8 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
                 PageParametersBuilder.param(CustomerActionsPage.INITIAL_TAB_SELECTION_KEY, CustomerActionsPage.SHOW_IMPORTEXPORT_PAGE)));
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("assetImportLink", AssetImportPage.class));
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("eventImportLink", EventImportPage.class));
+        subMenuContainer.add(new BookmarkablePageLink<WebPage>("autoAttributesImportLink", AutoAttributeActionsPage.class,
+                PageParametersBuilder.param(AutoAttributeActionsPage.INITIAL_TAB_SELECTION_KEY, AutoAttributeActionsPage.SHOW_IMPORTEXPORT_PAGE)));
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("templatesLink", TemplatesPage.class));
         subMenuContainer.add(createTemplatesSubMenu());
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("widgetsLink", WidgetsPage.class));

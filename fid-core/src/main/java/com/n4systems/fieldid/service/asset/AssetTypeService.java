@@ -57,6 +57,13 @@ public class AssetTypeService extends CrudService<AssetType> {
         return persistenceService.find(AssetType.class, id);
     }
 
+    public AssetType getAssetTypeWithPostFetches(Long id) {
+        QueryBuilder<AssetType> query = new QueryBuilder<AssetType>(AssetType.class, new OpenSecurityFilter());
+        query.addSimpleWhere("id", id);
+        query.addPostFetchPaths("infoFields", "eventTypes", "attachments", "subTypes");
+        return persistenceService.find(query);
+    }
+
     public boolean isNameExists(String name) {
         QueryBuilder<AssetType> builder = createTenantSecurityBuilder(AssetType.class);
         builder.addWhere(WhereClauseFactory.create("name", name));
