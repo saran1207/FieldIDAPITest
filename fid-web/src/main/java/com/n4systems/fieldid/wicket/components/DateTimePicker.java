@@ -127,7 +127,7 @@ public class DateTimePicker extends Panel {
     }
 
 
-    private String getDateFormat() {
+    protected String getDateFormat() {
         SessionUser sessionUser = FieldIDSession.get().getSessionUser();
         return  includeTime && !allDay ? sessionUser.getDateTimeFormat() : sessionUser.getDateFormat();
     }
@@ -264,7 +264,7 @@ public class DateTimePicker extends Panel {
         Boolean buttonImageOnly = true;
         Integer numberOfMonths = monthsDisplayed;
         Boolean showButtonPanel = true;
-        String dateFormat = FieldIDSession.get().getSessionUser().getJqueryDateFormat();
+        String dateFormat = getJQueryDateFormat();
         Boolean changeMonth = true;
         Boolean changeYear = true;
         Boolean ampm = null;
@@ -277,6 +277,10 @@ public class DateTimePicker extends Panel {
                 timeFormat = "hh:mm TT";
             }
         }
+    }
+
+    protected String getJQueryDateFormat() {
+        return FieldIDSession.get().getSessionUser().getJqueryDateFormat();
     }
 
     public DateTimePicker withoutPerformSetDateOnInitialization() {
