@@ -40,5 +40,9 @@ public class UserImportAction extends AbstractImportAction {
 		UserWelcomeNotificationProducer userWelcomeNotificationProducer = new UserWelcomeNotificationProducer(getDefaultNotifier(), createActionUrlBuilder());
 		return userWelcomeNotificationProducer;
 	}
+
+	public WelcomeNotifier getWelcomeNotifier() {
+		return createWelcomeNotifier();
+	}
 		
 }

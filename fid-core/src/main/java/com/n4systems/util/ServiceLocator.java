@@ -19,6 +19,7 @@ import com.n4systems.fieldid.service.pentaho.PentahoService;
 import com.n4systems.fieldid.service.procedure.*;
 import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.fieldid.service.sendsearch.SendSearchService;
+import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.mail.MailManager;
 import com.n4systems.mail.MailManagerFactory;
@@ -41,7 +42,6 @@ import java.util.Map;
 public class ServiceLocator implements ApplicationContextAware {
 
 	private static ApplicationContext applicationContext;
-
 
     // TODO : make all of these returned values spring objects.
 	//  Caveat : all spring beans should NOT be stateful..the previous implementation returned new instances but using getBean() 
@@ -204,6 +204,9 @@ public class ServiceLocator implements ApplicationContextAware {
         return getBean(SvgGenerationService.class);
     }
 
+	public static TenantSettingsService getTenantSettingsService() {
+		return getBean(TenantSettingsService.class);
+	}
 
     @SuppressWarnings("unchecked")
 	public static <T> T getBean(String name, Class<T> type) {
@@ -220,7 +223,7 @@ public class ServiceLocator implements ApplicationContextAware {
 		}
 	}
 
-    @Override
+	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		ServiceLocator.applicationContext = applicationContext;
 	}
