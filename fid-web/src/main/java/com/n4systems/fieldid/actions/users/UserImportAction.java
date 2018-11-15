@@ -41,8 +41,4 @@ public class UserImportAction extends AbstractImportAction {
 		return userWelcomeNotificationProducer;
 	}
 
-	public WelcomeNotifier getWelcomeNotifier() {
-		return createWelcomeNotifier();
-	}
-		
 }

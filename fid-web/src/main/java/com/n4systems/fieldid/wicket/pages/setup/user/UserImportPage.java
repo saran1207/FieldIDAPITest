@@ -163,7 +163,7 @@ public class UserImportPage extends FieldIDFrontEndPage {
                             UserWelcomeNotificationProducer userWelcomeNotificationProducer = new UserWelcomeNotificationProducer(ServiceLocator.getDefaultNotifier(), new ActionURLBuilder(baseURI, ConfigService.getInstance()));
 
                             return getImporterFactory().createUserImporter(reader, userWelcomeNotificationProducer, getTenant().getSettings().getUserLimits(), getCurrentUser().getTimeZoneID(), ServiceLocator.getTenantSettingsService().getTenantSettings(getTenantId()).getPasswordPolicy());
-               }
+                        }
                     };
                     result = importService.doImport(inputStream);
                 } catch (IOException ex) {
@@ -191,8 +191,8 @@ public class UserImportPage extends FieldIDFrontEndPage {
             setResponsePage(resultPage);
         }
     };
-        fileUploadForm.setMultiPart(true);
-        fileUploadForm.add(fileUploadField);
+    fileUploadForm.setMultiPart(true);
+    fileUploadForm.add(fileUploadField);
 
     add(fileUploadForm);
 
