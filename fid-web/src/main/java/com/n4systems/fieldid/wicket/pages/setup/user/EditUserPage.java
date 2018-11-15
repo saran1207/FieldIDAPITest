@@ -135,7 +135,7 @@ public class EditUserPage extends UserPage {
                         .params(PageParametersBuilder.uniqueId(userModel.getObject().getId())).build(),
                 aNavItem().label("nav.mobile_profile").page(UserOfflineProfilePage.class).params(uniqueId(userModel.getObject().getId())).build(),
                 aNavItem().label("nav.add").page(SelectUserTypePage.class).onRight().build(),
-                aNavItem().label("nav.import_export").page("userImportExport.action").onRight().build()
+                aNavItem().label(new FIDLabelModel("nav.import_export")).page(UserImportPage.class).onRight().build()
         ));
     }
 
