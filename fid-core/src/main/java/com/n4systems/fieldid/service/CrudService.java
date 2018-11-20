@@ -39,7 +39,7 @@ public abstract class CrudService<T extends AbstractEntity> extends FieldIdPersi
 	@Transactional(readOnly = true)
 	public List<T> findAll(int page, int pageSize, Date delta) {
 		QueryBuilder<T> builder = createUserSecurityBuilder(entity);
-		builder.addWhere(WhereParameter.Comparator.GE, "modified", "modified", delta);
+		if(delta != null) builder.addWhere(WhereParameter.Comparator.GE, "modified", "modified", delta);
 		return findAll(builder, page, pageSize);
 	}
 
@@ -86,7 +86,7 @@ public abstract class CrudService<T extends AbstractEntity> extends FieldIdPersi
 	@Transactional(readOnly = true)
 	public Long count(Date delta) {
 		QueryBuilder<T> builder = createUserSecurityBuilder(entity);
-		builder.addWhere(WhereParameter.Comparator.GE, "modified", "modified", delta);
+		if(delta != null) builder.addWhere(WhereParameter.Comparator.GE, "modified", "modified", delta);
 		return count(builder);
 	}
 
