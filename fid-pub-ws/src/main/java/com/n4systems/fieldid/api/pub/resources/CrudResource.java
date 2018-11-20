@@ -10,15 +10,12 @@ import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.api.HasTenant;
 import com.n4systems.model.parents.AbstractEntity;
-import com.n4systems.util.time.DateUtil;
 import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -71,7 +68,7 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 	@Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Transactional(readOnly = true)
-	public Messages.ListResponseMessage findAll(@QueryParam("page") int page, @QueryParam("pageSize") int pageSize, @QueryParam("delta") String date) {
+	public Messages.ListResponseMessage findAll(@QueryParam("page") int page, @QueryParam("pageSize") int pageSize, @QueryParam("delta") String date ) {
 		List<M> allItems;
 		List<A> items;
 		Date delta = null;
@@ -84,37 +81,21 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 			delta = convertDate(date);
 		}
 
-		//ignore the delta value
-		if(delta == null) {
-			allItems = crudService().findAll(page, pageSize);
+		allItems = crudService()
+				.findAll(page, pageSize, delta);
 
-			items = allItems
-					.stream()
-					.map(m -> toMessage(m))
-					.collect(Collectors.toList());
+		items = allItems
+				.stream()
+				.map(m -> toMessage(m))
+				.collect(Collectors.toList());
 
-			return Messages.ListResponseMessage.newBuilder()
-					.setPageSize(pageSize)
-					.setPage(page)
-					.setTotal(crudService().count())
-					.setExtension(listResponseType, items)
-					.build();
-		} else {
-			allItems = crudService()
-					.findAll(page, pageSize, delta);
+		return Messages.ListResponseMessage.newBuilder()
+				.setPageSize(pageSize)
+				.setPage(page)
+				.setTotal(crudService().count(delta))
+				.setExtension(listResponseType, items)
+				.build();
 
-			items = allItems
-					.stream()
-					.map(m -> toMessage(m))
-					.collect(Collectors.toList());
-
-			return Messages.ListResponseMessage.newBuilder()
-					.setPageSize(pageSize)
-					.setPage(page)
-					.setTotal(crudService().count(delta))
-					.setExtension(listResponseType, items)
-					.build();
-		}
 	}
 
 	protected <M> M testNotFound(M model) {
@@ -350,6 +331,8 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 	public Extension<Messages.ListResponseMessage, List<A>> getListResponseType() {
 		return listResponseType;
 	}
+
+	public Logger getLogger() { return logger; }
 
 	public Date convertDate(String dateInString) {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
