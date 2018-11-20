@@ -11,8 +11,7 @@ import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.model.Asset;
 import com.n4systems.util.StringUtils;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.util.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -142,8 +141,15 @@ public class AssetResource extends CrudResource<Asset, AssetMessage, Builder> {
 	@Transactional(readOnly = true)
 	public List<Asset> findAll(int page, int pageSize, Date delta, String identifier) {
 		QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
-		if (delta != null) builder.addWhere(WhereParameter.Comparator.GE, "modified", "modified", delta);
-		if (StringUtils.isNotEmpty(identifier)) builder.addWhere(WhereParameter.Comparator.LIKE, "identifier", "identifier", "%"+identifier+"%");
+		WhereParameterGroup group = new WhereParameterGroup("smartsearch");
+		if (delta != null) {
+			group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.GE, "modified", "modified", delta, null, WhereClause.ChainOp.OR));
+		}
+		if (StringUtils.isNotEmpty(identifier)) {
+			group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "identifier", "identifier", identifier, WhereParameter.WILDCARD_BOTH, null));
+		}
+		builder.addWhere(group);
+		builder.addOrder("modified",false);
 
 		return crudService().findAll(builder, page, pageSize);
 	}

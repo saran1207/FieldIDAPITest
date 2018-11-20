@@ -68,7 +68,7 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 	@Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Transactional(readOnly = true)
-	public Messages.ListResponseMessage findAll(@QueryParam("page") int page, @QueryParam("pageSize") int pageSize, @QueryParam("delta") String date ) {
+	public Messages.ListResponseMessage findAll(@QueryParam("page") int page, @QueryParam("pageSize") int pageSize, @QueryParam("delta") String date) {
 		List<M> allItems;
 		List<A> items;
 		Date delta = null;
@@ -81,21 +81,37 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 			delta = convertDate(date);
 		}
 
-		allItems = crudService()
-				.findAll(page, pageSize, delta);
+		//ignore the delta value
+		if(delta == null) {
+			allItems = crudService().findAll(page, pageSize);
 
-		items = allItems
-				.stream()
-				.map(m -> toMessage(m))
-				.collect(Collectors.toList());
+			items = allItems
+					.stream()
+					.map(m -> toMessage(m))
+					.collect(Collectors.toList());
 
-		return Messages.ListResponseMessage.newBuilder()
-				.setPageSize(pageSize)
-				.setPage(page)
-				.setTotal(crudService().count(delta))
-				.setExtension(listResponseType, items)
-				.build();
+			return Messages.ListResponseMessage.newBuilder()
+					.setPageSize(pageSize)
+					.setPage(page)
+					.setTotal(crudService().count())
+					.setExtension(listResponseType, items)
+					.build();
+		} else {
+			allItems = crudService()
+					.findAll(page, pageSize, delta);
 
+			items = allItems
+					.stream()
+					.map(m -> toMessage(m))
+					.collect(Collectors.toList());
+
+			return Messages.ListResponseMessage.newBuilder()
+					.setPageSize(pageSize)
+					.setPage(page)
+					.setTotal(crudService().count(delta))
+					.setExtension(listResponseType, items)
+					.build();
+		}
 	}
 
 	protected <M> M testNotFound(M model) {
