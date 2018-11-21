@@ -1,5 +1,8 @@
 package com.n4systems.util.mail;
 
+/**
+ * This file was copied from package com.n4systems.fieldid.actions.user.UserWelcomeNotificationProducer.java to de-couple functionality from struts hierarchy packages
+ */
 
 import com.n4systems.model.user.User;
 import com.n4systems.notifiers.Notifier;

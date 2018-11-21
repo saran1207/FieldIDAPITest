@@ -117,8 +117,8 @@ public class UserImportPage extends FieldIDFrontEndPage {
 
     Link downloadDataLink = new Link("downloadDataLink") {
 
-    @Override
-    public void onClick() {
+         @Override
+         public void onClick() {
                 performDataExport();
             }
     };
@@ -229,7 +229,7 @@ public class UserImportPage extends FieldIDFrontEndPage {
 
                     } catch (Exception e) {
                         logger.error("Failed generating example user export", e);
-                        //TODO handle this error?
+                        throw new RuntimeException(e);
                     } finally {
                         StreamUtils.close(writer);
                     }
