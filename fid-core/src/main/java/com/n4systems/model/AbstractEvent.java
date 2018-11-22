@@ -18,34 +18,34 @@ import java.util.stream.Collectors;
 @Cacheable
 @org.hibernate.annotations.Cache(region = "EventCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public abstract class AbstractEvent<T extends EventType, R extends EntityWithTenant> extends EntityWithTenant implements HasFileAttachments {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     private static final Logger logger = Logger.getLogger(AbstractEvent.class);
 
-	@Column(length=5000)
-	private String comments;
+    @Column(length=5000)
+    private String comments;
 
     @ManyToOne(targetEntity = EventType.class)
     @JoinColumn(name="type_id")
     private EventType<T> type;
-	
+    
     @ManyToOne(fetch=FetchType.EAGER, optional=true)
     @JoinColumn(name="eventform_id")
     private EventForm eventForm;
 
- 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, mappedBy = "event", orphanRemoval = true)
-	@org.hibernate.annotations.Cache(region = "EventCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-	private Set<CriteriaResult> results = new HashSet<CriteriaResult>();
-	
-	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+     @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, mappedBy = "event", orphanRemoval = true)
+    @org.hibernate.annotations.Cache(region = "EventCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<CriteriaResult> results = new HashSet<CriteriaResult>();
+    
+    @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
     @JoinTable(name="events_fileattachments", joinColumns = @JoinColumn(name="events_id"), inverseJoinColumns = @JoinColumn(name="attachments_id"))
-	@org.hibernate.annotations.Cache(region = "EventCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-	private List<FileAttachment> attachments = new ArrayList<FileAttachment>();
+    @org.hibernate.annotations.Cache(region = "EventCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private List<FileAttachment> attachments = new ArrayList<FileAttachment>();
 
     @ElementCollection(fetch = FetchType.LAZY)
     @JoinTable(name="events_infooptionmap", joinColumns = @JoinColumn(name="events_id"))
     @MapKeyColumn(name = "mapkey")
     @Column(name="element")
-	@org.hibernate.annotations.Cache(region = "EventCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @org.hibernate.annotations.Cache(region = "EventCache-Collections", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Map<String, String> infoOptionMap = new HashMap<String, String>();
 
     @Column(name="score")
@@ -56,110 +56,114 @@ public abstract class AbstractEvent<T extends EventType, R extends EntityWithTen
 
     @Column(name="pass_observations")
     private Double passObservations;
-	
+    
     @Column(nullable=false)
     private boolean editable = true;
 
     @Transient
     private List<SectionResults> sectionResults;
 
-	private String mobileGUID;
+    private String mobileGUID;
 
     @ManyToOne(optional = true)
     @JoinColumn(name="eventstatus_id")
     private EventStatus eventStatus;
-	
-	@AllowSafetyNetworkAccess
-	public String getMobileGUID() {
-		return mobileGUID;
-	}
-	public void setMobileGUID(String mobileGUID) {
-		this.mobileGUID = mobileGUID;
-	}
-
-	public AbstractEvent() {}
-
-	public AbstractEvent(Tenant tenant) {
-		super(tenant);
-	}
-
-    // This check may be better refactored into a listener in persistence.xml - NC
-	@Override
-	protected void onCreate() {
-		super.onCreate();
-		ensureMobileGuidIsSet();
-	}
-
-	@Override
-	protected void onUpdate() {
-		super.onUpdate();
-		ensureMobileGuidIsSet();
-	}
-
-	private void ensureMobileGuidIsSet() {
-		if(getMobileGUID() == null || getMobileGUID().length() == 0){
-			setMobileGUID(UUID.randomUUID().toString());
-		}
-	}
-	
-	@Override
-    public String toString() {
-		String resultString = new String();
-		for (CriteriaResult result: getResults()) {
-			resultString += "\n" + result;
-		}
-		
-	    return	"id: " + getId() +
-	    		"\nTenant: " + getTenant() + 
-	    		"\nResults: " + StringUtils.indent(resultString, 1);
+    
+    @AllowSafetyNetworkAccess
+    public String getMobileGUID() {
+        return mobileGUID;
+    }
+    public void setMobileGUID(String mobileGUID) {
+        this.mobileGUID = mobileGUID;
     }
 
-	@AllowSafetyNetworkAccess
-	public boolean isEditable() {
-		return editable;
-	}
+    public AbstractEvent() {}
 
-	public void setEditable(boolean editable) {
-		this.editable = editable;
-	}
+    public AbstractEvent(Tenant tenant) {
+        super(tenant);
+    }
 
-	@AllowSafetyNetworkAccess
-	public Set<CriteriaResult> getResults() {
-		return results;
-	}
+    // This check may be better refactored into a listener in persistence.xml - NC
+    @Override
+    protected void onCreate() {
+        super.onCreate();
+        ensureMobileGuidIsSet();
+    }
 
-	public void setCriteriaResults(Set<CriteriaResult> results) {
+    @Override
+    protected void onUpdate() {
+        super.onUpdate();
+        ensureMobileGuidIsSet();
+    }
+
+    private void ensureMobileGuidIsSet() {
+        if(getMobileGUID() == null || getMobileGUID().length() == 0){
+            setMobileGUID(UUID.randomUUID().toString());
+        }
+    }
+    
+    @Override
+    public String toString() {
+        String resultString = new String();
+        for (CriteriaResult result: getResults()) {
+            resultString += "\n" + result;
+        }
+        
+        return    "id: " + getId() +
+                "\nTenant: " + getTenant() + 
+                "\nResults: " + StringUtils.indent(resultString, 1);
+    }
+
+    @AllowSafetyNetworkAccess
+    public boolean isEditable() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+    }
+
+    @AllowSafetyNetworkAccess
+    public Set<CriteriaResult> getResults() {
+        return results;
+    }
+
+    public void setCriteriaResults(Set<CriteriaResult> results) {
         this.results.clear();
         this.results.addAll(results);
-	}
+    }
 
-	@Override
-	@AllowSafetyNetworkAccess
-	public List<FileAttachment> getAttachments() {
-		return attachments;
-	}
+    @Override
+    @AllowSafetyNetworkAccess
+    public List<FileAttachment> getAttachments() {
+        return attachments;
+    }
 
-	@Override
-	public void setAttachments(List<FileAttachment> attachments) {
-		this.attachments.clear();
+    @Override
+    public void setAttachments(List<FileAttachment> attachments) {
+        this.attachments.clear();
         this.attachments.addAll(attachments);
-	}
-	
-	@AllowSafetyNetworkAccess
-	public Map<String, String> getInfoOptionMap() {
-		return infoOptionMap;
-	}
+    }
 
-	public void setInfoOptionMap(Map<String, String> infoOptionMap) {
-		this.infoOptionMap = infoOptionMap;
-	}
+    public void setEmptyAttachments(List<FileAttachment> emptyAttachments) {
+        this.attachments = emptyAttachments;
+    }
 
-	@AllowSafetyNetworkAccess
-	public String getComments() {
-		return comments;
-	}
+    @AllowSafetyNetworkAccess
+    public Map<String, String> getInfoOptionMap() {
+        return infoOptionMap;
+    }
 
-	public void setComments( String comments ) {
+    public void setInfoOptionMap(Map<String, String> infoOptionMap) {
+        this.infoOptionMap = infoOptionMap;
+    }
+
+    @AllowSafetyNetworkAccess
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments( String comments ) {
 
         if (comments != null && !comments.isEmpty()) {
             try {
@@ -174,8 +178,8 @@ public abstract class AbstractEvent<T extends EventType, R extends EntityWithTen
                 logger.error(ex);
             }
         }
-		this.comments = comments;
-	}
+        this.comments = comments;
+    }
 
     @AllowSafetyNetworkAccess
     public EventForm getEventForm() {
@@ -225,16 +229,16 @@ public abstract class AbstractEvent<T extends EventType, R extends EntityWithTen
         return attachments.stream()
                           .filter(FileAttachment::isImage)
                           .collect(Collectors.toList());
-	}
+    }
 
-	/**
-	 * Finds the CriteriaSections for a given Criteria.
-	 * @param criteria	Criteria
-	 * @return			The CriteriaSection containing the Criteria or null if no section was found
-	 */
-	public CriteriaSection findSection(Criteria criteria) {
-		CriteriaSection criteriaSection = null;
-		if (getEventForm() != null) {
+    /**
+     * Finds the CriteriaSections for a given Criteria.
+     * @param criteria    Criteria
+     * @return            The CriteriaSection containing the Criteria or null if no section was found
+     */
+    public CriteriaSection findSection(Criteria criteria) {
+        CriteriaSection criteriaSection = null;
+        if (getEventForm() != null) {
             for(CriteriaSection section: getEventForm().getSections()) {
                 if(section.getCriteria().contains(criteria)) {
                     criteriaSection = section;
@@ -242,7 +246,7 @@ public abstract class AbstractEvent<T extends EventType, R extends EntityWithTen
                 }
             }
         }
-		return criteriaSection;
+        return criteriaSection;
     }
 
     public void setTriggersIntoResultingActions(Event triggerEvent) {
