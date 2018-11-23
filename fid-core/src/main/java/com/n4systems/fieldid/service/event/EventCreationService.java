@@ -320,7 +320,8 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
         saveCriteriaResultImages(event, true);
         setAllTriggersForActions(event);
 
-        event.setEmptyAttachments(new ArrayList<FileAttachment>());
+        List<FileAttachment> attachmentsInput = new ArrayList<>(attachments);
+        event.getAttachments().clear();;
 
         //Save any new actions that have been added on edit.
         for (CriteriaResult result : event.getResults()) {
@@ -375,7 +376,7 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
 //        ruleService.createApplicableQueueItems(trainingWheels);
 
         postUpdateEvent(event, fileData);
-        processUploadedFiles(event, attachments);
+        processUploadedFiles(event, attachmentsInput);
 
         return event;
     }
