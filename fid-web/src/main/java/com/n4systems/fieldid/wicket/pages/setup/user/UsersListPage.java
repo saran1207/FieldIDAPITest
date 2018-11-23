@@ -10,17 +10,16 @@ import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.org.people.table.UserGroupColumn;
+import com.n4systems.fieldid.wicket.components.renderer.DisplayEnumChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.table.SimpleDefaultDataTable;
 import com.n4systems.fieldid.wicket.components.user.columns.LastLoginColumn;
-import com.n4systems.fieldid.wicket.components.user.columns.UserNameLinkCell;
 import com.n4systems.fieldid.wicket.components.user.columns.UserNameLinkColumn;
 import com.n4systems.fieldid.wicket.components.user.columns.UsersListActionColumn;
 import com.n4systems.fieldid.wicket.data.UsersDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
-import com.n4systems.fieldid.wicket.components.renderer.DisplayEnumChoiceRenderer;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
@@ -229,7 +228,7 @@ public class UsersListPage extends FieldIDTemplatePage {
                 aNavItem().label(new FIDLabelModel("nav.view_all.count", activeUserCount)).page(UsersListPage.class).build(),
                 aNavItem().label(new FIDLabelModel("nav.view_all_archived.count", archivedUserCount)).page(ArchivedUsersListPage.class).build(),
                 aNavItem().label("nav.add").page(SelectUserTypePage.class).onRight().build(),
-                aNavItem().label("nav.import_export").page("userImportExport.action").onRight().build()
+                aNavItem().label(new FIDLabelModel("nav.import_export")).page(UserImportPage.class).onRight().build()
         ));
     }
 

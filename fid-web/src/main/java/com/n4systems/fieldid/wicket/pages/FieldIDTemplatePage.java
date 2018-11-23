@@ -54,6 +54,7 @@ import com.n4systems.fieldid.wicket.pages.setup.security.PasswordPolicyPage;
 import com.n4systems.fieldid.wicket.pages.setup.sso.SsoSettingsPage;
 import com.n4systems.fieldid.wicket.pages.setup.translations.AssetTypeGroupTranslationsPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UserGroupsPage;
+import com.n4systems.fieldid.wicket.pages.setup.user.UserImportPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UsersListPage;
 import com.n4systems.fieldid.wicket.pages.setup.userregistration.UserRequestListPage;
 import com.n4systems.fieldid.wicket.pages.trends.CriteriaTrendsPage;
@@ -302,6 +303,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("assetImportLink", AssetImportPage.class));
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("eventImportLink", EventImportPage.class));
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("templatesLink", TemplatesPage.class));
+        subMenuContainer.add(new BookmarkablePageLink<WebPage>("userImportLink", UserImportPage.class));
         subMenuContainer.add(createTemplatesSubMenu());
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("widgetsLink", WidgetsPage.class));
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("securityLink", SecurityPage.class));

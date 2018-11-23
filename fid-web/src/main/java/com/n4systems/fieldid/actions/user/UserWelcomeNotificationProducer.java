@@ -1,5 +1,8 @@
 package com.n4systems.fieldid.actions.user;
 
+/**
+ * This class has been copied to com.n4systems.util.mail.UserWelcomeNotificationProducer.java package to de-couple Wicket packages from Struts hierarchy
+ */
 
 import com.n4systems.model.user.User;
 import com.n4systems.notifiers.Notifier;
@@ -7,6 +10,7 @@ import com.n4systems.notifiers.notifications.UserWelcomeEmail;
 import com.n4systems.util.uri.ActionURLBuilder;
 import com.n4systems.utils.email.WelcomeNotifier;
 
+@Deprecated
 public class UserWelcomeNotificationProducer implements WelcomeNotifier {
 
 	private final Notifier notifier;
