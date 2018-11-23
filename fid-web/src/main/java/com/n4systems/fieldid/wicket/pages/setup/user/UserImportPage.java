@@ -115,88 +115,88 @@ public class UserImportPage extends FieldIDFrontEndPage {
 
     private void addComponents() {
 
-    Link downloadDataLink = new Link("downloadDataLink") {
+        Link downloadDataLink = new Link("downloadDataLink") {
+
+             @Override
+             public void onClick() {
+                    performDataExport();
+                }
+        };
+        setLinkToColorbox(downloadDataLink);
+        add(downloadDataLink);
+
+        Link downloadTemplateLink = new Link("downloadTemplateLink") {
 
          @Override
          public void onClick() {
-                performDataExport();
+             AbstractResourceStreamWriter rStream = doDownloadExample(false);
+             ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(rStream, getExportFileName(getCurrentUser()));
+             getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
             }
-    };
-    setLinkToColorbox(downloadDataLink);
-    add(downloadDataLink);
+         };
+         add(downloadTemplateLink);
 
-    Link downloadTemplateLink = new Link("downloadTemplateLink") {
+        final FileUploadField fileUploadField;
+        fileUploadField = new FileUploadField("fileToUpload");
+        Form fileUploadForm = new Form("fileUploadForm") {
+            @Override
+            protected void onSubmit() {
+                ImportResultStatus result;
+                FileUpload fileUpload = fileUploadField.getFileUpload();
+                if (fileUpload != null) {
+                    try {
+                        InputStream inputStream = fileUpload.getInputStream();
+                        EntityImportInitiator importService = new EntityImportInitiator(getWebSessionMap(), getCurrentUser(), getSessionUser(), getSecurityFilter()) {
+                            @Override
+                            protected ImportSuccessNotification createSuccessNotification() {
+                                return new UserImportSuccessNotification(getCurrentUser());
+                            }
 
-     @Override
-     public void onClick() {
-         AbstractResourceStreamWriter rStream = doDownloadExample(false);
-         ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(rStream, getExportFileName(getCurrentUser()));
-         getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
-        }
-     };
-     add(downloadTemplateLink);
+                            @Override
+                            protected ImportFailureNotification createFailureNotification() {
+                                return new UserImportFailureNotification(getCurrentUser());
+                            }
 
-    final FileUploadField fileUploadField;
-    fileUploadField = new FileUploadField("fileToUpload");
-    Form fileUploadForm = new Form("fileUploadForm") {
-        @Override
-        protected void onSubmit() {
-            ImportResultStatus result;
-            FileUpload fileUpload = fileUploadField.getFileUpload();
-            if (fileUpload != null) {
-                try {
-                    InputStream inputStream = fileUpload.getInputStream();
-                    EntityImportInitiator importService = new EntityImportInitiator(getWebSessionMap(), getCurrentUser(), getSessionUser(), getSecurityFilter()) {
-                        @Override
-                        protected ImportSuccessNotification createSuccessNotification() {
-                            return new UserImportSuccessNotification(getCurrentUser());
-                        }
+                            @Override
+                            protected Importer createImporter(MapReader reader) {
+                                URI baseURI = URI.create(getServletRequest().getRequestURL().toString()).resolve(getServletRequest().getContextPath() + "/");
+                                UserWelcomeNotificationProducer userWelcomeNotificationProducer = new UserWelcomeNotificationProducer(ServiceLocator.getDefaultNotifier(), new ActionURLBuilder(baseURI, ConfigService.getInstance()));
 
-                        @Override
-                        protected ImportFailureNotification createFailureNotification() {
-                            return new UserImportFailureNotification(getCurrentUser());
-                        }
-
-                        @Override
-                        protected Importer createImporter(MapReader reader) {
-                            URI baseURI = URI.create(getServletRequest().getRequestURL().toString()).resolve(getServletRequest().getContextPath() + "/");
-                            UserWelcomeNotificationProducer userWelcomeNotificationProducer = new UserWelcomeNotificationProducer(ServiceLocator.getDefaultNotifier(), new ActionURLBuilder(baseURI, ConfigService.getInstance()));
-
-                            return getImporterFactory().createUserImporter(reader, userWelcomeNotificationProducer, getTenant().getSettings().getUserLimits(), getCurrentUser().getTimeZoneID(), ServiceLocator.getTenantSettingsService().getTenantSettings(getTenantId()).getPasswordPolicy());
-                        }
-                    };
-                    result = importService.doImport(inputStream);
-                } catch (IOException ex) {
-                    logger.error("Exception reading input file", ex);
+                                return getImporterFactory().createUserImporter(reader, userWelcomeNotificationProducer, getTenant().getSettings().getUserLimits(), getCurrentUser().getTimeZoneID(), ServiceLocator.getTenantSettingsService().getTenantSettings(getTenantId()).getPasswordPolicy());
+                            }
+                        };
+                        result = importService.doImport(inputStream);
+                    } catch (IOException ex) {
+                        logger.error("Exception reading input file", ex);
+                        result = new ImportResultStatus(false, null,
+                                new FIDLabelModel("error.io_error_reading_import_file").getObject(), null);
+                    }
+                } else {
                     result = new ImportResultStatus(false, null,
-                            new FIDLabelModel("error.io_error_reading_import_file").getObject(), null);
+                            new FIDLabelModel("error.file_required").getObject(), null);
                 }
-            } else {
-                result = new ImportResultStatus(false, null,
-                        new FIDLabelModel("error.file_required").getObject(), null);
+                Long selectedUserId = getCurrentUser().getId();
+                ImportResultPage resultPage = new ImportResultPage(result) {
+
+                    @Override
+                    protected PageParameters getRerunParameters() {
+                        return PageParametersBuilder.uniqueId(selectedUserId);
+                    }
+
+                    @Override
+                    protected Class<? extends IRequestablePage> getRerunPageClass() {
+                        return UserImportPage.class;
+                    }
+                };
+                setResponsePage(resultPage);
             }
-            Long selectedUserId = getCurrentUser().getId();
-            ImportResultPage resultPage = new ImportResultPage(result) {
+        };
+        fileUploadForm.setMultiPart(true);
+        fileUploadForm.add(fileUploadField);
 
-                @Override
-                protected PageParameters getRerunParameters() {
-                    return PageParametersBuilder.uniqueId(selectedUserId);
-                }
+        add(fileUploadForm);
 
-                @Override
-                protected Class<? extends IRequestablePage> getRerunPageClass() {
-                    return UserImportPage.class;
-                }
-            };
-            setResponsePage(resultPage);
-        }
-    };
-    fileUploadForm.setMultiPart(true);
-    fileUploadForm.add(fileUploadField);
-
-    add(fileUploadForm);
-
-}
+    }
 
     public AbstractResourceStreamWriter doDownloadExample( boolean isIncludeRecommendationsAndDeficiencies) {
 
