@@ -56,6 +56,8 @@ public class AutoAttributeActionsPage extends FieldIDFrontEndWithFeedbackPage {
     private IModel<SecurityFilter> securityFilterModel;
     private IModel<WebSessionMap> webSessionMapModel;
 
+    private AutoAttributeDefinitionsPanel definitionsPanel;
+
     /**
      * The currently selected AssetType. This is set in one of the following three cases since they change the focus
      * to an individual customer:
@@ -134,6 +136,8 @@ public class AutoAttributeActionsPage extends FieldIDFrontEndWithFeedbackPage {
 
         int preSelectedTab = NO_TAB_SELECTION;
 
+
+
         final List<ITab> tabs = new ArrayList<ITab>();
 
         final TabbedPanel tabbedPanel = new TabbedPanel("navBar", tabs) {
@@ -141,12 +145,23 @@ public class AutoAttributeActionsPage extends FieldIDFrontEndWithFeedbackPage {
             @Override
             protected void onBeforeRender() {
                 int newTab = getSelectedTab();
-                System.out.println("AutoAttributesActionPage.onBeforeRender selected tab " + newTab);
-                if (newTab == VIEW_ALL_TAB_INDEX || newTab == IMPORT_EXPORT_TAB_INDEX)
-                    assetTypeSelectedForEditModel.setObject(null); // cleanup any old value
-                Session.get().cleanupFeedbackMessages();
-                currentlySelectedTab = getSelectedTab();
+                System.out.println("AutoAttributesActionPage.onBeforeRender selected tab " + newTab + " prev tab " + currentlySelectedTab);
+                if (newTab != currentlySelectedTab) {
+                    /* Tab selection has changed, some pages might have to cleanup */
+                    if (newTab == VIEW_ALL_TAB_INDEX || newTab == IMPORT_EXPORT_TAB_INDEX)
+                        assetTypeSelectedForEditModel.setObject(null); // cleanup any old value
+                    if (newTab == DEFINITIONS_TAB_INDEX)
+                        definitionsPanel.handleSelectionChange();
+                    Session.get().cleanupFeedbackMessages();
+                    currentlySelectedTab = getSelectedTab();
+                }
                 super.onBeforeRender();
+            }
+
+            @Override
+            public TabbedPanel setSelectedTab(int index) {
+                System.out.println("Tabbed panel.setSelectedTab(" + index + ")");
+                return super.setSelectedTab(index);
             }
         };
 
@@ -183,7 +198,8 @@ public class AutoAttributeActionsPage extends FieldIDFrontEndWithFeedbackPage {
         tabs.add(new PanelCachingTab(new AbstractTab(new FIDLabelModel("nav.definitions")) {
             @Override
             public Panel getPanel(String panelId) {
-                return new AutoAttributeDefinitionsPanel(panelId, currentAutoAttributeCriteriaEditModel, sessionUserModel);
+                definitionsPanel = new AutoAttributeDefinitionsPanel(panelId, currentAutoAttributeCriteriaEditModel, sessionUserModel);
+                return definitionsPanel;
             }
              @Override
             public boolean isVisible() {
@@ -226,6 +242,7 @@ public class AutoAttributeActionsPage extends FieldIDFrontEndWithFeedbackPage {
     private void changeSelectedPage(TabbedPanel tabbedPanel, Long assetTypeId, Long criteriaId, int newIndex) {
         assetTypeSelectedForEditModel.setObject(assetTypeId);
         currentAutoAttributeCriteriaEditModel.setObject(criteriaId);
+        System.out.println("Page changing " + assetTypeId + ":" + criteriaId);
         tabbedPanel.setSelectedTab(newIndex);
         currentlySelectedTab = newIndex;
         RequestCycle.get().setResponsePage( AutoAttributeActionsPage.this.getPage() );

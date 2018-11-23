@@ -2,8 +2,14 @@
 <wicket:panel>
 
     <div class="infoSet">
+        <label class="label">
+            <span style="padding-right: 2px;" wicket:id="required"></span>
+            <span wicket:id="fieldName"></span>
+        </label>
+        <span class="fieldHolder">
        <!-- <@s.textfield id="${infoField.uniqueID}" cssClass="attribute  ${requiredClass}"  name="${prefix}InfoOptions[${stat.index}].name"   theme="fieldid"/>-->
-        <label wicket:id="optionName" class="attribute"></label>
+            <input type="text" wicket:id="inputValue" class="attribute">
+        </span>
     </div>
 
 </wicket:panel>

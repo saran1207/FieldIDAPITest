@@ -164,6 +164,7 @@
     </@s.iterator>
 </@s.if>-->
 
+    <form wicket:id="addDefinitionForm">
     <div id="inputlist"  class="fluidSets" style="width:750px;   padding:10px;  border:1px solid #cfdddd;">
         <h3><wicket:message key="label.inputfields"/></h3>
         <div wicket:id="inputFieldsList" class="notranslate">
@@ -197,5 +198,16 @@
         </div>
     </div>
 
+    <div class="formAction">
+
+        <input type="submit" wicket:id="save" wicket:message="value:hbutton.save"/>
+    <!--    <#if !autoAttributeDefinition.id?exists  >-->
+            <input type="submit" wicket:id="saveAndAdd" wicket:message="value:hbutton.saveandadd" />
+<!--        </#if>-->
+        <wicket:message key="label.or"/>
+        <a href="javascript:void(0);" wicket:id="cancel"><wicket:message key="label.cancel" /></a>
+    </div>
+
+    </form>
 </wicket:panel>
 </html>

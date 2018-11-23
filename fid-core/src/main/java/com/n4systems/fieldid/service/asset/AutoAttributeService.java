@@ -108,6 +108,7 @@ public class AutoAttributeService extends FieldIdPersistenceService {
         }
     }
 
+    @Transactional(readOnly = true)
     public AutoAttributeCriteria getAutoAttributeCriteriaWithPostFetches(Long criteriaId) {
         QueryBuilder<AutoAttributeCriteria> query = new QueryBuilder<AutoAttributeCriteria>(AutoAttributeCriteria.class, new OpenSecurityFilter());
         query.addSimpleWhere("id", criteriaId);
@@ -115,6 +116,15 @@ public class AutoAttributeService extends FieldIdPersistenceService {
         return persistenceService.find(query);
     }
 
+    @Transactional(readOnly = true)
+    public AutoAttributeDefinition getAutoAttributeDefinitionWithPostFetches(Long definitionId) {
+        QueryBuilder<AutoAttributeDefinition> query = new QueryBuilder<AutoAttributeDefinition>(AutoAttributeDefinition.class, new OpenSecurityFilter());
+        query.addSimpleWhere("id", definitionId);
+        query.addPostFetchPaths("inputs");
+        return persistenceService.find(query);
+    }
+
+    @Transactional(readOnly = true)
     public List<AutoAttributeDefinition> getAutoAttributeDefinitionsWithPostFetches(Long criteriaId) {
         QueryBuilder<AutoAttributeDefinition> query = new QueryBuilder<AutoAttributeDefinition>(AutoAttributeDefinition.class, new OpenSecurityFilter());
         query.addSimpleWhere("criteria", getAutoAttributeCriteriaWithPostFetches(criteriaId));
@@ -130,6 +140,14 @@ public class AutoAttributeService extends FieldIdPersistenceService {
             }
         }
         return null;
+    }
+
+    @Transactional
+    public AutoAttributeDefinition saveDefinition(AutoAttributeDefinition definition) {
+
+        definition = getEntityManager().merge(definition);
+        modifyCriteria(definition);
+        return definition;
     }
 
     @Transactional

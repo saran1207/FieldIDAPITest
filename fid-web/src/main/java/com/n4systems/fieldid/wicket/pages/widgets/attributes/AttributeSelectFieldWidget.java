@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.pages.autoattributes;
+package com.n4systems.fieldid.wicket.pages.widgets.attributes;
 
 import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
@@ -17,24 +17,38 @@ import rfid.ejb.entity.InfoFieldBean;
 import java.util.List;
 
 /**
- * Created by agrabovskis on 2018-11-14.
+ * A reusable select box control for display/updating attribute value
  */
-public class AutoAttributeDisplaySelectFieldPanel extends Panel {
+public class AttributeSelectFieldWidget extends Panel {
 
-    private static final Logger logger = Logger.getLogger(AutoAttributeDisplaySelectFieldPanel.class);
+    private static final Logger logger = Logger.getLogger(AttributeSelectFieldWidget.class);
 
     private boolean allowNoSelection;
     private InfoFieldBean infoFieldBean;
+    private InfoOptionInput infoOptionInput;
     private IModel<List<InfoOptionInput>> infoOptionInputModel;
+    private IModel<StringListingPair> selectedListingPair;
 
-    public AutoAttributeDisplaySelectFieldPanel(String id,
-                                                boolean allowNoSelection,
-                                                InfoFieldBean infoFieldBean,
-                                                IModel<List<InfoOptionInput>> infoOptionInputModel) {
+    /**
+     *
+     * @param id
+     * @param allowNoSelection specifies if the select box allows no selection
+     * @param infoFieldBean the entity we are selecting a value for
+     * @param infoOptionInput the currently selected value is contained here in the uniqueIDString field
+     * @param infoOptionInputModel the list of possible selections for the select box
+     */
+    public AttributeSelectFieldWidget(String id,
+                                      boolean allowNoSelection,
+                                      InfoFieldBean infoFieldBean,
+                                      InfoOptionInput infoOptionInput,
+                                      IModel<List<InfoOptionInput>> infoOptionInputModel) {
         super(id);
+        System.out.println("Constructing select field, infoOptionInput uniqueIDString: " + infoOptionInput.getUniqueIDString());
         this.allowNoSelection = allowNoSelection;
         this.infoFieldBean = infoFieldBean;
+        this.infoOptionInput = infoOptionInput;
         this.infoOptionInputModel = infoOptionInputModel;
+        selectedListingPair = new Model(null);
         addComponents();
     }
 
@@ -49,16 +63,27 @@ public class AutoAttributeDisplaySelectFieldPanel extends Panel {
         add(new Label("fieldName", infoFieldBean.getName()));
 
         /* Inputs are limited to combo and select boxes */
-
-        IModel<StringListingPair> selectedListingPair = new Model(null);
         final DropDownChoice<StringListingPair> inputValueSelection = new DropDownChoice<StringListingPair>("fieldValue",
                 selectedListingPair,
                 new LoadableDetachableModel<List<StringListingPair>>() {
                     @Override
                     protected List<StringListingPair> load() {
+                        System.out.println("select field load, " + selectedListingPair.getObject() + ", '" + infoOptionInput.getUniqueIDString() + "', " + infoOptionInput.getName());
                         List<StringListingPair> listingPair = getComboBoxInfoOptions(infoFieldBean, infoOptionInputModel.getObject());
+                        if (selectedListingPair.getObject() == null && infoOptionInput.getUniqueIDString() != null) {
+                            for (StringListingPair pair : listingPair) {
+                                if (pair.getId().equals(infoOptionInput.getUniqueIDString())) {
+                                    System.out.println("Setting select box to " + pair.getId());
+                                    selectedListingPair.setObject(pair);
+                                    break;
+                                }
+                            }
+                        }
+                        else
                         if (!allowNoSelection && selectedListingPair.getObject() == null && !listingPair.isEmpty()) {
+                            System.out.println("Setting to first in list");
                             selectedListingPair.setObject(listingPair.get(0));
+                            infoOptionInput.setUniqueIDString(selectedListingPair.getObject().getId());
                         }
                         return listingPair;
                     }
@@ -80,6 +105,12 @@ public class AutoAttributeDisplaySelectFieldPanel extends Panel {
                 return true;
             }
 
+            @Override
+            protected void onSelectionChanged(StringListingPair newSelection) {
+                System.out.println("Select box selected " + newSelection.getId());
+                infoOptionInput.setUniqueIDString(newSelection.getId());
+                super.onSelectionChanged(newSelection);
+            }
         };
 
         inputValueSelection.setNullValid(allowNoSelection);

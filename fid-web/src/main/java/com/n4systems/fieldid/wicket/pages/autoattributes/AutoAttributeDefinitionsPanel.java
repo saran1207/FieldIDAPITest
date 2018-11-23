@@ -1,6 +1,9 @@
 package com.n4systems.fieldid.wicket.pages.autoattributes;
 
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.service.asset.AutoAttributeService;
+import com.n4systems.model.AutoAttributeCriteria;
+import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.security.Permissions;
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -8,7 +11,12 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import rfid.web.helper.SessionUser;
+
+import java.util.List;
 
 
 /**
@@ -19,27 +27,51 @@ public class AutoAttributeDefinitionsPanel extends Panel {
 
     private static final Logger logger = Logger.getLogger(AutoAttributeDefinitionsPanel.class);
 
+    @SpringBean
+    private AutoAttributeService autoAttributeService;
+
     private IModel<Long> autoAttributeCriteriaProvidedIdModel;
+    private IModel<Long> autoAttributeDefinitionIdModel;
+
     private IModel<SessionUser> sessionUserModel;
     private boolean displayingViewAllDefinitions;
+
+    private WebMarkupContainer definitionsPanels;
+    private WebMarkupContainer buttonsContainer;
+    private AutoAttributeDefinitionsListPanel definitionsListPanel;
+    private AutoAttributeDefinitionAddPanel definitionAddPanel;
 
     public AutoAttributeDefinitionsPanel(String id, IModel<Long> autoAttributeCriteriaProvidedIdModel,
                                          IModel<SessionUser> sessionUserModel) {
         super(id);
         displayingViewAllDefinitions = true;
+        autoAttributeDefinitionIdModel = new Model(null);
         this.autoAttributeCriteriaProvidedIdModel = autoAttributeCriteriaProvidedIdModel;
         this.sessionUserModel = sessionUserModel;
         addComponents();
     }
 
+    @Override
+    protected void onBeforeRender() {
+        System.out.println("AutoAttributeDefinitionsPanel.onBeforeRender");
+        //autoAttributeCriteriaModel.detach(); // force refresh of criteria
+        super.onBeforeRender();
+    }
+
+    public void handleSelectionChange() {
+        System.out.println("DefinitionsPanel.handleSelectionChange");
+        definitionsListPanel.handleSelectionChange();
+        definitionAddPanel.handleSelectionChange();
+    }
+
     private void addComponents() {
 
-        WebMarkupContainer definitionsPanels = new WebMarkupContainer("definitionsPanels");
+        definitionsPanels = new WebMarkupContainer("definitionsPanels");
         definitionsPanels.setOutputMarkupId(true);
         definitionsPanels.setOutputMarkupPlaceholderTag(true);
         add(definitionsPanels);
 
-        WebMarkupContainer buttonsContainer = new WebMarkupContainer("buttonsContainer");
+        buttonsContainer = new WebMarkupContainer("buttonsContainer");
         buttonsContainer.setOutputMarkupId(true);
         add(buttonsContainer);
 
@@ -47,9 +79,7 @@ public class AutoAttributeDefinitionsPanel extends Panel {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 System.out.println("clicked viewDefinitions");
-                displayingViewAllDefinitions = true;
-                target.add(buttonsContainer);
-                target.add(definitionsPanels);
+                handleSwitchBackToListPanel(target);
             }
 
             @Override
@@ -76,7 +106,18 @@ public class AutoAttributeDefinitionsPanel extends Panel {
         addDefinition.setOutputMarkupId(true);
         buttonsContainer.add(addDefinition);
 
-        Panel definitionsListPanel = new AutoAttributeDefinitionsListPanel("definitionsListPanel", autoAttributeCriteriaProvidedIdModel) {
+        definitionsListPanel = new AutoAttributeDefinitionsListPanel(
+                "definitionsListPanel",
+                autoAttributeCriteriaProvidedIdModel,
+                autoAttributeDefinitionIdModel) {
+
+            @Override
+            protected void editActionInvoked(AjaxRequestTarget target) {
+                displayingViewAllDefinitions = false;
+                target.add(buttonsContainer);
+                target.add(definitionsPanels);
+            }
+
             @Override
             public boolean isVisible() {
                 return displayingViewAllDefinitions;
@@ -86,15 +127,37 @@ public class AutoAttributeDefinitionsPanel extends Panel {
         definitionsListPanel.setOutputMarkupId(true);
         definitionsPanels.add(definitionsListPanel);
 
-        Panel definitionAddPanel = new AutoAttributeDefinitionAddPanel("definitionAddPanel", autoAttributeCriteriaProvidedIdModel, sessionUserModel) {
+        definitionAddPanel = new AutoAttributeDefinitionAddPanel(
+                "definitionAddPanel",
+                autoAttributeCriteriaProvidedIdModel,
+                autoAttributeDefinitionIdModel,
+                sessionUserModel) {
             @Override
             public boolean isVisible() {
                 return !displayingViewAllDefinitions;
+            }
+
+            @Override
+            protected void addActionCompleted(AjaxRequestTarget target) {
+                handleSwitchBackToListPanel(target);
+            }
+
+            @Override
+            protected void cancelActionCompleted(AjaxRequestTarget target) {
+                handleSwitchBackToListPanel(target);
             }
         };
         definitionAddPanel.setOutputMarkupPlaceholderTag(true);
         definitionsListPanel.setOutputMarkupId(true);
         definitionsPanels.add(definitionAddPanel);
+    }
+
+    private void handleSwitchBackToListPanel(AjaxRequestTarget target) {
+        displayingViewAllDefinitions = true;
+        definitionsListPanel.handleSelectionChange();
+        definitionAddPanel.handleSelectionChange();
+        target.add(buttonsContainer);
+        target.add(definitionsPanels);
     }
 
 }

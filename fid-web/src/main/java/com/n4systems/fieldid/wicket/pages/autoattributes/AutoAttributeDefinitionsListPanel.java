@@ -5,6 +5,8 @@ import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Session;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -23,7 +25,7 @@ import java.util.List;
 /**
  * Created by agrabovskis on 2018-11-12.
  */
-public class AutoAttributeDefinitionsListPanel extends Panel {
+abstract public class AutoAttributeDefinitionsListPanel extends Panel {
 
     private static final Logger logger = Logger.getLogger(AutoAttributeDefinitionsListPanel.class);
 
@@ -31,17 +33,34 @@ public class AutoAttributeDefinitionsListPanel extends Panel {
     private AutoAttributeService autoAttributeService;
 
     private IModel<Long> autoAttributeCriteriaProvidedIdModel;
-
-    private LoadableDetachableModel<AutoAttributeCriteria> autoAttributeCriteriaModel;
-    private LoadableDetachableModel<List<AutoAttributeDefinition>> autoAttributeDefinitionModel;
+    private IModel<Long> autoAttributeDefinitionIdModel;
+    private IModel<AutoAttributeCriteria> autoAttributeCriteriaModel;
+    private IModel<List<AutoAttributeDefinition>> autoAttributeDefinitionModel;
     private WebMarkupContainer resultsPanel;
     private WebMarkupContainer noResultsPanel;
 
-    public AutoAttributeDefinitionsListPanel(String id, IModel<Long> autoAttributeCriteriaProvidedIdModel) {
+    public AutoAttributeDefinitionsListPanel(
+            String id,
+            IModel<Long> autoAttributeCriteriaProvidedIdModel,
+            IModel<Long> autoAttributeDefinitionIdModel) {
         super(id);
         this.autoAttributeCriteriaProvidedIdModel = autoAttributeCriteriaProvidedIdModel;
+        this.autoAttributeDefinitionIdModel = autoAttributeDefinitionIdModel;
         createDataModels();
         addComponents();
+    }
+
+    @Override
+    protected void onBeforeRender() {
+        System.out.println("AutoAttributeDefinitionsListPanel.onBeforeRender");
+        //autoAttributeDefinitionModel.detach(); // force reload in case criteria has changed
+        super.onBeforeRender();
+    }
+
+    public void handleSelectionChange() {
+        Session.get().cleanupFeedbackMessages();
+        autoAttributeCriteriaModel.detach();
+        autoAttributeDefinitionModel.detach();
     }
 
     private void addComponents() {
@@ -93,23 +112,29 @@ public class AutoAttributeDefinitionsListPanel extends Panel {
                                     }
                                 };
                         item.add(definitionInputList);
-                        Link autoAttributeDefinitionEditLink = new Link("autoAttributeDefinitionEdit") {
+                        AjaxLink autoAttributeDefinitionEditLink = new AjaxLink("autoAttributeDefinitionEdit") {
                             @Override
-                            public void onClick() {
+                            public void onClick(AjaxRequestTarget target) {
                                 // templates/html/autoAttributeDefinition/form.ftl
-                                System.out.println("Edit definition link clicked");
+                                System.out.println("Edit definition link clicked for " + definition.getId());
+                                autoAttributeDefinitionIdModel.setObject(definition.getId());
+                                editActionInvoked(target);
                             }
                         };
                         item.add(autoAttributeDefinitionEditLink);
 
-                        Link autoAttributeDefinitionRemoveLink = new Link("autoAttributeDefinitionRemove") {
+                        AjaxLink autoAttributeDefinitionRemoveLink = new AjaxLink("autoAttributeDefinitionRemove") {
                             @Override
-                            public void onClick() {
-                                System.out.println("Remove definition link clicked");
+                            public void onClick(AjaxRequestTarget target) {
+                              System.out.println("Remove definition link clicked");
                                 try {
                                     //autoAttributeManager.removeDefinition( autoAttributeDefinition );
+                                    autoAttributeService.removeDefinition(definition);
                                     logger.info("AutoAttributesDefinition ");
                                     Session.get().info("message.definition_removed");
+                                    autoAttributeDefinitionModel.detach();
+                                    target.add(resultsPanel);
+                                    target.add(noResultsPanel);
                                 } catch (Exception e) {
                                     logger.error("Removal of AutoAttributesDefinition failed", e);
                                     Session.get().error("error.remove_definition_failed");
@@ -147,17 +172,23 @@ public class AutoAttributeDefinitionsListPanel extends Panel {
         autoAttributeCriteriaModel = new LoadableDetachableModel<AutoAttributeCriteria>() {
 
             protected AutoAttributeCriteria load() {
-                return autoAttributeService.getAutoAttributeCriteriaWithPostFetches(
+                System.out.println("Loading autoAttributeCriteria");
+                AutoAttributeCriteria criteria = autoAttributeService.getAutoAttributeCriteriaWithPostFetches(
                         autoAttributeCriteriaProvidedIdModel.getObject());
+                System.out.println("AUtoAttributeCriteria loaded with " + criteria.getInputs().size() + " inputs and " + criteria.getOutputs().size() + " outputs");
+                return criteria;
             }
         };
 
         autoAttributeDefinitionModel = new LoadableDetachableModel<List<AutoAttributeDefinition>>() {
             @Override
             protected List<AutoAttributeDefinition> load() {
+                System.out.println("Loading autoAttributeDefinition");
                 return autoAttributeService.getAutoAttributeDefinitionsWithPostFetches(
-                        autoAttributeCriteriaProvidedIdModel.getObject());
+                        autoAttributeCriteriaModel.getObject().getId());
             }
         };
     }
+
+    abstract protected void editActionInvoked(AjaxRequestTarget target);
 }
