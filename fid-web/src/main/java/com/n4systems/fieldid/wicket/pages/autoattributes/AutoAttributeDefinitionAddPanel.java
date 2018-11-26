@@ -15,7 +15,6 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -26,7 +25,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
 import rfid.web.helper.SessionUser;
 
 import java.util.Date;
@@ -75,7 +73,6 @@ abstract public class AutoAttributeDefinitionAddPanel extends Panel {
     }
 
     public void handleSelectionChange() {
-        System.out.println("AutoAttributeDefinitionAddPanel.handleSelectionChanged");
         autoAttributeDefinitionProvidedIdModel.setObject(null);
         autoAttributeCriteriaModel.detach();
         autoAttributeDefinitionModel.detach();
@@ -88,6 +85,8 @@ abstract public class AutoAttributeDefinitionAddPanel extends Panel {
     private void addComponents() {
 
         final Form addDefinitionForm = new Form("addDefinitionForm");
+        addDefinitionForm.setOutputMarkupId(true);
+        addDefinitionForm.setOutputMarkupPlaceholderTag(true);
         add(addDefinitionForm);
 
         final DataView<InfoFieldBean> inputFieldsList =
@@ -108,13 +107,11 @@ abstract public class AutoAttributeDefinitionAddPanel extends Panel {
                 new DataView<InfoFieldBean>("outputFieldsList", new ListDataProvider<InfoFieldBean>() {
                     @Override
                     protected List<InfoFieldBean> getData() {
-                        System.out.println("AutoAttributeDefinitionAddPanel, outputFieldsList, getData");
                         return outputInfoFieldBeanModel.getObject();
                     }
                 }) {
                     @Override
                     protected void populateItem(Item<InfoFieldBean> item) {
-                        System.out.println("AutoAttributeDefinitionAddPanel, outputFieldsList, populateItem");
                         item.add(getWidgetForAttribute("outputAttribute", true, item.getModelObject(), findMatchingInput(item.getModelObject(), outputInfoOptionsModel), outputInfoOptionsModel));
                     }
                 };
@@ -123,13 +120,12 @@ abstract public class AutoAttributeDefinitionAddPanel extends Panel {
         AjaxButton saveButton = new AjaxButton("save") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                System.out.println("save button clicked");
-                if (saveChanges(false))
+                if (saveChanges(false)) {
                     addActionCompleted(target);
-                else
-                    target.addChildren(getPage(), FeedbackPanel.class);
+                    target.add(addDefinitionForm);
+                }
+                target.addChildren(getPage(), FeedbackPanel.class);
             }
-
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
 
@@ -138,11 +134,18 @@ abstract public class AutoAttributeDefinitionAddPanel extends Panel {
         };
         addDefinitionForm.add(saveButton);
 
-        Button saveAndAddButton = new Button("saveAndAdd") {
+        AjaxButton saveAndAddButton = new AjaxButton("saveAndAdd") {
             @Override
-            public void onSubmit() {
-                System.out.println("save and add button clicked");
-                saveChanges(true);
+            public void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                if (saveChanges(true)) {
+                    addActionCompleted(target);
+                    target.add(addDefinitionForm);
+                }
+                target.addChildren(getPage(), FeedbackPanel.class);
+            }
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+
             }
 
             @Override
@@ -156,7 +159,6 @@ abstract public class AutoAttributeDefinitionAddPanel extends Panel {
         AjaxSubmitLink cancelLink = new AjaxSubmitLink("cancel") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                System.out.println("Cancel on add page clicked");
                 cancelActionCompleted(target);
             }
 
@@ -173,10 +175,8 @@ abstract public class AutoAttributeDefinitionAddPanel extends Panel {
         autoAttributeCriteriaModel = new LoadableDetachableModel<AutoAttributeCriteria>() {
 
             protected AutoAttributeCriteria load() {
-                System.out.println("Loading autoAttributeCriteria");
                 AutoAttributeCriteria criteria = autoAttributeService.getAutoAttributeCriteriaWithPostFetches(
                         autoAttributeCriteriaProvidedIdModel.getObject());
-                System.out.println("AUtoAttributeCriteria loaded with " + criteria.getInputs().size() + " inputs and " + criteria.getOutputs().size() + " outputs");
                 return criteria;
             }
         };
@@ -184,12 +184,10 @@ abstract public class AutoAttributeDefinitionAddPanel extends Panel {
         autoAttributeDefinitionModel = new LoadableDetachableModel<AutoAttributeDefinition>() {
             @Override
             protected AutoAttributeDefinition load() {
-                System.out.println("Loading AutoAttributeDefinitionAddPanel.autoAttributeDefinition");
                 Long definitionId = autoAttributeDefinitionProvidedIdModel.getObject();
                 if (definitionId != null)
                     return autoAttributeService.getAutoAttributeDefinitionWithPostFetches(definitionId);
                 else {
-                    System.out.println("... definition id is null");
                     return new AutoAttributeDefinition();
                 }
             }
@@ -207,8 +205,6 @@ abstract public class AutoAttributeDefinitionAddPanel extends Panel {
             @Override
             protected List<InfoOptionInput> load() {
 
-                System.out.println("AutoAttributeDefinitionAddPanel.getInputInfoOptions, autoAttributeDefinition has " + autoAttributeDefinitionModel.getObject().getInputs().size() + " inputs");
-
                 List<InfoFieldBean> criteriaInputs = autoAttributeCriteriaModel.getObject().getInputs();
 
                 List<InfoOptionInput> inputInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions(
@@ -223,7 +219,6 @@ abstract public class AutoAttributeDefinitionAddPanel extends Panel {
         outputInfoFieldBeanModel = new LoadableDetachableModel<List<InfoFieldBean>>() {
             @Override
             protected List<InfoFieldBean> load() {
-                System.out.println("AutoAttributeDefinitionAddPanel loading autoAttributeCriteria outputs");
                 List<InfoFieldBean> criteriaOutputs = autoAttributeCriteriaModel.getObject().getOutputs();
                 return criteriaOutputs;
             }
@@ -238,9 +233,6 @@ abstract public class AutoAttributeDefinitionAddPanel extends Panel {
                         criteriaOutputs,
                         sessionUserModel.getObject());
 
-                for (InfoOptionInput info : outputInfoOptions) {
-                    System.out.println("... loaded model: " + info.getUniqueIDString() + ":" + info.getName() + ":" + info.getUniqueIDString());
-                }
                 return outputInfoOptions;
             }
         };
@@ -305,23 +297,8 @@ abstract public class AutoAttributeDefinitionAddPanel extends Panel {
                 inputInfoOptionsModel.getObject(),
                 sessionUserModel.getObject());
 
-        System.out.println("Wicket - autoAttributeDefinition inputs " + autoAttributeDefinitionModel.getObject().getInputs().size());
-        for (InfoOptionBean bean : autoAttributeDefinitionModel.getObject().getInputs()) {
-            System.out.println("Wicket: definition input " + bean.getUniqueID() + ":" + bean.getName());
-            InfoFieldBean infoBean = bean.getInfoField();
-            if (infoBean != null)
-                System.out.println("... its infoFieldBean is " + infoBean.getUniqueID()+ ":" + infoBean.getName());
-            else
-                System.out.println("... its infoFieldBean is null");
-        }
         AutoAttributeDefinition existingDefinition = autoAttributeService.findTemplateToApply(autoAttributeCriteriaModel.getObject(), autoAttributeDefinitionModel.getObject().getInputs());
-        System.out.println("Wicket existing definition " + existingDefinition);
-        if (existingDefinition != null)
-            System.out.println("... existing definition id is " + existingDefinition.getId() + ", " + autoAttributeDefinitionModel.getObject().getId());
-        //if( existingDefinition != null && !existingDefinition.getId().equals( uniqueID ) ) {
-        System.out.println("existing definition: " + (existingDefinition != null));
-        if (autoAttributeDefinitionModel.getObject() != null)
-            System.out.println("... editing definition " + autoAttributeDefinitionModel.getObject().getId());
+
         if (existingDefinition != null && autoAttributeDefinitionModel.getObject() != null &&
                 !existingDefinition.getId().equals(autoAttributeDefinitionModel.getObject().getId())) {
             Session.get().error("These inputs have already been used on an auto attribute definition.");
@@ -371,6 +348,7 @@ abstract public class AutoAttributeDefinitionAddPanel extends Panel {
     private String validateOutputs(AutoAttributeCriteria autoAttributeCriteria, List<InfoOptionInput> outputInfoOptions) {
         SessionUser user = sessionUserModel.getObject();
         for (InfoOptionInput input : outputInfoOptions) {
+            System.out.println("AutoAttributeDefinitionAddPanel.validateOutputs for input " + input.getName() + ":" + input.getUniqueID());
             for (InfoFieldBean field : autoAttributeCriteria.getOutputs()) {
                 if (field.getUniqueID().equals(input.getInfoFieldId()) && input != null) {
                     String error = validateField(field, user, input.getName());
@@ -433,7 +411,6 @@ abstract public class AutoAttributeDefinitionAddPanel extends Panel {
         }
         return null;
     }
-
 
     abstract protected void addActionCompleted(AjaxRequestTarget target);
     abstract protected void cancelActionCompleted(AjaxRequestTarget target);

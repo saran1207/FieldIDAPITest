@@ -182,6 +182,8 @@ public class AutoAttributeActionsPage extends FieldIDFrontEndWithFeedbackPage {
                 return new AutoAttributeViewAllPanel(panelId, webSessionMapModel, getLoaderFactory()) {
                     @Override
                     protected void assetTypeWithCriteriaChosen(AssetType assetType) {
+                        if (definitionsPanel != null)
+                            definitionsPanel.handleSelectionChange();
                         changeSelectedPage(tabbedPanel, assetType.getId(), assetType.getAutoAttributeCriteria().getId(), DEFINITIONS_TAB_INDEX);
                     }
                 };

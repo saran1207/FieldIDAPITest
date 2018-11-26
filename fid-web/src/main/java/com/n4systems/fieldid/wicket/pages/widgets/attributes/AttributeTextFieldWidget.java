@@ -40,8 +40,7 @@ public class AttributeTextFieldWidget extends Panel {
         });
         add(new Label("fieldName", infoFieldBean.getName()));
 
-        TextField inputValueField = new TextField("inputValue", new PropertyModel(infoOptionInput, "name"));
-        inputValueField.setEnabled(false);
+        TextField<String> inputValueField = new TextField("inputValue", new PropertyModel(infoOptionInput, "name"));
         add(inputValueField);
     }
 

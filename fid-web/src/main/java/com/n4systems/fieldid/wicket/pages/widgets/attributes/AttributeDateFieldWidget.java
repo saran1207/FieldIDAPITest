@@ -55,23 +55,19 @@ public class AttributeDateFieldWidget extends Panel {
         final IModel<Date> dateFieldModel = new Model<Date>() {
             @Override
             public Date getObject() {
-                System.out.println("Date field getting input date " + infoOptionInput.getName());
                 if (infoOptionInput == null ||infoOptionInput.getName() == null)
                     return null;
                 SessionUserDateConverter dateConverter = sessionUserModel.getObject().createUserDateConverter();
                 Date date = dateConverter.convertDate(infoOptionInput.getName(), infoFieldBean.isIncludeTime());
-                System.out.println("Date field model.getObject " + date);
                 return date;
             }
 
             @Override
             public void setObject(Date object) {
-                System.out.println("Date field model.setObject " + object);
                 if (object instanceof Date) {
                     if (infoOptionInput != null) {
                         SessionUserDateConverter dateConverter = sessionUserModel.getObject().createUserDateConverter();
                         String date = dateConverter.convertDate((Date) object, infoFieldBean.isIncludeTime());
-                        System.out.println("... setting input's date to " + date);
                         infoOptionInput.setName(date);
                     }
                 }

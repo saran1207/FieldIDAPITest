@@ -2,21 +2,17 @@ package com.n4systems.fieldid.wicket.pages.autoattributes;
 
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.service.asset.AutoAttributeService;
-import com.n4systems.model.AutoAttributeCriteria;
-import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.security.Permissions;
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import rfid.web.helper.SessionUser;
-
-import java.util.List;
 
 
 /**
@@ -93,7 +89,6 @@ public class AutoAttributeDefinitionsPanel extends Panel {
         AjaxLink addDefinition = new AjaxLink("addDefinition") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                System.out.println("Clicked addDefinition");
                 displayingViewAllDefinitions = false;
                 target.add(buttonsContainer);
                 target.add(definitionsPanels);
@@ -139,7 +134,6 @@ public class AutoAttributeDefinitionsPanel extends Panel {
 
             @Override
             protected void addActionCompleted(AjaxRequestTarget target) {
-                handleSwitchBackToListPanel(target);
             }
 
             @Override

@@ -9,7 +9,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
@@ -52,8 +51,6 @@ abstract public class AutoAttributeDefinitionsListPanel extends Panel {
 
     @Override
     protected void onBeforeRender() {
-        System.out.println("AutoAttributeDefinitionsListPanel.onBeforeRender");
-        //autoAttributeDefinitionModel.detach(); // force reload in case criteria has changed
         super.onBeforeRender();
     }
 
@@ -115,8 +112,6 @@ abstract public class AutoAttributeDefinitionsListPanel extends Panel {
                         AjaxLink autoAttributeDefinitionEditLink = new AjaxLink("autoAttributeDefinitionEdit") {
                             @Override
                             public void onClick(AjaxRequestTarget target) {
-                                // templates/html/autoAttributeDefinition/form.ftl
-                                System.out.println("Edit definition link clicked for " + definition.getId());
                                 autoAttributeDefinitionIdModel.setObject(definition.getId());
                                 editActionInvoked(target);
                             }
@@ -126,9 +121,7 @@ abstract public class AutoAttributeDefinitionsListPanel extends Panel {
                         AjaxLink autoAttributeDefinitionRemoveLink = new AjaxLink("autoAttributeDefinitionRemove") {
                             @Override
                             public void onClick(AjaxRequestTarget target) {
-                              System.out.println("Remove definition link clicked");
                                 try {
-                                    //autoAttributeManager.removeDefinition( autoAttributeDefinition );
                                     autoAttributeService.removeDefinition(definition);
                                     logger.info("AutoAttributesDefinition ");
                                     Session.get().info("message.definition_removed");
@@ -172,10 +165,8 @@ abstract public class AutoAttributeDefinitionsListPanel extends Panel {
         autoAttributeCriteriaModel = new LoadableDetachableModel<AutoAttributeCriteria>() {
 
             protected AutoAttributeCriteria load() {
-                System.out.println("Loading autoAttributeCriteria");
                 AutoAttributeCriteria criteria = autoAttributeService.getAutoAttributeCriteriaWithPostFetches(
                         autoAttributeCriteriaProvidedIdModel.getObject());
-                System.out.println("AUtoAttributeCriteria loaded with " + criteria.getInputs().size() + " inputs and " + criteria.getOutputs().size() + " outputs");
                 return criteria;
             }
         };
@@ -183,7 +174,6 @@ abstract public class AutoAttributeDefinitionsListPanel extends Panel {
         autoAttributeDefinitionModel = new LoadableDetachableModel<List<AutoAttributeDefinition>>() {
             @Override
             protected List<AutoAttributeDefinition> load() {
-                System.out.println("Loading autoAttributeDefinition");
                 return autoAttributeService.getAutoAttributeDefinitionsWithPostFetches(
                         autoAttributeCriteriaModel.getObject().getId());
             }

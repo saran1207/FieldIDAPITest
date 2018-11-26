@@ -3,10 +3,8 @@ package com.n4systems.fieldid.wicket.pages.widgets.attributes;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.UnitOfMeasure;
 import com.n4systems.model.security.OpenSecurityFilter;
-import com.n4systems.util.StringListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -23,7 +21,6 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.ListDataProvider;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -129,13 +126,6 @@ public class AttributeUomFieldPanel extends Panel {
         unitSelection.setOutputMarkupId(true);
         unitSelection.setOutputMarkupPlaceholderTag(true);
 
-        System.out.println("UOM form's default model object is " + uomForm.getDefaultModelObject());
-
-        WebMarkupContainer inputUnitsContainer = new WebMarkupContainer("inputUnitsContainer");
-        inputUnitsContainer.setOutputMarkupId(true);
-        inputUnitsContainer.setOutputMarkupPlaceholderTag(true);
-        uomForm.add(inputUnitsContainer);
-
         final Map<String, String> uomValues = new HashMap();
         final DataView<UnitOfMeasure> inputUnits =
                 new DataView<UnitOfMeasure>("inputUnits", new ListDataProvider<UnitOfMeasure>() {
@@ -146,7 +136,6 @@ public class AttributeUomFieldPanel extends Panel {
                 }) {
                     @Override
                     protected void populateItem(Item<UnitOfMeasure> item) {
-                        System.out.println("inputUnits populateItem");
                         item.add(new Label("unitOfMeasureName", item.getModelObject().getName()));
                         item.add(new TextField("unitOfMeasureInputValue",
                                 new PropertyModel<String>(uomValues, item.getModelObject().getShortName())));
@@ -155,15 +144,14 @@ public class AttributeUomFieldPanel extends Panel {
         inputUnits.setOutputMarkupId(true);
         inputUnits.setOutputMarkupPlaceholderTag(true);
         uomForm.add(unitSelection);
-        inputUnitsContainer.add(inputUnits);
+        uomForm.add(inputUnits);
 
-        // Add Ajax Behaviour...
+        // Add Ajax Behaviour to prevent change in unit selection from generating a
+        // page refresh which will lose the state in the unit selection control.
         unitSelection.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             protected void onUpdate(AjaxRequestTarget target) {
-                System.out.println("UnitOfMeasures change");
-                System.out.println("... changed to " + unitSelection.getModelObject());
                 selectedUnit.setObject(unitSelection.getModelObject());
-                target.add(inputUnitsContainer);
+                target.add(uomFormHideableContainer);
             }
         });
 
@@ -172,6 +160,7 @@ public class AttributeUomFieldPanel extends Panel {
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 displayUomForm = false;
 
+                /* Create the measurement string that will be set in the model */
                 String unitString = "";
                 for (UnitOfMeasure inputUnit : getInputOrder(unitSelection.getModelObject())) {
                     String shortName = inputUnit.getShortName();
@@ -180,8 +169,6 @@ public class AttributeUomFieldPanel extends Panel {
                         unitString += unitAmount.trim() + " " + shortName + " ";
                     }
                 }
-
-                System.out.println("UnitString " + unitString);
                 infoOptionInput.setName(unitString);
                 target.add(amountField);
                 target.add(uomFormContainer);

@@ -17,57 +17,29 @@
             </span>
             <div wicket:id="uomFormContainer">
                 <div wicket:id="uomFormHideableContainer" class="unitMeasureDiv">
-                <!--<@s.form theme="fieldidSimple" action="selectUnitOfMeasure" namespace="/ajax" id="unitOfMeasureForm_${infoFieldId}" cssClass="inputForm" cssStyle="width:auto">
-                <@s.hidden name="infoFieldId"/>-->
                     <form wicket:id="uomForm" class="inputForm fullForm" style="width:auto; padding-top:2px;">
                         <table>
                             <tr class="fieldData">
-                                <td><wicket:message key="label.unitofmeasure"/></td>
-                                <td><select wicket:id="unitOfMeasures"></select></td>
+                                <th><wicket:message key="label.unitofmeasure"/></th>
+                                <th><select wicket:id="unitOfMeasures"></select></th>
                             </tr>
-                            </table>
-                        <div wicket:id="inputUnitsContainer">
-                        <table>
-                                <tr wicket:id="inputUnits" class="fieldData">
-                                    <td><span wicket:id="unitOfMeasureName"></span></td>
-                                    <td><input type="text" wicket:id="unitOfMeasureInputValue" /></td>
-                                </tr>
-
-                                </table>
-                        </div>
-                        <table>
+                            <tr wicket:id="inputUnits" class="fieldData">
+                                <td><span wicket:id="unitOfMeasureName"></span></td>
+                                <td><input type="text" wicket:id="unitOfMeasureInputValue" /></td>
+                            </tr>
                             <tr>
                                 <td>&nbsp;</td>
                                 <td>
                                     <input type="button" wicket:id="submitForm" wicket:message="value:hbutton.submit">
                                     <wicket:message key="label.or"></wicket:message>
                                     <a href="javascript:void(0);" wicket:id="cancelForm"><wicket:message key="label.cancel"></wicket:message></a>
-                            <!--<@s.submit key="hbutton.submit"/>
-                            <@s.text name="label.or"/>
-                            <a href="javascript:void(0);" onClick="$('unitSelectorDiv_${infoFieldId}').hide();">
-                                <@s.text name="label.cancel" />
-                            </a>-->
                                 </td>
                             </tr>
                         </table>
 
                     </form>
                 </div>
-           <!-- </@s.form>-->
             </div>
-           <!-- <span class="action">
-                <a href="javascript: void(0);" id="unitOfMeasureSelector_${infoField.uniqueID}" class="editLink"
-                onclick="$('unitSelectorDiv_${infoField.uniqueID}').toggle('normal'); if( $('unitSelectorDiv_${infoField.uniqueID}').visible() ) { loadUnitOfMeasure('${infoField.uniqueID}', ${ (infoField.unitOfMeasure.id)!"null" } ); }">
-                    <img style="border: none;" src="images/unit_of_measure.png" />
-                </a>
-            </span>
-            <div id="unitSelectorDiv_${infoField.uniqueID}" class="unitMeasureDiv" style="display:none;" >
-                <table width="100%">
-                    <tr><td align="center">
-                        <img src="images/loading_animation_liferay.gif" />
-                    </td></tr>
-                </table>
-            </div>-->
         </div>
     </div>
 

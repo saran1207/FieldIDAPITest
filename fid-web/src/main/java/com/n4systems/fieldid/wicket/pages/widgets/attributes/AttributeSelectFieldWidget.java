@@ -5,6 +5,8 @@ import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.util.StringListingPair;
 import org.apache.log4j.Logger;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -43,7 +45,6 @@ public class AttributeSelectFieldWidget extends Panel {
                                       InfoOptionInput infoOptionInput,
                                       IModel<List<InfoOptionInput>> infoOptionInputModel) {
         super(id);
-        System.out.println("Constructing select field, infoOptionInput uniqueIDString: " + infoOptionInput.getUniqueIDString());
         this.allowNoSelection = allowNoSelection;
         this.infoFieldBean = infoFieldBean;
         this.infoOptionInput = infoOptionInput;
@@ -68,12 +69,10 @@ public class AttributeSelectFieldWidget extends Panel {
                 new LoadableDetachableModel<List<StringListingPair>>() {
                     @Override
                     protected List<StringListingPair> load() {
-                        System.out.println("select field load, " + selectedListingPair.getObject() + ", '" + infoOptionInput.getUniqueIDString() + "', " + infoOptionInput.getName());
                         List<StringListingPair> listingPair = getComboBoxInfoOptions(infoFieldBean, infoOptionInputModel.getObject());
                         if (selectedListingPair.getObject() == null && infoOptionInput.getUniqueIDString() != null) {
                             for (StringListingPair pair : listingPair) {
                                 if (pair.getId().equals(infoOptionInput.getUniqueIDString())) {
-                                    System.out.println("Setting select box to " + pair.getId());
                                     selectedListingPair.setObject(pair);
                                     break;
                                 }
@@ -81,7 +80,6 @@ public class AttributeSelectFieldWidget extends Panel {
                         }
                         else
                         if (!allowNoSelection && selectedListingPair.getObject() == null && !listingPair.isEmpty()) {
-                            System.out.println("Setting to first in list");
                             selectedListingPair.setObject(listingPair.get(0));
                             infoOptionInput.setUniqueIDString(selectedListingPair.getObject().getId());
                         }
@@ -99,25 +97,21 @@ public class AttributeSelectFieldWidget extends Panel {
                         return object.getId().toString();
                     }
                 }
-        ) {
-            @Override
-            protected boolean wantOnSelectionChangedNotifications() {
-                return true;
-            }
-
-            @Override
-            protected void onSelectionChanged(StringListingPair newSelection) {
-                System.out.println("Select box selected " + newSelection.getId());
-                infoOptionInput.setUniqueIDString(newSelection.getId());
-                super.onSelectionChanged(newSelection);
-            }
-        };
-
+        );
         inputValueSelection.setNullValid(allowNoSelection);
+        // Add Ajax Behaviour to prevent change in unit selection from generating a
+        // page refresh which will lose the state.
+        inputValueSelection.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            protected void onUpdate(AjaxRequestTarget target) {
+                if (inputValueSelection.getModelObject() != null)
+                    infoOptionInput.setUniqueIDString(inputValueSelection.getModelObject().getId());
+            }
+        });
+
         add(inputValueSelection);
     }
 
-    public List<StringListingPair> getComboBoxInfoOptions(InfoFieldBean field,  List<InfoOptionInput> inputOptions) {
+    private List<StringListingPair> getComboBoxInfoOptions(InfoFieldBean field,  List<InfoOptionInput> inputOptions) {
         // WEB-3518 CAVEAT : note that the list of InfoFieldBeans and InfoOptionInputs aren't treated the same.
         // one filters out retired fields, the other doesn't so we need to account for this.
         for (InfoOptionInput inputOption : inputOptions) {
@@ -127,6 +121,5 @@ public class AttributeSelectFieldWidget extends Panel {
         }
         throw new IllegalStateException("can't find input option for field " + field.getName());
     }
-
 
 }
