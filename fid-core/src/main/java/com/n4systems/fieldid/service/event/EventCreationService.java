@@ -33,7 +33,7 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
     @Autowired protected AssetService assetService;
     @Autowired protected LastEventDateService lastEventDateService;
     @Autowired protected NextEventScheduleService nextEventScheduleService;
-	@Autowired protected S3Service s3Service;
+    @Autowired protected S3Service s3Service;
     @Autowired protected TenantSettingsService tenantSettingsService;
     @Autowired protected EventScheduleService eventScheduleService;
     @Autowired protected EventService eventService;
@@ -147,7 +147,7 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
         // writeSignatureImagesToDisk MUST be called after persistenceManager.save(parameterObject.event, parameterObject.userId) as an
         // event id is required to build the save path
         writeSignatureImagesToDisk(event);
-		saveCriteriaResultImages(event, cleanUpCriteriaImages);
+        saveCriteriaResultImages(event, cleanUpCriteriaImages);
 
         processUploadedFiles(event, uploadedFiles);
 
@@ -320,7 +320,8 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
         saveCriteriaResultImages(event, true);
         setAllTriggersForActions(event);
 
-        event.getAttachments().clear();
+        List<FileAttachment> attachmentsInput = new ArrayList<>(attachments);
+        event.getAttachments().clear();;
 
         //Save any new actions that have been added on edit.
         for (CriteriaResult result : event.getResults()) {
@@ -375,7 +376,7 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
 //        ruleService.createApplicableQueueItems(trainingWheels);
 
         postUpdateEvent(event, fileData);
-        processUploadedFiles(event, attachments);
+        processUploadedFiles(event, attachmentsInput);
 
         return event;
     }
@@ -384,26 +385,26 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
     protected abstract void postUpdateEvent(T event, FileDataContainer fileData);
 
     private void saveCriteriaResultImages(T event, Boolean cleanUpCriteriaImages) {
-		saveCriteriaResultImages(event.getResults(), cleanUpCriteriaImages);
-		for (SubEvent subEvent: event.getSubEvents()) {
-			saveCriteriaResultImages(subEvent.getResults(), cleanUpCriteriaImages);
-		}
-	}
+        saveCriteriaResultImages(event.getResults(), cleanUpCriteriaImages);
+        for (SubEvent subEvent: event.getSubEvents()) {
+            saveCriteriaResultImages(subEvent.getResults(), cleanUpCriteriaImages);
+        }
+    }
 
-	private void saveCriteriaResultImages(Collection<CriteriaResult> results, Boolean cleanUpCriteriaImages) {
+    private void saveCriteriaResultImages(Collection<CriteriaResult> results, Boolean cleanUpCriteriaImages) {
 
-		for (CriteriaResult result: results) {
-			for (CriteriaResultImage criteriaResultImage: result.getCriteriaImages()) {
+        for (CriteriaResult result: results) {
+            for (CriteriaResultImage criteriaResultImage: result.getCriteriaImages()) {
                 if (criteriaResultImage.getTempFileName() != null) {
                     if (cleanUpCriteriaImages) {
-				        s3Service.finalizeCriteriaResultImageUpload(criteriaResultImage);
+                        s3Service.finalizeCriteriaResultImageUpload(criteriaResultImage);
                     } else {
                         s3Service.finalizeMultiCriteriaResultImageUpload(criteriaResultImage);
                     }
                 }
-			}
-		}
-	}
+            }
+        }
+    }
 
     public void cleanUpMultiEventCriteriaImages(Collection<CriteriaResult> results) {
         for (CriteriaResult result: results) {
@@ -415,17 +416,17 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
         }
     }
 
-	private void defaultOneClickResultsWithNullState(Collection<CriteriaResult> results) {
-		for (CriteriaResult result: results) {
-			OneClickCriteriaResult oneClickResult;
-			if (result instanceof OneClickCriteriaResult) {
-				oneClickResult = (OneClickCriteriaResult)result;
-				if (oneClickResult.getButton() == null) {
-					oneClickResult.setButton(((OneClickCriteria) oneClickResult.getCriteria()).getButtonGroup().getAvailableButtons().get(0));
-				}
-			}
-		}
-	}
+    private void defaultOneClickResultsWithNullState(Collection<CriteriaResult> results) {
+        for (CriteriaResult result: results) {
+            OneClickCriteriaResult oneClickResult;
+            if (result instanceof OneClickCriteriaResult) {
+                oneClickResult = (OneClickCriteriaResult)result;
+                if (oneClickResult.getButton() == null) {
+                    oneClickResult.setButton(((OneClickCriteria) oneClickResult.getCriteria()).getButtonGroup().getAvailableButtons().get(0));
+                }
+            }
+        }
+    }
 
     private void addActionNotifications(T event) {
         for (CriteriaResult result : event.getResults()) {
