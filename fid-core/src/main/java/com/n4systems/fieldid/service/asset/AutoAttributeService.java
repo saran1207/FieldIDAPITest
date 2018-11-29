@@ -5,6 +5,7 @@ import com.n4systems.model.AssetType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.springframework.transaction.annotation.Transactional;
 import rfid.ejb.entity.InfoFieldBean;
@@ -143,8 +144,37 @@ public class AutoAttributeService extends FieldIdPersistenceService {
     }
 
     @Transactional
-    public AutoAttributeDefinition saveDefinition(AutoAttributeDefinition definition) {
+    public AutoAttributeCriteria save(AutoAttributeCriteria criteria, User user) {
+        criteria.setCreatedBy(user);
+        criteria.setModifiedBy(user);
+        persistenceService.save(criteria);
+        return criteria;
+    }
 
+    @Transactional
+    public AutoAttributeCriteria update(AutoAttributeCriteria criteria) {
+        deleteExistingDefinitions(criteria);
+        criteria.touch();
+        return persistenceService.update(criteria);
+    }
+
+    @Transactional
+    public void delete(AutoAttributeCriteria criteria) {
+        /* Attach entity first */
+        persistenceService.delete(persistenceService.find(AutoAttributeCriteria.class, criteria.getId()));
+    }
+
+    @Transactional
+    private void deleteExistingDefinitions(AutoAttributeCriteria criteria) {
+        QueryBuilder<AutoAttributeDefinition> builder = new QueryBuilder<AutoAttributeDefinition>(AutoAttributeDefinition.class, new OpenSecurityFilter());
+        builder.addSimpleWhere("criteria", criteria);
+        for (AutoAttributeDefinition definition : persistenceService.findAll(builder)) {
+            persistenceService.delete(definition);
+        }
+    }
+
+    @Transactional
+    public AutoAttributeDefinition saveDefinition(AutoAttributeDefinition definition) {
         definition = getEntityManager().merge(definition);
         modifyCriteria(definition);
         return definition;

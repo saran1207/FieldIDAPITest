@@ -47,15 +47,7 @@ public class AutoAttributeDefinitionsPanel extends Panel {
         addComponents();
     }
 
-    @Override
-    protected void onBeforeRender() {
-        System.out.println("AutoAttributeDefinitionsPanel.onBeforeRender");
-        //autoAttributeCriteriaModel.detach(); // force refresh of criteria
-        super.onBeforeRender();
-    }
-
     public void handleSelectionChange() {
-        System.out.println("DefinitionsPanel.handleSelectionChange");
         definitionsListPanel.handleSelectionChange();
         definitionAddPanel.handleSelectionChange();
     }

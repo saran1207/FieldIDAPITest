@@ -7,6 +7,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndWithFeedbackPage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.LoaderFactory;
@@ -14,6 +15,7 @@ import com.n4systems.security.Permissions;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
@@ -40,7 +42,7 @@ public class AutoAttributeActionsPage extends FieldIDFrontEndWithFeedbackPage {
 
     public static final String INITIAL_TAB_SELECTION_KEY = "InitialTabSelection";
     public static final String SHOW_AUTO_ATTRIBUTES_VIEW_ALL_PAGE = "ShowViewAllPage";
-    //public static final String SHOW_AUTO_ATTRIBUTES_EDIT_PAGE = "ShowEditPage";
+    public static final String SHOW_AUTO_ATTRIBUTES_EDIT_PAGE = "ShowEditPage";
     public static final String SHOW_AUTO_ATTRIBUTES_DEFINITIONS_PAGE = "ShowDefinitionsPage";
     public static final String SHOW_IMPORTEXPORT_PAGE = "ShowImportExportPage";
     public static final String INITIAL_CUSTOMER_ID = "id";
@@ -51,12 +53,14 @@ public class AutoAttributeActionsPage extends FieldIDFrontEndWithFeedbackPage {
     private int currentlySelectedTab;
     private IModel<String> currentTitleModel;
     private IModel<Long> currentAutoAttributeCriteriaEditModel;
+    private IModel<Long> assetTypeSelectedForEditModel;
     private IModel<User> currentUserModel;
     private IModel<SessionUser> sessionUserModel;
     private IModel<SecurityFilter> securityFilterModel;
     private IModel<WebSessionMap> webSessionMapModel;
 
     private AutoAttributeDefinitionsPanel definitionsPanel;
+    private AutoAttributeEditPanel editPanel;
 
     /**
      * The currently selected AssetType. This is set in one of the following three cases since they change the focus
@@ -65,7 +69,6 @@ public class AutoAttributeActionsPage extends FieldIDFrontEndWithFeedbackPage {
      * The selected AssetTYpe is reset to null if the user clicks on the 'View All', or 'Import/Export
      * tabs since the focus is no longer on an individual customer.
      */
-    private IModel<Long> assetTypeSelectedForEditModel;
 
     private String initialTabSelection;
     private Long initialCustomerId;
@@ -98,11 +101,9 @@ public class AutoAttributeActionsPage extends FieldIDFrontEndWithFeedbackPage {
         response.renderCSS("div#pageContent {display: none}", null);
         response.renderCSS(".wicket-tabbed-panel-content {margin-top: 14px;}", null);
 
-         /* We want the first four tabs to appear on the left (though all might not be visible) and the last two on the right */
+         /* We want the first three tabs to appear on the left (though all might not be visible) and the last one on the right */
         response.renderCSS(".tab-row {width: 100%; padding-top:10px;}", null);
-        response.renderCSS("div.wicket-tabpanel div.tab-row li.tab2 {float: right}", null);
-       /* response.renderCSS("div.wicket-tabpanel div.tab-row li.tab8.last {float: right}", null);*/
-
+        response.renderCSS("div.wicket-tabpanel div.tab-row li.tab3 {float: right}", null);
     }
 
     @Override
@@ -130,12 +131,11 @@ public class AutoAttributeActionsPage extends FieldIDFrontEndWithFeedbackPage {
 
         final int NO_TAB_SELECTION = -1;
         final int VIEW_ALL_TAB_INDEX = 0;
-        //final int EDIT_TAB_INDEX= 1;
-        final int DEFINITIONS_TAB_INDEX = 1;
-        final int IMPORT_EXPORT_TAB_INDEX = 2;
+        final int EDIT_TAB_INDEX= 1;
+        final int DEFINITIONS_TAB_INDEX = 2;
+        final int IMPORT_EXPORT_TAB_INDEX = 3;
 
         int preSelectedTab = NO_TAB_SELECTION;
-
 
 
         final List<ITab> tabs = new ArrayList<ITab>();
@@ -150,8 +150,13 @@ public class AutoAttributeActionsPage extends FieldIDFrontEndWithFeedbackPage {
                     /* Tab selection has changed, some pages might have to cleanup */
                     if (newTab == VIEW_ALL_TAB_INDEX || newTab == IMPORT_EXPORT_TAB_INDEX)
                         assetTypeSelectedForEditModel.setObject(null); // cleanup any old value
+                    else
                     if (newTab == DEFINITIONS_TAB_INDEX)
                         definitionsPanel.handleSelectionChange();
+                    else
+                    if (newTab == EDIT_TAB_INDEX)
+                        editPanel.handleSelectionChange();
+
                     Session.get().cleanupFeedbackMessages();
                     currentlySelectedTab = getSelectedTab();
                 }
@@ -184,7 +189,18 @@ public class AutoAttributeActionsPage extends FieldIDFrontEndWithFeedbackPage {
                     protected void assetTypeWithCriteriaChosen(AssetType assetType) {
                         if (definitionsPanel != null)
                             definitionsPanel.handleSelectionChange();
-                        changeSelectedPage(tabbedPanel, assetType.getId(), assetType.getAutoAttributeCriteria().getId(), DEFINITIONS_TAB_INDEX);
+                        changeSelectedPage(
+                                tabbedPanel,
+                                assetType.getId(),
+                                assetType.getAutoAttributeCriteria().getId(),
+                                DEFINITIONS_TAB_INDEX);
+                    }
+
+                    @Override
+                    protected void assetTypeWithoutCriteriaChosen(AssetType assetType) {
+                        if (editPanel != null)
+                            editPanel.handleSelectionChange();
+                        changeSelectedPage(tabbedPanel, assetType.getId(), null, EDIT_TAB_INDEX);
                     }
                 };
             }
@@ -192,6 +208,57 @@ public class AutoAttributeActionsPage extends FieldIDFrontEndWithFeedbackPage {
         titleLabelsByTabIndex.add(getString("title.auto_attribute_list"));
         if (SHOW_AUTO_ATTRIBUTES_VIEW_ALL_PAGE.equals(initialTabSelection)) {
             preSelectedTab = VIEW_ALL_TAB_INDEX;
+        }
+
+        /**
+         * Edit tab
+         */
+        tabs.add(new PanelCachingTab(new AbstractTab(new FIDLabelModel("nav.edit")) {
+            @Override
+            public Panel getPanel(String panelId) {
+                editPanel = new AutoAttributeEditPanel(
+                        panelId,
+                        currentUserModel,
+                        assetTypeSelectedForEditModel,
+                        currentAutoAttributeCriteriaEditModel) {
+
+                    @Override
+                    void saveActionCompleted(AjaxRequestTarget target, AutoAttributeCriteria createdCriteria) {
+                        changeSelectedPage(
+                                tabbedPanel,
+                                assetTypeSelectedForEditModel.getObject(),
+                                createdCriteria.getId(),
+                                DEFINITIONS_TAB_INDEX);
+                    }
+                    @Override
+                    void cancelActionCompleted(AjaxRequestTarget target) {
+                        changeSelectedPage(tabbedPanel, VIEW_ALL_TAB_INDEX);
+                    }
+
+                    @Override
+                    void deleteActionCompleted(AjaxRequestTarget target) {
+                        changeSelectedPage(
+                                tabbedPanel,
+                                assetTypeSelectedForEditModel.getObject(),
+                                null,
+                                VIEW_ALL_TAB_INDEX);
+                    }
+
+                    @Override
+                    void switchToDefinitionList(AjaxRequestTarget target) {
+                        changeSelectedPage(tabbedPanel, DEFINITIONS_TAB_INDEX);
+                    }
+                };
+                return editPanel;
+            }
+            @Override
+            public boolean isVisible() {
+                return assetTypeSelectedForEditModel.getObject() != null;
+            }
+        }));
+        titleLabelsByTabIndex.add(getString("title.auto_attribute_edit"));
+        if (SHOW_AUTO_ATTRIBUTES_EDIT_PAGE.equals(initialTabSelection)) {
+            preSelectedTab = EDIT_TAB_INDEX;
         }
 
         /**

@@ -76,11 +76,6 @@ abstract public class AutoAttributeViewAllPanel extends Panel {
                                     assetTypeWithCriteriaChosen(item.getModelObject());
                                 }
                                 else {
-                                    // go to edit
-                                   // if (assetType != null && assetType.hasCriteria()) {
-                                   //     String[] fetchList = { "inputs", "outputs" };
-                                   //     autoAttributeCriteria = persistenceManager.find(AutoAttributeCriteria.class, assetType
-                                   //             .getAutoAttributeCriteria().getId(), getTenant(), fetchList);
                                     AssetType assetType = assetTypeService.getAssetTypeWithPostFetches(item.getModelObject().getId());
                                     if (!assetHasEnoughFields(assetType)) {
                                         System.out.println("error 1");
@@ -91,6 +86,8 @@ abstract public class AutoAttributeViewAllPanel extends Panel {
                                         System.out.println("error 2");
                                         Session.get().error(getString("error.asset_needs_select_or_combo"));
                                     }
+                                    else
+                                        assetTypeWithoutCriteriaChosen(assetType);
                                 }
                             }
                         }.add(new Label("assetTypeName", item.getModelObject().getName())));
@@ -125,6 +122,7 @@ abstract public class AutoAttributeViewAllPanel extends Panel {
     }
 
     abstract protected void assetTypeWithCriteriaChosen(AssetType assetType);
+    abstract protected void assetTypeWithoutCriteriaChosen(AssetType assetType);
 
     /**
      * an assetType requires at least 2 fields to have a template.
