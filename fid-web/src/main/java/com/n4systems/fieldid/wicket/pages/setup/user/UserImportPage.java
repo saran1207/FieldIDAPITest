@@ -10,6 +10,7 @@ import com.n4systems.exporting.io.ExcelXSSFMapWriter;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.service.user.UserListFilterCriteria;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
@@ -37,6 +38,7 @@ import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.persistence.savers.SaverFactory;
 import com.n4systems.security.PasswordComplexityChecker;
+import com.n4systems.security.Permissions;
 import com.n4systems.security.UserType;
 import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ServiceLocator;
@@ -71,6 +73,7 @@ import java.util.Collections;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_END_USERS})
 public class UserImportPage extends FieldIDFrontEndPage {
 
     private static final Logger logger = Logger.getLogger(UserImportPage.class);
