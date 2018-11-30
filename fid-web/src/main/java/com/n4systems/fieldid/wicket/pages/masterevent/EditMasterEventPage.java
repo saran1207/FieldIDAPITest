@@ -15,6 +15,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class EditMasterEventPage extends MasterEventPage {
@@ -33,7 +34,7 @@ public class EditMasterEventPage extends MasterEventPage {
         } else {
             setEventResult(event.getObject().getEventResult());
         }
-        fileAttachments = event.getObject().getAttachments() == null ? Lists.newArrayList() : event.getObject().getAttachments();
+        fileAttachments = new ArrayList<>(event.getObject().getAttachments() == null ? Lists.newArrayList() : event.getObject().getAttachments());
     }
 
     public EditMasterEventPage(IModel<ThingEvent> masterEvent) {
@@ -44,7 +45,7 @@ public class EditMasterEventPage extends MasterEventPage {
         } else {
             setEventResult(event.getObject().getEventResult());
         }
-        fileAttachments = event.getObject().getAttachments() == null ? Lists.newArrayList() : event.getObject().getAttachments();
+        fileAttachments = new ArrayList<>(event.getObject().getAttachments() == null ? Lists.newArrayList() : event.getObject().getAttachments());
     }
 
     protected ThingEvent loadExistingEvent() {
