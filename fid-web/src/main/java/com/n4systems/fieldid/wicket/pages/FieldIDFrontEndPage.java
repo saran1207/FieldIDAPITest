@@ -410,6 +410,8 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         assetCodeMappingcontainer.setVisible(intergrationEnabled);
         container.add(assetCodeMappingcontainer);
 
+        container.add(new BookmarkablePageLink<WebPage>("autoAttributesViewAllLink", AutoAttributeActionsPage.class,
+                PageParametersBuilder.param(AutoAttributeActionsPage.INITIAL_TAB_SELECTION_KEY, AutoAttributeActionsPage.SHOW_AUTO_ATTRIBUTES_VIEW_ALL_PAGE)));
         container.add(new BookmarkablePageLink("commentTemplateLink",
                                                CommentTemplateListPage.class));
         

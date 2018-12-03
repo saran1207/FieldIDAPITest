@@ -120,7 +120,6 @@ abstract public class AutoAttributeEditPanel extends Panel {
         AjaxButton saveButton = new AjaxButton("save") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                System.out.println("save button clicked");
                 doSave(target);
             }
             @Override
@@ -144,7 +143,6 @@ abstract public class AutoAttributeEditPanel extends Panel {
         AjaxButton deleteButton = new AjaxButton("delete") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                System.out.println("delete button clicked");
                 doDelete(target);
             }
             @Override
@@ -306,7 +304,6 @@ abstract public class AutoAttributeEditPanel extends Panel {
                     }) {
                         @Override
                         protected void populateItem(Item<InfoFieldBean> item) {
-                            System.out.println("populateItem " + item.getModelObject().getName());
                             WebMarkupContainer container = new WebMarkupContainer("infoFieldContainer");
                             container.add(new AttributeAppender("class",DYNAMIC_OPTION_CSS_CLASS, " "));
                             container.setOutputMarkupId(true);

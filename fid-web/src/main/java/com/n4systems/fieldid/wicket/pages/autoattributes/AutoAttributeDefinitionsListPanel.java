@@ -9,6 +9,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
@@ -123,14 +124,15 @@ abstract public class AutoAttributeDefinitionsListPanel extends Panel {
                             public void onClick(AjaxRequestTarget target) {
                                 try {
                                     autoAttributeService.removeDefinition(definition);
-                                    logger.info("AutoAttributesDefinition ");
-                                    Session.get().info("message.definition_removed");
+                                    logger.info("AutoAttributesDefinition removed");
+                                    Session.get().info(getString("message.definition_removed"));
                                     autoAttributeDefinitionModel.detach();
                                     target.add(resultsPanel);
                                     target.add(noResultsPanel);
+                                    target.addChildren(getPage(), FeedbackPanel.class);
                                 } catch (Exception e) {
                                     logger.error("Removal of AutoAttributesDefinition failed", e);
-                                    Session.get().error("error.remove_definition_failed");
+                                    Session.get().error(getString("error.remove_definition_failed"));
                                 }
                             }
                         };
@@ -141,7 +143,7 @@ abstract public class AutoAttributeDefinitionsListPanel extends Panel {
 
         resultsPanel.add(definitionList);
 
-        /* Create the section to display a message if no result */
+        /* Create the section to display a message if no results were found */
         noResultsPanel = new WebMarkupContainer("emptyListResult"){
             @Override
             public boolean isVisible() {

@@ -80,7 +80,6 @@ public class AutoAttributeImportPanel extends BaseImportExportPanel {
                                 assetType -> assetType.getAutoAttributeCriteria() != null).map(a -> a.getAutoAttributeCriteria()).collect(Collectors.toList()));
                         if (selectedAutoAttributeCriteria.getObject() == null && !autoAttributeCriteria.isEmpty()) {
                             // If no selection default to first item in this list
-                            System.out.println("AutoAttributeImportPanel model load setting selection to first in list");
                             setSelection(autoAttributeCriteria.get(0).getId());
                         }
                         return autoAttributeCriteria;
@@ -105,7 +104,6 @@ public class AutoAttributeImportPanel extends BaseImportExportPanel {
 
             @Override
             protected void onSelectionChanged(AutoAttributeCriteria newSelection) {
-                System.out.println("AutoAttributeImportPanel.onSelectionChanged(" + newSelection + "");
                 super.onSelectionChanged(newSelection);
                 setSelection(newSelection.getId());
             }
@@ -160,7 +158,6 @@ public class AutoAttributeImportPanel extends BaseImportExportPanel {
     }
 
     protected void setSelection(Long id) {
-        System.out.println("AutoAttributeImportPanel.setSelection(" + id + ")");
         selectedAutoAttributeCriteria.setObject(
                 getLoaderFactory().createFilteredIdLoader(AutoAttributeCriteria.class).
                         setId(id).setPostFetchFields(

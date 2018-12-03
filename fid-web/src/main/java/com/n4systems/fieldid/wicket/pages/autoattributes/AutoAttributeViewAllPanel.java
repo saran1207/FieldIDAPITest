@@ -72,18 +72,17 @@ abstract public class AutoAttributeViewAllPanel extends Panel {
                             @Override
                             public void onClick() {
                                 if (item.getModelObject().hasCriteria()) {
-                                    // go to definition
+                                    // go to definition tab page
                                     assetTypeWithCriteriaChosen(item.getModelObject());
                                 }
                                 else {
+                                    // go to edit tab page
                                     AssetType assetType = assetTypeService.getAssetTypeWithPostFetches(item.getModelObject().getId());
                                     if (!assetHasEnoughFields(assetType)) {
-                                        System.out.println("error 1");
                                         Session.get().error(getString("error.asset_needs_2_attr"));
                                     }
                                     else
                                     if (!assetHasStaticFields(assetType)) {
-                                        System.out.println("error 2");
                                         Session.get().error(getString("error.asset_needs_select_or_combo"));
                                     }
                                     else
@@ -112,7 +111,6 @@ abstract public class AutoAttributeViewAllPanel extends Panel {
 
     public List<AssetType> getAssetTypes() {
         List<AssetType> assetTypes = assetTypeService.getAssetTypes();
-        System.out.println(assetTypes.size() + " were found");
         currentResultCount = assetTypes.size();
         return assetTypes;
     }

@@ -145,7 +145,6 @@ public class AutoAttributeActionsPage extends FieldIDFrontEndWithFeedbackPage {
             @Override
             protected void onBeforeRender() {
                 int newTab = getSelectedTab();
-                System.out.println("AutoAttributesActionPage.onBeforeRender selected tab " + newTab + " prev tab " + currentlySelectedTab);
                 if (newTab != currentlySelectedTab) {
                     /* Tab selection has changed, some pages might have to cleanup */
                     if (newTab == VIEW_ALL_TAB_INDEX || newTab == IMPORT_EXPORT_TAB_INDEX)
@@ -165,7 +164,6 @@ public class AutoAttributeActionsPage extends FieldIDFrontEndWithFeedbackPage {
 
             @Override
             public TabbedPanel setSelectedTab(int index) {
-                System.out.println("Tabbed panel.setSelectedTab(" + index + ")");
                 return super.setSelectedTab(index);
             }
         };
@@ -290,10 +288,6 @@ public class AutoAttributeActionsPage extends FieldIDFrontEndWithFeedbackPage {
                 return new AutoAttributeImportPanel(panelId, currentUserModel, sessionUserModel,
                         securityFilterModel, webSessionMapModel);
             }
-           /* @Override
-            public boolean isVisible() {
-                return assetTypeSelectedForEditModel.getObject() == null;
-            }*/
         }));
         titleLabelsByTabIndex.add(new FIDLabelModel("title.customer_import_export").getObject());
         if (SHOW_IMPORTEXPORT_PAGE.equals(initialTabSelection)) {
@@ -311,7 +305,6 @@ public class AutoAttributeActionsPage extends FieldIDFrontEndWithFeedbackPage {
     private void changeSelectedPage(TabbedPanel tabbedPanel, Long assetTypeId, Long criteriaId, int newIndex) {
         assetTypeSelectedForEditModel.setObject(assetTypeId);
         currentAutoAttributeCriteriaEditModel.setObject(criteriaId);
-        System.out.println("Page changing " + assetTypeId + ":" + criteriaId);
         tabbedPanel.setSelectedTab(newIndex);
         currentlySelectedTab = newIndex;
         RequestCycle.get().setResponsePage( AutoAttributeActionsPage.this.getPage() );

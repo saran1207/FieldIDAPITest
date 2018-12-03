@@ -28,7 +28,6 @@ import rfid.ejb.entity.InfoFieldBean;
 import rfid.web.helper.SessionUser;
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -268,21 +267,11 @@ abstract public class AutoAttributeDefinitionAddPanel extends Panel {
 
     public boolean saveChanges(boolean withAdd) {
 
-        /*System.out.println("AutoAttributeDefinitionCrud.doSave, autoAttributeDefinition " + autoAttributeDefinition);
-        if( autoAttributeCriteria == null || autoAttributeDefinition == null ) {
-            addFlashMessage( getText( "error.noautoattributecriteria" ) );
-            return ERROR;
-        }*/
-
-       /* updateInfoOptions(inputInfoFieldBeansModel, inputInfoOptionsModel);
-        updateInfoOptions(outputInfoFieldBeanModel, outputInfoOptionsModel);*/
-
         autoAttributeDefinitionModel.getObject().setCriteria(autoAttributeCriteriaModel.getObject());
         autoAttributeDefinitionModel.getObject().setTenant(sessionUserModel.getObject().getTenant());
 
         String error = validateOutputs(autoAttributeCriteriaModel.getObject(), outputInfoOptionsModel.getObject());
         if (error != null) {
-            System.out.println("Validate outputs encountered '" + error + "'");
             Session.get().error(error);
             return false;
         }
@@ -314,33 +303,15 @@ abstract public class AutoAttributeDefinitionAddPanel extends Panel {
             return false;
         }
 
-        /*uniqueID = autoAttributeDefinition.getId();*/
         Session.get().info(new FIDLabelModel("message.definition_saved").getObject());
-        /*if( saveandadd != null ) {
-            setSavedInputs();
-            return "saveandadd";
-        }
-        return "saved";*/
+
         if (withAdd) {
-           /* public String doEdit() {
-
-                if( autoAttributeCriteria == null || autoAttributeDefinition == null ) {
-                    addFlashMessage( getText( "error.noautoattributecriteria" ) );
-                    return ERROR;
-                }
-                if( autoAttributeDefinition.getId() == null ) {
-                    getSavedInputs();
-                }
-
-                return SUCCESS;
-            }*/
+            autoAttributeDefinitionModel.detach();
             return true;
         }
         else
             return true;
     }
-
-
 
     // WEB-2583 NOTE : previously, no validation was done because the field types didn't require it.
     //  this was added to handle date fields.  if more and more field types are added this should be refactored
@@ -348,7 +319,6 @@ abstract public class AutoAttributeDefinitionAddPanel extends Panel {
     private String validateOutputs(AutoAttributeCriteria autoAttributeCriteria, List<InfoOptionInput> outputInfoOptions) {
         SessionUser user = sessionUserModel.getObject();
         for (InfoOptionInput input : outputInfoOptions) {
-            System.out.println("AutoAttributeDefinitionAddPanel.validateOutputs for input " + input.getName() + ":" + input.getUniqueID());
             for (InfoFieldBean field : autoAttributeCriteria.getOutputs()) {
                 if (field.getUniqueID().equals(input.getInfoFieldId()) && input != null) {
                     String error = validateField(field, user, input.getName());
@@ -363,7 +333,6 @@ abstract public class AutoAttributeDefinitionAddPanel extends Panel {
 
     private String validateField(InfoFieldBean field, SessionUser user, String name) {
         if (field.getFieldType().equals(InfoFieldBean.DATEFIELD_FIELD_TYPE)) {
-            System.out.println("Validating field '" + name + "'");
             SessionUserDateConverter dateConverter = user.createUserDateConverter();
             Date date = dateConverter.convertDate(name, field.isIncludeTime());
             return date == null ? getString("error.invalidate_date_value") : null;
@@ -376,36 +345,12 @@ abstract public class AutoAttributeDefinitionAddPanel extends Panel {
     }
 
     private void convertInputsToInfoOptions(AutoAttributeCriteria autoAttributeCriteria, List<InfoOptionInput> inputInfoOptions, SessionUser sessionUser) {
-        System.out.println("AutoAttributeDefinitionAddPanel.convertInputsToInfoOptions, " + inputInfoOptions.size() + " inputInfoOptions, " + autoAttributeCriteria.getInputs() + " criteria inputs");
-       /* for (InfoOptionInput input : inputInfoOptions) {
-            System.out.println("AutoAttributeDefinitionAddPanel.convertInputsToInfoOptions, " + input.getUniqueID() + ":" + input.getInfoFieldId() + ":" + input.getUniqueIDString());
-        }
-        for (InfoFieldBean info : autoAttributeCriteria.getInputs()) {
-            System.out.println("AutoAttributeDefinitionAddPanel.convertInputsToInfoOptions, " + info.getUniqueID() + ":" + info.getName());
-        }*/
         autoAttributeDefinitionModel.getObject().setInputs(InfoOptionInput.convertInputInfoOptionsToInfoOptions(inputInfoOptions, autoAttributeCriteria.getInputs(), sessionUser));
-      /*  for (InfoOptionBean info : autoAttributeDefinition.getInputs()) {
-            System.out.println("AutoAttributeDefinitionAddPanel.convertInputsToInfoOptions, input InfoOptionBean " + info.getUniqueID() + ":" + info.getName() + ":" + info.getInfoField().getName());
-        }*/
-    }
-
-    /**
-     * Set each Input/Output InfoField with its corresponding infoFieldID value, based on this line
-     * in the struts code:
-     * <@s.hidden name="${prefix}InfoOptions[${stat.index}].infoFieldId"  value="${infoField.uniqueID}"/>
-     **/
-    private void updateInfoOptions(IModel<List<InfoFieldBean>> infoFieldBeans, IModel<List<InfoOptionInput>> infoOptionInputs) {
-        Iterator<InfoFieldBean> inputBeanIterator = infoFieldBeans.getObject().iterator();
-        Iterator<InfoOptionInput> inputInfoOptionIterator = infoOptionInputs.getObject().iterator();
-        while (inputBeanIterator.hasNext() && inputInfoOptionIterator.hasNext()) {
-            inputInfoOptionIterator.next().setInfoFieldId(inputBeanIterator.next().getUniqueID());
-        }
     }
 
     private InfoOptionInput findMatchingInput(InfoFieldBean infoFieldBean, IModel<List<InfoOptionInput>> optionsModel) {
         for (InfoOptionInput infoOptionInput : optionsModel.getObject()) {
             if (infoFieldBean.getUniqueID().equals(infoOptionInput.getInfoFieldId())) {
-                System.out.println("Matching input " + infoOptionInput);
                 return infoOptionInput;
             }
         }

@@ -4,6 +4,7 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.service.asset.AutoAttributeService;
 import com.n4systems.security.Permissions;
 import org.apache.log4j.Logger;
+import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -66,7 +67,6 @@ public class AutoAttributeDefinitionsPanel extends Panel {
         AjaxLink viewDefinitions = new AjaxLink("viewDefinitions") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                System.out.println("clicked viewDefinitions");
                 handleSwitchBackToListPanel(target);
             }
 
@@ -81,9 +81,7 @@ public class AutoAttributeDefinitionsPanel extends Panel {
         AjaxLink addDefinition = new AjaxLink("addDefinition") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                displayingViewAllDefinitions = false;
-                target.add(buttonsContainer);
-                target.add(definitionsPanels);
+                handleSwitchToAddPanel(target);
             }
             @Override
             public boolean isVisible() {
@@ -144,6 +142,16 @@ public class AutoAttributeDefinitionsPanel extends Panel {
         definitionAddPanel.handleSelectionChange();
         target.add(buttonsContainer);
         target.add(definitionsPanels);
+        Session.get().cleanupFeedbackMessages();
+        target.addChildren(getPage(), FeedbackPanel.class);
+    }
+
+    private void handleSwitchToAddPanel(AjaxRequestTarget target) {
+        displayingViewAllDefinitions = false;
+        target.add(buttonsContainer);
+        target.add(definitionsPanels);
+        Session.get().cleanupFeedbackMessages();
+        target.addChildren(getPage(), FeedbackPanel.class);
     }
 
 }
