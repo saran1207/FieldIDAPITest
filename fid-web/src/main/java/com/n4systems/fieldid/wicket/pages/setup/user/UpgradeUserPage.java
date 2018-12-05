@@ -148,7 +148,7 @@ public class UpgradeUserPage extends FieldIDTemplatePage {
                 aNavItem().label(new FIDLabelModel("nav.view_all.count", activeUserCount)).page(UsersListPage.class).build(),
                 aNavItem().label(new FIDLabelModel("nav.view_all_archived.count", archivedUserCount)).page(ArchivedUsersListPage.class).build(),
                 aNavItem().label("nav.add").page(SelectUserTypePage.class).onRight().build(),
-                aNavItem().label("nav.import_export").page("userImportExport.action").onRight().build()
+                aNavItem().label(new FIDLabelModel("nav.import_export")).page(UserImportPage.class).onRight().build()
         ));
     }
 

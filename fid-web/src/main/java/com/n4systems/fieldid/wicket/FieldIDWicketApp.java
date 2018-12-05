@@ -306,9 +306,9 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("runLastReport", RunLastReportPage.class);
 
         mountPage("admin/addTenant", AddTenantPage.class);
-		mountPage("admin/users", AdminUserPage.class);
+        mountPage("admin/users", AdminUserPage.class);
         mountPage("admin/configureLanguages", ConfigureLanguagesPage.class);
-		mountPage("admin/tenantUsers", TenantUserListPage.class);
+        mountPage("admin/tenantUsers", TenantUserListPage.class);
         mountPage("admin/changeAdminPassword", ChangeAdminPasswordPage.class);
         mountPage("admin/lotoPrintoutSelection", LotoPrintoutListPage.class);
         mountPage("admin/config", ConfigPage.class);
@@ -374,6 +374,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("customerActions", CustomerActionsPage.class);
         mountPage("eventImport", EventImportPage.class);
         mountPage("assetImport", AssetImportPage.class);
+        mountPage("userImport", UserImportPage.class);
 
         mountResource("/signature/${eventId}/${criteriaId}", new SignatureResourceReference());
         mountResource("/temporarySignature/${fileId}", new TemporarySignatureResourceReference());
@@ -442,9 +443,9 @@ public class FieldIDWicketApp extends WebApplication {
     
     @Override
     protected IConverterLocator newConverterLocator() {
-    	ConverterLocator converterLocator = new ConverterLocator();
-    	converterLocator.set(PlainDate.class, new PlainDateConverter());
-    	return converterLocator;
+        ConverterLocator converterLocator = new ConverterLocator();
+        converterLocator.set(PlainDate.class, new PlainDateConverter());
+        return converterLocator;
     }
 
 
