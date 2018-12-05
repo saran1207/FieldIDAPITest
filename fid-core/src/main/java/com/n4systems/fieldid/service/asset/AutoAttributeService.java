@@ -144,10 +144,11 @@ public class AutoAttributeService extends FieldIdPersistenceService {
     }
 
     @Transactional
-    public AutoAttributeCriteria save(AutoAttributeCriteria criteria, User user) {
+    public AutoAttributeCriteria saveWithFlush(AutoAttributeCriteria criteria, User user) {
         criteria.setCreatedBy(user);
         criteria.setModifiedBy(user);
         persistenceService.save(criteria);
+        persistenceService.flush();
         return criteria;
     }
 
@@ -174,9 +175,10 @@ public class AutoAttributeService extends FieldIdPersistenceService {
     }
 
     @Transactional
-    public AutoAttributeDefinition saveDefinition(AutoAttributeDefinition definition) {
+    public AutoAttributeDefinition saveDefinitionWithFlush(AutoAttributeDefinition definition) {
         definition = getEntityManager().merge(definition);
         modifyCriteria(definition);
+        getEntityManager().flush();
         return definition;
     }
 

@@ -64,6 +64,8 @@ abstract public class AutoAttributeEditPanel extends Panel {
     private IModel<List<InfoFieldBean>> inputFieldsModel;
     private IModel<List<InfoFieldBean>> outputFieldsModel;
 
+    private AjaxButton saveButton;
+
     public AutoAttributeEditPanel(
             String id,
             IModel<User> currentUserModel,
@@ -93,6 +95,7 @@ abstract public class AutoAttributeEditPanel extends Panel {
         FieldListPanel availableFieldsList = new FieldListPanel(
                 "availableFieldsList",
                 new FIDLabelModel("label.availablefields").getObject(),
+                "",
                 false,
                 availableFieldsModel);
         availableFieldsList.setOutputMarkupId(true);
@@ -102,6 +105,7 @@ abstract public class AutoAttributeEditPanel extends Panel {
         FieldListPanel inputFieldsList = new FieldListPanel(
                 "inputFieldsList",
                 new FIDLabelModel("label.inputfields").getObject(),
+                new FIDLabelModel("error.inputsnotempty").getObject(),
                 true,
                 inputFieldsModel);
         inputFieldsList.setOutputMarkupId(true);
@@ -111,22 +115,28 @@ abstract public class AutoAttributeEditPanel extends Panel {
         FieldListPanel outputFieldsList = new FieldListPanel(
                 "outputFieldsList",
                 new FIDLabelModel("label.outputfields").getObject(),
+                new FIDLabelModel("error.outputsnotempty").getObject(),
                 false,
                 outputFieldsModel);
         outputFieldsList.setOutputMarkupId(true);
         outputFieldsList.setOutputMarkupPlaceholderTag(true);
         form.add(outputFieldsList);
 
-        AjaxButton saveButton = new AjaxButton("save") {
+        saveButton = new AjaxButton("save") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 doSave(target);
             }
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
+            }
 
+            @Override
+            public boolean isEnabled() {
+                return inputFieldsModel.getObject().size() > 0 && outputFieldsModel.getObject().size() > 0;
             }
         };
+        saveButton.setOutputMarkupId(true);
         saveButton.add(new ConfirmBehavior(new Model(getString("message.save_prompt"))));
 
         form.add(saveButton);
@@ -211,10 +221,17 @@ abstract public class AutoAttributeEditPanel extends Panel {
             @Override
             protected List<InfoFieldBean> load() {
                 List<InfoFieldBean> available = new ArrayList(assetTypeModel.getObject().getAvailableInfoFields());
-                // remove the ones that are used in inputs or outputs.
-                available.removeAll(autoAttributeCriteriaModel.getObject().getInputs());
-                available.removeAll(autoAttributeCriteriaModel.getObject().getOutputs());
-                return available;
+                if (available != null) {
+                    // remove the ones that are used in inputs or outputs.
+                    if (autoAttributeCriteriaProvidedIdModel.getObject() != null) {
+                        available.removeAll(autoAttributeCriteriaModel.getObject().getInputs());
+                        available.removeAll(autoAttributeCriteriaModel.getObject().getOutputs());
+                    }
+                    return available;
+                }
+                else {
+                    return new ArrayList();
+                }
             }
         };
 
@@ -237,35 +254,54 @@ abstract public class AutoAttributeEditPanel extends Panel {
     private void doSave(AjaxRequestTarget target) {
 
         List<InfoFieldBean> inputFields = inputFieldsModel.getObject();
-        List<InfoFieldBean> outputFields = outputFieldsModel.getObject();
-
-        AutoAttributeCriteria autoAttributeCriteria = autoAttributeCriteriaModel.getObject();
-
-        autoAttributeCriteria.setInputs(inputFields);
-        autoAttributeCriteria.setOutputs(outputFields);
-        autoAttributeCriteria.setTenant(currentUserModel.getObject().getTenant());
-        autoAttributeCriteria.setAssetType(assetTypeModel.getObject());
-        autoAttributeCriteria.setDefinitions(new ArrayList<AutoAttributeDefinition>());
-
-        if (autoAttributeCriteria.getId() != null) {
-            autoAttributeCriteria = autoAttributeService.update(autoAttributeCriteria);
-        } else {
-            autoAttributeCriteria = autoAttributeService.save(autoAttributeCriteria, currentUserModel.getObject());
+        if (inputFieldsModel.getObject().size() == 0) {
+            Session.get().error(new FIDLabelModel("error.inputsnotempty").getObject());
+            target.addChildren(getPage(), FeedbackPanel.class);
         }
-        Session.get().info(getString("message.save_success"));
-        target.addChildren(getPage(), FeedbackPanel.class);
-        saveActionCompleted(target, autoAttributeCriteria);
+        else
+        if (outputFieldsModel.getObject().size() == 0) {
+            Session.get().error(new FIDLabelModel("error.outputsnotempty").getObject());
+            target.addChildren(getPage(), FeedbackPanel.class);
+        }
+        else {
+            List<InfoFieldBean> outputFields = outputFieldsModel.getObject();
+
+            AutoAttributeCriteria autoAttributeCriteria = autoAttributeCriteriaModel.getObject();
+
+            autoAttributeCriteria.setInputs(inputFields);
+            autoAttributeCriteria.setOutputs(outputFields);
+            autoAttributeCriteria.setTenant(currentUserModel.getObject().getTenant());
+            autoAttributeCriteria.setAssetType(assetTypeModel.getObject());
+            autoAttributeCriteria.setDefinitions(new ArrayList<AutoAttributeDefinition>());
+
+            if (autoAttributeCriteria.getId() != null) {
+                autoAttributeCriteria = autoAttributeService.update(autoAttributeCriteria);
+            } else {
+                autoAttributeCriteria = autoAttributeService.saveWithFlush(autoAttributeCriteria, currentUserModel.getObject());
+                System.out.println("Added autoAttributeCriteria with id " + autoAttributeCriteria.getId());
+            }
+            autoAttributeCriteriaProvidedIdModel.setObject(autoAttributeCriteria.getId());
+            autoAttributeCriteriaModel.setObject(autoAttributeCriteria);
+            Session.get().info(getString("message.save_success"));
+            target.addChildren(getPage(), FeedbackPanel.class);
+            saveActionCompleted(target);
+        }
     }
 
     private void doDelete(AjaxRequestTarget target) {
 
         autoAttributeService.delete(autoAttributeCriteriaModel.getObject());
+        autoAttributeCriteriaProvidedIdModel.setObject(null);
+        autoAttributeCriteriaModel.detach();
+        availableFieldsModel.detach();
+        inputFieldsModel.detach();
+        outputFieldsModel.detach();
         Session.get().info(getString("message.delete_success"));
         target.addChildren(getPage(), FeedbackPanel.class);
         deleteActionCompleted(target);
     }
 
-    abstract void saveActionCompleted(AjaxRequestTarget target, AutoAttributeCriteria createdCriteria);
+    abstract void saveActionCompleted(AjaxRequestTarget target);
     abstract void deleteActionCompleted(AjaxRequestTarget target);
     abstract void cancelActionCompleted(AjaxRequestTarget target);
     abstract void switchToDefinitionList(AjaxRequestTarget target);
@@ -284,24 +320,29 @@ abstract public class AutoAttributeEditPanel extends Panel {
          * @param acceptOnlyStaticOptions true if this panel only accepts drop of static fields.
          * @param infoFieldBeanModel
          */
-        public FieldListPanel(String id, String listTitle, boolean acceptOnlyStaticOptions, IModel<List<InfoFieldBean>> infoFieldBeanModel) {
+        public FieldListPanel(String id,
+                              String listTitle,
+                              String emptyListMsg,
+                              boolean acceptOnlyStaticOptions,
+                              IModel<List<InfoFieldBean>> infoFieldBeanModel) {
             super(id);
             this.infoFieldBeanModel = infoFieldBeanModel;
-            addComponents(listTitle, acceptOnlyStaticOptions);
+            addComponents(listTitle, emptyListMsg, acceptOnlyStaticOptions);
         }
 
-        private void addComponents(String listTitle, boolean acceptOnlyStaticOptions) {
+        private void addComponents(String listTitle, String emptyListMsg, boolean acceptOnlyStaticOptions) {
             WebMarkupContainer dropBox = new WebMarkupContainer("dropBox");
             add(dropBox);
             Label listTitleLabel = new Label("listTitle", listTitle);
             dropBox.add(listTitleLabel);
+            ListDataProvider dataProvider = new ListDataProvider<InfoFieldBean>() {
+                @Override
+                protected List<InfoFieldBean> getData() {
+                    return infoFieldBeanModel.getObject();
+                }
+            };
             final DataView<InfoFieldBean> infoFieldsList =
-                    new DataView<InfoFieldBean>("infoFieldsList", new ListDataProvider<InfoFieldBean>() {
-                        @Override
-                        protected List<InfoFieldBean> getData() {
-                            return infoFieldBeanModel.getObject();
-                        }
-                    }) {
+                    new DataView<InfoFieldBean>("infoFieldsList", dataProvider) {
                         @Override
                         protected void populateItem(Item<InfoFieldBean> item) {
                             WebMarkupContainer container = new WebMarkupContainer("infoFieldContainer");
@@ -358,9 +399,16 @@ abstract public class AutoAttributeEditPanel extends Panel {
                         }
                     };
             dropBox.add(infoFieldsList);
+            WebMarkupContainer emptyListMsgSection = new WebMarkupContainer("emptyListMsgSection") {
+                @Override
+                public boolean isVisible() {
+                    return dataProvider.size() == 0;
+                }
+            };
+            emptyListMsgSection.add(new Label("emptyListMsg", emptyListMsg));
+            dropBox.add(emptyListMsgSection);
 
-
-           DroppableAjaxBehavior droppableAjaxBehavior = new DroppableAjaxBehavior() {
+            DroppableAjaxBehavior droppableAjaxBehavior = new DroppableAjaxBehavior() {
                 @Override
                 public void onDrop(Component droppedComponent, AjaxRequestTarget ajaxRequestTarget) {
                     /* Remove dropped component from source model and add it to target model. */
@@ -371,6 +419,7 @@ abstract public class AutoAttributeEditPanel extends Panel {
 
                     FieldSourceLocation sourceLocation = (FieldSourceLocation) droppedComponent.getDefaultModelObject();
                     sourceLocation.getInfoFieldBeanModel().getObject().remove(infoFieldBean);
+                    ajaxRequestTarget.add(saveButton);
                 }
             };
 

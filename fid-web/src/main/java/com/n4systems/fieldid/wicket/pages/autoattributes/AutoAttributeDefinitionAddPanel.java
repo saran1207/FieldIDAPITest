@@ -295,7 +295,8 @@ abstract public class AutoAttributeDefinitionAddPanel extends Panel {
         }
 
         try {
-            autoAttributeDefinitionModel.setObject(autoAttributeService.saveDefinition(autoAttributeDefinitionModel.getObject()));
+            autoAttributeDefinitionModel.setObject(autoAttributeService.saveDefinitionWithFlush(autoAttributeDefinitionModel.getObject()));
+            autoAttributeDefinitionProvidedIdModel.setObject(autoAttributeDefinitionModel.getObject().getId());
         } catch (Exception e) {
             String errorMsg = new FIDLabelModel("error.definition_save_failed").getObject();
             logger.error(errorMsg);
@@ -306,6 +307,7 @@ abstract public class AutoAttributeDefinitionAddPanel extends Panel {
         Session.get().info(new FIDLabelModel("message.definition_saved").getObject());
 
         if (withAdd) {
+            autoAttributeDefinitionProvidedIdModel.setObject(null);
             autoAttributeDefinitionModel.detach();
             return true;
         }

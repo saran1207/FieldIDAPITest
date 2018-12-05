@@ -158,7 +158,10 @@ abstract public class AutoAttributeDefinitionsListPanel extends Panel {
     }
 
     protected boolean showResultSection() {
-        return autoAttributeCriteriaModel.getObject().getInputs().size() > 0 &&
+        return  autoAttributeCriteriaModel.getObject() != null &&
+                autoAttributeCriteriaModel.getObject().getInputs() != null &&
+                autoAttributeCriteriaModel.getObject().getInputs().size() > 0 &&
+                autoAttributeDefinitionModel.getObject() != null &&
                 autoAttributeDefinitionModel.getObject().size() > 0;
     }
 
