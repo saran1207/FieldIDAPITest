@@ -39,5 +39,8 @@ public class FieldIdPersistenceService extends FieldIdService {
     protected EntityManager getEntityManager() {
         return _entityManager;
     }
-	
+
+    public void flush() {
+        persistenceService.flush();
+    }
 }

@@ -266,8 +266,17 @@ abstract public class BaseImportExportPanel extends Panel {
                     }
                 };
             }
+
+            @Override
+            public boolean isEnabled() {
+                return isUploadButtonEnabled();
+            }
         };
         return fileUploadButton;
+    }
+
+    protected boolean isUploadButtonEnabled() {
+        return true;
     }
 
     abstract protected ImportSuccessNotification getImportSuccessNotification();
