@@ -85,7 +85,12 @@ public class AutoAttributeActionsPage extends FieldIDFrontEndWithFeedbackPage {
         StringValue tabSelection = params.get(INITIAL_TAB_SELECTION_KEY);
         if (tabSelection != null && !tabSelection.isEmpty())
             initialTabSelection = tabSelection.toString();
+    }
+
+    @Override
+    protected void onInitialize() {
         createModels();
+        super.onInitialize();
     }
 
     @Override
@@ -179,21 +184,21 @@ public class AutoAttributeActionsPage extends FieldIDFrontEndWithFeedbackPage {
             public Panel getPanel(String panelId) {
                 return new AutoAttributeViewAllPanel(panelId, webSessionMapModel, getLoaderFactory()) {
                     @Override
-                    protected void assetTypeWithCriteriaChosen(AssetType assetType) {
+                    protected void assetTypeWithCriteriaChosen(Long assetTypeId, Long criteriaId) {
                         if (definitionsPanel != null)
                             definitionsPanel.handleSelectionChange();
                         changeSelectedPage(
                                 tabbedPanel,
-                                assetType.getId(),
-                                assetType.getAutoAttributeCriteria().getId(),
+                                assetTypeId,
+                                criteriaId,
                                 DEFINITIONS_TAB_INDEX);
                     }
 
                     @Override
-                    protected void assetTypeWithoutCriteriaChosen(AssetType assetType) {
+                    protected void assetTypeWithoutCriteriaChosen(Long assetTypeId) {
                         if (editPanel != null)
                             editPanel.handleSelectionChange();
-                        changeSelectedPage(tabbedPanel, assetType.getId(), null, EDIT_TAB_INDEX);
+                        changeSelectedPage(tabbedPanel, assetTypeId, null, EDIT_TAB_INDEX);
                     }
                 };
             }
@@ -232,7 +237,6 @@ public class AutoAttributeActionsPage extends FieldIDFrontEndWithFeedbackPage {
                         changeSelectedPage(
                                 tabbedPanel,
                                 VIEW_ALL_TAB_INDEX);
-                        System.out.println("Edit tab delete action completed criteria id: " + currentAutoAttributeCriteriaIdEditModel.getObject());
                     }
 
                     @Override
@@ -263,7 +267,6 @@ public class AutoAttributeActionsPage extends FieldIDFrontEndWithFeedbackPage {
             }
              @Override
             public boolean isVisible() {
-                 System.out.println("Definitions visible " + currentAutoAttributeCriteriaIdEditModel.getObject());
                 return assetTypeSelectedForEditIdModel.getObject() != null && currentAutoAttributeCriteriaIdEditModel.getObject() != null;
             }
         }));

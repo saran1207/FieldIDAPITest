@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.setup;
 
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.asset.AssetImportPage;
 import com.n4systems.fieldid.wicket.pages.autoattributes.AutoAttributeActionsPage;
 import com.n4systems.fieldid.wicket.pages.customers.CustomerActionsPage;
@@ -34,7 +35,11 @@ public class ImportPage extends SetupPage {
         add(new AjaxLink<AutoAttributeActionsPage>("importAutoAttributesButton") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                getRequestCycle().setResponsePage(EventImportPage.class);
+                getRequestCycle().setResponsePage(
+                        AutoAttributeActionsPage.class,
+                        PageParametersBuilder.param(
+                                AutoAttributeActionsPage.INITIAL_TAB_SELECTION_KEY,
+                                AutoAttributeActionsPage.SHOW_IMPORTEXPORT_PAGE));
             }
         });
         add(new ImportUsersForm("importUsersForm"));

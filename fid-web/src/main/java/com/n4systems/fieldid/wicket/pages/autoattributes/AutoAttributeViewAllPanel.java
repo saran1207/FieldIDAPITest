@@ -73,11 +73,15 @@ abstract public class AutoAttributeViewAllPanel extends Panel {
                             public void onClick() {
                                 if (item.getModelObject().hasCriteria()) {
                                     // go to definition tab page
-                                    assetTypeWithCriteriaChosen(item.getModelObject());
+                                    assetTypeWithCriteriaChosen(
+                                            item.getModelObject().getId(),
+                                            item.getModelObject().getAutoAttributeCriteria().getId());
+                                    assetTypeModel.detach();
                                 }
                                 else {
                                     // go to edit tab page
-                                    AssetType assetType = assetTypeService.getAssetTypeWithPostFetches(item.getModelObject().getId());
+                                    AssetType assetType = assetTypeService.getAssetTypeWithPostFetches(
+                                            item.getModelObject().getId());
                                     if (!assetHasEnoughFields(assetType)) {
                                         Session.get().error(getString("error.asset_needs_2_attr"));
                                     }
@@ -85,8 +89,10 @@ abstract public class AutoAttributeViewAllPanel extends Panel {
                                     if (!assetHasStaticFields(assetType)) {
                                         Session.get().error(getString("error.asset_needs_select_or_combo"));
                                     }
-                                    else
-                                        assetTypeWithoutCriteriaChosen(assetType);
+                                    {
+                                        assetTypeWithoutCriteriaChosen(assetType.getId());
+                                        assetTypeModel.detach();
+                                    }
                                 }
                             }
                         }.add(new Label("assetTypeName", item.getModelObject().getName())));
@@ -119,8 +125,8 @@ abstract public class AutoAttributeViewAllPanel extends Panel {
         return resultCount == 0;
     }
 
-    abstract protected void assetTypeWithCriteriaChosen(AssetType assetType);
-    abstract protected void assetTypeWithoutCriteriaChosen(AssetType assetType);
+    abstract protected void assetTypeWithCriteriaChosen(Long assetTypeId, Long criteriaId);
+    abstract protected void assetTypeWithoutCriteriaChosen(Long assetTypeId);
 
     /**
      * an assetType requires at least 2 fields to have a template.

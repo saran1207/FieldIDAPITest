@@ -83,6 +83,8 @@ abstract public class AutoAttributeEditPanel extends Panel {
         assetTypeModel.detach();
         autoAttributeCriteriaModel.detach();
         availableFieldsModel.detach();
+        inputFieldsModel.detach();
+        outputFieldsModel.detach();
     }
 
     private void addComponents() {
@@ -200,6 +202,8 @@ abstract public class AutoAttributeEditPanel extends Panel {
         assetTypeModel = new LoadableDetachableModel<AssetType>() {
             @Override
             protected AssetType load() {
+                if (assetTypeSelectedForEditModel.getObject() == null)
+                    throw new RuntimeException("No AssetType selected");
                 AssetType assetType = assetTypeService.getAssetTypeWithPostFetches(assetTypeSelectedForEditModel.getObject());
                 return assetType;
             }
@@ -278,7 +282,6 @@ abstract public class AutoAttributeEditPanel extends Panel {
                 autoAttributeCriteria = autoAttributeService.update(autoAttributeCriteria);
             } else {
                 autoAttributeCriteria = autoAttributeService.saveWithFlush(autoAttributeCriteria, currentUserModel.getObject());
-                System.out.println("Added autoAttributeCriteria with id " + autoAttributeCriteria.getId());
             }
             autoAttributeCriteriaProvidedIdModel.setObject(autoAttributeCriteria.getId());
             autoAttributeCriteriaModel.setObject(autoAttributeCriteria);
