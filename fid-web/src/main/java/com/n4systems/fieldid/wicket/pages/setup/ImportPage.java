@@ -8,9 +8,6 @@ import com.n4systems.fieldid.wicket.pages.event.EventImportPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UserImportPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.request.flow.RedirectToUrlException;
 
 public class ImportPage extends SetupPage {
 
@@ -39,7 +36,6 @@ public class ImportPage extends SetupPage {
                 getRequestCycle().setResponsePage(UserImportPage.class);
             }
         });
-        add(new ImportAutoAttributesForm("importAutoAttributesForm"));
         add(new AjaxLink<AutoAttributeActionsPage>("importAutoAttributesButton") {
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -50,27 +46,6 @@ public class ImportPage extends SetupPage {
                                 AutoAttributeActionsPage.SHOW_IMPORTEXPORT_PAGE));
             }
         });
-        add(new ImportUsersForm("importUsersForm"));
-    }
-
-    class ImportAutoAttributesForm extends Form {
-        public ImportAutoAttributesForm(String id) {
-            super(id);
-            add(createRedirectingAjaxButton("startImportButton", "/autoAttributeImportExport.action"));
-        }
-    }
-
-    protected AjaxButton createRedirectingAjaxButton(final String id, final String url) {
-        return new AjaxButton(id) {
-            @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                throw new RedirectToUrlException(url);
-            }
-
-            @Override
-            protected void onError(AjaxRequestTarget target, Form<?> form) {
-            }
-        };
     }
 
 }

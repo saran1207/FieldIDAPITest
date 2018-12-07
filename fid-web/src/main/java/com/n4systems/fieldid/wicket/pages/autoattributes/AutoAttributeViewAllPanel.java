@@ -89,6 +89,7 @@ abstract public class AutoAttributeViewAllPanel extends Panel {
                                     if (!assetHasStaticFields(assetType)) {
                                         Session.get().error(getString("error.asset_needs_select_or_combo"));
                                     }
+                                    else
                                     {
                                         assetTypeWithoutCriteriaChosen(assetType.getId());
                                         assetTypeModel.detach();
