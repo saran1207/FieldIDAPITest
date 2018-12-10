@@ -15,7 +15,6 @@ import com.n4systems.tools.Pager;
 import com.n4systems.util.StringListingPair;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
 import rfid.web.helper.Constants;
 import rfid.web.helper.SessionUser;
 
@@ -108,31 +107,10 @@ private static final long serialVersionUID = 1L;
 			addActionErrorText(error);
 			return INPUT;
 		}
-
-
-		System.out.println("Struts - InfoOptionBean outputs " + getOutputInfoOptions().size());
-		for (InfoOptionInput bean : getOutputInfoOptions()) {
-			System.out.println("Struts: InfoOptionInput output " + bean.getUniqueID() + ":" + bean.getUniqueIDString() + ":" + bean.getName());
-			Long infoBeanId = bean.getInfoFieldId();
-			if (infoBeanId != null)
-				System.out.println("... its infoFieldBean is " + infoBeanId);
-			else
-				System.out.println("... its infoFieldBean is null");
-		}
-
+		
 		convertOutputsToInfoOptionsWithValidation();
 		convertInputsToInfoOptions();
-
-		System.out.println("Struts - autoAttributeDefinition inputs " + autoAttributeDefinition.getOutputs().size());
-		for (InfoOptionBean bean : autoAttributeDefinition.getOutputs()) {
-			System.out.println("Struts: definition input " + bean.getUniqueID() + ":" + bean.getName());
-			InfoFieldBean infoBean = bean.getInfoField();
-			if (infoBean != null)
-				System.out.println("... its infoFieldBean is " + infoBean.getUniqueID()+ ":" + infoBean.getName());
-			else
-				System.out.println("... its infoFieldBean is null");
-		}
-
+		
 		AutoAttributeDefinition existingDefinition = autoAttributeManager.findTemplateToApply( autoAttributeCriteria, autoAttributeDefinition.getInputs() ); 
 		if( existingDefinition != null && !existingDefinition.getId().equals( uniqueID ) ) {
 			addActionError( "These inputs have already been used on an auto attribute definition." );
@@ -188,9 +166,7 @@ private static final long serialVersionUID = 1L;
 	private String validateOutputs() {				
 		SessionUser user = getSessionUser();
 		for( InfoOptionInput input : outputInfoOptions ) {
-			System.out.println("AutoAttributeDefinitionCrud.validateOutputs for input " + input.getName() + ":" + input.getUniqueID());
-			for (InfoFieldBean field: autoAttributeCriteria.getOutputs()) {
-				System.out.println("AutoAttributeDefinitionCrud.validateOutputs for field " + field.getName() + ":" + field.getUniqueID());
+			for (InfoFieldBean field: autoAttributeCriteria.getOutputs()) {		
 				if(field.getUniqueID().equals(input.getInfoFieldId()) && input!=null) {				
 					String error = validateField(field, user, input.getName());
 					if (error!=null) { 
@@ -203,7 +179,6 @@ private static final long serialVersionUID = 1L;
 	}
 	
 	private String validateField(InfoFieldBean field, SessionUser user, String name) {
-		System.out.println("... validateField " + field.getName() + ":" + name);
 		if (field.getFieldType().equals( InfoFieldBean.DATEFIELD_FIELD_TYPE)) {
 			SessionUserDateConverter dateConverter = user.createUserDateConverter();
 			Date date = dateConverter.convertDate(name, field.isIncludeTime());
