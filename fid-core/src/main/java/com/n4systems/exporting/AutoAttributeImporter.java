@@ -36,6 +36,8 @@ public class AutoAttributeImporter extends AbstractImporter<AutoAttributeView> {
 		for (AutoAttributeDefinition def: converter.getCriteria().getDefinitions()) {
 			saver.remove(transaction, def);
 		}
+		converter.getCriteria().getDefinitions().clear();
+		transaction.getEntityManager().merge(converter.getCriteria());
 	}
 	
 }
