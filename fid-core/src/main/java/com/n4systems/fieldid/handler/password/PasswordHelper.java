@@ -18,7 +18,7 @@ public class PasswordHelper {
 
 	public boolean isPasswordExpired(User loginUser) {
 		Integer expiryDays = passwordPolicy.getExpiryDays();
-		if (expiryDays==0 || expiryDays==null) {
+		if (expiryDays==0 || expiryDays==null || loginUser.getPasswordChanged()==null) {
 			return false;
 		}
 		Date expiry = DateUtils.addDays(loginUser.getPasswordChanged(), expiryDays);		
