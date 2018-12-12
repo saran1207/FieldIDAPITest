@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public abstract class CrudService<T extends AbstractEntity> extends FieldIdPersistenceService {
 	private final Class<T> entity;
@@ -32,14 +33,9 @@ public abstract class CrudService<T extends AbstractEntity> extends FieldIdPersi
 	}
 
 	@Transactional(readOnly = true)
-	public List<T> findAll(int page, int pageSize) {
-		return findAll(createUserSecurityBuilder(entity), page, pageSize);
-	}
-
-	@Transactional(readOnly = true)
-	public List<T> findAll(int page, int pageSize, Date delta) {
+	public List<T> findAll(int page, int pageSize, Map<String, Object> optionalParameters) {
 		QueryBuilder<T> builder = createUserSecurityBuilder(entity);
-		builder.addWhere(WhereParameter.Comparator.GE, "modified", "modified", delta);
+		addFindAllParameters(builder, optionalParameters);
 		return findAll(builder, page, pageSize);
 	}
 
@@ -79,14 +75,9 @@ public abstract class CrudService<T extends AbstractEntity> extends FieldIdPersi
 	}
 
 	@Transactional(readOnly = true)
-	public Long count() {
-		return count(createUserSecurityBuilder(entity));
-	}
-
-	@Transactional(readOnly = true)
-	public Long count(Date delta) {
+	public Long count(Map<String, Object> optionalParameters) {
 		QueryBuilder<T> builder = createUserSecurityBuilder(entity);
-		builder.addWhere(WhereParameter.Comparator.GE, "modified", "modified", delta);
+		addFindAllParameters(builder, optionalParameters);
 		return count(builder);
 	}
 
@@ -124,5 +115,18 @@ public abstract class CrudService<T extends AbstractEntity> extends FieldIdPersi
 	@Transactional
 	public List<T> findActionItemByAssetId(String assetId, int page, int pageSize, boolean openActionItems) {
 		throw new UnsupportedOperationException(); // This operation is not supported for all entity types
+	}
+
+	/**
+	 * May be extended by subclasses that need to add extra query parameters that apply only to specific entity types.
+	 * The 'delta' query parameter is common to all entity types so extensions of this method should be sure to call
+	 * super.addFileAllParameters
+	 *
+	 * @param builder
+	 * @param optionalParameters
+	 */
+	protected void addFindAllParameters(QueryBuilder<T> builder, Map<String, Object> optionalParameters) {
+		if (optionalParameters.containsKey("delta"))
+			builder.addWhere(WhereParameter.Comparator.GE, "modified", "modified", optionalParameters.get("delta"));
 	}
 }

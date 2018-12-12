@@ -35,6 +35,7 @@ import rfid.ejb.entity.InfoOptionBean;
 import javax.persistence.Query;
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 public class AssetTypeService extends CrudService<AssetType> {
@@ -446,4 +447,10 @@ public class AssetTypeService extends CrudService<AssetType> {
         return update(assetType);
     }
 
+    @Override
+    protected void addFindAllParameters(QueryBuilder<AssetType> builder, Map<String, Object> optionalParameters) {
+        super.addFindAllParameters(builder, optionalParameters);
+        if (optionalParameters.containsKey("name"))
+            builder.addWhere(WhereParameter.Comparator.EQ, "name", "name", optionalParameters.get("name"));
+    }
 }

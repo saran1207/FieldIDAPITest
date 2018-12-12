@@ -18,9 +18,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class CrudResource<M extends AbstractEntity, A extends GeneratedMessage, B extends GeneratedMessage.Builder> extends FieldIdPersistenceService {
@@ -71,7 +69,11 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 	@Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Transactional(readOnly = true)
-	public Messages.ListResponseMessage findAll(@QueryParam("page") int page, @QueryParam("pageSize") int pageSize, @QueryParam("delta") String date) {
+	public Messages.ListResponseMessage findAll(
+			@QueryParam("page") int page,
+			@QueryParam("pageSize") int pageSize,
+			@QueryParam("delta") String date,
+			@QueryParam("name") String name) {
 		List<M> allItems;
 		List<A> items;
 		Date delta = null;
@@ -84,37 +86,25 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 			delta = convertDate(date);
 		}
 
-		//ignore the delta value
-		if(delta == null) {
-			allItems = crudService().findAll(page, pageSize);
+		Map<String, Object> optionalParameters = new HashMap<String, Object>();
+		if (delta != null)
+			optionalParameters.put("delta", delta);
+		if (name != null)
+			optionalParameters.put("name", name);
 
-			items = allItems
-					.stream()
-					.map(m -> toMessage(m))
-					.collect(Collectors.toList());
+		allItems = crudService().findAll(page, pageSize, optionalParameters);
 
-			return Messages.ListResponseMessage.newBuilder()
-					.setPageSize(pageSize)
-					.setPage(page)
-					.setTotal(crudService().count())
-					.setExtension(listResponseType, items)
-					.build();
-		} else {
-			allItems = crudService()
-					.findAll(page, pageSize, delta);
+		items = allItems
+				.stream()
+				.map(m -> toMessage(m))
+				.collect(Collectors.toList());
 
-			items = allItems
-					.stream()
-					.map(m -> toMessage(m))
-					.collect(Collectors.toList());
-
-			return Messages.ListResponseMessage.newBuilder()
-					.setPageSize(pageSize)
-					.setPage(page)
-					.setTotal(crudService().count(delta))
-					.setExtension(listResponseType, items)
-					.build();
-		}
+		return Messages.ListResponseMessage.newBuilder()
+				.setPageSize(pageSize)
+				.setPage(page)
+				.setTotal(crudService().count(optionalParameters))
+				.setExtension(listResponseType, items)
+				.build();
 	}
 
 	protected <M> M testNotFound(M model) {
