@@ -73,7 +73,8 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 			@QueryParam("page") int page,
 			@QueryParam("pageSize") int pageSize,
 			@QueryParam("delta") String date,
-			@QueryParam("name") String name) {
+			@QueryParam("name") String name,
+			@QueryParam("code") String code) {
 		List<M> allItems;
 		List<A> items;
 		Date delta = null;
@@ -91,6 +92,8 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 			optionalParameters.put("delta", delta);
 		if (name != null)
 			optionalParameters.put("name", name);
+		if (code != null)
+			optionalParameters.put("code", code);
 
 		allItems = crudService().findAll(page, pageSize, optionalParameters);
 
