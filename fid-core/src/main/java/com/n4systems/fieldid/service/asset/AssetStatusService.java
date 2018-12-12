@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Transactional
 public class AssetStatusService extends CrudService<AssetStatus> {
@@ -269,5 +270,12 @@ public class AssetStatusService extends CrudService<AssetStatus> {
         return persistenceService.findAllPaginated(query,
                 first,
                 count);
+    }
+
+    @Override
+    protected void addFindAllParameters(QueryBuilder<AssetStatus> builder, Map<String, Object> optionalParameters) {
+        super.addFindAllParameters(builder, optionalParameters);
+        if (optionalParameters.containsKey("name"))
+            builder.addWhere(WhereParameter.Comparator.EQ, "name", "name", optionalParameters.get("name"));
     }
 }
