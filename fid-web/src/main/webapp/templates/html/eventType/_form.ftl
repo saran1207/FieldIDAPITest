@@ -43,7 +43,7 @@
 <div class="infoSet">
 	<@s.label cssClass="label" value="${action.getText('label.printable')}:" />
 	<span class="fieldHolder">
-		<@s.checkbox name="printable" checked="checked"/>
+		<@s.checkbox name="printable"/>
 	</span>
 </div>
 
@@ -51,7 +51,7 @@
     <div class="infoSet">
         <@s.label cssClass="label" value="${action.getText('label.masterevent')}:" />
         <span class="fieldHolder">
-            <@s.checkbox name="master" checked="checked"/>
+            <@s.checkbox name="master"/>
         </span>
     </div>
 
