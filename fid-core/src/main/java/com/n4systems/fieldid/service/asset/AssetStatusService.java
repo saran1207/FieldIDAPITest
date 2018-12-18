@@ -5,10 +5,7 @@ import com.n4systems.fieldid.service.event.EventTypeRulesService;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.user.User;
-import com.n4systems.util.persistence.JoinClause;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.SortTerm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -275,7 +272,12 @@ public class AssetStatusService extends CrudService<AssetStatus> {
     @Override
     protected void addFindAllParameters(QueryBuilder<AssetStatus> builder, Map<String, Object> optionalParameters) {
         super.addFindAllParameters(builder, optionalParameters);
-        if (optionalParameters.containsKey("name"))
-            builder.addWhere(WhereParameter.Comparator.EQ, "name", "name", optionalParameters.get("name"));
+        if (optionalParameters.containsKey("name")) {
+            builder.addWhere(WhereClauseFactory.create(
+                    WhereParameter.Comparator.EQ, "name",
+                    optionalParameters.get("name"),
+                    WhereClause.ChainOp.AND,
+                    "name"));
+        }
     }
 }
