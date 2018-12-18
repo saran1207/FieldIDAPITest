@@ -426,8 +426,13 @@ public class OrgService extends CrudService<BaseOrg> {
     @Override
     protected void addFindAllParameters(QueryBuilder<BaseOrg> builder, Map<String, Object> optionalParameters) {
         super.addFindAllParameters(builder, optionalParameters);
-        if (optionalParameters.containsKey("code"))
-            builder.addWhere(WhereParameter.Comparator.EQ, "code", "code", optionalParameters.get("code"));
+        if (optionalParameters.containsKey("code")) {
+            builder.addWhere(WhereClauseFactory.create(
+                    WhereParameter.Comparator.EQ, "code",
+                    optionalParameters.get("code"),
+                    WhereClause.ChainOp.AND,
+                    "code"));
+        }
     }
 
 }
