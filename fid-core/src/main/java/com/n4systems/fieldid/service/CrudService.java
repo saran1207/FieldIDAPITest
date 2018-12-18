@@ -3,10 +3,11 @@ package com.n4systems.fieldid.service;
 import com.n4systems.model.PublicIdEncoder;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClause;
+import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -45,32 +46,18 @@ public abstract class CrudService<T extends AbstractEntity> extends FieldIdPersi
 	}
 
 	@Transactional(readOnly = true)
-	public List<T> findAllActionItem(int page, int pageSize) {
+	public List<T> findAllActionItem(int page, int pageSize, Map<String, Object> optionalParameters) {
 		QueryBuilder<T> builder = createUserSecurityBuilder(entity);
 		builder.addWhere(WhereParameter.Comparator.NOTNULL, "triggerEvent", "triggerEvent", "");
+        addFindAllParameters(builder, optionalParameters);
 		return findAll(builder, page, pageSize);
 	}
 
 	@Transactional(readOnly = true)
-	public List<T> findAllActionItem(int page, int pageSize, Date delta) {
-		QueryBuilder<T> builder = createUserSecurityBuilder(entity);
-		builder.addWhere(WhereParameter.Comparator.GE, "modified", "modified", delta);
-		builder.addWhere(WhereParameter.Comparator.NOTNULL, "triggerEvent", "triggerEvent", "");
-		return findAll(builder, page, pageSize);
-	}
-
-	@Transactional(readOnly = true)
-	public Long countAllActionItem(Date delta) {
-		QueryBuilder<T> builder = createUserSecurityBuilder(entity);
-		builder.addWhere(WhereParameter.Comparator.GE, "modified", "modified", delta);
-		builder.addWhere(WhereParameter.Comparator.NOTNULL, "triggerEvent", "triggerEvent", "");
-		return count(builder);
-	}
-
-	@Transactional(readOnly = true)
-	public Long countAllActionItem() {
+	public Long countAllActionItem(Map<String, Object> optionalParameters) {
 		QueryBuilder<T> builder = createUserSecurityBuilder(entity);
 		builder.addWhere(WhereParameter.Comparator.NOTNULL, "triggerEvent", "triggerEvent", "");
+        addFindAllParameters(builder, optionalParameters);
 		return count(builder);
 	}
 
@@ -126,7 +113,11 @@ public abstract class CrudService<T extends AbstractEntity> extends FieldIdPersi
 	 * @param optionalParameters
 	 */
 	protected void addFindAllParameters(QueryBuilder<T> builder, Map<String, Object> optionalParameters) {
-		if (optionalParameters.containsKey("delta"))
-			builder.addWhere(WhereParameter.Comparator.GE, "modified", "modified", optionalParameters.get("delta"));
+		if (optionalParameters.containsKey("delta")) {
+			builder.addWhere(WhereClauseFactory.create(
+					WhereParameter.Comparator.GE, "modified",
+					optionalParameters.get("delta"),
+					WhereClause.ChainOp.AND));
+		}
 	}
 }
