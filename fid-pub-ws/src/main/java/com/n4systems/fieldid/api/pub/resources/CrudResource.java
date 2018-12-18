@@ -83,6 +83,10 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 
 		if(date != null) {
 			delta = convertDate(date);
+			if (delta == null) {
+				logger.error("Invalid delta '" + date + "'");
+				throw new RuntimeException("Invalid delta '" + date + "', should be in yyyy-MM-dd HH:mm:ss format");
+			}
 		}
 
 		Map<String, Object> optionalParameters = new HashMap<String, Object>();
