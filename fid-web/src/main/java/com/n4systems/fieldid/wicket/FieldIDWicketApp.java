@@ -232,6 +232,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("placeEventTypes", PlaceEventTypesPage.class);
         mountPage("placeDescendants", PlaceDescendantsPage.class);
         mountPage("placeRecurringEvents", PlaceRecurringSchedulesPage.class);
+        //mountPage("organizations", ManageOrganizationsPage.class);
+        mountPage("organizations1", OrgsListPage.class);
 
         mountPage("dashboard", DashboardPage.class);
 

@@ -1,0 +1,28 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+    <div class="setup-user user-list">
+        <div wicket:id="feedbackPanel"/>
+
+
+        <h2 class="decoratedHeader">
+            <wicket:message key="label.primaryorganization"/>
+            <a href="<@s.url action="organizationEdit" uniqueID="${primaryOrg.id}"/>"> <wicket:message key="label.edit"/></a>
+        </h2>
+        <div wicket:id="primaryOrgContainer">
+            <div>
+                <span class="label"><wicket:message key="label.name"/></span>
+                <span class="fieldHolder notranslate"  wicket:id="primaryOrgName"/>
+            </div>
+            <div>
+                <span class="label"><wicket:message key="label.name_on_pdf_reports"/></span>
+                <span class="fieldHolder notranslate" wicket:id="primaryOrgCertificateName"/>
+            </div>
+        </div>
+
+        <div wicket:id="orgsListContainer">
+            <table wicket:id="orgs" class="list borders clear comfortable"/>
+            <label class="label" wicket:id="total"/>
+        </div>
+    </div>
+</wicket:extend>
+</html>

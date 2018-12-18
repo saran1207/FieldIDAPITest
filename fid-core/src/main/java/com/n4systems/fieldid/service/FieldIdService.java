@@ -39,6 +39,20 @@ public class FieldIdService {
     	}
     }
 
+    protected <T> QueryBuilder<T> createSecondaryOrgSecurityBuilder(Class<T> clazz) {
+        return createSecondaryOrgSecurityBuilder(clazz, false);
+    }
+
+    protected <T> QueryBuilder<T> createSecondaryOrgSecurityBuilder(Class<T> clazz, boolean withArchived) {
+        if (withArchived) {
+            securityContext.setSecondaryOrgSecurityFilter(securityContext.getTenantSecurityFilterWithArchived());
+            return new QueryBuilder<T>(clazz, securityContext.getSecondaryOrgSecurityFilterWithArchived());
+        } else {
+            securityContext.setSecondaryOrgSecurityFilter(securityContext.getTenantSecurityFilter());
+            return new QueryBuilder<T>(clazz, securityContext.getSecondaryOrgSecurityFilter());
+        }
+    }
+
     protected TimeZone getUserTimeZone() {
         return securityContext.getUserSecurityFilter().getTimeZone();
     }

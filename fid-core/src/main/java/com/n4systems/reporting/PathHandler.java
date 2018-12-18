@@ -2,6 +2,7 @@ package com.n4systems.reporting;
 
 import com.n4systems.model.*;
 import com.n4systems.model.asset.AssetAttachment;
+import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.user.User;
 
 import java.io.File;
@@ -63,7 +64,7 @@ public class PathHandler {
 	
 	// paths are in the format <tenant id>/<created year>/<created month>/<event id>
 	private static final String CREATED_DATE_PATH_FORMAT = "yy/MM";
-	
+
 	/**
 	 * Merges path parts into a file system path.
 	 * @see File#pathSeparatorChar
@@ -562,6 +563,10 @@ public class PathHandler {
 		return mergePaths(getTenantUserBasePath(user.getTenant()), user.getId().toString());
 	}
 
+	private static String getSecondaryOrgPrivatePath(SecondaryOrg secondaryOrg) {
+		return mergePaths(getTenantUserBasePath(secondaryOrg.getTenant()), secondaryOrg.getId().toString());
+	}
+
 	/** @return The absolute private directory for a user  */
 	public static File getUserPrivateDir(User user) {
         File userPrivateDir = absolutize(getUserPrivatePath(user));
@@ -579,6 +584,25 @@ public class PathHandler {
 		return getUserFile(user, SIGNATURE_IMAGE_FILE_NAME);
 	}
 
+
+	/** @return The absolute private directory for a user  */
+	public static File getSecondaryOrgPrivateDir(SecondaryOrg secondaryOrg) {
+		File secondaryOrgPrivateDir = absolutize(getSecondaryOrgPrivatePath(secondaryOrg));
+		secondaryOrgPrivateDir.mkdirs();
+		return secondaryOrgPrivateDir;
+	}
+
+	/** @return The path to a file under a users private directory */
+	public static File getSecondaryOrgFile(SecondaryOrg secondaryOrg, String fileName) {
+		return new File(getSecondaryOrgPrivateDir(secondaryOrg), fileName);
+	}
+
+	/** @return The signature image for a user  */
+	public static File getReportImage(SecondaryOrg secondaryOrg) {
+		return getSecondaryOrgFile(secondaryOrg, SIGNATURE_IMAGE_FILE_NAME);
+	}
+
+
 	public static File getReleaseNotesPath() {
 		return absolutize(mergePaths(COMMON_PATH_BASE, "releaseNotes.xml"));
 	}
@@ -586,4 +610,5 @@ public class PathHandler {
 	public static File getReservedTenantNamesConfigFile() {
 		return absolutize(RESERVED_TENANT_NAMES_CONFIG_FILE);
 	}
+
 }

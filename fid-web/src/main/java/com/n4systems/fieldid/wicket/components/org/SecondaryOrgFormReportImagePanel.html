@@ -1,0 +1,21 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+
+    <div class="setup-user identifiers-panel">
+        <h3><wicket:message key="label.pdf_report_image"/></h3>
+
+        <div class="control-group digital-signature" wicket:enclosure="uploadForm">
+            <label class="label" style="vertical-align: top; margin-top: unset;"><wicket:message key="label.pdf_report_image"/></label>
+            <form wicket:id="uploadForm" style="width: 295px;">
+                <input type="file" wicket:id="digitalSignature">
+                <span wicket:enclosure="digitalSignature"><wicket:message key="label.signature_size"/></span>
+                <span class="displaySignature" wicket:id="fileDisplay">
+                    <img src="/fieldid/images/attachment-icon.png" class="attachmentImage"> <label wicket:id="fileName" class="fileName notranslate"/> <a wicket:id="removeLink" class="removeLink"><wicket:message key="label.remove"/></a>
+                </span>
+            </form>
+        </div>
+    </div>
+
+</wicket:panel>
+
+</html>

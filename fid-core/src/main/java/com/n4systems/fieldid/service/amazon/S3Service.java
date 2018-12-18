@@ -2,6 +2,7 @@ package com.n4systems.fieldid.service.amazon;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.HttpMethod;
+import com.amazonaws.services.dynamodbv2.xspec.S;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.google.common.base.Preconditions;
@@ -17,6 +18,7 @@ import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
+import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
@@ -1419,6 +1421,50 @@ public class S3Service extends FieldIdPersistenceService {
     public void removeUserSignature(Long userId) {
         removeResource(null, USER_SIGNATURE_PATH, userId);
     }
+
+    public File downloadSecondaryOrgLogoImage(SecondaryOrg secondaryOrg){
+        return downloadSecondaryOrgLogoImage(secondaryOrg.getId());
+    }
+
+    public byte[] downloadsecondaryOrgLogoImageBytes(SecondaryOrg secondaryOrg) throws IOException {
+        //the attachment Filename field is overloaded to house full URL instead of just the filename
+        byte[] secondaryOrgLogoImageData = downloadSecondaryOrgLogoImageBytes(secondaryOrg.getId());
+        return secondaryOrgLogoImageData;
+    }
+
+    public byte[] downloadSecondaryOrgLogoImageBytes(Long secondaryOrgId) throws IOException {
+        return downloadResource(null, SECONDARY_CERTIFICATE_LOGO_PATH, secondaryOrgId);
+    }
+
+
+    public File downloadSecondaryOrgLogoImage(Long secondaryOrgId){
+        File secondaryOrgLogoImageFile = null;
+        try {
+            byte[] secondaryOrgLogoImageBytes = downloadSecondaryOrgLogoImageBytes(secondaryOrgId);
+            secondaryOrgLogoImageFile = PathHandler.getUserFile(getCurrentUser(), secondaryOrgId + USER_SIGNATURE_IMAGE_FILE_NAME);
+            FileOutputStream secondaryOrgLogoImageFos = new FileOutputStream(secondaryOrgLogoImageFile);
+            secondaryOrgLogoImageFos.write(secondaryOrgLogoImageBytes);
+        }
+        catch(FileNotFoundException e) {
+            logger.warn("Unable to write to temp secondary Org logo Image file at: " + secondaryOrgLogoImageFile, e);
+        }
+        catch(IOException e) {
+            logger.warn("Unable to download secondary Org logo Image file from S3", e);
+        }
+        return secondaryOrgLogoImageFile;
+    }
+
+
+    public boolean secondaryOrgLogoImageExists(SecondaryOrg secondaryOrg){
+        return secondaryOrgLogoImageExists(secondaryOrg.getId());
+    }
+
+    public boolean secondaryOrgLogoImageExists(Long secondaryOrgId){
+        boolean exists = resourceExists(null, SECONDARY_CERTIFICATE_LOGO_PATH, secondaryOrgId);
+        return exists;
+    }
+
+
 
     public String getEventSignaturePath(SignatureCriteriaResult signatureResult){
         String eventSignaturePath = getEventSignaturePath(signatureResult.getTenant().getId(), signatureResult.getEvent().getId(), signatureResult.getCriteria().getId());

@@ -1,0 +1,23 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+    <div class="setup-user user-page">
+        <div wicket:id="feedbackPanel"/>
+
+        <form class="fullForm fluidSets" wicket:id="addSecondaryOrgForm">
+
+            <div class="columns-two">
+                <fieldset wicket:id="detailsPanel" class="form-horizontal"/>
+                <fieldset wicket:id="localizationPanel" class="form-horizontal"/>
+                <fieldset wicket:id="addressPanel" class="form-horizontal"/>
+                <fieldset wicket:id="reportImagePanel" class="form-horizontal"/>
+            </div>
+
+            <div class="formAction">
+                <a wicket:id="save" class="btn-primary"><wicket:message key="label.save"/></a>
+                <wicket:message key="label.or"/>
+                <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
+            </div>
+        </form>
+     </div>
+</wicket:extend>
+</html>
