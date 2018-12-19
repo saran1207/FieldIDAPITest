@@ -2,7 +2,6 @@ package com.n4systems.fieldid.service.amazon;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.HttpMethod;
-import com.amazonaws.services.dynamodbv2.xspec.S;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.google.common.base.Preconditions;
@@ -62,6 +61,7 @@ public class S3Service extends FieldIdPersistenceService {
     private static final Logger logger = Logger.getLogger(S3Service.class);
 
     private static final int DEFAULT_EXPIRATION_DAYS = 1;
+    private SecondaryOrg secondaryOrg;
 
     private Integer expirationDays = null;
     public static final String TENANTS_PREFIX = "tenants/";
@@ -1422,11 +1422,54 @@ public class S3Service extends FieldIdPersistenceService {
         removeResource(null, USER_SIGNATURE_PATH, userId);
     }
 
+    public String getSecondaryOrgLogoImagePath(User user){
+        String userSignaturePath = getUserSignaturePath(user.getId());
+        return userSignaturePath;
+    }
+
+    public String getSecondaryOrgLogoImagePath(Long secondaryOrgId){
+        String resourcePath = createResourcePath(null, SECONDARY_CERTIFICATE_LOGO_PATH, secondaryOrgId);
+        return resourcePath;
+    }
+
+    public URL getSecondaryOrgLogoImageUrl(SecondaryOrg secondaryOrg){
+        URL secondaryOrgLogoImageUrl = getSecondaryOrgLogoImageUrl(secondaryOrg.getId());
+        return secondaryOrgLogoImageUrl;
+    }
+
+    public URL getSecondaryOrgLogoImageUrl(Long secondaryOrgId){
+        Date expires = new DateTime().plusDays(getExpiryInDays()).toDate();
+        String resourcePath = getSecondaryOrgLogoImagePath(secondaryOrgId);
+        URL url = generatePresignedUrl(resourcePath, expires, HttpMethod.GET);
+        return url;
+    }
+
+    public void uploadSecondaryOrgLogoImage(File secondaryOrgLogoImageFile, SecondaryOrg secondaryOrg){
+        uploadSecondaryOrgLogoImage(secondaryOrgLogoImageFile, secondaryOrg.getId());
+    }
+
+    public void uploadSecondaryOrgLogoImage(File secondaryOrgLogoImageFile, Long secondaryOrgId){
+        uploadResource(secondaryOrgLogoImageFile, null, SECONDARY_CERTIFICATE_LOGO_PATH, secondaryOrgId);
+    }
+
+    public void uploadSecondaryOrgLogoImageData(byte[] userSignatureData, SecondaryOrg secondaryOrg){
+        String secondaryOrgLogoImageFileName = SECONDARY_CERTIFICATE_LOGO_PATH.substring(SECONDARY_CERTIFICATE_LOGO_PATH.lastIndexOf('/') + 1);
+        String contentType = ContentTypeUtil.getContentType(secondaryOrgLogoImageFileName);
+        uploadUserSignatureData(userSignatureData, contentType, secondaryOrg.getId());
+    }
+
+    public void uploadSecondaryOrgLogoImageData(byte[] userSignatureData, String contentType, Long secondaryOrgId){
+        uploadResource(userSignatureData, contentType, null, SECONDARY_CERTIFICATE_LOGO_PATH, secondaryOrgId);
+    }
+
+
+
     public File downloadSecondaryOrgLogoImage(SecondaryOrg secondaryOrg){
+        this.secondaryOrg = secondaryOrg;
         return downloadSecondaryOrgLogoImage(secondaryOrg.getId());
     }
 
-    public byte[] downloadsecondaryOrgLogoImageBytes(SecondaryOrg secondaryOrg) throws IOException {
+    public byte[] downloadSecondaryOrgLogoImageBytes(SecondaryOrg secondaryOrg) throws IOException {
         //the attachment Filename field is overloaded to house full URL instead of just the filename
         byte[] secondaryOrgLogoImageData = downloadSecondaryOrgLogoImageBytes(secondaryOrg.getId());
         return secondaryOrgLogoImageData;
@@ -1441,7 +1484,7 @@ public class S3Service extends FieldIdPersistenceService {
         File secondaryOrgLogoImageFile = null;
         try {
             byte[] secondaryOrgLogoImageBytes = downloadSecondaryOrgLogoImageBytes(secondaryOrgId);
-            secondaryOrgLogoImageFile = PathHandler.getUserFile(getCurrentUser(), secondaryOrgId + USER_SIGNATURE_IMAGE_FILE_NAME);
+            secondaryOrgLogoImageFile = PathHandler.getSecondaryOrgFile(this.secondaryOrg, getSecondaryOrgLogoImagePath(secondaryOrgId));
             FileOutputStream secondaryOrgLogoImageFos = new FileOutputStream(secondaryOrgLogoImageFile);
             secondaryOrgLogoImageFos.write(secondaryOrgLogoImageBytes);
         }
@@ -1464,6 +1507,13 @@ public class S3Service extends FieldIdPersistenceService {
         return exists;
     }
 
+    public void removeSecondaryOrgLogoImage(SecondaryOrg secondaryOrg){
+        removeSecondaryOrgLogoImage(secondaryOrg.getId());
+    }
+
+    public void removeSecondaryOrgLogoImage(Long secondaryOrgId) {
+        removeResource(null, SECONDARY_CERTIFICATE_LOGO_PATH, secondaryOrgId);
+    }
 
 
     public String getEventSignaturePath(SignatureCriteriaResult signatureResult){

@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.wicket.components.org;
 
-import com.n4systems.fieldid.service.user.UserGroupService;
-import com.n4systems.model.AddressInfo;
+import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.reporting.PathHandler;
@@ -12,13 +12,11 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.io.File;
@@ -27,23 +25,29 @@ import java.io.IOException;
 
 public class SecondaryOrgFormReportImagePanel extends Panel {
 
+    @SpringBean
+    private S3Service s3Service;
+
     private static final Logger logger = Logger.getLogger(SecondaryOrgFormReportImagePanel.class);
 
     private UploadedImage uploadedImage;
+    private SecondaryOrg  secondaryOrg;
 
     public SecondaryOrgFormReportImagePanel(String id, IModel<SecondaryOrg> secondaryOrg, UploadedImage reportImage) {
         super(id, secondaryOrg);
         this.uploadedImage = reportImage;
+        if (secondaryOrg != null) this.secondaryOrg = secondaryOrg.getObject();
 
         UploadForm uploadForm;
         add(uploadForm = new UploadForm("uploadForm"));
         uploadForm.setMultiPart(true);
-        uploadForm.setVisible(!secondaryOrg.getObject().isNew());
+        if (secondaryOrg != null) uploadForm.setVisible(!secondaryOrg.getObject().isNew());
     }
+
+    public SecondaryOrg getSecondaryOrg() {return secondaryOrg;}
 
     class UploadForm extends Form<FileAttachment> {
         FileUploadField uploadField;
-        Label fileName;
 
         public UploadForm(String id) {
             super(id);
@@ -56,7 +60,6 @@ public class SecondaryOrgFormReportImagePanel extends Panel {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target) {
                     FileUpload fileUpload = uploadField.getFileUpload();
-                    fileName.setDefaultModelObject(fileUpload.getClientFileName());
                     saveFileAttachment(fileUpload);
                     fileDisplay.setVisible(true);
                     uploadField.setVisible(false);
@@ -67,10 +70,12 @@ public class SecondaryOrgFormReportImagePanel extends Panel {
                 protected void onError(AjaxRequestTarget target) {
                 }
             });
-            if(uploadedImage.isExistingImage())
-                fileDisplay.add(fileName = new Label("fileName", Model.of(uploadedImage.getImage().getName())));
-            else
-                fileDisplay.add(fileName = new Label("fileName", Model.of(new String())));
+            if(uploadedImage.isExistingImage()) {
+                fileDisplay.add(new ExternalImage("logoImage", s3Service.getSecondaryOrgCertificateLogoURL(getSecondaryOrg().getId())));
+            }
+            else {
+                fileDisplay.add(new ExternalImage("logoImage", "/fieldid/images/attachment-icon.png"));
+            }
             fileDisplay.add(new AjaxLink<Void>("removeLink") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
@@ -108,5 +113,6 @@ public class SecondaryOrgFormReportImagePanel extends Panel {
     public UploadedImage getUploadedImage() {
         return uploadedImage;
     }
+
 
 }

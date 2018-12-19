@@ -16,7 +16,6 @@ import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
-import com.n4systems.model.user.User;
 import com.n4systems.security.UserType;
 import com.n4systems.util.persistence.image.FileSystemSecondaryOrgReportFileProcessor;
 import com.n4systems.util.persistence.image.UploadedImage;
@@ -55,12 +54,14 @@ public abstract class OrgPage extends FieldIDTemplatePage {
 
     public OrgPage(IModel<SecondaryOrg> secondaryOrgModel) {
         this.uniqueId = secondaryOrgModel.getObject().getId();
-        this.secondaryOrgModel = secondaryOrgModel;
+        this.secondaryOrgModel = secondaryOrgModel == null?createSecondaryOrg():secondaryOrgModel;
     }
+
+    public OrgPage (){}
 
     public OrgPage(PageParameters parameters) {
         filterCriteriaModel = getOrgListFilterCriteria();
-        uniqueId = parameters.get("uniqueID").toLong();
+        uniqueId = parameters.get("uniqueID")==null?0L:parameters.get("uniqueID").toLong();
         secondaryOrgModel = Model.of(loadExistingSecondaryOrg());
         filterCriteriaModel.getObject().withSecondaryOrg(loadExistingSecondaryOrg());
     }
@@ -121,24 +122,23 @@ public abstract class OrgPage extends FieldIDTemplatePage {
         return (SecondaryOrgFormDetailsPanel) detailsPanel;
     }
 
-    protected IModel<User> createUser(UserType userType) {
-        User newUser = new User();
-        newUser.setTenant(getTenant());
-        newUser.setRegistered(true);
-        newUser.setModifiedBy(getCurrentUser());
-        newUser.setCreatedBy(getCurrentUser());
-        newUser.setUserType(userType);
-        newUser.setTimeZoneID(getSessionUser().getOwner().getInternalOrg().getDefaultTimeZone());
-        return Model.of(newUser);
+    protected IModel<SecondaryOrg> createSecondaryOrg() {
+        SecondaryOrg newSecondaryOrg = new SecondaryOrg();
+        newSecondaryOrg.setTenant(getTenant());
+        newSecondaryOrg.setModifiedBy(getCurrentUser());
+        newSecondaryOrg.setCreatedBy(getCurrentUser());
+        newSecondaryOrg.setPrimaryOrg(getPrimaryOrg());
+        newSecondaryOrg.setDefaultTimeZone(getPrimaryOrg().getDefaultTimeZone());
+        return Model.of(newSecondaryOrg);
     }
 
     protected SecondaryOrg create() {
         SecondaryOrg newSeconadryOrg = secondaryOrgModel.getObject();
+        newSeconadryOrg.setName(getPrimaryOrg().getDisplayName());
 
         orgService.create(newSeconadryOrg);
 
         UploadedImage secondaryOrgLogoImage = reportImagePanel.getUploadedImage();
-        //UploadedImage signature = new UploadedImage();
 
         if(secondaryOrgLogoImage.isNewImage()) {
             saveSignatureFile(secondaryOrgLogoImage);
@@ -151,7 +151,6 @@ public abstract class OrgPage extends FieldIDTemplatePage {
         SecondaryOrg secondaryOrg = secondaryOrgModel.getObject();
 
         UploadedImage secondaryOrgLogoImage = reportImagePanel.getUploadedImage();
-        //UploadedImage signature = new UploadedImage();
 
         if(secondaryOrgLogoImage.isNewImage() || secondaryOrgLogoImage.isRemoveImage()) {
             saveSignatureFile(secondaryOrgLogoImage);
@@ -168,6 +167,8 @@ public abstract class OrgPage extends FieldIDTemplatePage {
 
     protected void addConfirmBehavior(SubmitLink submitLink) {}
 
+    protected void onOwnerPicked(AjaxRequestTarget target) {}
+
     class AddSecondaryOrgForm extends Form {
 
         SubmitLink submitLink;
@@ -176,6 +177,8 @@ public abstract class OrgPage extends FieldIDTemplatePage {
             super(id);
 
             add(reportImagePanel = new SecondaryOrgFormReportImagePanel("reportImagePanel", secondaryOrgModel, getReportImage()));
+
+            secondaryOrgModel = secondaryOrgModel == null?createSecondaryOrg():secondaryOrgModel;
 
             add(addressPanel = new SecondaryOrgFormAddressPanel("addressPanel", Model.of(secondaryOrgModel.getObject().getAddressInfo())));
 

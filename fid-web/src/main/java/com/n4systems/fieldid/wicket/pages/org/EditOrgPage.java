@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.org;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
-import com.n4systems.fieldid.service.notificationsetting.NotificationSettingService;
 import com.n4systems.fieldid.service.org.OrgListFilterCriteria;
 import com.n4systems.fieldid.wicket.behavior.ConfirmBehavior;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
@@ -29,9 +28,6 @@ public class EditOrgPage extends OrgPage {
 
     @SpringBean
     private S3Service s3Service;
-
-    @SpringBean
-    private NotificationSettingService notificationSettingService;
 
     private Long previousOwnerId;
 
@@ -88,8 +84,8 @@ public class EditOrgPage extends OrgPage {
 
     @Override
     protected UploadedImage getReportImage() {
-        File reportImage1 = PathHandler.getReportImage(secondaryOrgModel.getObject());
-        File reportImage = new File("");
+        File reportImage = PathHandler.getReportImage(secondaryOrgModel.getObject());
+        //File reportImage = new File("");
         UploadedImage uploadedImage = new UploadedImage();
 
         if (reportImage.exists()) {
@@ -119,7 +115,7 @@ public class EditOrgPage extends OrgPage {
                 aNavItem().label(new FIDLabelModel("nav.view_all.count", activeOrgCount)).page(OrgsListPage.class).build(),
                 aNavItem().label(new FIDLabelModel("nav.view_all_archived.count", archivedOrgCount)).page(ArchivedOrgsListPage.class).build(),
                 aNavItem().label("nav.edit").page(EditOrgPage.class).params(uniqueId(secondaryOrgModel.getObject().getId())).build(),
-                aNavItem().label("nav.add").page(EditOrgPage.class).onRight().build()
+                aNavItem().label("nav.add").page(AddSecondaryOrgPage.class).onRight().build()
         ));
     }
 

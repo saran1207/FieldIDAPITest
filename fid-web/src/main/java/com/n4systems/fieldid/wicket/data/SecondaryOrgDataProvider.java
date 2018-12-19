@@ -4,7 +4,6 @@ import com.n4systems.fieldid.service.org.OrgListFilterCriteria;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.model.orgs.SecondaryOrg;
-import com.n4systems.model.user.User;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.IModel;
@@ -40,7 +39,6 @@ public class SecondaryOrgDataProvider extends FieldIDDataProvider<SecondaryOrg> 
         if (results == null) {
             int page = first / pageSize;
             criteria.withOrder(getSort().getProperty(), getSort().isAscending());
-            //results = orgService.searchSecondaryOrg(getTextFilter(), getTypeFilter(), page, pageSize);
             results = orgService.getSecondaryOrgs(criteria, page, pageSize);
         }
         return results;

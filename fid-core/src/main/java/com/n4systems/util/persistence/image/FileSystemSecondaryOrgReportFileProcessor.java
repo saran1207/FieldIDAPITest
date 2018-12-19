@@ -11,7 +11,6 @@ import java.io.File;
 
 public class FileSystemSecondaryOrgReportFileProcessor {
     private S3Service s3Service = ServiceLocator.getS3Service();
-    private User user;
     private SecondaryOrg secondaryOrg;
 
 
@@ -20,27 +19,27 @@ public class FileSystemSecondaryOrgReportFileProcessor {
 	}
 
 
-	public void process(UploadedImage signature) throws FileProcessingException {
-        if (signature.isRemoveImage()) {
+	public void process(UploadedImage secondaryOrgLogoImage) throws FileProcessingException {
+        if (secondaryOrgLogoImage.isRemoveImage()) {
             removeExistingSignature();
         }
-		if (signature.isNewImage()) {
-			putNewImageInPlace(signature);
+		if (secondaryOrgLogoImage.isNewImage()) {
+			putNewImageInPlace(secondaryOrgLogoImage);
 		}
 	}
 
 
-	private void putNewImageInPlace(UploadedImage signature) {
-        s3Service.uploadUserSignature(tempFile(signature), user);
+	private void putNewImageInPlace(UploadedImage secondaryOrgLogoImage) {
+        s3Service.uploadSecondaryOrgLogoImage(tempFile(secondaryOrgLogoImage), secondaryOrg);
 	}
 
-	private File tempFile(UploadedImage signature) {
-		return new File(PathHandler.getTempRoot().getAbsolutePath() + '/' + signature.getUploadDirectory());
+	private File tempFile(UploadedImage secondaryOrgLogoImage) {
+		return new File(PathHandler.getTempRoot().getAbsolutePath() + '/' + secondaryOrgLogoImage.getUploadDirectory());
 	}
 
     private void removeExistingSignature() {
-        if (s3Service.userSignatureExists(user)) {
-            s3Service.removeUserSignature(user);
+        if (s3Service.secondaryOrgCertificateLogoExists(secondaryOrg.getId())) {
+            s3Service.removeSecondaryOrgLogoImage(secondaryOrg);
         }
     }
 }

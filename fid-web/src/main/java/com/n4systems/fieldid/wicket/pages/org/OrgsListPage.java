@@ -121,10 +121,7 @@ public class OrgsListPage extends FieldIDTemplatePage {
         add(new NavigationBar(navBarId,
                 aNavItem().label(new FIDLabelModel("nav.view_all.count", activeOrgCount)).page(OrgsListPage.class).build(),
                 aNavItem().label(new FIDLabelModel("nav.view_all_archived.count", archivedOrgCount)).page(ArchivedOrgsListPage.class).build(),
-                //aNavItem().label("nav.add").page(SelectUserTypePage.class).onRight().build()
-                //aNavItem().label("nav.view_all.count").page("organizations.action").build(),
-                //aNavItem().label("nav.view_all_archived.count").page("archivedOrganizations.action").build(),
-                aNavItem().label("nav.add").page("organizationAdd.action").onRight().build()
+                aNavItem().label("nav.add").page(AddSecondaryOrgPage.class).onRight().build()
         ));
     }
 
@@ -133,8 +130,7 @@ public class OrgsListPage extends FieldIDTemplatePage {
             @Override
             protected String load() {
                 OrgListFilterCriteria criteria = new OrgListFilterCriteria(filterCriteriaModel.getObject());
-                Long totalSecondaryOrgs = criteria.isArchivedOnly()?orgService.countSecondaryOrgs(criteria.withArchivedOnly()):orgService.countSecondaryOrgs(criteria.withArchivedOnly(false));
-                //return new FIDLabelModel("label.total_x", orgService.getSearchSecondaryOrgCount(null,null)).getObject();
+                Long totalSecondaryOrgs = criteria.isArchivedOnly()?orgService.countSecondaryOrgs(criteria.withArchivedOnly()):orgService.countSecondaryOrgs(criteria.withArchivedOnly(false));//return new FIDLabelModel("label.total_x", orgService.getSearchSecondaryOrgCount(null,null)).getObject();
                 return new FIDLabelModel("label.total_x", totalSecondaryOrgs).getObject();
             }
         };

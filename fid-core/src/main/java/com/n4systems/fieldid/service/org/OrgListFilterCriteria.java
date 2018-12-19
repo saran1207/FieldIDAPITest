@@ -1,13 +1,9 @@
 package com.n4systems.fieldid.service.org;
 
-import com.n4systems.fieldid.service.user.UserListFilterCriteria;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
-import com.n4systems.model.user.UserGroup;
-import com.n4systems.security.UserType;
-import com.n4systems.util.UserBelongsToFilter;
 
 import java.io.Serializable;
 
