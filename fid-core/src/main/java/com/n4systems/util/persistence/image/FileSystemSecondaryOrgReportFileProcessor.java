@@ -21,7 +21,7 @@ public class FileSystemSecondaryOrgReportFileProcessor {
 
 	public void process(UploadedImage secondaryOrgLogoImage) throws FileProcessingException {
         if (secondaryOrgLogoImage.isRemoveImage()) {
-            removeExistingSignature();
+            removeExistingSecondaryOrgLogoImage();
         }
 		if (secondaryOrgLogoImage.isNewImage()) {
 			putNewImageInPlace(secondaryOrgLogoImage);
@@ -37,7 +37,7 @@ public class FileSystemSecondaryOrgReportFileProcessor {
 		return new File(PathHandler.getTempRoot().getAbsolutePath() + '/' + secondaryOrgLogoImage.getUploadDirectory());
 	}
 
-    private void removeExistingSignature() {
+    private void removeExistingSecondaryOrgLogoImage() {
         if (s3Service.secondaryOrgCertificateLogoExists(secondaryOrg.getId())) {
             s3Service.removeSecondaryOrgLogoImage(secondaryOrg);
         }

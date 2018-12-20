@@ -24,6 +24,7 @@ import com.n4systems.util.timezone.CountryList;
 import com.n4systems.util.timezone.Region;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -82,7 +83,7 @@ public abstract class OrgPage extends FieldIDTemplatePage {
         return new UploadedImage();
     }
 
-    protected void saveSignatureFile(UploadedImage reportImage) {
+    protected void saveSecondaryOrgFile(UploadedImage reportImage) {
         new FileSystemSecondaryOrgReportFileProcessor(secondaryOrgModel.getObject()).process(reportImage);
     }
 
@@ -93,6 +94,11 @@ public abstract class OrgPage extends FieldIDTemplatePage {
         region = CountryList.getInstance().getRegionByFullId(getPrimaryOrg().getDefaultTimeZone());
         add(new FIDFeedbackPanel("feedbackPanel"));
         add(new AddSecondaryOrgForm("addSecondaryOrgForm"));
+    }
+
+    @Override
+    protected Label createTitleLabel(String labelId) {
+        return new Label(labelId, new FIDLabelModel("title.manage_organizational_units"));
     }
 
     @Override
@@ -141,7 +147,7 @@ public abstract class OrgPage extends FieldIDTemplatePage {
         UploadedImage secondaryOrgLogoImage = reportImagePanel.getUploadedImage();
 
         if(secondaryOrgLogoImage.isNewImage()) {
-            saveSignatureFile(secondaryOrgLogoImage);
+            saveSecondaryOrgFile(secondaryOrgLogoImage);
         }
 
         return newSeconadryOrg;
@@ -153,7 +159,7 @@ public abstract class OrgPage extends FieldIDTemplatePage {
         UploadedImage secondaryOrgLogoImage = reportImagePanel.getUploadedImage();
 
         if(secondaryOrgLogoImage.isNewImage() || secondaryOrgLogoImage.isRemoveImage()) {
-            saveSignatureFile(secondaryOrgLogoImage);
+            saveSecondaryOrgFile(secondaryOrgLogoImage);
         }
 
         if(secondaryOrg.isArchived()) {

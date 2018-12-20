@@ -536,12 +536,6 @@ public class OrgService extends CrudService<BaseOrg> {
         }
         return builder;
     }
-
-    public void archive(SecondaryOrg secondaryOrg) {
-        secondaryOrg.archiveEntity();
-        persistenceService.update(secondaryOrg);
-    }
-
     public void unarchive(SecondaryOrg secondaryOrg) {
         secondaryOrg.activateEntity();
         persistenceService.update(secondaryOrg);

@@ -12,6 +12,7 @@ import com.n4systems.fieldid.wicket.data.SecondaryOrgDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
+import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
 import org.apache.wicket.Component;
@@ -47,6 +48,7 @@ public class OrgsListPage extends FieldIDTemplatePage {
     private WebMarkupContainer primaryOrgContainer;
     private IModel<OrgListFilterCriteria> filterCriteriaModel;
     private Form filterForm;
+    protected InternalOrg organization;
 
     protected FIDFeedbackPanel feedbackPanel;
 
@@ -57,10 +59,16 @@ public class OrgsListPage extends FieldIDTemplatePage {
 
     public OrgsListPage(PageParameters params) {
         filterCriteriaModel = getOrgListFilterCriteria();
+        PrimaryOrg primaryOrg = getPrimaryOrg();
 
-        Long secondaryOrgId = params.get("uniqueID").toLong();
-        SecondaryOrg secondaryOrg = orgService.getSecondaryOrg(secondaryOrgId);
-        dataProvider = new SecondaryOrgDataProvider(filterCriteriaModel.getObject().withSecondaryOrg(secondaryOrg));
+        Long uniqueId = params.get("uniqueID").toLong();
+        if (primaryOrg.getId().equals(uniqueId)) {
+            organization = primaryOrg;
+        }
+        else {
+            organization = orgService.getSecondaryOrg(uniqueId);
+        }
+        dataProvider = new SecondaryOrgDataProvider(filterCriteriaModel.getObject().withOrgFilter(organization));
     }
 
     @Override
