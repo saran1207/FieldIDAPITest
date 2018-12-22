@@ -6,7 +6,6 @@ import com.n4systems.fieldid.wicket.behavior.ConfirmBehavior;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.org.SecondaryOrgFormDetailsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.persistence.image.UploadedImage;
@@ -48,7 +47,8 @@ public class EditOrgPage extends OrgPage {
     @Override
     protected void doSave() {
         update();
-        setResponsePage(OrgsListPage.class, PageParametersBuilder.uniqueId(secondaryOrgModel.getObject().getId()));
+        //setResponsePage(OrgsListPage.class, PageParametersBuilder.uniqueId(secondaryOrgModel.getObject().getId()));
+        setResponsePage(OrgsListPage.class);
     }
 
     @Override
@@ -85,7 +85,6 @@ public class EditOrgPage extends OrgPage {
     @Override
     protected UploadedImage getReportImage() {
         File reportImage = PathHandler.getReportImage(secondaryOrgModel.getObject());
-        //File reportImage = new File("");
         UploadedImage uploadedImage = new UploadedImage();
 
         if (reportImage.exists()) {

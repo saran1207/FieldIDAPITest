@@ -14,6 +14,7 @@ import com.n4systems.fieldid.wicket.components.org.SecondaryOrgFormReportImagePa
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
+import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.security.UserType;
@@ -48,6 +49,7 @@ public abstract class OrgPage extends FieldIDTemplatePage {
     protected IModel<OrgListFilterCriteria> filterCriteriaModel;
     protected Country country;
     protected Region region;
+    protected InternalOrg organization;
 
     public OrgPage(UserType userType) {
         this.userType = userType;
@@ -62,9 +64,20 @@ public abstract class OrgPage extends FieldIDTemplatePage {
 
     public OrgPage(PageParameters parameters) {
         filterCriteriaModel = getOrgListFilterCriteria();
+        PrimaryOrg primaryOrg = getPrimaryOrg();
         uniqueId = parameters.get("uniqueID")==null?0L:parameters.get("uniqueID").toLong();
+        if (primaryOrg.getId().equals(uniqueId)) {
+            organization = primaryOrg;
+        } else {
+            organization = loadExistingSecondaryOrg();
+        }
+
+
         secondaryOrgModel = Model.of(loadExistingSecondaryOrg());
         filterCriteriaModel.getObject().withSecondaryOrg(loadExistingSecondaryOrg());
+
+        //secondaryOrgModel = Model.of(organization);
+        //filterCriteriaModel.getObject().withSecondaryOrg(organization);
     }
 
     protected abstract void doSave();

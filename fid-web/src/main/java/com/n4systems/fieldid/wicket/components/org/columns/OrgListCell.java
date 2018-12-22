@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.org.ArchivedOrgConfirmPage;
 import com.n4systems.fieldid.wicket.pages.org.EditOrgPage;
+import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -18,15 +19,15 @@ public class OrgListCell extends Panel {
     public OrgListCell(String componentId, IModel<SecondaryOrg> rowModel) {
         super(componentId, rowModel);
 
-        final SecondaryOrg secondaryOrg = rowModel.getObject();
+        final InternalOrg internalOrg = rowModel.getObject();
 
-        if(secondaryOrg.isSecondary()) {
-            add(new BookmarkablePageLink<EditOrgPage>("edit", EditOrgPage.class, PageParametersBuilder.uniqueId(secondaryOrg.getId())));
+        if(internalOrg.isSecondary()) {
+            add(new BookmarkablePageLink<EditOrgPage>("edit", EditOrgPage.class, PageParametersBuilder.uniqueId(internalOrg.getId())));
         }  else {
-            add(new BookmarkablePageLink<EditOrgPage>("edit", EditOrgPage.class, PageParametersBuilder.uniqueId(secondaryOrg.getId())));
+            add(new BookmarkablePageLink<EditOrgPage>("edit", EditOrgPage.class, PageParametersBuilder.uniqueId(internalOrg.getId())));
         }
 
-        add(new BookmarkablePageLink<EditOrgPage>("archive", ArchivedOrgConfirmPage.class, PageParametersBuilder.uniqueId(secondaryOrg.getId())));
+        add(new BookmarkablePageLink<EditOrgPage>("archive", ArchivedOrgConfirmPage.class, PageParametersBuilder.uniqueId(internalOrg.getId())));
 
 
 

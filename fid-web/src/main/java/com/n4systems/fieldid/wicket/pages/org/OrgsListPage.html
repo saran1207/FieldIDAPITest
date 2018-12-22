@@ -4,18 +4,19 @@
         <div wicket:id="feedbackPanel"/>
 
 
-        <h2 class="decoratedHeader">
+        <h3 class="decoratedHeader">
             <wicket:message key="label.primaryorganization"/>
             <a href="<@s.url action="organizationEdit" uniqueID="${primaryOrg.id}"/>"> <wicket:message key="label.edit"/></a>
-        </h2>
+            <!--<a wicket:id="editPrimaryOrg"><wicket:message key="label.edit"/></a>-->
+        </h3>
         <div wicket:id="primaryOrgContainer">
             <div>
-                <span class="label"><wicket:message key="label.name"/></span>
-                <span class="fieldHolder notranslate"  wicket:id="primaryOrgName"/>
+                <div style="float:left;width:12em;" class="label"><wicket:message key="label.name"/></div>
+                <div style="overflow:hidden;" class="fieldHolder notranslate"  wicket:id="primaryOrgName"/>
             </div>
             <div>
-                <span class="label"><wicket:message key="label.name_on_pdf_reports"/></span>
-                <span class="fieldHolder notranslate" wicket:id="primaryOrgCertificateName"/>
+                <div style="float:left;width:12em;" class="label"><wicket:message key="label.name_on_pdf_reports"/></div>
+                <div style="overflow:hidden;" class="fieldHolder notranslate" wicket:id="primaryOrgCertificateName"/>
             </div>
         </div>
 

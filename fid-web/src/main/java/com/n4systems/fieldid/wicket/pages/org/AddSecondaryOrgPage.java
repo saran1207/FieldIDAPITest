@@ -16,7 +16,6 @@ public class AddSecondaryOrgPage extends OrgPage {
 
     public AddSecondaryOrgPage(IModel<SecondaryOrg> secondaryOrg) {
         super(secondaryOrg);
-        //secondaryOrgModel = super.createSecondaryOrg();
     }
 
     public AddSecondaryOrgPage() {

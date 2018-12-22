@@ -3,27 +3,17 @@ package com.n4systems.fieldid.service.org;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.CrudService;
-import com.n4systems.fieldid.service.user.UserListFilterCriteria;
-import com.n4systems.model.builders.CriteriaBuilder;
 import com.n4systems.model.location.PredefinedLocation;
-import com.n4systems.model.offlineprofile.OfflineProfile;
 import com.n4systems.model.orgs.*;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.security.OwnerAndDownWithPrimaryFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
-import com.n4systems.model.user.UserGroup;
-import com.n4systems.model.user.UserQueryHelper;
-import com.n4systems.security.UserType;
-import com.n4systems.services.config.ConfigService;
-import com.n4systems.util.UserBelongsToFilter;
 import com.n4systems.util.collections.OrgList;
 import com.n4systems.util.persistence.*;
-import net.sf.ehcache.search.Query;
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.Session;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -32,9 +22,9 @@ import java.util.List;
 @Transactional
 public class OrgService extends CrudService<BaseOrg> {
 
-	public OrgService() {
-		super(BaseOrg.class);
-	}
+    public OrgService() {
+        super(BaseOrg.class);
+    }
 
     private static String [] DEFAULT_ORDER = {"name"};
 
@@ -485,31 +475,20 @@ public class OrgService extends CrudService<BaseOrg> {
     private QueryBuilder<SecondaryOrg> createOrgQueryBuilder(OrgListFilterCriteria criteria) {
         QueryBuilder<SecondaryOrg> builder = createSecondaryOrgSecurityBuilder(SecondaryOrg.class, criteria.isArchivedOnly());
 
-        if (criteria.getOwner() != null) {
-            builder.addSimpleWhere("owner", criteria.getOwner());
-        }
-
         if (criteria.getCustomer() != null) {
-            builder.addSimpleWhere("owner.customerOrg", criteria.getCustomer());
+            builder.addSimpleWhere("customerOrg", criteria.getCustomer());
         }
 
         if(criteria.isFilterOnPrimaryOrg()) {
-            builder.addWhere(WhereClauseFactory.createIsNull("owner.secondaryOrg"));
+            builder.addWhere(WhereClauseFactory.createIsNull("secondaryOrg"));
         }
 
         if(criteria.isFilterOnSecondaryOrg()) {
-            builder.addSimpleWhere("owner.secondaryOrg", criteria.getOrgFilter());
+            builder.addSimpleWhere("secondaryOrg", criteria.getOrgFilter());
         }
 
         if (criteria.getNameFilter() != null && !criteria.getNameFilter().isEmpty()) {
-            WhereParameterGroup whereGroup = new WhereParameterGroup();
-            whereGroup.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "userID", criteria.getNameFilter(), WhereParameter.IGNORE_CASE | WhereParameter.WILDCARD_BOTH,
-                    WhereClause.ChainOp.OR));
-            whereGroup.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "firstName", criteria.getNameFilter(), WhereParameter.IGNORE_CASE | WhereParameter.WILDCARD_BOTH,
-                    WhereClause.ChainOp.OR));
-            whereGroup.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "lastName", criteria.getNameFilter(), WhereParameter.IGNORE_CASE | WhereParameter.WILDCARD_BOTH,
-                    WhereClause.ChainOp.OR));
-            builder.addWhere(whereGroup);
+            builder.addSimpleWhere("name", criteria.getNameFilter());
         }
 
         if (criteria.isArchivedOnly()) {
@@ -517,18 +496,9 @@ public class OrgService extends CrudService<BaseOrg> {
         }
 
         if(criteria.getOrder() != null && !criteria.getOrder().isEmpty()) {
-            if(criteria.getOrder().startsWith("owner")) {
-                builder.addJoin(new JoinClause(JoinClause.JoinType.LEFT, criteria.getOrder(), "sort", true));
-
-                OrderClause orderClause1 = new OrderClause("sort", criteria.isAscending());
-                orderClause1.setAlwaysDropAlias(true);
-
-                builder.getOrderArguments().add(orderClause1);
-                builder.getOrderArguments().add(new OrderClause("id", criteria.isAscending()));
-            } else
-                for (String subOrder : criteria.getOrder().split(",")) {
-                    builder.addOrder(subOrder.trim(), criteria.isAscending());
-                }
+            for (String subOrder : criteria.getOrder().split(",")) {
+                builder.addOrder(subOrder.trim(), criteria.isAscending());
+            }
         } else {
             for (String order : DEFAULT_ORDER) {
                 builder.setOrder(order, criteria.isAscending());
@@ -536,10 +506,24 @@ public class OrgService extends CrudService<BaseOrg> {
         }
         return builder;
     }
-    public void unarchive(SecondaryOrg secondaryOrg) {
-        secondaryOrg.activateEntity();
-        persistenceService.update(secondaryOrg);
+
+    public boolean orgNameIsUnique(Long tenantId, String orgName, Long currentOrgId, boolean isPrimary) {
+        if (orgName == null) {
+            return true;
+        }
+
+        QueryBuilder<Long> queryBuilder;
+        if (isPrimary) queryBuilder = new QueryBuilder<Long>(PrimaryOrg.class, new TenantOnlySecurityFilter(tenantId)).setCountSelect();
+        else queryBuilder = new QueryBuilder<Long>(SecondaryOrg.class, new TenantOnlySecurityFilter(tenantId)).setCountSelect();
+        queryBuilder.addSimpleWhere("name",orgName);
+
+        if (currentOrgId != null) {
+            queryBuilder.addWhere(WhereParameter.Comparator.NE, "id", "id", currentOrgId);
+        }
+
+        return !persistenceService.exists(queryBuilder);
     }
+
 
     public void create(SecondaryOrg secondaryOrg) {
         persistenceService.save(secondaryOrg);

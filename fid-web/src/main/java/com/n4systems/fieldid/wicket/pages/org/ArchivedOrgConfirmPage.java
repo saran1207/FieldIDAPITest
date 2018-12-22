@@ -75,6 +75,7 @@ public class ArchivedOrgConfirmPage extends FieldIDTemplatePage {
     protected void onInitialize() {
         super.onInitialize();
         add(new FIDFeedbackPanel("feedbackPanel"));
+        add(new Label("archiveSecondaryOrg", new FIDLabelModel("instruction.archive_secondary_org", organization.getName())));
         add(new ArchivedSecondaryOrgForm("archivedOrgConfirmForm"));
     }
 
@@ -103,7 +104,7 @@ public class ArchivedOrgConfirmPage extends FieldIDTemplatePage {
 
     @Override
     protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("title.manage_organizational_units"));
+        return new Label(labelId, new FIDLabelModel("title.confirm_secondary_org_archive_no", organization.getName()));
     }
 
     protected void addConfirmBehavior(SubmitLink submitLink) {}

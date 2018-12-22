@@ -10,6 +10,7 @@ import com.n4systems.fieldid.wicket.components.org.columns.OrgListColumn;
 import com.n4systems.fieldid.wicket.components.table.SimpleDefaultDataTable;
 import com.n4systems.fieldid.wicket.data.SecondaryOrgDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
 import com.n4systems.model.orgs.InternalOrg;
@@ -49,19 +50,21 @@ public class OrgsListPage extends FieldIDTemplatePage {
     private IModel<OrgListFilterCriteria> filterCriteriaModel;
     private Form filterForm;
     protected InternalOrg organization;
+    protected PrimaryOrg primaryOrg;
 
     protected FIDFeedbackPanel feedbackPanel;
 
     public OrgsListPage() {
         filterCriteriaModel = getOrgListFilterCriteria();
         dataProvider = new SecondaryOrgDataProvider(filterCriteriaModel.getObject());
+        primaryOrg = getPrimaryOrg();
     }
 
     public OrgsListPage(PageParameters params) {
         filterCriteriaModel = getOrgListFilterCriteria();
-        PrimaryOrg primaryOrg = getPrimaryOrg();
+        primaryOrg = getPrimaryOrg();
 
-        Long uniqueId = params.get("uniqueID").toLong();
+        Long uniqueId = params.get("uniqueID")==null?0L:params.get("uniqueID").toLong();;
         if (primaryOrg.getId().equals(uniqueId)) {
             organization = primaryOrg;
         }
@@ -77,6 +80,8 @@ public class OrgsListPage extends FieldIDTemplatePage {
 
         add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
         feedbackPanel.setOutputMarkupId(true);
+
+        //add(new BookmarkablePageLink<EditOrgPage>("editPrimaryOrg", EditOrgPage.class, PageParametersBuilder.uniqueId(primaryOrg.getId())));
 
         add(primaryOrgContainer = new WebMarkupContainer("primaryOrgContainer"));
         primaryOrgContainer.setOutputMarkupPlaceholderTag(true);

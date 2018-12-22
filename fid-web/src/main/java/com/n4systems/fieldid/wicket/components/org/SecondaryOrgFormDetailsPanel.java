@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.wicket.components.org;
 
-import com.n4systems.fieldid.service.user.UserService;
+import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.model.orgs.SecondaryOrg;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -17,7 +17,7 @@ import org.apache.wicket.validation.ValidationError;
 public class SecondaryOrgFormDetailsPanel extends Panel {
 
     @SpringBean
-    private UserService userService;
+    private OrgService orgService;
 
     private RequiredTextField secondaryOrgName;
 
@@ -28,9 +28,9 @@ public class SecondaryOrgFormDetailsPanel extends Panel {
         secondaryOrgName.add(new IValidator<String>() {
             @Override
             public void validate(IValidatable validatable) {
-                if(!userService.userIdIsUnique(FieldIDSession.get().getTenant().getId(), (String) validatable.getValue(), secondaryOrg.getObject().getId())) {
+                if(!orgService.orgNameIsUnique(FieldIDSession.get().getTenant().getId(), (String) validatable.getValue(), secondaryOrg.getObject().getId(), secondaryOrg.getObject().isPrimary())) {
                     ValidationError error = new ValidationError();
-                    error.addMessageKey("errors.data.userduplicate");
+                    error.addMessageKey("errors.data.orgDuplicate");
                     validatable.error(error);
                 }
             }

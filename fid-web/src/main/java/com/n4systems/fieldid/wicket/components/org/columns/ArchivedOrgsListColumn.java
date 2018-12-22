@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.org.columns;
 
+import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
