@@ -81,7 +81,7 @@ public class OrgsListPage extends FieldIDTemplatePage {
         add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
         feedbackPanel.setOutputMarkupId(true);
 
-        //add(new BookmarkablePageLink<EditOrgPage>("editPrimaryOrg", EditOrgPage.class, PageParametersBuilder.uniqueId(primaryOrg.getId())));
+        add(new BookmarkablePageLink<EditOrgPage>("editPrimaryOrg", EditOrgPage.class, PageParametersBuilder.uniqueId(primaryOrg.getId())));
 
         add(primaryOrgContainer = new WebMarkupContainer("primaryOrgContainer"));
         primaryOrgContainer.setOutputMarkupPlaceholderTag(true);

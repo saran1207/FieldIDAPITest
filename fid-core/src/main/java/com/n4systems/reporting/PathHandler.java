@@ -2,6 +2,7 @@ package com.n4systems.reporting;
 
 import com.n4systems.model.*;
 import com.n4systems.model.asset.AssetAttachment;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.user.User;
 
@@ -563,6 +564,10 @@ public class PathHandler {
 		return mergePaths(getTenantUserBasePath(user.getTenant()), user.getId().toString());
 	}
 
+	private static String getPrimaryOrgPrivatePath(PrimaryOrg primaryOrg) {
+		return mergePaths(getTenantUserBasePath(primaryOrg.getTenant()), primaryOrg.getId().toString());
+	}
+
 	private static String getSecondaryOrgPrivatePath(SecondaryOrg secondaryOrg) {
 		return mergePaths(getTenantUserBasePath(secondaryOrg.getTenant()), secondaryOrg.getId().toString());
 	}
@@ -585,23 +590,39 @@ public class PathHandler {
 	}
 
 
-	/** @return The absolute private directory for a user  */
+	/** @return The absolute private directory for a secondary org  */
 	public static File getSecondaryOrgPrivateDir(SecondaryOrg secondaryOrg) {
 		File secondaryOrgPrivateDir = absolutize(getSecondaryOrgPrivatePath(secondaryOrg));
 		secondaryOrgPrivateDir.mkdirs();
 		return secondaryOrgPrivateDir;
 	}
 
-	/** @return The path to a file under a users private directory */
+	/** @return The path to a file under a secondary orgs private directory */
 	public static File getSecondaryOrgFile(SecondaryOrg secondaryOrg, String fileName) {
 		return new File(getSecondaryOrgPrivateDir(secondaryOrg), fileName);
 	}
 
-	/** @return The signature image for a user  */
+	/** @return The log image for a secondary org  */
 	public static File getReportImage(SecondaryOrg secondaryOrg) {
 		return getSecondaryOrgFile(secondaryOrg, SIGNATURE_IMAGE_FILE_NAME);
 	}
 
+	/** @return The absolute private directory for a primary org  */
+	public static File getPrimaryOrgPrivateDir(PrimaryOrg primaryOrg) {
+		File primaryOrgPrivateDir = absolutize(getPrimaryOrgPrivatePath(primaryOrg));
+		primaryOrgPrivateDir.mkdirs();
+		return primaryOrgPrivateDir;
+	}
+
+	/** @return The path to a file under a primary orgs private directory */
+	public static File getPrimaryOrgFile(PrimaryOrg primaryOrg, String fileName) {
+		return new File(getPrimaryOrgPrivateDir(primaryOrg), fileName);
+	}
+
+	/** @return The log image for a primary org  */
+	public static File getReportImage(PrimaryOrg primaryOrg) {
+		return getPrimaryOrgFile(primaryOrg, SIGNATURE_IMAGE_FILE_NAME);
+	}
 
 	public static File getReleaseNotesPath() {
 		return absolutize(mergePaths(COMMON_PATH_BASE, "releaseNotes.xml"));

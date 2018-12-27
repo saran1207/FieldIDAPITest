@@ -7,10 +7,10 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
-import com.n4systems.fieldid.wicket.components.org.SecondaryOrgFormAddressPanel;
-import com.n4systems.fieldid.wicket.components.org.SecondaryOrgFormDetailsPanel;
-import com.n4systems.fieldid.wicket.components.org.SecondaryOrgFormLocalizationPanel;
-import com.n4systems.fieldid.wicket.components.org.SecondaryOrgFormReportImagePanel;
+import com.n4systems.fieldid.wicket.components.org.InternalOrgFormAddressPanel;
+import com.n4systems.fieldid.wicket.components.org.InternalOrgFormDetailsPanel;
+import com.n4systems.fieldid.wicket.components.org.InternalOrgFormLocalizationPanel;
+import com.n4systems.fieldid.wicket.components.org.InternalOrgFormReportImagePanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
@@ -18,7 +18,7 @@ import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.security.UserType;
-import com.n4systems.util.persistence.image.FileSystemSecondaryOrgReportFileProcessor;
+import com.n4systems.util.persistence.image.FileSystemInternalOrgReportFileProcessor;
 import com.n4systems.util.persistence.image.UploadedImage;
 import com.n4systems.util.timezone.Country;
 import com.n4systems.util.timezone.CountryList;
@@ -39,25 +39,18 @@ import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilde
 public abstract class OrgPage extends FieldIDTemplatePage {
 
     @SpringBean
-    protected UserService userService;
-    @SpringBean
     protected OrgService orgService;
 
-    protected UserType userType;
     private Long uniqueId;
-    protected IModel<SecondaryOrg> secondaryOrgModel;
+    protected IModel<InternalOrg> internalOrg;
     protected IModel<OrgListFilterCriteria> filterCriteriaModel;
     protected Country country;
     protected Region region;
     protected InternalOrg organization;
 
-    public OrgPage(UserType userType) {
-        this.userType = userType;
-    }
-
-    public OrgPage(IModel<SecondaryOrg> secondaryOrgModel) {
-        this.uniqueId = secondaryOrgModel.getObject().getId();
-        this.secondaryOrgModel = secondaryOrgModel == null?createSecondaryOrg():secondaryOrgModel;
+    public OrgPage(IModel<InternalOrg> internalOrg) {
+        this.uniqueId = internalOrg.getObject().getId();
+        this.internalOrg = internalOrg == null?createSecondaryOrg():internalOrg;
     }
 
     public OrgPage (){}
@@ -73,19 +66,19 @@ public abstract class OrgPage extends FieldIDTemplatePage {
         }
 
 
-        secondaryOrgModel = Model.of(loadExistingSecondaryOrg());
-        filterCriteriaModel.getObject().withSecondaryOrg(loadExistingSecondaryOrg());
+        //internalOrg = Model.of(loadExistingSecondaryOrg());
+        //filterCriteriaModel.getObject().withSecondaryOrg(loadExistingSecondaryOrg());
 
-        //secondaryOrgModel = Model.of(organization);
-        //filterCriteriaModel.getObject().withSecondaryOrg(organization);
+        internalOrg = Model.of(organization);
+        filterCriteriaModel.getObject().withOrgFilter(organization);
     }
 
     protected abstract void doSave();
 
     protected abstract Component createDetailsPanel(String id);
 
-    protected SecondaryOrgFormAddressPanel addressPanel;
-    protected SecondaryOrgFormReportImagePanel reportImagePanel;
+    protected InternalOrgFormAddressPanel addressPanel;
+    protected InternalOrgFormReportImagePanel reportImagePanel;
     protected Component detailsPanel;
 
     protected SecondaryOrg loadExistingSecondaryOrg() {
@@ -96,8 +89,8 @@ public abstract class OrgPage extends FieldIDTemplatePage {
         return new UploadedImage();
     }
 
-    protected void saveSecondaryOrgFile(UploadedImage reportImage) {
-        new FileSystemSecondaryOrgReportFileProcessor(secondaryOrgModel.getObject()).process(reportImage);
+    protected void saveInternalOrgLogoImageFile(UploadedImage reportImage) {
+        new FileSystemInternalOrgReportFileProcessor(internalOrg.getObject()).process(reportImage);
     }
 
     @Override
@@ -137,11 +130,11 @@ public abstract class OrgPage extends FieldIDTemplatePage {
         ));
     }
 
-    protected SecondaryOrgFormDetailsPanel getSecondaryOrgFormDetailsPanel() {
-        return (SecondaryOrgFormDetailsPanel) detailsPanel;
+    protected InternalOrgFormDetailsPanel getSecondaryOrgFormDetailsPanel() {
+        return (InternalOrgFormDetailsPanel) detailsPanel;
     }
 
-    protected IModel<SecondaryOrg> createSecondaryOrg() {
+    protected IModel<InternalOrg> createSecondaryOrg() {
         SecondaryOrg newSecondaryOrg = new SecondaryOrg();
         newSecondaryOrg.setTenant(getTenant());
         newSecondaryOrg.setModifiedBy(getCurrentUser());
@@ -151,37 +144,37 @@ public abstract class OrgPage extends FieldIDTemplatePage {
         return Model.of(newSecondaryOrg);
     }
 
-    protected SecondaryOrg create() {
-        SecondaryOrg newSeconadryOrg = secondaryOrgModel.getObject();
-        newSeconadryOrg.setName(getPrimaryOrg().getDisplayName());
+    protected InternalOrg create() {
+        SecondaryOrg secondaryOrg = (SecondaryOrg) internalOrg.getObject();
+        secondaryOrg.setName(((SecondaryOrg) detailsPanel.getInnermostModel().getObject()).getName());
 
-        orgService.create(newSeconadryOrg);
+        orgService.save(secondaryOrg);
 
-        UploadedImage secondaryOrgLogoImage = reportImagePanel.getUploadedImage();
+        UploadedImage orgLogoImage = reportImagePanel.getUploadedImage();
 
-        if(secondaryOrgLogoImage.isNewImage()) {
-            saveSecondaryOrgFile(secondaryOrgLogoImage);
+        if(orgLogoImage.isNewImage()) {
+            saveInternalOrgLogoImageFile(orgLogoImage);
         }
-
-        return newSeconadryOrg;
-    }
-
-    protected SecondaryOrg update() {
-        SecondaryOrg secondaryOrg = secondaryOrgModel.getObject();
-
-        UploadedImage secondaryOrgLogoImage = reportImagePanel.getUploadedImage();
-
-        if(secondaryOrgLogoImage.isNewImage() || secondaryOrgLogoImage.isRemoveImage()) {
-            saveSecondaryOrgFile(secondaryOrgLogoImage);
-        }
-
-        if(secondaryOrg.isArchived()) {
-            secondaryOrg.activateEntity();
-        }
-
-        orgService.update(secondaryOrg);
 
         return secondaryOrg;
+    }
+
+    protected InternalOrg update() {
+        InternalOrg org = internalOrg.getObject();
+
+        UploadedImage internalOrgLogoImage = reportImagePanel.getUploadedImage();
+
+        if(internalOrgLogoImage.isNewImage() || internalOrgLogoImage.isRemoveImage()) {
+            saveInternalOrgLogoImageFile(internalOrgLogoImage);
+        }
+
+        if(org.isArchived()) {
+            org.activateEntity();
+        }
+
+        orgService.update(org);
+
+        return org;
     }
 
     protected void addConfirmBehavior(SubmitLink submitLink) {}
@@ -195,15 +188,15 @@ public abstract class OrgPage extends FieldIDTemplatePage {
         public AddSecondaryOrgForm(String id) {
             super(id);
 
-            add(reportImagePanel = new SecondaryOrgFormReportImagePanel("reportImagePanel", secondaryOrgModel, getReportImage()));
+            add(reportImagePanel = new InternalOrgFormReportImagePanel("reportImagePanel", internalOrg, getReportImage()));
 
-            secondaryOrgModel = secondaryOrgModel == null?createSecondaryOrg():secondaryOrgModel;
+            internalOrg = internalOrg == null?createSecondaryOrg():internalOrg;
 
-            add(addressPanel = new SecondaryOrgFormAddressPanel("addressPanel", Model.of(secondaryOrgModel.getObject().getAddressInfo())));
+            add(addressPanel = new InternalOrgFormAddressPanel("addressPanel", Model.of(internalOrg.getObject().getAddressInfo())));
 
             add(detailsPanel = createDetailsPanel("detailsPanel"));
 
-            add(new SecondaryOrgFormLocalizationPanel("localizationPanel", secondaryOrgModel));
+            add(new InternalOrgFormLocalizationPanel("localizationPanel", internalOrg));
 
             add(submitLink = new SubmitLink("save"));
 

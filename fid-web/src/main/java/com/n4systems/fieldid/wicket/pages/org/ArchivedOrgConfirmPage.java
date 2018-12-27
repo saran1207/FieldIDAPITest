@@ -12,9 +12,12 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
-import com.n4systems.model.orgs.InternalOrg;
-import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.orgs.SecondaryOrg;
+import com.n4systems.model.orgs.*;
+import com.n4systems.model.orgs.division.DivisionOrgByCustomerListLoader;
+import com.n4systems.model.orgs.secondaryorg.CustomerOrgByOwnerListLoader;
+import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserByOwnerListLoader;
+import com.n4systems.util.OrganizationalUnitRemovalSummary;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
@@ -25,6 +28,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import java.util.List;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
@@ -44,7 +49,7 @@ public class ArchivedOrgConfirmPage extends FieldIDTemplatePage {
     protected IModel<SecondaryOrg> secondaryOrgModel;
     protected IModel<OrgListFilterCriteria> filterCriteriaModel;
     private InternalOrg organization;
-
+    private OrganizationalUnitRemovalSummary removalSummary;
 
     public ArchivedOrgConfirmPage(IModel<SecondaryOrg> secondaryOrgModel) {
         this.uniqueId = secondaryOrgModel.getObject().getId();
@@ -116,9 +121,11 @@ public class ArchivedOrgConfirmPage extends FieldIDTemplatePage {
         public ArchivedSecondaryOrgForm(String id) {
             super(id);
 
-            add(new Label("customersToArchive", new FIDLabelModel("instruction.customers_to_archive","1")));
-            add(new Label("divisionsToArchive", new FIDLabelModel("instruction.division_to_archive","2")));
-            add(new Label("usersToArchive", new FIDLabelModel("instruction.users_to_archive","3")));
+            removalSummary = new OrganizationalUnitRemovalSummary(organization);
+            updateRemovalSummary();
+            add(new Label("customersToArchive", new FIDLabelModel("instruction.customers_to_archive",removalSummary.getCustomersToArchive())));
+            add(new Label("divisionsToArchive", new FIDLabelModel("instruction.division_to_archive",removalSummary.getDivisionsToArchive())));
+            add(new Label("usersToArchive", new FIDLabelModel("instruction.users_to_archive",removalSummary.getUsersToArchive())));
 
             add(submitLink = new SubmitLink("save"));
 
@@ -131,6 +138,28 @@ public class ArchivedOrgConfirmPage extends FieldIDTemplatePage {
         protected void onSubmit() {
             doSave();
             FieldIDSession.get().info(new FIDLabelModel("message.archive_secondary_org").getObject());
+        }
+
+        private void updateRemovalSummary() {
+            removalSummary.addUsers(getUsersByOwner(organization).size());
+
+            List<CustomerOrg> customers = new CustomerOrgByOwnerListLoader(getSecurityFilter()).setOwner(organization).load();
+            removalSummary.setCustomersToArchive(customers.size());
+
+            for (CustomerOrg customer: customers) {
+                removalSummary.addUsers(getUsersByOwner(customer).size());
+
+                List<DivisionOrg> divisions = new DivisionOrgByCustomerListLoader(getSecurityFilter()).setCustomer(customer).load();
+                removalSummary.addDivisions(divisions.size());
+
+                for (DivisionOrg division: divisions) {
+                    removalSummary.addUsers(getUsersByOwner(division).size());
+                }
+            }
+        }
+
+        private List<User> getUsersByOwner(BaseOrg owner) {
+            return new UserByOwnerListLoader(getSecurityFilter()).owner(owner).load();
         }
 
     }

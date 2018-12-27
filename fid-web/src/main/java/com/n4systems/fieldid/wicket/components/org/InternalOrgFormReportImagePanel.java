@@ -3,7 +3,7 @@ package com.n4systems.fieldid.wicket.components.org;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.orgs.SecondaryOrg;
+import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.persistence.image.UploadedImage;
 import org.apache.commons.io.IOUtils;
@@ -23,28 +23,28 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class SecondaryOrgFormReportImagePanel extends Panel {
+public class InternalOrgFormReportImagePanel extends Panel {
 
     @SpringBean
     private S3Service s3Service;
 
-    private static final Logger logger = Logger.getLogger(SecondaryOrgFormReportImagePanel.class);
+    private static final Logger logger = Logger.getLogger(InternalOrgFormReportImagePanel.class);
 
     private UploadedImage uploadedImage;
-    private SecondaryOrg  secondaryOrg;
+    private InternalOrg internalOrg;
 
-    public SecondaryOrgFormReportImagePanel(String id, IModel<SecondaryOrg> secondaryOrg, UploadedImage reportImage) {
-        super(id, secondaryOrg);
+    public InternalOrgFormReportImagePanel(String id, IModel<InternalOrg> internalOrg, UploadedImage reportImage) {
+        super(id, internalOrg);
         this.uploadedImage = reportImage;
-        if (secondaryOrg != null) this.secondaryOrg = secondaryOrg.getObject();
+        if (internalOrg != null) this.internalOrg = internalOrg.getObject();
 
         UploadForm uploadForm;
         add(uploadForm = new UploadForm("uploadForm"));
         uploadForm.setMultiPart(true);
-        if (secondaryOrg != null) uploadForm.setVisible(!secondaryOrg.getObject().isNew());
+        if (internalOrg != null) uploadForm.setVisible(!internalOrg.getObject().isNew());
     }
 
-    public SecondaryOrg getSecondaryOrg() {return secondaryOrg;}
+    public InternalOrg getInternalOrg() {return internalOrg;}
 
     class UploadForm extends Form<FileAttachment> {
         FileUploadField uploadField;
@@ -55,7 +55,7 @@ public class SecondaryOrgFormReportImagePanel extends Panel {
 
             final WebMarkupContainer fileDisplay = new WebMarkupContainer("fileDisplay");
 
-            add(uploadField = new FileUploadField("digitalSignature"));
+            add(uploadField = new FileUploadField("internalOrgLogoImage"));
             uploadField.add(new AjaxFormSubmitBehavior("onchange") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target) {
@@ -71,7 +71,10 @@ public class SecondaryOrgFormReportImagePanel extends Panel {
                 }
             });
             if(uploadedImage.isExistingImage()) {
-                fileDisplay.add(new ExternalImage("logoImage", s3Service.getSecondaryOrgCertificateLogoURL(getSecondaryOrg().getId())));
+                if (getInternalOrg().isPrimary()) {
+                    fileDisplay.add(new ExternalImage("logoImage", s3Service.getPrimaryOrgCertificateLogoURL()));
+                }
+                else fileDisplay.add(new ExternalImage("logoImage", s3Service.getSecondaryOrgCertificateLogoURL(getInternalOrg().getId())));
             }
             else {
                 fileDisplay.add(new ExternalImage("logoImage", "/fieldid/images/attachment-icon.png"));

@@ -7,11 +7,11 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
-public class SecondaryOrgFormAddressPanel extends Panel {
+public class InternalOrgFormAddressPanel extends Panel {
 
-    private static final Logger logger = Logger.getLogger(SecondaryOrgFormAddressPanel.class);
+    private static final Logger logger = Logger.getLogger(InternalOrgFormAddressPanel.class);
 
-    public SecondaryOrgFormAddressPanel(String id, IModel<AddressInfo> addressInfo) {
+    public InternalOrgFormAddressPanel(String id, IModel<AddressInfo> addressInfo) {
         super(id, addressInfo);
 
         add(new TextField<String>("streetAddress", new PropertyModel<String>(addressInfo, "streetAddress")));

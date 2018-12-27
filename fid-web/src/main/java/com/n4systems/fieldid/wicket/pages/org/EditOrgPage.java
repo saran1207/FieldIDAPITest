@@ -4,8 +4,10 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.org.OrgListFilterCriteria;
 import com.n4systems.fieldid.wicket.behavior.ConfirmBehavior;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
-import com.n4systems.fieldid.wicket.components.org.SecondaryOrgFormDetailsPanel;
+import com.n4systems.fieldid.wicket.components.org.InternalOrgFormDetailsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.model.orgs.InternalOrg;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.persistence.image.UploadedImage;
@@ -30,8 +32,8 @@ public class EditOrgPage extends OrgPage {
 
     private Long previousOwnerId;
 
-    public EditOrgPage(IModel<SecondaryOrg> secondaryOrgModel) {
-        super(secondaryOrgModel);
+    public EditOrgPage(IModel<InternalOrg> internalOrg) {
+        super(internalOrg);
     }
 
     public EditOrgPage(PageParameters parameters) {
@@ -41,25 +43,19 @@ public class EditOrgPage extends OrgPage {
     @Override
     protected void onInitialize() {
         super.onInitialize();
-        previousOwnerId = secondaryOrgModel.getObject().getOwner().getId();
+        previousOwnerId = internalOrg.getObject().getOwner().getId();
     }
 
     @Override
     protected void doSave() {
-        update();
+        super.update();
         //setResponsePage(OrgsListPage.class, PageParametersBuilder.uniqueId(secondaryOrgModel.getObject().getId()));
         setResponsePage(OrgsListPage.class);
     }
 
     @Override
-    protected SecondaryOrg update() {
-        SecondaryOrg secondaryOrg = super.update();
-        return secondaryOrg;
-    }
-
-    @Override
     protected void onOwnerPicked(AjaxRequestTarget target) {
-        if (isOwnerChanged(secondaryOrgModel.getObject()) ) {
+        if (isOwnerChanged(internalOrg.getObject()) ) {
             target.appendJavaScript("confirmationRequired = true");
         } else {
             target.appendJavaScript("confirmationRequired = false");
@@ -79,19 +75,21 @@ public class EditOrgPage extends OrgPage {
 
     @Override
     protected Component createDetailsPanel(String id) {
-        return new SecondaryOrgFormDetailsPanel(id, secondaryOrgModel);
+        return new InternalOrgFormDetailsPanel(id, internalOrg);
     }
 
     @Override
     protected UploadedImage getReportImage() {
-        File reportImage = PathHandler.getReportImage(secondaryOrgModel.getObject());
+        File reportImage;
+        if (internalOrg.getObject().isPrimary()) reportImage = PathHandler.getReportImage((PrimaryOrg) internalOrg.getObject());
+        else reportImage = PathHandler.getReportImage((SecondaryOrg) internalOrg.getObject());
         UploadedImage uploadedImage = new UploadedImage();
 
         if (reportImage.exists()) {
             uploadedImage.setImage(reportImage);
             uploadedImage.setUploadDirectory(reportImage.getPath());
-        } else if(s3Service.secondaryOrgLogoImageExists(secondaryOrgModel.getObject())){
-            reportImage = s3Service.downloadSecondaryOrgLogoImage(secondaryOrgModel.getObject());
+        } else if(s3Service.isCertificateLogoExists(internalOrg.getObject().getId(), internalOrg.getObject().isPrimary())){
+            reportImage = s3Service.downloadInternalOrgLogoImage(internalOrg.getObject());
             uploadedImage.setImage(reportImage);
             uploadedImage.setUploadDirectory(reportImage.getPath());
         }
@@ -113,12 +111,12 @@ public class EditOrgPage extends OrgPage {
         add(new NavigationBar(navBarId,
                 aNavItem().label(new FIDLabelModel("nav.view_all.count", activeOrgCount)).page(OrgsListPage.class).build(),
                 aNavItem().label(new FIDLabelModel("nav.view_all_archived.count", archivedOrgCount)).page(ArchivedOrgsListPage.class).build(),
-                aNavItem().label("nav.edit").page(EditOrgPage.class).params(uniqueId(secondaryOrgModel.getObject().getId())).build(),
+                aNavItem().label("nav.edit").page(EditOrgPage.class).params(uniqueId(internalOrg.getObject().getId())).build(),
                 aNavItem().label("nav.add").page(AddSecondaryOrgPage.class).onRight().build()
         ));
     }
 
-    private Boolean isOwnerChanged(SecondaryOrg secondaryOrg) {
-        return secondaryOrg.getOwner().getId() != previousOwnerId;
+    private Boolean isOwnerChanged(InternalOrg internalOrg) {
+        return internalOrg.getOwner().getId() != previousOwnerId;
     }
 }

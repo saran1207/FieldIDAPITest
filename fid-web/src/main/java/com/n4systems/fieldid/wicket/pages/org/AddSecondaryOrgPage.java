@@ -2,7 +2,7 @@ package com.n4systems.fieldid.wicket.pages.org;
 
 import com.n4systems.fieldid.service.org.OrgListFilterCriteria;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
-import com.n4systems.fieldid.wicket.components.org.SecondaryOrgFormDetailsPanel;
+import com.n4systems.fieldid.wicket.components.org.InternalOrgFormDetailsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.orgs.SecondaryOrg;
 import org.apache.wicket.Component;
@@ -12,16 +12,6 @@ import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilde
 
 public class AddSecondaryOrgPage extends OrgPage {
 
-    protected IModel<SecondaryOrg> secondaryOrgModel;
-
-    public AddSecondaryOrgPage(IModel<SecondaryOrg> secondaryOrg) {
-        super(secondaryOrg);
-    }
-
-    public AddSecondaryOrgPage() {
-        secondaryOrgModel = super.createSecondaryOrg();
-    }
-
     @Override
     protected void doSave() {
         create();
@@ -30,7 +20,7 @@ public class AddSecondaryOrgPage extends OrgPage {
 
     @Override
     protected Component createDetailsPanel(String id) {
-        return new SecondaryOrgFormDetailsPanel(id, secondaryOrgModel);
+        return new InternalOrgFormDetailsPanel(id, internalOrg);
     }
 
     @Override
