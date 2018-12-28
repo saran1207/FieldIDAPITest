@@ -49,7 +49,6 @@ public class EditOrgPage extends OrgPage {
     @Override
     protected void doSave() {
         super.update();
-        //setResponsePage(OrgsListPage.class, PageParametersBuilder.uniqueId(secondaryOrgModel.getObject().getId()));
         setResponsePage(OrgsListPage.class);
     }
 

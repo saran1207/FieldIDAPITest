@@ -4,9 +4,7 @@ import com.n4systems.fieldid.service.org.OrgListFilterCriteria;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.org.InternalOrgFormDetailsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.model.orgs.SecondaryOrg;
 import org.apache.wicket.Component;
-import org.apache.wicket.model.IModel;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 

@@ -23,7 +23,6 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
@@ -48,7 +47,6 @@ public class OrgsListPage extends FieldIDTemplatePage {
     private WebMarkupContainer orgsListContainer;
     private WebMarkupContainer primaryOrgContainer;
     private IModel<OrgListFilterCriteria> filterCriteriaModel;
-    private Form filterForm;
     protected InternalOrg organization;
     protected PrimaryOrg primaryOrg;
 

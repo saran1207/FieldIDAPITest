@@ -86,6 +86,7 @@ public class InternalOrgFormReportImagePanel extends Panel {
                     uploadField.setVisible(true);
                     target.add(UploadForm.this);
                     uploadedImage.setRemoveImage(true);
+                    uploadedImage.getImage().delete();
                 }
             });
             fileDisplay.setOutputMarkupId(true);

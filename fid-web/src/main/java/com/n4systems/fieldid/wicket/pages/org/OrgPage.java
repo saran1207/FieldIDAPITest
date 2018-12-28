@@ -2,7 +2,6 @@ package com.n4systems.fieldid.wicket.pages.org;
 
 import com.n4systems.fieldid.service.org.OrgListFilterCriteria;
 import com.n4systems.fieldid.service.org.OrgService;
-import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
@@ -17,7 +16,6 @@ import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
-import com.n4systems.security.UserType;
 import com.n4systems.util.persistence.image.FileSystemInternalOrgReportFileProcessor;
 import com.n4systems.util.persistence.image.UploadedImage;
 import com.n4systems.util.timezone.Country;
@@ -64,10 +62,6 @@ public abstract class OrgPage extends FieldIDTemplatePage {
         } else {
             organization = loadExistingSecondaryOrg();
         }
-
-
-        //internalOrg = Model.of(loadExistingSecondaryOrg());
-        //filterCriteriaModel.getObject().withSecondaryOrg(loadExistingSecondaryOrg());
 
         internalOrg = Model.of(organization);
         filterCriteriaModel.getObject().withOrgFilter(organization);

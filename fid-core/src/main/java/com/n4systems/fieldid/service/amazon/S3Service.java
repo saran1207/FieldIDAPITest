@@ -1425,77 +1425,15 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
 //------------------------------------------------------------------------------------------------------
-    public String getPrimaryOrgLogoImagePath(PrimaryOrg primaryOrg){
-        String primaryOrgLogoImagePath = getPrimaryOrgLogoImagePath(primaryOrg.getId());
-        return primaryOrgLogoImagePath;
-    }
+    public void uploadInternalOrgLogoImage(File internalOrgLogoImageFile, InternalOrg internalOrg) {
 
-    public String getPrimaryOrgLogoImagePath(Long primaryOrgId){
-        String resourcePath = createResourcePath(null, PRIMARY_CERTIFICATE_LOGO_PATH, primaryOrgId);
-        return resourcePath;
-    }
-
-    public URL getPrimaryOrgLogoImageUrl(PrimaryOrg primaryOrg){
-        URL primaryOrgLogoImageUrl = getPrimaryOrgLogoImageUrl(primaryOrg.getId());
-        return primaryOrgLogoImageUrl;
-    }
-
-    public URL getPrimaryOrgLogoImageUrl(Long primaryOrgId){
-        Date expires = new DateTime().plusDays(getExpiryInDays()).toDate();
-        String resourcePath = getPrimaryOrgLogoImagePath(primaryOrgId);
-        URL url = generatePresignedUrl(resourcePath, expires, HttpMethod.GET);
-        return url;
-    }
-
-    //------------------------------------------------------------------------------------------------------
-    public String getSecondaryOrgLogoImagePath(SecondaryOrg secondaryOrg){
-        String secondaryOrgLogoImagePath = getSecondaryOrgLogoImagePath(secondaryOrg.getId());
-        return secondaryOrgLogoImagePath;
-    }
-
-    public String getSecondaryOrgLogoImagePath(Long secondaryOrgId){
-        String resourcePath = createResourcePath(null, SECONDARY_CERTIFICATE_LOGO_PATH, secondaryOrgId);
-        return resourcePath;
-    }
-
-    public URL getSecondaryOrgLogoImageUrl(SecondaryOrg secondaryOrg){
-        URL secondaryOrgLogoImageUrl = getSecondaryOrgLogoImageUrl(secondaryOrg.getId());
-        return secondaryOrgLogoImageUrl;
-    }
-
-    public URL getSecondaryOrgLogoImageUrl(Long secondaryOrgId){
-        Date expires = new DateTime().plusDays(getExpiryInDays()).toDate();
-        String resourcePath = getSecondaryOrgLogoImagePath(secondaryOrgId);
-        URL url = generatePresignedUrl(resourcePath, expires, HttpMethod.GET);
-        return url;
-    }
-
-    public void uploadInternalOrgLogoImage(File internalOrgLogoImageFile, InternalOrg internalOrg){
         if (internalOrg.isPrimary()) {
-            uploadPrimaryOrgLogoImage(internalOrgLogoImageFile, internalOrg.getId());
+            uploadPrimaryOrgCertificateLogo(internalOrgLogoImageFile);
         }
-        else uploadSecondaryOrgLogoImage(internalOrgLogoImageFile, internalOrg.getId());
+        else {
+            uploadSecondaryOrgCertificateLogo(internalOrgLogoImageFile, internalOrg.getId());
+        }
     }
-
-    public void uploadPrimaryOrgLogoImage(File internalOrgLogoImageFile, Long primaryOrgId){
-        uploadResource(internalOrgLogoImageFile, null, PRIMARY_CERTIFICATE_LOGO_PATH, primaryOrgId);
-    }
-
-    public void uploadSecondaryOrgLogoImage(File internalOrgLogoImageFile, Long secondaryOrgId){
-        uploadResource(internalOrgLogoImageFile, null, SECONDARY_CERTIFICATE_LOGO_PATH, secondaryOrgId);
-    }
-
-    public void uploadSecondaryOrgLogoImageData(byte[] secondaryOrgLogoImageData, SecondaryOrg secondaryOrg){
-        String secondaryOrgLogoImageFileName = SECONDARY_CERTIFICATE_LOGO_PATH.substring(SECONDARY_CERTIFICATE_LOGO_PATH.lastIndexOf('/') + 1);
-        String contentType = ContentTypeUtil.getContentType(secondaryOrgLogoImageFileName);
-        uploadSecondaryOrgLogoImageData(secondaryOrgLogoImageData, contentType, secondaryOrg.getId());
-    }
-
-    public void uploadSecondaryOrgLogoImageData(byte[] secondaryOrgLogoImageData, String contentType, Long secondaryOrgId){
-        uploadResource(secondaryOrgLogoImageData, contentType, null, SECONDARY_CERTIFICATE_LOGO_PATH, secondaryOrgId);
-    }
-
-
 
     public File downloadSecondaryOrgLogoImage(SecondaryOrg secondaryOrg){
         this.secondaryOrg = secondaryOrg;
@@ -1503,21 +1441,15 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     public byte[] downloadSecondaryOrgLogoImageBytes(SecondaryOrg secondaryOrg) throws IOException {
-        //the attachment Filename field is overloaded to house full URL instead of just the filename
-        byte[] secondaryOrgLogoImageData = downloadSecondaryOrgLogoImageBytes(secondaryOrg.getId());
+        byte[] secondaryOrgLogoImageData = downloadSecondaryOrgCertificateLogo(secondaryOrg.getId());
         return secondaryOrgLogoImageData;
     }
-
-    public byte[] downloadSecondaryOrgLogoImageBytes(Long secondaryOrgId) throws IOException {
-        return downloadResource(null, SECONDARY_CERTIFICATE_LOGO_PATH, secondaryOrgId);
-    }
-
 
     public File downloadSecondaryOrgLogoImage(Long secondaryOrgId){
         File secondaryOrgLogoImageFile = null;
         try {
-            byte[] secondaryOrgLogoImageBytes = downloadSecondaryOrgLogoImageBytes(secondaryOrgId);
-            secondaryOrgLogoImageFile = PathHandler.getSecondaryOrgFile(this.secondaryOrg, getSecondaryOrgLogoImagePath(secondaryOrgId));
+            byte[] secondaryOrgLogoImageBytes = downloadSecondaryOrgCertificateLogo(secondaryOrgId);
+            secondaryOrgLogoImageFile = PathHandler.getSecondaryOrgFile(this.secondaryOrg, PathHandler.createResourcePath(this.secondaryOrg.getTenant().getId()), PathHandler.createResourceFile(PathHandler.SECONDARY_CERTIFICATE_LOGO_PATH,secondaryOrgId));
             FileOutputStream secondaryOrgLogoImageFos = new FileOutputStream(secondaryOrgLogoImageFile);
             secondaryOrgLogoImageFos.write(secondaryOrgLogoImageBytes);
         }
@@ -1530,40 +1462,22 @@ public class S3Service extends FieldIdPersistenceService {
         return secondaryOrgLogoImageFile;
     }
 
-
-    public boolean secondaryOrgLogoImageExists(SecondaryOrg secondaryOrg){
-        return secondaryOrgLogoImageExists(secondaryOrg.getId());
-    }
-
-    public boolean secondaryOrgLogoImageExists(Long secondaryOrgId){
-        boolean exists = resourceExists(null, SECONDARY_CERTIFICATE_LOGO_PATH, secondaryOrgId);
-        return exists;
-    }
-
     public File downloadInternalOrgLogoImage(InternalOrg internalOrg){
         if (internalOrg.isPrimary()) {
             this.primaryOrg= (PrimaryOrg) internalOrg;
-            return downloadPrimaryOrgLogoImage(internalOrg.getId());
+            return downloadPrimaryOrgLogoImage();
         }
         this.secondaryOrg = (SecondaryOrg) internalOrg;
         return downloadSecondaryOrgLogoImage(internalOrg.getId());
-
     }
 
-    public File downloadPrimaryOrgLogoImage(PrimaryOrg primaryOrg){
-        //this.primaryOrg = primaryOrg;
-        return downloadPrimaryOrgLogoImage(primaryOrg.getId());
-    }
+    public File downloadPrimaryOrgLogoImage(PrimaryOrg primaryOrg){ return downloadPrimaryOrgLogoImage(); }
 
-    public byte[] downloadPrimaryOrgLogoImageBytes(Long primaryOrgId) throws IOException {
-        return downloadResource(null, PRIMARY_CERTIFICATE_LOGO_PATH, primaryOrgId);
-    }
-
-    public File downloadPrimaryOrgLogoImage(Long primaryOrgId){
+    public File downloadPrimaryOrgLogoImage(){
         File primaryOrgLogoImageFile = null;
         try {
-            byte[] primaryOrgLogoImageBytes = downloadPrimaryOrgLogoImageBytes(primaryOrgId);
-            primaryOrgLogoImageFile = PathHandler.getPrimaryOrgFile(this.primaryOrg, getPrimaryOrgLogoImagePath(primaryOrgId));
+            byte[] primaryOrgLogoImageBytes = downloadPrimaryOrgCertificateLogo();
+            primaryOrgLogoImageFile = PathHandler.getPrimaryOrgFile(this.primaryOrg, PathHandler.createResourcePath(this.primaryOrg.getTenant().getId()), PathHandler.createResourceFile(PathHandler.PRIMARY_CERTIFICATE_LOGO_PATH));
             FileOutputStream primaryOrgLogoImageFos = new FileOutputStream(primaryOrgLogoImageFile);
             primaryOrgLogoImageFos.write(primaryOrgLogoImageBytes);
         }
@@ -1576,18 +1490,9 @@ public class S3Service extends FieldIdPersistenceService {
         return primaryOrgLogoImageFile;
     }
 
-
     public void removeInternalOrgLogoImage(InternalOrg internalOrg){
-        if (internalOrg.isPrimary()) removePrimaryOrgLogoImage(internalOrg.getId());
-        else removeSecondaryOrgLogoImage(internalOrg.getId());
-    }
-
-    public void removePrimaryOrgLogoImage(Long primaryOrgId) {
-        removeResource(null, PRIMARY_CERTIFICATE_LOGO_PATH, primaryOrgId);
-    }
-
-    public void removeSecondaryOrgLogoImage(Long secondaryOrgId) {
-        removeResource(null, SECONDARY_CERTIFICATE_LOGO_PATH, secondaryOrgId);
+        if (internalOrg.isPrimary()) removePrimaryOrgCertificateLogo();
+        else removeSecondaryOrgCertificateLogo(internalOrg.getId());
     }
 //----------------------------------------------------------------------------------------------
 
