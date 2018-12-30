@@ -1,8 +1,10 @@
 package com.n4systems.fieldid.wicket.components.org.columns;
 
+import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.pages.org.ArchivedOrgsListPage;
 import com.n4systems.fieldid.wicket.pages.org.OrgsListPage;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
@@ -16,6 +18,8 @@ public class ArchivedOrgsListCell extends Panel {
 
     @SpringBean
     private PlaceService placeService;
+    @SpringBean
+    private OrgService orgService;
 
     public ArchivedOrgsListCell(String componentId, IModel<SecondaryOrg> rowModel) {
         super(componentId, rowModel);
@@ -27,12 +31,21 @@ public class ArchivedOrgsListCell extends Panel {
             @Override
             public void onClick(AjaxRequestTarget target) {
 
-                if (organization == null) FieldIDSession.get().info(new FIDLabelModel("message.unarchive_secondary_org_failure").getObject());
-                else {
-                    placeService.unarchive(organization) ;
-                    FieldIDSession.get().info(new FIDLabelModel("message.unarchive_secondary_org").getObject());
+                if (organization == null) {
+                    FieldIDSession.get().error(new FIDLabelModel("message.unarchive_secondary_org_failure").getObject());
+                    setResponsePage(OrgsListPage.class);
                 }
-                setResponsePage(OrgsListPage.class);
+                else {
+                    if(!orgService.orgNameIsUnique(FieldIDSession.get().getTenant().getId(), organization.getName(), organization.getId(), organization.isPrimary())) {
+                        FieldIDSession.get().error(new FIDLabelModel("errors.data.orgDuplicate").getObject());
+                        setResponsePage(ArchivedOrgsListPage.class);
+                    }
+                    else {
+                        placeService.unarchive(organization) ;
+                        FieldIDSession.get().info(new FIDLabelModel("message.unarchive_secondary_org").getObject());
+                        setResponsePage(OrgsListPage.class);
+                    }
+                }
 
             }
         });
