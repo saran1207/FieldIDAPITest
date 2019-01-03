@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.org;
 
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.org.OrgListFilterCriteria;
 import com.n4systems.fieldid.wicket.behavior.ConfirmBehavior;
@@ -10,6 +11,7 @@ import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.reporting.PathHandler;
+import com.n4systems.security.Permissions;
 import com.n4systems.util.persistence.image.UploadedImage;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -25,6 +27,7 @@ import java.io.File;
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.uniqueId;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_CONFIG})
 public class EditOrgPage extends OrgPage {
 
     @SpringBean

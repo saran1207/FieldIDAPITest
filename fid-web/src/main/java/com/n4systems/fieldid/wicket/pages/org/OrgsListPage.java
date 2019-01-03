@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.org;
 
 import com.google.common.collect.Lists;
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.service.org.OrgListFilterCriteria;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
@@ -16,6 +17,7 @@ import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
+import com.n4systems.security.Permissions;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
@@ -36,6 +38,7 @@ import java.util.List;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_CONFIG})
 public class OrgsListPage extends FieldIDTemplatePage {
 
     private static int PAGE_SIZE = 20;

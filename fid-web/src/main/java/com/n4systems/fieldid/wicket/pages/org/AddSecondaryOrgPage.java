@@ -1,13 +1,16 @@
 package com.n4systems.fieldid.wicket.pages.org;
 
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.service.org.OrgListFilterCriteria;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.org.InternalOrgFormDetailsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.security.Permissions;
 import org.apache.wicket.Component;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_CONFIG})
 public class AddSecondaryOrgPage extends OrgPage {
 
     @Override

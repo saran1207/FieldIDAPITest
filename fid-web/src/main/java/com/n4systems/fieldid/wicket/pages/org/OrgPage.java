@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.org;
 
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.service.org.OrgListFilterCriteria;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
@@ -16,6 +17,7 @@ import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
+import com.n4systems.security.Permissions;
 import com.n4systems.util.persistence.image.FileSystemInternalOrgReportFileProcessor;
 import com.n4systems.util.persistence.image.UploadedImage;
 import com.n4systems.util.timezone.Country;
@@ -34,6 +36,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_CONFIG})
 public abstract class OrgPage extends FieldIDTemplatePage {
 
     @SpringBean

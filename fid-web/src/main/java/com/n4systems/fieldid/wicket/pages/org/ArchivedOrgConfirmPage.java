@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.org;
 
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.service.org.OrgListFilterCriteria;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.org.PlaceService;
@@ -17,6 +18,7 @@ import com.n4systems.model.orgs.division.DivisionOrgByCustomerListLoader;
 import com.n4systems.model.orgs.secondaryorg.CustomerOrgByOwnerListLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserByOwnerListLoader;
+import com.n4systems.security.Permissions;
 import com.n4systems.util.OrganizationalUnitRemovalSummary;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
@@ -33,6 +35,7 @@ import java.util.List;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_CONFIG})
 public class ArchivedOrgConfirmPage extends FieldIDTemplatePage {
 
     @SpringBean
