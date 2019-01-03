@@ -12,8 +12,7 @@ public class SettingsPage extends SetupPage {
     public SettingsPage() {
         add(new BookmarkablePageLink<Void>("systemSettingsLink", SystemSettingsPage.class));
         add(new BookmarkablePageLink<Void>("yourPlanLink", YourPlanPage.class));
-        //add(new BookmarkablePageLink<Void>("organizationsLink", ManageOrganizationsPage.class));
-        add(new BookmarkablePageLink<Void>("organizationsLink1", OrgsListPage.class));
+        add(new BookmarkablePageLink<Void>("organizationsLink", OrgsListPage.class));
         Link ssoSettingsPageLink = new BookmarkablePageLink<Void>("ssoSettingsLink", SsoSettingsPage.class);
         add(ssoSettingsPageLink);
         ssoSettingsPageLink.setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.SSO));

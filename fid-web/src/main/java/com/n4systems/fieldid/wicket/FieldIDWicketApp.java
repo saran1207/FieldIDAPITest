@@ -130,6 +130,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/import", ImportPage.class);
         mountPage("setup/templates", TemplatesPage.class);
         mountPage("setup/widgets", WidgetsPage.class);
+        mountPage("setup/organizations", OrgsListPage.class);
         mountPage("setup/systemSettings", SystemSettingsPage.class);
         mountPage("setup/ssoSettings", SsoSettingsPage.class);
         mountPage("setup/yourPlan", YourPlanPage.class);
@@ -227,7 +228,6 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("placeEventTypes", PlaceEventTypesPage.class);
         mountPage("placeDescendants", PlaceDescendantsPage.class);
         mountPage("placeRecurringEvents", PlaceRecurringSchedulesPage.class);
-        mountPage("organizations1", OrgsListPage.class);
 
         mountPage("dashboard", DashboardPage.class);
 
