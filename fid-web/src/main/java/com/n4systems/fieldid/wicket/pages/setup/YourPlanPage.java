@@ -77,7 +77,7 @@ public class YourPlanPage extends FieldIDFrontEndPage {
     
     @Override
     protected Label createTitleLabel(String labelId) {
-        return new FlatLabel(labelId, new FIDLabelModel("title.manage_field_id_plan"));
+        return (FlatLabel) new FlatLabel(labelId, new FIDLabelModel("title.manage_field_id_plan.plural")).setEscapeModelStrings(false);
     }
 
     @Override
