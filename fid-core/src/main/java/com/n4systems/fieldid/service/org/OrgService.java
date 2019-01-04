@@ -139,7 +139,7 @@ public class OrgService extends CrudService<BaseOrg> {
 
     @Transactional(readOnly = true)
     public SecondaryOrg getSecondaryOrg(Long id) {
-        QueryBuilder<SecondaryOrg> builder =  createSecondaryOrgSecurityBuilder(SecondaryOrg.class);
+        QueryBuilder<SecondaryOrg> builder =  createTenantSecurityBuilder(SecondaryOrg.class);
         builder.addSimpleWhere("id", id);
         builder.addSimpleWhere("tenant.disabled", false);
         return persistenceService.find(builder);
@@ -473,7 +473,7 @@ public class OrgService extends CrudService<BaseOrg> {
     }
 
     private QueryBuilder<SecondaryOrg> createOrgQueryBuilder(OrgListFilterCriteria criteria) {
-        QueryBuilder<SecondaryOrg> builder = createSecondaryOrgSecurityBuilder(SecondaryOrg.class, criteria.isArchivedOnly());
+        QueryBuilder<SecondaryOrg> builder = createTenantSecurityBuilder(SecondaryOrg.class, criteria.isArchivedOnly());
 
         if (criteria.getCustomer() != null) {
             builder.addSimpleWhere("customerOrg", criteria.getCustomer());
