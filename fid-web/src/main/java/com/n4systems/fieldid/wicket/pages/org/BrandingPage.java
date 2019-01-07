@@ -32,8 +32,6 @@ import java.io.File;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
-//import com.n4systems.fieldid.wicket.components.org.InternalOrgFormDetailsPanel;
-
 public class BrandingPage extends FieldIDTemplatePage {
 
     @SpringBean
@@ -60,15 +58,14 @@ public class BrandingPage extends FieldIDTemplatePage {
 
     protected void doSave() {
         update();
-        setResponsePage(SettingsPage.class);
+        setResponsePage(BrandingPage.class);
     }
 
     protected BrandingLogoFormPanel reportImagePanel;
 
     protected UploadedImage getBrandingLogo() {
-        File reportImage;
+        File reportImage = new File("");
         if (internalOrg.getObject().isPrimary()) reportImage = PathHandler.getBrandingLogo((PrimaryOrg) internalOrg.getObject());
-        else reportImage = new File("");
         UploadedImage uploadedImage = new UploadedImage();
 
         if (reportImage.exists()) {
@@ -91,7 +88,7 @@ public class BrandingPage extends FieldIDTemplatePage {
     protected void onInitialize() {
         super.onInitialize();
         add(new FIDFeedbackPanel("feedbackPanel"));
-        add(new AddInternalOrgForm("addInternalOrgForm"));
+        add(new EditInternalOrgForm("editInternalOrgForm"));
     }
 
     @Override
@@ -133,11 +130,11 @@ public class BrandingPage extends FieldIDTemplatePage {
 
     protected void addConfirmBehavior(SubmitLink submitLink) {}
 
-    class AddInternalOrgForm extends Form {
+    class EditInternalOrgForm extends Form {
 
         SubmitLink submitLink;
 
-        public AddInternalOrgForm(String id) {
+        public EditInternalOrgForm(String id) {
             super(id);
 
             add(reportImagePanel = new BrandingLogoFormPanel("brandingLogoPanel", internalOrg, getBrandingLogo()));
@@ -156,7 +153,7 @@ public class BrandingPage extends FieldIDTemplatePage {
         @Override
         protected void onSubmit() {
             doSave();
-            FieldIDSession.get().info(new FIDLabelModel("message.organizationsaved").getObject());
+            FieldIDSession.get().info(new FIDLabelModel("message.system_settings_updated").getObject());
         }
     }
 
