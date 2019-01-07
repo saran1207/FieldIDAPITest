@@ -38,15 +38,11 @@ public class BrandingPage extends FieldIDTemplatePage {
     protected OrgService orgService;
     @SpringBean
     protected S3Service s3Service;
-
     private Long uniqueId;
     protected IModel<InternalOrg> internalOrg;
-    protected Country country;
-    protected Region region;
     protected InternalOrg organization;
 
     public BrandingPage(IModel<InternalOrg> internalOrg) {
-        this.uniqueId = internalOrg.getObject().getId();
         this.internalOrg = internalOrg;
     }
 
