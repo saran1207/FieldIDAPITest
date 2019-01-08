@@ -78,7 +78,7 @@ public class UserService extends CrudService<User> {
     }
 
 	@Override
-	public List<User> findAll(int page, int pageSize) {
+	public List<User> findAll(int page, int pageSize, Map<String, Object> optionapParameters) {
 		return super.findAll(createUserQueryBuilder(true, false), page, pageSize);
 	}
 

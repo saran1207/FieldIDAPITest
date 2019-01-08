@@ -10,16 +10,10 @@ import com.n4systems.fieldid.api.pub.model.Messages.AssetMessage.Builder;
 import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.model.Asset;
-import com.n4systems.util.StringUtils;
-import com.n4systems.util.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import java.util.Date;
-import java.util.List;
+import javax.ws.rs.Path;
 import java.util.stream.Collectors;
 
 @Path("assets")
@@ -100,68 +94,4 @@ public class AssetResource extends CrudResource<Asset, AssetMessage, Builder> {
 				.addCollection(AssetMessage::getAttributesList, Asset::setInfoOptions, messageToAssetAttributes, Collectors.toSet())
 				.build();
 	}
-
-	@GET
-	@Path("identifier")
-	@Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
-	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
-	@Transactional(readOnly = true)
-	public Messages.ListResponseMessage findAll(@QueryParam("page") int page, @QueryParam("pageSize") int pageSize, @QueryParam("delta") String date,
-												@QueryParam("identifier") String identifier) {
-		List<Asset> allItems;
-		List<AssetMessage> items;
-		Date delta = null;
-		String logInfo = getLogInfo();
-		String apiCall = getListResponseType().getDescriptor().getName();
-		String logMessage = logInfo + apiCall + " FIND All";
-		getLogger().info(logMessage);
-
-		if(date != null) {
-			delta = convertDate(date);
-		}
-
-		//allItems = assetService.findAssetByIdentifiersForNewSmartSearch(identifier);
-		allItems = findAll(page, pageSize, delta, identifier);
-
-		items = allItems
-				.stream()
-				.map(m -> toMessage(m))
-				.collect(Collectors.toList());
-
-		return Messages.ListResponseMessage.newBuilder()
-				.setPageSize(pageSize)
-				.setPage(page)
-				//.setTotal(assetService.findExactAssetSizeByIdentifiersForNewSmartSearch(identifier))
-				.setTotal(count(delta, identifier))
-				.setExtension(getListResponseType(), items)
-				.build();
-
-	}
-
-	@Transactional(readOnly = true)
-	public List<Asset> findAll(int page, int pageSize, Date delta, String identifier) {
-		QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
-		WhereParameterGroup group = new WhereParameterGroup("smartsearch");
-		if (delta != null) {
-			group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.GE, "modified", "modified", delta, null, WhereClause.ChainOp.OR));
-		}
-		if (StringUtils.isNotEmpty(identifier)) {
-			group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "identifier", "identifier", identifier, WhereParameter.WILDCARD_BOTH, null));
-		}
-		builder.addWhere(group);
-		builder.addOrder("modified",false);
-
-		return crudService().findAll(builder, page, pageSize);
-	}
-
-	@Transactional(readOnly = true)
-	public Long count(Date delta, String identifier) {
-		QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
-		if (delta != null) builder.addWhere(WhereParameter.Comparator.GE, "modified", "modified", delta);
-		if (StringUtils.isNotEmpty(identifier)) builder.addWhere(WhereParameter.Comparator.LIKE, "identifier", "identifier", "%"+identifier+"%");
-		return crudService().count(builder);
-	}
-
-
-
 }
