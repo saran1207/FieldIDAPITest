@@ -19,6 +19,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.OopsPage;
+import com.n4systems.fieldid.wicket.pages.setup.ImportPage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.fieldid.wicket.pages.widgets.DownloadExportNotificationPage;
 import com.n4systems.fieldid.wicket.pages.widgets.EntityImportInitiator;
@@ -329,7 +330,7 @@ public class UserImportPage extends FieldIDFrontEndPage {
 
     @Override
     protected Component createBackToLink(String linkId, String linkLabelId) {
-        BookmarkablePageLink<Void> pageLink = new BookmarkablePageLink<Void>(linkId, OwnersUsersLocationsPage.class);
+        BookmarkablePageLink<Void> pageLink = new BookmarkablePageLink<Void>(linkId, ImportPage.class);
         pageLink.add(new FlatLabel(linkLabelId, new FIDLabelModel("label.back_to_setup")));
         return pageLink;
     }
