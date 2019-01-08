@@ -1,0 +1,33 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<wicket:panel>
+    <div wicket:id="resultList">
+        <table class="list">
+
+            <tbody>
+            <tr>
+                <th wicket:id="criteriaList" class="notranslate">
+                    <wicket:container wicket:id="inputName"></wicket:container>
+                </th>
+                <th></th>
+            </tr>
+            <tr wicket:id="definitionList">
+                <td wicket:id="definitionInputList" class="notranslate">
+                    <wicket:container wicket:id="inputName"></wicket:container>
+                </td>
+                <td><div><a wicket:id="autoAttributeDefinitionEdit"><wicket:message key="label.edit"/></a></div>
+                    <div><a wicket:id="autoAttributeDefinitionRemove"><wicket:message key="label.remove"/></a></div>
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div wicket:id="emptyListResult" class="emptyList" >
+        <h2><wicket:message key="label.noresults"/></h2>
+        <p>
+            <span><wicket:message key="label.emptylistautoattribute"/></span>
+        </p>
+    </div>
+</wicket:panel>
+</html>

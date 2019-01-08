@@ -1,0 +1,17 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<wicket:panel>
+
+
+
+    <ul wicket:id="buttonsContainer" class="secondaryNav">
+        <li><a href="javascript:void(0)" wicket:id="viewDefinitions">&#171; <wicket:message key="label.view_all_definitions"/></a></li>
+        <li class="add button"><a href="javascript:void(0)" wicket:id="addDefinition"><wicket:message key="label.add_definition"/></a></li>
+    </ul>
+
+    <div wicket:id="definitionsPanels">
+        <wicket:container wicket:id="definitionsListPanel"></wicket:container>
+        <wicket:container wicket:id="definitionAddPanel"></wicket:container>
+    </div>
+
+</wicket:panel>
+</html>

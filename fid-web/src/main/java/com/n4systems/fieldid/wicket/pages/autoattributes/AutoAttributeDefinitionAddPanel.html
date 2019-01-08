@@ -1,0 +1,32 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<wicket:panel>
+
+    <form wicket:id="addDefinitionForm">
+    <div id="inputlist"  class="fluidSets" style="width:750px;   padding:10px;  border:1px solid #cfdddd;">
+        <h3><wicket:message key="label.inputfields"/></h3>
+        <div wicket:id="inputFieldsList" class="notranslate">
+            <wicket:container wicket:id="inputAttribute"></wicket:container>
+        </div>
+    </div>
+
+    <div style="margin:20px;" >
+        <h3><wicket:message key="label.mapto" /></h3>
+    </div>
+
+    <div id="outputlist"  class="fluidSets" style="width:750px;   padding:10px;  border:1px solid #cfdddd;">
+        <h3><wicket:message key="label.outputfields" /></h3>
+        <div wicket:id="outputFieldsList" class="notranslate">
+            <wicket:container wicket:id="outputAttribute"></wicket:container>
+        </div>
+    </div>
+
+    <div class="formAction">
+        <input type="submit" wicket:id="save" wicket:message="value:hbutton.save"/>
+            <input type="submit" wicket:id="saveAndAdd" wicket:message="value:hbutton.saveandadd" />
+        <wicket:message key="label.or"/>
+        <a href="javascript:void(0);" wicket:id="cancel"><wicket:message key="label.cancel" /></a>
+    </div>
+
+    </form>
+</wicket:panel>
+</html>
