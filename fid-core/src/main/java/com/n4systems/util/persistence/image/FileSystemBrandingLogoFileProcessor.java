@@ -1,5 +1,6 @@
 package com.n4systems.util.persistence.image;
 
+import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.orgs.InternalOrg;
@@ -47,9 +48,11 @@ public class FileSystemBrandingLogoFileProcessor {
         }
         catch(FileNotFoundException e) {
             logger.warn("Unable to read from temp branding logo Image file at: " + internalOrgLogoImageFile, e);
+            throw new FileAttachmentException("Unable to read from temp branding logo Image file at: " + internalOrgLogoImageFile, e);
         }
         catch(IOException e) {
             logger.warn("Unable to upload branding logo Image file to S3", e);
+            throw new FileAttachmentException("Unable to upload branding logo Image file to S3", e);
         }
     }
 
