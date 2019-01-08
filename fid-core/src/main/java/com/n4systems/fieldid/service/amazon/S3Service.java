@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
+import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ImageAttachmentException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.images.ImageService;
@@ -1455,9 +1456,11 @@ public class S3Service extends FieldIdPersistenceService {
         }
         catch(FileNotFoundException e) {
             logger.warn("Unable to write to temp secondary Org logo Image file at: " + secondaryOrgLogoImageFile, e);
+            throw new FileAttachmentException("Unable to write to temp secondary Org logo Image file at: " + secondaryOrgLogoImageFile, e);
         }
         catch(IOException e) {
             logger.warn("Unable to download secondary Org logo Image file from S3", e);
+            throw new FileAttachmentException("Unable to download secondary Org logo Image file from S3", e);
         }
         return secondaryOrgLogoImageFile;
     }
@@ -1483,9 +1486,11 @@ public class S3Service extends FieldIdPersistenceService {
         }
         catch(FileNotFoundException e) {
             logger.warn("Unable to write to temp primary Org logo Image file at: " + primaryOrgLogoImageFile, e);
+            throw new FileAttachmentException("Unable to write to temp primary Org logo Image file at: " + primaryOrgLogoImageFile, e);
         }
         catch(IOException e) {
             logger.warn("Unable to download primary Org logo Image file from S3", e);
+            throw new FileAttachmentException("Unable to download primary Org logo Image file from S3", e);
         }
         return primaryOrgLogoImageFile;
     }

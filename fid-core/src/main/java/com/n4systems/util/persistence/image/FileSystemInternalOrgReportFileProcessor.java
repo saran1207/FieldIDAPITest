@@ -1,5 +1,6 @@
 package com.n4systems.util.persistence.image;
 
+import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.orgs.InternalOrg;
@@ -49,14 +50,15 @@ public class FileSystemInternalOrgReportFileProcessor {
             byte[] primaryOrgLogoImageData = FileUtils.readFileToByteArray(internalOrgLogoImageFile);
             String contentType = new MimetypesFileTypeMap().getContentType(internalOrgLogoImageFile);
             s3Service.uploadPrimaryOrgCertificateLogo(contentType, primaryOrgLogoImageData);
-        }
-        catch(FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             logger.warn("Unable to read from temp primary Org logo Image file at: " + internalOrgLogoImageFile, e);
-        }
-        catch(IOException e) {
+            throw new FileAttachmentException("Unable to read from temp primary Org logo Image file at: " + internalOrgLogoImageFile, e);
+        } catch (IOException e) {
             logger.warn("Unable to upload primary Org logo Image file to S3", e);
+            throw new FileAttachmentException("Unable to upload primary Org logo Image file to S3", e);
         }
     }
+
 
     private void putNewImageForSecondaryOrg(File internalOrgLogoImageFile, InternalOrg internalOrg) {
 
@@ -67,9 +69,11 @@ public class FileSystemInternalOrgReportFileProcessor {
         }
         catch(FileNotFoundException e) {
             logger.warn("Unable to read from temp secondary Org logo Image file at: " + internalOrgLogoImageFile, e);
+            throw new FileAttachmentException("Unable to read from temp secondary Org logo Image file at: " + internalOrgLogoImageFile, e);
         }
         catch(IOException e) {
             logger.warn("Unable to upload secondary Org logo Image file to S3", e);
+            throw new FileAttachmentException("Unable to upload secondary Org logo Image file to S3", e);
         }
     }
 

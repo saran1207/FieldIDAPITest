@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.org;
 
+import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.model.FileAttachment;
@@ -110,6 +111,8 @@ public class InternalOrgFormReportImagePanel extends Panel {
                 uploadedImage = newImage;
             } catch (IOException e) {
                 logger.error("error with attaching file", e);
+                throw new FileAttachmentException("error with attaching file", e);
+
             }
         }
     }
