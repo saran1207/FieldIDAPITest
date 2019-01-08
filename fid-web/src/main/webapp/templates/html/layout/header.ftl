@@ -278,7 +278,7 @@
                                         <a href="<@s.url value="/w/setup/templates" />" ><@s.text name="nav.templates"/> » </a>
                                         <#if sessionUser.hasAccess("managesystemconfig") >
                                             <ul class="sub_menu">
-                                                <li><a href="<@s.url action='autoAttributeCriteriaList' namespace='/'/>" ><@s.text name="title.auto_attribute_wizard.plural" /></a></li>
+                                                <li><a href="/fieldid/w/autoAttributeActions?InitialTabSelection=ShowViewAllPage" ><@s.text name="title.auto_attribute_wizard.plural" /></a></li>
                                                 <li><a href="<@s.url value='w/setup/commentTemplateList' />" ><@s.text name="title.manage_comment_templates.plural" /></a></li>
                                                 <li><a href="<@s.url value='/w/setup/columnsLayout' type='ASSET'/>" ><@s.text name="title.column_layout_asset" /></a></li>
                                                 <#if securityGuard.isInspectionsEnabled()>
