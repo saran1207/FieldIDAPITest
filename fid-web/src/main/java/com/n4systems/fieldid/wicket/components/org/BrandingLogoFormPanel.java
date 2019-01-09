@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket.components.org;
 
-import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.model.FileAttachment;
@@ -9,15 +8,20 @@ import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.persistence.image.UploadedImage;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.io.File;
@@ -33,8 +37,9 @@ public class BrandingLogoFormPanel extends Panel {
 
     private UploadedImage uploadedImage;
     private InternalOrg internalOrg;
+    private FeedbackPanel feedbackPanel;
 
-    public BrandingLogoFormPanel(String id, IModel<InternalOrg> internalOrg, UploadedImage reportImage) {
+    public BrandingLogoFormPanel(String id, IModel<InternalOrg> internalOrg, UploadedImage reportImage, FeedbackPanel feedbackPanel) {
         super(id, internalOrg);
         this.uploadedImage = reportImage;
         if (internalOrg != null) this.internalOrg = internalOrg.getObject();
@@ -43,6 +48,7 @@ public class BrandingLogoFormPanel extends Panel {
         add(uploadForm = new UploadForm("uploadForm"));
         uploadForm.setMultiPart(true);
         if (internalOrg != null) uploadForm.setVisible(!internalOrg.getObject().isNew());
+        this.feedbackPanel = feedbackPanel;
     }
 
     public InternalOrg getInternalOrg() {return internalOrg;}
@@ -64,11 +70,13 @@ public class BrandingLogoFormPanel extends Panel {
                     saveFileAttachment(fileUpload);
                     fileDisplay.setVisible(true);
                     uploadField.setVisible(false);
+                    target.addChildren(getPage(), FeedbackPanel.class);
                     target.add(UploadForm.this);
                 }
 
                 @Override
                 protected void onError(AjaxRequestTarget target) {
+                    target.add(feedbackPanel);
                 }
             });
             if(uploadedImage.isExistingImage()) {
@@ -82,6 +90,8 @@ public class BrandingLogoFormPanel extends Panel {
             fileDisplay.add(new AjaxLink<Void>("removeLink") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
+                    Session.get().cleanupFeedbackMessages();
+                    target.add(feedbackPanel);
                     fileDisplay.setVisible(false);
                     uploadField.setVisible(true);
                     target.add(UploadForm.this);
@@ -110,7 +120,7 @@ public class BrandingLogoFormPanel extends Panel {
                 uploadedImage = newImage;
             } catch (IOException e) {
                 logger.error("error with attaching file", e);
-                throw new FileAttachmentException("error with attaching file", e);
+                Session.get().error("error with attaching file");
             }
         }
     }
@@ -118,6 +128,5 @@ public class BrandingLogoFormPanel extends Panel {
     public UploadedImage getUploadedImage() {
         return uploadedImage;
     }
-
 
 }

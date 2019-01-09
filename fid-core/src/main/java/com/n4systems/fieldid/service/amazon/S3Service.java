@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
+import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.exceptions.ImageAttachmentException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.images.ImageService;
@@ -1509,20 +1510,22 @@ public class S3Service extends FieldIdPersistenceService {
         return primaryOrgLogoImageFile;
     }
 
-    public File downloadBrandingLogoImage(InternalOrg internalOrg){
+    public File downloadBrandingLogoImage(InternalOrg internalOrg) throws FileProcessingException,FileNotFoundException,IOException {
         File brandingLogoImageFile = null;
         try {
             byte[] brandingLogoImageBytes = downloadBrandingCertificateLogo();
             this.primaryOrg= (PrimaryOrg) internalOrg;
             brandingLogoImageFile = PathHandler.getPrimaryOrgFile(this.primaryOrg, PathHandler.createResourcePath(this.primaryOrg.getTenant().getId()), PathHandler.createResourceFile(PathHandler.BRANDING_LOGO_PATH));
-            FileOutputStream brandinfLogoImageFos = new FileOutputStream(brandingLogoImageFile);
-            brandinfLogoImageFos.write(brandingLogoImageBytes);
+            FileOutputStream brandingLogoImageFos = new FileOutputStream(brandingLogoImageFile);
+            brandingLogoImageFos.write(brandingLogoImageBytes);
         }
         catch(FileNotFoundException e) {
             logger.warn("Unable to write to temp branding logo Image file at: " + brandingLogoImageFile, e);
+            throw new FileNotFoundException("Unable to write to temp branding logo Image file at: " + brandingLogoImageFile);
         }
         catch(IOException e) {
             logger.warn("Unable to download branding logo Image file from S3", e);
+            throw new IOException("Unable to download branding logo Image file from S3");
         }
         return brandingLogoImageFile;
     }

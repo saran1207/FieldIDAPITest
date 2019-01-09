@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages;
 
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -11,6 +12,11 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 public class FieldIDTemplateWithFeedbackPage extends FieldIDTemplatePage {
 
     private FeedbackPanel feedbackPanel;
+
+    public FieldIDTemplateWithFeedbackPage() {
+        super();
+        addFeedbackPanel();
+    }
 
     public FieldIDTemplateWithFeedbackPage(final PageParameters parameters) {
         super(parameters);
@@ -30,4 +36,18 @@ public class FieldIDTemplateWithFeedbackPage extends FieldIDTemplatePage {
     public FeedbackPanel getFeedbackPanel() {
         return feedbackPanel;
     }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.renderCSS("li .feedbackPanelINFO {padding: 10px 0px 10px 0px;\n" +
+                "text-align: center;\n" +
+                "border: 1px solid #5fb336;\n" +
+                "background-color: #e3f4db;\n" +
+                "font-size: 13px;\n" +
+                "display: block;\n" +
+                "color: #333333;}", null);
+        response.renderCSS("li .feedbackPanelERROR {text-align: center: display:block; color: red;}", null);
+    }
+
 }

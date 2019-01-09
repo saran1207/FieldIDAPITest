@@ -24,7 +24,7 @@ public class FileSystemBrandingLogoFileProcessor {
     }
 
 
-    public void process(UploadedImage internalOrgLogoImage) throws FileProcessingException {
+    public void process(UploadedImage internalOrgLogoImage) throws FileProcessingException,FileNotFoundException,IOException {
         if (internalOrgLogoImage.isRemoveImage()) {
             removeExistingInternalOrgLogoImage();
             internalOrgLogoImage.getImage().delete();
@@ -35,11 +35,11 @@ public class FileSystemBrandingLogoFileProcessor {
     }
 
 
-    private void putNewImageInPlace(UploadedImage internalOrgLogoImage) {
+    private void putNewImageInPlace(UploadedImage internalOrgLogoImage) throws FileNotFoundException,IOException {
         putNewImageForBrandingLogo(tempFile(internalOrgLogoImage));
     }
 
-    private void putNewImageForBrandingLogo(File internalOrgLogoImageFile) {
+    private void putNewImageForBrandingLogo(File internalOrgLogoImageFile) throws FileNotFoundException,IOException {
 
         try {
             byte[] brandingLogoImageData = FileUtils.readFileToByteArray(internalOrgLogoImageFile);
@@ -48,11 +48,11 @@ public class FileSystemBrandingLogoFileProcessor {
         }
         catch(FileNotFoundException e) {
             logger.warn("Unable to read from temp branding logo Image file at: " + internalOrgLogoImageFile, e);
-            throw new FileAttachmentException("Unable to read from temp branding logo Image file at: " + internalOrgLogoImageFile, e);
+            throw new FileNotFoundException("Unable to read from temp branding logo Image file at: " + internalOrgLogoImageFile);
         }
         catch(IOException e) {
             logger.warn("Unable to upload branding logo Image file to S3", e);
-            throw new FileAttachmentException("Unable to upload branding logo Image file to S3", e);
+            throw new IOException("Unable to upload branding logo Image file to S3", e);
         }
     }
 

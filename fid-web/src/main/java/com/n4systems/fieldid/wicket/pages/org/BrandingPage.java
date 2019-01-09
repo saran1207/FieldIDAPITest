@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.org;
 
+import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
@@ -9,6 +10,7 @@ import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.org.BrandingLogoFormPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
+import com.n4systems.fieldid.wicket.pages.FieldIDTemplateWithFeedbackPage;
 import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -18,6 +20,7 @@ import com.n4systems.util.persistence.image.UploadedImage;
 import com.n4systems.util.timezone.Country;
 import com.n4systems.util.timezone.Region;
 import org.apache.wicket.Component;
+import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
@@ -26,13 +29,16 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
-public class BrandingPage extends FieldIDTemplatePage {
+public class BrandingPage extends FieldIDTemplateWithFeedbackPage {
 
     @SpringBean
     protected OrgService orgService;
@@ -42,13 +48,15 @@ public class BrandingPage extends FieldIDTemplatePage {
     protected IModel<InternalOrg> internalOrg;
     protected InternalOrg organization;
 
-    public BrandingPage(IModel<InternalOrg> internalOrg) {
-        this.internalOrg = internalOrg;
+    public BrandingPage (){
+        super();
+        organization = getPrimaryOrg();;
+        internalOrg = Model.of(organization);
     }
 
-    public BrandingPage (){
-        PrimaryOrg primaryOrg = getPrimaryOrg();
-        organization = primaryOrg;
+    public BrandingPage(PageParameters params) {
+        super(params);
+        organization = getPrimaryOrg();;
         internalOrg = Model.of(organization);
     }
 
@@ -64,26 +72,41 @@ public class BrandingPage extends FieldIDTemplatePage {
         if (internalOrg.getObject().isPrimary()) reportImage = PathHandler.getBrandingLogo((PrimaryOrg) internalOrg.getObject());
         UploadedImage uploadedImage = new UploadedImage();
 
-        if (reportImage.exists()) {
-            uploadedImage.setImage(reportImage);
-            uploadedImage.setUploadDirectory(reportImage.getPath());
-        } else if(s3Service.isBrandingLogoExists(internalOrg.getObject().getId(), internalOrg.getObject().isPrimary())){
-            reportImage = s3Service.downloadBrandingLogoImage(internalOrg.getObject());
-            uploadedImage.setImage(reportImage);
-            uploadedImage.setUploadDirectory(reportImage.getPath());
+        try {
+            if (reportImage.exists()) {
+                uploadedImage.setImage(reportImage);
+                uploadedImage.setUploadDirectory(reportImage.getPath());
+            } else if (s3Service.isBrandingLogoExists(internalOrg.getObject().getId(), internalOrg.getObject().isPrimary())) {
+                reportImage = s3Service.downloadBrandingLogoImage(internalOrg.getObject());
+                uploadedImage.setImage(reportImage);
+                uploadedImage.setUploadDirectory(reportImage.getPath());
+            }
+        }
+        catch(FileProcessingException e) {
+            Session.get().error("Internal Error during branding logo processing");
+        }
+        catch(IOException e) {
+            Session.get().error(e.getMessage());
         }
 
         return uploadedImage;
     }
 
     protected void saveBrandingLogoImageFile(UploadedImage reportImage) {
-        new FileSystemBrandingLogoFileProcessor(internalOrg.getObject()).process(reportImage);
+        try {
+            new FileSystemBrandingLogoFileProcessor(internalOrg.getObject()).process(reportImage);
+        }
+        catch(FileProcessingException e) {
+            Session.get().error("Internal Error during branding logo processing");
+        }
+        catch(IOException e) {
+            Session.get().error(e.getMessage());
+        }
     }
 
     @Override
     protected void onInitialize() {
         super.onInitialize();
-        add(new FIDFeedbackPanel("feedbackPanel"));
         add(new EditInternalOrgForm("editInternalOrgForm"));
     }
 
@@ -133,7 +156,7 @@ public class BrandingPage extends FieldIDTemplatePage {
         public EditInternalOrgForm(String id) {
             super(id);
 
-            add(reportImagePanel = new BrandingLogoFormPanel("brandingLogoPanel", internalOrg, getBrandingLogo()));
+            add(reportImagePanel = new BrandingLogoFormPanel("brandingLogoPanel", internalOrg, getBrandingLogo(), getFeedbackPanel()));
 
             add(new TextField<String>("internalOrgWebSite", new PropertyModel<String>(internalOrg, "webSite")));
 
@@ -144,6 +167,8 @@ public class BrandingPage extends FieldIDTemplatePage {
             add(new BookmarkablePageLink<BrandingPage>("cancel", BrandingPage.class));
 
             setOutputMarkupPlaceholderTag(true);
+
+            setOutputMarkupId(true);
         }
 
         @Override
