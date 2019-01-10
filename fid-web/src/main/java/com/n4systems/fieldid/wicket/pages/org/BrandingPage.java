@@ -13,6 +13,7 @@ import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.reporting.PathHandler;
+import com.n4systems.util.StringUtils;
 import com.n4systems.util.persistence.image.FileSystemBrandingLogoFileProcessor;
 import com.n4systems.util.persistence.image.UploadedImage;
 import org.apache.wicket.Component;
@@ -81,7 +82,8 @@ public class BrandingPage extends FieldIDTemplateWithFeedbackPage {
             Session.get().error("Internal Error during branding logo processing");
         }
         catch(IOException e) {
-            Session.get().error(e.getMessage());
+            String errorMessage = e==null||e.getMessage()==null||StringUtils.isEmpty(e.getMessage())?"Internal Error during branding logo processing":e.getMessage();
+            Session.get().error(errorMessage);
         }
 
         return uploadedImage;
@@ -95,7 +97,8 @@ public class BrandingPage extends FieldIDTemplateWithFeedbackPage {
             Session.get().error("Internal Error during branding logo processing");
         }
         catch(IOException e) {
-            Session.get().error(e.getMessage());
+            String errorMessage = e==null||e.getMessage()==null||StringUtils.isEmpty(e.getMessage())?"Internal Error during branding logo processing":e.getMessage();
+            Session.get().error(errorMessage);
         }
     }
 
