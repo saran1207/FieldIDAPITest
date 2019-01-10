@@ -1,6 +1,5 @@
 package com.n4systems.util.persistence.image;
 
-import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.orgs.InternalOrg;
@@ -24,7 +23,7 @@ public class FileSystemInternalOrgReportFileProcessor {
     }
 
 
-    public void process(UploadedImage internalOrgLogoImage) throws FileProcessingException {
+    public void process(UploadedImage internalOrgLogoImage) throws FileProcessingException,FileNotFoundException,IOException {
         if (internalOrgLogoImage.isRemoveImage()) {
             removeExistingInternalOrgLogoImage();
             internalOrgLogoImage.getImage().delete();
@@ -35,7 +34,7 @@ public class FileSystemInternalOrgReportFileProcessor {
     }
 
 
-    private void putNewImageInPlace(UploadedImage internalOrgLogoImage) {
+    private void putNewImageInPlace(UploadedImage internalOrgLogoImage) throws FileNotFoundException,IOException {
         s3Service.uploadInternalOrgLogoImage(tempFile(internalOrgLogoImage), internalOrg);
         if (internalOrg.isPrimary()) {
             putNewImageForPrimaryOrg(tempFile(internalOrgLogoImage), internalOrg);
@@ -44,23 +43,23 @@ public class FileSystemInternalOrgReportFileProcessor {
             putNewImageForSecondaryOrg(tempFile(internalOrgLogoImage), internalOrg);
     }
 
-    private void putNewImageForPrimaryOrg(File internalOrgLogoImageFile, InternalOrg internalOrg) {
+    private void putNewImageForPrimaryOrg(File internalOrgLogoImageFile, InternalOrg internalOrg) throws FileNotFoundException,IOException {
 
         try {
             byte[] primaryOrgLogoImageData = FileUtils.readFileToByteArray(internalOrgLogoImageFile);
             String contentType = new MimetypesFileTypeMap().getContentType(internalOrgLogoImageFile);
             s3Service.uploadPrimaryOrgCertificateLogo(contentType, primaryOrgLogoImageData);
         } catch (FileNotFoundException e) {
-            logger.warn("Unable to read from temp primary Org logo Image file at: " + internalOrgLogoImageFile, e);
-            throw new FileAttachmentException("Unable to read from temp primary Org logo Image file at: " + internalOrgLogoImageFile, e);
+            logger.error("Unable to read from temp primary Org logo Image file at: " + internalOrgLogoImageFile, e);
+            throw new FileNotFoundException("Unable to read from temp primary Org logo Image file");
         } catch (IOException e) {
-            logger.warn("Unable to upload primary Org logo Image file to S3", e);
-            throw new FileAttachmentException("Unable to upload primary Org logo Image file to S3", e);
+            logger.error("Unable to upload primary Org logo Image file to S3", e);
+            throw new IOException("Unable to upload primary Org logo Image file to server", e);
         }
     }
 
 
-    private void putNewImageForSecondaryOrg(File internalOrgLogoImageFile, InternalOrg internalOrg) {
+    private void putNewImageForSecondaryOrg(File internalOrgLogoImageFile, InternalOrg internalOrg) throws FileNotFoundException,IOException {
 
         try {
             byte[] secondaryOrgLogoImageData = FileUtils.readFileToByteArray(internalOrgLogoImageFile);
@@ -68,12 +67,12 @@ public class FileSystemInternalOrgReportFileProcessor {
             s3Service.uploadSecondaryOrgCertificateLogo(internalOrg.getId(), contentType, secondaryOrgLogoImageData);
         }
         catch(FileNotFoundException e) {
-            logger.warn("Unable to read from temp secondary Org logo Image file at: " + internalOrgLogoImageFile, e);
-            throw new FileAttachmentException("Unable to read from temp secondary Org logo Image file at: " + internalOrgLogoImageFile, e);
+            logger.error("Unable to read from temp secondary Org logo Image file at: " + internalOrgLogoImageFile, e);
+            throw new FileNotFoundException("Unable to read from temp secondary Org logo Image file");
         }
         catch(IOException e) {
-            logger.warn("Unable to upload secondary Org logo Image file to S3", e);
-            throw new FileAttachmentException("Unable to upload secondary Org logo Image file to S3", e);
+            logger.error("Unable to upload secondary Org logo Image file to S3", e);
+            throw new IOException("Unable to upload secondary Org logo Image file to server", e);
         }
     }
 

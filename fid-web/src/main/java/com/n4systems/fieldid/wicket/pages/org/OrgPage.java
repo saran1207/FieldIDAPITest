@@ -1,29 +1,31 @@
 package com.n4systems.fieldid.wicket.pages.org;
 
+import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.service.org.OrgListFilterCriteria;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
-import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.org.InternalOrgFormAddressPanel;
 import com.n4systems.fieldid.wicket.components.org.InternalOrgFormDetailsPanel;
 import com.n4systems.fieldid.wicket.components.org.InternalOrgFormLocalizationPanel;
 import com.n4systems.fieldid.wicket.components.org.InternalOrgFormReportImagePanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
+import com.n4systems.fieldid.wicket.pages.FieldIDTemplateWithFeedbackPage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.security.Permissions;
+import com.n4systems.util.StringUtils;
 import com.n4systems.util.persistence.image.FileSystemInternalOrgReportFileProcessor;
 import com.n4systems.util.persistence.image.UploadedImage;
 import com.n4systems.util.timezone.Country;
 import com.n4systems.util.timezone.CountryList;
 import com.n4systems.util.timezone.Region;
 import org.apache.wicket.Component;
+import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -34,10 +36,12 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.io.IOException;
+
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_CONFIG})
-public abstract class OrgPage extends FieldIDTemplatePage {
+public abstract class OrgPage extends FieldIDTemplateWithFeedbackPage {
 
     @SpringBean
     protected OrgService orgService;
@@ -50,13 +54,17 @@ public abstract class OrgPage extends FieldIDTemplatePage {
     protected InternalOrg organization;
 
     public OrgPage(IModel<InternalOrg> internalOrg) {
+        super();
         this.uniqueId = internalOrg.getObject().getId();
         this.internalOrg = internalOrg == null?createSecondaryOrg():internalOrg;
     }
 
-    public OrgPage (){}
+    public OrgPage (){
+        super();
+    }
 
     public OrgPage(PageParameters parameters) {
+        super(parameters);
         filterCriteriaModel = getOrgListFilterCriteria();
         PrimaryOrg primaryOrg = getPrimaryOrg();
         uniqueId = parameters.get("uniqueID")==null?0L:parameters.get("uniqueID").toLong();
@@ -65,7 +73,6 @@ public abstract class OrgPage extends FieldIDTemplatePage {
         } else {
             organization = loadExistingSecondaryOrg();
         }
-
         internalOrg = Model.of(organization);
         filterCriteriaModel.getObject().withOrgFilter(organization);
     }
@@ -87,7 +94,16 @@ public abstract class OrgPage extends FieldIDTemplatePage {
     }
 
     protected void saveInternalOrgLogoImageFile(UploadedImage reportImage) {
-        new FileSystemInternalOrgReportFileProcessor(internalOrg.getObject()).process(reportImage);
+        try {
+            new FileSystemInternalOrgReportFileProcessor(internalOrg.getObject()).process(reportImage);
+        }
+        catch(FileProcessingException e) {
+            Session.get().error("Internal Error during organization logo processing");
+        }
+        catch(IOException e) {
+            String errorMessage = e==null||e.getMessage()==null|| StringUtils.isEmpty(e.getMessage())?"Internal Error during organization logo processing":e.getMessage();
+            Session.get().error(errorMessage);
+        }
     }
 
     @Override
@@ -95,7 +111,6 @@ public abstract class OrgPage extends FieldIDTemplatePage {
         super.onInitialize();
         country = CountryList.getInstance().getCountryByFullName(getPrimaryOrg().getDefaultTimeZone());
         region = CountryList.getInstance().getRegionByFullId(getPrimaryOrg().getDefaultTimeZone());
-        add(new FIDFeedbackPanel("feedbackPanel"));
         add(new AddSecondaryOrgForm("addSecondaryOrgForm"));
     }
 
@@ -185,7 +200,7 @@ public abstract class OrgPage extends FieldIDTemplatePage {
         public AddSecondaryOrgForm(String id) {
             super(id);
 
-            add(reportImagePanel = new InternalOrgFormReportImagePanel("reportImagePanel", internalOrg, getReportImage()));
+            add(reportImagePanel = new InternalOrgFormReportImagePanel("reportImagePanel", internalOrg, getReportImage(), getFeedbackPanel()));
 
             internalOrg = internalOrg == null?createSecondaryOrg():internalOrg;
 

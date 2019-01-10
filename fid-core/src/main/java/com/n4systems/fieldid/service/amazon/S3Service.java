@@ -6,7 +6,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
-import com.n4systems.exceptions.FileAttachmentException;
+import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.exceptions.ImageAttachmentException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.images.ImageService;
@@ -1436,7 +1436,7 @@ public class S3Service extends FieldIdPersistenceService {
         }
     }
 
-    public File downloadSecondaryOrgLogoImage(SecondaryOrg secondaryOrg){
+    public File downloadSecondaryOrgLogoImage(SecondaryOrg secondaryOrg) throws FileNotFoundException,IOException {
         this.secondaryOrg = secondaryOrg;
         return downloadSecondaryOrgLogoImage(secondaryOrg.getId());
     }
@@ -1446,7 +1446,7 @@ public class S3Service extends FieldIdPersistenceService {
         return secondaryOrgLogoImageData;
     }
 
-    public File downloadSecondaryOrgLogoImage(Long secondaryOrgId){
+    public File downloadSecondaryOrgLogoImage(Long secondaryOrgId) throws FileNotFoundException,IOException {
         File secondaryOrgLogoImageFile = null;
         try {
             byte[] secondaryOrgLogoImageBytes = downloadSecondaryOrgCertificateLogo(secondaryOrgId);
@@ -1455,17 +1455,17 @@ public class S3Service extends FieldIdPersistenceService {
             secondaryOrgLogoImageFos.write(secondaryOrgLogoImageBytes);
         }
         catch(FileNotFoundException e) {
-            logger.warn("Unable to write to temp secondary Org logo Image file at: " + secondaryOrgLogoImageFile, e);
-            throw new FileAttachmentException("Unable to write to temp secondary Org logo Image file at: " + secondaryOrgLogoImageFile, e);
+            logger.error("Unable to write to temp secondary Org logo Image file at: " + secondaryOrgLogoImageFile, e);
+            throw new FileNotFoundException("Unable to write to temp secondary Org logo Image file");
         }
         catch(IOException e) {
-            logger.warn("Unable to download secondary Org logo Image file from S3", e);
-            throw new FileAttachmentException("Unable to download secondary Org logo Image file from S3", e);
+            logger.error("Unable to download secondary Org logo Image file from S3", e);
+            throw new IOException("Unable to download secondary Org logo Image file from server", e);
         }
         return secondaryOrgLogoImageFile;
     }
 
-    public File downloadInternalOrgLogoImage(InternalOrg internalOrg){
+    public File downloadInternalOrgLogoImage(InternalOrg internalOrg) throws FileProcessingException,FileNotFoundException,IOException {
         if (internalOrg.isPrimary()) {
             this.primaryOrg= (PrimaryOrg) internalOrg;
             return downloadPrimaryOrgLogoImage();
@@ -1474,9 +1474,9 @@ public class S3Service extends FieldIdPersistenceService {
         return downloadSecondaryOrgLogoImage(internalOrg.getId());
     }
 
-    public File downloadPrimaryOrgLogoImage(PrimaryOrg primaryOrg){ return downloadPrimaryOrgLogoImage(); }
+    public File downloadPrimaryOrgLogoImage(PrimaryOrg primaryOrg) throws FileNotFoundException,IOException { return downloadPrimaryOrgLogoImage(); }
 
-    public File downloadPrimaryOrgLogoImage(){
+    public File downloadPrimaryOrgLogoImage() throws FileNotFoundException,IOException {
         File primaryOrgLogoImageFile = null;
         try {
             byte[] primaryOrgLogoImageBytes = downloadPrimaryOrgCertificateLogo();
@@ -1485,12 +1485,12 @@ public class S3Service extends FieldIdPersistenceService {
             primaryOrgLogoImageFos.write(primaryOrgLogoImageBytes);
         }
         catch(FileNotFoundException e) {
-            logger.warn("Unable to write to temp primary Org logo Image file at: " + primaryOrgLogoImageFile, e);
-            throw new FileAttachmentException("Unable to write to temp primary Org logo Image file at: " + primaryOrgLogoImageFile, e);
+            logger.error("Unable to write to temp primary Org logo Image file at: " + primaryOrgLogoImageFile, e);
+            throw new FileNotFoundException("Unable to write to temp primary Org logo Image file");
         }
         catch(IOException e) {
-            logger.warn("Unable to download primary Org logo Image file from S3", e);
-            throw new FileAttachmentException("Unable to download primary Org logo Image file from S3", e);
+            logger.error("Unable to download primary Org logo Image file from S3", e);
+            throw new IOException("Unable to download primary Org logo Image file from server", e);
         }
         return primaryOrgLogoImageFile;
     }

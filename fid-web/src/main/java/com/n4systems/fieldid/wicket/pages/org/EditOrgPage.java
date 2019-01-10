@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.org;
 
+import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.org.OrgListFilterCriteria;
@@ -12,8 +13,10 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
+import com.n4systems.util.StringUtils;
 import com.n4systems.util.persistence.image.UploadedImage;
 import org.apache.wicket.Component;
+import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
@@ -23,6 +26,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.io.File;
+import java.io.IOException;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.uniqueId;
@@ -52,7 +56,7 @@ public class EditOrgPage extends OrgPage {
     @Override
     protected void doSave() {
         super.update();
-        setResponsePage(OrgsListPage.class);
+        setResponsePage(EditOrgPage.class,uniqueId(internalOrg.getObject().getId()));
     }
 
     @Override
@@ -87,15 +91,23 @@ public class EditOrgPage extends OrgPage {
         else reportImage = PathHandler.getReportImage((SecondaryOrg) internalOrg.getObject());
         UploadedImage uploadedImage = new UploadedImage();
 
-        if (reportImage.exists()) {
-            uploadedImage.setImage(reportImage);
-            uploadedImage.setUploadDirectory(reportImage.getPath());
-        } else if(s3Service.isCertificateLogoExists(internalOrg.getObject().getId(), internalOrg.getObject().isPrimary())){
-            reportImage = s3Service.downloadInternalOrgLogoImage(internalOrg.getObject());
-            uploadedImage.setImage(reportImage);
-            uploadedImage.setUploadDirectory(reportImage.getPath());
+        try {
+            if (reportImage.exists()) {
+                uploadedImage.setImage(reportImage);
+                uploadedImage.setUploadDirectory(reportImage.getPath());
+            } else if(s3Service.isCertificateLogoExists(internalOrg.getObject().getId(), internalOrg.getObject().isPrimary())){
+                reportImage = s3Service.downloadInternalOrgLogoImage(internalOrg.getObject());
+                uploadedImage.setImage(reportImage);
+                uploadedImage.setUploadDirectory(reportImage.getPath());
+            }
         }
-
+        catch(FileProcessingException e) {
+            Session.get().error("Internal Error during organization logo processing");
+        }
+        catch(IOException e) {
+            String errorMessage = e==null||e.getMessage()==null||StringUtils.isEmpty(e.getMessage())?"Internal Error during organization logo processing":e.getMessage();
+            Session.get().error(errorMessage);
+        }
         return uploadedImage;
     }
 
