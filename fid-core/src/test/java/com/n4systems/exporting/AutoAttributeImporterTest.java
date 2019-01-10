@@ -103,7 +103,7 @@ public class AutoAttributeImporterTest {
 		AutoAttributeDefinition model = new AutoAttributeDefinition();
 		
 		AutoAttributeCriteria criteria = new AutoAttributeCriteria();
-		criteria.setDefinitions(Arrays.asList(new AutoAttributeDefinition()));
+		criteria.setDefinitions(new ArrayList(Arrays.asList(new AutoAttributeDefinition())));
 		
 		expect(validator.getValidationContext()).andReturn(validationContext);
 		expect(converter.getCriteria()).andReturn(criteria);
@@ -114,9 +114,10 @@ public class AutoAttributeImporterTest {
 		reader.close();
 		expect(converter.toModel(view, transaction)).andReturn(model);
 		expect(converter.getCriteria()).andReturn(criteria);
+		expectLastCall().anyTimes();
 		saver.remove(transaction, criteria.getDefinitions().get(0));
 		saver.save(transaction, model);
-		
+
 		replay(reader);
 		replay(validator);
 		replay(converter);

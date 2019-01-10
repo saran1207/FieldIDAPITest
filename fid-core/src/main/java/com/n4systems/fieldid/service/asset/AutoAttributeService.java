@@ -4,6 +4,9 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
+import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.user.User;
+import com.n4systems.util.persistence.QueryBuilder;
 import org.springframework.transaction.annotation.Transactional;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
@@ -106,6 +109,30 @@ public class AutoAttributeService extends FieldIdPersistenceService {
         }
     }
 
+    @Transactional(readOnly = true)
+    public AutoAttributeCriteria getAutoAttributeCriteriaWithPostFetches(Long criteriaId) {
+        QueryBuilder<AutoAttributeCriteria> query = new QueryBuilder<AutoAttributeCriteria>(AutoAttributeCriteria.class, new OpenSecurityFilter());
+        query.addSimpleWhere("id", criteriaId);
+        query.addPostFetchPaths("inputs", "outputs", "assetType.name");
+        return persistenceService.find(query);
+    }
+
+    @Transactional(readOnly = true)
+    public AutoAttributeDefinition getAutoAttributeDefinitionWithPostFetches(Long definitionId) {
+        QueryBuilder<AutoAttributeDefinition> query = new QueryBuilder<AutoAttributeDefinition>(AutoAttributeDefinition.class, new OpenSecurityFilter());
+        query.addSimpleWhere("id", definitionId);
+        query.addPostFetchPaths("inputs");
+        return persistenceService.find(query);
+    }
+
+    @Transactional(readOnly = true)
+    public List<AutoAttributeDefinition> getAutoAttributeDefinitionsWithPostFetches(Long criteriaId) {
+        QueryBuilder<AutoAttributeDefinition> query = new QueryBuilder<AutoAttributeDefinition>(AutoAttributeDefinition.class, new OpenSecurityFilter());
+        query.addSimpleWhere("criteria", getAutoAttributeCriteriaWithPostFetches(criteriaId));
+        query.addPostFetchPaths("inputs");
+        return persistenceService.findAll(query);
+    }
+
     private AutoAttributeCriteria criteriaUses(AssetType assetType, InfoFieldBean field) {
         if (assetType.getAutoAttributeCriteria() != null) {
             AutoAttributeCriteria criteria = persistenceService.find(AutoAttributeCriteria.class, assetType.getAutoAttributeCriteria().getId());
@@ -114,5 +141,58 @@ public class AutoAttributeService extends FieldIdPersistenceService {
             }
         }
         return null;
+    }
+
+    @Transactional
+    public AutoAttributeCriteria saveWithFlush(AutoAttributeCriteria criteria, User user) {
+        criteria.setCreatedBy(user);
+        criteria.setModifiedBy(user);
+        persistenceService.save(criteria);
+        persistenceService.flush();
+        return criteria;
+    }
+
+    @Transactional
+    public AutoAttributeCriteria update(AutoAttributeCriteria criteria) {
+        deleteExistingDefinitions(criteria);
+        criteria.touch();
+        return persistenceService.update(criteria);
+    }
+
+    @Transactional
+    public void delete(AutoAttributeCriteria criteria) {
+        /* Attach entity first */
+        persistenceService.delete(persistenceService.find(AutoAttributeCriteria.class, criteria.getId()));
+    }
+
+    @Transactional
+    private void deleteExistingDefinitions(AutoAttributeCriteria criteria) {
+        QueryBuilder<AutoAttributeDefinition> builder = new QueryBuilder<AutoAttributeDefinition>(AutoAttributeDefinition.class, new OpenSecurityFilter());
+        builder.addSimpleWhere("criteria", criteria);
+        for (AutoAttributeDefinition definition : persistenceService.findAll(builder)) {
+            persistenceService.delete(definition);
+        }
+    }
+
+    @Transactional
+    public AutoAttributeDefinition saveDefinitionWithFlush(AutoAttributeDefinition definition) {
+        definition = getEntityManager().merge(definition);
+        modifyCriteria(definition);
+        getEntityManager().flush();
+        return definition;
+    }
+
+    @Transactional
+    public void removeDefinition(AutoAttributeDefinition definition) {
+        definition = persistenceService.find(AutoAttributeDefinition.class, definition.getId());
+        persistenceService.remove(definition);
+        modifyCriteria(definition);
+    }
+
+    @Transactional
+    private void modifyCriteria(AutoAttributeDefinition definition) {
+        AutoAttributeCriteria criteria = persistenceService.find(AutoAttributeCriteria.class, definition.getCriteria().getId());
+        criteria.touch();
+        persistenceService.merge(criteria);
     }
 }

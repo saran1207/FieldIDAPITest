@@ -1,0 +1,45 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<wicket:panel>
+
+    <div class="infoSet">
+        <label class="label">
+            <span style="padding-right: 2px;" wicket:id="required"></span>
+            <span wicket:id="fieldName"></span>
+        </label>
+        <div class="fieldHolder">
+            <span class="unitOfMeasure">
+                 <input type="text" wicket:id="amount" class="dataEntry attribute unitOfMeasure " readonly="true" />
+            </span>
+            <span class="action">
+                <a href="javascript:void(0)" wicket:id="editLink"><img style="border: none;" src="images/unit_of_measure.png" /></a>
+            </span>
+            <div wicket:id="uomFormContainer">
+                <div wicket:id="uomFormHideableContainer" class="unitMeasureDiv">
+                    <form wicket:id="uomForm" class="inputForm fullForm" style="width:auto; padding-top:2px;">
+                        <table>
+                            <tr class="fieldData">
+                                <th><wicket:message key="label.unitofmeasure"/></th>
+                                <th><select wicket:id="unitOfMeasures"></select></th>
+                            </tr>
+                            <tr wicket:id="inputUnits" class="fieldData">
+                                <td><span wicket:id="unitOfMeasureName"></span></td>
+                                <td><input type="text" wicket:id="unitOfMeasureInputValue" /></td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>
+                                    <input type="button" wicket:id="submitForm" wicket:message="value:hbutton.submit">
+                                    <wicket:message key="label.or"></wicket:message>
+                                    <a href="javascript:void(0);" wicket:id="cancelForm"><wicket:message key="label.cancel"></wicket:message></a>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</wicket:panel>
+</html>

@@ -5,8 +5,8 @@ ${action.setPageType('setup','import')!}
 	<@n4.includeStyle href="settings" type="page"/>
 	<script type="text/javascript">
 		importAssets = '/fieldid/w/AssetImport';
-		importEvents = '<@s.url action="eventImportExport" />';
-		importAutoAttributes = '<@s.url action="autoAttributeImportExport" />'; 		
+		importEvents = '/fieldid/w/EventImport';
+		importAutoAttributes = '/fieldid/w/autoAttributeActions';
 			
 		function redirectImportLink(url, param, id) {
 			return redirect(url + param + id);
