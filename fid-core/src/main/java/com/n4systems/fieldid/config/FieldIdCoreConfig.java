@@ -55,6 +55,7 @@ import com.n4systems.fieldid.service.pentaho.PentahoService;
 import com.n4systems.fieldid.service.predefinedlocation.PredefinedLocationService;
 import com.n4systems.fieldid.service.procedure.*;
 import com.n4systems.fieldid.service.project.ProjectService;
+import com.n4systems.fieldid.service.catalog.PublishedCatalogService;
 import com.n4systems.fieldid.service.schedule.AssetTypeScheduleService;
 import com.n4systems.fieldid.service.schedule.MassScheduleService;
 import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
@@ -978,5 +979,10 @@ public class FieldIdCoreConfig {
     @Bean
     public ButtonGroupService buttonGroupService() {
         return new ButtonGroupService();
+    }
+
+    @Bean
+    public PublishedCatalogService publishedCatalogService() {
+        return new PublishedCatalogService();
     }
 }

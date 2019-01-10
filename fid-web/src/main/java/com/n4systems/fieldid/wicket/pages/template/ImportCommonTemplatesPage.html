@@ -1,0 +1,86 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+    <style>
+        .setupWizardContent{
+            background-color: white;
+            border: 1px solid #c2c2c2;
+            padding: 20px;
+            width: auto;
+        }
+        .setupWizardContent h2{
+            font-size: 22px;
+            font-weight: normal;
+        }
+        .setupWizardContent p{
+            font-size: 13px;
+            line-height: 20px;
+        }
+        .setupWizardContent .importSelection label{
+            padding: 10px 5px 10px 5px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+        .catalogPackage li{
+            padding: 5px 5px 5px 25px;
+            font-size: 12px;
+        }
+        ul .catalogPackage {
+            padding-top: 4px;
+        }
+        .catalogPackage li span {
+            padding-left: 5px;
+        }
+        .selectOptions {
+            padding-left: 5px;
+            padding-bottom: 10px;
+        }
+    </style>
+   <!-- <div class="setupContainer">-->
+    <div class="setupWizardContent">
+        <!--<h2><wicket:message key="label.import_common_templates"/></h2>-->
+        <p><wicket:message key="label.setup_wizard_catalog_description"/></p>
+        <br/>
+
+        <div class="selectOptions">
+            <wicket:message key="label.select"/>:
+            <a wicket:id="selectAll" href="javascript:void(0);"><wicket:message key="label.all"/></a>,
+            <a wicket:id="selectNone" href="javascript:void(0);"><wicket:message key="label.none"/></a>
+        </div>
+
+        <div wicket:id="assetTypeSelections">
+            <div wicket:id="publishedAssetTypeGroups" class="importSelection">
+                <label wicket:id="groupName"></label>
+                <ul wicket:id="publishedAssetTypeList" class="catalogPackage">
+                    <li>
+                        <input type="checkbox" wicket:id="publishedAssetTypeSelection"><span wicket:id="publishedAssetTypeName"></span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="importSelection">
+            <label><wicket:message key="label.ungrouped"/></label>
+            <ul wicket:id="publishedAssetTypeUngroupedList" class="catalogPackage">
+                <li>
+                    <input type="checkbox" wicket:id="publishedAssetTypeSelection"><span wicket:id="publishedAssetTypeName"></span>
+                </li>
+            </ul>
+                </div>
+        <!--<ul class="catalogPackage">
+            &lt;!&ndash;<#list publishedAssetTypesUngrouped as assetType>&ndash;&gt;
+                <li>
+                    <@s.checkbox name="importAssetTypeIds['${assetType.id}']" /> <span class="catalogItem">${assetType.name?html}</span>
+                </li>
+            &lt;!&ndash;</#list>&ndash;&gt;
+        </ul>-->
+        </div>
+    </div>
+    <!--</div>
+    <div id="formActions" class="prominent">
+        <@s.url id="cancelUrl" action="step2"/>
+        <@s.submit key="label.next" id="continue" />
+        <@s.text name="label.or"/>
+        <a href="#" onclick="return redirect( '${cancelUrl}' );" ><@s.text name="label.back"/></a>
+    </div>-->
+       <!-- </div>-->
+</wicket:extend>
+</html>
