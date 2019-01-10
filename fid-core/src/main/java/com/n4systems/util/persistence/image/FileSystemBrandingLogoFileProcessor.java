@@ -1,6 +1,5 @@
 package com.n4systems.util.persistence.image;
 
-import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.orgs.InternalOrg;

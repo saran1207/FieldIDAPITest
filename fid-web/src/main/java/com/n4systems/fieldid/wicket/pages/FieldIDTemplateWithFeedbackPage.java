@@ -28,8 +28,9 @@ public class FieldIDTemplateWithFeedbackPage extends FieldIDTemplatePage {
             get recognized as a feedback panel for our messages. */
         remove(getTopFeedbackPanel());
         feedbackPanel = new FeedbackPanel("topFeedbackPanel");
-        feedbackPanel.add(new AttributeAppender("style", new Model("text-align: center; color:red; padding: 0px 10px"), " "));
+        feedbackPanel.add(new AttributeAppender("style", new Model("text-align: center; color:red; padding: 0px 10px;"), " "));
         feedbackPanel.setOutputMarkupId(true);
+        feedbackPanel.get("feedbackul").add(new AttributeAppender("style", new Model("list-style-type: none; padding: 0px 0px;"), " "));
         add(feedbackPanel);
     }
 
