@@ -7,7 +7,7 @@
 <div class="viewLinks">
     <a class="mattButtonLeft" href="/fieldid/w/setup/usersList"><@s.text name="nav.view_all"/></a>
     <a class="mattButtonRight" href="/fieldid/w/setup/archivedUsersList"><@s.text name="nav.archived"/></a>
-    <a class="mattButton padLeft" href="<@s.url action='userImportExport'/>"><@s.text name="nav.import"/></a>
+    <a class="mattButton padLeft" href="/fieldid/w/userImport"><@s.text name="nav.import"/></a>
 </div>
 
 <div class="horizontalGrouping">

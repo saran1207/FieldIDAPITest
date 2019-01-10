@@ -1,0 +1,46 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<wicket:panel>
+
+    <form wicket:id="attributeEditForm">
+        <h2> <wicket:message key="label.assettype" /> : <label wicket:id="assetTypeName"/> </h2>
+
+        <div class="dropBoxHolder">
+
+            <div wicket:id="availableFieldsList"></div>
+            <div wicket:id="inputFieldsList"></div>
+            <div wicket:id="outputFieldsList"></div>
+        </div>
+
+        <div class="help">
+            <h4 >Instructions </h4>
+            <p>
+                To create an Auto Attribute Criteria, simply drag the fields from the available list into either the input or output list.<br/>
+                You can place only combo box and select box fields in to the inputs list.  All field types can be placed in the output list
+                Refer to the legend below to identify what type each field is.
+            </p>
+            <table class="legend">
+                <tr><th>Symbol</th><th>Field Type</th> </tr>
+                <tr><td>[ T ]</td><td>text field</td> </tr>
+                <tr><td>[ S ]</td><td>select box</td> </tr>
+                <tr><td>[ C ]</td><td>combo box</td> </tr>
+                <tr><td>[ D ]</td><td>date field</td> </tr>
+            </table>
+        </div>
+
+        <div class="formAction">
+
+            <input type="submit" wicket:id="save" wicket:message="value:hbutton.save"/>
+            <wicket:message key="label.or"/>
+            <a href="javascript:void(0);" wicket:id="cancel"><wicket:message key="label.cancel" /></a>
+            <div wicket:id="deleteButtonSection" style="display: inline; margin-left: 0px;">
+                <wicket:message key="label.or"/>
+                <a href="javascript:void(0);" wicket:id="delete"><wicket:message key="label.delete" /></a>
+            </div>
+
+        </div>
+        <div class="actions">
+            <a href="javascript:void(0);" wicket:id="switchToDefinitionList"><wicket:message key="label.viewautoattributedefinitions" /></a>
+        </div>
+    </form>
+</wicket:panel>
+</html>

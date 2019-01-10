@@ -19,6 +19,9 @@ import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetImportPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetMergePage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
+import com.n4systems.fieldid.wicket.pages.autoattributes.AutoAttributeActionsPage;
+import com.n4systems.fieldid.wicket.pages.customers.CustomerActionsPage;
+import com.n4systems.fieldid.wicket.pages.event.EventImportPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.*;
 import com.n4systems.fieldid.wicket.pages.customers.CustomerActionsPage;
 import com.n4systems.fieldid.wicket.pages.escalationrules.ManageEscalationRules;
@@ -371,6 +374,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("eventImport", EventImportPage.class);
         mountPage("assetImport", AssetImportPage.class);
         mountPage("userImport", UserImportPage.class);
+        mountPage("autoAttributeActions", AutoAttributeActionsPage.class);
 
         mountResource("/signature/${eventId}/${criteriaId}", new SignatureResourceReference());
         mountResource("/temporarySignature/${fileId}", new TemporarySignatureResourceReference());
