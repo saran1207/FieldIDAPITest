@@ -30,6 +30,7 @@ import com.n4systems.services.config.ConfigService;
 import com.n4systems.services.signature.SignatureService;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ContentTypeUtil;
+import com.n4systems.util.persistence.image.UploadedImage;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
@@ -1512,21 +1513,23 @@ public class S3Service extends FieldIdPersistenceService {
 
     public File downloadBrandingLogoImage(InternalOrg internalOrg) throws FileProcessingException,FileNotFoundException,IOException {
         File brandingLogoImageFile = null;
+        URL logoUrl = null;
         try {
             byte[] brandingLogoImageBytes = downloadBrandingCertificateLogo();
             this.primaryOrg= (PrimaryOrg) internalOrg;
             brandingLogoImageFile = PathHandler.getPrimaryOrgFile(this.primaryOrg, PathHandler.createResourcePath(this.primaryOrg.getTenant().getId()), PathHandler.createResourceFile(PathHandler.BRANDING_LOGO_PATH));
             FileOutputStream brandingLogoImageFos = new FileOutputStream(brandingLogoImageFile);
             brandingLogoImageFos.write(brandingLogoImageBytes);
+            logoUrl = this.getBrandingLogoURL(internalOrg.getTenant().getId());
         }
         catch(FileNotFoundException e) {
             logger.error("Unable to write to temp branding logo Image file at: " + brandingLogoImageFile, e);
             throw new FileNotFoundException("Unable to write to temp branding logo Image file");
         }
         catch(IOException e) {
-            logger.error("Unable to download branding logo Image file from S3", e);
+            logger.error("Unable to download branding logo Image file from S3 :" + logoUrl, e);
             throw new IOException("Unable to download branding logo Image file from server");
-        }
+    }
         return brandingLogoImageFile;
     }
 
