@@ -55,13 +55,15 @@ public class ArchivedOrgConfirmPage extends FieldIDTemplatePage {
     private OrganizationalUnitRemovalSummary removalSummary;
 
     public ArchivedOrgConfirmPage(IModel<SecondaryOrg> secondaryOrgModel) {
+        super();
         this.uniqueId = secondaryOrgModel.getObject().getId();
         this.secondaryOrgModel = secondaryOrgModel;
     }
 
-    public ArchivedOrgConfirmPage(){}
+    public ArchivedOrgConfirmPage(){ super(); }
 
     public ArchivedOrgConfirmPage(PageParameters parameters) {
+        super(parameters);
         filterCriteriaModel = getOrgListFilterCriteria();
         PrimaryOrg primaryOrg = getPrimaryOrg();
         uniqueId = parameters.get("uniqueID")==null?0L:parameters.get("uniqueID").toLong();

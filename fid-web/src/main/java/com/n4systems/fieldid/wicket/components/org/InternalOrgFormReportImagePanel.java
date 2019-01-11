@@ -34,7 +34,7 @@ public class InternalOrgFormReportImagePanel extends Panel {
 
     private UploadedImage uploadedImage;
     private InternalOrg internalOrg;
-    private  FeedbackPanel feedbackPanel;
+    private FeedbackPanel feedbackPanel;
 
     public InternalOrgFormReportImagePanel(String id, IModel<InternalOrg> internalOrg, UploadedImage reportImage, FeedbackPanel feedbackPanel) {
         super(id, internalOrg);
@@ -48,7 +48,7 @@ public class InternalOrgFormReportImagePanel extends Panel {
         this.feedbackPanel = feedbackPanel;
     }
 
-    public InternalOrg getInternalOrg() {return internalOrg;}
+    private InternalOrg getInternalOrg() {return internalOrg;}
 
     class UploadForm extends Form<FileAttachment> {
         FileUploadField uploadField;
@@ -104,7 +104,7 @@ public class InternalOrgFormReportImagePanel extends Panel {
         }
     }
 
-    public void saveFileAttachment(FileUpload fileUpload) {
+    private void saveFileAttachment(FileUpload fileUpload) {
         if (fileUpload != null) {
             File tempFilePath = PathHandler.getTempFile(fileUpload.getClientFileName());
             String uploadedFilePath = new File( tempFilePath.getParent() ).getName() + '/' + tempFilePath.getName();

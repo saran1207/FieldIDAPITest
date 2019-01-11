@@ -1,15 +1,12 @@
 package com.n4systems.fieldid.wicket.components.org;
 
 import com.n4systems.model.AddressInfo;
-import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
 public class InternalOrgFormAddressPanel extends Panel {
-
-    private static final Logger logger = Logger.getLogger(InternalOrgFormAddressPanel.class);
 
     public InternalOrgFormAddressPanel(String id, IModel<AddressInfo> addressInfo) {
         super(id, addressInfo);

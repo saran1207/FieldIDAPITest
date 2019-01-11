@@ -56,16 +56,18 @@ public class OrgsListPage extends FieldIDTemplatePage {
     protected FIDFeedbackPanel feedbackPanel;
 
     public OrgsListPage() {
+        super();
         filterCriteriaModel = getOrgListFilterCriteria();
         dataProvider = new SecondaryOrgDataProvider(filterCriteriaModel.getObject());
         primaryOrg = getPrimaryOrg();
     }
 
     public OrgsListPage(PageParameters params) {
+        super(params);
         filterCriteriaModel = getOrgListFilterCriteria();
         primaryOrg = getPrimaryOrg();
 
-        Long uniqueId = params.get("uniqueID")==null?0L:params.get("uniqueID").toLong();;
+        Long uniqueId = params.get("uniqueID")==null?0L:params.get("uniqueID").toLong();
         if (primaryOrg.getId().equals(uniqueId)) {
             organization = primaryOrg;
         }

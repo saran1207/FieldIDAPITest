@@ -4,10 +4,7 @@ import com.n4systems.fieldid.service.org.OrgListFilterCriteria;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.model.orgs.SecondaryOrg;
-import com.n4systems.model.user.User;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
-import org.apache.wicket.injection.Injector;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -24,10 +21,10 @@ public class SecondaryOrgDataProvider extends FieldIDDataProvider<SecondaryOrg> 
 
     public SecondaryOrgDataProvider() {
         super();
-        Injector.get().inject(this);
     }
 
     public SecondaryOrgDataProvider(OrgListFilterCriteria criteria) {
+        super();
         this.criteria = criteria;
         setSort(criteria.getOrder(), criteria.isAscending() ? SortOrder.ASCENDING: SortOrder.DESCENDING);
     }
@@ -59,11 +56,9 @@ public class SecondaryOrgDataProvider extends FieldIDDataProvider<SecondaryOrg> 
         return size.intValue();
     }
 
-    /*private Long getResultSize() {return orgService.getSearchSecondaryOrgCount(getTextFilter(), getTypeFilter());}*/
     private Long getResultSize() {
         return Long.valueOf(orgService.countSecondaryOrgs(criteria));
     }
-
 
     @Override
     public IModel<SecondaryOrg> model(SecondaryOrg object) {
