@@ -46,12 +46,12 @@ public class FileSystemBrandingLogoFileProcessor {
             s3Service.uploadBrandingLogo(contentType, brandingLogoImageData);
         }
         catch(FileNotFoundException e) {
-            logger.warn("Unable to read from temp branding logo Image file at: " + internalOrgLogoImageFile, e);
-            throw new FileNotFoundException("Unable to read from temp branding logo Image file");
+            logger.error("Unable to read from temp branding logo Image file at: " + internalOrgLogoImageFile, e);
+            throw e;
         }
         catch(IOException e) {
-            logger.warn("Unable to upload branding logo Image file to S3", e);
-            throw new IOException("Unable to upload branding logo Image file to server", e);
+            logger.error("Unable to upload branding logo Image file to S3", e);
+            throw e;
         }
     }
 

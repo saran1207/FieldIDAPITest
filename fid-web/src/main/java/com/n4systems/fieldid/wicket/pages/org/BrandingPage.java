@@ -46,13 +46,13 @@ public class BrandingPage extends FieldIDTemplateWithFeedbackPage {
 
     public BrandingPage (){
         super();
-        organization = getPrimaryOrg();;
+        organization = getPrimaryOrg();
         internalOrg = Model.of(organization);
     }
 
     public BrandingPage(PageParameters params) {
         super(params);
-        organization = getPrimaryOrg();;
+        organization = getPrimaryOrg();
         internalOrg = Model.of(organization);
     }
 
@@ -78,12 +78,8 @@ public class BrandingPage extends FieldIDTemplateWithFeedbackPage {
                 uploadedImage.setUploadDirectory(reportImage.getPath());
             }
         }
-        catch(FileProcessingException e) {
+        catch(IOException|FileProcessingException e) {
             Session.get().error("Internal Error during branding logo processing");
-        }
-        catch(IOException e) {
-            String errorMessage = e==null||e.getMessage()==null||StringUtils.isEmpty(e.getMessage())?"Internal Error during branding logo processing":e.getMessage();
-            Session.get().error(errorMessage);
         }
 
         return uploadedImage;
@@ -93,12 +89,8 @@ public class BrandingPage extends FieldIDTemplateWithFeedbackPage {
         try {
             new FileSystemBrandingLogoFileProcessor(internalOrg.getObject()).process(reportImage);
         }
-        catch(FileProcessingException e) {
+        catch(IOException|FileProcessingException e) {
             Session.get().error("Internal Error during branding logo processing");
-        }
-        catch(IOException e) {
-            String errorMessage = e==null||e.getMessage()==null||StringUtils.isEmpty(e.getMessage())?"Internal Error during branding logo processing":e.getMessage();
-            Session.get().error(errorMessage);
         }
     }
 

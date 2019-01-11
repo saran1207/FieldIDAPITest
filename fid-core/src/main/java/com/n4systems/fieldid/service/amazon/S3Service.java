@@ -1524,11 +1524,11 @@ public class S3Service extends FieldIdPersistenceService {
         }
         catch(FileNotFoundException e) {
             logger.error("Unable to write to temp branding logo Image file at: " + brandingLogoImageFile, e);
-            throw new FileNotFoundException("Unable to write to temp branding logo Image file");
+            throw e;
         }
         catch(IOException e) {
             logger.error("Unable to download branding logo Image file from S3 :" + logoUrl, e);
-            throw new IOException("Unable to download branding logo Image file from server");
+            throw e;
     }
         return brandingLogoImageFile;
     }
