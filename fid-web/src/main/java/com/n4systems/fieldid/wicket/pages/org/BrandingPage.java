@@ -146,7 +146,7 @@ public class BrandingPage extends FieldIDTemplateWithFeedbackPage {
         public EditInternalOrgForm(String id) {
             super(id);
 
-            add(reportImagePanel = new BrandingLogoFormPanel("brandingLogoPanel", internalOrg, getBrandingLogo(), getFeedbackPanel()));
+            add(reportImagePanel = new BrandingLogoFormPanel("brandingLogoPanel", internalOrg, getBrandingLogo()));
 
             add(new TextField<String>("internalOrgWebSite", new PropertyModel<String>(internalOrg, "webSite")));
 

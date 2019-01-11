@@ -34,9 +34,8 @@ public class BrandingLogoFormPanel extends Panel {
 
     private UploadedImage uploadedImage;
     private InternalOrg internalOrg;
-    private FeedbackPanel feedbackPanel;
 
-    public BrandingLogoFormPanel(String id, IModel<InternalOrg> internalOrg, UploadedImage reportImage, FeedbackPanel feedbackPanel) {
+    public BrandingLogoFormPanel(String id, IModel<InternalOrg> internalOrg, UploadedImage reportImage) {
         super(id, internalOrg);
         this.uploadedImage = reportImage;
         if (internalOrg != null) this.internalOrg = internalOrg.getObject();
@@ -45,7 +44,6 @@ public class BrandingLogoFormPanel extends Panel {
         add(uploadForm = new UploadForm("uploadForm"));
         uploadForm.setMultiPart(true);
         if (internalOrg != null) uploadForm.setVisible(!internalOrg.getObject().isNew());
-        this.feedbackPanel = feedbackPanel;
     }
 
     public InternalOrg getInternalOrg() {return internalOrg;}
@@ -72,9 +70,7 @@ public class BrandingLogoFormPanel extends Panel {
                 }
 
                 @Override
-                protected void onError(AjaxRequestTarget target) {
-                    target.add(feedbackPanel);
-                }
+                protected void onError(AjaxRequestTarget target) {}
             });
             if(uploadedImage.isExistingImage()) {
                 if(s3Service.isBrandingLogoExists(getInternalOrg().getId(), getInternalOrg().isPrimary())) {
@@ -88,7 +84,7 @@ public class BrandingLogoFormPanel extends Panel {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
                     Session.get().cleanupFeedbackMessages();
-                    target.add(feedbackPanel);
+                    target.addChildren(getPage(), FeedbackPanel.class);
                     fileDisplay.setVisible(false);
                     uploadField.setVisible(true);
                     target.add(UploadForm.this);
