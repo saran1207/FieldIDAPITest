@@ -13,7 +13,6 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
-import com.n4systems.util.StringUtils;
 import com.n4systems.util.persistence.image.UploadedImage;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
@@ -101,12 +100,8 @@ public class EditOrgPage extends OrgPage {
                 uploadedImage.setUploadDirectory(reportImage.getPath());
             }
         }
-        catch(FileProcessingException e) {
+        catch(IOException|FileProcessingException e) {
             Session.get().error("Internal Error during organization logo processing");
-        }
-        catch(IOException e) {
-            String errorMessage = e==null||e.getMessage()==null||StringUtils.isEmpty(e.getMessage())?"Internal Error during organization logo processing":e.getMessage();
-            Session.get().error(errorMessage);
         }
         return uploadedImage;
     }

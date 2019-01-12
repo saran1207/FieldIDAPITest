@@ -34,9 +34,8 @@ public class InternalOrgFormReportImagePanel extends Panel {
 
     private UploadedImage uploadedImage;
     private InternalOrg internalOrg;
-    private FeedbackPanel feedbackPanel;
 
-    public InternalOrgFormReportImagePanel(String id, IModel<InternalOrg> internalOrg, UploadedImage reportImage, FeedbackPanel feedbackPanel) {
+    public InternalOrgFormReportImagePanel(String id, IModel<InternalOrg> internalOrg, UploadedImage reportImage) {
         super(id, internalOrg);
         this.uploadedImage = reportImage;
         if (internalOrg != null) this.internalOrg = internalOrg.getObject();
@@ -45,7 +44,6 @@ public class InternalOrgFormReportImagePanel extends Panel {
         add(uploadForm = new UploadForm("uploadForm"));
         uploadForm.setMultiPart(true);
         if (internalOrg != null) uploadForm.setVisible(!internalOrg.getObject().isNew());
-        this.feedbackPanel = feedbackPanel;
     }
 
     private InternalOrg getInternalOrg() {return internalOrg;}
@@ -72,9 +70,7 @@ public class InternalOrgFormReportImagePanel extends Panel {
                 }
 
                 @Override
-                protected void onError(AjaxRequestTarget target) {
-                    target.add(feedbackPanel);
-                }
+                protected void onError(AjaxRequestTarget target) {}
             });
             if(uploadedImage.isExistingImage()) {
                 if (getInternalOrg().isPrimary()) {
@@ -89,7 +85,7 @@ public class InternalOrgFormReportImagePanel extends Panel {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
                     Session.get().cleanupFeedbackMessages();
-                    target.add(feedbackPanel);
+                    target.addChildren(getPage(), FeedbackPanel.class);
                     fileDisplay.setVisible(false);
                     uploadField.setVisible(true);
                     target.add(UploadForm.this);

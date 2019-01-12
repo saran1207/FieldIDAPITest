@@ -51,10 +51,10 @@ public class FileSystemInternalOrgReportFileProcessor {
             s3Service.uploadPrimaryOrgCertificateLogo(contentType, primaryOrgLogoImageData);
         } catch (FileNotFoundException e) {
             logger.error("Unable to read from temp primary Org logo Image file at: " + internalOrgLogoImageFile, e);
-            throw new FileNotFoundException("Unable to read from temp primary Org logo Image file");
+            throw e;
         } catch (IOException e) {
             logger.error("Unable to upload primary Org logo Image file to S3", e);
-            throw new IOException("Unable to upload primary Org logo Image file to server", e);
+            throw e;
         }
     }
 
@@ -68,11 +68,11 @@ public class FileSystemInternalOrgReportFileProcessor {
         }
         catch(FileNotFoundException e) {
             logger.error("Unable to read from temp secondary Org logo Image file at: " + internalOrgLogoImageFile, e);
-            throw new FileNotFoundException("Unable to read from temp secondary Org logo Image file");
+            throw e;
         }
         catch(IOException e) {
             logger.error("Unable to upload secondary Org logo Image file to S3", e);
-            throw new IOException("Unable to upload secondary Org logo Image file to server", e);
+            throw e;
         }
     }
 

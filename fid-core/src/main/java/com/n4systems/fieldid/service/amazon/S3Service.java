@@ -1458,11 +1458,11 @@ public class S3Service extends FieldIdPersistenceService {
         }
         catch(FileNotFoundException e) {
             logger.error("Unable to write to temp secondary Org logo Image file at: " + secondaryOrgLogoImageFile, e);
-            throw new FileNotFoundException("Unable to write to temp secondary Org logo Image file");
+            throw e;
         }
         catch(IOException e) {
             logger.error("Unable to download secondary Org logo Image file from S3: " + logoUrl, e);
-            throw new IOException("Unable to download secondary Org logo Image file from server", e);
+            throw e;
         }
         return secondaryOrgLogoImageFile;
     }
@@ -1490,11 +1490,11 @@ public class S3Service extends FieldIdPersistenceService {
         }
         catch(FileNotFoundException e) {
             logger.error("Unable to write to temp primary Org logo Image file at: " + primaryOrgLogoImageFile, e);
-            throw new FileNotFoundException("Unable to write to temp primary Org logo Image file");
+            throw e;
         }
         catch(IOException e) {
             logger.error("Unable to download primary Org logo Image file from S3 :" + logoUrl, e);
-            throw new IOException("Unable to download primary Org logo Image file from server", e);
+            throw e;
         }
         return primaryOrgLogoImageFile;
     }
