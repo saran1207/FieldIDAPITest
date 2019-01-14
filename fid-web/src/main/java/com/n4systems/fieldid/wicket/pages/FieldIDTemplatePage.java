@@ -344,7 +344,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         
         container.add(new BookmarkablePageLink<ColumnsLayoutPage>("assetLayoutLink", ColumnsLayoutPage.class, param("type", ReportType.ASSET)));
         container.add(new BookmarkablePageLink<ColumnsLayoutPage>("eventLayoutLink", ColumnsLayoutPage.class, param("type", ReportType.EVENT)).setVisible(getSecurityGuard().isInspectionsEnabled()));
-        container.add(new BookmarkablePageLink<ImportCommonTemplatesPage>("importEventTemplatesLink", ImportCommonTemplatesPage.class));
+        container.add(new BookmarkablePageLink<ImportCommonTemplatesPage>("importCommonTemplatesLink", ImportCommonTemplatesPage.class));
 
         return container;
 	}

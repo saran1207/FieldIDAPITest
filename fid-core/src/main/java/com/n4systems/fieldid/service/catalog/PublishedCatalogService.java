@@ -38,7 +38,6 @@ public class PublishedCatalogService extends FieldIdPersistenceService {
         for (TypedOrgConnection connection : getConnections()) {
             if (connection.getConnectedOrg().getTenant().getName().equals(houseAccountName)) {
                 Tenant houseAccountTenant = connection.getConnectedOrg().getTenant();
-                System.out.println("linkedTenant obtained is " + houseAccountTenant.getId() + ":" + houseAccountTenant.getName());
                 return houseAccountTenant;
             }
         }
@@ -46,7 +45,6 @@ public class PublishedCatalogService extends FieldIdPersistenceService {
     }
 
     public Set<AssetTypeGroup> getPublishedAssetTypeGroups(Tenant tenant) {
-        System.out.println("PublishedCatalogService.getPublishedAssetTypeGroups");
         Set<Long> assetTypeIds = new HashSet<Long>();
         for (ListingPair assetType : getPublishedAssetTypesLP(tenant)){
             assetTypeIds.add(assetType.getId());
