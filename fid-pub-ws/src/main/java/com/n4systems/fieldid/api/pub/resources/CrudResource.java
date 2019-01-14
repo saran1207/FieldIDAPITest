@@ -10,17 +10,13 @@ import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.api.HasTenant;
 import com.n4systems.model.parents.AbstractEntity;
-import com.n4systems.util.time.DateUtil;
 import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class CrudResource<M extends AbstractEntity, A extends GeneratedMessage, B extends GeneratedMessage.Builder> extends FieldIdPersistenceService {
@@ -71,7 +67,12 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 	@Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Transactional(readOnly = true)
-	public Messages.ListResponseMessage findAll(@QueryParam("page") int page, @QueryParam("pageSize") int pageSize, @QueryParam("delta") String date) {
+	public Messages.ListResponseMessage findAll(
+			@QueryParam("page") int page,
+			@QueryParam("pageSize") int pageSize,
+			@QueryParam("delta") String date,
+			@QueryParam("name") String name,
+			@QueryParam("code") String code) {
 		List<M> allItems;
 		List<A> items;
 		Date delta = null;
@@ -82,39 +83,33 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 
 		if(date != null) {
 			delta = convertDate(date);
+			if (delta == null) {
+				logger.error("Invalid delta '" + date + "'");
+				throw new RuntimeException("Invalid delta '" + date + "', should be in yyyy-MM-dd HH:mm:ss format");
+			}
 		}
 
-		//ignore the delta value
-		if(delta == null) {
-			allItems = crudService().findAll(page, pageSize);
+		Map<String, Object> optionalParameters = new HashMap<String, Object>();
+		if (delta != null)
+			optionalParameters.put("delta", delta);
+		if (name != null)
+			optionalParameters.put("name", name);
+		if (code != null)
+			optionalParameters.put("code", code);
 
-			items = allItems
-					.stream()
-					.map(m -> toMessage(m))
-					.collect(Collectors.toList());
+		allItems = crudService().findAll(page, pageSize, optionalParameters);
 
-			return Messages.ListResponseMessage.newBuilder()
-					.setPageSize(pageSize)
-					.setPage(page)
-					.setTotal(crudService().count())
-					.setExtension(listResponseType, items)
-					.build();
-		} else {
-			allItems = crudService()
-					.findAll(page, pageSize, delta);
+		items = allItems
+				.stream()
+				.map(m -> toMessage(m))
+				.collect(Collectors.toList());
 
-			items = allItems
-					.stream()
-					.map(m -> toMessage(m))
-					.collect(Collectors.toList());
-
-			return Messages.ListResponseMessage.newBuilder()
-					.setPageSize(pageSize)
-					.setPage(page)
-					.setTotal(crudService().count(delta))
-					.setExtension(listResponseType, items)
-					.build();
-		}
+		return Messages.ListResponseMessage.newBuilder()
+				.setPageSize(pageSize)
+				.setPage(page)
+				.setTotal(crudService().count(optionalParameters))
+				.setExtension(listResponseType, items)
+				.build();
 	}
 
 	protected <M> M testNotFound(M model) {
@@ -223,7 +218,14 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 	@Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Transactional
-	public Messages.ListResponseMessage findAllActionItem(@QueryParam("page") int page, @QueryParam("pageSize") int pageSize,  @QueryParam("delta") String date) {
+	public Messages.ListResponseMessage findAllActionItem(
+			@QueryParam("page") int page,
+			@QueryParam("pageSize") int pageSize,
+			@QueryParam("delta") String deltaDate,
+			@QueryParam("workflowState") String workflowState,
+			@QueryParam("ownerId") String ownerId,
+			@QueryParam("fromCompletedDate") String fromCompletedDate,
+			@QueryParam("toCompletedDate") String toCompletedDate) {
 		List<M> allItems;
 		List<A> items;
 		Date delta = null;
@@ -233,47 +235,57 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 		String logMessage = logInfo + apiCall + " FIND ALL ACTION ITEMS ";
 		logger.info(logMessage);
 
-		if(date != null) {
-			delta = convertDate(date);
+		if(deltaDate != null) {
+			delta = convertDate(deltaDate);
+			if (delta == null) {
+				logger.error("Invalid delta '" + deltaDate + "'");
+				throw new RuntimeException("Invalid delta '" + deltaDate + "', should be in yyyy-MM-dd HH:mm:ss format");
+			}
 		}
 
-		//ignore the delta value
-		if(delta == null) {
-			try {
-				allItems = crudService().findAllActionItem(page, pageSize);
+		Map<String, Object> optionalParameters = new HashMap<String, Object>();
+		if (delta != null) {
+			optionalParameters.put("delta", delta);
+		}
+		if (workflowState != null) {
+			optionalParameters.put("workflowState", workflowState);
+		}
+		if (ownerId != null) {
+			optionalParameters.put("ownerId", ownerId);
+		}
+		if (fromCompletedDate != null) {
+			Date date = convertDate(fromCompletedDate);
+			if (date == null) {
+				logger.error("Invalid fromCompletedDate '" + date + "'");
+				throw new RuntimeException("Invalid fromCompletedDate '" + date + "', should be in yyyy-MM-dd HH:mm:ss format");
+			}
+			optionalParameters.put("fromCompletedDate", date);
+		}
+		if (toCompletedDate != null) {
+			Date date = convertDate(toCompletedDate);
+			if (date == null) {
+				logger.error("Invalid toCompletedDate '" + date + "'");
+				throw new RuntimeException("Invalid toCompletedDate '" + date + "', should be in yyyy-MM-dd HH:mm:ss format");
+			}
+			optionalParameters.put("toCompletedDate", date);
+		}
 
-				items = allItems
-						.stream()
-						.map(m -> toMessage(m))
-						.collect(Collectors.toList());
+		try {
+			allItems = crudService().findAllActionItem(page, pageSize, optionalParameters);
 
-				return Messages.ListResponseMessage.newBuilder()
-						.setPageSize(pageSize)
-						.setPage(page)
-						.setTotal(crudService().countAllActionItem())
-						.setExtension(listResponseType, items)
-						.build();
+			items = allItems
+					.stream()
+					.map(m -> toMessage(m))
+					.collect(Collectors.toList());
+
+			return Messages.ListResponseMessage.newBuilder()
+					.setPageSize(pageSize)
+					.setPage(page)
+					.setTotal(crudService().countAllActionItem(optionalParameters))
+					.setExtension(listResponseType, items)
+					.build();
 			} catch (UnsupportedOperationException ex) {
 				throw new NotAllowedException("DELETE not allowed for this entity type");
-			}
-		} else {
-			try {
-				allItems = crudService().findAllActionItem(page, pageSize, delta);
-
-				items = allItems
-						.stream()
-						.map(m -> toMessage(m))
-						.collect(Collectors.toList());
-
-				return Messages.ListResponseMessage.newBuilder()
-						.setPageSize(pageSize)
-						.setPage(page)
-						.setTotal(crudService().countAllActionItem(delta))
-						.setExtension(listResponseType, items)
-						.build();
-			} catch (UnsupportedOperationException ex) {
-				throw new NotAllowedException("DELETE not allowed for this entity type");
-			}
 		}
 	}
 

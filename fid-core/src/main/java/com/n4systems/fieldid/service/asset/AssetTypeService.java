@@ -19,10 +19,7 @@ import com.n4systems.reporting.PathHandler;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.ArchiveAssetTypeTask;
 import com.n4systems.util.AssetTypeRemovalSummary;
-import com.n4systems.util.persistence.NewObjectSelect;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.util.persistence.*;
 import org.apache.log4j.Logger;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +32,7 @@ import rfid.ejb.entity.InfoOptionBean;
 import javax.persistence.Query;
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 public class AssetTypeService extends CrudService<AssetType> {
@@ -446,4 +444,15 @@ public class AssetTypeService extends CrudService<AssetType> {
         return update(assetType);
     }
 
+    @Override
+    protected void addFindAllParameters(QueryBuilder<AssetType> builder, Map<String, Object> optionalParameters) {
+        super.addFindAllParameters(builder, optionalParameters);
+        if (optionalParameters.containsKey("name")) {
+            builder.addWhere(WhereClauseFactory.create(
+                    WhereParameter.Comparator.EQ, "name",
+                    optionalParameters.get("name"),
+                    WhereClause.ChainOp.AND,
+                    "name"));
+        }
+    }
 }
