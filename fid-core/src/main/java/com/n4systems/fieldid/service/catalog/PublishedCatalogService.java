@@ -24,9 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Created by agrabovskis on 2019-01-09.
- */
+
 public class PublishedCatalogService extends FieldIdPersistenceService {
 
     @Autowired

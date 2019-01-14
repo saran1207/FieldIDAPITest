@@ -1,10 +1,12 @@
 package com.n4systems.fieldid.wicket.pages.template;
 
+import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.service.catalog.PublishedCatalogService;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndWithFeedbackPage;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.Tenant;
+import com.n4systems.security.Permissions;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.CatalogImportTask;
 import com.n4systems.util.ListingPair;
@@ -27,9 +29,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.*;
 
-/**
- * Created by agrabovskis on 2019-01-08.
- */
+
+@UserPermissionFilter(userRequiresOneOf={Permissions.MANAGE_SYSTEM_CONFIG})
 public class ImportCommonTemplatesPage extends FieldIDFrontEndWithFeedbackPage {
 
     private static final Logger logger = Logger.getLogger(ImportCommonTemplatesPage.class);
