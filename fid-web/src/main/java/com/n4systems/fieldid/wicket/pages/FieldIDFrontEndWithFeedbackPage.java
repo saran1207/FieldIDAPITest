@@ -13,6 +13,11 @@ public class FieldIDFrontEndWithFeedbackPage extends FieldIDFrontEndPage {
 
     private FeedbackPanel feedbackPanel;
 
+    public FieldIDFrontEndWithFeedbackPage() {
+        super();
+        addFeedbackPanel();
+    }
+
     public FieldIDFrontEndWithFeedbackPage(final PageParameters parameters) {
         super(parameters);
         addFeedbackPanel();
