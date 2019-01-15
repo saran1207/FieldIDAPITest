@@ -287,7 +287,7 @@
                                                 <#if securityGuard.integrationEnabled>
                                                     <li><a href="<@s.url action="assetCodeMappingList"/>" ><@s.text name="title.manage_asset_code_mappings" /></a></li>
                                                 </#if>
-                                                <li><a href="/fieldid/w/setup/importCommonTemplates" ><@s.text name="nav.event_templates" /></a></li>
+                                                <li><a href="/fieldid/w/setup/importCommonTemplates" ><@s.text name="nav.common_templates" /></a></li>
                                             </ul>
                                         </#if>
                                     </li>
