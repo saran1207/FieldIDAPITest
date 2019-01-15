@@ -49,7 +49,7 @@ public abstract class CrudService<T extends AbstractEntity> extends FieldIdPersi
 	public List<T> findAllActionItem(int page, int pageSize, Map<String, Object> optionalParameters) {
 		QueryBuilder<T> builder = createUserSecurityBuilder(entity);
 		builder.addWhere(WhereParameter.Comparator.NOTNULL, "triggerEvent", "triggerEvent", "");
-        addFindAllParameters(builder, optionalParameters);
+		addFindAllParameters(builder, optionalParameters);
 		return findAll(builder, page, pageSize);
 	}
 
@@ -57,7 +57,7 @@ public abstract class CrudService<T extends AbstractEntity> extends FieldIdPersi
 	public Long countAllActionItem(Map<String, Object> optionalParameters) {
 		QueryBuilder<T> builder = createUserSecurityBuilder(entity);
 		builder.addWhere(WhereParameter.Comparator.NOTNULL, "triggerEvent", "triggerEvent", "");
-        addFindAllParameters(builder, optionalParameters);
+		addFindAllParameters(builder, optionalParameters);
 		return count(builder);
 	}
 

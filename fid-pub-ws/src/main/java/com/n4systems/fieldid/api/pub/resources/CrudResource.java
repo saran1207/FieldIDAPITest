@@ -16,7 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public abstract class CrudResource<M extends AbstractEntity, A extends GeneratedMessage, B extends GeneratedMessage.Builder> extends FieldIdPersistenceService {
@@ -71,8 +74,16 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 			@QueryParam("page") int page,
 			@QueryParam("pageSize") int pageSize,
 			@QueryParam("delta") String date,
-			@QueryParam("name") String name,
-			@QueryParam("code") String code) {
+      @QueryParam("name") String name,
+      @QueryParam("identifier") String identifier,
+      @QueryParam("rfidNumber") String rfidNumber,
+      @QueryParam("customerRefNumber") String customerRefNumber,
+      @QueryParam("assetTypeName") String assetTypeName,
+      @QueryParam("ownerName") String ownerName,
+      @QueryParam("identifiedByUserLastName") String identifiedByUserLastName,
+      @QueryParam("identifiedByUserFirstName") String identifiedByUserFirstName,
+      @QueryParam("freeFormLocation") String freeFormLocation,
+      @QueryParam("code") String code) {
 		List<M> allItems;
 		List<A> items;
 		Date delta = null;
@@ -89,13 +100,29 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 			}
 		}
 
-		Map<String, Object> optionalParameters = new HashMap<String, Object>();
-		if (delta != null)
-			optionalParameters.put("delta", delta);
-		if (name != null)
-			optionalParameters.put("name", name);
-		if (code != null)
-			optionalParameters.put("code", code);
+    Map<String, Object> optionalParameters = new HashMap<String, Object>();
+    if (delta != null)
+        optionalParameters.put("delta", delta);
+    if (name != null)
+        optionalParameters.put("name", name);
+    if (code != null)
+        optionalParameters.put("code", code);
+    if (identifier != null)
+        optionalParameters.put("identifier", identifier);
+    if (rfidNumber != null)
+        optionalParameters.put("rfidNumber", rfidNumber);
+    if (customerRefNumber != null)
+        optionalParameters.put("customerRefNumber", customerRefNumber);
+    if (assetTypeName != null)
+        optionalParameters.put("assetTypeName", assetTypeName);
+    if (ownerName != null)
+        optionalParameters.put("ownerName", ownerName);
+    if (identifiedByUserLastName != null)
+        optionalParameters.put("identifiedByUserLastName", identifiedByUserLastName);
+    if (identifiedByUserFirstName != null)
+        optionalParameters.put("identifiedByUserFirstName", identifiedByUserFirstName);
+    if (freeFormLocation != null)
+        optionalParameters.put("freeFormLocation", freeFormLocation);
 
 		allItems = crudService().findAll(page, pageSize, optionalParameters);
 
