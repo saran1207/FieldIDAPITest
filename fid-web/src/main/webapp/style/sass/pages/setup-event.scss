@@ -4,11 +4,30 @@
       margin-bottom: 15px;
     }
     span {
-      padding-left: 48px;
+      padding-left: 15x;
     }
   }
   .infoSet label {
-    margin-left: 48px;
+    margin-left: 15px;
+  }
+  .infoSet input {
+    width: 100%;
+  }
+}
+.setup-event.event-type-group-add {
+  .certFormTitle {
+    h2 {
+      margin-bottom: 15px;
+    }
+    span {
+      padding-left: 15x;
+    }
+  }
+  .infoSet label {
+    margin-left: 15px;
+  }
+  .infoSet input {
+    width: 100%;
   }
 }
 .setup-event.event-type-group-view {

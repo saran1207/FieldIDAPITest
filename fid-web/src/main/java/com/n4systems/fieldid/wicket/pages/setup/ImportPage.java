@@ -2,8 +2,8 @@ package com.n4systems.fieldid.wicket.pages.setup;
 
 import com.n4systems.fieldid.wicket.pages.asset.AssetImportPage;
 import com.n4systems.fieldid.wicket.pages.customers.CustomerActionsPage;
-import com.n4systems.fieldid.wicket.pages.customers.CustomerDivisionsListPanel;
 import com.n4systems.fieldid.wicket.pages.event.EventImportPage;
+import com.n4systems.fieldid.wicket.pages.setup.user.UserImportPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -31,21 +31,19 @@ public class ImportPage extends SetupPage {
                 getRequestCycle().setResponsePage(EventImportPage.class);
             }
         });
+        add(new AjaxLink<UserImportPage>("importUsersButton") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                getRequestCycle().setResponsePage(UserImportPage.class);
+            }
+        });
         add(new ImportAutoAttributesForm("importAutoAttributesForm"));
-        add(new ImportUsersForm("importUsersForm"));
     }
 
     class ImportAutoAttributesForm extends Form {
         public ImportAutoAttributesForm(String id) {
             super(id);
             add(createRedirectingAjaxButton("startImportButton", "/autoAttributeImportExport.action"));
-        }
-    }
-    
-    class ImportUsersForm extends Form {
-        public ImportUsersForm(String id) {
-            super(id);
-            add(createRedirectingAjaxButton("importUsersButton", "/userImportExport.action"));
         }
     }
 
