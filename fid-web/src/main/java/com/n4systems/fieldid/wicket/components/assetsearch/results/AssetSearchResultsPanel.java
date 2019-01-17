@@ -116,8 +116,14 @@ public class AssetSearchResultsPanel extends SRSResultsPanel<AssetSearchCriteria
                 o.addProperty("colour", getMarkerColour(results, location));
             }
         };
+        googleCreateAndShowJs = map.getCreateAndShowJs();
         map.withZoomPanNotifications().setOutputMarkupPlaceholderTag(true).setVisible(false);
         return map;
+    }
+
+    @Override
+    public String getGoogleCreateAndShowJs() {
+        return googleCreateAndShowJs;
     }
 
 

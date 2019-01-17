@@ -32,6 +32,7 @@ import java.util.List;
 public abstract class SRSResultsPanel<T extends SearchCriteria, S extends HasGpsLocation> extends Panel {
 
     private static final String TOGGLE_PANEL_JS = "$('.tipsy').remove();";  // TODO : add js to show loading bar/text.
+    protected String googleCreateAndShowJs;
 
     protected SimpleDataTable<RowView> dataTable;
     protected FieldIdAPIDataProvider provider;
@@ -221,9 +222,19 @@ public abstract class SRSResultsPanel<T extends SearchCriteria, S extends HasGps
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        //response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false", GoogleMap.GOOGLE_MAP_API_ID); 
         response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyBcMtP_Yxr_RrU8TnYeFrGqJylMmDlFlHI&token=75701", GoogleMap.GOOGLE_MAP_API_ID);
         response.renderJavaScriptReference("javascript/googleMaps.js", GoogleMap.GOOGLE_MAPS_JS_ID);
+        if (isMapVisible()) {
+            response.renderOnDomReadyJavaScript(getGoogleCreateAndShowJs());
+        }
+    }
+
+    protected boolean isMapVisible() {
+        return true;
+    }
+
+    public String getGoogleCreateAndShowJs() {
+        return "";
     }
 
     @SuppressWarnings("unchecked") //Shhhhh... it's a secret.

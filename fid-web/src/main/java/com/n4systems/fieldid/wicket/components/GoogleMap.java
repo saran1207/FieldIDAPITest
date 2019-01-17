@@ -146,6 +146,10 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
         return "map_"+getMarkupId();
     }
 
+    public String getCreateAndShowJs()  {
+        return String.format(CREATE_AND_SHOW_JS, getJsVar(), getGson().toJson(new GoogleMapOptions()));
+    }
+
     public GoogleMap withCentredLocation(Double latitude, Double longitude) {
         centre = new GpsLocation(latitude,longitude);
         return this;
