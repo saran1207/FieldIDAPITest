@@ -126,6 +126,10 @@ public class AssetSearchResultsPanel extends SRSResultsPanel<AssetSearchCriteria
         return googleCreateAndShowJs;
     }
 
+    @Override
+    protected boolean isGoogleMapCreateAndShowJsVisible() {
+        return true;
+    }
 
     protected String getMarkerColour(MappedResults<AssetSearchRecord> results, GpsLocation gpsLocation) {
         List<AssetSearchRecord> entitiesAtLocation = results.getEntitiesAtLocation(gpsLocation);

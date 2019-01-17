@@ -156,10 +156,10 @@ public class AssetEventsPage extends AssetPage{
 
     }
 
-	@Override
-	protected Label createTitleLabel(String labelId) {
-		return new Label(labelId, new FIDLabelModel("title.asset_events_page"));
-	}
+    @Override
+    protected Label createTitleLabel(String labelId) {
+        return new Label(labelId, new FIDLabelModel("title.asset_events_page"));
+    }
 
     private void updateEventListPanel(AjaxRequestTarget target) {
         ((EventByNetworkIdProvider) eventPanel.getDataProvider()).setStates(getWorkflowStates());
@@ -196,7 +196,7 @@ public class AssetEventsPage extends AssetPage{
         response.renderOnDomReadyJavaScript("subMenu.init();");
 
         //Needs to be included because the map panel is initially hidden.
-        response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false", GoogleMap.GOOGLE_MAP_API_ID);
+        response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyBcMtP_Yxr_RrU8TnYeFrGqJylMmDlFlHI", GoogleMap.GOOGLE_MAP_API_ID);
         response.renderJavaScriptReference("javascript/googleMaps.js", GoogleMap.GOOGLE_MAPS_JS_ID);
 
         /* Javascript function to fix alignment of action options when google translate is active */

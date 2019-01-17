@@ -138,7 +138,7 @@ public class OrgViewPage extends FieldIDTemplatePage {
         super.renderHead(response);
         response.renderCSSReference("style/pages/places.css");
         response.renderJavaScriptReference("javascript/component/autoComplete.js");
-        response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false", GoogleMap.GOOGLE_MAP_API_ID);
+        response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyBcMtP_Yxr_RrU8TnYeFrGqJylMmDlFlHI", GoogleMap.GOOGLE_MAP_API_ID);
         response.renderJavaScriptReference("javascript/googleMaps.js", GoogleMap.GOOGLE_MAPS_JS_ID);
     }
 

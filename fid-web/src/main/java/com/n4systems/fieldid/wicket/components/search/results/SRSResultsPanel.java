@@ -222,19 +222,19 @@ public abstract class SRSResultsPanel<T extends SearchCriteria, S extends HasGps
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyBcMtP_Yxr_RrU8TnYeFrGqJylMmDlFlHI&token=75701", GoogleMap.GOOGLE_MAP_API_ID);
+        response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyBcMtP_Yxr_RrU8TnYeFrGqJylMmDlFlHI", GoogleMap.GOOGLE_MAP_API_ID);
         response.renderJavaScriptReference("javascript/googleMaps.js", GoogleMap.GOOGLE_MAPS_JS_ID);
-        if (isMapVisible()) {
+        if (isGoogleMapCreateAndShowJsVisible()) {
             response.renderOnDomReadyJavaScript(getGoogleCreateAndShowJs());
         }
     }
 
-    protected boolean isMapVisible() {
-        return true;
+    protected boolean isGoogleMapCreateAndShowJsVisible() {
+        return false;
     }
 
     public String getGoogleCreateAndShowJs() {
-        return "";
+        return "map_resultsMap = googleMapFactory.createAndShow()";
     }
 
     @SuppressWarnings("unchecked") //Shhhhh... it's a secret.

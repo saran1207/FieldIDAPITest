@@ -145,7 +145,7 @@ public class PlaceEventsPage extends PlacePage {
         super.renderHead(response);
 
         //Needs to be included because the map panel is initially hidden.
-        response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false", GoogleMap.GOOGLE_MAP_API_ID);
+        response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyBcMtP_Yxr_RrU8TnYeFrGqJylMmDlFlHI", GoogleMap.GOOGLE_MAP_API_ID);
         response.renderJavaScriptReference("javascript/googleMaps.js", GoogleMap.GOOGLE_MAPS_JS_ID);
     }
 
