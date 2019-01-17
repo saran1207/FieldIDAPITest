@@ -91,7 +91,7 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
                     double west = params.getParameterValue("w").toDouble();
                     double north = params.getParameterValue("n").toDouble();
                     double east = params.getParameterValue("e").toDouble();
-                    int zoom  = params.getParameterValue("zoom")==null?12:params.getParameterValue("zoom").toInt();
+                    int zoom  = params.getParameterValue("zoom").toInt();
                     double lat = params.getParameterValue("lat").toDouble();
                     double lng = params.getParameterValue("lng").toDouble();
                     // stuff these into the criteria.
