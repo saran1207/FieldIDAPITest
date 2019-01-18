@@ -14,6 +14,7 @@ import com.n4systems.fieldid.wicket.data.EventByNetworkIdProvider;
 import com.n4systems.fieldid.wicket.data.FieldIDDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.*;
+import com.n4systems.services.config.ConfigService;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
@@ -31,6 +32,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +50,12 @@ public class AssetEventsPage extends AssetPage{
     private EventService eventService;
     @SpringBean
     private OrgService orgService;
+    @Bean
+    private ConfigService getConfigService(){
+        return ConfigService.getInstance();
+    }
+
+    private static final String GOOGLE_APIS_JS = "https://maps.googleapis.com/maps/api/js?key=%s";
 
     private boolean open = true;
     private boolean completed = true;
@@ -196,7 +204,7 @@ public class AssetEventsPage extends AssetPage{
         response.renderOnDomReadyJavaScript("subMenu.init();");
 
         //Needs to be included because the map panel is initially hidden.
-        response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyBcMtP_Yxr_RrU8TnYeFrGqJylMmDlFlHI", GoogleMap.GOOGLE_MAP_API_ID);
+        response.renderJavaScriptReference(String.format(GOOGLE_APIS_JS, getConfigService().getConfig().getWeb().getGoogleapisKey()), GoogleMap.GOOGLE_MAP_API_ID);
         response.renderJavaScriptReference("javascript/googleMaps.js", GoogleMap.GOOGLE_MAPS_JS_ID);
 
         /* Javascript function to fix alignment of action options when google translate is active */

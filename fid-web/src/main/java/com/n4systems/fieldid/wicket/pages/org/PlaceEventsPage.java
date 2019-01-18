@@ -16,6 +16,7 @@ import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.model.Event;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.services.config.ConfigService;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
@@ -28,6 +29,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.springframework.context.annotation.Bean;
 
 import java.util.Iterator;
 import java.util.List;
@@ -42,6 +44,13 @@ public class PlaceEventsPage extends PlacePage {
 
     @SpringBean
     private PlaceService placeService;
+
+    @Bean
+    private ConfigService getConfigService(){
+        return ConfigService.getInstance();
+    }
+
+    private static final String GOOGLE_APIS_JS = "https://maps.googleapis.com/maps/api/js?key=%s";
 
     private EventListPanel eventPanel;
     private EventMapPanel mapPanel;
@@ -145,7 +154,7 @@ public class PlaceEventsPage extends PlacePage {
         super.renderHead(response);
 
         //Needs to be included because the map panel is initially hidden.
-        response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyBcMtP_Yxr_RrU8TnYeFrGqJylMmDlFlHI", GoogleMap.GOOGLE_MAP_API_ID);
+        response.renderJavaScriptReference(String.format(GOOGLE_APIS_JS, getConfigService().getConfig().getWeb().getGoogleapisKey()), GoogleMap.GOOGLE_MAP_API_ID);
         response.renderJavaScriptReference("javascript/googleMaps.js", GoogleMap.GOOGLE_MAPS_JS_ID);
     }
 

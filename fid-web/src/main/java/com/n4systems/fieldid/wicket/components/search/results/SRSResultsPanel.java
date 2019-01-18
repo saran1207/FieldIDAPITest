@@ -13,6 +13,7 @@ import com.n4systems.model.columns.loader.ColumnMappingLoader;
 import com.n4systems.model.search.ColumnMappingConverter;
 import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.search.SearchCriteria;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.selection.MultiIdSelection;
 import com.n4systems.util.views.RowView;
@@ -26,13 +27,19 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.springframework.context.annotation.Bean;
 
 import java.util.List;
 
 public abstract class SRSResultsPanel<T extends SearchCriteria, S extends HasGpsLocation> extends Panel {
 
+    @Bean
+    private ConfigService getConfigService(){
+        return ConfigService.getInstance();
+    }
+
+    private static final String GOOGLE_APIS_JS = "https://maps.googleapis.com/maps/api/js?key=%s";
     private static final String TOGGLE_PANEL_JS = "$('.tipsy').remove();";  // TODO : add js to show loading bar/text.
-    protected String googleCreateAndShowJs;
 
     protected SimpleDataTable<RowView> dataTable;
     protected FieldIdAPIDataProvider provider;
@@ -222,19 +229,8 @@ public abstract class SRSResultsPanel<T extends SearchCriteria, S extends HasGps
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyBcMtP_Yxr_RrU8TnYeFrGqJylMmDlFlHI", GoogleMap.GOOGLE_MAP_API_ID);
+        response.renderJavaScriptReference(String.format(GOOGLE_APIS_JS, getConfigService().getConfig().getWeb().getGoogleapisKey()), GoogleMap.GOOGLE_MAP_API_ID);
         response.renderJavaScriptReference("javascript/googleMaps.js", GoogleMap.GOOGLE_MAPS_JS_ID);
-        if (isGoogleMapCreateAndShowJsVisible()) {
-            response.renderOnDomReadyJavaScript(getGoogleCreateAndShowJs());
-        }
-    }
-
-    protected boolean isGoogleMapCreateAndShowJsVisible() {
-        return false;
-    }
-
-    public String getGoogleCreateAndShowJs() {
-        return "map_resultsMap = googleMapFactory.createAndShow()";
     }
 
     @SuppressWarnings("unchecked") //Shhhhh... it's a secret.

@@ -11,6 +11,7 @@ public class WebConfig {
 	protected String apptegicDataset;
 	protected Boolean mixpanelEnabled;
 	protected String mixpanelToken;
+    protected String googleapisKey;
 	protected String externalPlansAndPricingUrl;
 	protected String helpSystemUrl;
 	protected String rssFeed;
@@ -31,6 +32,7 @@ public class WebConfig {
 		this.apptegicDataset = other.apptegicDataset;
 		this.mixpanelEnabled = other.mixpanelEnabled;
 		this.mixpanelToken = other.mixpanelToken;
+        this.googleapisKey = other.googleapisKey;
 		this.externalPlansAndPricingUrl = other.externalPlansAndPricingUrl;
 		this.helpSystemUrl = other.helpSystemUrl;
 		this.rssFeed = other.rssFeed;
@@ -75,9 +77,9 @@ public class WebConfig {
 		return mixpanelEnabled;
 	}
 
-	public String getMixpanelToken() {
-		return mixpanelToken;
-	}
+	public String getMixpanelToken() { return mixpanelToken; }
+
+    public String getGoogleapisKey() { return googleapisKey; }
 
 	public String getExternalPlansAndPricingUrl() {
 		return externalPlansAndPricingUrl;

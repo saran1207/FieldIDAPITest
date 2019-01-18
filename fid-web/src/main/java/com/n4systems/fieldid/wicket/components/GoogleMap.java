@@ -5,6 +5,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.GpsBounds;
 import com.n4systems.model.GpsLocation;
 import com.n4systems.model.api.HasGpsLocation;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.services.search.MappedResults;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -14,12 +15,20 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.springframework.context.annotation.Bean;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
 
 public class GoogleMap<T extends HasGpsLocation> extends Panel {
+    @Bean
+    private ConfigService getConfigService(){
+        return ConfigService.getInstance();
+    }
+
+    private static final String GOOGLE_APIS_JS = "https://maps.googleapis.com/maps/api/js?key=%s";
+
     public static final String GOOGLE_MAPS_JS_ID = "googleMaps";
     public static final String GOOGLE_MAP_API_ID = "google-map-api";
 
@@ -131,7 +140,7 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyBcMtP_Yxr_RrU8TnYeFrGqJylMmDlFlHI", GOOGLE_MAP_API_ID);
+        response.renderJavaScriptReference(String.format(GOOGLE_APIS_JS, getConfigService().getConfig().getWeb().getGoogleapisKey()), GOOGLE_MAP_API_ID);
         response.renderJavaScriptReference("javascript/googleMaps.js", GOOGLE_MAPS_JS_ID);
         if (isMapVisible()) {
             response.renderOnDomReadyJavaScript(String.format(CREATE_AND_SHOW_JS, getJsVar(), getGson().toJson(new GoogleMapOptions())));
@@ -144,10 +153,6 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
 
     public String getJsVar() {
         return "map_"+getMarkupId();
-    }
-
-    public String getCreateAndShowJs()  {
-        return String.format(CREATE_AND_SHOW_JS, getJsVar(), getGson().toJson(new GoogleMapOptions()));
     }
 
     public GoogleMap withCentredLocation(Double latitude, Double longitude) {
