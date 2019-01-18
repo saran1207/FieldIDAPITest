@@ -45,13 +45,10 @@ public class PlaceEventsPage extends PlacePage {
     @SpringBean
     private PlaceService placeService;
 
-    @Bean
-    private ConfigService getConfigService(){
-        return ConfigService.getInstance();
-    }
+    @SpringBean
+    private ConfigService configService;
 
     private static final String GOOGLE_APIS_JS = "https://maps.googleapis.com/maps/api/js?key=%s";
-
     private EventListPanel eventPanel;
     private EventMapPanel mapPanel;
     private FilterPanel filterPanel;
@@ -154,7 +151,7 @@ public class PlaceEventsPage extends PlacePage {
         super.renderHead(response);
 
         //Needs to be included because the map panel is initially hidden.
-        response.renderJavaScriptReference(String.format(GOOGLE_APIS_JS, getConfigService().getConfig().getWeb().getGoogleapisKey()), GoogleMap.GOOGLE_MAP_API_ID);
+        response.renderJavaScriptReference(String.format(GOOGLE_APIS_JS, configService.getConfig().getWeb().getGoogleApiKey()), GoogleMap.GOOGLE_MAP_API_ID);
         response.renderJavaScriptReference("javascript/googleMaps.js", GoogleMap.GOOGLE_MAPS_JS_ID);
     }
 

@@ -27,16 +27,14 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.springframework.context.annotation.Bean;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
 
 public abstract class SRSResultsPanel<T extends SearchCriteria, S extends HasGpsLocation> extends Panel {
 
-    @Bean
-    private ConfigService getConfigService(){
-        return ConfigService.getInstance();
-    }
+    @SpringBean
+    private ConfigService configService;
 
     private static final String GOOGLE_APIS_JS = "https://maps.googleapis.com/maps/api/js?key=%s";
     private static final String TOGGLE_PANEL_JS = "$('.tipsy').remove();";  // TODO : add js to show loading bar/text.
@@ -229,7 +227,7 @@ public abstract class SRSResultsPanel<T extends SearchCriteria, S extends HasGps
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.renderJavaScriptReference(String.format(GOOGLE_APIS_JS, getConfigService().getConfig().getWeb().getGoogleapisKey()), GoogleMap.GOOGLE_MAP_API_ID);
+        response.renderJavaScriptReference(String.format(GOOGLE_APIS_JS, configService.getConfig().getWeb().getGoogleApiKey()), GoogleMap.GOOGLE_MAP_API_ID);
         response.renderJavaScriptReference("javascript/googleMaps.js", GoogleMap.GOOGLE_MAPS_JS_ID);
     }
 

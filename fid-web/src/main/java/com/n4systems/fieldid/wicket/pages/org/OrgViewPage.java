@@ -12,6 +12,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.util.JavascriptUtil;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -38,7 +39,9 @@ public class OrgViewPage extends FieldIDTemplatePage {
 
     private @SpringBean PersistenceService persistenceService;
     private @SpringBean JavascriptUtil javascriptUtil;
+    private @SpringBean ConfigService configService;
 
+    private static final String GOOGLE_APIS_JS = "https://maps.googleapis.com/maps/api/js?key=%s";
     private Component createForm;
     private OrgTree orgTree;
     private final WebMarkupContainer buttons;
@@ -138,7 +141,7 @@ public class OrgViewPage extends FieldIDTemplatePage {
         super.renderHead(response);
         response.renderCSSReference("style/pages/places.css");
         response.renderJavaScriptReference("javascript/component/autoComplete.js");
-        response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyBcMtP_Yxr_RrU8TnYeFrGqJylMmDlFlHI", GoogleMap.GOOGLE_MAP_API_ID);
+        response.renderJavaScriptReference(String.format(GOOGLE_APIS_JS, configService.getConfig().getWeb().getGoogleApiKey()), GoogleMap.GOOGLE_MAP_API_ID);
         response.renderJavaScriptReference("javascript/googleMaps.js", GoogleMap.GOOGLE_MAPS_JS_ID);
     }
 

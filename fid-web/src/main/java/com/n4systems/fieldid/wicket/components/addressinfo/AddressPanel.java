@@ -17,8 +17,8 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.ui.autocomplete.WiQueryAutocompleteJavaScriptResourceReference;
-import org.springframework.context.annotation.Bean;
 
 import java.math.BigDecimal;
 
@@ -26,10 +26,8 @@ import static ch.lambdaj.Lambda.on;
 
 public class AddressPanel extends Panel implements ILabelProvider<String> {
 
-    @Bean
-    private ConfigService getConfigService(){
-        return ConfigService.getInstance();
-    }
+    @SpringBean
+    private ConfigService configService;
 
     private static final String GOOGLE_APIS_JS = "https://maps.googleapis.com/maps/api/js?key=%s";
     private IModel<AddressInfo> model;
@@ -80,7 +78,7 @@ public class AddressPanel extends Panel implements ILabelProvider<String> {
         response.renderCSSReference("style/legacy/jquery-redmond/jquery-ui-1.8.13.custom.css");
         response.renderCSSReference("style/legacy/component/address.css");
         response.renderJavaScriptReference(WiQueryAutocompleteJavaScriptResourceReference.get());
-        response.renderJavaScriptReference(String.format(GOOGLE_APIS_JS, getConfigService().getConfig().getWeb().getGoogleapisKey()), GoogleMap.GOOGLE_MAP_API_ID);
+        response.renderJavaScriptReference(String.format(GOOGLE_APIS_JS, configService.getConfig().getWeb().getGoogleApiKey()), GoogleMap.GOOGLE_MAP_API_ID);
         response.renderJavaScriptReference("javascript/googleMaps.js", GoogleMap.GOOGLE_MAPS_JS_ID);
         response.renderOnDomReadyJavaScript(String.format("googleMapFactory.createAutoCompleteAddress(%s);", getOptions()));
         response.renderOnDomReadyJavaScript("var attr = $('.txt').autocomplete('widget').attr('class'); $('.txt').autocomplete('widget').attr('class', 'auto-complete-address ' + attr);");

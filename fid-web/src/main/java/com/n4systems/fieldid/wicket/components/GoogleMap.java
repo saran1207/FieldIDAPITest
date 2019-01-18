@@ -15,20 +15,18 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.springframework.context.annotation.Bean;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
 
 public class GoogleMap<T extends HasGpsLocation> extends Panel {
-    @Bean
-    private ConfigService getConfigService(){
-        return ConfigService.getInstance();
-    }
+
+    @SpringBean
+    private ConfigService configService;
 
     private static final String GOOGLE_APIS_JS = "https://maps.googleapis.com/maps/api/js?key=%s";
-
     public static final String GOOGLE_MAPS_JS_ID = "googleMaps";
     public static final String GOOGLE_MAP_API_ID = "google-map-api";
 
@@ -140,7 +138,7 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderJavaScriptReference(String.format(GOOGLE_APIS_JS, getConfigService().getConfig().getWeb().getGoogleapisKey()), GOOGLE_MAP_API_ID);
+        response.renderJavaScriptReference(String.format(GOOGLE_APIS_JS, configService.getConfig().getWeb().getGoogleApiKey()), GOOGLE_MAP_API_ID);
         response.renderJavaScriptReference("javascript/googleMaps.js", GOOGLE_MAPS_JS_ID);
         if (isMapVisible()) {
             response.renderOnDomReadyJavaScript(String.format(CREATE_AND_SHOW_JS, getJsVar(), getGson().toJson(new GoogleMapOptions())));
