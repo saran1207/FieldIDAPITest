@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket.components.massupdate.asset;
 
-import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.asset.MassUpdateAssetService;
 import com.n4systems.fieldid.service.task.AsyncService;
@@ -11,6 +10,7 @@ import com.n4systems.fieldid.wicket.model.asset.MassUpdateAssetModel;
 import com.n4systems.model.PlatformType;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.user.User;
+import com.newrelic.api.agent.NewRelic;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
@@ -46,6 +46,7 @@ public class ConfirmEditPanel extends AbstractMassUpdatePanel {
 			@Override
 			protected void onSubmit() {
 				final List<Long> assetIds = assetSearchCriteria.getObject().getSelection().getSelectedIds();
+				NewRelic.addCustomParameter("Asset mass update count", assetIds.size());
                 final User modifiedBy = getCurrentUser();
                 final String currentPlatform = ThreadLocalInteractionContext.getInstance().getCurrentPlatform();
                 final PlatformType platformType = ThreadLocalInteractionContext.getInstance().getCurrentPlatformType();
