@@ -10,15 +10,13 @@ import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.api.HasTenant;
 import com.n4systems.model.parents.AbstractEntity;
-import com.n4systems.util.time.DateUtil;
+import com.newrelic.api.agent.Trace;
 import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -70,6 +68,7 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 	@GET
 	@Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
+    @Trace (dispatcher=true)
 	@Transactional(readOnly = true)
 	public Messages.ListResponseMessage findAll(@QueryParam("page") int page, @QueryParam("pageSize") int pageSize, @QueryParam("delta") String date) {
 		List<M> allItems;
@@ -79,6 +78,7 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 		String apiCall = listResponseType.getDescriptor().getName();
 		String logMessage = logInfo + apiCall + " FIND All";
 		logger.info(logMessage);
+        setNewRelicCustomParameters();
 
 		if(date != null) {
 			delta = convertDate(date);
@@ -128,12 +128,14 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 	@Path("{id}")
 	@Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
-	@Transactional(readOnly = true)
+    @Trace (dispatcher=true)
+    @Transactional(readOnly = true)
 	public A find(@PathParam("id") String id) {
 		String logInfo = getLogInfo();
 		String apiCall = listResponseType.getDescriptor().getName();
 		String logMessage = logInfo + apiCall + " FIND with id " + id;
 		logger.info(logMessage);
+        setNewRelicCustomParameters();
 
 		return toMessage(testNotFound(crudService().findByPublicId(id)));
 	}
@@ -141,12 +143,14 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 	@POST
 	@Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
-	@Transactional
+    @Trace (dispatcher=true)
+    @Transactional
 	public A save(A message) {
 		String logInfo = getLogInfo();
 		String apiCall = listResponseType.getDescriptor().getName();
 		String logMessage = logInfo + apiCall + " CREATE with json: " + message.toString();
 		logger.info(logMessage);
+        setNewRelicCustomParameters();
 
 		return toMessage(crudService().save(toModel(message)));
 	}
@@ -155,12 +159,14 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 	@Path("{id}")
 	@Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
-	@Transactional
+    @Trace (dispatcher=true)
+    @Transactional
 	public A update(@PathParam("id") String id, A message) {
 		String logInfo = getLogInfo();
 		String apiCall = listResponseType.getDescriptor().getName();
 		String logMessage = logInfo + apiCall + " UPDATE with id: " + id + " and json: " + message.toString();
 		logger.info(logMessage);
+        setNewRelicCustomParameters();
 
 		return toMessage(crudService().update(merge(message, testNotFound(crudService().findByPublicId(id)))));
 	}
@@ -169,12 +175,14 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 	@Path("{id}")
 	@Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
-	@Transactional
+    @Trace (dispatcher=true)
+    @Transactional
 	public A delete(@PathParam("id") String id) {
 		String logInfo = getLogInfo();
 		String apiCall = listResponseType.getDescriptor().getName();
 		String logMessage = logInfo + apiCall + " DELETE for id: " + id;
 		logger.info(logMessage);
+        setNewRelicCustomParameters();
 
 		try {
 			return toMessage(testNotFound(crudService().deleteByPublicId(id)));
@@ -188,7 +196,8 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 	@Path("asset/{assetId}")
 	@Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
-	@Transactional
+    @Trace (dispatcher=true)
+    @Transactional
 	public Messages.ListResponseMessage findByAssetId(@PathParam("assetId") String id, @QueryParam("page") int page, @QueryParam("pageSize") int pageSize, @QueryParam("openInspections") boolean openInspections) {
 		List<M> allItems;
 		List<A> items;
@@ -196,6 +205,7 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 		String apiCall = listResponseType.getDescriptor().getName();
 		String logMessage = logInfo + apiCall + " FIND INSPECTIONS with id " + id;
 		logger.info(logMessage);
+        setNewRelicCustomParameters();
 
 		try {
 			allItems = crudService().findByAssetId(id, page, pageSize, openInspections);
@@ -222,7 +232,8 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 	@Path("actionItems")
 	@Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
-	@Transactional
+    @Trace (dispatcher=true)
+    @Transactional
 	public Messages.ListResponseMessage findAllActionItem(@QueryParam("page") int page, @QueryParam("pageSize") int pageSize,  @QueryParam("delta") String date) {
 		List<M> allItems;
 		List<A> items;
@@ -232,6 +243,7 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 		String apiCall = listResponseType.getDescriptor().getName();
 		String logMessage = logInfo + apiCall + " FIND ALL ACTION ITEMS ";
 		logger.info(logMessage);
+        setNewRelicCustomParameters();
 
 		if(date != null) {
 			delta = convertDate(date);
@@ -281,8 +293,10 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 	@Path("actionItems/{id}")
 	@Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
-	@Transactional(readOnly = true)
+    @Trace (dispatcher=true)
+    @Transactional(readOnly = true)
 	public A findActionItem(@PathParam("id") String id) {
+        setNewRelicCustomParameters();
 		return this.find(id);
 	}
 
@@ -290,8 +304,10 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 	@Path("actionItems/{id}")
 	@Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
-	@Transactional
+    @Trace (dispatcher=true)
+    @Transactional
 	public A saveActionItem(A message) {
+        setNewRelicCustomParameters();
 		return this.save(message);
 	}
 
@@ -299,8 +315,10 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 	@Path("actionItems/{id}")
 	@Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
-	@Transactional
+    @Trace (dispatcher=true)
+    @Transactional
 	public A updateActionItem(@PathParam("id") String id, A message) {
+        setNewRelicCustomParameters();
 		return this.update(id, message);
 	}
 
@@ -308,7 +326,8 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 	@Path("actionItems/asset/{assetId}")
 	@Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
-	@Transactional
+    @Trace (dispatcher=true)
+    @Transactional
 	public Messages.ListResponseMessage findActionItemByAssetId(@PathParam("assetId") String id, @QueryParam("page") int page, @QueryParam("pageSize") int pageSize, @QueryParam("openActionItems") boolean openActionItems) {
 		List<M> allItems;
 		List<A> items;
@@ -316,6 +335,7 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 		String apiCall = listResponseType.getDescriptor().getName();
 		String logMessage = logInfo + apiCall + " FIND ACTION ITEMS with id " + id;
 		logger.info(logMessage);
+        setNewRelicCustomParameters();
 
 		try {
 			allItems = crudService().findActionItemByAssetId(id, page, pageSize, openActionItems);

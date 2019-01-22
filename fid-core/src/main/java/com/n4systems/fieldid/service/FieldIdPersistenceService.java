@@ -3,6 +3,7 @@ package com.n4systems.fieldid.service;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.user.User;
+import com.newrelic.api.agent.NewRelic;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
@@ -42,5 +43,10 @@ public class FieldIdPersistenceService extends FieldIdService {
 
     public void flush() {
         persistenceService.flush();
+    }
+
+    public void setNewRelicCustomParameters() {
+        NewRelic.addCustomParameter("Tenant", getCurrentTenant().getName());
+        NewRelic.addCustomParameter("User", getCurrentUser().getUserID());
     }
 }
