@@ -116,7 +116,7 @@ public class AssetSearchResultsPanel extends SRSResultsPanel<AssetSearchCriteria
                 o.addProperty("colour", getMarkerColour(results, location));
             }
         };
-        GpsLocation gpsLocation = mapModel.getObject().getLocations().iterator().next();
+        GpsLocation gpsLocation = map.getDefaultCenter();
         map.withDefaultZoom(12);
         map.withCentredLocation(new Double(gpsLocation.getLatitude().doubleValue()),new Double(gpsLocation.getLongitude().doubleValue()));
         map.withZoomPanNotifications().setOutputMarkupPlaceholderTag(true).setVisible(false);

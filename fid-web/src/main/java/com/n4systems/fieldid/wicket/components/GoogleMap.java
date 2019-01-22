@@ -257,4 +257,8 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
     protected void addCustomProperties(JsonObject o, MappedResults<T> results, GpsLocation location) {
     }
 
+    public GpsLocation getDefaultCenter() {
+        return defaultCentre;
+    }
+
 }
