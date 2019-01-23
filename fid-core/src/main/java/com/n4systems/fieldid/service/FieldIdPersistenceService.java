@@ -11,22 +11,22 @@ import javax.persistence.PersistenceContext;
 
 public class FieldIdPersistenceService extends FieldIdService {
 
-	@Autowired
+    @Autowired
     protected PersistenceService persistenceService;
 
     @PersistenceContext EntityManager _entityManager;
 
-	public void setPersistenceService(PersistenceService persistenceService) {
-		this.persistenceService = persistenceService;
-	}
-	
-	protected Tenant getCurrentTenant() {
-		return persistenceService.findNonSecure(Tenant.class, securityContext.getTenantSecurityFilter().getTenantId());
-	}
-	
-	protected User getCurrentUser() {
-		return persistenceService.find(User.class, securityContext.getUserSecurityFilter().getUserId());
-	}
+    public void setPersistenceService(PersistenceService persistenceService) {
+        this.persistenceService = persistenceService;
+    }
+    
+    protected Tenant getCurrentTenant() {
+        return persistenceService.findNonSecure(Tenant.class, securityContext.getTenantSecurityFilter().getTenantId());
+    }
+    
+    protected User getCurrentUser() {
+        return persistenceService.find(User.class, securityContext.getUserSecurityFilter().getUserId());
+    }
     
     protected <T extends AbstractEntity> Long getId(T entity) {
         if (entity == null) {
