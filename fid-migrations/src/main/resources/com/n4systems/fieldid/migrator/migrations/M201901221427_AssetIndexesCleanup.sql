@@ -57,21 +57,13 @@ alter table assets add index idx_asssets_network_id (network_id);
 alter table assets drop index index_products_on_network_id;
 
 alter table assets add index idx_asssets_predefinedlocation_id (predefinedlocation_id);
-
-set @exist := (select count(*) from information_schema.statistics where table_name = 'assets' and index_name = 'fk_products_predefinedlocations' and table_schema = database());
-set @sqlstmt := if( @exist > 0, 'alter table assets drop index fk_products_predefinedlocations;', 'select ''INFO: nothing to drop''');
-PREPARE stmt FROM @sqlstmt;
-EXECUTE stmt;
+alter table assets drop index fk_products_predefinedlocations;
 
 alter table assets add index idx_asssets_assetstatus_id (assetstatus_id);
 alter table assets drop index index_assets_on_assetstatus_id;
 
 alter table assets add index idx_asssets_createdby (createdby);
-
-set @exist := (select count(*) from information_schema.statistics where table_name = 'assets' and index_name = 'fk_created_by_user' and table_schema = database());
-set @sqlstmt := if( @exist > 0, 'alter table assets drop index fk_created_by_user;', 'select ''INFO: nothing to drop''');
-PREPARE stmt FROM @sqlstmt;
-EXECUTE stmt;
+alter table assets drop index fk_created_by_user;
 
 alter table assets add index idx_asssets_location (location);
 alter table assets drop index freeform_location_idx;
@@ -82,7 +74,6 @@ alter table assets drop index index_products_state_tenantid_linkedid;
 alter table assets add index idx_asssets_ownerid_tenantid_mobileguid_state (`owner_id`,`tenant_id`,`mobileguid`,`state`);
 alter table assets drop index index_owner_id_tenant_id_mobileguid_state;
 
-create index idx_assets_identified on assets (identified desc);
 
 
 
