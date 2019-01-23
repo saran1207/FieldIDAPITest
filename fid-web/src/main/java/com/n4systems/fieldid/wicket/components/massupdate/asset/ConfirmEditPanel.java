@@ -73,16 +73,17 @@ public class ConfirmEditPanel extends AbstractMassUpdatePanel {
                         ThreadLocalInteractionContext.getInstance().setCurrentPlatformType(platformType);
 
                         try {
+							logger.info("Beginning Asset mass update for " + assetCount + " assets");
                           	massUpdateAssetService.updateAssets(assetIds, massUpdateAssetModel.getAsset(), massUpdateAssetModel.getSelect(), modifiedBy, getNonIntegrationOrderNumber());
 							massUpdateAssetService.sendSuccessEmailResponse(assetIds, modifiedBy);
+							long endTime = System.nanoTime();
+							logger.info("Asset mass update finished for " + assetCount + " assets and took " + ((endTime-startTime) / 1000000) + " ms");
                         } catch (Exception e) {
 							logger.error("Asset mass update failed",e);
                             massUpdateAssetService.sendFailureEmailResponse(assetIds, modifiedBy);
                         }
 
                         ThreadLocalInteractionContext.getInstance().clear();
-						long endTime = System.nanoTime();
-						logger.info("Asset mass update finished for " + assetCount + " assets and took " + ((endTime-startTime) / 1000000) + " ms");
 						newRelicToken.expire();
                         return null;
                     }
