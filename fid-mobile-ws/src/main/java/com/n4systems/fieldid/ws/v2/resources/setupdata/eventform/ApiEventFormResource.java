@@ -44,7 +44,8 @@ public class ApiEventFormResource extends SetupDataResourceReadOnly<ApiEventForm
         QueryBuilder<ApiModelHeader> query = new QueryBuilder<>(EventForm.class, securityContext.getUserSecurityFilter(true));
         query.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, "id", "modified").setDistinct(true));
         setNewRelicCustomParameters();
-        
+        setNewRelicAppInfoParameter();
+
         // Pulls only the EventForms for to the list of events
         query.addWhere(
                 WhereClauseFactory.createExists("for_events",

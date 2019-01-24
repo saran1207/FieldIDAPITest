@@ -40,6 +40,7 @@ public class ApiProcedureResource extends ApiResource<ApiProcedure, Procedure> {
     public List<ApiModelHeader> query(@QueryParam("id") List<ApiKeyString> procedureIds) {
         if (procedureIds.isEmpty()) return new ArrayList<>();
         setNewRelicCustomParameters();
+        setNewRelicAppInfoParameter();
 
         QueryBuilder<ApiModelHeader> query = new QueryBuilder<>(Procedure.class, securityContext.getUserSecurityFilter());
         query.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, "mobileGUID", "modified"));
@@ -60,6 +61,7 @@ public class ApiProcedureResource extends ApiResource<ApiProcedure, Procedure> {
         query.addOrder("dueDate");
         query.addWhere(WhereParameter.Comparator.IN, "workflowState", "workflowState", Arrays.asList(ProcedureWorkflowState.ACTIVE_STATES));
         setNewRelicCustomParameters();
+        setNewRelicAppInfoParameter();
 
         if (startDate != null) {
             query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GE, "startDate", "dueDate", startDate));
@@ -91,6 +93,7 @@ public class ApiProcedureResource extends ApiResource<ApiProcedure, Procedure> {
     public List<ApiProcedure> findAll(@QueryParam("id") List<ApiKeyString> procedureIds) {
         if (procedureIds.isEmpty()) return new ArrayList<>();
         setNewRelicCustomParameters();
+        setNewRelicAppInfoParameter();
 
         List<ApiProcedure> results = convertAllEntitiesToApiModels(procedureService.findByMobileId(unwrapKeys(procedureIds)));
         return results;
@@ -107,6 +110,7 @@ public class ApiProcedureResource extends ApiResource<ApiProcedure, Procedure> {
             @QueryParam("month") int month) {
 
         setNewRelicCustomParameters();
+        setNewRelicAppInfoParameter();
         List<Long> counts = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, 1);
@@ -149,6 +153,7 @@ public class ApiProcedureResource extends ApiResource<ApiProcedure, Procedure> {
             throw new BadRequestException("procedureId must not be null");
         }
         setNewRelicCustomParameters();
+        setNewRelicAppInfoParameter();
 
         Procedure procedure = procedureService.findByMobileId(apiProcedure.getProcedureId(), true);
 
@@ -205,6 +210,7 @@ public class ApiProcedureResource extends ApiResource<ApiProcedure, Procedure> {
             throw new BadRequestException("procedureId must not be null");
         }
         setNewRelicCustomParameters();
+        setNewRelicAppInfoParameter();
 
         Procedure procedure = procedureService.findByMobileId(apiProcedure.getProcedureId(), true);
 

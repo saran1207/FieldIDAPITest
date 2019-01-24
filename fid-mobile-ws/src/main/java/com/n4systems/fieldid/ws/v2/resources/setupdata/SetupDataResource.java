@@ -43,6 +43,7 @@ public abstract class SetupDataResource<A extends ApiModel, E extends AbstractEn
     public List<ApiModelHeader> query(@QueryParam("id") List<K> ids) {
         if (ids.isEmpty()) return new ArrayList<>();
         setNewRelicCustomParameters();
+        setNewRelicAppInfoParameter();
 
         QueryBuilder<ApiModelHeader> query = new QueryBuilder<>(entityClass, securityContext.getUserSecurityFilter(allowArchived));
         query.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, idField, "modified"));
@@ -61,6 +62,7 @@ public abstract class SetupDataResource<A extends ApiModel, E extends AbstractEn
         QueryBuilder<ApiModelHeader> query = new QueryBuilder<>(entityClass, securityContext.getUserSecurityFilter(allowArchived));
         query.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, idField, "modified"));
         setNewRelicCustomParameters();
+        setNewRelicAppInfoParameter();
 
         if (since != null) {
             query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GT, "modified", since));
@@ -78,6 +80,7 @@ public abstract class SetupDataResource<A extends ApiModel, E extends AbstractEn
     public List<A> findAll(@QueryParam("id") List<K> ids) {
         if (ids.isEmpty()) return new ArrayList<>();
         setNewRelicCustomParameters();
+        setNewRelicAppInfoParameter();
 
         QueryBuilder<E> query = createTenantSecurityBuilder(entityClass, allowArchived);
         query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, idField, unwrapKeys(ids)));

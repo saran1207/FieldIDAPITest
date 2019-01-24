@@ -5,8 +5,10 @@ import com.n4systems.fieldid.ws.v2.resources.ApiKey;
 import com.n4systems.fieldid.ws.v2.resources.ApiKeyLong;
 import com.n4systems.fieldid.ws.v2.resources.ApiModelHeader;
 import com.n4systems.fieldid.ws.v2.resources.model.DateParam;
+import com.n4systems.fieldid.ws.v2.resources.setupdata.user.ApiUserResource;
 import com.n4systems.model.IsolationPointSourceType;
 import com.newrelic.api.agent.Trace;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,9 @@ import java.util.stream.Collectors;
 @Path("isolationPointSourceType")
 public class ApiIsolationPointSourceTypeResource extends FieldIdPersistenceService {
 
+    @Autowired
+    protected ApiUserResource apiUserResource;
+
     @GET
     @Path("query")
     @Produces(MediaType.APPLICATION_JSON)
@@ -31,6 +36,7 @@ public class ApiIsolationPointSourceTypeResource extends FieldIdPersistenceServi
     public List<ApiModelHeader> query(@QueryParam("id") List<ApiKeyLong> ids) {
         if (ids.isEmpty()) return new ArrayList<>();
         setNewRelicCustomParameters();
+        apiUserResource.setNewRelicAppInfoParameter();
 
         return ApiKey.unwrap(ids)
                 .stream()
@@ -46,6 +52,7 @@ public class ApiIsolationPointSourceTypeResource extends FieldIdPersistenceServi
     @Transactional(readOnly = true)
     public List<ApiModelHeader> queryLatest(@QueryParam("since") DateParam since) {
         setNewRelicCustomParameters();
+        apiUserResource.setNewRelicAppInfoParameter();
         return IsolationPointSourceType.modifiedAfter(since)
                 .stream()
                 .map(st -> new ApiModelHeader<>(st.getId(), st.getModified()))
@@ -59,6 +66,7 @@ public class ApiIsolationPointSourceTypeResource extends FieldIdPersistenceServi
     public List<ApiIsolationPointSourceType> findAll(@QueryParam("id") List<ApiKeyLong> ids) {
         if (ids.isEmpty()) return new ArrayList<>();
         setNewRelicCustomParameters();
+        apiUserResource.setNewRelicAppInfoParameter();
 
         return ApiKey.unwrap(ids)
                 .stream()

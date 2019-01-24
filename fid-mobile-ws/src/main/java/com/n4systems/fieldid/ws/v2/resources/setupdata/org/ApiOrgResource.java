@@ -58,6 +58,7 @@ public class ApiOrgResource extends SetupDataResourceReadOnly<ApiOrg, BaseOrg> {
     public List<ApiModelHeader> queryLatestByType(@PathParam("type") String type, @QueryParam("since") DateParam since) {
         Class<?> targetClass;
         setNewRelicCustomParameters();
+        setNewRelicAppInfoParameter();
 
         switch(type)
         {

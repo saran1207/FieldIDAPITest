@@ -56,6 +56,7 @@ public class ApiProcedureDefinitionResource extends ApiResource<ApiProcedureDefi
     public List<ApiModelHeader> query(@QueryParam("id") List<ApiKeyString> ids) {
         if (ids.isEmpty()) return new ArrayList<>();
         setNewRelicCustomParameters();
+        setNewRelicAppInfoParameter();
 
         QueryBuilder<ApiModelHeader> query = new QueryBuilder<>(ProcedureDefinition.class, securityContext.getUserSecurityFilter(true));
         query.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, "mobileId", "modified"));
@@ -72,6 +73,7 @@ public class ApiProcedureDefinitionResource extends ApiResource<ApiProcedureDefi
     public List<ApiModelHeader> queryAsset(@QueryParam("id") List<ApiKeyString> assetIds) {
         if (assetIds.isEmpty()) return new ArrayList<>();
         setNewRelicCustomParameters();
+        setNewRelicAppInfoParameter();
 
         QueryBuilder<ApiModelHeader> query = new QueryBuilder<>(ProcedureDefinition.class, securityContext.getUserSecurityFilter(true));
         query.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, "mobileId", "modified"));
@@ -87,6 +89,7 @@ public class ApiProcedureDefinitionResource extends ApiResource<ApiProcedureDefi
     public List<ApiProcedureDefinition> findAll(@QueryParam("id") List<ApiKeyString> ids) {
         if (ids.isEmpty()) return new ArrayList<>();
         setNewRelicCustomParameters();
+        setNewRelicAppInfoParameter();
 
         QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
         query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "mobileId", unwrapKeys(ids)));
@@ -103,6 +106,7 @@ public class ApiProcedureDefinitionResource extends ApiResource<ApiProcedureDefi
     public Response writeOrUpdateProcedureDefinition(ApiProcedureDefinition apiProcDef) {
         boolean isNew = false;
         setNewRelicCustomParameters();
+        setNewRelicAppInfoParameter();
 
         try {
             //First thing we should do is see if this new Procedure Definition exists.  If it exists, then we're golden.
@@ -163,6 +167,7 @@ public class ApiProcedureDefinitionResource extends ApiResource<ApiProcedureDefi
     @Transactional
     public Response deleteDraftProcedureDefinition(@QueryParam("procDefSid") String procDefSid) {
         setNewRelicCustomParameters();
+        setNewRelicAppInfoParameter();
 
         ProcedureDefinition deleteMe = procedureDefinitionService.findProcedureDefinitionByMobileId(procDefSid);
 

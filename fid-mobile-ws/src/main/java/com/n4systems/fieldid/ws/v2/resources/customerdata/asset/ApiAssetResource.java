@@ -46,7 +46,8 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
     public List<ApiModelHeader> query(@QueryParam("id") List<ApiKeyString> assetIds) {
         if (assetIds.isEmpty()) return new ArrayList<>();
         setNewRelicCustomParameters();
-        
+        setNewRelicAppInfoParameter();
+
         QueryBuilder<ApiModelHeader> query = new QueryBuilder<>(Asset.class, securityContext.getUserSecurityFilter());
         query.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, "mobileGUID", "modified"));
         query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "mobileGUID", unwrapKeys(assetIds)));
@@ -78,6 +79,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
             @QueryParam("orderByDirection") @DefaultValue("DESC") String orderByDirection) {
 
         setNewRelicCustomParameters();
+        setNewRelicAppInfoParameter();
         List<ApiAssetModelHeader> results = persistenceService.findAll(createAssetSearchQuery(
                 rfidNumber, identifier, referenceNumber, assignedTo,
                 owner, location, predefinedLocationId, orderNumber, purchaseOrder,
@@ -94,6 +96,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
     public List<ApiAssetModelHeader> querySmartSearch(@QueryParam("searchText") String searchText) {
         List<ApiAssetModelHeader> results = persistenceService.findAll(createAssetSmartSearchQuery(searchText));
         setNewRelicCustomParameters();
+        setNewRelicAppInfoParameter();
         return results;
     }
 
@@ -104,6 +107,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
     public List<ApiAsset> findAll(@QueryParam("id") List<ApiKeyString> assetIds) {
         if (assetIds.isEmpty()) return new ArrayList<>();
         setNewRelicCustomParameters();
+        setNewRelicAppInfoParameter();
 
         List<ApiAsset> apiAssets = convertAllEntitiesToApiModels(assetService.findByMobileId(unwrapKeys(assetIds)));
         return apiAssets;

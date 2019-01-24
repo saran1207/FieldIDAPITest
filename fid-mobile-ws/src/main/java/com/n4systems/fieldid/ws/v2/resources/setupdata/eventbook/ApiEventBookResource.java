@@ -39,6 +39,7 @@ public class ApiEventBookResource extends SetupDataResourceReadWrite<ApiEventBoo
         EventBook eventBook = convertApiEventBook(apiEventBook);
         persistenceService.save(eventBook);
         setNewRelicCustomParameters();
+        setNewRelicAppInfoParameter();
     }
 
     private EventBook convertApiEventBook(ApiEventBook apiEventBook) {
