@@ -23,19 +23,20 @@ import javax.ws.rs.core.MediaType;
 @Component
 @Path("criteriaImage")
 public class ApiCriteriaImagesResource extends FieldIdPersistenceService {
-	private static Logger logger = Logger.getLogger(ApiCriteriaImagesResource.class);
-	@Autowired private S3Service s3Service;
+    private static Logger logger = Logger.getLogger(ApiCriteriaImagesResource.class);
+    @Autowired private S3Service s3Service;
 
-	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Transactional
-	public void saveCriteriaImage(ApiCriteriaImage apiCriteriaImage) {
-		QueryBuilder<CriteriaResult> builder = createTenantSecurityBuilder(CriteriaResult.class, true);
-		builder.addWhere(WhereClauseFactory.create("mobileId", apiCriteriaImage.getCriteriaResultSid()));
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public void saveCriteriaImage(ApiCriteriaImage apiCriteriaImage) {
+        QueryBuilder<CriteriaResult> builder = createTenantSecurityBuilder(CriteriaResult.class, true);
+        builder.addWhere(WhereClauseFactory.create("mobileId", apiCriteriaImage.getCriteriaResultSid()));
+        setNewRelicCustomParameters();
 
         String imageMd5sum = DigestUtils.md5Hex(apiCriteriaImage.getImage());
 
-		CriteriaResult criteriaResult = persistenceService.find(builder);
+        CriteriaResult criteriaResult = persistenceService.find(builder);
 
         for (CriteriaResultImage criteriaResultImage : criteriaResult.getCriteriaImages()) {
             if (imageMd5sum.equals(criteriaResultImage.getMd5sum())) {
@@ -44,30 +45,31 @@ public class ApiCriteriaImagesResource extends FieldIdPersistenceService {
             }
         }
 
-		CriteriaResultImage criteriaResultImage = new CriteriaResultImage();
-		criteriaResultImage.setCriteriaResult(criteriaResult);
+        CriteriaResultImage criteriaResultImage = new CriteriaResultImage();
+        criteriaResultImage.setCriteriaResult(criteriaResult);
         criteriaResultImage.setMd5sum(imageMd5sum);
-		criteriaResultImage.setFileName(apiCriteriaImage.getFileName());
-		criteriaResultImage.setContentType(FileTypeMap.getDefaultFileTypeMap().getContentType(apiCriteriaImage.getFileName()));
-		criteriaResultImage.setComments(apiCriteriaImage.getComments());
-		criteriaResult.getCriteriaImages().add(criteriaResultImage);		
+        criteriaResultImage.setFileName(apiCriteriaImage.getFileName());
+        criteriaResultImage.setContentType(FileTypeMap.getDefaultFileTypeMap().getContentType(apiCriteriaImage.getFileName()));
+        criteriaResultImage.setComments(apiCriteriaImage.getComments());
+        criteriaResult.getCriteriaImages().add(criteriaResultImage);        
 
-		persistenceService.update(criteriaResult);
-		s3Service.uploadCriteriaResultImage(criteriaResultImage, apiCriteriaImage.getImage());
-		
-		logger.info("Saved Criteria Image for CriteriaResult: " + apiCriteriaImage.getCriteriaResultSid());
-	}
-	
-	@PUT
-	@Path("multi")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Transactional
-	public void saveMultiAddEventCriteriaImage(ApiMultiEventCriteriaImage multiEventCriteriaImage) {
-		ApiCriteriaImage apiCriteriaImage = multiEventCriteriaImage.getCriteriaImageTemplate();
-		for(String criteriaResultId : multiEventCriteriaImage.getCriteriaResultIds()) {
-			apiCriteriaImage.setCriteriaResultSid(criteriaResultId);
-			saveCriteriaImage(apiCriteriaImage);
-		}
-		logger.info("Saved Multi Event Attachment for Events: " + multiEventCriteriaImage.getCriteriaResultIds().size());
-	}
+        persistenceService.update(criteriaResult);
+        s3Service.uploadCriteriaResultImage(criteriaResultImage, apiCriteriaImage.getImage());
+        
+        logger.info("Saved Criteria Image for CriteriaResult: " + apiCriteriaImage.getCriteriaResultSid());
+    }
+    
+    @PUT
+    @Path("multi")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public void saveMultiAddEventCriteriaImage(ApiMultiEventCriteriaImage multiEventCriteriaImage) {
+        ApiCriteriaImage apiCriteriaImage = multiEventCriteriaImage.getCriteriaImageTemplate();
+        for(String criteriaResultId : multiEventCriteriaImage.getCriteriaResultIds()) {
+            apiCriteriaImage.setCriteriaResultSid(criteriaResultId);
+            saveCriteriaImage(apiCriteriaImage);
+        }
+        logger.info("Saved Multi Event Attachment for Events: " + multiEventCriteriaImage.getCriteriaResultIds().size());
+        setNewRelicCustomParameters();
+    }
 }
