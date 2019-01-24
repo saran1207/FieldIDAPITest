@@ -38,7 +38,7 @@ public class AuthenticationResource extends FieldIdPersistenceService {
         
         logger.info("Standard authentication for " + tenantName + " for " + userId);
         setNewRelicCustomParameters();
-        
+
         if (tenantName == null || userId == null || password == null) {
             throw new ForbiddenException();
         }
@@ -61,7 +61,8 @@ public class AuthenticationResource extends FieldIdPersistenceService {
             @FormParam("passcode") String passcode) {
         
         logger.info("Passcode authentication for " + tenantName);
-        
+        setNewRelicCustomParameters();
+
         if (tenantName == null || passcode == null) {
             throw new ForbiddenException();
         }
