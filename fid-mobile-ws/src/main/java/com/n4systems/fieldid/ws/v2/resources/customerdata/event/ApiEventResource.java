@@ -49,8 +49,7 @@ public class ApiEventResource extends ApiResource<ApiEvent, ThingEvent> {
     @Transactional(readOnly = true)
     public List<ApiModelHeader> queryById(@QueryParam("id") List<ApiKeyString> eventIds) {
         if (eventIds.isEmpty()) return new ArrayList<>();
-        setNewRelicCustomParameters();
-        setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
 
         List<ApiModelHeader> headers = persistenceService.findAll(
                 createModelHeaderQueryBuilder(ThingEvent.class, "mobileGUID", "modified")
@@ -66,8 +65,7 @@ public class ApiEventResource extends ApiResource<ApiEvent, ThingEvent> {
     @Transactional(readOnly = true)
     public List<ApiModelHeader> queryCompleted(@QueryParam("assetId") List<ApiKeyString> assetIds) {
         if (assetIds.isEmpty()) return new ArrayList<>();
-        setNewRelicCustomParameters();
-        setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
 
         List<ApiModelHeader> headers = eventService.getLastEventOfEachType(unwrapKeys(assetIds))
                 .stream()
@@ -83,8 +81,7 @@ public class ApiEventResource extends ApiResource<ApiEvent, ThingEvent> {
     @Transactional(readOnly = true)
     public List<ApiSortedModelHeader> queryOpen(@QueryParam("assetId") List<ApiKeyString> assetIds, @DefaultValue("YEAR") @QueryParam("syncDuration") SyncDuration syncDuration) {
         if (assetIds.isEmpty()) return new ArrayList<>();
-        setNewRelicCustomParameters();
-        setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
 
         QueryBuilder<ApiSortedModelHeader> query = createModelHeaderQueryBuilder(ThingEvent.class, "mobileGUID", "modified", "dueDate", true)
                 .addWhere(WhereClauseFactory.create("workflowState", WorkflowState.OPEN))
@@ -105,8 +102,7 @@ public class ApiEventResource extends ApiResource<ApiEvent, ThingEvent> {
     @Transactional(readOnly = true)
     public List<ApiModelHeader> queryOpenCompleted(@QueryParam("assetId") List<ApiKeyString> assetIds, @DefaultValue("YEAR") @QueryParam("syncDuration") SyncDuration syncDuration) {
         if (assetIds.isEmpty()) return new ArrayList<>();
-        setNewRelicCustomParameters();
-        setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
 
         List<ApiModelHeader> headers = new ArrayList<>();
         headers.addAll(queryOpen(assetIds, syncDuration));
@@ -123,8 +119,7 @@ public class ApiEventResource extends ApiResource<ApiEvent, ThingEvent> {
         List<ApiSortedModelHeader> headers = persistenceService.findAll(
                 prepareAssignedEventsQuery(createModelHeaderQueryBuilder(ThingEvent.class, "mobileGUID", "modified", "dueDate", true), startDate, endDate, getCurrentUser())
         );
-        setNewRelicCustomParameters();
-        setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
         return headers;
     }
 
@@ -138,8 +133,7 @@ public class ApiEventResource extends ApiResource<ApiEvent, ThingEvent> {
             @QueryParam("year") int year,
             @QueryParam("month") int month) {
 
-        setNewRelicCustomParameters();
-        setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
         List<Long> counts = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, 1);
@@ -161,8 +155,7 @@ public class ApiEventResource extends ApiResource<ApiEvent, ThingEvent> {
     @Transactional(readOnly = true)
     public List<ApiEvent> findAll(@QueryParam("id") List<ApiKeyString> eventIds) {
         if (eventIds.isEmpty()) return new ArrayList<>();
-        setNewRelicCustomParameters();
-        setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
 
         QueryBuilder<ThingEvent> queryBuilder = createUserSecurityBuilder(ThingEvent.class);
         queryBuilder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "mobileGUID", unwrapKeys(eventIds)));

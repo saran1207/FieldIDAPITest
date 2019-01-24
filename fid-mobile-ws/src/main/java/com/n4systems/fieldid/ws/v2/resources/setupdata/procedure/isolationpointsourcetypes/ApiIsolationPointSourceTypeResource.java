@@ -25,9 +25,6 @@ import java.util.stream.Collectors;
 @Path("isolationPointSourceType")
 public class ApiIsolationPointSourceTypeResource extends FieldIdPersistenceService {
 
-    @Autowired
-    protected ApiUserResource apiUserResource;
-
     @GET
     @Path("query")
     @Produces(MediaType.APPLICATION_JSON)
@@ -35,8 +32,7 @@ public class ApiIsolationPointSourceTypeResource extends FieldIdPersistenceServi
     @Transactional(readOnly = true)
     public List<ApiModelHeader> query(@QueryParam("id") List<ApiKeyLong> ids) {
         if (ids.isEmpty()) return new ArrayList<>();
-        setNewRelicCustomParameters();
-        apiUserResource.setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
 
         return ApiKey.unwrap(ids)
                 .stream()
@@ -51,8 +47,7 @@ public class ApiIsolationPointSourceTypeResource extends FieldIdPersistenceServi
     @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public List<ApiModelHeader> queryLatest(@QueryParam("since") DateParam since) {
-        setNewRelicCustomParameters();
-        apiUserResource.setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
         return IsolationPointSourceType.modifiedAfter(since)
                 .stream()
                 .map(st -> new ApiModelHeader<>(st.getId(), st.getModified()))
@@ -65,8 +60,7 @@ public class ApiIsolationPointSourceTypeResource extends FieldIdPersistenceServi
     @Transactional(readOnly = true)
     public List<ApiIsolationPointSourceType> findAll(@QueryParam("id") List<ApiKeyLong> ids) {
         if (ids.isEmpty()) return new ArrayList<>();
-        setNewRelicCustomParameters();
-        apiUserResource.setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
 
         return ApiKey.unwrap(ids)
                 .stream()

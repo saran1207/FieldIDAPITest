@@ -6,11 +6,7 @@ import com.n4systems.fieldid.ws.v2.resources.ApiModelHeader;
 import com.n4systems.fieldid.ws.v2.resources.model.DateParam;
 import com.n4systems.fieldid.ws.v2.resources.setupdata.SetupDataResourceReadOnly;
 import com.n4systems.model.AddressInfo;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.orgs.SecondaryOrg;
-import com.n4systems.model.orgs.CustomerOrg;
-import com.n4systems.model.orgs.DivisionOrg;
+import com.n4systems.model.orgs.*;
 import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
@@ -22,15 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -57,8 +49,7 @@ public class ApiOrgResource extends SetupDataResourceReadOnly<ApiOrg, BaseOrg> {
     @Transactional(readOnly = true)
     public List<ApiModelHeader> queryLatestByType(@PathParam("type") String type, @QueryParam("since") DateParam since) {
         Class<?> targetClass;
-        setNewRelicCustomParameters();
-        setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
 
         switch(type)
         {

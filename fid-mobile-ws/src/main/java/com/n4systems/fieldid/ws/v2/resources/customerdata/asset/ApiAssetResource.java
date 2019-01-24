@@ -45,8 +45,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
     @Transactional(readOnly = true)
     public List<ApiModelHeader> query(@QueryParam("id") List<ApiKeyString> assetIds) {
         if (assetIds.isEmpty()) return new ArrayList<>();
-        setNewRelicCustomParameters();
-        setNewRelicAppInfoParameter();
+      setNewRelicWithAppInfoParameters();
 
         QueryBuilder<ApiModelHeader> query = new QueryBuilder<>(Asset.class, securityContext.getUserSecurityFilter());
         query.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, "mobileGUID", "modified"));
@@ -78,8 +77,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
             @QueryParam("orderByField") @DefaultValue("identified") String orderByField,
             @QueryParam("orderByDirection") @DefaultValue("DESC") String orderByDirection) {
 
-        setNewRelicCustomParameters();
-        setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
         List<ApiAssetModelHeader> results = persistenceService.findAll(createAssetSearchQuery(
                 rfidNumber, identifier, referenceNumber, assignedTo,
                 owner, location, predefinedLocationId, orderNumber, purchaseOrder,
@@ -95,8 +93,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
     @Transactional(readOnly = true)
     public List<ApiAssetModelHeader> querySmartSearch(@QueryParam("searchText") String searchText) {
         List<ApiAssetModelHeader> results = persistenceService.findAll(createAssetSmartSearchQuery(searchText));
-        setNewRelicCustomParameters();
-        setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
         return results;
     }
 
@@ -106,8 +103,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
     @Transactional(readOnly = true)
     public List<ApiAsset> findAll(@QueryParam("id") List<ApiKeyString> assetIds) {
         if (assetIds.isEmpty()) return new ArrayList<>();
-        setNewRelicCustomParameters();
-        setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
 
         List<ApiAsset> apiAssets = convertAllEntitiesToApiModels(assetService.findByMobileId(unwrapKeys(assetIds)));
         return apiAssets;

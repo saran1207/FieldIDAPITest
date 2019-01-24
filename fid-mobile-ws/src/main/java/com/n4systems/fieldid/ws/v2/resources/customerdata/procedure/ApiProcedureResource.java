@@ -39,8 +39,7 @@ public class ApiProcedureResource extends ApiResource<ApiProcedure, Procedure> {
     @Transactional(readOnly = true)
     public List<ApiModelHeader> query(@QueryParam("id") List<ApiKeyString> procedureIds) {
         if (procedureIds.isEmpty()) return new ArrayList<>();
-        setNewRelicCustomParameters();
-        setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
 
         QueryBuilder<ApiModelHeader> query = new QueryBuilder<>(Procedure.class, securityContext.getUserSecurityFilter());
         query.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, "mobileGUID", "modified"));
@@ -60,8 +59,7 @@ public class ApiProcedureResource extends ApiResource<ApiProcedure, Procedure> {
         query.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, "mobileGUID", "modified"));
         query.addOrder("dueDate");
         query.addWhere(WhereParameter.Comparator.IN, "workflowState", "workflowState", Arrays.asList(ProcedureWorkflowState.ACTIVE_STATES));
-        setNewRelicCustomParameters();
-        setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
 
         if (startDate != null) {
             query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GE, "startDate", "dueDate", startDate));
@@ -92,8 +90,7 @@ public class ApiProcedureResource extends ApiResource<ApiProcedure, Procedure> {
     @Transactional(readOnly = true)
     public List<ApiProcedure> findAll(@QueryParam("id") List<ApiKeyString> procedureIds) {
         if (procedureIds.isEmpty()) return new ArrayList<>();
-        setNewRelicCustomParameters();
-        setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
 
         List<ApiProcedure> results = convertAllEntitiesToApiModels(procedureService.findByMobileId(unwrapKeys(procedureIds)));
         return results;
@@ -109,8 +106,7 @@ public class ApiProcedureResource extends ApiResource<ApiProcedure, Procedure> {
             @QueryParam("year") int year,
             @QueryParam("month") int month) {
 
-        setNewRelicCustomParameters();
-        setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
         List<Long> counts = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, 1);
@@ -152,8 +148,7 @@ public class ApiProcedureResource extends ApiResource<ApiProcedure, Procedure> {
         if (apiProcedure.getProcedureId() == null) {
             throw new BadRequestException("procedureId must not be null");
         }
-        setNewRelicCustomParameters();
-        setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
 
         Procedure procedure = procedureService.findByMobileId(apiProcedure.getProcedureId(), true);
 
@@ -209,8 +204,7 @@ public class ApiProcedureResource extends ApiResource<ApiProcedure, Procedure> {
         if (apiProcedure.getProcedureId() == null) {
             throw new BadRequestException("procedureId must not be null");
         }
-        setNewRelicCustomParameters();
-        setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
 
         Procedure procedure = procedureService.findByMobileId(apiProcedure.getProcedureId(), true);
 

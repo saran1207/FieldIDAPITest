@@ -43,8 +43,7 @@ public class ApiEventFormResource extends SetupDataResourceReadOnly<ApiEventForm
     public List<ApiModelHeader> queryEvent(@QueryParam("eventId") List<ApiKeyString> eventIds) {
         QueryBuilder<ApiModelHeader> query = new QueryBuilder<>(EventForm.class, securityContext.getUserSecurityFilter(true));
         query.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, "id", "modified").setDistinct(true));
-        setNewRelicCustomParameters();
-        setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
 
         // Pulls only the EventForms for to the list of events
         query.addWhere(

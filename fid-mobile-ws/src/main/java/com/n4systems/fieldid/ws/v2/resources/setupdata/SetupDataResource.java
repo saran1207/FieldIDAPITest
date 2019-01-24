@@ -42,8 +42,7 @@ public abstract class SetupDataResource<A extends ApiModel, E extends AbstractEn
     @Transactional(readOnly = true)
     public List<ApiModelHeader> query(@QueryParam("id") List<K> ids) {
         if (ids.isEmpty()) return new ArrayList<>();
-        setNewRelicCustomParameters();
-        setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
 
         QueryBuilder<ApiModelHeader> query = new QueryBuilder<>(entityClass, securityContext.getUserSecurityFilter(allowArchived));
         query.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, idField, "modified"));
@@ -61,8 +60,7 @@ public abstract class SetupDataResource<A extends ApiModel, E extends AbstractEn
     public List<ApiModelHeader> queryLatest(@QueryParam("since") DateParam since) {
         QueryBuilder<ApiModelHeader> query = new QueryBuilder<>(entityClass, securityContext.getUserSecurityFilter(allowArchived));
         query.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, idField, "modified"));
-        setNewRelicCustomParameters();
-        setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
 
         if (since != null) {
             query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GT, "modified", since));
@@ -79,8 +77,7 @@ public abstract class SetupDataResource<A extends ApiModel, E extends AbstractEn
     @Transactional(readOnly = true)
     public List<A> findAll(@QueryParam("id") List<K> ids) {
         if (ids.isEmpty()) return new ArrayList<>();
-        setNewRelicCustomParameters();
-        setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
 
         QueryBuilder<E> query = createTenantSecurityBuilder(entityClass, allowArchived);
         query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, idField, unwrapKeys(ids)));

@@ -5,7 +5,6 @@ import com.n4systems.fieldid.ws.v2.filters.RequestContext;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
-import com.newrelic.api.agent.NewRelic;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -85,10 +84,6 @@ public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPe
 
     protected <T, K extends ApiKey<T>> List<T> unwrapKeys(List<K> keys) {
         return ApiKey.unwrap(keys);
-    }
-
-    public void setNewRelicAppInfoParameter() {
-        NewRelic.addCustomParameter("AppInfo", getVersionString());
     }
 
 }

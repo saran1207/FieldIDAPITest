@@ -32,8 +32,7 @@ public class ApiEventHistoryResource extends ApiResource<ApiEventHistory, ThingE
     @Transactional(readOnly = true)
     public List<ApiModelHeader> queryById(@QueryParam("id") List<ApiKeyString> eventIds) {
         if (eventIds.isEmpty()) return new ArrayList<>();
-        setNewRelicCustomParameters();
-        setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
 
         List<ApiModelHeader> headers = persistenceService.findAll(
                 createModelHeaderQueryBuilder(ThingEvent.class, "mobileGUID", "modified")
@@ -50,8 +49,7 @@ public class ApiEventHistoryResource extends ApiResource<ApiEventHistory, ThingE
     @Transactional(readOnly = true)
     public List<ApiSortedModelHeader> queryAsset(@QueryParam("assetId") List<ApiKeyString> assetIds) {
         if (assetIds.isEmpty()) return new ArrayList<>();
-        setNewRelicCustomParameters();
-        setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
 
         List<ApiSortedModelHeader> headers = persistenceService.findAll(
                 createModelHeaderQueryBuilder(ThingEvent.class, "mobileGUID", "modified", "completedDate", false)
@@ -67,8 +65,7 @@ public class ApiEventHistoryResource extends ApiResource<ApiEventHistory, ThingE
     @Transactional(readOnly = true)
     public List<ApiEventHistory> findAll(@QueryParam("id") List<ApiKeyString> eventIds) {
         if (eventIds.isEmpty()) return new ArrayList<>();
-        setNewRelicCustomParameters();
-        setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
 
         QueryBuilder<ThingEvent> queryBuilder = createUserSecurityBuilder(ThingEvent.class);
         queryBuilder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "mobileGUID", unwrapKeys(eventIds)));

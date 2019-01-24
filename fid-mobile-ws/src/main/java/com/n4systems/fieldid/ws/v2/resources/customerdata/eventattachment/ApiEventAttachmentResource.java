@@ -41,8 +41,7 @@ public class ApiEventAttachmentResource extends ApiResource<ApiEventAttachment, 
     public List<ApiModelHeader> query(@QueryParam("id") List<ApiKeyString> attachmentIds) {
         if (attachmentIds.isEmpty()) return new ArrayList<>();
         List<ApiModelHeader> headers = convertAllEntitiesToApiModels(findAttachmentsByMobileIds(unwrapKeys(attachmentIds)), a -> new ApiModelHeader(a.getMobileId(), a.getModified()));
-        setNewRelicCustomParameters();
-        setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
         return headers;
     }
 
@@ -54,8 +53,7 @@ public class ApiEventAttachmentResource extends ApiResource<ApiEventAttachment, 
     public List<ApiModelHeader> queryEvent(@QueryParam("eventIds") List<ApiKeyString> eventIds) {
         if (eventIds.isEmpty()) return new ArrayList<>();
         List<ApiModelHeader> headers = convertAllEntitiesToApiModels(findAttachmentsByEvents(unwrapKeys(eventIds)), a -> new ApiModelHeader(a.getMobileId(), a.getModified()));
-        setNewRelicCustomParameters();
-        setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
         return headers;
     }
 
@@ -65,8 +63,7 @@ public class ApiEventAttachmentResource extends ApiResource<ApiEventAttachment, 
     @Transactional(readOnly = true)
     public List<ApiEventAttachment> findAll(@QueryParam("id") List<ApiKeyString> attachmentIds) {
         if (attachmentIds.isEmpty()) return new ArrayList<>();
-        setNewRelicCustomParameters();
-        setNewRelicAppInfoParameter();
+        setNewRelicWithAppInfoParameters();
 
         List<FileAttachment> attachments = findAttachmentsByMobileIds(unwrapKeys(attachmentIds));
         List<ApiEventAttachment> apiAttachments = convertAllEntitiesToApiModels(attachments, att -> {
