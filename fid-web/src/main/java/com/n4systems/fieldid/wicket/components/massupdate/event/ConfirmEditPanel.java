@@ -11,7 +11,6 @@ import com.n4systems.model.PlatformType;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.user.User;
 import com.newrelic.api.agent.NewRelic;
-import com.newrelic.api.agent.Token;
 import com.newrelic.api.agent.Trace;
 import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.basic.Label;
@@ -45,23 +44,30 @@ public class ConfirmEditPanel extends AbstractMassUpdatePanel {
 				                                           new FIDLabelModel("label.events.lc").getObject())));
 		
 		Form<Void> confirmEditForm = new Form<Void>("form") {
+
 			@Override
 			protected void onSubmit() {
 				final List<Long> eventScheduleIds = eventSearchCriteria.getObject().getSelection().getSelectedIds();
 				final int eventCount = eventScheduleIds.size();
-				NewRelic.addCustomParameter("Event mass update count", eventCount);
+
                 final User modifiedBy = getCurrentUser();
                 final String currentPlatform = ThreadLocalInteractionContext.getInstance().getCurrentPlatform();
                 final PlatformType platformType = ThreadLocalInteractionContext.getInstance().getCurrentPlatformType();
 
-				final Token newRelicToken = NewRelic.getAgent().getTransaction().getToken();
+				final String userId = modifiedBy.getUserID();
+				final String tenantName = modifiedBy.getTenant().getName();
+
                 AsyncService.AsyncTask<Void> task = asyncService.createTask(new Callable<Void>() {
 
-					@Trace(async = true)
+					@Trace(dispatcher = true)
                     @Override
                     public Void call() throws Exception {
 
-						newRelicToken.link(); // link this async thread to the main NewRelic transaction for reporting
+						NewRelic.addCustomParameter("User", userId);
+						NewRelic.addCustomParameter("Tenant", tenantName);
+						NewRelic.addCustomParameter("Event mass update count", eventCount);
+						NewRelic.setTransactionName(null, "/EventMassUpdate");
+
 						long startTime = System.nanoTime();
 
                         ThreadLocalInteractionContext.getInstance().setCurrentUser(modifiedBy);
@@ -79,7 +85,6 @@ public class ConfirmEditPanel extends AbstractMassUpdatePanel {
                             massUpdateEventService.sendFailureEmailResponse(eventScheduleIds, modifiedBy);
                         } finally {
 							ThreadLocalInteractionContext.getInstance().clear();
-							newRelicToken.expire();
 						}
                         return null;
                     }

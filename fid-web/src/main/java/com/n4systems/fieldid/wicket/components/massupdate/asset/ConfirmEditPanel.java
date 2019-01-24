@@ -11,7 +11,6 @@ import com.n4systems.model.PlatformType;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.user.User;
 import com.newrelic.api.agent.NewRelic;
-import com.newrelic.api.agent.Token;
 import com.newrelic.api.agent.Trace;
 import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.basic.Label;
@@ -53,19 +52,24 @@ public class ConfirmEditPanel extends AbstractMassUpdatePanel {
 			protected void onSubmit() {
 				final List<Long> assetIds = assetSearchCriteria.getObject().getSelection().getSelectedIds();
 				final int assetCount = assetIds.size();
-				NewRelic.addCustomParameter("Asset mass update count", assetCount);
+
                 final User modifiedBy = getCurrentUser();
                 final String currentPlatform = ThreadLocalInteractionContext.getInstance().getCurrentPlatform();
                 final PlatformType platformType = ThreadLocalInteractionContext.getInstance().getCurrentPlatformType();
 
-				final Token newRelicToken = NewRelic.getAgent().getTransaction().getToken();
+				final String userId = modifiedBy.getUserID();
+				final String tenantName = modifiedBy.getTenant().getName();
+
                 AsyncService.AsyncTask<Void> task = asyncService.createTask(new Callable<Void>() {
 
-					@Trace(async = true)
+					@Trace(dispatcher = true)
                     @Override
                     public Void call() throws Exception {
 
-						newRelicToken.link(); // link this async thread to the main NewRelic transaction for reporting
+						NewRelic.addCustomParameter("User", userId);
+						NewRelic.addCustomParameter("Tenant", tenantName);
+						NewRelic.addCustomParameter("Asset mass update count", assetCount);
+						NewRelic.setTransactionName(null, "/AssetMassUpdate");
 						long startTime = System.nanoTime();
 
                         ThreadLocalInteractionContext.getInstance().setCurrentUser(modifiedBy);
@@ -74,7 +78,7 @@ public class ConfirmEditPanel extends AbstractMassUpdatePanel {
 
                         try {
 							logger.info("Beginning Asset mass update for " + assetCount + " assets");
-                          	massUpdateAssetService.updateAssets(assetIds, massUpdateAssetModel.getAsset(), massUpdateAssetModel.getSelect(), modifiedBy, getNonIntegrationOrderNumber());
+							massUpdateAssetService.updateAssets(assetIds, massUpdateAssetModel.getAsset(), massUpdateAssetModel.getSelect(), modifiedBy, getNonIntegrationOrderNumber());
 							massUpdateAssetService.sendSuccessEmailResponse(assetIds, modifiedBy);
 							long endTime = System.nanoTime();
 							logger.info("Asset mass update finished for " + assetCount + " assets and took " + ((endTime-startTime) / 1000000) + " ms");
@@ -84,8 +88,7 @@ public class ConfirmEditPanel extends AbstractMassUpdatePanel {
                         }
 
                         ThreadLocalInteractionContext.getInstance().clear();
-						newRelicToken.expire();
-                        return null;
+			            return null;
                     }
                 });
                 asyncService.run(task);
