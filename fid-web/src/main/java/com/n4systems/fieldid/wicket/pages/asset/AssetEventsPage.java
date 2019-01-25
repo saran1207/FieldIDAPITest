@@ -14,6 +14,7 @@ import com.n4systems.fieldid.wicket.data.EventByNetworkIdProvider;
 import com.n4systems.fieldid.wicket.data.FieldIDDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.*;
+import com.n4systems.services.config.ConfigService;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
@@ -35,9 +36,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AssetEventsPage extends AssetPage{
-
-    private EventListPanel eventPanel;
+public class AssetEventsPage extends AssetPage{    private EventListPanel eventPanel;
     private EventMapPanel mapPanel;
     private WebMarkupContainer filters;
     private FIDFeedbackPanel feedbackPanel;
@@ -48,7 +47,10 @@ public class AssetEventsPage extends AssetPage{
     private EventService eventService;
     @SpringBean
     private OrgService orgService;
+    @SpringBean
+    private ConfigService configService;
 
+    private static final String GOOGLE_APIS_JS = "https://maps.googleapis.com/maps/api/js?key=%s";
     private boolean open = true;
     private boolean completed = true;
     private boolean closed = true;
@@ -67,10 +69,10 @@ public class AssetEventsPage extends AssetPage{
                 updateEventListPanel(target);
             }
         });
-        
+
         AjaxLink listLink;
         AjaxLink mapLink;
-        
+
         add(listLink = new AjaxLink<Void>("listLink") {
 
             @Override
@@ -96,7 +98,7 @@ public class AssetEventsPage extends AssetPage{
                 target.add(filters);
             }
         });
-        
+
         if (FieldIDSession.get().getTenant().getSettings().isGpsCapture()) {
             listLink.add(new AttributeAppender("class", "mattButtonLeft").setSeparator(" "));
             mapLink.add(new AttributeAppender("class", "mattButtonRight").setSeparator(" "));
@@ -156,10 +158,10 @@ public class AssetEventsPage extends AssetPage{
 
     }
 
-	@Override
-	protected Label createTitleLabel(String labelId) {
-		return new Label(labelId, new FIDLabelModel("title.asset_events_page"));
-	}
+    @Override
+    protected Label createTitleLabel(String labelId) {
+        return new Label(labelId, new FIDLabelModel("title.asset_events_page"));
+    }
 
     private void updateEventListPanel(AjaxRequestTarget target) {
         ((EventByNetworkIdProvider) eventPanel.getDataProvider()).setStates(getWorkflowStates());
@@ -167,7 +169,7 @@ public class AssetEventsPage extends AssetPage{
         target.appendJavaScript("$('.tipsy').remove(); $('.tipsy-tooltip').tipsy({gravity: 'nw', fade:true, delayIn:150})");
 
     }
-    
+
     private List<WorkflowState> getWorkflowStates() {
         List<WorkflowState> states = new ArrayList<WorkflowState>();
 
@@ -196,7 +198,7 @@ public class AssetEventsPage extends AssetPage{
         response.renderOnDomReadyJavaScript("subMenu.init();");
 
         //Needs to be included because the map panel is initially hidden.
-        response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false", GoogleMap.GOOGLE_MAP_API_ID);
+        response.renderJavaScriptReference(String.format(GOOGLE_APIS_JS, configService.getConfig().getWeb().getGoogleApiKey()), GoogleMap.GOOGLE_MAP_API_ID);
         response.renderJavaScriptReference("javascript/googleMaps.js", GoogleMap.GOOGLE_MAPS_JS_ID);
 
         /* Javascript function to fix alignment of action options when google translate is active */
@@ -207,15 +209,15 @@ public class AssetEventsPage extends AssetPage{
                        action button cell in all of the rows.
                      */
                     "    if (isGoogleTranslateAllowedForCurrentLanguage()) {\n" +
-                    "       var maxWidth = '0px';\n" +
-                    "       $('td .compoundActionButton ._defaultActionButtonContainer a').bind('DOMSubtreeModified', function () {\n" +
-                    "           if (maxWidth < $(this).css('width')) {\n" +
-                    "               maxWidth = $(this).css('width');\n" +
+                            "       var maxWidth = '0px';\n" +
+                            "       $('td .compoundActionButton ._defaultActionButtonContainer a').bind('DOMSubtreeModified', function () {\n" +
+                            "           if (maxWidth < $(this).css('width')) {\n" +
+                            "               maxWidth = $(this).css('width');\n" +
                                     /* Value of 28px is the width of the dropdown arrow which is an img and doesn't change */
-                    "               var newWidth = (parseInt(maxWidth.replace(/px/, '')) + 28) + 'px';\n" +
-                    "               $('.actions.compoundActionButton').first().parent().parent().css('width',newWidth);\n" +
-                    "       }});\n" +
-                    "    }");
+                            "               var newWidth = (parseInt(maxWidth.replace(/px/, '')) + 28) + 'px';\n" +
+                            "               $('.actions.compoundActionButton').first().parent().parent().css('width',newWidth);\n" +
+                            "       }});\n" +
+                            "    }");
         }
     }
 
@@ -228,6 +230,8 @@ public class AssetEventsPage extends AssetPage{
     protected boolean forceDefaultLanguage() {
         return false;
     }
+
+
 }
 
 
