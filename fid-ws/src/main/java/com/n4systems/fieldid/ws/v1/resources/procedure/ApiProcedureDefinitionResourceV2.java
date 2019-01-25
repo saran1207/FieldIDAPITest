@@ -19,6 +19,7 @@ import com.n4systems.model.procedure.*;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import com.newrelic.api.agent.Trace;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -52,8 +53,10 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/save")
+    @Trace  (dispatcher=true)
     @Transactional
     public Response writeOrUpdateProcedureDefinition(ApiProcedureDefinitionV2 apiProcDef) {
+        setNewRelicWithAppInfoParameters();
         boolean isNew = false;
 
         try {
@@ -106,6 +109,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/")
+    @Trace  (dispatcher=true)
     @Transactional(readOnly = true, noRollbackFor = AmazonS3Exception.class)
     public ListResponse<ApiProcedureDefinitionV2> findForAsset(
             @PathParam("assetId") String assetId,
@@ -130,10 +134,12 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
     @Path("list")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public ListResponse<ApiProcedureDefinitionV2> findAll(
             @QueryParam("id") List<String> assetIds) {
 
+        setNewRelicWithAppInfoParameters();
         List<ApiProcedureDefinitionV2> apiProcs = new ArrayList<>();
         try {
             QueryBuilder<ProcedureDefinition> builder = createUserSecurityBuilder(ProcedureDefinition.class);
@@ -153,11 +159,13 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
     @Path("/asset/{assetId}/procedures/test")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public String FindForAssetTest(
             @PathParam("assetId") String assetId,
             @DefaultValue("0") @QueryParam("page") int page,
             @DefaultValue("100") @QueryParam("pageSize") int pageSize) {
+        setNewRelicWithAppInfoParameters();
         QueryBuilder<ProcedureDefinition> builder = createUserSecurityBuilder(ProcedureDefinition.class);
         builder.addWhere(WhereClauseFactory.create(Comparator.EQ, "asset.mobileGUID", "0"));
 
@@ -174,9 +182,11 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
     @DELETE
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
     @Transactional
     public Response deleteDraftProcedureDefinition(@QueryParam("procDefSid") String procDefSid) {
 
+        setNewRelicWithAppInfoParameters();
         ProcedureDefinition deleteMe = procedureDefinitionService.findProcedureDefinitionByMobileId(procDefSid);
 
         Response.Status responseStatus;

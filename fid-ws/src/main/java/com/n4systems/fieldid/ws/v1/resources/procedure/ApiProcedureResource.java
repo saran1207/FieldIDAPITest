@@ -10,6 +10,7 @@ import com.n4systems.model.GpsLocation;
 import com.n4systems.model.ProcedureWorkflowState;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.procedure.*;
+import com.newrelic.api.agent.Trace;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,7 +37,9 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     @Path("lock")
+    @Trace  (dispatcher=true)
     public void lock(ApiProcedureResult apiProcedure) {
+        setNewRelicWithAppInfoParameters();
         if (apiProcedure.getProcedureId() == null) {
             throw new NullPointerException("ApiProcedureResult has null procedureId");
         }
@@ -95,7 +98,9 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     @Path("unlock")
+    @Trace  (dispatcher=true)
     public void unlock(ApiProcedureResult apiProcedure) {
+        setNewRelicWithAppInfoParameters();
         if (apiProcedure.getProcedureId() == null) {
             throw new NullPointerException("ApiProcedureResult has null procedureId");
         }
@@ -120,12 +125,14 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
     @Path("assignedList")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public ListResponse<ApiProcedure> findAssignedProcedures(
             @QueryParam("startDate") Date startDate,
             @QueryParam("endDate") Date endDate,
             @DefaultValue("0") @QueryParam("page") int page,
             @DefaultValue("25") @QueryParam("pageSize") int pageSize) {
+        setNewRelicWithAppInfoParameters();
         List<Procedure> procedures = procedureService.findAllOpenAssignedProcedures(startDate, endDate, page, pageSize);
         Long total = procedureService.getTotalProcedureCount(startDate, endDate);
         List<ApiProcedure> apiSchedules = convertProcedures(procedures);
@@ -221,10 +228,12 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
     @Path("assignedListCounts")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public List<Long> findAssignedActiveProcedureCounts(
             @QueryParam("year") int year,
             @QueryParam("month") int month) {
+        setNewRelicWithAppInfoParameters();
         return procedureService.findAssignedActiveProcedureCounts(year, month);
     }
 

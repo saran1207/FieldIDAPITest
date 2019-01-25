@@ -9,6 +9,7 @@ import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.services.SecurityContext;
+import com.newrelic.api.agent.Trace;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,61 +21,65 @@ import javax.ws.rs.core.MediaType;
 @Path("/authenticate")
 @Component
 public class AuthenticationResource extends FieldIdPersistenceService {
-	private static Logger logger = Logger.getLogger(AuthenticationResource.class);
+    private static Logger logger = Logger.getLogger(AuthenticationResource.class);
 
-	@Autowired protected UserService userService;
-	@Autowired protected ApiUserResource apiUserResource;
-	@Autowired protected SecurityContext securityContext;
-	
-	@POST
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional(readOnly = true)
-	public ApiUser authenticate(
-			@FormParam("tenant") String tenantName,
-			@FormParam("user") String userId, 
-			@FormParam("password") String password) {
-		
-		logger.info("Standard authentication for " + tenantName + " for " + userId);
-		
-		if (tenantName == null || userId == null || password == null) {
-			throw new ForbiddenException();
-		}
+    @Autowired protected UserService userService;
+    @Autowired protected ApiUserResource apiUserResource;
+    @Autowired protected SecurityContext securityContext;
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
+    @Transactional(readOnly = true)
+    public ApiUser authenticate(
+            @FormParam("tenant") String tenantName,
+            @FormParam("user") String userId, 
+            @FormParam("password") String password) {
+        
+        logger.info("Standard authentication for " + tenantName + " for " + userId);
+        setNewRelicWithAppInfoParameters();
 
-		User user = userService.authenticateUserByPassword(tenantName, userId, password);
+        if (tenantName == null || userId == null || password == null) {
+            throw new ForbiddenException();
+        }
 
-		return authenticateUser(user);
-	}
-	
-	@POST
-	@Path("passcode")
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional(readOnly = true)
-	public ApiUser authenticate(
-			@FormParam("tenant") String tenantName,
-			@FormParam("passcode") String passcode) {
-		
-		logger.info("Passcode authentication for " + tenantName);
-		
-		if (tenantName == null || passcode == null) {
-			throw new ForbiddenException();
-		}
-		
-		User user = userService.authenticateUserBySecurityCard(tenantName, passcode);
-		return authenticateUser(user);
-	}
-	
-	private ApiUser authenticateUser(User user) {
-		if (user == null) {
-			throw new ForbiddenException();
-		}
-		
-		securityContext.setUserSecurityFilter(new UserSecurityFilter(user));
-		securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(user.getTenant().getId()));
-		
-		ApiUser apiUser = apiUserResource.convertEntityToApiModel(user);
-		return apiUser;
-	}
-	
+        User user = userService.authenticateUserByPassword(tenantName, userId, password);
+
+        return authenticateUser(user);
+    }
+    
+    @POST
+    @Path("passcode")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
+    @Transactional(readOnly = true)
+    public ApiUser authenticate(
+            @FormParam("tenant") String tenantName,
+            @FormParam("passcode") String passcode) {
+        
+        logger.info("Passcode authentication for " + tenantName);
+        setNewRelicWithAppInfoParameters();
+
+        if (tenantName == null || passcode == null) {
+            throw new ForbiddenException();
+        }
+        
+        User user = userService.authenticateUserBySecurityCard(tenantName, passcode);
+        return authenticateUser(user);
+    }
+    
+    private ApiUser authenticateUser(User user) {
+        if (user == null) {
+            throw new ForbiddenException();
+        }
+        
+        securityContext.setUserSecurityFilter(new UserSecurityFilter(user));
+        securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(user.getTenant().getId()));
+        
+        ApiUser apiUser = apiUserResource.convertEntityToApiModel(user);
+        return apiUser;
+    }
+    
 }

@@ -2,6 +2,7 @@ package com.n4systems.fieldid.ws.v1.resources.eventhistory;
 
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiPlaceEventTypeResource;
 import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedPlaceEventResource;
+import com.newrelic.api.agent.Trace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

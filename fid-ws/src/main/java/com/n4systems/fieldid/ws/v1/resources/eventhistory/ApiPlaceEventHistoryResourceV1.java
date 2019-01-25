@@ -5,6 +5,7 @@ import com.n4systems.model.PlaceEvent;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+import com.newrelic.api.agent.Trace;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.GET;
@@ -25,7 +26,9 @@ public class ApiPlaceEventHistoryResourceV1 extends ApiResource<ApiPlaceEventHis
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
     public List<ApiPlaceEventHistoryV1> findAllEventHistory(@QueryParam("id") Long placeId) {
+        setNewRelicWithAppInfoParameters();
         QueryBuilder<PlaceEvent> builder = createUserSecurityBuilder(PlaceEvent.class);
         builder.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.COMPLETED));
         builder.addWhere(WhereClauseFactory.create("place.id", placeId));

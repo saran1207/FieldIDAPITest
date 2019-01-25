@@ -7,6 +7,7 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.SubAsset;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+import com.newrelic.api.agent.Trace;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,67 +21,71 @@ import java.util.List;
 @Component
 @Path("subAsset")
 public class ApiSubAssetResource extends FieldIdPersistenceService {
-	private static Logger logger = Logger.getLogger(ApiSubAssetResource.class);
-	@Autowired private AssetService assetService;
-	
-	@PUT
-	@Path("{masterAssetSid}/{assetSid}")
-	@Consumes(MediaType.TEXT_PLAIN)
-	@Transactional
-	public void attachSubAsset(@PathParam("masterAssetSid") String masterAssetSid, @PathParam("assetSid") String assetSid) {
-		logger.info("attachSubAsset for masterAssetSid: " + masterAssetSid + " and assetSid: " + assetSid);
-		if(masterAssetSid != null && assetSid != null) {
-			Asset masterAsset = assetService.findByMobileId(masterAssetSid);
-			Asset asset = assetService.findByMobileId(assetSid);
-			
-			if(masterAsset != null && asset != null){
-				QueryBuilder<SubAsset> query = new QueryBuilder<>(SubAsset.class);
-				query.addWhere(WhereClauseFactory.create("masterAsset", masterAsset));
-				query.addWhere(WhereClauseFactory.create("asset", asset));
-				if(!persistenceService.exists(query)) {
-					SubAsset subAsset = new SubAsset();
-					subAsset.setMasterAsset(masterAsset);
-					subAsset.setAsset(asset);
-					subAsset.setWeight(1L);
-					persistenceService.save(subAsset);
-					logger.info("SubAsset created for masterAssetSid: " + masterAssetSid + " and assetSid: " + assetSid);
-				} else {
-					logger.warn("SubAsset already exists for masterAssetSid: " + masterAssetSid + " and assetSid: " + assetSid);
-				}
-			} else {
-				logger.error("Failed to find Assets for masterAssetSid: " + masterAssetSid + " and assetSid: " + assetSid);
-				throw new NotFoundException("SubAsset", masterAssetSid);
-			}
-		}	
-	}
-	
-	@DELETE
-	@Path("{masterAssetSid}/{assetSid}")
-	@Consumes(MediaType.TEXT_PLAIN)
-	@Transactional
-	public void detachSubAsset(@PathParam("masterAssetSid") String masterAssetSid, @PathParam("assetSid") String assetSid) {
-		logger.info("detachSubAsset for masterAssetSid: " + masterAssetSid + " and assetSid: " + assetSid);
-		if(masterAssetSid != null && assetSid != null) {
-			Asset masterAsset = assetService.findByMobileId(masterAssetSid);
-			Asset asset = assetService.findByMobileId(assetSid);
-			
-			if(masterAsset != null && asset != null) {
-				QueryBuilder<SubAsset> query = new QueryBuilder<>(SubAsset.class);
-				query.addWhere(WhereClauseFactory.create("masterAsset", masterAsset));
-				query.addWhere(WhereClauseFactory.create("asset", asset));
-				SubAsset subAsset = persistenceService.find(query);
-				if(subAsset != null) {
-					persistenceService.delete(subAsset);
-					logger.info("SubAsset deleted for masterAssetSid: " + masterAssetSid + " and assetSid: " + assetSid);
-				} else {
-					logger.warn("Failed to find SubAset for masterAssetSid: " + masterAssetSid + " and assetSid: " + assetSid);
-				}
-			} else {
-				logger.error("Failed to find Assets for masterAssetSid: " + masterAssetSid + " and assetSid: " + assetSid);
-				throw new NotFoundException("SubAsset", masterAssetSid);
-			}
-		}
-	}
+    private static Logger logger = Logger.getLogger(ApiSubAssetResource.class);
+    @Autowired private AssetService assetService;
+    
+    @PUT
+    @Path("{masterAssetSid}/{assetSid}")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Trace  (dispatcher=true)
+    @Transactional
+    public void attachSubAsset(@PathParam("masterAssetSid") String masterAssetSid, @PathParam("assetSid") String assetSid) {
+        logger.info("attachSubAsset for masterAssetSid: " + masterAssetSid + " and assetSid: " + assetSid);
+        setNewRelicWithAppInfoParameters();
+        if(masterAssetSid != null && assetSid != null) {
+            Asset masterAsset = assetService.findByMobileId(masterAssetSid);
+            Asset asset = assetService.findByMobileId(assetSid);
+            
+            if(masterAsset != null && asset != null){
+                QueryBuilder<SubAsset> query = new QueryBuilder<>(SubAsset.class);
+                query.addWhere(WhereClauseFactory.create("masterAsset", masterAsset));
+                query.addWhere(WhereClauseFactory.create("asset", asset));
+                if(!persistenceService.exists(query)) {
+                    SubAsset subAsset = new SubAsset();
+                    subAsset.setMasterAsset(masterAsset);
+                    subAsset.setAsset(asset);
+                    subAsset.setWeight(1L);
+                    persistenceService.save(subAsset);
+                    logger.info("SubAsset created for masterAssetSid: " + masterAssetSid + " and assetSid: " + assetSid);
+                } else {
+                    logger.warn("SubAsset already exists for masterAssetSid: " + masterAssetSid + " and assetSid: " + assetSid);
+                }
+            } else {
+                logger.error("Failed to find Assets for masterAssetSid: " + masterAssetSid + " and assetSid: " + assetSid);
+                throw new NotFoundException("SubAsset", masterAssetSid);
+            }
+        }
+    }
+    
+    @DELETE
+    @Path("{masterAssetSid}/{assetSid}")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Trace  (dispatcher=true)
+    @Transactional
+    public void detachSubAsset(@PathParam("masterAssetSid") String masterAssetSid, @PathParam("assetSid") String assetSid) {
+        logger.info("detachSubAsset for masterAssetSid: " + masterAssetSid + " and assetSid: " + assetSid);
+        setNewRelicWithAppInfoParameters();
+        if(masterAssetSid != null && assetSid != null) {
+            Asset masterAsset = assetService.findByMobileId(masterAssetSid);
+            Asset asset = assetService.findByMobileId(assetSid);
+            
+            if(masterAsset != null && asset != null) {
+                QueryBuilder<SubAsset> query = new QueryBuilder<>(SubAsset.class);
+                query.addWhere(WhereClauseFactory.create("masterAsset", masterAsset));
+                query.addWhere(WhereClauseFactory.create("asset", asset));
+                SubAsset subAsset = persistenceService.find(query);
+                if(subAsset != null) {
+                    persistenceService.delete(subAsset);
+                    logger.info("SubAsset deleted for masterAssetSid: " + masterAssetSid + " and assetSid: " + assetSid);
+                } else {
+                    logger.warn("Failed to find SubAset for masterAssetSid: " + masterAssetSid + " and assetSid: " + assetSid);
+                }
+            } else {
+                logger.error("Failed to find Assets for masterAssetSid: " + masterAssetSid + " and assetSid: " + assetSid);
+                throw new NotFoundException("SubAsset", masterAssetSid);
+            }
+        }
+    }
 
     /**
      * In a situation where you can't determine the ID of the MasterAsset to a SubAsset, but you need to break that link
@@ -90,9 +95,11 @@ public class ApiSubAssetResource extends FieldIdPersistenceService {
     @DELETE
     @Path("{subAssetSid}")
     @Consumes(MediaType.TEXT_PLAIN)
+    @Trace  (dispatcher=true)
     @Transactional
     public void breakSubAssetLink(@PathParam("subAssetSid") String subAssetSid) {
         logger.info("breakSubAssetLink for subAssetSid: " + subAssetSid);
+        setNewRelicWithAppInfoParameters();
         if(subAssetSid != null && !subAssetSid.isEmpty()) {
             Asset subAsset = assetService.findByMobileId(subAssetSid);
 
@@ -113,37 +120,37 @@ public class ApiSubAssetResource extends FieldIdPersistenceService {
             }
         }
     }
-	
-	public ApiSubAsset findMasterAsset(Asset asset) {
-		QueryBuilder<SubAsset> query = new QueryBuilder<>(SubAsset.class);
-		query.addWhere(WhereClauseFactory.create("asset", asset));
-		SubAsset subAsset = persistenceService.find(query); // Assumes that there will be only one MasterAsset for this one.
+    
+    public ApiSubAsset findMasterAsset(Asset asset) {
+        QueryBuilder<SubAsset> query = new QueryBuilder<>(SubAsset.class);
+        query.addWhere(WhereClauseFactory.create("asset", asset));
+        SubAsset subAsset = persistenceService.find(query); // Assumes that there will be only one MasterAsset for this one.
         return subAsset != null ? convertToApiSubAsset(subAsset.getMasterAsset()) : null;
-	}
-	
-	public List<ApiSubAsset> findAndConvertSubAssets(Asset asset) {
-		List<ApiSubAsset> apiSubAssets = new ArrayList<>();
-		List<SubAsset> subAssets = findSubAssets(asset);
-		
-		for(SubAsset subAsset: subAssets) {
-			ApiSubAsset apiSubAsset = convertToApiSubAsset(subAsset.getAsset());
-			apiSubAssets.add(apiSubAsset);
-		}
-		
-		return apiSubAssets;
-	}
-	
-	public List<SubAsset> findSubAssets(Asset asset) {
-		QueryBuilder<SubAsset> query = new QueryBuilder<>(SubAsset.class);
-		query.addWhere(WhereClauseFactory.create("masterAsset", asset));
-		return persistenceService.findAll(query);
-	}
-	
-	private ApiSubAsset convertToApiSubAsset(Asset asset) {
-		ApiSubAsset apiSubAsset = new ApiSubAsset();
-		apiSubAsset.setSid(asset.getMobileGUID());
-		apiSubAsset.setType(asset.getType().getName());
-		apiSubAsset.setIdentifier(asset.getIdentifier());
-		return apiSubAsset;
-	}
+    }
+    
+    public List<ApiSubAsset> findAndConvertSubAssets(Asset asset) {
+        List<ApiSubAsset> apiSubAssets = new ArrayList<>();
+        List<SubAsset> subAssets = findSubAssets(asset);
+        
+        for(SubAsset subAsset: subAssets) {
+            ApiSubAsset apiSubAsset = convertToApiSubAsset(subAsset.getAsset());
+            apiSubAssets.add(apiSubAsset);
+        }
+        
+        return apiSubAssets;
+    }
+    
+    public List<SubAsset> findSubAssets(Asset asset) {
+        QueryBuilder<SubAsset> query = new QueryBuilder<>(SubAsset.class);
+        query.addWhere(WhereClauseFactory.create("masterAsset", asset));
+        return persistenceService.findAll(query);
+    }
+    
+    private ApiSubAsset convertToApiSubAsset(Asset asset) {
+        ApiSubAsset apiSubAsset = new ApiSubAsset();
+        apiSubAsset.setSid(asset.getMobileGUID());
+        apiSubAsset.setType(asset.getType().getName());
+        apiSubAsset.setIdentifier(asset.getIdentifier());
+        return apiSubAsset;
+    }
 }

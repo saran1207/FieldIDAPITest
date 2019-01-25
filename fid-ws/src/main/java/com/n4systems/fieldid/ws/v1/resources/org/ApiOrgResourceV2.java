@@ -18,6 +18,7 @@ import com.n4systems.model.orgs.OrgIdTree;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
+import com.newrelic.api.agent.Trace;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -115,8 +116,10 @@ public class ApiOrgResourceV2 extends SetupDataResource<ApiOrgV2, BaseOrg> {
     @GET
     @Path("visibleOrgsTree")
     @Produces(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public Response findVisibleOrgsTree() {
+        setNewRelicWithAppInfoParameters();
         List<OrgIdTree> results = orgService.getIdVisibleOrgsIdTree();
 
         System.out.println("TEST");
@@ -127,8 +130,10 @@ public class ApiOrgResourceV2 extends SetupDataResource<ApiOrgV2, BaseOrg> {
     @GET
     @Path("visibleOrgs")
     @Produces(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public Response findVisibleOrgIds() {
+        setNewRelicWithAppInfoParameters();
         List<Long> results = orgService.getIdOfAllVisibleOrgs();
 
         return Response.ok().entity(results).build();
@@ -142,14 +147,16 @@ public class ApiOrgResourceV2 extends SetupDataResource<ApiOrgV2, BaseOrg> {
     @Path("images")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public ListResponse<ApiOrgImage> findAllOrgImages(@QueryParam("after") DateParam after) {
-		/*
-		Note: Rather than loading orgs first and fetching images, we fetch ALL customer logo images, parse the id
-		from the filename and then load the org.  This is much faster because we do not know if the org has a logo
-		image until we try and fetch it from S3.  Given 1000 orgs, that would be 1000 GET requests, most of which will 404
-		since the ratio of org images to orgs is very low.
-		 */
+        /*
+        Note: Rather than loading orgs first and fetching images, we fetch ALL customer logo images, parse the id
+        from the filename and then load the org.  This is much faster because we do not know if the org has a logo
+        image until we try and fetch it from S3.  Given 1000 orgs, that would be 1000 GET requests, most of which will 404
+        since the ratio of org images to orgs is very low.
+         */
+        setNewRelicWithAppInfoParameters();
         List<S3ObjectSummary> s3Images = s3Service.getAllCustomerLogos();
         List<ApiOrgImage> orgImages = new ArrayList<>();
 
@@ -158,10 +165,10 @@ public class ApiOrgResourceV2 extends SetupDataResource<ApiOrgV2, BaseOrg> {
         for (S3ObjectSummary image: s3Images) {
             Matcher m = p.matcher(image.getKey());
             if (m.matches()) {
-				/*
-				We still need to attempt to load the org as it may be archived (the images are not removed when an org is archived).
-				We can apply date filtering at the same time
-				*/
+                /*
+                We still need to attempt to load the org as it may be archived (the images are not removed when an org is archived).
+                We can apply date filtering at the same time
+                */
                 long orgId = Long.parseLong(m.group(1));
                 QueryBuilder<BaseOrg> query = createTenantSecurityBuilder(BaseOrg.class).addWhere(WhereClauseFactory.create("id", orgId));
                 if (after != null) {

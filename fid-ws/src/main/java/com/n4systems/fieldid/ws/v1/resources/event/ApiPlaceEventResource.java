@@ -16,6 +16,7 @@ import com.n4systems.reporting.EventReportType;
 import com.n4systems.util.ContentTypeUtil;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+import com.newrelic.api.agent.Trace;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -53,8 +54,10 @@ public class ApiPlaceEventResource extends FieldIdPersistenceService {
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
     @Transactional
     public void saveEvent(ApiPlaceEvent apiEvent) {
+        setNewRelicWithAppInfoParameters();
         if(apiEvent.getSid() == null) {
             throw new NullPointerException("ApiPlaceEventInfo has null sid");
         }
@@ -76,12 +79,14 @@ public class ApiPlaceEventResource extends FieldIdPersistenceService {
     @GET
     @Path("downloadReport")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public Response downloadReport(@QueryParam("eventSid") String eventSid, @QueryParam("reportType") String reportType) throws Exception {
         QueryBuilder<Event> query = createUserSecurityBuilder(Event.class);
         query.addWhere(WhereClauseFactory.create("mobileGUID", eventSid));
         Event event = persistenceService.find(query);
         EventReportType eventReportType = EventReportType.valueOf(reportType);
+        setNewRelicWithAppInfoParameters();
 
         try {
             byte[] pdf = certificateService.generateEventCertificatePdf(eventReportType, event.getId());

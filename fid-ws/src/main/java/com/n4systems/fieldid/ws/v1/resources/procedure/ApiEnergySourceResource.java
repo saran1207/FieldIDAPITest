@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.procedure.PreconfiguredEnergySource;
+import com.newrelic.api.agent.Trace;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.GET;
@@ -31,7 +32,9 @@ public class ApiEnergySourceResource extends ApiResource<ApiEnergySource, Precon
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
     public Response getPreconfiguredEnergySource() {
+        setNewRelicWithAppInfoParameters();
         //This is a pretty simple wrapper, so we can do it in one line.
         return Response.status(Response.Status.OK)
                 .entity(convertAllEntitiesToApiModels(procedureDefinitionService.getAllPreconfiguredEnergySource()))
@@ -46,8 +49,10 @@ public class ApiEnergySourceResource extends ApiResource<ApiEnergySource, Precon
     @GET
     @Path("/defaultIsolationPointSourceTypes")
     @Produces(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
     public Response getDefaultIsolationPoints() {
 
+        setNewRelicWithAppInfoParameters();
         ArrayList<ApiIsolationPointSourceType> defaults = getDefaultValues();
         return Response.status(Response.Status.OK)
                 .entity(defaults)

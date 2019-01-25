@@ -5,6 +5,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
+import com.newrelic.api.agent.Trace;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -58,6 +59,7 @@ public class ApiEventBookResource extends SetupDataResource<ApiEventBook, EventB
 	
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Trace  (dispatcher=true)
 	@Transactional
 	public void saveEventBook(ApiEventBook apiEventBook) {
 		if (apiEventBook.getName() == null || apiEventBook.getOwnerId() == null || apiEventBook.getSid() == null) {
@@ -69,6 +71,7 @@ public class ApiEventBookResource extends SetupDataResource<ApiEventBook, EventB
 		EventBook eventBook = convertApiEventBook(apiEventBook);		
 		persistenceService.save(eventBook);
 		logger.info("saved event book: " + apiEventBook.getName());
+		setNewRelicWithAppInfoParameters();
 	}
 	
 	private EventBook convertApiEventBook(ApiEventBook apiEventBook) {
