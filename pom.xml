@@ -44,6 +44,7 @@
         <buildhelper.maven.plugin.version>1.9</buildhelper.maven.plugin.version>
         <sass.maven.plugin.version>1.1.0</sass.maven.plugin.version>
         <buildnumber.maven.plugin.version>1.0-beta-3</buildnumber.maven.plugin.version>
+		<newrelic.version>3.47.0</newrelic.version>
     </properties>
 	<repositories>
 		<repository>
