@@ -1,27 +1,9 @@
 package com.n4systems.fieldid.ws.v1.resources.eventattachment;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.MediaType;
-
 import com.amazonaws.AmazonClientException;
 import com.n4systems.fieldid.service.amazon.S3Service;
-import com.newrelic.api.agent.Trace;
-import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
+import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithNewRelicLogging;
 import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Tenant;
@@ -29,10 +11,25 @@ import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+import com.newrelic.api.agent.Trace;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.core.MediaType;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @Path("eventAttachment")
-public class ApiEventAttachmentResource extends FieldIdPersistenceService {
+public class ApiEventAttachmentResource extends FieldIdPersistenceServiceWithNewRelicLogging {
     private static Logger logger = Logger.getLogger(ApiEventAttachmentResource.class);
 
     @Autowired
@@ -137,6 +134,5 @@ public class ApiEventAttachmentResource extends FieldIdPersistenceService {
             return null;
         }
     }
-    
-    
+
 }

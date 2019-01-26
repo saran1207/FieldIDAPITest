@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.ws.v1.resources.asset;
 
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
+import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithNewRelicLogging;
 import com.n4systems.model.Asset;
 import com.n4systems.model.SubAsset;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -20,7 +20,7 @@ import java.util.List;
 
 @Component
 @Path("subAsset")
-public class ApiSubAssetResource extends FieldIdPersistenceService {
+public class ApiSubAssetResource extends FieldIdPersistenceServiceWithNewRelicLogging {
     private static Logger logger = Logger.getLogger(ApiSubAssetResource.class);
     @Autowired private AssetService assetService;
     

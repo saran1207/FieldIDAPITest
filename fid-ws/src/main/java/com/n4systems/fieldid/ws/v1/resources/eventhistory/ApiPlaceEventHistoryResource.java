@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.ws.v1.resources.eventhistory;
 
+import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithNewRelicLogging;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiPlaceEventTypeResource;
 import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedPlaceEventResource;
 import com.newrelic.api.agent.Trace;
@@ -11,7 +12,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import java.util.stream.Collectors;
 
 /**
  * This service returns the event history for one Place/Org.
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  */
 @Component
 @Path("placeEventHistory")
-public class ApiPlaceEventHistoryResource {
+public class ApiPlaceEventHistoryResource extends FieldIdPersistenceServiceWithNewRelicLogging {
 
     @Autowired
     private ApiPlaceEventInfoResource placeEventResource;
@@ -33,8 +33,10 @@ public class ApiPlaceEventHistoryResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
     public ApiPlaceEventHistory findAllEventHistory(@QueryParam("id") Long placeId) {
 
+        setNewRelicWithAppInfoParameters();
         ApiPlaceEventHistory apiEventHistory = new ApiPlaceEventHistory();
 
         apiEventHistory.setEventHistory(placeEventResource.getPlaceEvents(placeId));

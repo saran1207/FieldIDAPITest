@@ -1,38 +1,30 @@
 package com.n4systems.fieldid.ws.v1.resources.assetattachment;
 
-import java.io.File;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.activation.MimetypesFileTypeMap;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import com.n4systems.fieldid.service.amazon.S3Service;
-import com.n4systems.model.FileAttachment;
-import com.n4systems.util.ServiceLocator;
-import com.newrelic.api.agent.Trace;
-import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.fieldid.ws.v1.resources.asset.ApiAssetLink;
 import com.n4systems.model.Asset;
+import com.n4systems.model.FileAttachment;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.asset.AssetAttachmentSaver;
 import com.n4systems.reporting.PathHandler;
+import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+import com.newrelic.api.agent.Trace;
+import org.apache.log4j.Logger;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+
+import javax.activation.MimetypesFileTypeMap;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.io.File;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 @Path("assetAttachment")
 public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, AssetAttachment> {

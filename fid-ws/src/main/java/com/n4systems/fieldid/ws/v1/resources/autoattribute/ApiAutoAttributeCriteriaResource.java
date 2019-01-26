@@ -1,13 +1,11 @@
 package com.n4systems.fieldid.ws.v1.resources.autoattribute;
 
-import javax.ws.rs.Path;
-
-import org.springframework.stereotype.Component;
-
-import rfid.ejb.entity.InfoFieldBean;
-
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
 import com.n4systems.model.AutoAttributeCriteria;
+import org.springframework.stereotype.Component;
+import rfid.ejb.entity.InfoFieldBean;
+
+import javax.ws.rs.Path;
 
 @Component
 @Path("autoAttributeCriteria")

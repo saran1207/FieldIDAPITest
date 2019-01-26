@@ -1,11 +1,10 @@
 package com.n4systems.fieldid.ws.v1.resources.commenttemplate;
 
-import javax.ws.rs.Path;
-
-import org.springframework.stereotype.Component;
-
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
 import com.n4systems.model.commenttemplate.CommentTemplate;
+import org.springframework.stereotype.Component;
+
+import javax.ws.rs.Path;
 
 @Component
 @Path("commentTemplate")

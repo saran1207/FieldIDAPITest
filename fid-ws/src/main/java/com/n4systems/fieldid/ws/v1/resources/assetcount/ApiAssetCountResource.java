@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.ws.v1.resources.assetcount;
 
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
+import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithNewRelicLogging;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.Asset;
 import com.n4systems.model.orgs.BaseOrg;
@@ -18,7 +18,7 @@ import java.util.List;
 
 @Component
 @Path("assetCount")
-public class ApiAssetCountResource extends FieldIdPersistenceService {
+public class ApiAssetCountResource extends FieldIdPersistenceServiceWithNewRelicLogging {
 
     @GET
     @Consumes(MediaType.TEXT_PLAIN)

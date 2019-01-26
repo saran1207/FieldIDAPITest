@@ -2,8 +2,8 @@ package com.n4systems.fieldid.ws.v1.resources.event.criteria;
 
 
 import com.google.common.collect.Lists;
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithNewRelicLogging;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -22,7 +22,7 @@ import java.util.List;
 
 @Component
 @Path("criteriaImage")
-public class ApiCriteriaImagesResource extends FieldIdPersistenceService {
+public class ApiCriteriaImagesResource extends FieldIdPersistenceServiceWithNewRelicLogging {
     private static Logger logger = Logger.getLogger(ApiCriteriaImagesResource.class);
     @Autowired private S3Service s3Service;
 
@@ -32,10 +32,10 @@ public class ApiCriteriaImagesResource extends FieldIdPersistenceService {
     @Trace  (dispatcher=true)
     @Transactional
     public void deleteCriteriaImage(@PathParam("sid") String sid) {
+        setNewRelicWithAppInfoParameters();
         QueryBuilder<CriteriaResultImage> builder = createTenantSecurityBuilder(CriteriaResultImage.class, true);
         builder.addWhere(WhereClauseFactory.create("mobileGUID", sid));
         CriteriaResultImage criteriaResultImage = persistenceService.find(builder);
-        setNewRelicWithAppInfoParameters();
 
         if (criteriaResultImage == null) {
             logger.info("Unable to delete Criteria Image '" + sid + "' since it does not exist.");
@@ -61,9 +61,9 @@ public class ApiCriteriaImagesResource extends FieldIdPersistenceService {
     @Trace  (dispatcher=true)
     @Transactional
     public void saveCriteriaImage(ApiCriteriaImage apiCriteriaImage) {
+        setNewRelicWithAppInfoParameters();
         QueryBuilder<CriteriaResult> builder = createTenantSecurityBuilder(CriteriaResult.class, true);
         builder.addWhere(WhereClauseFactory.create("mobileId", apiCriteriaImage.getCriteriaResultSid()));
-        setNewRelicWithAppInfoParameters();
 
         String imageMd5sum = DigestUtils.md5Hex(apiCriteriaImage.getImage());
 
@@ -114,12 +114,12 @@ public class ApiCriteriaImagesResource extends FieldIdPersistenceService {
     @Transactional
     //TODO Probably want to make this return something so we can handle the Response...
     public void saveMultiAddEventCriteriaImage(ApiMultiEventCriteriaImage multiEventCriteriaImage) {
+        setNewRelicWithAppInfoParameters();
         ApiCriteriaImage apiCriteriaImage = multiEventCriteriaImage.getCriteriaImageTemplate();
         for(String criteriaResultId : multiEventCriteriaImage.getCriteriaResultIds()) {
             apiCriteriaImage.setCriteriaResultSid(criteriaResultId);
             saveCriteriaImage(apiCriteriaImage);
         }
         logger.info("Saved Multi Event Attachment for Events: " + multiEventCriteriaImage.getCriteriaResultIds().size());
-        setNewRelicWithAppInfoParameters();
     }
 }

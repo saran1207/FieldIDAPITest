@@ -1,11 +1,11 @@
 package com.n4systems.fieldid.ws.v1.resources.event;
 
 import com.n4systems.exceptions.NonPrintableEventType;
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.certificate.CertificateService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.ThingEventCreationService;
+import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithNewRelicLogging;
 import com.n4systems.fieldid.ws.v1.resources.eventattachment.ApiEventAttachmentResource;
 import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventSchedule;
 import com.n4systems.model.*;
@@ -35,7 +35,7 @@ import java.util.List;
 
 @Component
 @Path("event")
-public class ApiEventResource extends FieldIdPersistenceService {
+public class ApiEventResource extends FieldIdPersistenceServiceWithNewRelicLogging {
     private static Logger logger = Logger.getLogger(ApiEventResource.class);
     
     @Autowired private AssetService assetService;

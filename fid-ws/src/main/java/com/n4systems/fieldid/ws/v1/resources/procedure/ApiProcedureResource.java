@@ -1,10 +1,10 @@
 package com.n4systems.fieldid.ws.v1.resources.procedure;
 
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.procedure.LockoutReasonService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
+import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithNewRelicLogging;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.GpsLocation;
 import com.n4systems.model.ProcedureWorkflowState;
@@ -18,12 +18,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 @Path("procedure")
-public class ApiProcedureResource extends FieldIdPersistenceService {
+public class ApiProcedureResource extends FieldIdPersistenceServiceWithNewRelicLogging {
 
     private static final Logger logger = Logger.getLogger(ApiProcedureResource.class);
 

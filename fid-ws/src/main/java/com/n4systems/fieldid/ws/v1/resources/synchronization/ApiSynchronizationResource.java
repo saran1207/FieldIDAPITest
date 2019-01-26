@@ -1,9 +1,9 @@
 package com.n4systems.fieldid.ws.v1.resources.synchronization;
 
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
+import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithNewRelicLogging;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.Asset;
 import com.n4systems.model.SubAsset;
@@ -32,7 +32,7 @@ import java.util.*;
 
 @Path("/synchronize")
 @Component
-public class ApiSynchronizationResource extends FieldIdPersistenceService {
+public class ApiSynchronizationResource extends FieldIdPersistenceServiceWithNewRelicLogging {
     private static Logger logger = Logger.getLogger(ApiSynchronizationResource.class);
 
     @Autowired private OfflineProfileService offlineProfileService;

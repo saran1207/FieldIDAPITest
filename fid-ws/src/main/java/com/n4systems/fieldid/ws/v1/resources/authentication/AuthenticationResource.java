@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.ws.v1.resources.authentication;
 
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.ws.v1.exceptions.ForbiddenException;
+import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithNewRelicLogging;
 import com.n4systems.fieldid.ws.v1.resources.user.ApiUser;
 import com.n4systems.fieldid.ws.v1.resources.user.ApiUserResource;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
@@ -15,18 +15,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 @Path("/authenticate")
 @Component
-public class AuthenticationResource extends FieldIdPersistenceService {
+public class AuthenticationResource extends FieldIdPersistenceServiceWithNewRelicLogging {
     private static Logger logger = Logger.getLogger(AuthenticationResource.class);
 
     @Autowired protected UserService userService;
     @Autowired protected ApiUserResource apiUserResource;
     @Autowired protected SecurityContext securityContext;
-    
+    @Autowired private HttpServletRequest request;
+
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
@@ -38,7 +40,6 @@ public class AuthenticationResource extends FieldIdPersistenceService {
             @FormParam("password") String password) {
         
         logger.info("Standard authentication for " + tenantName + " for " + userId);
-        setNewRelicWithAppInfoParameters();
 
         if (tenantName == null || userId == null || password == null) {
             throw new ForbiddenException();
@@ -46,6 +47,7 @@ public class AuthenticationResource extends FieldIdPersistenceService {
 
         User user = userService.authenticateUserByPassword(tenantName, userId, password);
 
+        setNewRelicWithAppInfoParameters(tenantName,user.getUserID());
         return authenticateUser(user);
     }
     
@@ -60,13 +62,13 @@ public class AuthenticationResource extends FieldIdPersistenceService {
             @FormParam("passcode") String passcode) {
         
         logger.info("Passcode authentication for " + tenantName);
-        setNewRelicWithAppInfoParameters();
 
         if (tenantName == null || passcode == null) {
             throw new ForbiddenException();
         }
         
         User user = userService.authenticateUserBySecurityCard(tenantName, passcode);
+        setNewRelicWithAppInfoParameters(tenantName,user.getUserID());
         return authenticateUser(user);
     }
     
@@ -81,5 +83,5 @@ public class AuthenticationResource extends FieldIdPersistenceService {
         ApiUser apiUser = apiUserResource.convertEntityToApiModel(user);
         return apiUser;
     }
-    
+
 }

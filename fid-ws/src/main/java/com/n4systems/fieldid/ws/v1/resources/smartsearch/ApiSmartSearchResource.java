@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.ws.v1.resources.smartsearch;
 
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithNewRelicLogging;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.Asset;
 import com.n4systems.util.persistence.*;
@@ -18,7 +18,7 @@ import java.util.List;
 
 @Component
 @Path("smartSearch")
-public class ApiSmartSearchResource extends FieldIdPersistenceService {
+public class ApiSmartSearchResource extends FieldIdPersistenceServiceWithNewRelicLogging {
     private static final int SearchOptions = WhereParameter.IGNORE_CASE|WhereParameter.TRIM|WhereParameter.WILDCARD_RIGHT;
     private static final int MaxResults = 8;
     

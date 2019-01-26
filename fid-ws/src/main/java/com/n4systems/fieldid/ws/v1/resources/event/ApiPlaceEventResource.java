@@ -1,13 +1,13 @@
 package com.n4systems.fieldid.ws.v1.resources.event;
 
 import com.n4systems.exceptions.NonPrintableEventType;
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.certificate.CertificateService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.EventTypeService;
 import com.n4systems.fieldid.service.event.PlaceEventCreationService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.user.UserService;
+import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithNewRelicLogging;
 import com.n4systems.fieldid.ws.v1.resources.eventattachment.ApiEventAttachmentResource;
 import com.n4systems.model.*;
 import com.n4systems.model.location.PredefinedLocation;
@@ -38,7 +38,7 @@ import java.util.List;
  */
 @Component
 @Path("placeevent")
-public class ApiPlaceEventResource extends FieldIdPersistenceService {
+public class ApiPlaceEventResource extends FieldIdPersistenceServiceWithNewRelicLogging {
     private static final Logger logger = Logger.getLogger(ApiPlaceEventResource.class);
 
     @Autowired private EventService eventService;
@@ -82,11 +82,11 @@ public class ApiPlaceEventResource extends FieldIdPersistenceService {
     @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public Response downloadReport(@QueryParam("eventSid") String eventSid, @QueryParam("reportType") String reportType) throws Exception {
+        setNewRelicWithAppInfoParameters();
         QueryBuilder<Event> query = createUserSecurityBuilder(Event.class);
         query.addWhere(WhereClauseFactory.create("mobileGUID", eventSid));
         Event event = persistenceService.find(query);
         EventReportType eventReportType = EventReportType.valueOf(reportType);
-        setNewRelicWithAppInfoParameters();
 
         try {
             byte[] pdf = certificateService.generateEventCertificatePdf(eventReportType, event.getId());
