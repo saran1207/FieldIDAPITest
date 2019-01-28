@@ -123,7 +123,7 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
     @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public Response findVisibleOrgsTree() {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         List<OrgIdTree> results = orgService.getIdVisibleOrgsIdTree();
 
         System.out.println("TEST");
@@ -137,7 +137,7 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
     @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public Response findVisibleOrgIds() {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         List<Long> results = orgService.getIdOfAllVisibleOrgs();
 
         return Response.ok().entity(results).build();
@@ -160,7 +160,7 @@ public class ApiOrgResource extends SetupDataResource<ApiOrg, BaseOrg> {
         image until we try and fetch it from S3.  Given 1000 orgs, that would be 1000 GET requests, most of which will 404
         since the ratio of org images to orgs is very low.
          */
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         List<S3ObjectSummary> s3Images = s3Service.getAllCustomerLogos();
         List<ApiOrgImage> orgImages = new ArrayList<>();
 

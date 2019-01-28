@@ -3,7 +3,7 @@ package com.n4systems.fieldid.ws.v1.resources.event.criteria;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.amazon.S3Service;
-import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithNewRelicLogging;
+import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithEnhancedLogging;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -22,7 +22,7 @@ import java.util.List;
 
 @Component
 @Path("criteriaImage")
-public class ApiCriteriaImagesResource extends FieldIdPersistenceServiceWithNewRelicLogging {
+public class ApiCriteriaImagesResource extends FieldIdPersistenceServiceWithEnhancedLogging {
     private static Logger logger = Logger.getLogger(ApiCriteriaImagesResource.class);
     @Autowired private S3Service s3Service;
 
@@ -32,7 +32,7 @@ public class ApiCriteriaImagesResource extends FieldIdPersistenceServiceWithNewR
     @Trace  (dispatcher=true)
     @Transactional
     public void deleteCriteriaImage(@PathParam("sid") String sid) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         QueryBuilder<CriteriaResultImage> builder = createTenantSecurityBuilder(CriteriaResultImage.class, true);
         builder.addWhere(WhereClauseFactory.create("mobileGUID", sid));
         CriteriaResultImage criteriaResultImage = persistenceService.find(builder);
@@ -61,7 +61,7 @@ public class ApiCriteriaImagesResource extends FieldIdPersistenceServiceWithNewR
     @Trace  (dispatcher=true)
     @Transactional
     public void saveCriteriaImage(ApiCriteriaImage apiCriteriaImage) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         QueryBuilder<CriteriaResult> builder = createTenantSecurityBuilder(CriteriaResult.class, true);
         builder.addWhere(WhereClauseFactory.create("mobileId", apiCriteriaImage.getCriteriaResultSid()));
 
@@ -114,7 +114,7 @@ public class ApiCriteriaImagesResource extends FieldIdPersistenceServiceWithNewR
     @Transactional
     //TODO Probably want to make this return something so we can handle the Response...
     public void saveMultiAddEventCriteriaImage(ApiMultiEventCriteriaImage multiEventCriteriaImage) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         ApiCriteriaImage apiCriteriaImage = multiEventCriteriaImage.getCriteriaImageTemplate();
         for(String criteriaResultId : multiEventCriteriaImage.getCriteriaResultIds()) {
             apiCriteriaImage.setCriteriaResultSid(criteriaResultId);

@@ -56,7 +56,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
     @Trace  (dispatcher=true)
     @Transactional
     public Response writeOrUpdateProcedureDefinition(ApiProcedureDefinitionV2 apiProcDef) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         boolean isNew = false;
 
         try {
@@ -139,7 +139,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
     public ListResponse<ApiProcedureDefinitionV2> findAll(
             @QueryParam("id") List<String> assetIds) {
 
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         List<ApiProcedureDefinitionV2> apiProcs = new ArrayList<>();
         try {
             QueryBuilder<ProcedureDefinition> builder = createUserSecurityBuilder(ProcedureDefinition.class);
@@ -165,7 +165,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
             @PathParam("assetId") String assetId,
             @DefaultValue("0") @QueryParam("page") int page,
             @DefaultValue("100") @QueryParam("pageSize") int pageSize) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         QueryBuilder<ProcedureDefinition> builder = createUserSecurityBuilder(ProcedureDefinition.class);
         builder.addWhere(WhereClauseFactory.create(Comparator.EQ, "asset.mobileGUID", "0"));
 
@@ -186,7 +186,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
     @Transactional
     public Response deleteDraftProcedureDefinition(@QueryParam("procDefSid") String procDefSid) {
 
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         ProcedureDefinition deleteMe = procedureDefinitionService.findProcedureDefinitionByMobileId(procDefSid);
 
         Response.Status responseStatus;

@@ -8,26 +8,26 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 
 @Component
-public class NewRelicLogging {
+public class FieldIdPersistenceServiceWithEnhancedLogging extends FieldIdPersistenceService {
 
     @Autowired
-    private  HttpServletRequest request;
+    private HttpServletRequest request;
 
-    public void setNewRelicCustomParameters(String currentTenant, String currentUser) {
-        NewRelic.addCustomParameter("Tenant", currentTenant);
-        NewRelic.addCustomParameter("User", currentUser);
+    public void setEnhancedLoggingWithAppInfoParameters() {
+        setEnhancedLoggingWithAppInfoParameters(getCurrentTenant().getName(), getCurrentUser().getUserID());
     }
 
-    public void setNewRelicWithAppInfoParameters(String currentTenant, String currentUser) {
-        setNewRelicCustomParameters(currentTenant, currentUser);
-        setNewRelicAppInfoParameters();
+    public void setEnhancedLoggingWithAppInfoParameters(String currentTenant, String currentUser) {
+        setEnhancedLoggingCustomParameters(currentTenant, currentUser);
+        setEnhancedLoggingAppInfoParameters();
     }
 
-    public void setNewRelicAppInfoParameters() {
+    public void setEnhancedLoggingAppInfoParameters() {
         NewRelic.addCustomParameter("Device", request.getHeader("X-APPINFO-DEVICE"));
         NewRelic.addCustomParameter("Device Type", request.getHeader("X-APPINFO-DEVICETYPE"));
         NewRelic.addCustomParameter("Platform", request.getHeader("X-APPINFO-PLATFORM"));
         NewRelic.addCustomParameter("OS Version", request.getHeader("X-APPINFO-OSVERSION"));
         NewRelic.addCustomParameter("AppInfo", request.getHeader("X-APPINFO-APPVERSION"));
     }
+
 }

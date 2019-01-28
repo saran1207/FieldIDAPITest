@@ -2,7 +2,7 @@ package com.n4systems.fieldid.ws.v1.resources.asset;
 
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
-import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithNewRelicLogging;
+import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithEnhancedLogging;
 import com.n4systems.model.Asset;
 import com.n4systems.model.SubAsset;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -20,7 +20,7 @@ import java.util.List;
 
 @Component
 @Path("subAsset")
-public class ApiSubAssetResource extends FieldIdPersistenceServiceWithNewRelicLogging {
+public class ApiSubAssetResource extends FieldIdPersistenceServiceWithEnhancedLogging {
     private static Logger logger = Logger.getLogger(ApiSubAssetResource.class);
     @Autowired private AssetService assetService;
     
@@ -31,7 +31,7 @@ public class ApiSubAssetResource extends FieldIdPersistenceServiceWithNewRelicLo
     @Transactional
     public void attachSubAsset(@PathParam("masterAssetSid") String masterAssetSid, @PathParam("assetSid") String assetSid) {
         logger.info("attachSubAsset for masterAssetSid: " + masterAssetSid + " and assetSid: " + assetSid);
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         if(masterAssetSid != null && assetSid != null) {
             Asset masterAsset = assetService.findByMobileId(masterAssetSid);
             Asset asset = assetService.findByMobileId(assetSid);
@@ -64,7 +64,7 @@ public class ApiSubAssetResource extends FieldIdPersistenceServiceWithNewRelicLo
     @Transactional
     public void detachSubAsset(@PathParam("masterAssetSid") String masterAssetSid, @PathParam("assetSid") String assetSid) {
         logger.info("detachSubAsset for masterAssetSid: " + masterAssetSid + " and assetSid: " + assetSid);
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         if(masterAssetSid != null && assetSid != null) {
             Asset masterAsset = assetService.findByMobileId(masterAssetSid);
             Asset asset = assetService.findByMobileId(assetSid);
@@ -99,7 +99,7 @@ public class ApiSubAssetResource extends FieldIdPersistenceServiceWithNewRelicLo
     @Transactional
     public void breakSubAssetLink(@PathParam("subAssetSid") String subAssetSid) {
         logger.info("breakSubAssetLink for subAssetSid: " + subAssetSid);
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         if(subAssetSid != null && !subAssetSid.isEmpty()) {
             Asset subAsset = assetService.findByMobileId(subAssetSid);
 

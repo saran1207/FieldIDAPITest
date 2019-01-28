@@ -28,7 +28,7 @@ public class ApiPlaceEventHistoryResourceV1 extends ApiResource<ApiPlaceEventHis
     @Produces(MediaType.APPLICATION_JSON)
     @Trace  (dispatcher=true)
     public List<ApiPlaceEventHistoryV1> findAllEventHistory(@QueryParam("id") Long placeId) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         QueryBuilder<PlaceEvent> builder = createUserSecurityBuilder(PlaceEvent.class);
         builder.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.COMPLETED));
         builder.addWhere(WhereClauseFactory.create("place.id", placeId));

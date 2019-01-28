@@ -3,7 +3,7 @@ package com.n4systems.fieldid.ws.v1.resources.eventattachment;
 import com.amazonaws.AmazonClientException;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
-import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithNewRelicLogging;
+import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithEnhancedLogging;
 import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Tenant;
@@ -29,7 +29,7 @@ import java.util.List;
 
 @Component
 @Path("eventAttachment")
-public class ApiEventAttachmentResource extends FieldIdPersistenceServiceWithNewRelicLogging {
+public class ApiEventAttachmentResource extends FieldIdPersistenceServiceWithEnhancedLogging {
     private static Logger logger = Logger.getLogger(ApiEventAttachmentResource.class);
 
     @Autowired
@@ -40,7 +40,7 @@ public class ApiEventAttachmentResource extends FieldIdPersistenceServiceWithNew
     @Trace  (dispatcher=true)
     @Transactional
     public void saveEventAttachment(ApiEventAttachment apiAttachment) throws IOException {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         QueryBuilder<Event> query = createTenantSecurityBuilder(Event.class, true);
         query.addWhere(WhereClauseFactory.create("mobileGUID", apiAttachment.getEventSid()));
         Event event = persistenceService.find(query);
@@ -84,7 +84,7 @@ public class ApiEventAttachmentResource extends FieldIdPersistenceServiceWithNew
     @Trace  (dispatcher=true)
     @Transactional
     public void multiAddEventAttachment(ApiMultiEventAttachment multiEventAttachment) throws IOException {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         ApiEventAttachment apiEventAttachment = multiEventAttachment.getEventAttachmentTemplate();
         for(String eventId : multiEventAttachment.getEventIds()) {
             apiEventAttachment.setEventSid(eventId);

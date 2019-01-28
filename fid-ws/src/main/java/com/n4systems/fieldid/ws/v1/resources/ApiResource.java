@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Component
-public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPersistenceServiceWithNewRelicLogging {
+public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPersistenceServiceWithEnhancedLogging {
 
     @Autowired
     private HttpServletRequest request;

@@ -38,7 +38,7 @@ public class ApiUserResource extends AbstractUserResource {
     @Transactional(readOnly = true)
     public Response findVisibleUserIds() {
 
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         List<User> users = userService.getUsers(true, false);
         List<Long> filteredUsers = new ArrayList<>();
 

@@ -81,7 +81,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
             @QueryParam("owner") Long ownerId,
             @DefaultValue("false") @QueryParam("downloadEvents") boolean downloadEvents,
             @DefaultValue("true") @QueryParam("downloadImageAttachments") boolean downloadImageAttachments) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
         builder.addOrder("created");
         
@@ -117,7 +117,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
             @DefaultValue("true") @QueryParam("downloadImageAttachments") boolean downloadImageAttachments,
             @DefaultValue("YEAR") @QueryParam("syncDuration") SyncDuration syncDuration) {
 
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
         builder.addWhere(WhereClauseFactory.create(Comparator.IN, "mobileGUID", assetIds));
         
@@ -137,7 +137,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
     public ApiAsset find(@PathParam("id") String id,
             @DefaultValue("false") @QueryParam("downloadEvents") boolean downloadEvents,
             @DefaultValue("true") @QueryParam("downloadImageAttachments") boolean downloadImageAttachments) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         Asset asset = assetService.findByMobileId(id);
         if (asset == null) {
             throw new NotFoundException("Asset", id);
@@ -152,7 +152,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
     @Trace  (dispatcher=true)
     @Transactional
     public void saveAsset(ApiAsset apiAsset) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         Asset asset;
         Asset existingAsset = assetService.findByMobileId(apiAsset.getSid());
         
@@ -174,7 +174,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
     @Trace  (dispatcher=true)
     @Transactional
     public void multiAddAsset(ApiMultiAddAsset multiAddAsset) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         ApiAsset assetTemplate = multiAddAsset.getAssetTemplate();
         for (ApiAssetIdentifiers identifiers: multiAddAsset.getIdentifiers()) {
             assetTemplate.setSid(identifiers.getSid());
@@ -195,7 +195,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
     @Trace  (dispatcher=true)
     @Transactional
     public void multiAddAsset(ApiAsset[] assets) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         //In order to allow Mobile to have an easier time performing offline actions, we're accepting multi-assets as
         //a simple array.  This allows the assets to be fully created offline, then uploaded at a later time when the
         //sync process happens.
@@ -211,7 +211,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
     @Transactional
     public Response deleteAssets(List<String> idList) {
         logger.warn("Getting ready to delete your list of Assets... I imagine it's pretty big");
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
 
         if(idList != null && !idList.isEmpty()) {
             List<Long> assetIds = idList.stream().map(Long::parseLong).collect(Collectors.toList());

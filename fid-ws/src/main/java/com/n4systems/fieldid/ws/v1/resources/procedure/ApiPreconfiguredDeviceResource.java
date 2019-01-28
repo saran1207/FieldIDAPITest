@@ -31,7 +31,7 @@ public class ApiPreconfiguredDeviceResource extends ApiResource<ApiPreconfigured
     @Produces(MediaType.APPLICATION_JSON)
     @Trace  (dispatcher=true)
     public Response getPreconfiguredDeviceList() {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         //This is a pretty simple wrapper, so we can do it in one line.
         return Response.status(Response.Status.OK)
                 .entity(convertAllEntitiesToApiModels(procedureDefinitionService.getAllPreConfiguredDevices()))

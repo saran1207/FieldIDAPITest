@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.ws.v1.resources.minimumversion;
 
-import com.n4systems.fieldid.ws.v1.resources.NewRelicLogging;
+import com.n4systems.fieldid.ws.v1.resources.EnhancedLogging;
 import com.n4systems.services.config.ConfigService;
 import com.newrelic.api.agent.Trace;
 import org.apache.log4j.Logger;
@@ -17,7 +17,7 @@ import java.util.Date;
 
 @Component
 @Path("/minimumVersion")
-public class ApiMinimumVersionResource extends NewRelicLogging {
+public class ApiMinimumVersionResource extends EnhancedLogging {
 
     protected static String ERROR_MESSAGE = "Your current application is not the latest version.  Please update the application and try again.";
     protected static String SUCCESS_MESSAGE = "Ok!";
@@ -32,7 +32,7 @@ public class ApiMinimumVersionResource extends NewRelicLogging {
     @Produces(MediaType.TEXT_PLAIN)
     @Trace  (dispatcher=true)
     public String minimumVersion(@QueryParam("tag") String tag) {
-        setNewRelicAppInfoParameters();
+        setEnhancedLoggingAppInfoParameters();
         String minimumVersion = configService.getConfig().getSystem().getMinimumAppVersion();
 
         String[] tagSplit = tag.split("\\.");

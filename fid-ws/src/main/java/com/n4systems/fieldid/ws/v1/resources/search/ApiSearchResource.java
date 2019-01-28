@@ -63,7 +63,7 @@ public class ApiSearchResource extends ApiResource<ApiSearchResult, Asset> {
             @QueryParam("orderByDirection") String orderByDirection) {
 
 
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         AssetSearchCriteria searchCriteria = new AssetSearchCriteria();
         
         searchCriteria.setRfidNumber(rfidNumber);

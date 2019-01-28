@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.ws.v1.resources.logging;
 
-import com.n4systems.fieldid.ws.v1.resources.NewRelicLogging;
+import com.n4systems.fieldid.ws.v1.resources.EnhancedLogging;
 import com.newrelic.api.agent.Trace;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ import javax.ws.rs.core.MediaType;
 
 @Path("/log")
 @Component
-public class ApiLoggingResource extends NewRelicLogging {
+public class ApiLoggingResource extends EnhancedLogging {
     private static Logger logger = Logger.getLogger(ApiLoggingResource.class);
     
     @POST
@@ -27,6 +27,6 @@ public class ApiLoggingResource extends NewRelicLogging {
             @FormParam("message") String message) {
         
         logger.info(String.format("[%s:%s]: %s", tenantName, userId, message));
-        setNewRelicWithAppInfoParameters(tenantName, userId);
+        setEnhancedLoggingWithAppInfoParameters(tenantName, userId);
     }
 }

@@ -2,7 +2,7 @@ package com.n4systems.fieldid.ws.v1.resources.authentication;
 
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.ws.v1.exceptions.ForbiddenException;
-import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithNewRelicLogging;
+import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithEnhancedLogging;
 import com.n4systems.fieldid.ws.v1.resources.user.ApiUser;
 import com.n4systems.fieldid.ws.v1.resources.user.ApiUserResource;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
@@ -22,7 +22,7 @@ import javax.ws.rs.core.MediaType;
 
 @Path("/authenticate")
 @Component
-public class AuthenticationResource extends FieldIdPersistenceServiceWithNewRelicLogging {
+public class AuthenticationResource extends FieldIdPersistenceServiceWithEnhancedLogging {
     private static Logger logger = Logger.getLogger(AuthenticationResource.class);
 
     @Autowired protected UserService userService;
@@ -48,11 +48,11 @@ public class AuthenticationResource extends FieldIdPersistenceServiceWithNewReli
 
         User user = userService.authenticateUserByPassword(tenantName, userId, password);
         if (user != null) {
-            setNewRelicWithAppInfoParameters(tenantName,user.getUserID());
+            setEnhancedLoggingWithAppInfoParameters(tenantName,user.getUserID());
         }
         else {
             NewRelic.addCustomParameter("Tenant", tenantName);
-            setNewRelicAppInfoParameters();
+            setEnhancedLoggingAppInfoParameters();
         }
         return authenticateUser(user);
     }
@@ -68,7 +68,7 @@ public class AuthenticationResource extends FieldIdPersistenceServiceWithNewReli
             @FormParam("passcode") String passcode) {
         
         logger.info("Passcode authentication for " + tenantName);
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
 
         if (tenantName == null || passcode == null) {
             throw new ForbiddenException();
@@ -76,11 +76,11 @@ public class AuthenticationResource extends FieldIdPersistenceServiceWithNewReli
         
         User user = userService.authenticateUserBySecurityCard(tenantName, passcode);
         if (user != null) {
-            setNewRelicWithAppInfoParameters(tenantName,user.getUserID());
+            setEnhancedLoggingWithAppInfoParameters(tenantName,user.getUserID());
         }
         else {
             NewRelic.addCustomParameter("Tenant", tenantName);
-            setNewRelicAppInfoParameters();
+            setEnhancedLoggingAppInfoParameters();
         }
         return authenticateUser(user);
     }

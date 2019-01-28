@@ -70,7 +70,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Thin
     @Trace  (dispatcher=true)
     @Transactional
     public void saveEventSchedule(ApiEventSchedule apiEventSchedule) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         ThingEvent event = eventScheduleService.findByMobileId(apiEventSchedule.getSid());
 
         if (event == null) {
@@ -98,7 +98,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Thin
     @Trace  (dispatcher=true)
     @Transactional
     public void saveMultipleEventSchedules(ApiMultiEventSchedule apiMultiEventSchedule) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         ApiEventSchedule eventScheduleTemplate = apiMultiEventSchedule.getEventScheduleTemplate();
         boolean copyOwner = eventScheduleTemplate.getOwnerId() == null; //If client had copyOwner, we will have ownerId = null.
         for (ApiAssetLink assetLink: apiMultiEventSchedule.getEventSchedules()) {
@@ -124,7 +124,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Thin
     @Transactional
     public void deleteEventSchedule(@PathParam("eventScheduleId") String eventScheduleId) {
         logger.info("Attempting to archive Scheduled Event with mobileId " + eventScheduleId);
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         Event event = eventScheduleService.findByMobileId(eventScheduleId, true);
         if(event != null) {
             if(event.isActive()) {
@@ -232,7 +232,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Thin
             @QueryParam("endDate") Date endDate,
             @DefaultValue("0") @QueryParam("page") int page,
             @DefaultValue("25") @QueryParam("pageSize") int pageSize) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         User user = getCurrentUser();
 
         QueryBuilder<ThingEvent> query = createUserSecurityBuilder(ThingEvent.class)
@@ -271,7 +271,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Thin
     public List<Long> findAssignedOpenEventCounts(
             @QueryParam("year") int year,
             @QueryParam("month") int month) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         List<Long> counts = new ArrayList<Long>();        
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, 1);

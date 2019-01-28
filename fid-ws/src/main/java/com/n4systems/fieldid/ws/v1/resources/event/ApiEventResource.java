@@ -5,7 +5,7 @@ import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.certificate.CertificateService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.ThingEventCreationService;
-import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithNewRelicLogging;
+import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithEnhancedLogging;
 import com.n4systems.fieldid.ws.v1.resources.eventattachment.ApiEventAttachmentResource;
 import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventSchedule;
 import com.n4systems.model.*;
@@ -35,7 +35,7 @@ import java.util.List;
 
 @Component
 @Path("event")
-public class ApiEventResource extends FieldIdPersistenceServiceWithNewRelicLogging {
+public class ApiEventResource extends FieldIdPersistenceServiceWithEnhancedLogging {
     private static Logger logger = Logger.getLogger(ApiEventResource.class);
     
     @Autowired private AssetService assetService;
@@ -51,7 +51,7 @@ public class ApiEventResource extends FieldIdPersistenceServiceWithNewRelicLoggi
     @Trace  (dispatcher=true)
     @Transactional
     public void saveEvent(ApiEvent apiEvent) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         if(apiEvent.getSid() == null) {
             throw new NullPointerException("ApiEvent has null sid");
         }
@@ -82,7 +82,7 @@ public class ApiEventResource extends FieldIdPersistenceServiceWithNewRelicLoggi
     @Trace  (dispatcher=true)
     @Transactional
     public void multiAddEvent(ApiMultiAddEvent multiAddEvent) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         ApiEvent apiEvent = multiAddEvent.getEventTemplate();
         for(ApiMultiAddEventItem eventItem : multiAddEvent.getItems()) {
             apiEvent.setSid(eventItem.getEventId());
@@ -168,7 +168,7 @@ public class ApiEventResource extends FieldIdPersistenceServiceWithNewRelicLoggi
     @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public Response downloadReport(@QueryParam("eventSid") String eventSid, @QueryParam("reportType") String reportType) throws Exception {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         QueryBuilder<Event> query = createUserSecurityBuilder(Event.class);
         query.addWhere(WhereClauseFactory.create("mobileGUID", eventSid)); 
         Event event = persistenceService.find(query);        

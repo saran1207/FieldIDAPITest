@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.ws.v1.resources.smartsearch;
 
-import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithNewRelicLogging;
+import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithEnhancedLogging;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.Asset;
 import com.n4systems.util.persistence.*;
@@ -18,7 +18,7 @@ import java.util.List;
 
 @Component
 @Path("smartSearch")
-public class ApiSmartSearchResource extends FieldIdPersistenceServiceWithNewRelicLogging {
+public class ApiSmartSearchResource extends FieldIdPersistenceServiceWithEnhancedLogging {
     private static final int SearchOptions = WhereParameter.IGNORE_CASE|WhereParameter.TRIM|WhereParameter.WILDCARD_RIGHT;
     private static final int MaxResults = 8;
     
@@ -32,7 +32,7 @@ public class ApiSmartSearchResource extends FieldIdPersistenceServiceWithNewReli
          * To get full-text search like functionality, we run individual searches on the identifier, and customerReferenceNumber
          * sorting by the field length.  Then we merge the two lists.
          */
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         List<ApiSmartSearchSuggestion> identifierSuggestions = loadSuggestions("identifier", searchText);
         List<ApiSmartSearchSuggestion> refNumberSuggestions = loadSuggestions("customerRefNumber", searchText);
         List<ApiSmartSearchSuggestion> rfidNumberSuggestions = loadSuggestions("rfidNumber", searchText);

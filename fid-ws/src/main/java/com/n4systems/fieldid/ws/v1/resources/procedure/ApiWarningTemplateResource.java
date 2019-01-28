@@ -45,7 +45,7 @@ public class ApiWarningTemplateResource extends ApiResource<ApiWarningTemplate, 
     @Produces(MediaType.APPLICATION_JSON)
     @Trace  (dispatcher=true)
     public Response getWarningTemplateList() {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         //This is a pretty simple wrapper, so we can do it in one line.
         return Response.status(Response.Status.OK)
                        .entity(convertAllEntitiesToApiModels(warningTemplateService.getAllTemplatesForTenant()))
@@ -65,7 +65,7 @@ public class ApiWarningTemplateResource extends ApiResource<ApiWarningTemplate, 
     @Trace  (dispatcher=true)
     public Response updateWarningTemplate(@PathParam("id") String idParam,
                                           ApiWarningTemplate apiWarningTemplate) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         try {
             Long id = Long.parseLong(idParam);
 
@@ -103,7 +103,7 @@ public class ApiWarningTemplateResource extends ApiResource<ApiWarningTemplate, 
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createWarningTemplate(ApiWarningTemplate apiWarningTemplate) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         WarningTemplate warningTemplate = new WarningTemplate();
         warningTemplate.setName(apiWarningTemplate.getName());
         warningTemplate.setWarning(apiWarningTemplate.getWarning());
@@ -132,7 +132,7 @@ public class ApiWarningTemplateResource extends ApiResource<ApiWarningTemplate, 
     @Consumes(MediaType.APPLICATION_JSON)
     @Trace  (dispatcher=true)
     public Response deleteWarningTemplate(@PathParam("id") String idParam) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         try {
             Long id = Long.parseLong(idParam);
 

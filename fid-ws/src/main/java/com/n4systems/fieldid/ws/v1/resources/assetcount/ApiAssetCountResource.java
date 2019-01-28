@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.ws.v1.resources.assetcount;
 
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
-import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithNewRelicLogging;
+import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithEnhancedLogging;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.Asset;
 import com.n4systems.model.orgs.BaseOrg;
@@ -18,7 +18,7 @@ import java.util.List;
 
 @Component
 @Path("assetCount")
-public class ApiAssetCountResource extends FieldIdPersistenceServiceWithNewRelicLogging {
+public class ApiAssetCountResource extends FieldIdPersistenceServiceWithEnhancedLogging {
 
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
@@ -26,7 +26,7 @@ public class ApiAssetCountResource extends FieldIdPersistenceServiceWithNewRelic
     @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public ListResponse<ApiAssetCount> getAssetCounts(@QueryParam("orgId") List<Long> orgIds) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         List<ApiAssetCount> assetCounts = new ArrayList<ApiAssetCount>();
 
         BaseOrg currentUserOwner = getCurrentUser().getOwner();

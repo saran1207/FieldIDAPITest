@@ -55,7 +55,7 @@ public abstract class SetupDataResource<A, E extends AbstractEntity> extends Api
             @DefaultValue("0") @QueryParam("page") int page,
             @DefaultValue("500") @QueryParam("pageSize") int pageSize) {
 
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         ListResponse<A> response = getApiPage(after, page, pageSize);
         return response;
     }
@@ -76,7 +76,7 @@ public abstract class SetupDataResource<A, E extends AbstractEntity> extends Api
     @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public A find(@PathParam("id") String id) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         QueryBuilder<E> builder = createFindSingleBuilder(id);
         E entityModel = persistenceService.find(builder);
         if (entityModel == null) {

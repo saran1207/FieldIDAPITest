@@ -48,7 +48,7 @@ public class ApiAutoAttributeDefinitionResource extends SetupDataResource<ApiAut
     @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public List<Long> findAllIds(@QueryParam("criteriaId") Long criteriaId ) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         QueryBuilder<AutoAttributeDefinition> builder = createTenantSecurityBuilder(AutoAttributeDefinition.class, true);
         builder.addWhere(WhereClauseFactory.create("criteria.id", criteriaId));
         List<AutoAttributeDefinition> definitions = persistenceService.findAll(builder);

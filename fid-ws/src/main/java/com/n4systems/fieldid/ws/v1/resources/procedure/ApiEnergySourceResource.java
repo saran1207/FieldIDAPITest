@@ -34,7 +34,7 @@ public class ApiEnergySourceResource extends ApiResource<ApiEnergySource, Precon
     @Produces(MediaType.APPLICATION_JSON)
     @Trace  (dispatcher=true)
     public Response getPreconfiguredEnergySource() {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         //This is a pretty simple wrapper, so we can do it in one line.
         return Response.status(Response.Status.OK)
                 .entity(convertAllEntitiesToApiModels(procedureDefinitionService.getAllPreconfiguredEnergySource()))
@@ -52,7 +52,7 @@ public class ApiEnergySourceResource extends ApiResource<ApiEnergySource, Precon
     @Trace  (dispatcher=true)
     public Response getDefaultIsolationPoints() {
 
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         ArrayList<ApiIsolationPointSourceType> defaults = getDefaultValues();
         return Response.status(Response.Status.OK)
                 .entity(defaults)

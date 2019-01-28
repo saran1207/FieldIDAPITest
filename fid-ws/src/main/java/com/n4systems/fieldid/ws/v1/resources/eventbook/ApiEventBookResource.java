@@ -70,7 +70,7 @@ public class ApiEventBookResource extends SetupDataResource<ApiEventBook, EventB
 		EventBook eventBook = convertApiEventBook(apiEventBook);		
 		persistenceService.save(eventBook);
 		logger.info("saved event book: " + apiEventBook.getName());
-		setNewRelicWithAppInfoParameters();
+		setEnhancedLoggingWithAppInfoParameters();
 	}
 	
 	private EventBook convertApiEventBook(ApiEventBook apiEventBook) {

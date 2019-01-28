@@ -32,13 +32,13 @@ public class ApiOfflineProfileResource extends ApiResource<ApiOfflineProfile, Of
     @Trace  (dispatcher=true)
     @Transactional
     public void addAsset(@PathParam("assetId") String assetId) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         OfflineProfile profile = offlineProfileService.findOrCreate(getCurrentUser());
         
         // do a check to ensure the asset exists before adding it
         Asset asset = assetService.findByMobileId(assetId);
         if (asset == null) {
-            setNewRelicWithAppInfoParameters();
+            setEnhancedLoggingWithAppInfoParameters();
             throw new NotFoundException("Asset", assetId);
         }
         
@@ -52,10 +52,10 @@ public class ApiOfflineProfileResource extends ApiResource<ApiOfflineProfile, Of
     @Trace  (dispatcher=true)
     @Transactional
     public void removeAsset(@PathParam("assetId") String assetId) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         OfflineProfile profile = offlineProfileService.find(getCurrentUser());
         if (profile == null) {
-            setNewRelicWithAppInfoParameters();
+            setEnhancedLoggingWithAppInfoParameters();
             return;
         }
         
@@ -70,13 +70,13 @@ public class ApiOfflineProfileResource extends ApiResource<ApiOfflineProfile, Of
     @Trace  (dispatcher=true)
     @Transactional
     public void addOrganization(@PathParam("orgId") Long orgId) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         OfflineProfile profile = offlineProfileService.findOrCreate(getCurrentUser());
         
         // check to see that the org exsists before adding it
         BaseOrg org = persistenceService.find(BaseOrg.class, orgId);
         if (org == null) {
-            setNewRelicWithAppInfoParameters();
+            setEnhancedLoggingWithAppInfoParameters();
             throw new NotFoundException("Organization", orgId);
         }
 
@@ -120,7 +120,7 @@ public class ApiOfflineProfileResource extends ApiResource<ApiOfflineProfile, Of
     @Trace  (dispatcher=true)
     @Transactional
     public void removeOrganization(@PathParam("orgId") Long orgId) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         OfflineProfile profile = offlineProfileService.find(getCurrentUser());
         if (profile == null) {
             return;
@@ -166,7 +166,7 @@ public class ApiOfflineProfileResource extends ApiResource<ApiOfflineProfile, Of
     @Trace  (dispatcher=true)
     @Transactional
     public void updateSyncDuration(@PathParam("newDuration") SyncDuration newDuration) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         OfflineProfile profile = offlineProfileService.findOrCreate(getCurrentUser());
         profile.setSyncDuration(newDuration);
         offlineProfileService.update(profile);

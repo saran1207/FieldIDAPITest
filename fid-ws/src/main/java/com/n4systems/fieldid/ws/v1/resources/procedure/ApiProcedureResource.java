@@ -4,7 +4,7 @@ import com.n4systems.fieldid.service.procedure.LockoutReasonService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
-import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithNewRelicLogging;
+import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithEnhancedLogging;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.GpsLocation;
 import com.n4systems.model.ProcedureWorkflowState;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 @Component
 @Path("procedure")
-public class ApiProcedureResource extends FieldIdPersistenceServiceWithNewRelicLogging {
+public class ApiProcedureResource extends FieldIdPersistenceServiceWithEnhancedLogging {
 
     private static final Logger logger = Logger.getLogger(ApiProcedureResource.class);
 
@@ -42,7 +42,7 @@ public class ApiProcedureResource extends FieldIdPersistenceServiceWithNewRelicL
     @Path("lock")
     @Trace  (dispatcher=true)
     public void lock(ApiProcedureResult apiProcedure) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         if (apiProcedure.getProcedureId() == null) {
             throw new NullPointerException("ApiProcedureResult has null procedureId");
         }
@@ -103,7 +103,7 @@ public class ApiProcedureResource extends FieldIdPersistenceServiceWithNewRelicL
     @Path("unlock")
     @Trace  (dispatcher=true)
     public void unlock(ApiProcedureResult apiProcedure) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         if (apiProcedure.getProcedureId() == null) {
             throw new NullPointerException("ApiProcedureResult has null procedureId");
         }
@@ -135,7 +135,7 @@ public class ApiProcedureResource extends FieldIdPersistenceServiceWithNewRelicL
             @QueryParam("endDate") Date endDate,
             @DefaultValue("0") @QueryParam("page") int page,
             @DefaultValue("25") @QueryParam("pageSize") int pageSize) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         List<Procedure> procedures = procedureService.findAllOpenAssignedProcedures(startDate, endDate, page, pageSize);
         Long total = procedureService.getTotalProcedureCount(startDate, endDate);
         List<ApiProcedure> apiSchedules = convertProcedures(procedures);
@@ -236,7 +236,7 @@ public class ApiProcedureResource extends FieldIdPersistenceServiceWithNewRelicL
     public List<Long> findAssignedActiveProcedureCounts(
             @QueryParam("year") int year,
             @QueryParam("month") int month) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         return procedureService.findAssignedActiveProcedureCounts(year, month);
     }
 

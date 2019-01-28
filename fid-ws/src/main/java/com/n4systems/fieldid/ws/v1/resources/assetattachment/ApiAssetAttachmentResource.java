@@ -36,7 +36,7 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
     @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public Response downloadAttachment(@PathParam("attachmentId") String attachmentId) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         AssetAttachment attachment = findAttachment(attachmentId);
         if (attachment == null) {
             throw new NotFoundException("Asset Attachment", attachmentId);
@@ -80,7 +80,7 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
     @Trace  (dispatcher=true)
     @Transactional
     public void saveAssetAttachment(ApiAssetAttachment apiAttachment) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         AssetAttachment attachment = convertApiModelToEntity(apiAttachment);
         AssetAttachmentSaver saver = new AssetAttachmentSaver(getCurrentUser(), attachment.getAsset());
         saver.saveOrUpdate(getEntityManager(), attachment);
@@ -92,7 +92,7 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
     @Trace  (dispatcher=true)
     @Transactional
     public void deleteAssetAttachment(@PathParam("attachmentId") String attachmentId) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         QueryBuilder<AssetAttachment> query = createTenantSecurityBuilder(AssetAttachment.class, true);
         query.addWhere(WhereClauseFactory.create("mobileId", attachmentId));
         AssetAttachment attachment = persistenceService.find(query);
@@ -111,7 +111,7 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
     @Trace  (dispatcher=true)
     @Transactional
     public void multiAddAsset(ApiMultiAssetAttachment multiAssetAttachment) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         ApiAssetAttachment assetAttachmentTemplate = multiAssetAttachment.getAssetAttachmentTemplate();
         for (ApiAssetLink assetLink: multiAssetAttachment.getAttachments()) {
             assetAttachmentTemplate.setSid(assetLink.getSid());

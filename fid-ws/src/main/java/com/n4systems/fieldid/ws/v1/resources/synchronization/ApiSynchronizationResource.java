@@ -3,7 +3,7 @@ package com.n4systems.fieldid.ws.v1.resources.synchronization;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
-import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithNewRelicLogging;
+import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithEnhancedLogging;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.Asset;
 import com.n4systems.model.SubAsset;
@@ -32,7 +32,7 @@ import java.util.*;
 
 @Path("/synchronize")
 @Component
-public class ApiSynchronizationResource extends FieldIdPersistenceServiceWithNewRelicLogging {
+public class ApiSynchronizationResource extends FieldIdPersistenceServiceWithEnhancedLogging {
     private static Logger logger = Logger.getLogger(ApiSynchronizationResource.class);
 
     @Autowired private OfflineProfileService offlineProfileService;
@@ -44,7 +44,7 @@ public class ApiSynchronizationResource extends FieldIdPersistenceServiceWithNew
     @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public ListResponse<ApiSynchronizationAsset> synchronize() {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         OfflineProfile profile = offlineProfileService.find(getCurrentUser());
 
         Set<ApiSynchronizationAsset> assets = new HashSet<>();
@@ -68,7 +68,7 @@ public class ApiSynchronizationResource extends FieldIdPersistenceServiceWithNew
     @Trace  (dispatcher=true)
     @Transactional
     public void storePlatform() {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         OfflineProfile profile = offlineProfileService.findOrCreate(getCurrentUser());
 
         profile.setCurrentPlatform(ThreadLocalInteractionContext.getInstance().getCurrentPlatform());

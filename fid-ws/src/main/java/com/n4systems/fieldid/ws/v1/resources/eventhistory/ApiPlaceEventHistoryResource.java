@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.ws.v1.resources.eventhistory;
 
-import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithNewRelicLogging;
+import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithEnhancedLogging;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiPlaceEventTypeResource;
 import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedPlaceEventResource;
 import com.newrelic.api.agent.Trace;
@@ -20,7 +20,7 @@ import javax.ws.rs.core.MediaType;
  */
 @Component
 @Path("placeEventHistory")
-public class ApiPlaceEventHistoryResource extends FieldIdPersistenceServiceWithNewRelicLogging {
+public class ApiPlaceEventHistoryResource extends FieldIdPersistenceServiceWithEnhancedLogging {
 
     @Autowired
     private ApiPlaceEventInfoResource placeEventResource;
@@ -36,7 +36,7 @@ public class ApiPlaceEventHistoryResource extends FieldIdPersistenceServiceWithN
     @Trace  (dispatcher=true)
     public ApiPlaceEventHistory findAllEventHistory(@QueryParam("id") Long placeId) {
 
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingWithAppInfoParameters();
         ApiPlaceEventHistory apiEventHistory = new ApiPlaceEventHistory();
 
         apiEventHistory.setEventHistory(placeEventResource.getPlaceEvents(placeId));
