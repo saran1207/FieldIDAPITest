@@ -36,9 +36,9 @@ public class ApiEventBookResource extends SetupDataResourceReadWrite<ApiEventBoo
     @Trace  (dispatcher=true)
     @Transactional
     public void saveEventBook(ApiEventBook apiEventBook) {
+        setEnhancedLoggingCustomParameters();
         EventBook eventBook = convertApiEventBook(apiEventBook);
         persistenceService.save(eventBook);
-        setNewRelicWithAppInfoParameters();
     }
 
     private EventBook convertApiEventBook(ApiEventBook apiEventBook) {

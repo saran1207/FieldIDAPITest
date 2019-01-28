@@ -41,8 +41,8 @@ public abstract class SetupDataResource<A extends ApiModel, E extends AbstractEn
     @Trace (dispatcher=true)
     @Transactional(readOnly = true)
     public List<ApiModelHeader> query(@QueryParam("id") List<K> ids) {
+        setEnhancedLoggingCustomParameters();
         if (ids.isEmpty()) return new ArrayList<>();
-        setNewRelicWithAppInfoParameters();
 
         QueryBuilder<ApiModelHeader> query = new QueryBuilder<>(entityClass, securityContext.getUserSecurityFilter(allowArchived));
         query.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, idField, "modified"));
@@ -58,9 +58,9 @@ public abstract class SetupDataResource<A extends ApiModel, E extends AbstractEn
     @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public List<ApiModelHeader> queryLatest(@QueryParam("since") DateParam since) {
+        setEnhancedLoggingCustomParameters();
         QueryBuilder<ApiModelHeader> query = new QueryBuilder<>(entityClass, securityContext.getUserSecurityFilter(allowArchived));
         query.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, idField, "modified"));
-        setNewRelicWithAppInfoParameters();
 
         if (since != null) {
             query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GT, "modified", since));
@@ -76,8 +76,8 @@ public abstract class SetupDataResource<A extends ApiModel, E extends AbstractEn
     @Trace (dispatcher=true)
     @Transactional(readOnly = true)
     public List<A> findAll(@QueryParam("id") List<K> ids) {
+        setEnhancedLoggingCustomParameters();
         if (ids.isEmpty()) return new ArrayList<>();
-        setNewRelicWithAppInfoParameters();
 
         QueryBuilder<E> query = createTenantSecurityBuilder(entityClass, allowArchived);
         query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, idField, unwrapKeys(ids)));

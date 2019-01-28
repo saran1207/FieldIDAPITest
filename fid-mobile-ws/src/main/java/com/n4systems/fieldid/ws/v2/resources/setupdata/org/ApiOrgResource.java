@@ -48,8 +48,8 @@ public class ApiOrgResource extends SetupDataResourceReadOnly<ApiOrg, BaseOrg> {
     @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public List<ApiModelHeader> queryLatestByType(@PathParam("type") String type, @QueryParam("since") DateParam since) {
+        setEnhancedLoggingCustomParameters();
         Class<?> targetClass;
-        setNewRelicWithAppInfoParameters();
 
         switch(type)
         {

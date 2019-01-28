@@ -38,8 +38,8 @@ public class ApiProcedureResource extends ApiResource<ApiProcedure, Procedure> {
     @Trace(dispatcher=true)
     @Transactional(readOnly = true)
     public List<ApiModelHeader> query(@QueryParam("id") List<ApiKeyString> procedureIds) {
+        setEnhancedLoggingCustomParameters();
         if (procedureIds.isEmpty()) return new ArrayList<>();
-        setNewRelicWithAppInfoParameters();
 
         QueryBuilder<ApiModelHeader> query = new QueryBuilder<>(Procedure.class, securityContext.getUserSecurityFilter());
         query.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, "mobileGUID", "modified"));
@@ -54,12 +54,12 @@ public class ApiProcedureResource extends ApiResource<ApiProcedure, Procedure> {
     @Trace (dispatcher=true)
     @Transactional(readOnly = true)
     public List<ApiModelHeader> findAssignedProcedures(@QueryParam("startDate") Date startDate, @QueryParam("endDate") Date endDate) {
+        setEnhancedLoggingCustomParameters();
         User user = getCurrentUser();
         QueryBuilder<ApiModelHeader> query = new QueryBuilder<>(Procedure.class, securityContext.getUserSecurityFilter());
         query.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, "mobileGUID", "modified"));
         query.addOrder("dueDate");
         query.addWhere(WhereParameter.Comparator.IN, "workflowState", "workflowState", Arrays.asList(ProcedureWorkflowState.ACTIVE_STATES));
-        setNewRelicWithAppInfoParameters();
 
         if (startDate != null) {
             query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GE, "startDate", "dueDate", startDate));
@@ -89,8 +89,8 @@ public class ApiProcedureResource extends ApiResource<ApiProcedure, Procedure> {
     @Trace (dispatcher=true)
     @Transactional(readOnly = true)
     public List<ApiProcedure> findAll(@QueryParam("id") List<ApiKeyString> procedureIds) {
+        setEnhancedLoggingCustomParameters();
         if (procedureIds.isEmpty()) return new ArrayList<>();
-        setNewRelicWithAppInfoParameters();
 
         List<ApiProcedure> results = convertAllEntitiesToApiModels(procedureService.findByMobileId(unwrapKeys(procedureIds)));
         return results;
@@ -106,7 +106,7 @@ public class ApiProcedureResource extends ApiResource<ApiProcedure, Procedure> {
             @QueryParam("year") int year,
             @QueryParam("month") int month) {
 
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingCustomParameters();
         List<Long> counts = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, 1);
@@ -145,10 +145,10 @@ public class ApiProcedureResource extends ApiResource<ApiProcedure, Procedure> {
     @Trace (dispatcher=true)
     @Transactional
     public void lock(ApiProcedureResult apiProcedure) {
+        setEnhancedLoggingCustomParameters();
         if (apiProcedure.getProcedureId() == null) {
             throw new BadRequestException("procedureId must not be null");
         }
-        setNewRelicWithAppInfoParameters();
 
         Procedure procedure = procedureService.findByMobileId(apiProcedure.getProcedureId(), true);
 
@@ -201,10 +201,10 @@ public class ApiProcedureResource extends ApiResource<ApiProcedure, Procedure> {
     @Trace (dispatcher=true)
     @Transactional
     public void unlock(ApiProcedureResult apiProcedure) {
+        setEnhancedLoggingCustomParameters();
         if (apiProcedure.getProcedureId() == null) {
             throw new BadRequestException("procedureId must not be null");
         }
-        setNewRelicWithAppInfoParameters();
 
         Procedure procedure = procedureService.findByMobileId(apiProcedure.getProcedureId(), true);
 

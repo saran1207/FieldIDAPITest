@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.ws.v2.resources;
 
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.ws.v2.filters.RequestContext;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.util.persistence.NewObjectSelect;
@@ -13,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPersistenceService {
+public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdpersistenceServiceWithEnhancedLogging {
 
     @Autowired
     private RequestContext requestContext;

@@ -4,7 +4,6 @@ import com.n4systems.model.Tenant;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.user.User;
 import com.newrelic.api.agent.NewRelic;
-import org.apache.http.HttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
@@ -51,21 +50,13 @@ public class FieldIdPersistenceService extends FieldIdService {
         persistenceService.flush();
     }
 
-    public void setNewRelicCustomParameters() {
-        NewRelic.addCustomParameter("Tenant", getCurrentTenant().getName());
-        NewRelic.addCustomParameter("User", getCurrentUser().getUserID());
+    public void setEnhancedLoggingCustomParameters() {
+        setEnhancedLoggingCustomParameters(getCurrentTenant().getName(), getCurrentUser().getUserID());
+    }
+    public void setEnhancedLoggingCustomParameters(String  currentTenant, String currentUser) {
+        NewRelic.addCustomParameter("Tenant", currentTenant);
+        NewRelic.addCustomParameter("User", currentUser);
     }
 
-    public void setNewRelicWithAppInfoParameters() {
-        setNewRelicCustomParameters();
-        NewRelic.addCustomParameter("Device", getHttpRequest().getFirstHeader("X-APPINFO-DEVICE").toString());
-        NewRelic.addCustomParameter("Device Type", getHttpRequest().getFirstHeader("X-APPINFO-DEVICETYPE").toString());
-        NewRelic.addCustomParameter("Platform", getHttpRequest().getFirstHeader("X-APPINFO-PLATFORM").toString());
-        NewRelic.addCustomParameter("OS Version", getHttpRequest().getFirstHeader("X-APPINFO-OSVERSION").toString());
-        NewRelic.addCustomParameter("AppInfo", getHttpRequest().getFirstHeader("X-APPINFO-APPVERSION").toString());
-    }
 
-    protected HttpRequest getHttpRequest() {
-        return applicationContext.getBean(HttpRequest.class);
-    }
 }

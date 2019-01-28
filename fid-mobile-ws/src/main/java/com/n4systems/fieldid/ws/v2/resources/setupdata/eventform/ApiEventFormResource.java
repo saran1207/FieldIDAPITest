@@ -41,9 +41,9 @@ public class ApiEventFormResource extends SetupDataResourceReadOnly<ApiEventForm
     @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public List<ApiModelHeader> queryEvent(@QueryParam("eventId") List<ApiKeyString> eventIds) {
+        setEnhancedLoggingCustomParameters();
         QueryBuilder<ApiModelHeader> query = new QueryBuilder<>(EventForm.class, securityContext.getUserSecurityFilter(true));
         query.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, "id", "modified").setDistinct(true));
-        setNewRelicWithAppInfoParameters();
 
         // Pulls only the EventForms for to the list of events
         query.addWhere(

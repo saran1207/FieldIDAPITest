@@ -1,12 +1,13 @@
 package com.n4systems.fieldid.ws.v2.resources.authentication;
 
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.admin.AdminUserService;
 import com.n4systems.fieldid.service.user.UserService;
+import com.n4systems.fieldid.ws.v2.resources.FieldIdpersistenceServiceWithEnhancedLogging;
 import com.n4systems.fieldid.ws.v2.resources.setupdata.user.ApiUserResource;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.model.user.User;
+import com.newrelic.api.agent.NewRelic;
 import com.newrelic.api.agent.Trace;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ import javax.ws.rs.core.MediaType;
 
 @Path("/authenticate")
 @Component
-public class AuthenticationResource extends FieldIdPersistenceService {
+public class AuthenticationResource extends FieldIdpersistenceServiceWithEnhancedLogging {
     private static Logger logger = Logger.getLogger(AuthenticationResource.class);
 
     @Autowired protected UserService userService;
@@ -37,7 +38,6 @@ public class AuthenticationResource extends FieldIdPersistenceService {
             @FormParam("password") String password) {
         
         logger.info("Standard authentication for " + tenantName + " for " + userId);
-        setNewRelicWithAppInfoParameters();
 
         if (tenantName == null || userId == null || password == null) {
             throw new ForbiddenException();
@@ -46,6 +46,13 @@ public class AuthenticationResource extends FieldIdPersistenceService {
         User user = userService.authenticateUserByPassword(tenantName, userId, password);
         if (user == null) {
             user = adminUserService.attemptSudoAuthentication(tenantName, userId, password);
+        }
+        if (user != null) {
+            setEnhancedLoggingWithAppInfoParameters(tenantName, user.getUserID());
+        }
+        else {
+            NewRelic.addCustomParameter("Tenant", tenantName);
+            setEnhancedLoggingAppInfoParameters();
         }
         return authenticateUser(user);
     }
@@ -61,13 +68,19 @@ public class AuthenticationResource extends FieldIdPersistenceService {
             @FormParam("passcode") String passcode) {
         
         logger.info("Passcode authentication for " + tenantName);
-        setNewRelicWithAppInfoParameters();
 
         if (tenantName == null || passcode == null) {
             throw new ForbiddenException();
         }
         
         User user = userService.authenticateUserBySecurityCard(tenantName, passcode);
+        if (user != null) {
+            setEnhancedLoggingWithAppInfoParameters(tenantName, user.getUserID());
+        }
+        else {
+            NewRelic.addCustomParameter("Tenant", tenantName);
+            setEnhancedLoggingAppInfoParameters();
+        }
         return authenticateUser(user);
     }
     

@@ -31,8 +31,8 @@ public class ApiIsolationPointSourceTypeResource extends FieldIdPersistenceServi
     @Trace(dispatcher=true)
     @Transactional(readOnly = true)
     public List<ApiModelHeader> query(@QueryParam("id") List<ApiKeyLong> ids) {
+        setEnhancedLoggingCustomParameters();
         if (ids.isEmpty()) return new ArrayList<>();
-        setNewRelicWithAppInfoParameters();
 
         return ApiKey.unwrap(ids)
                 .stream()
@@ -47,7 +47,7 @@ public class ApiIsolationPointSourceTypeResource extends FieldIdPersistenceServi
     @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public List<ApiModelHeader> queryLatest(@QueryParam("since") DateParam since) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingCustomParameters();
         return IsolationPointSourceType.modifiedAfter(since)
                 .stream()
                 .map(st -> new ApiModelHeader<>(st.getId(), st.getModified()))
@@ -59,8 +59,8 @@ public class ApiIsolationPointSourceTypeResource extends FieldIdPersistenceServi
     @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public List<ApiIsolationPointSourceType> findAll(@QueryParam("id") List<ApiKeyLong> ids) {
+        setEnhancedLoggingCustomParameters();
         if (ids.isEmpty()) return new ArrayList<>();
-        setNewRelicWithAppInfoParameters();
 
         return ApiKey.unwrap(ids)
                 .stream()

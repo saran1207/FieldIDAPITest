@@ -30,9 +30,9 @@ public class ApiCriteriaImagesResource extends FieldIdPersistenceService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public void saveCriteriaImage(ApiCriteriaImage apiCriteriaImage) {
+        setEnhancedLoggingCustomParameters();
         QueryBuilder<CriteriaResult> builder = createTenantSecurityBuilder(CriteriaResult.class, true);
         builder.addWhere(WhereClauseFactory.create("mobileId", apiCriteriaImage.getCriteriaResultSid()));
-        setNewRelicWithAppInfoParameters();
 
         String imageMd5sum = DigestUtils.md5Hex(apiCriteriaImage.getImage());
 
@@ -64,12 +64,12 @@ public class ApiCriteriaImagesResource extends FieldIdPersistenceService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public void saveMultiAddEventCriteriaImage(ApiMultiEventCriteriaImage multiEventCriteriaImage) {
+        setEnhancedLoggingCustomParameters();
         ApiCriteriaImage apiCriteriaImage = multiEventCriteriaImage.getCriteriaImageTemplate();
         for(String criteriaResultId : multiEventCriteriaImage.getCriteriaResultIds()) {
             apiCriteriaImage.setCriteriaResultSid(criteriaResultId);
             saveCriteriaImage(apiCriteriaImage);
         }
         logger.info("Saved Multi Event Attachment for Events: " + multiEventCriteriaImage.getCriteriaResultIds().size());
-        setNewRelicWithAppInfoParameters();
     }
 }

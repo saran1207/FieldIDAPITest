@@ -54,8 +54,8 @@ public class ApiProcedureDefinitionResource extends ApiResource<ApiProcedureDefi
     @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public List<ApiModelHeader> query(@QueryParam("id") List<ApiKeyString> ids) {
+        setEnhancedLoggingCustomParameters();
         if (ids.isEmpty()) return new ArrayList<>();
-        setNewRelicWithAppInfoParameters();
 
         QueryBuilder<ApiModelHeader> query = new QueryBuilder<>(ProcedureDefinition.class, securityContext.getUserSecurityFilter(true));
         query.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, "mobileId", "modified"));
@@ -70,8 +70,8 @@ public class ApiProcedureDefinitionResource extends ApiResource<ApiProcedureDefi
     @Trace (dispatcher=true)
     @Transactional(readOnly = true)
     public List<ApiModelHeader> queryAsset(@QueryParam("id") List<ApiKeyString> assetIds) {
+        setEnhancedLoggingCustomParameters();
         if (assetIds.isEmpty()) return new ArrayList<>();
-        setNewRelicWithAppInfoParameters();
 
         QueryBuilder<ApiModelHeader> query = new QueryBuilder<>(ProcedureDefinition.class, securityContext.getUserSecurityFilter(true));
         query.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, "mobileId", "modified"));
@@ -85,8 +85,8 @@ public class ApiProcedureDefinitionResource extends ApiResource<ApiProcedureDefi
     @Trace (dispatcher=true)
     @Transactional(readOnly = true)
     public List<ApiProcedureDefinition> findAll(@QueryParam("id") List<ApiKeyString> ids) {
+        setEnhancedLoggingCustomParameters();
         if (ids.isEmpty()) return new ArrayList<>();
-        setNewRelicWithAppInfoParameters();
 
         QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
         query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "mobileId", unwrapKeys(ids)));
@@ -101,8 +101,8 @@ public class ApiProcedureDefinitionResource extends ApiResource<ApiProcedureDefi
     @Trace (dispatcher=true)
     @Transactional
     public Response writeOrUpdateProcedureDefinition(ApiProcedureDefinition apiProcDef) {
+        setEnhancedLoggingCustomParameters();
         boolean isNew = false;
-        setNewRelicWithAppInfoParameters();
 
         try {
             //First thing we should do is see if this new Procedure Definition exists.  If it exists, then we're golden.
@@ -162,7 +162,7 @@ public class ApiProcedureDefinitionResource extends ApiResource<ApiProcedureDefi
     @Trace (dispatcher=true)
     @Transactional
     public Response deleteDraftProcedureDefinition(@QueryParam("procDefSid") String procDefSid) {
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingCustomParameters();
 
         ProcedureDefinition deleteMe = procedureDefinitionService.findProcedureDefinitionByMobileId(procDefSid);
 

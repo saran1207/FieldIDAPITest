@@ -34,8 +34,8 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
     @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public List<ApiModelHeader> query(@QueryParam("id") List<ApiKeyString> attachmentIds) {
+        setEnhancedLoggingCustomParameters();
         if (attachmentIds.isEmpty()) return new ArrayList<>();
-        setNewRelicWithAppInfoParameters();
 
         List<ApiModelHeader> headers = persistenceService.findAll(
                 createModelHeaderQueryBuilder(AssetAttachment.class, "mobileId", "modified")
@@ -50,8 +50,8 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
     @Trace (dispatcher=true)
     @Transactional(readOnly = true)
     public List<ApiModelHeader> queryAsset(@QueryParam("assetId") List<ApiKeyString> assetIds) {
+        setEnhancedLoggingCustomParameters();
         if (assetIds.isEmpty()) return new ArrayList<>();
-        setNewRelicWithAppInfoParameters();
 
         List<ApiModelHeader> headers = persistenceService.findAll(
                 createModelHeaderQueryBuilder(AssetAttachment.class, "mobileId", "modified")
@@ -65,8 +65,8 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
     @Trace (dispatcher=true)
     @Transactional(readOnly = true)
     public List<ApiAssetAttachment> findAll(@QueryParam("id") List<ApiKeyString> attachmentIds) {
+        setEnhancedLoggingCustomParameters();
         if (attachmentIds.isEmpty()) return new ArrayList<>();
-        setNewRelicWithAppInfoParameters();
 
         QueryBuilder<AssetAttachment> queryBuilder = createUserSecurityBuilder(AssetAttachment.class);
         queryBuilder.addWhere(WhereClauseFactory.create(Comparator.IN, "mobileId", unwrapKeys(attachmentIds)));

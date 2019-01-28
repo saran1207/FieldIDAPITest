@@ -39,9 +39,9 @@ public class ApiEventAttachmentResource extends ApiResource<ApiEventAttachment, 
     @Trace (dispatcher=true)
     @Transactional(readOnly = true)
     public List<ApiModelHeader> query(@QueryParam("id") List<ApiKeyString> attachmentIds) {
+        setEnhancedLoggingCustomParameters();
         if (attachmentIds.isEmpty()) return new ArrayList<>();
         List<ApiModelHeader> headers = convertAllEntitiesToApiModels(findAttachmentsByMobileIds(unwrapKeys(attachmentIds)), a -> new ApiModelHeader(a.getMobileId(), a.getModified()));
-        setNewRelicWithAppInfoParameters();
         return headers;
     }
 
@@ -51,9 +51,9 @@ public class ApiEventAttachmentResource extends ApiResource<ApiEventAttachment, 
     @Trace (dispatcher=true)
     @Transactional(readOnly = true)
     public List<ApiModelHeader> queryEvent(@QueryParam("eventIds") List<ApiKeyString> eventIds) {
+        setEnhancedLoggingCustomParameters();
         if (eventIds.isEmpty()) return new ArrayList<>();
         List<ApiModelHeader> headers = convertAllEntitiesToApiModels(findAttachmentsByEvents(unwrapKeys(eventIds)), a -> new ApiModelHeader(a.getMobileId(), a.getModified()));
-        setNewRelicWithAppInfoParameters();
         return headers;
     }
 
@@ -62,8 +62,8 @@ public class ApiEventAttachmentResource extends ApiResource<ApiEventAttachment, 
     @Trace (dispatcher=true)
     @Transactional(readOnly = true)
     public List<ApiEventAttachment> findAll(@QueryParam("id") List<ApiKeyString> attachmentIds) {
+        setEnhancedLoggingCustomParameters();
         if (attachmentIds.isEmpty()) return new ArrayList<>();
-        setNewRelicWithAppInfoParameters();
 
         List<FileAttachment> attachments = findAttachmentsByMobileIds(unwrapKeys(attachmentIds));
         List<ApiEventAttachment> apiAttachments = convertAllEntitiesToApiModels(attachments, att -> {
