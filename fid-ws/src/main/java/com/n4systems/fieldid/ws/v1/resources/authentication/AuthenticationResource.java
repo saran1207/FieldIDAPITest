@@ -9,6 +9,7 @@ import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.services.SecurityContext;
+import com.newrelic.api.agent.NewRelic;
 import com.newrelic.api.agent.Trace;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +47,13 @@ public class AuthenticationResource extends FieldIdPersistenceServiceWithNewReli
         }
 
         User user = userService.authenticateUserByPassword(tenantName, userId, password);
-
-        setNewRelicWithAppInfoParameters(tenantName,user.getUserID());
+        if (user != null) {
+            setNewRelicWithAppInfoParameters(tenantName,user.getUserID());
+        }
+        else {
+            NewRelic.addCustomParameter("Tenant", tenantName);
+            setNewRelicAppInfoParameters();
+        }
         return authenticateUser(user);
     }
     
@@ -62,13 +68,20 @@ public class AuthenticationResource extends FieldIdPersistenceServiceWithNewReli
             @FormParam("passcode") String passcode) {
         
         logger.info("Passcode authentication for " + tenantName);
+        setNewRelicWithAppInfoParameters();
 
         if (tenantName == null || passcode == null) {
             throw new ForbiddenException();
         }
         
         User user = userService.authenticateUserBySecurityCard(tenantName, passcode);
-        setNewRelicWithAppInfoParameters(tenantName,user.getUserID());
+        if (user != null) {
+            setNewRelicWithAppInfoParameters(tenantName,user.getUserID());
+        }
+        else {
+            NewRelic.addCustomParameter("Tenant", tenantName);
+            setNewRelicAppInfoParameters();
+        }
         return authenticateUser(user);
     }
     

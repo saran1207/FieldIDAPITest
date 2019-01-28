@@ -19,6 +19,10 @@ public class FieldIdPersistenceServiceWithNewRelicLogging extends FieldIdPersist
 
     public void setNewRelicWithAppInfoParameters(String currentTenant, String currentUser) {
         setNewRelicCustomParameters(currentTenant, currentUser);
+        setNewRelicAppInfoParameters();
+    }
+
+    public void setNewRelicAppInfoParameters() {
         NewRelic.addCustomParameter("Device", request.getHeader("X-APPINFO-DEVICE"));
         NewRelic.addCustomParameter("Device Type", request.getHeader("X-APPINFO-DEVICETYPE"));
         NewRelic.addCustomParameter("Platform", request.getHeader("X-APPINFO-PLATFORM"));
