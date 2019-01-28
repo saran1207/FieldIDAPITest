@@ -45,8 +45,13 @@ public class FieldIdPersistenceService extends FieldIdService {
         persistenceService.flush();
     }
 
-    public void setNewRelicCustomParameters() {
-        NewRelic.addCustomParameter("Tenant", getCurrentTenant().getName());
-        NewRelic.addCustomParameter("User", getCurrentUser().getUserID());
+    public void setEnhancedLoggingCustomParameters() {
+        setEnhancedLoggingCustomParameters(getCurrentTenant().getName(), getCurrentUser().getUserID());
     }
+
+    public void setEnhancedLoggingCustomParameters(String currentTenant, String currentUser) {
+        NewRelic.addCustomParameter("Tenant", currentTenant);
+        NewRelic.addCustomParameter("User", currentUser);
+    }
+
 }

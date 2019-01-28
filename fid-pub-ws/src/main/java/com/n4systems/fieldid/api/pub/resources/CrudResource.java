@@ -71,6 +71,7 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
     @Trace (dispatcher=true)
     @Transactional(readOnly = true)
     public Messages.ListResponseMessage findAll(@QueryParam("page") int page, @QueryParam("pageSize") int pageSize, @QueryParam("delta") String date) {
+        setEnhancedLoggingCustomParameters();
         List<M> allItems;
         List<A> items;
         Date delta = null;
@@ -78,7 +79,6 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
         String apiCall = listResponseType.getDescriptor().getName();
         String logMessage = logInfo + apiCall + " FIND All";
         logger.info(logMessage);
-        setNewRelicCustomParameters();
 
         if(date != null) {
             delta = convertDate(date);
@@ -131,11 +131,11 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
     @Trace (dispatcher=true)
     @Transactional(readOnly = true)
     public A find(@PathParam("id") String id) {
+        setEnhancedLoggingCustomParameters();
         String logInfo = getLogInfo();
         String apiCall = listResponseType.getDescriptor().getName();
         String logMessage = logInfo + apiCall + " FIND with id " + id;
         logger.info(logMessage);
-        setNewRelicCustomParameters();
 
         return toMessage(testNotFound(crudService().findByPublicId(id)));
     }
@@ -146,11 +146,11 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
     @Trace (dispatcher=true)
     @Transactional
     public A save(A message) {
+        setEnhancedLoggingCustomParameters();
         String logInfo = getLogInfo();
         String apiCall = listResponseType.getDescriptor().getName();
         String logMessage = logInfo + apiCall + " CREATE with json: " + message.toString();
         logger.info(logMessage);
-        setNewRelicCustomParameters();
 
         return toMessage(crudService().save(toModel(message)));
     }
@@ -162,11 +162,11 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
     @Trace (dispatcher=true)
     @Transactional
     public A update(@PathParam("id") String id, A message) {
+        setEnhancedLoggingCustomParameters();
         String logInfo = getLogInfo();
         String apiCall = listResponseType.getDescriptor().getName();
         String logMessage = logInfo + apiCall + " UPDATE with id: " + id + " and json: " + message.toString();
         logger.info(logMessage);
-        setNewRelicCustomParameters();
 
         return toMessage(crudService().update(merge(message, testNotFound(crudService().findByPublicId(id)))));
     }
@@ -178,11 +178,11 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
     @Trace (dispatcher=true)
     @Transactional
     public A delete(@PathParam("id") String id) {
+        setEnhancedLoggingCustomParameters();
         String logInfo = getLogInfo();
         String apiCall = listResponseType.getDescriptor().getName();
         String logMessage = logInfo + apiCall + " DELETE for id: " + id;
         logger.info(logMessage);
-        setNewRelicCustomParameters();
 
         try {
             return toMessage(testNotFound(crudService().deleteByPublicId(id)));
@@ -199,13 +199,13 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
     @Trace (dispatcher=true)
     @Transactional
     public Messages.ListResponseMessage findByAssetId(@PathParam("assetId") String id, @QueryParam("page") int page, @QueryParam("pageSize") int pageSize, @QueryParam("openInspections") boolean openInspections) {
+        setEnhancedLoggingCustomParameters();
         List<M> allItems;
         List<A> items;
         String logInfo = getLogInfo();
         String apiCall = listResponseType.getDescriptor().getName();
         String logMessage = logInfo + apiCall + " FIND INSPECTIONS with id " + id;
         logger.info(logMessage);
-        setNewRelicCustomParameters();
 
         try {
             allItems = crudService().findByAssetId(id, page, pageSize, openInspections);
@@ -235,6 +235,7 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
     @Trace (dispatcher=true)
     @Transactional
     public Messages.ListResponseMessage findAllActionItem(@QueryParam("page") int page, @QueryParam("pageSize") int pageSize,  @QueryParam("delta") String date) {
+        setEnhancedLoggingCustomParameters();
         List<M> allItems;
         List<A> items;
         Date delta = null;
@@ -243,7 +244,6 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
         String apiCall = listResponseType.getDescriptor().getName();
         String logMessage = logInfo + apiCall + " FIND ALL ACTION ITEMS ";
         logger.info(logMessage);
-        setNewRelicCustomParameters();
 
         if(date != null) {
             delta = convertDate(date);
@@ -296,7 +296,7 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
     @Trace (dispatcher=true)
     @Transactional(readOnly = true)
     public A findActionItem(@PathParam("id") String id) {
-        setNewRelicCustomParameters();
+        setEnhancedLoggingCustomParameters();
         return this.find(id);
     }
 
@@ -307,7 +307,7 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
     @Trace (dispatcher=true)
     @Transactional
     public A saveActionItem(A message) {
-        setNewRelicCustomParameters();
+        setEnhancedLoggingCustomParameters();
         return this.save(message);
     }
 
@@ -318,7 +318,7 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
     @Trace (dispatcher=true)
     @Transactional
     public A updateActionItem(@PathParam("id") String id, A message) {
-        setNewRelicCustomParameters();
+        setEnhancedLoggingCustomParameters();
         return this.update(id, message);
     }
 
@@ -329,13 +329,13 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
     @Trace (dispatcher=true)
     @Transactional
     public Messages.ListResponseMessage findActionItemByAssetId(@PathParam("assetId") String id, @QueryParam("page") int page, @QueryParam("pageSize") int pageSize, @QueryParam("openActionItems") boolean openActionItems) {
+        setEnhancedLoggingCustomParameters();
         List<M> allItems;
         List<A> items;
         String logInfo = getLogInfo();
         String apiCall = listResponseType.getDescriptor().getName();
         String logMessage = logInfo + apiCall + " FIND ACTION ITEMS with id " + id;
         logger.info(logMessage);
-        setNewRelicCustomParameters();
 
         try {
             allItems = crudService().findActionItemByAssetId(id, page, pageSize, openActionItems);
