@@ -38,7 +38,6 @@ public class ApiOfflineProfileResource extends ApiResource<ApiOfflineProfile, Of
         // do a check to ensure the asset exists before adding it
         Asset asset = assetService.findByMobileId(assetId);
         if (asset == null) {
-            setEnhancedLoggingWithAppInfoParameters();
             throw new NotFoundException("Asset", assetId);
         }
         
@@ -55,7 +54,6 @@ public class ApiOfflineProfileResource extends ApiResource<ApiOfflineProfile, Of
         setEnhancedLoggingWithAppInfoParameters();
         OfflineProfile profile = offlineProfileService.find(getCurrentUser());
         if (profile == null) {
-            setEnhancedLoggingWithAppInfoParameters();
             return;
         }
         
@@ -76,7 +74,6 @@ public class ApiOfflineProfileResource extends ApiResource<ApiOfflineProfile, Of
         // check to see that the org exsists before adding it
         BaseOrg org = persistenceService.find(BaseOrg.class, orgId);
         if (org == null) {
-            setEnhancedLoggingWithAppInfoParameters();
             throw new NotFoundException("Organization", orgId);
         }
 
