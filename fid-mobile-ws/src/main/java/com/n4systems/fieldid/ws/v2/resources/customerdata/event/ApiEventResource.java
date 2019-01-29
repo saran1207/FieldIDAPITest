@@ -48,8 +48,8 @@ public class ApiEventResource extends ApiResource<ApiEvent, ThingEvent> {
     @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public List<ApiModelHeader> queryById(@QueryParam("id") List<ApiKeyString> eventIds) {
+        setEnhancedLoggingCustomParameters();
         if (eventIds.isEmpty()) return new ArrayList<>();
-        setNewRelicWithAppInfoParameters();
 
         List<ApiModelHeader> headers = persistenceService.findAll(
                 createModelHeaderQueryBuilder(ThingEvent.class, "mobileGUID", "modified")
@@ -64,8 +64,8 @@ public class ApiEventResource extends ApiResource<ApiEvent, ThingEvent> {
     @Trace (dispatcher=true)
     @Transactional(readOnly = true)
     public List<ApiModelHeader> queryCompleted(@QueryParam("assetId") List<ApiKeyString> assetIds) {
+        setEnhancedLoggingCustomParameters();
         if (assetIds.isEmpty()) return new ArrayList<>();
-        setNewRelicWithAppInfoParameters();
 
         List<ApiModelHeader> headers = eventService.getLastEventOfEachType(unwrapKeys(assetIds))
                 .stream()
@@ -80,8 +80,8 @@ public class ApiEventResource extends ApiResource<ApiEvent, ThingEvent> {
     @Trace (dispatcher=true)
     @Transactional(readOnly = true)
     public List<ApiSortedModelHeader> queryOpen(@QueryParam("assetId") List<ApiKeyString> assetIds, @DefaultValue("YEAR") @QueryParam("syncDuration") SyncDuration syncDuration) {
+        setEnhancedLoggingCustomParameters();
         if (assetIds.isEmpty()) return new ArrayList<>();
-        setNewRelicWithAppInfoParameters();
 
         QueryBuilder<ApiSortedModelHeader> query = createModelHeaderQueryBuilder(ThingEvent.class, "mobileGUID", "modified", "dueDate", true)
                 .addWhere(WhereClauseFactory.create("workflowState", WorkflowState.OPEN))
@@ -101,8 +101,8 @@ public class ApiEventResource extends ApiResource<ApiEvent, ThingEvent> {
     @Trace (dispatcher=true)
     @Transactional(readOnly = true)
     public List<ApiModelHeader> queryOpenCompleted(@QueryParam("assetId") List<ApiKeyString> assetIds, @DefaultValue("YEAR") @QueryParam("syncDuration") SyncDuration syncDuration) {
+        setEnhancedLoggingCustomParameters();
         if (assetIds.isEmpty()) return new ArrayList<>();
-        setNewRelicWithAppInfoParameters();
 
         List<ApiModelHeader> headers = new ArrayList<>();
         headers.addAll(queryOpen(assetIds, syncDuration));
@@ -116,10 +116,10 @@ public class ApiEventResource extends ApiResource<ApiEvent, ThingEvent> {
     @Trace (dispatcher=true)
     @Transactional(readOnly = true)
     public List<ApiSortedModelHeader> queryAssigned(@QueryParam("startDate") DateParam startDate, @QueryParam("endDate") DateParam endDate) {
+        setEnhancedLoggingCustomParameters();
         List<ApiSortedModelHeader> headers = persistenceService.findAll(
                 prepareAssignedEventsQuery(createModelHeaderQueryBuilder(ThingEvent.class, "mobileGUID", "modified", "dueDate", true), startDate, endDate, getCurrentUser())
         );
-        setNewRelicWithAppInfoParameters();
         return headers;
     }
 
@@ -133,7 +133,7 @@ public class ApiEventResource extends ApiResource<ApiEvent, ThingEvent> {
             @QueryParam("year") int year,
             @QueryParam("month") int month) {
 
-        setNewRelicWithAppInfoParameters();
+        setEnhancedLoggingCustomParameters();
         List<Long> counts = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, 1);
@@ -154,8 +154,8 @@ public class ApiEventResource extends ApiResource<ApiEvent, ThingEvent> {
     @Trace (dispatcher=true)
     @Transactional(readOnly = true)
     public List<ApiEvent> findAll(@QueryParam("id") List<ApiKeyString> eventIds) {
+        setEnhancedLoggingCustomParameters();
         if (eventIds.isEmpty()) return new ArrayList<>();
-        setNewRelicWithAppInfoParameters();
 
         QueryBuilder<ThingEvent> queryBuilder = createUserSecurityBuilder(ThingEvent.class);
         queryBuilder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "mobileGUID", unwrapKeys(eventIds)));
