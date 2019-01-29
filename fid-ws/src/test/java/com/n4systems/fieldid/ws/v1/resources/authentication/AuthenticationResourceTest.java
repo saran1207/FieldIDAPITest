@@ -9,16 +9,22 @@ import com.n4systems.model.user.User;
 import com.n4systems.services.SecurityContext;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.test.util.ReflectionTestUtils;
+
+import javax.servlet.http.HttpServletRequest;
 
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertSame;
 
+//@RunWith(SpringJUnit4ClassRunner.class)
 public class AuthenticationResourceTest {
 	
 	private AuthenticationResource fixture;
 	private UserService userService;
 	private ApiUserResource apiUserResource;
 	private SecurityContext securityContext;
+	private HttpServletRequest request;
 	
 	@Before
 	public void before() {
@@ -30,6 +36,7 @@ public class AuthenticationResourceTest {
 		fixture.userService = userService;
 		fixture.apiUserResource = apiUserResource;
 		fixture.securityContext = securityContext;
+		ReflectionTestUtils.setField(fixture, "request", new MockHttpServletRequest());
 
 	}
 	

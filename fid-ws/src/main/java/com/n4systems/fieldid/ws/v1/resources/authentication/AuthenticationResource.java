@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
@@ -28,7 +27,6 @@ public class AuthenticationResource extends FieldIdPersistenceServiceWithEnhance
     @Autowired protected UserService userService;
     @Autowired protected ApiUserResource apiUserResource;
     @Autowired protected SecurityContext securityContext;
-    @Autowired private HttpServletRequest request;
 
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
