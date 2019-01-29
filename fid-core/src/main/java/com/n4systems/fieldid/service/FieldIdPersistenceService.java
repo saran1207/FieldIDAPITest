@@ -5,6 +5,7 @@ import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.user.User;
 import com.newrelic.api.agent.NewRelic;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -13,6 +14,10 @@ public class FieldIdPersistenceService extends FieldIdService {
 
     @Autowired
     protected PersistenceService persistenceService;
+
+    @Autowired
+    private ApplicationContext applicationContext;
+
 
     @PersistenceContext EntityManager _entityManager;
 
