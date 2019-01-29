@@ -1,22 +1,12 @@
 package com.n4systems.fieldid.ws.v1.resources.eventhistory;
 
-import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
-import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiEventType;
-import com.n4systems.fieldid.ws.v1.resources.eventtype.ApiPlaceEventTypeResource;
 import com.n4systems.model.PlaceEvent;
 import com.n4systems.model.WorkflowState;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.orgs.OrgSaver;
-import com.n4systems.persistence.utils.PostFetcher;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.util.persistence.search.PostfetchingDefiner;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by rrana on 2018-02-19.
