@@ -3,6 +3,7 @@ package com.n4systems.fieldid.service;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.user.User;
+import com.newrelic.api.agent.NewRelic;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
@@ -10,22 +11,22 @@ import javax.persistence.PersistenceContext;
 
 public class FieldIdPersistenceService extends FieldIdService {
 
-	@Autowired
+    @Autowired
     protected PersistenceService persistenceService;
 
     @PersistenceContext EntityManager _entityManager;
 
-	public void setPersistenceService(PersistenceService persistenceService) {
-		this.persistenceService = persistenceService;
-	}
-	
-	protected Tenant getCurrentTenant() {
-		return persistenceService.findNonSecure(Tenant.class, securityContext.getTenantSecurityFilter().getTenantId());
-	}
-	
-	protected User getCurrentUser() {
-		return persistenceService.find(User.class, securityContext.getUserSecurityFilter().getUserId());
-	}
+    public void setPersistenceService(PersistenceService persistenceService) {
+        this.persistenceService = persistenceService;
+    }
+    
+    protected Tenant getCurrentTenant() {
+        return persistenceService.findNonSecure(Tenant.class, securityContext.getTenantSecurityFilter().getTenantId());
+    }
+    
+    protected User getCurrentUser() {
+        return persistenceService.find(User.class, securityContext.getUserSecurityFilter().getUserId());
+    }
     
     protected <T extends AbstractEntity> Long getId(T entity) {
         if (entity == null) {
@@ -43,4 +44,14 @@ public class FieldIdPersistenceService extends FieldIdService {
     public void flush() {
         persistenceService.flush();
     }
+
+    public void setEnhancedLoggingCustomParameters() {
+        setEnhancedLoggingCustomParameters(getCurrentTenant().getName(), getCurrentUser().getUserID());
+    }
+
+    public void setEnhancedLoggingCustomParameters(String currentTenant, String currentUser) {
+        NewRelic.addCustomParameter("Tenant", currentTenant);
+        NewRelic.addCustomParameter("User", currentUser);
+    }
+
 }
