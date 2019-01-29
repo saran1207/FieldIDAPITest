@@ -355,5 +355,12 @@
             <version>7.0.32</version>
             <scope>provided</scope>
         </dependency>
+
+		<dependency>
+			<groupId>com.newrelic.agent.java</groupId>
+			<artifactId>newrelic-api</artifactId>
+			<version>${newrelic.version}</version>
+		</dependency>
+
 	</dependencies>
 </project>
