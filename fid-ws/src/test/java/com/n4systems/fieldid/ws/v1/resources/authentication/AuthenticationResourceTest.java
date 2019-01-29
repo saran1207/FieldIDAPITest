@@ -12,80 +12,76 @@ import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import javax.servlet.http.HttpServletRequest;
-
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertSame;
 
-//@RunWith(SpringJUnit4ClassRunner.class)
 public class AuthenticationResourceTest {
-	
-	private AuthenticationResource fixture;
-	private UserService userService;
-	private ApiUserResource apiUserResource;
-	private SecurityContext securityContext;
-	private HttpServletRequest request;
-	
-	@Before
-	public void before() {
-		fixture = new AuthenticationResource();
-		userService = createMock(UserService.class);
-		apiUserResource = createMock(ApiUserResource.class);
-		securityContext = createMock(SecurityContext.class);
+    
+    private AuthenticationResource fixture;
+    private UserService userService;
+    private ApiUserResource apiUserResource;
+    private SecurityContext securityContext;
 
-		fixture.userService = userService;
-		fixture.apiUserResource = apiUserResource;
-		fixture.securityContext = securityContext;
-		ReflectionTestUtils.setField(fixture, "request", new MockHttpServletRequest());
+    @Before
+    public void before() {
+        fixture = new AuthenticationResource();
+        userService = createMock(UserService.class);
+        apiUserResource = createMock(ApiUserResource.class);
+        securityContext = createMock(SecurityContext.class);
 
-	}
-	
-	@Test(expected = ForbiddenException.class)
-	public void authenticate_throws_forbidden_on_null_tenant() {
-		replay(userService);
-		fixture.authenticate(null, "asd", "asd");
-	}
-	
-	@Test(expected = ForbiddenException.class)
-	public void authenticate_throws_forbidden_on_null_user() {
-		replay(userService);
-		fixture.authenticate("asd", null, "asd");
-	}
-	
-	@Test(expected = ForbiddenException.class)
-	public void authenticate_throws_forbidden_on_null_pass() {
-		replay(userService);
-		fixture.authenticate("asd", "asd", null);
-	}
-	
-	@Test(expected = ForbiddenException.class)
-	public void authenticate_throws_forbidden_when_user_not_found() {
-		String tenant = "tenant";
-		String user = "user";
-		String pass = "pass";
-		
-		expect(userService.authenticateUserByPassword(tenant, user, pass)).andReturn(null);
-		replay(userService);
+        fixture.userService = userService;
+        fixture.apiUserResource = apiUserResource;
+        fixture.securityContext = securityContext;
+        ReflectionTestUtils.setField(fixture, "request", new MockHttpServletRequest());
 
-		fixture.authenticate(tenant, user, pass);
-	}
-	
-	@Test
-	public void authenticate_returns_api_user_when_found() {
-		String tenant = "tenant";
-		String userId = "user";
-		String pass = "pass";
-		String authKey = "abcdefg";
-		
-		User user = UserBuilder.anEmployee().withAuthKey(authKey).build();
-		ApiUser apiUser = new ApiUser();
-		
-		expect(userService.authenticateUserByPassword(tenant, userId, pass)).andReturn(user);
-		replay(userService);
-		
-		expect(apiUserResource.convertEntityToApiModel(user)).andReturn(apiUser);
-		replay(apiUserResource);
+    }
+    
+    @Test(expected = ForbiddenException.class)
+    public void authenticate_throws_forbidden_on_null_tenant() {
+        replay(userService);
+        fixture.authenticate(null, "asd", "asd");
+    }
+    
+    @Test(expected = ForbiddenException.class)
+    public void authenticate_throws_forbidden_on_null_user() {
+        replay(userService);
+        fixture.authenticate("asd", null, "asd");
+    }
+    
+    @Test(expected = ForbiddenException.class)
+    public void authenticate_throws_forbidden_on_null_pass() {
+        replay(userService);
+        fixture.authenticate("asd", "asd", null);
+    }
+    
+    @Test(expected = ForbiddenException.class)
+    public void authenticate_throws_forbidden_when_user_not_found() {
+        String tenant = "tenant";
+        String user = "user";
+        String pass = "pass";
+        
+        expect(userService.authenticateUserByPassword(tenant, user, pass)).andReturn(null);
+        replay(userService);
 
-		assertSame(apiUser, fixture.authenticate(tenant, userId, pass));
-	}
+        fixture.authenticate(tenant, user, pass);
+    }
+    
+    @Test
+    public void authenticate_returns_api_user_when_found() {
+        String tenant = "tenant";
+        String userId = "user";
+        String pass = "pass";
+        String authKey = "abcdefg";
+        
+        User user = UserBuilder.anEmployee().withAuthKey(authKey).build();
+        ApiUser apiUser = new ApiUser();
+        
+        expect(userService.authenticateUserByPassword(tenant, userId, pass)).andReturn(user);
+        replay(userService);
+        
+        expect(apiUserResource.convertEntityToApiModel(user)).andReturn(apiUser);
+        replay(apiUserResource);
+
+        assertSame(apiUser, fixture.authenticate(tenant, userId, pass));
+    }
 }
