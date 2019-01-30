@@ -29,6 +29,7 @@ public class EventExcelExportService extends ExcelExportService<EventReportCrite
 
     @Override
     protected void logTaskStartMsg(EventReportCriteria criteria, String downloadUrl, DownloadLink downloadLink) {
+        super.logTaskStartMsg(criteria, downloadUrl, downloadLink);
         logger.info("Started Excel export of " + criteria.getSelection().getNumSelectedIds() + " events for download " + downloadLink);
     }
 }

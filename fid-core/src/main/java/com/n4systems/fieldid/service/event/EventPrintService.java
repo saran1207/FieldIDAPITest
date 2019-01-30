@@ -34,6 +34,7 @@ public class EventPrintService extends DownloadService<EventReportCriteria> {
 
     @Override
     protected void logTaskStartMsg(EventReportCriteria criteria, String downloadUrl, DownloadLink downloadLink) {
+        super.logTaskStartMsg(criteria, downloadUrl, downloadLink);
         logger.info("Started Excel print of " + criteria.getSelection().getNumSelectedIds() + " events for download " + downloadLink);
     }
 }

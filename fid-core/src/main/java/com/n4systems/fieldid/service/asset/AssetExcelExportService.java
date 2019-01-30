@@ -30,6 +30,7 @@ public class AssetExcelExportService extends ExcelExportService<AssetSearchCrite
 
     @Override
     protected void logTaskStartMsg(AssetSearchCriteria criteria, String downloadUrl, DownloadLink downloadLink) {
+        super.logTaskStartMsg(criteria, downloadUrl, downloadLink);
         logger.info("Started Excel export of " + criteria.getSelection().getNumSelectedIds() + " assets for download " + downloadLink);
     }
 }
