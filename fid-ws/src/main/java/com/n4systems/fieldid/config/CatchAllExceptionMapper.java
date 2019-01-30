@@ -44,15 +44,14 @@ public class CatchAllExceptionMapper implements ExceptionMapper<Throwable> {
 
         SecurityContextInitializer.resetSecurityContext();
 
+        NewRelic.noticeError(exception);
         if (exception instanceof JsonParseException) {
             logger.error("JSON parse exception for tenantId '" + tenantId + "', userId '" + userId + "'", exception);
             /* Json parse error is a bad data error as opposed to a server error */
-            NewRelic.noticeError(exception);
             return Response.status(Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN_TYPE).build();
         }
         else {
             logger.error("Uncaught exception in webservice for tenantId '" + tenantId + "', userId '" + userId + "'", exception);
-            NewRelic.noticeError(exception);
             return Response.status(Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN_TYPE).build();
         }
     }
