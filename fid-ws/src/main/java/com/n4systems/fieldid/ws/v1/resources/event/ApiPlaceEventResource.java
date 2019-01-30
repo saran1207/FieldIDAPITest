@@ -101,7 +101,7 @@ public class ApiPlaceEventResource extends FieldIdPersistenceServiceWithEnhanced
 
             return response;
         } catch(NonPrintableEventType npe) {
-            logger.warn("Cert was non-printable for event: " + event.getId());
+            logger.error("Cert was non-printable for event: " + event.getId());
             NewRelic.noticeError(npe);
             throw npe;
         } catch(Exception e) {
