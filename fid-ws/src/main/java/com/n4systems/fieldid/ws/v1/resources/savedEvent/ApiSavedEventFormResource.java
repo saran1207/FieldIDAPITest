@@ -15,6 +15,7 @@ import com.n4systems.fieldid.ws.v1.resources.eventtype.criteria.ApiObservationCo
 import com.n4systems.model.*;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.services.signature.SignatureService;
+import com.newrelic.api.agent.NewRelic;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -144,6 +145,7 @@ public class ApiSavedEventFormResource extends FieldIdPersistenceService{
 						apiResult.setSignatureValue(image);
 					} catch (IOException ex) {
 						logger.error("Error loading signature image for event: " + eventId, ex);
+						NewRelic.noticeError(ex);
 					}
 				}				
 				break;

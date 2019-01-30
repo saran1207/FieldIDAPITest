@@ -12,6 +12,7 @@ import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+import com.newrelic.api.agent.NewRelic;
 import com.newrelic.api.agent.Trace;
 import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
@@ -249,7 +250,8 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
             data = s3Service.downloadAssetAttachmentBytes(attachment);
         } catch(Exception e) {
             String assetAttachmentUrl = attachment.getFileName();
-            logger.warn("Unable to load remote asset attachment at: " + assetAttachmentUrl, e);
+            logger.error("Unable to load remote asset attachment at: " + assetAttachmentUrl, e);
+            NewRelic.noticeError(e);
         }
         apiAssetAttachment.setData(data);
     }
@@ -263,7 +265,8 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
             data = s3Service.downloadFileAttachmentBytes(attachment.getMobileId(), fileName);
         } catch(Exception e) {
             String assetAttachmentUrl = attachment.getFileName();
-            logger.warn("Unable to load remote asset attachment at: " + assetAttachmentUrl, e);
+            logger.error("Unable to load remote asset attachment at: " + assetAttachmentUrl, e);
+            NewRelic.noticeError(e);
         }
         apiAssetAttachment.setData(data);
     }

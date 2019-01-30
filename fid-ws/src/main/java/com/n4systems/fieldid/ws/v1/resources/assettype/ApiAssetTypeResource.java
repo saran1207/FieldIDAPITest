@@ -6,6 +6,7 @@ import com.n4systems.fieldid.ws.v1.resources.assettype.attributes.*;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.AssociatedEventType;
+import com.newrelic.api.agent.NewRelic;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -145,7 +146,8 @@ public class ApiAssetTypeResource extends SetupDataResource<ApiAssetType, AssetT
                 try {
                     image = s3Service.downloadAssetTypeProfileImageBytes(type);
                 } catch (IOException ex) {
-                    logger.warn("Unable to download asset type from S3 image for asset: " + type.getId(), ex);
+                    logger.error("Unable to download asset type from S3 image for asset: " + type.getId(), ex);
+                    NewRelic.noticeError(ex);
                 }
             }
         }

@@ -5,6 +5,7 @@ import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.model.Event;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.utils.ActionDescriptionUtil;
+import com.newrelic.api.agent.NewRelic;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -59,6 +60,7 @@ public class ApiTriggerEventResource extends ApiResource<ApiTriggerEvent, Event>
 			} catch (IOException e) {
 				logger.error("Error Fetching EventSchedule.images data for criteriaResultImage" 
 						+ criteriaResultImage.getId(), e);
+				NewRelic.noticeError(e);
 			}
 		}
 		

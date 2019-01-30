@@ -15,6 +15,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.chart.RangeType;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.newrelic.api.agent.NewRelic;
 import com.newrelic.api.agent.Trace;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -176,6 +177,7 @@ public class ApiSearchResource extends ApiResource<ApiSearchResult, Asset> {
                 image = s3service.downloadAssetProfileMediumImage(asset.getId(), asset.getImageName());
             } catch (IOException ex) {
                 logger.warn("Unable to load asset image for asset: " + asset.getIdentifier(), ex);
+                NewRelic.noticeError(ex);
             }
         }
         return image;

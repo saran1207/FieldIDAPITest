@@ -16,6 +16,7 @@ import com.n4systems.reporting.EventReportType;
 import com.n4systems.util.ContentTypeUtil;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+import com.newrelic.api.agent.NewRelic;
 import com.newrelic.api.agent.Trace;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,9 +102,11 @@ public class ApiPlaceEventResource extends FieldIdPersistenceServiceWithEnhanced
             return response;
         } catch(NonPrintableEventType npe) {
             logger.warn("Cert was non-printable for event: " + event.getId());
+            NewRelic.noticeError(npe);
             throw npe;
         } catch(Exception e) {
             logger.error("Unable to download event cert for event: " + event.getId());
+            NewRelic.noticeError(e);
             throw e;
         }
     }

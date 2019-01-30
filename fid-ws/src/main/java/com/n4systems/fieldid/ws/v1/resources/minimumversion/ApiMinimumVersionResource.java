@@ -2,6 +2,7 @@ package com.n4systems.fieldid.ws.v1.resources.minimumversion;
 
 import com.n4systems.fieldid.ws.v1.resources.EnhancedLogging;
 import com.n4systems.services.config.ConfigService;
+import com.newrelic.api.agent.NewRelic;
 import com.newrelic.api.agent.Trace;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,7 @@ public class ApiMinimumVersionResource extends EnhancedLogging {
                 }
         } catch (Exception e) {
             logger.error(String.format("There was an error determining minimum versions with tag: [%s] and minimumAppVersion: [%s]", tag, minimumVersion));
+            NewRelic.noticeError(e);
             return ERROR_MESSAGE;
         }
     }
