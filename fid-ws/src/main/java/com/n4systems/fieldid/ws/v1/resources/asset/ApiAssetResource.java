@@ -32,6 +32,7 @@ import com.n4systems.services.asset.AssetSaveServiceSpring;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import com.newrelic.api.agent.NewRelic;
 import com.newrelic.api.agent.Trace;
 import org.apache.commons.collections.ListUtils;
 import org.apache.log4j.Logger;
@@ -227,9 +228,11 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
                         assetService.archive(asset);
                     } catch (UsedOnMasterEventException e) {
                         logger.error("Could not archive Asset with ID " + id + " because of UsedOnMasterEventException");
+                        NewRelic.noticeError(e);
                         subAssetIds.add(id);
                     } catch (Exception e) {
                         logger.error("Could not archive Asset with ID " + id + " because of an unexpected Exception", e);
+                        NewRelic.noticeError(e);
                         subAssetIds.add(id);
                     }
                 } else {
@@ -451,7 +454,8 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
             try {
                 image = s3Service.downloadAssetProfileMediumImage(asset.getId(), asset.getImageName());
             } catch (IOException ex) {
-                logger.warn("Unable to load asset image for asset: " + asset.getIdentifier(), ex);
+                logger.error("Unable to load asset image for asset: " + asset.getIdentifier(), ex);
+                NewRelic.noticeError(ex);
             }
         }        
         return image;
