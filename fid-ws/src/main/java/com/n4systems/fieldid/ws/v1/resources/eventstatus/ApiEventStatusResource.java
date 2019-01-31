@@ -1,11 +1,10 @@
 package com.n4systems.fieldid.ws.v1.resources.eventstatus;
 
-import javax.ws.rs.Path;
-
-import org.springframework.stereotype.Component;
-
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
 import com.n4systems.model.EventStatus;
+import org.springframework.stereotype.Component;
+
+import javax.ws.rs.Path;
 
 @Component
 @Path("eventStatus")
