@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.ws.v2.resources;
 
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.ws.v2.filters.RequestContext;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.util.persistence.NewObjectSelect;
@@ -13,18 +12,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPersistenceService {
+public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdpersistenceServiceWithEnhancedLogging {
 
     @Autowired
     private RequestContext requestContext;
 
     protected abstract A convertEntityToApiModel(E entityModel);
 
-	protected List<A> postConvertAllEntitiesToApiModels(List<A> apiModels) { return apiModels; }
+    protected List<A> postConvertAllEntitiesToApiModels(List<A> apiModels) { return apiModels; }
 
-	protected List<A> convertAllEntitiesToApiModels(List<E> entityModels) {
+    protected List<A> convertAllEntitiesToApiModels(List<E> entityModels) {
         return postConvertAllEntitiesToApiModels(convertAllEntitiesToApiModels(entityModels, this::convertEntityToApiModel));
-	}
+    }
 
     protected <M, R> List<R> convertAllEntitiesToApiModels(List<M> entityModels, Function<M, R> converter) {
         return entityModels.stream().map(converter).filter(r -> r != null).collect(Collectors.toList());
@@ -55,14 +54,14 @@ public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPe
         return version;
     }
 
-	@SuppressWarnings("unused")
+    @SuppressWarnings("unused")
     protected boolean versionEqualOrGreaterThan(int major, int minor, int patch) {
         long mobileVersion = getVersionNumber();
         long checkVersion = formatVersion(major, minor, patch);
         return (mobileVersion >= checkVersion);
     }
 
-	@SuppressWarnings("unused")
+    @SuppressWarnings("unused")
     protected boolean versionLessThan(int major, int minor, int patch) {
         long mobileVersion = getVersionNumber();
         long checkVersion = formatVersion(major, minor, patch);
@@ -75,15 +74,15 @@ public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPe
         return queryBuilder;
     }
 
-	protected QueryBuilder<ApiSortedModelHeader> createModelHeaderQueryBuilder(Class<?> tableClass, String sidField, String modifiedByField, String sortField, boolean ascending) {
-		QueryBuilder<ApiSortedModelHeader> queryBuilder = new QueryBuilder<>(tableClass, securityContext.getUserSecurityFilter());
-		queryBuilder.setSelectArgument(new NewObjectSelect(ApiSortedModelHeader.class, sidField, modifiedByField, sortField));
-		queryBuilder.setOrder(sortField, ascending);
-		return queryBuilder;
-	}
+    protected QueryBuilder<ApiSortedModelHeader> createModelHeaderQueryBuilder(Class<?> tableClass, String sidField, String modifiedByField, String sortField, boolean ascending) {
+        QueryBuilder<ApiSortedModelHeader> queryBuilder = new QueryBuilder<>(tableClass, securityContext.getUserSecurityFilter());
+        queryBuilder.setSelectArgument(new NewObjectSelect(ApiSortedModelHeader.class, sidField, modifiedByField, sortField));
+        queryBuilder.setOrder(sortField, ascending);
+        return queryBuilder;
+    }
 
-	protected <T, K extends ApiKey<T>> List<T> unwrapKeys(List<K> keys) {
-		return ApiKey.unwrap(keys);
-	}
+    protected <T, K extends ApiKey<T>> List<T> unwrapKeys(List<K> keys) {
+        return ApiKey.unwrap(keys);
+    }
 
 }

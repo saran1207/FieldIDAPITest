@@ -13,6 +13,7 @@ import com.n4systems.model.api.Archivable;
 import com.n4systems.model.procedure.*;
 import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.*;
+import com.newrelic.api.agent.Trace;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,110 +32,120 @@ public class ApiProcedureResource extends ApiResource<ApiProcedure, Procedure> {
     @Autowired private TenantSettingsService tenantSettingsService;
     @Autowired private LockoutReasonService lockoutReasonService;
 
-	@GET
-	@Path("query")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional(readOnly = true)
-	public List<ApiModelHeader> query(@QueryParam("id") List<ApiKeyString> procedureIds) {
-		if (procedureIds.isEmpty()) return new ArrayList<>();
+    @GET
+    @Path("query")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Trace(dispatcher=true)
+    @Transactional(readOnly = true)
+    public List<ApiModelHeader> query(@QueryParam("id") List<ApiKeyString> procedureIds) {
+        setEnhancedLoggingCustomParameters();
+        if (procedureIds.isEmpty()) return new ArrayList<>();
 
-		QueryBuilder<ApiModelHeader> query = new QueryBuilder<>(Procedure.class, securityContext.getUserSecurityFilter());
-		query.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, "mobileGUID", "modified"));
-		query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "mobileGUID", unwrapKeys(procedureIds)));
-		List<ApiModelHeader> results = persistenceService.findAll(query);
-		return results;
-	}
+        QueryBuilder<ApiModelHeader> query = new QueryBuilder<>(Procedure.class, securityContext.getUserSecurityFilter());
+        query.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, "mobileGUID", "modified"));
+        query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "mobileGUID", unwrapKeys(procedureIds)));
+        List<ApiModelHeader> results = persistenceService.findAll(query);
+        return results;
+    }
 
-	@GET
-	@Path("query/assigned")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional(readOnly = true)
-	public List<ApiModelHeader> findAssignedProcedures(@QueryParam("startDate") Date startDate, @QueryParam("endDate") Date endDate) {
-		User user = getCurrentUser();
-		QueryBuilder<ApiModelHeader> query = new QueryBuilder<>(Procedure.class, securityContext.getUserSecurityFilter());
-		query.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, "mobileGUID", "modified"));
-		query.addOrder("dueDate");
-		query.addWhere(WhereParameter.Comparator.IN, "workflowState", "workflowState", Arrays.asList(ProcedureWorkflowState.ACTIVE_STATES));
+    @GET
+    @Path("query/assigned")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Trace (dispatcher=true)
+    @Transactional(readOnly = true)
+    public List<ApiModelHeader> findAssignedProcedures(@QueryParam("startDate") Date startDate, @QueryParam("endDate") Date endDate) {
+        setEnhancedLoggingCustomParameters();
+        User user = getCurrentUser();
+        QueryBuilder<ApiModelHeader> query = new QueryBuilder<>(Procedure.class, securityContext.getUserSecurityFilter());
+        query.setSelectArgument(new NewObjectSelect(ApiModelHeader.class, "mobileGUID", "modified"));
+        query.addOrder("dueDate");
+        query.addWhere(WhereParameter.Comparator.IN, "workflowState", "workflowState", Arrays.asList(ProcedureWorkflowState.ACTIVE_STATES));
 
-		if (startDate != null) {
-			query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GE, "startDate", "dueDate", startDate));
+        if (startDate != null) {
+            query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GE, "startDate", "dueDate", startDate));
 
-		}
-		if (endDate != null) {
-			query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.LT, "endDate", "dueDate", endDate));	//excludes end date.
-		}
+        }
+        if (endDate != null) {
+            query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.LT, "endDate", "dueDate", endDate));    //excludes end date.
+        }
 
-		if (user.getGroups().isEmpty()) {
-			query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignee.id", user.getId()));
-		} else {
-			// WE need to do AND ( assignee.id = user.GetId() OR assignedGroup.id = user.getGroup().getId() )
-			WhereParameterGroup group = new WhereParameterGroup();
-			group.setChainOperator(WhereClause.ChainOp.AND);
-			group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignee.id", user.getId(), WhereClause.ChainOp.OR));
-			group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.IN, "assignedGroup", user.getGroups(), WhereClause.ChainOp.OR));
-			query.addWhere(group);
-		}
+        if (user.getGroups().isEmpty()) {
+            query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignee.id", user.getId()));
+        } else {
+            // WE need to do AND ( assignee.id = user.GetId() OR assignedGroup.id = user.getGroup().getId() )
+            WhereParameterGroup group = new WhereParameterGroup();
+            group.setChainOperator(WhereClause.ChainOp.AND);
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignee.id", user.getId(), WhereClause.ChainOp.OR));
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.IN, "assignedGroup", user.getGroups(), WhereClause.ChainOp.OR));
+            query.addWhere(group);
+        }
 
-		List<ApiModelHeader> results = persistenceService.findAll(query);
-		return results;
-	}
+        List<ApiModelHeader> results = persistenceService.findAll(query);
+        return results;
+    }
 
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional(readOnly = true)
-	public List<ApiProcedure> findAll(@QueryParam("id") List<ApiKeyString> procedureIds) {
-		if (procedureIds.isEmpty()) return new ArrayList<>();
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Trace (dispatcher=true)
+    @Transactional(readOnly = true)
+    public List<ApiProcedure> findAll(@QueryParam("id") List<ApiKeyString> procedureIds) {
+        setEnhancedLoggingCustomParameters();
+        if (procedureIds.isEmpty()) return new ArrayList<>();
 
-		List<ApiProcedure> results = convertAllEntitiesToApiModels(procedureService.findByMobileId(unwrapKeys(procedureIds)));
-		return results;
-	}
+        List<ApiProcedure> results = convertAllEntitiesToApiModels(procedureService.findByMobileId(unwrapKeys(procedureIds)));
+        return results;
+    }
 
-	@GET
-	@Path("assignedCounts")
-	@Consumes(MediaType.TEXT_PLAIN)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional(readOnly = true)
-	public List<Long> findAssignedActiveProcedureCounts(
-			@QueryParam("year") int year,
-			@QueryParam("month") int month) {
+    @GET
+    @Path("assignedCounts")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Trace (dispatcher=true)
+    @Transactional(readOnly = true)
+    public List<Long> findAssignedActiveProcedureCounts(
+            @QueryParam("year") int year,
+            @QueryParam("month") int month) {
 
-		List<Long> counts = new ArrayList<>();
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(year, month, 1);
-		int days = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-		for(int i = 1; i <= days; i++) {
-			Date startDate = new DateTime(year, month + 1, i, 0, 0).toDate();
-			Date endDate = new DateTime(year, month + 1, i, 0, 0).plusDays(1).toDate();
-			User user = getCurrentUser();
+        setEnhancedLoggingCustomParameters();
+        List<Long> counts = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, 1);
+        int days = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        for(int i = 1; i <= days; i++) {
+            Date startDate = new DateTime(year, month + 1, i, 0, 0).toDate();
+            Date endDate = new DateTime(year, month + 1, i, 0, 0).plusDays(1).toDate();
+            User user = getCurrentUser();
 
-			QueryBuilder<Procedure> query = createUserSecurityBuilder(Procedure.class)
-					.addOrder("dueDate")
-					.addWhere(WhereParameter.Comparator.IN, "workflowState", "workflowState", Arrays.asList(ProcedureWorkflowState.ACTIVE_STATES))
-					.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GE, "startDate", "dueDate", startDate))
-					.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.LT, "endDate", "dueDate", endDate));
+            QueryBuilder<Procedure> query = createUserSecurityBuilder(Procedure.class)
+                    .addOrder("dueDate")
+                    .addWhere(WhereParameter.Comparator.IN, "workflowState", "workflowState", Arrays.asList(ProcedureWorkflowState.ACTIVE_STATES))
+                    .addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GE, "startDate", "dueDate", startDate))
+                    .addWhere(WhereClauseFactory.create(WhereParameter.Comparator.LT, "endDate", "dueDate", endDate));
 
-			if (user.getGroups().isEmpty()) {
-				query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignee.id", user.getId()));
-			} else {
-				// WE need to do AND ( assignee.id = user.GetId() OR assignedGroup.id = user.getGroup().getId() )
-				WhereParameterGroup group = new WhereParameterGroup();
-				group.setChainOperator(WhereClause.ChainOp.AND);
-				group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignee.id", user.getId(), WhereClause.ChainOp.OR));
-				group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.IN, "assignedGroup", user.getGroups(), WhereClause.ChainOp.OR));
-				query.addWhere(group);
-			}
+            if (user.getGroups().isEmpty()) {
+                query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignee.id", user.getId()));
+            } else {
+                // WE need to do AND ( assignee.id = user.GetId() OR assignedGroup.id = user.getGroup().getId() )
+                WhereParameterGroup group = new WhereParameterGroup();
+                group.setChainOperator(WhereClause.ChainOp.AND);
+                group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignee.id", user.getId(), WhereClause.ChainOp.OR));
+                group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.IN, "assignedGroup", user.getGroups(), WhereClause.ChainOp.OR));
+                query.addWhere(group);
+            }
 
-			Long count = persistenceService.count(query);
-			counts.add(count);
-		}
-		return counts;
-	}
+            Long count = persistenceService.count(query);
+            counts.add(count);
+        }
+        return counts;
+    }
 
     @PUT
-	@Path("lock")
+    @Path("lock")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Trace (dispatcher=true)
     @Transactional
     public void lock(ApiProcedureResult apiProcedure) {
+        setEnhancedLoggingCustomParameters();
         if (apiProcedure.getProcedureId() == null) {
             throw new BadRequestException("procedureId must not be null");
         }
@@ -143,7 +154,7 @@ public class ApiProcedureResource extends ApiResource<ApiProcedure, Procedure> {
 
         //The Mobile app is performing an unscheduled procedure, so we need to create it first.
         if(procedure == null) {
-			ProcedureDefinition procedureDefinition = procedureDefinitionService.findProcedureDefinitionByMobileId(apiProcedure.getProcedureDefinitionId());
+            ProcedureDefinition procedureDefinition = procedureDefinitionService.findProcedureDefinitionByMobileId(apiProcedure.getProcedureDefinitionId());
 
             procedure = new Procedure();
             procedure.setMobileGUID(apiProcedure.getProcedureId());
@@ -185,18 +196,20 @@ public class ApiProcedureResource extends ApiResource<ApiProcedure, Procedure> {
     }
 
     @PUT
-	@Path("unlock")
+    @Path("unlock")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Trace (dispatcher=true)
     @Transactional
     public void unlock(ApiProcedureResult apiProcedure) {
-		if (apiProcedure.getProcedureId() == null) {
-			throw new BadRequestException("procedureId must not be null");
-		}
+        setEnhancedLoggingCustomParameters();
+        if (apiProcedure.getProcedureId() == null) {
+            throw new BadRequestException("procedureId must not be null");
+        }
 
         Procedure procedure = procedureService.findByMobileId(apiProcedure.getProcedureId(), true);
 
         if (procedure.getWorkflowState() != ProcedureWorkflowState.LOCKED) {
-			throw new BadRequestException("Attempt to unlock procedure that is not in LOCKED state. Actual state: " + procedure.getWorkflowState());
+            throw new BadRequestException("Attempt to unlock procedure that is not in LOCKED state. Actual state: " + procedure.getWorkflowState());
         }
 
         List<IsolationPointResult> convertedResults = convertToEntity(apiProcedure.getSortedIsolationPointResults());
@@ -209,7 +222,7 @@ public class ApiProcedureResource extends ApiResource<ApiProcedure, Procedure> {
     }
 
 
-	private void convertGpsLocation(ApiProcedureResult procedureResult, Procedure procedure) {
+    private void convertGpsLocation(ApiProcedureResult procedureResult, Procedure procedure) {
         if (procedureResult.getGpsLatitude() != null && procedureResult.getGpsLongitude() != null) {
             GpsLocation gpsLocation = new GpsLocation(procedureResult.getGpsLatitude(), procedureResult.getGpsLongitude());
 
@@ -230,7 +243,7 @@ public class ApiProcedureResource extends ApiResource<ApiProcedure, Procedure> {
         return convertedResults;
     }
 
-	@Override
+    @Override
     protected ApiProcedure convertEntityToApiModel(Procedure procedure) {
         ApiProcedure convertedProcedure = new ApiProcedure();
         convertedProcedure.setSid(procedure.getMobileGUID());
@@ -247,16 +260,16 @@ public class ApiProcedureResource extends ApiResource<ApiProcedure, Procedure> {
         return convertedProcedure;
     }
 
-	private ApiIsolationPointResult convertPointResult(IsolationPointResult lockResult) {
-		ApiIsolationPointResult apiResult = new ApiIsolationPointResult();
-		apiResult.setCheckCheckTime(lockResult.getCheckCheckTime());
-		apiResult.setDeviceAssetId(lockResult.getDevice() == null ? null : lockResult.getDevice().getMobileGUID());
-		apiResult.setLockAssetId(lockResult.getLock() == null ? null : lockResult.getLock().getMobileGUID());
-		apiResult.setDeviceScanOrCheckTime(lockResult.getDeviceScanOrCheckTime());
-		apiResult.setLockScanOrCheckTime(lockResult.getLockScanOrCheckTime());
-		apiResult.setMethodCheckTime(lockResult.getMethodCheckTime());
-		apiResult.setIsolationPointId(lockResult.getIsolationPoint().getId());
-		apiResult.setLocationCheckTime(lockResult.getLocationCheckTime());
-		return apiResult;
-	}
+    private ApiIsolationPointResult convertPointResult(IsolationPointResult lockResult) {
+        ApiIsolationPointResult apiResult = new ApiIsolationPointResult();
+        apiResult.setCheckCheckTime(lockResult.getCheckCheckTime());
+        apiResult.setDeviceAssetId(lockResult.getDevice() == null ? null : lockResult.getDevice().getMobileGUID());
+        apiResult.setLockAssetId(lockResult.getLock() == null ? null : lockResult.getLock().getMobileGUID());
+        apiResult.setDeviceScanOrCheckTime(lockResult.getDeviceScanOrCheckTime());
+        apiResult.setLockScanOrCheckTime(lockResult.getLockScanOrCheckTime());
+        apiResult.setMethodCheckTime(lockResult.getMethodCheckTime());
+        apiResult.setIsolationPointId(lockResult.getIsolationPoint().getId());
+        apiResult.setLocationCheckTime(lockResult.getLocationCheckTime());
+        return apiResult;
+    }
 }

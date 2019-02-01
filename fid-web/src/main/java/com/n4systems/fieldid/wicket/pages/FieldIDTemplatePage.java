@@ -68,6 +68,7 @@ import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.uri.ActionURLBuilder;
+import com.newrelic.api.agent.NewRelic;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -224,6 +225,9 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         add(createSubHeader("subHeader"));
 
         add(createActionGroup("actionGroup"));
+
+        NewRelic.addCustomParameter("Tenant", getTenant().getName());
+        NewRelic.addCustomParameter("User", getSessionUser().getUserID());
     }
 
     protected boolean forceDefaultLanguage() {

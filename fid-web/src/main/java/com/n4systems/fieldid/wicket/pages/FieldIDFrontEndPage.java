@@ -68,6 +68,7 @@ import com.n4systems.model.columns.ReportType;
 import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
+import com.newrelic.api.agent.NewRelic;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -222,6 +223,8 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
         add(topTitleLabel = useTopTitleLabel() ? createTopTitleLabel("topTitleLabel") : createTitleLabel("topTitleLabel"));
         topTitleLabel.setRenderBodyOnly(true);
+        NewRelic.addCustomParameter("Tenant", getTenant().getName());
+        NewRelic.addCustomParameter("User", getSessionUser().getUserID());
     }
 
     protected boolean forceDefaultLanguage() {

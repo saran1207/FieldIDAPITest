@@ -5,7 +5,10 @@ import com.n4systems.fieldid.ws.v2.resources.ApiKey;
 import com.n4systems.fieldid.ws.v2.resources.ApiKeyLong;
 import com.n4systems.fieldid.ws.v2.resources.ApiModelHeader;
 import com.n4systems.fieldid.ws.v2.resources.model.DateParam;
+import com.n4systems.fieldid.ws.v2.resources.setupdata.user.ApiUserResource;
 import com.n4systems.model.IsolationPointSourceType;
+import com.newrelic.api.agent.Trace;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,49 +25,55 @@ import java.util.stream.Collectors;
 @Path("isolationPointSourceType")
 public class ApiIsolationPointSourceTypeResource extends FieldIdPersistenceService {
 
-	@GET
-	@Path("query")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional(readOnly = true)
-	public List<ApiModelHeader> query(@QueryParam("id") List<ApiKeyLong> ids) {
-		if (ids.isEmpty()) return new ArrayList<>();
+    @GET
+    @Path("query")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Trace(dispatcher=true)
+    @Transactional(readOnly = true)
+    public List<ApiModelHeader> query(@QueryParam("id") List<ApiKeyLong> ids) {
+        setEnhancedLoggingCustomParameters();
+        if (ids.isEmpty()) return new ArrayList<>();
 
-		return ApiKey.unwrap(ids)
-				.stream()
-				.map(IsolationPointSourceType::forId)
-				.map(st -> new ApiModelHeader<>(st.getId(), st.getModified()))
-				.collect(Collectors.toList());
-	}
+        return ApiKey.unwrap(ids)
+                .stream()
+                .map(IsolationPointSourceType::forId)
+                .map(st -> new ApiModelHeader<>(st.getId(), st.getModified()))
+                .collect(Collectors.toList());
+    }
 
-	@GET
-	@Path("query/latest")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional(readOnly = true)
-	public List<ApiModelHeader> queryLatest(@QueryParam("since") DateParam since) {
-		return IsolationPointSourceType.modifiedAfter(since)
-				.stream()
-				.map(st -> new ApiModelHeader<>(st.getId(), st.getModified()))
-				.collect(Collectors.toList());
-	}
+    @GET
+    @Path("query/latest")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
+    @Transactional(readOnly = true)
+    public List<ApiModelHeader> queryLatest(@QueryParam("since") DateParam since) {
+        setEnhancedLoggingCustomParameters();
+        return IsolationPointSourceType.modifiedAfter(since)
+                .stream()
+                .map(st -> new ApiModelHeader<>(st.getId(), st.getModified()))
+                .collect(Collectors.toList());
+    }
 
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional(readOnly = true)
-	public List<ApiIsolationPointSourceType> findAll(@QueryParam("id") List<ApiKeyLong> ids) {
-		if (ids.isEmpty()) return new ArrayList<>();
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
+    @Transactional(readOnly = true)
+    public List<ApiIsolationPointSourceType> findAll(@QueryParam("id") List<ApiKeyLong> ids) {
+        setEnhancedLoggingCustomParameters();
+        if (ids.isEmpty()) return new ArrayList<>();
 
-		return ApiKey.unwrap(ids)
-				.stream()
-				.map(IsolationPointSourceType::forId)
-				.map(st -> {
-					ApiIsolationPointSourceType ast = new ApiIsolationPointSourceType();
-					ast.setSid(st.getId());
-					ast.setActive(true);
-					ast.setModified(st.getModified());
-					ast.setSource(st.name());
-					ast.setSourceText(st.getIdentifier());
-					return ast;
-				})
-				.collect(Collectors.toList());
-	}
+        return ApiKey.unwrap(ids)
+                .stream()
+                .map(IsolationPointSourceType::forId)
+                .map(st -> {
+                    ApiIsolationPointSourceType ast = new ApiIsolationPointSourceType();
+                    ast.setSid(st.getId());
+                    ast.setActive(true);
+                    ast.setModified(st.getModified());
+                    ast.setSource(st.name());
+                    ast.setSourceText(st.getIdentifier());
+                    return ast;
+                })
+                .collect(Collectors.toList());
+    }
 }

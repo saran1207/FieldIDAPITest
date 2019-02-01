@@ -3,6 +3,8 @@ package com.n4systems.fieldid.ws.v1.resources.procedure;
 import com.n4systems.fieldid.service.warningtemplates.WarningTemplateService;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.model.warningtemplate.WarningTemplate;
+import com.newrelic.api.agent.NewRelic;
+import com.newrelic.api.agent.Trace;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.*;
@@ -42,7 +44,9 @@ public class ApiWarningTemplateResource extends ApiResource<ApiWarningTemplate, 
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
     public Response getWarningTemplateList() {
+        setEnhancedLoggingWithAppInfoParameters();
         //This is a pretty simple wrapper, so we can do it in one line.
         return Response.status(Response.Status.OK)
                        .entity(convertAllEntitiesToApiModels(warningTemplateService.getAllTemplatesForTenant()))
@@ -59,9 +63,10 @@ public class ApiWarningTemplateResource extends ApiResource<ApiWarningTemplate, 
     @PUT
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
     public Response updateWarningTemplate(@PathParam("id") String idParam,
                                           ApiWarningTemplate apiWarningTemplate) {
-
+        setEnhancedLoggingWithAppInfoParameters();
         try {
             Long id = Long.parseLong(idParam);
 
@@ -82,9 +87,11 @@ public class ApiWarningTemplateResource extends ApiResource<ApiWarningTemplate, 
                 throw new Exception("ID must match resource in JSON!!");
             }
         } catch (NumberFormatException e) {
+            NewRelic.noticeError(e);
             //ID Can't e parsed to a Long... must be an invalid resource.
             return Response.status(Response.Status.BAD_REQUEST).entity(BAD_ID_ERROR).build();
         } catch (Exception e) {
+            NewRelic.noticeError(e);
             return Response.status(Response.Status.BAD_REQUEST).entity("You talk of one resource, but what to update another.  Forbidden.").build();
         }
     }
@@ -99,6 +106,7 @@ public class ApiWarningTemplateResource extends ApiResource<ApiWarningTemplate, 
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createWarningTemplate(ApiWarningTemplate apiWarningTemplate) {
+        setEnhancedLoggingWithAppInfoParameters();
         WarningTemplate warningTemplate = new WarningTemplate();
         warningTemplate.setName(apiWarningTemplate.getName());
         warningTemplate.setWarning(apiWarningTemplate.getWarning());
@@ -125,7 +133,9 @@ public class ApiWarningTemplateResource extends ApiResource<ApiWarningTemplate, 
     @DELETE
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
     public Response deleteWarningTemplate(@PathParam("id") String idParam) {
+        setEnhancedLoggingWithAppInfoParameters();
         try {
             Long id = Long.parseLong(idParam);
 
@@ -135,10 +145,12 @@ public class ApiWarningTemplateResource extends ApiResource<ApiWarningTemplate, 
             //Delete succeeded.  No need for
             return Response.noContent().build();
         } catch (NumberFormatException e) {
+            NewRelic.noticeError(e);
             return Response.status(Response.Status.BAD_REQUEST)
                            .entity(BAD_ID_ERROR)
                            .build();
         } catch (Exception e) {
+            NewRelic.noticeError(e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                            .entity(RESOURCE_NOT_FOUND)
                            .build();

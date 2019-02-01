@@ -19,6 +19,8 @@ import com.n4systems.model.procedure.*;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import com.newrelic.api.agent.NewRelic;
+import com.newrelic.api.agent.Trace;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -52,8 +54,10 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/save")
+    @Trace  (dispatcher=true)
     @Transactional
     public Response writeOrUpdateProcedureDefinition(ApiProcedureDefinitionV2 apiProcDef) {
+        setEnhancedLoggingWithAppInfoParameters();
         boolean isNew = false;
 
         try {
@@ -83,18 +87,21 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
 
         } catch (ImageProcessingException ipe) {
             log.error("There was an error when attempting to process images in the ProcedureDefinition.  Error: " + ipe.getMessage(), ipe);
+            NewRelic.noticeError(ipe);
 
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("There was an error when attempting to process images in the ProcedureDefinition.  Error: " + ipe.getMessage())
                     .build();
         } catch (PersistenceException pe) {
             log.error("There was an error retrieving data related to the ProcedureDefinition.  Error: " + pe.getMessage(), pe);
+            NewRelic.noticeError(pe);
 
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("There was an error retrieving data related to the ProcedureDefinition.  Error: " + pe.getMessage())
                     .build();
         } catch (Exception e) {
             log.error("Unexpected error!!!  Error: " + e.getMessage(), e);
+            NewRelic.noticeError(e);
 
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Unexpected error!!!  Error: " + e.getMessage())
@@ -106,6 +113,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/")
+    @Trace  (dispatcher=true)
     @Transactional(readOnly = true, noRollbackFor = AmazonS3Exception.class)
     public ListResponse<ApiProcedureDefinitionV2> findForAsset(
             @PathParam("assetId") String assetId,
@@ -121,7 +129,8 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         } catch (TransactionException e) {
             // This can happen when we are unable to find an S3 image while converting the procedure.
             // Mostly occurs during development when pointing at stage (database and s3 bucket are often out of sync).
-            log.warn("Transaction failure while finding procedure definitions", e);
+            log.error("Transaction failure while finding procedure definitions", e);
+            NewRelic.noticeError(e);
         }
         return new ListResponse<>(procs, page, pageSize, total);
     }
@@ -130,10 +139,12 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
     @Path("list")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public ListResponse<ApiProcedureDefinitionV2> findAll(
             @QueryParam("id") List<String> assetIds) {
 
+        setEnhancedLoggingWithAppInfoParameters();
         List<ApiProcedureDefinitionV2> apiProcs = new ArrayList<>();
         try {
             QueryBuilder<ProcedureDefinition> builder = createUserSecurityBuilder(ProcedureDefinition.class);
@@ -144,7 +155,8 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         } catch (TransactionException e) {
             // This can happen when we are unable to find an S3 image while converting the procedure.
             // Mostly occurs during development when pointing at stage (database and s3 bucket are often out of sync).
-            log.warn("Transaction failure while finding procedure definitions", e);
+            log.error("Transaction failure while finding procedure definitions", e);
+            NewRelic.noticeError(e);
         }
         return new ListResponse<>(apiProcs, 0, apiProcs.size(), apiProcs.size());
     }
@@ -153,11 +165,13 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
     @Path("/asset/{assetId}/procedures/test")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public String FindForAssetTest(
             @PathParam("assetId") String assetId,
             @DefaultValue("0") @QueryParam("page") int page,
             @DefaultValue("100") @QueryParam("pageSize") int pageSize) {
+        setEnhancedLoggingWithAppInfoParameters();
         QueryBuilder<ProcedureDefinition> builder = createUserSecurityBuilder(ProcedureDefinition.class);
         builder.addWhere(WhereClauseFactory.create(Comparator.EQ, "asset.mobileGUID", "0"));
 
@@ -174,9 +188,11 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
     @DELETE
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
     @Transactional
     public Response deleteDraftProcedureDefinition(@QueryParam("procDefSid") String procDefSid) {
 
+        setEnhancedLoggingWithAppInfoParameters();
         ProcedureDefinition deleteMe = procedureDefinitionService.findProcedureDefinitionByMobileId(procDefSid);
 
         Response.Status responseStatus;
@@ -309,6 +325,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
                 //this error and continue on, the sky will fall, kittens will perish and zombies will rise.
                 log.warn("There was a Null Pointer Exception when processing Annotations on ProcDef with ID " +
                          procDef.getId() + "... trying to carry on.");
+                NewRelic.noticeError(npe);
             }
 
             //Add the image to the updated image list.
@@ -684,11 +701,14 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
 
                     convertedImage.setData(imageData);
                 } catch (AmazonS3Exception ase) {
-                    log.warn("Could not find images...", ase);
+                    log.error("Could not find images...", ase);
+                    NewRelic.noticeError(ase);
                 } catch (IOException ioe) {
-                    log.warn("IOException downloading procedure def image: " + image.getId(), ioe);
+                    log.error("IOException downloading procedure def image: " + image.getId(), ioe);
+                    NewRelic.noticeError(ioe);
                 } catch (Exception e) {
-                    log.warn("There was a problem while Generating SVGs for ProcDef with ID " + definition.getId(), e);
+                    log.error("There was a problem while Generating SVGs for ProcDef with ID " + definition.getId(), e);
+                    NewRelic.noticeError(e);
                 }
 
                 convertedImages.add(convertedImage);
