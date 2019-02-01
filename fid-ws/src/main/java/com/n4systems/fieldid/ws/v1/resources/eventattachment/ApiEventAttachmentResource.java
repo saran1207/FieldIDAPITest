@@ -11,6 +11,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+import com.newrelic.api.agent.NewRelic;
 import com.newrelic.api.agent.Trace;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,7 @@ public class ApiEventAttachmentResource extends FieldIdPersistenceServiceWithEnh
             } catch (AmazonClientException e) {
                 logger.error("Failed Saving Event Attachment for Event: " + apiAttachment.getEventSid());
                 e.printStackTrace();
+                NewRelic.noticeError(e);
                 throw e;
             }
             logger.info("Saved Event Attachment for Event: " + apiAttachment.getEventSid());
@@ -131,6 +133,7 @@ public class ApiEventAttachmentResource extends FieldIdPersistenceServiceWithEnh
             return attachment;        
         } catch (IOException e) {
             e.printStackTrace();
+            NewRelic.noticeError(e);
             return null;
         }
     }

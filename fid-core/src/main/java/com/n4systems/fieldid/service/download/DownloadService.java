@@ -16,6 +16,7 @@ import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.mail.TemplateMailMessage;
 import com.n4systems.util.selection.MultiIdSelection;
+import com.newrelic.api.agent.Trace;
 import org.apache.commons.lang.time.StopWatch;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,9 +64,11 @@ public abstract class DownloadService<T extends SearchCriteria> extends FieldIdP
         return downloadLink;
     }
 
+	@Trace(dispatcher = true)
     @Transactional
 	private void run(T criteria, String downloadUrl, DownloadLink downloadLink) {
-		logger.info("[" + downloadLink + "]: Started " + getClass().getSimpleName());
+		logTaskStartMsg(criteria, downloadUrl, downloadLink);
+		setEnhancedLoggingCustomParameters();
 
 		StopWatch watch = new StopWatch();
 		watch.start();
@@ -146,5 +149,15 @@ public abstract class DownloadService<T extends SearchCriteria> extends FieldIdP
         Collections.sort(selectedIds, (id1, id2) -> new Integer(idList.indexOf(id1)).compareTo(idList.indexOf(id2)));
         return selectedIds;
     }
+
+	/**
+	 * Override to provide a more specific message.
+	 * @param criteria
+	 * @param downloadUrl
+	 * @param downloadLink
+	 */
+    protected void logTaskStartMsg(T criteria, String downloadUrl, DownloadLink downloadLink) {
+		logger.info("[" + downloadLink + "]: Started " + getClass().getSimpleName());
+	}
 
 }

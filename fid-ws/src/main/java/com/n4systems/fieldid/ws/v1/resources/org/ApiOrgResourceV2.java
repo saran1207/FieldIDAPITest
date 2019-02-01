@@ -18,6 +18,7 @@ import com.n4systems.model.orgs.OrgIdTree;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
+import com.newrelic.api.agent.NewRelic;
 import com.newrelic.api.agent.Trace;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -189,7 +190,8 @@ public class ApiOrgResourceV2 extends SetupDataResource<ApiOrgV2, BaseOrg> {
             try {
                 image = s3Service.downloadCustomerLogo(baseOrg.getId());
             } catch (Exception e) {
-                logger.warn("Unable to load organization image at: " + baseOrg.getId(), e);
+                logger.error("Unable to load organization image at: " + baseOrg.getId(), e);
+                NewRelic.noticeError(e);
             }
             return image;
         } else {

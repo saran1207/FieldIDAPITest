@@ -51,7 +51,11 @@ public class FieldIdPersistenceService extends FieldIdService {
     }
 
     public void setEnhancedLoggingCustomParameters() {
-        setEnhancedLoggingCustomParameters(getCurrentTenant().getName(), getCurrentUser().getUserID());
+        Tenant currentTenant = getCurrentTenant();
+        User currentUser = getCurrentUser();
+        setEnhancedLoggingCustomParameters(
+                currentTenant != null ? currentTenant.getName() : "Not Known",
+                currentUser != null ? currentUser.getUserID() : "Not Known");
     }
 
     public void setEnhancedLoggingCustomParameters(String currentTenant, String currentUser) {
