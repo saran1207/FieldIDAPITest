@@ -17,6 +17,7 @@ import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.project.ProjectService;
 import com.n4systems.fieldid.service.transaction.TransactionService;
+import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.asset.AssetAttachment;
@@ -445,17 +446,7 @@ public class AssetService extends CrudService<Asset> {
 
     public int findExactAssetSizeByIdentifiersForNewSmartSearch(String searchValue, UserSecurityFilter filter) {
 
-        QueryBuilder<Asset> builder = new QueryBuilder<>(Asset.class, filter);
-
-        //TODO Can probably drop that "IGNORE_CASE" crap... the DB always ignores case... that's part of the config.
-        WhereParameterGroup group = new WhereParameterGroup("smartsearch");
-        group.addClause(WhereClauseFactory.create(Comparator.EQ, "identifier", "identifier", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
-        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "rfidNumber", "rfidNumber", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
-        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "customerRefNumber", "customerRefNumber", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
-        builder.addWhere(group);
-        builder.addOrder("type", "created");
-        //builder.addOrder("created");
-
+        QueryBuilder<Asset> builder = makeExactAssetByIdentifiersForNewSmartSearchBuilder(searchValue, filter);
         return persistenceService.count(builder).intValue();
     }
 
@@ -465,19 +456,25 @@ public class AssetService extends CrudService<Asset> {
 
     private List<Asset> findExactAssetByIdentifiersForNewSmartSearch(String searchValue, UserSecurityFilter filter) {
 
+        QueryBuilder<Asset> builder = makeExactAssetByIdentifiersForNewSmartSearchBuilder(searchValue, filter);
+
+        return persistenceService.findAll(builder);
+    }
+
+    private QueryBuilder<Asset> makeExactAssetByIdentifiersForNewSmartSearchBuilder(String searchValue, UserSecurityFilter filter) {
         QueryBuilder<Asset> builder = new QueryBuilder<>(Asset.class, filter);
 
-        //TODO Can probably drop that "IGNORE_CASE" crap... the DB always ignores case... that's part of the config.
         WhereParameterGroup group = new WhereParameterGroup("smartsearch");
-        group.addClause(WhereClauseFactory.create(Comparator.EQ, "identifier", "identifier", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
-        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "rfidNumber", "rfidNumber", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
-        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "customerRefNumber", "customerRefNumber", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
+        group.addClause(WhereClauseFactory.create(Comparator.EQ, "identifier", "identifier", searchValue, null, WhereClause.ChainOp.OR));
+        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "rfidNumber", "rfidNumber", searchValue, null, WhereClause.ChainOp.OR));
+        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "customerRefNumber", "customerRefNumber", searchValue, null, WhereClause.ChainOp.OR));
         builder.addWhere(group);
         builder.addOrder("type", "created");
         //builder.addOrder("created");
 
-        return persistenceService.findAll(builder);
+        return builder;
     }
+
 
     public List<Asset> findAssetByIdentifiersForNewSmartSearch(String searchValue) {
         return findAssetByIdentifiersForNewSmartSearch(searchValue, securityContext.getUserSecurityFilter());
@@ -488,33 +485,17 @@ public class AssetService extends CrudService<Asset> {
             return new ArrayList<>();
         }
 
-        //mysql full-text search uses "-" as a word delimiter, so we have to use the old smart search "like" approach.
-        if(searchValue.contains("-")) {
-            QueryBuilder<Asset> builder = new QueryBuilder<>(Asset.class, filter);
+        QueryBuilder<Asset> builder = new QueryBuilder<>(Asset.class, filter);
 
-            WhereParameterGroup group = new WhereParameterGroup("smartsearch");
-            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "identifier", "identifier", searchValue, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
-            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "rfidNumber", "rfidNumber", searchValue, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
-            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "customerRefNumber", "customerRefNumber", searchValue, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
-            builder.addWhere(group);
-            builder.addOrder("type", "created");
-            //builder.addOrder("created");
+        WhereParameterGroup group = new WhereParameterGroup("smartsearch");
+        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "identifier", "identifier", searchValue, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "rfidNumber", "rfidNumber", searchValue, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "customerRefNumber", "customerRefNumber", searchValue, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+        builder.addWhere(group);
+        builder.addOrder("type", "created");
+        //builder.addOrder("created");
 
-            return persistenceService.findAll(builder);
-        } else {
-            String queryString = "SELECT * FROM assets p join org_base o on p.owner_id=o.id WHERE (MATCH (p.identifier, p.rfidNumber, p.customerRefNumber) AGAINST ('" + searchValue + "*' IN BOOLEAN MODE)) ";
-
-            //new security filter if the user is not part of the main org.
-            if(!filter.getTenantId().equals(filter.getOwner().getID())) {
-                queryString += "AND (o.SECONDARY_ID = " + filter.getOwner().getID() + " OR o.SECONDARY_ID IS NULL) ";
-            }
-            queryString += "AND p.TENANT_ID = " + filter.getTenantId() + " AND p.state='ACTIVE' ORDER BY p.type_id, p.created";
-            Query query = persistenceService.createSQLQuery(queryString, Asset.class);
-
-            //noinspection unchecked
-            return query.getResultList();
-        }
-
+        return persistenceService.findAll(builder);
     }
 
     public int findExactAssetSizeByIdentifierSmartSearchAndAssetType(String searchValue, Long assetTypeId, Long excludeAssetId) {
@@ -522,30 +503,12 @@ public class AssetService extends CrudService<Asset> {
                 searchValue, assetTypeId, excludeAssetId, securityContext.getUserSecurityFilter());
     }
 
+    //TODO: Should this be private?  No Usages, and breaks the pattern set above / below
     public int findExactAssetSizeByIdentifierSmartSearchAndAssetType(
             String searchValue, Long assetTypeId, Long excludeAssetId, UserSecurityFilter filter) {
 
-        QueryBuilder<Asset> builder = new QueryBuilder<>(Asset.class, filter);
-
-        //TODO Can probably drop that "IGNORE_CASE" crap... the DB always ignores case... that's part of the config.
-        WhereParameterGroup group = new WhereParameterGroup("smartsearch");
-        group.addClause(WhereClauseFactory.create(Comparator.EQ,
-                "identifier", "identifier", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
-        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ,
-                "rfidNumber", "rfidNumber", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
-        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ,
-                "customerRefNumber", "customerRefNumber", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
-        builder.addWhere(group);
-
-        WhereParameterGroup group2 = new WhereParameterGroup("restrictsearch");
-        group2.setChainOperator(ChainOp.AND);
-        group2.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ,
-                "type_id", "type.id", assetTypeId, null, ChainOp.AND));
-        group2.addClause(WhereClauseFactory.create(WhereParameter.Comparator.NE,
-                "id", "id", excludeAssetId, null, ChainOp.AND));
-        builder.addWhere(group2);
-
-        builder.addOrder("type", "created");
+        QueryBuilder<Asset> builder = makeFindExactAssetByIdentifierSmartSearchAndAssetTypeQueryBuilder(
+                searchValue, assetTypeId, excludeAssetId, -1, -1, filter);
 
         return persistenceService.count(builder).intValue();
     }
@@ -559,16 +522,24 @@ public class AssetService extends CrudService<Asset> {
     private List<Asset> findExactAssetByIdentifierSmartSearchAndAssetType(
             String searchValue, Long assetTypeId, Long excludeAssetId, int first, int pageSize, UserSecurityFilter filter) {
 
+        QueryBuilder<Asset> builder = makeFindExactAssetByIdentifierSmartSearchAndAssetTypeQueryBuilder(
+                searchValue, assetTypeId, excludeAssetId, first, pageSize, filter);
+
+        return persistenceService.findAllPaginated(builder, first, pageSize);
+    }
+
+    private QueryBuilder<Asset> makeFindExactAssetByIdentifierSmartSearchAndAssetTypeQueryBuilder(
+            String searchValue, Long assetTypeId, Long excludeAssetId, int first, int pageSize, UserSecurityFilter filter) {
+
         QueryBuilder<Asset> builder = new QueryBuilder<>(Asset.class, filter);
 
-        //TODO Can probably drop that "IGNORE_CASE" crap... the DB always ignores case... that's part of the config.
         WhereParameterGroup group = new WhereParameterGroup("smartsearch");
         group.addClause(WhereClauseFactory.create(Comparator.EQ,
-                "identifier", "identifier", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
+                "identifier", "identifier", searchValue, null, WhereClause.ChainOp.OR));
         group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ,
-                "rfidNumber", "rfidNumber", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
+                "rfidNumber", "rfidNumber", searchValue, null, WhereClause.ChainOp.OR));
         group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ,
-                "customerRefNumber", "customerRefNumber", searchValue, WhereParameter.IGNORE_CASE, WhereClause.ChainOp.OR));
+                "customerRefNumber", "customerRefNumber", searchValue, null, WhereClause.ChainOp.OR));
         builder.addWhere(group);
 
         WhereParameterGroup group2 = new WhereParameterGroup("restrictsearch");
@@ -581,7 +552,7 @@ public class AssetService extends CrudService<Asset> {
 
         builder.addOrder("type", "created");
 
-        return persistenceService.findAllPaginated(builder, first, pageSize);
+        return builder;
     }
 
     private void moveRfidFromAssets(Asset asset/*, User modifiedBy*/) {
