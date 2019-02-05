@@ -506,7 +506,7 @@ public class AssetService extends CrudService<Asset> {
             String searchValue, Long assetTypeId, Long excludeAssetId, UserSecurityFilter filter) {
 
         QueryBuilder<Asset> builder = makeFindExactAssetByIdentifierSmartSearchAndAssetTypeQueryBuilder(
-                searchValue, assetTypeId, excludeAssetId, -1, -1, filter);
+                searchValue, assetTypeId, excludeAssetId, filter);
 
         return persistenceService.count(builder).intValue();
     }
@@ -521,13 +521,13 @@ public class AssetService extends CrudService<Asset> {
             String searchValue, Long assetTypeId, Long excludeAssetId, int first, int pageSize, UserSecurityFilter filter) {
 
         QueryBuilder<Asset> builder = makeFindExactAssetByIdentifierSmartSearchAndAssetTypeQueryBuilder(
-                searchValue, assetTypeId, excludeAssetId, first, pageSize, filter);
+                searchValue, assetTypeId, excludeAssetId, filter);
 
         return persistenceService.findAllPaginated(builder, first, pageSize);
     }
 
     private QueryBuilder<Asset> makeFindExactAssetByIdentifierSmartSearchAndAssetTypeQueryBuilder(
-            String searchValue, Long assetTypeId, Long excludeAssetId, int first, int pageSize, UserSecurityFilter filter) {
+            String searchValue, Long assetTypeId, Long excludeAssetId, UserSecurityFilter filter) {
 
         QueryBuilder<Asset> builder = new QueryBuilder<>(Asset.class, filter);
 
