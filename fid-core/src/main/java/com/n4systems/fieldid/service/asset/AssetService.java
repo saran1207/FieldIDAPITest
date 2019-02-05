@@ -470,7 +470,6 @@ public class AssetService extends CrudService<Asset> {
         group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "customerRefNumber", "customerRefNumber", searchValue, null, WhereClause.ChainOp.OR));
         builder.addWhere(group);
         builder.addOrder("type", "created");
-        //builder.addOrder("created");
 
         return builder;
     }
@@ -493,7 +492,6 @@ public class AssetService extends CrudService<Asset> {
         group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "customerRefNumber", "customerRefNumber", searchValue, WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
         builder.addWhere(group);
         builder.addOrder("type", "created");
-        //builder.addOrder("created");
 
         return persistenceService.findAll(builder);
     }
