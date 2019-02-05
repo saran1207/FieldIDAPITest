@@ -45,6 +45,7 @@ public class ImportCatalogService {
 		adjustWhatToImport();
 		try {
 			importCatalog();
+			logger.info("Successfully imported " + importAssetTypeIds.size() + " asset types and " + importEventTypeIds.size() + " event types");
 			return true;
 		} catch (ImportFailureException e) {
             logger.error("Error importing catalog, rolling back", e);

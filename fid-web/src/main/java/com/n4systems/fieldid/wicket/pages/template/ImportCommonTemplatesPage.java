@@ -7,9 +7,10 @@ import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndWithFeedbackPage;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.Tenant;
 import com.n4systems.security.Permissions;
-import com.n4systems.taskscheduling.TaskExecutor;
+import com.n4systems.services.SecurityContext;
 import com.n4systems.taskscheduling.task.CatalogImportTask;
 import com.n4systems.util.ListingPair;
+import com.n4systems.util.ServiceLocator;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
@@ -37,6 +38,9 @@ public class ImportCommonTemplatesPage extends FieldIDFrontEndWithFeedbackPage {
 
     @SpringBean
     private PublishedCatalogService publishedCatalogService;
+
+    @SpringBean
+    private SecurityContext securityContext;
 
     public ImportCommonTemplatesPage(PageParameters params) {
         super(params);
@@ -176,7 +180,7 @@ public class ImportCommonTemplatesPage extends FieldIDFrontEndWithFeedbackPage {
 
         Tenant houseAccountTenant = publishedCatalogService.getHouseAccountTenant();
         try {
-            CatalogImportTask importTask = new CatalogImportTask();
+            CatalogImportTask importTask = ServiceLocator.getBean(CatalogImportTask.class);
 
             importTask.setImportEventTypeIds(new HashSet<Long>());
             importTask.setImportAssetTypeIds(selectedAssetIds);
@@ -185,9 +189,9 @@ public class ImportCommonTemplatesPage extends FieldIDFrontEndWithFeedbackPage {
             importTask.setUsingPackages(true);
             importTask.setUser(getCurrentUser());
 
-            TaskExecutor.getInstance().execute(importTask);
+            importTask.start();
 
-            logger.info("Could not schedule import of asset types from " + houseAccountTenant.getName());
+            logger.info("Scheduled import of asset types from " + houseAccountTenant.getName());
             Session.get().info(getString("msg.scheduleImport.email"));
 
         } catch (Exception e) {
