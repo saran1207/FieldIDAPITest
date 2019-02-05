@@ -7,7 +7,6 @@ import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndWithFeedbackPage;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.Tenant;
 import com.n4systems.security.Permissions;
-import com.n4systems.services.SecurityContext;
 import com.n4systems.taskscheduling.task.CatalogImportTask;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.ServiceLocator;
@@ -38,9 +37,6 @@ public class ImportCommonTemplatesPage extends FieldIDFrontEndWithFeedbackPage {
 
     @SpringBean
     private PublishedCatalogService publishedCatalogService;
-
-    @SpringBean
-    private SecurityContext securityContext;
 
     public ImportCommonTemplatesPage(PageParameters params) {
         super(params);
