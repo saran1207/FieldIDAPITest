@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
+import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.exceptions.ImageAttachmentException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.images.ImageService;
@@ -17,6 +18,8 @@ import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
+import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
@@ -60,6 +63,8 @@ public class S3Service extends FieldIdPersistenceService {
     private static final Logger logger = Logger.getLogger(S3Service.class);
 
     private static final int DEFAULT_EXPIRATION_DAYS = 1;
+    private PrimaryOrg primaryOrg;
+    private SecondaryOrg secondaryOrg;
 
     private Integer expirationDays = null;
     public static final String TENANTS_PREFIX = "tenants/";
@@ -1419,6 +1424,87 @@ public class S3Service extends FieldIdPersistenceService {
     public void removeUserSignature(Long userId) {
         removeResource(null, USER_SIGNATURE_PATH, userId);
     }
+
+//------------------------------------------------------------------------------------------------------
+    public void uploadInternalOrgLogoImage(File internalOrgLogoImageFile, InternalOrg internalOrg) {
+
+        if (internalOrg.isPrimary()) {
+            uploadPrimaryOrgCertificateLogo(internalOrgLogoImageFile);
+        }
+        else {
+            uploadSecondaryOrgCertificateLogo(internalOrgLogoImageFile, internalOrg.getId());
+        }
+    }
+
+    public File downloadSecondaryOrgLogoImage(SecondaryOrg secondaryOrg) throws FileNotFoundException,IOException {
+        this.secondaryOrg = secondaryOrg;
+        return downloadSecondaryOrgLogoImage(secondaryOrg.getId());
+    }
+
+    public byte[] downloadSecondaryOrgLogoImageBytes(SecondaryOrg secondaryOrg) throws IOException {
+        byte[] secondaryOrgLogoImageData = downloadSecondaryOrgCertificateLogo(secondaryOrg.getId());
+        return secondaryOrgLogoImageData;
+    }
+
+    public File downloadSecondaryOrgLogoImage(Long secondaryOrgId) throws FileNotFoundException,IOException {
+        File secondaryOrgLogoImageFile = null;
+        URL logoUrl = null;
+        try {
+            byte[] secondaryOrgLogoImageBytes = downloadSecondaryOrgCertificateLogo(secondaryOrgId);
+            secondaryOrgLogoImageFile = PathHandler.getSecondaryOrgFile(this.secondaryOrg, PathHandler.createResourcePath(this.secondaryOrg.getTenant().getId()), PathHandler.createResourceFile(PathHandler.SECONDARY_CERTIFICATE_LOGO_PATH,secondaryOrgId));
+            FileOutputStream secondaryOrgLogoImageFos = new FileOutputStream(secondaryOrgLogoImageFile);
+            secondaryOrgLogoImageFos.write(secondaryOrgLogoImageBytes);
+            logoUrl = this.getBrandingLogoURL(this.secondaryOrg.getTenant().getId());
+        }
+        catch(FileNotFoundException e) {
+            logger.error("Unable to write to temp secondary Org logo Image file at: " + secondaryOrgLogoImageFile, e);
+            throw e;
+        }
+        catch(IOException e) {
+            logger.error("Unable to download secondary Org logo Image file from S3: " + logoUrl, e);
+            throw e;
+        }
+        return secondaryOrgLogoImageFile;
+    }
+
+    public File downloadInternalOrgLogoImage(InternalOrg internalOrg) throws FileProcessingException,FileNotFoundException,IOException {
+        if (internalOrg.isPrimary()) {
+            this.primaryOrg= (PrimaryOrg) internalOrg;
+            return downloadPrimaryOrgLogoImage();
+        }
+        this.secondaryOrg = (SecondaryOrg) internalOrg;
+        return downloadSecondaryOrgLogoImage(internalOrg.getId());
+    }
+
+    public File downloadPrimaryOrgLogoImage(PrimaryOrg primaryOrg) throws FileNotFoundException,IOException { return downloadPrimaryOrgLogoImage(); }
+
+    public File downloadPrimaryOrgLogoImage() throws FileNotFoundException,IOException {
+        File primaryOrgLogoImageFile = null;
+        URL logoUrl = null;
+        try {
+            byte[] primaryOrgLogoImageBytes = downloadPrimaryOrgCertificateLogo();
+            primaryOrgLogoImageFile = PathHandler.getPrimaryOrgFile(this.primaryOrg, PathHandler.createResourcePath(this.primaryOrg.getTenant().getId()), PathHandler.createResourceFile(PathHandler.PRIMARY_CERTIFICATE_LOGO_PATH));
+            FileOutputStream primaryOrgLogoImageFos = new FileOutputStream(primaryOrgLogoImageFile);
+            primaryOrgLogoImageFos.write(primaryOrgLogoImageBytes);
+            logoUrl = this.getBrandingLogoURL(this.primaryOrg.getTenant().getId());
+        }
+        catch(FileNotFoundException e) {
+            logger.error("Unable to write to temp primary Org logo Image file at: " + primaryOrgLogoImageFile, e);
+            throw e;
+        }
+        catch(IOException e) {
+            logger.error("Unable to download primary Org logo Image file from S3 :" + logoUrl, e);
+            throw e;
+        }
+        return primaryOrgLogoImageFile;
+    }
+
+    public void removeInternalOrgLogoImage(InternalOrg internalOrg){
+        if (internalOrg.isPrimary()) removePrimaryOrgCertificateLogo();
+        else removeSecondaryOrgCertificateLogo(internalOrg.getId());
+    }
+//----------------------------------------------------------------------------------------------
+
 
     public String getEventSignaturePath(SignatureCriteriaResult signatureResult){
         String eventSignaturePath = getEventSignaturePath(signatureResult.getTenant().getId(), signatureResult.getEvent().getId(), signatureResult.getCriteria().getId());
