@@ -59,6 +59,7 @@ import com.n4systems.fieldid.wicket.pages.setup.user.UserGroupsPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UserImportPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UsersListPage;
 import com.n4systems.fieldid.wicket.pages.setup.userregistration.UserRequestListPage;
+import com.n4systems.fieldid.wicket.pages.template.ImportCommonTemplatesPage;
 import com.n4systems.fieldid.wicket.pages.trends.CriteriaTrendsPage;
 import com.n4systems.model.Asset;
 import com.n4systems.model.ExtendedFeature;
@@ -423,6 +424,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         container.add(new BookmarkablePageLink<ColumnsLayoutPage>("assetLayoutLink", ColumnsLayoutPage.class, param("type", ReportType.ASSET)));
         container.add(new BookmarkablePageLink<ColumnsLayoutPage>("eventLayoutLink", ColumnsLayoutPage.class, param("type", ReportType.EVENT)).setVisible(getSecurityGuard().isInspectionsEnabled()));
 
+        container.add(new BookmarkablePageLink<ImportCommonTemplatesPage>("importCommonTemplatesLink", ImportCommonTemplatesPage.class));
         return container;
 	}
 

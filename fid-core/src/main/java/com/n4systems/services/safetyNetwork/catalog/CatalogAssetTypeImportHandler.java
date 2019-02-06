@@ -84,8 +84,8 @@ public class CatalogAssetTypeImportHandler extends CatalogImportHandler {
 	}
 
 	private void importAssetType(Long assetTypeId) throws ImportFailureException {
-		originalType = importCatalog.getPublishedAssetType(assetTypeId, "infoFields");
-		importedAssetType = importCatalog.getPublishedAssetType(assetTypeId, "infoFields");
+		originalType = importCatalog.getPublishedAssetType(assetTypeId, "infoFields", "attachments");
+		importedAssetType = importCatalog.getPublishedAssetType(assetTypeId, "infoFields", "attachments");
 
 		prepareAssetImageForImport();
 		copyAssetType(importedAssetType);
