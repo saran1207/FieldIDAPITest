@@ -1509,7 +1509,7 @@ public class S3Service extends FieldIdPersistenceService {
             logoUrl = this.getBrandingLogoURL(this.primaryOrg.getTenant().getId());
         }
         catch(FileNotFoundException e) {
-            logger.error("Unable to write to temp branding logo Image file at: " + brandingLogoImageFile, e);
+            logger.error("Unable to write to temp branding logo Image file at: " + primaryOrgLogoImageFile, e);
             throw e;
         }
         catch(IOException e) {
