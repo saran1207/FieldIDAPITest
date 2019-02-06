@@ -93,6 +93,7 @@ import com.n4systems.services.search.writer.CriteriaTrendsIndexWriter;
 import com.n4systems.services.search.writer.EventIndexWriter;
 import com.n4systems.services.signature.SignatureService;
 import com.n4systems.services.tenant.TenantCreationService;
+import com.n4systems.taskscheduling.task.CatalogImportTask;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.json.ArrowStyleAnnotationJsonRenderer;
@@ -984,5 +985,11 @@ public class FieldIdCoreConfig {
     @Bean
     public PublishedCatalogService publishedCatalogService() {
         return new PublishedCatalogService();
+    }
+
+    @Bean
+    @Scope("prototype")
+    public CatalogImportTask catalogImportTask() {
+        return new CatalogImportTask();
     }
 }

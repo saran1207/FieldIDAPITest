@@ -1,21 +1,21 @@
 package com.n4systems.fieldid.ws.v1.resources.eventbook;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.MediaType;
-
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+import com.newrelic.api.agent.Trace;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.core.MediaType;
 
 @Component
 @Path("eventBook")
@@ -58,6 +58,7 @@ public class ApiEventBookResource extends SetupDataResource<ApiEventBook, EventB
 	
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Trace  (dispatcher=true)
 	@Transactional
 	public void saveEventBook(ApiEventBook apiEventBook) {
 		if (apiEventBook.getName() == null || apiEventBook.getOwnerId() == null || apiEventBook.getSid() == null) {
@@ -69,6 +70,7 @@ public class ApiEventBookResource extends SetupDataResource<ApiEventBook, EventB
 		EventBook eventBook = convertApiEventBook(apiEventBook);		
 		persistenceService.save(eventBook);
 		logger.info("saved event book: " + apiEventBook.getName());
+		setEnhancedLoggingWithAppInfoParameters();
 	}
 	
 	private EventBook convertApiEventBook(ApiEventBook apiEventBook) {

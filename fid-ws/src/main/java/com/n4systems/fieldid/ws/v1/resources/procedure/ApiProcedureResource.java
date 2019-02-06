@@ -1,15 +1,16 @@
 package com.n4systems.fieldid.ws.v1.resources.procedure;
 
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.procedure.LockoutReasonService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
+import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithEnhancedLogging;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.GpsLocation;
 import com.n4systems.model.ProcedureWorkflowState;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.procedure.*;
+import com.newrelic.api.agent.Trace;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,12 +18,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 @Path("procedure")
-public class ApiProcedureResource extends FieldIdPersistenceService {
+public class ApiProcedureResource extends FieldIdPersistenceServiceWithEnhancedLogging {
 
     private static final Logger logger = Logger.getLogger(ApiProcedureResource.class);
 
@@ -36,7 +40,9 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     @Path("lock")
+    @Trace  (dispatcher=true)
     public void lock(ApiProcedureResult apiProcedure) {
+        setEnhancedLoggingWithAppInfoParameters();
         if (apiProcedure.getProcedureId() == null) {
             throw new NullPointerException("ApiProcedureResult has null procedureId");
         }
@@ -95,7 +101,9 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     @Path("unlock")
+    @Trace  (dispatcher=true)
     public void unlock(ApiProcedureResult apiProcedure) {
+        setEnhancedLoggingWithAppInfoParameters();
         if (apiProcedure.getProcedureId() == null) {
             throw new NullPointerException("ApiProcedureResult has null procedureId");
         }
@@ -120,12 +128,14 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
     @Path("assignedList")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public ListResponse<ApiProcedure> findAssignedProcedures(
             @QueryParam("startDate") Date startDate,
             @QueryParam("endDate") Date endDate,
             @DefaultValue("0") @QueryParam("page") int page,
             @DefaultValue("25") @QueryParam("pageSize") int pageSize) {
+        setEnhancedLoggingWithAppInfoParameters();
         List<Procedure> procedures = procedureService.findAllOpenAssignedProcedures(startDate, endDate, page, pageSize);
         Long total = procedureService.getTotalProcedureCount(startDate, endDate);
         List<ApiProcedure> apiSchedules = convertProcedures(procedures);
@@ -221,10 +231,12 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
     @Path("assignedListCounts")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public List<Long> findAssignedActiveProcedureCounts(
             @QueryParam("year") int year,
             @QueryParam("month") int month) {
+        setEnhancedLoggingWithAppInfoParameters();
         return procedureService.findAssignedActiveProcedureCounts(year, month);
     }
 
