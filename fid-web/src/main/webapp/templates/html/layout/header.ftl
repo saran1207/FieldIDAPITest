@@ -1,3 +1,4 @@
+
 <head>
 
     <@n4.includeStyle href="dropdown/style"/>
@@ -224,7 +225,7 @@
                                     <li>
                                         <a href="<@s.url value='/w/setup/settings'/>" ><@s.text name="nav.settings" /> » </a>
                                         <ul class="sub_menu">
-                                            <li><a href="<@s.url action='organizations' namespace='/'/>"><@s.text name="title.manage_organizational_units.plural"/></a></li>
+                                            <li><a href="<@s.url value='/w/setup/organizations'/>"><@s.text name="title.manage_organizational_units.plural"/></a></li>
                                             <li><a href="<@s.url value='/w/setup/systemSettings'/>"><@s.text name="nav.system_settings"/></a></li>
                                             <li><a href="<@s.url action='quickSetupWizard/startWizard' namespace='/'/>"><@s.text name="label.quick_setup_wizard"/></a></li>
                                             <li><a href="<@s.url value='/w/setup/branding'/>"><@s.text name="title.manage_branding.plural"/></a></li>
@@ -270,7 +271,7 @@
                                             <li><a href="/fieldid/w/customerActions?InitialTabSelection=ShowImportExportPage"><@s.text name="label.import_owners"/></a></li>
                                             <li><a href="/fieldid/w/assetImport"><@s.text name="label.import_assets"/></a></li>
                                             <li><a href="/fieldid/w/eventImport"><@s.text name="label.import_events"/></a></li>
-                                            <li><a href="<@s.url action='autoAttributeImportExport' namespace='/'/>"><@s.text name="label.import_auto_attributes"/></a></li>
+                                            <li><a href="/fieldid/w/autoAttributeActions?InitialTabSelection=ShowImportExportPage"><@s.text name="label.import_auto_attributes"/></a></li>
                                             <li><a href="/fieldid/w/userImport"><@s.text name="label.import_users"/></a></li>
                                         </ul>
                                     </li>
@@ -278,7 +279,7 @@
                                         <a href="<@s.url value="/w/setup/templates" />" ><@s.text name="nav.templates"/> » </a>
                                         <#if sessionUser.hasAccess("managesystemconfig") >
                                             <ul class="sub_menu">
-                                                <li><a href="<@s.url action='autoAttributeCriteriaList' namespace='/'/>" ><@s.text name="title.auto_attribute_wizard.plural" /></a></li>
+                                                <li><a href="/fieldid/w/autoAttributeActions?InitialTabSelection=ShowViewAllPage" ><@s.text name="title.auto_attribute_wizard.plural" /></a></li>
                                                 <li><a href="<@s.url value='w/setup/commentTemplateList' />" ><@s.text name="title.manage_comment_templates.plural" /></a></li>
                                                 <li><a href="<@s.url value='/w/setup/columnsLayout' type='ASSET'/>" ><@s.text name="title.column_layout_asset" /></a></li>
                                                 <#if securityGuard.isInspectionsEnabled()>
@@ -287,6 +288,7 @@
                                                 <#if securityGuard.integrationEnabled>
                                                     <li><a href="<@s.url action="assetCodeMappingList"/>" ><@s.text name="title.manage_asset_code_mappings" /></a></li>
                                                 </#if>
+                                                <li><a href="/fieldid/w/setup/importCommonTemplates" ><@s.text name="nav.common_templates" /></a></li>
                                             </ul>
                                         </#if>
                                     </li>

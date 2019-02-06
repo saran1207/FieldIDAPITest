@@ -4,10 +4,7 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.wicket.components.event.criteria.signature.resource.SignatureResourceReference;
 import com.n4systems.fieldid.wicket.components.event.criteria.signature.resource.TemporarySignatureResourceReference;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
-import com.n4systems.fieldid.wicket.pages.DashboardPage;
-import com.n4systems.fieldid.wicket.pages.OopsPage;
-import com.n4systems.fieldid.wicket.pages.SecretTestPage;
-import com.n4systems.fieldid.wicket.pages.SelectLanguagePage;
+import com.n4systems.fieldid.wicket.pages.*;
 import com.n4systems.fieldid.wicket.pages.admin.adminusers.AdminUserPage;
 import com.n4systems.fieldid.wicket.pages.admin.adminusers.ChangeAdminUser;
 import com.n4systems.fieldid.wicket.pages.admin.config.ConfigPage;
@@ -22,9 +19,11 @@ import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetImportPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetMergePage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
+import com.n4systems.fieldid.wicket.pages.autoattributes.AutoAttributeActionsPage;
 import com.n4systems.fieldid.wicket.pages.customers.CustomerActionsPage;
 import com.n4systems.fieldid.wicket.pages.event.EventImportPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.*;
+import com.n4systems.fieldid.wicket.pages.customers.CustomerActionsPage;
 import com.n4systems.fieldid.wicket.pages.escalationrules.ManageEscalationRules;
 import com.n4systems.fieldid.wicket.pages.event.*;
 import com.n4systems.fieldid.wicket.pages.event.criteriaimage.CriteriaImageViewListPage;
@@ -101,7 +100,6 @@ import com.n4systems.fieldid.wicket.pages.useraccount.UserAccountSearchPage;
 import com.n4systems.fieldid.wicket.pages.useraccount.mobileofflineprofile.MobileOfflineProfilePage;
 import com.n4systems.fieldid.wicket.pages.useraccount.notificationsettings.AddEditNotificationSettingPage;
 import com.n4systems.fieldid.wicket.pages.useraccount.notificationsettings.NotificationSettingsListPage;
-import com.n4systems.fieldid.wicket.pages.OopsPageErrorType;
 import com.n4systems.fieldid.wicket.resources.CacheInSessionLocalizer;
 import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
 import com.n4systems.fieldid.wicket.resources.TenantOverridesResourceLoader;
@@ -135,6 +133,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/import", ImportPage.class);
         mountPage("setup/templates", TemplatesPage.class);
         mountPage("setup/widgets", WidgetsPage.class);
+        mountPage("setup/organizations", OrgsListPage.class);
         mountPage("setup/systemSettings", SystemSettingsPage.class);
         mountPage("setup/branding", BrandingPage.class);
         mountPage("setup/yourPlan", YourPlanPage.class);
@@ -225,6 +224,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/addEditNotifications", AddEditNotificationSettingPage.class);
 
         mountPage("setup/buttonGroups", ButtonGroupPage.class);
+
+        mountPage("setup/importCommonTemplates", ImportCommonTemplatesPage.class);
 
         mountPage("places", OrgViewPage.class);
         mountPage("placeSummary", PlaceSummaryPage.class);
@@ -376,6 +377,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("eventImport", EventImportPage.class);
         mountPage("assetImport", AssetImportPage.class);
         mountPage("userImport", UserImportPage.class);
+        mountPage("autoAttributeActions", AutoAttributeActionsPage.class);
 
         mountResource("/signature/${eventId}/${criteriaId}", new SignatureResourceReference());
         mountResource("/temporarySignature/${fileId}", new TemporarySignatureResourceReference());

@@ -55,6 +55,7 @@ import com.n4systems.fieldid.service.pentaho.PentahoService;
 import com.n4systems.fieldid.service.predefinedlocation.PredefinedLocationService;
 import com.n4systems.fieldid.service.procedure.*;
 import com.n4systems.fieldid.service.project.ProjectService;
+import com.n4systems.fieldid.service.catalog.PublishedCatalogService;
 import com.n4systems.fieldid.service.schedule.AssetTypeScheduleService;
 import com.n4systems.fieldid.service.schedule.MassScheduleService;
 import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
@@ -92,6 +93,7 @@ import com.n4systems.services.search.writer.CriteriaTrendsIndexWriter;
 import com.n4systems.services.search.writer.EventIndexWriter;
 import com.n4systems.services.signature.SignatureService;
 import com.n4systems.services.tenant.TenantCreationService;
+import com.n4systems.taskscheduling.task.CatalogImportTask;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.json.ArrowStyleAnnotationJsonRenderer;
@@ -978,5 +980,16 @@ public class FieldIdCoreConfig {
     @Bean
     public ButtonGroupService buttonGroupService() {
         return new ButtonGroupService();
+    }
+
+    @Bean
+    public PublishedCatalogService publishedCatalogService() {
+        return new PublishedCatalogService();
+    }
+
+    @Bean
+    @Scope("prototype")
+    public CatalogImportTask catalogImportTask() {
+        return new CatalogImportTask();
     }
 }

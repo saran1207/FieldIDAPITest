@@ -42,6 +42,8 @@ public class MutableWebConfig extends WebConfig {
 		this.mixpanelToken = mixpanelToken;
 	}
 
+	public void setGoogleApiKey(String googleApiKey) { this.googleApiKey = googleApiKey; }
+
 	public void setExternalPlansAndPricingUrl(String externalPlansAndPricingUrl) {
 		this.externalPlansAndPricingUrl = externalPlansAndPricingUrl;
 	}

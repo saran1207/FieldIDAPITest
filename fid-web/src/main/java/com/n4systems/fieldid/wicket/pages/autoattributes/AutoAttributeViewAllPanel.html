@@ -1,0 +1,29 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<wicket:panel>
+
+            <div wicket:id="resultList">
+                <table class="list">
+                    <thead>
+                        <tr>
+                            <th><wicket:message key="label.assettype" /></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr wicket:id="assetTypeList">
+                            <td class="notranslate">
+                                <a href="javascript:void(0)" wicket:id="assetTypeLink"><wicket:container wicket:id="assetTypeName" /></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div wicket:id="emptyListResult" class="emptyList" >
+                <h2><wicket:message key="label.noresults"/></h2>
+                <p>
+                    <span><wicket:message key="label.emptylistautoattribute"/></span>
+                </p>
+            </div>
+
+</wicket:panel>
+</html>

@@ -24,6 +24,7 @@ import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ProcedureSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
+import com.n4systems.fieldid.wicket.pages.autoattributes.AutoAttributeActionsPage;
 import com.n4systems.fieldid.wicket.pages.customers.CustomerActionsPage;
 import com.n4systems.fieldid.wicket.pages.event.EventImportPage;
 import com.n4systems.fieldid.wicket.pages.event.StartEventPage;
@@ -33,6 +34,7 @@ import com.n4systems.fieldid.wicket.pages.loto.ProcedureWaitingApprovalsPage;
 import com.n4systems.fieldid.wicket.pages.loto.PublishedListAllPage;
 import com.n4systems.fieldid.wicket.pages.org.BrandingPage;
 import com.n4systems.fieldid.wicket.pages.org.OrgViewPage;
+import com.n4systems.fieldid.wicket.pages.org.OrgsListPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
 import com.n4systems.fieldid.wicket.pages.search.SmartSearchListPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
@@ -59,6 +61,7 @@ import com.n4systems.fieldid.wicket.pages.setup.user.UserGroupsPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UserImportPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UsersListPage;
 import com.n4systems.fieldid.wicket.pages.setup.userregistration.UserRequestListPage;
+import com.n4systems.fieldid.wicket.pages.template.ImportCommonTemplatesPage;
 import com.n4systems.fieldid.wicket.pages.trends.CriteriaTrendsPage;
 import com.n4systems.model.Asset;
 import com.n4systems.model.ExtendedFeature;
@@ -67,6 +70,7 @@ import com.n4systems.model.columns.ReportType;
 import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
+import com.newrelic.api.agent.NewRelic;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -221,6 +225,8 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
         add(topTitleLabel = useTopTitleLabel() ? createTopTitleLabel("topTitleLabel") : createTitleLabel("topTitleLabel"));
         topTitleLabel.setRenderBodyOnly(true);
+        NewRelic.addCustomParameter("Tenant", getTenant().getName());
+        NewRelic.addCustomParameter("User", getSessionUser().getUserID());
     }
 
     protected boolean forceDefaultLanguage() {
@@ -332,6 +338,8 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
                 PageParametersBuilder.param(CustomerActionsPage.INITIAL_TAB_SELECTION_KEY, CustomerActionsPage.SHOW_IMPORTEXPORT_PAGE)));
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("assetImportLink", AssetImportPage.class));
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("eventImportLink", EventImportPage.class));
+        subMenuContainer.add(new BookmarkablePageLink<WebPage>("autoAttributesImportLink", AutoAttributeActionsPage.class,
+                PageParametersBuilder.param(AutoAttributeActionsPage.INITIAL_TAB_SELECTION_KEY, AutoAttributeActionsPage.SHOW_IMPORTEXPORT_PAGE)));
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("templatesLink", TemplatesPage.class));
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("userImportLink", UserImportPage.class));
         subMenuContainer.add(createTemplatesSubMenu());
@@ -410,12 +418,15 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         assetCodeMappingcontainer.setVisible(intergrationEnabled);
         container.add(assetCodeMappingcontainer);
 
+        container.add(new BookmarkablePageLink<WebPage>("autoAttributesViewAllLink", AutoAttributeActionsPage.class,
+                PageParametersBuilder.param(AutoAttributeActionsPage.INITIAL_TAB_SELECTION_KEY, AutoAttributeActionsPage.SHOW_AUTO_ATTRIBUTES_VIEW_ALL_PAGE)));
         container.add(new BookmarkablePageLink("commentTemplateLink",
                                                CommentTemplateListPage.class));
         
         container.add(new BookmarkablePageLink<ColumnsLayoutPage>("assetLayoutLink", ColumnsLayoutPage.class, param("type", ReportType.ASSET)));
         container.add(new BookmarkablePageLink<ColumnsLayoutPage>("eventLayoutLink", ColumnsLayoutPage.class, param("type", ReportType.EVENT)).setVisible(getSecurityGuard().isInspectionsEnabled()));
 
+        container.add(new BookmarkablePageLink<ImportCommonTemplatesPage>("importCommonTemplatesLink", ImportCommonTemplatesPage.class));
         return container;
 	}
 
@@ -434,7 +445,8 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
 	private Component createSettingsSubMenu() {
     	WebMarkupContainer container = new WebMarkupContainer("settingsSubMenuContainer");
-    	
+
+        container.add(new BookmarkablePageLink<Void>("organizationsLink", OrgsListPage.class));
     	container.add(new BookmarkablePageLink<Void>("systemSettingsLink", SystemSettingsPage.class));
         container.add(new BookmarkablePageLink<Void>("brandingLink", BrandingPage.class));
         container.add(new BookmarkablePageLink<Void>("yourPlanLink", YourPlanPage.class));

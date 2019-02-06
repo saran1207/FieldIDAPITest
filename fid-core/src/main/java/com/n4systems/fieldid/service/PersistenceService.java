@@ -383,4 +383,8 @@ public class PersistenceService extends FieldIdService {
     public Object merge(Object entity) {
         return em.merge(entity);
     }
+
+    public void flush() {
+        em.flush();
+    }
 }

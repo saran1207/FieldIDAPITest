@@ -222,9 +222,9 @@ public class PathHandler {
 		return mergePaths(REPORT_PATH_BASE, getTenantPathPart(asset.getTenant()), getReportFileName(locale));
 	}
 
-	private static String getCompiledReportPath(Asset asset) {
-		return mergePaths(REPORT_PATH_BASE, getTenantPathPart(asset.getTenant()), COMPILED_ASSET_REPORT_FILE_NAME);
-	}
+    private static String getCompiledReportPath(Asset asset) {
+        return mergePaths(REPORT_PATH_BASE, getTenantPathPart(asset.getTenant()), COMPILED_ASSET_REPORT_FILE_NAME);
+    }
 
 	private static String localizeReportPath(Tenant tenant, String localizedPathFormat, String defaultPath, Locale locale) {
 		String localizedPath;
@@ -360,10 +360,10 @@ public class PathHandler {
 		return printOutPath;
 	}
 
-	public static String getLotoDefaultPath(LotoPrintoutType type) {
-		String printOutPath = mergePaths(ALL_TENANT_LOTO_PART, type.getLabel());
-		return printOutPath;
-	}
+    public static String getLotoDefaultPath(LotoPrintoutType type) {
+        String printOutPath = mergePaths(ALL_TENANT_LOTO_PART, type.getLabel());
+        return printOutPath;
+    }
 
 	public static File getAbsoluteLotoPath(LotoPrintout lotoPrintout) {
 		String printOutPath = mergePaths(LOTO_PATH_BASE, getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName());
@@ -604,7 +604,6 @@ public class PathHandler {
 		return getUserFile(user, SIGNATURE_IMAGE_FILE_NAME);
 	}
 
-
 	/** @return The absolute private directory for a secondary org  */
 	public static File getSecondaryOrgPrivateDir(SecondaryOrg secondaryOrg, String path) {
 		File secondaryOrgPrivateDir = absolutize(getSecondaryOrgPrivatePath(secondaryOrg, path));
@@ -668,7 +667,4 @@ public class PathHandler {
 	public static String createResourceFile(String resourcePath, Object...pathArgs) {
 		return String.format(resourcePath, pathArgs);
 	}
-
-
-
 }
