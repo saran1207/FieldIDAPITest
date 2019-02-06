@@ -135,8 +135,9 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/widgets", WidgetsPage.class);
         mountPage("setup/organizations", OrgsListPage.class);
         mountPage("setup/systemSettings", SystemSettingsPage.class);
-        mountPage("setup/ssoSettings", SsoSettingsPage.class);
+        mountPage("setup/branding", BrandingPage.class);
         mountPage("setup/yourPlan", YourPlanPage.class);
+        mountPage("setup/ssoSettings", SsoSettingsPage.class);
         mountPage("setup/identifierOverrides", IdentifierOverridesPage.class);
         mountPage("setup/passwordPolicy", PasswordPolicyPage.class);
         mountPage("setup/accountPolicy", AccountPolicyPage.class);

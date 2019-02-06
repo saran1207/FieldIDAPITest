@@ -30,6 +30,7 @@ import com.n4systems.services.config.ConfigService;
 import com.n4systems.services.signature.SignatureService;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ContentTypeUtil;
+import com.n4systems.util.persistence.image.UploadedImage;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
@@ -80,7 +81,7 @@ public class S3Service extends FieldIdPersistenceService {
     public static final String CRITERIA_RESULT_IMAGE_PATH_THUMB = "/events/%d/criteria_results/%d/criteria_images/%s.thumbnail";
     public static final String CRITERIA_RESULT_IMAGE_PATH_MEDIUM = "/events/%d/criteria_results/%d/criteria_images/%s.medium";
 
-//    public static final String GENERATED_REPORT_PATH = "/printouts/%d/%s/%s";
+    //    public static final String GENERATED_REPORT_PATH = "/printouts/%d/%s/%s";
     public static final String GENERATED_REPORT_PATH = "/printouts/%d/%s/%d.%s";
     public static final String GENERATED_EXPORT_PATH = "/exports/%d/%s/%d.%s";
 
@@ -157,6 +158,15 @@ public class S3Service extends FieldIdPersistenceService {
         copyObject(DEFAULT_BRANDING_LOGO_PATH, createResourcePath(tenantId, BRANDING_LOGO_PATH));
     }
 
+    public boolean isBrandingLogoExists(Long customerOrgId, boolean isPrimary) {
+        if(isPrimary) {
+            return resourceExists(null, BRANDING_LOGO_PATH, customerOrgId);
+        } else {
+            return false;
+        }
+    }
+
+
     public byte[] downloadCertificateLogo(Long customerOrgId, boolean isPrimary) throws IOException {
         byte[] logoData = null;
         if(isPrimary) {
@@ -226,12 +236,12 @@ public class S3Service extends FieldIdPersistenceService {
      */
     public void uploadGeneratedReport(File file, DownloadLink downloadLink) {
         uploadResource(file,
-                       downloadLink.getTenant().getId(),
-                       GENERATED_REPORT_PATH,
-                       downloadLink.getUser().getId(),
-                       downloadLink.getContentType().getExtension(),
-                       downloadLink.getId(),
-                       downloadLink.getContentType().getExtension());
+                downloadLink.getTenant().getId(),
+                GENERATED_REPORT_PATH,
+                downloadLink.getUser().getId(),
+                downloadLink.getContentType().getExtension(),
+                downloadLink.getId(),
+                downloadLink.getContentType().getExtension());
     }
 
     /**
@@ -244,13 +254,13 @@ public class S3Service extends FieldIdPersistenceService {
      */
     public void uploadGeneratedReport(byte[] fileContents, DownloadLink downloadLink) {
         uploadResource(fileContents,
-                       downloadLink.getContentType().getMimeType(),
-                       downloadLink.getTenant().getId(),
-                       GENERATED_REPORT_PATH,
-                       downloadLink.getUser().getId(),
-                       downloadLink.getContentType().getExtension(),
-                       downloadLink.getId(),
-                       downloadLink.getContentType().getExtension());
+                downloadLink.getContentType().getMimeType(),
+                downloadLink.getTenant().getId(),
+                GENERATED_REPORT_PATH,
+                downloadLink.getUser().getId(),
+                downloadLink.getContentType().getExtension(),
+                downloadLink.getId(),
+                downloadLink.getContentType().getExtension());
     }
 
     /**
@@ -263,13 +273,13 @@ public class S3Service extends FieldIdPersistenceService {
      */
     public void uploadGeneratedExport(byte[] fileContents, DownloadLink downloadLink) {
         uploadResource(fileContents,
-                       downloadLink.getContentType().getMimeType(),
-                       downloadLink.getTenant().getId(),
-                       GENERATED_EXPORT_PATH,
-                       downloadLink.getUser().getId(),
-                       downloadLink.getContentType().getExtension(),
-                       downloadLink.getId(),
-                       downloadLink.getContentType().getExtension());
+                downloadLink.getContentType().getMimeType(),
+                downloadLink.getTenant().getId(),
+                GENERATED_EXPORT_PATH,
+                downloadLink.getUser().getId(),
+                downloadLink.getContentType().getExtension(),
+                downloadLink.getId(),
+                downloadLink.getContentType().getExtension());
     }
 
     /**
@@ -282,11 +292,11 @@ public class S3Service extends FieldIdPersistenceService {
     public byte[] getGeneratedExportByteArray(DownloadLink downloadLink) {
         try {
             return downloadResource(downloadLink.getTenant().getId(),
-                                    GENERATED_EXPORT_PATH,
-                                    downloadLink.getUser().getId(),
-                                    downloadLink.getContentType().getExtension(),
-                                    downloadLink.getId(),
-                                    downloadLink.getContentType().getExtension());
+                    GENERATED_EXPORT_PATH,
+                    downloadLink.getUser().getId(),
+                    downloadLink.getContentType().getExtension(),
+                    downloadLink.getId(),
+                    downloadLink.getContentType().getExtension());
         } catch (IOException e) {
             logger.error("Unable to download export file for DownloadLink with ID " + downloadLink.getId(), e);
             return null;
@@ -304,11 +314,11 @@ public class S3Service extends FieldIdPersistenceService {
     public byte[] getGeneratedReportByteArray(DownloadLink downloadLink) {
         try {
             return downloadResource(downloadLink.getTenant().getId(),
-                                    GENERATED_REPORT_PATH,
-                                    downloadLink.getUser().getId(),
-                                    downloadLink.getContentType().getExtension(),
-                                    downloadLink.getId(),
-                                    downloadLink.getContentType().getExtension());
+                    GENERATED_REPORT_PATH,
+                    downloadLink.getUser().getId(),
+                    downloadLink.getContentType().getExtension(),
+                    downloadLink.getId(),
+                    downloadLink.getContentType().getExtension());
         } catch (IOException e) {
             logger.error("Unable to download file for DownloadLink with ID " + downloadLink.getId(), e);
             return null;
@@ -321,6 +331,11 @@ public class S3Service extends FieldIdPersistenceService {
 
     public void removeCustomerLogo(Long customerOrgId) {
         removeResource(null, CUSTOMER_LOGO_PATH, customerOrgId);
+    }
+
+    public URL getBrandingCertificateLogoURL() {
+        URL url = generateResourceUrl(null, BRANDING_LOGO_PATH);
+        return url;
     }
 
     public URL getPrimaryOrgCertificateLogoURL() {
@@ -341,6 +356,11 @@ public class S3Service extends FieldIdPersistenceService {
             logo = downloadPrimaryOrgCertificateLogo();
         }
         return logo;
+    }
+
+    private byte[] downloadBrandingCertificateLogo() throws IOException {
+        byte[] logoData = downloadResource(null, BRANDING_LOGO_PATH);
+        return logoData;
     }
 
     private byte[] downloadPrimaryOrgCertificateLogo() throws IOException {
@@ -705,14 +725,14 @@ public class S3Service extends FieldIdPersistenceService {
 
     public void uploadProcedureDefinitionSvg(ProcedureDefinition procedureDefinition, byte[] fileContents, String fileName) {
         uploadResource(fileContents,
-                        //This is the MIME type for SVG images.  We can statically place this here since this is the
-                        //only type we're dealing with... you know... because this method is for SVGs.
-                        "image/svg+xml",
-                        procedureDefinition.getTenant().getId(),
-                        PROCEDURE_DEFINITION_IMAGE_PATH,
-                        procedureDefinition.getAsset().getId(),
-                        procedureDefinition.getId(),
-                        fileName);
+                //This is the MIME type for SVG images.  We can statically place this here since this is the
+                //only type we're dealing with... you know... because this method is for SVGs.
+                "image/svg+xml",
+                procedureDefinition.getTenant().getId(),
+                PROCEDURE_DEFINITION_IMAGE_PATH,
+                procedureDefinition.getAsset().getId(),
+                procedureDefinition.getId(),
+                fileName);
     }
 
     public byte[] downloadProcedureDefinitionArrowImageSvg(ProcedureDefinitionImage image, int index) throws IOException {
@@ -992,10 +1012,10 @@ public class S3Service extends FieldIdPersistenceService {
 
     public InputStream openCriteriaResultImageMedium(CriteriaResultImage criteriaResultImage) throws IOException {
         byte[] imageContents = downloadResource(null,
-                                                CRITERIA_RESULT_IMAGE_PATH_MEDIUM,
-                                                criteriaResultImage.getCriteriaResult().getEvent().getId(),
-                                                criteriaResultImage.getCriteriaResult().getId(),
-                                                criteriaResultImage.getFileName());
+                CRITERIA_RESULT_IMAGE_PATH_MEDIUM,
+                criteriaResultImage.getCriteriaResult().getEvent().getId(),
+                criteriaResultImage.getCriteriaResult().getId(),
+                criteriaResultImage.getFileName());
 
         if(imageContents != null) {
             return new ByteArrayInputStream(imageContents);
@@ -1489,14 +1509,44 @@ public class S3Service extends FieldIdPersistenceService {
             logoUrl = this.getBrandingLogoURL(this.primaryOrg.getTenant().getId());
         }
         catch(FileNotFoundException e) {
-            logger.error("Unable to write to temp primary Org logo Image file at: " + primaryOrgLogoImageFile, e);
+            logger.error("Unable to write to temp branding logo Image file at: " + primaryOrgLogoImageFile, e);
             throw e;
         }
         catch(IOException e) {
-            logger.error("Unable to download primary Org logo Image file from S3 :" + logoUrl, e);
+            logger.error("Unable to download branding logo Image file from S3 :" + logoUrl, e);
             throw e;
         }
         return primaryOrgLogoImageFile;
+    }
+
+    public File downloadBrandingLogoImage(InternalOrg internalOrg) throws FileProcessingException,FileNotFoundException,IOException {
+        File brandingLogoImageFile = null;
+        URL logoUrl = null;
+        try {
+            byte[] brandingLogoImageBytes = downloadBrandingCertificateLogo();
+            this.primaryOrg= (PrimaryOrg) internalOrg;
+            brandingLogoImageFile = PathHandler.getPrimaryOrgFile(this.primaryOrg, PathHandler.createResourcePath(this.primaryOrg.getTenant().getId()), PathHandler.createResourceFile(PathHandler.BRANDING_LOGO_PATH));
+            FileOutputStream brandingLogoImageFos = new FileOutputStream(brandingLogoImageFile);
+            brandingLogoImageFos.write(brandingLogoImageBytes);
+            logoUrl = this.getBrandingLogoURL(internalOrg.getTenant().getId());
+        }
+        catch(FileNotFoundException e) {
+            logger.error("Unable to write to temp branding logo Image file at: " + brandingLogoImageFile, e);
+            throw e;
+        }
+        catch(IOException e) {
+            logger.error("Unable to download branding logo Image file from S3 :" + logoUrl, e);
+            throw e;
+    }
+        return brandingLogoImageFile;
+    }
+
+    public void removeBrandingLogo() {
+        removeResource(null, BRANDING_LOGO_PATH);
+    }
+
+    public void uploadBrandingLogo(String contentType, byte[] bytes) {
+        uploadResource(bytes, contentType, null, BRANDING_LOGO_PATH);
     }
 
     public void removeInternalOrgLogoImage(InternalOrg internalOrg){
@@ -1980,73 +2030,73 @@ public class S3Service extends FieldIdPersistenceService {
         String bucketPolicyBase64 = this.getBucketPolicyBase64();
 
         String uploadJavascript =
-            "var control = document.getElementById('" + uploadFormMarkupId + "');" +
-            "if(!window.uploadsInProgress){" +
-            "   window.uploadsInProgress = 0;" +
-            "   window.setInterval(function(){" +
-            "       var buttons = document.querySelectorAll('[name=\"actionsContainer:saveButton\"],[name=\"actionsContainer:saveAndStartEventButton\"],[name=\"actionsContainer:saveAndPrintButton\"],[name=\"actionsContainer:mergeLink\"]');" +
-            "       for(var i = 0; i < buttons.length; i++){" +
-            "           buttons[i].disabled = (window.uploadsInProgress > 0);" +
-            "       }" +
-            "       var indicators = document.querySelectorAll('.wicket-ajax-indicator');" +
-            "       for(var i = 0; i < indicators.length; i++){" +
-            "           indicators[i].style.display = (window.uploadsInProgress > 0 ? 'inline' : 'none');" +
-            "       }" +
-            "   }, 1000);" +
-            "}" +
-            "for(var i = 0; control.files && i < control.files.length; i++){" +
-            "   var file = control.files[i];" +
-            //if file size is bigger than allowed, just skip it, the panel will show error message to user
-            "   if(file.size >= " + this.getUploadMaxFileSizeBytes() + "){" +
-            "       continue;" +
-            "   }" +
-            "   var uploadStarted = function(){" +
-            "       window.uploadsInProgress += 1;" +
-            "       wicketAjaxGet(getAjaxCallbackUrl('" + callbackContainerMarkupId + "') + '&filename=' + encodeURI(file.name) + '&status=-1&uuid=" + childUuid + "', function() { }, function() { });" +
-            "   };" +
-            "   var uploadFinished = function(xhr){" +
-            "       window.uploadsInProgress -= 1;" +
-            "       wicketAjaxGet(getAjaxCallbackUrl('" + callbackContainerMarkupId + "') + '&filename=' + encodeURI(file.name) + '&status=' + xhr.status + '&uuid=" + childUuid + "', function() { }, function() { });" +
-            "   };" +
-            "   var fd = new FormData();" +
-            "   var key = '" + path + "' + file.name;" +
-            // Populate the Post paramters.
-            "   fd.append('key', key);" +
-            "   fd.append('Content-Type', mimeLookup.getContentType(mimeLookup.getExt(file.name)));" +
-            "   fd.append('User-Agent', navigator.userAgent);" +
-            "   fd.append('Referer', document.URL);" +
-            "   fd.append('Server', '" + FieldIdVersion.getWebVersionDescription() + "');" +
-            "   fd.append('AWSAccessKeyId', '" + this.getAccessKey() + "');" +
-            "   fd.append('x-amz-meta-fieldid-user-userid', '" + user.getUserID() + "');" +
-            "   fd.append('x-amz-meta-fieldid-user-type', '" + user.getUserType().getLabel() + "');" +
-            "   fd.append('x-amz-meta-fieldid-user-permissions', '" + user.getPermissions() + "');" +
-            "   fd.append('x-amz-meta-fieldid-user-guid', '" + user.getGlobalId() + "');" +
-            "   fd.append('x-amz-meta-fieldid-user-owner-guid', '" + user.getOwner().getGlobalId() + "');" +
-            "   fd.append('acl', 'private');" +
-            "   fd.append('policy', '" + bucketPolicyBase64 + "');" +
-            "   fd.append('signature','" + this.getBucketPolicySigned(bucketPolicyBase64) + "');" +
-            //This file object is retrieved from a file input
-            "   fd.append('file', file );" +
-            "   var url = 'https://" + this.getBucketHostname() + "';" +
-            "   var timeout = " + getUploadTimeoutMilliseconds() + ";" +
-            "   $.ajax({" +
-            "       url: url," +
-            "       data: fd," +
-            "       processData: false," +
-            "       type: 'POST'," +
-            "       dataType: 'json'," +
-            "       crossDomain: true," +
-            "       contentType: false," +
-            //"       contentType: 'multipart/form-data'," +
-            //"       mimeType: 'multipart/form-data'," +
-            "       timeout: timeout," +
-            "       beforeSend: function(jqXHR, settings){ uploadStarted(); }," +
-            "       success: function(data, textStatus, jqXHR){ uploadFinished(jqXHR); }, " +
-            "       error: function(jqXHR, textStatus, errorThrown){ uploadFinished(jqXHR); } " +
-            "   });" +
-            //"   xhr.open('POST', 'https://" + this.getBucketHostname() + "', true);" +
-            //"   xhr.send(fd);" +
-            "}";
+                "var control = document.getElementById('" + uploadFormMarkupId + "');" +
+                        "if(!window.uploadsInProgress){" +
+                        "   window.uploadsInProgress = 0;" +
+                        "   window.setInterval(function(){" +
+                        "       var buttons = document.querySelectorAll('[name=\"actionsContainer:saveButton\"],[name=\"actionsContainer:saveAndStartEventButton\"],[name=\"actionsContainer:saveAndPrintButton\"],[name=\"actionsContainer:mergeLink\"]');" +
+                        "       for(var i = 0; i < buttons.length; i++){" +
+                        "           buttons[i].disabled = (window.uploadsInProgress > 0);" +
+                        "       }" +
+                        "       var indicators = document.querySelectorAll('.wicket-ajax-indicator');" +
+                        "       for(var i = 0; i < indicators.length; i++){" +
+                        "           indicators[i].style.display = (window.uploadsInProgress > 0 ? 'inline' : 'none');" +
+                        "       }" +
+                        "   }, 1000);" +
+                        "}" +
+                        "for(var i = 0; control.files && i < control.files.length; i++){" +
+                        "   var file = control.files[i];" +
+                        //if file size is bigger than allowed, just skip it, the panel will show error message to user
+                        "   if(file.size >= " + this.getUploadMaxFileSizeBytes() + "){" +
+                        "       continue;" +
+                        "   }" +
+                        "   var uploadStarted = function(){" +
+                        "       window.uploadsInProgress += 1;" +
+                        "       wicketAjaxGet(getAjaxCallbackUrl('" + callbackContainerMarkupId + "') + '&filename=' + encodeURI(file.name) + '&status=-1&uuid=" + childUuid + "', function() { }, function() { });" +
+                        "   };" +
+                        "   var uploadFinished = function(xhr){" +
+                        "       window.uploadsInProgress -= 1;" +
+                        "       wicketAjaxGet(getAjaxCallbackUrl('" + callbackContainerMarkupId + "') + '&filename=' + encodeURI(file.name) + '&status=' + xhr.status + '&uuid=" + childUuid + "', function() { }, function() { });" +
+                        "   };" +
+                        "   var fd = new FormData();" +
+                        "   var key = '" + path + "' + file.name;" +
+                        // Populate the Post paramters.
+                        "   fd.append('key', key);" +
+                        "   fd.append('Content-Type', mimeLookup.getContentType(mimeLookup.getExt(file.name)));" +
+                        "   fd.append('User-Agent', navigator.userAgent);" +
+                        "   fd.append('Referer', document.URL);" +
+                        "   fd.append('Server', '" + FieldIdVersion.getWebVersionDescription() + "');" +
+                        "   fd.append('AWSAccessKeyId', '" + this.getAccessKey() + "');" +
+                        "   fd.append('x-amz-meta-fieldid-user-userid', '" + user.getUserID() + "');" +
+                        "   fd.append('x-amz-meta-fieldid-user-type', '" + user.getUserType().getLabel() + "');" +
+                        "   fd.append('x-amz-meta-fieldid-user-permissions', '" + user.getPermissions() + "');" +
+                        "   fd.append('x-amz-meta-fieldid-user-guid', '" + user.getGlobalId() + "');" +
+                        "   fd.append('x-amz-meta-fieldid-user-owner-guid', '" + user.getOwner().getGlobalId() + "');" +
+                        "   fd.append('acl', 'private');" +
+                        "   fd.append('policy', '" + bucketPolicyBase64 + "');" +
+                        "   fd.append('signature','" + this.getBucketPolicySigned(bucketPolicyBase64) + "');" +
+                        //This file object is retrieved from a file input
+                        "   fd.append('file', file );" +
+                        "   var url = 'https://" + this.getBucketHostname() + "';" +
+                        "   var timeout = " + getUploadTimeoutMilliseconds() + ";" +
+                        "   $.ajax({" +
+                        "       url: url," +
+                        "       data: fd," +
+                        "       processData: false," +
+                        "       type: 'POST'," +
+                        "       dataType: 'json'," +
+                        "       crossDomain: true," +
+                        "       contentType: false," +
+                        //"       contentType: 'multipart/form-data'," +
+                        //"       mimeType: 'multipart/form-data'," +
+                        "       timeout: timeout," +
+                        "       beforeSend: function(jqXHR, settings){ uploadStarted(); }," +
+                        "       success: function(data, textStatus, jqXHR){ uploadFinished(jqXHR); }, " +
+                        "       error: function(jqXHR, textStatus, errorThrown){ uploadFinished(jqXHR); } " +
+                        "   });" +
+                        //"   xhr.open('POST', 'https://" + this.getBucketHostname() + "', true);" +
+                        //"   xhr.send(fd);" +
+                        "}";
         return uploadJavascript;
     }
 

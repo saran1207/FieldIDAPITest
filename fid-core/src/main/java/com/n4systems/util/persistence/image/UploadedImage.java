@@ -38,5 +38,4 @@ public class UploadedImage implements Serializable {
     public boolean isExistingImage() {
         return currentImage != null || StringUtils.isNotEmpty(uploadDirectory);
     }
-    
 }
