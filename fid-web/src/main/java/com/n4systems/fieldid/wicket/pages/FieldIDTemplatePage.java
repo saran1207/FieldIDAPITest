@@ -59,6 +59,7 @@ import com.n4systems.fieldid.wicket.pages.setup.user.UserImportPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UsersListPage;
 import com.n4systems.fieldid.wicket.pages.setup.userregistration.UserRequestListPage;
 import com.n4systems.fieldid.wicket.pages.trends.CriteriaTrendsPage;
+import com.n4systems.fieldid.wicket.pages.useraccount.details.UserDetailsPage;
 import com.n4systems.model.Asset;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
@@ -129,6 +130,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
     protected Component titleLabel;
 	protected Component topTitleLabel;
     private TopFeedbackPanel topFeedbackPanel;
+    private Component myAccountLink;
     private Component languageSelectionLink;
     private ModalWindow languageSelectionModalWindow;
     private final SelectLanguagePanel selectLanguagePanel;
@@ -589,6 +591,12 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
             // header logo and links
             add(new StaticImage("tenantLogo", new Model<String>(s3Service.getBrandingLogoURL().toString())).setEscapeModelStrings(false));
 
+            final Mybean bean = new Mybean();
+            bean.setLabelText(sessionUser.getName());
+            add(new BookmarkablePageLink<Void>("myAccountLink", UserDetailsPage.class).
+                    add(new Label("loggedInUsernameLabel1", new PropertyModel<String>(bean, "labelText")))
+            );
+
             add(new Label("loggedInUsernameLabel", sessionUser.getName()));
             addSpeedIdentifyLinks(sessionUser);
 
@@ -746,5 +754,19 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
                     }
                 }.setFileName(fileName).setContentDisposition(ContentDisposition.ATTACHMENT)
         );
+    }
+
+    private static class Mybean{
+
+        String labelText = "click me";
+
+        public String getLabelText(){
+            return this.labelText;
+        }
+
+        public void setLabelText(final String labelText){
+            this.labelText = labelText;
+        }
+
     }
 }

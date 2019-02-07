@@ -60,6 +60,7 @@ import com.n4systems.fieldid.wicket.pages.setup.user.UserImportPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UsersListPage;
 import com.n4systems.fieldid.wicket.pages.setup.userregistration.UserRequestListPage;
 import com.n4systems.fieldid.wicket.pages.trends.CriteriaTrendsPage;
+import com.n4systems.fieldid.wicket.pages.useraccount.details.UserDetailsPage;
 import com.n4systems.model.Asset;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
@@ -685,6 +686,8 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             // header logo and links
             add(new StaticImage("tenantLogo", new Model<String>(s3Service.getBrandingLogoURL().toString())).setEscapeModelStrings(false));
 
+            add(new BookmarkablePageLink<Void>("myAccountLink", UserDetailsPage.class));
+            add(new Label("loggedInUsernameLabel1", sessionUser.getName()));
             add(new Label("loggedInUsernameLabel", sessionUser.getName()));
             addSpeedIdentifyLinks(sessionUser);
 

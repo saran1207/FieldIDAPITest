@@ -70,9 +70,15 @@ public class UserFormIdentifiersPanel extends Panel {
         add(new TextField<String>("identifier", new PropertyModel<String>(user, "identifier")));
         add(new TextField<String>("position", new PropertyModel<String>(user, "position")));
         UploadForm uploadForm;
-        add(uploadForm = new UploadForm("uploadForm"));
-        uploadForm.setMultiPart(true);
-        uploadForm.setVisible(!user.getObject().isPerson());
+        if (uploadedImage != null) {
+            add(uploadForm = new UploadForm("uploadForm"));
+            uploadForm.setMultiPart(true);
+            uploadForm.setVisible(!user.getObject().isPerson());
+        }
+        else {
+            add(uploadForm =  new UploadForm("uploadForm"));
+            uploadForm.setVisible(false);
+        }
     }
 
     protected void onOwnerPicked(AjaxRequestTarget target) { }
@@ -103,7 +109,7 @@ public class UserFormIdentifiersPanel extends Panel {
                 protected void onError(AjaxRequestTarget target) {
                 }
             });
-            if(uploadedImage.isExistingImage())
+            if(uploadedImage != null && uploadedImage.isExistingImage())
                 fileDisplay.add(fileName = new Label("fileName", Model.of(uploadedImage.getImage().getName())));
             else
                 fileDisplay.add(fileName = new Label("fileName", Model.of(new String())));
@@ -117,8 +123,10 @@ public class UserFormIdentifiersPanel extends Panel {
                 }
             });
             fileDisplay.setOutputMarkupId(true);
-            fileDisplay.setVisible(uploadedImage.isExistingImage());
-            uploadField.setVisible(!uploadedImage.isExistingImage());
+            if (uploadedImage != null) {
+                fileDisplay.setVisible(uploadedImage.isExistingImage());
+                uploadField.setVisible(!uploadedImage.isExistingImage());
+            }
             add(fileDisplay);
         }
     }
