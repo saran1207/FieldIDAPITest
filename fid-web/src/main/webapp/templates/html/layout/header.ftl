@@ -1,4 +1,3 @@
-
 <head>
 
     <@n4.includeStyle href="dropdown/style"/>
@@ -227,7 +226,6 @@
                                         <ul class="sub_menu">
                                             <li><a href="<@s.url value='/w/setup/organizations'/>"><@s.text name="title.manage_organizational_units.plural"/></a></li>
                                             <li><a href="<@s.url value='/w/setup/systemSettings'/>"><@s.text name="nav.system_settings"/></a></li>
-                                            <li><a href="<@s.url action='quickSetupWizard/startWizard' namespace='/'/>"><@s.text name="label.quick_setup_wizard"/></a></li>
                                             <li><a href="<@s.url value='/w/setup/branding'/>"><@s.text name="title.manage_branding.plural"/></a></li>
                                             <li><a href="<@s.url value='/w/setup/yourPlan'/>"><@s.text name="title.manage_field_id_plan.plural"/></a></li>
                                             <#if action.isSsoFeatureEnabled()>
