@@ -32,6 +32,7 @@ import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
 import com.n4systems.fieldid.wicket.pages.loto.ProcedureAuditListPage;
 import com.n4systems.fieldid.wicket.pages.loto.ProcedureWaitingApprovalsPage;
 import com.n4systems.fieldid.wicket.pages.loto.PublishedListAllPage;
+import com.n4systems.fieldid.wicket.pages.org.BrandingPage;
 import com.n4systems.fieldid.wicket.pages.org.OrgViewPage;
 import com.n4systems.fieldid.wicket.pages.org.OrgsListPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
@@ -68,6 +69,7 @@ import com.n4systems.model.columns.ReportType;
 import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
+import com.newrelic.api.agent.NewRelic;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -222,6 +224,8 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
         add(topTitleLabel = useTopTitleLabel() ? createTopTitleLabel("topTitleLabel") : createTitleLabel("topTitleLabel"));
         topTitleLabel.setRenderBodyOnly(true);
+        NewRelic.addCustomParameter("Tenant", getTenant().getName());
+        NewRelic.addCustomParameter("User", getSessionUser().getUserID());
     }
 
     protected boolean forceDefaultLanguage() {
@@ -442,7 +446,8 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
         container.add(new BookmarkablePageLink<Void>("organizationsLink", OrgsListPage.class));
     	container.add(new BookmarkablePageLink<Void>("systemSettingsLink", SystemSettingsPage.class));
-    	container.add(new BookmarkablePageLink<Void>("yourPlanLink", YourPlanPage.class));
+        container.add(new BookmarkablePageLink<Void>("brandingLink", BrandingPage.class));
+        container.add(new BookmarkablePageLink<Void>("yourPlanLink", YourPlanPage.class));
 
         Link ssoSettingsPageLink = new BookmarkablePageLink<Void>("ssoSettingsLink", SsoSettingsPage.class);
         container.add(ssoSettingsPageLink);

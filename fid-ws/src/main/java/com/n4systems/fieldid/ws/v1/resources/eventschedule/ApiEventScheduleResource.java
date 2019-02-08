@@ -14,6 +14,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import com.newrelic.api.agent.Trace;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -31,142 +32,148 @@ import java.util.List;
 @Component
 @Path("eventSchedule")
 public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, ThingEvent> {
-	private static Logger logger = Logger.getLogger(ApiEventScheduleResource.class);
-	
-	@Autowired private EventScheduleService eventScheduleService;
-	@Autowired private PersistenceService persistenceService;
-	@Autowired private AssetService assetService;
-	@Autowired private ApiTriggerEventResource apiTriggerEventResource;	
-	
-	public List<ApiEventSchedule>  findAllSchedules(Long assetId, SyncDuration syncDuration) {
-		List<ApiEventSchedule> apiEventSchedules = new ArrayList<ApiEventSchedule>();
-		
-		QueryBuilder<ThingEvent> query = createUserSecurityBuilder(ThingEvent.class)
-		.addOrder("dueDate")
+    private static Logger logger = Logger.getLogger(ApiEventScheduleResource.class);
+    
+    @Autowired private EventScheduleService eventScheduleService;
+    @Autowired private PersistenceService persistenceService;
+    @Autowired private AssetService assetService;
+    @Autowired private ApiTriggerEventResource apiTriggerEventResource;    
+    
+    public List<ApiEventSchedule>  findAllSchedules(Long assetId, SyncDuration syncDuration) {
+        List<ApiEventSchedule> apiEventSchedules = new ArrayList<ApiEventSchedule>();
+
+        QueryBuilder<ThingEvent> query = createUserSecurityBuilder(ThingEvent.class)
+        .addOrder("dueDate")
         .addWhere(WhereClauseFactory.create(Comparator.EQ, "workflowState", WorkflowState.OPEN))
-		.addWhere(WhereClauseFactory.create("asset.id", assetId));
-		
-		if(syncDuration != SyncDuration.ALL) {
-			// If we have a specific syncduration, we should filter schedules that is bounded by start and end dates.
-			// This is currently only used for taking assets offline.
-			Date startDate = new LocalDate().toDate();
-			Date endDate = ApiSynchronizationResource.getSyncEndDate(syncDuration, startDate);
-			query.addWhere(WhereClauseFactory.create(Comparator.GE, "dueDate", startDate));
-			query.addWhere(WhereClauseFactory.create(Comparator.LE, "dueDate", endDate));
-		}
-		
-		List<ThingEvent> schedules = persistenceService.findAll(query);
-		
-		for (ThingEvent schedule: schedules) {
-			apiEventSchedules.add(convertEntityToApiModel(schedule));
-		}
-		
-		return apiEventSchedules;
-	}
-	
-	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Transactional
-	public void saveEventSchedule(ApiEventSchedule apiEventSchedule) {
+        .addWhere(WhereClauseFactory.create("asset.id", assetId));
+        
+        if(syncDuration != SyncDuration.ALL) {
+            // If we have a specific syncduration, we should filter schedules that is bounded by start and end dates.
+            // This is currently only used for taking assets offline.
+            Date startDate = new LocalDate().toDate();
+            Date endDate = ApiSynchronizationResource.getSyncEndDate(syncDuration, startDate);
+            query.addWhere(WhereClauseFactory.create(Comparator.GE, "dueDate", startDate));
+            query.addWhere(WhereClauseFactory.create(Comparator.LE, "dueDate", endDate));
+        }
+        
+        List<ThingEvent> schedules = persistenceService.findAll(query);
+        
+        for (ThingEvent schedule: schedules) {
+            apiEventSchedules.add(convertEntityToApiModel(schedule));
+        }
+
+        return apiEventSchedules;
+    }
+    
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
+    @Transactional
+    public void saveEventSchedule(ApiEventSchedule apiEventSchedule) {
+        setEnhancedLoggingWithAppInfoParameters();
         ThingEvent event = eventScheduleService.findByMobileId(apiEventSchedule.getSid());
 
-		if (event == null) {
+        if (event == null) {
             event = converApiEventSchedule(apiEventSchedule);
-			persistenceService.save(event);
-			logger.info("Saved New Scheduled Event("  + event.getMobileGUID() + ") for " + 
-					event.getEventType().getName() + " on Asset " + event.getAsset().getMobileGUID());
-		} else if (event.getWorkflowState() == WorkflowState.OPEN) {
-			event.setDueDate(apiEventSchedule.getNextDate());
+            persistenceService.save(event);
+            logger.info("Saved New Scheduled Event("  + event.getMobileGUID() + ") for " + 
+                    event.getEventType().getName() + " on Asset " + event.getAsset().getMobileGUID());
+        } else if (event.getWorkflowState() == WorkflowState.OPEN) {
+            event.setDueDate(apiEventSchedule.getNextDate());
             event.setType(persistenceService.find(ThingEventType.class, apiEventSchedule.getEventTypeId()));
             event.setAssignee(getAssigneeUser(apiEventSchedule));
             if(event.getAssignee() == null)
-            	event.setAssignedGroup(getAssigneeUserGroup(apiEventSchedule));
+                event.setAssignedGroup(getAssigneeUserGroup(apiEventSchedule));
             
-			persistenceService.update(event);
-			logger.warn("(Legacy Client Detected) Updated Scheduled Event for " + event.getEventType().getName() + " on Asset " + event.getMobileGUID());
-		} else {
+            persistenceService.update(event);
+            logger.warn("(Legacy Client Detected) Updated Scheduled Event for " + event.getEventType().getName() + " on Asset " + event.getMobileGUID());
+        } else {
             logger.warn("(Legacy Client Detected) Failed Updating Completed Scheduled Event" + event.getId());
         }
-	}
+    }
 
-	@PUT
-	@Path("multi")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Transactional
-	public void saveMultipleEventSchedules(ApiMultiEventSchedule apiMultiEventSchedule) {
-		ApiEventSchedule eventScheduleTemplate = apiMultiEventSchedule.getEventScheduleTemplate();
-		boolean copyOwner = eventScheduleTemplate.getOwnerId() == null; //If client had copyOwner, we will have ownerId = null.
-		for (ApiAssetLink assetLink: apiMultiEventSchedule.getEventSchedules()) {
-			eventScheduleTemplate.setSid(assetLink.getSid());
-			eventScheduleTemplate.setAssetId(assetLink.getAssetId());
-			
-			if(copyOwner) {
-				Asset asset = assetService.findByMobileId(assetLink.getAssetId(), true);
-				eventScheduleTemplate.setOwnerId(asset.getOwner() != null ? asset.getOwner().getId() : null);
-			}
+    @PUT
+    @Path("multi")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
+    @Transactional
+    public void saveMultipleEventSchedules(ApiMultiEventSchedule apiMultiEventSchedule) {
+        setEnhancedLoggingWithAppInfoParameters();
+        ApiEventSchedule eventScheduleTemplate = apiMultiEventSchedule.getEventScheduleTemplate();
+        boolean copyOwner = eventScheduleTemplate.getOwnerId() == null; //If client had copyOwner, we will have ownerId = null.
+        for (ApiAssetLink assetLink: apiMultiEventSchedule.getEventSchedules()) {
+            eventScheduleTemplate.setSid(assetLink.getSid());
+            eventScheduleTemplate.setAssetId(assetLink.getAssetId());
+            
+            if(copyOwner) {
+                Asset asset = assetService.findByMobileId(assetLink.getAssetId(), true);
+                eventScheduleTemplate.setOwnerId(asset.getOwner() != null ? asset.getOwner().getId() : null);
+            }
 
-			logger.info("Creating Event Schedule " + eventScheduleTemplate.getSid());
-			saveEventSchedule(eventScheduleTemplate);
-		}
+            logger.info("Creating Event Schedule " + eventScheduleTemplate.getSid());
+            saveEventSchedule(eventScheduleTemplate);
+        }
 
-		logger.info("Saved " + apiMultiEventSchedule.getEventSchedules().size() + " Schedules");
-	}
-	
-	@DELETE
-	@Path("{eventScheduleId}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Transactional
-	public void deleteEventSchedule(@PathParam("eventScheduleId") String eventScheduleId) {
-		logger.info("Attempting to archive Scheduled Event with mobileId " + eventScheduleId);
-		Event event = eventScheduleService.findByMobileId(eventScheduleId, true);
-		if(event != null) {
-			if(event.isActive()) {
-		        event.archiveEntity();
-		        persistenceService.update(event);
-				logger.info("Archived Scheduled Event for " + event.getEventType().getName() + " on Event " + event.getMobileGUID());
-			} else {
-				logger.warn("Failed Deleting Event Schedule. Inative Event " + eventScheduleId);
-			}
-		} else {
-			logger.warn("Failed Deleting Event Schedule. Unable to find Event " + eventScheduleId);
-		}
-	}
+        logger.info("Saved " + apiMultiEventSchedule.getEventSchedules().size() + " Schedules");
+    }
+    
+    @DELETE
+    @Path("{eventScheduleId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
+    @Transactional
+    public void deleteEventSchedule(@PathParam("eventScheduleId") String eventScheduleId) {
+        logger.info("Attempting to archive Scheduled Event with mobileId " + eventScheduleId);
+        setEnhancedLoggingWithAppInfoParameters();
+        Event event = eventScheduleService.findByMobileId(eventScheduleId, true);
+        if(event != null) {
+            if(event.isActive()) {
+                event.archiveEntity();
+                persistenceService.update(event);
+                logger.info("Archived Scheduled Event for " + event.getEventType().getName() + " on Event " + event.getMobileGUID());
+            } else {
+                logger.warn("Failed Deleting Event Schedule. Inative Event " + eventScheduleId);
+            }
+        } else {
+            logger.warn("Failed Deleting Event Schedule. Unable to find Event " + eventScheduleId);
+        }
+    }
 
-	@Override
-	protected ApiEventSchedule convertEntityToApiModel(ThingEvent event) {
-		ApiEventSchedule apiSchedule = new ApiEventSchedule();
+    @Override
+    protected ApiEventSchedule convertEntityToApiModel(ThingEvent event) {
+        ApiEventSchedule apiSchedule = new ApiEventSchedule();
         // For backward compatibility, we must still use the GUID of the Schedule, since all
         // existing schedules out there in mobile land will refer to schedule GUIDs.
-		apiSchedule.setSid(event.getMobileGUID());
-		apiSchedule.setActive(true);
-		apiSchedule.setModified(event.getModified());
-		apiSchedule.setOwnerId(event.getOwner().getId());
-		apiSchedule.setAssetId(event.getAsset().getMobileGUID());
-		apiSchedule.setAssetIdentifier(event.getAsset().getIdentifier());
-		apiSchedule.setEventTypeId(event.getEventType().getId());
-		apiSchedule.setEventTypeName(event.getEventType().getName());
-		apiSchedule.setOwner(event.getOwner().getDisplayName());
-		apiSchedule.setNextDate(event.getDueDate());
-		if (event.getAssignee() != null) {
-			apiSchedule.setAssigneeUserId(event.getAssignee().getId());
-		}
-		if(event.getAssignedGroup() != null) {
-			apiSchedule.setAssigneeUserGroupId(event.getAssignedGroup().getId());
-		}
-		
-		
-		if (event.isAction()) {
-			apiSchedule.setAction(true);
-			apiSchedule.setPriorityId(event.getPriority().getId());
-			apiSchedule.setNotes(event.getNotes());
-			apiSchedule.setTriggerEventInfo(apiTriggerEventResource.convertEntityToApiModel(event));
-		}
-		
-		return apiSchedule;
-	}
-	
-	public ThingEvent converApiEventSchedule(ApiEventSchedule apiEventSchedule) {
-		BaseOrg owner = persistenceService.findUsingTenantOnlySecurityWithArchived(BaseOrg.class, apiEventSchedule.getOwnerId());
+        apiSchedule.setSid(event.getMobileGUID());
+        apiSchedule.setActive(true);
+        apiSchedule.setModified(event.getModified());
+        apiSchedule.setOwnerId(event.getOwner().getId());
+        apiSchedule.setAssetId(event.getAsset().getMobileGUID());
+        apiSchedule.setAssetIdentifier(event.getAsset().getIdentifier());
+        apiSchedule.setEventTypeId(event.getEventType().getId());
+        apiSchedule.setEventTypeName(event.getEventType().getName());
+        apiSchedule.setOwner(event.getOwner().getDisplayName());
+        apiSchedule.setNextDate(event.getDueDate());
+        if (event.getAssignee() != null) {
+            apiSchedule.setAssigneeUserId(event.getAssignee().getId());
+        }
+        if(event.getAssignedGroup() != null) {
+            apiSchedule.setAssigneeUserGroupId(event.getAssignedGroup().getId());
+        }
+        
+        
+        if (event.isAction()) {
+            apiSchedule.setAction(true);
+            apiSchedule.setPriorityId(event.getPriority().getId());
+            apiSchedule.setNotes(event.getNotes());
+            apiSchedule.setTriggerEventInfo(apiTriggerEventResource.convertEntityToApiModel(event));
+        }
+        
+        return apiSchedule;
+    }
+    
+    public ThingEvent converApiEventSchedule(ApiEventSchedule apiEventSchedule) {
+        BaseOrg owner = persistenceService.findUsingTenantOnlySecurityWithArchived(BaseOrg.class, apiEventSchedule.getOwnerId());
 
         Asset asset = assetService.findByMobileId(apiEventSchedule.getAssetId(), true);
 
@@ -181,115 +188,119 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Thin
         event.setAssignee(getAssigneeUser(apiEventSchedule));
 
         if (event.getAssignee() == null) {
-        	event.setAssignedGroup(getAssigneeUserGroup(apiEventSchedule));
+            event.setAssignedGroup(getAssigneeUserGroup(apiEventSchedule));
         }
         
         if (event.getEventType() instanceof ActionEventType) {
-        	event.setPriority(persistenceService.find(PriorityCode.class, apiEventSchedule.getPriorityId()));
-        	event.setNotes(apiEventSchedule.getNotes());
+            event.setPriority(persistenceService.find(PriorityCode.class, apiEventSchedule.getPriorityId()));
+            event.setNotes(apiEventSchedule.getNotes());
         }
         
         if (asset.isArchived()) {
-        	event.archiveEntity();
+            event.archiveEntity();
         }
 
-		return event;
-	}
-	
-	private User getAssigneeUser(ApiEventSchedule apiEventSchedule) {
-		if(apiEventSchedule.getAssigneeUserId() != null && apiEventSchedule.getAssigneeUserId() > 0) {
-        	User assigneeUser = persistenceService.findUsingTenantOnlySecurityWithArchived(User.class, apiEventSchedule.getAssigneeUserId());
-        	return assigneeUser;
+        return event;
+    }
+    
+    private User getAssigneeUser(ApiEventSchedule apiEventSchedule) {
+        if(apiEventSchedule.getAssigneeUserId() != null && apiEventSchedule.getAssigneeUserId() > 0) {
+            User assigneeUser = persistenceService.findUsingTenantOnlySecurityWithArchived(User.class, apiEventSchedule.getAssigneeUserId());
+            return assigneeUser;
         }
-		
-		return null;
-	}
-	
-	private UserGroup getAssigneeUserGroup(ApiEventSchedule apiEventSchedule) {
-		if(apiEventSchedule.getAssigneeUserGroupId() != null && apiEventSchedule.getAssigneeUserGroupId() > 0) {
-			UserGroup assigneeUserGroup = persistenceService.findUsingTenantOnlySecurityWithArchived(UserGroup.class, apiEventSchedule.getAssigneeUserGroupId());
-        	return assigneeUserGroup;
+        
+        return null;
+    }
+    
+    private UserGroup getAssigneeUserGroup(ApiEventSchedule apiEventSchedule) {
+        if(apiEventSchedule.getAssigneeUserGroupId() != null && apiEventSchedule.getAssigneeUserGroupId() > 0) {
+            UserGroup assigneeUserGroup = persistenceService.findUsingTenantOnlySecurityWithArchived(UserGroup.class, apiEventSchedule.getAssigneeUserGroupId());
+            return assigneeUserGroup;
         }
-		
-		return null;
-	}
-	
-	@GET
-	@Path("assignedList")
-	@Consumes(MediaType.TEXT_PLAIN)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional(readOnly = true)
-	public ListResponse<ApiEventSchedule> findAssignedOpenEvents(
-			@QueryParam("startDate") Date startDate, 
-			@QueryParam("endDate") Date endDate,
-			@DefaultValue("0") @QueryParam("page") int page,
-			@DefaultValue("25") @QueryParam("pageSize") int pageSize) {
-		User user = getCurrentUser();
-		
-		QueryBuilder<ThingEvent> query = createUserSecurityBuilder(ThingEvent.class)
-		.addOrder("dueDate")
+        
+        return null;
+    }
+    
+    @GET
+    @Path("assignedList")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
+    @Transactional(readOnly = true)
+    public ListResponse<ApiEventSchedule> findAssignedOpenEvents(
+            @QueryParam("startDate") Date startDate, 
+            @QueryParam("endDate") Date endDate,
+            @DefaultValue("0") @QueryParam("page") int page,
+            @DefaultValue("25") @QueryParam("pageSize") int pageSize) {
+        setEnhancedLoggingWithAppInfoParameters();
+        User user = getCurrentUser();
+
+        QueryBuilder<ThingEvent> query = createUserSecurityBuilder(ThingEvent.class)
+        .addOrder("dueDate")
         .addWhere(WhereClauseFactory.create(Comparator.EQ, "workflowState", WorkflowState.OPEN))
-		.addWhere(WhereClauseFactory.create(Comparator.GE, "startDate", "dueDate", startDate))
-		.addWhere(WhereClauseFactory.create(Comparator.LT, "endDate", "dueDate", endDate));	//excludes end date.
-		
-		if (user.getGroups().isEmpty()) {
-			query.addWhere(WhereClauseFactory.create(Comparator.EQ, "assignee.id", user.getId()));
-		} else {
-			// WE need to do AND ( assignee.id = user.GetId() OR assignedGroup.id = user.getGroup().getId() )				
-			WhereParameterGroup group = new WhereParameterGroup();
-	        group.setChainOperator(WhereClause.ChainOp.AND);
-	        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignee.id", user.getId(), WhereClause.ChainOp.OR));
-	        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.IN, "assignedGroup", user.getGroups(), WhereClause.ChainOp.OR));
-	        query.addWhere(group);				
-		}
-		
-		List<ThingEvent> events = persistenceService.findAll(query, page, pageSize);
-		Long total = persistenceService.count(query);
-		List<ApiEventSchedule> apiSchedules = convertAllEntitiesToApiModels(events);
-		ListResponse<ApiEventSchedule> response = new ListResponse<ApiEventSchedule>(apiSchedules, page, pageSize, total);
-		
-		logger.info("findAssignedOpenEvents: >= startDate: " + startDate + " < endDate: " + endDate);
-		
-		return response;
-	}
-	
-	@GET
-	@Path("assignedListCounts")
-	@Consumes(MediaType.TEXT_PLAIN)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional(readOnly = true)
-	public List<Long> findAssignedOpenEventCounts(
-			@QueryParam("year") int year,
-			@QueryParam("month") int month) {
-		List<Long> counts = new ArrayList<Long>();		
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(year, month, 1);
-		int days = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-		for(int i = 1; i <= days; i++) {
-			Date startDate = new DateTime(year, month + 1, i, 0, 0).toDate();
-			Date endDate = new DateTime(year, month + 1, i, 0, 0).plusDays(1).toDate();			
-			User user = getCurrentUser();
-			
-			QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
-			.addOrder("dueDate")
-	        .addWhere(WhereClauseFactory.create(Comparator.EQ, "workflowState", WorkflowState.OPEN))
-			.addWhere(WhereClauseFactory.create(Comparator.GE, "startDate", "dueDate", startDate))
-			.addWhere(WhereClauseFactory.create(Comparator.LT, "endDate", "dueDate", endDate));
-			
-			if (user.getGroups().isEmpty()) {
-				query.addWhere(WhereClauseFactory.create(Comparator.EQ, "assignee.id", user.getId()));
-			} else {
-				// WE need to do AND ( assignee.id = user.GetId() OR assignedGroup.id = user.getGroup().getId() )				
-				WhereParameterGroup group = new WhereParameterGroup();
-		        group.setChainOperator(WhereClause.ChainOp.AND);
-		        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignee.id", user.getId(), WhereClause.ChainOp.OR));
-		        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.IN, "assignedGroup", user.getGroups(), WhereClause.ChainOp.OR));
-		        query.addWhere(group);				
-			}
-			
-			Long count = persistenceService.count(query);
-			counts.add(count);
-		}		
-		return counts;
-	}
+        .addWhere(WhereClauseFactory.create(Comparator.GE, "startDate", "dueDate", startDate))
+        .addWhere(WhereClauseFactory.create(Comparator.LT, "endDate", "dueDate", endDate));    //excludes end date.
+        
+        if (user.getGroups().isEmpty()) {
+            query.addWhere(WhereClauseFactory.create(Comparator.EQ, "assignee.id", user.getId()));
+        } else {
+            // WE need to do AND ( assignee.id = user.GetId() OR assignedGroup.id = user.getGroup().getId() )                
+            WhereParameterGroup group = new WhereParameterGroup();
+            group.setChainOperator(WhereClause.ChainOp.AND);
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignee.id", user.getId(), WhereClause.ChainOp.OR));
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.IN, "assignedGroup", user.getGroups(), WhereClause.ChainOp.OR));
+            query.addWhere(group);                
+        }
+        
+        List<ThingEvent> events = persistenceService.findAll(query, page, pageSize);
+        Long total = persistenceService.count(query);
+        List<ApiEventSchedule> apiSchedules = convertAllEntitiesToApiModels(events);
+        ListResponse<ApiEventSchedule> response = new ListResponse<ApiEventSchedule>(apiSchedules, page, pageSize, total);
+        
+        logger.info("findAssignedOpenEvents: >= startDate: " + startDate + " < endDate: " + endDate);
+        
+        return response;
+    }
+    
+    @GET
+    @Path("assignedListCounts")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
+    @Transactional(readOnly = true)
+    public List<Long> findAssignedOpenEventCounts(
+            @QueryParam("year") int year,
+            @QueryParam("month") int month) {
+        setEnhancedLoggingWithAppInfoParameters();
+        List<Long> counts = new ArrayList<Long>();        
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, 1);
+        int days = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        for(int i = 1; i <= days; i++) {
+            Date startDate = new DateTime(year, month + 1, i, 0, 0).toDate();
+            Date endDate = new DateTime(year, month + 1, i, 0, 0).plusDays(1).toDate();            
+            User user = getCurrentUser();
+            
+            QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
+            .addOrder("dueDate")
+            .addWhere(WhereClauseFactory.create(Comparator.EQ, "workflowState", WorkflowState.OPEN))
+            .addWhere(WhereClauseFactory.create(Comparator.GE, "startDate", "dueDate", startDate))
+            .addWhere(WhereClauseFactory.create(Comparator.LT, "endDate", "dueDate", endDate));
+            
+            if (user.getGroups().isEmpty()) {
+                query.addWhere(WhereClauseFactory.create(Comparator.EQ, "assignee.id", user.getId()));
+            } else {
+                // WE need to do AND ( assignee.id = user.GetId() OR assignedGroup.id = user.getGroup().getId() )                
+                WhereParameterGroup group = new WhereParameterGroup();
+                group.setChainOperator(WhereClause.ChainOp.AND);
+                group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignee.id", user.getId(), WhereClause.ChainOp.OR));
+                group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.IN, "assignedGroup", user.getGroups(), WhereClause.ChainOp.OR));
+                query.addWhere(group);                
+            }
+            
+            Long count = persistenceService.count(query);
+            counts.add(count);
+        }
+        return counts;
+    }
 }

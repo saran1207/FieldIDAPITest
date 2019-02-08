@@ -3,6 +3,7 @@ package com.n4systems.fieldid.ws.v1.resources.procedure;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.model.procedure.PreconfiguredDevice;
+import com.newrelic.api.agent.Trace;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.GET;
@@ -28,7 +29,9 @@ public class ApiPreconfiguredDeviceResource extends ApiResource<ApiPreconfigured
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
     public Response getPreconfiguredDeviceList() {
+        setEnhancedLoggingWithAppInfoParameters();
         //This is a pretty simple wrapper, so we can do it in one line.
         return Response.status(Response.Status.OK)
                 .entity(convertAllEntitiesToApiModels(procedureDefinitionService.getAllPreConfiguredDevices()))

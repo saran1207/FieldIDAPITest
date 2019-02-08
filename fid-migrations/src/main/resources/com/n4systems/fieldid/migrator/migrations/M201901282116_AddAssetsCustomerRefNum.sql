@@ -1,0 +1,1 @@
+alter table assets add index `idx_assets_customerrefnumber` (customerrefnumber(255));

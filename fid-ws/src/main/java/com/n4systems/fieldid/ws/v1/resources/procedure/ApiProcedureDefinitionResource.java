@@ -9,6 +9,7 @@ import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import com.n4systems.model.procedure.PublishedState;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.newrelic.api.agent.NewRelic;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -90,6 +91,7 @@ public class ApiProcedureDefinitionResource extends SetupDataResource<ApiProcedu
                 convertedImage.setData(s3Service.downloadProcedureDefinitionMediumImage(image));
             } catch (IOException e) {
                 log.error("IOException downloading procedure def image: " + image.getId(), e);
+                NewRelic.noticeError(e);
             }
 
             convertedImages.add(convertedImage);

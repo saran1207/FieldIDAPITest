@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.ws.v1.resources;
 
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.parents.EntityWithTenant;
@@ -14,16 +13,16 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Component
-public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPersistenceService {
+public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPersistenceServiceWithEnhancedLogging {
 
     @Autowired
     private HttpServletRequest request;
 
-	protected abstract A convertEntityToApiModel(E entityModel);
+    protected abstract A convertEntityToApiModel(E entityModel);
 
-	protected List<A> convertAllEntitiesToApiModels(List<E> entityModels) {
-		return entityModels.stream().map(this::convertEntityToApiModel).collect(Collectors.toList());
-	}
+    protected List<A> convertAllEntitiesToApiModels(List<E> entityModels) {
+        return entityModels.stream().map(this::convertEntityToApiModel).collect(Collectors.toList());
+    }
 
     protected <T extends EntityWithTenant> T findEntity(Class<T> entityClass, Long id) {
         T entity = persistenceService.findUsingTenantOnlySecurityWithArchived(entityClass, id);
@@ -53,14 +52,14 @@ public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPe
                 int patch = Integer.parseInt(m.group(3));
                 version = formatVersion(major, minor, patch);
             } else {
-				// Some legacy mobile versions send <major>.<minor> and are missing the patch.
-				p = Pattern.compile("^(\\d+)\\.(\\d+)$");
-				m = p.matcher(verStr);
-				if (m.matches()) {
-					int major = Integer.parseInt(m.group(1));
-					int minor = Integer.parseInt(m.group(2));
-					version = formatVersion(major, minor, 0);
-				}
+                // Some legacy mobile versions send <major>.<minor> and are missing the patch.
+                p = Pattern.compile("^(\\d+)\\.(\\d+)$");
+                m = p.matcher(verStr);
+                if (m.matches()) {
+                    int major = Integer.parseInt(m.group(1));
+                    int minor = Integer.parseInt(m.group(2));
+                    version = formatVersion(major, minor, 0);
+                }
             }
         }
         return version;
@@ -77,4 +76,5 @@ public abstract class ApiResource<A, E extends AbstractEntity> extends FieldIdPe
         long checkVersion = formatVersion(major, minor, patch);
         return (mobileVersion < checkVersion);
     }
+
 }
