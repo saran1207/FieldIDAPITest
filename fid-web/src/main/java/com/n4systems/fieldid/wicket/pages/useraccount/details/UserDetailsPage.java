@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.useraccount.details;
 
+import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
@@ -8,10 +9,12 @@ import com.n4systems.fieldid.wicket.components.user.UserFormAccountPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.setup.user.UsersListPage;
 import com.n4systems.fieldid.wicket.pages.useraccount.AccountSetupPage;
+import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.security.UserType;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -23,10 +26,12 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 public class UserDetailsPage extends AccountSetupPage {
 
     @SpringBean protected UserService userService;
+    @SpringBean protected OrgService orgService;
 
     protected UserType userType;
     private Long uniqueId;
     protected IModel<User> userModel;
+    protected IModel<InternalOrg> internalOrgIModel;
 
     public UserDetailsPage(UserType userType) {
         super();
@@ -37,18 +42,21 @@ public class UserDetailsPage extends AccountSetupPage {
         super();
         this.uniqueId = userModel.getObject().getId();
         this.userModel = userModel;
+        this.internalOrgIModel = Model.of(getPrimaryOrg());
     }
 
     public UserDetailsPage(PageParameters parameters) {
         super(parameters);
         uniqueId = parameters.get("uniqueID").toLong();
         userModel = Model.of(loadExistingUser());
+        internalOrgIModel = Model.of(getPrimaryOrg());
     }
 
     public UserDetailsPage() {
         super();
         uniqueId = getSessionUser().getId();
         userModel = Model.of(loadExistingUser());
+        internalOrgIModel = Model.of(getPrimaryOrg());
     }
 
     protected void doSave() {
@@ -66,6 +74,9 @@ public class UserDetailsPage extends AccountSetupPage {
     protected User loadExistingUser() {
         return userService.getUser(uniqueId);
     }
+    protected InternalOrg getPrimaryOrg() {
+        return orgService.getPrimaryOrgForTenant(userModel.getObject().getTenant().getId());
+    }
 
     @Override
     protected void onInitialize() {
@@ -75,10 +86,8 @@ public class UserDetailsPage extends AccountSetupPage {
     }
 
     @Override
-    protected Component createBackToLink(String linkId, String linkLabelId) {
-        BookmarkablePageLink<Void> pageLink = new BookmarkablePageLink<Void>(linkId, UserDetailsPage.class);
-        pageLink.add(new FlatLabel(linkLabelId, new FIDLabelModel("label.back_to_setup")));
-        return pageLink;
+    protected Label createTitleLabel(String labelId) {
+        return new Label(labelId, new FIDLabelModel("title.myaccount"));
     }
 
     protected UserFormAccountPanel getUserFormAccountPanel() {
@@ -112,7 +121,7 @@ public class UserDetailsPage extends AccountSetupPage {
         public AddUserForm(String id) {
             super(id);
 
-            add(identifiersPanel = new UserAccountFormIdentifiersPanel("identifiersPanel", userModel) {
+            add(identifiersPanel = new UserAccountFormIdentifiersPanel("identifiersPanel", userModel, internalOrgIModel) {
                 @Override
                 protected void onOwnerPicked(AjaxRequestTarget target) {
                     UserDetailsPage.this.onOwnerPicked(target);

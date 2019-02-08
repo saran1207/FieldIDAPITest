@@ -35,7 +35,7 @@
         <div id="listContainer">
             <ul class="listOfLinks">                
                 <li class="first">
-                    <@s.text name="label.welcome"/>, <a class="notranslate" href="<@s.url action="myAccount" namespace="/"/>">${sessionUser.name}</a>
+                    <@s.text name="label.welcome"/>, <a class="notranslate" href="<@s.url value="/w/myAccount" namespace="/"/>">${sessionUser.name}</a>
                 </li>
                 <#if action.isMultiLanguage() || action.isGoogleTranslateAllowed()>
                     <li>

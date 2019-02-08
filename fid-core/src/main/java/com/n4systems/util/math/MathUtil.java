@@ -14,6 +14,12 @@ public class MathUtil {
                         a.compareTo(b) < 0 ? a : b;
     }
 
+    /**
+     * The method performs regex check: myString.matches("[A-Za-z0-9]+")
+     * https://stackoverflow.com/questions/12831719/fastest-way-to-check-a-string-is-alphanumeric-in-java
+     * @param str
+     * @return
+     */
     public static boolean isAlphanumeric(String str) {
         for (int i=0; i<str.length(); i++) {
             char c = str.charAt(i);

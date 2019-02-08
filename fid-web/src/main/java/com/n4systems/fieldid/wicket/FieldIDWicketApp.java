@@ -99,6 +99,7 @@ import com.n4systems.fieldid.wicket.pages.setup.userregistration.ViewUserRequest
 import com.n4systems.fieldid.wicket.pages.template.*;
 import com.n4systems.fieldid.wicket.pages.trends.CriteriaTrendsPage;
 import com.n4systems.fieldid.wicket.pages.useraccount.UserAccountSearchPage;
+import com.n4systems.fieldid.wicket.pages.useraccount.details.UserDetailsPage;
 import com.n4systems.fieldid.wicket.pages.useraccount.mobileofflineprofile.MobileOfflineProfilePage;
 import com.n4systems.fieldid.wicket.pages.useraccount.notificationsettings.AddEditNotificationSettingPage;
 import com.n4systems.fieldid.wicket.pages.useraccount.notificationsettings.NotificationSettingsListPage;
@@ -221,10 +222,13 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/eventStatusForm", EventStatusFormPage.class);
 
         mountPage("setup/actionEmailCustomization", ActionEmailSetupPage.class);
-        mountPage("setup/notificationsList", NotificationSettingsListPage.class);
         mountPage("setup/addEditNotifications", AddEditNotificationSettingPage.class);
 
         mountPage("setup/buttonGroups", ButtonGroupPage.class);
+
+        mountPage("myAccount", UserDetailsPage.class);
+        mountPage("notificationsList", NotificationSettingsListPage.class);
+        mountPage("mobileOfflineProfile", MobileOfflineProfilePage.class);
 
         mountPage("places", OrgViewPage.class);
         mountPage("placeSummary", PlaceSummaryPage.class);
@@ -340,8 +344,6 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("criteriaTrends", CriteriaTrendsPage.class);
 
         mountPage("selectLanguage", SelectLanguagePage.class);
-
-        mountPage("mobileOfflineProfile", MobileOfflineProfilePage.class);
 
         mountPage("userAccountSearch", UserAccountSearchPage.class);
 
