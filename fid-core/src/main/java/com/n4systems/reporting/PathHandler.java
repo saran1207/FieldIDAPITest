@@ -2,6 +2,8 @@ package com.n4systems.reporting;
 
 import com.n4systems.model.*;
 import com.n4systems.model.asset.AssetAttachment;
+import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.user.User;
 
 import java.io.File;
@@ -10,7 +12,9 @@ import java.util.Locale;
 import java.util.UUID;
 
 public class PathHandler {
+
 	private static final String PRIVATE_PATH_BASE = "private";
+	private static final String TENANTS_PREFIX = "tenants/";
 	private static final String COMMON_PATH_BASE = "common";
 	private static final String TEMP_PATH_BASE = "tmp";
 	private static final String COMPILED_REPORT_FILE_EXT = ".jasper";
@@ -18,13 +22,13 @@ public class PathHandler {
 	private static final String PROPERTIES_FILE_EXT = ".properties";
 	private static final String PACKAGE_PROPERTIES_FILE = "package.properties";
 	private static final String COMPILED_SUMMARY_REPORT_FILE_NAME = "inspection_summary_report" + COMPILED_REPORT_FILE_EXT;
-    private static final String COMPILED_SUMMARY_REPORT_FILE_NAME_LOCALIZED = "inspection_summary_report_%s" + COMPILED_REPORT_FILE_EXT;
+	private static final String COMPILED_SUMMARY_REPORT_FILE_NAME_LOCALIZED = "inspection_summary_report_%s" + COMPILED_REPORT_FILE_EXT;
 	private static final String ASSET_REPORT_FILE_NAME = "product" + REPORT_FILE_EXT;
-    private static final String ASSET_REPORT_FILE_NAME_LOCALIZED = "product_%s" + REPORT_FILE_EXT;
-    private static final String COMPILED_ASSET_REPORT_FILE_NAME = "product" + COMPILED_REPORT_FILE_EXT;
-    private static final String COMPILED_ASSET_REPORT_FILE_NAME_LOCALIZED = "product_%s" + COMPILED_REPORT_FILE_EXT;
-    private static final String CHART_FILE_NAME = "proof_test_chart.png";
-    private static final String PROOF_TEST_FILE_NAME = "proof_test.pt";
+	private static final String ASSET_REPORT_FILE_NAME_LOCALIZED = "product_%s" + REPORT_FILE_EXT;
+	private static final String COMPILED_ASSET_REPORT_FILE_NAME = "product" + COMPILED_REPORT_FILE_EXT;
+	private static final String COMPILED_ASSET_REPORT_FILE_NAME_LOCALIZED = "product_%s" + COMPILED_REPORT_FILE_EXT;
+	private static final String CHART_FILE_NAME = "proof_test_chart.png";
+	private static final String PROOF_TEST_FILE_NAME = "proof_test.pt";
 	private static final String SIGNATURE_IMAGE_FILE_NAME = "signature.gif";
 	private static final String EVENT_PATH_BASE = PRIVATE_PATH_BASE + "/inspections";
 	private static final String ASSET_PATH_BASE = PRIVATE_PATH_BASE + "/products";
@@ -40,18 +44,23 @@ public class PathHandler {
 	private static final String ATTACHMENT_PATH_BASE = EVENT_PATH_BASE + "/attachments";
 	private static final String PROOF_TEST_PATH_BASE = EVENT_PATH_BASE + "/prooftests";
 	private static final String CHART_IMAGE_PATH_BASE = EVENT_PATH_BASE + "/chartimages";
-    private static final String EVENT_SIGNATURE_PATH_BASE = EVENT_PATH_BASE + "/signatures";
+	private static final String EVENT_SIGNATURE_PATH_BASE = EVENT_PATH_BASE + "/signatures";
 	private static final String REPORT_PATH_BASE = PRIVATE_PATH_BASE + "/reports";
-    private static final String ALL_TENANT_REPORT_PART = "all_tenants";
+	private static final String ALL_TENANT_REPORT_PART = "all_tenants";
 	private static final String ALL_TENANT_REPORT_PATH = REPORT_PATH_BASE + "/" + ALL_TENANT_REPORT_PART;
+	private static final String CUSTOMER_LOGO_BASE_PATH = "/logos/";
+	public static final String PRIMARY_CERTIFICATE_LOGO_PATH = "primary_certificate_logo.gif";
+	public static final String SECONDARY_CERTIFICATE_LOGO_PATH = "secondary_certificate_logo_%d.gif";
+	public static final String BRANDING_LOGO_PATH = "branding_logo.gif";
 
-    private static final String LOTO_DEFAULT_NAME = "procedure";
-    private static final String COMPILED_LOTO_FILE_EXT = ".jasper";
-    private static final String LOTO_FILE_EXT = ".jrxml";
-    private static final String LOTO_S3_BUCKET = "/fieldid-loto";
-    private static final String LOTO_PATH_BASE = PRIVATE_PATH_BASE + "/fieldid-loto";
-    private static final String ALL_TENANT_LOTO_PART = "all_tenants";
-    private static final String ALL_TENANT_LOTO_PATH = LOTO_PATH_BASE + "/" + ALL_TENANT_LOTO_PART;
+
+	private static final String LOTO_DEFAULT_NAME = "procedure";
+	private static final String COMPILED_LOTO_FILE_EXT = ".jasper";
+	private static final String LOTO_FILE_EXT = ".jrxml";
+	private static final String LOTO_S3_BUCKET = "/fieldid-loto";
+	private static final String LOTO_PATH_BASE = PRIVATE_PATH_BASE + "/fieldid-loto";
+	private static final String ALL_TENANT_LOTO_PART = "all_tenants";
+	private static final String ALL_TENANT_LOTO_PATH = LOTO_PATH_BASE + "/" + ALL_TENANT_LOTO_PART;
 
 	private static final String COMMON_IMAGE_PATH_BASE = COMMON_PATH_BASE + "/images";
 	private static final String COMMON_TEMPLATE_BASE = COMMON_PATH_BASE + "/templates";
@@ -60,15 +69,15 @@ public class PathHandler {
 	private static final String BUTTON_IMAGE_EXT = ".png";
 	private static final String N4_LOGO_IMAGE = COMMON_IMAGE_PATH_BASE + "/n4_logo.gif";
 	private static final String RESERVED_TENANT_NAMES_CONFIG_FILE = COMMON_CONFIG_BASE + "/reservedTenantNames.txt";
-	
+
 	// paths are in the format <tenant id>/<created year>/<created month>/<event id>
 	private static final String CREATED_DATE_PATH_FORMAT = "yy/MM";
-	
+
 	/**
 	 * Merges path parts into a file system path.
 	 * @see File#pathSeparatorChar
-	 * @param pathParts	An array of path parts to merge
-	 * @return			The merged path.
+	 * @param pathParts    An array of path parts to merge
+	 * @return            The merged path.
 	 */
 	private static String mergePaths(String...pathParts) {
 		// we do it this way so we don't add a leading '/'
@@ -80,48 +89,48 @@ public class PathHandler {
 		return mergedPath.toString();
 	}
 
-    private static String getReportFileName(Locale locale) {
-        return "product_"+locale.getLanguage() +COMPILED_REPORT_FILE_EXT;
-    }
-	
+	private static String getReportFileName(Locale locale) {
+		return "product_"+locale.getLanguage() +COMPILED_REPORT_FILE_EXT;
+	}
+
 	/**
 	 * Returns a new file object with the path parented by parent
 	 * @see File#File(File, String)
-	 * @param parent	parent directory
-	 * @param path		child path
-	 * @return			File
+	 * @param parent    parent directory
+	 * @param path        child path
+	 * @return            File
 	 */
 	private static File parentize(File parent, String path) {
 		return new File(parent, path);
 	}
-	
+
 	/**
 	 * Returns a new file object with the path parented by the application root
 	 * @see #parentize(File, String)
 	 * @see #getAppRoot()
-	 * @param path		child path
-	 * @return			File
+	 * @param path        child path
+	 * @return            File
 	 */
 	private static File absolutize(String path) {
 		return parentize(getAppRoot(), path);
 	}
-	
+
 	/**
 	 * Returns the application root directory
-	 * @return	A File object for this directory
+	 * @return    A File object for this directory
 	 */
 	private static File getAppRoot() {
 		return new File("/var/fieldid");
 	}
-	
+
 	/**
 	 * Constructs a File object to the temporary directory root
-	 * @return					A File object for this directory
+	 * @return                    A File object for this directory
 	 */
 	public static File getTempRoot() {
 		return absolutize(TEMP_PATH_BASE);
 	}
-	
+
 	/**
 	 * Generates a random file name.
 	 * @see UUID#randomUUID()
@@ -134,23 +143,23 @@ public class PathHandler {
 	private static String getTempFileName(String ext) {
 		return getTempFileName() + '.' + ext;
 	}
-	
+
 	/**
 	 * Constructs a File object for a temporary directory.
 	 * @see #getTempRoot()
 	 * @see #getTempFileName()
-	 * @return					A File object for this directory
+	 * @return                    A File object for this directory
 	 */
 	public static File getTempDir() {
 		File tempDir = getTempFile();
 		tempDir.mkdirs();
 		return tempDir;
 	}
-	
+
 	/**
 	 * Constructs temp File with a random name
 	 * @see #getTempDir()
-	 * @return				A File object for this file
+	 * @return                A File object for this file
 	 */
 	public static File getTempFile() {
 		return parentize(getTempRoot(), getTempFileName());
@@ -163,12 +172,12 @@ public class PathHandler {
 	public static File getTempFileInRoot(String tempFileName) {
 		return parentize(getTempRoot(), tempFileName);
 	}
-	
+
 	/**
 	 * Constructs a File object for a file in a temporary directory
 	 * @see #getTempDir()
-	 * @param fileName			The name of the file
-	 * @return					A File object for this file
+	 * @param fileName            The name of the file
+	 * @return                    A File object for this file
 	 */
 	public static File getTempFile(String fileName) {
 		return parentize(getTempDir(), fileName);
@@ -177,121 +186,121 @@ public class PathHandler {
 	public static File getAllTenantReportFile(String reportName, Locale locale) {
 		return absolutize(mergePaths(ALL_TENANT_REPORT_PATH, reportName));
 	}
-	
+
 	/**
 	 * Constructs a relative path for a tenants private directory.
-	 * @param 	tenant	A Tenant
-	 * @return			A string path representing a Tenants private path
+	 * @param     tenant    A Tenant
+	 * @return            A string path representing a Tenants private path
 	 */
 	private static String getTenantPathPart(Tenant tenant) {
 		return tenant.getName();
 	}
-	
+
 	/**
 	 * Returns the base directory for user files for the given tenant.
 	 */
 	public static File getTenantUserBaseFile(Tenant tenant) {
 		return absolutize(getTenantUserBasePath(tenant));
 	}
-	
+
 	private static String getTenantUserBasePath(Tenant tenant) {
 		return mergePaths(USERS_PATH_BASE, getTenantPathPart(tenant));
 	}
-	
+
 	/**
 	 * Finds the relative Tenant specific path to Asset report.  Uses the Tenant from the Asset to resolve the Teanant path part
-	 * @see 	#getTenantPathPart(Tenant)
-	 * @see 	#getReportPath(com.n4systems.model.Asset)
-	 * @param 	asset	A Asset
-	 * @return	A string path relative to the application root
+	 * @see     #getTenantPathPart(Tenant)
+	 * @see     #getReportPath(com.n4systems.model.Asset)
+	 * @param     asset    A Asset
+	 * @return    A string path relative to the application root
 	 */
 	private static String getReportPath(Asset asset) {
 		return mergePaths(REPORT_PATH_BASE, getTenantPathPart(asset.getTenant()), ASSET_REPORT_FILE_NAME);
 	}
 
-    private static String getReportPath(Asset asset, Locale locale) {
-        return mergePaths(REPORT_PATH_BASE, getTenantPathPart(asset.getTenant()), getReportFileName(locale));
-    }
+	private static String getReportPath(Asset asset, Locale locale) {
+		return mergePaths(REPORT_PATH_BASE, getTenantPathPart(asset.getTenant()), getReportFileName(locale));
+	}
 
 	private static String getCompiledReportPath(Asset asset) {
 		return mergePaths(REPORT_PATH_BASE, getTenantPathPart(asset.getTenant()), COMPILED_ASSET_REPORT_FILE_NAME);
 	}
 
-    private static String localizeReportPath(Tenant tenant, String localizedPathFormat, String defaultPath, Locale locale) {
-        String localizedPath;
-        if (locale != null) {
-            localizedPath = String.format(localizedPathFormat, locale.getLanguage());
-        } else {
-            localizedPath = defaultPath;
-        }
-        if (tenant != null) {
-            return mergePaths(REPORT_PATH_BASE, getTenantPathPart(tenant), localizedPath);
-        } else {
-            return mergePaths(REPORT_PATH_BASE, ALL_TENANT_REPORT_PART, localizedPath);
-        }
-    }
+	private static String localizeReportPath(Tenant tenant, String localizedPathFormat, String defaultPath, Locale locale) {
+		String localizedPath;
+		if (locale != null) {
+			localizedPath = String.format(localizedPathFormat, locale.getLanguage());
+		} else {
+			localizedPath = defaultPath;
+		}
+		if (tenant != null) {
+			return mergePaths(REPORT_PATH_BASE, getTenantPathPart(tenant), localizedPath);
+		} else {
+			return mergePaths(REPORT_PATH_BASE, ALL_TENANT_REPORT_PART, localizedPath);
+		}
+	}
 
-    private static File getPossiblyLocalizedReport(Tenant tenant, Locale locale, String localizedPathFormat, String defaultPath) {
-        File localizedFile = null;
-        if (locale != null) {
-            // Current tenant - selected locale
-            localizedFile = absolutize(localizeReportPath(tenant, localizedPathFormat, defaultPath, locale));
-        }
-        File tenantReport;
-        if (localizedFile != null && localizedFile.exists()) {
-            tenantReport = localizedFile;
-        } else {
-            // Current tenant - no locale
-            tenantReport = absolutize(localizeReportPath(tenant, localizedPathFormat, defaultPath, null));
-        }
+	private static File getPossiblyLocalizedReport(Tenant tenant, Locale locale, String localizedPathFormat, String defaultPath) {
+		File localizedFile = null;
+		if (locale != null) {
+			// Current tenant - selected locale
+			localizedFile = absolutize(localizeReportPath(tenant, localizedPathFormat, defaultPath, locale));
+		}
+		File tenantReport;
+		if (localizedFile != null && localizedFile.exists()) {
+			tenantReport = localizedFile;
+		} else {
+			// Current tenant - no locale
+			tenantReport = absolutize(localizeReportPath(tenant, localizedPathFormat, defaultPath, null));
+		}
 
-        if (tenantReport.exists()) {
-            return tenantReport;
-        }
+		if (tenantReport.exists()) {
+			return tenantReport;
+		}
 
-        // No tenant - selected locale
-        localizedFile = absolutize(localizeReportPath(null, localizedPathFormat, defaultPath, locale));
+		// No tenant - selected locale
+		localizedFile = absolutize(localizeReportPath(null, localizedPathFormat, defaultPath, locale));
 
-        if (localizedFile.exists()) {
-            return localizedFile;
-        }
+		if (localizedFile.exists()) {
+			return localizedFile;
+		}
 
-        // No tenant - no locale
-        return absolutize(localizeReportPath(null, localizedPathFormat, defaultPath, null));
-    }
+		// No tenant - no locale
+		return absolutize(localizeReportPath(null, localizedPathFormat, defaultPath, null));
+	}
 
 	public static File getReportFile(Asset asset, Locale locale) {
-        return getPossiblyLocalizedReport(asset.getTenant(), locale, ASSET_REPORT_FILE_NAME_LOCALIZED, ASSET_REPORT_FILE_NAME);
+		return getPossiblyLocalizedReport(asset.getTenant(), locale, ASSET_REPORT_FILE_NAME_LOCALIZED, ASSET_REPORT_FILE_NAME);
 	}
 
 	public static File getCompiledReportFile(Asset asset, Locale locale) {
-        return getPossiblyLocalizedReport(asset.getTenant(), locale, COMPILED_ASSET_REPORT_FILE_NAME_LOCALIZED, COMPILED_ASSET_REPORT_FILE_NAME);
+		return getPossiblyLocalizedReport(asset.getTenant(), locale, COMPILED_ASSET_REPORT_FILE_NAME_LOCALIZED, COMPILED_ASSET_REPORT_FILE_NAME);
 	}
 
 	private static String getReportFileName(PrintOut printOut, Locale locale) {
-        String pdfTemplate = printOut.getPdfTemplate();
-        if (locale != null) {
-            pdfTemplate += "_"+ locale.getLanguage();
-        }
-        return pdfTemplate + REPORT_FILE_EXT;
+		String pdfTemplate = printOut.getPdfTemplate();
+		if (locale != null) {
+			pdfTemplate += "_"+ locale.getLanguage();
+		}
+		return pdfTemplate + REPORT_FILE_EXT;
 	}
-	
+
 	private static String getCompiledReportFileName(PrintOut printOut, Locale locale) {
-        String pdfTemplate = printOut.getPdfTemplate();
-        if (locale != null) {
-            pdfTemplate += "_"+ locale.getLanguage();
-        }
-        return pdfTemplate + COMPILED_REPORT_FILE_EXT;
+		String pdfTemplate = printOut.getPdfTemplate();
+		if (locale != null) {
+			pdfTemplate += "_"+ locale.getLanguage();
+		}
+		return pdfTemplate + COMPILED_REPORT_FILE_EXT;
 	}
 
 	private static String getReportPath(PrintOut printOut, Locale locale) {
 		return mergePaths(getReportPathBase(printOut), getReportFileName(printOut, locale));
 	}
-	
+
 	private static String getCompiledReportPath(PrintOut printOut, Locale locale) {
 		return mergePaths(getReportPathBase(printOut), getCompiledReportFileName(printOut, locale));
 	}
-	
+
 	private static String getPrintOutPreveiwPath(PrintOut printOut) {
 		return mergePaths(getReportPathBase(printOut), printOut.getFullPdfImage());
 	}
@@ -308,131 +317,131 @@ public class PathHandler {
 	}
 
 	public static File getPrintOutFile(PrintOut printOut, Locale locale) {
-        File localizedFile = absolutize(getReportPath(printOut, locale));
-        if (localizedFile.exists()) {
-            return localizedFile;
-        }
-        return absolutize(getReportPath(printOut, null));
+		File localizedFile = absolutize(getReportPath(printOut, locale));
+		if (localizedFile.exists()) {
+			return localizedFile;
+		}
+		return absolutize(getReportPath(printOut, null));
 	}
 
 	public static File getCompiledPrintOutFile(PrintOut printOut, Locale locale) {
-        File localizedCompiledFile = absolutize(getCompiledReportPath(printOut, locale));
-        if (localizedCompiledFile.exists()) {
-            return localizedCompiledFile;
-        }
-        return absolutize(getCompiledReportPath(printOut, null));
+		File localizedCompiledFile = absolutize(getCompiledReportPath(printOut, locale));
+		if (localizedCompiledFile.exists()) {
+			return localizedCompiledFile;
+		}
+		return absolutize(getCompiledReportPath(printOut, null));
 	}
 
-    //----------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------
 
-    public static String getLotoDisplayString(LotoPrintout lotoPrintout) {
-        String printOutPath = mergePaths(getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName());
-        return printOutPath;
-    }
+	public static String getLotoDisplayString(LotoPrintout lotoPrintout) {
+		String printOutPath = mergePaths(getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName());
+		return printOutPath;
+	}
 
-    public static String getS3BasePath(LotoPrintout lotoPrintout) {
-        String printOutPath = mergePaths(getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName());
-        return printOutPath;
-    }
+	public static String getS3BasePath(LotoPrintout lotoPrintout) {
+		String printOutPath = mergePaths(getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName());
+		return printOutPath;
+	}
 
-    public static String getZipS3Path(LotoPrintout lotoPrintout) {
-        String printOutPath = mergePaths(getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName(), (lotoPrintout.getPrintoutName() + ".zip"));
-        return printOutPath;
-    }
+	public static String getZipS3Path(LotoPrintout lotoPrintout) {
+		String printOutPath = mergePaths(getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName(), (lotoPrintout.getPrintoutName() + ".zip"));
+		return printOutPath;
+	}
 
-    public static String getS3Path(LotoPrintout lotoPrintout, String fileName) {
-        String printOutPath = mergePaths(getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName(), fileName);
-        return printOutPath;
-    }
+	public static String getS3Path(LotoPrintout lotoPrintout, String fileName) {
+		String printOutPath = mergePaths(getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName(), fileName);
+		return printOutPath;
+	}
 
 
-    public static String getLotoPath(LotoPrintout lotoPrintout) {
-        String printOutPath = mergePaths(getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName());
-        return printOutPath;
-    }
+	public static String getLotoPath(LotoPrintout lotoPrintout) {
+		String printOutPath = mergePaths(getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName());
+		return printOutPath;
+	}
 
 	public static String getLotoDefaultPath(LotoPrintoutType type) {
 		String printOutPath = mergePaths(ALL_TENANT_LOTO_PART, type.getLabel());
 		return printOutPath;
 	}
 
-    public static File getAbsoluteLotoPath(LotoPrintout lotoPrintout) {
-        String printOutPath = mergePaths(LOTO_PATH_BASE, getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName());
-        return absolutize(printOutPath);
-    }
+	public static File getAbsoluteLotoPath(LotoPrintout lotoPrintout) {
+		String printOutPath = mergePaths(LOTO_PATH_BASE, getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName());
+		return absolutize(printOutPath);
+	}
 
-    public static File getAbsoluteLotoDefaultPath(LotoPrintout lotoPrintout) {
-        String printOutPath = mergePaths(ALL_TENANT_LOTO_PART, lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName());
-        return absolutize(printOutPath);
-    }
+	public static File getAbsoluteLotoDefaultPath(LotoPrintout lotoPrintout) {
+		String printOutPath = mergePaths(ALL_TENANT_LOTO_PART, lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName());
+		return absolutize(printOutPath);
+	}
 
-    public static String getDefaultCompiledLotoFilePath(LotoPrintout lotoPrintout) {
-        String printOutPath = mergePaths(ALL_TENANT_LOTO_PART, lotoPrintout.getPrintoutType().getLabel(), getCompiledLotoFileName());
-        return printOutPath;
-    }
+	public static String getDefaultCompiledLotoFilePath(LotoPrintout lotoPrintout) {
+		String printOutPath = mergePaths(ALL_TENANT_LOTO_PART, lotoPrintout.getPrintoutType().getLabel(), getCompiledLotoFileName());
+		return printOutPath;
+	}
 
-    public static String getCompiledLotoFilePath(LotoPrintout lotoPrintout) {
-        String printOutPath = mergePaths(getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName(), getCompiledLotoFileName());
-        return printOutPath;
-    }
+	public static String getCompiledLotoFilePath(LotoPrintout lotoPrintout) {
+		String printOutPath = mergePaths(getTenantPathPart(lotoPrintout.getTenant()), lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName(), getCompiledLotoFileName());
+		return printOutPath;
+	}
 
-    private static String getCompiledLotoFileName() {
-        return LOTO_DEFAULT_NAME + COMPILED_LOTO_FILE_EXT;
-    }
+	private static String getCompiledLotoFileName() {
+		return LOTO_DEFAULT_NAME + COMPILED_LOTO_FILE_EXT;
+	}
 
-    //----------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------
 
 	public static File getPreviewImage(PrintOut printOut) {
 		return absolutize(getPrintOutPreveiwPath(printOut));
 	}
-	
+
 	public static File getPreviewThumb(PrintOut printOut) {
 		return absolutize(getPrintOutPreveiwThumbPath(printOut));
 	}
-	
+
 	public static File getCompiledSummaryReportFile(Tenant tenant, Locale locale) {
-        return getPossiblyLocalizedReport(tenant, locale, COMPILED_SUMMARY_REPORT_FILE_NAME_LOCALIZED, COMPILED_SUMMARY_REPORT_FILE_NAME);
+		return getPossiblyLocalizedReport(tenant, locale, COMPILED_SUMMARY_REPORT_FILE_NAME_LOCALIZED, COMPILED_SUMMARY_REPORT_FILE_NAME);
 	}
 
-    private static String getEventPath(AbstractEvent event) {
-        String dateCreatedPath = (new SimpleDateFormat(CREATED_DATE_PATH_FORMAT)).format(event.getCreated());
-        return mergePaths(dateCreatedPath, event.getId().toString());
-    }
-	
+	private static String getEventPath(AbstractEvent event) {
+		String dateCreatedPath = (new SimpleDateFormat(CREATED_DATE_PATH_FORMAT)).format(event.getCreated());
+		return mergePaths(dateCreatedPath, event.getId().toString());
+	}
+
 	private static String getProjectPath(Project project) {
 		String dateCreatedPath = (new SimpleDateFormat(CREATED_DATE_PATH_FORMAT)).format(project.getCreated());
 		return mergePaths(dateCreatedPath, project.getId().toString());
 	}
-	
+
 	private static String getJobAttachmentBasePath(Tenant tenant) {
 		return mergePaths(PROJECT_ATTACHMENT_PATH_BASE, getTenantPathPart(tenant));
 	}
-	
+
 	private static String getAssetPath(Asset asset) {
 		String dateCreatedPath = (new SimpleDateFormat(CREATED_DATE_PATH_FORMAT)).format(asset.getCreated());
 		return mergePaths(dateCreatedPath, asset.getId().toString());
 	}
-	
+
 	private static String getSubEventPath(SubEvent subEvent) {
 		return subEvent.getId().toString();
 	}
-	
+
 	private static String getAssetTypePath(Long assetTypeId) {
 		return assetTypeId.toString();
 	}
-	
+
 	private static String getAssetTypePath(AssetType assetType) {
 		return getAssetTypePath(assetType.getId());
 	}
-	
+
 	private static String getAttachmentPath(AbstractEvent event) {
 		return mergePaths(getEventPath(event));
 	}
-	
+
 	private static String getNotePath(FileAttachment note) {
 		return note.getId().toString();
 	}
-	
+
 	private static String getAssetAttachmentPath(AssetAttachment pAttachment) {
 		return pAttachment.getId().toString();
 	}
@@ -440,45 +449,45 @@ public class PathHandler {
 	public static File getEventAttachmentFile(Event event, SubEvent subEvent, FileAttachment attachment) {
 		return new File(getAttachmentFile(event, subEvent), attachment.getFileName());
 	}
-	
+
 	public static File getEventAttachmentFile(Event event, FileAttachment attachment) {
 		return new File(getAttachmentFile(event), attachment.getFileName());
 	}
-	
+
 	public static File getAttachmentFile(AbstractEvent event, SubEvent subEvent) {
 		return absolutize(mergePaths(getEventAttachmentBasePath(event.getTenant()), getAttachmentPath(event), getSubEventPath(subEvent)));
 	}
-	
+
 	public static File getAttachmentFile(AbstractEvent event) {
 		return absolutize(mergePaths(getEventAttachmentBasePath(event.getTenant()), getAttachmentPath(event)));
 	}
-	
+
 	public static File getEventAttachmentBaseFile(Tenant tenant) {
 		return absolutize(getEventAttachmentBasePath(tenant));
 	}
-	
+
 	private static String getEventAttachmentBasePath(Tenant tenant) {
 		return mergePaths(ATTACHMENT_PATH_BASE, getTenantPathPart(tenant));
 	}
-	
+
 	public static File getAttachmentFile(Project project, FileAttachment note) {
 		return absolutize(mergePaths(getJobAttachmentBasePath(project.getTenant()), getProjectPath(project), getNotePath(note)));
 	}
-	
+
 	public static File getAssetAttachmentDir(AssetAttachment attachment) {
 		File assetAttachmentDir = absolutize(mergePaths(getAssetAttachmentBasePath(attachment.getTenant()), getAssetPath(attachment.getAsset()), getAssetAttachmentPath(attachment)));
-        assetAttachmentDir.mkdirs();
-        return assetAttachmentDir;
+		assetAttachmentDir.mkdirs();
+		return assetAttachmentDir;
 	}
-	
+
 	public static File getAssetAttachmentFile(AssetAttachment attachment) {
 		return new File(getAssetAttachmentDir(attachment), attachment.getFileName());
 	}
-	
+
 	public static File getAssetAttachmentBaseFile(Tenant tenant) {
 		return absolutize(getAssetAttachmentBasePath(tenant));
 	}
-	
+
 	private static String getAssetAttachmentBasePath(Tenant tenant) {
 		return mergePaths(ASSET_ATTACHMENT_PATH_BASE, getTenantPathPart(tenant));
 	}
@@ -486,54 +495,54 @@ public class PathHandler {
 	public static File getChartImageFile(ThingEvent event) {
 		return absolutize(mergePaths(getEventChartImageBasePath(event.getTenant()), getEventPath(event), CHART_FILE_NAME));
 	}
-	
+
 	public static File getEventChartImageBaseFile(Tenant tenant) {
 		return absolutize(getEventChartImageBasePath(tenant));
 	}
-	
+
 	private static String getEventChartImageBasePath(Tenant tenant) {
 		return mergePaths(CHART_IMAGE_PATH_BASE, getTenantPathPart(tenant));
 	}
 
-    @Deprecated
-    public static File getProofTestFile(Event event) {
+	@Deprecated
+	public static File getProofTestFile(Event event) {
 		return absolutize(mergePaths(getEventProoftestBasePath(event.getTenant()), getEventPath(event), PROOF_TEST_FILE_NAME));
 	}
 
-    @Deprecated
-    public static File getEventProoftestBaseFile(Tenant tenant) {
+	@Deprecated
+	public static File getEventProoftestBaseFile(Tenant tenant) {
 		return absolutize(getEventProoftestBasePath(tenant));
 	}
 
-    @Deprecated
-    private static String getEventProoftestBasePath(Tenant tenant) {
+	@Deprecated
+	private static String getEventProoftestBasePath(Tenant tenant) {
 		return mergePaths(PROOF_TEST_PATH_BASE, getTenantPathPart(tenant));
 	}
-	
+
 	public static File getButtonImageFile(Button button) {
 		return absolutize(mergePaths(BUTTON_IMAGE_PATH_BASE, button.getButtonName()+ BUTTON_IMAGE_EXT));
 	}
-	
+
 	public static File getCommonImageFile(String fileName) {
 		return absolutize(mergePaths(COMMON_IMAGE_PATH_BASE, fileName));
 	}
-	
+
 	public static File getN4LogoImageFile() {
 		return absolutize(N4_LOGO_IMAGE);
 	}
-	
+
 	public static File getCommonTemplatePath() {
 		return absolutize(COMMON_TEMPLATE_BASE);
 	}
-	
+
 	public static File getAssetTypeAttachmentFile(FileAttachment attachment, Long assetTypeId) {
 		return absolutize(mergePaths(getAssetTypeAttachmentBasePath(attachment.getTenant()), getAssetTypePath(assetTypeId), attachment.getFileName()));
 	}
-	
+
 	public static File getAssetTypeAttachmentFile(AssetType assetType) {
 		return absolutize(mergePaths(getAssetTypeAttachmentBasePath(assetType.getTenant()), getAssetTypePath(assetType)));
 	}
-	
+
 	private static String getAssetTypeAttachmentBasePath(Tenant tenant) {
 		return mergePaths(ASSET_TYPE_ATTACHMENT_PATH_BASE, getTenantPathPart(tenant));
 	}
@@ -541,34 +550,50 @@ public class PathHandler {
 	private static String getEventSignatureBasePath(Tenant tenant) {
 		return mergePaths(EVENT_SIGNATURE_PATH_BASE, getTenantPathPart(tenant));
 	}
-	
+
 	public static File getAssetTypeImageFile(AssetType assetType) {
 		return absolutize(mergePaths(getAssetTypeImageBasePath(assetType.getTenant()), getAssetTypePath(assetType)));
 	}
 
-    public static File getEventSignatureBaseFile(Tenant tenant) {
-        return absolutize(getEventSignatureBasePath(tenant));
-    }
+	public static File getEventSignatureBaseFile(Tenant tenant) {
+		return absolutize(getEventSignatureBasePath(tenant));
+	}
 
-    public static File getEventSignatureDirectory(Tenant tenant, Long eventId) {
-        return absolutize(mergePaths(getEventSignatureBasePath(tenant), eventId.toString()));
-    }
-	
+	public static File getEventSignatureDirectory(Tenant tenant, Long eventId) {
+		return absolutize(mergePaths(getEventSignatureBasePath(tenant), eventId.toString()));
+	}
+
 	public static String getAssetTypeImageBasePath(Tenant tenant) {
 		return mergePaths(ASSET_TYPE_IMAGE_PATH_BASE, getTenantPathPart(tenant));
 	}
-	
+
 	private static String getUserPrivatePath(User user) {
 		return mergePaths(getTenantUserBasePath(user.getTenant()), user.getId().toString());
 	}
 
+	private static String getPrimaryOrgPrivatePath(PrimaryOrg primaryOrg) {
+		return mergePaths(getTenantUserBasePath(primaryOrg.getTenant()), primaryOrg.getId().toString());
+	}
+
+	private static String getSecondaryOrgPrivatePath(SecondaryOrg secondaryOrg) {
+		return mergePaths(getTenantUserBasePath(secondaryOrg.getTenant()), secondaryOrg.getId().toString());
+	}
+
+	private static String getPrimaryOrgPrivatePath(PrimaryOrg primaryOrg, String path) {
+		return mergePaths(getTenantUserBasePath(primaryOrg.getTenant()), primaryOrg.getId().toString(), path);
+	}
+
+	private static String getSecondaryOrgPrivatePath(SecondaryOrg secondaryOrg, String path) {
+		return mergePaths(getTenantUserBasePath(secondaryOrg.getTenant()), secondaryOrg.getId().toString(), path);
+	}
+
 	/** @return The absolute private directory for a user  */
 	public static File getUserPrivateDir(User user) {
-        File userPrivateDir = absolutize(getUserPrivatePath(user));
-        userPrivateDir.mkdirs();
-        return userPrivateDir;
+		File userPrivateDir = absolutize(getUserPrivatePath(user));
+		userPrivateDir.mkdirs();
+		return userPrivateDir;
 	}
-	
+
 	/** @return The path to a file under a users private directory */
 	public static File getUserFile(User user, String fileName) {
 		return new File(getUserPrivateDir(user), fileName);
@@ -579,11 +604,71 @@ public class PathHandler {
 		return getUserFile(user, SIGNATURE_IMAGE_FILE_NAME);
 	}
 
+
+	/** @return The absolute private directory for a secondary org  */
+	public static File getSecondaryOrgPrivateDir(SecondaryOrg secondaryOrg, String path) {
+		File secondaryOrgPrivateDir = absolutize(getSecondaryOrgPrivatePath(secondaryOrg, path));
+		secondaryOrgPrivateDir.mkdirs();
+		return secondaryOrgPrivateDir;
+	}
+
+	/** @return The path to a file under a secondary orgs private directory */
+	public static File getSecondaryOrgFile(SecondaryOrg secondaryOrg, String path, String fileName) {
+		return new File(getSecondaryOrgPrivateDir(secondaryOrg, path), fileName);
+	}
+
+	/** @return The log0 image for a secondary org  */
+	public static File getReportImage(SecondaryOrg secondaryOrg) {
+		Long tenantId = secondaryOrg.getTenant().getId();
+		String secondaryCertificateLogoPath = createResourcePath(tenantId);
+		String secondaryCertificateLogoFile = createResourceFile(SECONDARY_CERTIFICATE_LOGO_PATH, secondaryOrg.getID());
+		return getSecondaryOrgFile(secondaryOrg, secondaryCertificateLogoPath, secondaryCertificateLogoFile);
+	}
+
+	/** @return The absolute private directory for a primary org  */
+	public static File getPrimaryOrgPrivateDir(PrimaryOrg primaryOrg, String path) {
+		File primaryOrgPrivateDir = absolutize(getPrimaryOrgPrivatePath(primaryOrg, path));
+		primaryOrgPrivateDir.mkdirs();
+		return primaryOrgPrivateDir;
+	}
+
+	/** @return The path to a file under a primary orgs private directory */
+	public static File getPrimaryOrgFile(PrimaryOrg primaryOrg, String path, String fileName) {
+		return new File(getPrimaryOrgPrivateDir(primaryOrg, path), fileName);
+	}
+
+	/** @return The logo image for a primary org  */
+	public static File getReportImage(PrimaryOrg primaryOrg) {
+		Long tenantId = primaryOrg.getTenant().getId();
+		String primaryCertificateLogoPath = createResourcePath(tenantId);
+		String primaryCertificateLogoFile = createResourceFile(PRIMARY_CERTIFICATE_LOGO_PATH, primaryOrg.getID());
+		return getPrimaryOrgFile(primaryOrg, primaryCertificateLogoPath, primaryCertificateLogoFile);
+	}
+
+	/** @return The branding logo for a primary org  */
+	public static File getBrandingLogo(PrimaryOrg primaryOrg) {
+		Long tenantId = primaryOrg.getTenant().getId();
+		String brandingLogoPath = createResourcePath(tenantId);
+		String pbrandingLogoFile = createResourceFile(BRANDING_LOGO_PATH, primaryOrg.getID());
+		return getPrimaryOrgFile(primaryOrg, brandingLogoPath, pbrandingLogoFile);
+	}
+
 	public static File getReleaseNotesPath() {
 		return absolutize(mergePaths(COMMON_PATH_BASE, "releaseNotes.xml"));
 	}
-	
+
 	public static File getReservedTenantNamesConfigFile() {
 		return absolutize(RESERVED_TENANT_NAMES_CONFIG_FILE);
 	}
+
+	public static String createResourcePath(Long tenantId) {
+		return TENANTS_PREFIX + tenantId + CUSTOMER_LOGO_BASE_PATH;
+	}
+
+	public static String createResourceFile(String resourcePath, Object...pathArgs) {
+		return String.format(resourcePath, pathArgs);
+	}
+
+
+
 }
