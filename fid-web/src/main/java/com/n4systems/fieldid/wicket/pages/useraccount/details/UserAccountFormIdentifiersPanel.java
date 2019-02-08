@@ -27,17 +27,6 @@ public class UserAccountFormIdentifiersPanel extends Panel {
     public UserAccountFormIdentifiersPanel(String id, IModel<User> user, IModel<InternalOrg> internalOrgIModel) {
         super(id, user);
 
-        /*OrgLocationPicker ownerPicker = new OrgLocationPicker("ownerPicker", new PropertyModel(user,"owner")) {
-            @Override protected void onChanged(AjaxRequestTarget target) {
-                onOwnerPicked(target);
-            }
-
-            @Override protected void onError(AjaxRequestTarget target, RuntimeException e) { }
-        }.withAutoUpdate();
-        add(ownerPicker.setRequired(true).setLabel(new FIDLabelModel("label.owner")));
-*/
-
-
         add(new Label("primaryOrgName", new PropertyModel<String>(internalOrgIModel, "name")));
         EmailTextField emailTextField = new EmailTextField("email", new PropertyModel<String>(user, "emailAddress"));
         emailTextField.add(new Behavior() {

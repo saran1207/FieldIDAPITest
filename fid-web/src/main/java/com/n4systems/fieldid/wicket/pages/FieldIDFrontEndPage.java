@@ -690,6 +690,8 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
                     add(new Label("loggedInUsernameLabel", sessionUser.getName()))
             );
 
+            addSpeedIdentifyLinks(sessionUser);
+
             languageSelectionLink = new AjaxLink<Void>("languageSelection") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {

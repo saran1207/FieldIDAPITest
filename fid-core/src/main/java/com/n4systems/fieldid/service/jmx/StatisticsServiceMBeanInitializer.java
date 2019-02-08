@@ -12,20 +12,18 @@ import java.lang.management.ManagementFactory;
 
 public class StatisticsServiceMBeanInitializer {
 
-    @Autowired
-    private SessionFactory sessionFactory;
+	@Autowired
+	private SessionFactory sessionFactory;
 
-    public void init() {
-        try {
-            final Statistics statistics = sessionFactory.getStatistics();
-            statistics.setStatisticsEnabled(true);
-            StatisticsService statisticsMBean = new StatisticsService(statistics);
-            MBeanServer mbeanServer = ManagementFactory.getPlatformMBeanServer();
-            if (!mbeanServer.isRegistered(new ObjectName("Hibernate:application=Statistics"))) {
-                mbeanServer.registerMBean(statisticsMBean, new ObjectName("Hibernate:application=Statistics"));
-            }
-        } catch (Exception e) {
-            Logger.getLogger(StatisticsServiceMBeanInitializer.class).warn("Unable to publish hibernate statistics mbean", e);
-        }
-    }
+	public void init() {
+		try {
+			final Statistics statistics = sessionFactory.getStatistics();
+			statistics.setStatisticsEnabled(true);
+			StatisticsService statisticsMBean = new StatisticsService(statistics);
+			MBeanServer mbeanServer = ManagementFactory.getPlatformMBeanServer();
+			mbeanServer.registerMBean(statisticsMBean, new ObjectName("Hibernate:application=Statistics"));
+		} catch (Exception e) {
+			Logger.getLogger(StatisticsServiceMBeanInitializer.class).warn("Unable to publish hibernate statistics mbean", e);
+		}
+	}
 }
