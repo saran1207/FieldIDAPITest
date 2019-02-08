@@ -1446,6 +1446,7 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     //------------------------------------------------------------------------------------------------------
+
     public void uploadInternalOrgLogoImage(File internalOrgLogoImageFile, InternalOrg internalOrg) {
 
         if (internalOrg.isPrimary()) {
@@ -1456,7 +1457,7 @@ public class S3Service extends FieldIdPersistenceService {
         }
     }
 
-    public File downloadSecondaryOrgLogoImage(SecondaryOrg secondaryOrg){
+    public File downloadSecondaryOrgLogoImage(SecondaryOrg secondaryOrg) throws FileNotFoundException,IOException {
         this.secondaryOrg = secondaryOrg;
         return downloadSecondaryOrgLogoImage(secondaryOrg.getId());
     }
@@ -1466,24 +1467,28 @@ public class S3Service extends FieldIdPersistenceService {
         return secondaryOrgLogoImageData;
     }
 
-    public File downloadSecondaryOrgLogoImage(Long secondaryOrgId){
+    public File downloadSecondaryOrgLogoImage(Long secondaryOrgId) throws FileNotFoundException,IOException {
         File secondaryOrgLogoImageFile = null;
+        URL logoUrl = null;
         try {
             byte[] secondaryOrgLogoImageBytes = downloadSecondaryOrgCertificateLogo(secondaryOrgId);
             secondaryOrgLogoImageFile = PathHandler.getSecondaryOrgFile(this.secondaryOrg, PathHandler.createResourcePath(this.secondaryOrg.getTenant().getId()), PathHandler.createResourceFile(PathHandler.SECONDARY_CERTIFICATE_LOGO_PATH,secondaryOrgId));
             FileOutputStream secondaryOrgLogoImageFos = new FileOutputStream(secondaryOrgLogoImageFile);
             secondaryOrgLogoImageFos.write(secondaryOrgLogoImageBytes);
+            logoUrl = this.getBrandingLogoURL(this.secondaryOrg.getTenant().getId());
         }
         catch(FileNotFoundException e) {
-            logger.warn("Unable to write to temp secondary Org logo Image file at: " + secondaryOrgLogoImageFile, e);
+            logger.error("Unable to write to temp secondary Org logo Image file at: " + secondaryOrgLogoImageFile, e);
+            throw e;
         }
         catch(IOException e) {
-            logger.warn("Unable to download secondary Org logo Image file from S3", e);
+            logger.error("Unable to download secondary Org logo Image file from S3: " + logoUrl, e);
+            throw e;
         }
         return secondaryOrgLogoImageFile;
     }
 
-    public File downloadInternalOrgLogoImage(InternalOrg internalOrg){
+    public File downloadInternalOrgLogoImage(InternalOrg internalOrg) throws FileProcessingException,FileNotFoundException,IOException {
         if (internalOrg.isPrimary()) {
             this.primaryOrg= (PrimaryOrg) internalOrg;
             return downloadPrimaryOrgLogoImage();
@@ -1492,21 +1497,25 @@ public class S3Service extends FieldIdPersistenceService {
         return downloadSecondaryOrgLogoImage(internalOrg.getId());
     }
 
-    public File downloadPrimaryOrgLogoImage(PrimaryOrg primaryOrg){ return downloadPrimaryOrgLogoImage(); }
+    public File downloadPrimaryOrgLogoImage(PrimaryOrg primaryOrg) throws FileNotFoundException,IOException { return downloadPrimaryOrgLogoImage(); }
 
-    public File downloadPrimaryOrgLogoImage(){
+    public File downloadPrimaryOrgLogoImage() throws FileNotFoundException,IOException {
         File primaryOrgLogoImageFile = null;
+        URL logoUrl = null;
         try {
             byte[] primaryOrgLogoImageBytes = downloadPrimaryOrgCertificateLogo();
             primaryOrgLogoImageFile = PathHandler.getPrimaryOrgFile(this.primaryOrg, PathHandler.createResourcePath(this.primaryOrg.getTenant().getId()), PathHandler.createResourceFile(PathHandler.PRIMARY_CERTIFICATE_LOGO_PATH));
             FileOutputStream primaryOrgLogoImageFos = new FileOutputStream(primaryOrgLogoImageFile);
             primaryOrgLogoImageFos.write(primaryOrgLogoImageBytes);
+            logoUrl = this.getBrandingLogoURL(this.primaryOrg.getTenant().getId());
         }
         catch(FileNotFoundException e) {
-            logger.warn("Unable to write to temp primary Org logo Image file at: " + primaryOrgLogoImageFile, e);
+            logger.error("Unable to write to temp primary Org logo Image file at: " + primaryOrgLogoImageFile, e);
+            throw e;
         }
         catch(IOException e) {
-            logger.warn("Unable to download primary Org logo Image file from S3", e);
+            logger.error("Unable to download primary Org logo Image file from S3 :" + logoUrl, e);
+            throw e;
         }
         return primaryOrgLogoImageFile;
     }
@@ -1540,7 +1549,6 @@ public class S3Service extends FieldIdPersistenceService {
     public void uploadBrandingLogo(String contentType, byte[] bytes) {
         uploadResource(bytes, contentType, null, BRANDING_LOGO_PATH);
     }
-
 
     public void removeInternalOrgLogoImage(InternalOrg internalOrg){
         if (internalOrg.isPrimary()) removePrimaryOrgCertificateLogo();
