@@ -1,0 +1,38 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+    <div class="setup-user user-page">
+        <div wicket:id="feedbackPanel"/>
+        <h1 class="instructions">
+            <span class="fieldHolder notranslate"  wicket:id="archiveSecondaryOrg"/>
+        </h1>
+
+        <h2 class="decoratedHeader">
+            <wicket:message key="label.removaldetails"/>
+        </h2>
+
+        <form class="fullForm fluidSets" wicket:id="archivedOrgConfirmForm">
+
+            <div class="columns-two">
+
+                <div class="infoSet">
+                    <span class="fieldHolder notranslate"  wicket:id="customersToArchive"/>
+                </div>
+
+                <div class="infoSet">
+                    <span class="fieldHolder notranslate"  wicket:id="divisionsToArchive"/>
+                </div>
+
+                <div class="infoSet">
+                    <span class="fieldHolder notranslate"  wicket:id="usersToArchive"/>
+                </div>
+            </div>
+
+            <div class="formAction">
+                <a wicket:id="save" class="btn-primary"><wicket:message key="label.archive"/></a>
+                <wicket:message key="label.or"/>
+                <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
+            </div>
+        </form>
+     </div>
+</wicket:extend>
+</html>

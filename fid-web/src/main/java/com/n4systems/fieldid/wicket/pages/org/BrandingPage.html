@@ -1,0 +1,24 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+    <div class="setup-user user-page">
+        <form class="fullForm fluidSets" wicket:id="editInternalOrgForm">
+
+            <div class="columns-one">
+                <fieldset wicket:id="brandingLogoPanel" class="form-horizontal"/>
+                <fieldset class="form-horizontal">
+                    <label class="label hideInQuickSetup"> <wicket:message key="label.website_url"/></label>
+                    <span class="fieldHolder">
+                    <input type="text" wicket:id="internalOrgWebSite" maxlength="255" placeholder="Enter your corporate website address"/> &nbsp;<wicket:message key="instruction.url_entry"/>
+                    </span>
+                </fieldset>
+            </div>
+
+            <div class="formAction">
+                <a wicket:id="save" class="btn-primary"><wicket:message key="label.save"/></a>
+                <wicket:message key="label.or"/>
+                <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
+            </div>
+        </form>
+    </div>
+</wicket:extend>
+</html>

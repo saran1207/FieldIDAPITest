@@ -32,7 +32,9 @@ import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
 import com.n4systems.fieldid.wicket.pages.loto.ProcedureAuditListPage;
 import com.n4systems.fieldid.wicket.pages.loto.ProcedureWaitingApprovalsPage;
 import com.n4systems.fieldid.wicket.pages.loto.PublishedListAllPage;
+import com.n4systems.fieldid.wicket.pages.org.BrandingPage;
 import com.n4systems.fieldid.wicket.pages.org.OrgViewPage;
+import com.n4systems.fieldid.wicket.pages.org.OrgsListPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
 import com.n4systems.fieldid.wicket.pages.search.SmartSearchListPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
@@ -443,9 +445,11 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
 	private Component createSettingsSubMenu() {
     	WebMarkupContainer container = new WebMarkupContainer("settingsSubMenuContainer");
-    	
+
+        container.add(new BookmarkablePageLink<Void>("organizationsLink", OrgsListPage.class));
     	container.add(new BookmarkablePageLink<Void>("systemSettingsLink", SystemSettingsPage.class));
-    	container.add(new BookmarkablePageLink<Void>("yourPlanLink", YourPlanPage.class));
+        container.add(new BookmarkablePageLink<Void>("brandingLink", BrandingPage.class));
+        container.add(new BookmarkablePageLink<Void>("yourPlanLink", YourPlanPage.class));
 
         Link ssoSettingsPageLink = new BookmarkablePageLink<Void>("ssoSettingsLink", SsoSettingsPage.class);
         container.add(ssoSettingsPageLink);
