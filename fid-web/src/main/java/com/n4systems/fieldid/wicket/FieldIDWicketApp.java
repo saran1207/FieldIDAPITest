@@ -225,6 +225,8 @@ public class FieldIDWicketApp extends WebApplication {
 
         mountPage("setup/buttonGroups", ButtonGroupPage.class);
 
+        mountPage("setup/importCommonTemplates", ImportCommonTemplatesPage.class);
+
         mountPage("places", OrgViewPage.class);
         mountPage("placeSummary", PlaceSummaryPage.class);
         mountPage("placeEvents", PlaceEventsPage.class);

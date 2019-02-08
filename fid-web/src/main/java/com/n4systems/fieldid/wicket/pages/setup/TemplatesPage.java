@@ -4,6 +4,7 @@ import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.autoattributes.AutoAttributeActionsPage;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.comment.CommentTemplateListPage;
+import com.n4systems.fieldid.wicket.pages.template.ImportCommonTemplatesPage;
 import com.n4systems.model.columns.ReportType;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
@@ -29,6 +30,8 @@ public class TemplatesPage extends SetupPage {
 
         eventColumnsLayoutContainer.setVisible(getSecurityGuard().isInspectionsEnabled());
         add(eventColumnsLayoutContainer);
+
+        add(new BookmarkablePageLink<ColumnsLayoutPage>("importCommonTemplatesLink", ImportCommonTemplatesPage.class));
     }
 
 }
