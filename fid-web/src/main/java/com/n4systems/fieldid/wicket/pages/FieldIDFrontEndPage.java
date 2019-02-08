@@ -686,8 +686,10 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             // header logo and links
             add(new StaticImage("tenantLogo", new Model<String>(s3Service.getBrandingLogoURL().toString())).setEscapeModelStrings(false));
 
-            add(new BookmarkablePageLink<Void>("myAccountLink", UserDetailsPage.class));
-            add(new Label("loggedInUsernameLabel1", sessionUser.getName()));
+            add(new BookmarkablePageLink<Void>("myAccountLink", UserDetailsPage.class).
+                    add(new Label("loggedInUsernameLabel1", sessionUser.getName()))
+            );
+
             add(new Label("loggedInUsernameLabel", sessionUser.getName()));
             addSpeedIdentifyLinks(sessionUser);
 

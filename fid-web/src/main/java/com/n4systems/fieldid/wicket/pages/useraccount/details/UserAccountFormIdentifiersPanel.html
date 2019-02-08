@@ -1,0 +1,46 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+
+    <div class="setup-user identifiers-panel">
+        <h3><wicket:message key="label.identifiers"/></h3>
+
+        <div class="control-group owner-picker" >
+            <label class="label">* <wicket:message key="label.owner"/></label>
+            <div wicket:id="ownerPicker"/>
+        </div>
+
+        <div class="control-group">
+            <label class="label">* <wicket:message key="label.emailaddress"/></label>
+            <input type="email" wicket:id="email"  maxlength="50"/>
+        </div>
+
+        <div class="control-group">
+            <label class="label">* <wicket:message key="label.firstname"/></label>
+            <input type="text" wicket:id="firstName" maxlength="30">
+        </div>
+
+        <div class="control-group">
+            <label class="label">* <wicket:message key="label.lastname"/></label>
+            <input type="text" wicket:id="lastName" maxlength="30">
+        </div>
+
+        <div class="control-group">
+            <label class="label"><wicket:message key="label.initials"/></label>
+            <input type="text" wicket:id="initials"  maxlength="255">
+        </div>
+
+        <div class="control-group">
+            <label class="label"><wicket:message key="label.id"/></label>
+            <input type="text" wicket:id="identifier" maxlength="20">
+        </div>
+
+        <div class="control-group">
+            <label class="label"><wicket:message key="label.position"/></label>
+            <input type="text" wicket:id="position"  maxlength="255">
+        </div>
+
+    </div>
+
+</wicket:panel>
+
+</html>

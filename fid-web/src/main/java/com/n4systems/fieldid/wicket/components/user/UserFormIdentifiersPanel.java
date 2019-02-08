@@ -70,13 +70,12 @@ public class UserFormIdentifiersPanel extends Panel {
         add(new TextField<String>("identifier", new PropertyModel<String>(user, "identifier")));
         add(new TextField<String>("position", new PropertyModel<String>(user, "position")));
         UploadForm uploadForm;
+        add(uploadForm = new UploadForm("uploadForm"));
         if (uploadedImage != null) {
-            add(uploadForm = new UploadForm("uploadForm"));
             uploadForm.setMultiPart(true);
             uploadForm.setVisible(!user.getObject().isPerson());
         }
         else {
-            add(uploadForm =  new UploadForm("uploadForm"));
             uploadForm.setVisible(false);
         }
     }
@@ -126,6 +125,10 @@ public class UserFormIdentifiersPanel extends Panel {
             if (uploadedImage != null) {
                 fileDisplay.setVisible(uploadedImage.isExistingImage());
                 uploadField.setVisible(!uploadedImage.isExistingImage());
+            }
+            else {
+                fileDisplay.setVisible(false);
+                uploadField.setVisible(false);
             }
             add(fileDisplay);
         }

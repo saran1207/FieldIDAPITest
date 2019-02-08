@@ -591,10 +591,8 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
             // header logo and links
             add(new StaticImage("tenantLogo", new Model<String>(s3Service.getBrandingLogoURL().toString())).setEscapeModelStrings(false));
 
-            final Mybean bean = new Mybean();
-            bean.setLabelText(sessionUser.getName());
             add(new BookmarkablePageLink<Void>("myAccountLink", UserDetailsPage.class).
-                    add(new Label("loggedInUsernameLabel1", new PropertyModel<String>(bean, "labelText")))
+                    add(new Label("loggedInUsernameLabel1", sessionUser.getName()))
             );
 
             add(new Label("loggedInUsernameLabel", sessionUser.getName()));
@@ -754,19 +752,5 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
                     }
                 }.setFileName(fileName).setContentDisposition(ContentDisposition.ATTACHMENT)
         );
-    }
-
-    private static class Mybean{
-
-        String labelText = "click me";
-
-        public String getLabelText(){
-            return this.labelText;
-        }
-
-        public void setLabelText(final String labelText){
-            this.labelText = labelText;
-        }
-
     }
 }
