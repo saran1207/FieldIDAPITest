@@ -1,14 +1,9 @@
 package com.n4systems.fieldid.wicket.pages.useraccount.details;
 
-import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
-import com.n4systems.fieldid.wicket.components.table.HighlightIfSelectedBehavior;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.orgs.InternalOrg;
-import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.user.User;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.basic.Label;
@@ -16,10 +11,8 @@ import org.apache.wicket.markup.html.form.EmailTextField;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.form.validation.FormValidatorAdapter;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 public class UserAccountFormIdentifiersPanel extends Panel {
@@ -66,10 +59,5 @@ public class UserAccountFormIdentifiersPanel extends Panel {
         add(new TextField<String>("position", new PropertyModel<String>(user, "position")));
     }
 
-    protected void onOwnerPicked(AjaxRequestTarget target) { }
-
-    public PrimaryOrg getPrimaryOrg() {
-        return new PrimaryOrg();
-    }
-
+    protected void onOwnerPicked(AjaxRequestTarget target) {}
 }

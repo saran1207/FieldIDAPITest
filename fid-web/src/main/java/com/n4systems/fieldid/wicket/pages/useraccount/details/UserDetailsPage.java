@@ -3,7 +3,6 @@ package com.n4systems.fieldid.wicket.pages.useraccount.details;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.user.UserFormAccountPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -25,13 +24,13 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class UserDetailsPage extends AccountSetupPage {
 
-    @SpringBean protected UserService userService;
-    @SpringBean protected OrgService orgService;
+    @SpringBean private UserService userService;
+    @SpringBean private OrgService orgService;
 
-    protected UserType userType;
+    private UserType userType;
     private Long uniqueId;
-    protected IModel<User> userModel;
-    protected IModel<InternalOrg> internalOrgIModel;
+    private IModel<User> userModel;
+    private IModel<InternalOrg> internalOrgIModel;
 
     public UserDetailsPage(UserType userType) {
         super();
@@ -94,7 +93,7 @@ public class UserDetailsPage extends AccountSetupPage {
         return (UserFormAccountPanel)accountPanel;
     }
 
-    protected User update() {
+    protected void update() {
         User user = userModel.getObject();
 
         user.assignSecruityCardNumber(getUserFormAccountPanel().getRfidNumber());
@@ -105,11 +104,10 @@ public class UserDetailsPage extends AccountSetupPage {
 
         userService.update(user);
 
-        return user;
+        return ;
     }
 
-    protected void addConfirmBehavior(SubmitLink submitLink) {
-    }
+    protected void addConfirmBehavior(SubmitLink submitLink) {}
 
     protected void onOwnerPicked(AjaxRequestTarget target) {}
 

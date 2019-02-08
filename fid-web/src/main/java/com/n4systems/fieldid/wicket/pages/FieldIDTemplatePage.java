@@ -114,21 +114,17 @@ import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilde
 @SuppressWarnings("serial")
 public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIConstants {
 
-    @SpringBean
-	protected ConfigService configService;
+    @SpringBean protected ConfigService configService;
 
-	@SpringBean
-	private UserLimitService userLimitService;
+    @SpringBean private UserLimitService userLimitService;
 
-    @SpringBean
-    private S3Service s3Service;
+    @SpringBean private S3Service s3Service;
 
-    @SpringBean
-    private OrgService orgService;
+    @SpringBean private OrgService orgService;
 
     private Asset smartSearchAsset;
     protected Component titleLabel;
-	protected Component topTitleLabel;
+    protected Component topTitleLabel;
     private TopFeedbackPanel topFeedbackPanel;
     private Component myAccountLink;
     private Component languageSelectionLink;
@@ -238,9 +234,9 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
     }
 
     private String getSupportUrl() {
-    	TenantSettings settings = getTenant().getSettings();
-		return settings.getSupportUrl()==null ? DEFAULT_SUPPORT_URL :settings.getSupportUrl();
-	}
+        TenantSettings settings = getTenant().getSettings();
+        return settings.getSupportUrl()==null ? DEFAULT_SUPPORT_URL :settings.getSupportUrl();
+    }
 
     protected IModel<String> getMetaIE() {
         return Model.of("IE=Edge");
@@ -273,8 +269,8 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
     }
     
     protected Component createHeaderLink(String id, String label) {
-		return new WebMarkupContainer(id).setVisible(false);
-	}
+        return new WebMarkupContainer(id).setVisible(false);
+    }
 
     protected Component createSubHeader(String subHeaderId) {
         return new WebMarkupContainer(subHeaderId).setVisible(false);
@@ -326,13 +322,13 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         return container;
     }
     
-	private void createSecuritySubMenu(WebMarkupContainer container) {
-		container.add(new BookmarkablePageLink<ColumnsLayoutPage>("passwordPolicyLink", PasswordPolicyPage.class));
-		container.add(new BookmarkablePageLink<ColumnsLayoutPage>("accountPolicyLink", AccountPolicyPage.class));
+    private void createSecuritySubMenu(WebMarkupContainer container) {
+        container.add(new BookmarkablePageLink<ColumnsLayoutPage>("passwordPolicyLink", PasswordPolicyPage.class));
+        container.add(new BookmarkablePageLink<ColumnsLayoutPage>("accountPolicyLink", AccountPolicyPage.class));
         container.add(new BookmarkablePageLink<ColumnsLayoutPage>("offlinePolicyLink", OfflinePolicyPage.class));
-	}
+    }
 
-	private Component createTemplatesSubMenu() {
+    private Component createTemplatesSubMenu() {
         boolean intergrationEnabled = FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.Integration);
 
         WebMarkupContainer container = new WebMarkupContainer("templatesSubMenuContainer");
@@ -351,9 +347,9 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         container.add(new BookmarkablePageLink<ColumnsLayoutPage>("eventLayoutLink", ColumnsLayoutPage.class, param("type", ReportType.EVENT)).setVisible(getSecurityGuard().isInspectionsEnabled()));
 
         return container;
-	}
+    }
 
-	private Component createAssetEventsSubMenu() {
+    private Component createAssetEventsSubMenu() {
         WebMarkupContainer container = new WebMarkupContainer("assetsEventsSubMenuContainer");
         container.add(new BookmarkablePageLink("eventTypeGroupLink", EventTypeGroupListPage.class));
         container.add(new BookmarkablePageLink("eventStatusListLink", EventStatusListPage.class));
@@ -366,11 +362,11 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         return container;
     }
 
-	private Component createSettingsSubMenu() {
-    	WebMarkupContainer container = new WebMarkupContainer("settingsSubMenuContainer");
-    	
-    	container.add(new BookmarkablePageLink<Void>("systemSettingsLink", SystemSettingsPage.class));
-    	container.add(new BookmarkablePageLink<Void>("yourPlanLink", YourPlanPage.class));
+    private Component createSettingsSubMenu() {
+        WebMarkupContainer container = new WebMarkupContainer("settingsSubMenuContainer");
+        
+        container.add(new BookmarkablePageLink<Void>("systemSettingsLink", SystemSettingsPage.class));
+        container.add(new BookmarkablePageLink<Void>("yourPlanLink", YourPlanPage.class));
 
         Link ssoSettingsPageLink = new BookmarkablePageLink<Void>("ssoSettingsLink", SsoSettingsPage.class);
         container.add(ssoSettingsPageLink);
@@ -409,9 +405,9 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
     }
 
     private Component createOwnersSubMenu() {
-    	WebMarkupContainer container = new WebMarkupContainer("ownersSubMenuContainer");
-    	
-	    boolean canManageSystemUsers = getSessionUser().hasAccess("managesystemusers");
+        WebMarkupContainer container = new WebMarkupContainer("ownersSubMenuContainer");
+        
+        boolean canManageSystemUsers = getSessionUser().hasAccess("managesystemusers");
         boolean advancedLocationEnabled = FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.AdvancedLocation);
 
         container.add(new BookmarkablePageLink<CustomerActionsPage>("manageCustomersLink", CustomerActionsPage.class,
@@ -422,7 +418,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         container.add(new BookmarkablePageLink<UserRequestListPage>("userRegistrationsLink", UserRequestListPage.class).setVisible(canManageSystemUsers && userLimitService.isReadOnlyUsersEnabled()));
         container.add(new WebMarkupContainer("managePredefinedLocationsContainer").setVisible(getSessionUser().hasAccess("manageendusers") && advancedLocationEnabled));
 
-    	return container;
+        return container;
     }
 
     protected void addNavBar(String navBarId) {
@@ -434,11 +430,11 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
     }
 
 //    protected ConfigurationProvider getConfigurationProvider() {
-//		if (configurationProvider==null) {
-//			configurationProvider = ConfigContext.getCurrentContext();
-//		}
-//		return configurationProvider;
-//	}
+//        if (configurationProvider==null) {
+//            configurationProvider = ConfigContext.getCurrentContext();
+//        }
+//        return configurationProvider;
+//    }
 
     protected ActionURLBuilder createActionUrlBuilder() {
         return new ActionURLBuilder(getBaseURI(), configService);
@@ -447,11 +443,11 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
     private URI getBaseURI() {
         return URI.create(getServletRequest().getRequestURL().toString()).resolve(getServletRequest().getContextPath() + "/");
     }
-	
-//	@Deprecated // for testing only to get around static implementation of configContext.
+    
+//    @Deprecated // for testing only to get around static implementation of configContext.
 //    public void setConfigurationProvider(ConfigurationProvider configurationProvider) {
-//		this.configurationProvider = configurationProvider;
-//	}
+//        this.configurationProvider = configurationProvider;
+//    }
 
     @Override
     public void renderHead(IHeaderResponse response) {
@@ -553,22 +549,22 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         return getSessionUser().getTenant();
     }
 
-	class GoogleAnalyticsContainer extends WebMarkupContainer {
+    class GoogleAnalyticsContainer extends WebMarkupContainer {
 
-		public GoogleAnalyticsContainer(String id) {
-			super(id);
-			setRenderBodyOnly(true);
-		}
+        public GoogleAnalyticsContainer(String id) {
+            super(id);
+            setRenderBodyOnly(true);
+        }
 
         @Override
         protected void onBeforeRender() {
             FieldIDSession.get().getSessionUser().getTenant();
-        	if (!hasBeenRendered()) {
-        		setVisible(configService.getBoolean(ConfigEntry.GOOGLE_ANALYTICS_ENABLED));    	    		
-        	}
-        	super.onBeforeRender();  // note : call super at END of override.  see wicket docs.
+            if (!hasBeenRendered()) {
+                setVisible(configService.getBoolean(ConfigEntry.GOOGLE_ANALYTICS_ENABLED));                    
+            }
+            super.onBeforeRender();  // note : call super at END of override.  see wicket docs.
         }
-    	
+        
     }
 
     public TopFeedbackPanel getTopFeedbackPanel() {
