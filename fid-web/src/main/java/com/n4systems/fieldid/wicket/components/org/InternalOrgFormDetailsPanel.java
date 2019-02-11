@@ -4,7 +4,11 @@ import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
+import org.apache.wicket.Component;
+import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -34,6 +38,14 @@ public class InternalOrgFormDetailsPanel extends Panel {
                     ValidationError error = new ValidationError();
                     error.addMessageKey("errors.data.orgDuplicate");
                     validatable.error(error);
+                }
+            }
+        });
+        internalOrgName.add(new Behavior() {
+            @Override public void onComponentTag(Component c, ComponentTag tag) {
+                FormComponent fc = (FormComponent) c;
+                if (!fc.isValid()) {
+                    tag.append("class", "error", " ");
                 }
             }
         });
