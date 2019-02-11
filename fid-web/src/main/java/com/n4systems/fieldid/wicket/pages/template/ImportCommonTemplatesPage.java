@@ -64,7 +64,17 @@ public class ImportCommonTemplatesPage extends FieldIDFrontEndWithFeedbackPage {
         final List<AjaxCheckBox> checkBoxes = new ArrayList<>();
         final Map<String, Boolean> checkBoxState = new HashMap<String, Boolean>();
 
-        Form form = new Form("form");
+        Tenant houseAccountTenant = publishedCatalogService.getHouseAccountTenant();
+        if (houseAccountTenant == null) {
+            error(getString("msg.noAccessToTemplates"));
+        }
+
+        Form form = new Form("form") {
+            @Override
+            public boolean isVisible() {
+                return houseAccountTenant != null;
+            }
+        };
         add(form);
 
         AjaxLink selectAll = new AjaxLink("selectAll") {
