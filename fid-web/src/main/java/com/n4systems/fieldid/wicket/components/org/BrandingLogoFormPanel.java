@@ -72,10 +72,9 @@ public class BrandingLogoFormPanel extends Panel {
                 @Override
                 protected void onError(AjaxRequestTarget target) {}
             });
-            if(uploadedImage.isExistingImage()) {
-                if(s3Service.isBrandingLogoExists(getInternalOrg().getId(), getInternalOrg().isPrimary())) {
-                    fileDisplay.add(new ExternalImage("logoImage", s3Service.getBrandingLogoURL(getInternalOrg().getTenant().getId())));
-                }
+            if(uploadedImage.isExistingImage() &&
+                s3Service.isBrandingLogoExists(getInternalOrg().getId(), getInternalOrg().isPrimary())) {
+                fileDisplay.add(new ExternalImage("logoImage", s3Service.getBrandingLogoURL(getInternalOrg().getTenant().getId())));
             }
             else {
                 fileDisplay.add(new ExternalImage("logoImage", "/fieldid/images/attachment-icon.png"));
