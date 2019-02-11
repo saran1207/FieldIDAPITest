@@ -39,7 +39,7 @@ public class PublishedCatalogService extends FieldIdPersistenceService {
                 return houseAccountTenant;
             }
         }
-        throw new RuntimeException("Unable to find tenant for House Account '" + houseAccountName + "'");
+        return null;
     }
 
     public Set<AssetTypeGroup> getPublishedAssetTypeGroups(Tenant tenant) {
