@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.pages.useraccount.mobilePasscode;
+package com.n4systems.fieldid.wicket.validators;
 
 import com.n4systems.fieldid.service.user.UserService;
 import org.apache.wicket.validation.IValidatable;

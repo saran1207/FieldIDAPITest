@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.useraccount.mobilePasscode;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.useraccount.AccountSetupPage;
+import com.n4systems.fieldid.wicket.validators.UniqueUserMobilePasscodeValidator;
 import com.n4systems.model.user.User;
 import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.form.Form;
