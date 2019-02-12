@@ -1,0 +1,17 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+    <div class="setup-user mobile-passcode">
+    <form wicket:id="form" class="edit-mobile-passcode-form" >
+        <div class="control-group">
+            <label><wicket:message key="message.mobile_passcode_instructions"/></label>
+            <input type="text" wicket:id="securityCardNumber" style="font-size: 1.5em; padding: 4px;"/>
+        </div>
+        <div class="control-group">
+            <button type="submit" class="btn-primary"><wicket:message key="hbutton.save"/></button>
+            <wicket:message key="label.or"/>
+            <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+        </div>
+    </form>
+</div>
+</wicket:extend>
+</html>

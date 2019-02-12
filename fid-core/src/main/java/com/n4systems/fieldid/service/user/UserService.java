@@ -611,4 +611,21 @@ public class UserService extends CrudService<User> {
         return persistenceService.findAll(builder);
     }
 
+    public boolean userSecurityCardNumberIsUnique(Long tenantId, String securityCardNumber, Long currentUserId) {
+
+        if (securityCardNumber == null || securityCardNumber.length() == 0) {
+            // empty security card numbers are always allowed
+            return true;
+        }
+
+        QueryBuilder<Long> queryBuilder = new QueryBuilder<Long>(User.class, new TenantOnlySecurityFilter(tenantId)).setCountSelect();
+        queryBuilder.addSimpleWhere("hashSecurityCardNumber", User.hashSecurityCardNumber(securityCardNumber));
+
+        if (currentUserId != null) {
+            queryBuilder.addWhere(Comparator.NE, "id", "id", currentUserId);
+        }
+
+        return (persistenceService.find(queryBuilder) > 0) ? false : true;
+    }
+
 }
