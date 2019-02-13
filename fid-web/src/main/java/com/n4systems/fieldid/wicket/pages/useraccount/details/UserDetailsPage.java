@@ -4,14 +4,12 @@ import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.components.user.UserFormAccountPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.setup.user.UsersListPage;
 import com.n4systems.fieldid.wicket.pages.useraccount.AccountSetupPage;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.security.UserType;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -63,12 +61,7 @@ public class UserDetailsPage extends AccountSetupPage {
         setResponsePage(UserDetailsPage.class);
     }
 
-    protected Component createAccountPanel(String id) {
-        return new UserFormAccountPanel(id, userModel);
-    }
-
     protected UserAccountFormIdentifiersPanel identifiersPanel;
-    protected Component accountPanel;
 
     protected User loadExistingUser() {
         return userService.getUser(uniqueId);
@@ -89,14 +82,8 @@ public class UserDetailsPage extends AccountSetupPage {
         return new Label(labelId, new FIDLabelModel("title.myaccount"));
     }
 
-    protected UserFormAccountPanel getUserFormAccountPanel() {
-        return (UserFormAccountPanel)accountPanel;
-    }
-
     protected void update() {
         User user = userModel.getObject();
-
-        user.assignSecruityCardNumber(getUserFormAccountPanel().getRfidNumber());
 
         if(user.isArchived()) {
             user.activateEntity();
@@ -125,8 +112,6 @@ public class UserDetailsPage extends AccountSetupPage {
                     UserDetailsPage.this.onOwnerPicked(target);
                 }
             });
-
-            add(accountPanel = createAccountPanel("accountPanel"));
 
             add(submitLink = new SubmitLink("save"));
 
