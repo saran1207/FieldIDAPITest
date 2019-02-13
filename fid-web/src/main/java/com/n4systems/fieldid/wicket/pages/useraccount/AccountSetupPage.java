@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.useraccount;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
+import com.n4systems.fieldid.wicket.pages.useraccount.changepassword.ChangeUserAccountPasswordPage;
 import com.n4systems.fieldid.wicket.pages.useraccount.notificationsettings.NotificationSettingsListPage;
 import com.n4systems.fieldid.wicket.pages.useraccount.mobileofflineprofile.MobileOfflineProfilePage;
 import com.n4systems.model.ExtendedFeature;
@@ -24,6 +25,7 @@ public abstract class AccountSetupPage extends FieldIDTemplatePage {
         add(new NavigationBar(navBarId,
                 aNavItem().label("nav.details").page("myAccount.action").build(),
                 aNavItem().label("nav.notification_settings").page(NotificationSettingsListPage.class).cond(hasEmailAlerts()).build(),
+                aNavItem().label("nav.change_password").page(ChangeUserAccountPasswordPage.class).build(),
                 aNavItem().label("nav.change_password").page("editPassword.action").build(),
                 aNavItem().label("nav.mobile_passcode").page("viewMobilePasscode.action").build(),
                 aNavItem().label("nav.mobile_profile").page(MobileOfflineProfilePage.class).build(),
