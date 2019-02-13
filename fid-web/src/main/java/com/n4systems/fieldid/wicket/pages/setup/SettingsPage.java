@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.wicket.pages.setup;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.pages.org.BrandingPage;
 import com.n4systems.fieldid.wicket.pages.org.OrgsListPage;
+import com.n4systems.fieldid.wicket.pages.org.BrandingPage;
 import com.n4systems.fieldid.wicket.pages.setup.sso.SsoSettingsPage;
 import com.n4systems.model.ExtendedFeature;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;

@@ -371,16 +371,16 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
 	private Component createSettingsSubMenu() {
     	WebMarkupContainer container = new WebMarkupContainer("settingsSubMenuContainer");
 
-      container.add(new BookmarkablePageLink<Void>("organizationsLink", OrgsListPage.class));
+        container.add(new BookmarkablePageLink<Void>("organizationsLink", OrgsListPage.class));
     	container.add(new BookmarkablePageLink<Void>("systemSettingsLink", SystemSettingsPage.class));
-      container.add(new BookmarkablePageLink<Void>("brandingLink", BrandingPage.class));
-      container.add(new BookmarkablePageLink<Void>("yourPlanLink", YourPlanPage.class));
+        container.add(new BookmarkablePageLink<Void>("brandingLink", BrandingPage.class));
+        container.add(new BookmarkablePageLink<Void>("yourPlanLink", YourPlanPage.class));
 
-      Link ssoSettingsPageLink = new BookmarkablePageLink<Void>("ssoSettingsLink", SsoSettingsPage.class);
-      container.add(ssoSettingsPageLink);
-      ssoSettingsPageLink.setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.SSO));
+        Link ssoSettingsPageLink = new BookmarkablePageLink<Void>("ssoSettingsLink", SsoSettingsPage.class);
+        container.add(ssoSettingsPageLink);
+        ssoSettingsPageLink.setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.SSO));
 
-      return container;
+        return container;
     }
 
     private Component createSmartSearch(String id) {

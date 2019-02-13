@@ -1445,7 +1445,8 @@ public class S3Service extends FieldIdPersistenceService {
         removeResource(null, USER_SIGNATURE_PATH, userId);
     }
 
-//------------------------------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------
+
     public void uploadInternalOrgLogoImage(File internalOrgLogoImageFile, InternalOrg internalOrg) {
 
         if (internalOrg.isPrimary()) {
@@ -1509,11 +1510,11 @@ public class S3Service extends FieldIdPersistenceService {
             logoUrl = this.getBrandingLogoURL(this.primaryOrg.getTenant().getId());
         }
         catch(FileNotFoundException e) {
-            logger.error("Unable to write to temp branding logo Image file at: " + primaryOrgLogoImageFile, e);
+            logger.error("Unable to write to temp primary Org logo Image file at: " + primaryOrgLogoImageFile, e);
             throw e;
         }
         catch(IOException e) {
-            logger.error("Unable to download branding logo Image file from S3 :" + logoUrl, e);
+            logger.error("Unable to download primary Org logo Image file from S3 :" + logoUrl, e);
             throw e;
         }
         return primaryOrgLogoImageFile;

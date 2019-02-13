@@ -53,7 +53,6 @@ public class PathHandler {
 	public static final String SECONDARY_CERTIFICATE_LOGO_PATH = "secondary_certificate_logo_%d.gif";
 	public static final String BRANDING_LOGO_PATH = "branding_logo.gif";
 
-
 	private static final String LOTO_DEFAULT_NAME = "procedure";
 	private static final String COMPILED_LOTO_FILE_EXT = ".jasper";
 	private static final String LOTO_FILE_EXT = ".jrxml";
@@ -604,6 +603,7 @@ public class PathHandler {
 		return getUserFile(user, SIGNATURE_IMAGE_FILE_NAME);
 	}
 
+
 	/** @return The absolute private directory for a secondary org  */
 	public static File getSecondaryOrgPrivateDir(SecondaryOrg secondaryOrg, String path) {
 		File secondaryOrgPrivateDir = absolutize(getSecondaryOrgPrivatePath(secondaryOrg, path));
@@ -667,4 +667,5 @@ public class PathHandler {
 	public static String createResourceFile(String resourcePath, Object...pathArgs) {
 		return String.format(resourcePath, pathArgs);
 	}
+
 }

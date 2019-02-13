@@ -74,9 +74,21 @@ public class InternalOrgFormReportImagePanel extends Panel {
             });
             if(uploadedImage.isExistingImage()) {
                 if (getInternalOrg().isPrimary()) {
-                    fileDisplay.add(new ExternalImage("logoImage", s3Service.getPrimaryOrgCertificateLogoURL()));
+                    if (s3Service.isCertificateLogoExists(getInternalOrg().getId(),getInternalOrg().isPrimary())) {
+                        fileDisplay.add(new ExternalImage("logoImage", s3Service.getPrimaryOrgCertificateLogoURL()));
+                    }
+                    else {
+                        fileDisplay.add(new ExternalImage("logoImage", "/fieldid/images/attachment-icon.png"));
+                    }
                 }
-                else fileDisplay.add(new ExternalImage("logoImage", s3Service.getSecondaryOrgCertificateLogoURL(getInternalOrg().getId())));
+                else {
+                    if (s3Service.isCertificateLogoExists(getInternalOrg().getId(),getInternalOrg().isPrimary())) {
+                        fileDisplay.add(new ExternalImage("logoImage", s3Service.getSecondaryOrgCertificateLogoURL(getInternalOrg().getId())));
+                    }
+                    else {
+                        fileDisplay.add(new ExternalImage("logoImage", "/fieldid/images/attachment-icon.png"));
+                    }
+                }
             }
             else {
                 fileDisplay.add(new ExternalImage("logoImage", "/fieldid/images/attachment-icon.png"));
