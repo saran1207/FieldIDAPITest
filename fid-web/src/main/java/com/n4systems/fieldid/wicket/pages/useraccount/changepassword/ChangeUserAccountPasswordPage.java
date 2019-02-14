@@ -67,7 +67,6 @@ public class ChangeUserAccountPasswordPage extends AccountSetupPage {
     @Override
     protected void onInitialize() {
         super.onInitialize();
-        add(new FIDFeedbackPanel("feedbackPanel"));
         add(new AddUserForm("addUserForm"));
     }
 

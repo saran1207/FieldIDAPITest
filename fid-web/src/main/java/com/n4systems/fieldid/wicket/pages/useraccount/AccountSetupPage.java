@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.useraccount;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
+import com.n4systems.fieldid.wicket.pages.FieldIDTemplateWithFeedbackPage;
 import com.n4systems.fieldid.wicket.pages.useraccount.changepassword.ChangeUserAccountPasswordPage;
 import com.n4systems.fieldid.wicket.pages.useraccount.mobileofflineprofile.MobileOfflineProfilePage;
 import com.n4systems.fieldid.wicket.pages.useraccount.notificationsettings.NotificationSettingsListPage;
@@ -11,7 +12,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
-public abstract class AccountSetupPage extends FieldIDTemplatePage {
+public abstract class AccountSetupPage extends FieldIDTemplateWithFeedbackPage {
 
     public AccountSetupPage() {
         super();
