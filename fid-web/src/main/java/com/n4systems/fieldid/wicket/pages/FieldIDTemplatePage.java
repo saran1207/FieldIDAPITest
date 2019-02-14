@@ -31,7 +31,9 @@ import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
 import com.n4systems.fieldid.wicket.pages.loto.ProcedureAuditListPage;
 import com.n4systems.fieldid.wicket.pages.loto.ProcedureWaitingApprovalsPage;
 import com.n4systems.fieldid.wicket.pages.loto.PublishedListAllPage;
+import com.n4systems.fieldid.wicket.pages.org.BrandingPage;
 import com.n4systems.fieldid.wicket.pages.org.OrgViewPage;
+import com.n4systems.fieldid.wicket.pages.org.OrgsListPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
 import com.n4systems.fieldid.wicket.pages.search.SmartSearchListPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
@@ -43,6 +45,7 @@ import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.comment.CommentTemplateListPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventbook.EventBooksListAllPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
+import com.n4systems.fieldid.wicket.pages.template.ImportCommonTemplatesPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventtypegroup.EventTypeGroupListPage;
 import com.n4systems.fieldid.wicket.pages.setup.loto.EnableByAssetTypePage;
 import com.n4systems.fieldid.wicket.pages.setup.loto.LotoSetupPage;
@@ -345,6 +348,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         
         container.add(new BookmarkablePageLink<ColumnsLayoutPage>("assetLayoutLink", ColumnsLayoutPage.class, param("type", ReportType.ASSET)));
         container.add(new BookmarkablePageLink<ColumnsLayoutPage>("eventLayoutLink", ColumnsLayoutPage.class, param("type", ReportType.EVENT)).setVisible(getSecurityGuard().isInspectionsEnabled()));
+        container.add(new BookmarkablePageLink<ImportCommonTemplatesPage>("importCommonTemplatesLink", ImportCommonTemplatesPage.class));
 
         return container;
     }
@@ -362,10 +366,12 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         return container;
     }
 
-    private Component createSettingsSubMenu() {
-        WebMarkupContainer container = new WebMarkupContainer("settingsSubMenuContainer");
-        
-        container.add(new BookmarkablePageLink<Void>("systemSettingsLink", SystemSettingsPage.class));
+	private Component createSettingsSubMenu() {
+    	WebMarkupContainer container = new WebMarkupContainer("settingsSubMenuContainer");
+
+        container.add(new BookmarkablePageLink<Void>("organizationsLink", OrgsListPage.class));
+    	container.add(new BookmarkablePageLink<Void>("systemSettingsLink", SystemSettingsPage.class));
+        container.add(new BookmarkablePageLink<Void>("brandingLink", BrandingPage.class));
         container.add(new BookmarkablePageLink<Void>("yourPlanLink", YourPlanPage.class));
 
         Link ssoSettingsPageLink = new BookmarkablePageLink<Void>("ssoSettingsLink", SsoSettingsPage.class);

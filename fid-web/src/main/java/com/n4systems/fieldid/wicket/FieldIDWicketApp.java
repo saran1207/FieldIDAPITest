@@ -22,6 +22,9 @@ import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.*;
 import com.n4systems.fieldid.wicket.pages.autoattributes.AutoAttributeActionsPage;
 import com.n4systems.fieldid.wicket.pages.customers.CustomerActionsPage;
+import com.n4systems.fieldid.wicket.pages.event.EventImportPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.*;
+import com.n4systems.fieldid.wicket.pages.customers.CustomerActionsPage;
 import com.n4systems.fieldid.wicket.pages.escalationrules.ManageEscalationRules;
 import com.n4systems.fieldid.wicket.pages.event.*;
 import com.n4systems.fieldid.wicket.pages.event.criteriaimage.CriteriaImageViewListPage;
@@ -132,9 +135,11 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/import", ImportPage.class);
         mountPage("setup/templates", TemplatesPage.class);
         mountPage("setup/widgets", WidgetsPage.class);
+        mountPage("setup/organizations", OrgsListPage.class);
         mountPage("setup/systemSettings", SystemSettingsPage.class);
-        mountPage("setup/ssoSettings", SsoSettingsPage.class);
+        mountPage("setup/branding", BrandingPage.class);
         mountPage("setup/yourPlan", YourPlanPage.class);
+        mountPage("setup/ssoSettings", SsoSettingsPage.class);
         mountPage("setup/identifierOverrides", IdentifierOverridesPage.class);
         mountPage("setup/passwordPolicy", PasswordPolicyPage.class);
         mountPage("setup/accountPolicy", AccountPolicyPage.class);
@@ -220,6 +225,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/addEditNotifications", AddEditNotificationSettingPage.class);
 
         mountPage("setup/buttonGroups", ButtonGroupPage.class);
+        mountPage("setup/importCommonTemplates", ImportCommonTemplatesPage.class);
 
         mountPage("myAccount", UserDetailsPage.class);
         mountPage("notificationsList", NotificationSettingsListPage.class);
