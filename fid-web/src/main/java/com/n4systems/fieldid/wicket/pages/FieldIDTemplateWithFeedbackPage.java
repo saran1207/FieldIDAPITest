@@ -48,13 +48,7 @@ public class FieldIDTemplateWithFeedbackPage extends FieldIDTemplatePage {
                 "font-size: 13px;\n" +
                 "display: block;\n" +
                 "color: #333333;}", null);
-        response.renderCSS("li .feedbackPanelERROR {padding: 10px 0px 10px 0px;\n" +
-                "text-align: center;\n" +
-                "border: 1px solid #ffc2c2;\n" +
-                "background-color: #ffebeb;\n" +
-                "font-size: 13px;\n" +
-                "display: block;\n" +
-                "color:red;}", null);
+        response.renderCSS("li .feedbackPanelERROR {text-align: center: display:block; color: red;}", null);
     }
 
 }
