@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.useraccount.mobilePasscode;
 
 import com.n4systems.fieldid.service.user.UserService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.useraccount.AccountSetupPage;
 import com.n4systems.fieldid.wicket.validators.UniqueUserMobilePasscodeValidator;
@@ -41,6 +42,7 @@ public class MobilePasscodeEditPage extends AccountSetupPage {
             @Override
             protected void onSubmit() {
                 updateSecurityCardNumber(securityCardNumberModel);
+                FieldIDSession.get().info(new FIDLabelModel("message.passcodeupdated").getObject());
                 setResponsePage(MobilePasscodeSetupPage.class);
             }
         };
