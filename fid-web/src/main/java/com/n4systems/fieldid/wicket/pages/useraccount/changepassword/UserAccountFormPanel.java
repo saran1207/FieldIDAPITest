@@ -40,7 +40,7 @@ public class UserAccountFormPanel extends Panel {
     public UserAccountFormPanel(String id, final IModel<User> user, Form form) {
         super(id, user);
 
-        add(new Label("username", new PropertyModel<String>(user, "userID")));
+        add(new Label("userName", new PropertyModel<String>(user, "userID")));
 
         WebMarkupContainer newAccountFields = new WebMarkupContainer("newAccountFields");
 

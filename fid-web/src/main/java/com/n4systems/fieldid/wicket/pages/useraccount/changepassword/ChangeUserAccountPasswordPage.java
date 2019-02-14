@@ -32,16 +32,19 @@ public class ChangeUserAccountPasswordPage extends AccountSetupPage {
     }
 
     public ChangeUserAccountPasswordPage(IModel<User> userModel) {
+        super();
         this.uniqueId = userModel.getObject().getId();
         this.userModel = userModel;
     }
 
     public ChangeUserAccountPasswordPage(PageParameters parameters) {
+        super(parameters);
         uniqueId = parameters.get("uniqueID").toLong();
         userModel = Model.of(loadExistingUser());
     }
 
     public ChangeUserAccountPasswordPage() {
+        super();
         uniqueId = getSessionUser().getId();
         userModel = Model.of(loadExistingUser());
     }
@@ -80,10 +83,6 @@ public class ChangeUserAccountPasswordPage extends AccountSetupPage {
     protected User update() {
         User user = userModel.getObject();
         user.updatePassword(getUserAccountFormPanel().getNewPassword());
-
-        if(user.isArchived()) {
-            user.activateEntity();
-        }
 
         userService.update(user);
 

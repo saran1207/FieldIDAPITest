@@ -14,6 +14,7 @@ import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilde
 public abstract class AccountSetupPage extends FieldIDTemplatePage {
 
     public AccountSetupPage() {
+        super();
     }
 
     public AccountSetupPage(PageParameters params) {
