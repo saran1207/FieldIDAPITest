@@ -1,12 +1,48 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
     <div class="setup-user user-page">
-        <form class="fullForm fluidSets" wicket:id="addUserForm">
+        <form class="fullForm fluidSets" wicket:id="form">
 
             <div class="columns-two">
-                <fieldset wicket:id="identifiersPanel" class="form-horizontal"/>
+                <fieldset class="form-horizontal">
+                    <div class="control-group">
+                        <label class="label">* <wicket:message key="label.username"/></label>
+                        <input type="text" wicket:id="userName" maxlength="255"/>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="label">* <wicket:message key="label.emailaddress"/></label>
+                        <input type="email" wicket:id="email"  maxlength="50"/>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="label">* <wicket:message key="label.firstname"/></label>
+                        <input type="text" wicket:id="firstName" maxlength="30">
+                    </div>
+
+                    <div class="control-group">
+                        <label class="label">* <wicket:message key="label.lastname"/></label>
+                        <input type="text" wicket:id="lastName" maxlength="30">
+                    </div>
+
+                    <div class="control-group">
+                        <label class="label"><wicket:message key="label.initials"/></label>
+                        <input type="text" wicket:id="initials"  maxlength="255">
+                    </div>
+
+                    <div class="control-group">
+                        <label class="label"><wicket:message key="label.position"/></label>
+                        <input type="text" wicket:id="position"  maxlength="255">
+                    </div>
+
+                    <div class="control-group">
+                        <label class="label"> <wicket:message key="label.organizationalunit"/></label>
+                        <span style="overflow:hidden;" class="fieldHolder notranslate" wicket:id="primaryOrgName"/>
+                    </div>
+                </fieldset>
+
                 <div class="formAction">
-                    <a wicket:id="save" class="btn-primary"><wicket:message key="label.save"/></a>
+                    <button type="submit" class="btn-primary"><wicket:message key="hbutton.save"/></button>
                     <wicket:message key="label.or"/>
                     <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
                 </div>
