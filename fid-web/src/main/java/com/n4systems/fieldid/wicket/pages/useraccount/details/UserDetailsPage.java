@@ -31,7 +31,6 @@ public class UserDetailsPage extends AccountSetupPage {
 
     @SpringBean private UserService userService;
     @SpringBean private OrgService orgService;
-    @SpringBean private PersistenceService persistenceService;
 
     private UserType userType;
     private Long uniqueId;
@@ -155,7 +154,7 @@ public class UserDetailsPage extends AccountSetupPage {
     protected void updateUser() {
         User user = userModel.getObject();
 
-        if (userService != null) userService.update(user);
+        userService.update(user);
         // Next line updates SessionUser with updated user account
         FieldIDSession.get().setUser(user);
         logger.info("account profile updated for " + getSessionUser().getUserID());
@@ -163,27 +162,6 @@ public class UserDetailsPage extends AccountSetupPage {
 
         return ;
     }
-
-    public UserService getUserService() {
-        return userService;
-    }
-
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
-    public OrgService getOrgService() {
-        return orgService;
-    }
-
-    public void setOrgService(OrgService orgService) {
-        this.orgService = orgService;
-    }
-
-    public void setPersistenceService(PersistenceService persistenceService) {
-        this.persistenceService = persistenceService;
-    }
-
 
 }
 
