@@ -1,9 +1,9 @@
 package com.n4systems.fieldid.api.pub.mapping.model.unmarshal;
 
-import com.n4systems.model.user.User;
+import com.n4systems.model.PriorityCode;
 
-public class UserResolver extends ModelResolver<User> {
-	public UserResolver() {
-		super(User.class);
+public class PriorityCodeResolver extends ModelResolver<PriorityCode> {
+	public PriorityCodeResolver() {
+		super(PriorityCode.class);
 	}
 }
