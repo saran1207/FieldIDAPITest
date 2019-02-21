@@ -6,6 +6,7 @@ import com.n4systems.fieldid.wicket.pages.useraccount.AccountSetupPage;
 import com.n4systems.model.user.User;
 import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -65,6 +66,11 @@ public class MobilePasscodeSetupPage extends AccountSetupPage {
             }
         };
         modifyMobilePasscodeSection.add(editMobilePasscodeButton);
+    }
+
+    @Override
+    protected Label createTitleLabel(String labelId) {
+        return new Label(labelId, new FIDLabelModel("nav.mobile_passcode"));
     }
 
     private boolean isMobilePasscodeSet() {

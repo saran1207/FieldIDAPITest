@@ -7,7 +7,12 @@ import com.n4systems.fieldid.wicket.pages.useraccount.AccountSetupPage;
 import com.n4systems.fieldid.wicket.validators.UniqueUserMobilePasscodeValidator;
 import com.n4systems.model.user.User;
 import org.apache.log4j.Logger;
+import org.apache.wicket.Component;
+import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
@@ -37,6 +42,14 @@ public class MobilePasscodeEditPage extends AccountSetupPage {
         securityCardNumberField.setRequired(true);
         securityCardNumberField.add(new StringValidator.MinimumLengthValidator(4));
         securityCardNumberField.add(new UniqueUserMobilePasscodeValidator(userService, getTenantId(), getCurrentUser().getId()));
+        securityCardNumberField.add(new Behavior() {
+            @Override public void onComponentTag(Component c, ComponentTag tag) {
+                FormComponent fc = (FormComponent) c;
+                if (!fc.isValid()) {
+                    tag.append("class", "error", " ");
+                }
+            }
+        });
 
         Form form = new Form("form") {
             @Override
@@ -56,6 +69,11 @@ public class MobilePasscodeEditPage extends AccountSetupPage {
             }
         });
         
+    }
+
+    @Override
+    protected Label createTitleLabel(String labelId) {
+        return new Label(labelId, new FIDLabelModel("nav.mobile_passcode"));
     }
 
     private void updateSecurityCardNumber(IModel<String> securityCardNumberModel) {
