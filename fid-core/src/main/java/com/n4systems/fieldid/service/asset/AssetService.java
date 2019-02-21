@@ -46,11 +46,7 @@ import org.apache.log4j.Logger;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import rfid.ejb.entity.AddAssetHistory;
-import rfid.ejb.entity.AssetCodeMapping;
-import rfid.ejb.entity.AssetExtension;
-import rfid.ejb.entity.InfoOptionBean;
-import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.*;
 
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -1186,4 +1182,67 @@ public class AssetService extends CrudService<Asset> {
         }
         return convertedResults;
     }
+
+    @Override
+    protected void addFindAllParameters(QueryBuilder<Asset> builder, Map<String, Object> optionalParameters) {
+        super.addFindAllParameters(builder, optionalParameters);
+        if (optionalParameters.containsKey("identifier")) {
+            builder.addWhere(WhereClauseFactory.create(
+                    WhereParameter.Comparator.EQ, "identifier",
+                    optionalParameters.get("identifier"),
+                    WhereClause.ChainOp.AND,
+                    "identifier"));
+        }
+        if (optionalParameters.containsKey("rfidNumber")) {
+            builder.addWhere(WhereClauseFactory.create(
+                    WhereParameter.Comparator.EQ, "rfidNumber",
+                    optionalParameters.get("rfidNumber"),
+                    WhereClause.ChainOp.AND,
+                    "rfidNumber"));
+        }
+        if (optionalParameters.containsKey("customerRefNumber")) {
+            builder.addWhere(WhereClauseFactory.create(
+                    WhereParameter.Comparator.EQ, "customerRefNumber",
+                    optionalParameters.get("customerRefNumber"),
+                    WhereClause.ChainOp.AND,
+                    "customerRefNumber"));
+        }
+        if (optionalParameters.containsKey("assetTypeName")) {
+            builder.addWhere(WhereClauseFactory.create(
+                    WhereParameter.Comparator.EQ, "type.name",
+                    optionalParameters.get("assetTypeName"),
+                    WhereClause.ChainOp.AND,
+                    "assetTypeName"));
+        }
+        if (optionalParameters.containsKey("ownerName")) {
+            builder.addWhere(WhereClauseFactory.create(
+                    WhereParameter.Comparator.EQ, "owner.name",
+                    optionalParameters.get("ownerName"),
+                    WhereClause.ChainOp.AND,
+                    "ownerName"));
+        }
+        if (optionalParameters.containsKey("identifiedByUserLastName")) {
+            builder.addWhere(WhereClauseFactory.create(
+                    WhereParameter.Comparator.EQ, "identifiedBy.lastName",
+                    optionalParameters.get("identifiedByUserLastName"),
+                    WhereClause.ChainOp.AND,
+                    "identifiedByUserLastName"));
+        }
+        if (optionalParameters.containsKey("identifiedByUserFirstName")) {
+            builder.addWhere(WhereClauseFactory.create(
+                    WhereParameter.Comparator.EQ, "identifiedBy.firstName",
+                    optionalParameters.get("identifiedByUserFirstName"),
+                    WhereClause.ChainOp.AND,
+                    "identifiedByUserFirstName"));
+        }
+        if (optionalParameters.containsKey("freeFormLocation")) {
+            builder.addWhere(WhereClauseFactory.create(
+                    WhereParameter.Comparator.EQ, "advancedLocation.freeformLocation",
+                    optionalParameters.get("freeFormLocation"),
+                    WhereClause.ChainOp.AND,
+                    "freeFormLocation"));
+        }
+    }
+
+
 }
