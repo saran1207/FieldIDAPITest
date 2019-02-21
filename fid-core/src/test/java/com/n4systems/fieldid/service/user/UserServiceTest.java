@@ -48,11 +48,11 @@ public class UserServiceTest extends FieldIdServiceTest {
     }
 
     @Test
-    public void test_AuthenticateUserByPassword() {
-        boolean isPasswordCorrect = userService.userSecurityCardNumberIsUnique(tenant.getId(),null,currentUser.getId());
-        assertTrue(isPasswordCorrect);
-        isPasswordCorrect = userService.userSecurityCardNumberIsUnique(tenant.getId(),"",currentUser.getId());
-        assertTrue(isPasswordCorrect);
+    public void test_UserSecurityCardNumberIsUnique() {
+        boolean isUserSecurityCardNumberUnique = userService.userSecurityCardNumberIsUnique(tenant.getId(),null,currentUser.getId());
+        assertTrue(isUserSecurityCardNumberUnique);
+        isUserSecurityCardNumberUnique = userService.userSecurityCardNumberIsUnique(tenant.getId(),"",currentUser.getId());
+        assertTrue(isUserSecurityCardNumberUnique);
     }
 
 }
