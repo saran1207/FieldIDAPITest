@@ -306,6 +306,7 @@ public class UserService extends CrudService<User> {
         builder.addWhere(WhereClauseFactory.create(Comparator.NE, "userType", UserType.PERSON));
         User user = persistenceService.find(builder);
 
+        if (user == null) return null;
         if (user.getUserType() == UserType.SYSTEM) {
             String systemUserPass = configService.getConfig(user.getTenant().getId()).getSystem().getSystemUserPassword();
             return systemUserPass.equals(EncryptionUtility.getSHA512HexHash(password)) ? user : null;
