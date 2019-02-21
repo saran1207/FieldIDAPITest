@@ -87,6 +87,7 @@ public class EventResource extends CrudResource<ThingEvent, EventMessage, Builde
                 .add(EventMessage::getComments, ThingEvent::setComments)
                 .add(EventMessage::getNotes, ThingEvent::setNotes)
                 .addToDouble(EventMessage::getScore, ThingEvent::setScore)
+                .addStringToDate(EventMessage::getDueDate, ThingEvent::setDueDate)
                 .add(EventMessage::getEventResult, ThingEvent::setEventResult, this::convertResultToModel)
                 .add(EventMessage::getWorkflowState, ThingEvent::setWorkflowState, this::convertWorkflowStateToModel)
                 .add(EventMessage::getOwnerId, ThingEvent::setOwner, baseOrgResolver)
