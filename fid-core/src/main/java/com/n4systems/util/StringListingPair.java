@@ -1,9 +1,10 @@
 package com.n4systems.util;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StringListingPair {
+public class StringListingPair implements Serializable {
 	private String id;
 	
 	private String name;

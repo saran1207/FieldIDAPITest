@@ -3,29 +3,35 @@ package com.n4systems.fieldid.service;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.user.User;
+import com.newrelic.api.agent.NewRelic;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 public class FieldIdPersistenceService extends FieldIdService {
 
-	@Autowired
+    @Autowired
     protected PersistenceService persistenceService;
+
+    @Autowired
+    private ApplicationContext applicationContext;
+
 
     @PersistenceContext EntityManager _entityManager;
 
-	public void setPersistenceService(PersistenceService persistenceService) {
-		this.persistenceService = persistenceService;
-	}
-	
-	protected Tenant getCurrentTenant() {
-		return persistenceService.findNonSecure(Tenant.class, securityContext.getTenantSecurityFilter().getTenantId());
-	}
-	
-	protected User getCurrentUser() {
-		return persistenceService.find(User.class, securityContext.getUserSecurityFilter().getUserId());
-	}
+    public void setPersistenceService(PersistenceService persistenceService) {
+        this.persistenceService = persistenceService;
+    }
+    
+    protected Tenant getCurrentTenant() {
+        return persistenceService.findNonSecure(Tenant.class, securityContext.getTenantSecurityFilter().getTenantId());
+    }
+    
+    protected User getCurrentUser() {
+        return persistenceService.find(User.class, securityContext.getUserSecurityFilter().getUserId());
+    }
     
     protected <T extends AbstractEntity> Long getId(T entity) {
         if (entity == null) {
@@ -39,5 +45,22 @@ public class FieldIdPersistenceService extends FieldIdService {
     protected EntityManager getEntityManager() {
         return _entityManager;
     }
-	
+
+    public void flush() {
+        persistenceService.flush();
+    }
+
+    public void setEnhancedLoggingCustomParameters() {
+        Tenant currentTenant = getCurrentTenant();
+        User currentUser = getCurrentUser();
+        setEnhancedLoggingCustomParameters(
+                currentTenant != null ? currentTenant.getName() : "Not Known",
+                currentUser != null ? currentUser.getUserID() : "Not Known");
+    }
+
+    public void setEnhancedLoggingCustomParameters(String currentTenant, String currentUser) {
+        NewRelic.addCustomParameter("Tenant", currentTenant);
+        NewRelic.addCustomParameter("User", currentUser);
+    }
+
 }

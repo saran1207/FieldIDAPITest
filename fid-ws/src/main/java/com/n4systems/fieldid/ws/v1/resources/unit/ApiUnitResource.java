@@ -1,11 +1,10 @@
 package com.n4systems.fieldid.ws.v1.resources.unit;
 
-import javax.ws.rs.Path;
-
-import org.springframework.stereotype.Component;
-
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
 import com.n4systems.model.UnitOfMeasure;
+import org.springframework.stereotype.Component;
+
+import javax.ws.rs.Path;
 
 @Component
 @Path("unit")

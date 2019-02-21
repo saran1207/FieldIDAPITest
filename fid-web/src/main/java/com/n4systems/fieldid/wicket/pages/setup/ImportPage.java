@@ -1,14 +1,13 @@
 package com.n4systems.fieldid.wicket.pages.setup;
 
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.asset.AssetImportPage;
+import com.n4systems.fieldid.wicket.pages.autoattributes.AutoAttributeActionsPage;
 import com.n4systems.fieldid.wicket.pages.customers.CustomerActionsPage;
 import com.n4systems.fieldid.wicket.pages.event.EventImportPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UserImportPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.request.flow.RedirectToUrlException;
 
 public class ImportPage extends SetupPage {
 
@@ -37,27 +36,16 @@ public class ImportPage extends SetupPage {
                 getRequestCycle().setResponsePage(UserImportPage.class);
             }
         });
-        add(new ImportAutoAttributesForm("importAutoAttributesForm"));
-    }
-
-    class ImportAutoAttributesForm extends Form {
-        public ImportAutoAttributesForm(String id) {
-            super(id);
-            add(createRedirectingAjaxButton("startImportButton", "/autoAttributeImportExport.action"));
-        }
-    }
-
-    protected AjaxButton createRedirectingAjaxButton(final String id, final String url) {
-        return new AjaxButton(id) {
+        add(new AjaxLink<AutoAttributeActionsPage>("importAutoAttributesButton") {
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                throw new RedirectToUrlException(url);
+            public void onClick(AjaxRequestTarget target) {
+                getRequestCycle().setResponsePage(
+                        AutoAttributeActionsPage.class,
+                        PageParametersBuilder.param(
+                                AutoAttributeActionsPage.INITIAL_TAB_SELECTION_KEY,
+                                AutoAttributeActionsPage.SHOW_IMPORTEXPORT_PAGE));
             }
-
-            @Override
-            protected void onError(AjaxRequestTarget target, Form<?> form) {
-            }
-        };
+        });
     }
 
 }
