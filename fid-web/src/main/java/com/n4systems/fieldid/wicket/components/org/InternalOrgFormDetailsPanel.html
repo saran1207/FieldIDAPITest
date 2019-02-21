@@ -1,0 +1,24 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+    <div class="setup-user user-account-panel">
+        <h3><wicket:message key="label.account_heading"/></h3>
+
+        <div class="control-group">
+            <label class="label">* <wicket:message key="label.name"/></label>
+            <input type="text" wicket:id="internalOrgName" maxlength="255"/>
+        </div>
+        <div wicket:id="newDetailsFields">
+            <div class="control-group">
+                <label class="label"><wicket:message key="label.name_on_pdf_reports"/></label>
+                <input type="text" wicket:id="nameOnPdfReports">
+            </div>
+        </div>
+        <wicket:enclosure child="primaryOrgUrl">
+            <div class="control-group">
+                <label class="label"><wicket:message key="label.website_url"/></label>
+                <input type="text" wicket:id="primaryOrgUrl">
+            </div>
+        </wicket:enclosure>
+    </div>
+</wicket:panel>
+</html>

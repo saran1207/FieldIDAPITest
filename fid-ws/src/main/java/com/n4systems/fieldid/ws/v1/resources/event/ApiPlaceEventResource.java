@@ -1,13 +1,13 @@
 package com.n4systems.fieldid.ws.v1.resources.event;
 
 import com.n4systems.exceptions.NonPrintableEventType;
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.certificate.CertificateService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.EventTypeService;
 import com.n4systems.fieldid.service.event.PlaceEventCreationService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.user.UserService;
+import com.n4systems.fieldid.ws.v1.resources.FieldIdPersistenceServiceWithEnhancedLogging;
 import com.n4systems.fieldid.ws.v1.resources.eventattachment.ApiEventAttachmentResource;
 import com.n4systems.model.*;
 import com.n4systems.model.location.PredefinedLocation;
@@ -16,6 +16,8 @@ import com.n4systems.reporting.EventReportType;
 import com.n4systems.util.ContentTypeUtil;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+import com.newrelic.api.agent.NewRelic;
+import com.newrelic.api.agent.Trace;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -37,7 +39,7 @@ import java.util.List;
  */
 @Component
 @Path("placeevent")
-public class ApiPlaceEventResource extends FieldIdPersistenceService {
+public class ApiPlaceEventResource extends FieldIdPersistenceServiceWithEnhancedLogging {
     private static final Logger logger = Logger.getLogger(ApiPlaceEventResource.class);
 
     @Autowired private EventService eventService;
@@ -53,8 +55,10 @@ public class ApiPlaceEventResource extends FieldIdPersistenceService {
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
     @Transactional
     public void saveEvent(ApiPlaceEvent apiEvent) {
+        setEnhancedLoggingWithAppInfoParameters();
         if(apiEvent.getSid() == null) {
             throw new NullPointerException("ApiPlaceEventInfo has null sid");
         }
@@ -76,8 +80,10 @@ public class ApiPlaceEventResource extends FieldIdPersistenceService {
     @GET
     @Path("downloadReport")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Trace  (dispatcher=true)
     @Transactional(readOnly = true)
     public Response downloadReport(@QueryParam("eventSid") String eventSid, @QueryParam("reportType") String reportType) throws Exception {
+        setEnhancedLoggingWithAppInfoParameters();
         QueryBuilder<Event> query = createUserSecurityBuilder(Event.class);
         query.addWhere(WhereClauseFactory.create("mobileGUID", eventSid));
         Event event = persistenceService.find(query);
@@ -95,10 +101,12 @@ public class ApiPlaceEventResource extends FieldIdPersistenceService {
 
             return response;
         } catch(NonPrintableEventType npe) {
-            logger.warn("Cert was non-printable for event: " + event.getId());
+            logger.error("Cert was non-printable for event: " + event.getId());
+            NewRelic.noticeError(npe);
             throw npe;
         } catch(Exception e) {
             logger.error("Unable to download event cert for event: " + event.getId());
+            NewRelic.noticeError(e);
             throw e;
         }
     }

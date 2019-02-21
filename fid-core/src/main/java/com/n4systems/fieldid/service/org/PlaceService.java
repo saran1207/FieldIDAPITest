@@ -4,11 +4,13 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
-import com.n4systems.model.*;
+import com.n4systems.model.Asset;
+import com.n4systems.model.PlaceEvent;
+import com.n4systems.model.PlaceEventType;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.model.orgs.*;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserQueryHelper;
-import com.n4systems.persistence.utils.PostFetcher;
 import com.n4systems.security.UserType;
 import com.n4systems.util.persistence.JoinClause;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -245,10 +247,10 @@ public class PlaceService extends FieldIdPersistenceService {
         return query;
     }
 
-// TODO DD :     @Cacheable("descendants")
+    // TODO DD :     @Cacheable("descendants")
     public List<BaseOrg> getDescendants(BaseOrg org, int page, int pageSize) {
         List<BaseOrg> result = Lists.newArrayList();
-MethodTimer methodTimer = new MethodTimer().start();
+        MethodTimer methodTimer = new MethodTimer().start();
         Preconditions.checkNotNull(org);
         QueryBuilder query = getDescendantsQuery(org);
         if (query.getFromArgument().getTableClass().equals(PrimaryOrgChildren.class)) {
@@ -261,7 +263,7 @@ MethodTimer methodTimer = new MethodTimer().start();
             query.addOrder("name");
             result = persistenceService.findAllPaginated(query, page, pageSize);
         }
-methodTimer.stop();
+        methodTimer.stop();
         return result;
     }
 }

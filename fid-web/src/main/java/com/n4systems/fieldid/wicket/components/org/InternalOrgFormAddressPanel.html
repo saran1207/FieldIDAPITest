@@ -1,0 +1,41 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+
+    <div class="setup-user identifiers-panel">
+        <h3><wicket:message key="label.address"/></h3>
+
+        <div class="control-group owner-picker" >
+            <label class="label"><wicket:message key="label.streetaddress"/></label>
+            <input type="text" wicket:id="streetAddress"  maxlength="50"/>
+        </div>
+
+        <div class="control-group">
+            <label class="label"><wicket:message key="label.city"/></label>
+            <input type="text" wicket:id="city"  maxlength="50"/>
+        </div>
+
+        <div class="control-group">
+            <label class="label"><wicket:message key="label.state"/></label>
+            <input type="text" wicket:id="stateProvince" maxlength="30">
+        </div>
+
+        <div class="control-group">
+            <label class="label"><wicket:message key="label.country"/></label>
+            <input type="text" wicket:id="country" maxlength="30">
+        </div>
+
+        <div class="control-group">
+            <label class="label"><wicket:message key="label.phone"/></label>
+            <input type="text" wicket:id="phone"  maxlength="255">
+        </div>
+
+        <div class="control-group">
+            <label class="label"><wicket:message key="label.fax"/></label>
+            <input type="text" wicket:id="fax" maxlength="255">
+        </div>
+
+    </div>
+
+</wicket:panel>
+
+</html>

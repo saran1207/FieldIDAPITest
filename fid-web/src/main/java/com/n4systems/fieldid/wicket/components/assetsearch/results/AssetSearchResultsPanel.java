@@ -116,10 +116,19 @@ public class AssetSearchResultsPanel extends SRSResultsPanel<AssetSearchCriteria
                 o.addProperty("colour", getMarkerColour(results, location));
             }
         };
+        GpsLocation gpsLocation;
+        if (mapModel == null || mapModel.getObject() == null ||
+                mapModel.getObject().getLocations() == null || mapModel.getObject().getLocations().size() == 0) {
+            gpsLocation = map.getDefaultCenter();
+        }
+        else {
+            gpsLocation = (GpsLocation) mapModel.getObject().getLocations().iterator().next();
+        }
+        map.withDefaultZoom(12);
+        map.withCentredLocation(new Double(gpsLocation.getLatitude().doubleValue()),new Double(gpsLocation.getLongitude().doubleValue()));
         map.withZoomPanNotifications().setOutputMarkupPlaceholderTag(true).setVisible(false);
         return map;
     }
-
 
     protected String getMarkerColour(MappedResults<AssetSearchRecord> results, GpsLocation gpsLocation) {
         List<AssetSearchRecord> entitiesAtLocation = results.getEntitiesAtLocation(gpsLocation);

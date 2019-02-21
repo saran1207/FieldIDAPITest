@@ -9,6 +9,8 @@ import com.n4systems.model.orgs.*;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.security.OwnerAndDownWithPrimaryFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.util.collections.OrgList;
 import com.n4systems.util.persistence.*;
 import org.apache.commons.lang.StringUtils;
@@ -21,11 +23,13 @@ import java.util.Map;
 @Transactional
 public class OrgService extends CrudService<BaseOrg> {
 
-	public OrgService() {
-		super(BaseOrg.class);
-	}
+    public OrgService() {
+        super(BaseOrg.class);
+    }
 
-	public List<Long> getIdOfAllVisibleOrgs() {
+    private static String [] DEFAULT_ORDER = {"name"};
+
+    public List<Long> getIdOfAllVisibleOrgs() {
         //If this doesn't work, we actually have to individually grab all visible:
         // - PrimaryOrg
         // - InternalOrg
@@ -124,6 +128,22 @@ public class OrgService extends CrudService<BaseOrg> {
         query.addWhere(WhereClauseFactory.create("tenant.disabled", false));
         query.addOrder("name");
         return persistenceService.findAll(query);
+    }
+
+    @Transactional(readOnly = true)
+    public List<SecondaryOrg> getSecondaryOrgs() {
+        QueryBuilder<SecondaryOrg> query =  new QueryBuilder<>(SecondaryOrg.class, new OpenSecurityFilter());
+        query.addWhere(WhereClauseFactory.create("tenant.disabled", false));
+        query.addOrder("name");
+        return persistenceService.findAll(query);
+    }
+
+    @Transactional(readOnly = true)
+    public SecondaryOrg getSecondaryOrg(Long id) {
+        QueryBuilder<SecondaryOrg> builder =  createTenantSecurityBuilder(SecondaryOrg.class);
+        builder.addSimpleWhere("id", id);
+        builder.addSimpleWhere("tenant.disabled", false);
+        return persistenceService.find(builder);
     }
 
     @Transactional(readOnly = true)
@@ -433,6 +453,93 @@ public class OrgService extends CrudService<BaseOrg> {
                     WhereClause.ChainOp.AND,
                     "code"));
         }
+    }
+
+    public List<? extends SecondaryOrg> searchSecondaryOrg(String textFilter, Class<? extends SecondaryOrg> typeFilter, int page, int pageSize) {
+        QueryBuilder<? extends SecondaryOrg> builder = createSearchQueryBuilderSecondaryOrg(textFilter, typeFilter);
+        return persistenceService.findAll(builder, page, pageSize);
+    }
+
+    private QueryBuilder<? extends SecondaryOrg> createSearchQueryBuilderSecondaryOrg(String textFilter,Class<? extends SecondaryOrg> typeFilter) {
+        Class<? extends SecondaryOrg> type = typeFilter==null ? SecondaryOrg.class : typeFilter;
+        QueryBuilder<? extends SecondaryOrg> builder = createUserSecurityBuilder(type);
+        builder.addWhere(WhereParameter.Comparator.LIKE, "name", "name", textFilter, WhereParameter.WILDCARD_BOTH | WhereParameter.TRIM);
+        builder.setOrder("name",true);
+        return builder;
+    }
+
+    public Long getSearchSecondaryOrgCount(String textFilter, Class<? extends SecondaryOrg> typeFilter) {
+        QueryBuilder<? extends SecondaryOrg> builder = createSearchQueryBuilderSecondaryOrg(textFilter,typeFilter);
+        return persistenceService.count(builder);
+    }
+
+    public List<SecondaryOrg> getSecondaryOrgs(OrgListFilterCriteria criteria, int page, int pageSize) {
+        QueryBuilder<SecondaryOrg> builder = createOrgQueryBuilder(criteria);
+
+        return persistenceService.findAll(builder, page, pageSize);
+    }
+
+    public Long countSecondaryOrgs(OrgListFilterCriteria criteria) {
+        QueryBuilder<SecondaryOrg> builder = createOrgQueryBuilder(criteria);
+
+        return persistenceService.count(builder);
+    }
+
+    private QueryBuilder<SecondaryOrg> createOrgQueryBuilder(OrgListFilterCriteria criteria) {
+        QueryBuilder<SecondaryOrg> builder = createTenantSecurityBuilder(SecondaryOrg.class, criteria.isArchivedOnly());
+
+        if (criteria.getCustomer() != null) {
+            builder.addSimpleWhere("customerOrg", criteria.getCustomer());
+        }
+
+        if(criteria.isFilterOnPrimaryOrg()) {
+            builder.addWhere(WhereClauseFactory.createIsNull("secondaryOrg"));
+        }
+
+        if(criteria.isFilterOnSecondaryOrg()) {
+            builder.addSimpleWhere("secondaryOrg", criteria.getOrgFilter());
+        }
+
+        if (criteria.getNameFilter() != null && !criteria.getNameFilter().isEmpty()) {
+            builder.addSimpleWhere("name", criteria.getNameFilter());
+        }
+
+        if (criteria.isArchivedOnly()) {
+            OrgQueryHelper.applyArchivedFilter(builder);
+        }
+
+        if(criteria.getOrder() != null && !criteria.getOrder().isEmpty()) {
+            for (String subOrder : criteria.getOrder().split(",")) {
+                builder.addOrder(subOrder.trim(), criteria.isAscending());
+            }
+        } else {
+            for (String order : DEFAULT_ORDER) {
+                builder.setOrder(order, criteria.isAscending());
+            }
+        }
+        return builder;
+    }
+
+    public boolean orgNameIsUnique(Long tenantId, String orgName, Long currentOrgId, boolean isPrimary) {
+        if (orgName == null) {
+            return true;
+        }
+
+        QueryBuilder<Long> queryBuilder;
+        if (isPrimary) queryBuilder = new QueryBuilder<Long>(PrimaryOrg.class, new TenantOnlySecurityFilter(tenantId)).setCountSelect();
+        else queryBuilder = new QueryBuilder<Long>(SecondaryOrg.class, new TenantOnlySecurityFilter(tenantId)).setCountSelect();
+        queryBuilder.addSimpleWhere("name",orgName);
+
+        if (currentOrgId != null) {
+            queryBuilder.addWhere(WhereParameter.Comparator.NE, "id", "id", currentOrgId);
+        }
+
+        return !persistenceService.exists(queryBuilder);
+    }
+
+
+    public void create(SecondaryOrg secondaryOrg) {
+        persistenceService.save(secondaryOrg);
     }
 
 }

@@ -5,8 +5,10 @@ import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.exceptions.NoAccessToTenantException;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.model.user.User;
+import com.n4systems.services.SecurityContext;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.ImportCatalogService;
 import com.n4systems.services.safetyNetwork.SafetyNetworkAccessService;
@@ -15,13 +17,21 @@ import com.n4systems.services.safetyNetwork.catalog.summary.CatalogImportSummary
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.MailMessage;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
 import javax.mail.NoSuchProviderException;
 import java.util.Set;
 
-public class CatalogImportTask implements Runnable {
+@Component
+@Scope("prototype")
+public class CatalogImportTask extends Thread {
 	private static final Logger logger = Logger.getLogger(CatalogImportTask.class);
+
+	@Autowired
+	private SecurityContext securityContext;
 
 	private User user;
 	private PrimaryOrg primaryOrg;
@@ -97,6 +107,14 @@ public class CatalogImportTask implements Runnable {
 	}
 
 	private void init() {
+
+		if (!securityContext.hasTenantSecurityFilter()) {
+			securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(user.getTenant().getId()));
+		}
+		if (!securityContext.hasUserSecurityFilter()) {
+			securityContext.setUserSecurityFilter(new UserSecurityFilter(user));
+		}
+
 		persistenceManager = ServiceLocator.getPersistenceManager();
 		assetTypeManager = ServiceLocator.getAssetType();
 		
@@ -158,5 +176,5 @@ public class CatalogImportTask implements Runnable {
 	public void setPrimaryOrg(PrimaryOrg primaryOrg) {
 		this.primaryOrg = primaryOrg;
 	}
-	
+
 }

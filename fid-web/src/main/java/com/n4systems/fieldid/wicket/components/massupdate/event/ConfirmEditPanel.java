@@ -10,6 +10,8 @@ import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.model.PlatformType;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.user.User;
+import com.newrelic.api.agent.NewRelic;
+import com.newrelic.api.agent.Trace;
 import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -42,23 +44,42 @@ public class ConfirmEditPanel extends AbstractMassUpdatePanel {
 				                                           new FIDLabelModel("label.events.lc").getObject())));
 		
 		Form<Void> confirmEditForm = new Form<Void>("form") {
+
 			@Override
 			protected void onSubmit() {
 				final List<Long> eventScheduleIds = eventSearchCriteria.getObject().getSelection().getSelectedIds();
+				final int eventCount = eventScheduleIds.size();
+
                 final User modifiedBy = getCurrentUser();
                 final String currentPlatform = ThreadLocalInteractionContext.getInstance().getCurrentPlatform();
                 final PlatformType platformType = ThreadLocalInteractionContext.getInstance().getCurrentPlatformType();
 
+				final String userId = modifiedBy.getUserID();
+				final String tenantName = modifiedBy.getTenant().getName();
+
                 AsyncService.AsyncTask<Void> task = asyncService.createTask(new Callable<Void>() {
+
+					@Trace(dispatcher = true)
                     @Override
                     public Void call() throws Exception {
+
+						NewRelic.addCustomParameter("User", userId);
+						NewRelic.addCustomParameter("Tenant", tenantName);
+						NewRelic.addCustomParameter("Event mass update count", eventCount);
+						NewRelic.setTransactionName(null, "/EventMassUpdate");
+
+						long startTime = System.nanoTime();
+
                         ThreadLocalInteractionContext.getInstance().setCurrentUser(modifiedBy);
                         ThreadLocalInteractionContext.getInstance().setCurrentPlatform(currentPlatform);
                         ThreadLocalInteractionContext.getInstance().setCurrentPlatformType(platformType);
 
                         try {
+							logger.info("Beginning Event mass update for " + eventCount + " events");
                             massUpdateEventService.updateEvents(eventScheduleIds, massUpdateEventModel.getEvent(), massUpdateEventModel.getSelect(), modifiedBy.getId());
 							massUpdateEventService.sendSuccessEmailResponse(eventScheduleIds, modifiedBy);
+							long endTime = System.nanoTime();
+							logger.info("Event mass update finished for " + eventCount + " assets and took " + ((endTime-startTime) / 1000000) + " ms");
                         } catch (Exception e) {
 							logger.error(e.getMessage(), e);
                             massUpdateEventService.sendFailureEmailResponse(eventScheduleIds, modifiedBy);
