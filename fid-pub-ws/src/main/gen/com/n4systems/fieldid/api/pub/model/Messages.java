@@ -6743,18 +6743,74 @@ public final class Messages {
         getCommentsBytes();
 
     /**
-     * <code>optional string score = 24;</code>
+     * <code>optional string notes = 24;</code>
+     */
+    boolean hasNotes();
+    /**
+     * <code>optional string notes = 24;</code>
+     */
+    java.lang.String getNotes();
+    /**
+     * <code>optional string notes = 24;</code>
+     */
+    com.google.protobuf.ByteString
+        getNotesBytes();
+
+    /**
+     * <code>optional string score = 25;</code>
      */
     boolean hasScore();
     /**
-     * <code>optional string score = 24;</code>
+     * <code>optional string score = 25;</code>
      */
     java.lang.String getScore();
     /**
-     * <code>optional string score = 24;</code>
+     * <code>optional string score = 25;</code>
      */
     com.google.protobuf.ByteString
         getScoreBytes();
+
+    /**
+     * <code>optional string dueDate = 26;</code>
+     */
+    boolean hasDueDate();
+    /**
+     * <code>optional string dueDate = 26;</code>
+     */
+    java.lang.String getDueDate();
+    /**
+     * <code>optional string dueDate = 26;</code>
+     */
+    com.google.protobuf.ByteString
+        getDueDateBytes();
+
+    /**
+     * <code>optional string priorityCodeName = 27;</code>
+     */
+    boolean hasPriorityCodeName();
+    /**
+     * <code>optional string priorityCodeName = 27;</code>
+     */
+    java.lang.String getPriorityCodeName();
+    /**
+     * <code>optional string priorityCodeName = 27;</code>
+     */
+    com.google.protobuf.ByteString
+        getPriorityCodeNameBytes();
+
+    /**
+     * <code>optional string priorityCodeId = 28;</code>
+     */
+    boolean hasPriorityCodeId();
+    /**
+     * <code>optional string priorityCodeId = 28;</code>
+     */
+    java.lang.String getPriorityCodeId();
+    /**
+     * <code>optional string priorityCodeId = 28;</code>
+     */
+    com.google.protobuf.ByteString
+        getPriorityCodeIdBytes();
   }
   /**
    * Protobuf type {@code com.n4systems.fieldid.api.pub.model.EventMessage}
@@ -6959,7 +7015,31 @@ public final class Messages {
             case 194: {
               com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00800000;
+              notes_ = bs;
+              break;
+            }
+            case 202: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x01000000;
               score_ = bs;
+              break;
+            }
+            case 210: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x02000000;
+              dueDate_ = bs;
+              break;
+            }
+            case 218: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x04000000;
+              priorityCodeName_ = bs;
+              break;
+            }
+            case 226: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x08000000;
+              priorityCodeId_ = bs;
               break;
             }
           }
@@ -8114,16 +8194,58 @@ public final class Messages {
       }
     }
 
-    public static final int SCORE_FIELD_NUMBER = 24;
-    private java.lang.Object score_;
+    public static final int NOTES_FIELD_NUMBER = 24;
+    private java.lang.Object notes_;
     /**
-     * <code>optional string score = 24;</code>
+     * <code>optional string notes = 24;</code>
      */
-    public boolean hasScore() {
+    public boolean hasNotes() {
       return ((bitField0_ & 0x00800000) == 0x00800000);
     }
     /**
-     * <code>optional string score = 24;</code>
+     * <code>optional string notes = 24;</code>
+     */
+    public java.lang.String getNotes() {
+      java.lang.Object ref = notes_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          notes_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string notes = 24;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNotesBytes() {
+      java.lang.Object ref = notes_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        notes_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int SCORE_FIELD_NUMBER = 25;
+    private java.lang.Object score_;
+    /**
+     * <code>optional string score = 25;</code>
+     */
+    public boolean hasScore() {
+      return ((bitField0_ & 0x01000000) == 0x01000000);
+    }
+    /**
+     * <code>optional string score = 25;</code>
      */
     public java.lang.String getScore() {
       java.lang.Object ref = score_;
@@ -8140,7 +8262,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>optional string score = 24;</code>
+     * <code>optional string score = 25;</code>
      */
     public com.google.protobuf.ByteString
         getScoreBytes() {
@@ -8150,6 +8272,132 @@ public final class Messages {
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         score_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int DUEDATE_FIELD_NUMBER = 26;
+    private java.lang.Object dueDate_;
+    /**
+     * <code>optional string dueDate = 26;</code>
+     */
+    public boolean hasDueDate() {
+      return ((bitField0_ & 0x02000000) == 0x02000000);
+    }
+    /**
+     * <code>optional string dueDate = 26;</code>
+     */
+    public java.lang.String getDueDate() {
+      java.lang.Object ref = dueDate_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          dueDate_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string dueDate = 26;</code>
+     */
+    public com.google.protobuf.ByteString
+        getDueDateBytes() {
+      java.lang.Object ref = dueDate_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        dueDate_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int PRIORITYCODENAME_FIELD_NUMBER = 27;
+    private java.lang.Object priorityCodeName_;
+    /**
+     * <code>optional string priorityCodeName = 27;</code>
+     */
+    public boolean hasPriorityCodeName() {
+      return ((bitField0_ & 0x04000000) == 0x04000000);
+    }
+    /**
+     * <code>optional string priorityCodeName = 27;</code>
+     */
+    public java.lang.String getPriorityCodeName() {
+      java.lang.Object ref = priorityCodeName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          priorityCodeName_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string priorityCodeName = 27;</code>
+     */
+    public com.google.protobuf.ByteString
+        getPriorityCodeNameBytes() {
+      java.lang.Object ref = priorityCodeName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        priorityCodeName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int PRIORITYCODEID_FIELD_NUMBER = 28;
+    private java.lang.Object priorityCodeId_;
+    /**
+     * <code>optional string priorityCodeId = 28;</code>
+     */
+    public boolean hasPriorityCodeId() {
+      return ((bitField0_ & 0x08000000) == 0x08000000);
+    }
+    /**
+     * <code>optional string priorityCodeId = 28;</code>
+     */
+    public java.lang.String getPriorityCodeId() {
+      java.lang.Object ref = priorityCodeId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          priorityCodeId_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string priorityCodeId = 28;</code>
+     */
+    public com.google.protobuf.ByteString
+        getPriorityCodeIdBytes() {
+      java.lang.Object ref = priorityCodeId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        priorityCodeId_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
@@ -8180,7 +8428,11 @@ public final class Messages {
       customerRefNumber_ = "";
       assetId_ = "";
       comments_ = "";
+      notes_ = "";
       score_ = "";
+      dueDate_ = "";
+      priorityCodeName_ = "";
+      priorityCodeId_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -8281,7 +8533,19 @@ public final class Messages {
         output.writeBytes(23, getCommentsBytes());
       }
       if (((bitField0_ & 0x00800000) == 0x00800000)) {
-        output.writeBytes(24, getScoreBytes());
+        output.writeBytes(24, getNotesBytes());
+      }
+      if (((bitField0_ & 0x01000000) == 0x01000000)) {
+        output.writeBytes(25, getScoreBytes());
+      }
+      if (((bitField0_ & 0x02000000) == 0x02000000)) {
+        output.writeBytes(26, getDueDateBytes());
+      }
+      if (((bitField0_ & 0x04000000) == 0x04000000)) {
+        output.writeBytes(27, getPriorityCodeNameBytes());
+      }
+      if (((bitField0_ & 0x08000000) == 0x08000000)) {
+        output.writeBytes(28, getPriorityCodeIdBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -8386,7 +8650,23 @@ public final class Messages {
       }
       if (((bitField0_ & 0x00800000) == 0x00800000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(24, getScoreBytes());
+          .computeBytesSize(24, getNotesBytes());
+      }
+      if (((bitField0_ & 0x01000000) == 0x01000000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(25, getScoreBytes());
+      }
+      if (((bitField0_ & 0x02000000) == 0x02000000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(26, getDueDateBytes());
+      }
+      if (((bitField0_ & 0x04000000) == 0x04000000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(27, getPriorityCodeNameBytes());
+      }
+      if (((bitField0_ & 0x08000000) == 0x08000000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(28, getPriorityCodeIdBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -8551,8 +8831,16 @@ public final class Messages {
         bitField0_ = (bitField0_ & ~0x00200000);
         comments_ = "";
         bitField0_ = (bitField0_ & ~0x00400000);
-        score_ = "";
+        notes_ = "";
         bitField0_ = (bitField0_ & ~0x00800000);
+        score_ = "";
+        bitField0_ = (bitField0_ & ~0x01000000);
+        dueDate_ = "";
+        bitField0_ = (bitField0_ & ~0x02000000);
+        priorityCodeName_ = "";
+        bitField0_ = (bitField0_ & ~0x04000000);
+        priorityCodeId_ = "";
+        bitField0_ = (bitField0_ & ~0x08000000);
         return this;
       }
 
@@ -8676,7 +8964,23 @@ public final class Messages {
         if (((from_bitField0_ & 0x00800000) == 0x00800000)) {
           to_bitField0_ |= 0x00800000;
         }
+        result.notes_ = notes_;
+        if (((from_bitField0_ & 0x01000000) == 0x01000000)) {
+          to_bitField0_ |= 0x01000000;
+        }
         result.score_ = score_;
+        if (((from_bitField0_ & 0x02000000) == 0x02000000)) {
+          to_bitField0_ |= 0x02000000;
+        }
+        result.dueDate_ = dueDate_;
+        if (((from_bitField0_ & 0x04000000) == 0x04000000)) {
+          to_bitField0_ |= 0x04000000;
+        }
+        result.priorityCodeName_ = priorityCodeName_;
+        if (((from_bitField0_ & 0x08000000) == 0x08000000)) {
+          to_bitField0_ |= 0x08000000;
+        }
+        result.priorityCodeId_ = priorityCodeId_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -8804,9 +9108,29 @@ public final class Messages {
           comments_ = other.comments_;
           onChanged();
         }
-        if (other.hasScore()) {
+        if (other.hasNotes()) {
           bitField0_ |= 0x00800000;
+          notes_ = other.notes_;
+          onChanged();
+        }
+        if (other.hasScore()) {
+          bitField0_ |= 0x01000000;
           score_ = other.score_;
+          onChanged();
+        }
+        if (other.hasDueDate()) {
+          bitField0_ |= 0x02000000;
+          dueDate_ = other.dueDate_;
+          onChanged();
+        }
+        if (other.hasPriorityCodeName()) {
+          bitField0_ |= 0x04000000;
+          priorityCodeName_ = other.priorityCodeName_;
+          onChanged();
+        }
+        if (other.hasPriorityCodeId()) {
+          bitField0_ |= 0x08000000;
+          priorityCodeId_ = other.priorityCodeId_;
           onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
@@ -10518,15 +10842,91 @@ public final class Messages {
         return this;
       }
 
-      private java.lang.Object score_ = "";
+      private java.lang.Object notes_ = "";
       /**
-       * <code>optional string score = 24;</code>
+       * <code>optional string notes = 24;</code>
        */
-      public boolean hasScore() {
+      public boolean hasNotes() {
         return ((bitField0_ & 0x00800000) == 0x00800000);
       }
       /**
-       * <code>optional string score = 24;</code>
+       * <code>optional string notes = 24;</code>
+       */
+      public java.lang.String getNotes() {
+        java.lang.Object ref = notes_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            notes_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string notes = 24;</code>
+       */
+      public com.google.protobuf.ByteString
+          getNotesBytes() {
+        java.lang.Object ref = notes_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          notes_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string notes = 24;</code>
+       */
+      public Builder setNotes(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00800000;
+        notes_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string notes = 24;</code>
+       */
+      public Builder clearNotes() {
+        bitField0_ = (bitField0_ & ~0x00800000);
+        notes_ = getDefaultInstance().getNotes();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string notes = 24;</code>
+       */
+      public Builder setNotesBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00800000;
+        notes_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object score_ = "";
+      /**
+       * <code>optional string score = 25;</code>
+       */
+      public boolean hasScore() {
+        return ((bitField0_ & 0x01000000) == 0x01000000);
+      }
+      /**
+       * <code>optional string score = 25;</code>
        */
       public java.lang.String getScore() {
         java.lang.Object ref = score_;
@@ -10543,7 +10943,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string score = 24;</code>
+       * <code>optional string score = 25;</code>
        */
       public com.google.protobuf.ByteString
           getScoreBytes() {
@@ -10559,37 +10959,265 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string score = 24;</code>
+       * <code>optional string score = 25;</code>
        */
       public Builder setScore(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00800000;
+  bitField0_ |= 0x01000000;
         score_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string score = 24;</code>
+       * <code>optional string score = 25;</code>
        */
       public Builder clearScore() {
-        bitField0_ = (bitField0_ & ~0x00800000);
+        bitField0_ = (bitField0_ & ~0x01000000);
         score_ = getDefaultInstance().getScore();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string score = 24;</code>
+       * <code>optional string score = 25;</code>
        */
       public Builder setScoreBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00800000;
+  bitField0_ |= 0x01000000;
         score_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object dueDate_ = "";
+      /**
+       * <code>optional string dueDate = 26;</code>
+       */
+      public boolean hasDueDate() {
+        return ((bitField0_ & 0x02000000) == 0x02000000);
+      }
+      /**
+       * <code>optional string dueDate = 26;</code>
+       */
+      public java.lang.String getDueDate() {
+        java.lang.Object ref = dueDate_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            dueDate_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string dueDate = 26;</code>
+       */
+      public com.google.protobuf.ByteString
+          getDueDateBytes() {
+        java.lang.Object ref = dueDate_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          dueDate_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string dueDate = 26;</code>
+       */
+      public Builder setDueDate(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x02000000;
+        dueDate_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string dueDate = 26;</code>
+       */
+      public Builder clearDueDate() {
+        bitField0_ = (bitField0_ & ~0x02000000);
+        dueDate_ = getDefaultInstance().getDueDate();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string dueDate = 26;</code>
+       */
+      public Builder setDueDateBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x02000000;
+        dueDate_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object priorityCodeName_ = "";
+      /**
+       * <code>optional string priorityCodeName = 27;</code>
+       */
+      public boolean hasPriorityCodeName() {
+        return ((bitField0_ & 0x04000000) == 0x04000000);
+      }
+      /**
+       * <code>optional string priorityCodeName = 27;</code>
+       */
+      public java.lang.String getPriorityCodeName() {
+        java.lang.Object ref = priorityCodeName_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            priorityCodeName_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string priorityCodeName = 27;</code>
+       */
+      public com.google.protobuf.ByteString
+          getPriorityCodeNameBytes() {
+        java.lang.Object ref = priorityCodeName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          priorityCodeName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string priorityCodeName = 27;</code>
+       */
+      public Builder setPriorityCodeName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x04000000;
+        priorityCodeName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string priorityCodeName = 27;</code>
+       */
+      public Builder clearPriorityCodeName() {
+        bitField0_ = (bitField0_ & ~0x04000000);
+        priorityCodeName_ = getDefaultInstance().getPriorityCodeName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string priorityCodeName = 27;</code>
+       */
+      public Builder setPriorityCodeNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x04000000;
+        priorityCodeName_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object priorityCodeId_ = "";
+      /**
+       * <code>optional string priorityCodeId = 28;</code>
+       */
+      public boolean hasPriorityCodeId() {
+        return ((bitField0_ & 0x08000000) == 0x08000000);
+      }
+      /**
+       * <code>optional string priorityCodeId = 28;</code>
+       */
+      public java.lang.String getPriorityCodeId() {
+        java.lang.Object ref = priorityCodeId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            priorityCodeId_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string priorityCodeId = 28;</code>
+       */
+      public com.google.protobuf.ByteString
+          getPriorityCodeIdBytes() {
+        java.lang.Object ref = priorityCodeId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          priorityCodeId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string priorityCodeId = 28;</code>
+       */
+      public Builder setPriorityCodeId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x08000000;
+        priorityCodeId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string priorityCodeId = 28;</code>
+       */
+      public Builder clearPriorityCodeId() {
+        bitField0_ = (bitField0_ & ~0x08000000);
+        priorityCodeId_ = getDefaultInstance().getPriorityCodeId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string priorityCodeId = 28;</code>
+       */
+      public Builder setPriorityCodeIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x08000000;
+        priorityCodeId_ = value;
         onChanged();
         return this;
       }
@@ -38007,7 +38635,7 @@ public final class Messages {
       "eMessage\032\202\001\n\020AttributeMessage\022E\n\004type\030\001 " +
       "\001(\01627.com.n4systems.fieldid.api.pub.mode" +
       "l.AttributeValueType\022\n\n\002id\030\002 \001(\t\022\014\n\004name" +
-      "\030\003 \001(\t\022\r\n\005value\030\004 \001(\t\"\232\006\n\014EventMessage\022\n" +
+      "\030\003 \001(\t\022\r\n\005value\030\004 \001(\t\"\354\006\n\014EventMessage\022\n" +
       "\n\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014modif" +
       "iedDate\030\003 \001(\t\022\025\n\rcompletedDate\030\004 \001(\t\022\031\n\021" +
       "createdByUserName\030\005 \001(\t\022\027\n\017createdByUser" +
@@ -38024,151 +38652,153 @@ public final class Messages {
       "\001(\t\022\023\n\013eventTypeId\030\022 \001(\t\022\022\n\nidentifier\030\023",
       " \002(\t\022\022\n\nrfidNumber\030\024 \001(\t\022\031\n\021customerRefN" +
       "umber\030\025 \001(\t\022\017\n\007assetId\030\026 \001(\t\022\020\n\010comments" +
-      "\030\027 \001(\t\022\r\n\005score\030\030 \001(\t\"3\n\013EventResult\022\010\n\004" +
-      "PASS\020\001\022\010\n\004FAIL\020\002\022\006\n\002NA\020\003\022\010\n\004VOID\020\004\">\n\rWo" +
-      "rkflowState\022\010\n\004OPEN\020\001\022\r\n\tCOMPLETED\020\002\022\n\n\006" +
-      "CLOSED\020\003\022\010\n\004NONE\020\004\"\303\001\n\022AssetStatusMessag" +
-      "e\022\n\n\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014mo" +
-      "difiedDate\030\003 \001(\t\022\031\n\021createdByUserName\030\004 " +
-      "\001(\t\022\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modified" +
-      "ByUserName\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001",
-      "(\t\022\014\n\004name\030\010 \001(\t\"\327\007\n\020AssetTypeMessage\022\n\n" +
-      "\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014modifi" +
-      "edDate\030\003 \001(\t\022\031\n\021createdByUserName\030\004 \001(\t\022" +
-      "\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modifiedByUs" +
-      "erName\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001(\t\022\014" +
-      "\n\004name\030\010 \002(\t\022\020\n\010warnings\030\t \001(\t\022\024\n\014instru" +
-      "ctions\030\n \001(\t\022\022\n\ncautionUrl\030\013 \001(\t\022\033\n\023desc" +
-      "riptionTemplate\030\014 \001(\t\022\"\n\032manufactureCert" +
-      "ificateText\030\r \001(\t\022!\n\031hasManufactureCerti" +
-      "ficate\030\016 \001(\010\022\031\n\021allowAssetLinking\030\017 \001(\010\022",
-      "\025\n\rhasProcedures\030\020 \001(\010\022\030\n\020assetTypeGroup" +
-      "Id\030\021 \001(\t\022\032\n\022assetTypeGroupName\030\022 \001(\t\022P\n\t" +
-      "schedules\030\023 \003(\0132=.com.n4systems.fieldid." +
-      "api.pub.model.AssetTypeScheduleMessage\022n" +
-      "\n\024associatedEventTypes\030\024 \003(\0132P.com.n4sys" +
-      "tems.fieldid.api.pub.model.AssetTypeMess" +
-      "age.AssociatedEventTypeMessage\022g\n\016attrib" +
-      "uteTypes\030\025 \003(\0132O.com.n4systems.fieldid.a" +
-      "pi.pub.model.AssetTypeMessage.AssetAttri" +
-      "buteTypeMessage\032H\n\032AssociatedEventTypeMe",
-      "ssage\022\023\n\013eventTypeId\030\001 \002(\t\022\025\n\reventTypeN" +
-      "ame\030\002 \002(\t\032\226\001\n\031AssetAttributeTypeMessage\022" +
-      "\n\n\002id\030\001 \002(\t\022E\n\004type\030\002 \002(\01627.com.n4system" +
-      "s.fieldid.api.pub.model.AttributeValueTy" +
-      "pe\022\014\n\004name\030\003 \002(\t\022\030\n\020attributeOptions\030\004 \003" +
-      "(\t\"\306\001\n\025AssetTypeGroupMessage\022\n\n\002id\030\001 \001(\t" +
-      "\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014modifiedDate\030\003 " +
-      "\001(\t\022\031\n\021createdByUserName\030\004 \001(\t\022\027\n\017create" +
-      "dByUserId\030\005 \001(\t\022\032\n\022modifiedByUserName\030\006 " +
-      "\001(\t\022\030\n\020modifiedByUserId\030\007 \001(\t\022\014\n\004name\030\010 ",
-      "\002(\t\"\346\002\n\030AssetTypeScheduleMessage\022\n\n\002id\030\001" +
-      " \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014modifiedDat" +
-      "e\030\003 \001(\t\022\031\n\021createdByUserName\030\004 \001(\t\022\027\n\017cr" +
-      "eatedByUserId\030\005 \001(\t\022\032\n\022modifiedByUserNam" +
-      "e\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001(\t\022\021\n\town" +
-      "erName\030\010 \001(\t\022\017\n\007ownerId\030\t \002(\t\022\025\n\rassetTy" +
-      "peName\030\n \001(\t\022\023\n\013assetTypeId\030\013 \002(\t\022\025\n\reve" +
-      "ntTypeName\030\014 \001(\t\022\023\n\013eventTypeId\030\r \002(\t\022\027\n" +
-      "\017frequencyInDays\030\016 \002(\003\022\024\n\014autoSchedule\030\017" +
-      " \002(\010\"\320\003\n\014OwnerMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013cre",
-      "atedDate\030\002 \001(\t\022\024\n\014modifiedDate\030\003 \001(\t\022\031\n\021" +
-      "createdByUserName\030\004 \001(\t\022\027\n\017createdByUser" +
-      "Id\030\005 \001(\t\022\032\n\022modifiedByUserName\030\006 \001(\t\022\030\n\020" +
-      "modifiedByUserId\030\007 \001(\t\022\014\n\004name\030\010 \002(\t\022\022\n\n" +
-      "parentName\030\t \001(\t\022\020\n\010parentId\030\n \001(\t\022\014\n\004co" +
-      "de\030\013 \001(\t\022\r\n\005notes\030\014 \001(\t\022\025\n\rstreetAddress" +
-      "\030\r \001(\t\022\014\n\004city\030\016 \001(\t\022\r\n\005state\030\017 \001(\t\022\017\n\007c" +
-      "ountry\030\020 \001(\t\022\013\n\003zip\030\021 \001(\t\022\016\n\006phone1\030\022 \001(" +
-      "\t\022\016\n\006phone2\030\023 \001(\t\022\014\n\004fax1\030\024 \001(\t\022\020\n\010latit" +
-      "ude\030\025 \001(\t\022\021\n\tlongitude\030\026 \001(\t\022\023\n\013contactN",
-      "ame\030\027 \001(\t\022\024\n\014contactEmail\030\030 \001(\t\"\224\002\n\031Pred" +
-      "efinedLocationMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013cre" +
-      "atedDate\030\002 \001(\t\022\024\n\014modifiedDate\030\003 \001(\t\022\031\n\021" +
-      "createdByUserName\030\004 \001(\t\022\027\n\017createdByUser" +
-      "Id\030\005 \001(\t\022\032\n\022modifiedByUserName\030\006 \001(\t\022\030\n\020" +
-      "modifiedByUserId\030\007 \001(\t\022\021\n\townerName\030\010 \001(" +
-      "\t\022\017\n\007ownerId\030\t \001(\t\022\022\n\nparentName\030\n \001(\t\022\020" +
-      "\n\010parentId\030\013 \001(\t\022\014\n\004name\030\014 \002(\t\"\310\002\n\021TestS" +
-      "impleMessage\022\024\n\014double_field\030\001 \001(\001\022\023\n\013fl" +
-      "oat_field\030\002 \001(\002\022\023\n\013int32_field\030\003 \001(\005\022\023\n\013",
-      "int64_field\030\004 \001(\003\022\024\n\014uint32_field\030\005 \001(\r\022" +
-      "\024\n\014uint64_field\030\006 \001(\004\022\024\n\014sint32_field\030\007 " +
-      "\001(\021\022\024\n\014sint64_field\030\010 \001(\022\022\025\n\rfixed32_fie" +
-      "ld\030\t \001(\007\022\025\n\rfixed64_field\030\n \001(\006\022\026\n\016sfixe" +
-      "d32_field\030\013 \001(\017\022\026\n\016sfixed64_field\030\014 \001(\020\022" +
-      "\022\n\nbool_field\030\r \001(\010\022\024\n\014string_field\030\016 \001(" +
-      "\t\")\n\021TestNestedMessage\022\024\n\014string_field\030\001" +
-      " \002(\t\"s\n\024TestContainerMessage\022\023\n\013int32_fi" +
-      "eld\030\001 \002(\005\022F\n\006nested\030\002 \001(\01326.com.n4system" +
-      "s.fieldid.api.pub.model.TestNestedMessag",
-      "e\"\371\007\n\013UserMessage\022\n\n\002id\030\001 \001(\t\022\017\n\007created" +
-      "\030\002 \001(\t\022\020\n\010modified\030\003 \001(\t\022\031\n\021createdByUse" +
-      "rName\030\004 \001(\t\022\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022" +
-      "modifiedByUserName\030\006 \001(\t\022\030\n\020modifiedByUs" +
-      "erId\030\007 \001(\t\022\021\n\townerName\030\010 \001(\t\022\017\n\007ownerId" +
-      "\030\t \002(\t\022\016\n\006userID\030\n \001(\t\022\021\n\tfirstName\030\013 \001(" +
-      "\t\022\020\n\010lastName\030\014 \001(\t\022\024\n\014emailAddress\030\r \001(" +
-      "\t\022\022\n\ntimeZoneID\030\016 \001(\t\022\020\n\010position\030\017 \001(\t\022" +
-      "\020\n\010initials\030\020 \001(\t\022\033\n\023failedLoginAttempts" +
-      "\030\021 \001(\005\022\016\n\006locked\030\022 \001(\010\022\023\n\013lockedUntil\030\023 ",
-      "\001(\t\022\027\n\017passwordChanged\030\024 \001(\t\022\020\n\010language" +
-      "\030\025 \001(\t\022\022\n\nidentifier\030\026 \001(\t\022\021\n\tlastLogin\030" +
-      "\027 \001(\t\022E\n\006groups\030\030 \003(\01325.com.n4systems.fi" +
-      "eldid.api.pub.model.UserGroupMessage\022K\n\010" +
-      "userType\030\031 \002(\01629.com.n4systems.fieldid.a" +
-      "pi.pub.model.UserMessage.UserType\022X\n\013per" +
-      "missions\030\032 \002(\0132C.com.n4systems.fieldid.a" +
-      "pi.pub.model.UserMessage.PermissionsMess" +
-      "age\032\324\001\n\022PermissionsMessage\022\024\n\014createAsse" +
-      "ts\030\001 \002(\010\022\032\n\022manageSystemConfig\030\002 \002(\010\022\031\n\021",
-      "manageSystemUsers\030\003 \002(\010\022\026\n\016manageEndUser" +
-      "s\030\004 \002(\010\022\024\n\014createEvents\030\005 \002(\010\022\022\n\neditEve" +
-      "nts\030\006 \002(\010\022\022\n\nmanageJobs\030\007 \002(\010\022\033\n\023manageS" +
-      "afetyNetwork\030\010 \002(\010\"Q\n\010UserType\022\t\n\005ADMIN\020" +
-      "\001\022\016\n\nINSPECTION\020\002\022\r\n\tREPORTING\020\003\022\n\n\006PERS" +
-      "ON\020\004\022\017\n\013USAGE_BASED\020\005\"=\n\020UserGroupMessag" +
-      "e\022\n\n\002id\030\001 \001(\t\022\014\n\004name\030\002 \002(\t\022\017\n\007groupId\030\003" +
-      " \001(\t\"L\n\023ListResponseMessage\022\014\n\004page\030\001 \002(" +
-      "\005\022\020\n\010pageSize\030\002 \002(\005\022\r\n\005total\030\003 \002(\003*\006\010\350\007\020" +
-      "\321\017*X\n\022AttributeValueType\022\010\n\004TEXT\020\001\022\n\n\006SE",
-      "LECT\020\002\022\t\n\005COMBO\020\003\022\010\n\004UNIT\020\004\022\010\n\004DATE\020\005\022\r\n" +
-      "\tDATE_TIME\020\006:8\n\017serialized_name\022\035.google" +
-      ".protobuf.FieldOptions\030\321\206\003 \001(\t:\206\001\n\006asset" +
-      "s\0228.com.n4systems.fieldid.api.pub.model." +
-      "ListResponseMessage\030\350\007 \003(\01321.com.n4syste" +
-      "ms.fieldid.api.pub.model.AssetMessageB\010\212" +
-      "\265\030\004list:\206\001\n\006owners\0228.com.n4systems.field" +
-      "id.api.pub.model.ListResponseMessage\030\351\007 " +
-      "\003(\01321.com.n4systems.fieldid.api.pub.mode" +
-      "l.OwnerMessageB\010\212\265\030\004list:\223\001\n\rassetStatus",
-      "es\0228.com.n4systems.fieldid.api.pub.model" +
-      ".ListResponseMessage\030\352\007 \003(\01327.com.n4syst" +
-      "ems.fieldid.api.pub.model.AssetStatusMes" +
-      "sageB\010\212\265\030\004list:\216\001\n\nassetTypes\0228.com.n4sy" +
-      "stems.fieldid.api.pub.model.ListResponse" +
-      "Message\030\353\007 \003(\01325.com.n4systems.fieldid.a" +
-      "pi.pub.model.AssetTypeMessageB\010\212\265\030\004list:" +
-      "\230\001\n\017assetTypeGroups\0228.com.n4systems.fiel" +
-      "did.api.pub.model.ListResponseMessage\030\354\007" +
-      " \003(\0132:.com.n4systems.fieldid.api.pub.mod",
-      "el.AssetTypeGroupMessageB\010\212\265\030\004list:\226\001\n\tl" +
-      "ocations\0228.com.n4systems.fieldid.api.pub" +
-      ".model.ListResponseMessage\030\355\007 \003(\0132>.com." +
-      "n4systems.fieldid.api.pub.model.Predefin" +
-      "edLocationMessageB\010\212\265\030\004list:\204\001\n\005users\0228." +
-      "com.n4systems.fieldid.api.pub.model.List" +
-      "ResponseMessage\030\356\007 \003(\01320.com.n4systems.f" +
-      "ieldid.api.pub.model.UserMessageB\010\212\265\030\004li" +
-      "st:\216\001\n\nuserGroups\0228.com.n4systems.fieldi" +
-      "d.api.pub.model.ListResponseMessage\030\357\007 \003",
-      "(\01325.com.n4systems.fieldid.api.pub.model" +
-      ".UserGroupMessageB\010\212\265\030\004list:\206\001\n\006events\0228" +
-      ".com.n4systems.fieldid.api.pub.model.Lis" +
-      "tResponseMessage\030\360\007 \003(\01321.com.n4systems." +
-      "fieldid.api.pub.model.EventMessageB\010\212\265\030\004" +
-      "listB/\n#com.n4systems.fieldid.api.pub.mo" +
-      "delB\010Messages"
+      "\030\027 \001(\t\022\r\n\005notes\030\030 \001(\t\022\r\n\005score\030\031 \001(\t\022\017\n\007" +
+      "dueDate\030\032 \001(\t\022\030\n\020priorityCodeName\030\033 \001(\t\022" +
+      "\026\n\016priorityCodeId\030\034 \001(\t\"3\n\013EventResult\022\010" +
+      "\n\004PASS\020\001\022\010\n\004FAIL\020\002\022\006\n\002NA\020\003\022\010\n\004VOID\020\004\">\n\r" +
+      "WorkflowState\022\010\n\004OPEN\020\001\022\r\n\tCOMPLETED\020\002\022\n" +
+      "\n\006CLOSED\020\003\022\010\n\004NONE\020\004\"\303\001\n\022AssetStatusMess" +
+      "age\022\n\n\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014" +
+      "modifiedDate\030\003 \001(\t\022\031\n\021createdByUserName\030",
+      "\004 \001(\t\022\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modifi" +
+      "edByUserName\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007" +
+      " \001(\t\022\014\n\004name\030\010 \001(\t\"\327\007\n\020AssetTypeMessage\022" +
+      "\n\n\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014modi" +
+      "fiedDate\030\003 \001(\t\022\031\n\021createdByUserName\030\004 \001(" +
+      "\t\022\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modifiedBy" +
+      "UserName\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001(\t" +
+      "\022\014\n\004name\030\010 \002(\t\022\020\n\010warnings\030\t \001(\t\022\024\n\014inst" +
+      "ructions\030\n \001(\t\022\022\n\ncautionUrl\030\013 \001(\t\022\033\n\023de" +
+      "scriptionTemplate\030\014 \001(\t\022\"\n\032manufactureCe",
+      "rtificateText\030\r \001(\t\022!\n\031hasManufactureCer" +
+      "tificate\030\016 \001(\010\022\031\n\021allowAssetLinking\030\017 \001(" +
+      "\010\022\025\n\rhasProcedures\030\020 \001(\010\022\030\n\020assetTypeGro" +
+      "upId\030\021 \001(\t\022\032\n\022assetTypeGroupName\030\022 \001(\t\022P" +
+      "\n\tschedules\030\023 \003(\0132=.com.n4systems.fieldi" +
+      "d.api.pub.model.AssetTypeScheduleMessage" +
+      "\022n\n\024associatedEventTypes\030\024 \003(\0132P.com.n4s" +
+      "ystems.fieldid.api.pub.model.AssetTypeMe" +
+      "ssage.AssociatedEventTypeMessage\022g\n\016attr" +
+      "ibuteTypes\030\025 \003(\0132O.com.n4systems.fieldid",
+      ".api.pub.model.AssetTypeMessage.AssetAtt" +
+      "ributeTypeMessage\032H\n\032AssociatedEventType" +
+      "Message\022\023\n\013eventTypeId\030\001 \002(\t\022\025\n\reventTyp" +
+      "eName\030\002 \002(\t\032\226\001\n\031AssetAttributeTypeMessag" +
+      "e\022\n\n\002id\030\001 \002(\t\022E\n\004type\030\002 \002(\01627.com.n4syst" +
+      "ems.fieldid.api.pub.model.AttributeValue" +
+      "Type\022\014\n\004name\030\003 \002(\t\022\030\n\020attributeOptions\030\004" +
+      " \003(\t\"\306\001\n\025AssetTypeGroupMessage\022\n\n\002id\030\001 \001" +
+      "(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014modifiedDate\030" +
+      "\003 \001(\t\022\031\n\021createdByUserName\030\004 \001(\t\022\027\n\017crea",
+      "tedByUserId\030\005 \001(\t\022\032\n\022modifiedByUserName\030" +
+      "\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001(\t\022\014\n\004name\030" +
+      "\010 \002(\t\"\346\002\n\030AssetTypeScheduleMessage\022\n\n\002id" +
+      "\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014modifiedD" +
+      "ate\030\003 \001(\t\022\031\n\021createdByUserName\030\004 \001(\t\022\027\n\017" +
+      "createdByUserId\030\005 \001(\t\022\032\n\022modifiedByUserN" +
+      "ame\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001(\t\022\021\n\to" +
+      "wnerName\030\010 \001(\t\022\017\n\007ownerId\030\t \002(\t\022\025\n\rasset" +
+      "TypeName\030\n \001(\t\022\023\n\013assetTypeId\030\013 \002(\t\022\025\n\re" +
+      "ventTypeName\030\014 \001(\t\022\023\n\013eventTypeId\030\r \002(\t\022",
+      "\027\n\017frequencyInDays\030\016 \002(\003\022\024\n\014autoSchedule" +
+      "\030\017 \002(\010\"\320\003\n\014OwnerMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013c" +
+      "reatedDate\030\002 \001(\t\022\024\n\014modifiedDate\030\003 \001(\t\022\031" +
+      "\n\021createdByUserName\030\004 \001(\t\022\027\n\017createdByUs" +
+      "erId\030\005 \001(\t\022\032\n\022modifiedByUserName\030\006 \001(\t\022\030" +
+      "\n\020modifiedByUserId\030\007 \001(\t\022\014\n\004name\030\010 \002(\t\022\022" +
+      "\n\nparentName\030\t \001(\t\022\020\n\010parentId\030\n \001(\t\022\014\n\004" +
+      "code\030\013 \001(\t\022\r\n\005notes\030\014 \001(\t\022\025\n\rstreetAddre" +
+      "ss\030\r \001(\t\022\014\n\004city\030\016 \001(\t\022\r\n\005state\030\017 \001(\t\022\017\n" +
+      "\007country\030\020 \001(\t\022\013\n\003zip\030\021 \001(\t\022\016\n\006phone1\030\022 ",
+      "\001(\t\022\016\n\006phone2\030\023 \001(\t\022\014\n\004fax1\030\024 \001(\t\022\020\n\010lat" +
+      "itude\030\025 \001(\t\022\021\n\tlongitude\030\026 \001(\t\022\023\n\013contac" +
+      "tName\030\027 \001(\t\022\024\n\014contactEmail\030\030 \001(\t\"\224\002\n\031Pr" +
+      "edefinedLocationMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013c" +
+      "reatedDate\030\002 \001(\t\022\024\n\014modifiedDate\030\003 \001(\t\022\031" +
+      "\n\021createdByUserName\030\004 \001(\t\022\027\n\017createdByUs" +
+      "erId\030\005 \001(\t\022\032\n\022modifiedByUserName\030\006 \001(\t\022\030" +
+      "\n\020modifiedByUserId\030\007 \001(\t\022\021\n\townerName\030\010 " +
+      "\001(\t\022\017\n\007ownerId\030\t \001(\t\022\022\n\nparentName\030\n \001(\t" +
+      "\022\020\n\010parentId\030\013 \001(\t\022\014\n\004name\030\014 \002(\t\"\310\002\n\021Tes",
+      "tSimpleMessage\022\024\n\014double_field\030\001 \001(\001\022\023\n\013" +
+      "float_field\030\002 \001(\002\022\023\n\013int32_field\030\003 \001(\005\022\023" +
+      "\n\013int64_field\030\004 \001(\003\022\024\n\014uint32_field\030\005 \001(" +
+      "\r\022\024\n\014uint64_field\030\006 \001(\004\022\024\n\014sint32_field\030" +
+      "\007 \001(\021\022\024\n\014sint64_field\030\010 \001(\022\022\025\n\rfixed32_f" +
+      "ield\030\t \001(\007\022\025\n\rfixed64_field\030\n \001(\006\022\026\n\016sfi" +
+      "xed32_field\030\013 \001(\017\022\026\n\016sfixed64_field\030\014 \001(" +
+      "\020\022\022\n\nbool_field\030\r \001(\010\022\024\n\014string_field\030\016 " +
+      "\001(\t\")\n\021TestNestedMessage\022\024\n\014string_field" +
+      "\030\001 \002(\t\"s\n\024TestContainerMessage\022\023\n\013int32_",
+      "field\030\001 \002(\005\022F\n\006nested\030\002 \001(\01326.com.n4syst" +
+      "ems.fieldid.api.pub.model.TestNestedMess" +
+      "age\"\371\007\n\013UserMessage\022\n\n\002id\030\001 \001(\t\022\017\n\007creat" +
+      "ed\030\002 \001(\t\022\020\n\010modified\030\003 \001(\t\022\031\n\021createdByU" +
+      "serName\030\004 \001(\t\022\027\n\017createdByUserId\030\005 \001(\t\022\032" +
+      "\n\022modifiedByUserName\030\006 \001(\t\022\030\n\020modifiedBy" +
+      "UserId\030\007 \001(\t\022\021\n\townerName\030\010 \001(\t\022\017\n\007owner" +
+      "Id\030\t \002(\t\022\016\n\006userID\030\n \001(\t\022\021\n\tfirstName\030\013 " +
+      "\001(\t\022\020\n\010lastName\030\014 \001(\t\022\024\n\014emailAddress\030\r " +
+      "\001(\t\022\022\n\ntimeZoneID\030\016 \001(\t\022\020\n\010position\030\017 \001(",
+      "\t\022\020\n\010initials\030\020 \001(\t\022\033\n\023failedLoginAttemp" +
+      "ts\030\021 \001(\005\022\016\n\006locked\030\022 \001(\010\022\023\n\013lockedUntil\030" +
+      "\023 \001(\t\022\027\n\017passwordChanged\030\024 \001(\t\022\020\n\010langua" +
+      "ge\030\025 \001(\t\022\022\n\nidentifier\030\026 \001(\t\022\021\n\tlastLogi" +
+      "n\030\027 \001(\t\022E\n\006groups\030\030 \003(\01325.com.n4systems." +
+      "fieldid.api.pub.model.UserGroupMessage\022K" +
+      "\n\010userType\030\031 \002(\01629.com.n4systems.fieldid" +
+      ".api.pub.model.UserMessage.UserType\022X\n\013p" +
+      "ermissions\030\032 \002(\0132C.com.n4systems.fieldid" +
+      ".api.pub.model.UserMessage.PermissionsMe",
+      "ssage\032\324\001\n\022PermissionsMessage\022\024\n\014createAs" +
+      "sets\030\001 \002(\010\022\032\n\022manageSystemConfig\030\002 \002(\010\022\031" +
+      "\n\021manageSystemUsers\030\003 \002(\010\022\026\n\016manageEndUs" +
+      "ers\030\004 \002(\010\022\024\n\014createEvents\030\005 \002(\010\022\022\n\neditE" +
+      "vents\030\006 \002(\010\022\022\n\nmanageJobs\030\007 \002(\010\022\033\n\023manag" +
+      "eSafetyNetwork\030\010 \002(\010\"Q\n\010UserType\022\t\n\005ADMI" +
+      "N\020\001\022\016\n\nINSPECTION\020\002\022\r\n\tREPORTING\020\003\022\n\n\006PE" +
+      "RSON\020\004\022\017\n\013USAGE_BASED\020\005\"=\n\020UserGroupMess" +
+      "age\022\n\n\002id\030\001 \001(\t\022\014\n\004name\030\002 \002(\t\022\017\n\007groupId" +
+      "\030\003 \001(\t\"L\n\023ListResponseMessage\022\014\n\004page\030\001 ",
+      "\002(\005\022\020\n\010pageSize\030\002 \002(\005\022\r\n\005total\030\003 \002(\003*\006\010\350" +
+      "\007\020\321\017*X\n\022AttributeValueType\022\010\n\004TEXT\020\001\022\n\n\006" +
+      "SELECT\020\002\022\t\n\005COMBO\020\003\022\010\n\004UNIT\020\004\022\010\n\004DATE\020\005\022" +
+      "\r\n\tDATE_TIME\020\006:8\n\017serialized_name\022\035.goog" +
+      "le.protobuf.FieldOptions\030\321\206\003 \001(\t:\206\001\n\006ass" +
+      "ets\0228.com.n4systems.fieldid.api.pub.mode" +
+      "l.ListResponseMessage\030\350\007 \003(\01321.com.n4sys" +
+      "tems.fieldid.api.pub.model.AssetMessageB" +
+      "\010\212\265\030\004list:\206\001\n\006owners\0228.com.n4systems.fie" +
+      "ldid.api.pub.model.ListResponseMessage\030\351",
+      "\007 \003(\01321.com.n4systems.fieldid.api.pub.mo" +
+      "del.OwnerMessageB\010\212\265\030\004list:\223\001\n\rassetStat" +
+      "uses\0228.com.n4systems.fieldid.api.pub.mod" +
+      "el.ListResponseMessage\030\352\007 \003(\01327.com.n4sy" +
+      "stems.fieldid.api.pub.model.AssetStatusM" +
+      "essageB\010\212\265\030\004list:\216\001\n\nassetTypes\0228.com.n4" +
+      "systems.fieldid.api.pub.model.ListRespon" +
+      "seMessage\030\353\007 \003(\01325.com.n4systems.fieldid" +
+      ".api.pub.model.AssetTypeMessageB\010\212\265\030\004lis" +
+      "t:\230\001\n\017assetTypeGroups\0228.com.n4systems.fi",
+      "eldid.api.pub.model.ListResponseMessage\030" +
+      "\354\007 \003(\0132:.com.n4systems.fieldid.api.pub.m" +
+      "odel.AssetTypeGroupMessageB\010\212\265\030\004list:\226\001\n" +
+      "\tlocations\0228.com.n4systems.fieldid.api.p" +
+      "ub.model.ListResponseMessage\030\355\007 \003(\0132>.co" +
+      "m.n4systems.fieldid.api.pub.model.Predef" +
+      "inedLocationMessageB\010\212\265\030\004list:\204\001\n\005users\022" +
+      "8.com.n4systems.fieldid.api.pub.model.Li" +
+      "stResponseMessage\030\356\007 \003(\01320.com.n4systems" +
+      ".fieldid.api.pub.model.UserMessageB\010\212\265\030\004",
+      "list:\216\001\n\nuserGroups\0228.com.n4systems.fiel" +
+      "did.api.pub.model.ListResponseMessage\030\357\007" +
+      " \003(\01325.com.n4systems.fieldid.api.pub.mod" +
+      "el.UserGroupMessageB\010\212\265\030\004list:\206\001\n\006events" +
+      "\0228.com.n4systems.fieldid.api.pub.model.L" +
+      "istResponseMessage\030\360\007 \003(\01321.com.n4system" +
+      "s.fieldid.api.pub.model.EventMessageB\010\212\265" +
+      "\030\004listB/\n#com.n4systems.fieldid.api.pub." +
+      "modelB\010Messages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -38200,7 +38830,7 @@ public final class Messages {
     internal_static_com_n4systems_fieldid_api_pub_model_EventMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_com_n4systems_fieldid_api_pub_model_EventMessage_descriptor,
-        new java.lang.String[] { "Id", "CreatedDate", "ModifiedDate", "CompletedDate", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "AssignedToUserName", "AssignedToUserId", "CompletedByUserName", "CompletedByUserId", "EventResult", "WorkflowState", "OwnerName", "OwnerId", "EventTypeName", "EventTypeId", "Identifier", "RfidNumber", "CustomerRefNumber", "AssetId", "Comments", "Score", });
+        new java.lang.String[] { "Id", "CreatedDate", "ModifiedDate", "CompletedDate", "CreatedByUserName", "CreatedByUserId", "ModifiedByUserName", "ModifiedByUserId", "AssignedToUserName", "AssignedToUserId", "CompletedByUserName", "CompletedByUserId", "EventResult", "WorkflowState", "OwnerName", "OwnerId", "EventTypeName", "EventTypeId", "Identifier", "RfidNumber", "CustomerRefNumber", "AssetId", "Comments", "Notes", "Score", "DueDate", "PriorityCodeName", "PriorityCodeId", });
     internal_static_com_n4systems_fieldid_api_pub_model_AssetStatusMessage_descriptor =
       getDescriptor().getMessageTypes().get(2);
     internal_static_com_n4systems_fieldid_api_pub_model_AssetStatusMessage_fieldAccessorTable = new
