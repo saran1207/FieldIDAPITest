@@ -107,8 +107,8 @@ public class OwnerResource extends CrudResource<BaseOrg, OwnerMessage, Builder> 
 						.addMessageToModel(AddressInfo::getGpsLocation, new MessageToGpsLocation<>(OwnerMessage::getLatitude, OwnerMessage::getLongitude))
 						.build())
 				.addMessageToModel(BaseOrg::getContact, (subBuilder) -> subBuilder
-						.add(OwnerMessage::getContactEmail, Contact::setName)
-						.add(OwnerMessage::getContactName, Contact::setEmail)
+						.add(OwnerMessage::getContactEmail, Contact::setEmail)
+						.add(OwnerMessage::getContactName, Contact::setName)
 						.build())
 				.build();
 	}
