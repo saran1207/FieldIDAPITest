@@ -18,7 +18,9 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public abstract class CrudResource<M extends AbstractEntity, A extends GeneratedMessage, B extends GeneratedMessage.Builder> extends FieldIdPersistenceService {
@@ -65,57 +67,80 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
         return model;
     }
 
-    @GET
-    @Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
-    @Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
-    @Trace (dispatcher=true)
-    @Transactional(readOnly = true)
-    public Messages.ListResponseMessage findAll(@QueryParam("page") int page, @QueryParam("pageSize") int pageSize, @QueryParam("delta") String date) {
-        setEnhancedLoggingCustomParameters();
-        List<M> allItems;
-        List<A> items;
-        Date delta = null;
-        String logInfo = getLogInfo();
-        String apiCall = listResponseType.getDescriptor().getName();
-        String logMessage = logInfo + apiCall + " FIND All";
-        logger.info(logMessage);
+	@GET
+	@Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
+	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
+	@Trace (dispatcher=true)
+	@Transactional(readOnly = true)
+	public Messages.ListResponseMessage findAll(
+			@QueryParam("page") int page,
+			@QueryParam("pageSize") int pageSize,
+			@QueryParam("delta") String date,
+			@QueryParam("name") String name,
+			@QueryParam("identifier") String identifier,
+			@QueryParam("rfidNumber") String rfidNumber,
+			@QueryParam("customerRefNumber") String customerRefNumber,
+			@QueryParam("assetTypeName") String assetTypeName,
+			@QueryParam("ownerName") String ownerName,
+			@QueryParam("identifiedByUserLastName") String identifiedByUserLastName,
+			@QueryParam("identifiedByUserFirstName") String identifiedByUserFirstName,
+			@QueryParam("freeFormLocation") String freeFormLocation,
+			@QueryParam("code") String code) {
+		setEnhancedLoggingCustomParameters();
+		List<M> allItems;
+		List<A> items;
+		Date delta = null;
+		String logInfo = getLogInfo();
+		String apiCall = listResponseType.getDescriptor().getName();
+		String logMessage = logInfo + apiCall + " FIND All";
+		logger.info(logMessage);
 
-        if(date != null) {
-            delta = convertDate(date);
-        }
+		if(date != null) {
+			delta = convertDate(date);
+			if (delta == null) {
+				logger.error("Invalid delta '" + date + "'");
+				throw new RuntimeException("Invalid delta '" + date + "', should be in yyyy-MM-dd HH:mm:ss format");
+			}
+		}
 
-        //ignore the delta value
-        if(delta == null) {
-            allItems = crudService().findAll(page, pageSize);
+		Map<String, Object> optionalParameters = new HashMap<String, Object>();
+		if (delta != null)
+			optionalParameters.put("delta", delta);
+		if (name != null)
+			optionalParameters.put("name", name);
+		if (code != null)
+			optionalParameters.put("code", code);
+		if (identifier != null)
+			optionalParameters.put("identifier", identifier);
+		if (rfidNumber != null)
+			optionalParameters.put("rfidNumber", rfidNumber);
+		if (customerRefNumber != null)
+			optionalParameters.put("customerRefNumber", customerRefNumber);
+		if (assetTypeName != null)
+			optionalParameters.put("assetTypeName", assetTypeName);
+		if (ownerName != null)
+			optionalParameters.put("ownerName", ownerName);
+		if (identifiedByUserLastName != null)
+			optionalParameters.put("identifiedByUserLastName", identifiedByUserLastName);
+		if (identifiedByUserFirstName != null)
+			optionalParameters.put("identifiedByUserFirstName", identifiedByUserFirstName);
+		if (freeFormLocation != null)
+			optionalParameters.put("freeFormLocation", freeFormLocation);
 
-            items = allItems
-                    .stream()
-                    .map(m -> toMessage(m))
-                    .collect(Collectors.toList());
+		allItems = crudService().findAll(page, pageSize, optionalParameters);
 
-            return Messages.ListResponseMessage.newBuilder()
-                    .setPageSize(pageSize)
-                    .setPage(page)
-                    .setTotal(crudService().count())
-                    .setExtension(listResponseType, items)
-                    .build();
-        } else {
-            allItems = crudService()
-                    .findAll(page, pageSize, delta);
+		items = allItems
+				.stream()
+				.map(m -> toMessage(m))
+				.collect(Collectors.toList());
 
-            items = allItems
-                    .stream()
-                    .map(m -> toMessage(m))
-                    .collect(Collectors.toList());
-
-            return Messages.ListResponseMessage.newBuilder()
-                    .setPageSize(pageSize)
-                    .setPage(page)
-                    .setTotal(crudService().count(delta))
-                    .setExtension(listResponseType, items)
-                    .build();
-        }
-    }
+		return Messages.ListResponseMessage.newBuilder()
+				.setPageSize(pageSize)
+				.setPage(page)
+				.setTotal(crudService().count(optionalParameters))
+				.setExtension(listResponseType, items)
+				.build();
+	}
 
     protected <M> M testNotFound(M model) {
         if (model == null) {
@@ -228,66 +253,83 @@ public abstract class CrudResource<M extends AbstractEntity, A extends Generated
 
     }
 
-    @GET
-    @Path("actionItems")
-    @Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
-    @Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
-    @Trace (dispatcher=true)
-    @Transactional
-    public Messages.ListResponseMessage findAllActionItem(@QueryParam("page") int page, @QueryParam("pageSize") int pageSize,  @QueryParam("delta") String date) {
-        setEnhancedLoggingCustomParameters();
-        List<M> allItems;
-        List<A> items;
-        Date delta = null;
+	@GET
+	@Path("actionItems")
+	@Consumes({"application/x-protobuf64", MediaType.APPLICATION_JSON})
+	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
+	@Trace (dispatcher=true)
+	@Transactional
+	public Messages.ListResponseMessage findAllActionItem(
+			@QueryParam("page") int page,
+			@QueryParam("pageSize") int pageSize,
+			@QueryParam("delta") String deltaDate,
+			@QueryParam("workflowState") String workflowState,
+			@QueryParam("ownerId") String ownerId,
+			@QueryParam("fromCompletedDate") String fromCompletedDate,
+			@QueryParam("toCompletedDate") String toCompletedDate) {
+		setEnhancedLoggingCustomParameters();
+		List<M> allItems;
+		List<A> items;
+		Date delta = null;
 
-        String logInfo = getLogInfo();
-        String apiCall = listResponseType.getDescriptor().getName();
-        String logMessage = logInfo + apiCall + " FIND ALL ACTION ITEMS ";
-        logger.info(logMessage);
+		String logInfo = getLogInfo();
+		String apiCall = listResponseType.getDescriptor().getName();
+		String logMessage = logInfo + apiCall + " FIND ALL ACTION ITEMS ";
+		logger.info(logMessage);
 
-        if(date != null) {
-            delta = convertDate(date);
-        }
+		if(deltaDate != null) {
+			delta = convertDate(deltaDate);
+			if (delta == null) {
+				logger.error("Invalid delta '" + deltaDate + "'");
+				throw new RuntimeException("Invalid delta '" + deltaDate + "', should be in yyyy-MM-dd HH:mm:ss format");
+			}
+		}
 
-        //ignore the delta value
-        if(delta == null) {
-            try {
-                allItems = crudService().findAllActionItem(page, pageSize);
+		Map<String, Object> optionalParameters = new HashMap<String, Object>();
+		if (delta != null) {
+			optionalParameters.put("delta", delta);
+		}
+		if (workflowState != null) {
+			optionalParameters.put("workflowState", workflowState);
+		}
+		if (ownerId != null) {
+			optionalParameters.put("ownerId", ownerId);
+		}
+		if (fromCompletedDate != null) {
+			Date date = convertDate(fromCompletedDate);
+			if (date == null) {
+				logger.error("Invalid fromCompletedDate '" + date + "'");
+				throw new RuntimeException("Invalid fromCompletedDate '" + date + "', should be in yyyy-MM-dd HH:mm:ss format");
+			}
+			optionalParameters.put("fromCompletedDate", date);
+		}
+		if (toCompletedDate != null) {
+			Date date = convertDate(toCompletedDate);
+			if (date == null) {
+				logger.error("Invalid toCompletedDate '" + date + "'");
+				throw new RuntimeException("Invalid toCompletedDate '" + date + "', should be in yyyy-MM-dd HH:mm:ss format");
+			}
+			optionalParameters.put("toCompletedDate", date);
+		}
 
-                items = allItems
-                        .stream()
-                        .map(m -> toMessage(m))
-                        .collect(Collectors.toList());
+		try {
+			allItems = crudService().findAllActionItem(page, pageSize, optionalParameters);
 
-                return Messages.ListResponseMessage.newBuilder()
-                        .setPageSize(pageSize)
-                        .setPage(page)
-                        .setTotal(crudService().countAllActionItem())
-                        .setExtension(listResponseType, items)
-                        .build();
-            } catch (UnsupportedOperationException ex) {
-                throw new NotAllowedException("DELETE not allowed for this entity type");
-            }
-        } else {
-            try {
-                allItems = crudService().findAllActionItem(page, pageSize, delta);
+			items = allItems
+					.stream()
+					.map(m -> toMessage(m))
+					.collect(Collectors.toList());
 
-                items = allItems
-                        .stream()
-                        .map(m -> toMessage(m))
-                        .collect(Collectors.toList());
-
-                return Messages.ListResponseMessage.newBuilder()
-                        .setPageSize(pageSize)
-                        .setPage(page)
-                        .setTotal(crudService().countAllActionItem(delta))
-                        .setExtension(listResponseType, items)
-                        .build();
-            } catch (UnsupportedOperationException ex) {
-                throw new NotAllowedException("DELETE not allowed for this entity type");
-            }
-        }
-    }
+			return Messages.ListResponseMessage.newBuilder()
+					.setPageSize(pageSize)
+					.setPage(page)
+					.setTotal(crudService().countAllActionItem(optionalParameters))
+					.setExtension(listResponseType, items)
+					.build();
+		} catch (UnsupportedOperationException ex) {
+			throw new NotAllowedException("DELETE not allowed for this entity type");
+		}
+	}
 
     @GET
     @Path("actionItems/{id}")

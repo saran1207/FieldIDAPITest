@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.CrudService;
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.util.EditExistingEventTransientResultPopulator;
@@ -23,7 +22,6 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.model.utils.PlainDate;
-import com.n4systems.persistence.utils.PostFetcher;
 import com.n4systems.services.date.DateService;
 import com.n4systems.services.reporting.*;
 import com.n4systems.services.tenant.Tenant30DayCountRecord;
@@ -38,7 +36,7 @@ import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.SortTerm;
 import com.n4systems.util.time.DateUtil;
 import org.apache.commons.lang.time.DateUtils;
-import org.apache.poi.ss.formula.functions.Even;
+import org.apache.log4j.Logger;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,13 +44,14 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.*;
-import java.util.concurrent.Callable;
 import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
 public class EventService extends CrudService<ThingEvent> {
+
+    private Logger logger = Logger.getLogger(EventService.class);
 
     @Autowired private ReportServiceHelper reportServiceHelper;
     @Autowired private AssetService assetService;
@@ -920,5 +919,66 @@ public class EventService extends CrudService<ThingEvent> {
         return getLastActionItemOfEachType(asset.getID(), page, pageSize, openActionItems);
     }
 
+    @Override
+    protected void addFindAllParameters(QueryBuilder<ThingEvent> builder, Map<String, Object> optionalParameters) {
+        super.addFindAllParameters(builder, optionalParameters);
+
+        if (optionalParameters.containsKey("workflowState")) {
+            WorkflowState workflowState;
+            String paramWorkflowState = (String) optionalParameters.get("workflowState");
+            if (WorkflowState.OPEN.getName().equalsIgnoreCase(paramWorkflowState))
+                workflowState = WorkflowState.OPEN;
+            else
+            if (WorkflowState.CLOSED.getName().equalsIgnoreCase(paramWorkflowState))
+                workflowState = WorkflowState.CLOSED;
+            else
+            if (WorkflowState.COMPLETED.getName().equalsIgnoreCase(paramWorkflowState))
+                workflowState = WorkflowState.COMPLETED;
+            else
+            if (WorkflowState.NONE.getName().equalsIgnoreCase(paramWorkflowState))
+                workflowState = WorkflowState.NONE;
+            else
+                throw new IllegalArgumentException("Unsupported value for workflowState parameter: '" + paramWorkflowState + "'");
+
+            builder.addWhere(WhereClauseFactory.create(
+                    WhereParameter.Comparator.EQ,
+                    "workflowState",
+                    workflowState,
+                    WhereClause.ChainOp.AND));
+        }
+
+        if (optionalParameters.containsKey("ownerId")) {
+            String ownerPublicId = (String) optionalParameters.get("ownerId");
+            Long ownerId;
+            try {
+                ownerId = PublicIdEncoder.decode(ownerPublicId);
+            }
+            catch(Exception ex) {
+                logger.error("attempt to decode public id '" + ownerPublicId + "' failed", ex);
+                throw new RuntimeException("Invalid owner id");
+            }
+            builder.addWhere(WhereClauseFactory.create(
+                    WhereParameter.Comparator.EQ,
+                    "owner.id",
+                    ownerId,
+                    WhereClause.ChainOp.AND));
+        }
+
+        if (optionalParameters.containsKey("fromCompletedDate")) {
+            builder.addWhere(WhereClauseFactory.create(
+                    WhereParameter.Comparator.GE, "completedDate",
+                    optionalParameters.get("fromCompletedDate"),
+                    WhereClause.ChainOp.AND,
+                    "fromCompletedDate"));
+        }
+
+        if (optionalParameters.containsKey("toCompletedDate")) {
+            builder.addWhere(WhereClauseFactory.create(
+                    WhereParameter.Comparator.LE, "completedDate",
+                    optionalParameters.get("toCompletedDate"),
+                    WhereClause.ChainOp.AND,
+                    "toCompletedDate"));
+        }
+    }
 }
 

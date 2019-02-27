@@ -5,20 +5,26 @@ import com.n4systems.fieldid.api.pub.mapping.Mapper;
 import com.n4systems.fieldid.api.pub.mapping.TypeMapperBuilder;
 import com.n4systems.fieldid.api.pub.mapping.model.marshal.ApiModelWithNameToMessage;
 import com.n4systems.fieldid.api.pub.mapping.model.marshal.AssetToMessage;
+import com.n4systems.fieldid.api.pub.mapping.model.marshal.PriorityCodeToMessage;
 import com.n4systems.fieldid.api.pub.mapping.model.marshal.UserToMessage;
 import com.n4systems.fieldid.api.pub.mapping.model.unmarshal.BaseOrgResolver;
+import com.n4systems.fieldid.api.pub.mapping.model.unmarshal.PriorityCodeResolver;
 import com.n4systems.fieldid.api.pub.mapping.model.unmarshal.UserResolver;
 import com.n4systems.fieldid.api.pub.model.Messages;
 import com.n4systems.fieldid.api.pub.model.Messages.EventMessage;
 import com.n4systems.fieldid.api.pub.model.Messages.EventMessage.Builder;
 import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.fieldid.service.event.EventService;
-import com.n4systems.model.*;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventResult;
+import com.n4systems.model.ThingEvent;
+import com.n4systems.model.WorkflowState;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.ws.rs.*;
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.Path;
 
 /**
  * Created by rrana on 2018-08-23.
@@ -32,6 +38,7 @@ public class EventResource extends CrudResource<ThingEvent, EventMessage, Builde
     @Autowired private EventService eventService;
     @Autowired private BaseOrgResolver baseOrgResolver;
     @Autowired private UserResolver userResolver;
+    @Autowired private PriorityCodeResolver priorityCodeResolver;
 
     public EventResource() {
         super(Messages.events);
@@ -57,6 +64,7 @@ public class EventResource extends CrudResource<ThingEvent, EventMessage, Builde
                 .addDateToString(ThingEvent::getCreated, Builder::setCreatedDate)
                 .addDateToString(ThingEvent::getModified, Builder::setModifiedDate)
                 .addDateToString(ThingEvent::getCompletedDate, Builder::setCompletedDate)
+                .addDateToString(ThingEvent::getDueDate, Builder::setDueDate)
                 .addModelToMessage(ThingEvent::getCreatedBy, new UserToMessage<>(Builder::setCreatedByUserId, Builder::setCreatedByUserName))
                 .addModelToMessage(ThingEvent::getModifiedBy, new UserToMessage<>(Builder::setModifiedByUserId, Builder::setModifiedByUserName))
                 .addModelToMessage(ThingEvent::getAssignee, new UserToMessage<>(Builder::setAssignedToUserId, Builder::setAssignedToUserName))
@@ -65,9 +73,11 @@ public class EventResource extends CrudResource<ThingEvent, EventMessage, Builde
                 .addModelToMessage(ThingEvent::getEventType, new ApiModelWithNameToMessage<>(Builder::setEventTypeId, Builder::setEventTypeName))
                 .addModelToMessage(ThingEvent::getAsset, new AssetToMessage<>(Builder::setAssetId, Builder::setIdentifier, Builder::setRfidNumber, Builder::setCustomerRefNumber))
                 .add(ThingEvent::getComments, Builder::setComments)
+                .add(ThingEvent::getNotes, Builder::setNotes)
                 .addToString(ThingEvent::getScore, Builder::setScore)
                 .add(ThingEvent::getEventResult, Builder::setEventResult, this::convertResultToMessage)
                 .add(ThingEvent::getWorkflowState, Builder::setWorkflowState, this::convertWorkflowStateToMessage)
+                .addModelToMessage(ThingEvent::getPriority, new PriorityCodeToMessage<>(Builder::setPriorityCodeId, Builder::setPriorityCodeName))
                 .build();
     }
 
@@ -75,12 +85,15 @@ public class EventResource extends CrudResource<ThingEvent, EventMessage, Builde
     protected Mapper<EventMessage, ThingEvent> createMessageToModelMapper(TypeMapperBuilder<EventMessage, ThingEvent> mapperBuilder) {
         return mapperBuilder
                 .add(EventMessage::getComments, ThingEvent::setComments)
+                .add(EventMessage::getNotes, ThingEvent::setNotes)
                 .addToDouble(EventMessage::getScore, ThingEvent::setScore)
+                .addStringToDate(EventMessage::getDueDate, ThingEvent::setDueDate)
                 .add(EventMessage::getEventResult, ThingEvent::setEventResult, this::convertResultToModel)
                 .add(EventMessage::getWorkflowState, ThingEvent::setWorkflowState, this::convertWorkflowStateToModel)
                 .add(EventMessage::getOwnerId, ThingEvent::setOwner, baseOrgResolver)
                 .add(EventMessage::getAssignedToUserId, ThingEvent::setAssignee, userResolver)
                 .add(EventMessage::getCompletedByUserId, ThingEvent::setPerformedBy, userResolver)
+                .add(EventMessage::getPriorityCodeId, ThingEvent::setPriority, priorityCodeResolver)
                 .build();
     }
 

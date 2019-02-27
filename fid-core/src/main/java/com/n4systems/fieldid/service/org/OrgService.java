@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Transactional
 public class OrgService extends CrudService<BaseOrg> {
@@ -442,6 +443,18 @@ public class OrgService extends CrudService<BaseOrg> {
         return builder;
     }
 
+    @Override
+    protected void addFindAllParameters(QueryBuilder<BaseOrg> builder, Map<String, Object> optionalParameters) {
+        super.addFindAllParameters(builder, optionalParameters);
+        if (optionalParameters.containsKey("code")) {
+            builder.addWhere(WhereClauseFactory.create(
+                    WhereParameter.Comparator.EQ, "code",
+                    optionalParameters.get("code"),
+                    WhereClause.ChainOp.AND,
+                    "code"));
+        }
+    }
+
     public List<? extends SecondaryOrg> searchSecondaryOrg(String textFilter, Class<? extends SecondaryOrg> typeFilter, int page, int pageSize) {
         QueryBuilder<? extends SecondaryOrg> builder = createSearchQueryBuilderSecondaryOrg(textFilter, typeFilter);
         return persistenceService.findAll(builder, page, pageSize);
@@ -527,7 +540,7 @@ public class OrgService extends CrudService<BaseOrg> {
 
     public void create(SecondaryOrg secondaryOrg) {
         persistenceService.save(secondaryOrg);
-    }
+   }
 
 }
 
