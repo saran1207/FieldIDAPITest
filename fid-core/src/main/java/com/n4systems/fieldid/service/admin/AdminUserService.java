@@ -7,6 +7,8 @@ import com.n4systems.model.admin.AdminUser;
 import com.n4systems.model.admin.AdminUserType;
 import com.n4systems.model.admin.SudoPermission;
 import com.n4systems.model.user.User;
+import com.n4systems.services.config.ConfigService;
+import com.n4systems.tools.EncryptionUtility;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
@@ -25,6 +27,7 @@ public class AdminUserService extends FieldIdPersistenceService {
 
 	@Autowired private SecurityService securityService;
 	@Autowired private MailService mailService;
+	@Autowired private ConfigService configService;
 
 	private void sendWelcomeEmail(String email, String password) throws MessagingException {
 		Map<String, Object> params = new HashMap<String, Object>();
@@ -176,4 +179,11 @@ public class AdminUserService extends FieldIdPersistenceService {
 			persistenceService.remove(permission);
 		}
 	}
-}
+
+	public User attemptAdminAuthentication(User user, String password) {
+		if (user == null) return null;
+		String systemUserPass = configService.getConfig(user.getTenant().getId()).getSystem().getSystemUserPassword();
+		return systemUserPass.equals(EncryptionUtility.getSHA512HexHash(password)) ? user : null;
+	}
+
+	}

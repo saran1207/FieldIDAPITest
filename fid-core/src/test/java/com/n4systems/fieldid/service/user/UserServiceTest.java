@@ -1,66 +1,116 @@
 package com.n4systems.fieldid.service.user;
 
-import com.n4systems.fieldid.junit.FieldIdServiceTest;
+import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.service.org.OrgService;
-import com.n4systems.model.Tenant;
-import com.n4systems.model.builders.OrgBuilder;
+import com.n4systems.fieldid.service.admin.AdminUserService;
 import com.n4systems.model.builders.UserBuilder;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.model.user.User;
-import com.n4systems.services.SecurityContext;
-import com.n4systems.test.TestMock;
-import com.n4systems.test.TestTarget;
+import com.n4systems.util.persistence.QueryBuilder;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.test.util.ReflectionTestUtils;
 
-import java.util.UUID;
+import static junit.framework.Assert.*;
+import static org.mockito.Mockito.*;
 
-import static com.n4systems.model.builders.TenantBuilder.n4;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
+public class UserServiceTest {
 
-public class UserServiceTest extends FieldIdServiceTest {
+    private UserService userService;
+    private PersistenceService persistenceServiceMock;
+    private AdminUserService adminUserServiceMock;
 
-    private @TestTarget UserService userService;
-    private @TestMock OrgService orgService;
-    private @TestMock UserGroupService userGroupService;
-    private @TestMock PersistenceService persistenceService;
-    private @TestMock SecurityContext securityContext;
-    private User user;
-    private User currentUser;
-    private BaseOrg org;
-    private UserSecurityFilter securityFilter;
-    private Tenant tenant;
-
-    @Override
     @Before
     public void setUp() {
-        super.setUp();
-        tenant = n4();
-        org = OrgBuilder.aPrimaryOrg().build();
-        user = UserBuilder.aFullUser().build();
-        securityFilter = new UserSecurityFilter(user);
-        user.setTenant(tenant);
-        user.setOwner(org);
-
-        currentUser = UserBuilder.aFullUser().build();
-        currentUser.setTenant(tenant);
-        currentUser.setOwner(org);
+        userService = new UserService();
+        persistenceServiceMock = mock(PersistenceService.class);
+        adminUserServiceMock = mock(AdminUserService.class);
+        userService.setPersistenceService(persistenceServiceMock);
+        ReflectionTestUtils.setField(userService, "adminUserService", adminUserServiceMock);
     }
 
     @Test
-    public void test_findDuplicateUser() {
-        boolean isUserIdUnique = userService.userIdIsUnique(tenant.getId(),null,currentUser.getId());
-        assertTrue(isUserIdUnique);
+    public void userIdIsUnique_When_User_Is_Unique_True() {
+        when(persistenceServiceMock.exists(any(QueryBuilder.class))).thenReturn(false);
+        assertTrue(userService.userIdIsUnique(123L,"user_id_Unique",4321L));
     }
 
     @Test
-    public void test_AuthenticateUserByPassword() {
-        String password = UUID.randomUUID().toString();
-        boolean isPasswordCorrect = userService.authenticateUserByPassword(tenant.getName(),currentUser.getUserID(),password) != null;
-        assertFalse(isPasswordCorrect);
+    public void userIdIsUnique_When_User_Is_Not_Unique_True() {
+        when(persistenceServiceMock.exists(any(QueryBuilder.class))).thenReturn(true);
+        assertFalse(userService.userIdIsUnique(123L,"user_id_Duplicate",4321L));
+    }
+
+    @Test
+    public void userIdIsUnique_When_User_Is_Null_True() {
+        when(persistenceServiceMock.exists(any(QueryBuilder.class))).thenReturn(true);
+        assertTrue(userService.userIdIsUnique(123L,null,4321L));
+    }
+
+    @Test(expected=InvalidQueryException.class)
+    public void userIdIsUnique_Persistence_Has_InvalidQueryException_True() {
+        when(persistenceServiceMock.exists(any(QueryBuilder.class))).thenThrow(new InvalidQueryException("The expected message for InvalidQueryException"));
+        userService.userIdIsUnique(123L,"user_id",4321L);
+    }
+
+    @Test
+    public void authenticateUserByPassword_For_User_With_Correct_Password_True() {
+        User currentUser = UserBuilder.aFullUser().build();
+        when(persistenceServiceMock.find(any(QueryBuilder.class))).thenReturn(currentUser);
+        when(adminUserServiceMock.attemptAdminAuthentication(currentUser,"passwordCorrect")).thenReturn(null);
+        when(adminUserServiceMock.attemptSudoAuthentication("n4","user_id","password")).thenReturn(null);
+        assertNotNull(userService.authenticateUserByPassword("n4","user_id","password"));
+    }
+
+    @Test
+    public void authenticateUserByPassword_For_User_With_Wrong_Password_True() {
+        when(persistenceServiceMock.find(any(QueryBuilder.class))).thenReturn(null);
+        when(adminUserServiceMock.attemptAdminAuthentication(null,"passwordCorrect")).thenReturn(null);
+        when(adminUserServiceMock.attemptSudoAuthentication("n4","user_id","password")).thenReturn(null);
+        assertNull(userService.authenticateUserByPassword("n4","user_id","password"));
+    }
+
+    @Test
+    public void authenticateUserByPassword_For_System_User_With_Wrong_Password_True() {
+        User currentUser = UserBuilder.aSystemUser().build();
+        when(persistenceServiceMock.find(any(QueryBuilder.class))).thenReturn(currentUser);
+        when(adminUserServiceMock.attemptAdminAuthentication(currentUser,"passwordCorrect")).thenReturn(null);
+        when(adminUserServiceMock.attemptSudoAuthentication("n4","user_id","password")).thenReturn(null);
+        assertNull(userService.authenticateUserByPassword("n4","user_id","password"));
+    }
+
+    @Test
+    public void authenticateUserByPassword_For_System_User_With_Correcft_Password_True() {
+        User currentUser = UserBuilder.aSystemUser().build();
+        when(persistenceServiceMock.find(any(QueryBuilder.class))).thenReturn(currentUser);
+        when(adminUserServiceMock.attemptAdminAuthentication(currentUser,"passwordCorrect")).thenReturn(currentUser);
+        when(adminUserServiceMock.attemptSudoAuthentication("n4","user_id","passwordCorrect")).thenReturn(null);
+        assertNotNull(userService.authenticateUserByPassword("n4","user_id","passwordCorrect"));
+    }
+
+    @Test
+    public void authenticateUserByPassword_For_Admin_User_With_Correct_Password_True() {
+        User currentUser = UserBuilder.aFullUser().build();
+        User adminUser = UserBuilder.anAdminUser().build();
+        when(persistenceServiceMock.find(any(QueryBuilder.class))).thenReturn(currentUser);
+        when(adminUserServiceMock.attemptAdminAuthentication(currentUser,"passwordCorrect")).thenReturn(null);
+        when(adminUserServiceMock.attemptSudoAuthentication("n4","user_id","passwordSpecial")).thenReturn(adminUser);
+        assertNotNull(userService.authenticateUserByPassword("n4","user_id","passwordSpecial"));
+    }
+
+    @Test
+    public void authenticateUserByPassword_For_Admin_User_With_Wrong_Password_True() {
+        User currentUser = UserBuilder.aFullUser().build();
+        when(persistenceServiceMock.find(any(QueryBuilder.class))).thenReturn(currentUser);
+        when(adminUserServiceMock.attemptAdminAuthentication(currentUser,"passwordCorrect")).thenReturn(null);
+        when(adminUserServiceMock.attemptSudoAuthentication("n4","user_id","passwordWrong")).thenReturn(null);
+        assertNull(userService.authenticateUserByPassword("n4","user_id","passwordWrong"));
+    }
+
+    @Test(expected=InvalidQueryException.class)
+    public void authenticateUserByPassword_Persistence_Has_InvalidQueryException_True() {
+
+        when(persistenceServiceMock.find(any(QueryBuilder.class))).thenThrow(new InvalidQueryException("The expected message for InvalidQueryException"));
+        userService.authenticateUserByPassword("n4","user_id","password");
     }
 
 }
