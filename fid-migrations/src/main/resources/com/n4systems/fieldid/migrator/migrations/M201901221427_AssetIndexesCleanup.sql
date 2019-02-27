@@ -1,0 +1,30 @@
+
+alter table assets add unique key pk_assets_id (id);
+alter table assets drop index productserial_uniqueid_idx;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
