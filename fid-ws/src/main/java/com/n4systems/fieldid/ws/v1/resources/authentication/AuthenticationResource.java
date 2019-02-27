@@ -66,7 +66,6 @@ public class AuthenticationResource extends FieldIdPersistenceServiceWithEnhance
             @FormParam("passcode") String passcode) {
         
         logger.info("Passcode authentication for " + tenantName);
-        setEnhancedLoggingWithAppInfoParameters();
 
         if (tenantName == null || passcode == null) {
             throw new ForbiddenException();
