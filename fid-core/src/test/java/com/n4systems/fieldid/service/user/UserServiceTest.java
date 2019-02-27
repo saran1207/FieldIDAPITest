@@ -2,10 +2,7 @@ package com.n4systems.fieldid.service.user;
 
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.model.security.TenantOnlySecurityFilter;
-import com.n4systems.model.user.UserGroup;
 import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereParameter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,61 +12,38 @@ import static org.mockito.Mockito.*;
 
 public class UserServiceTest {
 
-    private UserService userServiceTest;
-    private PersistenceService persistenceServiceTest;
+    private UserService userService;
+    private PersistenceService persistenceServiceMock;
 
     @Before
     public void setUp() {
-        userServiceTest = mock(UserService.class);
-        persistenceServiceTest = mock(PersistenceService.class);
+        userService = new UserService();
+        persistenceServiceMock = mock(PersistenceService.class);
+        userService.setPersistenceService(persistenceServiceMock);
     }
 
     @Test
     public void userIdIsUnique_When_User_Is_Unique_True() {
-        when(userServiceTest.userIdIsUnique(123L,"testUnique",4321L)).thenReturn(true);
-        assertTrue(userServiceTest.userIdIsUnique(123L,"testUnique",4321L));
-        verify(userServiceTest,atLeastOnce()).userIdIsUnique(123L,"testUnique",4321L);
+        when(persistenceServiceMock.exists(any(QueryBuilder.class))).thenReturn(false);
+        assertTrue(userService.userIdIsUnique(123L,"user_id_Unique",4321L));
     }
 
     @Test
     public void userIdIsUnique_When_User_Is_Not_Unique_True() {
-        when(userServiceTest.userIdIsUnique(123L,"testFalse",4321L)).thenReturn(false);
-        assertFalse(userServiceTest.userIdIsUnique(123L,"testFalse",4321L));
-        verify(userServiceTest,atLeastOnce()).userIdIsUnique(123L,"testFalse",4321L);
+        when(persistenceServiceMock.exists(any(QueryBuilder.class))).thenReturn(true);
+        assertFalse(userService.userIdIsUnique(123L,"user_id_Duplicate",4321L));
     }
 
     @Test
-    public void userIdIsUnique_Persistence_Returns_A_Result_True() {
-
-        QueryBuilder<Long> queryBuilder = new QueryBuilder<Long>(UserGroup.class, new TenantOnlySecurityFilter(123L)).setCountSelect();
-        queryBuilder.addWhere(WhereParameter.Comparator.EQ, "userID", "useID", "testUnique");
-        queryBuilder.addWhere(WhereParameter.Comparator.NE, "id", "id", 4321L);
-
-        when(persistenceServiceTest.exists(queryBuilder)).thenReturn(true);
-        assertTrue(persistenceServiceTest.exists(queryBuilder));
-        verify(persistenceServiceTest,atLeastOnce()).exists(queryBuilder);
-    }
-
-    @Test
-    public void userIdIsUnique_Persistence_Returns_No_Results_True() {
-
-        QueryBuilder<Long> queryBuilder = new QueryBuilder<Long>(UserGroup.class, new TenantOnlySecurityFilter(123L)).setCountSelect();
-        queryBuilder.addWhere(WhereParameter.Comparator.EQ, "userID", "useID", "testFalse");
-        queryBuilder.addWhere(WhereParameter.Comparator.NE, "id", "id", 4321L);
-
-        when(persistenceServiceTest.exists(queryBuilder)).thenReturn(false);
-        assertFalse(persistenceServiceTest.exists(queryBuilder));
-        verify(persistenceServiceTest,atLeastOnce()).exists(queryBuilder);
+    public void userIdIsUnique_When_User_Is_Null_True() {
+        when(persistenceServiceMock.exists(any(QueryBuilder.class))).thenReturn(true);
+        assertTrue(userService.userIdIsUnique(123L,null,4321L));
     }
 
     @Test(expected=InvalidQueryException.class)
     public void userIdIsUnique_Persistence_Has_InvalidQueryException_True() {
 
-        QueryBuilder<Long> queryBuilder = new QueryBuilder<Long>(UserGroup.class, new TenantOnlySecurityFilter(123L)).setCountSelect();
-        queryBuilder.addWhere(WhereParameter.Comparator.EQ, "userIDTest", "useIDTest", "testException");
-        queryBuilder.addWhere(WhereParameter.Comparator.NE, "id", "id", 4321L);
-
-        when(persistenceServiceTest.exists(queryBuilder)).thenThrow(new InvalidQueryException("The expected message for InvalidQueryException"));
-        persistenceServiceTest.exists(queryBuilder);
+        when(persistenceServiceMock.exists(any(QueryBuilder.class))).thenThrow(new InvalidQueryException("The expected message for InvalidQueryException"));
+        userService.userIdIsUnique(123L,"user_id",4321L);
     }
 }
