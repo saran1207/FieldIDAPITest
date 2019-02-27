@@ -73,35 +73,39 @@ message EventMessage {
 	optional string assignedToUserId 		= 10;
 
 	optional string completedByUserName 	= 11;
-   	optional string completedByUserId 		= 12;
+	optional string completedByUserId 		= 12;
 
-    enum EventResult {
-    		PASS 		= 1;
-    		FAIL 	    = 2;
-    		NA 	        = 3;
-    		VOID 		= 4;
-    	}
-    required EventResult eventResult    	= 13;
+	enum EventResult {
+			PASS 		= 1;
+			FAIL 	    = 2;
+			NA 	        = 3;
+			VOID 		= 4;
+		}
+	required EventResult eventResult    	= 13;
 
-    enum WorkflowState {
-    		OPEN 		= 1;
-    		COMPLETED 	= 2;
-    		CLOSED 	    = 3;
-    		NONE 		= 4;
-    	}
-    required WorkflowState workflowState	= 14;
+	enum WorkflowState {
+			OPEN 		= 1;
+			COMPLETED 	= 2;
+			CLOSED 	    = 3;
+			NONE 		= 4;
+		}
+	required WorkflowState workflowState	= 14;
 
 	optional string ownerName 				= 15;
 	required string ownerId 				= 16;
 	optional string eventTypeName 			= 17;
-   	optional string eventTypeId 			= 18;
+	optional string eventTypeId 			= 18;
 
-    required string identifier 				= 19;
-   	optional string rfidNumber 				= 20;
-   	optional string customerRefNumber 		= 21;
+	required string identifier 				= 19;
+	optional string rfidNumber 				= 20;
+	optional string customerRefNumber 		= 21;
 	optional string assetId		 			= 22;
 	optional string comments				= 23;
-	optional string score					= 24;
+	optional string notes					= 24;
+	optional string score					= 25;
+	optional string dueDate 				= 26;
+	optional string priorityCodeName 		= 27;
+	optional string priorityCodeId 			= 28;
 
 }
 

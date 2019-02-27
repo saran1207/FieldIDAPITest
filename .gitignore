@@ -3,6 +3,13 @@
 **/target/
 node_modules/
 .sass-cache
+.project
+.settings/
+.vscode/
+.classpath
+.factorypath
+*.css.map
+
 fid-web/src/main/webapp/style/global.css.map
 fid-web/src/main/webapp/style/ie-all.css.map
 fid-web/src/main/webapp/style/ie-lte8.css.map
@@ -17,3 +24,4 @@ fid-web/src/main/webapp/style/pages/procedureList.css.map
 fid-web/src/main/webapp/style/pages/setup-event.css.map
 fid-web/src/main/webapp/style/pages/setup-user.css.map
 fid-web/src/main/webapp/style/pages/setup.css.map
+

@@ -50,9 +50,10 @@ public class PublicApiConfig {
 	}
 
 	@Bean
-	public UserResolver userResolver() {
-		return new UserResolver();
-	}
+	public UserResolver userResolver() { return new UserResolver(); }
+
+	@Bean
+	public PriorityCodeResolver priorityCodeResolver() { return new PriorityCodeResolver(); }
 
 	@Bean
 	public AssetTypeResolver assetTypeResolver() {
