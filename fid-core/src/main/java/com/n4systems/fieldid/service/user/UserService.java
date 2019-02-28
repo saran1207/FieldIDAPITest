@@ -25,6 +25,8 @@ import com.n4systems.model.user.UserGroup;
 import com.n4systems.model.user.UserQueryHelper;
 import com.n4systems.security.Permissions;
 import com.n4systems.security.UserType;
+import com.n4systems.services.config.ConfigService;
+import com.n4systems.tools.EncryptionUtility;
 import com.n4systems.util.BitField;
 import com.n4systems.util.StringUtils;
 import com.n4systems.util.UserBelongsToFilter;
@@ -45,6 +47,8 @@ public class UserService extends CrudService<User> {
     @Autowired private UserGroupService userGroupService;
     @Autowired protected AdminUserService adminUserService;
     @Autowired protected OfflineProfileService offlineProfileService;
+    @Autowired private ConfigService configService;
+
 
     public UserService() {
         super(User.class);
@@ -305,7 +309,8 @@ public class UserService extends CrudService<User> {
 
         if (user == null) return null;
         if (user.getUserType() == UserType.SYSTEM) {
-            return adminUserService.attemptAdminAuthentication(user, password);
+            String systemUserPass = configService.getConfig(user.getTenant().getId()).getSystem().getSystemUserPassword();
+            return systemUserPass.equals(EncryptionUtility.getSHA512HexHash(password)) ? user : null;
         } else if (user.getHashPassword().equals(User.hashPassword(password))) {
             return user;
         }
