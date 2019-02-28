@@ -81,6 +81,12 @@ public class UserServiceTest {
         assertNull(userService.authenticateUserByPassword("n4","user_id","password"));
     }
 
+    /**
+     * Expected SystemUserPassword not null or length > 128 - line #107
+     * Otherwise SecurityException is thrown
+     * Password in line #107 should be different from the String "password" produced by algorithm
+     * from BouncyCastleProvider() - line #26
+     */
     @Test
     public void authenticateUserByPassword_For_System_User_With_Wrong_Password_True() {
         User currentUser = UserBuilder.aSystemUser().build();
@@ -95,6 +101,12 @@ public class UserServiceTest {
         assertNull(userService.authenticateUserByPassword("n4","user_id","password"));
     }
 
+    /**
+     * Expected SystemUserPassword not null or length > 128 - line #107
+     * Otherwise SecurityException is thrown
+     * Password in line #107 is the String "password" produced by algorithm
+     * from BouncyCastleProvider() - line #26
+     */
     @Test
     public void authenticateUserByPassword_For_System_User_With_Correct_Password_True() {
         User currentUser = UserBuilder.aSystemUser().build();
@@ -109,6 +121,25 @@ public class UserServiceTest {
         assertNotNull(userService.authenticateUserByPassword("n4","user_id","password"));
     }
 
+    /**
+     * Expected SystemUserPassword not null or length > 128
+     * Otherwise SecurityException is thrown
+     * with the message "System password not configured correctly"
+     * at com.n4systems.services.config.SystemConfig.getSystemUserPassword(SystemConfig.java:66)
+     */
+    @Test(expected=SecurityException.class)
+    public void authenticateUserByPassword_For_System_User_With_SecurityException_True() {
+        User currentUser = UserBuilder.aSystemUser().build();
+        MutableRootConfig mutableRootConfig = new MutableRootConfig();
+        MutableSystemConfig mutableSystemConfig = new MutableSystemConfig();
+        mutableSystemConfig.setSystemUserPassword("password");
+        mutableRootConfig.setSystem(mutableSystemConfig);
+        RootConfig rootConfig = new RootConfig(mutableRootConfig);
+        when(configServiceMock.getConfig(any(Long.class))).thenReturn(rootConfig);
+        when(persistenceServiceMock.find(any(QueryBuilder.class))).thenReturn(currentUser);
+        when(adminUserServiceMock.attemptSudoAuthentication("n4","user_id","password")).thenReturn(null);
+        userService.authenticateUserByPassword("n4","user_id","password");
+    }
     @Test
     public void authenticateUserByPassword_For_Admin_User_With_Correct_Password_True() {
         User currentUser = UserBuilder.aFullUser().build();
