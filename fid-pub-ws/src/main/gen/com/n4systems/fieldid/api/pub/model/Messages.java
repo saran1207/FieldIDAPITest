@@ -281,71 +281,71 @@ public final class Messages {
         getIdentifierBytes();
 
     /**
-     * <code>optional string rfidNumber = 11;</code>
+     * <code>optional string rfidNumber = 11 [default = "__null__"];</code>
      */
     boolean hasRfidNumber();
     /**
-     * <code>optional string rfidNumber = 11;</code>
+     * <code>optional string rfidNumber = 11 [default = "__null__"];</code>
      */
     java.lang.String getRfidNumber();
     /**
-     * <code>optional string rfidNumber = 11;</code>
+     * <code>optional string rfidNumber = 11 [default = "__null__"];</code>
      */
     com.google.protobuf.ByteString
         getRfidNumberBytes();
 
     /**
-     * <code>optional string customerRefNumber = 12;</code>
+     * <code>optional string customerRefNumber = 12 [default = "__null__"];</code>
      */
     boolean hasCustomerRefNumber();
     /**
-     * <code>optional string customerRefNumber = 12;</code>
+     * <code>optional string customerRefNumber = 12 [default = "__null__"];</code>
      */
     java.lang.String getCustomerRefNumber();
     /**
-     * <code>optional string customerRefNumber = 12;</code>
+     * <code>optional string customerRefNumber = 12 [default = "__null__"];</code>
      */
     com.google.protobuf.ByteString
         getCustomerRefNumberBytes();
 
     /**
-     * <code>optional string purchaseOrder = 13;</code>
+     * <code>optional string purchaseOrder = 13 [default = "__null__"];</code>
      */
     boolean hasPurchaseOrder();
     /**
-     * <code>optional string purchaseOrder = 13;</code>
+     * <code>optional string purchaseOrder = 13 [default = "__null__"];</code>
      */
     java.lang.String getPurchaseOrder();
     /**
-     * <code>optional string purchaseOrder = 13;</code>
+     * <code>optional string purchaseOrder = 13 [default = "__null__"];</code>
      */
     com.google.protobuf.ByteString
         getPurchaseOrderBytes();
 
     /**
-     * <code>optional string comments = 14;</code>
+     * <code>optional string comments = 14 [default = "__null__"];</code>
      */
     boolean hasComments();
     /**
-     * <code>optional string comments = 14;</code>
+     * <code>optional string comments = 14 [default = "__null__"];</code>
      */
     java.lang.String getComments();
     /**
-     * <code>optional string comments = 14;</code>
+     * <code>optional string comments = 14 [default = "__null__"];</code>
      */
     com.google.protobuf.ByteString
         getCommentsBytes();
 
     /**
-     * <code>optional string identifiedDate = 15;</code>
+     * <code>optional string identifiedDate = 15 [default = "__null__"];</code>
      */
     boolean hasIdentifiedDate();
     /**
-     * <code>optional string identifiedDate = 15;</code>
+     * <code>optional string identifiedDate = 15 [default = "__null__"];</code>
      */
     java.lang.String getIdentifiedDate();
     /**
-     * <code>optional string identifiedDate = 15;</code>
+     * <code>optional string identifiedDate = 15 [default = "__null__"];</code>
      */
     com.google.protobuf.ByteString
         getIdentifiedDateBytes();
@@ -393,15 +393,15 @@ public final class Messages {
         getAssetStatusNameBytes();
 
     /**
-     * <code>optional string assetStatusId = 19;</code>
+     * <code>optional string assetStatusId = 19 [default = "__null__"];</code>
      */
     boolean hasAssetStatusId();
     /**
-     * <code>optional string assetStatusId = 19;</code>
+     * <code>optional string assetStatusId = 19 [default = "__null__"];</code>
      */
     java.lang.String getAssetStatusId();
     /**
-     * <code>optional string assetStatusId = 19;</code>
+     * <code>optional string assetStatusId = 19 [default = "__null__"];</code>
      */
     com.google.protobuf.ByteString
         getAssetStatusIdBytes();
@@ -421,15 +421,15 @@ public final class Messages {
         getIdentifiedByUserNameBytes();
 
     /**
-     * <code>optional string identifiedByUserId = 21;</code>
+     * <code>optional string identifiedByUserId = 21 [default = "__null__"];</code>
      */
     boolean hasIdentifiedByUserId();
     /**
-     * <code>optional string identifiedByUserId = 21;</code>
+     * <code>optional string identifiedByUserId = 21 [default = "__null__"];</code>
      */
     java.lang.String getIdentifiedByUserId();
     /**
-     * <code>optional string identifiedByUserId = 21;</code>
+     * <code>optional string identifiedByUserId = 21 [default = "__null__"];</code>
      */
     com.google.protobuf.ByteString
         getIdentifiedByUserIdBytes();
@@ -449,15 +449,15 @@ public final class Messages {
         getAssignedUserNameBytes();
 
     /**
-     * <code>optional string assignedUserId = 23;</code>
+     * <code>optional string assignedUserId = 23 [default = "__null__"];</code>
      */
     boolean hasAssignedUserId();
     /**
-     * <code>optional string assignedUserId = 23;</code>
+     * <code>optional string assignedUserId = 23 [default = "__null__"];</code>
      */
     java.lang.String getAssignedUserId();
     /**
-     * <code>optional string assignedUserId = 23;</code>
+     * <code>optional string assignedUserId = 23 [default = "__null__"];</code>
      */
     com.google.protobuf.ByteString
         getAssignedUserIdBytes();
@@ -533,15 +533,15 @@ public final class Messages {
         getPredefinedLocationIdBytes();
 
     /**
-     * <code>optional string orderNumber = 29;</code>
+     * <code>optional string orderNumber = 29 [default = "__null__"];</code>
      */
     boolean hasOrderNumber();
     /**
-     * <code>optional string orderNumber = 29;</code>
+     * <code>optional string orderNumber = 29 [default = "__null__"];</code>
      */
     java.lang.String getOrderNumber();
     /**
-     * <code>optional string orderNumber = 29;</code>
+     * <code>optional string orderNumber = 29 [default = "__null__"];</code>
      */
     com.google.protobuf.ByteString
         getOrderNumberBytes();
@@ -2167,13 +2167,13 @@ public final class Messages {
     public static final int RFIDNUMBER_FIELD_NUMBER = 11;
     private java.lang.Object rfidNumber_;
     /**
-     * <code>optional string rfidNumber = 11;</code>
+     * <code>optional string rfidNumber = 11 [default = "__null__"];</code>
      */
     public boolean hasRfidNumber() {
       return ((bitField0_ & 0x00000400) == 0x00000400);
     }
     /**
-     * <code>optional string rfidNumber = 11;</code>
+     * <code>optional string rfidNumber = 11 [default = "__null__"];</code>
      */
     public java.lang.String getRfidNumber() {
       java.lang.Object ref = rfidNumber_;
@@ -2190,7 +2190,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>optional string rfidNumber = 11;</code>
+     * <code>optional string rfidNumber = 11 [default = "__null__"];</code>
      */
     public com.google.protobuf.ByteString
         getRfidNumberBytes() {
@@ -2209,13 +2209,13 @@ public final class Messages {
     public static final int CUSTOMERREFNUMBER_FIELD_NUMBER = 12;
     private java.lang.Object customerRefNumber_;
     /**
-     * <code>optional string customerRefNumber = 12;</code>
+     * <code>optional string customerRefNumber = 12 [default = "__null__"];</code>
      */
     public boolean hasCustomerRefNumber() {
       return ((bitField0_ & 0x00000800) == 0x00000800);
     }
     /**
-     * <code>optional string customerRefNumber = 12;</code>
+     * <code>optional string customerRefNumber = 12 [default = "__null__"];</code>
      */
     public java.lang.String getCustomerRefNumber() {
       java.lang.Object ref = customerRefNumber_;
@@ -2232,7 +2232,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>optional string customerRefNumber = 12;</code>
+     * <code>optional string customerRefNumber = 12 [default = "__null__"];</code>
      */
     public com.google.protobuf.ByteString
         getCustomerRefNumberBytes() {
@@ -2251,13 +2251,13 @@ public final class Messages {
     public static final int PURCHASEORDER_FIELD_NUMBER = 13;
     private java.lang.Object purchaseOrder_;
     /**
-     * <code>optional string purchaseOrder = 13;</code>
+     * <code>optional string purchaseOrder = 13 [default = "__null__"];</code>
      */
     public boolean hasPurchaseOrder() {
       return ((bitField0_ & 0x00001000) == 0x00001000);
     }
     /**
-     * <code>optional string purchaseOrder = 13;</code>
+     * <code>optional string purchaseOrder = 13 [default = "__null__"];</code>
      */
     public java.lang.String getPurchaseOrder() {
       java.lang.Object ref = purchaseOrder_;
@@ -2274,7 +2274,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>optional string purchaseOrder = 13;</code>
+     * <code>optional string purchaseOrder = 13 [default = "__null__"];</code>
      */
     public com.google.protobuf.ByteString
         getPurchaseOrderBytes() {
@@ -2293,13 +2293,13 @@ public final class Messages {
     public static final int COMMENTS_FIELD_NUMBER = 14;
     private java.lang.Object comments_;
     /**
-     * <code>optional string comments = 14;</code>
+     * <code>optional string comments = 14 [default = "__null__"];</code>
      */
     public boolean hasComments() {
       return ((bitField0_ & 0x00002000) == 0x00002000);
     }
     /**
-     * <code>optional string comments = 14;</code>
+     * <code>optional string comments = 14 [default = "__null__"];</code>
      */
     public java.lang.String getComments() {
       java.lang.Object ref = comments_;
@@ -2316,7 +2316,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>optional string comments = 14;</code>
+     * <code>optional string comments = 14 [default = "__null__"];</code>
      */
     public com.google.protobuf.ByteString
         getCommentsBytes() {
@@ -2335,13 +2335,13 @@ public final class Messages {
     public static final int IDENTIFIEDDATE_FIELD_NUMBER = 15;
     private java.lang.Object identifiedDate_;
     /**
-     * <code>optional string identifiedDate = 15;</code>
+     * <code>optional string identifiedDate = 15 [default = "__null__"];</code>
      */
     public boolean hasIdentifiedDate() {
       return ((bitField0_ & 0x00004000) == 0x00004000);
     }
     /**
-     * <code>optional string identifiedDate = 15;</code>
+     * <code>optional string identifiedDate = 15 [default = "__null__"];</code>
      */
     public java.lang.String getIdentifiedDate() {
       java.lang.Object ref = identifiedDate_;
@@ -2358,7 +2358,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>optional string identifiedDate = 15;</code>
+     * <code>optional string identifiedDate = 15 [default = "__null__"];</code>
      */
     public com.google.protobuf.ByteString
         getIdentifiedDateBytes() {
@@ -2503,13 +2503,13 @@ public final class Messages {
     public static final int ASSETSTATUSID_FIELD_NUMBER = 19;
     private java.lang.Object assetStatusId_;
     /**
-     * <code>optional string assetStatusId = 19;</code>
+     * <code>optional string assetStatusId = 19 [default = "__null__"];</code>
      */
     public boolean hasAssetStatusId() {
       return ((bitField0_ & 0x00040000) == 0x00040000);
     }
     /**
-     * <code>optional string assetStatusId = 19;</code>
+     * <code>optional string assetStatusId = 19 [default = "__null__"];</code>
      */
     public java.lang.String getAssetStatusId() {
       java.lang.Object ref = assetStatusId_;
@@ -2526,7 +2526,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>optional string assetStatusId = 19;</code>
+     * <code>optional string assetStatusId = 19 [default = "__null__"];</code>
      */
     public com.google.protobuf.ByteString
         getAssetStatusIdBytes() {
@@ -2587,13 +2587,13 @@ public final class Messages {
     public static final int IDENTIFIEDBYUSERID_FIELD_NUMBER = 21;
     private java.lang.Object identifiedByUserId_;
     /**
-     * <code>optional string identifiedByUserId = 21;</code>
+     * <code>optional string identifiedByUserId = 21 [default = "__null__"];</code>
      */
     public boolean hasIdentifiedByUserId() {
       return ((bitField0_ & 0x00100000) == 0x00100000);
     }
     /**
-     * <code>optional string identifiedByUserId = 21;</code>
+     * <code>optional string identifiedByUserId = 21 [default = "__null__"];</code>
      */
     public java.lang.String getIdentifiedByUserId() {
       java.lang.Object ref = identifiedByUserId_;
@@ -2610,7 +2610,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>optional string identifiedByUserId = 21;</code>
+     * <code>optional string identifiedByUserId = 21 [default = "__null__"];</code>
      */
     public com.google.protobuf.ByteString
         getIdentifiedByUserIdBytes() {
@@ -2671,13 +2671,13 @@ public final class Messages {
     public static final int ASSIGNEDUSERID_FIELD_NUMBER = 23;
     private java.lang.Object assignedUserId_;
     /**
-     * <code>optional string assignedUserId = 23;</code>
+     * <code>optional string assignedUserId = 23 [default = "__null__"];</code>
      */
     public boolean hasAssignedUserId() {
       return ((bitField0_ & 0x00400000) == 0x00400000);
     }
     /**
-     * <code>optional string assignedUserId = 23;</code>
+     * <code>optional string assignedUserId = 23 [default = "__null__"];</code>
      */
     public java.lang.String getAssignedUserId() {
       java.lang.Object ref = assignedUserId_;
@@ -2694,7 +2694,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>optional string assignedUserId = 23;</code>
+     * <code>optional string assignedUserId = 23 [default = "__null__"];</code>
      */
     public com.google.protobuf.ByteString
         getAssignedUserIdBytes() {
@@ -2923,13 +2923,13 @@ public final class Messages {
     public static final int ORDERNUMBER_FIELD_NUMBER = 29;
     private java.lang.Object orderNumber_;
     /**
-     * <code>optional string orderNumber = 29;</code>
+     * <code>optional string orderNumber = 29 [default = "__null__"];</code>
      */
     public boolean hasOrderNumber() {
       return ((bitField0_ & 0x10000000) == 0x10000000);
     }
     /**
-     * <code>optional string orderNumber = 29;</code>
+     * <code>optional string orderNumber = 29 [default = "__null__"];</code>
      */
     public java.lang.String getOrderNumber() {
       java.lang.Object ref = orderNumber_;
@@ -2946,7 +2946,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>optional string orderNumber = 29;</code>
+     * <code>optional string orderNumber = 29 [default = "__null__"];</code>
      */
     public com.google.protobuf.ByteString
         getOrderNumberBytes() {
@@ -3050,25 +3050,25 @@ public final class Messages {
       ownerName_ = "";
       ownerId_ = "";
       identifier_ = "";
-      rfidNumber_ = "";
-      customerRefNumber_ = "";
-      purchaseOrder_ = "";
-      comments_ = "";
-      identifiedDate_ = "";
+      rfidNumber_ = "__null__";
+      customerRefNumber_ = "__null__";
+      purchaseOrder_ = "__null__";
+      comments_ = "__null__";
+      identifiedDate_ = "__null__";
       assetTypeName_ = "";
       assetTypeId_ = "";
       assetStatusName_ = "";
-      assetStatusId_ = "";
+      assetStatusId_ = "__null__";
       identifiedByUserName_ = "";
-      identifiedByUserId_ = "";
+      identifiedByUserId_ = "__null__";
       assignedUserName_ = "";
-      assignedUserId_ = "";
+      assignedUserId_ = "__null__";
       latitude_ = "";
       longitude_ = "";
       freeFormLocation_ = "";
       predefinedLocationName_ = "";
       predefinedLocationId_ = "";
-      orderNumber_ = "";
+      orderNumber_ = "__null__";
       description_ = "";
       attributes_ = java.util.Collections.emptyList();
     }
@@ -3461,15 +3461,15 @@ public final class Messages {
         bitField0_ = (bitField0_ & ~0x00000100);
         identifier_ = "";
         bitField0_ = (bitField0_ & ~0x00000200);
-        rfidNumber_ = "";
+        rfidNumber_ = "__null__";
         bitField0_ = (bitField0_ & ~0x00000400);
-        customerRefNumber_ = "";
+        customerRefNumber_ = "__null__";
         bitField0_ = (bitField0_ & ~0x00000800);
-        purchaseOrder_ = "";
+        purchaseOrder_ = "__null__";
         bitField0_ = (bitField0_ & ~0x00001000);
-        comments_ = "";
+        comments_ = "__null__";
         bitField0_ = (bitField0_ & ~0x00002000);
-        identifiedDate_ = "";
+        identifiedDate_ = "__null__";
         bitField0_ = (bitField0_ & ~0x00004000);
         assetTypeName_ = "";
         bitField0_ = (bitField0_ & ~0x00008000);
@@ -3477,15 +3477,15 @@ public final class Messages {
         bitField0_ = (bitField0_ & ~0x00010000);
         assetStatusName_ = "";
         bitField0_ = (bitField0_ & ~0x00020000);
-        assetStatusId_ = "";
+        assetStatusId_ = "__null__";
         bitField0_ = (bitField0_ & ~0x00040000);
         identifiedByUserName_ = "";
         bitField0_ = (bitField0_ & ~0x00080000);
-        identifiedByUserId_ = "";
+        identifiedByUserId_ = "__null__";
         bitField0_ = (bitField0_ & ~0x00100000);
         assignedUserName_ = "";
         bitField0_ = (bitField0_ & ~0x00200000);
-        assignedUserId_ = "";
+        assignedUserId_ = "__null__";
         bitField0_ = (bitField0_ & ~0x00400000);
         latitude_ = "";
         bitField0_ = (bitField0_ & ~0x00800000);
@@ -3497,7 +3497,7 @@ public final class Messages {
         bitField0_ = (bitField0_ & ~0x04000000);
         predefinedLocationId_ = "";
         bitField0_ = (bitField0_ & ~0x08000000);
-        orderNumber_ = "";
+        orderNumber_ = "__null__";
         bitField0_ = (bitField0_ & ~0x10000000);
         description_ = "";
         bitField0_ = (bitField0_ & ~0x20000000);
@@ -4655,15 +4655,15 @@ public final class Messages {
         return this;
       }
 
-      private java.lang.Object rfidNumber_ = "";
+      private java.lang.Object rfidNumber_ = "__null__";
       /**
-       * <code>optional string rfidNumber = 11;</code>
+       * <code>optional string rfidNumber = 11 [default = "__null__"];</code>
        */
       public boolean hasRfidNumber() {
         return ((bitField0_ & 0x00000400) == 0x00000400);
       }
       /**
-       * <code>optional string rfidNumber = 11;</code>
+       * <code>optional string rfidNumber = 11 [default = "__null__"];</code>
        */
       public java.lang.String getRfidNumber() {
         java.lang.Object ref = rfidNumber_;
@@ -4680,7 +4680,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string rfidNumber = 11;</code>
+       * <code>optional string rfidNumber = 11 [default = "__null__"];</code>
        */
       public com.google.protobuf.ByteString
           getRfidNumberBytes() {
@@ -4696,7 +4696,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string rfidNumber = 11;</code>
+       * <code>optional string rfidNumber = 11 [default = "__null__"];</code>
        */
       public Builder setRfidNumber(
           java.lang.String value) {
@@ -4709,7 +4709,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string rfidNumber = 11;</code>
+       * <code>optional string rfidNumber = 11 [default = "__null__"];</code>
        */
       public Builder clearRfidNumber() {
         bitField0_ = (bitField0_ & ~0x00000400);
@@ -4718,7 +4718,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string rfidNumber = 11;</code>
+       * <code>optional string rfidNumber = 11 [default = "__null__"];</code>
        */
       public Builder setRfidNumberBytes(
           com.google.protobuf.ByteString value) {
@@ -4731,15 +4731,15 @@ public final class Messages {
         return this;
       }
 
-      private java.lang.Object customerRefNumber_ = "";
+      private java.lang.Object customerRefNumber_ = "__null__";
       /**
-       * <code>optional string customerRefNumber = 12;</code>
+       * <code>optional string customerRefNumber = 12 [default = "__null__"];</code>
        */
       public boolean hasCustomerRefNumber() {
         return ((bitField0_ & 0x00000800) == 0x00000800);
       }
       /**
-       * <code>optional string customerRefNumber = 12;</code>
+       * <code>optional string customerRefNumber = 12 [default = "__null__"];</code>
        */
       public java.lang.String getCustomerRefNumber() {
         java.lang.Object ref = customerRefNumber_;
@@ -4756,7 +4756,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string customerRefNumber = 12;</code>
+       * <code>optional string customerRefNumber = 12 [default = "__null__"];</code>
        */
       public com.google.protobuf.ByteString
           getCustomerRefNumberBytes() {
@@ -4772,7 +4772,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string customerRefNumber = 12;</code>
+       * <code>optional string customerRefNumber = 12 [default = "__null__"];</code>
        */
       public Builder setCustomerRefNumber(
           java.lang.String value) {
@@ -4785,7 +4785,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string customerRefNumber = 12;</code>
+       * <code>optional string customerRefNumber = 12 [default = "__null__"];</code>
        */
       public Builder clearCustomerRefNumber() {
         bitField0_ = (bitField0_ & ~0x00000800);
@@ -4794,7 +4794,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string customerRefNumber = 12;</code>
+       * <code>optional string customerRefNumber = 12 [default = "__null__"];</code>
        */
       public Builder setCustomerRefNumberBytes(
           com.google.protobuf.ByteString value) {
@@ -4807,15 +4807,15 @@ public final class Messages {
         return this;
       }
 
-      private java.lang.Object purchaseOrder_ = "";
+      private java.lang.Object purchaseOrder_ = "__null__";
       /**
-       * <code>optional string purchaseOrder = 13;</code>
+       * <code>optional string purchaseOrder = 13 [default = "__null__"];</code>
        */
       public boolean hasPurchaseOrder() {
         return ((bitField0_ & 0x00001000) == 0x00001000);
       }
       /**
-       * <code>optional string purchaseOrder = 13;</code>
+       * <code>optional string purchaseOrder = 13 [default = "__null__"];</code>
        */
       public java.lang.String getPurchaseOrder() {
         java.lang.Object ref = purchaseOrder_;
@@ -4832,7 +4832,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string purchaseOrder = 13;</code>
+       * <code>optional string purchaseOrder = 13 [default = "__null__"];</code>
        */
       public com.google.protobuf.ByteString
           getPurchaseOrderBytes() {
@@ -4848,7 +4848,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string purchaseOrder = 13;</code>
+       * <code>optional string purchaseOrder = 13 [default = "__null__"];</code>
        */
       public Builder setPurchaseOrder(
           java.lang.String value) {
@@ -4861,7 +4861,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string purchaseOrder = 13;</code>
+       * <code>optional string purchaseOrder = 13 [default = "__null__"];</code>
        */
       public Builder clearPurchaseOrder() {
         bitField0_ = (bitField0_ & ~0x00001000);
@@ -4870,7 +4870,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string purchaseOrder = 13;</code>
+       * <code>optional string purchaseOrder = 13 [default = "__null__"];</code>
        */
       public Builder setPurchaseOrderBytes(
           com.google.protobuf.ByteString value) {
@@ -4883,15 +4883,15 @@ public final class Messages {
         return this;
       }
 
-      private java.lang.Object comments_ = "";
+      private java.lang.Object comments_ = "__null__";
       /**
-       * <code>optional string comments = 14;</code>
+       * <code>optional string comments = 14 [default = "__null__"];</code>
        */
       public boolean hasComments() {
         return ((bitField0_ & 0x00002000) == 0x00002000);
       }
       /**
-       * <code>optional string comments = 14;</code>
+       * <code>optional string comments = 14 [default = "__null__"];</code>
        */
       public java.lang.String getComments() {
         java.lang.Object ref = comments_;
@@ -4908,7 +4908,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string comments = 14;</code>
+       * <code>optional string comments = 14 [default = "__null__"];</code>
        */
       public com.google.protobuf.ByteString
           getCommentsBytes() {
@@ -4924,7 +4924,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string comments = 14;</code>
+       * <code>optional string comments = 14 [default = "__null__"];</code>
        */
       public Builder setComments(
           java.lang.String value) {
@@ -4937,7 +4937,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string comments = 14;</code>
+       * <code>optional string comments = 14 [default = "__null__"];</code>
        */
       public Builder clearComments() {
         bitField0_ = (bitField0_ & ~0x00002000);
@@ -4946,7 +4946,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string comments = 14;</code>
+       * <code>optional string comments = 14 [default = "__null__"];</code>
        */
       public Builder setCommentsBytes(
           com.google.protobuf.ByteString value) {
@@ -4959,15 +4959,15 @@ public final class Messages {
         return this;
       }
 
-      private java.lang.Object identifiedDate_ = "";
+      private java.lang.Object identifiedDate_ = "__null__";
       /**
-       * <code>optional string identifiedDate = 15;</code>
+       * <code>optional string identifiedDate = 15 [default = "__null__"];</code>
        */
       public boolean hasIdentifiedDate() {
         return ((bitField0_ & 0x00004000) == 0x00004000);
       }
       /**
-       * <code>optional string identifiedDate = 15;</code>
+       * <code>optional string identifiedDate = 15 [default = "__null__"];</code>
        */
       public java.lang.String getIdentifiedDate() {
         java.lang.Object ref = identifiedDate_;
@@ -4984,7 +4984,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string identifiedDate = 15;</code>
+       * <code>optional string identifiedDate = 15 [default = "__null__"];</code>
        */
       public com.google.protobuf.ByteString
           getIdentifiedDateBytes() {
@@ -5000,7 +5000,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string identifiedDate = 15;</code>
+       * <code>optional string identifiedDate = 15 [default = "__null__"];</code>
        */
       public Builder setIdentifiedDate(
           java.lang.String value) {
@@ -5013,7 +5013,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string identifiedDate = 15;</code>
+       * <code>optional string identifiedDate = 15 [default = "__null__"];</code>
        */
       public Builder clearIdentifiedDate() {
         bitField0_ = (bitField0_ & ~0x00004000);
@@ -5022,7 +5022,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string identifiedDate = 15;</code>
+       * <code>optional string identifiedDate = 15 [default = "__null__"];</code>
        */
       public Builder setIdentifiedDateBytes(
           com.google.protobuf.ByteString value) {
@@ -5263,15 +5263,15 @@ public final class Messages {
         return this;
       }
 
-      private java.lang.Object assetStatusId_ = "";
+      private java.lang.Object assetStatusId_ = "__null__";
       /**
-       * <code>optional string assetStatusId = 19;</code>
+       * <code>optional string assetStatusId = 19 [default = "__null__"];</code>
        */
       public boolean hasAssetStatusId() {
         return ((bitField0_ & 0x00040000) == 0x00040000);
       }
       /**
-       * <code>optional string assetStatusId = 19;</code>
+       * <code>optional string assetStatusId = 19 [default = "__null__"];</code>
        */
       public java.lang.String getAssetStatusId() {
         java.lang.Object ref = assetStatusId_;
@@ -5288,7 +5288,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string assetStatusId = 19;</code>
+       * <code>optional string assetStatusId = 19 [default = "__null__"];</code>
        */
       public com.google.protobuf.ByteString
           getAssetStatusIdBytes() {
@@ -5304,7 +5304,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string assetStatusId = 19;</code>
+       * <code>optional string assetStatusId = 19 [default = "__null__"];</code>
        */
       public Builder setAssetStatusId(
           java.lang.String value) {
@@ -5317,7 +5317,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string assetStatusId = 19;</code>
+       * <code>optional string assetStatusId = 19 [default = "__null__"];</code>
        */
       public Builder clearAssetStatusId() {
         bitField0_ = (bitField0_ & ~0x00040000);
@@ -5326,7 +5326,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string assetStatusId = 19;</code>
+       * <code>optional string assetStatusId = 19 [default = "__null__"];</code>
        */
       public Builder setAssetStatusIdBytes(
           com.google.protobuf.ByteString value) {
@@ -5415,15 +5415,15 @@ public final class Messages {
         return this;
       }
 
-      private java.lang.Object identifiedByUserId_ = "";
+      private java.lang.Object identifiedByUserId_ = "__null__";
       /**
-       * <code>optional string identifiedByUserId = 21;</code>
+       * <code>optional string identifiedByUserId = 21 [default = "__null__"];</code>
        */
       public boolean hasIdentifiedByUserId() {
         return ((bitField0_ & 0x00100000) == 0x00100000);
       }
       /**
-       * <code>optional string identifiedByUserId = 21;</code>
+       * <code>optional string identifiedByUserId = 21 [default = "__null__"];</code>
        */
       public java.lang.String getIdentifiedByUserId() {
         java.lang.Object ref = identifiedByUserId_;
@@ -5440,7 +5440,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string identifiedByUserId = 21;</code>
+       * <code>optional string identifiedByUserId = 21 [default = "__null__"];</code>
        */
       public com.google.protobuf.ByteString
           getIdentifiedByUserIdBytes() {
@@ -5456,7 +5456,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string identifiedByUserId = 21;</code>
+       * <code>optional string identifiedByUserId = 21 [default = "__null__"];</code>
        */
       public Builder setIdentifiedByUserId(
           java.lang.String value) {
@@ -5469,7 +5469,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string identifiedByUserId = 21;</code>
+       * <code>optional string identifiedByUserId = 21 [default = "__null__"];</code>
        */
       public Builder clearIdentifiedByUserId() {
         bitField0_ = (bitField0_ & ~0x00100000);
@@ -5478,7 +5478,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string identifiedByUserId = 21;</code>
+       * <code>optional string identifiedByUserId = 21 [default = "__null__"];</code>
        */
       public Builder setIdentifiedByUserIdBytes(
           com.google.protobuf.ByteString value) {
@@ -5567,15 +5567,15 @@ public final class Messages {
         return this;
       }
 
-      private java.lang.Object assignedUserId_ = "";
+      private java.lang.Object assignedUserId_ = "__null__";
       /**
-       * <code>optional string assignedUserId = 23;</code>
+       * <code>optional string assignedUserId = 23 [default = "__null__"];</code>
        */
       public boolean hasAssignedUserId() {
         return ((bitField0_ & 0x00400000) == 0x00400000);
       }
       /**
-       * <code>optional string assignedUserId = 23;</code>
+       * <code>optional string assignedUserId = 23 [default = "__null__"];</code>
        */
       public java.lang.String getAssignedUserId() {
         java.lang.Object ref = assignedUserId_;
@@ -5592,7 +5592,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string assignedUserId = 23;</code>
+       * <code>optional string assignedUserId = 23 [default = "__null__"];</code>
        */
       public com.google.protobuf.ByteString
           getAssignedUserIdBytes() {
@@ -5608,7 +5608,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string assignedUserId = 23;</code>
+       * <code>optional string assignedUserId = 23 [default = "__null__"];</code>
        */
       public Builder setAssignedUserId(
           java.lang.String value) {
@@ -5621,7 +5621,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string assignedUserId = 23;</code>
+       * <code>optional string assignedUserId = 23 [default = "__null__"];</code>
        */
       public Builder clearAssignedUserId() {
         bitField0_ = (bitField0_ & ~0x00400000);
@@ -5630,7 +5630,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string assignedUserId = 23;</code>
+       * <code>optional string assignedUserId = 23 [default = "__null__"];</code>
        */
       public Builder setAssignedUserIdBytes(
           com.google.protobuf.ByteString value) {
@@ -6023,15 +6023,15 @@ public final class Messages {
         return this;
       }
 
-      private java.lang.Object orderNumber_ = "";
+      private java.lang.Object orderNumber_ = "__null__";
       /**
-       * <code>optional string orderNumber = 29;</code>
+       * <code>optional string orderNumber = 29 [default = "__null__"];</code>
        */
       public boolean hasOrderNumber() {
         return ((bitField0_ & 0x10000000) == 0x10000000);
       }
       /**
-       * <code>optional string orderNumber = 29;</code>
+       * <code>optional string orderNumber = 29 [default = "__null__"];</code>
        */
       public java.lang.String getOrderNumber() {
         java.lang.Object ref = orderNumber_;
@@ -6048,7 +6048,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string orderNumber = 29;</code>
+       * <code>optional string orderNumber = 29 [default = "__null__"];</code>
        */
       public com.google.protobuf.ByteString
           getOrderNumberBytes() {
@@ -6064,7 +6064,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string orderNumber = 29;</code>
+       * <code>optional string orderNumber = 29 [default = "__null__"];</code>
        */
       public Builder setOrderNumber(
           java.lang.String value) {
@@ -6077,7 +6077,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string orderNumber = 29;</code>
+       * <code>optional string orderNumber = 29 [default = "__null__"];</code>
        */
       public Builder clearOrderNumber() {
         bitField0_ = (bitField0_ & ~0x10000000);
@@ -6086,7 +6086,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string orderNumber = 29;</code>
+       * <code>optional string orderNumber = 29 [default = "__null__"];</code>
        */
       public Builder setOrderNumberBytes(
           com.google.protobuf.ByteString value) {
@@ -6557,15 +6557,15 @@ public final class Messages {
         getAssignedToUserNameBytes();
 
     /**
-     * <code>optional string assignedToUserId = 10;</code>
+     * <code>optional string assignedToUserId = 10 [default = "__null__"];</code>
      */
     boolean hasAssignedToUserId();
     /**
-     * <code>optional string assignedToUserId = 10;</code>
+     * <code>optional string assignedToUserId = 10 [default = "__null__"];</code>
      */
     java.lang.String getAssignedToUserId();
     /**
-     * <code>optional string assignedToUserId = 10;</code>
+     * <code>optional string assignedToUserId = 10 [default = "__null__"];</code>
      */
     com.google.protobuf.ByteString
         getAssignedToUserIdBytes();
@@ -6585,15 +6585,15 @@ public final class Messages {
         getCompletedByUserNameBytes();
 
     /**
-     * <code>optional string completedByUserId = 12;</code>
+     * <code>optional string completedByUserId = 12 [default = "__null__"];</code>
      */
     boolean hasCompletedByUserId();
     /**
-     * <code>optional string completedByUserId = 12;</code>
+     * <code>optional string completedByUserId = 12 [default = "__null__"];</code>
      */
     java.lang.String getCompletedByUserId();
     /**
-     * <code>optional string completedByUserId = 12;</code>
+     * <code>optional string completedByUserId = 12 [default = "__null__"];</code>
      */
     com.google.protobuf.ByteString
         getCompletedByUserIdBytes();
@@ -6687,29 +6687,29 @@ public final class Messages {
         getIdentifierBytes();
 
     /**
-     * <code>optional string rfidNumber = 20;</code>
+     * <code>optional string rfidNumber = 20 [default = "__null__"];</code>
      */
     boolean hasRfidNumber();
     /**
-     * <code>optional string rfidNumber = 20;</code>
+     * <code>optional string rfidNumber = 20 [default = "__null__"];</code>
      */
     java.lang.String getRfidNumber();
     /**
-     * <code>optional string rfidNumber = 20;</code>
+     * <code>optional string rfidNumber = 20 [default = "__null__"];</code>
      */
     com.google.protobuf.ByteString
         getRfidNumberBytes();
 
     /**
-     * <code>optional string customerRefNumber = 21;</code>
+     * <code>optional string customerRefNumber = 21 [default = "__null__"];</code>
      */
     boolean hasCustomerRefNumber();
     /**
-     * <code>optional string customerRefNumber = 21;</code>
+     * <code>optional string customerRefNumber = 21 [default = "__null__"];</code>
      */
     java.lang.String getCustomerRefNumber();
     /**
-     * <code>optional string customerRefNumber = 21;</code>
+     * <code>optional string customerRefNumber = 21 [default = "__null__"];</code>
      */
     com.google.protobuf.ByteString
         getCustomerRefNumberBytes();
@@ -6729,57 +6729,57 @@ public final class Messages {
         getAssetIdBytes();
 
     /**
-     * <code>optional string comments = 23;</code>
+     * <code>optional string comments = 23 [default = "__null__"];</code>
      */
     boolean hasComments();
     /**
-     * <code>optional string comments = 23;</code>
+     * <code>optional string comments = 23 [default = "__null__"];</code>
      */
     java.lang.String getComments();
     /**
-     * <code>optional string comments = 23;</code>
+     * <code>optional string comments = 23 [default = "__null__"];</code>
      */
     com.google.protobuf.ByteString
         getCommentsBytes();
 
     /**
-     * <code>optional string notes = 24;</code>
+     * <code>optional string notes = 24 [default = "__null__"];</code>
      */
     boolean hasNotes();
     /**
-     * <code>optional string notes = 24;</code>
+     * <code>optional string notes = 24 [default = "__null__"];</code>
      */
     java.lang.String getNotes();
     /**
-     * <code>optional string notes = 24;</code>
+     * <code>optional string notes = 24 [default = "__null__"];</code>
      */
     com.google.protobuf.ByteString
         getNotesBytes();
 
     /**
-     * <code>optional string score = 25;</code>
+     * <code>optional string score = 25 [default = "__null__"];</code>
      */
     boolean hasScore();
     /**
-     * <code>optional string score = 25;</code>
+     * <code>optional string score = 25 [default = "__null__"];</code>
      */
     java.lang.String getScore();
     /**
-     * <code>optional string score = 25;</code>
+     * <code>optional string score = 25 [default = "__null__"];</code>
      */
     com.google.protobuf.ByteString
         getScoreBytes();
 
     /**
-     * <code>optional string dueDate = 26;</code>
+     * <code>optional string dueDate = 26 [default = "__null__"];</code>
      */
     boolean hasDueDate();
     /**
-     * <code>optional string dueDate = 26;</code>
+     * <code>optional string dueDate = 26 [default = "__null__"];</code>
      */
     java.lang.String getDueDate();
     /**
-     * <code>optional string dueDate = 26;</code>
+     * <code>optional string dueDate = 26 [default = "__null__"];</code>
      */
     com.google.protobuf.ByteString
         getDueDateBytes();
@@ -6799,15 +6799,15 @@ public final class Messages {
         getPriorityCodeNameBytes();
 
     /**
-     * <code>optional string priorityCodeId = 28;</code>
+     * <code>optional string priorityCodeId = 28 [default = "__null__"];</code>
      */
     boolean hasPriorityCodeId();
     /**
-     * <code>optional string priorityCodeId = 28;</code>
+     * <code>optional string priorityCodeId = 28 [default = "__null__"];</code>
      */
     java.lang.String getPriorityCodeId();
     /**
-     * <code>optional string priorityCodeId = 28;</code>
+     * <code>optional string priorityCodeId = 28 [default = "__null__"];</code>
      */
     com.google.protobuf.ByteString
         getPriorityCodeIdBytes();
@@ -7663,13 +7663,13 @@ public final class Messages {
     public static final int ASSIGNEDTOUSERID_FIELD_NUMBER = 10;
     private java.lang.Object assignedToUserId_;
     /**
-     * <code>optional string assignedToUserId = 10;</code>
+     * <code>optional string assignedToUserId = 10 [default = "__null__"];</code>
      */
     public boolean hasAssignedToUserId() {
       return ((bitField0_ & 0x00000200) == 0x00000200);
     }
     /**
-     * <code>optional string assignedToUserId = 10;</code>
+     * <code>optional string assignedToUserId = 10 [default = "__null__"];</code>
      */
     public java.lang.String getAssignedToUserId() {
       java.lang.Object ref = assignedToUserId_;
@@ -7686,7 +7686,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>optional string assignedToUserId = 10;</code>
+     * <code>optional string assignedToUserId = 10 [default = "__null__"];</code>
      */
     public com.google.protobuf.ByteString
         getAssignedToUserIdBytes() {
@@ -7747,13 +7747,13 @@ public final class Messages {
     public static final int COMPLETEDBYUSERID_FIELD_NUMBER = 12;
     private java.lang.Object completedByUserId_;
     /**
-     * <code>optional string completedByUserId = 12;</code>
+     * <code>optional string completedByUserId = 12 [default = "__null__"];</code>
      */
     public boolean hasCompletedByUserId() {
       return ((bitField0_ & 0x00000800) == 0x00000800);
     }
     /**
-     * <code>optional string completedByUserId = 12;</code>
+     * <code>optional string completedByUserId = 12 [default = "__null__"];</code>
      */
     public java.lang.String getCompletedByUserId() {
       java.lang.Object ref = completedByUserId_;
@@ -7770,7 +7770,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>optional string completedByUserId = 12;</code>
+     * <code>optional string completedByUserId = 12 [default = "__null__"];</code>
      */
     public com.google.protobuf.ByteString
         getCompletedByUserIdBytes() {
@@ -8029,13 +8029,13 @@ public final class Messages {
     public static final int RFIDNUMBER_FIELD_NUMBER = 20;
     private java.lang.Object rfidNumber_;
     /**
-     * <code>optional string rfidNumber = 20;</code>
+     * <code>optional string rfidNumber = 20 [default = "__null__"];</code>
      */
     public boolean hasRfidNumber() {
       return ((bitField0_ & 0x00080000) == 0x00080000);
     }
     /**
-     * <code>optional string rfidNumber = 20;</code>
+     * <code>optional string rfidNumber = 20 [default = "__null__"];</code>
      */
     public java.lang.String getRfidNumber() {
       java.lang.Object ref = rfidNumber_;
@@ -8052,7 +8052,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>optional string rfidNumber = 20;</code>
+     * <code>optional string rfidNumber = 20 [default = "__null__"];</code>
      */
     public com.google.protobuf.ByteString
         getRfidNumberBytes() {
@@ -8071,13 +8071,13 @@ public final class Messages {
     public static final int CUSTOMERREFNUMBER_FIELD_NUMBER = 21;
     private java.lang.Object customerRefNumber_;
     /**
-     * <code>optional string customerRefNumber = 21;</code>
+     * <code>optional string customerRefNumber = 21 [default = "__null__"];</code>
      */
     public boolean hasCustomerRefNumber() {
       return ((bitField0_ & 0x00100000) == 0x00100000);
     }
     /**
-     * <code>optional string customerRefNumber = 21;</code>
+     * <code>optional string customerRefNumber = 21 [default = "__null__"];</code>
      */
     public java.lang.String getCustomerRefNumber() {
       java.lang.Object ref = customerRefNumber_;
@@ -8094,7 +8094,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>optional string customerRefNumber = 21;</code>
+     * <code>optional string customerRefNumber = 21 [default = "__null__"];</code>
      */
     public com.google.protobuf.ByteString
         getCustomerRefNumberBytes() {
@@ -8155,13 +8155,13 @@ public final class Messages {
     public static final int COMMENTS_FIELD_NUMBER = 23;
     private java.lang.Object comments_;
     /**
-     * <code>optional string comments = 23;</code>
+     * <code>optional string comments = 23 [default = "__null__"];</code>
      */
     public boolean hasComments() {
       return ((bitField0_ & 0x00400000) == 0x00400000);
     }
     /**
-     * <code>optional string comments = 23;</code>
+     * <code>optional string comments = 23 [default = "__null__"];</code>
      */
     public java.lang.String getComments() {
       java.lang.Object ref = comments_;
@@ -8178,7 +8178,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>optional string comments = 23;</code>
+     * <code>optional string comments = 23 [default = "__null__"];</code>
      */
     public com.google.protobuf.ByteString
         getCommentsBytes() {
@@ -8197,13 +8197,13 @@ public final class Messages {
     public static final int NOTES_FIELD_NUMBER = 24;
     private java.lang.Object notes_;
     /**
-     * <code>optional string notes = 24;</code>
+     * <code>optional string notes = 24 [default = "__null__"];</code>
      */
     public boolean hasNotes() {
       return ((bitField0_ & 0x00800000) == 0x00800000);
     }
     /**
-     * <code>optional string notes = 24;</code>
+     * <code>optional string notes = 24 [default = "__null__"];</code>
      */
     public java.lang.String getNotes() {
       java.lang.Object ref = notes_;
@@ -8220,7 +8220,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>optional string notes = 24;</code>
+     * <code>optional string notes = 24 [default = "__null__"];</code>
      */
     public com.google.protobuf.ByteString
         getNotesBytes() {
@@ -8239,13 +8239,13 @@ public final class Messages {
     public static final int SCORE_FIELD_NUMBER = 25;
     private java.lang.Object score_;
     /**
-     * <code>optional string score = 25;</code>
+     * <code>optional string score = 25 [default = "__null__"];</code>
      */
     public boolean hasScore() {
       return ((bitField0_ & 0x01000000) == 0x01000000);
     }
     /**
-     * <code>optional string score = 25;</code>
+     * <code>optional string score = 25 [default = "__null__"];</code>
      */
     public java.lang.String getScore() {
       java.lang.Object ref = score_;
@@ -8262,7 +8262,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>optional string score = 25;</code>
+     * <code>optional string score = 25 [default = "__null__"];</code>
      */
     public com.google.protobuf.ByteString
         getScoreBytes() {
@@ -8281,13 +8281,13 @@ public final class Messages {
     public static final int DUEDATE_FIELD_NUMBER = 26;
     private java.lang.Object dueDate_;
     /**
-     * <code>optional string dueDate = 26;</code>
+     * <code>optional string dueDate = 26 [default = "__null__"];</code>
      */
     public boolean hasDueDate() {
       return ((bitField0_ & 0x02000000) == 0x02000000);
     }
     /**
-     * <code>optional string dueDate = 26;</code>
+     * <code>optional string dueDate = 26 [default = "__null__"];</code>
      */
     public java.lang.String getDueDate() {
       java.lang.Object ref = dueDate_;
@@ -8304,7 +8304,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>optional string dueDate = 26;</code>
+     * <code>optional string dueDate = 26 [default = "__null__"];</code>
      */
     public com.google.protobuf.ByteString
         getDueDateBytes() {
@@ -8365,13 +8365,13 @@ public final class Messages {
     public static final int PRIORITYCODEID_FIELD_NUMBER = 28;
     private java.lang.Object priorityCodeId_;
     /**
-     * <code>optional string priorityCodeId = 28;</code>
+     * <code>optional string priorityCodeId = 28 [default = "__null__"];</code>
      */
     public boolean hasPriorityCodeId() {
       return ((bitField0_ & 0x08000000) == 0x08000000);
     }
     /**
-     * <code>optional string priorityCodeId = 28;</code>
+     * <code>optional string priorityCodeId = 28 [default = "__null__"];</code>
      */
     public java.lang.String getPriorityCodeId() {
       java.lang.Object ref = priorityCodeId_;
@@ -8388,7 +8388,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>optional string priorityCodeId = 28;</code>
+     * <code>optional string priorityCodeId = 28 [default = "__null__"];</code>
      */
     public com.google.protobuf.ByteString
         getPriorityCodeIdBytes() {
@@ -8414,9 +8414,9 @@ public final class Messages {
       modifiedByUserName_ = "";
       modifiedByUserId_ = "";
       assignedToUserName_ = "";
-      assignedToUserId_ = "";
+      assignedToUserId_ = "__null__";
       completedByUserName_ = "";
-      completedByUserId_ = "";
+      completedByUserId_ = "__null__";
       eventResult_ = com.n4systems.fieldid.api.pub.model.Messages.EventMessage.EventResult.PASS;
       workflowState_ = com.n4systems.fieldid.api.pub.model.Messages.EventMessage.WorkflowState.OPEN;
       ownerName_ = "";
@@ -8424,15 +8424,15 @@ public final class Messages {
       eventTypeName_ = "";
       eventTypeId_ = "";
       identifier_ = "";
-      rfidNumber_ = "";
-      customerRefNumber_ = "";
+      rfidNumber_ = "__null__";
+      customerRefNumber_ = "__null__";
       assetId_ = "";
-      comments_ = "";
-      notes_ = "";
-      score_ = "";
-      dueDate_ = "";
+      comments_ = "__null__";
+      notes_ = "__null__";
+      score_ = "__null__";
+      dueDate_ = "__null__";
       priorityCodeName_ = "";
-      priorityCodeId_ = "";
+      priorityCodeId_ = "__null__";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -8803,11 +8803,11 @@ public final class Messages {
         bitField0_ = (bitField0_ & ~0x00000080);
         assignedToUserName_ = "";
         bitField0_ = (bitField0_ & ~0x00000100);
-        assignedToUserId_ = "";
+        assignedToUserId_ = "__null__";
         bitField0_ = (bitField0_ & ~0x00000200);
         completedByUserName_ = "";
         bitField0_ = (bitField0_ & ~0x00000400);
-        completedByUserId_ = "";
+        completedByUserId_ = "__null__";
         bitField0_ = (bitField0_ & ~0x00000800);
         eventResult_ = com.n4systems.fieldid.api.pub.model.Messages.EventMessage.EventResult.PASS;
         bitField0_ = (bitField0_ & ~0x00001000);
@@ -8823,23 +8823,23 @@ public final class Messages {
         bitField0_ = (bitField0_ & ~0x00020000);
         identifier_ = "";
         bitField0_ = (bitField0_ & ~0x00040000);
-        rfidNumber_ = "";
+        rfidNumber_ = "__null__";
         bitField0_ = (bitField0_ & ~0x00080000);
-        customerRefNumber_ = "";
+        customerRefNumber_ = "__null__";
         bitField0_ = (bitField0_ & ~0x00100000);
         assetId_ = "";
         bitField0_ = (bitField0_ & ~0x00200000);
-        comments_ = "";
+        comments_ = "__null__";
         bitField0_ = (bitField0_ & ~0x00400000);
-        notes_ = "";
+        notes_ = "__null__";
         bitField0_ = (bitField0_ & ~0x00800000);
-        score_ = "";
+        score_ = "__null__";
         bitField0_ = (bitField0_ & ~0x01000000);
-        dueDate_ = "";
+        dueDate_ = "__null__";
         bitField0_ = (bitField0_ & ~0x02000000);
         priorityCodeName_ = "";
         bitField0_ = (bitField0_ & ~0x04000000);
-        priorityCodeId_ = "";
+        priorityCodeId_ = "__null__";
         bitField0_ = (bitField0_ & ~0x08000000);
         return this;
       }
@@ -9860,15 +9860,15 @@ public final class Messages {
         return this;
       }
 
-      private java.lang.Object assignedToUserId_ = "";
+      private java.lang.Object assignedToUserId_ = "__null__";
       /**
-       * <code>optional string assignedToUserId = 10;</code>
+       * <code>optional string assignedToUserId = 10 [default = "__null__"];</code>
        */
       public boolean hasAssignedToUserId() {
         return ((bitField0_ & 0x00000200) == 0x00000200);
       }
       /**
-       * <code>optional string assignedToUserId = 10;</code>
+       * <code>optional string assignedToUserId = 10 [default = "__null__"];</code>
        */
       public java.lang.String getAssignedToUserId() {
         java.lang.Object ref = assignedToUserId_;
@@ -9885,7 +9885,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string assignedToUserId = 10;</code>
+       * <code>optional string assignedToUserId = 10 [default = "__null__"];</code>
        */
       public com.google.protobuf.ByteString
           getAssignedToUserIdBytes() {
@@ -9901,7 +9901,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string assignedToUserId = 10;</code>
+       * <code>optional string assignedToUserId = 10 [default = "__null__"];</code>
        */
       public Builder setAssignedToUserId(
           java.lang.String value) {
@@ -9914,7 +9914,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string assignedToUserId = 10;</code>
+       * <code>optional string assignedToUserId = 10 [default = "__null__"];</code>
        */
       public Builder clearAssignedToUserId() {
         bitField0_ = (bitField0_ & ~0x00000200);
@@ -9923,7 +9923,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string assignedToUserId = 10;</code>
+       * <code>optional string assignedToUserId = 10 [default = "__null__"];</code>
        */
       public Builder setAssignedToUserIdBytes(
           com.google.protobuf.ByteString value) {
@@ -10012,15 +10012,15 @@ public final class Messages {
         return this;
       }
 
-      private java.lang.Object completedByUserId_ = "";
+      private java.lang.Object completedByUserId_ = "__null__";
       /**
-       * <code>optional string completedByUserId = 12;</code>
+       * <code>optional string completedByUserId = 12 [default = "__null__"];</code>
        */
       public boolean hasCompletedByUserId() {
         return ((bitField0_ & 0x00000800) == 0x00000800);
       }
       /**
-       * <code>optional string completedByUserId = 12;</code>
+       * <code>optional string completedByUserId = 12 [default = "__null__"];</code>
        */
       public java.lang.String getCompletedByUserId() {
         java.lang.Object ref = completedByUserId_;
@@ -10037,7 +10037,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string completedByUserId = 12;</code>
+       * <code>optional string completedByUserId = 12 [default = "__null__"];</code>
        */
       public com.google.protobuf.ByteString
           getCompletedByUserIdBytes() {
@@ -10053,7 +10053,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string completedByUserId = 12;</code>
+       * <code>optional string completedByUserId = 12 [default = "__null__"];</code>
        */
       public Builder setCompletedByUserId(
           java.lang.String value) {
@@ -10066,7 +10066,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string completedByUserId = 12;</code>
+       * <code>optional string completedByUserId = 12 [default = "__null__"];</code>
        */
       public Builder clearCompletedByUserId() {
         bitField0_ = (bitField0_ & ~0x00000800);
@@ -10075,7 +10075,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string completedByUserId = 12;</code>
+       * <code>optional string completedByUserId = 12 [default = "__null__"];</code>
        */
       public Builder setCompletedByUserIdBytes(
           com.google.protobuf.ByteString value) {
@@ -10538,15 +10538,15 @@ public final class Messages {
         return this;
       }
 
-      private java.lang.Object rfidNumber_ = "";
+      private java.lang.Object rfidNumber_ = "__null__";
       /**
-       * <code>optional string rfidNumber = 20;</code>
+       * <code>optional string rfidNumber = 20 [default = "__null__"];</code>
        */
       public boolean hasRfidNumber() {
         return ((bitField0_ & 0x00080000) == 0x00080000);
       }
       /**
-       * <code>optional string rfidNumber = 20;</code>
+       * <code>optional string rfidNumber = 20 [default = "__null__"];</code>
        */
       public java.lang.String getRfidNumber() {
         java.lang.Object ref = rfidNumber_;
@@ -10563,7 +10563,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string rfidNumber = 20;</code>
+       * <code>optional string rfidNumber = 20 [default = "__null__"];</code>
        */
       public com.google.protobuf.ByteString
           getRfidNumberBytes() {
@@ -10579,7 +10579,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string rfidNumber = 20;</code>
+       * <code>optional string rfidNumber = 20 [default = "__null__"];</code>
        */
       public Builder setRfidNumber(
           java.lang.String value) {
@@ -10592,7 +10592,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string rfidNumber = 20;</code>
+       * <code>optional string rfidNumber = 20 [default = "__null__"];</code>
        */
       public Builder clearRfidNumber() {
         bitField0_ = (bitField0_ & ~0x00080000);
@@ -10601,7 +10601,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string rfidNumber = 20;</code>
+       * <code>optional string rfidNumber = 20 [default = "__null__"];</code>
        */
       public Builder setRfidNumberBytes(
           com.google.protobuf.ByteString value) {
@@ -10614,15 +10614,15 @@ public final class Messages {
         return this;
       }
 
-      private java.lang.Object customerRefNumber_ = "";
+      private java.lang.Object customerRefNumber_ = "__null__";
       /**
-       * <code>optional string customerRefNumber = 21;</code>
+       * <code>optional string customerRefNumber = 21 [default = "__null__"];</code>
        */
       public boolean hasCustomerRefNumber() {
         return ((bitField0_ & 0x00100000) == 0x00100000);
       }
       /**
-       * <code>optional string customerRefNumber = 21;</code>
+       * <code>optional string customerRefNumber = 21 [default = "__null__"];</code>
        */
       public java.lang.String getCustomerRefNumber() {
         java.lang.Object ref = customerRefNumber_;
@@ -10639,7 +10639,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string customerRefNumber = 21;</code>
+       * <code>optional string customerRefNumber = 21 [default = "__null__"];</code>
        */
       public com.google.protobuf.ByteString
           getCustomerRefNumberBytes() {
@@ -10655,7 +10655,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string customerRefNumber = 21;</code>
+       * <code>optional string customerRefNumber = 21 [default = "__null__"];</code>
        */
       public Builder setCustomerRefNumber(
           java.lang.String value) {
@@ -10668,7 +10668,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string customerRefNumber = 21;</code>
+       * <code>optional string customerRefNumber = 21 [default = "__null__"];</code>
        */
       public Builder clearCustomerRefNumber() {
         bitField0_ = (bitField0_ & ~0x00100000);
@@ -10677,7 +10677,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string customerRefNumber = 21;</code>
+       * <code>optional string customerRefNumber = 21 [default = "__null__"];</code>
        */
       public Builder setCustomerRefNumberBytes(
           com.google.protobuf.ByteString value) {
@@ -10766,15 +10766,15 @@ public final class Messages {
         return this;
       }
 
-      private java.lang.Object comments_ = "";
+      private java.lang.Object comments_ = "__null__";
       /**
-       * <code>optional string comments = 23;</code>
+       * <code>optional string comments = 23 [default = "__null__"];</code>
        */
       public boolean hasComments() {
         return ((bitField0_ & 0x00400000) == 0x00400000);
       }
       /**
-       * <code>optional string comments = 23;</code>
+       * <code>optional string comments = 23 [default = "__null__"];</code>
        */
       public java.lang.String getComments() {
         java.lang.Object ref = comments_;
@@ -10791,7 +10791,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string comments = 23;</code>
+       * <code>optional string comments = 23 [default = "__null__"];</code>
        */
       public com.google.protobuf.ByteString
           getCommentsBytes() {
@@ -10807,7 +10807,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string comments = 23;</code>
+       * <code>optional string comments = 23 [default = "__null__"];</code>
        */
       public Builder setComments(
           java.lang.String value) {
@@ -10820,7 +10820,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string comments = 23;</code>
+       * <code>optional string comments = 23 [default = "__null__"];</code>
        */
       public Builder clearComments() {
         bitField0_ = (bitField0_ & ~0x00400000);
@@ -10829,7 +10829,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string comments = 23;</code>
+       * <code>optional string comments = 23 [default = "__null__"];</code>
        */
       public Builder setCommentsBytes(
           com.google.protobuf.ByteString value) {
@@ -10842,15 +10842,15 @@ public final class Messages {
         return this;
       }
 
-      private java.lang.Object notes_ = "";
+      private java.lang.Object notes_ = "__null__";
       /**
-       * <code>optional string notes = 24;</code>
+       * <code>optional string notes = 24 [default = "__null__"];</code>
        */
       public boolean hasNotes() {
         return ((bitField0_ & 0x00800000) == 0x00800000);
       }
       /**
-       * <code>optional string notes = 24;</code>
+       * <code>optional string notes = 24 [default = "__null__"];</code>
        */
       public java.lang.String getNotes() {
         java.lang.Object ref = notes_;
@@ -10867,7 +10867,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string notes = 24;</code>
+       * <code>optional string notes = 24 [default = "__null__"];</code>
        */
       public com.google.protobuf.ByteString
           getNotesBytes() {
@@ -10883,7 +10883,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string notes = 24;</code>
+       * <code>optional string notes = 24 [default = "__null__"];</code>
        */
       public Builder setNotes(
           java.lang.String value) {
@@ -10896,7 +10896,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string notes = 24;</code>
+       * <code>optional string notes = 24 [default = "__null__"];</code>
        */
       public Builder clearNotes() {
         bitField0_ = (bitField0_ & ~0x00800000);
@@ -10905,7 +10905,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string notes = 24;</code>
+       * <code>optional string notes = 24 [default = "__null__"];</code>
        */
       public Builder setNotesBytes(
           com.google.protobuf.ByteString value) {
@@ -10918,15 +10918,15 @@ public final class Messages {
         return this;
       }
 
-      private java.lang.Object score_ = "";
+      private java.lang.Object score_ = "__null__";
       /**
-       * <code>optional string score = 25;</code>
+       * <code>optional string score = 25 [default = "__null__"];</code>
        */
       public boolean hasScore() {
         return ((bitField0_ & 0x01000000) == 0x01000000);
       }
       /**
-       * <code>optional string score = 25;</code>
+       * <code>optional string score = 25 [default = "__null__"];</code>
        */
       public java.lang.String getScore() {
         java.lang.Object ref = score_;
@@ -10943,7 +10943,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string score = 25;</code>
+       * <code>optional string score = 25 [default = "__null__"];</code>
        */
       public com.google.protobuf.ByteString
           getScoreBytes() {
@@ -10959,7 +10959,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string score = 25;</code>
+       * <code>optional string score = 25 [default = "__null__"];</code>
        */
       public Builder setScore(
           java.lang.String value) {
@@ -10972,7 +10972,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string score = 25;</code>
+       * <code>optional string score = 25 [default = "__null__"];</code>
        */
       public Builder clearScore() {
         bitField0_ = (bitField0_ & ~0x01000000);
@@ -10981,7 +10981,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string score = 25;</code>
+       * <code>optional string score = 25 [default = "__null__"];</code>
        */
       public Builder setScoreBytes(
           com.google.protobuf.ByteString value) {
@@ -10994,15 +10994,15 @@ public final class Messages {
         return this;
       }
 
-      private java.lang.Object dueDate_ = "";
+      private java.lang.Object dueDate_ = "__null__";
       /**
-       * <code>optional string dueDate = 26;</code>
+       * <code>optional string dueDate = 26 [default = "__null__"];</code>
        */
       public boolean hasDueDate() {
         return ((bitField0_ & 0x02000000) == 0x02000000);
       }
       /**
-       * <code>optional string dueDate = 26;</code>
+       * <code>optional string dueDate = 26 [default = "__null__"];</code>
        */
       public java.lang.String getDueDate() {
         java.lang.Object ref = dueDate_;
@@ -11019,7 +11019,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string dueDate = 26;</code>
+       * <code>optional string dueDate = 26 [default = "__null__"];</code>
        */
       public com.google.protobuf.ByteString
           getDueDateBytes() {
@@ -11035,7 +11035,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string dueDate = 26;</code>
+       * <code>optional string dueDate = 26 [default = "__null__"];</code>
        */
       public Builder setDueDate(
           java.lang.String value) {
@@ -11048,7 +11048,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string dueDate = 26;</code>
+       * <code>optional string dueDate = 26 [default = "__null__"];</code>
        */
       public Builder clearDueDate() {
         bitField0_ = (bitField0_ & ~0x02000000);
@@ -11057,7 +11057,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string dueDate = 26;</code>
+       * <code>optional string dueDate = 26 [default = "__null__"];</code>
        */
       public Builder setDueDateBytes(
           com.google.protobuf.ByteString value) {
@@ -11146,15 +11146,15 @@ public final class Messages {
         return this;
       }
 
-      private java.lang.Object priorityCodeId_ = "";
+      private java.lang.Object priorityCodeId_ = "__null__";
       /**
-       * <code>optional string priorityCodeId = 28;</code>
+       * <code>optional string priorityCodeId = 28 [default = "__null__"];</code>
        */
       public boolean hasPriorityCodeId() {
         return ((bitField0_ & 0x08000000) == 0x08000000);
       }
       /**
-       * <code>optional string priorityCodeId = 28;</code>
+       * <code>optional string priorityCodeId = 28 [default = "__null__"];</code>
        */
       public java.lang.String getPriorityCodeId() {
         java.lang.Object ref = priorityCodeId_;
@@ -11171,7 +11171,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string priorityCodeId = 28;</code>
+       * <code>optional string priorityCodeId = 28 [default = "__null__"];</code>
        */
       public com.google.protobuf.ByteString
           getPriorityCodeIdBytes() {
@@ -11187,7 +11187,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string priorityCodeId = 28;</code>
+       * <code>optional string priorityCodeId = 28 [default = "__null__"];</code>
        */
       public Builder setPriorityCodeId(
           java.lang.String value) {
@@ -11200,7 +11200,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string priorityCodeId = 28;</code>
+       * <code>optional string priorityCodeId = 28 [default = "__null__"];</code>
        */
       public Builder clearPriorityCodeId() {
         bitField0_ = (bitField0_ & ~0x08000000);
@@ -11209,7 +11209,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string priorityCodeId = 28;</code>
+       * <code>optional string priorityCodeId = 28 [default = "__null__"];</code>
        */
       public Builder setPriorityCodeIdBytes(
           com.google.protobuf.ByteString value) {
@@ -11336,15 +11336,15 @@ public final class Messages {
         getModifiedByUserIdBytes();
 
     /**
-     * <code>optional string name = 8;</code>
+     * <code>optional string name = 8 [default = "__null__"];</code>
      */
     boolean hasName();
     /**
-     * <code>optional string name = 8;</code>
+     * <code>optional string name = 8 [default = "__null__"];</code>
      */
     java.lang.String getName();
     /**
-     * <code>optional string name = 8;</code>
+     * <code>optional string name = 8 [default = "__null__"];</code>
      */
     com.google.protobuf.ByteString
         getNameBytes();
@@ -11786,13 +11786,13 @@ public final class Messages {
     public static final int NAME_FIELD_NUMBER = 8;
     private java.lang.Object name_;
     /**
-     * <code>optional string name = 8;</code>
+     * <code>optional string name = 8 [default = "__null__"];</code>
      */
     public boolean hasName() {
       return ((bitField0_ & 0x00000080) == 0x00000080);
     }
     /**
-     * <code>optional string name = 8;</code>
+     * <code>optional string name = 8 [default = "__null__"];</code>
      */
     public java.lang.String getName() {
       java.lang.Object ref = name_;
@@ -11809,7 +11809,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>optional string name = 8;</code>
+     * <code>optional string name = 8 [default = "__null__"];</code>
      */
     public com.google.protobuf.ByteString
         getNameBytes() {
@@ -11833,7 +11833,7 @@ public final class Messages {
       createdByUserId_ = "";
       modifiedByUserName_ = "";
       modifiedByUserId_ = "";
-      name_ = "";
+      name_ = "__null__";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -12044,7 +12044,7 @@ public final class Messages {
         bitField0_ = (bitField0_ & ~0x00000020);
         modifiedByUserId_ = "";
         bitField0_ = (bitField0_ & ~0x00000040);
-        name_ = "";
+        name_ = "__null__";
         bitField0_ = (bitField0_ & ~0x00000080);
         return this;
       }
@@ -12721,15 +12721,15 @@ public final class Messages {
         return this;
       }
 
-      private java.lang.Object name_ = "";
+      private java.lang.Object name_ = "__null__";
       /**
-       * <code>optional string name = 8;</code>
+       * <code>optional string name = 8 [default = "__null__"];</code>
        */
       public boolean hasName() {
         return ((bitField0_ & 0x00000080) == 0x00000080);
       }
       /**
-       * <code>optional string name = 8;</code>
+       * <code>optional string name = 8 [default = "__null__"];</code>
        */
       public java.lang.String getName() {
         java.lang.Object ref = name_;
@@ -12746,7 +12746,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string name = 8;</code>
+       * <code>optional string name = 8 [default = "__null__"];</code>
        */
       public com.google.protobuf.ByteString
           getNameBytes() {
@@ -12762,7 +12762,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string name = 8;</code>
+       * <code>optional string name = 8 [default = "__null__"];</code>
        */
       public Builder setName(
           java.lang.String value) {
@@ -12775,7 +12775,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string name = 8;</code>
+       * <code>optional string name = 8 [default = "__null__"];</code>
        */
       public Builder clearName() {
         bitField0_ = (bitField0_ & ~0x00000080);
@@ -12784,7 +12784,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string name = 8;</code>
+       * <code>optional string name = 8 [default = "__null__"];</code>
        */
       public Builder setNameBytes(
           com.google.protobuf.ByteString value) {
@@ -22700,29 +22700,29 @@ public final class Messages {
         getParentIdBytes();
 
     /**
-     * <code>optional string code = 11;</code>
+     * <code>optional string code = 11 [default = "__null__"];</code>
      */
     boolean hasCode();
     /**
-     * <code>optional string code = 11;</code>
+     * <code>optional string code = 11 [default = "__null__"];</code>
      */
     java.lang.String getCode();
     /**
-     * <code>optional string code = 11;</code>
+     * <code>optional string code = 11 [default = "__null__"];</code>
      */
     com.google.protobuf.ByteString
         getCodeBytes();
 
     /**
-     * <code>optional string notes = 12;</code>
+     * <code>optional string notes = 12 [default = "__null__"];</code>
      */
     boolean hasNotes();
     /**
-     * <code>optional string notes = 12;</code>
+     * <code>optional string notes = 12 [default = "__null__"];</code>
      */
     java.lang.String getNotes();
     /**
-     * <code>optional string notes = 12;</code>
+     * <code>optional string notes = 12 [default = "__null__"];</code>
      */
     com.google.protobuf.ByteString
         getNotesBytes();
@@ -23554,13 +23554,13 @@ public final class Messages {
     public static final int CODE_FIELD_NUMBER = 11;
     private java.lang.Object code_;
     /**
-     * <code>optional string code = 11;</code>
+     * <code>optional string code = 11 [default = "__null__"];</code>
      */
     public boolean hasCode() {
       return ((bitField0_ & 0x00000400) == 0x00000400);
     }
     /**
-     * <code>optional string code = 11;</code>
+     * <code>optional string code = 11 [default = "__null__"];</code>
      */
     public java.lang.String getCode() {
       java.lang.Object ref = code_;
@@ -23577,7 +23577,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>optional string code = 11;</code>
+     * <code>optional string code = 11 [default = "__null__"];</code>
      */
     public com.google.protobuf.ByteString
         getCodeBytes() {
@@ -23596,13 +23596,13 @@ public final class Messages {
     public static final int NOTES_FIELD_NUMBER = 12;
     private java.lang.Object notes_;
     /**
-     * <code>optional string notes = 12;</code>
+     * <code>optional string notes = 12 [default = "__null__"];</code>
      */
     public boolean hasNotes() {
       return ((bitField0_ & 0x00000800) == 0x00000800);
     }
     /**
-     * <code>optional string notes = 12;</code>
+     * <code>optional string notes = 12 [default = "__null__"];</code>
      */
     public java.lang.String getNotes() {
       java.lang.Object ref = notes_;
@@ -23619,7 +23619,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>optional string notes = 12;</code>
+     * <code>optional string notes = 12 [default = "__null__"];</code>
      */
     public com.google.protobuf.ByteString
         getNotesBytes() {
@@ -24150,8 +24150,8 @@ public final class Messages {
       name_ = "";
       parentName_ = "";
       parentId_ = "";
-      code_ = "";
-      notes_ = "";
+      code_ = "__null__";
+      notes_ = "__null__";
       streetAddress_ = "";
       city_ = "";
       state_ = "";
@@ -24496,9 +24496,9 @@ public final class Messages {
         bitField0_ = (bitField0_ & ~0x00000100);
         parentId_ = "";
         bitField0_ = (bitField0_ & ~0x00000200);
-        code_ = "";
+        code_ = "__null__";
         bitField0_ = (bitField0_ & ~0x00000400);
-        notes_ = "";
+        notes_ = "__null__";
         bitField0_ = (bitField0_ & ~0x00000800);
         streetAddress_ = "";
         bitField0_ = (bitField0_ & ~0x00001000);
@@ -25575,15 +25575,15 @@ public final class Messages {
         return this;
       }
 
-      private java.lang.Object code_ = "";
+      private java.lang.Object code_ = "__null__";
       /**
-       * <code>optional string code = 11;</code>
+       * <code>optional string code = 11 [default = "__null__"];</code>
        */
       public boolean hasCode() {
         return ((bitField0_ & 0x00000400) == 0x00000400);
       }
       /**
-       * <code>optional string code = 11;</code>
+       * <code>optional string code = 11 [default = "__null__"];</code>
        */
       public java.lang.String getCode() {
         java.lang.Object ref = code_;
@@ -25600,7 +25600,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string code = 11;</code>
+       * <code>optional string code = 11 [default = "__null__"];</code>
        */
       public com.google.protobuf.ByteString
           getCodeBytes() {
@@ -25616,7 +25616,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string code = 11;</code>
+       * <code>optional string code = 11 [default = "__null__"];</code>
        */
       public Builder setCode(
           java.lang.String value) {
@@ -25629,7 +25629,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string code = 11;</code>
+       * <code>optional string code = 11 [default = "__null__"];</code>
        */
       public Builder clearCode() {
         bitField0_ = (bitField0_ & ~0x00000400);
@@ -25638,7 +25638,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string code = 11;</code>
+       * <code>optional string code = 11 [default = "__null__"];</code>
        */
       public Builder setCodeBytes(
           com.google.protobuf.ByteString value) {
@@ -25651,15 +25651,15 @@ public final class Messages {
         return this;
       }
 
-      private java.lang.Object notes_ = "";
+      private java.lang.Object notes_ = "__null__";
       /**
-       * <code>optional string notes = 12;</code>
+       * <code>optional string notes = 12 [default = "__null__"];</code>
        */
       public boolean hasNotes() {
         return ((bitField0_ & 0x00000800) == 0x00000800);
       }
       /**
-       * <code>optional string notes = 12;</code>
+       * <code>optional string notes = 12 [default = "__null__"];</code>
        */
       public java.lang.String getNotes() {
         java.lang.Object ref = notes_;
@@ -25676,7 +25676,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string notes = 12;</code>
+       * <code>optional string notes = 12 [default = "__null__"];</code>
        */
       public com.google.protobuf.ByteString
           getNotesBytes() {
@@ -25692,7 +25692,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string notes = 12;</code>
+       * <code>optional string notes = 12 [default = "__null__"];</code>
        */
       public Builder setNotes(
           java.lang.String value) {
@@ -25705,7 +25705,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string notes = 12;</code>
+       * <code>optional string notes = 12 [default = "__null__"];</code>
        */
       public Builder clearNotes() {
         bitField0_ = (bitField0_ & ~0x00000800);
@@ -25714,7 +25714,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string notes = 12;</code>
+       * <code>optional string notes = 12 [default = "__null__"];</code>
        */
       public Builder setNotesBytes(
           com.google.protobuf.ByteString value) {
@@ -26767,15 +26767,15 @@ public final class Messages {
         getOwnerNameBytes();
 
     /**
-     * <code>optional string ownerId = 9;</code>
+     * <code>optional string ownerId = 9 [default = "__null__"];</code>
      */
     boolean hasOwnerId();
     /**
-     * <code>optional string ownerId = 9;</code>
+     * <code>optional string ownerId = 9 [default = "__null__"];</code>
      */
     java.lang.String getOwnerId();
     /**
-     * <code>optional string ownerId = 9;</code>
+     * <code>optional string ownerId = 9 [default = "__null__"];</code>
      */
     com.google.protobuf.ByteString
         getOwnerIdBytes();
@@ -26795,15 +26795,15 @@ public final class Messages {
         getParentNameBytes();
 
     /**
-     * <code>optional string parentId = 11;</code>
+     * <code>optional string parentId = 11 [default = "__null__"];</code>
      */
     boolean hasParentId();
     /**
-     * <code>optional string parentId = 11;</code>
+     * <code>optional string parentId = 11 [default = "__null__"];</code>
      */
     java.lang.String getParentId();
     /**
-     * <code>optional string parentId = 11;</code>
+     * <code>optional string parentId = 11 [default = "__null__"];</code>
      */
     com.google.protobuf.ByteString
         getParentIdBytes();
@@ -27325,13 +27325,13 @@ public final class Messages {
     public static final int OWNERID_FIELD_NUMBER = 9;
     private java.lang.Object ownerId_;
     /**
-     * <code>optional string ownerId = 9;</code>
+     * <code>optional string ownerId = 9 [default = "__null__"];</code>
      */
     public boolean hasOwnerId() {
       return ((bitField0_ & 0x00000100) == 0x00000100);
     }
     /**
-     * <code>optional string ownerId = 9;</code>
+     * <code>optional string ownerId = 9 [default = "__null__"];</code>
      */
     public java.lang.String getOwnerId() {
       java.lang.Object ref = ownerId_;
@@ -27348,7 +27348,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>optional string ownerId = 9;</code>
+     * <code>optional string ownerId = 9 [default = "__null__"];</code>
      */
     public com.google.protobuf.ByteString
         getOwnerIdBytes() {
@@ -27409,13 +27409,13 @@ public final class Messages {
     public static final int PARENTID_FIELD_NUMBER = 11;
     private java.lang.Object parentId_;
     /**
-     * <code>optional string parentId = 11;</code>
+     * <code>optional string parentId = 11 [default = "__null__"];</code>
      */
     public boolean hasParentId() {
       return ((bitField0_ & 0x00000400) == 0x00000400);
     }
     /**
-     * <code>optional string parentId = 11;</code>
+     * <code>optional string parentId = 11 [default = "__null__"];</code>
      */
     public java.lang.String getParentId() {
       java.lang.Object ref = parentId_;
@@ -27432,7 +27432,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>optional string parentId = 11;</code>
+     * <code>optional string parentId = 11 [default = "__null__"];</code>
      */
     public com.google.protobuf.ByteString
         getParentIdBytes() {
@@ -27499,9 +27499,9 @@ public final class Messages {
       modifiedByUserName_ = "";
       modifiedByUserId_ = "";
       ownerName_ = "";
-      ownerId_ = "";
+      ownerId_ = "__null__";
       parentName_ = "";
-      parentId_ = "";
+      parentId_ = "__null__";
       name_ = "";
     }
     private byte memoizedIsInitialized = -1;
@@ -27747,11 +27747,11 @@ public final class Messages {
         bitField0_ = (bitField0_ & ~0x00000040);
         ownerName_ = "";
         bitField0_ = (bitField0_ & ~0x00000080);
-        ownerId_ = "";
+        ownerId_ = "__null__";
         bitField0_ = (bitField0_ & ~0x00000100);
         parentName_ = "";
         bitField0_ = (bitField0_ & ~0x00000200);
-        parentId_ = "";
+        parentId_ = "__null__";
         bitField0_ = (bitField0_ & ~0x00000400);
         name_ = "";
         bitField0_ = (bitField0_ & ~0x00000800);
@@ -28546,15 +28546,15 @@ public final class Messages {
         return this;
       }
 
-      private java.lang.Object ownerId_ = "";
+      private java.lang.Object ownerId_ = "__null__";
       /**
-       * <code>optional string ownerId = 9;</code>
+       * <code>optional string ownerId = 9 [default = "__null__"];</code>
        */
       public boolean hasOwnerId() {
         return ((bitField0_ & 0x00000100) == 0x00000100);
       }
       /**
-       * <code>optional string ownerId = 9;</code>
+       * <code>optional string ownerId = 9 [default = "__null__"];</code>
        */
       public java.lang.String getOwnerId() {
         java.lang.Object ref = ownerId_;
@@ -28571,7 +28571,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string ownerId = 9;</code>
+       * <code>optional string ownerId = 9 [default = "__null__"];</code>
        */
       public com.google.protobuf.ByteString
           getOwnerIdBytes() {
@@ -28587,7 +28587,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string ownerId = 9;</code>
+       * <code>optional string ownerId = 9 [default = "__null__"];</code>
        */
       public Builder setOwnerId(
           java.lang.String value) {
@@ -28600,7 +28600,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string ownerId = 9;</code>
+       * <code>optional string ownerId = 9 [default = "__null__"];</code>
        */
       public Builder clearOwnerId() {
         bitField0_ = (bitField0_ & ~0x00000100);
@@ -28609,7 +28609,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string ownerId = 9;</code>
+       * <code>optional string ownerId = 9 [default = "__null__"];</code>
        */
       public Builder setOwnerIdBytes(
           com.google.protobuf.ByteString value) {
@@ -28698,15 +28698,15 @@ public final class Messages {
         return this;
       }
 
-      private java.lang.Object parentId_ = "";
+      private java.lang.Object parentId_ = "__null__";
       /**
-       * <code>optional string parentId = 11;</code>
+       * <code>optional string parentId = 11 [default = "__null__"];</code>
        */
       public boolean hasParentId() {
         return ((bitField0_ & 0x00000400) == 0x00000400);
       }
       /**
-       * <code>optional string parentId = 11;</code>
+       * <code>optional string parentId = 11 [default = "__null__"];</code>
        */
       public java.lang.String getParentId() {
         java.lang.Object ref = parentId_;
@@ -28723,7 +28723,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string parentId = 11;</code>
+       * <code>optional string parentId = 11 [default = "__null__"];</code>
        */
       public com.google.protobuf.ByteString
           getParentIdBytes() {
@@ -28739,7 +28739,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string parentId = 11;</code>
+       * <code>optional string parentId = 11 [default = "__null__"];</code>
        */
       public Builder setParentId(
           java.lang.String value) {
@@ -28752,7 +28752,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string parentId = 11;</code>
+       * <code>optional string parentId = 11 [default = "__null__"];</code>
        */
       public Builder clearParentId() {
         bitField0_ = (bitField0_ & ~0x00000400);
@@ -28761,7 +28761,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string parentId = 11;</code>
+       * <code>optional string parentId = 11 [default = "__null__"];</code>
        */
       public Builder setParentIdBytes(
           com.google.protobuf.ByteString value) {
@@ -38612,193 +38612,199 @@ public final class Messages {
     java.lang.String[] descriptorData = {
       "\n\016Messages.proto\022#com.n4systems.fieldid." +
       "api.pub.model\032 google/protobuf/descripto" +
-      "r.proto\"\243\007\n\014AssetMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013" +
+      "r.proto\"\375\007\n\014AssetMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013" +
       "createdDate\030\002 \001(\t\022\024\n\014modifiedDate\030\003 \001(\t\022" +
       "\031\n\021createdByUserName\030\004 \001(\t\022\027\n\017createdByU" +
       "serId\030\005 \001(\t\022\032\n\022modifiedByUserName\030\006 \001(\t\022" +
       "\030\n\020modifiedByUserId\030\007 \001(\t\022\021\n\townerName\030\010" +
       " \001(\t\022\017\n\007ownerId\030\t \002(\t\022\022\n\nidentifier\030\n \002(" +
-      "\t\022\022\n\nrfidNumber\030\013 \001(\t\022\031\n\021customerRefNumb" +
-      "er\030\014 \001(\t\022\025\n\rpurchaseOrder\030\r \001(\t\022\020\n\010comme",
-      "nts\030\016 \001(\t\022\026\n\016identifiedDate\030\017 \001(\t\022\025\n\rass" +
-      "etTypeName\030\020 \001(\t\022\023\n\013assetTypeId\030\021 \002(\t\022\027\n" +
-      "\017assetStatusName\030\022 \001(\t\022\025\n\rassetStatusId\030" +
-      "\023 \001(\t\022\034\n\024identifiedByUserName\030\024 \001(\t\022\032\n\022i" +
-      "dentifiedByUserId\030\025 \001(\t\022\030\n\020assignedUserN" +
-      "ame\030\026 \001(\t\022\026\n\016assignedUserId\030\027 \001(\t\022\020\n\010lat" +
+      "\t\022\034\n\nrfidNumber\030\013 \001(\t:\010__null__\022#\n\021custo" +
+      "merRefNumber\030\014 \001(\t:\010__null__\022\037\n\rpurchase",
+      "Order\030\r \001(\t:\010__null__\022\032\n\010comments\030\016 \001(\t:" +
+      "\010__null__\022 \n\016identifiedDate\030\017 \001(\t:\010__nul" +
+      "l__\022\025\n\rassetTypeName\030\020 \001(\t\022\023\n\013assetTypeI" +
+      "d\030\021 \002(\t\022\027\n\017assetStatusName\030\022 \001(\t\022\037\n\rasse" +
+      "tStatusId\030\023 \001(\t:\010__null__\022\034\n\024identifiedB" +
+      "yUserName\030\024 \001(\t\022$\n\022identifiedByUserId\030\025 " +
+      "\001(\t:\010__null__\022\030\n\020assignedUserName\030\026 \001(\t\022" +
+      " \n\016assignedUserId\030\027 \001(\t:\010__null__\022\020\n\010lat" +
       "itude\030\030 \001(\t\022\021\n\tlongitude\030\031 \001(\t\022\030\n\020freeFo" +
-      "rmLocation\030\032 \001(\t\022\036\n\026predefinedLocationNa" +
-      "me\030\033 \001(\t\022\034\n\024predefinedLocationId\030\034 \001(\t\022\023" +
-      "\n\013orderNumber\030\035 \001(\t\022\023\n\013description\030\036 \001(\t",
-      "\022V\n\nattributes\030\037 \003(\0132B.com.n4systems.fie" +
-      "ldid.api.pub.model.AssetMessage.Attribut" +
-      "eMessage\032\202\001\n\020AttributeMessage\022E\n\004type\030\001 " +
-      "\001(\01627.com.n4systems.fieldid.api.pub.mode" +
-      "l.AttributeValueType\022\n\n\002id\030\002 \001(\t\022\014\n\004name" +
-      "\030\003 \001(\t\022\r\n\005value\030\004 \001(\t\"\354\006\n\014EventMessage\022\n" +
-      "\n\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014modif" +
-      "iedDate\030\003 \001(\t\022\025\n\rcompletedDate\030\004 \001(\t\022\031\n\021" +
-      "createdByUserName\030\005 \001(\t\022\027\n\017createdByUser" +
-      "Id\030\006 \001(\t\022\032\n\022modifiedByUserName\030\007 \001(\t\022\030\n\020",
-      "modifiedByUserId\030\010 \001(\t\022\032\n\022assignedToUser" +
-      "Name\030\t \001(\t\022\030\n\020assignedToUserId\030\n \001(\t\022\033\n\023" +
-      "completedByUserName\030\013 \001(\t\022\031\n\021completedBy" +
-      "UserId\030\014 \001(\t\022R\n\013eventResult\030\r \002(\0162=.com." +
-      "n4systems.fieldid.api.pub.model.EventMes" +
-      "sage.EventResult\022V\n\rworkflowState\030\016 \002(\0162" +
-      "?.com.n4systems.fieldid.api.pub.model.Ev" +
-      "entMessage.WorkflowState\022\021\n\townerName\030\017 " +
-      "\001(\t\022\017\n\007ownerId\030\020 \002(\t\022\025\n\reventTypeName\030\021 " +
-      "\001(\t\022\023\n\013eventTypeId\030\022 \001(\t\022\022\n\nidentifier\030\023",
-      " \002(\t\022\022\n\nrfidNumber\030\024 \001(\t\022\031\n\021customerRefN" +
-      "umber\030\025 \001(\t\022\017\n\007assetId\030\026 \001(\t\022\020\n\010comments" +
-      "\030\027 \001(\t\022\r\n\005notes\030\030 \001(\t\022\r\n\005score\030\031 \001(\t\022\017\n\007" +
-      "dueDate\030\032 \001(\t\022\030\n\020priorityCodeName\030\033 \001(\t\022" +
-      "\026\n\016priorityCodeId\030\034 \001(\t\"3\n\013EventResult\022\010" +
-      "\n\004PASS\020\001\022\010\n\004FAIL\020\002\022\006\n\002NA\020\003\022\010\n\004VOID\020\004\">\n\r" +
-      "WorkflowState\022\010\n\004OPEN\020\001\022\r\n\tCOMPLETED\020\002\022\n" +
-      "\n\006CLOSED\020\003\022\010\n\004NONE\020\004\"\303\001\n\022AssetStatusMess" +
-      "age\022\n\n\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014" +
-      "modifiedDate\030\003 \001(\t\022\031\n\021createdByUserName\030",
-      "\004 \001(\t\022\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modifi" +
-      "edByUserName\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007" +
-      " \001(\t\022\014\n\004name\030\010 \001(\t\"\327\007\n\020AssetTypeMessage\022" +
-      "\n\n\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014modi" +
-      "fiedDate\030\003 \001(\t\022\031\n\021createdByUserName\030\004 \001(" +
-      "\t\022\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modifiedBy" +
-      "UserName\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001(\t" +
-      "\022\014\n\004name\030\010 \002(\t\022\020\n\010warnings\030\t \001(\t\022\024\n\014inst" +
-      "ructions\030\n \001(\t\022\022\n\ncautionUrl\030\013 \001(\t\022\033\n\023de" +
-      "scriptionTemplate\030\014 \001(\t\022\"\n\032manufactureCe",
-      "rtificateText\030\r \001(\t\022!\n\031hasManufactureCer" +
-      "tificate\030\016 \001(\010\022\031\n\021allowAssetLinking\030\017 \001(" +
-      "\010\022\025\n\rhasProcedures\030\020 \001(\010\022\030\n\020assetTypeGro" +
-      "upId\030\021 \001(\t\022\032\n\022assetTypeGroupName\030\022 \001(\t\022P" +
-      "\n\tschedules\030\023 \003(\0132=.com.n4systems.fieldi" +
-      "d.api.pub.model.AssetTypeScheduleMessage" +
-      "\022n\n\024associatedEventTypes\030\024 \003(\0132P.com.n4s" +
-      "ystems.fieldid.api.pub.model.AssetTypeMe" +
-      "ssage.AssociatedEventTypeMessage\022g\n\016attr" +
-      "ibuteTypes\030\025 \003(\0132O.com.n4systems.fieldid",
-      ".api.pub.model.AssetTypeMessage.AssetAtt" +
-      "ributeTypeMessage\032H\n\032AssociatedEventType" +
-      "Message\022\023\n\013eventTypeId\030\001 \002(\t\022\025\n\reventTyp" +
-      "eName\030\002 \002(\t\032\226\001\n\031AssetAttributeTypeMessag" +
-      "e\022\n\n\002id\030\001 \002(\t\022E\n\004type\030\002 \002(\01627.com.n4syst" +
-      "ems.fieldid.api.pub.model.AttributeValue" +
-      "Type\022\014\n\004name\030\003 \002(\t\022\030\n\020attributeOptions\030\004" +
-      " \003(\t\"\306\001\n\025AssetTypeGroupMessage\022\n\n\002id\030\001 \001" +
-      "(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014modifiedDate\030" +
-      "\003 \001(\t\022\031\n\021createdByUserName\030\004 \001(\t\022\027\n\017crea",
-      "tedByUserId\030\005 \001(\t\022\032\n\022modifiedByUserName\030" +
-      "\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001(\t\022\014\n\004name\030" +
-      "\010 \002(\t\"\346\002\n\030AssetTypeScheduleMessage\022\n\n\002id" +
-      "\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014modifiedD" +
-      "ate\030\003 \001(\t\022\031\n\021createdByUserName\030\004 \001(\t\022\027\n\017" +
-      "createdByUserId\030\005 \001(\t\022\032\n\022modifiedByUserN" +
-      "ame\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001(\t\022\021\n\to" +
-      "wnerName\030\010 \001(\t\022\017\n\007ownerId\030\t \002(\t\022\025\n\rasset" +
-      "TypeName\030\n \001(\t\022\023\n\013assetTypeId\030\013 \002(\t\022\025\n\re" +
-      "ventTypeName\030\014 \001(\t\022\023\n\013eventTypeId\030\r \002(\t\022",
-      "\027\n\017frequencyInDays\030\016 \002(\003\022\024\n\014autoSchedule" +
-      "\030\017 \002(\010\"\320\003\n\014OwnerMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013c" +
+      "rmLocation\030\032 \001(\t\022\036\n\026predefinedLocationNa",
+      "me\030\033 \001(\t\022\034\n\024predefinedLocationId\030\034 \001(\t\022\035" +
+      "\n\013orderNumber\030\035 \001(\t:\010__null__\022\023\n\013descrip" +
+      "tion\030\036 \001(\t\022V\n\nattributes\030\037 \003(\0132B.com.n4s" +
+      "ystems.fieldid.api.pub.model.AssetMessag" +
+      "e.AttributeMessage\032\202\001\n\020AttributeMessage\022" +
+      "E\n\004type\030\001 \001(\01627.com.n4systems.fieldid.ap" +
+      "i.pub.model.AttributeValueType\022\n\n\002id\030\002 \001" +
+      "(\t\022\014\n\004name\030\003 \001(\t\022\r\n\005value\030\004 \001(\t\"\306\007\n\014Even" +
+      "tMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(" +
+      "\t\022\024\n\014modifiedDate\030\003 \001(\t\022\025\n\rcompletedDate",
+      "\030\004 \001(\t\022\031\n\021createdByUserName\030\005 \001(\t\022\027\n\017cre" +
+      "atedByUserId\030\006 \001(\t\022\032\n\022modifiedByUserName" +
+      "\030\007 \001(\t\022\030\n\020modifiedByUserId\030\010 \001(\t\022\032\n\022assi" +
+      "gnedToUserName\030\t \001(\t\022\"\n\020assignedToUserId" +
+      "\030\n \001(\t:\010__null__\022\033\n\023completedByUserName\030" +
+      "\013 \001(\t\022#\n\021completedByUserId\030\014 \001(\t:\010__null" +
+      "__\022R\n\013eventResult\030\r \002(\0162=.com.n4systems." +
+      "fieldid.api.pub.model.EventMessage.Event" +
+      "Result\022V\n\rworkflowState\030\016 \002(\0162?.com.n4sy" +
+      "stems.fieldid.api.pub.model.EventMessage",
+      ".WorkflowState\022\021\n\townerName\030\017 \001(\t\022\017\n\007own" +
+      "erId\030\020 \002(\t\022\025\n\reventTypeName\030\021 \001(\t\022\023\n\013eve" +
+      "ntTypeId\030\022 \001(\t\022\022\n\nidentifier\030\023 \002(\t\022\034\n\nrf" +
+      "idNumber\030\024 \001(\t:\010__null__\022#\n\021customerRefN" +
+      "umber\030\025 \001(\t:\010__null__\022\017\n\007assetId\030\026 \001(\t\022\032" +
+      "\n\010comments\030\027 \001(\t:\010__null__\022\027\n\005notes\030\030 \001(" +
+      "\t:\010__null__\022\027\n\005score\030\031 \001(\t:\010__null__\022\031\n\007" +
+      "dueDate\030\032 \001(\t:\010__null__\022\030\n\020priorityCodeN" +
+      "ame\030\033 \001(\t\022 \n\016priorityCodeId\030\034 \001(\t:\010__nul" +
+      "l__\"3\n\013EventResult\022\010\n\004PASS\020\001\022\010\n\004FAIL\020\002\022\006",
+      "\n\002NA\020\003\022\010\n\004VOID\020\004\">\n\rWorkflowState\022\010\n\004OPE" +
+      "N\020\001\022\r\n\tCOMPLETED\020\002\022\n\n\006CLOSED\020\003\022\010\n\004NONE\020\004" +
+      "\"\315\001\n\022AssetStatusMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013c" +
       "reatedDate\030\002 \001(\t\022\024\n\014modifiedDate\030\003 \001(\t\022\031" +
       "\n\021createdByUserName\030\004 \001(\t\022\027\n\017createdByUs" +
       "erId\030\005 \001(\t\022\032\n\022modifiedByUserName\030\006 \001(\t\022\030" +
-      "\n\020modifiedByUserId\030\007 \001(\t\022\014\n\004name\030\010 \002(\t\022\022" +
-      "\n\nparentName\030\t \001(\t\022\020\n\010parentId\030\n \001(\t\022\014\n\004" +
-      "code\030\013 \001(\t\022\r\n\005notes\030\014 \001(\t\022\025\n\rstreetAddre" +
-      "ss\030\r \001(\t\022\014\n\004city\030\016 \001(\t\022\r\n\005state\030\017 \001(\t\022\017\n" +
-      "\007country\030\020 \001(\t\022\013\n\003zip\030\021 \001(\t\022\016\n\006phone1\030\022 ",
-      "\001(\t\022\016\n\006phone2\030\023 \001(\t\022\014\n\004fax1\030\024 \001(\t\022\020\n\010lat" +
-      "itude\030\025 \001(\t\022\021\n\tlongitude\030\026 \001(\t\022\023\n\013contac" +
-      "tName\030\027 \001(\t\022\024\n\014contactEmail\030\030 \001(\t\"\224\002\n\031Pr" +
-      "edefinedLocationMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013c" +
-      "reatedDate\030\002 \001(\t\022\024\n\014modifiedDate\030\003 \001(\t\022\031" +
-      "\n\021createdByUserName\030\004 \001(\t\022\027\n\017createdByUs" +
-      "erId\030\005 \001(\t\022\032\n\022modifiedByUserName\030\006 \001(\t\022\030" +
-      "\n\020modifiedByUserId\030\007 \001(\t\022\021\n\townerName\030\010 " +
-      "\001(\t\022\017\n\007ownerId\030\t \001(\t\022\022\n\nparentName\030\n \001(\t" +
-      "\022\020\n\010parentId\030\013 \001(\t\022\014\n\004name\030\014 \002(\t\"\310\002\n\021Tes",
-      "tSimpleMessage\022\024\n\014double_field\030\001 \001(\001\022\023\n\013" +
-      "float_field\030\002 \001(\002\022\023\n\013int32_field\030\003 \001(\005\022\023" +
-      "\n\013int64_field\030\004 \001(\003\022\024\n\014uint32_field\030\005 \001(" +
-      "\r\022\024\n\014uint64_field\030\006 \001(\004\022\024\n\014sint32_field\030" +
-      "\007 \001(\021\022\024\n\014sint64_field\030\010 \001(\022\022\025\n\rfixed32_f" +
-      "ield\030\t \001(\007\022\025\n\rfixed64_field\030\n \001(\006\022\026\n\016sfi" +
-      "xed32_field\030\013 \001(\017\022\026\n\016sfixed64_field\030\014 \001(" +
-      "\020\022\022\n\nbool_field\030\r \001(\010\022\024\n\014string_field\030\016 " +
-      "\001(\t\")\n\021TestNestedMessage\022\024\n\014string_field" +
-      "\030\001 \002(\t\"s\n\024TestContainerMessage\022\023\n\013int32_",
-      "field\030\001 \002(\005\022F\n\006nested\030\002 \001(\01326.com.n4syst" +
-      "ems.fieldid.api.pub.model.TestNestedMess" +
-      "age\"\371\007\n\013UserMessage\022\n\n\002id\030\001 \001(\t\022\017\n\007creat" +
-      "ed\030\002 \001(\t\022\020\n\010modified\030\003 \001(\t\022\031\n\021createdByU" +
-      "serName\030\004 \001(\t\022\027\n\017createdByUserId\030\005 \001(\t\022\032" +
-      "\n\022modifiedByUserName\030\006 \001(\t\022\030\n\020modifiedBy" +
-      "UserId\030\007 \001(\t\022\021\n\townerName\030\010 \001(\t\022\017\n\007owner" +
-      "Id\030\t \002(\t\022\016\n\006userID\030\n \001(\t\022\021\n\tfirstName\030\013 " +
-      "\001(\t\022\020\n\010lastName\030\014 \001(\t\022\024\n\014emailAddress\030\r " +
-      "\001(\t\022\022\n\ntimeZoneID\030\016 \001(\t\022\020\n\010position\030\017 \001(",
-      "\t\022\020\n\010initials\030\020 \001(\t\022\033\n\023failedLoginAttemp" +
-      "ts\030\021 \001(\005\022\016\n\006locked\030\022 \001(\010\022\023\n\013lockedUntil\030" +
-      "\023 \001(\t\022\027\n\017passwordChanged\030\024 \001(\t\022\020\n\010langua" +
-      "ge\030\025 \001(\t\022\022\n\nidentifier\030\026 \001(\t\022\021\n\tlastLogi" +
-      "n\030\027 \001(\t\022E\n\006groups\030\030 \003(\01325.com.n4systems." +
-      "fieldid.api.pub.model.UserGroupMessage\022K" +
-      "\n\010userType\030\031 \002(\01629.com.n4systems.fieldid" +
-      ".api.pub.model.UserMessage.UserType\022X\n\013p" +
-      "ermissions\030\032 \002(\0132C.com.n4systems.fieldid" +
-      ".api.pub.model.UserMessage.PermissionsMe",
-      "ssage\032\324\001\n\022PermissionsMessage\022\024\n\014createAs" +
-      "sets\030\001 \002(\010\022\032\n\022manageSystemConfig\030\002 \002(\010\022\031" +
-      "\n\021manageSystemUsers\030\003 \002(\010\022\026\n\016manageEndUs" +
-      "ers\030\004 \002(\010\022\024\n\014createEvents\030\005 \002(\010\022\022\n\neditE" +
-      "vents\030\006 \002(\010\022\022\n\nmanageJobs\030\007 \002(\010\022\033\n\023manag" +
-      "eSafetyNetwork\030\010 \002(\010\"Q\n\010UserType\022\t\n\005ADMI" +
-      "N\020\001\022\016\n\nINSPECTION\020\002\022\r\n\tREPORTING\020\003\022\n\n\006PE" +
-      "RSON\020\004\022\017\n\013USAGE_BASED\020\005\"=\n\020UserGroupMess" +
-      "age\022\n\n\002id\030\001 \001(\t\022\014\n\004name\030\002 \002(\t\022\017\n\007groupId" +
-      "\030\003 \001(\t\"L\n\023ListResponseMessage\022\014\n\004page\030\001 ",
-      "\002(\005\022\020\n\010pageSize\030\002 \002(\005\022\r\n\005total\030\003 \002(\003*\006\010\350" +
-      "\007\020\321\017*X\n\022AttributeValueType\022\010\n\004TEXT\020\001\022\n\n\006" +
-      "SELECT\020\002\022\t\n\005COMBO\020\003\022\010\n\004UNIT\020\004\022\010\n\004DATE\020\005\022" +
-      "\r\n\tDATE_TIME\020\006:8\n\017serialized_name\022\035.goog" +
-      "le.protobuf.FieldOptions\030\321\206\003 \001(\t:\206\001\n\006ass" +
-      "ets\0228.com.n4systems.fieldid.api.pub.mode" +
-      "l.ListResponseMessage\030\350\007 \003(\01321.com.n4sys" +
-      "tems.fieldid.api.pub.model.AssetMessageB" +
-      "\010\212\265\030\004list:\206\001\n\006owners\0228.com.n4systems.fie" +
-      "ldid.api.pub.model.ListResponseMessage\030\351",
-      "\007 \003(\01321.com.n4systems.fieldid.api.pub.mo" +
-      "del.OwnerMessageB\010\212\265\030\004list:\223\001\n\rassetStat" +
-      "uses\0228.com.n4systems.fieldid.api.pub.mod" +
-      "el.ListResponseMessage\030\352\007 \003(\01327.com.n4sy" +
-      "stems.fieldid.api.pub.model.AssetStatusM" +
-      "essageB\010\212\265\030\004list:\216\001\n\nassetTypes\0228.com.n4" +
-      "systems.fieldid.api.pub.model.ListRespon" +
-      "seMessage\030\353\007 \003(\01325.com.n4systems.fieldid" +
-      ".api.pub.model.AssetTypeMessageB\010\212\265\030\004lis" +
-      "t:\230\001\n\017assetTypeGroups\0228.com.n4systems.fi",
+      "\n\020modifiedByUserId\030\007 \001(\t\022\026\n\004name\030\010 \001(\t:\010" +
+      "__null__\"\327\007\n\020AssetTypeMessage\022\n\n\002id\030\001 \001(" +
+      "\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014modifiedDate\030\003" +
+      " \001(\t\022\031\n\021createdByUserName\030\004 \001(\t\022\027\n\017creat",
+      "edByUserId\030\005 \001(\t\022\032\n\022modifiedByUserName\030\006" +
+      " \001(\t\022\030\n\020modifiedByUserId\030\007 \001(\t\022\014\n\004name\030\010" +
+      " \002(\t\022\020\n\010warnings\030\t \001(\t\022\024\n\014instructions\030\n" +
+      " \001(\t\022\022\n\ncautionUrl\030\013 \001(\t\022\033\n\023descriptionT" +
+      "emplate\030\014 \001(\t\022\"\n\032manufactureCertificateT" +
+      "ext\030\r \001(\t\022!\n\031hasManufactureCertificate\030\016" +
+      " \001(\010\022\031\n\021allowAssetLinking\030\017 \001(\010\022\025\n\rhasPr" +
+      "ocedures\030\020 \001(\010\022\030\n\020assetTypeGroupId\030\021 \001(\t" +
+      "\022\032\n\022assetTypeGroupName\030\022 \001(\t\022P\n\tschedule" +
+      "s\030\023 \003(\0132=.com.n4systems.fieldid.api.pub.",
+      "model.AssetTypeScheduleMessage\022n\n\024associ" +
+      "atedEventTypes\030\024 \003(\0132P.com.n4systems.fie" +
+      "ldid.api.pub.model.AssetTypeMessage.Asso" +
+      "ciatedEventTypeMessage\022g\n\016attributeTypes" +
+      "\030\025 \003(\0132O.com.n4systems.fieldid.api.pub.m" +
+      "odel.AssetTypeMessage.AssetAttributeType" +
+      "Message\032H\n\032AssociatedEventTypeMessage\022\023\n" +
+      "\013eventTypeId\030\001 \002(\t\022\025\n\reventTypeName\030\002 \002(" +
+      "\t\032\226\001\n\031AssetAttributeTypeMessage\022\n\n\002id\030\001 " +
+      "\002(\t\022E\n\004type\030\002 \002(\01627.com.n4systems.fieldi",
+      "d.api.pub.model.AttributeValueType\022\014\n\004na" +
+      "me\030\003 \002(\t\022\030\n\020attributeOptions\030\004 \003(\t\"\306\001\n\025A" +
+      "ssetTypeGroupMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013crea" +
+      "tedDate\030\002 \001(\t\022\024\n\014modifiedDate\030\003 \001(\t\022\031\n\021c" +
+      "reatedByUserName\030\004 \001(\t\022\027\n\017createdByUserI" +
+      "d\030\005 \001(\t\022\032\n\022modifiedByUserName\030\006 \001(\t\022\030\n\020m" +
+      "odifiedByUserId\030\007 \001(\t\022\014\n\004name\030\010 \002(\t\"\346\002\n\030" +
+      "AssetTypeScheduleMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013" +
+      "createdDate\030\002 \001(\t\022\024\n\014modifiedDate\030\003 \001(\t\022" +
+      "\031\n\021createdByUserName\030\004 \001(\t\022\027\n\017createdByU",
+      "serId\030\005 \001(\t\022\032\n\022modifiedByUserName\030\006 \001(\t\022" +
+      "\030\n\020modifiedByUserId\030\007 \001(\t\022\021\n\townerName\030\010" +
+      " \001(\t\022\017\n\007ownerId\030\t \002(\t\022\025\n\rassetTypeName\030\n" +
+      " \001(\t\022\023\n\013assetTypeId\030\013 \002(\t\022\025\n\reventTypeNa" +
+      "me\030\014 \001(\t\022\023\n\013eventTypeId\030\r \002(\t\022\027\n\017frequen" +
+      "cyInDays\030\016 \002(\003\022\024\n\014autoSchedule\030\017 \002(\010\"\344\003\n" +
+      "\014OwnerMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013createdDate" +
+      "\030\002 \001(\t\022\024\n\014modifiedDate\030\003 \001(\t\022\031\n\021createdB" +
+      "yUserName\030\004 \001(\t\022\027\n\017createdByUserId\030\005 \001(\t" +
+      "\022\032\n\022modifiedByUserName\030\006 \001(\t\022\030\n\020modified",
+      "ByUserId\030\007 \001(\t\022\014\n\004name\030\010 \002(\t\022\022\n\nparentNa" +
+      "me\030\t \001(\t\022\020\n\010parentId\030\n \001(\t\022\026\n\004code\030\013 \001(\t" +
+      ":\010__null__\022\027\n\005notes\030\014 \001(\t:\010__null__\022\025\n\rs" +
+      "treetAddress\030\r \001(\t\022\014\n\004city\030\016 \001(\t\022\r\n\005stat" +
+      "e\030\017 \001(\t\022\017\n\007country\030\020 \001(\t\022\013\n\003zip\030\021 \001(\t\022\016\n" +
+      "\006phone1\030\022 \001(\t\022\016\n\006phone2\030\023 \001(\t\022\014\n\004fax1\030\024 " +
+      "\001(\t\022\020\n\010latitude\030\025 \001(\t\022\021\n\tlongitude\030\026 \001(\t" +
+      "\022\023\n\013contactName\030\027 \001(\t\022\024\n\014contactEmail\030\030 " +
+      "\001(\t\"\250\002\n\031PredefinedLocationMessage\022\n\n\002id\030" +
+      "\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014modifiedDa",
+      "te\030\003 \001(\t\022\031\n\021createdByUserName\030\004 \001(\t\022\027\n\017c" +
+      "reatedByUserId\030\005 \001(\t\022\032\n\022modifiedByUserNa" +
+      "me\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001(\t\022\021\n\tow" +
+      "nerName\030\010 \001(\t\022\031\n\007ownerId\030\t \001(\t:\010__null__" +
+      "\022\022\n\nparentName\030\n \001(\t\022\032\n\010parentId\030\013 \001(\t:\010" +
+      "__null__\022\014\n\004name\030\014 \002(\t\"\310\002\n\021TestSimpleMes" +
+      "sage\022\024\n\014double_field\030\001 \001(\001\022\023\n\013float_fiel" +
+      "d\030\002 \001(\002\022\023\n\013int32_field\030\003 \001(\005\022\023\n\013int64_fi" +
+      "eld\030\004 \001(\003\022\024\n\014uint32_field\030\005 \001(\r\022\024\n\014uint6" +
+      "4_field\030\006 \001(\004\022\024\n\014sint32_field\030\007 \001(\021\022\024\n\014s",
+      "int64_field\030\010 \001(\022\022\025\n\rfixed32_field\030\t \001(\007" +
+      "\022\025\n\rfixed64_field\030\n \001(\006\022\026\n\016sfixed32_fiel" +
+      "d\030\013 \001(\017\022\026\n\016sfixed64_field\030\014 \001(\020\022\022\n\nbool_" +
+      "field\030\r \001(\010\022\024\n\014string_field\030\016 \001(\t\")\n\021Tes" +
+      "tNestedMessage\022\024\n\014string_field\030\001 \002(\t\"s\n\024" +
+      "TestContainerMessage\022\023\n\013int32_field\030\001 \002(" +
+      "\005\022F\n\006nested\030\002 \001(\01326.com.n4systems.fieldi" +
+      "d.api.pub.model.TestNestedMessage\"\371\007\n\013Us" +
+      "erMessage\022\n\n\002id\030\001 \001(\t\022\017\n\007created\030\002 \001(\t\022\020" +
+      "\n\010modified\030\003 \001(\t\022\031\n\021createdByUserName\030\004 ",
+      "\001(\t\022\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modified" +
+      "ByUserName\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001" +
+      "(\t\022\021\n\townerName\030\010 \001(\t\022\017\n\007ownerId\030\t \002(\t\022\016" +
+      "\n\006userID\030\n \001(\t\022\021\n\tfirstName\030\013 \001(\t\022\020\n\010las" +
+      "tName\030\014 \001(\t\022\024\n\014emailAddress\030\r \001(\t\022\022\n\ntim" +
+      "eZoneID\030\016 \001(\t\022\020\n\010position\030\017 \001(\t\022\020\n\010initi" +
+      "als\030\020 \001(\t\022\033\n\023failedLoginAttempts\030\021 \001(\005\022\016" +
+      "\n\006locked\030\022 \001(\010\022\023\n\013lockedUntil\030\023 \001(\t\022\027\n\017p" +
+      "asswordChanged\030\024 \001(\t\022\020\n\010language\030\025 \001(\t\022\022" +
+      "\n\nidentifier\030\026 \001(\t\022\021\n\tlastLogin\030\027 \001(\t\022E\n",
+      "\006groups\030\030 \003(\01325.com.n4systems.fieldid.ap" +
+      "i.pub.model.UserGroupMessage\022K\n\010userType" +
+      "\030\031 \002(\01629.com.n4systems.fieldid.api.pub.m" +
+      "odel.UserMessage.UserType\022X\n\013permissions" +
+      "\030\032 \002(\0132C.com.n4systems.fieldid.api.pub.m" +
+      "odel.UserMessage.PermissionsMessage\032\324\001\n\022" +
+      "PermissionsMessage\022\024\n\014createAssets\030\001 \002(\010" +
+      "\022\032\n\022manageSystemConfig\030\002 \002(\010\022\031\n\021manageSy" +
+      "stemUsers\030\003 \002(\010\022\026\n\016manageEndUsers\030\004 \002(\010\022" +
+      "\024\n\014createEvents\030\005 \002(\010\022\022\n\neditEvents\030\006 \002(",
+      "\010\022\022\n\nmanageJobs\030\007 \002(\010\022\033\n\023manageSafetyNet" +
+      "work\030\010 \002(\010\"Q\n\010UserType\022\t\n\005ADMIN\020\001\022\016\n\nINS" +
+      "PECTION\020\002\022\r\n\tREPORTING\020\003\022\n\n\006PERSON\020\004\022\017\n\013" +
+      "USAGE_BASED\020\005\"=\n\020UserGroupMessage\022\n\n\002id\030" +
+      "\001 \001(\t\022\014\n\004name\030\002 \002(\t\022\017\n\007groupId\030\003 \001(\t\"L\n\023" +
+      "ListResponseMessage\022\014\n\004page\030\001 \002(\005\022\020\n\010pag" +
+      "eSize\030\002 \002(\005\022\r\n\005total\030\003 \002(\003*\006\010\350\007\020\321\017*X\n\022At" +
+      "tributeValueType\022\010\n\004TEXT\020\001\022\n\n\006SELECT\020\002\022\t" +
+      "\n\005COMBO\020\003\022\010\n\004UNIT\020\004\022\010\n\004DATE\020\005\022\r\n\tDATE_TI" +
+      "ME\020\006:8\n\017serialized_name\022\035.google.protobu",
+      "f.FieldOptions\030\321\206\003 \001(\t:\206\001\n\006assets\0228.com." +
+      "n4systems.fieldid.api.pub.model.ListResp" +
+      "onseMessage\030\350\007 \003(\01321.com.n4systems.field" +
+      "id.api.pub.model.AssetMessageB\010\212\265\030\004list:" +
+      "\206\001\n\006owners\0228.com.n4systems.fieldid.api.p" +
+      "ub.model.ListResponseMessage\030\351\007 \003(\01321.co" +
+      "m.n4systems.fieldid.api.pub.model.OwnerM" +
+      "essageB\010\212\265\030\004list:\223\001\n\rassetStatuses\0228.com" +
+      ".n4systems.fieldid.api.pub.model.ListRes" +
+      "ponseMessage\030\352\007 \003(\01327.com.n4systems.fiel",
+      "did.api.pub.model.AssetStatusMessageB\010\212\265" +
+      "\030\004list:\216\001\n\nassetTypes\0228.com.n4systems.fi" +
       "eldid.api.pub.model.ListResponseMessage\030" +
-      "\354\007 \003(\0132:.com.n4systems.fieldid.api.pub.m" +
-      "odel.AssetTypeGroupMessageB\010\212\265\030\004list:\226\001\n" +
-      "\tlocations\0228.com.n4systems.fieldid.api.p" +
-      "ub.model.ListResponseMessage\030\355\007 \003(\0132>.co" +
-      "m.n4systems.fieldid.api.pub.model.Predef" +
-      "inedLocationMessageB\010\212\265\030\004list:\204\001\n\005users\022" +
-      "8.com.n4systems.fieldid.api.pub.model.Li" +
-      "stResponseMessage\030\356\007 \003(\01320.com.n4systems" +
-      ".fieldid.api.pub.model.UserMessageB\010\212\265\030\004",
-      "list:\216\001\n\nuserGroups\0228.com.n4systems.fiel" +
-      "did.api.pub.model.ListResponseMessage\030\357\007" +
-      " \003(\01325.com.n4systems.fieldid.api.pub.mod" +
-      "el.UserGroupMessageB\010\212\265\030\004list:\206\001\n\006events" +
-      "\0228.com.n4systems.fieldid.api.pub.model.L" +
-      "istResponseMessage\030\360\007 \003(\01321.com.n4system" +
-      "s.fieldid.api.pub.model.EventMessageB\010\212\265" +
-      "\030\004listB/\n#com.n4systems.fieldid.api.pub." +
-      "modelB\010Messages"
+      "\353\007 \003(\01325.com.n4systems.fieldid.api.pub.m" +
+      "odel.AssetTypeMessageB\010\212\265\030\004list:\230\001\n\017asse" +
+      "tTypeGroups\0228.com.n4systems.fieldid.api." +
+      "pub.model.ListResponseMessage\030\354\007 \003(\0132:.c" +
+      "om.n4systems.fieldid.api.pub.model.Asset" +
+      "TypeGroupMessageB\010\212\265\030\004list:\226\001\n\tlocations" +
+      "\0228.com.n4systems.fieldid.api.pub.model.L",
+      "istResponseMessage\030\355\007 \003(\0132>.com.n4system" +
+      "s.fieldid.api.pub.model.PredefinedLocati" +
+      "onMessageB\010\212\265\030\004list:\204\001\n\005users\0228.com.n4sy" +
+      "stems.fieldid.api.pub.model.ListResponse" +
+      "Message\030\356\007 \003(\01320.com.n4systems.fieldid.a" +
+      "pi.pub.model.UserMessageB\010\212\265\030\004list:\216\001\n\nu" +
+      "serGroups\0228.com.n4systems.fieldid.api.pu" +
+      "b.model.ListResponseMessage\030\357\007 \003(\01325.com" +
+      ".n4systems.fieldid.api.pub.model.UserGro" +
+      "upMessageB\010\212\265\030\004list:\206\001\n\006events\0228.com.n4s",
+      "ystems.fieldid.api.pub.model.ListRespons" +
+      "eMessage\030\360\007 \003(\01321.com.n4systems.fieldid." +
+      "api.pub.model.EventMessageB\010\212\265\030\004listB/\n#" +
+      "com.n4systems.fieldid.api.pub.modelB\010Mes" +
+      "sages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {

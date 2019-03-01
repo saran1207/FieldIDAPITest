@@ -29,25 +29,25 @@ message AssetMessage {
 	optional string ownerName 				= 8;
 	required string ownerId 				= 9;
 	required string identifier 				= 10;
-	optional string rfidNumber 				= 11;
-	optional string customerRefNumber 		= 12;
-	optional string purchaseOrder 			= 13;
-	optional string comments 				= 14;
-	optional string identifiedDate 			= 15;
+	optional string rfidNumber 				= 11 [default = "__null__"];
+	optional string customerRefNumber 		= 12 [default = "__null__"];
+	optional string purchaseOrder 			= 13 [default = "__null__"];
+	optional string comments 				= 14 [default = "__null__"];
+	optional string identifiedDate 			= 15 [default = "__null__"];
 	optional string assetTypeName 			= 16;
 	required string assetTypeId 			= 17;
 	optional string assetStatusName 		= 18;
-	optional string assetStatusId 			= 19;
+	optional string assetStatusId 			= 19 [default = "__null__"];
 	optional string identifiedByUserName 	= 20;
-	optional string identifiedByUserId 		= 21;
+	optional string identifiedByUserId 		= 21 [default = "__null__"];
 	optional string assignedUserName 		= 22;
-	optional string assignedUserId 			= 23;
+	optional string assignedUserId 			= 23 [default = "__null__"];
 	optional string latitude				= 24;
 	optional string longitude				= 25;
 	optional string freeFormLocation 		= 26;
 	optional string predefinedLocationName	= 27;
 	optional string predefinedLocationId 	= 28;
-	optional string orderNumber 			= 29;
+	optional string orderNumber 			= 29 [default = "__null__"];
 	optional string description 			= 30;
 
 	message AttributeMessage {
@@ -70,10 +70,10 @@ message EventMessage {
 	optional string modifiedByUserId 		= 8;
 
 	optional string assignedToUserName	 	= 9;
-	optional string assignedToUserId 		= 10;
+	optional string assignedToUserId 		= 10 [default = "__null__"];
 
 	optional string completedByUserName 	= 11;
-	optional string completedByUserId 		= 12;
+	optional string completedByUserId 		= 12 [default = "__null__"];
 
 	enum EventResult {
 			PASS 		= 1;
@@ -100,12 +100,12 @@ message EventMessage {
 	optional string rfidNumber 				= 20;
 	optional string customerRefNumber 		= 21;
 	optional string assetId		 			= 22;
-	optional string comments				= 23;
-	optional string notes					= 24;
-	optional string score					= 25;
-	optional string dueDate 				= 26;
+	optional string comments				= 23 [default = "__null__"];
+	optional string notes					= 24 [default = "__null__"];
+	optional string score					= 25 [default = "__null__"];
+	optional string dueDate 				= 26 [default = "__null__"];
 	optional string priorityCodeName 		= 27;
-	optional string priorityCodeId 			= 28;
+	optional string priorityCodeId 			= 28 [default = "__null__"];
 
 }
 
@@ -117,7 +117,7 @@ message AssetStatusMessage {
 	optional string createdByUserId 	= 5;
 	optional string modifiedByUserName	= 6;
 	optional string modifiedByUserId 	= 7;
-	optional string name 				= 8;
+	optional string name 				= 8 [default = "__null__"];
 }
 
 message AssetTypeMessage {
@@ -196,8 +196,8 @@ message OwnerMessage {
     required string name 				= 8;
 	optional string parentName			= 9;
 	optional string parentId			= 10;
-	optional string code 				= 11;
-	optional string notes				= 12;
+	optional string code 				= 11 [default = "__null__"];
+	optional string notes				= 12 [default = "__null__"];
 	optional string streetAddress		= 13;
 	optional string city				= 14;
 	optional string state				= 15;
@@ -221,9 +221,9 @@ message PredefinedLocationMessage {
 	optional string modifiedByUserName 	= 6;
 	optional string modifiedByUserId 	= 7;
 	optional string ownerName 			= 8;
-	optional string ownerId 			= 9;
+	optional string ownerId 			= 9 [default = "__null__"];
 	optional string parentName 			= 10;
-	optional string parentId 			= 11;
+	optional string parentId 			= 11 [default = "__null__"];
 	required string name 				= 12;
 }
 

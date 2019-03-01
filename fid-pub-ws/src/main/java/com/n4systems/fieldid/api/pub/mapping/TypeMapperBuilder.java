@@ -37,7 +37,7 @@ public class TypeMapperBuilder<FromType, ToType> {
 		return add((FromType from, ToType to)  -> {
 			if (from != null) {
 				FromValue value = getter.get(from);
-				if (value != null || mapNulls) {
+				if ((value != null && !value.equals("__null__")) || mapNulls) {
 					setter.set(to, converter.convert(value, new ConversionContext<>(from, to)));
 				}
 			}
