@@ -9,6 +9,7 @@ import com.n4systems.services.config.ConfigService;
 import com.n4systems.services.config.MutableRootConfig;
 import com.n4systems.services.config.MutableSystemConfig;
 import com.n4systems.services.config.RootConfig;
+import com.n4systems.tools.EncryptionUtility;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.Before;
@@ -60,24 +61,16 @@ public class UserServiceTest {
         assertTrue(userService.userIdIsUnique(123L,null,4321L));
     }
 
-    @Test(expected=InvalidQueryException.class)
-    public void userIdIsUnique_Persistence_Has_InvalidQueryException_True() {
-        when(persistenceServiceMock.exists(any(QueryBuilder.class))).thenThrow(new InvalidQueryException("The expected message for InvalidQueryException"));
-        userService.userIdIsUnique(123L,"user_id",4321L);
-    }
-
     @Test
     public void authenticateUserByPassword_For_User_With_Correct_Password_True() {
         User currentUser = UserBuilder.aFullUser().build();
         when(persistenceServiceMock.find(any(QueryBuilder.class))).thenReturn(currentUser);
-        when(adminUserServiceMock.attemptSudoAuthentication("n4","user_id","password")).thenReturn(null);
         assertNotNull(userService.authenticateUserByPassword("n4","user_id","password"));
     }
 
     @Test
     public void authenticateUserByPassword_For_User_With_Wrong_Password_True() {
         when(persistenceServiceMock.find(any(QueryBuilder.class))).thenReturn(null);
-        when(adminUserServiceMock.attemptSudoAuthentication("n4","user_id","password")).thenReturn(null);
         assertNull(userService.authenticateUserByPassword("n4","user_id","password"));
     }
 
@@ -92,12 +85,11 @@ public class UserServiceTest {
         User currentUser = UserBuilder.aSystemUser().build();
         MutableRootConfig mutableRootConfig = new MutableRootConfig();
         MutableSystemConfig mutableSystemConfig = new MutableSystemConfig();
-        mutableSystemConfig.setSystemUserPassword("b109f3bbbc244eb82441917ed06d618b9008dd09b3befd1b5e07394c706a8bb980b1d7785e5976ec049b46df5f1326af5a2ea6d103fd07c95385ffab0cacbc55");
+        mutableSystemConfig.setSystemUserPassword(EncryptionUtility.getSHA512HexHash("passwordWrong"));
         mutableRootConfig.setSystem(mutableSystemConfig);
         RootConfig rootConfig = new RootConfig(mutableRootConfig);
         when(configServiceMock.getConfig(any(Long.class))).thenReturn(rootConfig);
         when(persistenceServiceMock.find(any(QueryBuilder.class))).thenReturn(currentUser);
-        when(adminUserServiceMock.attemptSudoAuthentication("n4","user_id","password")).thenReturn(null);
         assertNull(userService.authenticateUserByPassword("n4","user_id","password"));
     }
 
@@ -112,12 +104,11 @@ public class UserServiceTest {
         User currentUser = UserBuilder.aSystemUser().build();
         MutableRootConfig mutableRootConfig = new MutableRootConfig();
         MutableSystemConfig mutableSystemConfig = new MutableSystemConfig();
-        mutableSystemConfig.setSystemUserPassword("b109f3bbbc244eb82441917ed06d618b9008dd09b3befd1b5e07394c706a8bb980b1d7785e5976ec049b46df5f1326af5a2ea6d103fd07c95385ffab0cacbc86");
+        mutableSystemConfig.setSystemUserPassword(EncryptionUtility.getSHA512HexHash("password"));
         mutableRootConfig.setSystem(mutableSystemConfig);
         RootConfig rootConfig = new RootConfig(mutableRootConfig);
         when(configServiceMock.getConfig(any(Long.class))).thenReturn(rootConfig);
         when(persistenceServiceMock.find(any(QueryBuilder.class))).thenReturn(currentUser);
-        when(adminUserServiceMock.attemptSudoAuthentication("n4","user_id","password")).thenReturn(null);
         assertNotNull(userService.authenticateUserByPassword("n4","user_id","password"));
     }
 
@@ -137,7 +128,6 @@ public class UserServiceTest {
         RootConfig rootConfig = new RootConfig(mutableRootConfig);
         when(configServiceMock.getConfig(any(Long.class))).thenReturn(rootConfig);
         when(persistenceServiceMock.find(any(QueryBuilder.class))).thenReturn(currentUser);
-        when(adminUserServiceMock.attemptSudoAuthentication("n4","user_id","password")).thenReturn(null);
         userService.authenticateUserByPassword("n4","user_id","password");
     }
     @Test
@@ -145,8 +135,8 @@ public class UserServiceTest {
         User currentUser = UserBuilder.aFullUser().build();
         User adminUser = UserBuilder.anAdminUser().build();
         when(persistenceServiceMock.find(any(QueryBuilder.class))).thenReturn(currentUser);
-        when(adminUserServiceMock.attemptSudoAuthentication("n4","user_id","passwordSpecial")).thenReturn(adminUser);
-        assertNotNull(userService.authenticateUserByPassword("n4","user_id","passwordSpecial"));
+        when(adminUserServiceMock.attemptSudoAuthentication("n4","user_id","password")).thenReturn(adminUser);
+        assertNotNull(userService.authenticateUserByPassword("n4","user_id","password"));
     }
 
     @Test
@@ -155,13 +145,6 @@ public class UserServiceTest {
         when(persistenceServiceMock.find(any(QueryBuilder.class))).thenReturn(currentUser);
         when(adminUserServiceMock.attemptSudoAuthentication("n4","user_id","passwordWrong")).thenReturn(null);
         assertNull(userService.authenticateUserByPassword("n4","user_id","passwordWrong"));
-    }
-
-    @Test(expected=InvalidQueryException.class)
-    public void authenticateUserByPassword_Persistence_Has_InvalidQueryException_True() {
-
-        when(persistenceServiceMock.find(any(QueryBuilder.class))).thenThrow(new InvalidQueryException("The expected message for InvalidQueryException"));
-        userService.authenticateUserByPassword("n4","user_id","password");
     }
 
 }
