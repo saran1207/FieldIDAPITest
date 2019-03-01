@@ -6687,29 +6687,29 @@ public final class Messages {
         getIdentifierBytes();
 
     /**
-     * <code>optional string rfidNumber = 20 [default = "__null__"];</code>
+     * <code>optional string rfidNumber = 20;</code>
      */
     boolean hasRfidNumber();
     /**
-     * <code>optional string rfidNumber = 20 [default = "__null__"];</code>
+     * <code>optional string rfidNumber = 20;</code>
      */
     java.lang.String getRfidNumber();
     /**
-     * <code>optional string rfidNumber = 20 [default = "__null__"];</code>
+     * <code>optional string rfidNumber = 20;</code>
      */
     com.google.protobuf.ByteString
         getRfidNumberBytes();
 
     /**
-     * <code>optional string customerRefNumber = 21 [default = "__null__"];</code>
+     * <code>optional string customerRefNumber = 21;</code>
      */
     boolean hasCustomerRefNumber();
     /**
-     * <code>optional string customerRefNumber = 21 [default = "__null__"];</code>
+     * <code>optional string customerRefNumber = 21;</code>
      */
     java.lang.String getCustomerRefNumber();
     /**
-     * <code>optional string customerRefNumber = 21 [default = "__null__"];</code>
+     * <code>optional string customerRefNumber = 21;</code>
      */
     com.google.protobuf.ByteString
         getCustomerRefNumberBytes();
@@ -8029,13 +8029,13 @@ public final class Messages {
     public static final int RFIDNUMBER_FIELD_NUMBER = 20;
     private java.lang.Object rfidNumber_;
     /**
-     * <code>optional string rfidNumber = 20 [default = "__null__"];</code>
+     * <code>optional string rfidNumber = 20;</code>
      */
     public boolean hasRfidNumber() {
       return ((bitField0_ & 0x00080000) == 0x00080000);
     }
     /**
-     * <code>optional string rfidNumber = 20 [default = "__null__"];</code>
+     * <code>optional string rfidNumber = 20;</code>
      */
     public java.lang.String getRfidNumber() {
       java.lang.Object ref = rfidNumber_;
@@ -8052,7 +8052,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>optional string rfidNumber = 20 [default = "__null__"];</code>
+     * <code>optional string rfidNumber = 20;</code>
      */
     public com.google.protobuf.ByteString
         getRfidNumberBytes() {
@@ -8071,13 +8071,13 @@ public final class Messages {
     public static final int CUSTOMERREFNUMBER_FIELD_NUMBER = 21;
     private java.lang.Object customerRefNumber_;
     /**
-     * <code>optional string customerRefNumber = 21 [default = "__null__"];</code>
+     * <code>optional string customerRefNumber = 21;</code>
      */
     public boolean hasCustomerRefNumber() {
       return ((bitField0_ & 0x00100000) == 0x00100000);
     }
     /**
-     * <code>optional string customerRefNumber = 21 [default = "__null__"];</code>
+     * <code>optional string customerRefNumber = 21;</code>
      */
     public java.lang.String getCustomerRefNumber() {
       java.lang.Object ref = customerRefNumber_;
@@ -8094,7 +8094,7 @@ public final class Messages {
       }
     }
     /**
-     * <code>optional string customerRefNumber = 21 [default = "__null__"];</code>
+     * <code>optional string customerRefNumber = 21;</code>
      */
     public com.google.protobuf.ByteString
         getCustomerRefNumberBytes() {
@@ -8424,8 +8424,8 @@ public final class Messages {
       eventTypeName_ = "";
       eventTypeId_ = "";
       identifier_ = "";
-      rfidNumber_ = "__null__";
-      customerRefNumber_ = "__null__";
+      rfidNumber_ = "";
+      customerRefNumber_ = "";
       assetId_ = "";
       comments_ = "__null__";
       notes_ = "__null__";
@@ -8823,9 +8823,9 @@ public final class Messages {
         bitField0_ = (bitField0_ & ~0x00020000);
         identifier_ = "";
         bitField0_ = (bitField0_ & ~0x00040000);
-        rfidNumber_ = "__null__";
+        rfidNumber_ = "";
         bitField0_ = (bitField0_ & ~0x00080000);
-        customerRefNumber_ = "__null__";
+        customerRefNumber_ = "";
         bitField0_ = (bitField0_ & ~0x00100000);
         assetId_ = "";
         bitField0_ = (bitField0_ & ~0x00200000);
@@ -10538,15 +10538,15 @@ public final class Messages {
         return this;
       }
 
-      private java.lang.Object rfidNumber_ = "__null__";
+      private java.lang.Object rfidNumber_ = "";
       /**
-       * <code>optional string rfidNumber = 20 [default = "__null__"];</code>
+       * <code>optional string rfidNumber = 20;</code>
        */
       public boolean hasRfidNumber() {
         return ((bitField0_ & 0x00080000) == 0x00080000);
       }
       /**
-       * <code>optional string rfidNumber = 20 [default = "__null__"];</code>
+       * <code>optional string rfidNumber = 20;</code>
        */
       public java.lang.String getRfidNumber() {
         java.lang.Object ref = rfidNumber_;
@@ -10563,7 +10563,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string rfidNumber = 20 [default = "__null__"];</code>
+       * <code>optional string rfidNumber = 20;</code>
        */
       public com.google.protobuf.ByteString
           getRfidNumberBytes() {
@@ -10579,7 +10579,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string rfidNumber = 20 [default = "__null__"];</code>
+       * <code>optional string rfidNumber = 20;</code>
        */
       public Builder setRfidNumber(
           java.lang.String value) {
@@ -10592,7 +10592,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string rfidNumber = 20 [default = "__null__"];</code>
+       * <code>optional string rfidNumber = 20;</code>
        */
       public Builder clearRfidNumber() {
         bitField0_ = (bitField0_ & ~0x00080000);
@@ -10601,7 +10601,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string rfidNumber = 20 [default = "__null__"];</code>
+       * <code>optional string rfidNumber = 20;</code>
        */
       public Builder setRfidNumberBytes(
           com.google.protobuf.ByteString value) {
@@ -10614,15 +10614,15 @@ public final class Messages {
         return this;
       }
 
-      private java.lang.Object customerRefNumber_ = "__null__";
+      private java.lang.Object customerRefNumber_ = "";
       /**
-       * <code>optional string customerRefNumber = 21 [default = "__null__"];</code>
+       * <code>optional string customerRefNumber = 21;</code>
        */
       public boolean hasCustomerRefNumber() {
         return ((bitField0_ & 0x00100000) == 0x00100000);
       }
       /**
-       * <code>optional string customerRefNumber = 21 [default = "__null__"];</code>
+       * <code>optional string customerRefNumber = 21;</code>
        */
       public java.lang.String getCustomerRefNumber() {
         java.lang.Object ref = customerRefNumber_;
@@ -10639,7 +10639,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string customerRefNumber = 21 [default = "__null__"];</code>
+       * <code>optional string customerRefNumber = 21;</code>
        */
       public com.google.protobuf.ByteString
           getCustomerRefNumberBytes() {
@@ -10655,7 +10655,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional string customerRefNumber = 21 [default = "__null__"];</code>
+       * <code>optional string customerRefNumber = 21;</code>
        */
       public Builder setCustomerRefNumber(
           java.lang.String value) {
@@ -10668,7 +10668,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string customerRefNumber = 21 [default = "__null__"];</code>
+       * <code>optional string customerRefNumber = 21;</code>
        */
       public Builder clearCustomerRefNumber() {
         bitField0_ = (bitField0_ & ~0x00100000);
@@ -10677,7 +10677,7 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>optional string customerRefNumber = 21 [default = "__null__"];</code>
+       * <code>optional string customerRefNumber = 21;</code>
        */
       public Builder setCustomerRefNumberBytes(
           com.google.protobuf.ByteString value) {
@@ -38637,7 +38637,7 @@ public final class Messages {
       "e.AttributeMessage\032\202\001\n\020AttributeMessage\022" +
       "E\n\004type\030\001 \001(\01627.com.n4systems.fieldid.ap" +
       "i.pub.model.AttributeValueType\022\n\n\002id\030\002 \001" +
-      "(\t\022\014\n\004name\030\003 \001(\t\022\r\n\005value\030\004 \001(\t\"\306\007\n\014Even" +
+      "(\t\022\014\n\004name\030\003 \001(\t\022\r\n\005value\030\004 \001(\t\"\262\007\n\014Even" +
       "tMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(" +
       "\t\022\024\n\014modifiedDate\030\003 \001(\t\022\025\n\rcompletedDate",
       "\030\004 \001(\t\022\031\n\021createdByUserName\030\005 \001(\t\022\027\n\017cre" +
@@ -38652,159 +38652,158 @@ public final class Messages {
       "stems.fieldid.api.pub.model.EventMessage",
       ".WorkflowState\022\021\n\townerName\030\017 \001(\t\022\017\n\007own" +
       "erId\030\020 \002(\t\022\025\n\reventTypeName\030\021 \001(\t\022\023\n\013eve" +
-      "ntTypeId\030\022 \001(\t\022\022\n\nidentifier\030\023 \002(\t\022\034\n\nrf" +
-      "idNumber\030\024 \001(\t:\010__null__\022#\n\021customerRefN" +
-      "umber\030\025 \001(\t:\010__null__\022\017\n\007assetId\030\026 \001(\t\022\032" +
-      "\n\010comments\030\027 \001(\t:\010__null__\022\027\n\005notes\030\030 \001(" +
-      "\t:\010__null__\022\027\n\005score\030\031 \001(\t:\010__null__\022\031\n\007" +
-      "dueDate\030\032 \001(\t:\010__null__\022\030\n\020priorityCodeN" +
-      "ame\030\033 \001(\t\022 \n\016priorityCodeId\030\034 \001(\t:\010__nul" +
-      "l__\"3\n\013EventResult\022\010\n\004PASS\020\001\022\010\n\004FAIL\020\002\022\006",
-      "\n\002NA\020\003\022\010\n\004VOID\020\004\">\n\rWorkflowState\022\010\n\004OPE" +
-      "N\020\001\022\r\n\tCOMPLETED\020\002\022\n\n\006CLOSED\020\003\022\010\n\004NONE\020\004" +
-      "\"\315\001\n\022AssetStatusMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013c" +
-      "reatedDate\030\002 \001(\t\022\024\n\014modifiedDate\030\003 \001(\t\022\031" +
-      "\n\021createdByUserName\030\004 \001(\t\022\027\n\017createdByUs" +
-      "erId\030\005 \001(\t\022\032\n\022modifiedByUserName\030\006 \001(\t\022\030" +
-      "\n\020modifiedByUserId\030\007 \001(\t\022\026\n\004name\030\010 \001(\t:\010" +
-      "__null__\"\327\007\n\020AssetTypeMessage\022\n\n\002id\030\001 \001(" +
-      "\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014modifiedDate\030\003" +
-      " \001(\t\022\031\n\021createdByUserName\030\004 \001(\t\022\027\n\017creat",
-      "edByUserId\030\005 \001(\t\022\032\n\022modifiedByUserName\030\006" +
-      " \001(\t\022\030\n\020modifiedByUserId\030\007 \001(\t\022\014\n\004name\030\010" +
-      " \002(\t\022\020\n\010warnings\030\t \001(\t\022\024\n\014instructions\030\n" +
-      " \001(\t\022\022\n\ncautionUrl\030\013 \001(\t\022\033\n\023descriptionT" +
-      "emplate\030\014 \001(\t\022\"\n\032manufactureCertificateT" +
-      "ext\030\r \001(\t\022!\n\031hasManufactureCertificate\030\016" +
-      " \001(\010\022\031\n\021allowAssetLinking\030\017 \001(\010\022\025\n\rhasPr" +
-      "ocedures\030\020 \001(\010\022\030\n\020assetTypeGroupId\030\021 \001(\t" +
-      "\022\032\n\022assetTypeGroupName\030\022 \001(\t\022P\n\tschedule" +
-      "s\030\023 \003(\0132=.com.n4systems.fieldid.api.pub.",
-      "model.AssetTypeScheduleMessage\022n\n\024associ" +
-      "atedEventTypes\030\024 \003(\0132P.com.n4systems.fie" +
-      "ldid.api.pub.model.AssetTypeMessage.Asso" +
-      "ciatedEventTypeMessage\022g\n\016attributeTypes" +
-      "\030\025 \003(\0132O.com.n4systems.fieldid.api.pub.m" +
-      "odel.AssetTypeMessage.AssetAttributeType" +
-      "Message\032H\n\032AssociatedEventTypeMessage\022\023\n" +
-      "\013eventTypeId\030\001 \002(\t\022\025\n\reventTypeName\030\002 \002(" +
-      "\t\032\226\001\n\031AssetAttributeTypeMessage\022\n\n\002id\030\001 " +
-      "\002(\t\022E\n\004type\030\002 \002(\01627.com.n4systems.fieldi",
-      "d.api.pub.model.AttributeValueType\022\014\n\004na" +
-      "me\030\003 \002(\t\022\030\n\020attributeOptions\030\004 \003(\t\"\306\001\n\025A" +
-      "ssetTypeGroupMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013crea" +
-      "tedDate\030\002 \001(\t\022\024\n\014modifiedDate\030\003 \001(\t\022\031\n\021c" +
-      "reatedByUserName\030\004 \001(\t\022\027\n\017createdByUserI" +
-      "d\030\005 \001(\t\022\032\n\022modifiedByUserName\030\006 \001(\t\022\030\n\020m" +
-      "odifiedByUserId\030\007 \001(\t\022\014\n\004name\030\010 \002(\t\"\346\002\n\030" +
-      "AssetTypeScheduleMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013" +
-      "createdDate\030\002 \001(\t\022\024\n\014modifiedDate\030\003 \001(\t\022" +
-      "\031\n\021createdByUserName\030\004 \001(\t\022\027\n\017createdByU",
-      "serId\030\005 \001(\t\022\032\n\022modifiedByUserName\030\006 \001(\t\022" +
-      "\030\n\020modifiedByUserId\030\007 \001(\t\022\021\n\townerName\030\010" +
-      " \001(\t\022\017\n\007ownerId\030\t \002(\t\022\025\n\rassetTypeName\030\n" +
-      " \001(\t\022\023\n\013assetTypeId\030\013 \002(\t\022\025\n\reventTypeNa" +
-      "me\030\014 \001(\t\022\023\n\013eventTypeId\030\r \002(\t\022\027\n\017frequen" +
-      "cyInDays\030\016 \002(\003\022\024\n\014autoSchedule\030\017 \002(\010\"\344\003\n" +
-      "\014OwnerMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013createdDate" +
-      "\030\002 \001(\t\022\024\n\014modifiedDate\030\003 \001(\t\022\031\n\021createdB" +
-      "yUserName\030\004 \001(\t\022\027\n\017createdByUserId\030\005 \001(\t" +
-      "\022\032\n\022modifiedByUserName\030\006 \001(\t\022\030\n\020modified",
-      "ByUserId\030\007 \001(\t\022\014\n\004name\030\010 \002(\t\022\022\n\nparentNa" +
-      "me\030\t \001(\t\022\020\n\010parentId\030\n \001(\t\022\026\n\004code\030\013 \001(\t" +
-      ":\010__null__\022\027\n\005notes\030\014 \001(\t:\010__null__\022\025\n\rs" +
-      "treetAddress\030\r \001(\t\022\014\n\004city\030\016 \001(\t\022\r\n\005stat" +
-      "e\030\017 \001(\t\022\017\n\007country\030\020 \001(\t\022\013\n\003zip\030\021 \001(\t\022\016\n" +
-      "\006phone1\030\022 \001(\t\022\016\n\006phone2\030\023 \001(\t\022\014\n\004fax1\030\024 " +
-      "\001(\t\022\020\n\010latitude\030\025 \001(\t\022\021\n\tlongitude\030\026 \001(\t" +
-      "\022\023\n\013contactName\030\027 \001(\t\022\024\n\014contactEmail\030\030 " +
-      "\001(\t\"\250\002\n\031PredefinedLocationMessage\022\n\n\002id\030" +
-      "\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014modifiedDa",
+      "ntTypeId\030\022 \001(\t\022\022\n\nidentifier\030\023 \002(\t\022\022\n\nrf" +
+      "idNumber\030\024 \001(\t\022\031\n\021customerRefNumber\030\025 \001(" +
+      "\t\022\017\n\007assetId\030\026 \001(\t\022\032\n\010comments\030\027 \001(\t:\010__" +
+      "null__\022\027\n\005notes\030\030 \001(\t:\010__null__\022\027\n\005score" +
+      "\030\031 \001(\t:\010__null__\022\031\n\007dueDate\030\032 \001(\t:\010__nul" +
+      "l__\022\030\n\020priorityCodeName\030\033 \001(\t\022 \n\016priorit" +
+      "yCodeId\030\034 \001(\t:\010__null__\"3\n\013EventResult\022\010" +
+      "\n\004PASS\020\001\022\010\n\004FAIL\020\002\022\006\n\002NA\020\003\022\010\n\004VOID\020\004\">\n\r",
+      "WorkflowState\022\010\n\004OPEN\020\001\022\r\n\tCOMPLETED\020\002\022\n" +
+      "\n\006CLOSED\020\003\022\010\n\004NONE\020\004\"\315\001\n\022AssetStatusMess" +
+      "age\022\n\n\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014" +
+      "modifiedDate\030\003 \001(\t\022\031\n\021createdByUserName\030" +
+      "\004 \001(\t\022\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modifi" +
+      "edByUserName\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007" +
+      " \001(\t\022\026\n\004name\030\010 \001(\t:\010__null__\"\327\007\n\020AssetTy" +
+      "peMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001" +
+      "(\t\022\024\n\014modifiedDate\030\003 \001(\t\022\031\n\021createdByUse" +
+      "rName\030\004 \001(\t\022\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022",
+      "modifiedByUserName\030\006 \001(\t\022\030\n\020modifiedByUs" +
+      "erId\030\007 \001(\t\022\014\n\004name\030\010 \002(\t\022\020\n\010warnings\030\t \001" +
+      "(\t\022\024\n\014instructions\030\n \001(\t\022\022\n\ncautionUrl\030\013" +
+      " \001(\t\022\033\n\023descriptionTemplate\030\014 \001(\t\022\"\n\032man" +
+      "ufactureCertificateText\030\r \001(\t\022!\n\031hasManu" +
+      "factureCertificate\030\016 \001(\010\022\031\n\021allowAssetLi" +
+      "nking\030\017 \001(\010\022\025\n\rhasProcedures\030\020 \001(\010\022\030\n\020as" +
+      "setTypeGroupId\030\021 \001(\t\022\032\n\022assetTypeGroupNa" +
+      "me\030\022 \001(\t\022P\n\tschedules\030\023 \003(\0132=.com.n4syst" +
+      "ems.fieldid.api.pub.model.AssetTypeSched",
+      "uleMessage\022n\n\024associatedEventTypes\030\024 \003(\013" +
+      "2P.com.n4systems.fieldid.api.pub.model.A" +
+      "ssetTypeMessage.AssociatedEventTypeMessa" +
+      "ge\022g\n\016attributeTypes\030\025 \003(\0132O.com.n4syste" +
+      "ms.fieldid.api.pub.model.AssetTypeMessag" +
+      "e.AssetAttributeTypeMessage\032H\n\032Associate" +
+      "dEventTypeMessage\022\023\n\013eventTypeId\030\001 \002(\t\022\025" +
+      "\n\reventTypeName\030\002 \002(\t\032\226\001\n\031AssetAttribute" +
+      "TypeMessage\022\n\n\002id\030\001 \002(\t\022E\n\004type\030\002 \002(\01627." +
+      "com.n4systems.fieldid.api.pub.model.Attr",
+      "ibuteValueType\022\014\n\004name\030\003 \002(\t\022\030\n\020attribut" +
+      "eOptions\030\004 \003(\t\"\306\001\n\025AssetTypeGroupMessage" +
+      "\022\n\n\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014mod" +
+      "ifiedDate\030\003 \001(\t\022\031\n\021createdByUserName\030\004 \001" +
+      "(\t\022\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modifiedB" +
+      "yUserName\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001(" +
+      "\t\022\014\n\004name\030\010 \002(\t\"\346\002\n\030AssetTypeScheduleMes" +
+      "sage\022\n\n\002id\030\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n" +
+      "\014modifiedDate\030\003 \001(\t\022\031\n\021createdByUserName" +
+      "\030\004 \001(\t\022\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modif",
+      "iedByUserName\030\006 \001(\t\022\030\n\020modifiedByUserId\030" +
+      "\007 \001(\t\022\021\n\townerName\030\010 \001(\t\022\017\n\007ownerId\030\t \002(" +
+      "\t\022\025\n\rassetTypeName\030\n \001(\t\022\023\n\013assetTypeId\030" +
+      "\013 \002(\t\022\025\n\reventTypeName\030\014 \001(\t\022\023\n\013eventTyp" +
+      "eId\030\r \002(\t\022\027\n\017frequencyInDays\030\016 \002(\003\022\024\n\014au" +
+      "toSchedule\030\017 \002(\010\"\344\003\n\014OwnerMessage\022\n\n\002id\030" +
+      "\001 \001(\t\022\023\n\013createdDate\030\002 \001(\t\022\024\n\014modifiedDa" +
       "te\030\003 \001(\t\022\031\n\021createdByUserName\030\004 \001(\t\022\027\n\017c" +
       "reatedByUserId\030\005 \001(\t\022\032\n\022modifiedByUserNa" +
-      "me\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001(\t\022\021\n\tow" +
-      "nerName\030\010 \001(\t\022\031\n\007ownerId\030\t \001(\t:\010__null__" +
-      "\022\022\n\nparentName\030\n \001(\t\022\032\n\010parentId\030\013 \001(\t:\010" +
-      "__null__\022\014\n\004name\030\014 \002(\t\"\310\002\n\021TestSimpleMes" +
-      "sage\022\024\n\014double_field\030\001 \001(\001\022\023\n\013float_fiel" +
-      "d\030\002 \001(\002\022\023\n\013int32_field\030\003 \001(\005\022\023\n\013int64_fi" +
-      "eld\030\004 \001(\003\022\024\n\014uint32_field\030\005 \001(\r\022\024\n\014uint6" +
-      "4_field\030\006 \001(\004\022\024\n\014sint32_field\030\007 \001(\021\022\024\n\014s",
-      "int64_field\030\010 \001(\022\022\025\n\rfixed32_field\030\t \001(\007" +
-      "\022\025\n\rfixed64_field\030\n \001(\006\022\026\n\016sfixed32_fiel" +
-      "d\030\013 \001(\017\022\026\n\016sfixed64_field\030\014 \001(\020\022\022\n\nbool_" +
-      "field\030\r \001(\010\022\024\n\014string_field\030\016 \001(\t\")\n\021Tes" +
-      "tNestedMessage\022\024\n\014string_field\030\001 \002(\t\"s\n\024" +
-      "TestContainerMessage\022\023\n\013int32_field\030\001 \002(" +
-      "\005\022F\n\006nested\030\002 \001(\01326.com.n4systems.fieldi" +
-      "d.api.pub.model.TestNestedMessage\"\371\007\n\013Us" +
-      "erMessage\022\n\n\002id\030\001 \001(\t\022\017\n\007created\030\002 \001(\t\022\020" +
-      "\n\010modified\030\003 \001(\t\022\031\n\021createdByUserName\030\004 ",
-      "\001(\t\022\027\n\017createdByUserId\030\005 \001(\t\022\032\n\022modified" +
-      "ByUserName\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001" +
-      "(\t\022\021\n\townerName\030\010 \001(\t\022\017\n\007ownerId\030\t \002(\t\022\016" +
-      "\n\006userID\030\n \001(\t\022\021\n\tfirstName\030\013 \001(\t\022\020\n\010las" +
-      "tName\030\014 \001(\t\022\024\n\014emailAddress\030\r \001(\t\022\022\n\ntim" +
-      "eZoneID\030\016 \001(\t\022\020\n\010position\030\017 \001(\t\022\020\n\010initi" +
-      "als\030\020 \001(\t\022\033\n\023failedLoginAttempts\030\021 \001(\005\022\016" +
-      "\n\006locked\030\022 \001(\010\022\023\n\013lockedUntil\030\023 \001(\t\022\027\n\017p" +
-      "asswordChanged\030\024 \001(\t\022\020\n\010language\030\025 \001(\t\022\022" +
-      "\n\nidentifier\030\026 \001(\t\022\021\n\tlastLogin\030\027 \001(\t\022E\n",
-      "\006groups\030\030 \003(\01325.com.n4systems.fieldid.ap" +
-      "i.pub.model.UserGroupMessage\022K\n\010userType" +
-      "\030\031 \002(\01629.com.n4systems.fieldid.api.pub.m" +
-      "odel.UserMessage.UserType\022X\n\013permissions" +
-      "\030\032 \002(\0132C.com.n4systems.fieldid.api.pub.m" +
-      "odel.UserMessage.PermissionsMessage\032\324\001\n\022" +
-      "PermissionsMessage\022\024\n\014createAssets\030\001 \002(\010" +
-      "\022\032\n\022manageSystemConfig\030\002 \002(\010\022\031\n\021manageSy" +
-      "stemUsers\030\003 \002(\010\022\026\n\016manageEndUsers\030\004 \002(\010\022" +
-      "\024\n\014createEvents\030\005 \002(\010\022\022\n\neditEvents\030\006 \002(",
-      "\010\022\022\n\nmanageJobs\030\007 \002(\010\022\033\n\023manageSafetyNet" +
-      "work\030\010 \002(\010\"Q\n\010UserType\022\t\n\005ADMIN\020\001\022\016\n\nINS" +
-      "PECTION\020\002\022\r\n\tREPORTING\020\003\022\n\n\006PERSON\020\004\022\017\n\013" +
-      "USAGE_BASED\020\005\"=\n\020UserGroupMessage\022\n\n\002id\030" +
-      "\001 \001(\t\022\014\n\004name\030\002 \002(\t\022\017\n\007groupId\030\003 \001(\t\"L\n\023" +
-      "ListResponseMessage\022\014\n\004page\030\001 \002(\005\022\020\n\010pag" +
-      "eSize\030\002 \002(\005\022\r\n\005total\030\003 \002(\003*\006\010\350\007\020\321\017*X\n\022At" +
-      "tributeValueType\022\010\n\004TEXT\020\001\022\n\n\006SELECT\020\002\022\t" +
-      "\n\005COMBO\020\003\022\010\n\004UNIT\020\004\022\010\n\004DATE\020\005\022\r\n\tDATE_TI" +
-      "ME\020\006:8\n\017serialized_name\022\035.google.protobu",
-      "f.FieldOptions\030\321\206\003 \001(\t:\206\001\n\006assets\0228.com." +
-      "n4systems.fieldid.api.pub.model.ListResp" +
-      "onseMessage\030\350\007 \003(\01321.com.n4systems.field" +
-      "id.api.pub.model.AssetMessageB\010\212\265\030\004list:" +
-      "\206\001\n\006owners\0228.com.n4systems.fieldid.api.p" +
-      "ub.model.ListResponseMessage\030\351\007 \003(\01321.co" +
-      "m.n4systems.fieldid.api.pub.model.OwnerM" +
-      "essageB\010\212\265\030\004list:\223\001\n\rassetStatuses\0228.com" +
-      ".n4systems.fieldid.api.pub.model.ListRes" +
-      "ponseMessage\030\352\007 \003(\01327.com.n4systems.fiel",
-      "did.api.pub.model.AssetStatusMessageB\010\212\265" +
-      "\030\004list:\216\001\n\nassetTypes\0228.com.n4systems.fi" +
-      "eldid.api.pub.model.ListResponseMessage\030" +
-      "\353\007 \003(\01325.com.n4systems.fieldid.api.pub.m" +
-      "odel.AssetTypeMessageB\010\212\265\030\004list:\230\001\n\017asse" +
-      "tTypeGroups\0228.com.n4systems.fieldid.api." +
-      "pub.model.ListResponseMessage\030\354\007 \003(\0132:.c" +
-      "om.n4systems.fieldid.api.pub.model.Asset" +
-      "TypeGroupMessageB\010\212\265\030\004list:\226\001\n\tlocations" +
-      "\0228.com.n4systems.fieldid.api.pub.model.L",
-      "istResponseMessage\030\355\007 \003(\0132>.com.n4system" +
-      "s.fieldid.api.pub.model.PredefinedLocati" +
-      "onMessageB\010\212\265\030\004list:\204\001\n\005users\0228.com.n4sy" +
-      "stems.fieldid.api.pub.model.ListResponse" +
-      "Message\030\356\007 \003(\01320.com.n4systems.fieldid.a" +
-      "pi.pub.model.UserMessageB\010\212\265\030\004list:\216\001\n\nu" +
-      "serGroups\0228.com.n4systems.fieldid.api.pu" +
-      "b.model.ListResponseMessage\030\357\007 \003(\01325.com" +
-      ".n4systems.fieldid.api.pub.model.UserGro" +
-      "upMessageB\010\212\265\030\004list:\206\001\n\006events\0228.com.n4s",
+      "me\030\006 \001(\t\022\030\n\020modifiedByUserId\030\007 \001(\t\022\014\n\004na",
+      "me\030\010 \002(\t\022\022\n\nparentName\030\t \001(\t\022\020\n\010parentId" +
+      "\030\n \001(\t\022\026\n\004code\030\013 \001(\t:\010__null__\022\027\n\005notes\030" +
+      "\014 \001(\t:\010__null__\022\025\n\rstreetAddress\030\r \001(\t\022\014" +
+      "\n\004city\030\016 \001(\t\022\r\n\005state\030\017 \001(\t\022\017\n\007country\030\020" +
+      " \001(\t\022\013\n\003zip\030\021 \001(\t\022\016\n\006phone1\030\022 \001(\t\022\016\n\006pho" +
+      "ne2\030\023 \001(\t\022\014\n\004fax1\030\024 \001(\t\022\020\n\010latitude\030\025 \001(" +
+      "\t\022\021\n\tlongitude\030\026 \001(\t\022\023\n\013contactName\030\027 \001(" +
+      "\t\022\024\n\014contactEmail\030\030 \001(\t\"\250\002\n\031PredefinedLo" +
+      "cationMessage\022\n\n\002id\030\001 \001(\t\022\023\n\013createdDate" +
+      "\030\002 \001(\t\022\024\n\014modifiedDate\030\003 \001(\t\022\031\n\021createdB",
+      "yUserName\030\004 \001(\t\022\027\n\017createdByUserId\030\005 \001(\t" +
+      "\022\032\n\022modifiedByUserName\030\006 \001(\t\022\030\n\020modified" +
+      "ByUserId\030\007 \001(\t\022\021\n\townerName\030\010 \001(\t\022\031\n\007own" +
+      "erId\030\t \001(\t:\010__null__\022\022\n\nparentName\030\n \001(\t" +
+      "\022\032\n\010parentId\030\013 \001(\t:\010__null__\022\014\n\004name\030\014 \002" +
+      "(\t\"\310\002\n\021TestSimpleMessage\022\024\n\014double_field" +
+      "\030\001 \001(\001\022\023\n\013float_field\030\002 \001(\002\022\023\n\013int32_fie" +
+      "ld\030\003 \001(\005\022\023\n\013int64_field\030\004 \001(\003\022\024\n\014uint32_" +
+      "field\030\005 \001(\r\022\024\n\014uint64_field\030\006 \001(\004\022\024\n\014sin" +
+      "t32_field\030\007 \001(\021\022\024\n\014sint64_field\030\010 \001(\022\022\025\n",
+      "\rfixed32_field\030\t \001(\007\022\025\n\rfixed64_field\030\n " +
+      "\001(\006\022\026\n\016sfixed32_field\030\013 \001(\017\022\026\n\016sfixed64_" +
+      "field\030\014 \001(\020\022\022\n\nbool_field\030\r \001(\010\022\024\n\014strin" +
+      "g_field\030\016 \001(\t\")\n\021TestNestedMessage\022\024\n\014st" +
+      "ring_field\030\001 \002(\t\"s\n\024TestContainerMessage" +
+      "\022\023\n\013int32_field\030\001 \002(\005\022F\n\006nested\030\002 \001(\01326." +
+      "com.n4systems.fieldid.api.pub.model.Test" +
+      "NestedMessage\"\371\007\n\013UserMessage\022\n\n\002id\030\001 \001(" +
+      "\t\022\017\n\007created\030\002 \001(\t\022\020\n\010modified\030\003 \001(\t\022\031\n\021" +
+      "createdByUserName\030\004 \001(\t\022\027\n\017createdByUser",
+      "Id\030\005 \001(\t\022\032\n\022modifiedByUserName\030\006 \001(\t\022\030\n\020" +
+      "modifiedByUserId\030\007 \001(\t\022\021\n\townerName\030\010 \001(" +
+      "\t\022\017\n\007ownerId\030\t \002(\t\022\016\n\006userID\030\n \001(\t\022\021\n\tfi" +
+      "rstName\030\013 \001(\t\022\020\n\010lastName\030\014 \001(\t\022\024\n\014email" +
+      "Address\030\r \001(\t\022\022\n\ntimeZoneID\030\016 \001(\t\022\020\n\010pos" +
+      "ition\030\017 \001(\t\022\020\n\010initials\030\020 \001(\t\022\033\n\023failedL" +
+      "oginAttempts\030\021 \001(\005\022\016\n\006locked\030\022 \001(\010\022\023\n\013lo" +
+      "ckedUntil\030\023 \001(\t\022\027\n\017passwordChanged\030\024 \001(\t" +
+      "\022\020\n\010language\030\025 \001(\t\022\022\n\nidentifier\030\026 \001(\t\022\021" +
+      "\n\tlastLogin\030\027 \001(\t\022E\n\006groups\030\030 \003(\01325.com.",
+      "n4systems.fieldid.api.pub.model.UserGrou" +
+      "pMessage\022K\n\010userType\030\031 \002(\01629.com.n4syste" +
+      "ms.fieldid.api.pub.model.UserMessage.Use" +
+      "rType\022X\n\013permissions\030\032 \002(\0132C.com.n4syste" +
+      "ms.fieldid.api.pub.model.UserMessage.Per" +
+      "missionsMessage\032\324\001\n\022PermissionsMessage\022\024" +
+      "\n\014createAssets\030\001 \002(\010\022\032\n\022manageSystemConf" +
+      "ig\030\002 \002(\010\022\031\n\021manageSystemUsers\030\003 \002(\010\022\026\n\016m" +
+      "anageEndUsers\030\004 \002(\010\022\024\n\014createEvents\030\005 \002(" +
+      "\010\022\022\n\neditEvents\030\006 \002(\010\022\022\n\nmanageJobs\030\007 \002(",
+      "\010\022\033\n\023manageSafetyNetwork\030\010 \002(\010\"Q\n\010UserTy" +
+      "pe\022\t\n\005ADMIN\020\001\022\016\n\nINSPECTION\020\002\022\r\n\tREPORTI" +
+      "NG\020\003\022\n\n\006PERSON\020\004\022\017\n\013USAGE_BASED\020\005\"=\n\020Use" +
+      "rGroupMessage\022\n\n\002id\030\001 \001(\t\022\014\n\004name\030\002 \002(\t\022" +
+      "\017\n\007groupId\030\003 \001(\t\"L\n\023ListResponseMessage\022" +
+      "\014\n\004page\030\001 \002(\005\022\020\n\010pageSize\030\002 \002(\005\022\r\n\005total" +
+      "\030\003 \002(\003*\006\010\350\007\020\321\017*X\n\022AttributeValueType\022\010\n\004" +
+      "TEXT\020\001\022\n\n\006SELECT\020\002\022\t\n\005COMBO\020\003\022\010\n\004UNIT\020\004\022" +
+      "\010\n\004DATE\020\005\022\r\n\tDATE_TIME\020\006:8\n\017serialized_n" +
+      "ame\022\035.google.protobuf.FieldOptions\030\321\206\003 \001",
+      "(\t:\206\001\n\006assets\0228.com.n4systems.fieldid.ap" +
+      "i.pub.model.ListResponseMessage\030\350\007 \003(\01321" +
+      ".com.n4systems.fieldid.api.pub.model.Ass" +
+      "etMessageB\010\212\265\030\004list:\206\001\n\006owners\0228.com.n4s" +
       "ystems.fieldid.api.pub.model.ListRespons" +
-      "eMessage\030\360\007 \003(\01321.com.n4systems.fieldid." +
-      "api.pub.model.EventMessageB\010\212\265\030\004listB/\n#" +
-      "com.n4systems.fieldid.api.pub.modelB\010Mes" +
-      "sages"
+      "eMessage\030\351\007 \003(\01321.com.n4systems.fieldid." +
+      "api.pub.model.OwnerMessageB\010\212\265\030\004list:\223\001\n" +
+      "\rassetStatuses\0228.com.n4systems.fieldid.a" +
+      "pi.pub.model.ListResponseMessage\030\352\007 \003(\0132" +
+      "7.com.n4systems.fieldid.api.pub.model.As",
+      "setStatusMessageB\010\212\265\030\004list:\216\001\n\nassetType" +
+      "s\0228.com.n4systems.fieldid.api.pub.model." +
+      "ListResponseMessage\030\353\007 \003(\01325.com.n4syste" +
+      "ms.fieldid.api.pub.model.AssetTypeMessag" +
+      "eB\010\212\265\030\004list:\230\001\n\017assetTypeGroups\0228.com.n4" +
+      "systems.fieldid.api.pub.model.ListRespon" +
+      "seMessage\030\354\007 \003(\0132:.com.n4systems.fieldid" +
+      ".api.pub.model.AssetTypeGroupMessageB\010\212\265" +
+      "\030\004list:\226\001\n\tlocations\0228.com.n4systems.fie" +
+      "ldid.api.pub.model.ListResponseMessage\030\355",
+      "\007 \003(\0132>.com.n4systems.fieldid.api.pub.mo" +
+      "del.PredefinedLocationMessageB\010\212\265\030\004list:" +
+      "\204\001\n\005users\0228.com.n4systems.fieldid.api.pu" +
+      "b.model.ListResponseMessage\030\356\007 \003(\01320.com" +
+      ".n4systems.fieldid.api.pub.model.UserMes" +
+      "sageB\010\212\265\030\004list:\216\001\n\nuserGroups\0228.com.n4sy" +
+      "stems.fieldid.api.pub.model.ListResponse" +
+      "Message\030\357\007 \003(\01325.com.n4systems.fieldid.a" +
+      "pi.pub.model.UserGroupMessageB\010\212\265\030\004list:" +
+      "\206\001\n\006events\0228.com.n4systems.fieldid.api.p",
+      "ub.model.ListResponseMessage\030\360\007 \003(\01321.co" +
+      "m.n4systems.fieldid.api.pub.model.EventM" +
+      "essageB\010\212\265\030\004listB/\n#com.n4systems.fieldi" +
+      "d.api.pub.modelB\010Messages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
