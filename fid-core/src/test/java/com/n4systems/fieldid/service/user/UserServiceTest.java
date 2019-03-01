@@ -47,10 +47,4 @@ public class UserServiceTest {
         assertTrue(userService.userSecurityCardNumberIsUnique(123L,"",4321L));
     }
 
-    @Test(expected=InvalidQueryException.class)
-    public void userIdIsUnique_Persistence_Has_InvalidQueryException_True() {
-        when(persistenceServiceMock.find(any(QueryBuilder.class))).thenThrow(new InvalidQueryException("The expected message for InvalidQueryException"));
-        userService.userSecurityCardNumberIsUnique(123L,"user_id",4321L);
-    }
-
 }
