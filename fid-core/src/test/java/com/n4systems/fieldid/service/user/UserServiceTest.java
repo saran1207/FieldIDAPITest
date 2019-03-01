@@ -40,10 +40,4 @@ public class UserServiceTest {
         assertTrue(userService.userIdIsUnique(123L,null,4321L));
     }
 
-    @Test(expected=InvalidQueryException.class)
-    public void userIdIsUnique_Persistence_Has_InvalidQueryException_True() {
-
-        when(persistenceServiceMock.exists(any(QueryBuilder.class))).thenThrow(new InvalidQueryException("The expected message for InvalidQueryException"));
-        userService.userIdIsUnique(123L,"user_id",4321L);
-    }
 }
