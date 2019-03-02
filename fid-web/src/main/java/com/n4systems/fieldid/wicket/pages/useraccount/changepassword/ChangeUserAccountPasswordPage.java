@@ -133,14 +133,22 @@ public class ChangeUserAccountPasswordPage extends AccountSetupPage {
             @Override
             public void validate(IValidatable<String> validatable) {
                 PasswordHelper passwordHelper = new PasswordHelper(getPasswordPolicy());
+                PasswordPolicy policy = passwordHelper.getPasswordPolicy();
                 if (!passwordHelper.isValidPassword(validatable.getValue())) {
+                    String message = new FIDLabelModel("error.password_policy_with_min_length", policy.getMinLength() + "").getObject();
+                    ValidationError error = new ValidationError();
+                    error.setMessage(message);
+                    validatable.error(error);
+                }
 
-                    PasswordPolicy policy = passwordHelper.getPasswordPolicy();
-                    String message = new FIDLabelModel("error.password_policy", policy.getMinLength() + "",
-                            policy.getMinCapitals() + "",
-                            policy.getMinNumbers() + "",
-                            policy.getMinSymbols() + "").getObject();
-
+                if (!passwordHelper.isPasswordUnique(userModel.getObject(), validatable.getValue())) {
+                    String message = new FIDLabelModel("error.password_unique", policy.getUniqueness() + "").getObject();
+                    ValidationError error = new ValidationError();
+                    error.setMessage(message);
+                    validatable.error(error);
+                }
+                if (passwordHelper.containsName(userModel.getObject(),  validatable.getValue())) {
+                    String message = new FIDLabelModel("error.password_contains_name").getObject();
                     ValidationError error = new ValidationError();
                     error.setMessage(message);
                     validatable.error(error);
@@ -149,7 +157,6 @@ public class ChangeUserAccountPasswordPage extends AccountSetupPage {
         });
         form.add(equalPasswordInputValidator);
     }
-
 
     private User loadExistingUser() {
         return getCurrentUser();
@@ -188,6 +195,5 @@ public class ChangeUserAccountPasswordPage extends AccountSetupPage {
     private void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
     }
-
 
 }
