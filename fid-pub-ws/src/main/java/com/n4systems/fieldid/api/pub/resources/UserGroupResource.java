@@ -48,8 +48,8 @@ public class UserGroupResource extends CrudResource<UserGroup, UserGroupMessage,
 	@Override
 	protected Mapper<UserGroupMessage, UserGroup> createMessageToModelMapper(TypeMapperBuilder<UserGroupMessage, UserGroup> mapperBuilder) {
 		return mapperBuilder
-				.add(UserGroupMessage::getName, UserGroup::setName)
-				.add(UserGroupMessage::getGroupId, UserGroup::setGroupId)
+				.add(UserGroupMessage::hasName, UserGroupMessage::getName, UserGroup::setName)
+				.add(UserGroupMessage::hasGroupId, UserGroupMessage::getGroupId, UserGroup::setGroupId)
 				.build();
 	}
 }

@@ -54,6 +54,6 @@ public class AssetStatusResource extends CrudResource<AssetStatus, AssetStatusMe
 
 	@Override
 	protected Mapper<AssetStatusMessage, AssetStatus> createMessageToModelMapper(TypeMapperBuilder<AssetStatusMessage, AssetStatus> mapperBuilder) {
-		return mapperBuilder.add(AssetStatusMessage::getName, AssetStatus::setName).build();
+		return mapperBuilder.add(AssetStatusMessage::hasName, AssetStatusMessage::getName, AssetStatus::setName).build();
 	}
 }

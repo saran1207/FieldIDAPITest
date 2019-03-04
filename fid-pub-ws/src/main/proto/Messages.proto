@@ -29,25 +29,25 @@ message AssetMessage {
 	optional string ownerName 				= 8;
 	required string ownerId 				= 9;
 	required string identifier 				= 10;
-	optional string rfidNumber 				= 11 [default = "__null__"];
-	optional string customerRefNumber 		= 12 [default = "__null__"];
-	optional string purchaseOrder 			= 13 [default = "__null__"];
-	optional string comments 				= 14 [default = "__null__"];
-	optional string identifiedDate 			= 15 [default = "__null__"];
+	optional string rfidNumber 				= 11;
+	optional string customerRefNumber 		= 12;
+	optional string purchaseOrder 			= 13;
+	optional string comments 				= 14;
+	optional string identifiedDate 			= 15;
 	optional string assetTypeName 			= 16;
 	required string assetTypeId 			= 17;
 	optional string assetStatusName 		= 18;
-	optional string assetStatusId 			= 19 [default = "__null__"];
+	optional string assetStatusId 			= 19;
 	optional string identifiedByUserName 	= 20;
-	optional string identifiedByUserId 		= 21 [default = "__null__"];
+	optional string identifiedByUserId 		= 21;
 	optional string assignedUserName 		= 22;
-	optional string assignedUserId 			= 23 [default = "__null__"];
+	optional string assignedUserId 			= 23;
 	optional string latitude				= 24;
 	optional string longitude				= 25;
 	optional string freeFormLocation 		= 26;
 	optional string predefinedLocationName	= 27;
 	optional string predefinedLocationId 	= 28;
-	optional string orderNumber 			= 29 [default = "__null__"];
+	optional string orderNumber 			= 29;
 	optional string description 			= 30;
 
 	message AttributeMessage {
@@ -60,33 +60,33 @@ message AssetMessage {
 }
 
 message EventMessage {
-    optional string id 						= 1;
+	optional string id 						= 1;
 	optional string createdDate 			= 2;
 	optional string modifiedDate 			= 3;
-	optional string completedDate           = 4;
+	optional string completedDate		   = 4;
 	optional string createdByUserName 		= 5;
 	optional string createdByUserId 		= 6;
 	optional string modifiedByUserName 		= 7;
 	optional string modifiedByUserId 		= 8;
 
 	optional string assignedToUserName	 	= 9;
-	optional string assignedToUserId 		= 10 [default = "__null__"];
+	optional string assignedToUserId 		= 10;
 
 	optional string completedByUserName 	= 11;
-	optional string completedByUserId 		= 12 [default = "__null__"];
+	optional string completedByUserId 		= 12;
 
 	enum EventResult {
 			PASS 		= 1;
-			FAIL 	    = 2;
-			NA 	        = 3;
+			FAIL 		= 2;
+			NA 			= 3;
 			VOID 		= 4;
 		}
-	required EventResult eventResult    	= 13;
+	required EventResult eventResult		= 13;
 
 	enum WorkflowState {
 			OPEN 		= 1;
 			COMPLETED 	= 2;
-			CLOSED 	    = 3;
+			CLOSED 		= 3;
 			NONE 		= 4;
 		}
 	required WorkflowState workflowState	= 14;
@@ -100,12 +100,12 @@ message EventMessage {
 	optional string rfidNumber 				= 20;
 	optional string customerRefNumber 		= 21;
 	optional string assetId		 			= 22;
-	optional string comments				= 23 [default = "__null__"];
-	optional string notes					= 24 [default = "__null__"];
-	optional string score					= 25 [default = "__null__"];
-	optional string dueDate 				= 26 [default = "__null__"];
+	optional string comments				= 23;
+	optional string notes					= 24;
+	optional string score					= 25;
+	optional string dueDate 				= 26;
 	optional string priorityCodeName 		= 27;
-	optional string priorityCodeId 			= 28 [default = "__null__"];
+	optional string priorityCodeId 			= 28;
 
 }
 
@@ -117,7 +117,7 @@ message AssetStatusMessage {
 	optional string createdByUserId 	= 5;
 	optional string modifiedByUserName	= 6;
 	optional string modifiedByUserId 	= 7;
-	optional string name 				= 8 [default = "__null__"];
+	optional string name 				= 8;
 }
 
 message AssetTypeMessage {
@@ -193,11 +193,11 @@ message OwnerMessage {
 	optional string createdByUserId 	= 5;
 	optional string modifiedByUserName 	= 6;
 	optional string modifiedByUserId 	= 7;
-    required string name 				= 8;
+	required string name 				= 8;
 	optional string parentName			= 9;
 	optional string parentId			= 10;
-	optional string code 				= 11 [default = "__null__"];
-	optional string notes				= 12 [default = "__null__"];
+	optional string code 				= 11;
+	optional string notes				= 12;
 	optional string streetAddress		= 13;
 	optional string city				= 14;
 	optional string state				= 15;
@@ -221,36 +221,36 @@ message PredefinedLocationMessage {
 	optional string modifiedByUserName 	= 6;
 	optional string modifiedByUserId 	= 7;
 	optional string ownerName 			= 8;
-	optional string ownerId 			= 9 [default = "__null__"];
+	optional string ownerId 			= 9;
 	optional string parentName 			= 10;
-	optional string parentId 			= 11 [default = "__null__"];
+	optional string parentId 			= 11;
 	required string name 				= 12;
 }
 
 message TestSimpleMessage {
-    optional double double_field = 1;
-    optional float float_field = 2;
-    optional int32 int32_field = 3;
-    optional int64 int64_field = 4;
-    optional uint32 uint32_field = 5;
-    optional uint64 uint64_field = 6;
-    optional sint32 sint32_field = 7;
-    optional sint64 sint64_field = 8;
-    optional fixed32 fixed32_field = 9;
-    optional fixed64 fixed64_field = 10;
-    optional sfixed32 sfixed32_field = 11;
-    optional sfixed64 sfixed64_field = 12;
-    optional bool bool_field = 13;
-    optional string string_field = 14;
+	optional double double_field = 1;
+	optional float float_field = 2;
+	optional int32 int32_field = 3;
+	optional int64 int64_field = 4;
+	optional uint32 uint32_field = 5;
+	optional uint64 uint64_field = 6;
+	optional sint32 sint32_field = 7;
+	optional sint64 sint64_field = 8;
+	optional fixed32 fixed32_field = 9;
+	optional fixed64 fixed64_field = 10;
+	optional sfixed32 sfixed32_field = 11;
+	optional sfixed64 sfixed64_field = 12;
+	optional bool bool_field = 13;
+	optional string string_field = 14;
 }
 
 message TestNestedMessage {
-    required string string_field = 1;
+	required string string_field = 1;
 }
 
 message TestContainerMessage {
-    required int32 int32_field = 1;
-    optional TestNestedMessage nested = 2;
+	required int32 int32_field = 1;
+	optional TestNestedMessage nested = 2;
 }
 
 message UserMessage {
@@ -294,8 +294,8 @@ message UserMessage {
 		required bool manageSystemConfig	= 2;
 		required bool manageSystemUsers		= 3;
 		required bool manageEndUsers		= 4;
-		required bool createEvents         	= 5;
-		required bool editEvents           	= 6;
+		required bool createEvents		 	= 5;
+		required bool editEvents		   	= 6;
 		required bool manageJobs			= 7;
 		required bool manageSafetyNetwork 	= 8;
 	}
@@ -317,8 +317,8 @@ message ListResponseMessage {
 }
 
 extend ListResponseMessage {
-	repeated AssetMessage assets    						= 1000 [(serialized_name) = "list"];
-	repeated OwnerMessage owners    						= 1001 [(serialized_name) = "list"];
+	repeated AssetMessage assets							= 1000 [(serialized_name) = "list"];
+	repeated OwnerMessage owners							= 1001 [(serialized_name) = "list"];
 	repeated AssetStatusMessage assetStatuses				= 1002 [(serialized_name) = "list"];
 	repeated AssetTypeMessage assetTypes					= 1003 [(serialized_name) = "list"];
 	repeated AssetTypeGroupMessage assetTypeGroups			= 1004 [(serialized_name) = "list"];

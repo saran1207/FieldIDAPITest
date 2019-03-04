@@ -84,20 +84,20 @@ public class UserResource extends CrudResource<User, UserMessage, Builder> {
 	@Override
 	protected Mapper<UserMessage, User> createMessageToModelMapper(TypeMapperBuilder<UserMessage, User> mapperBuilder) {
 		return mapperBuilder
-				.add(UserMessage::getOwnerId, User::setOwner, baseOrgResolver)
-				.add(UserMessage::getUserID, User::setUserID)
-				.add(UserMessage::getFirstName, User::setFirstName)
-				.add(UserMessage::getLastName, User::setLastName)
-				.add(UserMessage::getEmailAddress, User::setEmailAddress)
-				.add(UserMessage::getTimeZoneID, User::setTimeZoneID)
-				.add(UserMessage::getPosition, User::setPosition)
-				.add(UserMessage::getInitials, User::setInitials)
-				.add(UserMessage::getLocked, User::setLocked)
+				.add(UserMessage::hasOwnerId, UserMessage::getOwnerId, User::setOwner, baseOrgResolver)
+				.add(UserMessage::hasUserID, UserMessage::getUserID, User::setUserID)
+				.add(UserMessage::hasFirstName, UserMessage::getFirstName, User::setFirstName)
+				.add(UserMessage::hasLastName, UserMessage::getLastName, User::setLastName)
+				.add(UserMessage::hasEmailAddress, UserMessage::getEmailAddress, User::setEmailAddress)
+				.add(UserMessage::hasTimeZoneID, UserMessage::getTimeZoneID, User::setTimeZoneID)
+				.add(UserMessage::hasPosition, UserMessage::getPosition, User::setPosition)
+				.add(UserMessage::hasInitials, UserMessage::getInitials, User::setInitials)
+				.add(UserMessage::hasLocked, UserMessage::getLocked, User::setLocked)
 				.add(UserMessage::getIdentifier, User::setIdentifier)
-				.add(UserMessage::getLanguage, User::setLanguage, (l) -> Locale.forLanguageTag(l))
-				.add(UserMessage::getPermissions, User::setPermissions, this::convertPermissionsToModel)
+				.add(UserMessage::hasLanguage, UserMessage::getLanguage, User::setLanguage, (l) -> Locale.forLanguageTag(l))
+				.add(UserMessage::hasPermissions, UserMessage::getPermissions, User::setPermissions, this::convertPermissionsToModel)
 				.addCollection(UserMessage::getGroupsList, User::setGroups, userGroupResolver, Collectors.toSet())
-				.add(UserMessage::getUserType, User::setUserType, this::convertTypeToModel) // this needs to come last as it does some permission validation
+				.add(UserMessage::hasUserType, UserMessage::getUserType, User::setUserType, this::convertTypeToModel) // this needs to come last as it does some permission validation
 				.build();
 	}
 

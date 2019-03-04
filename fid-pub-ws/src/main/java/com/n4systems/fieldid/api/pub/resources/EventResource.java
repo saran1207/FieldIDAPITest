@@ -84,16 +84,16 @@ public class EventResource extends CrudResource<ThingEvent, EventMessage, Builde
     @Override
     protected Mapper<EventMessage, ThingEvent> createMessageToModelMapper(TypeMapperBuilder<EventMessage, ThingEvent> mapperBuilder) {
         return mapperBuilder
-                .add(EventMessage::getComments, ThingEvent::setComments)
-                .add(EventMessage::getNotes, ThingEvent::setNotes)
-                .addToDouble(EventMessage::getScore, ThingEvent::setScore)
-                .addStringToDate(EventMessage::getDueDate, ThingEvent::setDueDate)
-                .add(EventMessage::getEventResult, ThingEvent::setEventResult, this::convertResultToModel)
-                .add(EventMessage::getWorkflowState, ThingEvent::setWorkflowState, this::convertWorkflowStateToModel)
-                .add(EventMessage::getOwnerId, ThingEvent::setOwner, baseOrgResolver)
-                .add(EventMessage::getAssignedToUserId, ThingEvent::setAssignee, userResolver)
-                .add(EventMessage::getCompletedByUserId, ThingEvent::setPerformedBy, userResolver)
-                .add(EventMessage::getPriorityCodeId, ThingEvent::setPriority, priorityCodeResolver)
+                .add(EventMessage::hasComments, EventMessage::getComments, ThingEvent::setComments)
+                .add(EventMessage::hasNotes, EventMessage::getNotes, ThingEvent::setNotes)
+                .addToDouble(EventMessage::hasScore, EventMessage::getScore, ThingEvent::setScore)
+                .addStringToDate(EventMessage::hasDueDate, EventMessage::getDueDate, ThingEvent::setDueDate)
+                .add(EventMessage::hasEventResult, EventMessage::getEventResult, ThingEvent::setEventResult, this::convertResultToModel)
+                .add(EventMessage::hasWorkflowState, EventMessage::getWorkflowState, ThingEvent::setWorkflowState, this::convertWorkflowStateToModel)
+                .add(EventMessage::hasOwnerId, EventMessage::getOwnerId, ThingEvent::setOwner, baseOrgResolver)
+                .add(EventMessage::hasAssignedToUserId, EventMessage::getAssignedToUserId, ThingEvent::setAssignee, userResolver)
+                .add(EventMessage::hasCompletedByUserId, EventMessage::getCompletedByUserId, ThingEvent::setPerformedBy, userResolver)
+                .add(EventMessage::hasPriorityCodeId, EventMessage::getPriorityCodeId, ThingEvent::setPriority, priorityCodeResolver)
                 .build();
     }
 
