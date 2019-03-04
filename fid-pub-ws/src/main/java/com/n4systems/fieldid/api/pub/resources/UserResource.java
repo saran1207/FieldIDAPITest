@@ -93,7 +93,7 @@ public class UserResource extends CrudResource<User, UserMessage, Builder> {
 				.add(UserMessage::hasPosition, UserMessage::getPosition, User::setPosition)
 				.add(UserMessage::hasInitials, UserMessage::getInitials, User::setInitials)
 				.add(UserMessage::hasLocked, UserMessage::getLocked, User::setLocked)
-				.add(UserMessage::getIdentifier, User::setIdentifier)
+				.add(UserMessage::hasIdentifier, UserMessage::getIdentifier, User::setIdentifier)
 				.add(UserMessage::hasLanguage, UserMessage::getLanguage, User::setLanguage, (l) -> Locale.forLanguageTag(l))
 				.add(UserMessage::hasPermissions, UserMessage::getPermissions, User::setPermissions, this::convertPermissionsToModel)
 				.addCollection(UserMessage::getGroupsList, User::setGroups, userGroupResolver, Collectors.toSet())
