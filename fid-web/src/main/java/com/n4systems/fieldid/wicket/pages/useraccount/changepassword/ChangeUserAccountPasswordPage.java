@@ -133,22 +133,22 @@ public class ChangeUserAccountPasswordPage extends AccountSetupPage {
             @Override
             public void validate(IValidatable<String> validatable) {
                 PasswordHelper passwordHelper = new PasswordHelper(getPasswordPolicy());
-                PasswordPolicy policy = passwordHelper.getPasswordPolicy();
-                if (!passwordHelper.isValidPassword(validatable.getValue())) {
-                    String message = new FIDLabelModel("error.password_policy_with_min_length", policy.getMinLength() + "").getObject();
-                    ValidationError error = new ValidationError();
-                    error.setMessage(message);
-                    validatable.error(error);
-                }
+                if (passwordHelper.containsName(userModel.getObject(), validatable.getValue()) || !passwordHelper.isValidPassword(validatable.getValue())) {
 
-                if (!passwordHelper.isPasswordUnique(userModel.getObject(), validatable.getValue())) {
-                    String message = new FIDLabelModel("error.password_unique", policy.getUniqueness() + "").getObject();
-                    ValidationError error = new ValidationError();
-                    error.setMessage(message);
-                    validatable.error(error);
-                }
-                if (passwordHelper.containsName(userModel.getObject(),  validatable.getValue())) {
-                    String message = new FIDLabelModel("error.password_contains_name").getObject();
+                    PasswordPolicy policy = passwordHelper.getPasswordPolicy();
+                    String message;
+                    if (policy.isCheckName()) {
+                        message = new FIDLabelModel("error.password_policy_with_name_check", policy.getMinLength() + "",
+                                policy.getMinCapitals() + "",
+                                policy.getMinNumbers() + "",
+                                policy.getMinSymbols() + "").getObject();
+                    } else {
+                        message = new FIDLabelModel("error.password_policy", policy.getMinLength() + "",
+                                policy.getMinCapitals() + "",
+                                policy.getMinNumbers() + "",
+                                policy.getMinSymbols() + "").getObject();
+                    }
+
                     ValidationError error = new ValidationError();
                     error.setMessage(message);
                     validatable.error(error);
