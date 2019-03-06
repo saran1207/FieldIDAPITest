@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.service.user;
 
-import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.admin.AdminUserService;
 import com.n4systems.model.builders.UserBuilder;
