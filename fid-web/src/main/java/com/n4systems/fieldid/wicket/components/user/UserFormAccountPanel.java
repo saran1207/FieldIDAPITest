@@ -7,9 +7,14 @@ import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.security.PasswordPolicy;
 import com.n4systems.model.user.User;
+import com.n4systems.util.math.MathUtil;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
@@ -47,10 +52,19 @@ public class UserFormAccountPanel extends Panel {
         userID.add(new IValidator<String>() {
             @Override
             public void validate(IValidatable validatable) {
-                if(!userService.userIdIsUnique(FieldIDSession.get().getTenant().getId(), (String) validatable.getValue(), user.getObject().getId())) {
+                if(!userService.userIdIsUnique(FieldIDSession.get().getTenant().getId(),
+                        (String) validatable.getValue(), user.getObject().getId())) {
                     ValidationError error = new ValidationError();
                     error.addMessageKey("errors.data.userduplicate");
                     validatable.error(error);
+                }
+            }
+        });
+        userID.add(new Behavior() {
+            @Override public void onComponentTag(Component c, ComponentTag tag) {
+                FormComponent fc = (FormComponent) c;
+                if (!fc.isValid()) {
+                    tag.append("class", "error", " ");
                 }
             }
         });

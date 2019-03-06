@@ -19,10 +19,8 @@ import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetImportPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetMergePage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
-import com.n4systems.fieldid.wicket.pages.autoattributes.AutoAttributeActionsPage;
-import com.n4systems.fieldid.wicket.pages.customers.CustomerActionsPage;
-import com.n4systems.fieldid.wicket.pages.event.EventImportPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.*;
+import com.n4systems.fieldid.wicket.pages.autoattributes.AutoAttributeActionsPage;
 import com.n4systems.fieldid.wicket.pages.customers.CustomerActionsPage;
 import com.n4systems.fieldid.wicket.pages.escalationrules.ManageEscalationRules;
 import com.n4systems.fieldid.wicket.pages.event.*;
@@ -97,6 +95,7 @@ import com.n4systems.fieldid.wicket.pages.setup.userregistration.ViewUserRequest
 import com.n4systems.fieldid.wicket.pages.template.*;
 import com.n4systems.fieldid.wicket.pages.trends.CriteriaTrendsPage;
 import com.n4systems.fieldid.wicket.pages.useraccount.UserAccountSearchPage;
+import com.n4systems.fieldid.wicket.pages.useraccount.details.UserDetailsPage;
 import com.n4systems.fieldid.wicket.pages.useraccount.mobileofflineprofile.MobileOfflineProfilePage;
 import com.n4systems.fieldid.wicket.pages.useraccount.notificationsettings.AddEditNotificationSettingPage;
 import com.n4systems.fieldid.wicket.pages.useraccount.notificationsettings.NotificationSettingsListPage;
@@ -220,12 +219,14 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/eventStatusForm", EventStatusFormPage.class);
 
         mountPage("setup/actionEmailCustomization", ActionEmailSetupPage.class);
-        mountPage("setup/notificationsList", NotificationSettingsListPage.class);
         mountPage("setup/addEditNotifications", AddEditNotificationSettingPage.class);
 
         mountPage("setup/buttonGroups", ButtonGroupPage.class);
-
         mountPage("setup/importCommonTemplates", ImportCommonTemplatesPage.class);
+
+        mountPage("myAccount", UserDetailsPage.class);
+        mountPage("notificationsList", NotificationSettingsListPage.class);
+        mountPage("mobileOfflineProfile", MobileOfflineProfilePage.class);
 
         mountPage("places", OrgViewPage.class);
         mountPage("placeSummary", PlaceSummaryPage.class);
@@ -341,8 +342,6 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("criteriaTrends", CriteriaTrendsPage.class);
 
         mountPage("selectLanguage", SelectLanguagePage.class);
-
-        mountPage("mobileOfflineProfile", MobileOfflineProfilePage.class);
 
         mountPage("userAccountSearch", UserAccountSearchPage.class);
 

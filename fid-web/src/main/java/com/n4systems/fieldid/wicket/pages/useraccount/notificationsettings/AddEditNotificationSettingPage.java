@@ -11,7 +11,6 @@ import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.assettype.GroupedAssetTypePicker;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
 import com.n4systems.fieldid.wicket.components.renderer.EventTypeChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
@@ -23,7 +22,6 @@ import com.n4systems.fieldid.wicket.model.assettype.GroupedAssetTypesForTenantMo
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypeGroupsForTenantModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForTenantModel;
 import com.n4systems.fieldid.wicket.pages.useraccount.AccountSetupPage;
-import com.n4systems.fieldid.wicket.pages.useraccount.mobileofflineprofile.MobileOfflineProfilePage;
 import com.n4systems.model.*;
 import com.n4systems.model.common.RelativeTime;
 import com.n4systems.model.common.SimpleFrequency;
@@ -47,8 +45,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.StringValidator;
 
 import java.util.List;
-
-import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
 public class AddEditNotificationSettingPage extends AccountSetupPage {
 
@@ -265,19 +261,6 @@ public class AddEditNotificationSettingPage extends AccountSetupPage {
         });
         eventTypeGroupDropDownChoice.setNullValid(true);
         return eventTypeGroupDropDownChoice;
-    }
-
-    @Override
-    protected void addNavBar(String navBarId) {
-        add(new NavigationBar(navBarId,
-                aNavItem().label("nav.details").page("myAccount.action").build(),
-                aNavItem().label("nav.notification_settings").page(AddEditNotificationSettingPage.class).cond(hasEmailAlerts()).build(),
-                aNavItem().label("nav.change_password").page("editPassword.action").build(),
-                aNavItem().label("nav.mobile_passcode").page("viewMobilePasscode.action").build(),
-                aNavItem().label("nav.mobile_profile").page(MobileOfflineProfilePage.class).build(),
-                aNavItem().label("nav.downloads").page("showDownloads.action").build(),
-                aNavItem().label("nav.excel_export").page("exportEvent.action").build()
-        ));
     }
 
     @Override
