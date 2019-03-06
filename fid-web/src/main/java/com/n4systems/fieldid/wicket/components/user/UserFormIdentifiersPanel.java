@@ -4,17 +4,14 @@ import com.n4systems.fieldid.actions.users.UploadedImage;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.wicket.components.MultiSelectDropDownChoice;
 import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
-import com.n4systems.fieldid.wicket.components.org.OrgPicker;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.reporting.PathHandler;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -71,8 +68,13 @@ public class UserFormIdentifiersPanel extends Panel {
         add(new TextField<String>("position", new PropertyModel<String>(user, "position")));
         UploadForm uploadForm;
         add(uploadForm = new UploadForm("uploadForm"));
-        uploadForm.setMultiPart(true);
-        uploadForm.setVisible(!user.getObject().isPerson());
+        if (uploadedImage != null) {
+            uploadForm.setMultiPart(true);
+            uploadForm.setVisible(!user.getObject().isPerson());
+        }
+        else {
+            uploadForm.setVisible(false);
+        }
     }
 
     protected void onOwnerPicked(AjaxRequestTarget target) { }
@@ -103,7 +105,7 @@ public class UserFormIdentifiersPanel extends Panel {
                 protected void onError(AjaxRequestTarget target) {
                 }
             });
-            if(uploadedImage.isExistingImage())
+            if(uploadedImage != null && uploadedImage.isExistingImage())
                 fileDisplay.add(fileName = new Label("fileName", Model.of(uploadedImage.getImage().getName())));
             else
                 fileDisplay.add(fileName = new Label("fileName", Model.of(new String())));
@@ -117,8 +119,14 @@ public class UserFormIdentifiersPanel extends Panel {
                 }
             });
             fileDisplay.setOutputMarkupId(true);
-            fileDisplay.setVisible(uploadedImage.isExistingImage());
-            uploadField.setVisible(!uploadedImage.isExistingImage());
+            if (uploadedImage != null) {
+                fileDisplay.setVisible(uploadedImage.isExistingImage());
+                uploadField.setVisible(!uploadedImage.isExistingImage());
+            }
+            else {
+                fileDisplay.setVisible(false);
+                uploadField.setVisible(false);
+            }
             add(fileDisplay);
         }
     }

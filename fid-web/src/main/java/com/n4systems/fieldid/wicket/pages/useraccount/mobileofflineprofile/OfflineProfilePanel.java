@@ -85,6 +85,7 @@ public class OfflineProfilePanel extends Panel{
 
             @Override
             public int size() {
+                if (offlineProfileModel.getObject() == null) return 0;
                 return offlineProfileModel.getObject().getAssets().size();
             }
 
