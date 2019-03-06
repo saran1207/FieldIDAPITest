@@ -49,14 +49,10 @@ import java.util.List;
 public class AddEditNotificationSettingPage extends AccountSetupPage {
 
 
-    @SpringBean
-    private NotificationSettingService notificationSettingService;
-    @SpringBean
-    private AssetTypeService assetTypeService;
-    @SpringBean
-    private EventTypeService eventTypeService;
-    @SpringBean
-    private AssetStatusService assetStatusService;
+    @SpringBean private NotificationSettingService notificationSettingService;
+    @SpringBean private AssetTypeService assetTypeService;
+    @SpringBean private EventTypeService eventTypeService;
+    @SpringBean private AssetStatusService assetStatusService;
 
     private Form form;
 

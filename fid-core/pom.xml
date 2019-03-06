@@ -386,7 +386,6 @@
             <artifactId>newrelic-api</artifactId>
             <version>${newrelic.version}</version>
         </dependency>
-
         <!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
         <dependency>
             <groupId>org.mockito</groupId>
