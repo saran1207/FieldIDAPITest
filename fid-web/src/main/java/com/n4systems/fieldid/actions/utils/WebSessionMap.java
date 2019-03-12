@@ -24,7 +24,7 @@ public class WebSessionMap extends AbstractMap<String, Object> implements Serial
 
 	public static final String USER_ID = "userId";
 	public static final String KEY_SESSION_USER = "sessionUser";
-	public static final String KEY_SECURITY_GUARD = "securityGaurd";
+	public static final String KEY_SECURITY_GUARD = "securityGuard";
 	public static final String KEY_USER_SECURITY_GUARD = "userSecurityGuard";
 	public static final String KEY_TENANT_LANG_OVERRIDES = "TENANT_LANG_OVERRIDES";
 	public static final String KEY_EULA_ACCEPTANCE = "eula_acceptance";

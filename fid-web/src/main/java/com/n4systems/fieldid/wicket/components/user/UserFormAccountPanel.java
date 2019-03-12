@@ -7,9 +7,13 @@ import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.validators.UniqueUserMobilePasscodeValidator;
 import com.n4systems.model.security.PasswordPolicy;
 import com.n4systems.model.user.User;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
@@ -20,13 +24,12 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
+import org.apache.wicket.validation.validator.StringValidator;
 
 public class UserFormAccountPanel extends Panel {
 
-    @SpringBean
-    private TenantSettingsService tenantSettingsService;
-    @SpringBean
-    private UserService userService;
+    @SpringBean private TenantSettingsService tenantSettingsService;
+    @SpringBean private UserService userService;
 
     private String password;
     private String confirmPassword;
@@ -47,10 +50,19 @@ public class UserFormAccountPanel extends Panel {
         userID.add(new IValidator<String>() {
             @Override
             public void validate(IValidatable validatable) {
-                if(!userService.userIdIsUnique(FieldIDSession.get().getTenant().getId(), (String) validatable.getValue(), user.getObject().getId())) {
+                if(!userService.userIdIsUnique(FieldIDSession.get().getTenant().getId(),
+                        (String) validatable.getValue(), user.getObject().getId())) {
                     ValidationError error = new ValidationError();
                     error.addMessageKey("errors.data.userduplicate");
                     validatable.error(error);
+                }
+            }
+        });
+        userID.add(new Behavior() {
+            @Override public void onComponentTag(Component c, ComponentTag tag) {
+                FormComponent fc = (FormComponent) c;
+                if (!fc.isValid()) {
+                    tag.append("class", "error", " ");
                 }
             }
         });
@@ -61,7 +73,14 @@ public class UserFormAccountPanel extends Panel {
         passwordField.setOutputMarkupPlaceholderTag(true);
         newAccountFields.add(cpasswordField = new PasswordTextField("confirmPassword", new PropertyModel<String>(this, "confirmPassword")));
         cpasswordField.setOutputMarkupPlaceholderTag(true);
-        newAccountFields.add(new TextField<String>("rfidNumber", new PropertyModel<String>(this, "rfidNumber")));
+
+        TextField rfidNumber = new TextField<String>("rfidNumber", new PropertyModel<String>(this, "rfidNumber"));
+        rfidNumber.add(new UniqueUserMobilePasscodeValidator(
+                userService,
+                FieldIDSession.get().getTenant().getId(),
+                null));
+        rfidNumber.add(new StringValidator.MinimumLengthValidator(4));
+        newAccountFields.add(rfidNumber);
 
         final EqualPasswordInputValidator equalPasswordInputValidator = new EqualPasswordInputValidator(passwordField, cpasswordField);
 

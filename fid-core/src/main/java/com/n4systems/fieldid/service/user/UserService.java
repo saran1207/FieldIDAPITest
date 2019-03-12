@@ -45,9 +45,10 @@ public class UserService extends CrudService<User> {
 
     @Autowired private OrgService orgService;
     @Autowired private UserGroupService userGroupService;
-    @Autowired private ConfigService configService;
     @Autowired protected AdminUserService adminUserService;
     @Autowired protected OfflineProfileService offlineProfileService;
+    @Autowired private ConfigService configService;
+
 
     public UserService() {
         super(User.class);
@@ -306,6 +307,7 @@ public class UserService extends CrudService<User> {
         builder.addWhere(WhereClauseFactory.create(Comparator.NE, "userType", UserType.PERSON));
         User user = persistenceService.find(builder);
 
+        if (user == null) return null;
         if (user.getUserType() == UserType.SYSTEM) {
             String systemUserPass = configService.getConfig(user.getTenant().getId()).getSystem().getSystemUserPassword();
             return systemUserPass.equals(EncryptionUtility.getSHA512HexHash(password)) ? user : null;
@@ -609,6 +611,23 @@ public class UserService extends CrudService<User> {
         builder.addSimpleWhere("tenant.id", tenantId);
         builder.addSimpleWhere("userType", UserType.FULL);
         return persistenceService.findAll(builder);
+    }
+
+    public boolean userSecurityCardNumberIsUnique(Long tenantId, String securityCardNumber, Long currentUserId) {
+
+        if (securityCardNumber == null || securityCardNumber.length() == 0) {
+            // empty security card numbers are always allowed
+            return true;
+        }
+
+        QueryBuilder<Long> queryBuilder = new QueryBuilder<Long>(User.class, new TenantOnlySecurityFilter(tenantId)).setCountSelect();
+        queryBuilder.addSimpleWhere("hashSecurityCardNumber", User.hashSecurityCardNumber(securityCardNumber));
+
+        if (currentUserId != null) {
+            queryBuilder.addWhere(Comparator.NE, "id", "id", currentUserId);
+        }
+
+        return (persistenceService.find(queryBuilder) > 0) ? false : true;
     }
 
 }

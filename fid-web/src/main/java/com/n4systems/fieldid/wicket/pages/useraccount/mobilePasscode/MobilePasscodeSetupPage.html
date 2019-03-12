@@ -1,0 +1,20 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+    <div wicket:id="createMobilePasscode">
+        <div style="margin-left: 25%; width: 50%;">
+            <img src="/fieldid/images/access-card-logo.png" style="float:left"/>
+            <div style="margin-left: 75px; overflow:hidden">
+                <h1><wicket:message key="label.setup_mobile_passcode" /></h1>
+                <p><wicket:message key="message.setup_mobile_passcode" /></p>
+                <div class="eventActions">
+                   <input type="submit" wicket:id="createMobilePasscode" wicket:message="value:label.create_mobile_passcode" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div wicket:id="modifyMobilePasscode" class="buttonForm" >
+        <input type="submit" class="btn-primary" wicket:id="removeMobilePasscode" wicket:message="value:label.disable_mobile_passcode" />
+        <input type="submit" class="btn-primary" wicket:id="editMobilePasscode" wicket:message="value:label.change_mobile_passcode" />
+    </div>
+</wicket:extend>
+</html>
