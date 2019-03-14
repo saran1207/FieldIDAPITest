@@ -5,8 +5,11 @@ import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.perform.PerformThingEventHelperService;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.LocalizeAround;
+import com.n4systems.fieldid.wicket.model.LocalizeModel;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.model.*;
+import com.n4systems.persistence.utils.PostFetcher;
 import com.n4systems.tools.FileDataContainer;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
@@ -16,6 +19,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
 public class PerformEventPage extends ThingEventPage {
 
@@ -27,8 +31,7 @@ public class PerformEventPage extends ThingEventPage {
 
     private PerformEventPage(Long scheduleId, Long assetId, Long typeId) {
         try {
-            ThingEvent thingEvent = thingEventHelperService.createEvent(scheduleId, assetId, typeId);
-            event = Model.of(thingEvent);
+            event = new LocalizeModel<ThingEvent>(Model.of(createNewEvent(scheduleId, assetId, typeId)));
 
             setEventResult(event.getObject().getEventResult());
             fileAttachments = new ArrayList<FileAttachment>();
@@ -83,6 +86,19 @@ public class PerformEventPage extends ThingEventPage {
     @Override
     protected Label createTitleLabel(String labelId) {
         return new Label(labelId, new FIDLabelModel("title.perform_event", event.getObject().getType().getDisplayName()));
+    }
+    private ThingEvent createNewEvent(Long scheduleId, Long assetId, Long typeId) {
+        final ThingEvent event = thingEventHelperService.createEvent(scheduleId, assetId, typeId, true);
+
+        ThingEvent existingEvent = new LocalizeAround<ThingEvent>(new Callable<ThingEvent>() {
+            @Override
+            public ThingEvent call() throws Exception {
+                PostFetcher.postFetchFields(event, Event.ALL_FIELD_PATHS);
+                return PostFetcher.postFetchFields(event, Event.THING_TYPE_PATHS);
+            }
+        }).call();
+
+        return existingEvent;
     }
 
 }

@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.event;
 
 import com.n4systems.fieldid.service.event.EventCriteriaEditService;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.LocalizeModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventResult;
@@ -27,7 +28,7 @@ public class EditEventPage extends ThingEventPage {
 
     public EditEventPage(PageParameters parameters) {
         uniqueId = parameters.get("uniqueID").toLong();
-        event = Model.of(loadExistingEvent());
+        event = new LocalizeModel<ThingEvent>(Model.of(loadExistingEvent()));
         event.getObject().setResultFromCriteriaAvailable();
         if(event.getObject().isResultFromCriteriaAvailable()) {
             setEventResult(EventResult.VOID);
@@ -38,7 +39,7 @@ public class EditEventPage extends ThingEventPage {
     }
 
     protected ThingEvent loadExistingEvent() {
-        ThingEvent existingEvent = eventService.lookupExistingEvent(ThingEvent.class, uniqueId, false, true);
+        ThingEvent existingEvent = eventService.lookupExistingEvent(ThingEvent.class, uniqueId, true, false);
         PostFetcher.postFetchFields(existingEvent, Event.ALL_FIELD_PATHS_WITH_SUB_EVENTS);
         if (existingEvent.getType().isThingEventType()) {
             PostFetcher.postFetchFields(existingEvent, Event.THING_TYPE_PATHS);

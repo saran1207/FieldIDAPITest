@@ -1,5 +1,6 @@
 package com.n4systems.model;
 
+import com.n4systems.persistence.localization.Localized;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import javax.persistence.*;
 public class ComboBoxCriteriaResult extends CriteriaResult implements ValueResult {
 
 	@Column
+	@Localized
 	private String value;
 
 	public void setValue(String value) {
