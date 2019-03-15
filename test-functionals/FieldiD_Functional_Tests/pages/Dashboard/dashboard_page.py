@@ -5,9 +5,7 @@ class DashboardPage(PageObject):
     PAGE_URL = "/fieldid/w/dashboard"
 
     _locators = {
-        "new_asset": "xpath=//a[@href='../assetImport?initialTab=addWithOrder']",
-        "rfid_number_field": "//input[@name='singleIdentifyContainer:rfidContainer:rfidNumber']",
-        "save_button": "//input[@name='actionsContainer:saveButton']"
+                
     }
 
     def _is_current_page(self):

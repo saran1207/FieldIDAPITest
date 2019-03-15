@@ -22,6 +22,7 @@ Create A User
    AddUserPage.Input Password Field   ${PASSWORD}
    AddUserPage.Input Verify Password Field     ${PASSWORD}
    AddUserPage.Input Owner Field    ${OWNER}
+   AddUserPage.Select N4 Owner Option
    AddUserPage.Input Email Field    ${EMAIL}
    AddUserPage.Input First Name Field   ${FIRSTNAME}
    AddUserPage.Input Last Name Field    ${LASTNAME}

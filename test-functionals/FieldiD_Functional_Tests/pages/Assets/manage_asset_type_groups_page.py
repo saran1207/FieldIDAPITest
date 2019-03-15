@@ -5,8 +5,7 @@ class ManageAssetTypeGroupsPage(PageObject):
 
     _locators = {
         "add_button": "xpath=//a[@href='./addAssetTypeGroup']",
-        "toggle_up_button": "xpath=//a[@href='./addAssetTypeGroup']"
-    }
+      }
 
     def _is_current_page(self):
         location = self.se2lib.get_location()
@@ -28,10 +27,10 @@ class ManageAssetTypeGroupsPage(PageObject):
         self.se2lib.click_element(link)
         
     def click_delete_asset_group_link(self, group_id):
-        link = "xpath=//td/div/a[@href='./confirmDeleteAssetTypeGroup?uniqueID=" + (group_id) + "']"
-        toggle_up_button= link+"/div[@class='dropdown']/button"
+        toggle_up_button="//td/div/a[@href='./editAssetTypeGroup?uniqueID=%s']/../div[@class='dropdown']/button" % (group_id)
         self.se2lib.wait_until_element_is_visible(toggle_up_button)
-        self.se2lib.mouse_over(link)
-        self.se2lib.wait_until_element_is_visible(link)
-        self.se2lib.click_element(link)
+        self.se2lib.click_element(toggle_up_button)
+        delete_link="xpath=//a[@href='./confirmDeleteAssetTypeGroup?uniqueID=" + (group_id) + "']"
+        self.se2lib.wait_until_element_is_visible(delete_link)
+        self.se2lib.click_element(delete_link)
     

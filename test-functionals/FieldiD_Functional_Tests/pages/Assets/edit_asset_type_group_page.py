@@ -6,9 +6,9 @@ class EditAssetTypeGroupPage(PageObject):
 
     _locators = {
         "view_all_button": "xpath=//a[@href='./assetTypeGroupsList']",
-        "save_button": "xpath=//button[@type='submit']",
-        "cancel_button": "xpath=//a[@href='./assetTypeGroupsList']",
-        "asset_type_group_name_field": "xpath=//input[@name='name']"
+        "save_button": "name:saveButton",
+        "cancel_button": "link:Cancel",
+        "asset_type_group_name_field": "name:name"
     }
 
     def _is_current_page(self):

@@ -9,10 +9,10 @@ Suite Teardown  Logout Of Field Id
 
 *** Variables ***
 ${USERNAME}         dev@fieldid.com       
-${PASSWORD}         R2d2>C3p0
+${PASSWORD}         eHplwc!LaHVy
 ${USERNAME1}        testauto
 ${PASSWORD1}        temp123
-${OWNER}            Master Lock Field iD
+${OWNER}            N4 Systems Inc.
 ${EMAIL}            saranya.mudaliar@ecompliance.com
 ${FIRSTNAME}        Test
 ${LASTNAME}         Automation

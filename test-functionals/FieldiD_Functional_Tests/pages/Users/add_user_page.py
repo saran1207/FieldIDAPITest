@@ -4,13 +4,14 @@ class AddUserPage(PageObject):
     PAGE_URL = "/fieldid/w/setup/addUser"
 
     _locators = {
-        "user_name_field": "xpath=//input[@name='accountPanel:username']",
-        "password_field": "xpath=//input[@name='accountPanel:newAccountFields:password']",
-        "verify_password_field": "xpath=//input[@name='accountPanel:newAccountFields:confirmPassword']",
-        "owner_field": "xpath=//input[@name='identifiersPanel:ownerPicker:text']",
-        "email_field": "xpath=//input[@name='identifiersPanel:email']",
-        "first_name_field": "xpath=//input[@name='identifiersPanel:firstname']",
-        "last_name_field": "xpath=//input[@name='identifiersPanel:lastname']",
+        "user_name_field": "name:accountPanel:username",
+        "password_field": "name:accountPanel:newAccountFields:password",
+        "verify_password_field": "name:accountPanel:newAccountFields:confirmPassword",
+        "owner_field": "name:identifiersPanel:ownerPicker:text",
+        "n4_owner_option":"link:N4 Systems Inc.",
+        "email_field": "name:identifiersPanel:email",
+        "first_name_field": "name:identifiersPanel:firstname",
+        "last_name_field": "name:identifiersPanel:lastname",
         "all_on_button": "xpath=//input[@value='All On']",
         "save_button": "link:Save"
     }
@@ -37,7 +38,11 @@ class AddUserPage(PageObject):
     def input_owner_field(self, owner):
         self.se2lib.wait_until_element_is_visible(self.locator.owner_field)
         self.se2lib.input_text(self.locator.owner_field, owner)
-        
+    
+    def select_n4_owner_option(self):
+        self.se2lib.wait_until_element_is_visible(self.locator.n4_owner_option)
+        self.se2lib.click_element(self.locator.n4_owner_option)
+            
     def input_email_field(self, email):
         self.se2lib.wait_until_element_is_visible(self.locator.email_field)
         self.se2lib.input_text(self.locator.email_field, email)

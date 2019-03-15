@@ -1,15 +1,14 @@
 from PageObjectLibrary import PageObject
 
 class DeleteAssetTypeGroupPage(PageObject):
-    NAME_REQUIRED_ERROR_MSG = "Field 'name' is required."
-    UNIQUE_NAME_ERROR_MSG = "Asset Type Group name has already been used. Please choose another."
-
+    PAGE_URL = "&uniqueID="
+    
+  
     _locators = {
         "view_all_tab": "link:View All",
-        "delete_button": "xpath=//button[@name='deleteButton']",
-        "cancel_button": "xpath=//a[@href='./assetTypeGroupsList']",
-        "asset_type_group_name_field": "xpath=//input[@name='name']"
-    }
+        "delete_button": "name:deleteButton",
+        "cancel_button": "link:Cancel",
+     }
 
     def _is_current_page(self):
         location = self.se2lib.get_location()

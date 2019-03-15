@@ -95,6 +95,11 @@ Verify Deletion Of An Asset Type Group
 Delete Asset Type Group
     DeletedAssetTypeGroupPage.Click Delete Button
     
+Verify Delete Asset Type Group Page
+     Page Should Contain   0 Asset Types being detached from this group
+     Page Should Contain   0 Saved reports and searches to be deleted
+     
+    
 Get Asset Group Id
     [Arguments]    ${groupName}
     Go To Page    ManageAssetTypeGroupsPage

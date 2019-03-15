@@ -8,8 +8,8 @@ Library     Collections
 Library     DatabaseLibrary
 
 *** Variables ***
-${SERVER_URL}        n4systems.dev.local
-${ADMIN_SERVER_URL}  n4.dev.local
+${SERVER_URL}        n4systems.fidstage.com
+${ADMIN_SERVER_URL}  n4systems.fidstage.com
 ${BROWSER}           chrome
 ${LOGIN_URL}         http://${SERVER_URL}
 ${WELCOME_URL}       http://${SERVER_URL}/fieldid/w/dashboard

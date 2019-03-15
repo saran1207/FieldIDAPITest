@@ -4,7 +4,7 @@ class CommonMenuBar(PageObject):
     #PAGE_URL = "/fieldid/w/identify"
 
     _locators = {
-        "new_asset": "xpath=//a[@href='./assetImport?initialTab=addWithOrder']",
+        "new_asset": "link:New Asset",
         "set_up": "link:Setup",
         "asset_and_events": "link:Assets & Events",
         "asset_type_groups": "link:Asset Type Groups",

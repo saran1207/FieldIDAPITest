@@ -21,7 +21,7 @@ Sudo User
     [Arguments]   ${PASSWORD}
     TenantsPage.Click N4tenant
     TenantEditPage.Click View All Users
-    #TenantUserPage.Click Sudo Any User
+    TenantUserPage.Click Sudo Any User
     TenantUserPage.Click Login
     select window  title=Field ID: Login
     LoginFieldidPage.Input Password  ${PASSWORD}
