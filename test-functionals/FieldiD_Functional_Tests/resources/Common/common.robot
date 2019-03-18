@@ -1,5 +1,5 @@
 *** Settings ***
-Resource          ${CURDIR}/../Login/login.robot
+Resource          ${CURDIR}/../Login/Login.robot
 Resource          ${CURDIR}/../../resources/AdminAccount/login_field_id_admin.robot
 Library     Selenium2Library
 Library     PageObjectLibrary

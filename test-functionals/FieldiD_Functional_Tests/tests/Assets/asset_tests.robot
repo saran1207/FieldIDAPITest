@@ -1,6 +1,6 @@
 *** Settings ***
 Resource        ${CURDIR}/../../resources/Common/common.robot
-Resource        ${CURDIR}/../../resources/Login/login.robot
+Resource        ${CURDIR}/../../resources/Login/Login.robot
 Resource        ${CURDIR}/../../resources/Dashboard/dashboard.robot
 Resource        ${CURDIR}/../../resources/Assets/assets.robot
 Library         Assets.add_asset_type_group_page.AddAssetTypeGroupPage      WITH NAME       AddAssetTypeGroupPage
