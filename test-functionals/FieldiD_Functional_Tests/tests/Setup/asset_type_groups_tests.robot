@@ -1,6 +1,6 @@
 *** Settings ***
 
-Resource        ${CURDIR}/../../resources/Login/login.robot
+Resource        ${CURDIR}/../../resources/Login/Login.robot
 Resource        ${CURDIR}/../../resources/Assets/assets.robot
 Resource        ${CURDIR}/../../resources/Dashboard/dashboard.robot
 Library           String
