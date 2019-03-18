@@ -26,6 +26,7 @@ Setup Chrome Browser
    Run keyword if    "${headless}" == "True"    Run Keywords
    ...    Call Method    ${options}    add_argument    --headless
    ...    AND    Call Method    ${options}    add_argument    --window-size\=1920,1080
+   ...    ...    AND    Call Method    ${options}    add_argument    --no-sandbox
    Create WebDriver    Chrome    chrome_options=${options}  #executable_path=/Users/saranya/Downloads/chromedriver
    Maximize Browser Window
   # Set Selenium Speed    ${DELAY}
