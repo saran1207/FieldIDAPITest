@@ -61,8 +61,8 @@ public class PredefinedLocationResource extends CrudResource<PredefinedLocation,
 	@Override
 	protected Mapper<PredefinedLocationMessage, PredefinedLocation> createMessageToModelMapper(TypeMapperBuilder<PredefinedLocationMessage, PredefinedLocation> mapperBuilder) {
 		return mapperBuilder
-				.add(PredefinedLocationMessage::getName, PredefinedLocation::setName)
-				.add(PredefinedLocationMessage::getParentId, PredefinedLocation::setParent, (publicId, context) -> {
+				.add(PredefinedLocationMessage::hasName, PredefinedLocationMessage::getName, PredefinedLocation::setName)
+				.add(PredefinedLocationMessage::hasParentId, PredefinedLocationMessage::getParentId, PredefinedLocation::setParent, (publicId, context) -> {
 					// you can only set a parent on creation
 					if (context.getTo().isNew()) {
 						return predefinedLocationResolver.convert(publicId);
@@ -70,7 +70,7 @@ public class PredefinedLocationResource extends CrudResource<PredefinedLocation,
 						return context.getTo().getParent();
 					}
 				})
-				.add(PredefinedLocationMessage::getOwnerId, PredefinedLocation::setOwner, (publicId, context) -> {
+				.add(PredefinedLocationMessage::hasOwnerId, PredefinedLocationMessage::getOwnerId, PredefinedLocation::setOwner, (publicId, context) -> {
 					// Only top level locations can define an owner
 					if (context.getTo().getParent() == null) {
 						return baseOrgResolver.convert(publicId);

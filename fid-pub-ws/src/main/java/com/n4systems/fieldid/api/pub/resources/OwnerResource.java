@@ -91,24 +91,24 @@ public class OwnerResource extends CrudResource<BaseOrg, OwnerMessage, Builder> 
 	@Override
 	protected Mapper<OwnerMessage, BaseOrg> createMessageToModelMapper(TypeMapperBuilder<OwnerMessage, BaseOrg> mapperBuilder) {
 		return mapperBuilder
-				.add(OwnerMessage::getParentId, this::setOrgParent, true)
-				.add(OwnerMessage::getName, BaseOrg::setName)
-				.add(OwnerMessage::getCode, BaseOrg::setCode)
-				.add(OwnerMessage::getNotes, BaseOrg::setNotes)
+				.add(OwnerMessage::hasParentId, OwnerMessage::getParentId, this::setOrgParent, true)
+				.add(OwnerMessage::hasName, OwnerMessage::getName, BaseOrg::setName)
+				.add(OwnerMessage::hasCode, OwnerMessage::getCode, BaseOrg::setCode)
+				.add(OwnerMessage::hasNotes, OwnerMessage::getNotes, BaseOrg::setNotes)
 				.addMessageToModel(BaseOrg::getAddressInfo, (subBuilder) -> subBuilder
-						.add(OwnerMessage::getStreetAddress, AddressInfo::setStreetAddress)
-						.add(OwnerMessage::getCity, AddressInfo::setCity)
-						.add(OwnerMessage::getState, AddressInfo::setState)
-						.add(OwnerMessage::getCountry, AddressInfo::setCountry)
-						.add(OwnerMessage::getZip, AddressInfo::setZip)
-						.add(OwnerMessage::getPhone1, AddressInfo::setPhone1)
-						.add(OwnerMessage::getPhone2, AddressInfo::setPhone2)
-						.add(OwnerMessage::getFax1, AddressInfo::setFax1)
-						.addMessageToModel(AddressInfo::getGpsLocation, new MessageToGpsLocation<>(OwnerMessage::getLatitude, OwnerMessage::getLongitude))
+						.add(OwnerMessage::hasStreetAddress, OwnerMessage::getStreetAddress, AddressInfo::setStreetAddress)
+						.add(OwnerMessage::hasCity, OwnerMessage::getCity, AddressInfo::setCity)
+						.add(OwnerMessage::hasState, OwnerMessage::getState, AddressInfo::setState)
+						.add(OwnerMessage::hasCountry, OwnerMessage::getCountry, AddressInfo::setCountry)
+						.add(OwnerMessage::hasZip,OwnerMessage::getZip, AddressInfo::setZip)
+						.add(OwnerMessage::hasPhone1, OwnerMessage::getPhone1, AddressInfo::setPhone1)
+						.add(OwnerMessage::hasPhone2, OwnerMessage::getPhone2, AddressInfo::setPhone2)
+						.add(OwnerMessage::hasFax1, OwnerMessage::getFax1, AddressInfo::setFax1)
+						.addMessageToModel(AddressInfo::getGpsLocation, new MessageToGpsLocation<>(OwnerMessage::hasLatitude, OwnerMessage::getLatitude, OwnerMessage::hasLongitude, OwnerMessage::getLongitude))
 						.build())
 				.addMessageToModel(BaseOrg::getContact, (subBuilder) -> subBuilder
-						.add(OwnerMessage::getContactEmail, Contact::setEmail)
-						.add(OwnerMessage::getContactName, Contact::setName)
+						.add(OwnerMessage::hasContactEmail, OwnerMessage::getContactEmail, Contact::setEmail)
+						.add(OwnerMessage::hasContactName, OwnerMessage::getContactName, Contact::setName)
 						.build())
 				.build();
 	}
