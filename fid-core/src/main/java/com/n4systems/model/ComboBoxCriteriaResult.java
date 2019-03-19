@@ -13,7 +13,6 @@ import javax.persistence.*;
 public class ComboBoxCriteriaResult extends CriteriaResult implements ValueResult {
 
 	@Column
-	@Localized
 	private String value;
 
 	public void setValue(String value) {
