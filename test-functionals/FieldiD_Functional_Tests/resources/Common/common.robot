@@ -10,7 +10,7 @@ Library     DatabaseLibrary
 *** Variables ***
 ${SERVER_URL}        n4systems.fidstage.com
 ${ADMIN_SERVER_URL}  n4systems.fidstage.com
-${BROWSER}           chrome
+${BROWSER}           chromeheadless
 ${LOGIN_URL}         http://${SERVER_URL}
 ${WELCOME_URL}       http://${SERVER_URL}/fieldid/w/dashboard
 ${SERVER_ADMIN_URL}  http://${ADMIN_SERVER_URL}/fieldid/admin/signIn.action
@@ -34,7 +34,7 @@ Setup Chrome Browser
    Go To    ${LOGIN_URL}
    
  Open Browser To Login Page
-   Run Keyword And Return if    '${BROWSER}' == 'chrome' or '${BROWSER}' == 'Chrome'     Setup Chrome Browser   True
+   Run Keyword And Return if    '${BROWSER}' == 'chrome' or '${BROWSER}' == 'Chrome'     Setup Chrome Browser   
    Run Keyword And Return if    '${BROWSER}' == 'chromeheadless' or '${BROWSER}' == 'Chromeheadless'     Setup Chrome Browser    True
    Run Keyword if     '${BROWSER}' == 'ie'    Setup IE Browser
    Open Browser    ${LOGIN_URL}    ${BROWSER}
@@ -62,7 +62,7 @@ Setup Chrome Browser
     Login To Field Id Admin Page   ${USER_NAME}    ${PASSWORD}
     
 Open Browser To Adminstrator Login Page
-   Run Keyword And Return if    '${BROWSER}' == 'chrome' or '${BROWSER}' == 'Chrome'     Setup Chrome Browser    True
+   Run Keyword And Return if    '${BROWSER}' == 'chrome' or '${BROWSER}' == 'Chrome'     Setup Chrome Browser    
    Run Keyword And Return if    '${BROWSER}' == 'chromeheadless' or '${BROWSER}' == 'Chromeheadless'     Setup Chrome Browser    True
    Run Keyword if     '${BROWSER}' == 'ie'    Setup IE Browser
    Open Browser   ${SERVER_ADMIN_URL}    ${BROWSER}
