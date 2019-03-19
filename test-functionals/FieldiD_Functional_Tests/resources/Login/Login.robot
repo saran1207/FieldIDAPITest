@@ -1,6 +1,7 @@
 *** Settings ***
 
 Resource        ${CURDIR}/../../resources/Common/common.robot
+Resource        ${CURDIR}/../../resources/Menu/common_menu_bar.robot
 Library  Login.login_fieldid_page.LoginFieldidPage  WITH NAME  LoginFieldidPage
 
 *** Variables ***
@@ -14,10 +15,8 @@ Login To Field Id Page
     LoginFieldidPage.Input Password      ${PASSWORD}
     LoginFieldidPage.Submit Credentials
     
-
 Logout Of Field Id
-    Wait Until Page Contains        Sign Out
-    Click Element       ${LOGOUT_BUTTON}
+    Click Sign Out
     Wait Until Page Contains        Login
     Close Browser
     

@@ -9,7 +9,8 @@ class CommonMenuBar(PageObject):
         "asset_and_events": "link:Assets & Events",
         "asset_type_groups": "link:Asset Type Groups",
         "owners_users_locations":  "link:Owners, Users & Locations",
-        "users":  "link:Users"
+        "users":  "link:Users",
+        "sign_out": "link:Sign Out"
     
     }
 
@@ -39,4 +40,8 @@ class CommonMenuBar(PageObject):
         self.se2lib.mouse_over(self.locator.owners_users_locations)
         self.se2lib.wait_until_element_is_visible(self.locator.users)
         self.se2lib.click_element(self.locator.users)
+        
+    def click_sign_out(self):
+        self.se2lib.wait_until_element_is_visible(self.locator.sign_out)
+        self.se2lib.click_element(self.locator.sign_out)
         
