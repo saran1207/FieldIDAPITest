@@ -52,6 +52,12 @@ public class AssetStatusResource extends CrudResource<AssetStatus, AssetStatusMe
 				.build();
 	}
 
+	/**
+	 * If functional interface has-XXX returns true, or user set the input field, system updates this field
+	 * Otherwise, it stays unchanged
+	 * @param mapperBuilder
+	 * @return
+	 */
 	@Override
 	protected Mapper<AssetStatusMessage, AssetStatus> createMessageToModelMapper(TypeMapperBuilder<AssetStatusMessage, AssetStatus> mapperBuilder) {
 		return mapperBuilder.add(AssetStatusMessage::hasName, AssetStatusMessage::getName, AssetStatus::setName).build();

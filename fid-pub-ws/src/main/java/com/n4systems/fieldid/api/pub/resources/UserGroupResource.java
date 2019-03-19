@@ -45,6 +45,12 @@ public class UserGroupResource extends CrudResource<UserGroup, UserGroupMessage,
 		return new UserGroupToMessage();
 	}
 
+	/**
+	 * If functional interface has-XXX returns true, or user set the input field, system updates this field
+	 * Otherwise, it stays unchanged
+	 * @param mapperBuilder
+	 * @return
+	 */
 	@Override
 	protected Mapper<UserGroupMessage, UserGroup> createMessageToModelMapper(TypeMapperBuilder<UserGroupMessage, UserGroup> mapperBuilder) {
 		return mapperBuilder

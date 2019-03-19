@@ -44,6 +44,21 @@ public class TypeMapperBuilder<FromType, ToType> {
 		});
 	}
 
+	/**
+	 * The method is used in createMessageToModelMapper() of AssetResource, etc objects
+	 * functional interface HasserReferenceFromType> hasser is added to check if the input field is set or not
+	 * the has-xxx method is available only in Protofub 2.0 https://stackoverflow.com/questions/9184215/whats-the-preferred-way-to-encode-a-nullable-field-in-protobuf-2
+	 * The main intention is to keep fields unchanged during updating the model (PUT request) if the corresponding input fields are skipped by any reason
+	 * In short, if the input fields are skipped, the system will not update them after PUT request
+	 * @param hasser
+	 * @param getter
+	 * @param setter
+	 * @param converter
+	 * @param mapNulls
+	 * @param <FromValue>
+	 * @param <ToValue>
+	 * @return
+	 */
 	public <FromValue, ToValue> TypeMapperBuilder<FromType, ToType> add(HasserReference<FromType> hasser, GetterReference<FromType, FromValue> getter, SetterReference<ToType, ToValue> setter, ValueConverterWithContext<FromValue, ToValue, FromType, ToType> converter, boolean mapNulls) {
 		return add((FromType from, ToType to)  -> {
 			if (from != null && hasser.has(from)) {

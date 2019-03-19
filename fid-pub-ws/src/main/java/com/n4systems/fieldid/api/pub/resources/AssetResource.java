@@ -74,6 +74,12 @@ public class AssetResource extends CrudResource<Asset, AssetMessage, Builder> {
 				.build();
 	}
 
+	/**
+	 * If functional interface has-XXX returns true, or user set the input field, system updates this field
+	 * Otherwise, it stays unchanged
+	 * @param mapperBuilder
+	 * @return
+	 */
 	@Override
 	protected Mapper<AssetMessage, Asset> createMessageToModelMapper(TypeMapperBuilder<AssetMessage, Asset> mapperBuilder) {
 		return mapperBuilder

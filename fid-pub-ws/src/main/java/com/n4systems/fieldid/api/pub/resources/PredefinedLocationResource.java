@@ -58,6 +58,12 @@ public class PredefinedLocationResource extends CrudResource<PredefinedLocation,
 				.build();
 	}
 
+	/**
+	 * If functional interface has-XXX returns true, or user set the input field, system updates this field
+	 * Otherwise, it stays unchanged
+	 * @param mapperBuilder
+	 * @return
+	 */
 	@Override
 	protected Mapper<PredefinedLocationMessage, PredefinedLocation> createMessageToModelMapper(TypeMapperBuilder<PredefinedLocationMessage, PredefinedLocation> mapperBuilder) {
 		return mapperBuilder
