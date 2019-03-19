@@ -88,6 +88,12 @@ public class OwnerResource extends CrudResource<BaseOrg, OwnerMessage, Builder> 
 				.build();
 	}
 
+	/**
+	 * If functional interface has-XXX returns true, or user set the input field, system updates this field
+	 * Otherwise, it stays unchanged
+	 * @param mapperBuilder
+	 * @return
+	 */
 	@Override
 	protected Mapper<OwnerMessage, BaseOrg> createMessageToModelMapper(TypeMapperBuilder<OwnerMessage, BaseOrg> mapperBuilder) {
 		return mapperBuilder

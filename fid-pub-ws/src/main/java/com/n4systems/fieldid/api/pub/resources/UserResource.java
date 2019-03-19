@@ -81,6 +81,12 @@ public class UserResource extends CrudResource<User, UserMessage, Builder> {
 				.build();
 	}
 
+	/**
+	 * If functional interface has-XXX returns true, or user set the input field, system updates this field
+	 * Otherwise, it stays unchanged
+	 * @param mapperBuilder
+	 * @return
+	 */
 	@Override
 	protected Mapper<UserMessage, User> createMessageToModelMapper(TypeMapperBuilder<UserMessage, User> mapperBuilder) {
 		return mapperBuilder

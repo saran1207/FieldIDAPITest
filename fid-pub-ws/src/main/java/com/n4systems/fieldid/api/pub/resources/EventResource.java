@@ -81,6 +81,12 @@ public class EventResource extends CrudResource<ThingEvent, EventMessage, Builde
                 .build();
     }
 
+    /**
+     * If functional interface has-XXX returns true, or user set the input field, system updates this field
+     * Otherwise, it stays unchanged
+     * @param mapperBuilder
+     * @return
+     */
     @Override
     protected Mapper<EventMessage, ThingEvent> createMessageToModelMapper(TypeMapperBuilder<EventMessage, ThingEvent> mapperBuilder) {
         return mapperBuilder
