@@ -27,7 +27,9 @@ Setup Chrome Browser
    ...    Call Method    ${options}    add_argument    --headless
    ...    AND    Call Method    ${options}    add_argument    --window-size\=1920,1080
    ...    ...    AND    Call Method    ${options}    add_argument    --no-sandbox
-   Create WebDriver    Chrome    chrome_options=${options}  #executable_path=/Users/saranya/Downloads/chromedriver
+   ${service_args}    Create List
+        ...           --verbose
+   Create WebDriver    Chrome    chrome_options=${options}  service_args=${service_args}  #executable_path=/Users/saranya/Downloads/chromedriver
    Maximize Browser Window
   # Set Selenium Speed    ${DELAY}
    Go To    ${LOGIN_URL}
