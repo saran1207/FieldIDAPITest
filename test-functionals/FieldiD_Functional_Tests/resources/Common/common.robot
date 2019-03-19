@@ -26,7 +26,6 @@ Setup Chrome Browser
    Run keyword if    "${headless}" == "True"    Run Keywords
    ...    Call Method    ${options}    add_argument    --headless
    ...    AND    Call Method    ${options}    add_argument    --no-sandbox
-   ...    ...    AND    Call Method    ${options}    add_argument    --window-size\=1920,1080  
    ${service_args}    Create List
         ...           --verbose
    Create WebDriver    Chrome    chrome_options=${options}  service_args=${service_args}  #executable_path=/Users/saranya/Downloads/chromedriver
@@ -35,7 +34,7 @@ Setup Chrome Browser
    Go To    ${LOGIN_URL}
    
  Open Browser To Login Page
-   Run Keyword And Return if    '${BROWSER}' == 'chrome' or '${BROWSER}' == 'Chrome'     Setup Chrome Browser
+   Run Keyword And Return if    '${BROWSER}' == 'chrome' or '${BROWSER}' == 'Chrome'     Setup Chrome Browser   True
    Run Keyword And Return if    '${BROWSER}' == 'chromeheadless' or '${BROWSER}' == 'Chromeheadless'     Setup Chrome Browser    True
    Run Keyword if     '${BROWSER}' == 'ie'    Setup IE Browser
    Open Browser    ${LOGIN_URL}    ${BROWSER}
@@ -63,7 +62,7 @@ Setup Chrome Browser
     Login To Field Id Admin Page   ${USER_NAME}    ${PASSWORD}
     
 Open Browser To Adminstrator Login Page
-   Run Keyword And Return if    '${BROWSER}' == 'chrome' or '${BROWSER}' == 'Chrome'     Setup Chrome Browser
+   Run Keyword And Return if    '${BROWSER}' == 'chrome' or '${BROWSER}' == 'Chrome'     Setup Chrome Browser    True
    Run Keyword And Return if    '${BROWSER}' == 'chromeheadless' or '${BROWSER}' == 'Chromeheadless'     Setup Chrome Browser    True
    Run Keyword if     '${BROWSER}' == 'ie'    Setup IE Browser
    Open Browser   ${SERVER_ADMIN_URL}    ${BROWSER}
