@@ -26,7 +26,7 @@ public abstract class PerformEventHelperService<T extends Event, V extends Event
     }
 
     public T createEvent(Long scheduleId, Long assetId, Long typeId) {
-        return createEvent(null, assetId, typeId, false);
+        return createEvent(scheduleId, assetId, typeId, false);
     }
 
     /**
