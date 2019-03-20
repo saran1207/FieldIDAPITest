@@ -11,6 +11,7 @@ import com.n4systems.fieldid.api.pub.resources.test.TestResource;
 import com.n4systems.fieldid.config.FieldIdCoreConfig;
 import com.n4systems.fieldid.config.FieldIdDownloadConfig;
 import com.n4systems.fieldid.config.FieldIdEntityRemovalConfig;
+import com.n4systems.model.EventStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -54,6 +55,9 @@ public class PublicApiConfig {
 
 	@Bean
 	public PriorityCodeResolver priorityCodeResolver() { return new PriorityCodeResolver(); }
+
+	@Bean
+	public EventStatusResolver eventStatusResolver() { return new EventStatusResolver(); }
 
 	@Bean
 	public AssetTypeResolver assetTypeResolver() {
