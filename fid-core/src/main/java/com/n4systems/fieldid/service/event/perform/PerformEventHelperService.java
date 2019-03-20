@@ -29,6 +29,18 @@ public abstract class PerformEventHelperService<T extends Event, V extends Event
         return createEvent(null, assetId, typeId, false);
     }
 
+    /**
+     * Re-used Design LocalizeModel's and LocalizeAround's pattern with ThreadLocalInteractionContext to manage the user settings' language.
+     * ThreadLocal are used for handle concurrency usage of languages
+     * As a general pattern we store previous Language from ThreadLocalInteractionContext first (usually it is null)
+     * Perform operations on the entity (event here) that are based on the user settings' language taken from SessionUser
+     * Finally, language in the ThreadLocalInteractionContext is reverted back to its previous value
+     * @param scheduleId
+     * @param assetId
+     * @param typeId
+     * @param withLocalization
+     * @return
+     */
     public T createEvent(Long scheduleId, Long assetId, Long typeId, boolean withLocalization) {
         T event;
 

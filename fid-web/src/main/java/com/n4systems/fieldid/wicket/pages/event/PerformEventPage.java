@@ -87,6 +87,14 @@ public class PerformEventPage extends ThingEventPage {
     protected Label createTitleLabel(String labelId) {
         return new Label(labelId, new FIDLabelModel("title.perform_event", event.getObject().getType().getDisplayName()));
     }
+
+    /**
+     * thingEventHelperService.createEvent() is invoked with withLocaliztion parameter is true, or enabled
+     * @param scheduleId
+     * @param assetId
+     * @param typeId
+     * @return
+     */
     private ThingEvent createNewEvent(Long scheduleId, Long assetId, Long typeId) {
         final ThingEvent event = thingEventHelperService.createEvent(scheduleId, assetId, typeId, true);
 

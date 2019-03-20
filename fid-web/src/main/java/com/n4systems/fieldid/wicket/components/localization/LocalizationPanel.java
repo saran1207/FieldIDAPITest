@@ -110,10 +110,6 @@ public class LocalizationPanel extends Panel {
         model.forceReload();
     }
 
-    protected boolean forceDefaultLanguage() {
-        return true;
-    }
-
     protected String getLabelFor(LocalizedField field) {
         String className = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL,field.getEntity().getClass().getSimpleName());
         String label = String.format("label.%s.%s", className,field.getName());
