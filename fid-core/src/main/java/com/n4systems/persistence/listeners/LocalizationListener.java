@@ -44,6 +44,14 @@ public class LocalizationListener implements PostLoadEventListener, PreUpdateEve
         return false;
     }
 
+    /**
+     * Sometimes, Hibernate gives "java.lang.ArrayIndexOutOfBoundsException: 12" Exception error for SelectCriteria entity
+     * Hibernate PostLoadEvent in LocalizationListener.onPostLoad() gets incorrect persister via event.getPersister().
+     * To address this we set persister manually in the code below: for example,
+     * event.getSession().getFactory().getEntityPersister("com.n4systems.model.SelectCriteria")
+     * For more details, see https://ecompliance.atlassian.net/wiki/spaces/CR/pages/606142574/Field+ID+Translation+for+PDF+Customized+reports
+     * @param event
+     */
     @Override
     public void onPostLoad(PostLoadEvent event) {
         EntityPersister persister = event.getPersister();
