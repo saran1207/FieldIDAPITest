@@ -64,9 +64,9 @@ public class DateChartManagerTest extends FieldIdUnitTest {
 
         dateChartManager = new DateChartManager(ChartGranularity.WEEK, dateRange);
         series = createTestSeries(firstWeekIn2011);
-        assertSeries(series, from, to, expected=6*52+2);
-        series = createTestSeries(firstWeekIn2011.plusWeeks(1));
         assertSeries(series, from, to, expected=6*52+2+1);
+        series = createTestSeries(firstWeekIn2011.plusWeeks(1));
+        assertSeries(series, from, to, expected=6*52+2+2);
 
         dateChartManager = new DateChartManager(ChartGranularity.DAY, dateRange);
         series = createTestSeries(jan1_2011);
