@@ -33,9 +33,6 @@
             <#if userLimitService.readOnlyUsersEnabled>
                 <a href="<@s.url action="registerUser"/>"><span><@s.text name="label.requestanaccount"/></span></a>
             </#if>
-            <#if securityGuard.plansAndPricingAvailable>
-                <a href="${externalPlansAndPricingUrl}"><span><@s.text name="label.plans_and_pricing"/></span></a>
-            </#if>
         </div>
     </@s.form>
 </div>
