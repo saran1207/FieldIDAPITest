@@ -1,9 +1,9 @@
 from PageObjectLibrary import PageObject
 
-class AddAssetTypeGroupPage(PageObject):
+class CreateAssetTypeGroupPage(PageObject):
     PAGE_URL = "/fieldid/w/setup/addAssetTypeGroup"
     NAME_REQUIRED_ERROR_MSG = "Field 'name' is required."
-    UNIQUE_NAME_ERROR_MSG = "Asset Type Group name has already been used. Please choose another. Jenkins test"
+    UNIQUE_NAME_ERROR_MSG = "Asset Type Group name has already been used. Please choose another."
 
     _locators = {
         "view_all_button": "link:View All",

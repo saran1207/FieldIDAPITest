@@ -10,6 +10,12 @@ ${USERNAME}         testauto
 ${PASSWORD}         temp123
 
 *** Keywords ***
+Verify Successfull Login    
+    Page Should Contain       Welcome
+    
+Verify Unsuccessfull Login   
+   ${INVALID LOGIN MSG}=   LoginFieldidPage.Return Invalid Login Message
+   Page Should Contain      ${INVALID LOGIN MSG}
 
 *** Test Cases ***
 Login And Logout Of Field Id

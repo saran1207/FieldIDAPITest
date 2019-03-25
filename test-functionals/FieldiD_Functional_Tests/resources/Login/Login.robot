@@ -19,11 +19,4 @@ Logout Of Field Id
     Click Sign Out
     Wait Until Page Contains        Login
     Close Browser
-    
-Verify Successfull Login    
-    Page Should Contain       Welcome
-    
-Verify Unsuccessfull Login   
-   ${INVALID LOGIN MSG}=   LoginFieldidPage.Return Invalid Login Message
-   Page Should Contain      ${INVALID LOGIN MSG}
   

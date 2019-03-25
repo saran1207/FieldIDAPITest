@@ -4,7 +4,7 @@ class DeleteAssetTypeGroupPage(PageObject):
     PAGE_URL = "&uniqueID="
     
     _locators = {
-        "view_all_tab": "link:View All",
+        "view_all_tab_link": "link:View All",
         "delete_button": "name:deleteButton",
         "cancel_button": "link:Cancel",
      }

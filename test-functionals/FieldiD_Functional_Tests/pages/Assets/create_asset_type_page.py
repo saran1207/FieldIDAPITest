@@ -1,6 +1,6 @@
 from PageObjectLibrary import PageObject
 
-class AddAssetTypePage(PageObject):
+class CreateAssetTypePage(PageObject):
     PAGE_URL = "/fieldid/w/setup/assetTypeForm"
 
     _locators = {

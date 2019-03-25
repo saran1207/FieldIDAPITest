@@ -18,7 +18,11 @@ ${FIRSTNAME}        Test
 ${LASTNAME}         Automation
 
 *** Keywords ***
-
+Verify If User Exist
+    [Arguments]    ${USERNAME}
+    Go To Page    ManageUsersPage
+    Page Should Contain    ${USERNAME} 
+    
 *** Test Cases ***
 Create User If Does Not Exist and Verify
     [Tags]  Preconditions
