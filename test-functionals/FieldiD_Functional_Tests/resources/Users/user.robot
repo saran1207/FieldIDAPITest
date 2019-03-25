@@ -28,3 +28,9 @@ Create A User
    AddUserPage.Input Last Name Field    ${LASTNAME}
    AddUserPage.Click All On Button
    AddUserPage.Click Save Button
+   
+Verify If User Exist
+    [Arguments]    ${USERNAME}
+    Go To Page    ManageUsersPage
+    Page Should Contain    ${USERNAME}    
+    

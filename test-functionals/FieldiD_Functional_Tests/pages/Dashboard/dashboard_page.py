@@ -1,5 +1,4 @@
 from PageObjectLibrary import PageObject
-#from Menu.common_menu_bar import CommonMenuBar
 
 class DashboardPage(PageObject):
     PAGE_URL = "/fieldid/w/dashboard"
@@ -14,4 +13,3 @@ class DashboardPage(PageObject):
             message = "Expected location to end with " + self.PAGE_URL + " but it did not"
             raise Exception(message)
         return True
-           

@@ -3,11 +3,13 @@ from PageObjectLibrary import PageObject
 class LoginFieldidPage(PageObject):
     PAGE_URL = "/fieldid/login.action"
     INVALID_LOGIN_MSG = "Your login information is incorrect. "
+    yes_log_me_in_button = "//input[@value='Yes, Log Me In']"
 
     _locators = {
         "username_field": "id=userName",
         "password_field": "id=password",
-        "login_button": "id=signInButton"
+        "login_button": "id=signInButton",
+        "yes_log_me_in_button": "//input[@value='Yes, Log Me In']"
     }
 
     def _is_current_page(self):
@@ -31,6 +33,5 @@ class LoginFieldidPage(PageObject):
     def submit_credentials(self):
         self.se2lib.wait_until_element_is_visible(self.locator.login_button)
         self.se2lib.click_element(self.locator.login_button)
-        
-        
-    
+        if  len(self.se2lib.driver.find_elements_by_xpath(self.yes_log_me_in_button))>0:
+                self.se2lib.click_element(self.locator.yes_log_me_in_button)

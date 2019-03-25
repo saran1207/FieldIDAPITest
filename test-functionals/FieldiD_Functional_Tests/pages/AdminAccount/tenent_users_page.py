@@ -2,10 +2,11 @@ from PageObjectLibrary import PageObject
 
 class TenantUserPage(PageObject):
     PAGE_URL = "/fieldid/admin/tenantUsers"
+    sudo_any_user = "Sudo"
    
     _locators = {
         "sudo_any_user": "link:Sudo",
-        "login":  "link:Login"
+        "login_button":  "link:Login"
      }
 
     def _is_current_page(self):
@@ -15,14 +16,10 @@ class TenantUserPage(PageObject):
             raise Exception(message)
         return True
 
-   
     def click_sudo_any_user(self):
-        self.se2lib.wait_until_element_is_visible(self.locator.sudo_any_user)
-        self.se2lib.click_element(self.locator.sudo_any_user)
-        
+        if  len(self.se2lib.driver.find_elements_by_link_text(self.sudo_any_user))>0:
+                self.se2lib.click_element(self.locator.sudo_any_user)
+               
     def click_login(self):
-        self.se2lib.wait_until_element_is_visible(self.locator.login)
-        self.se2lib.click_element(self.locator.login)
-       
-    
-        
+        self.se2lib.wait_until_element_is_visible(self.locator.login_button)
+        self.se2lib.click_element(self.locator.login_button)

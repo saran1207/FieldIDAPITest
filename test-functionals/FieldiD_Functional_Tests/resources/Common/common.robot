@@ -28,9 +28,9 @@ Setup Chrome Browser
    ...    AND    Call Method    ${options}    add_argument    --window-size\=1920,1080
    ${service_args}    Create List
         ...           --verbose
-   Create WebDriver    Chrome    chrome_options=${options}  service_args=${service_args}  #executable_path=/Users/saranya/Downloads/chromedriver
+   Create WebDriver    Chrome    chrome_options=${options}  service_args=${service_args}
    Maximize Browser Window
-  # Set Selenium Speed    ${DELAY}
+   Set Selenium Speed    ${DELAY}
    Go To    ${LOGIN_URL}
    
  Open Browser To Login Page

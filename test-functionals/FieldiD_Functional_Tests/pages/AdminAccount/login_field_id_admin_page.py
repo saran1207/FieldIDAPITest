@@ -31,7 +31,3 @@ class LoginFieldidAdminPage(PageObject):
     def submit_credentials(self):
         self.se2lib.wait_until_element_is_visible(self.locator.login_button)
         self.se2lib.click_element(self.locator.login_button)
-        
-    
-        
-    

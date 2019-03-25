@@ -4,7 +4,7 @@ class TenantEditPage(PageObject):
     PAGE_URL = "/fieldid/admin/organizationEdit.action"
    
     _locators = {
-        "view_all_users": "link:View All Users"
+        "view_all_users_link": "link:View All Users"
     }
 
     def _is_current_page(self):
@@ -16,9 +16,5 @@ class TenantEditPage(PageObject):
 
    
     def click_view_all_users(self):
-        self.se2lib.wait_until_element_is_visible(self.locator.view_all_users)
-        self.se2lib.click_element(self.locator.view_all_users)
-        
-    
-        
-    
+        self.se2lib.wait_until_element_is_visible(self.locator.view_all_users_link)
+        self.se2lib.click_element(self.locator.view_all_users_link)

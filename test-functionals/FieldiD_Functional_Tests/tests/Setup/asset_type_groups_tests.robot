@@ -18,17 +18,20 @@ ${PASSWORD}         temp123
 
 *** Test Cases ***
 Create Asset Type Group With No Name Test
+    [Tags]    Regression  C1843
     Go To Asset Type Group Page
     Create An Asset Type Group      ${EMPTY}
     ${NAME_REQUIRED_ERROR_MSG}=   AddAssetTypeGroupPage.Get Name Required Error Msg
     Page Should Contain      ${NAME_REQUIRED_ERROR_MSG}
     
 Create Asset Type Group And Verify Creation Test
+    [Tags]  C1703
     ${assetGroup}    Generate Random String  5
     Create An Asset Type Group      ${assetGroup}
     Verify Creation Of An Asset Type Group      ${assetGroup}
     
 Create Duplicate Asset Type Group Test
+    [Tags]  C1844
      ${assetGroup}    Generate Random String  5
     Create An Asset Type Group      ${assetGroup}
     Verify Creation Of An Asset Type Group      ${assetGroup}
@@ -37,7 +40,8 @@ Create Duplicate Asset Type Group Test
     Page Should Contain      ${UNIQUE_NAME_ERROR_MSG}
     
 Edit Asset Type Group Test
-   ${assetGroup}    Generate Random String  5
+    [Tags]  C1704
+    ${assetGroup}    Generate Random String  5
     Create An Asset Type Group      ${assetGroup}
     Verify Creation Of An Asset Type Group      ${assetGroup}
     Go To Edit Asset Type Group     ${assetGroup}
@@ -46,7 +50,8 @@ Edit Asset Type Group Test
     Verify Creation Of An Asset Type Group       ${assetGroup}+editted
     
 Deleted Asset Type Group Test
-   ${assetGroup}    Generate Random String  5
+    [Tags]  C1771
+    ${assetGroup}    Generate Random String  5
     Create An Asset Type Group      ${assetGroup}
     Verify Creation Of An Asset Type Group      ${assetGroup}
     Go To Delete Asset Type Group     ${assetGroup}

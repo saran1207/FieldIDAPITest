@@ -2,7 +2,7 @@
 
 Resource        ${CURDIR}/../../resources/Common/common.robot
 Resource        ${CURDIR}/../../resources/AdminAccount/login_field_id_admin.robot
-Resource        ${CURDIR}/../../resources/Users/create_user.robot
+Resource        ${CURDIR}/../../resources/Users/user.robot
 Resource        ${CURDIR}/../../resources/Dashboard/dashboard.robot
 Library           String
 Suite Teardown  Logout Of Field Id
@@ -20,8 +20,11 @@ ${LASTNAME}         Automation
 *** Keywords ***
 
 *** Test Cases ***
-Create User and verify
+Create User If Does Not Exist and Verify
+    [Tags]  Preconditions
     Login to Field Id Admin Console  ${USERNAME}      ${PASSWORD}
     Sudo User  ${PASSWORD}
-    Create A User  ${USERNAME1}  ${PASSWORD1}  ${OWNER}  ${EMAIL}  ${FIRSTNAME}  ${LASTNAME}
+    ${user_exists}  Run Keyword And Return Status    Verify If User Exist    ${USERNAME1}        
+    Run Keyword if   not ${user_exists}  Create A User  ${USERNAME1}  ${PASSWORD1}  ${OWNER}  ${EMAIL}  ${FIRSTNAME}  ${LASTNAME}
+    Verify If User Exist    ${USERNAME1}
   
