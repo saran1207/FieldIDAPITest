@@ -48,6 +48,8 @@ import rfid.web.helper.SessionUser;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -684,11 +686,16 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 
 		tokens.put("userIQSiteId",configService.getConfig().getWeb().getUserIQSiteId());
 		tokens.put("userId",getSessionUser().getUserID());
-		tokens.put("userName",getSessionUser().getFirstName() +" " + getSessionUser().getLastName());
+		tokens.put("userName",getSessionUser().getFirstName() + " " + getSessionUser().getLastName());
 		tokens.put("salesforceId",getTenant().getSalesforceId());
-		tokens.put("tenantName",orgService.getPrimaryOrgForTenant(getTenantId()).getName());
+		tokens.put("tenantName",getSessionUser().getOwner().getName());
 		tokens.put("userEmail",getSessionUser().getEmailAddress());
-		tokens.put("userCreatedDate", new SimpleDateFormat("yyyy-MM-dd").format(getCurrentUser().getCreated()));
+		Date createdDate = new Date();
+		if (getCurrentUser() != null) createdDate = getCurrentUser().getCreated();
+		if (createdDate == null) {
+			createdDate = java.sql.Date.valueOf(LocalDate.of(2000, Month.JANUARY,1));
+		}
+		tokens.put("userCreatedDate", new SimpleDateFormat("yyyy-MM-dd").format(createdDate));
 
 		String patternString = "%(" + StringUtils.concat(tokens.keySet(), "|") + ")%";
 		Pattern pattern = Pattern.compile(patternString);

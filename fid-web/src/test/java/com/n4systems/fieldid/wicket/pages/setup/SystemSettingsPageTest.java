@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.setup;
 
+import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.tenant.SystemSettingsService;
@@ -32,6 +33,7 @@ public class SystemSettingsPageTest extends FieldIdPageTest<SystemsSettingsPageH
 	private S3Service s3Service;
 	private TenantSettingsService tenantSettingsService;
 	private OrgService orgService;
+	private PersistenceService persistenceService;
 
 	@Override
 	@Before
@@ -43,6 +45,7 @@ public class SystemSettingsPageTest extends FieldIdPageTest<SystemsSettingsPageH
 		userLimitService = wire(UserLimitService.class);
 		s3Service = wire(S3Service.class);
 		orgService = wire(OrgService.class);
+		persistenceService = wire(PersistenceService.class);
 	}
 
 	@Test
@@ -60,9 +63,11 @@ public class SystemSettingsPageTest extends FieldIdPageTest<SystemsSettingsPageH
 		replay(s3Service);
 		PrimaryOrg primaryOrg = wire(PrimaryOrg.class);
 		expect(primaryOrg.hasExtendedFeature(ExtendedFeature.GoogleTranslate)).andStubReturn(false);
+		expect(primaryOrg.getName()).andStubReturn("");
 		replay(primaryOrg);
 		expect(orgService.getPrimaryOrgForTenant(anyLong())).andStubReturn(primaryOrg);
 		replay(orgService);
+		expectingPersistenceService();
 
 		renderFixture(this);
 

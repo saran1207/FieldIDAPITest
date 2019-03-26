@@ -113,6 +113,9 @@ import rfid.web.helper.SessionUser;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -196,27 +199,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             add(new Label("footerScript").setVisible(false));
         }
 
-        Map<String,String> tokens = new HashMap<>();
-
-        tokens.put("userIQSiteId",configService.getConfig().getWeb().getUserIQSiteId());
-        tokens.put("userId",getSessionUser().getUserID());
-        tokens.put("userName",getSessionUser().getFirstName() +" " + getSessionUser().getLastName());
-        tokens.put("salesforceId",getTenant().getSalesforceId());
-        tokens.put("tenantName",orgService.getPrimaryOrgForTenant(getTenantId()).getName());
-        tokens.put("userEmail",getSessionUser().getEmailAddress());
-        tokens.put("userCreatedDate", new SimpleDateFormat("yyyy-MM-dd").format(getCurrentUser().getCreated()));
-
-        String patternString = "%(" + StringUtils.concat(tokens.keySet(), "|") + ")%";
-        Pattern pattern = Pattern.compile(patternString);
-        Matcher matcher = pattern.matcher(BASE_USEIQ_SCRIPT);
-
-        StringBuffer sb = new StringBuffer();
-        while(matcher.find()) {
-            matcher.appendReplacement(sb, tokens.get(matcher.group(1)));
-        }
-        matcher.appendTail(sb);
-
-        String useriqJsInlineScript = "<script type='text/javascript' id ='USERIQ_INTEGRATION'>" + sb.toString() + "</script>";
+        String useriqJsInlineScript = "<script type='text/javascript' id ='USERIQ_INTEGRATION'>" + getUserIQJs() + "</script>";
 
         String walkmeScript = "<script type='text/javascript' id ='WALKME_INTEGRATION'>" +
                 BASE_WALKME_SCRIPT.replace("${walkmeURL}",
@@ -235,6 +218,36 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
         add(createBackToLink("backToLink", "backToLinkLabel"));
         add(createRelogLink());
+    }
+
+    public String getUserIQJs() {
+
+        Map<String,String> tokens = new HashMap<>();
+
+        tokens.put("userIQSiteId",configService.getConfig().getWeb().getUserIQSiteId());
+        tokens.put("userId",getSessionUser().getUserID());
+        tokens.put("userName",getSessionUser().getFirstName() + " " + getSessionUser().getLastName());
+        tokens.put("salesforceId",getTenant().getSalesforceId());
+        tokens.put("tenantName",getSessionUser().getOwner().getName());
+        tokens.put("userEmail",getSessionUser().getEmailAddress());
+        Date createdDate = new Date();
+        if (getCurrentUser() != null) createdDate = getCurrentUser().getCreated();
+        if (createdDate == null) {
+            createdDate = java.sql.Date.valueOf(LocalDate.of(2000, Month.JANUARY,1));
+        }
+        tokens.put("userCreatedDate", new SimpleDateFormat("yyyy-MM-dd").format(createdDate));
+
+        String patternString = "%(" + StringUtils.concat(tokens.keySet(), "|") + ")%";
+        Pattern pattern = Pattern.compile(patternString);
+        Matcher matcher = pattern.matcher(BASE_USEIQ_SCRIPT);
+
+        StringBuffer sb = new StringBuffer();
+        while(matcher.find()) {
+            matcher.appendReplacement(sb, tokens.get(matcher.group(1)));
+        }
+        matcher.appendTail(sb);
+
+        return sb.toString();
     }
 
     @Override
