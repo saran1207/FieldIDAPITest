@@ -67,4 +67,8 @@ public class MutableWebConfig extends WebConfig {
 		this.walkmeUrl = walkmeUrl;
 	}
 
+	public void setUserIQSiteId(String userIQSiteId) {
+		this.userIQSiteId = userIQSiteId;
+	}
+
 }

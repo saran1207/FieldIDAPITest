@@ -70,6 +70,7 @@ import com.n4systems.model.columns.ReportType;
 import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.StringUtils;
 import com.n4systems.util.uri.ActionURLBuilder;
 import com.newrelic.api.agent.NewRelic;
 import org.apache.wicket.Component;
@@ -109,8 +110,11 @@ import rfid.web.helper.SessionUser;
 
 import java.io.File;
 import java.net.URI;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.param;
 
@@ -181,6 +185,28 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
             add(new Label("footerScript").setVisible(false));
         }
 
+        Map<String,String> tokens = new HashMap<>();
+
+        tokens.put("userIQSiteId",configService.getConfig().getWeb().getUserIQSiteId());
+        tokens.put("userId",getSessionUser().getUserID());
+        tokens.put("userName",getSessionUser().getFirstName() +" " + getSessionUser().getLastName());
+        tokens.put("salesforceId",getTenant().getSalesforceId());
+        tokens.put("tenantName",orgService.getPrimaryOrgForTenant(getTenantId()).getName());
+        tokens.put("userEmail",getSessionUser().getEmailAddress());
+        tokens.put("userCreatedDate", new SimpleDateFormat("yyyy-MM-dd").format(getCurrentUser().getCreated()));
+
+        String patternString = "%(" + StringUtils.concat(tokens.keySet(), "|") + ")%";
+        Pattern pattern = Pattern.compile(patternString);
+        Matcher matcher = pattern.matcher(BASE_USEIQ_SCRIPT);
+
+        StringBuffer sb = new StringBuffer();
+        while(matcher.find()) {
+            matcher.appendReplacement(sb, tokens.get(matcher.group(1)));
+        }
+        matcher.appendTail(sb);
+
+        String useriqJsInlineScript = "<script type='text/javascript' id ='USERIQ_INTEGRATION'>" + sb.toString() + "</script>";
+
         String walkmeScript = "<script type='text/javascript' id ='WALKME_INTEGRATION'>" +
                 BASE_WALKME_SCRIPT.replace("${walkmeURL}",
                         configService.getConfig().getWeb().getWalkmeUrl()) +
@@ -193,7 +219,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
                 "</script>";
 
         add(new Label("footer-js-container",
-                walkmeScript + "\n\n" + slasskJsInclude + "\n" + slaaskJsInlineScript).
+                useriqJsInlineScript + "\n\n" + walkmeScript + "\n\n" + slasskJsInclude + "\n" + slaaskJsInlineScript).
                 setEscapeModelStrings(false));
 
         add(createHeaderLink("headerLink", "headerLinkLabel"));

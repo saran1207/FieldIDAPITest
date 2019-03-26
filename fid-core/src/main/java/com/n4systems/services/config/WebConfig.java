@@ -18,6 +18,7 @@ public class WebConfig {
     protected String safetyNetworkHelpUrl;
     protected String safetyNetworkVideoUrl;
     protected String walkmeUrl;
+    protected String userIQSiteId;
 
     public WebConfig() {}
 
@@ -39,6 +40,7 @@ public class WebConfig {
         this.safetyNetworkHelpUrl = other.safetyNetworkHelpUrl;
         this.safetyNetworkVideoUrl = other.safetyNetworkVideoUrl;
         this.walkmeUrl = other.walkmeUrl;
+        this.userIQSiteId = other.userIQSiteId;
     }
 
     public Boolean getGoogleAnalyticsEnabled() {
@@ -103,6 +105,8 @@ public class WebConfig {
 
     public String getWalkmeUrl() { return walkmeUrl; }
 
+    public String getUserIQSiteId() { return userIQSiteId; }
+
     @Override
     public String toString() {
         return "\t\tgoogleAnalyticsEnabled: " + googleAnalyticsEnabled + '\n' +
@@ -121,6 +125,7 @@ public class WebConfig {
                 "\t\trssFeed: '" + rssFeed + "'\n" +
                 "\t\tsafetyNetworkHelpUrl: '" + safetyNetworkHelpUrl + "'\n" +
                 "\t\tsafetyNetworkVideoUrl: '" + safetyNetworkVideoUrl + "'\n" +
+                "\t\tuserIQSiteId: '" + userIQSiteId + "'\n" +
                 "\t\twalkmeUrl: '" + walkmeUrl + "'\n";
     }
 }
