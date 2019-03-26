@@ -23,13 +23,12 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
@@ -162,7 +161,12 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
 
     protected void showLocalizationDialogFor(final EntityWithTenant entity, final List<String> fieldsToInclude, AjaxRequestTarget target) {
         EntityModel entityModel = new EntityModel(entity.getClass(), entity);
-        showLocalizationDialogFor(entityModel, fieldsToInclude, target, new PropertyModel(entityModel,"tenant.settings.translatedLanguages"));
+        List<Locale> allLaguages = (List<Locale>) new PropertyModel(entityModel,"tenant.settings.translatedLanguages").getObject();
+        Locale defaultLanguage = (Locale) new PropertyModel(entityModel,"tenant.settings.defaultLanguage").getObject();
+        if (!allLaguages.contains(defaultLanguage)) {
+            allLaguages.add(defaultLanguage);
+        }
+        showLocalizationDialogFor(entityModel, fieldsToInclude, target, Model.of((Collection) allLaguages));
     }
 
     protected void showLocalizationDialogFor(final IModel<?> model, final List<String> fieldsToInclude, AjaxRequestTarget target, IModel<List<Locale>> languages) {
