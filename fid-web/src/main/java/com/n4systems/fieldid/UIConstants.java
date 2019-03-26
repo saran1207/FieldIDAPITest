@@ -70,5 +70,5 @@ public interface UIConstants {
 			"\t }); " +
 			"useriq.startTracker(); \n" +
 			"var d=document, g=d.createElement(\"script\"), s=d.getElementsByTagName(\"script\")[0]; g.type=\"text/javascript\"; \n" +
-			"g.defer=true; g.async=true; g.src=\"https://feed.useriq.com/useriq.js\"; s.parentNode.insertBefore(g,s); window._sConfig = {smartLoad:true};}) (); ";
+			"g.defer=true; g.async=true; g.src=\"https://feed.useriq.com/useriq.js\"; s.parentNode.insertBefore(g,s); }) (); ";
 }
