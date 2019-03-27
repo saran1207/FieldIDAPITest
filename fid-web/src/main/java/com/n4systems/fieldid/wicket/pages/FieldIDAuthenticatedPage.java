@@ -1,9 +1,12 @@
 package com.n4systems.fieldid.wicket.pages;
 
+import com.n4systems.fieldid.UIConstants;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.utils.UrlArchive;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.model.user.User;
+import com.n4systems.services.config.ConfigService;
+import com.n4systems.util.StringUtils;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.request.flow.RedirectToUrlException;
@@ -11,12 +14,22 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import rfid.web.helper.SessionUser;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 // Subclasses of this page can be full endpoints, but they won't have the outside
 // layout for navigation. This is useful for lightbox rendered items.
-public class FieldIDAuthenticatedPage extends FieldIDWicketPage {
+public class FieldIDAuthenticatedPage extends FieldIDWicketPage implements UIConstants {
 
-    @SpringBean
-    private PersistenceService persistenceService;
+    @SpringBean private PersistenceService persistenceService;
+
+    @SpringBean protected ConfigService configService;
 
     public FieldIDAuthenticatedPage(PageParameters params) {
         super(params);
@@ -66,9 +79,39 @@ public class FieldIDAuthenticatedPage extends FieldIDWicketPage {
         return persistenceService.find(User.class, getSessionUser().getUniqueID());
     }
 
-
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
     }
+
+    public String getUserIQJs() {
+
+        Map<String,String> tokens = new HashMap<>();
+
+        tokens.put("userIQSiteId",configService.getConfig().getWeb().getUserIQSiteId());
+        tokens.put("userId",getSessionUser().getUserID());
+        tokens.put("userName",getSessionUser().getFirstName() + " " + getSessionUser().getLastName());
+        tokens.put("salesforceId",getSessionUser().getTenant().getSalesforceId());
+        tokens.put("tenantName",getSessionUser().getOwner().getName());
+        tokens.put("userEmail",getSessionUser().getEmailAddress());
+        Date createdDate = new Date();
+        if (getCurrentUser() != null) createdDate = getCurrentUser().getCreated();
+        if (createdDate == null) {
+            createdDate = java.sql.Date.valueOf(LocalDate.of(2000, Month.JANUARY,1));
+        }
+        tokens.put("userCreatedDate", new SimpleDateFormat("yyyy-MM-dd").format(createdDate));
+
+        String patternString = "%(" + StringUtils.concat(tokens.keySet(), "|") + ")%";
+        Pattern pattern = Pattern.compile(patternString);
+        Matcher matcher = pattern.matcher(BASE_USEIQ_SCRIPT);
+
+        StringBuffer sb = new StringBuffer();
+        while(matcher.find()) {
+            matcher.appendReplacement(sb, tokens.get(matcher.group(1)));
+        }
+        matcher.appendTail(sb);
+
+        return sb.toString();
+    }
+
 }

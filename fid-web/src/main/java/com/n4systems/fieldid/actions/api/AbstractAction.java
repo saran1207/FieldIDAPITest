@@ -680,6 +680,13 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 				getSessionUser().getUserID()).replace("${User_Email}", getSessionUser().getEmailAddress());
 	}
 
+	/**
+	 * The getUserIQJs() method is exact copy of one from FiledIdAuthenticatedPage.java
+	 * The duplication is done in order to seperate Wicket files from Struts' ones
+	 * This Struts' method is annotated as @Deprecated
+	 * @return
+	 */
+	@Deprecated
 	public String getUserIQJs() {
 
 		Map<String,String> tokens = new HashMap<>();

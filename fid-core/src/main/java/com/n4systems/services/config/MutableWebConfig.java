@@ -67,6 +67,11 @@ public class MutableWebConfig extends WebConfig {
 		this.walkmeUrl = walkmeUrl;
 	}
 
+	/**
+	 * userIQSiteId is the required parameter for UserIQ Javascript snippet (see UIConstants.java for details)
+	 * The value for userIQSiteId in Production config.yml is different from Stage(test) one
+	 * @param userIQSiteId
+	 */
 	public void setUserIQSiteId(String userIQSiteId) {
 		this.userIQSiteId = userIQSiteId;
 	}

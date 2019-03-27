@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.pages;
 
 import com.google.common.base.Preconditions;
-import com.n4systems.fieldid.UIConstants;
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.org.OrgService;
@@ -68,11 +67,9 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.columns.ReportType;
-import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.services.config.ConfigService;
 import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.StringUtils;
 import com.newrelic.api.agent.NewRelic;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -112,19 +109,13 @@ import org.odlabs.wiquery.core.resources.CoreJavaScriptResourceReference;
 import rfid.web.helper.SessionUser;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.Month;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.param;
 
 @SuppressWarnings("serial")
-public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIConstants {
+public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage {
 
     public static final String SUB_MENU_ID = "subMenu";
     public static final String LEFT_PANEL_ID = "leftPanel";
@@ -218,36 +209,6 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
         add(createBackToLink("backToLink", "backToLinkLabel"));
         add(createRelogLink());
-    }
-
-    public String getUserIQJs() {
-
-        Map<String,String> tokens = new HashMap<>();
-
-        tokens.put("userIQSiteId",configService.getConfig().getWeb().getUserIQSiteId());
-        tokens.put("userId",getSessionUser().getUserID());
-        tokens.put("userName",getSessionUser().getFirstName() + " " + getSessionUser().getLastName());
-        tokens.put("salesforceId",getTenant().getSalesforceId());
-        tokens.put("tenantName",getSessionUser().getOwner().getName());
-        tokens.put("userEmail",getSessionUser().getEmailAddress());
-        Date createdDate = new Date();
-        if (getCurrentUser() != null) createdDate = getCurrentUser().getCreated();
-        if (createdDate == null) {
-            createdDate = java.sql.Date.valueOf(LocalDate.of(2000, Month.JANUARY,1));
-        }
-        tokens.put("userCreatedDate", new SimpleDateFormat("yyyy-MM-dd").format(createdDate));
-
-        String patternString = "%(" + StringUtils.concat(tokens.keySet(), "|") + ")%";
-        Pattern pattern = Pattern.compile(patternString);
-        Matcher matcher = pattern.matcher(BASE_USEIQ_SCRIPT);
-
-        StringBuffer sb = new StringBuffer();
-        while(matcher.find()) {
-            matcher.appendReplacement(sb, tokens.get(matcher.group(1)));
-        }
-        matcher.appendTail(sb);
-
-        return sb.toString();
     }
 
     @Override

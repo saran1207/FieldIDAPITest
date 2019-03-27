@@ -105,6 +105,10 @@ public class WebConfig {
 
     public String getWalkmeUrl() { return walkmeUrl; }
 
+    /**
+     * userIQSiteId is the required parameter for UserIQ Javascript snippet (see UIConstants.java for details)
+     * The value for userIQSiteId in Production config.yml is different from Stage(test) one
+     */
     public String getUserIQSiteId() { return userIQSiteId; }
 
     @Override
