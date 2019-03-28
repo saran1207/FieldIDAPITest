@@ -12,10 +12,10 @@ ${LOGOUT_BUTTON}        xpath=//a[@href='/fieldid/logout.action']
 *** Keywords ***
 Login To Field Id Admin Page
     [Arguments]     ${USERNAME}     ${PASSWORD}
+    Go To Page  LoginFieldidAdminPage
     LoginFieldidAdminPage.Input Username      ${USERNAME}
     LoginFieldidAdminPage.Input Password      ${PASSWORD}
     LoginFieldidAdminPage.Submit Credentials
-    
     
 Sudo User 
     [Arguments]   ${PASSWORD}
@@ -26,5 +26,3 @@ Sudo User
     select window  title=Field ID: Login
     LoginFieldidPage.Input Password  ${PASSWORD}
     LoginFieldidPage.Submit Credentials
-    
-    

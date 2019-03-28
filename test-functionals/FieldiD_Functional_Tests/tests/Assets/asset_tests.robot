@@ -36,7 +36,4 @@ Create Asset Type And Verify Creation
 Create Asset And Verify Creation
     Go To New Asset From Dashboard
     Create An Asset     TestAsset   TEST123
-    Verify Creation Of An Asset     TestAsset   TEST123
-    
-    
-    
+    Verify Creation Of An Asset     TestAsset   TEST123    

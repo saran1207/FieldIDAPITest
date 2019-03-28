@@ -31,4 +31,3 @@ Create User If Does Not Exist and Verify
     ${user_exists}  Run Keyword And Return Status    Verify If User Exist    ${USERNAME1}        
     Run Keyword if   not ${user_exists}  Create A User  ${USERNAME1}  ${PASSWORD1}  ${OWNER}  ${EMAIL}  ${FIRSTNAME}  ${LASTNAME}
     Verify If User Exist    ${USERNAME1}
-  

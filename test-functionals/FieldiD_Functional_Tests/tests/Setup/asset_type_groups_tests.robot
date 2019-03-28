@@ -25,7 +25,6 @@ Verify Creation Of An Asset
     Wait Until Page Contains        ${RFID_NUMBER}
     Page Should Contain         ${RFID_NUMBER}
 
-
 Verify Creation Of An Asset Type
     [Arguments]     ${ASSET_TYPE_NAME}
     Go To Page      ManageAssetTypesPage
@@ -43,10 +42,6 @@ Verify Deletion Of An Asset Type Group
     Go To Page      ManageAssetTypeGroupsPage
     The Current Page Should Be      ManageAssetTypeGroupsPage
     Page Should Not Contain     ${ASSET_TYPE_GROUP_NAME}   
-    
-Verify Delete Asset Type Group Page
-     Page Should Contain   0 Asset Types being detached from this group
-     Page Should Contain   0 Saved reports and searches to be deleted 
      
 *** Test Cases ***
 Create Asset Type Group With No Name Test
@@ -90,8 +85,3 @@ Deleted Asset Type Group Test
     The Current Page Should Be    DeleteAssetTypeGroupPage
     Delete Asset Type Group
     Verify Deletion Of An Asset Type Group       ${assetGroup}
-
-
-    
-    
-    

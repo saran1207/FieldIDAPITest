@@ -15,5 +15,3 @@ Go To New Asset From Dashboard
     
 Go To Asset Type Groups From Dashboard
     CommonMenuBar.Click Asset Type Groups
-     
-

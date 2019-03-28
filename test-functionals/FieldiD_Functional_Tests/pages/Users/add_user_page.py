@@ -62,4 +62,3 @@ class AddUserPage(PageObject):
     def click_save_button(self):
         self.se2lib.wait_until_element_is_visible(self.locator.save_button)
         self.se2lib.click_element(self.locator.save_button)
-        

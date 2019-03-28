@@ -33,7 +33,6 @@ Create An Asset Type
     The Current Page Should Be      CreateAssetTypePage
     Input Asset Type Name       ${ASSET_TYPE_NAME}
     CreateAssetTypePage.Click Save Button
-
     
 Create An Asset Type Group
     [Arguments]     ${ASSET_TYPE_GROUP_NAME}

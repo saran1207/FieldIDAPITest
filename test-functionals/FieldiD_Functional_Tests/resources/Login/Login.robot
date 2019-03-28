@@ -19,4 +19,3 @@ Logout Of Field Id
     Click Sign Out
     Wait Until Page Contains        Login
     Close Browser
-  

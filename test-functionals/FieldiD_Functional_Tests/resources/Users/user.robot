@@ -27,5 +27,4 @@ Create A User
    AddUserPage.Input First Name Field   ${FIRSTNAME}
    AddUserPage.Input Last Name Field    ${LASTNAME}
    AddUserPage.Click All On Button
-   AddUserPage.Click Save Button  
-    
+   AddUserPage.Click Save Button
