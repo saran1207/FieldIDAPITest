@@ -4,10 +4,8 @@ class DeleteAssetTypeGroupPage(PageObject):
     PAGE_URL = "&uniqueID="
     
     _locators = {
-        "view_all_tab_link": "link:View All",
         "delete_button": "name:deleteButton",
-        "cancel_button": "link:Cancel",
-     }
+    }
 
     def _is_current_page(self):
         location = self.se2lib.get_location()
