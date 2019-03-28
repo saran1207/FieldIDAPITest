@@ -691,12 +691,12 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 
 		Map<String,String> tokens = new HashMap<>();
 
-		tokens.put("userIQSiteId",configService.getConfig().getWeb().getUserIQSiteId());
-		tokens.put("userId",getSessionUser().getUserID());
-		tokens.put("userName",getSessionUser().getFirstName() + " " + getSessionUser().getLastName());
-		tokens.put("salesforceId",getTenant().getSalesforceId());
-		tokens.put("tenantName",getSessionUser().getOwner().getName());
-		tokens.put("userEmail",getSessionUser().getEmailAddress());
+		tokens.put("userIQSiteId",configService.getConfig() == null || configService.getConfig().getWeb() == null || configService.getConfig().getWeb().getUserIQSiteId()==null?"":configService.getConfig().getWeb().getUserIQSiteId());
+		tokens.put("userId",getSessionUser()==null||getSessionUser().getUserID()==null?"":getSessionUser().getUserID());
+		tokens.put("userName",getSessionUser()==null||getSessionUser().getName()==null?"":getSessionUser().getName());
+		tokens.put("salesforceId",getSessionUser()==null||getSessionUser().getTenant()==null||getSessionUser().getTenant().getSalesforceId()==null?"":getSessionUser().getTenant().getSalesforceId());
+		tokens.put("tenantName",getSessionUser()==null||getSessionUser().getOwner()==null||getSessionUser().getOwner().getName()==null?"":getSessionUser().getOwner().getName());
+		tokens.put("userEmail",getSessionUser()==null||getSessionUser().getEmailAddress()==null?"":getSessionUser().getEmailAddress());
 		Date createdDate = new Date();
 		if (getCurrentUser() != null) createdDate = getCurrentUser().getCreated();
 		if (createdDate == null) {
