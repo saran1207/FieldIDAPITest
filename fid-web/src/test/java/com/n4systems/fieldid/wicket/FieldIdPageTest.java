@@ -65,14 +65,22 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
 	
 	protected void expectingConfig() {
         expect(configService.getString(ConfigEntry.SYSTEM_DOMAIN)).andReturn("localhost");
+        expectLastCall().anyTimes();
         expect(configService.getInteger(ConfigEntry.ACTIVE_SESSION_TIME_OUT)).andReturn(new Integer(20));
+        expectLastCall().anyTimes();
 		expect(configService.getBoolean(ConfigEntry.GOOGLE_ANALYTICS_ENABLED)).andReturn(configData.googleAnalytics);
+        expectLastCall().anyTimes();
 		expect(configService.getString(ConfigEntry.RSS_FEED)).andReturn(configData.rssFeed);
+        expectLastCall().anyTimes();
         expect(configService.getBoolean(ConfigEntry.APPTEGIC_ENABLED)).andReturn(configData.apptegic);
+        expectLastCall().anyTimes();
         expect(configService.getString(ConfigEntry.APPTEGIC_DATASET)).andReturn(configData.apptegicDataset);
+        expectLastCall().anyTimes();
         expect(configService.getString(ConfigEntry.CUSTOM_JS)).andReturn("");
+        expectLastCall().anyTimes();
         expect(configService.getString(eq(ConfigEntry.FOOTER_SCRIPT), anyLong())).andReturn("");
         expect(configService.getString(eq(ConfigEntry.HEADER_SCRIPT), anyLong())).andReturn("");
+        expectLastCall().anyTimes();
         MutableRootConfig mrc = new MutableRootConfig();
         mrc.getWeb().setWalkmeUrl("test"); // Needed by FieldIDTemplatePage.renderHead to create walkme script element
         mrc.getWeb().setUserIQSiteId("test"); // Needed by FieldIDTemplatePage.renderHead to create userIQ script element
@@ -82,9 +90,7 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
 
         //Extra additions for walkme, and userIQ, and newrelicappid and newreliclicensekey
         expect(configService.getConfig()).andReturn(new RootConfig(mrc));
-        expect(configService.getConfig()).andReturn(new RootConfig(mrc));
-        expect(configService.getConfig()).andReturn(new RootConfig(mrc));
-        expect(configService.getConfig()).andReturn(new RootConfig(mrc));
+        expectLastCall().anyTimes();
 
         replay(configService);
 	}
