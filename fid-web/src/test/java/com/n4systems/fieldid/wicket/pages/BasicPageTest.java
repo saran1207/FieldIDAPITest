@@ -43,6 +43,7 @@ public class BasicPageTest extends FieldIdPageTest<BasicPageHarness, FieldIDTemp
         expectingConfig();
         expectingTenantSettingsService();
         expectingOrgService();
+        expectingPersistenceService();
 
         getWicketTester().getApplication().setHeaderResponseDecorator(CachingStrategyDecoratingHeaderResponse.createHeaderResponseDecorator());
         getWicketTester().getApplication().getResourceSettings().setCachingStrategy(new QueryStringWithVersionResourceCachingStrategy(new MessageDigestResourceVersion()));
@@ -64,6 +65,7 @@ public class BasicPageTest extends FieldIdPageTest<BasicPageHarness, FieldIDTemp
         expectingConfig();
         expectingTenantSettingsService();
         expectingOrgService();
+        expectingPersistenceService();
 
         renderFixture(this);
 
@@ -82,6 +84,7 @@ public class BasicPageTest extends FieldIdPageTest<BasicPageHarness, FieldIDTemp
         expectingS3Service();
         expectingTenantSettingsService();
         expectingOrgService();
+        expectingPersistenceService();
 
         renderFixture(this);
         assertInvisible(getHarness().getGoogleAnalytics());

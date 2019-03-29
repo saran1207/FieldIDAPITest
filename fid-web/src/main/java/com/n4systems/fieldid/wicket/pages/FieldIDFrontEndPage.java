@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.pages;
 
 import com.google.common.base.Preconditions;
-import com.n4systems.fieldid.UIConstants;
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.org.OrgService;
@@ -116,7 +115,7 @@ import java.util.Map;
 import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.param;
 
 @SuppressWarnings("serial")
-public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIConstants {
+public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage {
 
     public static final String SUB_MENU_ID = "subMenu";
     public static final String LEFT_PANEL_ID = "leftPanel";
@@ -191,6 +190,8 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             add(new Label("footerScript").setVisible(false));
         }
 
+        String useriqJsInlineScript = "<script type='text/javascript' id ='USERIQ_INTEGRATION'>" + getUserIQJs() + "</script>";
+
         String walkmeScript = "<script type='text/javascript' id ='WALKME_INTEGRATION'>" +
                 BASE_WALKME_SCRIPT.replace("${walkmeURL}",
                         configService.getConfig().getWeb().getWalkmeUrl()) +
@@ -203,7 +204,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
                 "</script>";
 
         add(new Label("footer-js-container",
-                walkmeScript + "\n\n" + slasskJsInclude + "\n" + slaaskJsInlineScript).
+                useriqJsInlineScript + "\n\n" + walkmeScript + "\n\n" + slasskJsInclude + "\n" + slaaskJsInlineScript).
                 setEscapeModelStrings(false));
 
         add(createBackToLink("backToLink", "backToLinkLabel"));

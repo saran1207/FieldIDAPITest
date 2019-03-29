@@ -33,6 +33,10 @@
             </script>
         </footer>
 
+        <script type="text/javascript" id ="USERIQ_INTEGRATION">
+			${action.getUserIQJs()}
+		</script>
+
         <script type="text/javascript" id ="WALKME_INTEGRATION">
 			${action.getWalkmeJs()}
 		</script>
