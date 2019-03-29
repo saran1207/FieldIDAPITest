@@ -106,6 +106,8 @@ message EventMessage {
 	optional string dueDate 				= 26;
 	optional string priorityCodeName 		= 27;
 	optional string priorityCodeId 			= 28;
+	optional string eventStatusName 		= 29;
+	optional string eventStatusId 			= 30;
 
 }
 
