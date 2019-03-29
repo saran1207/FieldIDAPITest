@@ -45,7 +45,7 @@ Verify Deletion Of An Asset Type Group
      
 *** Test Cases ***
 Create Asset Type Group With No Name Test
-    [Tags]    C1843  Regression
+    [Tags]    C1843  Regression  C1709
     Go To Page Asset Type Group 
     Create An Asset Type Group      ${EMPTY}
     ${NAME_REQUIRED_ERROR_MSG}=   CreateAssetTypeGroupPage.Get Name Required Error Msg
@@ -76,12 +76,38 @@ Edit Asset Type Group Test
     Edit Asset Type Group     ${assetGroup}+editted
     Verify Creation Of An Asset Type Group       ${assetGroup}+editted
     
-Deleted Asset Type Group Test  
-    [Tags]  C1771  Regression  Smoke
-    ${assetGroup}    Generate Random String  5
+Deleted Asset Type Group With 1 Asset Type Test
+    [Tags]  C1771
+   ${assetGroup}    Generate Random String  5
+   ${assetType}     Generate Random String  5
     Create An Asset Type Group      ${assetGroup}
     Verify Creation Of An Asset Type Group      ${assetGroup}
+    Create An Asset Type  ${assetType}   ${assetGroup}
     Go To Page Delete Asset Type Group     ${assetGroup}
+    ${num_of_asset_types}  DeleteAssetTypeGroupPage.Get Num Of Asset Types Attached
+    Should Be Equal   ${num_of_asset_types}    1 Asset Types being detached from this group
+    Page Should Contain   Saved reports and searches to be deleted
     The Current Page Should Be    DeleteAssetTypeGroupPage
     Delete Asset Type Group
     Verify Deletion Of An Asset Type Group       ${assetGroup}
+    
+Create Asset Type From Asset Type Group Test
+    [Tags]  C1723  	C1724
+   ${assetGroup}    Generate Random String  5
+   ${assetType}    Generate Random String  5
+    Create An Asset Type Group      ${assetGroup}
+    Verify Creation Of An Asset Type Group      ${assetGroup}
+    Go To Page View Asset Type Group  ${assetGroup}
+    Add Asset Type From Asset Type Group  ${assetType} 
+    Verify Creation Of An Asset Type   ${assetType} 
+    Go To Page      ManageAssetTypeGroupsPage
+    Go To Page View Asset Type Group  ${assetGroup}
+    Page Should Contain     ${assetType}
+    
+Verify Asset Type Group List In Asset Type Page
+    [Tags]  C1705
+    Go to Page  ManageAssetTypeGroupsPage
+    ${ASSET_TYPE_GROUP_LIST}  ManageAssetTypeGroupsPage.Get Asset Group List  
+    Go to Page  CreateAssetTypePage  
+    ${ASSET_TYPE_GROUP_LIST_FROM_ASSET_TYPE_PAGE}  CreateAssetTypePage.Get Asset Group List
+    Should Be Equal    ${ASSET_TYPE_GROUP_LIST}   ${ASSET_TYPE_GROUP_LIST_FROM_ASSET_TYPE_PAGE}  

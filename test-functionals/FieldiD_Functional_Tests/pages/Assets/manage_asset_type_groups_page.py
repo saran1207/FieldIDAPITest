@@ -6,6 +6,7 @@ class ManageAssetTypeGroupsPage(PageObject):
     DELETE_LINK="xpath=//a[@href='./confirmDeleteAssetTypeGroup?uniqueID=%s']"
     VIEW_LINK="xpath=//td/a[@href='./viewAssetTypeGroup?uniqueID=%s']"
     EDIT_LINK= "xpath=//td/div/a[@href='./editAssetTypeGroup?uniqueID=%s']"
+    GROUP_LIST= "//tbody/tr[@class='groupList']/td[1]/a"
 
     _locators = {
         "add_button": "xpath=//a[@href='./addAssetTypeGroup']",
@@ -37,3 +38,16 @@ class ManageAssetTypeGroupsPage(PageObject):
         delete_link = self.DELETE_LINK % (group_id)
         self.se2lib.wait_until_element_is_visible(delete_link)
         self.se2lib.click_element(delete_link)
+        
+    def click_view_asset_group_link(self, group_id):
+        link =  self.VIEW_LINK % (group_id)
+        self.se2lib.wait_until_element_is_visible(link)
+        self.se2lib.click_element(link)
+        
+    def get_asset_group_list(self):
+        asset_group = self.se2lib.driver.find_elements_by_xpath(self.GROUP_LIST)
+        asset_group_list=[0]
+        for item in asset_group:
+            print item.text
+            asset_group_list.append(item.text)
+        return asset_group_list

@@ -10,6 +10,7 @@ Library         Assets.create_asset_type_page.CreateAssetTypePage      WITH NAME
 Library         Assets.new_asset_with_order_page.NewAssetWithOrderPage     WITH NAME       NewAddWithOrderPage
 Library         Assets.edit_asset_type_group_page.EditAssetTypeGroupPage      WITH NAME       EditAssetTypeGroupPage
 Library         Assets.delete_asset_types_groups_page.DeleteAssetTypeGroupPage      WITH NAME       DeletedAssetTypeGroupPage
+Library         Assets.view_asset_types_group_page.ViewAssetTypeGroupPage      WITH NAME       ViewAssetTypeGroupPage
 Library         String
 
 
@@ -26,12 +27,13 @@ Create An Asset
     CreateAssetPage.Click Save Button
 
 Create An Asset Type
-    [Arguments]     ${ASSET_TYPE_NAME}
+    [Arguments]     ${ASSET_TYPE_NAME}  ${ASSET_TYPE_GROUP}=${EMPTY}
     Go To Page      ManageAssetTypesPage
     The Current Page Should Be      ManageAssetTypesPage
     ManageAssetTypesPage.Click Add Button
     The Current Page Should Be      CreateAssetTypePage
     Input Asset Type Name       ${ASSET_TYPE_NAME}
+    Select Asset Group Dropdown  ${ASSET_TYPE_GROUP}
     CreateAssetTypePage.Click Save Button
     
 Create An Asset Type Group
@@ -59,6 +61,12 @@ Go To Page Delete Asset Type Group
     DeletedAssetTypeGroupPage.Set Page URL    ${id}
     Click Delete Asset Group Link    ${id}
     
+Go To Page View Asset Type Group
+    [Arguments]    ${assetTypeGroup}
+    ${id}    Get Asset Group Id    ${assetTypeGroup}
+    ViewAssetTypeGroupPage.Set Page URL    ${id}
+    Click View Asset Group Link    ${id}
+    
 Edit Asset Type Group
     [Arguments]    ${assetTypeGroup}
     EditAssetTypeGroupPage.Input Asset Type Group Name    ${assetTypeGroup}
@@ -66,6 +74,12 @@ Edit Asset Type Group
     
 Delete Asset Type Group
     DeletedAssetTypeGroupPage.Click Delete Button
+    
+Add Asset Type From Asset Type Group
+    [Arguments]    ${ASSET_TYPE_NAME}
+    ViewAssetTypeGroupPage.Click Add Asset Link
+    Input Asset Type Name       ${ASSET_TYPE_NAME}
+    CreateAssetTypePage.Click Save Button
     
 Get Asset Group Id
     [Arguments]    ${groupName}

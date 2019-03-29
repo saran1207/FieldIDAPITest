@@ -10,7 +10,7 @@ Library     DatabaseLibrary
 *** Variables ***
 ${SERVER_URL}        n4systems.fidstage.com
 ${ADMIN_SERVER_URL}  n4systems.fidstage.com
-${BROWSER}           chromeheadless
+${BROWSER}           chrome
 ${LOGIN_URL}         http://${SERVER_URL}
 ${WELCOME_URL}       http://${SERVER_URL}/fieldid/w/dashboard
 ${SERVER_ADMIN_URL}  http://${ADMIN_SERVER_URL}/fieldid/admin/signIn.action
