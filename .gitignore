@@ -9,6 +9,7 @@ node_modules/
 .classpath
 .factorypath
 *.css.map
+*.pyc
 
 fid-web/src/main/webapp/style/global.css.map
 fid-web/src/main/webapp/style/ie-all.css.map
@@ -25,3 +26,5 @@ fid-web/src/main/webapp/style/pages/setup-event.css.map
 fid-web/src/main/webapp/style/pages/setup-user.css.map
 fid-web/src/main/webapp/style/pages/setup.css.map
 
+test-functionals/FieldiD_Functional_Tests/results/
+/libspecs/
