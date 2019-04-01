@@ -4,8 +4,10 @@ Resource        ${CURDIR}/../../resources/Login/Login.robot
 Resource        ${CURDIR}/../../resources/Assets/assets.robot
 Resource        ${CURDIR}/../../resources/Dashboard/dashboard.robot
 Library           String
+Library           DateTime
 Library         Assets.edit_asset_type_group_page.EditAssetTypeGroupPage      WITH NAME       EditAssetTypeGroupPage
 Library         Assets.delete_asset_types_groups_page.DeleteAssetTypeGroupPage      WITH NAME       DeleteAssetTypeGroupPage
+Library         Assets.manage_asset_type_groups_page.ManageAssetTypeGroupsPage    WITH NAME      ManageAssetTypesPage
 
 Suite Setup     Login To Field Id Page      ${USERNAME}      ${PASSWORD}
 Suite Teardown  Logout Of Field Id
@@ -67,7 +69,7 @@ Create Duplicate Asset Type Group Test
     Page Should Contain      ${UNIQUE_NAME_ERROR_MSG}
     
 Edit Asset Type Group Test
-    [Tags]  C1704  Regression
+    [Tags]  C1704  Regression  Smoke
     ${assetGroup}    Generate Random String  5
     Create An Asset Type Group      ${assetGroup}
     Verify Creation Of An Asset Type Group      ${assetGroup}
@@ -77,7 +79,7 @@ Edit Asset Type Group Test
     Verify Creation Of An Asset Type Group       ${assetGroup}+editted
     
 Deleted Asset Type Group With 1 Asset Type Test
-    [Tags]  C1771
+    [Tags]  C1771  Regression
    ${assetGroup}    Generate Random String  5
    ${assetType}     Generate Random String  5
     Create An Asset Type Group      ${assetGroup}
@@ -92,7 +94,7 @@ Deleted Asset Type Group With 1 Asset Type Test
     Verify Deletion Of An Asset Type Group       ${assetGroup}
     
 Create Asset Type From Asset Type Group Test
-    [Tags]  C1723  	C1724
+    [Tags]  C1723  	C1724  Regression
    ${assetGroup}    Generate Random String  5
    ${assetType}    Generate Random String  5
     Create An Asset Type Group      ${assetGroup}
@@ -104,10 +106,25 @@ Create Asset Type From Asset Type Group Test
     Go To Page View Asset Type Group  ${assetGroup}
     Page Should Contain     ${assetType}
     
-Verify Asset Type Group List In Asset Type Page
-    [Tags]  C1705
+Asset Type Group List In Asset Type Page Test
+    [Tags]  C1705  Regression
     Go to Page  ManageAssetTypeGroupsPage
     ${ASSET_TYPE_GROUP_LIST}  ManageAssetTypeGroupsPage.Get Asset Group List  
     Go to Page  CreateAssetTypePage  
     ${ASSET_TYPE_GROUP_LIST_FROM_ASSET_TYPE_PAGE}  CreateAssetTypePage.Get Asset Group List
-    Should Be Equal    ${ASSET_TYPE_GROUP_LIST}   ${ASSET_TYPE_GROUP_LIST_FROM_ASSET_TYPE_PAGE}  
+    Should Be Equal    ${ASSET_TYPE_GROUP_LIST}   ${ASSET_TYPE_GROUP_LIST_FROM_ASSET_TYPE_PAGE}
+    
+List View for Asset Types Groups Test
+    [Tags]  C1708  Regression
+    ${assetGroup}    Generate Random String  5
+    Create An Asset Type Group      ${assetGroup} 
+    ${currentDateTime}  Get Current Date    result_format=%m/%d/%y
+    ${assetGroupId}  Get Asset Group Id  ${assetGroup}
+    ${createdByUsername}  ManageAssetTypeGroupsPage.Get Create By Username  ${assetGroupId}
+    ${createdOnDate}  ManageAssetTypeGroupsPage.Get Create On Date  ${assetGroupId}
+    ${modifiedByUsername}  ManageAssetTypeGroupsPage.Get Modified By Username  ${assetGroupId}
+    ${modifiedOnDate}  ManageAssetTypeGroupsPage.Get Last Modified Date  ${assetGroupId}
+    Should Be Equal   ${createdByUsername}   Test Automation
+    Should Contain   ${createdOnDate}  ${currentDateTime}  
+    Should Be Equal   ${modifiedByUsername}   Test Automation
+    Should Contain    ${modifiedOnDate}  ${currentDateTime}

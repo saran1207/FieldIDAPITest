@@ -7,6 +7,10 @@ class ManageAssetTypeGroupsPage(PageObject):
     VIEW_LINK="xpath=//td/a[@href='./viewAssetTypeGroup?uniqueID=%s']"
     EDIT_LINK= "xpath=//td/div/a[@href='./editAssetTypeGroup?uniqueID=%s']"
     GROUP_LIST= "//tbody/tr[@class='groupList']/td[1]/a"
+    CREATED_BY="/../../td[@class='createdBy notranslate']"
+    CREATED_ON="/../../td[@class='createdDate notranslate']"
+    MODIFIED_BY="/../../td[@class='modifiedBy notranslate']"
+    LAST_MODIFIED="/../../td[@class='modifiedDate notranslate']"
 
     _locators = {
         "add_button": "xpath=//a[@href='./addAssetTypeGroup']",
@@ -51,3 +55,23 @@ class ManageAssetTypeGroupsPage(PageObject):
             print item.text
             asset_group_list.append(item.text)
         return asset_group_list
+    
+    def get_create_by_username(self, group_id):
+        link =  self.VIEW_LINK % (group_id)+self.CREATED_BY
+        self.se2lib.wait_until_element_is_visible(link)
+        return self.se2lib.get_text(link)
+    
+    def get_create_on_date(self, group_id):
+        link =  self.VIEW_LINK % (group_id)+self.CREATED_ON
+        self.se2lib.wait_until_element_is_visible(link)
+        return self.se2lib.get_text(link)
+    
+    def get_modified_by_username(self, group_id):
+        link =  self.VIEW_LINK % (group_id)+self.MODIFIED_BY
+        self.se2lib.wait_until_element_is_visible(link)
+        return self.se2lib.get_text(link)
+    
+    def get_last_modified_date(self, group_id):
+        link =  self.VIEW_LINK % (group_id)+self.LAST_MODIFIED
+        self.se2lib.wait_until_element_is_visible(link)
+        return self.se2lib.get_text(link)
