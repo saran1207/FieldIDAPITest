@@ -8,7 +8,7 @@ class CreateAssetTypePage(PageObject):
         "asset_type_name_field": "xpath=//input[@name='name']",
         "save_button": "xpath=//a[@class='btn btn-green']",
         "asset_group_dropdown":  "xpath=//select[@name='group']/../div/a",
-        "asset_group_list": "xpath=//ul[@class='chzn-results']" 
+        "asset_group_list": "//ul[@class='chzn-results']"
     }
 
     def _is_current_page(self):
@@ -31,7 +31,7 @@ class CreateAssetTypePage(PageObject):
             self.se2lib.wait_until_element_is_visible(self.locator.asset_group_dropdown)
             self.se2lib.click_element(self.locator.asset_group_dropdown)
             self.se2lib.wait_until_element_is_visible(self.locator.asset_group_list)
-            asset_group_list = self.se2lib.driver.find_element_by_xpath(self.ASSET_GROUP_LIST)
+            asset_group_list = self.se2lib.driver.find_element_by_xpath(self.locator.asset_group_list)
             items = asset_group_list.find_elements_by_tag_name("li")
             for item in items:
                 print item.text
@@ -42,9 +42,9 @@ class CreateAssetTypePage(PageObject):
         self.se2lib.wait_until_element_is_visible(self.locator.asset_group_dropdown)
         self.se2lib.click_element(self.locator.asset_group_dropdown)
         self.se2lib.wait_until_element_is_visible(self.locator.asset_group_list)
-        asset_group=self.se2lib.driver.find_element_by_xpath(self.ASSET_GROUP_LIST)
+        asset_group=self.se2lib.driver.find_element_by_xpath(self.locator.asset_group_list)
         asset_group = asset_group.find_elements_by_tag_name("li")
-        asset_group_list=[0]
+        asset_group_list=[]
         for item in asset_group:
               asset_group_list.append(item.text)
         return asset_group_list

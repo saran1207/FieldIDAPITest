@@ -1,8 +1,8 @@
 *** Settings ***
 
-Resource        ${CURDIR}/../../resources/Login/Login.robot
-Resource        ${CURDIR}/../../resources/Assets/assets.robot
-Resource        ${CURDIR}/../../resources/Dashboard/dashboard.robot
+Resource        ${CURDIR}/../../../resources/Login/Login.robot
+Resource        ${CURDIR}/../../../resources/Setup/Assets/assets.robot
+Resource        ${CURDIR}/../../../resources/Dashboard/dashboard.robot
 Library           String
 Library           DateTime
 Library         Assets.edit_asset_type_group_page.EditAssetTypeGroupPage      WITH NAME       EditAssetTypeGroupPage
@@ -15,6 +15,7 @@ Suite Teardown  Logout Of Field Id
 *** Variables ***
 ${USERNAME}         testauto       
 ${PASSWORD}         temp123
+${USERFULLNAME}     Test Automation
 
 *** Keywords ***
 
@@ -109,8 +110,10 @@ Create Asset Type From Asset Type Group Test
 Asset Type Group List In Asset Type Page Test
     [Tags]  C1705  Regression
     Go to Page  ManageAssetTypeGroupsPage
+    The Current Page Should Be  ManageAssetTypeGroupsPage 
     ${ASSET_TYPE_GROUP_LIST}  ManageAssetTypeGroupsPage.Get Asset Group List  
     Go to Page  CreateAssetTypePage  
+    The Current Page Should Be  CreateAssetTypePage 
     ${ASSET_TYPE_GROUP_LIST_FROM_ASSET_TYPE_PAGE}  CreateAssetTypePage.Get Asset Group List
     Should Be Equal    ${ASSET_TYPE_GROUP_LIST}   ${ASSET_TYPE_GROUP_LIST_FROM_ASSET_TYPE_PAGE}
     
@@ -124,7 +127,7 @@ List View for Asset Types Groups Test
     ${createdOnDate}  ManageAssetTypeGroupsPage.Get Create On Date  ${assetGroupId}
     ${modifiedByUsername}  ManageAssetTypeGroupsPage.Get Modified By Username  ${assetGroupId}
     ${modifiedOnDate}  ManageAssetTypeGroupsPage.Get Last Modified Date  ${assetGroupId}
-    Should Be Equal   ${createdByUsername}   Test Automation
+    Should Be Equal   ${createdByUsername}   ${USERFULLNAME} 
     Should Contain   ${createdOnDate}  ${currentDateTime}  
-    Should Be Equal   ${modifiedByUsername}   Test Automation
+    Should Be Equal   ${modifiedByUsername}   ${USERFULLNAME} 
     Should Contain    ${modifiedOnDate}  ${currentDateTime}

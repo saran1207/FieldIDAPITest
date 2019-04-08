@@ -1,6 +1,6 @@
 *** Settings ***
-Resource        ${CURDIR}/../../resources/Common/common.robot
-Resource        ${CURDIR}/../../resources/Dashboard/dashboard.robot
+Resource        ${CURDIR}/../../../resources/Common/common.robot
+Resource        ${CURDIR}/../../../resources/Dashboard/dashboard.robot
 Library         Assets.create_asset_page.CreateAssetPage        WITH NAME       CreateAssetPage
 Library         Search.search_page.SearchPage       WITH NAME       SearchPage
 Library         Assets.manage_asset_type_groups_page.ManageAssetTypeGroupsPage      WITH NAME       ManageAssetTypeGroupsPage
