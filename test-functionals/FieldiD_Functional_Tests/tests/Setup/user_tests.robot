@@ -25,7 +25,6 @@ Verify If User Exist
     
 *** Test Cases ***
 Create User If Does Not Exist and Verify
-    [Tags]  Preconditions
     Login to Field Id Admin Console  ${USERNAME}      ${PASSWORD}
     Sudo User  ${PASSWORD}
     ${user_exists}  Run Keyword And Return Status    Verify If User Exist    ${USERNAME1}        
