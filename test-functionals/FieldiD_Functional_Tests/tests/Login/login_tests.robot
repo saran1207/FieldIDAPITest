@@ -19,7 +19,7 @@ Verify Unsuccessfull Login
 
 *** Test Cases ***
 Login And Logout Of Field Id
-    [Tags]  Regression
+    [Tags]  Smoke
     Open Browser To Login Page
     Login To Field Id Page      ${USERNAME}      ${PASSWORD}
     Verify Successfull Login

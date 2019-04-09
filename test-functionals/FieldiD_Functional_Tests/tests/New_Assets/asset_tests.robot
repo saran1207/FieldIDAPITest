@@ -4,7 +4,7 @@ Resource        ${CURDIR}/../../resources/Login/Login.robot
 Resource        ${CURDIR}/../../resources/Dashboard/dashboard.robot
 Resource        ${CURDIR}/../../resources/Setup/Assets/assets.robot
 Library         Assets.create_asset_type_group_page.CreateAssetTypeGroupPage      WITH NAME       CreateAssetTypeGroupPage
-
+Library          DateTime
 Library           String
 Suite Setup     Login To Field Id Page      ${USERNAME}      ${PASSWORD}
 Suite Teardown  Logout Of Field Id
@@ -21,19 +21,23 @@ Verify Creation Of An Asset Type
     Page Should Contain     ${ASSET_TYPE_NAME}
     
 Verify Creation Of An Asset
-    [Arguments]     ${SERIAL_NUMBER}    ${RFID_NUMBER}
+    [Arguments]     ${SERIAL_NUMBER}
     Go To Page      SearchPage
     The Current Page Should Be      SearchPage
     Input Serial Number         ${SERIAL_NUMBER}
     Click Search Button
-    Wait Until Page Contains        ${RFID_NUMBER}
+    ${currentDateTime}  Get Current Date    result_format=%m/%d/%y
+    Wait Until Page Contains       ${currentDateTime}
    
 *** Test Cases ***
 Create Asset Type And Verify Creation
+    [Tags]  Smoke
     Create An Asset Type    TestAssetType
     Verify Creation Of An Asset Type    TestAssetType
 
 Create Asset And Verify Creation
+    [Tags]  Smoke
+    ${SERIAL_NUMBER}    Generate Random String  5
     Go To New Asset From Dashboard
-    Create An Asset     TestAsset   TEST123
-    Verify Creation Of An Asset     TestAsset   TEST123    
+    Create An Asset     ${SERIAL_NUMBER}   TEST123
+    Verify Creation Of An Asset     ${SERIAL_NUMBER}    
