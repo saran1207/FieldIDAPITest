@@ -24,26 +24,26 @@ Create An Asset
     The Current Page Should Be      CreateAssetPage
     Input Asset Serial Number       ${SERIAL_NUMBER}
     Input Rfid Number       ${RFID_NUMBER}
-    CreateAssetPage.Click Save Button
+    Click Save Button
 
 Create An Asset Type
     [Arguments]     ${ASSET_TYPE_NAME}  ${ASSET_TYPE_GROUP}=${EMPTY}
     Go To Page      ManageAssetTypesPage
     The Current Page Should Be      ManageAssetTypesPage
-    ManageAssetTypesPage.Click Add Button
+    Click Add Button
     The Current Page Should Be      CreateAssetTypePage
     Input Asset Type Name       ${ASSET_TYPE_NAME}
     Select Asset Group Dropdown  ${ASSET_TYPE_GROUP}
-    CreateAssetTypePage.Click Save Button
+    Click Save Button
     
 Create An Asset Type Group
     [Arguments]     ${ASSET_TYPE_GROUP_NAME}
     Go To Page  ManageAssetTypeGroupsPage
     The Current Page Should Be      ManageAssetTypeGroupsPage
-    ManageAssetTypeGroupsPage.Click Add Button
+    Click Add Button
     The Current Page Should Be      CreateAssetTypeGroupPage
-    CreateAssetTypeGroupPage.Input Asset Type Group Name     ${ASSET_TYPE_GROUP_NAME}
-    CreateAssetTypeGroupPage.Click Save Button
+    Input Asset Type Group Name     ${ASSET_TYPE_GROUP_NAME}
+    Click Save Button
    
 Go To Page Asset Type Group
     Go To Asset Type Groups From Dashboard
@@ -69,22 +69,27 @@ Go To Page View Asset Type Group
     
 Edit Asset Type Group
     [Arguments]    ${assetTypeGroup}
-    EditAssetTypeGroupPage.Input Asset Type Group Name    ${assetTypeGroup}
-    EditAssetTypeGroupPage.Click Save Button
+    The Current Page Should Be    EditAssetTypeGroupPage
+    Input Asset Type Group Name    ${assetTypeGroup}
+    Click Save Button
     
 Delete Asset Type Group
+    The Current Page Should Be    DeleteAssetTypeGroupPage
     DeletedAssetTypeGroupPage.Click Delete Button
     
 Add Asset Type From Asset Type Group
     [Arguments]    ${ASSET_TYPE_NAME}
-    ViewAssetTypeGroupPage.Click Add Asset Link
+    The Current Page Should Be     ViewAssetTypeGroupPage
+    Click Add Asset Link
+    The Current Page Should Be    CreateAssetTypePage
     Input Asset Type Name       ${ASSET_TYPE_NAME}
-    CreateAssetTypePage.Click Save Button
+    Click Save Button
     
 Get Asset Group Id
     [Arguments]    ${groupName}
     Go To Page    ManageAssetTypeGroupsPage
-    ${link}    ManageAssetTypeGroupsPage.Get Link From Name    ${groupName}
+    The Current Page Should Be    ManageAssetTypeGroupsPage
+    ${link}    Get Link From Name    ${groupName}
     ${url}    Get Element Attribute    ${link}    attribute=href
     ${groupId}    Fetch From Right    ${url}    =
     [return]    ${groupId}

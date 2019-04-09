@@ -7,7 +7,7 @@ Library           String
 Library           DateTime
 Library         Assets.edit_asset_type_group_page.EditAssetTypeGroupPage      WITH NAME       EditAssetTypeGroupPage
 Library         Assets.delete_asset_types_groups_page.DeleteAssetTypeGroupPage      WITH NAME       DeleteAssetTypeGroupPage
-Library         Assets.manage_asset_type_groups_page.ManageAssetTypeGroupsPage    WITH NAME      ManageAssetTypesPage
+Library         Assets.manage_asset_type_groups_page.ManageAssetTypeGroupsPage    WITH NAME      ManageAssetTypeGroupsPage
 
 Suite Setup     Login To Field Id Page      ${USERNAME}      ${PASSWORD}
 Suite Teardown  Logout Of Field Id
@@ -49,7 +49,7 @@ Verify Deletion Of An Asset Type Group
 *** Test Cases ***
 Create Asset Type Group With No Name Test
     [Tags]    C1843  Regression  C1709
-    Go To Page Asset Type Group 
+    Go To Page Asset Type Group
     Create An Asset Type Group      ${EMPTY}
     ${NAME_REQUIRED_ERROR_MSG}=   CreateAssetTypeGroupPage.Get Name Required Error Msg
     Page Should Contain      ${NAME_REQUIRED_ERROR_MSG}
@@ -75,7 +75,6 @@ Edit Asset Type Group Test
     Create An Asset Type Group      ${assetGroup}
     Verify Creation Of An Asset Type Group      ${assetGroup}
     Go To Page Edit Asset Type Group     ${assetGroup}
-    The Current Page Should Be    EditAssetTypeGroupPage
     Edit Asset Type Group     ${assetGroup}+editted
     Verify Creation Of An Asset Type Group       ${assetGroup}+editted
     
@@ -87,10 +86,10 @@ Deleted Asset Type Group With 1 Asset Type Test
     Verify Creation Of An Asset Type Group      ${assetGroup}
     Create An Asset Type  ${assetType}   ${assetGroup}
     Go To Page Delete Asset Type Group     ${assetGroup}
-    ${num_of_asset_types}  DeleteAssetTypeGroupPage.Get Num Of Asset Types Attached
+    The Current Page Should Be    DeleteAssetTypeGroupPage
+    ${num_of_asset_types}  Get Num Of Asset Types Attached
     Should Be Equal   ${num_of_asset_types}    1 Asset Types being detached from this group
     Page Should Contain   Saved reports and searches to be deleted
-    The Current Page Should Be    DeleteAssetTypeGroupPage
     Delete Asset Type Group
     Verify Deletion Of An Asset Type Group       ${assetGroup}
     
@@ -111,10 +110,10 @@ Asset Type Group List In Asset Type Page Test
     [Tags]  C1705  Regression
     Go to Page  ManageAssetTypeGroupsPage
     The Current Page Should Be  ManageAssetTypeGroupsPage 
-    ${ASSET_TYPE_GROUP_LIST}  ManageAssetTypeGroupsPage.Get Asset Group List  
+    ${ASSET_TYPE_GROUP_LIST}  Get Asset Group List  
     Go to Page  CreateAssetTypePage  
     The Current Page Should Be  CreateAssetTypePage 
-    ${ASSET_TYPE_GROUP_LIST_FROM_ASSET_TYPE_PAGE}  CreateAssetTypePage.Get Asset Group List
+    ${ASSET_TYPE_GROUP_LIST_FROM_ASSET_TYPE_PAGE}  Get Asset Group Dropdown List
     Should Be Equal    ${ASSET_TYPE_GROUP_LIST}   ${ASSET_TYPE_GROUP_LIST_FROM_ASSET_TYPE_PAGE}
     
 List View for Asset Types Groups Test
@@ -123,10 +122,10 @@ List View for Asset Types Groups Test
     Create An Asset Type Group      ${assetGroup} 
     ${currentDateTime}  Get Current Date    result_format=%m/%d/%y
     ${assetGroupId}  Get Asset Group Id  ${assetGroup}
-    ${createdByUsername}  ManageAssetTypeGroupsPage.Get Create By Username  ${assetGroupId}
-    ${createdOnDate}  ManageAssetTypeGroupsPage.Get Create On Date  ${assetGroupId}
-    ${modifiedByUsername}  ManageAssetTypeGroupsPage.Get Modified By Username  ${assetGroupId}
-    ${modifiedOnDate}  ManageAssetTypeGroupsPage.Get Last Modified Date  ${assetGroupId}
+    ${createdByUsername}  Get Create By Username  ${assetGroupId}
+    ${createdOnDate}  Get Create On Date  ${assetGroupId}
+    ${modifiedByUsername}  Get Modified By Username  ${assetGroupId}
+    ${modifiedOnDate}  Get Last Modified Date  ${assetGroupId}
     Should Be Equal   ${createdByUsername}   ${USERFULLNAME} 
     Should Contain   ${createdOnDate}  ${currentDateTime}  
     Should Be Equal   ${modifiedByUsername}   ${USERFULLNAME} 

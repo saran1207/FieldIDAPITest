@@ -11,7 +11,7 @@ class ViewAssetTypeGroupPage(PageObject):
     def _is_current_page(self):
         location = self.se2lib.get_location()
         
-        if not self.PAGE_BASE_URL in location:
+        if not self.PAGE_UNIQUEID_URL in location:
             message = "Expected location to end with " + self.PAGE_UNIQUEID_URL + " but it did not"
             raise Exception(message)
         if not self.PAGE_URL in location:

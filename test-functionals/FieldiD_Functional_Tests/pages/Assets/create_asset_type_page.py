@@ -2,13 +2,13 @@ from PageObjectLibrary import PageObject
 
 class CreateAssetTypePage(PageObject):
     PAGE_URL = "/fieldid/w/setup/assetTypeForm"
-    ASSET_GROUP_LIST = "//ul[@class='chzn-results']"
-
+    
     _locators = {
         "asset_type_name_field": "xpath=//input[@name='name']",
         "save_button": "xpath=//a[@class='btn btn-green']",
         "asset_group_dropdown":  "xpath=//select[@name='group']/../div/a",
-        "asset_group_list": "//ul[@class='chzn-results']"
+        "asset_group_list": "//ul[@class='chzn-results']",
+        "asset_group": "//ul[@class='chzn-results']/li[text()='%s']"
     }
 
     def _is_current_page(self):
@@ -30,15 +30,10 @@ class CreateAssetTypePage(PageObject):
         if  asset_group != "":
             self.se2lib.wait_until_element_is_visible(self.locator.asset_group_dropdown)
             self.se2lib.click_element(self.locator.asset_group_dropdown)
-            self.se2lib.wait_until_element_is_visible(self.locator.asset_group_list)
-            asset_group_list = self.se2lib.driver.find_element_by_xpath(self.locator.asset_group_list)
-            items = asset_group_list.find_elements_by_tag_name("li")
-            for item in items:
-                print item.text
-                if  asset_group == item.text:
-                    item.click()
+            self.se2lib.wait_until_element_is_visible(self.locator.asset_group % asset_group) 
+            self.se2lib.click_element(self.locator.asset_group % asset_group)
                     
-    def get_asset_group_list(self):
+    def get_asset_group_dropdown_list(self):
         self.se2lib.wait_until_element_is_visible(self.locator.asset_group_dropdown)
         self.se2lib.click_element(self.locator.asset_group_dropdown)
         self.se2lib.wait_until_element_is_visible(self.locator.asset_group_list)
