@@ -91,8 +91,3 @@ Setup Chrome Browser And Login to Field ID
     Maximize Browser Window
     Set Selenium Speed    ${DELAY}
     Login To Field Id Page    ${USER_NAME}    ${PASSWORD}
-
-#Open Browser To Login Page
- #   Setup Chrome Browser
-    #Open Browser        ${LOGIN_URL}        ${BROWSER}
- #   Wait Until Page Contains        Login

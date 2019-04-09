@@ -5,6 +5,7 @@ class DeleteAssetTypeGroupPage(PageObject):
     
     _locators = {
         "delete_button": "name:deleteButton",
+        "asset_types_details": "xpath=//ul[@class='list-table']/li[@class='infoSet'][1]"
     }
 
     def _is_current_page(self):
@@ -20,3 +21,8 @@ class DeleteAssetTypeGroupPage(PageObject):
     def click_delete_button(self):
         self.se2lib.wait_until_element_is_visible(self.locator.delete_button)
         self.se2lib.click_element(self.locator.delete_button)
+        
+    def get_num_of_asset_types_attached(self):
+        self.se2lib.wait_until_element_is_visible(self.locator.asset_types_details)
+        num_of_asset_types = self.se2lib.get_text(self.locator.asset_types_details)
+        return num_of_asset_types

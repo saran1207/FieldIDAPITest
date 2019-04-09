@@ -19,12 +19,14 @@ Verify Unsuccessfull Login
 
 *** Test Cases ***
 Login And Logout Of Field Id
+    [Tags]  Regression
     Open Browser To Login Page
     Login To Field Id Page      ${USERNAME}      ${PASSWORD}
     Verify Successfull Login
     Logout Of Field Id
     
 Test Invalid Login To Field Id
+    [Tags]  Regression
     ${invalidPassword}    Generate Random String
     Login To Field Id Page      ${USERNAME}       ${invalidPassword}
     Verify Unsuccessfull Login
