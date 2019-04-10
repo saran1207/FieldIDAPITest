@@ -7,6 +7,7 @@ Resource        ${CURDIR}/../../resources/Dashboard/dashboard.robot
 Library           String
 Suite Teardown  Logout Of Field Id
 
+
 *** Variables ***
 ${USERNAME}         dev@fieldid.com       
 ${PASSWORD}         eHplwc!LaHVy
@@ -25,7 +26,6 @@ Verify If User Exist
     
 *** Test Cases ***
 Create User If Does Not Exist and Verify
-    [Tags]  Preconditions
     Login to Field Id Admin Console  ${USERNAME}      ${PASSWORD}
     Sudo User  ${PASSWORD}
     ${user_exists}  Run Keyword And Return Status    Verify If User Exist    ${USERNAME1}        
