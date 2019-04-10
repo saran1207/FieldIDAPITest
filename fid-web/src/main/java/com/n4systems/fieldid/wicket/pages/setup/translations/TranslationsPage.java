@@ -23,10 +23,12 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -44,7 +46,7 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
     private Component localizationPanel;
     private final FeedbackPanel feedback;
 
-    protected List<String> excludedNames= Lists.newArrayList("allInfoOptionsForCasadeDeleteOnlyDoNotInteractWithThisSet");
+    private List<String> excludedNames= Lists.newArrayList("allInfoOptionsForCasadeDeleteOnlyDoNotInteractWithThisSet");
 
     protected final ModalWindow dialog;
 
@@ -77,7 +79,7 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
 
     protected List<String> initExcludedFields() {
         return Lists.newArrayList();
-    };
+    }
 
     protected abstract DropDownChoice<T> createChoice(String choice);
 
@@ -162,7 +164,12 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
 
     protected void showLocalizationDialogFor(final EntityWithTenant entity, final List<String> fieldsToInclude, AjaxRequestTarget target) {
         EntityModel entityModel = new EntityModel(entity.getClass(), entity);
-        showLocalizationDialogFor(entityModel, fieldsToInclude, target, new PropertyModel(entityModel,"tenant.settings.translatedLanguages"));
+        List<Locale> allLanguages = (List<Locale>) new PropertyModel(entityModel,"tenant.settings.translatedLanguages").getObject();
+        Locale defaultLanguage = (Locale) new PropertyModel(entityModel,"tenant.settings.defaultLanguage").getObject();
+        if (!allLanguages.contains(defaultLanguage)) {
+            allLanguages.add(defaultLanguage);
+        }
+        showLocalizationDialogFor(entityModel, fieldsToInclude, target, Model.of((Collection) allLanguages));
     }
 
     protected void showLocalizationDialogFor(final IModel<?> model, final List<String> fieldsToInclude, AjaxRequestTarget target, IModel<List<Locale>> languages) {

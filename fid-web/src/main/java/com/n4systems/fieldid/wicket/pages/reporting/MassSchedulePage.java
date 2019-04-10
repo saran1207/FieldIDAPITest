@@ -20,6 +20,7 @@ import com.n4systems.model.EventType;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.asset.ScheduleSummaryEntry;
 import com.n4systems.model.search.AssetSearchCriteria;
+import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -42,6 +43,8 @@ import java.util.Date;
 import java.util.List;
 
 public class MassSchedulePage extends FieldIDFrontEndPage {
+
+    static Logger logger = Logger.getLogger(MassSchedulePage.class);
 
     private List<Long> selectedIds;
     private List<ScheduleSummaryEntry> scheduleSummary;
@@ -110,6 +113,7 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
                     error(new FIDLabelModel("message.mass_schedule_no_events").getObject());
                     return;
                 }
+                logger.info("Performing mass schedule creation for " + scheduleSummary.size() + " assets");
                 massScheduleService.performSchedules(scheduleSummary, duplicateDetection);
                 FieldIDSession.get().info(new FIDLabelModel("message.mass_schedule_success").getObject());
                 setResponsePage(new com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage(criteriaModel.getObject()));

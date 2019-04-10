@@ -229,6 +229,7 @@ public class CertificateService extends FieldIdPersistenceService {
 
 	private void addOwnerParams(Map<String, Object> reportMap, BaseOrg ownerOrg) {
         addPrimaryOrgParams(reportMap, ownerOrg.getPrimaryOrg());
+		addSecondaryOrgParams(reportMap, ownerOrg.getSecondaryOrg());
 		addCustomerOrgParams(reportMap, ownerOrg.getCustomerOrg());
 		addDivisionOrgParams(reportMap, ownerOrg.getDivisionOrg());
 	}
@@ -243,7 +244,18 @@ public class CertificateService extends FieldIdPersistenceService {
             }
         }
 	}
-	
+
+	private void addSecondaryOrgParams(Map<String, Object> reportMap, SecondaryOrg ownerSecondaryOrg) {
+		if (ownerSecondaryOrg != null) {
+			reportMap.put("secondaryOrgName", ownerSecondaryOrg.getName());
+
+			AddressInfo ownerSecondaryOrgAddress = ownerSecondaryOrg.getAddressInfo();
+			if (ownerSecondaryOrgAddress != null) {
+				reportMap.put("secondaryOrgAddress", ownerSecondaryOrgAddress.getDisplay());
+			}
+		}
+	}
+
 	private void addCustomerOrgParams(Map<String, Object> reportMap, CustomerOrg customer) {
 		if (customer != null) {
 			reportMap.put("customerNumber", customer.getCode());

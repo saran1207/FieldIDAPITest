@@ -1,5 +1,6 @@
 package com.n4systems.model;
 
+import com.n4systems.persistence.localization.Localized;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;

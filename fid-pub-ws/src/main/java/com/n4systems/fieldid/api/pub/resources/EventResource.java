@@ -3,11 +3,9 @@ package com.n4systems.fieldid.api.pub.resources;
 import com.n4systems.fieldid.api.pub.mapping.ConversionContext;
 import com.n4systems.fieldid.api.pub.mapping.Mapper;
 import com.n4systems.fieldid.api.pub.mapping.TypeMapperBuilder;
-import com.n4systems.fieldid.api.pub.mapping.model.marshal.ApiModelWithNameToMessage;
-import com.n4systems.fieldid.api.pub.mapping.model.marshal.AssetToMessage;
-import com.n4systems.fieldid.api.pub.mapping.model.marshal.PriorityCodeToMessage;
-import com.n4systems.fieldid.api.pub.mapping.model.marshal.UserToMessage;
+import com.n4systems.fieldid.api.pub.mapping.model.marshal.*;
 import com.n4systems.fieldid.api.pub.mapping.model.unmarshal.BaseOrgResolver;
+import com.n4systems.fieldid.api.pub.mapping.model.unmarshal.EventStatusResolver;
 import com.n4systems.fieldid.api.pub.mapping.model.unmarshal.PriorityCodeResolver;
 import com.n4systems.fieldid.api.pub.mapping.model.unmarshal.UserResolver;
 import com.n4systems.fieldid.api.pub.model.Messages;
@@ -39,6 +37,7 @@ public class EventResource extends CrudResource<ThingEvent, EventMessage, Builde
     @Autowired private BaseOrgResolver baseOrgResolver;
     @Autowired private UserResolver userResolver;
     @Autowired private PriorityCodeResolver priorityCodeResolver;
+    @Autowired private EventStatusResolver eventStatusResolver;
 
     public EventResource() {
         super(Messages.events);
@@ -78,6 +77,7 @@ public class EventResource extends CrudResource<ThingEvent, EventMessage, Builde
                 .add(ThingEvent::getEventResult, Builder::setEventResult, this::convertResultToMessage)
                 .add(ThingEvent::getWorkflowState, Builder::setWorkflowState, this::convertWorkflowStateToMessage)
                 .addModelToMessage(ThingEvent::getPriority, new PriorityCodeToMessage<>(Builder::setPriorityCodeId, Builder::setPriorityCodeName))
+                .addModelToMessage(ThingEvent::getEventStatus, new EventStatusToMessage<>(Builder::setEventStatusId, Builder::setEventStatusName))
                 .build();
     }
 
@@ -100,6 +100,7 @@ public class EventResource extends CrudResource<ThingEvent, EventMessage, Builde
                 .add(EventMessage::hasAssignedToUserId, EventMessage::getAssignedToUserId, ThingEvent::setAssignee, userResolver)
                 .add(EventMessage::hasCompletedByUserId, EventMessage::getCompletedByUserId, ThingEvent::setPerformedBy, userResolver)
                 .add(EventMessage::hasPriorityCodeId, EventMessage::getPriorityCodeId, ThingEvent::setPriority, priorityCodeResolver)
+                .add(EventMessage::hasEventStatusId, EventMessage::getEventStatusId, ThingEvent::setEventStatus, eventStatusResolver)
                 .build();
     }
 

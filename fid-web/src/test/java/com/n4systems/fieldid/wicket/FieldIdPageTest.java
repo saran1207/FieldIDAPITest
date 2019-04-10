@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket;
 
+import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
@@ -18,6 +19,7 @@ import org.junit.Before;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
 
 import static org.easymock.EasyMock.*;
 
@@ -30,7 +32,7 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
     private ConfigData configData;
     private TenantSettingsService tenantSettingsService;
     private OrgService orgService;
-
+    private PersistenceService persistenceService;
 
     @Override
 	@Before
@@ -41,8 +43,8 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
         s3Service = wire(S3Service.class);
         tenantSettingsService = wire(TenantSettingsService.class);
         orgService = wire(OrgService.class);
+        persistenceService = wire(PersistenceService.class);
         configData = new ConfigData();
-
     }
 	
 	@Override
@@ -63,24 +65,32 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
 	
 	protected void expectingConfig() {
         expect(configService.getString(ConfigEntry.SYSTEM_DOMAIN)).andReturn("localhost");
+        expectLastCall().anyTimes();
         expect(configService.getInteger(ConfigEntry.ACTIVE_SESSION_TIME_OUT)).andReturn(new Integer(20));
+        expectLastCall().anyTimes();
 		expect(configService.getBoolean(ConfigEntry.GOOGLE_ANALYTICS_ENABLED)).andReturn(configData.googleAnalytics);
+        expectLastCall().anyTimes();
 		expect(configService.getString(ConfigEntry.RSS_FEED)).andReturn(configData.rssFeed);
+        expectLastCall().anyTimes();
         expect(configService.getBoolean(ConfigEntry.APPTEGIC_ENABLED)).andReturn(configData.apptegic);
+        expectLastCall().anyTimes();
         expect(configService.getString(ConfigEntry.APPTEGIC_DATASET)).andReturn(configData.apptegicDataset);
+        expectLastCall().anyTimes();
         expect(configService.getString(ConfigEntry.CUSTOM_JS)).andReturn("");
+        expectLastCall().anyTimes();
         expect(configService.getString(eq(ConfigEntry.FOOTER_SCRIPT), anyLong())).andReturn("");
         expect(configService.getString(eq(ConfigEntry.HEADER_SCRIPT), anyLong())).andReturn("");
+        expectLastCall().anyTimes();
         MutableRootConfig mrc = new MutableRootConfig();
         mrc.getWeb().setWalkmeUrl("test"); // Needed by FieldIDTemplatePage.renderHead to create walkme script element
+        mrc.getWeb().setUserIQSiteId("test"); // Needed by FieldIDTemplatePage.renderHead to create userIQ script element
         mrc.getSystem().setNewRelicApplicationId("testID");
         mrc.getSystem().setNewRelicLicenseKey("testLicenseKey");
 		expect(configService.getConfig()).andReturn(new RootConfig(mrc));
 
-        //Extra additions for walkme, and newrelicappid and newreliclicensekey
+        //Extra additions for walkme, and userIQ, and newrelicappid and newreliclicensekey
         expect(configService.getConfig()).andReturn(new RootConfig(mrc));
-        expect(configService.getConfig()).andReturn(new RootConfig(mrc));
-        expect(configService.getConfig()).andReturn(new RootConfig(mrc));
+        expectLastCall().anyTimes();
 
         replay(configService);
 	}
@@ -108,9 +118,18 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
     protected void expectingOrgService() {
         PrimaryOrg primaryOrg = wire(PrimaryOrg.class);
         expect(primaryOrg.hasExtendedFeature(ExtendedFeature.GoogleTranslate)).andStubReturn(false);
+        expect(primaryOrg.getName()).andStubReturn("");
         replay(primaryOrg);
         expect(orgService.getPrimaryOrgForTenant(anyLong())).andStubReturn(primaryOrg);
         replay(orgService);
+    }
+
+    protected void expectingPersistenceService() {
+        User user = wire(User.class);
+        expect(user.getCreated()).andStubReturn(wire(Date.class));
+        replay(user);
+        expect(persistenceService.find(anyObject(),anyLong())).andStubReturn(user);
+        replay(persistenceService);
     }
 
     protected ConfigData withRssFeed(String rssFeed) {

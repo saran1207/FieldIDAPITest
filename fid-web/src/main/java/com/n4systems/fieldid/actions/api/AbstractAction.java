@@ -10,6 +10,7 @@ import com.n4systems.fieldid.permissions.SessionUserSecurityGuard;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
+import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.service.user.UserLimitService;
@@ -35,10 +36,7 @@ import com.n4systems.persistence.loaders.NonSecureLoaderFactory;
 import com.n4systems.persistence.savers.SaverFactory;
 import com.n4systems.services.SecurityContext;
 import com.n4systems.services.config.ConfigService;
-import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.ConfigurationProvider;
-import com.n4systems.util.FieldIdDateFormatter;
-import com.n4systems.util.ServiceLocator;
+import com.n4systems.util.*;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.uri.ActionURLBuilder;
 import org.apache.commons.io.FileUtils;
@@ -49,7 +47,12 @@ import rfid.web.helper.SessionUser;
 
 import java.math.BigDecimal;
 import java.net.URI;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @SuppressWarnings("serial")
 abstract public class AbstractAction extends ExtendedTextProviderAction implements FlashScopeAware, UserDateFormatValidator, LoaderFactoryProvider, UIConstants {
@@ -73,26 +76,21 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	private boolean useContext = false;
     private String pageName;
 
-    @Autowired
-    protected UserLimitService userLimitService;
+	@Autowired protected UserGroupService userGroupService;
 
-    @Autowired
-    protected UserGroupService userGroupService;
+	@Autowired protected UserLimitService userLimitService;
 
-    @Autowired
-    protected SecurityContext securityContext;
+    @Autowired protected SecurityContext securityContext;
 
-    @Autowired
-    protected TenantSettingsService tenantSettingsService;
+    @Autowired protected TenantSettingsService tenantSettingsService;
 
-    @Autowired
-    protected S3Service s3Service;
+    @Autowired protected S3Service s3Service;
 
-    @Autowired
-    protected ConfigService configService;
+    @Autowired protected ConfigService configService;
 
-    @Autowired
-    private OfflineProfileService offlineProfileService;
+    @Autowired private OfflineProfileService offlineProfileService;
+
+	@Autowired private OrgService orgService;
 
 	public AbstractAction(PersistenceManager persistenceManager) {
 		this.persistenceManager = persistenceManager;
@@ -682,7 +680,44 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 				getSessionUser().getUserID()).replace("${User_Email}", getSessionUser().getEmailAddress());
 	}
 
-    public boolean isMultiLanguage() {
+	/**
+	 * The getUserIQJs() method is exact copy of one from FiledIdAuthenticatedPage.java
+	 * The duplication is done in order to seperate Wicket files from Struts' ones
+	 * This Struts' method is annotated as @Deprecated
+	 * @return
+	 */
+	@Deprecated
+	public String getUserIQJs() {
+
+		Map<String,String> tokens = new HashMap<>();
+
+		tokens.put("userIQSiteId",configService.getConfig() == null || configService.getConfig().getWeb() == null || configService.getConfig().getWeb().getUserIQSiteId()==null?"":configService.getConfig().getWeb().getUserIQSiteId());
+		tokens.put("userId",getSessionUser()==null||getSessionUser().getUserID()==null?"":getSessionUser().getUserID());
+		tokens.put("userName",getSessionUser()==null||getSessionUser().getName()==null?"":getSessionUser().getName());
+		tokens.put("salesforceId",getSessionUser()==null||getSessionUser().getTenant()==null||getSessionUser().getTenant().getSalesforceId()==null?"":getSessionUser().getTenant().getSalesforceId());
+		tokens.put("tenantName",getSessionUser()==null||getSessionUser().getOwner()==null||getSessionUser().getOwner().getName()==null?"":getSessionUser().getOwner().getName());
+		tokens.put("userEmail",getSessionUser()==null||getSessionUser().getEmailAddress()==null?"":getSessionUser().getEmailAddress());
+		Date createdDate = new Date();
+		if (getCurrentUser() != null) createdDate = getCurrentUser().getCreated();
+		if (createdDate == null) {
+			createdDate = java.sql.Date.valueOf(LocalDate.of(2000, Month.JANUARY,1));
+		}
+		tokens.put("userCreatedDate", new SimpleDateFormat("yyyy-MM-dd").format(createdDate));
+
+		String patternString = "%(" + StringUtils.concat(tokens.keySet(), "|") + ")%";
+		Pattern pattern = Pattern.compile(patternString);
+		Matcher matcher = pattern.matcher(BASE_USEIQ_SCRIPT);
+
+		StringBuffer sb = new StringBuffer();
+		while(matcher.find()) {
+			matcher.appendReplacement(sb, tokens.get(matcher.group(1)));
+		}
+		matcher.appendTail(sb);
+
+		return sb.toString();
+	}
+
+	public boolean isMultiLanguage() {
         return getTenant().getSettings().getTranslatedLanguages().size() > 0;
     }
 

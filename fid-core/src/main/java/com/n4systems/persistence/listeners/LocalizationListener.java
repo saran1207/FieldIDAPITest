@@ -10,6 +10,7 @@ import com.n4systems.persistence.localization.Localized;
 import com.n4systems.services.localization.LocalizationService;
 import com.n4systems.util.ServiceLocator;
 import org.apache.log4j.Logger;
+import org.hibernate.annotations.Persister;
 import org.hibernate.event.spi.*;
 import org.hibernate.persister.entity.EntityPersister;
 import org.hibernate.type.Type;
@@ -43,9 +44,20 @@ public class LocalizationListener implements PostLoadEventListener, PreUpdateEve
         return false;
     }
 
+    /**
+     * Sometimes, Hibernate gives "java.lang.ArrayIndexOutOfBoundsException: 12" Exception error for SelectCriteria entity
+     * Hibernate PostLoadEvent in LocalizationListener.onPostLoad() gets incorrect persister via event.getPersister().
+     * To address this we set persister manually in the code below: for example,
+     * event.getSession().getFactory().getEntityPersister("com.n4systems.model.SelectCriteria")
+     * For more details, see https://ecompliance.atlassian.net/wiki/spaces/CR/pages/606142574/Field+ID+Translation+for+PDF+Customized+reports
+     * @param event
+     */
     @Override
     public void onPostLoad(PostLoadEvent event) {
-        localize(event.getEntity(), event.getPersister(), event.getSession());
+        EntityPersister persister = event.getPersister();
+        if (event.getEntity() instanceof SelectCriteria) persister = event.getSession().getFactory().getEntityPersister("com.n4systems.model.SelectCriteria");
+        if (event.getEntity() instanceof ComboBoxCriteria) persister = event.getSession().getFactory().getEntityPersister("com.n4systems.model.ComboBoxCriteria");
+        localize(event.getEntity(), persister, event.getSession());
     }
 
     private void localize(Object entity, EntityPersister persister, EventSource eventSource) {

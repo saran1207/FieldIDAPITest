@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.service.event.perform;
 
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.event.util.NewEventTransientCriteriaResultPopulator;
 import com.n4systems.model.Event;
@@ -7,6 +8,7 @@ import com.n4systems.model.EventType;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.Locale;
 
 @Transactional
 public abstract class PerformEventHelperService<T extends Event, V extends EventType> extends FieldIdPersistenceService {
@@ -24,8 +26,30 @@ public abstract class PerformEventHelperService<T extends Event, V extends Event
     }
 
     public T createEvent(Long scheduleId, Long assetId, Long typeId) {
+        return createEvent(scheduleId, assetId, typeId, false);
+    }
+
+    /**
+     * Re-used Design LocalizeModel's and LocalizeAround's pattern with ThreadLocalInteractionContext to manage the user settings' language.
+     * ThreadLocal are used for handle concurrency usage of languages
+     * As a general pattern we store previous Language from ThreadLocalInteractionContext first (usually it is null)
+     * Perform operations on the entity (event here) that are based on the user settings' language taken from SessionUser
+     * Finally, language in the ThreadLocalInteractionContext is reverted back to its previous value
+     * @param scheduleId
+     * @param assetId
+     * @param typeId
+     * @param withLocalization
+     * @return
+     */
+    public T createEvent(Long scheduleId, Long assetId, Long typeId, boolean withLocalization) {
+        T event;
+
+        Locale previousLanguage = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
         try {
-            T event;
+            if (withLocalization) {
+                Locale language = getCurrentUser().getLanguage();
+                ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(language);
+            }
             if (scheduleId != null) {
                 event = createEventFromOpenEvent(scheduleId);
                 postFetchAdditionalFields(event);
@@ -35,10 +59,14 @@ public abstract class PerformEventHelperService<T extends Event, V extends Event
                 event = createNewMasterEvent(assetId, typeId);
                 populateNewEvent(event);
             }
-            return event;
         } catch (Exception e) {
             throw new RuntimeException(e);
+        } finally {
+            if (withLocalization) {
+                ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(previousLanguage);
+            }
         }
+        return event;
     }
 
     protected void postFetchAdditionalFields(T event) {}
