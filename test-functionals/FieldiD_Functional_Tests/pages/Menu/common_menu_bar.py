@@ -9,7 +9,9 @@ class CommonMenuBar(PageObject):
         "asset_type_groups_link": "link:Asset Type Groups",
         "owners_users_locations_link":  "link:Owners, Users & Locations",
         "users_link":  "link:Users",
-        "sign_out_link": "link:Sign Out"
+        "sign_out_link": "link:Sign Out",
+        "search_field": "id=searchText",
+        "first_asset_link": "//a[@class='link ui-corner-all'][1]"
     }
 
     def click_new_asset(self):
@@ -35,3 +37,10 @@ class CommonMenuBar(PageObject):
     def click_sign_out(self):
         self.se2lib.wait_until_element_is_visible(self.locator.sign_out_link)
         self.se2lib.click_element(self.locator.sign_out_link) 
+        
+    def search_asset(self, asset_detail):
+        self.se2lib.wait_until_element_is_visible(self.locator.search_field)
+        self.se2lib.input_text(self.locator.search_field, asset_detail) 
+        self.se2lib.wait_until_element_is_visible(self.locator.first_asset_link)
+        self.se2lib.click_element(self.locator.first_asset_link) 
+        

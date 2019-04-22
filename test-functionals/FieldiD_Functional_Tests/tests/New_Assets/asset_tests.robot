@@ -3,6 +3,7 @@ Resource        ${CURDIR}/../../resources/Common/common.robot
 Resource        ${CURDIR}/../../resources/Login/Login.robot
 Resource        ${CURDIR}/../../resources/Dashboard/dashboard.robot
 Resource        ${CURDIR}/../../resources/Setup/Assets/assets.robot
+Resource        ${CURDIR}/../../resources/New_Assets/new_assets.robot
 Library         Assets.create_asset_type_group_page.CreateAssetTypeGroupPage      WITH NAME       CreateAssetTypeGroupPage
 Library          DateTime
 Library           String

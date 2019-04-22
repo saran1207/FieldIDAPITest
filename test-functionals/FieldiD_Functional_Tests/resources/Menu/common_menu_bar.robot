@@ -8,10 +8,17 @@ Library  Menu.common_menu_bar.CommonMenuBar  WITH NAME  CommonMenuBar
 
 *** Keywords ***
 Go To New Asset
-    CommonMenuBar.Click New Asset
+    Click New Asset
     
 Go To Asset Type Groups
-    CommonMenuBar.Click Asset Type Groups
+    Click Asset Type Groups
      
-Click Sign Out
-    CommonMenuBar.Click Sign Out
+Sign Out
+    Click Sign Out
+    
+Go To Asset View Page
+    [Arguments]  ${asset_details}
+    Search Asset  ${asset_details}
+    Wait Until Page Contains      Details    
+    
+    

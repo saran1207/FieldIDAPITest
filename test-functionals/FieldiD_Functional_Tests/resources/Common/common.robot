@@ -8,8 +8,8 @@ Library     Collections
 Library     DatabaseLibrary
 
 *** Variables ***
-${SERVER_URL}        n4systems.fidstage.com
-${ADMIN_SERVER_URL}  n4systems.fidstage.com
+${SERVER_URL}        qafunctionals.fidstage.com
+${ADMIN_SERVER_URL}  qafunctionals.fidstage.com
 ${BROWSER}           chromeheadless
 ${LOGIN_URL}         http://${SERVER_URL}
 ${WELCOME_URL}       http://${SERVER_URL}/fieldid/w/dashboard

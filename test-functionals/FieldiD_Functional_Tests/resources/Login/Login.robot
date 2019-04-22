@@ -16,6 +16,6 @@ Login To Field Id Page
     LoginFieldidPage.Submit Credentials
     
 Logout Of Field Id
-    Click Sign Out
+    Sign Out
     Wait Until Page Contains        Login
     Close Browser
