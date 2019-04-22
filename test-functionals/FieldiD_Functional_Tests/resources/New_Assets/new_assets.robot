@@ -1,10 +1,10 @@
 *** Settings ***
 Resource        ${CURDIR}/../../resources/Common/common.robot
 Resource        ${CURDIR}/../../resources/Dashboard/dashboard.robot
-Library         Assets.create_asset_page.CreateAssetPage        WITH NAME       CreateAssetPage
+Library         New_Assets.create_asset_page.CreateAssetPage        WITH NAME       CreateAssetPage
 Library         Search.search_page.SearchPage       WITH NAME       SearchPage
-Library         Assets.new_asset_with_order_page.NewAssetWithOrderPage     WITH NAME       NewAddWithOrderPage
-Library         Assets.view_asset_types_group_page.ViewAssetTypeGroupPage      WITH NAME       ViewAssetTypeGroupPage
+Library         Setup.Assets.new_asset_with_order_page.NewAssetWithOrderPage     WITH NAME       NewAddWithOrderPage
+Library         Setup.Assets.view_asset_types_group_page.ViewAssetTypeGroupPage      WITH NAME       ViewAssetTypeGroupPage
 Library         New_Assets.quick_event_page.QuickEventPage      WITH NAME       QuickEventPage
 Library         New_Assets.asset_summary_page.AssetSummaryPage      WITH NAME       AssetSummaryPage
 Library         New_Assets.asset_events_page.AssetEventsPage      WITH NAME       AssetEventsPage 
