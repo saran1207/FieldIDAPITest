@@ -1,5 +1,5 @@
 from PageObjectLibrary import PageObject
-from Assets.asset_type_group_base_page import AssetTypeGroupBasePage
+from Setup.Assets.asset_type_group_base_page import AssetTypeGroupBasePage
 
 class CreateAssetTypeGroupPage(AssetTypeGroupBasePage,PageObject):
     PAGE_URL = "/fieldid/w/setup/addAssetTypeGroup"

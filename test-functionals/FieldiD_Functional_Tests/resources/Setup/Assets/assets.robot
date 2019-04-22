@@ -1,9 +1,9 @@
 *** Settings ***
 Resource        ${CURDIR}/../../../resources/Common/common.robot
 Resource        ${CURDIR}/../../../resources/Dashboard/dashboard.robot
-Library         Setup.Assets.create_asset_page.CreateAssetPage        WITH NAME       CreateAssetPage
+Library         New_Assets.create_asset_page.CreateAssetPage        WITH NAME       CreateAssetPage
 Library         Search.search_page.SearchPage       WITH NAME       SearchPage
-Library         Setup.Assets.manage_asset_type_groups_page.ManageAssetTypeGroupsPage      WITH NAME       ManageAssetTypeGroupsPage
+Library         Setup.Assets.manage_asset_type_groups_page.py     WITH NAME       ManageAssetTypeGroupsPage
 Library         Setup.Assets.create_asset_type_group_page.CreateAssetTypeGroupPage      WITH NAME       CreateAssetTypeGroupPage
 Library         Setup.Assets.manage_asset_types_page.ManageAssetTypesPage      WITH NAME       ManageAssetTypesPage
 Library         Setup.Assets.create_asset_type_page.CreateAssetTypePage      WITH NAME       CreateAssetTypePage
