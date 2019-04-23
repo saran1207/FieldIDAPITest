@@ -5,9 +5,9 @@ Resource        ${CURDIR}/../../resources/Dashboard/dashboard.robot
 Resource        ${CURDIR}/../../resources/New_Assets/new_assets.robot
 Library           String
 Library           DateTime
-Library         Assets.edit_asset_type_group_page.EditAssetTypeGroupPage      WITH NAME       EditAssetTypeGroupPage
-Library         Assets.delete_asset_types_groups_page.DeleteAssetTypeGroupPage      WITH NAME       DeleteAssetTypeGroupPage
-Library         Assets.manage_asset_type_groups_page.ManageAssetTypeGroupsPage    WITH NAME      ManageAssetTypeGroupsPage
+Library         Setup.Assets.edit_asset_type_group_page.EditAssetTypeGroupPage      WITH NAME       EditAssetTypeGroupPage
+Library         Setup.Assets.delete_asset_types_groups_page.DeleteAssetTypeGroupPage      WITH NAME       DeleteAssetTypeGroupPage
+Library         Setup.Assets.manage_asset_type_groups_page.ManageAssetTypeGroupsPage    WITH NAME      ManageAssetTypeGroupsPage
 Library         New_Assets.asset_summary_page.AssetSummaryPage    WITH NAME      AssetSummaryPage
 
 Suite Setup     Login To Field Id Page      ${USERNAME}      ${PASSWORD}
