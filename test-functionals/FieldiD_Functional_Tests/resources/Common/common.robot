@@ -11,7 +11,7 @@ Library     DatabaseLibrary
 ${SERVER_URL}        qafunctionals.fidstage.com
 ${ADMIN_SERVER_URL}  qafunctionals.fidstage.com
 ${BROWSER}           chromeheadless
-${LOGIN_URL}         http://${SERVER_URL}
+${LOGIN_URL}         http://${SERVER_URL}/fieldid/login.action
 ${WELCOME_URL}       http://${SERVER_URL}/fieldid/w/dashboard
 ${SERVER_ADMIN_URL}  http://${ADMIN_SERVER_URL}/fieldid/admin/signIn.action
 ${DELAY}             0s
@@ -56,7 +56,6 @@ Setup Chrome Browser
     
  Login to Field Id Admin Console
     [Arguments]    ${USER_NAME}    ${PASSWORD}
-    Set Server Variables    ${SERVER_ADMIN_URL}
     Open Browser To Adminstrator Login Page
     Login To Field Id Admin Page   ${USER_NAME}    ${PASSWORD}
     Login To Field Id Admin Page   ${USER_NAME}    ${PASSWORD}
