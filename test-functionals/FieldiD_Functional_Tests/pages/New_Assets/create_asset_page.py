@@ -31,8 +31,9 @@ class CreateAssetPage(PageObject):
         self.se2lib.click_element(self.locator.save_button)
         
     def select_asset_type(self, asset_type):
-         if  asset_type != "":
+         if asset_type != "":
             self.se2lib.wait_until_element_is_visible(self.locator.asset_type_dropdown)
             self.se2lib.click_element(self.locator.asset_type_dropdown)
             self.se2lib.wait_until_element_is_visible(self.locator.asset_type % asset_type) 
             self.se2lib.click_element(self.locator.asset_type % asset_type)
+            self.se2lib.click_element(self.locator.rfid_number_field)
