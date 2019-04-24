@@ -32,7 +32,7 @@ Perform an Unscheduled Event and Verify
     The Current Page Should Be    AssetSummaryPage
     Start An Event   ${EVENT_TYPE1}
     The Current Page Should be  PerformEventPage
-    Select Event Result  ${RESULT}
+    Select Event Result  ${EVENTRESULT}
     Input Comments  ${COMMENTS}
     Input Owner Field  ${OWNER}
     Click Save Button
