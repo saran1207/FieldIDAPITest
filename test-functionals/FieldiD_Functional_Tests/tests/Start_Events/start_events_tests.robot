@@ -18,16 +18,16 @@ ${PASSWORD}         temp123
 ${EVENTRESULT}      Fail
 ${COMMENTS}        Test Comments
 ${OWNER}           Level1
-${ASSET_TYPE}      fire
+${ASSET_TYPE}      Score Test
 ${EVENT_TYPE1}     Blank Event
-${EVENT_TYPE2}     Score Test
+${EVENT_TYPE2}     Event Type one
 
 
 *** Keywords ***
 
 *** Test Cases ***
 Perform an Unscheduled Event and Verify 
-    [Tags]    C1891
+    [Tags]    C1891  Smoke
     Go To Asset View Page      C1895Asset
     The Current Page Should Be    AssetSummaryPage
     Start An Event   ${EVENT_TYPE1}
@@ -43,7 +43,7 @@ Perform an Unscheduled Event and Verify
     Page Should Contain  ${OWNER}
     
 Perform an Event with Score settings and verify 
-    [Tags]  Smoke
+    [Tags]  C1906
     ${SERIAL_NUMBER}    Generate Random String  5
     Go To New Asset From Dashboard
     Create An Asset     ${SERIAL_NUMBER}   ${EMPTY}  ${ASSET_TYPE}
