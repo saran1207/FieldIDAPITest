@@ -19,6 +19,6 @@ Sign Out
 Go To Asset View Page
     [Arguments]  ${asset_details}
     Search Asset  ${asset_details}
-    Wait Until Page Contains      Details    
+    Wait Until Page Contains      Edit    
     
     

@@ -5,7 +5,7 @@ class ThingEventSummaryPage(PageObject):
 
     _locators = {
         "print_link": "link:Print",
-        "edit_link": "link:Edit"
+        "edit_button": "link:Edit"
     }
 
     def _is_current_page(self):
@@ -15,6 +15,6 @@ class ThingEventSummaryPage(PageObject):
             raise Exception(message)
         return True
     
-    
-
-   
+    def click_edit_button(self):
+        self.se2lib.wait_until_element_is_visible(self.locator.edit_button)
+        self.se2lib.click_element(self.locator.edit_button)   
