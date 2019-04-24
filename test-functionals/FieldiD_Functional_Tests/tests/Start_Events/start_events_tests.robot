@@ -43,7 +43,7 @@ Perform an Unscheduled Event and Verify
     Page Should Contain  ${OWNER}
     
 Perform an Event with Score settings and verify 
-    [Tags]    C1906  Smoke
+    [Tags]  Smoke
     ${SERIAL_NUMBER}    Generate Random String  5
     Go To New Asset From Dashboard
     Create An Asset     ${SERIAL_NUMBER}   ${EMPTY}  ${ASSET_TYPE}
