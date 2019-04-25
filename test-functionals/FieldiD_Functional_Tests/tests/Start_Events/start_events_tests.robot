@@ -21,6 +21,7 @@ ${OWNER}           Level1
 ${ASSET_TYPE}      Score Test
 ${EVENT_TYPE1}     Blank Event
 ${EVENT_TYPE2}     Event Type one
+${EVENT_TYPE3}     Observation Test
 
 
 *** Keywords ***
@@ -80,6 +81,62 @@ Perform an Event with Score settings and verify
     The Current Page Should Be    ThingEventSummaryPage
      Page Should Contain  N/A
     Page Should Contain  (100%)
+    
+Perform an Event with Observations settings and verify  
+    [Tags]  C1893
+    ${SERIAL_NUMBER}    Generate Random String  5
+    Go To New Asset From Dashboard
+    Create An Asset     ${SERIAL_NUMBER}   ${EMPTY}  ${ASSET_TYPE}
+    Go To Asset View Page      ${SERIAL_NUMBER}
+    The Current Page Should Be    AssetSummaryPage
+    Start An Event   ${EVENT_TYPE3}
+    The Current Page Should be  PerformEventPage
+    Input Comments  ${COMMENTS}
+    Input Owner Field  ${OWNER}
+    #testdata 1
+    Input Observation Score  Safe  61
+    Input Observation Score  Unsafe  10
+    Click Save Button 
+    Wait Until Page Contains      Event Summary 
+    The Current Page Should Be  ThingEventSummaryPage
+    Page Should Contain  Pass
+    Page Should Contain  ${COMMENTS}
+    Page Should Contain  ${OWNER}
+    Page Should Contain  (86%)
+    Page Should Contain  (14%)
+    Click Edit Button
+    The Current Page Should be  PerformEventPage
+    # testdata 2
+    Input Observation Score  Safe  50
+    Input Observation Score  Unsafe  10
+    Click Save Button
+    Wait Until Page Contains      Event Summary
+    The Current Page Should Be    ThingEventSummaryPage
+    Page Should Contain  N/A
+    Page Should Contain  (83%)
+    Page Should Contain  (17%)
+    Click Edit Button
+    The Current Page Should be  PerformEventPage
+    # testdata 3
+    Input Observation Score  Safe  50
+    Input Observation Score  Unsafe  65
+    Click Save Button
+    Wait Until Page Contains      Event Summary
+    The Current Page Should Be    ThingEventSummaryPage
+    Page Should Contain  Fail
+    Page Should Contain  (43%)
+    Page Should Contain  (57%)
+    Click Edit Button
+    The Current Page Should be  PerformEventPage
+    # testdata 4
+    Input Observation Score  Safe  65
+    Input Observation Score  Unsafe  65
+    Click Save Button
+    Wait Until Page Contains      Event Summary
+    The Current Page Should Be    ThingEventSummaryPage
+    Page Should Contain  Fail
+    Page Should Contain  (50%)
+    Page Should Contain  (50%)
     
     
     

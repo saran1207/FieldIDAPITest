@@ -13,7 +13,8 @@ class PerformEventPage(PageObject):
         "owner_field": "name:ownerSection:orgPicker:text",
         "owner_option": "link:%s",
         "save_button": "name:saveButton",
-        "score_radio_button": "//div[@class='scoreEditContainer']/span/span[text()=%s]/../input"
+        "score_radio_button": "//div[@class='scoreEditContainer']/span/span[text()=%s]/../input",
+        "observation_score_field": "//div[@class='observation-counter']/label[text()='%s']/../div/input"
     }
 
     def _is_current_page(self):
@@ -48,3 +49,6 @@ class PerformEventPage(PageObject):
         self.se2lib.click_element(self.locator.score_radio_button % score_value)
         self.se2lib.click_element(self.locator.comments_field)
         
+    def input_observation_score(self, observation_criteria, observation_value):
+        self.se2lib.wait_until_element_is_visible(self.locator.observation_score_field % observation_criteria)
+        self.se2lib.input_text(self.locator.observation_score_field % observation_criteria, observation_value)        
