@@ -47,8 +47,7 @@ class PerformEventPage(PageObject):
     def select_score(self, score_value):
         self.se2lib.wait_until_element_is_visible(self.locator.score_radio_button % score_value)
         self.se2lib.click_element(self.locator.score_radio_button % score_value)
-        self.se2lib.click_element(self.locator.comments_field)
-        
+         
     def input_observation_score(self, observation_criteria, observation_value):
         self.se2lib.wait_until_element_is_visible(self.locator.observation_score_field % observation_criteria)
         self.se2lib.input_text(self.locator.observation_score_field % observation_criteria, observation_value)        

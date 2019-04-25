@@ -52,10 +52,10 @@ Perform an Event with Score settings and verify
     The Current Page Should Be    AssetSummaryPage
     Start An Event   ${EVENT_TYPE2} 
     The Current Page Should be  PerformEventPage
-    Input Comments  ${COMMENTS}
     Input Owner Field  ${OWNER}
     #testdata 1
     Select Score  1
+    Input Comments  ${COMMENTS}
     Click Save Button
     Wait Until Page Contains      Event Summary 
     The Current Page Should Be  ThingEventSummaryPage
@@ -67,6 +67,7 @@ Perform an Event with Score settings and verify
     The Current Page Should be  PerformEventPage
     # testdata 2
     Select Score  2
+    Input Comments  ${COMMENTS}
     Click Save Button
     Wait Until Page Contains      Event Summary
     The Current Page Should Be    ThingEventSummaryPage
@@ -76,6 +77,7 @@ Perform an Event with Score settings and verify
     The Current Page Should be  PerformEventPage
     # testdata 3
     Select Score  3
+    Input Comments  ${COMMENTS}
     Click Save Button
     Wait Until Page Contains      Event Summary
     The Current Page Should Be    ThingEventSummaryPage
