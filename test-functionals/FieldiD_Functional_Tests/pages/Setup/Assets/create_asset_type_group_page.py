@@ -1,7 +1,6 @@
-from PageObjectLibrary import PageObject
-from Assets.asset_type_group_base_page import AssetTypeGroupBasePage
+from Setup.Assets.asset_type_group_base_page import AssetTypeGroupBasePage
 
-class CreateAssetTypeGroupPage(AssetTypeGroupBasePage,PageObject):
+class CreateAssetTypeGroupPage(AssetTypeGroupBasePage):
     PAGE_URL = "/fieldid/w/setup/addAssetTypeGroup"
    
     def _is_current_page(self):

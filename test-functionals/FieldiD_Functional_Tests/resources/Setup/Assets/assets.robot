@@ -1,16 +1,16 @@
 *** Settings ***
 Resource        ${CURDIR}/../../../resources/Common/common.robot
 Resource        ${CURDIR}/../../../resources/Dashboard/dashboard.robot
-Library         Assets.create_asset_page.CreateAssetPage        WITH NAME       CreateAssetPage
+Library         New_Assets.create_asset_page.CreateAssetPage        WITH NAME       CreateAssetPage
 Library         Search.search_page.SearchPage       WITH NAME       SearchPage
-Library         Assets.manage_asset_type_groups_page.ManageAssetTypeGroupsPage      WITH NAME       ManageAssetTypeGroupsPage
-Library         Assets.create_asset_type_group_page.CreateAssetTypeGroupPage      WITH NAME       CreateAssetTypeGroupPage
-Library         Assets.manage_asset_types_page.ManageAssetTypesPage      WITH NAME       ManageAssetTypesPage
-Library         Assets.create_asset_type_page.CreateAssetTypePage      WITH NAME       CreateAssetTypePage
-Library         Assets.new_asset_with_order_page.NewAssetWithOrderPage     WITH NAME       NewAddWithOrderPage
-Library         Assets.edit_asset_type_group_page.EditAssetTypeGroupPage      WITH NAME       EditAssetTypeGroupPage
-Library         Assets.delete_asset_types_groups_page.DeleteAssetTypeGroupPage      WITH NAME       DeletedAssetTypeGroupPage
-Library         Assets.view_asset_types_group_page.ViewAssetTypeGroupPage      WITH NAME       ViewAssetTypeGroupPage
+Library         Setup.Assets.manage_asset_type_groups_page.ManageAssetTypeGroupsPage     WITH NAME       ManageAssetTypeGroupsPage
+Library         Setup.Assets.create_asset_type_group_page.CreateAssetTypeGroupPage      WITH NAME       CreateAssetTypeGroupPage
+Library         Setup.Assets.manage_asset_types_page.ManageAssetTypesPage      WITH NAME       ManageAssetTypesPage
+Library         Setup.Assets.create_asset_type_page.CreateAssetTypePage      WITH NAME       CreateAssetTypePage
+Library         Setup.Assets.new_asset_with_order_page.NewAssetWithOrderPage     WITH NAME       NewAddWithOrderPage
+Library         Setup.Assets.edit_asset_type_group_page.EditAssetTypeGroupPage      WITH NAME       EditAssetTypeGroupPage
+Library         Setup.Assets.delete_asset_types_groups_page.DeleteAssetTypeGroupPage      WITH NAME       DeletedAssetTypeGroupPage
+Library         Setup.Assets.view_asset_types_group_page.ViewAssetTypeGroupPage      WITH NAME       ViewAssetTypeGroupPage
 Library         String
 
 
@@ -18,14 +18,6 @@ Library         String
 *** Variables ***
 
 *** Keywords ***
-Create An Asset
-    [Arguments]     ${SERIAL_NUMBER}        ${RFID_NUMBER}
-    NewAddWithOrderPage.Click Add Tab
-    The Current Page Should Be      CreateAssetPage
-    Input Asset Serial Number       ${SERIAL_NUMBER}
-    Input Rfid Number       ${RFID_NUMBER}
-    Click Save Button
-
 Create An Asset Type
     [Arguments]     ${ASSET_TYPE_NAME}  ${ASSET_TYPE_GROUP}=${EMPTY}
     Go To Page      ManageAssetTypesPage

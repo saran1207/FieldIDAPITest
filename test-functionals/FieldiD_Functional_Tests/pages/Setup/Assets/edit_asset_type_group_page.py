@@ -1,7 +1,6 @@
-from PageObjectLibrary import PageObject
-from Assets.asset_type_group_base_page import AssetTypeGroupBasePage
+from Setup.Assets.asset_type_group_base_page import AssetTypeGroupBasePage
 
-class EditAssetTypeGroupPage(AssetTypeGroupBasePage,PageObject):
+class EditAssetTypeGroupPage(AssetTypeGroupBasePage):
    
     def _is_current_page(self):
         location = self.se2lib.get_location()
