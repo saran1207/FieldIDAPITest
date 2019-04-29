@@ -22,10 +22,18 @@ ${ASSET_TYPE}      Score Test
 ${EVENT_TYPE1}     Blank Event
 ${EVENT_TYPE2}     Event Type one
 ${EVENT_TYPE3}     Observation Test
+${SERIAL_NUMBER}   C1906
 
 
 *** Keywords ***
 
+Go To Asset And Start Event
+    [Arguments]  ${SERIAL_NUMBER}  ${EVENT_TYPE}
+    Go To Asset View Page      ${SERIAL_NUMBER}
+    The Current Page Should Be    AssetSummaryPage
+    Start An Event   ${EVENT_TYPE} 
+    Wait Until Page Contains  Perform Event
+    
 *** Test Cases ***
 Perform an Unscheduled Event and Verify 
     [Tags]    C1891  Smoke
@@ -45,12 +53,7 @@ Perform an Unscheduled Event and Verify
     
 Perform an Event with Score settings and verify 
     [Tags]  C1906
-    ${SERIAL_NUMBER}    Generate Random String  5
-    Go To New Asset From Dashboard
-    Create An Asset     ${SERIAL_NUMBER}   ${EMPTY}  ${ASSET_TYPE}
-    Go To Asset View Page      ${SERIAL_NUMBER}
-    The Current Page Should Be    AssetSummaryPage
-    Start An Event   ${EVENT_TYPE2} 
+    Go To Asset And Start Event  ${SERIAL_NUMBER}  ${EVENT_TYPE2}
     The Current Page Should be  PerformEventPage
     Input Owner Field  ${OWNER}
     #testdata 1
@@ -86,12 +89,7 @@ Perform an Event with Score settings and verify
     
 Perform an Event with Observations settings and verify  
     [Tags]  C1893
-    ${SERIAL_NUMBER}    Generate Random String  5
-    Go To New Asset From Dashboard
-    Create An Asset     ${SERIAL_NUMBER}   ${EMPTY}  ${ASSET_TYPE}
-    Go To Asset View Page      ${SERIAL_NUMBER}
-    The Current Page Should Be    AssetSummaryPage
-    Start An Event   ${EVENT_TYPE3}
+    Go To Asset And Start Event  ${SERIAL_NUMBER}  ${EVENT_TYPE3}
     The Current Page Should be  PerformEventPage
     Input Comments  ${COMMENTS}
     Input Owner Field  ${OWNER}
@@ -139,7 +137,3 @@ Perform an Event with Observations settings and verify
     Page Should Contain  Fail
     Page Should Contain  (50%)
     Page Should Contain  (50%)
-    
-    
-    
-    

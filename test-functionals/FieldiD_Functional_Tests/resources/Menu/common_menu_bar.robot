@@ -12,9 +12,6 @@ Go To New Asset
     
 Go To Asset Type Groups
     Click Asset Type Groups
-     
-Sign Out
-    Click Sign Out
     
 Go To Asset View Page
     [Arguments]  ${asset_details}
