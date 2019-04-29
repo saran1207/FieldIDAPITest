@@ -5,7 +5,8 @@ class AssetSummaryPage(PageObject):
 
     _locators = {
         "events_button": "name:eventHistoryLink",
-        "start_event_link": "name:startEventLink"
+        "start_event_link": "name:startEventLink",
+        "summary_button":  "name:summaryLink"
     }
 
     def _is_current_page(self):
@@ -22,3 +23,6 @@ class AssetSummaryPage(PageObject):
     def click_start_event_link(self):
         self.se2lib.wait_until_element_is_visible(self.locator.start_event_link)
         self.se2lib.click_element(self.locator.start_event_link)
+        
+    def wait_for_summary_button(self):
+         self.se2lib.wait_until_element_is_visible(self.locator.summary_button)
