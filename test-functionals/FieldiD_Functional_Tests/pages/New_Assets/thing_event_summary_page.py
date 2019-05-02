@@ -5,7 +5,8 @@ class ThingEventSummaryPage(PageObject):
 
     _locators = {
         "print_link": "link:Print",
-        "edit_button": "link:Edit"
+        "edit_button": "link:Edit",
+        "summary_link": "link:Summary"
     }
 
     def _is_current_page(self):
@@ -17,4 +18,8 @@ class ThingEventSummaryPage(PageObject):
     
     def click_edit_button(self):
         self.se2lib.wait_until_element_is_visible(self.locator.edit_button)
-        self.se2lib.click_element(self.locator.edit_button)   
+        self.se2lib.click_element(self.locator.edit_button)
+        
+    def click_summary_link(self):
+        self.se2lib.wait_until_element_is_visible(self.locator.summary_link)
+        self.se2lib.click_element(self.locator.summary_link)    
