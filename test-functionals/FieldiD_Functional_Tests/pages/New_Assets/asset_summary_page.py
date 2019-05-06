@@ -8,7 +8,7 @@ class AssetSummaryPage(PageObject):
         "start_event_link": "name:startEventLink",
         "summary_button":  "name:summaryLink",
         "schedules_list": "//div[@name='upcomingEventsList'][%s]",
-        "schedules_event_start": "//div[@name='upcomingEventsList'][%s]//a"
+        "schedules_event_start": "//div[@name='upcomingEventsList'][%s]//div[@class='_defaultActionButtonContainer']/a[1]"
     }
 
     def _is_current_page(self):

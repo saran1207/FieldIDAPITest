@@ -7,6 +7,7 @@ Library         Setup.Assets.create_asset_type_group_page.CreateAssetTypeGroupPa
 Library         New_Assets.asset_summary_page.AssetSummaryPage      WITH NAME       AssetSummaryPage
 Library         New_Assets.thing_event_summary_page.ThingEventSummaryPage      WITH NAME       ThingEventSummaryPage
 Library         New_Assets.asset_events_page.AssetEventsPage      WITH NAME       AssetEventsPage
+Library         Menu.common_menu_bar.CommonMenuBar  WITH NAME  CommonMenuBar
 Library          DateTime
 Library           String
 Suite Setup     Login To Field Id Page      ${USERNAME}      ${PASSWORD}
@@ -52,9 +53,12 @@ Verify Event Triggers On Asset Creation
     
 Verify Event Triggers After Event Is Completed
     [Tags]  C1995
+    Click Dashboard
+    Wait Until Page Contains  Let's setup your dashboard
     Go To Asset View Page      ${ASSET}
     The Current Page Should Be    AssetSummaryPage
     Start Scheduled Event    1
+    Wait Until Page Contains  Perform Event: Fire Extinguisher Annual Inspection
     The Current Page Should be  PerformEventPage
     Select Event Result  Pass
     Input Comments  Test Comments

@@ -11,7 +11,8 @@ class CommonMenuBar(PageObject):
         "users_link":  "link:Users",
         "sign_out_link": "link:Sign Out",
         "search_field": "id=searchText",
-        "first_asset_link": "//a[@class='link ui-corner-all'][1]"
+        "first_asset_link": "//a[@class='link ui-corner-all'][1]",
+        "dashboard_link": "link:Dashboard"
     }
 
     def click_new_asset(self):
@@ -43,4 +44,8 @@ class CommonMenuBar(PageObject):
         self.se2lib.input_text(self.locator.search_field, asset_detail) 
         self.se2lib.wait_until_element_is_visible(self.locator.first_asset_link)
         self.se2lib.click_element(self.locator.first_asset_link) 
+    
+    def click_dashboard(self):
+        self.se2lib.wait_until_element_is_visible(self.locator.dashboard_link)
+        self.se2lib.click_element(self.locator.dashboard_link) 
         
