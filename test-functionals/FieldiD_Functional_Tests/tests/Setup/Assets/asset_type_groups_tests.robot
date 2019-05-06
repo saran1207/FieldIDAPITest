@@ -59,6 +59,10 @@ Create Asset Type Group And Verify Creation Test
     ${assetGroup}    Generate Random String  5
     Create An Asset Type Group      ${assetGroup}
     Verify Creation Of An Asset Type Group      ${assetGroup}
+    Go To Page Delete Asset Type Group     ${assetGroup}
+    The Current Page Should Be    DeleteAssetTypeGroupPage
+    Delete Asset Type Group
+    Verify Deletion Of An Asset Type Group       ${assetGroup}
     
 Create Duplicate Asset Type Group Test
     [Tags]  C1844
@@ -68,6 +72,11 @@ Create Duplicate Asset Type Group Test
     Create An Asset Type Group      ${assetGroup}
     ${UNIQUE_NAME_ERROR_MSG}=   CreateAssetTypeGroupPage.Get Unique Name Error Msg
     Page Should Contain      ${UNIQUE_NAME_ERROR_MSG}
+    Go To Page  ManageAssetTypeGroupsPage
+    Go To Page Delete Asset Type Group     ${assetGroup}
+    The Current Page Should Be    DeleteAssetTypeGroupPage
+    Delete Asset Type Group
+    Verify Deletion Of An Asset Type Group       ${assetGroup}
     
 Edit Asset Type Group Test
     [Tags]  C1704  Smoke
@@ -77,6 +86,11 @@ Edit Asset Type Group Test
     Go To Page Edit Asset Type Group     ${assetGroup}
     Edit Asset Type Group     ${assetGroup}+editted
     Verify Creation Of An Asset Type Group       ${assetGroup}+editted
+     Go To Page  ManageAssetTypeGroupsPage
+    Go To Page Delete Asset Type Group     ${assetGroup}+editted
+    The Current Page Should Be    DeleteAssetTypeGroupPage
+    Delete Asset Type Group
+    Verify Deletion Of An Asset Type Group       ${assetGroup}+editted
     
 Deleted Asset Type Group With 1 Asset Type Test
     [Tags]  C1771  
@@ -105,6 +119,11 @@ Create Asset Type From Asset Type Group Test
     Go To Page      ManageAssetTypeGroupsPage
     Go To Page View Asset Type Group  ${assetGroup}
     Page Should Contain     ${assetType}
+    Go To Page  ManageAssetTypeGroupsPage
+    Go To Page Delete Asset Type Group     ${assetGroup}
+    The Current Page Should Be    DeleteAssetTypeGroupPage
+    Delete Asset Type Group
+    Verify Deletion Of An Asset Type Group       ${assetGroup}
     
 Asset Type Group List In Asset Type Page Test
     [Tags]  C1705  
@@ -130,3 +149,8 @@ List View for Asset Types Groups Test
     Should Contain   ${createdOnDate}  ${currentDateTime}  
     Should Be Equal   ${modifiedByUsername}   ${USERFULLNAME} 
     Should Contain    ${modifiedOnDate}  ${currentDateTime}
+    Go To Page  ManageAssetTypeGroupsPage
+    Go To Page Delete Asset Type Group     ${assetGroup}
+    The Current Page Should Be    DeleteAssetTypeGroupPage
+    Delete Asset Type Group
+    Verify Deletion Of An Asset Type Group       ${assetGroup}
