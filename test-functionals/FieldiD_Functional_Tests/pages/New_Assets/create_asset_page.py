@@ -23,8 +23,9 @@ class CreateAssetPage(PageObject):
         self.se2lib.input_text(self.locator.serial_number_field, identifier)
 
     def input_rfid_number(self, rfidNumber):
-        self.se2lib.wait_until_element_is_visible(self.locator.rfid_number_field)
-        self.se2lib.input_text(self.locator.rfid_number_field, rfidNumber)
+        if rfidNumber != "":
+            self.se2lib.wait_until_element_is_visible(self.locator.rfid_number_field)
+            self.se2lib.input_text(self.locator.rfid_number_field, rfidNumber)
 
     def click_save_button(self):
         self.se2lib.wait_until_element_is_visible(self.locator.save_button)
