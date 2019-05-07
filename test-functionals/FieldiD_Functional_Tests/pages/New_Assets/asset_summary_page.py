@@ -29,7 +29,7 @@ class AssetSummaryPage(PageObject):
     def wait_for_summary_button(self):
          self.se2lib.wait_until_element_is_visible(self.locator.summary_button)
          
-    def get_schedules(self, listNum):
+    def get_schedule(self, listNum):
         self.se2lib.wait_until_element_is_visible(self.locator.schedules_list % listNum)
         return self.se2lib.get_text(self.locator.schedules_list % listNum)
     

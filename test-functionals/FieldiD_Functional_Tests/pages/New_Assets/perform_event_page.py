@@ -53,9 +53,9 @@ class PerformEventPage(PageObject):
         self.se2lib.wait_until_element_is_visible(self.locator.observation_score_field % observation_criteria)
         self.se2lib.input_text(self.locator.observation_score_field % observation_criteria, observation_value)
         
-    def get_schedules(self, listNum):
+    def get_schedule_from_perform_event_page(self, listNum):
         self.se2lib.wait_until_element_is_visible(self.locator.event_schedules % listNum)
         return self.se2lib.get_text(self.locator.event_schedules % listNum) 
     
-    def wait_for_save_button(self):
+    def wait_for_save_button_is_visible(self):
         self.se2lib.wait_until_element_is_visible(self.locator.save_button)      

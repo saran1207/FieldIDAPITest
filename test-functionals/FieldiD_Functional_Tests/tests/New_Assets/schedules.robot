@@ -27,23 +27,26 @@ Add Days To A Date
     ${currentDate}  Get Current Date   
     ${newdatetime} =  Add Time To Date  ${currentDate}  ${numOfDays} days  
     [Return]  ${newdatetime}
-
-   
+    
+Create Asset And Go To Asset Summary Page
+    [Arguments]  ${ASSETTYPE}
+    ${SERIAL_NUMBER}    Generate Random String  5
+    Go To New Asset From Dashboard
+    Create An Asset     ${SERIAL_NUMBER}   ${EMPTY}    ${ASSETTYPE}
+    Go To Asset View Page      ${SERIAL_NUMBER}
+       
 *** Test Cases ***
 Verify Event Triggers On Asset Creation
     [Tags]  C2025
-    ${SERIAL_NUMBER}    Generate Random String  5
-    Go To New Asset From Dashboard
-    Create An Asset     ${SERIAL_NUMBER}   ${EMPTY}    ${ASSETTYPE1}
-    Go To Asset View Page      ${SERIAL_NUMBER}
+    Create Asset And Go To Asset Summary Page  ${ASSETTYPE1}
     The Current Page Should Be    AssetSummaryPage
     ${currentDate}  Get Current Date    
     ${newdatetime1} =  Add Time To Date  ${currentDate}  365 days  result_format=%m/%d/%y
     ${newdatetime2} =  Add Time To Date  ${currentDate}  2190 days  result_format=%m/%d/%y
     ${newdatetime3} =  Add Time To Date  ${currentDate}  4380 days  result_format=%m/%d/%y
-    ${schedule1}  Get Schedules    1
-    ${schedule2}  Get Schedules    2
-    ${schedule3}  Get Schedules    3
+    ${schedule1}  Get Schedule    1
+    ${schedule2}  Get Schedule    2
+    ${schedule3}  Get Schedule    3
     Should Contain   ${schedule1}  Fire Extinguisher Annual Inspection
     Should Contain   ${schedule1}  In 365 Days on ${newdatetime1}
     Should Contain   ${schedule2}  Fire Extinguisher 6 Year Inspection
@@ -62,7 +65,7 @@ Verify Event Triggers After Event Is Completed
     The Current Page Should be  PerformEventPage
     Select Event Result  Pass
     Input Comments  Test Comments
-    ${schedule1}  Get Schedules    1
+    ${schedule1}  Get Schedule From Perform Event Page    1
     ${currentDate}  Get Current Date    
     ${newdatetime1} =  Add Time To Date  ${currentDate}  365 days  result_format=%m/%d/%y
     Should Contain   ${schedule1}  Fire Extinguisher Annual Inspection
@@ -72,19 +75,17 @@ Verify Event Triggers After Event Is Completed
     The Current Page Should Be    ThingEventSummaryPage
     Click Summary Link
     The Current Page Should Be    AssetSummaryPage
-    ${schedule1}  Get Schedules    1
+    ${schedule1}  Get Schedule    1
     Should Contain   ${schedule1}  Fire Extinguisher Annual Inspection
     Should Contain   ${schedule1}  In 365 Days on ${newdatetime1}
     
 Verify Weekly Recurring Schedule On Asset Creation
     [Tags]  C1994
-    ${SERIAL_NUMBER}    Generate Random String  5
-    Go To New Asset From Dashboard
-    Create An Asset     ${SERIAL_NUMBER}   ${EMPTY}    ${ASSETTYPE2}
-    Go To Asset View Page      ${SERIAL_NUMBER}
+    Create Asset And Go To Asset Summary Page  ${ASSETTYPE2}
     The Current Page Should Be    AssetSummaryPage
     Click Events Button
     Wait Until Page Contains      Show
+    The Current Page Should Be    AssetEventsPage
     ${currentDate}  Get Current Date
     ${Day}=    Convert Date    ${currentDate}    result_format=%a
     ${newSchedule}=  Run Keyword IF  '${Day}' == 'Mon'   Add Days To A Date  1
@@ -106,10 +107,7 @@ Verify Weekly Recurring Schedule On Asset Creation
     
 Verify Daily Recurring Schedule On Asset Creation
     [Tags]  C2026
-    ${SERIAL_NUMBER}    Generate Random String  5
-    Go To New Asset From Dashboard
-    Create An Asset     ${SERIAL_NUMBER}   ${EMPTY}    ${ASSETTYPE3}
-    Go To Asset View Page      ${SERIAL_NUMBER}
+    Create Asset And Go To Asset Summary Page  ${ASSETTYPE3}
     The Current Page Should Be    AssetSummaryPage
     Click Events Button
     Wait Until Page Contains      Show
