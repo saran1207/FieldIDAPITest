@@ -20,7 +20,7 @@ ${COMMENTS}        Test Comments
 ${OWNER}           Level1
 ${ASSET_TYPE}      Score Test
 ${EVENT_TYPE1}     Blank Event
-${EVENT_TYPE2}     Event Type one
+${EVENT_TYPE2}     Score Event
 ${EVENT_TYPE3}     Observation Test
 ${SERIAL_NUMBER}   C1906
 

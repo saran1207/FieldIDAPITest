@@ -21,9 +21,9 @@ Create An Asset
     [Arguments]     ${SERIAL_NUMBER}    ${RFID_NUMBER}=${EMPTY}  ${ASSET_TYPE}=${EMPTY}
     NewAddWithOrderPage.Click Add Tab
     The Current Page Should Be      CreateAssetPage
+    Select Asset Type  ${ASSET_TYPE}
     Input Asset Serial Number       ${SERIAL_NUMBER}
     Input Rfid Number       ${RFID_NUMBER}
-    Select Asset Type  ${ASSET_TYPE}
     Click Save Button
     
 Start An Event

@@ -14,7 +14,8 @@ class PerformEventPage(PageObject):
         "owner_option": "link:%s",
         "save_button": "name:saveButton",
         "score_radio_button": "//div[@class='scoreEditContainer']/span/span[text()=%s]/../input",
-        "observation_score_field": "//div[@class='observation-counter']/label[text()='%s']/../div/input"
+        "observation_score_field": "//div[@class='observation-counter']/label[text()='%s']/../div/input",
+        "event_schedules": "//div[@class='schedule'][%s]"
     }
 
     def _is_current_page(self):
@@ -50,4 +51,11 @@ class PerformEventPage(PageObject):
          
     def input_observation_score(self, observation_criteria, observation_value):
         self.se2lib.wait_until_element_is_visible(self.locator.observation_score_field % observation_criteria)
-        self.se2lib.input_text(self.locator.observation_score_field % observation_criteria, observation_value)        
+        self.se2lib.input_text(self.locator.observation_score_field % observation_criteria, observation_value)
+        
+    def get_schedule_from_perform_event_page(self, listNum):
+        self.se2lib.wait_until_element_is_visible(self.locator.event_schedules % listNum)
+        return self.se2lib.get_text(self.locator.event_schedules % listNum) 
+    
+    def wait_for_save_button_is_visible(self):
+        self.se2lib.wait_until_element_is_visible(self.locator.save_button)      
