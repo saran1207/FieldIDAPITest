@@ -9,9 +9,6 @@ Library         New_Assets.asset_summary_page.AssetSummaryPage    WITH NAME     
 Library         New_Assets.perform_event_page.PerformEventPage      WITH NAME       PerformEventPage
 Library         New_Assets.thing_event_summary_page.ThingEventSummaryPage      WITH NAME       ThingEventSummaryPage
 
-Suite Setup     Login To Field Id Page      ${USERNAME}      ${PASSWORD}
-Suite Teardown  Logout Of Field Id
-
 *** Variables ***
 ${USERNAME}         testauto          
 ${PASSWORD}         temp123
@@ -37,6 +34,7 @@ Go To Asset And Start Event
 *** Test Cases ***
 Perform an Unscheduled Event and Verify 
     [Tags]    C1891  Smoke
+    [Setup]     Login To Field Id Page      ${USERNAME}      ${PASSWORD}
     Go To Asset View Page      C1895Asset
     The Current Page Should Be    AssetSummaryPage
     Start An Event   ${EVENT_TYPE1}
@@ -50,9 +48,12 @@ Perform an Unscheduled Event and Verify
     Page Should Contain  ${EVENTRESULT}
     Page Should Contain  ${COMMENTS}
     Page Should Contain  ${OWNER}
+    [Teardown]  Logout Of Field Id
+    
     
 Perform an Event with Score settings and verify 
     [Tags]  C1906
+    [Setup]     Login To Field Id Page      ${USERNAME}      ${PASSWORD}
     Go To Asset And Start Event  ${SERIAL_NUMBER}  ${EVENT_TYPE2}
     The Current Page Should be  PerformEventPage
     Input Owner Field  ${OWNER}
@@ -86,9 +87,11 @@ Perform an Event with Score settings and verify
     The Current Page Should Be    ThingEventSummaryPage
      Page Should Contain  N/A
     Page Should Contain  (100%)
+    [Teardown]  Logout Of Field Id
     
 Perform an Event with Observations settings and verify  
     [Tags]  C1893
+    [Setup]     Login To Field Id Page      ${USERNAME}      ${PASSWORD}
     Go To Asset And Start Event  ${SERIAL_NUMBER}  ${EVENT_TYPE3}
     The Current Page Should be  PerformEventPage
     Input Comments  ${COMMENTS}
@@ -137,3 +140,4 @@ Perform an Event with Observations settings and verify
     Page Should Contain  Fail
     Page Should Contain  (50%)
     Page Should Contain  (50%)
+    [Teardown]  Logout Of Field Id
