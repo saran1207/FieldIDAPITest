@@ -48,6 +48,7 @@ class PerformEventPage(PageObject):
     def select_score(self, score_value):
         self.se2lib.wait_until_element_is_visible(self.locator.score_radio_button % score_value)
         self.se2lib.click_element(self.locator.score_radio_button % score_value)
+        self.se2lib.click_element(self.locator.score_radio_button % score_value)
          
     def input_observation_score(self, observation_criteria, observation_value):
         self.se2lib.wait_until_element_is_visible(self.locator.observation_score_field % observation_criteria)
@@ -58,7 +59,4 @@ class PerformEventPage(PageObject):
         return self.se2lib.get_text(self.locator.event_schedules % listNum) 
     
     def wait_for_save_button_is_visible(self):
-        self.se2lib.wait_until_element_is_visible(self.locator.save_button)  
-        
-    def wait_untill_result_dropdown_is_visible(self):
-        self.se2lib.wait_until_element_is_visible(self.locator.event_result_dropdown)
+        self.se2lib.wait_until_element_is_visible(self.locator.save_button)
