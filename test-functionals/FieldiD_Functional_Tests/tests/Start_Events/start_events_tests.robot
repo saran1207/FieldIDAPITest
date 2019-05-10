@@ -68,6 +68,7 @@ Perform an Event with Score settings and verify
     Page Should Contain  ${OWNER}
     Page Should Contain  (33%)
     Click Edit Button
+    Wait Untill Result Dropdown Is Visible
     The Current Page Should be  PerformEventPage
     # testdata 2
     Select Score  2
@@ -78,6 +79,7 @@ Perform an Event with Score settings and verify
     Page Should Contain  Pass
     Page Should Contain  (67%)
     Click Edit Button
+    Wait Untill Result Dropdown Is Visible
     The Current Page Should be  PerformEventPage
     # testdata 3
     Select Score  3
