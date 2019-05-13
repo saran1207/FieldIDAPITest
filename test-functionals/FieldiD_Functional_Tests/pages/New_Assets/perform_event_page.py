@@ -1,4 +1,5 @@
 from PageObjectLibrary import PageObject
+from selenium import webdriver
 
 class PerformEventPage(PageObject):
     PAGE_URL_PERFORM = "/fieldid/w/performEvent"
@@ -15,7 +16,8 @@ class PerformEventPage(PageObject):
         "save_button": "name:saveButton",
         "score_radio_button": "//div[@class='scoreEditContainer']/span/span[text()=%s]/../input",
         "observation_score_field": "//div[@class='observation-counter']/label[text()='%s']/../div/input",
-        "event_schedules": "//div[@class='schedule'][%s]"
+        "event_schedules": "//div[@class='schedule'][%s]",
+        "score_radio_button_checked": "//div[@class='scoreEditContainer']/span/span[text()=%s]/../input[@checked='checked']"
     }
 
     def _is_current_page(self):
@@ -47,8 +49,7 @@ class PerformEventPage(PageObject):
         
     def select_score(self, score_value):
         self.se2lib.wait_until_element_is_visible(self.locator.score_radio_button % score_value)
-        self.se2lib.click_element(self.locator.score_radio_button % score_value)
-        self.se2lib.click_element(self.locator.score_radio_button % score_value)
+        webdriver.ActionChains(self.se2lib.driver).move_to_element(self.se2lib.driver.find_element_by_xpath(self.locator.score_radio_button % score_value)).click().perform()
          
     def input_observation_score(self, observation_criteria, observation_value):
         self.se2lib.wait_until_element_is_visible(self.locator.observation_score_field % observation_criteria)
