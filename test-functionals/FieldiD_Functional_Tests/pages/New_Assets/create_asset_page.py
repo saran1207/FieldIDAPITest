@@ -8,7 +8,9 @@ class CreateAssetPage(PageObject):
         "rfid_number_field": "//input[@name='singleIdentifyContainer:rfidContainer:rfidNumber']",
         "save_button": "//input[@name='actionsContainer:saveButton']",
         "asset_type_dropdown": "(//a[@class='chzn-single'])[1]",
-        "asset_type": "(//ul[@class='chzn-results'])[1]/li[text()='%s']"
+        "asset_type": "(//ul[@class='chzn-results'])[1]/li[text()='%s']",
+        "owner_field": "name:owner:text",
+        "owner_option": "//ins[@class='jstree-icon']/../a[text()='%s']"
     }
 
     def _is_current_page(self):
@@ -26,6 +28,13 @@ class CreateAssetPage(PageObject):
         if rfidNumber != "":
             self.se2lib.wait_until_element_is_visible(self.locator.rfid_number_field)
             self.se2lib.input_text(self.locator.rfid_number_field, rfidNumber)
+            
+    def input_owner_field(self, owner):
+         if owner != "":
+             self.se2lib.wait_until_element_is_visible(self.locator.owner_field)
+             self.se2lib.input_text(self.locator.owner_field, owner)
+             self.se2lib.wait_until_element_is_visible(self.locator.owner_option % owner)
+             self.se2lib.click_element(self.locator.owner_option % owner)
 
     def click_save_button(self):
         self.se2lib.wait_until_element_is_visible(self.locator.save_button)

@@ -20,6 +20,9 @@ ${ASSETTYPE1}       Fire Extinguisher
 ${ASSET}            Event Trigger Asset
 ${ASSETTYPE2}       Weekly
 ${ASSETTYPE3}       Daily
+${ASSETTYPE4}       Score Test
+${OWNER1}           Test Automation
+${OWNER2}           Level1
 
 *** Keywords ***
 Add Days To A Date
@@ -29,10 +32,10 @@ Add Days To A Date
     [Return]  ${newdatetime}
     
 Create Asset And Go To Asset Summary Page
-    [Arguments]  ${ASSETTYPE}
-    ${SERIAL_NUMBER}    Generate Random String  5
+    [Arguments]  ${ASSETTYPE}  ${OWNER}=${EMPTY}
+    ${SERIAL_NUMBER}    Generate Random String  6
     Go To New Asset From Dashboard
-    Create An Asset     ${SERIAL_NUMBER}   ${EMPTY}    ${ASSETTYPE}
+    Create An Asset     ${SERIAL_NUMBER}   ${EMPTY}    ${ASSETTYPE}  ${OWNER}
     Go To Asset View Page      ${SERIAL_NUMBER}
        
 *** Test Cases ***
@@ -134,3 +137,21 @@ Verify Daily Recurring Schedule On Asset Creation
     Page Should Contain   ${newSchedule9}
     ${newSchedule10} =  Add Time To Date  ${currentDate}  9 days  result_format=%m/%d/%y
     Page Should Contain   ${newSchedule10} 
+    
+Verify Event Triggers For Only Selected Owners On Asset Creation
+    [Tags]  C2048
+    Create Asset And Go To Asset Summary Page  ${ASSETTYPE4}  ${OWNER1}
+    The Current Page Should Be    AssetSummaryPage
+    Page Should Contain  No upcoming or overdue schedules
+    Create Asset And Go To Asset Summary Page  ${ASSETTYPE4}  ${OWNER2}
+    The Current Page Should Be    AssetSummaryPage
+    ${currentDate}  Get Current Date    
+    ${newdatetime1} =  Add Time To Date  ${currentDate}  45 days  result_format=%m/%d/%y
+    #${newdatetime2} =  Add Time To Date  ${currentDate}  2190 days  result_format=%m/%d/%y
+    #${newdatetime3} =  Add Time To Date  ${currentDate}  4380 days  result_format=%m/%d/%y
+    ${schedule1}  Get Schedule    1
+    #${schedule2}  Get Schedule    2
+    #${schedule3}  Get Schedule    3
+    Should Contain   ${schedule1}  Blank Event
+    Should Contain   ${schedule1}  In 45 Days on ${newdatetime1}
+    

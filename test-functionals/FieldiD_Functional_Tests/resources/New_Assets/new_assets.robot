@@ -18,10 +18,11 @@ Library         String
 
 *** Keywords ***
 Create An Asset
-    [Arguments]     ${SERIAL_NUMBER}    ${RFID_NUMBER}=${EMPTY}  ${ASSET_TYPE}=${EMPTY}
+    [Arguments]     ${SERIAL_NUMBER}    ${RFID_NUMBER}=${EMPTY}  ${ASSET_TYPE}=${EMPTY}  ${OWNER}=${EMPTY}
     NewAddWithOrderPage.Click Add Tab
     The Current Page Should Be      CreateAssetPage
     Select Asset Type  ${ASSET_TYPE}
+    Input Owner Field       ${OWNER}
     Input Asset Serial Number       ${SERIAL_NUMBER}
     Input Rfid Number       ${RFID_NUMBER}
     Click Save Button
