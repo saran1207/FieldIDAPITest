@@ -1,5 +1,8 @@
 from PageObjectLibrary import PageObject
 from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 
 class PerformEventPage(PageObject):
     PAGE_URL_PERFORM = "/fieldid/w/performEvent"
@@ -50,6 +53,8 @@ class PerformEventPage(PageObject):
     def select_score(self, score_value):
         self.se2lib.wait_until_element_is_visible(self.locator.score_radio_button % score_value)
         webdriver.ActionChains(self.se2lib.driver).move_to_element(self.se2lib.driver.find_element_by_xpath(self.locator.score_radio_button % score_value)).click().perform()
+        wait=WebDriverWait(self.browser,10)
+        wait.until(EC.element_located_to_be_selected((By.XPATH,self.locator.score_radio_button % score_value)))
          
     def input_observation_score(self, observation_criteria, observation_value):
         self.se2lib.wait_until_element_is_visible(self.locator.observation_score_field % observation_criteria)
