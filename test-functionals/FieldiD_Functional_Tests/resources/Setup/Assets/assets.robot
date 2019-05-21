@@ -26,9 +26,10 @@ Delete Asset Type
     Click Asset Type Link    ${ASSET_TYPE_NAME}
     The Current Page Should Be    CreateAssetTypePage
     Click Delete Asset Type Button
+    Wait Until Page Contains  Removal Details
     The Current Page Should Be    DeleteAssetTypePage
     Input Type Delete    DELETE
-    Click Delete Button    
+    Click Delete Asset Type Button 
     
 Create An Asset Type
     [Arguments]     ${ASSET_TYPE_NAME}  ${ASSET_TYPE_GROUP}=${EMPTY}

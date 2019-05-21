@@ -17,11 +17,8 @@ class CreateAssetTypePage(PageObject):
 
     def _is_current_page(self):
         location = self.se2lib.get_location()
-        if not self.PAGE_ADD_URL in location:
+        if (not self.PAGE_ADD_URL in location) and (not self.PAGE_EDIT_URL in location):
             message = "Expected location to end with " + self.PAGE_ADD_URL + " but it did not"
-            raise Exception(message)
-        if not self.PAGE_EDIT_URL in location:
-            message = "Expected location to end with " + self.PAGE_EDIT_URL + " but it did not"
             raise Exception(message)
         return True
 
