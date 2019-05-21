@@ -16,7 +16,7 @@ class DeleteAssetTypePage(PageObject):
             raise Exception(message)
         return True
               
-    def click_delete_asset_type_button(self):
+    def click_confirm_delete_asset_type_button(self):
         self.se2lib.wait_until_element_is_visible(self.locator.delete_button)
         self.se2lib.wait_until_element_is_enabled(self.locator.delete_button)
         self.se2lib.click_element(self.locator.delete_button)

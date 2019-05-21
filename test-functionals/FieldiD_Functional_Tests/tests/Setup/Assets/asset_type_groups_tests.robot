@@ -143,4 +143,3 @@ List View for Asset Types Groups Test
     Should Contain   ${createdOnDate}  ${currentDateTime}  
     Should Be Equal   ${modifiedByUsername}   ${USERFULLNAME} 
     Should Contain    ${modifiedOnDate}  ${currentDateTime}
-    [Teardown]  Delete An Asset Type Group       ${assetGroup}

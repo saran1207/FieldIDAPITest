@@ -29,12 +29,11 @@ Delete Asset Type
     Wait Until Page Contains  Removal Details
     The Current Page Should Be    DeleteAssetTypePage
     Input Type Delete    DELETE
-    Click Delete Asset Type Button 
+    Click Confirm Delete Asset Type Button 
     
 Create An Asset Type
     [Arguments]     ${ASSET_TYPE_NAME}  ${ASSET_TYPE_GROUP}=${EMPTY}
     Go To Page      ManageAssetTypesPage
-    Wait Until Page Contains  Manage Asset Type Groups
     The Current Page Should Be      ManageAssetTypesPage
     Click Add Button
     The Current Page Should Be      CreateAssetTypePage
