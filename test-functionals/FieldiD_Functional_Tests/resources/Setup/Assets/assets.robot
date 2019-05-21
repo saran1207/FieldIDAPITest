@@ -34,6 +34,7 @@ Delete Asset Type
 Create An Asset Type
     [Arguments]     ${ASSET_TYPE_NAME}  ${ASSET_TYPE_GROUP}=${EMPTY}
     Go To Page      ManageAssetTypesPage
+    Wait Until Page Contains  Manage Asset Type Groups
     The Current Page Should Be      ManageAssetTypesPage
     Click Add Button
     The Current Page Should Be      CreateAssetTypePage
