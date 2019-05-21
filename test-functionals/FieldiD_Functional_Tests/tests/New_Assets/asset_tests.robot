@@ -35,6 +35,7 @@ Create Asset Type And Verify Creation
     [Tags]  Smoke
     Create An Asset Type    TestAssetType
     Verify Creation Of An Asset Type    TestAssetType
+    [Teardown]  Delete Asset Type  TestAssetType
 
 Create Asset And Verify Creation
     [Tags]  Smoke

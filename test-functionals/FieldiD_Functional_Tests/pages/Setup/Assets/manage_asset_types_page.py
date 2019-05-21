@@ -5,7 +5,8 @@ class ManageAssetTypesPage(PageObject):
 
     _locators = {
         "add_button": "xpath=//a[@href='./assetTypeForm']",
-        "back_to_setup_button": "xpath=//a[@href='./assetsEvents']"
+        "back_to_setup_button": "xpath=//a[@href='./assetsEvents']",
+        "asset_type_link": "link:%s"
     }
 
     def _is_current_page(self):
@@ -18,3 +19,7 @@ class ManageAssetTypesPage(PageObject):
     def click_add_button(self):
         self.se2lib.wait_until_element_is_visible(self.locator.add_button)
         self.se2lib.click_element(self.locator.add_button)
+        
+    def click_asset_type_link(self, assetTypeName):
+        self.se2lib.wait_until_element_is_visible(self.locator.asset_type_link % assetTypeName)
+        self.se2lib.click_element(self.locator.asset_type_link % assetTypeName)
