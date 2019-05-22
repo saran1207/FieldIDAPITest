@@ -1,4 +1,5 @@
 *** Settings ***
+Documentation     This test suite verifies the functionailty of the Asset Type Group
 
 Resource        ${CURDIR}/../../../resources/Login/Login.robot
 Resource        ${CURDIR}/../../../resources/Setup/Assets/assets.robot

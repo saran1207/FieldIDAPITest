@@ -1,4 +1,5 @@
 *** Settings ***
+Documentation     This test suite verifies the functionailty of the Login
 
 Resource        ${CURDIR}/../../resources/Common/common.robot
 Resource        ${CURDIR}/../../resources/Login/Login.robot

@@ -1,4 +1,6 @@
 *** Settings ***
+Documentation     This test suite verifies the functionailty of the Schedules
+
 Resource        ${CURDIR}/../../resources/Login/Login.robot
 Resource        ${CURDIR}/../../resources/Dashboard/dashboard.robot
 Resource        ${CURDIR}/../../resources/Setup/Assets/assets.robot

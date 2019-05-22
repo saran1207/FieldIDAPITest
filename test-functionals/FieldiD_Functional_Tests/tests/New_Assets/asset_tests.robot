@@ -1,4 +1,6 @@
 *** Settings ***
+Documentation     This test suite verifies the functionailty of the Assets
+
 Resource        ${CURDIR}/../../resources/Common/common.robot
 Resource        ${CURDIR}/../../resources/Login/Login.robot
 Resource        ${CURDIR}/../../resources/Dashboard/dashboard.robot
