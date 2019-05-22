@@ -22,6 +22,7 @@ ${ASSETTYPE2}       Weekly
 ${ASSETTYPE3}       Daily
 ${ASSETTYPE4}       Score Test
 ${ASSETTYPE5}       Asset Type 1
+${ASSETTYPE6}       Asset Type 2
 ${OWNER1}           Test Automation
 ${OWNER2}           Level1
 
@@ -38,6 +39,16 @@ Create Asset And Go To Asset Summary Page
     Go To New Asset From Dashboard
     Create An Asset     ${SERIAL_NUMBER}   ${EMPTY}    ${ASSETTYPE}  ${OWNER}
     Go To Asset View Page      ${SERIAL_NUMBER}
+    
+Go To Asset Type And Schedule Recurring Event
+    Go To Schedules Tab Of An Asset Type  ${ASSETTYPE6}
+    Schedule Recurring Event  Blank Event
+    
+Remove All Schedules
+    [Arguments]  ${ASSETTYPE}
+    Go To Schedules Tab Of An Asset Type  ${ASSETTYPE}
+    Click Remove Schedule Link Till Present
+    
        
 *** Test Cases ***
 Verify Event Triggers On Asset Creation
@@ -164,3 +175,18 @@ Verify Recurring Schedule For Only Selected Owners On Asset Creation
     ${schedule1}  Get Schedule    1
     Should Contain   ${schedule1}  Blank Event
     Should Contain   ${schedule1}  Today on ${newSchedule1}
+    
+Remove Recurring Schedules And verify That Schedules Are Deleted
+    [Tags]  C2048
+    [Setup]  Go To Asset Type And Schedule Recurring Event
+    Create Asset And Go To Asset Summary Page  ${ASSETTYPE6}
+    ${assetId} =  Get AssetId
+    The Current Page Should Be    AssetSummaryPage
+    ${schedule1}  Get Schedule    1
+    Should Contain   ${schedule1}  Blank Event
+    Go To Schedules Tab Of An Asset Type  ${ASSETTYPE6}
+    Click Remove Schedule Link
+    Go To Asset View Page      ${assetId}
+    The Current Page Should Be    AssetSummaryPage
+    Page Should Contain  No upcoming or overdue schedules
+    [Teardown]  Remove All Schedules  ${ASSETTYPE6}   

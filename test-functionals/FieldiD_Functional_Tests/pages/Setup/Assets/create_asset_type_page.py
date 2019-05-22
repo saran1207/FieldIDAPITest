@@ -11,7 +11,8 @@ class CreateAssetTypePage(PageObject):
         "asset_group_dropdown":  "xpath=//select[@name='group']/../div/a",
         "asset_group_list": "//ul[@class='chzn-results']",
         "asset_group": "//ul[@class='chzn-results']/li[text()='%s']",
-        "delete_button": "link:Delete"
+        "delete_button": "link:Delete",
+        "schedules_link": "link:Schedules"
         
     }
 
@@ -33,6 +34,10 @@ class CreateAssetTypePage(PageObject):
     def click_delete_asset_type_button(self):
         self.se2lib.wait_until_element_is_visible(self.locator.delete_button)
         self.se2lib.click_element(self.locator.delete_button)
+        
+    def click_schedules_link(self):
+        self.se2lib.wait_until_element_is_visible(self.locator.schedules_link)
+        self.se2lib.click_element(self.locator.schedules_link)
         
     def select_asset_group_dropdown(self, asset_group):
         if  asset_group != "":

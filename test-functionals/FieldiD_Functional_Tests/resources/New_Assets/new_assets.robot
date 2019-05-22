@@ -5,6 +5,8 @@ Library         New_Assets.create_asset_page.CreateAssetPage        WITH NAME   
 Library         Search.search_page.SearchPage       WITH NAME       SearchPage
 Library         Setup.Assets.new_asset_with_order_page.NewAssetWithOrderPage     WITH NAME       NewAddWithOrderPage
 Library         Setup.Assets.view_asset_types_group_page.ViewAssetTypeGroupPage      WITH NAME       ViewAssetTypeGroupPage
+Library         Setup.Assets.manage_asset_types_page.ManageAssetTypesPage      WITH NAME       ManageAssetTypesPage
+Library         Setup.Assets.asset_type_schedules_page.AssetTypeSchedulesPage      WITH NAME       AssetTypeSchedulesPage
 Library         New_Assets.quick_event_page.QuickEventPage      WITH NAME       QuickEventPage
 Library         New_Assets.asset_summary_page.AssetSummaryPage      WITH NAME       AssetSummaryPage
 Library         New_Assets.asset_events_page.AssetEventsPage      WITH NAME       AssetEventsPage 
@@ -48,6 +50,10 @@ View Latest Completed Event
     Click View Button
     The Current Page Should Be  ThingEventSummaryPage
     
-    
-
-    
+Go To Schedules Tab Of An Asset Type
+    [Arguments]  ${assetTypeName}
+    Go To Page  ManageAssetTypesPage
+    Click Asset Type Link    ${assetTypeName}
+    The Current Page Should Be    CreateAssetTypePage
+    Click Schedules Link  
+    The Current Page Should Be    AssetTypeSchedulesPage
