@@ -11,6 +11,8 @@ Library         Setup.Assets.new_asset_with_order_page.NewAssetWithOrderPage    
 Library         Setup.Assets.edit_asset_type_group_page.EditAssetTypeGroupPage      WITH NAME       EditAssetTypeGroupPage
 Library         Setup.Assets.delete_asset_types_groups_page.DeleteAssetTypeGroupPage      WITH NAME       DeletedAssetTypeGroupPage
 Library         Setup.Assets.view_asset_types_group_page.ViewAssetTypeGroupPage      WITH NAME       ViewAssetTypeGroupPage
+Library         Setup.Assets.delete_asset_type_page.DeleteAssetTypePage    WITH NAME       DeleteAssetTypePage
+Library         Setup.Assets.asset_type_schedules_page.AssetTypeSchedulesPage    WITH NAME       AssetTypeSchedulesPage
 Library         String
 
 
@@ -18,6 +20,18 @@ Library         String
 *** Variables ***
 
 *** Keywords ***
+
+Delete Asset Type
+    [Arguments]  ${ASSET_TYPE_NAME}
+    Go To Page    ManageAssetTypesPage
+    Click Asset Type Link    ${ASSET_TYPE_NAME}
+    The Current Page Should Be    CreateAssetTypePage
+    Click Delete Asset Type Button
+    Wait Until Page Contains  Removal Details
+    The Current Page Should Be    DeleteAssetTypePage
+    Input Type Delete    DELETE
+    Click Confirm Delete Asset Type Button 
+    
 Create An Asset Type
     [Arguments]     ${ASSET_TYPE_NAME}  ${ASSET_TYPE_GROUP}=${EMPTY}
     Go To Page      ManageAssetTypesPage
@@ -85,3 +99,10 @@ Get Asset Group Id
     ${url}    Get Element Attribute    ${link}    attribute=href
     ${groupId}    Fetch From Right    ${url}    =
     [return]    ${groupId}
+    
+Schedule Recurring Event
+    [Arguments]  ${eventType}
+    Click Create New Rule Button
+    Click Recurring Link
+    Select Recurring Event Type Dropdown  ${eventType}
+    Click Create Recurring Event Button

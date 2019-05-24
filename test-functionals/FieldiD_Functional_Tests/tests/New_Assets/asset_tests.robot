@@ -1,4 +1,6 @@
 *** Settings ***
+Documentation     This test suite verifies the functionailty of the Assets
+
 Resource        ${CURDIR}/../../resources/Common/common.robot
 Resource        ${CURDIR}/../../resources/Login/Login.robot
 Resource        ${CURDIR}/../../resources/Dashboard/dashboard.robot
@@ -35,6 +37,7 @@ Create Asset Type And Verify Creation
     [Tags]  Smoke
     Create An Asset Type    TestAssetType
     Verify Creation Of An Asset Type    TestAssetType
+    [Teardown]  Delete Asset Type  TestAssetType
 
 Create Asset And Verify Creation
     [Tags]  Smoke

@@ -1,4 +1,6 @@
 *** Settings ***
+Documentation     This test suite verifies the functionailty of the Schedules
+
 Resource        ${CURDIR}/../../resources/Login/Login.robot
 Resource        ${CURDIR}/../../resources/Dashboard/dashboard.robot
 Resource        ${CURDIR}/../../resources/Setup/Assets/assets.robot
@@ -20,6 +22,11 @@ ${ASSETTYPE1}       Fire Extinguisher
 ${ASSET}            Event Trigger Asset
 ${ASSETTYPE2}       Weekly
 ${ASSETTYPE3}       Daily
+${ASSETTYPE4}       Score Test
+${ASSETTYPE5}       Asset Type 1
+${ASSETTYPE6}       Asset Type 2
+${OWNER1}           Test Automation
+${OWNER2}           Level1
 
 *** Keywords ***
 Add Days To A Date
@@ -29,11 +36,21 @@ Add Days To A Date
     [Return]  ${newdatetime}
     
 Create Asset And Go To Asset Summary Page
-    [Arguments]  ${ASSETTYPE}
-    ${SERIAL_NUMBER}    Generate Random String  5
+    [Arguments]  ${ASSETTYPE}  ${OWNER}=${EMPTY}
+    ${SERIAL_NUMBER}    Generate Random String  6
     Go To New Asset From Dashboard
-    Create An Asset     ${SERIAL_NUMBER}   ${EMPTY}    ${ASSETTYPE}
+    Create An Asset     ${SERIAL_NUMBER}   ${EMPTY}    ${ASSETTYPE}  ${OWNER}
     Go To Asset View Page      ${SERIAL_NUMBER}
+    
+Go To Asset Type And Schedule Recurring Event
+    Go To Schedules Tab Of An Asset Type  ${ASSETTYPE6}
+    Schedule Recurring Event  Blank Event
+    
+Remove All Schedules
+    [Arguments]  ${ASSETTYPE}
+    Go To Schedules Tab Of An Asset Type  ${ASSETTYPE}
+    Click Remove Schedule Link Till Present
+    
        
 *** Test Cases ***
 Verify Event Triggers On Asset Creation
@@ -134,3 +151,44 @@ Verify Daily Recurring Schedule On Asset Creation
     Page Should Contain   ${newSchedule9}
     ${newSchedule10} =  Add Time To Date  ${currentDate}  9 days  result_format=%m/%d/%y
     Page Should Contain   ${newSchedule10} 
+    
+Verify Event Triggers For Only Selected Owners On Asset Creation
+    [Tags]  C2048
+    Create Asset And Go To Asset Summary Page  ${ASSETTYPE4}  ${OWNER1}
+    The Current Page Should Be    AssetSummaryPage
+    Page Should Contain  No upcoming or overdue schedules
+    Create Asset And Go To Asset Summary Page  ${ASSETTYPE4}  ${OWNER2}
+    The Current Page Should Be    AssetSummaryPage
+    ${currentDate}  Get Current Date    
+    ${newdatetime1} =  Add Time To Date  ${currentDate}  45 days  result_format=%m/%d/%y
+    ${schedule1}  Get Schedule    1
+    Should Contain   ${schedule1}  Blank Event
+    Should Contain   ${schedule1}  In 45 Days on ${newdatetime1}
+    
+Verify Recurring Schedule For Only Selected Owners On Asset Creation
+    [Tags]  C1991
+    Create Asset And Go To Asset Summary Page  ${ASSETTYPE5}  ${OWNER1}
+    The Current Page Should Be    AssetSummaryPage
+    Page Should Contain  No upcoming or overdue schedules
+    Create Asset And Go To Asset Summary Page  ${ASSETTYPE5}  ${OWNER2}
+    The Current Page Should Be    AssetSummaryPage
+     ${currentDate}  Get Current Date
+    ${newSchedule1} =  Convert Date  ${currentDate}  result_format=%m/%d/%y
+    ${schedule1}  Get Schedule    1
+    Should Contain   ${schedule1}  Blank Event
+    Should Contain   ${schedule1}  Today on ${newSchedule1}
+    
+Remove Recurring Schedules And verify That Schedules Are Deleted
+    [Tags]  C2048
+    [Setup]  Go To Asset Type And Schedule Recurring Event
+    Create Asset And Go To Asset Summary Page  ${ASSETTYPE6}
+    ${assetId} =  Get AssetId
+    The Current Page Should Be    AssetSummaryPage
+    ${schedule1}  Get Schedule    1
+    Should Contain   ${schedule1}  Blank Event
+    Go To Schedules Tab Of An Asset Type  ${ASSETTYPE6}
+    Click Remove Schedule Link
+    Go To Asset View Page      ${assetId}
+    The Current Page Should Be    AssetSummaryPage
+    Page Should Contain  No upcoming or overdue schedules
+    [Teardown]  Remove All Schedules  ${ASSETTYPE6}   

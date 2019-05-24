@@ -1,4 +1,7 @@
 *** Settings ***
+Documentation     This test suite verifies the functionailty of the Events
+
+
 Resource        ${CURDIR}/../../resources/Login/Login.robot
 Resource        ${CURDIR}/../../resources/Setup/Assets/assets.robot
 Resource        ${CURDIR}/../../resources/Dashboard/dashboard.robot

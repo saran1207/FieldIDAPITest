@@ -1,4 +1,5 @@
 *** Settings ***
+Documentation     This test suite verifies the functionailty of the Asset Type Group
 
 Resource        ${CURDIR}/../../../resources/Login/Login.robot
 Resource        ${CURDIR}/../../../resources/Setup/Assets/assets.robot
@@ -53,7 +54,7 @@ Delete An Asset Type Group
     The Current Page Should Be    DeleteAssetTypeGroupPage
     Delete Asset Type Group
     Verify Deletion Of An Asset Type Group       ${ASSET_TYPE_GROUP_NAME}
-     
+
 *** Test Cases ***
 Create Asset Type Group With No Name Test
     [Tags]    C1843  C1709
@@ -103,6 +104,7 @@ Deleted Asset Type Group With 1 Asset Type Test
     Page Should Contain   Saved reports and searches to be deleted
     Delete Asset Type Group
     Verify Deletion Of An Asset Type Group       ${assetGroup}
+    [Teardown]  Delete Asset Type  ${assetType}
     
 Create Asset Type From Asset Type Group Test
     [Tags]  C1723  	C1724  
@@ -142,4 +144,3 @@ List View for Asset Types Groups Test
     Should Contain   ${createdOnDate}  ${currentDateTime}  
     Should Be Equal   ${modifiedByUsername}   ${USERFULLNAME} 
     Should Contain    ${modifiedOnDate}  ${currentDateTime}
-    [Teardown]  Delete An Asset Type Group       ${assetGroup}

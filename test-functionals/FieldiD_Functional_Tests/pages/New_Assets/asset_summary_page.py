@@ -8,7 +8,8 @@ class AssetSummaryPage(PageObject):
         "start_event_link": "name:startEventLink",
         "summary_button":  "name:summaryLink",
         "schedules_list": "//div[@name='upcomingEventsList'][%s]",
-        "schedules_event_start": "//div[@name='upcomingEventsList'][%s]//div[@class='_defaultActionButtonContainer']/a[1]"
+        "schedules_event_start": "//div[@name='upcomingEventsList'][%s]//div[@class='_defaultActionButtonContainer']/a[1]",
+        "asset_id_label": "name:assetId"
     }
 
     def _is_current_page(self):
@@ -32,6 +33,10 @@ class AssetSummaryPage(PageObject):
     def get_schedule(self, listNum):
         self.se2lib.wait_until_element_is_visible(self.locator.schedules_list % listNum)
         return self.se2lib.get_text(self.locator.schedules_list % listNum)
+    
+    def get_assetId(self):
+        self.se2lib.wait_until_element_is_visible(self.locator.asset_id_label)
+        return self.se2lib.get_text(self.locator.asset_id_label)
     
     def start_scheduled_event(self, listNum):
         self.se2lib.wait_until_element_is_visible(self.locator.schedules_event_start % listNum)
