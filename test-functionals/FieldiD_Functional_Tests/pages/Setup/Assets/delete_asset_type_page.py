@@ -4,7 +4,6 @@ class DeleteAssetTypePage(PageObject):
     PAGE_URL = "assetTypeDelete"
     
     _locators = {
-        "asset_types_details": "xpath=//ul[@class='list-table']/li[@class='infoSet'][1]",
         "type_delete_field": "//input[@name='confirmationField']",
         "delete_button": "//input[@value='Delete']"
     }
