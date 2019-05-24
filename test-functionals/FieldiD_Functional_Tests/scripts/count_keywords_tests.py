@@ -34,16 +34,16 @@ def indent(elem, level=0):
       elem.tail = i
 
 def print_suite(suite):
-    print 'Suite:', suite.name
+    print ('Suite:', suite.name)
     for test in suite.testcase_table:
-        print '-', test.name
+        print ('-', test.name)
     for keyword in suite.keyword_table:
-        print '-', keyword.name
+        print ('-', keyword.name)
     for child in suite.children:
         print_suite(child)
-    print len(suite.keyword_table.keywords), 'keywords'
-    print len(suite.testcase_table.tests), 'tests'
-    print'##############################################'
+    print (len(suite.keyword_table.keywords), 'keywords')
+    print (len(suite.testcase_table.tests), 'tests')
+    print('##############################################')
 
 def print_xml_resource(suite,root):
     testsuite = ET.SubElement(root, "suite", name=str(suite.name), keywords=str(len(suite.keyword_table.keywords)))
@@ -72,7 +72,7 @@ def parse_resource_files(root):
         for name in files:
             if fnmatch(name, pattern):
                 absPath = os.path.join(path, name)
-                print absPath
+                print (absPath)
                 suite = ResourceFile(source='%s' % absPath).populate()
                 print_suite(suite)
                 # print xml suite
@@ -91,7 +91,7 @@ def parse_test_files(root):
         for name in files:
             if fnmatch(name, pattern):
                 absPath = os.path.join(path, name)
-                print absPath
+                print (absPath)
                 suite = TestCaseFile(source='%s' % absPath).populate()
                 print_suite(suite)
                 # print xml suite
@@ -108,8 +108,8 @@ def main():
     os.chdir(cwd)
     test_keywords, tests = parse_test_files(root)
     total_keywords = resource_keywords + test_keywords
-    print "total # keywords:", resource_keywords + test_keywords
-    print "total # tests:", tests
+    print ("total # keywords:", resource_keywords + test_keywords)
+    print ("total # tests:", tests)
 
     tree = ET.ElementTree(root)
     root.set('tests', str(tests))
