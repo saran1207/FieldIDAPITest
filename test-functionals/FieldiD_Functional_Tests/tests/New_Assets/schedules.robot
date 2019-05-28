@@ -187,7 +187,7 @@ Remove Recurring Schedules And verify That Schedules Are Deleted
     ${schedule1}  Get Schedule    1
     Should Contain   ${schedule1}  Blank Event
     Go To Schedules Tab Of An Asset Type  ${ASSETTYPE6}
-    Click Remove Schedule Link
+    Remove All Schedules  ${ASSETTYPE6}
     Go To Asset View Page      ${assetId}
     The Current Page Should Be    AssetSummaryPage
     Page Should Contain  No upcoming or overdue schedules
