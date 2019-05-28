@@ -31,5 +31,5 @@ Create Asset And Verify Creation
     [Tags]  Smoke
     ${SERIAL_NUMBER}    Generate Random String  5
     Go To New Asset From Dashboard
-    Create An Asset     ${SERIAL_NUMBER}   TEST123
+    Create An Asset     ${SERIAL_NUMBER}   TEST123  Fire Extinguisher
     Verify Creation Of An Asset     ${SERIAL_NUMBER}    
