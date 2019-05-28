@@ -78,6 +78,7 @@ class CreateAssetPage(PageObject):
              self.se2lib.click_element(self.locator.attribute_select_box % row)
              self.se2lib.wait_until_element_is_visible(self.locator.attribute_select_box_value % (row,value))
              self.se2lib.click_element(self.locator.attribute_select_box_value % (row,value) )
+             self.se2lib.click_element(self.locator.identify_assets_label)
                         
     def select_combo_box_value(self, value, row):
          if value != "":
@@ -86,6 +87,7 @@ class CreateAssetPage(PageObject):
             self.se2lib.click_element(self.locator.attribute_combo_box % row)
             self.se2lib.wait_until_element_is_visible(self.locator.attribute_combo_box_value % (row,value))
             self.se2lib.click_element(self.locator.attribute_combo_box_value % (row,value) )
+            self.se2lib.click_element(self.locator.identify_assets_label)
                        
     def input_unit_of_measure(self, value, row):
          if value != "":
