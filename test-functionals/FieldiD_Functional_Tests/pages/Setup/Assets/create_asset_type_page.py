@@ -12,7 +12,14 @@ class CreateAssetTypePage(PageObject):
         "asset_group_list": "//ul[@class='chzn-results']",
         "asset_group": "//ul[@class='chzn-results']/li[text()='%s']",
         "delete_button": "link:Delete",
-        "schedules_link": "link:Schedules"
+        "schedules_link": "link:Schedules",
+        "add_attribute_button": "//span[text()='Add Attribute']",
+        "attribute_name_textbox": "//input[@name='attributes:existingAttributesContainer:existingAttributes:%s:attributeName']",
+        "attribute_datatype_dropdown": "//select[@name='attributes:existingAttributesContainer:existingAttributes:%s:attributeType']/..",
+        "attribute_datatype_value": "(//li[text()='%s'])[%s]",
+        "select_combo_box_textbox": "//input[@name='attributes:existingAttributesContainer:existingAttributes:%s:selectOptions']",
+        "select_unit_of_measure_dropdown": "//select[@name='attributes:existingAttributesContainer:existingAttributes:%s:unitOfMeasureChoice']/..",
+        "unit_of_measure_value": "//li[text()='%s']"
         
     }
 
@@ -56,3 +63,35 @@ class CreateAssetTypePage(PageObject):
         for item in asset_group:
               asset_group_list.append(item.text)
         return asset_group_list
+            
+    def click_add_attribute_button(self):
+        self.se2lib.wait_until_element_is_visible(self.locator.add_attribute_button)
+        self.se2lib.click_element(self.locator.add_attribute_button)
+        
+    def input_attribute_name(self, attributeName, row):
+        row=int(row)-1
+        self.se2lib.wait_until_element_is_visible(self.locator.attribute_name_textbox % row)
+        self.se2lib.input_text(self.locator.attribute_name_textbox % row, attributeName)
+        
+    def select_attribute_datatype_dropdown(self, datatype, row):
+        if  datatype != "":
+            row=int(row)-1
+            self.se2lib.wait_until_element_is_visible(self.locator.attribute_datatype_dropdown % row)
+            self.se2lib.click_element(self.locator.attribute_datatype_dropdown % row)
+            row=int(row)+1
+            self.se2lib.wait_until_element_is_visible(self.locator.attribute_datatype_value % (datatype, row)) 
+            self.se2lib.click_element(self.locator.attribute_datatype_value % (datatype, row))
+            
+    def input_select_comb_box_values(self, value, row):
+        row=int(row)-1
+        self.se2lib.wait_until_element_is_visible(self.locator.select_combo_box_textbox % row)
+        self.se2lib.input_text(self.locator.select_combo_box_textbox % row, value)
+        
+    def select_unit_of_measure_dropdown(self, unit, row):
+        if  unit != "":
+            row=int(row)-1
+            self.se2lib.wait_until_element_is_visible(self.locator.select_unit_of_measure_dropdown % row)
+            self.se2lib.click_element(self.locator.select_unit_of_measure_dropdown % row)
+            row=int(row)+1
+            self.se2lib.wait_until_element_is_visible(self.locator.unit_of_measure_value % unit) 
+            self.se2lib.click_element(self.locator.unit_of_measure_value % unit)

@@ -17,12 +17,6 @@ ${USERNAME}         testauto
 ${PASSWORD}         temp123
 
 *** Keywords ***
-Verify Creation Of An Asset Type
-    [Arguments]     ${ASSET_TYPE_NAME}
-    Go To Page      ManageAssetTypesPage
-    The Current Page Should Be      ManageAssetTypesPage
-    Page Should Contain     ${ASSET_TYPE_NAME}
-    
 Verify Creation Of An Asset
     [Arguments]     ${SERIAL_NUMBER}
     Go To Page      SearchPage
@@ -33,12 +27,6 @@ Verify Creation Of An Asset
     Wait Until Page Contains       ${currentDateTime}
    
 *** Test Cases ***
-Create Asset Type And Verify Creation
-    [Tags]  Smoke
-    Create An Asset Type    TestAssetType
-    Verify Creation Of An Asset Type    TestAssetType
-    [Teardown]  Delete Asset Type  TestAssetType
-
 Create Asset And Verify Creation
     [Tags]  Smoke
     ${SERIAL_NUMBER}    Generate Random String  5
