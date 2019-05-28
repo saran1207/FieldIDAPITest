@@ -10,6 +10,8 @@ Library           DateTime
 Library         Setup.Assets.new_asset_with_order_page.NewAssetWithOrderPage     WITH NAME       NewAddWithOrderPage
 Library         Setup.Assets.create_asset_type_page.CreateAssetTypePage      WITH NAME       CreateAssetTypePage
 Library         New_Assets.create_asset_page.CreateAssetPage        WITH NAME       CreateAssetPage
+Library         Setup.Assets.event_type_assocation_page.EventTypeAssocationPage    WITH NAME       EventTypeAssocationPage
+Library         New_Assets.quick_event_page.QuickEventPage      WITH NAME       QuickEventPage
 Suite Setup     Login To Field Id Page      ${USERNAME}      ${PASSWORD}
 Suite Teardown  Logout Of Field Id
 
@@ -87,4 +89,22 @@ Create Asset Type With Attributes And Verify In New Asset
     Page should Contain   combo Option1
     Page should Contain   5 in
     Page should Contain   05/01/19
+    [Teardown]  Delete Asset Type  ${assetType}
+    
+Verify Event Type Association For An Asset Type
+    [Tags]  C1981
+    ${assetType}    Generate Random String  5
+    Create An Asset Type  ${assetType}
+    Go To Events Tab Of An Asset Type  ${assetType}
+    The Current Page Should Be    EventTypeAssocationPage
+    Click Event Type Checkbox    Blank Event
+    Click Save Eventtype Association Button
+    ${SERIAL_NUMBER}    Generate Random String  5
+    Go To New Asset From Dashboard
+    Create An Asset     ${SERIAL_NUMBER}   ${EMPTY}  ${assetType}
+    Go To Asset View Page  ${SERIAL_NUMBER}
+    The Current Page Should Be    AssetSummaryPage
+    Click Start Event Link
+    The Current Page Should be  QuickEventPage
+    Page Should Contain  Blank Event
     [Teardown]  Delete Asset Type  ${assetType}

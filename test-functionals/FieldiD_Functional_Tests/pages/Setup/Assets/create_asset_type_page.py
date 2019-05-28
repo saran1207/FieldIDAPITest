@@ -13,6 +13,7 @@ class CreateAssetTypePage(PageObject):
         "asset_group": "//ul[@class='chzn-results']/li[text()='%s']",
         "delete_button": "link:Delete",
         "schedules_link": "link:Schedules",
+        "event_type_associations_link": "link:Event Type Associations",
         "add_attribute_button": "//span[text()='Add Attribute']",
         "attribute_name_textbox": "//input[@name='attributes:existingAttributesContainer:existingAttributes:%s:attributeName']",
         "attribute_datatype_dropdown": "//select[@name='attributes:existingAttributesContainer:existingAttributes:%s:attributeType']/..",
@@ -45,6 +46,10 @@ class CreateAssetTypePage(PageObject):
     def click_schedules_link(self):
         self.se2lib.wait_until_element_is_visible(self.locator.schedules_link)
         self.se2lib.click_element(self.locator.schedules_link)
+        
+    def click_event_type_associations_link(self):
+        self.se2lib.wait_until_element_is_visible(self.locator.event_type_associations_link)
+        self.se2lib.click_element(self.locator.event_type_associations_link)
         
     def select_asset_group_dropdown(self, asset_group):
         if  asset_group != "":

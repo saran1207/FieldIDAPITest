@@ -49,11 +49,3 @@ View Latest Completed Event
     The Current Page Should Be  AssetEventsPage
     Click View Button
     The Current Page Should Be  ThingEventSummaryPage
-    
-Go To Schedules Tab Of An Asset Type
-    [Arguments]  ${assetTypeName}
-    Go To Page  ManageAssetTypesPage
-    Click Asset Type Link    ${assetTypeName}
-    The Current Page Should Be    CreateAssetTypePage
-    Click Schedules Link  
-    The Current Page Should Be    AssetTypeSchedulesPage
