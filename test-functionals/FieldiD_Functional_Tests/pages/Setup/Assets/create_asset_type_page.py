@@ -20,7 +20,9 @@ class CreateAssetTypePage(PageObject):
         "attribute_datatype_value": "(//li[text()='%s'])[%s]",
         "select_combo_box_textbox": "//input[@name='attributes:existingAttributesContainer:existingAttributes:%s:selectOptions']",
         "select_unit_of_measure_dropdown": "//select[@name='attributes:existingAttributesContainer:existingAttributes:%s:unitOfMeasureChoice']/..",
-        "unit_of_measure_value": "//li[text()='%s']"
+        "unit_of_measure_value": "//li[text()='%s']",
+        "more_information_link": "link:More Information",
+        "allow_assset_linking_checkbox": "name: moreInfo:linkable"
         
     }
 
@@ -100,3 +102,11 @@ class CreateAssetTypePage(PageObject):
             row=int(row)+1
             self.se2lib.wait_until_element_is_visible(self.locator.unit_of_measure_value % unit) 
             self.se2lib.click_element(self.locator.unit_of_measure_value % unit)
+            
+    def click_more_information_link(self):
+        self.se2lib.wait_until_element_is_visible(self.locator.more_information_link)
+        self.se2lib.click_element(self.locator.more_information_link)
+        
+    def click_allow_assset_linking_checkbox(self):
+        self.se2lib.wait_until_element_is_visible(self.locator.allow_assset_linking_checkbox)
+        self.se2lib.click_element(self.locator.allow_assset_linking_checkbox)

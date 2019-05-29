@@ -123,3 +123,12 @@ Go To Events Tab Of An Asset Type
     The Current Page Should Be    CreateAssetTypePage
     Click Event Type Associations Link
     The Current Page Should Be    EventTypeAssocationPage
+    
+Allow Asset Linking For Asset Type
+    [Arguments]  ${assetTypeName}
+    Go To Page  ManageAssetTypesPage
+    Click Asset Type Link    ${assetTypeName}
+    The Current Page Should Be    CreateAssetTypePage
+    Click More Information Link
+    Click Allow Assset Linking Checkbox
+    Click Save Button
