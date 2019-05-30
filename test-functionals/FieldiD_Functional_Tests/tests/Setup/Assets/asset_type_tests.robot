@@ -5,6 +5,7 @@ Resource        ${CURDIR}/../../../resources/Login/Login.robot
 Resource        ${CURDIR}/../../../resources/Setup/Assets/assets.robot
 Resource        ${CURDIR}/../../../resources/Dashboard/dashboard.robot
 Resource        ${CURDIR}/../../../resources/New_Assets/new_assets.robot
+Resource        ${CURDIR}/../../../resources/Search/search_assets.robot
 Library     Selenium2Library
 Library           String
 Library           DateTime
@@ -20,7 +21,7 @@ Suite Teardown  Logout Of Field Id
 
 *** Variables ***
 ${USERNAME}         testauto       
-${PASSWORD}         temp123
+${PASSWORD}         temp123 
 ${USERFULLNAME}     Test Automation
 
 *** Keywords ***
@@ -140,3 +141,29 @@ Verify Allow Asset Linking
      The Current Page Should Be    AssetSummaryPage
      Page Should Contain  ${SERIAL_NUMBER2}
      [Teardown]  Delete Asset Type  ${assetType}
+     
+Verify Description Template
+    [Tags]  C1946
+    ${assetType}    Generate Random String  5
+    Create An Asset Type  ${assetType}
+    The Current Page Should Be  ManageAssetTypesPage
+    Click Asset Type Link    ${assetType}
+    The Current Page Should Be    CreateAssetTypePage
+    Click Add Attribute Button
+    Input Attribute Name    Text Field    1
+    Select Attribute Datatype Dropdown    Text Field  1
+    Input Description Template    Testing the description template with {Identifier}, {RFID} and {Text Field} field
+    Click Save Button
+    ${SERIAL_NUMBER}    Generate Random String  5
+    ${RFID_NUMBER}    Generate Random String  5
+    Go To Page   CreateAssetPage
+    The Current Page Should Be      CreateAssetPage
+    Select Asset Type  ${assetType}
+    Input Asset Serial Number       ${SERIAL_NUMBER}
+    Input Rfid Number       ${RFID_NUMBER}
+    Input Text Field Attribute    Custom Attribute    1
+    Click Save Button
+    Search For Asset Using Identifiers  ${SERIAL_NUMBER}
+    Select Description Column
+    Page Should Contain  Testing the description template with ${SERIAL_NUMBER}, ${RFID_NUMBER} and Custom Attribute field
+    [Teardown]  Delete Asset Type  ${assetType}
