@@ -12,6 +12,7 @@ Library         New_Assets.asset_events_page.AssetEventsPage      WITH NAME     
 Library         Menu.common_menu_bar.CommonMenuBar  WITH NAME  CommonMenuBar
 Library          DateTime
 Library           String
+Library     Selenium2Library
 Suite Setup     Login To Field Id Page      ${USERNAME}      ${PASSWORD}
 Suite Teardown  Logout Of Field Id
 
