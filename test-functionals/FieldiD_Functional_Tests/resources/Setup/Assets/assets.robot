@@ -21,6 +21,11 @@ Library         String
 *** Variables ***
 
 *** Keywords ***
+Verify Creation Of An Asset Type
+    [Arguments]     ${ASSET_TYPE_NAME}
+    Go To Page      ManageAssetTypesPage
+    The Current Page Should Be      ManageAssetTypesPage
+    Page Should Contain     ${ASSET_TYPE_NAME}
 
 Delete Asset Type
     [Arguments]  ${ASSET_TYPE_NAME}

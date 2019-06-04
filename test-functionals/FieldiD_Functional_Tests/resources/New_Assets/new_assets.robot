@@ -13,6 +13,7 @@ Library         New_Assets.asset_events_page.AssetEventsPage      WITH NAME     
 Library         New_Assets.perform_event_page.PerformEventPage      WITH NAME       PerformEventPage
 Library         New_Assets.thing_event_summary_page.ThingEventSummaryPage      WITH NAME       ThingEventSummaryPage
 Library         String
+Library          DateTime
 
 
 
@@ -49,3 +50,12 @@ View Latest Completed Event
     The Current Page Should Be  AssetEventsPage
     Click View Button
     The Current Page Should Be  ThingEventSummaryPage
+    
+Verify Creation Of An Asset
+    [Arguments]     ${SERIAL_NUMBER}
+    Go To Page      SearchPage
+    The Current Page Should Be      SearchPage
+    Input Serial Number         ${SERIAL_NUMBER}
+    Click Search Button
+    ${currentDateTime}  Get Current Date    result_format=%m/%d/%y
+    Wait Until Page Contains       ${currentDateTime}

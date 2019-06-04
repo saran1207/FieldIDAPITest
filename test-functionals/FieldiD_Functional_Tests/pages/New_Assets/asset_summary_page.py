@@ -50,7 +50,7 @@ class AssetSummaryPage(PageObject):
         self.se2lib.wait_until_element_is_visible(self.locator.link_new_asset_link)
         self.se2lib.click_element(self.locator.link_new_asset_link)
         
-    def input_linked_asset(self, assetName):
+    def input_and_select_linked_asset_name(self, assetName):
         self.se2lib.wait_until_element_is_visible(self.locator.link_asset_textbox)
         self.se2lib.input_text(self.locator.link_asset_textbox, assetName)
         self.se2lib.wait_until_element_is_visible(self.locator.link_assetname % assetName)

@@ -17,6 +17,7 @@ class CreateAssetTypePage(PageObject):
         "add_attribute_button": "//span[text()='Add Attribute']",
         "attribute_name_textbox": "//input[@name='attributes:existingAttributesContainer:existingAttributes:%s:attributeName']",
         "attribute_datatype_dropdown": "//select[@name='attributes:existingAttributesContainer:existingAttributes:%s:attributeType']/..",
+        "attribute_datatype_dropdown_field": "//select[@name='attributes:existingAttributesContainer:existingAttributes:%s:attributeType']/../div/a",
         "attribute_datatype_value": "(//li[text()='%s'])[%s]",
         "select_combo_box_textbox": "//input[@name='attributes:existingAttributesContainer:existingAttributes:%s:selectOptions']",
         "select_unit_of_measure_dropdown": "//select[@name='attributes:existingAttributesContainer:existingAttributes:%s:unitOfMeasureChoice']/..",
@@ -115,3 +116,13 @@ class CreateAssetTypePage(PageObject):
     def input_description_template(self, descriptionTemp):
         self.se2lib.wait_until_element_is_visible(self.locator.description_template_textbox)
         self.se2lib.input_text(self.locator.description_template_textbox, descriptionTemp)
+        
+          
+    def verify_if_input_attribute_is_present(self, attributeName, row):
+        row=int(row)-1
+        return len(self.se2lib.driver.find_elements_by_xpath(self.locator.attribute_name_textbox % row))>0 and self.se2lib.get_value(self.locator.attribute_name_textbox % row)==attributeName
+    
+    def verify_if_select_attribute_datatype_dropdown_is_present(self, datatype, row):
+        if  datatype != "":
+            row=int(row)-1
+            return self.se2lib.driver.find_elements_by_xpath(self.locator.attribute_datatype_dropdown % row) and self.se2lib.get_text(self.locator.attribute_datatype_dropdown_field % row)==datatype

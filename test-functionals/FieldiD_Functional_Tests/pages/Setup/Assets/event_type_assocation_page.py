@@ -22,3 +22,7 @@ class EventTypeAssocationPage(PageObject):
     def click_event_type_checkbox(self, eventTypeName):
         self.se2lib.wait_until_element_is_visible(self.locator.event_type_checkbox % eventTypeName)
         self.se2lib.click_element(self.locator.event_type_checkbox % eventTypeName)
+        
+    def verify_if_event_type_checkbox_is_checked(self, eventTypeName):
+        self.se2lib.wait_until_element_is_visible(self.locator.event_type_checkbox % eventTypeName)
+        return self.se2lib.driver.find_element_by_xpath(self.locator.event_type_checkbox % eventTypeName).get_attribute("checked")=='true'
