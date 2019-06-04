@@ -12,6 +12,7 @@ Library         New_Assets.asset_events_page.AssetEventsPage      WITH NAME     
 Library         Menu.common_menu_bar.CommonMenuBar  WITH NAME  CommonMenuBar
 Library          DateTime
 Library           String
+Library     Selenium2Library
 Suite Setup     Login To Field Id Page      ${USERNAME}      ${PASSWORD}
 Suite Teardown  Logout Of Field Id
 
@@ -187,7 +188,9 @@ Remove Recurring Schedules And verify That Schedules Are Deleted
     ${schedule1}  Get Schedule    1
     Should Contain   ${schedule1}  Blank Event
     Go To Schedules Tab Of An Asset Type  ${ASSETTYPE6}
+    Set Selenium Speed    0.5s
     Remove All Schedules  ${ASSETTYPE6}
+    Set Selenium Speed    0s
     Go To Asset View Page      ${assetId}
     The Current Page Should Be    AssetSummaryPage
     Page Should Contain  No upcoming or overdue schedules

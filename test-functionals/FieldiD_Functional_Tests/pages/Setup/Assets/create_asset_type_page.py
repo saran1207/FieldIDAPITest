@@ -22,7 +22,8 @@ class CreateAssetTypePage(PageObject):
         "select_unit_of_measure_dropdown": "//select[@name='attributes:existingAttributesContainer:existingAttributes:%s:unitOfMeasureChoice']/..",
         "unit_of_measure_value": "//li[text()='%s']",
         "more_information_link": "link:More Information",
-        "allow_assset_linking_checkbox": "name: moreInfo:linkable"
+        "allow_assset_linking_checkbox": "name: moreInfo:linkable",
+        "description_template_textbox": "//legend[text()='Description Template']/../div/input"
         
     }
 
@@ -110,3 +111,7 @@ class CreateAssetTypePage(PageObject):
     def click_allow_assset_linking_checkbox(self):
         self.se2lib.wait_until_element_is_visible(self.locator.allow_assset_linking_checkbox)
         self.se2lib.click_element(self.locator.allow_assset_linking_checkbox)
+        
+    def input_description_template(self, descriptionTemp):
+        self.se2lib.wait_until_element_is_visible(self.locator.description_template_textbox)
+        self.se2lib.input_text(self.locator.description_template_textbox, descriptionTemp)
