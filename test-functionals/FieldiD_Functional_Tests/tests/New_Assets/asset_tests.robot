@@ -49,7 +49,7 @@ Create Asset And Verify Creation
     Verify Creation Of An Asset     ${SERIAL_NUMBER}  
     
 Create Asset Type With Attributes And Verify
-    [Tags]  C1731  C1732
+    [Tags]  C1732
     ${SERIAL_NUMBER}    Generate Random String  5
     Go To New Asset From Dashboard
     The Current Page Should Be   NewAssetWithOrderPage

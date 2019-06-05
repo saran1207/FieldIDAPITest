@@ -79,7 +79,7 @@ Create Asset Type And Verify Creation
     [Teardown]  Delete Asset Type  TestAssetType
     
 Create Asset Type With Attributes And Verify In New Asset
-    [Tags]  C1731  C1732
+    [Tags]  C1731
     ${assetType}    Generate Random String  5
     Create An Asset Type With All Attributes    ${assetType}
     Verify Creation Of An Asset Type    ${assetType}
