@@ -13,6 +13,7 @@ Library         Setup.Assets.create_asset_type_page.CreateAssetTypePage      WIT
 Library         New_Assets.create_asset_page.CreateAssetPage        WITH NAME       CreateAssetPage
 Library         New_Assets.asset_summary_page.AssetSummaryPage        WITH NAME       AssetSummaryPage 
 Library         Setup.Assets.event_type_assocation_page.EventTypeAssocationPage    WITH NAME       EventTypeAssocationPage
+Library         Setup.Assets.manage_asset_types_page.ManageAssetTypesPage      WITH NAME       ManageAssetTypesPage
 Suite Setup     Login To Field Id Page      ${USERNAME}      ${PASSWORD}
 Suite Teardown  Logout Of Field Id
 
@@ -35,11 +36,11 @@ Create An Asset Type With All Attributes
     Click Add Attribute Button
     Input Attribute Name    Select Box   2
     Select Attribute Datatype Dropdown    Select Box   2
-    Input Select Comb Box Values    select Option1    2
+    Input Select Combo Box Values    select Option1    2
     Click Add Attribute Button
     Input Attribute Name    Combo Box   3
     Select Attribute Datatype Dropdown    Combo Box   3
-    Input Select Comb Box Values    combo Option1    3
+    Input Select Combo Box Values    combo Option1    3
     Click Add Attribute Button
     Input Attribute Name    Unit Of Measure   4
     Select Attribute Datatype Dropdown    Unit Of Measure   4
@@ -78,7 +79,7 @@ Create Asset Type And Verify Creation
     Verify Creation Of An Asset Type    TestAssetType
     [Teardown]  Delete Asset Type  TestAssetType
     
-Create Asset Type With Attributes And Verify In New Asset
+Create Asset Type With Attributes And Verify
     [Tags]  C1731
     ${assetType}    Generate Random String  5
     Create An Asset Type With All Attributes    ${assetType}

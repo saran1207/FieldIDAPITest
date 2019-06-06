@@ -91,7 +91,7 @@ class CreateAssetTypePage(PageObject):
             self.se2lib.wait_until_element_is_visible(self.locator.attribute_datatype_value % (datatype, row)) 
             self.se2lib.click_element(self.locator.attribute_datatype_value % (datatype, row))
             
-    def input_select_comb_box_values(self, value, row):
+    def input_select_combo_box_values(self, value, row):
         row=int(row)-1
         self.se2lib.wait_until_element_is_visible(self.locator.select_combo_box_textbox % row)
         self.se2lib.input_text(self.locator.select_combo_box_textbox % row, value)

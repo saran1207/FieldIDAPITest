@@ -13,6 +13,7 @@ Library         New_Assets.create_asset_page.CreateAssetPage        WITH NAME   
 Library         Menu.common_menu_bar.CommonMenuBar  WITH NAME  CommonMenuBar
 Library         Setup.Assets.create_asset_type_page.CreateAssetTypePage      WITH NAME       CreateAssetTypePage
 Library         New_Assets.asset_summary_page.AssetSummaryPage        WITH NAME       AssetSummaryPage 
+Library         Setup.Assets.manage_asset_types_page.ManageAssetTypesPage      WITH NAME       ManageAssetTypesPage
 Library          DateTime
 Library           String
 Library     Selenium2Library
@@ -32,14 +33,6 @@ Enter Attributes Value For Asset
     Input Unit Of Measure    5    4
     Input Date Field Attribute    05/01/19    5
     
-Link New Asset To An Asset
-    [Arguments]  ${assetToBeLinked}
-    Click Link New Asset Link
-    Set Selenium Speed    0.5s
-    Input And Select Linked Asset Name    ${assetToBeLinked}
-    Set Selenium Speed    0s
-    Click Add Linked Asset Button
-   
 *** Test Cases ***
 Create Asset And Verify Creation
     [Tags]  Smoke
@@ -48,7 +41,7 @@ Create Asset And Verify Creation
     Create An Asset     ${SERIAL_NUMBER}   TEST123  Fire Extinguisher
     Verify Creation Of An Asset     ${SERIAL_NUMBER}  
     
-Create Asset Type With Attributes And Verify
+Create Asset Type With Attributes And Verify In New Asset
     [Tags]  C1732
     ${SERIAL_NUMBER}    Generate Random String  5
     Go To New Asset From Dashboard

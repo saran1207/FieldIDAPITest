@@ -14,6 +14,7 @@ Library         New_Assets.perform_event_page.PerformEventPage      WITH NAME   
 Library         New_Assets.thing_event_summary_page.ThingEventSummaryPage      WITH NAME       ThingEventSummaryPage
 Library         String
 Library          DateTime
+Library     Selenium2Library
 
 
 
@@ -59,3 +60,11 @@ Verify Creation Of An Asset
     Click Search Button
     ${currentDateTime}  Get Current Date    result_format=%m/%d/%y
     Wait Until Page Contains       ${currentDateTime}
+    
+Link New Asset To An Asset
+    [Arguments]  ${assetToBeLinked}
+    Click Link New Asset Link
+    Set Selenium Speed    0.5s
+    Input And Select Linked Asset Name    ${assetToBeLinked}
+    Set Selenium Speed    0s
+    Click Add Linked Asset Button
