@@ -10,6 +10,7 @@ Library         New_Assets.asset_summary_page.AssetSummaryPage      WITH NAME   
 Library         New_Assets.thing_event_summary_page.ThingEventSummaryPage      WITH NAME       ThingEventSummaryPage
 Library         New_Assets.asset_events_page.AssetEventsPage      WITH NAME       AssetEventsPage
 Library         Menu.common_menu_bar.CommonMenuBar  WITH NAME  CommonMenuBar
+Library         Setup.Assets.asset_type_schedules_page.AssetTypeSchedulesPage     WITH NAME       AssetTypeSchedulesPage 
 Library          DateTime
 Library           String
 Library     Selenium2Library
@@ -187,7 +188,6 @@ Remove Recurring Schedules And verify That Schedules Are Deleted
     The Current Page Should Be    AssetSummaryPage
     ${schedule1}  Get Schedule    1
     Should Contain   ${schedule1}  Blank Event
-    Go To Schedules Tab Of An Asset Type  ${ASSETTYPE6}
     Set Selenium Speed    0.5s
     Remove All Schedules  ${ASSETTYPE6}
     Set Selenium Speed    0s
