@@ -12,7 +12,19 @@ class CreateAssetTypePage(PageObject):
         "asset_group_list": "//ul[@class='chzn-results']",
         "asset_group": "//ul[@class='chzn-results']/li[text()='%s']",
         "delete_button": "link:Delete",
-        "schedules_link": "link:Schedules"
+        "schedules_link": "link:Schedules",
+        "event_type_associations_link": "link:Event Type Associations",
+        "add_attribute_button": "//span[text()='Add Attribute']",
+        "attribute_name_textbox": "//input[@name='attributes:existingAttributesContainer:existingAttributes:%s:attributeName']",
+        "attribute_datatype_dropdown": "//select[@name='attributes:existingAttributesContainer:existingAttributes:%s:attributeType']/..",
+        "attribute_datatype_dropdown_field": "//select[@name='attributes:existingAttributesContainer:existingAttributes:%s:attributeType']/../div/a",
+        "attribute_datatype_value": "(//li[text()='%s'])[%s]",
+        "select_combo_box_textbox": "//input[@name='attributes:existingAttributesContainer:existingAttributes:%s:selectOptions']",
+        "select_unit_of_measure_dropdown": "//select[@name='attributes:existingAttributesContainer:existingAttributes:%s:unitOfMeasureChoice']/..",
+        "unit_of_measure_value": "//li[text()='%s']",
+        "more_information_link": "link:More Information",
+        "allow_assset_linking_checkbox": "name: moreInfo:linkable",
+        "description_template_textbox": "//legend[text()='Description Template']/../div/input"
         
     }
 
@@ -39,6 +51,10 @@ class CreateAssetTypePage(PageObject):
         self.se2lib.wait_until_element_is_visible(self.locator.schedules_link)
         self.se2lib.click_element(self.locator.schedules_link)
         
+    def click_event_type_associations_link(self):
+        self.se2lib.wait_until_element_is_visible(self.locator.event_type_associations_link)
+        self.se2lib.click_element(self.locator.event_type_associations_link)
+        
     def select_asset_group_dropdown(self, asset_group):
         if  asset_group != "":
             self.se2lib.wait_until_element_is_visible(self.locator.asset_group_dropdown)
@@ -56,3 +72,57 @@ class CreateAssetTypePage(PageObject):
         for item in asset_group:
               asset_group_list.append(item.text)
         return asset_group_list
+            
+    def click_add_attribute_button(self):
+        self.se2lib.wait_until_element_is_visible(self.locator.add_attribute_button)
+        self.se2lib.click_element(self.locator.add_attribute_button)
+        
+    def input_attribute_name(self, attributeName, row):
+        row=int(row)-1
+        self.se2lib.wait_until_element_is_visible(self.locator.attribute_name_textbox % row)
+        self.se2lib.input_text(self.locator.attribute_name_textbox % row, attributeName)
+        
+    def select_attribute_datatype_dropdown(self, datatype, row):
+        if  datatype != "":
+            row=int(row)-1
+            self.se2lib.wait_until_element_is_visible(self.locator.attribute_datatype_dropdown % row)
+            self.se2lib.click_element(self.locator.attribute_datatype_dropdown % row)
+            row=int(row)+1
+            self.se2lib.wait_until_element_is_visible(self.locator.attribute_datatype_value % (datatype, row)) 
+            self.se2lib.click_element(self.locator.attribute_datatype_value % (datatype, row))
+            
+    def input_select_combo_box_values(self, value, row):
+        row=int(row)-1
+        self.se2lib.wait_until_element_is_visible(self.locator.select_combo_box_textbox % row)
+        self.se2lib.input_text(self.locator.select_combo_box_textbox % row, value)
+        
+    def select_unit_of_measure_dropdown(self, unit, row):
+        if  unit != "":
+            row=int(row)-1
+            self.se2lib.wait_until_element_is_visible(self.locator.select_unit_of_measure_dropdown % row)
+            self.se2lib.click_element(self.locator.select_unit_of_measure_dropdown % row)
+            row=int(row)+1
+            self.se2lib.wait_until_element_is_visible(self.locator.unit_of_measure_value % unit) 
+            self.se2lib.click_element(self.locator.unit_of_measure_value % unit)
+            
+    def click_more_information_link(self):
+        self.se2lib.wait_until_element_is_visible(self.locator.more_information_link)
+        self.se2lib.click_element(self.locator.more_information_link)
+        
+    def click_allow_assset_linking_checkbox(self):
+        self.se2lib.wait_until_element_is_visible(self.locator.allow_assset_linking_checkbox)
+        self.se2lib.click_element(self.locator.allow_assset_linking_checkbox)
+        
+    def input_description_template(self, descriptionTemp):
+        self.se2lib.wait_until_element_is_visible(self.locator.description_template_textbox)
+        self.se2lib.input_text(self.locator.description_template_textbox, descriptionTemp)
+        
+          
+    def verify_if_input_attribute_is_present(self, attributeName, row):
+        row=int(row)-1
+        return len(self.se2lib.driver.find_elements_by_xpath(self.locator.attribute_name_textbox % row))>0 and self.se2lib.get_value(self.locator.attribute_name_textbox % row)==attributeName
+    
+    def verify_if_select_attribute_datatype_dropdown_is_present(self, datatype, row):
+        if  datatype != "":
+            row=int(row)-1
+            return self.se2lib.driver.find_elements_by_xpath(self.locator.attribute_datatype_dropdown % row) and self.se2lib.get_text(self.locator.attribute_datatype_dropdown_field % row)==datatype

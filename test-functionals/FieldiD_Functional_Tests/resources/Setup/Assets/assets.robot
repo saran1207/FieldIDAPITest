@@ -13,6 +13,7 @@ Library         Setup.Assets.delete_asset_types_groups_page.DeleteAssetTypeGroup
 Library         Setup.Assets.view_asset_types_group_page.ViewAssetTypeGroupPage      WITH NAME       ViewAssetTypeGroupPage
 Library         Setup.Assets.delete_asset_type_page.DeleteAssetTypePage    WITH NAME       DeleteAssetTypePage
 Library         Setup.Assets.asset_type_schedules_page.AssetTypeSchedulesPage    WITH NAME       AssetTypeSchedulesPage
+Library         Setup.Assets.event_type_assocation_page.EventTypeAssocationPage    WITH NAME       EventTypeAssocationPage
 Library         String
 
 
@@ -20,6 +21,11 @@ Library         String
 *** Variables ***
 
 *** Keywords ***
+Verify Creation Of An Asset Type
+    [Arguments]     ${ASSET_TYPE_NAME}
+    Go To Page      ManageAssetTypesPage
+    The Current Page Should Be      ManageAssetTypesPage
+    Page Should Contain     ${ASSET_TYPE_NAME}
 
 Delete Asset Type
     [Arguments]  ${ASSET_TYPE_NAME}
@@ -106,3 +112,28 @@ Schedule Recurring Event
     Click Recurring Link
     Select Recurring Event Type Dropdown  ${eventType}
     Click Create Recurring Event Button
+      
+Go To Schedules Tab Of An Asset Type
+    [Arguments]  ${assetTypeName}
+    Go To Page  ManageAssetTypesPage
+    Click Asset Type Link    ${assetTypeName}
+    The Current Page Should Be    CreateAssetTypePage
+    Click Schedules Link  
+    The Current Page Should Be    AssetTypeSchedulesPage
+    
+Go To Events Tab Of An Asset Type
+    [Arguments]  ${assetTypeName}
+    Go To Page  ManageAssetTypesPage
+    Click Asset Type Link    ${assetTypeName}
+    The Current Page Should Be    CreateAssetTypePage
+    Click Event Type Associations Link
+    The Current Page Should Be    EventTypeAssocationPage
+    
+Allow Asset Linking For Asset Type
+    [Arguments]  ${assetTypeName}
+    Go To Page  ManageAssetTypesPage
+    Click Asset Type Link    ${assetTypeName}
+    The Current Page Should Be    CreateAssetTypePage
+    Click More Information Link
+    Click Allow Assset Linking Checkbox
+    Click Save Button
