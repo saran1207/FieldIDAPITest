@@ -26,6 +26,12 @@ Verify Creation Of An Asset Type
     Go To Page      ManageAssetTypesPage
     The Current Page Should Be      ManageAssetTypesPage
     Page Should Contain     ${ASSET_TYPE_NAME}
+    
+Go To An Asset Type
+    [Arguments]     ${ASSET_TYPE_NAME}
+    Go To Page      ManageAssetTypesPage
+    The Current Page Should Be      ManageAssetTypesPage
+    Click Asset Type Link    ${ASSET_TYPE_NAME}
 
 Delete Asset Type
     [Arguments]  ${ASSET_TYPE_NAME}
@@ -67,6 +73,11 @@ Go To Page Edit Asset Type Group
     EditAssetTypeGroupPage.Set Page URL    ${id}
     Click Edit Asset Group Link    ${id}
     
+Copy Asset Type 
+    [Arguments]    ${assetTypeGroup}
+    ${id}    Get Asset Type Id    ${assetTypeGroup}
+    Click Copy Asset Type Link    ${id}
+    
 Go To Page Delete Asset Type Group
     [Arguments]    ${assetTypeGroup}
     ${id}    Get Asset Group Id    ${assetTypeGroup}
@@ -101,6 +112,15 @@ Get Asset Group Id
     [Arguments]    ${groupName}
     Go To Page    ManageAssetTypeGroupsPage
     The Current Page Should Be    ManageAssetTypeGroupsPage
+    ${link}    Get Link From Name    ${groupName}
+    ${url}    Get Element Attribute    ${link}    attribute=href
+    ${groupId}    Fetch From Right    ${url}    =
+    [return]    ${groupId}
+    
+Get Asset Type Id
+    [Arguments]    ${groupName}
+    Go To Page    ManageAssetTypesPage
+    The Current Page Should Be    ManageAssetTypesPage
     ${link}    Get Link From Name    ${groupName}
     ${url}    Get Element Attribute    ${link}    attribute=href
     ${groupId}    Fetch From Right    ${url}    =

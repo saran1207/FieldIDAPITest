@@ -3,6 +3,7 @@ from PageObjectLibrary import PageObject
 class CreateAssetTypePage(PageObject):
     PAGE_URL = "/fieldid/w/setup/assetTypeForm"
     PAGE_EDIT_URL = "/fieldid/w/setup/assetTypeEdit"
+    PAGE_COPY_URL = "/fieldid/w/setup/assetTypeCopy"
     
     
     _locators = {
@@ -30,11 +31,11 @@ class CreateAssetTypePage(PageObject):
 
     def _is_current_page(self):
         location = self.se2lib.get_location()
-        if (not self.PAGE_URL in location) and (not self.PAGE_EDIT_URL in location):
-            message = "Expected location to end with " + self.PAGE_URL + " or " + self.PAGE_EDIT_URL + " but it did not"
+        if (not self.PAGE_URL in location) and (not self.PAGE_EDIT_URL in location)and (not self.PAGE_COPY_URL in location):
+            message = "Expected location to end with " + self.PAGE_URL + " or " + self.PAGE_EDIT_URL + " or " + self.PAGE_COPY_URL + " but it did not"
             raise Exception(message)
         return True
-
+  
     def input_asset_type_name(self, assetTypeName):
         self.se2lib.wait_until_element_is_visible(self.locator.asset_type_name_field)
         self.se2lib.input_text(self.locator.asset_type_name_field, assetTypeName)
@@ -126,3 +127,10 @@ class CreateAssetTypePage(PageObject):
         if  datatype != "":
             row=int(row)-1
             return self.se2lib.driver.find_elements_by_xpath(self.locator.attribute_datatype_dropdown % row) and self.se2lib.get_text(self.locator.attribute_datatype_dropdown_field % row)==datatype
+        
+    def get_selected_asset_group(self):
+        return self.se2lib.get_text(self.locator.asset_group_dropdown)
+    
+    def get_description_template(self):
+        self.se2lib.wait_until_element_is_visible(self.locator.description_template_textbox)
+        return self.se2lib.get_value(self.locator.description_template_textbox)

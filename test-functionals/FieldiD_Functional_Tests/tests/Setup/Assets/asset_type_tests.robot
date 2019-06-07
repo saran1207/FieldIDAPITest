@@ -72,6 +72,15 @@ Verify Asset Type With All Attributes
     ${result}=  Verify If Select Attribute Datatype Dropdown Is Present    Date Field   5
     Should Be True  ${result}
     
+Verify Copy Asset Type Values
+    ${result}=  Verify If Input Attribute Is Present   Text Field    1
+    ${result}=  Verify If Select Attribute Datatype Dropdown Is Present    Text Field  1
+    ${assetGroup}  Get Selected Asset Group
+    ${descriptionTemp}  Get Description Template
+    Should Be True  ${result}
+    Should Be Equal  ${assetGroup}  Fire Safety
+    Should Be Equal  ${descriptionTemp}  Testing the description template with {Identifier} and {Text Field} field
+    
 *** Test Cases ***
 Create Asset Type And Verify Creation
     [Tags]  Smoke
@@ -101,3 +110,27 @@ Verify Event Type Association For An Asset Type
     ${isChecked}  Verify If Event Type Checkbox Is Checked    Blank Event
     Should Be True    ${isChecked}    
     [Teardown]  Delete Asset Type  ${assetType}
+    
+Copy Asset Type And Verify
+    [Tags]  C1715
+     ${assetType1}    Generate Random String  6
+     ${assetType2}    Generate Random String  6
+    Create An Asset Type  ${assetType1}
+    Go To An Asset Type    ${assetType1}
+    The Current Page Should Be    CreateAssetTypePage
+    Select Asset Group Dropdown    Fire Safety
+    Click Add Attribute Button
+    Input Attribute Name    Text Field    1
+    Select Attribute Datatype Dropdown    Text Field  1
+    Input Description Template    Testing the description template with {Identifier} and {Text Field} field
+    Click Save Button
+    Verify Creation Of An Asset Type    ${assetType1}
+    Copy Asset Type     ${assetType1}
+    The Current Page Should Be    CreateAssetTypePage
+    Verify Copy Asset Type Values
+    Input Asset Type Name       ${assetType2}
+    Click Save Button
+    Verify Creation Of An Asset Type    ${assetType2}
+    [Teardown]  Run Keywords  
+                ...    Delete Asset Type  ${assetType1}
+                ...    AND  Delete Asset Type  ${assetType2}   
