@@ -181,7 +181,7 @@ Verify Recurring Schedule For Only Selected Owners On Asset Creation
     Should Contain   ${schedule1}  Today on ${newSchedule1}
     
 Remove Recurring Schedules And verify That Schedules Are Deleted
-    [Tags]  C2048
+    [Tags]  C1992
     [Setup]  Go To Asset Type And Schedule Recurring Event
     Create Asset And Go To Asset Summary Page  ${ASSETTYPE6}
     ${assetId} =  Get AssetId
