@@ -83,7 +83,7 @@ Verify Copy Asset Type Values
     
 *** Test Cases ***
 Create Asset Type And Verify Creation
-    [Tags]  Smoke
+    [Tags]  Smoke  C1707
     Create An Asset Type  TestAssetType
     Verify Creation Of An Asset Type    TestAssetType
     [Teardown]  Delete Asset Type  TestAssetType
@@ -133,4 +133,14 @@ Copy Asset Type And Verify
     Verify Creation Of An Asset Type    ${assetType2}
     [Teardown]  Run Keywords  
                 ...    Delete Asset Type  ${assetType1}
-                ...    AND  Delete Asset Type  ${assetType2}   
+                ...    AND  Delete Asset Type  ${assetType2} 
+                   
+Delete Asset Type And Verify Creation
+    [Tags]  C1737
+    ${assetType}    Generate Random String  6
+    Create An Asset Type   ${assetType}
+    Verify Creation Of An Asset Type     ${assetType}
+    Delete Asset Type   ${assetType} 
+    Go To Page      ManageAssetTypesPage
+    The Current Page Should Be      ManageAssetTypesPage
+    Page Should Not Contain     ${assetType}     
