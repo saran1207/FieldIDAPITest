@@ -1,4 +1,5 @@
 from PageObjectLibrary import PageObject
+import os
 
 class CreateAssetTypePage(PageObject):
     PAGE_URL = "/fieldid/w/setup/assetTypeForm"
@@ -25,7 +26,8 @@ class CreateAssetTypePage(PageObject):
         "unit_of_measure_value": "//li[text()='%s']",
         "more_information_link": "link:More Information",
         "allow_assset_linking_checkbox": "name: moreInfo:linkable",
-        "description_template_textbox": "//legend[text()='Description Template']/../div/input"
+        "description_template_textbox": "//legend[text()='Description Template']/../div/input",
+        "attach_files": "//input[@name='moreInfo:attachments:uploadAttachmentForm:attachmentUpload']"
         
     }
 
@@ -134,3 +136,7 @@ class CreateAssetTypePage(PageObject):
     def get_description_template(self):
         self.se2lib.wait_until_element_is_visible(self.locator.description_template_textbox)
         return self.se2lib.get_value(self.locator.description_template_textbox)
+    
+    def input_file_name(self, fileName):
+        self.se2lib.wait_until_element_is_visible(self.locator.attach_files)
+        self.se2lib.driver.find_element_by_xpath(self.locator.attach_files).send_keys(os.getcwd()+"/test-functionals/FieldiD_Functional_Tests/Assets/"+fileName)

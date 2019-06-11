@@ -143,4 +143,21 @@ Delete Asset Type And Verify Creation
     Delete Asset Type   ${assetType} 
     Go To Page      ManageAssetTypesPage
     The Current Page Should Be      ManageAssetTypesPage
-    Page Should Not Contain     ${assetType}     
+    Page Should Not Contain     ${assetType}  
+    
+Upload File To Asset Type And Verify
+    [Tags]  C1978
+     ${assetType}    Generate Random String  6
+    Create An Asset Type  ${assetType} 
+    Verify Creation Of An Asset Type    ${assetType} 
+    Click Asset Type Link    ${assetType}
+    The Current Page Should Be    CreateAssetTypePage
+    Click More Information Link
+    Input File Name  Asset Report.xlsx
+    Click Save Button
+    The Current Page Should Be      ManageAssetTypesPage
+    Click Asset Type Link    ${assetType}
+    The Current Page Should Be    CreateAssetTypePage
+    Click More Information Link
+    Page Should Contain  Asset Report.xlsx
+    [Teardown]  Delete Asset Type  ${assetType}   
