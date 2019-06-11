@@ -159,5 +159,7 @@ Upload File To Asset Type And Verify
     Click Asset Type Link    ${assetType}
     The Current Page Should Be    CreateAssetTypePage
     Click More Information Link
+    Set Selenium Speed    0.5s
     Page Should Contain  Asset Report.xlsx
+    Set Selenium Speed    0s
     [Teardown]  Delete Asset Type  ${assetType}   
