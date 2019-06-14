@@ -135,7 +135,7 @@ Copy Asset Type And Verify
                 ...    Delete Asset Type  ${assetType1}
                 ...    AND  Delete Asset Type  ${assetType2} 
                    
-Delete Asset Type And Verify Creation
+Delete Asset Type And Verify
     [Tags]  C1737
     ${assetType}    Generate Random String  6
     Create An Asset Type   ${assetType}
