@@ -27,7 +27,8 @@ class CreateAssetTypePage(PageObject):
         "more_information_link": "link:More Information",
         "allow_assset_linking_checkbox": "name: moreInfo:linkable",
         "description_template_textbox": "//legend[text()='Description Template']/../div/input",
-        "attach_files": "//input[@name='moreInfo:attachments:uploadAttachmentForm:attachmentUpload']"
+        "attach_files": "//input[@name='moreInfo:attachments:uploadAttachmentForm:attachmentUpload']",
+        "caution_url_textbox": "name:moreInfo:cautionUrl"
         
     }
 
@@ -140,3 +141,7 @@ class CreateAssetTypePage(PageObject):
     def input_file_name(self, fileName):
         self.se2lib.wait_until_element_is_visible(self.locator.attach_files)
         self.se2lib.driver.find_element_by_xpath(self.locator.attach_files).send_keys(os.getcwd()+"/test-functionals/FieldiD_Functional_Tests/Assets/"+fileName)
+        
+    def input_caution_url(self, cautionURL):
+        self.se2lib.wait_until_element_is_visible(self.locator.caution_url_textbox)
+        self.se2lib.input_text(self.locator.caution_url_textbox, cautionURL)

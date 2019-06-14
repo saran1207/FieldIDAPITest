@@ -163,3 +163,20 @@ Upload File To Asset Type And Verify
     Page Should Contain  Asset Report.xlsx
     Set Selenium Speed    0s
     [Teardown]  Delete Asset Type  ${assetType}   
+    
+Verify Caution URL
+    [Tags]  C1979
+     ${assetType}    Generate Random String  6
+    Create An Asset Type  ${assetType} 
+    Verify Creation Of An Asset Type    ${assetType} 
+    Click Asset Type Link    ${assetType}
+    The Current Page Should Be    CreateAssetTypePage
+    Click More Information Link
+    Input Caution Url    Plain Text
+    Click Save Button
+    Page Should Contain  'Plain Text' is not a valid URL.
+    Input Caution Url    https://google.com
+    Click Save Button 
+    The Current Page Should Be      ManageAssetTypesPage
+    [Teardown]  Delete Asset Type  ${assetType}   
+    
