@@ -73,11 +73,12 @@ Verify Asset Type With All Attributes
     Should Be True  ${result}
     
 Verify Copy Asset Type Values
-    ${result}=  Verify If Input Attribute Is Present   Text Field    1
-    ${result}=  Verify If Select Attribute Datatype Dropdown Is Present    Text Field  1
+    ${inputAttributeResult}=  Verify If Input Attribute Is Present   Text Field    1
+    ${selectAttributeResult}=  Verify If Select Attribute Datatype Dropdown Is Present    Text Field  1
     ${assetGroup}  Get Selected Asset Group
     ${descriptionTemp}  Get Description Template
-    Should Be True  ${result}
+    Should Be True  ${inputAttributeResult}
+    Should Be True  ${selectAttributeResult}
     Should Be Equal  ${assetGroup}  Fire Safety
     Should Be Equal  ${descriptionTemp}  Testing the description template with {Identifier} and {Text Field} field
     
