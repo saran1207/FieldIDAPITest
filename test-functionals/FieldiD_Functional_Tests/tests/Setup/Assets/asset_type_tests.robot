@@ -160,9 +160,8 @@ Upload File To Asset Type And Verify
     Click Asset Type Link    ${assetType}
     The Current Page Should Be    CreateAssetTypePage
     Click More Information Link
-    Set Selenium Speed    0.5s
+    Wait Until Page Contains  Manufacturer Certificates
     Page Should Contain  Asset Report.xlsx
-    Set Selenium Speed    0s
     [Teardown]  Delete Asset Type  ${assetType}   
     
 Verify Caution URL
@@ -179,5 +178,10 @@ Verify Caution URL
     Input Caution Url    https://google.com
     Click Save Button 
     The Current Page Should Be      ManageAssetTypesPage
+    Click Asset Type Link    ${assetType}
+    The Current Page Should Be    CreateAssetTypePage
+    Click More Information Link
+    ${cautionURL}  Get Caution Url
+    Should Be Equal  ${cautionURL}   https://google.com
     [Teardown]  Delete Asset Type  ${assetType}   
     

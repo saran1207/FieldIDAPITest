@@ -74,8 +74,9 @@ Go To Page Edit Asset Type Group
     Click Edit Asset Group Link    ${id}
     
 Copy Asset Type 
-    [Arguments]    ${assetTypeGroup}
-    ${id}    Get Asset Type Id    ${assetTypeGroup}
+    [Arguments]    ${assetType}
+    Go To Page    ManageAssetTypesPage
+    ${id}    Get Asset Type Id    ${assetType}
     Click Copy Asset Type Link    ${id}
     
 Go To Page Delete Asset Type Group
@@ -118,13 +119,13 @@ Get Asset Group Id
     [return]    ${groupId}
     
 Get Asset Type Id
-    [Arguments]    ${groupName}
+    [Arguments]    ${assetTypeName}
     Go To Page    ManageAssetTypesPage
     The Current Page Should Be    ManageAssetTypesPage
-    ${link}    Get Link From Name    ${groupName}
+    ${link}    Get Link From Name    ${assetTypeName}
     ${url}    Get Element Attribute    ${link}    attribute=href
-    ${groupId}    Fetch From Right    ${url}    =
-    [return]    ${groupId}
+    ${assetTypeId}    Fetch From Right    ${url}    =
+    [return]    ${assetTypeId}
     
 Schedule Recurring Event
     [Arguments]  ${eventType}

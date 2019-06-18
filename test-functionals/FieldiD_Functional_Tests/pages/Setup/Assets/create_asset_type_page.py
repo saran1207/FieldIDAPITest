@@ -145,3 +145,7 @@ class CreateAssetTypePage(PageObject):
     def input_caution_url(self, cautionURL):
         self.se2lib.wait_until_element_is_visible(self.locator.caution_url_textbox)
         self.se2lib.input_text(self.locator.caution_url_textbox, cautionURL)
+        
+    def get_caution_url(self):
+        self.se2lib.wait_until_element_is_visible(self.locator.caution_url_textbox)
+        return self.se2lib.get_value(self.locator.caution_url_textbox)
