@@ -1,8 +1,10 @@
 from PageObjectLibrary import PageObject
+import os
 
 class CreateAssetTypePage(PageObject):
     PAGE_URL = "/fieldid/w/setup/assetTypeForm"
     PAGE_EDIT_URL = "/fieldid/w/setup/assetTypeEdit"
+    PAGE_COPY_URL = "/fieldid/w/setup/assetTypeCopy"
     
     
     _locators = {
@@ -24,17 +26,19 @@ class CreateAssetTypePage(PageObject):
         "unit_of_measure_value": "//li[text()='%s']",
         "more_information_link": "link:More Information",
         "allow_assset_linking_checkbox": "name: moreInfo:linkable",
-        "description_template_textbox": "//legend[text()='Description Template']/../div/input"
+        "description_template_textbox": "//legend[text()='Description Template']/../div/input",
+        "attach_files": "//input[@name='moreInfo:attachments:uploadAttachmentForm:attachmentUpload']",
+        "caution_url_textbox": "name:moreInfo:cautionUrl"
         
     }
 
     def _is_current_page(self):
         location = self.se2lib.get_location()
-        if (not self.PAGE_URL in location) and (not self.PAGE_EDIT_URL in location):
-            message = "Expected location to end with " + self.PAGE_URL + " or " + self.PAGE_EDIT_URL + " but it did not"
+        if (not self.PAGE_URL in location) and (not self.PAGE_EDIT_URL in location)and (not self.PAGE_COPY_URL in location):
+            message = "Expected location to end with " + self.PAGE_URL + " or " + self.PAGE_EDIT_URL + " or " + self.PAGE_COPY_URL + " but it did not"
             raise Exception(message)
         return True
-
+  
     def input_asset_type_name(self, assetTypeName):
         self.se2lib.wait_until_element_is_visible(self.locator.asset_type_name_field)
         self.se2lib.input_text(self.locator.asset_type_name_field, assetTypeName)
@@ -126,3 +130,22 @@ class CreateAssetTypePage(PageObject):
         if  datatype != "":
             row=int(row)-1
             return self.se2lib.driver.find_elements_by_xpath(self.locator.attribute_datatype_dropdown % row) and self.se2lib.get_text(self.locator.attribute_datatype_dropdown_field % row)==datatype
+        
+    def get_selected_asset_group(self):
+        return self.se2lib.get_text(self.locator.asset_group_dropdown)
+    
+    def get_description_template(self):
+        self.se2lib.wait_until_element_is_visible(self.locator.description_template_textbox)
+        return self.se2lib.get_value(self.locator.description_template_textbox)
+    
+    def input_file_name(self, fileName):
+        self.se2lib.wait_until_element_is_visible(self.locator.attach_files)
+        self.se2lib.driver.find_element_by_xpath(self.locator.attach_files).send_keys(os.getcwd()+"/test-functionals/FieldiD_Functional_Tests/Assets/"+fileName)
+        
+    def input_caution_url(self, cautionURL):
+        self.se2lib.wait_until_element_is_visible(self.locator.caution_url_textbox)
+        self.se2lib.input_text(self.locator.caution_url_textbox, cautionURL)
+        
+    def get_caution_url(self):
+        self.se2lib.wait_until_element_is_visible(self.locator.caution_url_textbox)
+        return self.se2lib.get_value(self.locator.caution_url_textbox)

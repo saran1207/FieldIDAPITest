@@ -6,7 +6,8 @@ class ManageAssetTypesPage(PageObject):
     _locators = {
         "add_button": "xpath=//a[@href='./assetTypeForm']",
         "back_to_setup_button": "xpath=//a[@href='./assetsEvents']",
-        "asset_type_link": "link:%s"
+        "asset_type_link": "link:%s",
+        "copy_asset_type": "//td/a[@href='./assetTypeCopy?uniqueID=%s']"
     }
 
     def _is_current_page(self):
@@ -23,3 +24,10 @@ class ManageAssetTypesPage(PageObject):
     def click_asset_type_link(self, assetTypeName):
         self.se2lib.wait_until_element_is_visible(self.locator.asset_type_link % assetTypeName)
         self.se2lib.click_element(self.locator.asset_type_link % assetTypeName)
+        
+    def get_link_from_name(self, name):
+        return "link: " + name
+    
+    def click_copy_asset_type_link(self, group_id):
+        self.se2lib.wait_until_element_is_visible(self.locator.copy_asset_type % (group_id))
+        self.se2lib.click_element(self.locator.copy_asset_type % (group_id))

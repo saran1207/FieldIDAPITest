@@ -72,9 +72,19 @@ Verify Asset Type With All Attributes
     ${result}=  Verify If Select Attribute Datatype Dropdown Is Present    Date Field   5
     Should Be True  ${result}
     
+Verify Copy Asset Type Values
+    ${inputAttributeResult}=  Verify If Input Attribute Is Present   Text Field    1
+    ${selectAttributeResult}=  Verify If Select Attribute Datatype Dropdown Is Present    Text Field  1
+    ${assetGroup}  Get Selected Asset Group
+    ${descriptionTemp}  Get Description Template
+    Should Be True  ${inputAttributeResult}
+    Should Be True  ${selectAttributeResult}
+    Should Be Equal  ${assetGroup}  Fire Safety
+    Should Be Equal  ${descriptionTemp}  Testing the description template with {Identifier} and {Text Field} field
+    
 *** Test Cases ***
 Create Asset Type And Verify Creation
-    [Tags]  Smoke
+    [Tags]  Smoke  C1707
     Create An Asset Type  TestAssetType
     Verify Creation Of An Asset Type    TestAssetType
     [Teardown]  Delete Asset Type  TestAssetType
@@ -101,3 +111,77 @@ Verify Event Type Association For An Asset Type
     ${isChecked}  Verify If Event Type Checkbox Is Checked    Blank Event
     Should Be True    ${isChecked}    
     [Teardown]  Delete Asset Type  ${assetType}
+    
+Copy Asset Type And Verify
+    [Tags]  C1715
+     ${assetType1}    Generate Random String  6
+     ${assetType2}    Generate Random String  6
+    Create An Asset Type  ${assetType1}
+    Go To An Asset Type    ${assetType1}
+    The Current Page Should Be    CreateAssetTypePage
+    Select Asset Group Dropdown    Fire Safety
+    Click Add Attribute Button
+    Input Attribute Name    Text Field    1
+    Select Attribute Datatype Dropdown    Text Field  1
+    Input Description Template    Testing the description template with {Identifier} and {Text Field} field
+    Click Save Button
+    Verify Creation Of An Asset Type    ${assetType1}
+    Copy Asset Type     ${assetType1}
+    The Current Page Should Be    CreateAssetTypePage
+    Verify Copy Asset Type Values
+    Input Asset Type Name       ${assetType2}
+    Click Save Button
+    Verify Creation Of An Asset Type    ${assetType2}
+    [Teardown]  Run Keywords  
+                ...    Delete Asset Type  ${assetType1}
+                ...    AND  Delete Asset Type  ${assetType2} 
+                   
+Delete Asset Type And Verify
+    [Tags]  C1737
+    ${assetType}    Generate Random String  6
+    Create An Asset Type   ${assetType}
+    Verify Creation Of An Asset Type     ${assetType}
+    Delete Asset Type   ${assetType} 
+    Go To Page      ManageAssetTypesPage
+    The Current Page Should Be      ManageAssetTypesPage
+    Page Should Not Contain     ${assetType}  
+    
+Upload File To Asset Type And Verify
+    [Tags]  C1978
+     ${assetType}    Generate Random String  6
+    Create An Asset Type  ${assetType} 
+    Verify Creation Of An Asset Type    ${assetType} 
+    Click Asset Type Link    ${assetType}
+    The Current Page Should Be    CreateAssetTypePage
+    Click More Information Link
+    Input File Name  Asset Report.xlsx
+    Click Save Button
+    The Current Page Should Be      ManageAssetTypesPage
+    Click Asset Type Link    ${assetType}
+    The Current Page Should Be    CreateAssetTypePage
+    Click More Information Link
+    Wait Until Page Contains  Manufacturer Certificates
+    Page Should Contain  Asset Report.xlsx
+    [Teardown]  Delete Asset Type  ${assetType}   
+    
+Verify Caution URL
+    [Tags]  C1979
+     ${assetType}    Generate Random String  6
+    Create An Asset Type  ${assetType} 
+    Verify Creation Of An Asset Type    ${assetType} 
+    Click Asset Type Link    ${assetType}
+    The Current Page Should Be    CreateAssetTypePage
+    Click More Information Link
+    Input Caution Url    Plain Text
+    Click Save Button
+    Page Should Contain  'Plain Text' is not a valid URL.
+    Input Caution Url    https://google.com
+    Click Save Button 
+    The Current Page Should Be      ManageAssetTypesPage
+    Click Asset Type Link    ${assetType}
+    The Current Page Should Be    CreateAssetTypePage
+    Click More Information Link
+    ${cautionURL}  Get Caution Url
+    Should Be Equal  ${cautionURL}   https://google.com
+    [Teardown]  Delete Asset Type  ${assetType}   
+    
