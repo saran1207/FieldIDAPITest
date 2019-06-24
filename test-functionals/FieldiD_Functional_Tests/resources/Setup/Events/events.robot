@@ -70,3 +70,11 @@ Copy Event Type
     The Current Page Should Be    ManageEventTypesPage
     ${id}  Get Event Type Id  ${eventTypeName}
     Click Copy Event Type Link    ${id}
+    
+Go To Asset Type Assocaition Tab Of An Event Type
+    [Arguments]    ${eventTypeName}
+    To Go View Event Type  ${eventTypeName}
+    The Current Page Should Be    ViewEventTypePage
+    Click Asset Type Association Tab
+    
+    

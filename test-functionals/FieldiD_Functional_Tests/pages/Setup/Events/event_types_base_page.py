@@ -16,3 +16,7 @@ class EventTypesBasePage(PageObject):
     def click_view_all_button(self):
         self.se2lib.wait_until_element_is_visible(self.locator.view_all_button)
         self.se2lib.click_element(self.locator.view_all_button)
+        
+    def click_asset_type_association_tab(self):
+        self.se2lib.wait_until_element_is_visible(self.locator.asset_type_associations)
+        self.se2lib.click_element(self.locator.asset_type_associations)
