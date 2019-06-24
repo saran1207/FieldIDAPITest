@@ -49,6 +49,8 @@ Get Event Type Id
     
 Delete Event Type 
     [Arguments]    ${eventTypeName}
+    Go To Page    ManageEventTypesPage
+    The Current Page Should Be    ManageEventTypesPage
     ${id}  Get Event Type Id  ${eventTypeName}
     Click Edit Event Type Link    ${id}
     The Current Page Should Be      AddEventTypePage
@@ -61,3 +63,10 @@ To Go View Event Type
     Go To Page    ManageEventTypesPage
     The Current Page Should Be    ManageEventTypesPage
     Click Event Type Link    ${eventTypeName}
+    
+Copy Event Type
+    [Arguments]    ${eventTypeName}
+    Go To Page    ManageEventTypesPage
+    The Current Page Should Be    ManageEventTypesPage
+    ${id}  Get Event Type Id  ${eventTypeName}
+    Click Copy Event Type Link    ${id}

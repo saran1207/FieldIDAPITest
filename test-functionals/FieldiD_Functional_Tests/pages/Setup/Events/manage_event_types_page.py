@@ -12,7 +12,8 @@ class ManageEventTypesPage(PageObject):
         "name_filter_field": "name:nameFilter",
         "filter_button": "//input[@value='Filter']",
         "event_type_link": "link:%s",
-        "edit_event_type": "//td/a[@href='./eventTypeForm?uniqueID=%s']"
+        "edit_event_type": "//td/a[@href='./eventTypeForm?uniqueID=%s']",
+        "copy_event_type": "//td/a[@href='./eventTypeForm?uniqueID=%s']/../a[text()='Copy']"
     }
 
     def _is_current_page(self):
@@ -60,3 +61,7 @@ class ManageEventTypesPage(PageObject):
     def click_edit_event_type_link(self, event_type_id):
         self.se2lib.wait_until_element_is_visible(self.locator.edit_event_type % (event_type_id))
         self.se2lib.click_element(self.locator.edit_event_type % (event_type_id))
+        
+    def click_copy_event_type_link(self, event_type_id):
+        self.se2lib.wait_until_element_is_visible(self.locator.copy_event_type % (event_type_id))
+        self.se2lib.click_element(self.locator.copy_event_type % (event_type_id))

@@ -79,3 +79,15 @@ Create Action Event Type And Verify Creation
     The Current Page Should Be    ViewEventTypePage
     Element Should Not Be Visible    ${ViewEventTypePage._locators['asset_type_associations']}  
     [Teardown]  Delete Event Type  ${eventTypeName}  
+    
+Copy Event Type And Verify Creation
+    [Tags]   C1861
+    ${eventTypeName}    Generate Random String  5
+    Create An Event Type  ${AssetEvent}  ${eventTypeName}  ${EventGroup}
+    Verify Creation Of An Event Type    ${eventTypeName}   ${AssetEvent}   ${EventGroup}
+    Copy Event Type  ${eventTypeName}
+    Verify Creation Of An Event Type    ${eventTypeName} - 1   ${AssetEvent}   ${EventGroup}
+    [Teardown]  Run Keywords  
+                ...    Delete Event Type  ${eventTypeName}
+                ...    AND  Delete Event Type   ${eventTypeName} - 1
+    
