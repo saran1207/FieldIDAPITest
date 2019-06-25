@@ -35,7 +35,7 @@ Enter Attributes Value For Asset
     
 *** Test Cases ***
 Create Asset And Verify Creation
-    [Tags]  Smoke
+    [Tags]  Smoke  C775
     ${SERIAL_NUMBER}    Generate Random String  5
     Go To New Asset From Dashboard
     Create An Asset     ${SERIAL_NUMBER}   TEST123  Fire Extinguisher
