@@ -23,6 +23,7 @@ ${ProcedureAudit}  Procedure Audit
 ${Action}    Action
 ${EventGroup}   Visual Inspection
 ${AssetType}  Asset Type 1
+${CopyEventType}  Score Event
 
 
 *** Keywords ***
@@ -84,14 +85,15 @@ Create Action Event Type And Verify Creation
     
 Copy Event Type And Verify Creation
     [Tags]   C1861
-    ${eventTypeName}    Generate Random String  5
-    Create An Event Type  ${AssetEvent}  ${eventTypeName}  ${EventGroup}
-    Verify Creation Of An Event Type    ${eventTypeName}   ${AssetEvent}   ${EventGroup}
-    Copy Event Type  ${eventTypeName}
-    Verify Creation Of An Event Type    ${eventTypeName} - 1   ${AssetEvent}   ${EventGroup}
-    [Teardown]  Run Keywords  
-                ...    Delete Event Type  ${eventTypeName}
-                ...    AND  Delete Event Type   ${eventTypeName} - 1
+    Copy Event Type  ${CopyEventType}
+    Verify Creation Of An Event Type    ${CopyEventType} - 1   ${AssetEvent}   ${EventGroup}
+    To Go View Event Type  ${CopyEventType} - 1
+    The Current Page Should Be    ViewEventTypePage
+    Page Should Contain    Section 1
+    Page Should Contain    Criteria 1
+    Page Should Contain    Score Group    
+    Page Should Not Contain    No event form    
+    [Teardown]  Delete Event Type   ${CopyEventType} - 1
 
 Verify Asset Type Association For An Event Type
     [Tags]  C1980
