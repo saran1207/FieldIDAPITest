@@ -18,7 +18,7 @@ Create An Event Type
     Go To Page      ManageEventTypesPage
     The Current Page Should Be      ManageEventTypesPage
     Click Add Event Button
-    Click Add Event Type Link  ${EVENT_TYPE}
+    Click Or Add Event Type Link  ${EVENT_TYPE}
     The Current Page Should Be      AddEventTypePage
     Input Event Type Name    ${EVENT_TYPE_NAME}
     Select Event Type Group    ${EVENT_TYPE_GROUP}
@@ -55,7 +55,7 @@ To Go View Event Type
     [Arguments]    ${eventTypeName}
     Go To Page    ManageEventTypesPage
     The Current Page Should Be    ManageEventTypesPage
-    Click Event Type Link    ${eventTypeName}
+    Click Or Add Event Type Link    ${eventTypeName}
     
 Copy Event Type
     [Arguments]    ${eventTypeName}

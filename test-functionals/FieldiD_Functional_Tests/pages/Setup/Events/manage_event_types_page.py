@@ -5,10 +5,9 @@ class ManageEventTypesPage(PageObject):
 
     _locators = {
         "add_event_type_button": "link:Add Event Type",
-        "add_event_link": "link:%s",
         "name_filter_field": "name:nameFilter",
         "filter_button": "//input[@value='Filter']",
-        "event_type_link": "link:%s",
+        "click_or_add_event_type_link": "link:%s",
         "edit_event_type": "//td/a[@href='./eventTypeForm?uniqueID=%s']",
         "copy_event_type": "//td/a[@href='./eventTypeForm?uniqueID=%s']/../a[text()='Copy']"
     }
@@ -27,10 +26,6 @@ class ManageEventTypesPage(PageObject):
         self.se2lib.wait_until_element_is_visible(self.locator.add_event_type_button)
         self.se2lib.click_element(self.locator.add_event_type_button)
         
-    def click_add_event_type_link(self, eventType):
-        self.se2lib.wait_until_element_is_visible(self.locator.add_event_link % eventType)
-        self.se2lib.click_element(self.locator.add_event_link % eventType)
-           
     def input_filter_name(self, eventTypeName):
         self.se2lib.wait_until_element_is_visible(self.locator.name_filter_field)
         self.se2lib.input_text(self.locator.name_filter_field, eventTypeName)
@@ -39,9 +34,9 @@ class ManageEventTypesPage(PageObject):
         self.se2lib.wait_until_element_is_visible(self.locator.filter_button)
         self.se2lib.click_element(self.locator.filter_button)
         
-    def click_event_type_link(self, eventTypeName):
-        self.se2lib.wait_until_element_is_visible(self.locator.event_type_link % eventTypeName)
-        self.se2lib.click_element(self.locator.event_type_link % eventTypeName)
+    def click_or_add_event_type_link(self, eventTypeName):
+        self.se2lib.wait_until_element_is_visible(self.locator.click_or_add_event_type_link % eventTypeName)
+        self.se2lib.click_element(self.locator.click_or_add_event_type_link % eventTypeName)
         
     def click_edit_event_type_link(self, event_type_id):
         self.se2lib.wait_until_element_is_visible(self.locator.edit_event_type % (event_type_id))
