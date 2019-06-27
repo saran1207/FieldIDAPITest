@@ -18,14 +18,7 @@ Create An Event Type
     Go To Page      ManageEventTypesPage
     The Current Page Should Be      ManageEventTypesPage
     Click Add Event Button
-    Run Keyword if  '${EVENT_TYPE}' == 'Asset Event'
-    ...  Click Add Asset Event Type Link
-    Run Keyword if  '${EVENT_TYPE}' == 'Place Event'
-    ...  Click Add Place Event Type Link  
-    Run Keyword if  '${EVENT_TYPE}' == 'Action'
-    ...  Click Add Action Event Type Link
-    Run Keyword if  '${EVENT_TYPE}' == 'Procedure Audit'
-    ...  Click Add Procedure Audit Event Type Link  
+    Click Add Event Type Link  ${EVENT_TYPE}
     The Current Page Should Be      AddEventTypePage
     Input Event Type Name    ${EVENT_TYPE_NAME}
     Select Event Type Group    ${EVENT_TYPE_GROUP}
@@ -76,5 +69,3 @@ Go To Asset Type Assocaition Tab Of An Event Type
     To Go View Event Type  ${eventTypeName}
     The Current Page Should Be    ViewEventTypePage
     Click Asset Type Association Tab
-    
-    

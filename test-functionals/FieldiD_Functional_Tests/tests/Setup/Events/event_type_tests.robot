@@ -10,23 +10,28 @@ Library         Setup.Events.manage_event_types_page.ManageEventTypesPage  WITH 
 Library         Setup.Events.add_event_type_page.AddEventTypePage      WITH NAME       AddEventTypePage
 Library         Setup.Events.view_event_type_page.ViewEventTypePage     WITH NAME       ViewEventTypePage
 Library         Setup.Events.asset_type_assocation_page.AssetTypeAssocationPage    WITH NAME       AssetTypeAssocationPage
-Suite Setup     Login To Field Id Page      ${USERNAME}      ${PASSWORD}
+Suite Setup      Perform Suite Setup
 Suite Teardown  Logout Of Field Id
 
 *** Variables ***
 ${USERNAME}         testauto       
 ${PASSWORD}         temp123 
 ${USERFULLNAME}     Test Automation
-${AssetEvent}  Asset Event
-${PlaceEvent}  Place Event
-${ProcedureAudit}  Procedure Audit
-${Action}    Action
-${EventGroup}   Visual Inspection
-${AssetType}  Asset Type 1
-${CopyEventType}  Score Event
+${ASSETEVENT}  Asset Event
+${PLACEEVENT}  Place Event
+${PROCEDUREEVENT}  Procedure Audit
+${ACTIONEVENT}    Action
+${EVENTGROUP}   Visual Inspection
+${ASSETTYPE}  Asset Type 1
+${COPYEVENTTYPE}  Score Event
 
 
 *** Keywords ***
+Perform Suite Setup
+   Login To Field Id Page  ${USERNAME}   ${PASSWORD} 
+   ${ViewEventTypePage} =    Get Library Instance   ViewEventTypePage
+    Set Suite Variable    ${ViewEventTypePage}
+    
 Verify Creation Of An Event Type
     [Arguments]     ${eventTypeName}  ${eventType}  ${eventTypeGroup}
     Search Event Type  ${eventTypeName}
@@ -34,77 +39,65 @@ Verify Creation Of An Event Type
     Page Should Contain     ${eventType}
     Page Should Contain     ${eventTypeGroup}
     
+Create Event Type and Verify Creation
+    [Arguments]     ${eventType}  ${eventTypeGroup}
+    ${eventTypeName}    Generate Random String  5
+    Create An Event Type   ${eventType}  ${eventTypeName}   ${eventTypeGroup}
+    Verify Creation Of An Event Type    ${eventTypeName}    ${eventType}   ${eventTypeGroup}
+    To Go View Event Type  ${eventTypeName}
+    [Return]   ${eventTypeName}
+    
+    
 *** Test Cases ***
 Create Asset Event Type And Verify Creation
     [Tags]   C1859  C2062
-    ${ViewEventTypePage}=    Get Library Instance    ViewEventTypePage
-    Set Suite Variable    ${ViewEventTypePage}
-     ${eventTypeName}    Generate Random String  5
-    Create An Event Type  ${AssetEvent}  ${eventTypeName}  ${EventGroup}
-    Verify Creation Of An Event Type    ${eventTypeName}   ${AssetEvent}   ${EventGroup}
-    To Go View Event Type  ${eventTypeName}
+    ${eventTypeName}=   Create Event Type and Verify Creation   ${ASSETEVENT}  ${EVENTGROUP}
     The Current Page Should Be    ViewEventTypePage
     Element Should Be Visible    ${ViewEventTypePage._locators['asset_type_associations']}  
     [Teardown]  Delete Event Type  ${eventTypeName}
     
 Create Place Event Type And Verify Creation
     [Tags]   C2017  C2062
-    ${ViewEventTypePage}=    Get Library Instance    ViewEventTypePage
-    Set Suite Variable    ${ViewEventTypePage}
-     ${eventTypeName}    Generate Random String  5
-    Create An Event Type  ${PlaceEvent}  ${eventTypeName}  ${EventGroup}
-    Verify Creation Of An Event Type    ${eventTypeName}   ${PlaceEvent}   ${EventGroup}
-    To Go View Event Type  ${eventTypeName}
+    ${eventTypeName}=   Create Event Type and Verify Creation   ${PLACEEVENT}  ${EVENTGROUP}
     The Current Page Should Be    ViewEventTypePage
     Element Should Not Be Visible    ${ViewEventTypePage._locators['asset_type_associations']}  
     [Teardown]  Delete Event Type  ${eventTypeName}
      
 Create Procedure Audit Event Type And Verify Creation
     [Tags]   C2019  C2062
-    ${ViewEventTypePage}=    Get Library Instance    ViewEventTypePage
-    Set Suite Variable    ${ViewEventTypePage}
-     ${eventTypeName}    Generate Random String  5
-    Create An Event Type  ${ProcedureAudit}  ${eventTypeName}  ${EventGroup}
-    Verify Creation Of An Event Type    ${eventTypeName}   ${ProcedureAudit}   ${EventGroup}
-    To Go View Event Type  ${eventTypeName}
+    ${eventTypeName}=   Create Event Type and Verify Creation   ${PROCEDUREEVENT}  ${EVENTGROUP}
     The Current Page Should Be    ViewEventTypePage
     Element Should Not Be Visible    ${ViewEventTypePage._locators['asset_type_associations']}  
     [Teardown]  Delete Event Type  ${eventTypeName}
         
 Create Action Event Type And Verify Creation
     [Tags]   C2018  C2062
-    ${ViewEventTypePage}=    Get Library Instance    ViewEventTypePage
-    Set Suite Variable    ${ViewEventTypePage}
-     ${eventTypeName}    Generate Random String  5
-    Create An Event Type  ${Action}  ${eventTypeName}  ${EventGroup}
-    Verify Creation Of An Event Type    ${eventTypeName}   ${Action}   ${EventGroup}
-    To Go View Event Type  ${eventTypeName}
+   ${eventTypeName}=   Create Event Type and Verify Creation   ${ACTIONEVENT}  ${EVENTGROUP}
     The Current Page Should Be    ViewEventTypePage
     Element Should Not Be Visible    ${ViewEventTypePage._locators['asset_type_associations']}  
     [Teardown]  Delete Event Type  ${eventTypeName}  
     
 Copy Event Type And Verify Creation
     [Tags]   C1861
-    Copy Event Type  ${CopyEventType}
-    Verify Creation Of An Event Type    ${CopyEventType} - 1   ${AssetEvent}   ${EventGroup}
-    To Go View Event Type  ${CopyEventType} - 1
+    Copy Event Type  ${COPYEVENTTYPE}
+    Verify Creation Of An Event Type    ${COPYEVENTTYPE} - 1   ${ASSETEVENT}   ${EVENTGROUP}
+    To Go View Event Type  ${COPYEVENTTYPE} - 1
     The Current Page Should Be    ViewEventTypePage
     Page Should Contain    Section 1
     Page Should Contain    Criteria 1
     Page Should Contain    Score Group    
     Page Should Not Contain    No event form    
-    [Teardown]  Delete Event Type   ${CopyEventType} - 1
+    [Teardown]  Delete Event Type   ${COPYEVENTTYPE} - 1
 
 Verify Asset Type Association For An Event Type
     [Tags]  C1980
     ${eventTypeName}    Generate Random String  5
-    Create An Event Type  ${AssetEvent}  ${eventTypeName}  ${EventGroup}
+    Create An Event Type  ${ASSETEVENT}  ${eventTypeName}  ${EVENTGROUP}
     Go To Asset Type Assocaition Tab Of An Event Type  ${eventTypeName}
     The Current Page Should Be    AssetTypeAssocationPage
-    Click Asset Type Checkbox    ${AssetType}
+    Click Asset Type Checkbox    ${ASSETTYPE}
     Click Save Assettype Association Button
     Go To Asset Type Assocaition Tab Of An Event Type  ${eventTypeName}
-    ${isChecked}  Verify If Asset Type Checkbox Is Checked    ${AssetType}
+    ${isChecked}  Verify If Asset Type Checkbox Is Checked   ${ASSETTYPE}
     Should Be True    ${isChecked}    
     [Teardown]  Delete Event Type  ${eventTypeName}    
-    
