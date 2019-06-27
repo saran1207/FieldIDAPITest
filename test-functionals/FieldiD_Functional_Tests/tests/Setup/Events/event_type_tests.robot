@@ -44,7 +44,7 @@ Create Event Type and Verify Creation
     ${eventTypeName}    Generate Random String  5
     Create An Event Type   ${eventType}  ${eventTypeName}   ${eventTypeGroup}
     Verify Creation Of An Event Type    ${eventTypeName}    ${eventType}   ${eventTypeGroup}
-    To Go View Event Type  ${eventTypeName}
+    Go To View Event Type  ${eventTypeName}
     [Return]   ${eventTypeName}
     
     
@@ -81,7 +81,7 @@ Copy Event Type And Verify Creation
     [Tags]   C1861
     Copy Event Type  ${COPYEVENTTYPE}
     Verify Creation Of An Event Type    ${COPYEVENTTYPE} - 1   ${ASSETEVENT}   ${EVENTGROUP}
-    To Go View Event Type  ${COPYEVENTTYPE} - 1
+    Go To View Event Type  ${COPYEVENTTYPE} - 1
     The Current Page Should Be    ViewEventTypePage
     Page Should Contain    Section 1
     Page Should Contain    Criteria 1

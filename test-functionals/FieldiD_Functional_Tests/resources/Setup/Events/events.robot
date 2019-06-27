@@ -51,7 +51,7 @@ Delete Event Type
     The Current Page Should Be   EventTypeDeleteConfirmPage
     Click Delete Button
     
-To Go View Event Type
+Go To View Event Type
     [Arguments]    ${eventTypeName}
     Go To Page    ManageEventTypesPage
     The Current Page Should Be    ManageEventTypesPage
@@ -66,6 +66,6 @@ Copy Event Type
     
 Go To Asset Type Assocaition Tab Of An Event Type
     [Arguments]    ${eventTypeName}
-    To Go View Event Type  ${eventTypeName}
+    Go To View Event Type  ${eventTypeName}
     The Current Page Should Be    ViewEventTypePage
     Click Asset Type Association Tab
