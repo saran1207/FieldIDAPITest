@@ -6,6 +6,7 @@ Library         Setup.Events.manage_event_types_page.ManageEventTypesPage  WITH 
 Library         Setup.Events.add_event_type_page.AddEventTypePage      WITH NAME       AddEventTypePage
 Library         Setup.Events.view_event_type_page.ViewEventTypePage     WITH NAME       ViewEventTypePage 
 Library         Setup.Events.event_type_delete_confirm_page.EventTypeDeleteConfirmPage      WITH NAME       EventTypeDeleteConfirmPage
+Library         Setup.Events.observation_groups_page.ObservationGroupsPage     WITH NAME       ObservationGroupsPage
 Library         String
 
 
@@ -69,3 +70,25 @@ Go To Asset Type Assocaition Tab Of An Event Type
     Go To View Event Type  ${eventTypeName}
     The Current Page Should Be    ViewEventTypePage
     Click Asset Type Association Tab
+    
+Add Observation Group
+    [Arguments]    ${observationGroupName}
+    Go To Page  ObservationGroupsPage
+    The Current Page Should Be  ObservationGroupsPage
+    Input Observation Group Name    ${observationGroupName}
+    Click Save Observation Group Button
+    
+Add Score To Observation Group
+    [Arguments]    ${observationGroupName}  ${scoreName}
+    Go To Page  ObservationGroupsPage
+    The Current Page Should Be  ObservationGroupsPage
+    Select Observation Group  ${observationGroupName}
+    Input Score Name   ${scoreName}
+    Click Add Score Button
+    
+Delete Observation Group
+    [Arguments]    ${observationGroupName}
+    Go To Page  ObservationGroupsPage
+    The Current Page Should Be  ObservationGroupsPage
+    Click Delete Observation Group  ${observationGroupName}
+    

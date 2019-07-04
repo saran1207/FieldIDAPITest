@@ -10,6 +10,7 @@ Library         Setup.Events.manage_event_types_page.ManageEventTypesPage  WITH 
 Library         Setup.Events.add_event_type_page.AddEventTypePage      WITH NAME       AddEventTypePage
 Library         Setup.Events.view_event_type_page.ViewEventTypePage     WITH NAME       ViewEventTypePage
 Library         Setup.Events.asset_type_assocation_page.AssetTypeAssocationPage    WITH NAME       AssetTypeAssocationPage
+Library         Setup.Events.observation_groups_page.ObservationGroupsPage     WITH NAME       ObservationGroupsPage
 Suite Setup      Perform Suite Setup
 Suite Teardown  Logout Of Field Id
 
@@ -100,4 +101,17 @@ Verify Asset Type Association For An Event Type
     Go To Asset Type Assocaition Tab Of An Event Type  ${eventTypeName}
     ${isChecked}  Verify If Asset Type Checkbox Is Checked   ${ASSETTYPE}
     Should Be True    ${isChecked}    
-    [Teardown]  Delete Event Type  ${eventTypeName}    
+    [Teardown]  Delete Event Type  ${eventTypeName}  
+    
+Verify Add Observation Group
+    [Tags]  C1872
+     ${observationGroupName}    Generate Random String  5 
+     Add Observation Group    ${observationGroupName}
+     Add Score To Observation Group    ${observationGroupName}    Test
+     Click Save Score Button
+     Handle Alert    ACCEPT
+     Go To Page  ObservationGroupsPage
+     ${isObservationGroupPresent}=  Verify If Observation Group Is Added    ${observationGroupName}
+     Select Observation Group    ${observationGroupName}
+     Should Be True  ${isObservationGroupPresent}
+     [Teardown]  Delete Observation Group    ${observationGroupName}
