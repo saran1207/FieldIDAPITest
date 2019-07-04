@@ -25,6 +25,7 @@ ${ACTIONEVENT}    Action
 ${EVENTGROUP}   Visual Inspection
 ${ASSETTYPE}  Asset Type 1
 ${COPYEVENTTYPE}  Score Event
+${SCORENAME}  Test Score
 
 
 *** Keywords ***
@@ -107,11 +108,23 @@ Verify Add Observation Group
     [Tags]  C1872
      ${observationGroupName}    Generate Random String  5 
      Add Observation Group    ${observationGroupName}
-     Add Score To Observation Group    ${observationGroupName}    Test
+     Add Score To Observation Group    ${observationGroupName}    ${SCORENAME}
      Click Save Score Button
      Handle Alert    ACCEPT
      Go To Page  ObservationGroupsPage
      ${isObservationGroupPresent}=  Verify If Observation Group Is Added    ${observationGroupName}
-     Select Observation Group    ${observationGroupName}
      Should Be True  ${isObservationGroupPresent}
+     Select Observation Group    ${observationGroupName}
+     ${isScorePresent}=  Verify If Score Is Added    ${SCORENAME}
+     Should Be True  ${isScorePresent}
      [Teardown]  Delete Observation Group    ${observationGroupName}
+     
+Verify Edit Observation Group
+    [Tags]  C1873
+     ${observationGroupName}    Generate Random String  5 
+     Add Observation Group    ${observationGroupName}
+     Edit Observation Group    ${observationGroupName}   ${observationGroupName} + editted
+     Go To Page  ObservationGroupsPage
+     ${isObservationGroupPresent}=  Verify If Observation Group Is Added    ${observationGroupName} + editted
+     Should Be True  ${isObservationGroupPresent}
+     [Teardown]  Delete Observation Group    ${observationGroupName} + editted

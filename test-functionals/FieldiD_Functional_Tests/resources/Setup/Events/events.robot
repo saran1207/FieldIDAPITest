@@ -92,3 +92,11 @@ Delete Observation Group
     The Current Page Should Be  ObservationGroupsPage
     Click Delete Observation Group  ${observationGroupName}
     
+Edit Observation Group
+    [Arguments]   ${oldObservationGroupName}  ${newObservationGroupName}  
+    Go To Page  ObservationGroupsPage
+    The Current Page Should Be  ObservationGroupsPage
+    Click Edit Observation Group Button  ${oldObservationGroupName}
+    Input Edit Observation Group Name    ${newObservationGroupName}
+    Click Save Edit Observation Group Button
+    

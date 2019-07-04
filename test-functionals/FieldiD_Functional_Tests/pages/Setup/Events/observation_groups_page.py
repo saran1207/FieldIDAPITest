@@ -36,14 +36,29 @@ class ObservationGroupsPage(PageObject):
     def input_observation_group_name(self, observation_group_name):
         self.se2lib.wait_until_element_is_visible(self.locator.observation_group_name_textbox)
         self.se2lib.input_text(self.locator.observation_group_name_textbox, observation_group_name)
+        
+    def input_edit_observation_group_name(self, observation_group_name):
+        self.se2lib.wait_until_element_is_visible(self.locator.edit_observation_group_textbox)
+        self.se2lib.input_text(self.locator.edit_observation_group_textbox, observation_group_name)
             
     def click_save_observation_group_button(self):
         self.se2lib.wait_until_element_is_visible(self.locator.save_observation_group_button)
         self.se2lib.click_element(self.locator.save_observation_group_button)
+    
+    def click_save_edit_observation_group_button(self):
+        self.se2lib.wait_until_element_is_visible(self.locator.save_edit_observation_group_link)
+        self.se2lib.click_element(self.locator.save_edit_observation_group_link)
+        
+    def click_edit_observation_group_button(self, observation_group_name):
+        self.se2lib.wait_until_element_is_visible(self.locator.edit_observation_group_link % observation_group_name)
+        self.se2lib.click_element(self.locator.edit_observation_group_link % observation_group_name)
         
     def verify_if_observation_group_is_added(self, observation_group_name):
-        print(len(self.se2lib.driver.find_elements_by_xpath(self.locator.copy_observation_group_link % observation_group_name)))
         return len(self.se2lib.driver.find_elements_by_xpath(self.locator.edit_observation_group_link % observation_group_name))>0 and len(self.se2lib.driver.find_elements_by_xpath(self.locator.copy_observation_group_link % observation_group_name))>0
+    
+    def verify_if_score_is_added(self, score_name):
+        self.se2lib.wait_until_element_is_visible(self.locator.score_name_label % score_name)
+        return len(self.se2lib.driver.find_elements_by_xpath(self.locator.score_name_label % score_name))>0 
                
     def input_score_name(self, score_name):
         self.se2lib.wait_until_element_is_visible(self.locator.score_name_textbox)
