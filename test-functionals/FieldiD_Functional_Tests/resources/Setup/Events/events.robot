@@ -7,6 +7,7 @@ Library         Setup.Events.add_event_type_page.AddEventTypePage      WITH NAME
 Library         Setup.Events.view_event_type_page.ViewEventTypePage     WITH NAME       ViewEventTypePage 
 Library         Setup.Events.event_type_delete_confirm_page.EventTypeDeleteConfirmPage      WITH NAME       EventTypeDeleteConfirmPage
 Library         Setup.Events.observation_groups_page.ObservationGroupsPage     WITH NAME       ObservationGroupsPage
+Library         Setup.Events.score_groups_page.ScoreGroupsPage     WITH NAME       ScoreGroupsPage
 Library         String
 
 
@@ -99,4 +100,34 @@ Edit Observation Group
     Click Edit Observation Group Button  ${oldObservationGroupName}
     Input Edit Observation Group Name    ${newObservationGroupName}
     Click Save Edit Observation Group Button
+    
+Add Score Group
+    [Arguments]    ${scoreGroupName}
+    Go To Page  ScoreGroupsPage
+    The Current Page Should Be  ScoreGroupsPage
+    Input Score Group Name    ${scoreGroupName}
+    Click Save Score Group Button
+    
+Add Score To Score Group
+    [Arguments]    ${scoreGroupName}  ${scoreName}  ${scoreValue}
+    Go To Page  ScoreGroupsPage
+    The Current Page Should Be  ScoreGroupsPage
+    Select Score Group  ${scoreGroupName}
+    Input Score Name   ${scoreName}
+    Input Score Value  ${scoreValue}
+    Click Save Score Button
+    
+Delete Score Group
+    [Arguments]    ${scoreGroupName}
+    Go To Page  ScoreGroupsPage
+    The Current Page Should Be  ScoreGroupsPage
+    Click Delete Score Group  ${scoreGroupName}
+    
+Edit Score Group
+    [Arguments]   ${oldScoreGroupName}  ${newScoreGroupName}  
+    Go To Page  ScoreGroupsPage
+    The Current Page Should Be  ScoreGroupsPage
+    Click Edit Score Group Link  ${oldScoreGroupName}
+    Input Edit Score Group Name    ${newScoreGroupName}
+    Click Save Edit Score Group Link
     

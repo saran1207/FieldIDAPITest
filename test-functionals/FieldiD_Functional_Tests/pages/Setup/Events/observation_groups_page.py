@@ -17,9 +17,7 @@ class ObservationGroupsPage(PageObject):
         "add_score_button": "link:Add",
         "score_name_label": "//div[@class='score']//a/span[text()='%s']",
         "save_score_button": "//div[@class='saveLinkContainer']/a",
-        "view_all_link": "link:View All"
-        
-        
+               
      }
     
     def _is_current_page(self):
@@ -29,10 +27,6 @@ class ObservationGroupsPage(PageObject):
             raise Exception(message)
         return True
 
-    def select_event_type_group(self, event_group):
-        if event_group != "":
-            self.se2lib.driver.find_element_by_xpath(self.locator.eventTypeGroup_dropdown % event_group).click()
-                
     def input_observation_group_name(self, observation_group_name):
         self.se2lib.wait_until_element_is_visible(self.locator.observation_group_name_textbox)
         self.se2lib.input_text(self.locator.observation_group_name_textbox, observation_group_name)
@@ -71,10 +65,6 @@ class ObservationGroupsPage(PageObject):
     def click_save_score_button(self):
         self.se2lib.wait_until_element_is_visible(self.locator.save_score_button)
         self.se2lib.click_element(self.locator.save_score_button)
-        
-    def click_view_all_link(self):
-        self.se2lib.wait_until_element_is_visible(self.locator.view_all_link)
-        self.se2lib.click_element(self.locator.view_all_link)
         
     def select_observation_group(self, observation_group_name):
         self.se2lib.wait_until_element_is_visible(self.locator.view_observation_group_link % observation_group_name)

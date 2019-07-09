@@ -11,6 +11,7 @@ Library         Setup.Events.add_event_type_page.AddEventTypePage      WITH NAME
 Library         Setup.Events.view_event_type_page.ViewEventTypePage     WITH NAME       ViewEventTypePage
 Library         Setup.Events.asset_type_assocation_page.AssetTypeAssocationPage    WITH NAME       AssetTypeAssocationPage
 Library         Setup.Events.observation_groups_page.ObservationGroupsPage     WITH NAME       ObservationGroupsPage
+Library         Setup.Events.score_groups_page.ScoreGroupsPage     WITH NAME       ScoreGroupsPage
 Suite Setup      Perform Suite Setup
 Suite Teardown  Logout Of Field Id
 
@@ -26,6 +27,7 @@ ${EVENTGROUP}   Visual Inspection
 ${ASSETTYPE}  Asset Type 1
 ${COPYEVENTTYPE}  Score Event
 ${SCORENAME}  Test Score
+${SCOREVALUE}  70
 
 
 *** Keywords ***
@@ -123,8 +125,31 @@ Verify Edit Observation Group
     [Tags]  C1873
      ${observationGroupName}    Generate Random String  5 
      Add Observation Group    ${observationGroupName}
-     Edit Observation Group    ${observationGroupName}   ${observationGroupName} + editted
+     Edit Observation Group    ${observationGroupName}   ${observationGroupName} editted
      Go To Page  ObservationGroupsPage
-     ${isObservationGroupPresent}=  Verify If Observation Group Is Added    ${observationGroupName} + editted
+     ${isObservationGroupPresent}=  Verify If Observation Group Is Added    ${observationGroupName} editted
      Should Be True  ${isObservationGroupPresent}
-     [Teardown]  Delete Observation Group    ${observationGroupName} + editted
+     [Teardown]  Delete Observation Group    ${observationGroupName} editted
+     
+Verify Add Score Group
+    [Tags]  C1870
+     ${scoreGroupName}    Generate Random String  5 
+     Add Score Group    ${scoreGroupName}
+     Add Score To Score Group    ${scoreGroupName}    ${SCORENAME}  ${SCOREVALUE}
+     Go To Page  ScoreGroupsPage
+     ${isScoreGroupPresent}=  Verify If Score Group Is Added    ${scoreGroupName}
+     Should Be True  ${isScoreGroupPresent}
+     Select Observation Group    ${scoreGroupName}
+     ${isScorePresent}=  Verify If Score Is Added    ${SCORENAME}
+     Should Be True  ${isScorePresent}
+     [Teardown]  Delete Score Group    ${scoreGroupName}
+     
+Verify Edit Score Group
+    [Tags]  C1871
+     ${scoreGroupName}    Generate Random String  5 
+     Add Score Group    ${scoreGroupName}
+     Edit Score Group    ${scoreGroupName}   ${scoreGroupName} editted
+     Go To Page  ScoreGroupsPage
+     ${isScoreGroupPresent}=  Verify If Score Group Is Added    ${scoreGroupName} editted
+     Should Be True  ${isScoreGroupPresent}
+     [Teardown]  Delete Score Group    ${scoreGroupName} editted
