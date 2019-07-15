@@ -12,6 +12,7 @@ Library         Setup.Events.view_event_type_page.ViewEventTypePage     WITH NAM
 Library         Setup.Events.asset_type_assocation_page.AssetTypeAssocationPage    WITH NAME       AssetTypeAssocationPage
 Library         Setup.Events.observation_groups_page.ObservationGroupsPage     WITH NAME       ObservationGroupsPage
 Library         Setup.Events.score_groups_page.ScoreGroupsPage     WITH NAME       ScoreGroupsPage
+Library         Setup.Events.observations_page.ObservationsPage   WITH NAME       ObservationsPage
 Suite Setup      Perform Suite Setup
 Suite Teardown  Logout Of Field Id
 
@@ -153,3 +154,22 @@ Verify Edit Score Group
      ${isScoreGroupPresent}=  Verify If Score Group Is Added    ${scoreGroupName} editted
      Should Be True  ${isScoreGroupPresent}
      [Teardown]  Delete Score Group    ${scoreGroupName} editted
+     
+Verify Observation Group In Event Type
+    [Tags]  C1896
+     ${eventTypeName}=   Create Event Type and Verify Creation  ${ASSETEVENT}  ${EVENTGROUP}
+    Setup Observations To Event Type   ${eventTypeName}   Default Observation Group  Unsafe  Safe  60  100  61  100
+    The Current Page Should Be   ViewEventTypePage
+    Click Observations Link
+    The Current Page Should Be  ObservationsPage
+    ${observationGroup}=  Verify Observation Group Name    Default Observation Group
+    ${observationCountFail}=  Verify Observation Count Fail    Unsafe
+    ${observationCountPass}=  Verify Observation Count Pass    Safe
+    ${failValue}=  Verify Fail Range Value    60  100
+    ${passValue}=  Verify Pass Range Value    61  100
+    Should Be True  ${observationGroup}
+    Should Be True  ${observationCountFail}
+    Should Be True  ${observationCountPass}
+    Should Be True  ${failValue}
+    Should Be True  ${passValue}
+    [Teardown]  Delete Event Type   ${eventTypeName}    

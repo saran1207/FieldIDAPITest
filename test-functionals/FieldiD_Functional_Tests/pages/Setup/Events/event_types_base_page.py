@@ -20,3 +20,7 @@ class EventTypesBasePage(PageObject):
     def click_asset_type_association_tab(self):
         self.se2lib.wait_until_element_is_visible(self.locator.asset_type_associations)
         self.se2lib.click_element(self.locator.asset_type_associations)
+        
+    def click_observations_link(self):
+        self.se2lib.wait_until_element_is_visible(self.locator.observations_link)
+        self.se2lib.click_element(self.locator.observations_link)

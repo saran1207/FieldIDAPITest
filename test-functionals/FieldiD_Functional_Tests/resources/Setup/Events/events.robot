@@ -7,6 +7,7 @@ Library         Setup.Events.add_event_type_page.AddEventTypePage      WITH NAME
 Library         Setup.Events.view_event_type_page.ViewEventTypePage     WITH NAME       ViewEventTypePage 
 Library         Setup.Events.event_type_delete_confirm_page.EventTypeDeleteConfirmPage      WITH NAME       EventTypeDeleteConfirmPage
 Library         Setup.Events.observation_groups_page.ObservationGroupsPage     WITH NAME       ObservationGroupsPage
+Library         Setup.Events.observations_page.ObservationsPage   WITH NAME       ObservationsPage
 Library         Setup.Events.score_groups_page.ScoreGroupsPage     WITH NAME       ScoreGroupsPage
 Library         String
 
@@ -131,3 +132,20 @@ Edit Score Group
     Input Edit Score Group Name    ${newScoreGroupName}
     Click Save Edit Score Group Link
     
+Setup Observations To Event Type
+    [Arguments]    ${eventType}   ${observationGroupName}  ${ObservationsCountFail}  ${ObservationsCountPass}  ${failValue1}  ${failValue2}  ${passValue1}  ${passValue2}
+    Go To View Event Type  ${eventType}
+    The Current Page Should Be   ViewEventTypePage
+    Click Observations Link
+    The Current Page Should Be  ObservationsPage
+    Select Observation Group Dropdown    ${observationGroupName}
+    Check Observation Count Result Checkbox
+    Check Observation Percentage Checkbox
+    Check Observation Section Totals Checkbox
+    Select Observation Count Fail Dropdown    ${ObservationsCountFail}
+    Select Observation Count Pass Dropdown    ${ObservationsCountPass}
+    Input Fail Range Value1 Textbox    ${failValue1}
+    Input Fail Range Value2 Textbox    ${failValue2}
+    Input Pass Range Value1 Textbox    ${passValue1}
+    Input Pass Range Value2 Textbox    ${passValue2}
+    Click Save Observations Button  
