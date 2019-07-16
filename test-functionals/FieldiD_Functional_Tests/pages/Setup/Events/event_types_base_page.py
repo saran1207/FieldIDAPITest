@@ -24,3 +24,7 @@ class EventTypesBasePage(PageObject):
     def click_observations_link(self):
         self.se2lib.wait_until_element_is_visible(self.locator.observations_link)
         self.se2lib.click_element(self.locator.observations_link)
+        
+    def click_scoring_link(self):
+        self.se2lib.wait_until_element_is_visible(self.locator.scoring_link)
+        self.se2lib.click_element(self.locator.scoring_link)

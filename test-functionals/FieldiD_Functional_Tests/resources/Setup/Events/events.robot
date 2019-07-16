@@ -9,6 +9,7 @@ Library         Setup.Events.event_type_delete_confirm_page.EventTypeDeleteConfi
 Library         Setup.Events.observation_groups_page.ObservationGroupsPage     WITH NAME       ObservationGroupsPage
 Library         Setup.Events.observations_page.ObservationsPage   WITH NAME       ObservationsPage
 Library         Setup.Events.score_groups_page.ScoreGroupsPage     WITH NAME       ScoreGroupsPage
+Library         Setup.Events.scoring_page.ScoringPage   WITH NAME       ScoringPage
 Library         String
 
 
@@ -149,3 +150,19 @@ Setup Observations To Event Type
     Input Pass Range Value1 Textbox    ${passValue1}
     Input Pass Range Value2 Textbox    ${passValue2}
     Click Save Observations Button  
+    
+Setup Scoring To Event Type
+    [Arguments]    ${eventType}   ${ScoreName}  ${failValue1}  ${failValue2}  ${passValue1}  ${passValue2}
+    Go To View Event Type  ${eventType}
+    The Current Page Should Be   ViewEventTypePage
+    Click Scoring Link
+    The Current Page Should Be  ScoringPage
+    Select Score Dropdown    ${ScoreName}
+    Check Score Total Result Checkbox
+    Check Score Percentage Checkbox
+    Check Score Section Totals Checkbox
+    Input Fail Range Value1 Textbox    ${failValue1}
+    Input Fail Range Value2 Textbox    ${failValue2}
+    Input Pass Range Value1 Textbox    ${passValue1}
+    Input Pass Range Value2 Textbox    ${passValue2}
+    Click Save Scoring Button  

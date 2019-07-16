@@ -13,6 +13,7 @@ Library         Setup.Events.asset_type_assocation_page.AssetTypeAssocationPage 
 Library         Setup.Events.observation_groups_page.ObservationGroupsPage     WITH NAME       ObservationGroupsPage
 Library         Setup.Events.score_groups_page.ScoreGroupsPage     WITH NAME       ScoreGroupsPage
 Library         Setup.Events.observations_page.ObservationsPage   WITH NAME       ObservationsPage
+Library         Setup.Events.scoring_page.ScoringPage   WITH NAME       ScoringPage
 Suite Setup      Perform Suite Setup
 Suite Teardown  Logout Of Field Id
 
@@ -172,4 +173,19 @@ Verify Observation Group In Event Type
     Should Be True  ${observationCountPass}
     Should Be True  ${failValue}
     Should Be True  ${passValue}
-    [Teardown]  Delete Event Type   ${eventTypeName}    
+    [Teardown]  Delete Event Type   ${eventTypeName}   
+    
+Verify Scoring In Event Type
+    [Tags]  C1907
+    ${eventTypeName}=   Create Event Type and Verify Creation  ${ASSETEVENT}  ${EVENTGROUP}
+    Setup Scoring To Event Type   ${eventTypeName}   Average  1  5  6  10
+    The Current Page Should Be   ViewEventTypePage
+    Click Scoring Link
+    The Current Page Should Be  ScoringPage
+    ${scoreName}=  Verify Score Name    Average
+    ${failValue}=  Verify Fail Range Value    1  5
+    ${passValue}=  Verify Pass Range Value    6  10
+    Should Be True  ${scoreName}
+    Should Be True  ${failValue}
+    Should Be True  ${passValue}
+    [Teardown]  Delete Event Type   ${eventTypeName}     
