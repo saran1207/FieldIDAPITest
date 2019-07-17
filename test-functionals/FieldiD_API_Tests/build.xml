@@ -1,0 +1,21 @@
+<project basedir="." default="testreport" name="ant script for testing soapui project">
+   <property environment="env"/>
+   <property name="soapui.project" value="~/FieldiD_API_Functional_Tests.xml"/>
+   <property name="results.dir" value="/Users/Shared/Jenkins/Home/workspace/FieldIdAPITests/"/>
+   <property name="reports.dir" value="${results.dir}/Reports"/>
+   <property name="html.dir" value="${reports.dir}/html"/>
+   <target name="execute.project">
+     <exec dir="/Applications/SoapUI-5.5.0.app/Contents/java/app/bin/" executable="./testrunner.sh">
+        <arg line="-raj -f ${results.dir} ${soapui.project}" />
+     </exec>
+  </target>
+   <target name="testreport" depends="execute.project">
+    <mkdir dir="${reports.dir}"/>
+          <junitreport todir="${reports.dir}">
+            <fileset dir="${results.dir}">
+               <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${html.dir}" />
+         </junitreport>
+   </target>
+</project>

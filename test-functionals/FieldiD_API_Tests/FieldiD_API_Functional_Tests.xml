@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="0e601371-a679-4b6e-87a6-ecdd25dc3123" activeEnvironment="Default" name="FieldiD_API_Functional_Tests" resourceRoot="" soapui-version="5.5.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings><con:setting id="com.smartbear.swagger.ExportSwaggerAction$FormBase Path"/><con:setting id="com.smartbear.swagger.ExportSwaggerAction$FormTarget Folder">/Users/saranya</con:setting><con:setting id="com.smartbear.swagger.ExportSwaggerAction$FormFormat">xml</con:setting><con:setting id="com.smartbear.swagger.ExportSwaggerAction$FormAPI Version">1.0</con:setting><con:setting id="com.smartbear.swagger.ExportSwaggerAction$FormSwagger Version">1.2</con:setting><con:setting id="com.eviware.soapui.impl.wsdl.actions.iface.tools.soapui.TestRunnerAction@values-local"><![CDATA[<xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  <con:entry key="Report Format(s)" value=""/>
+  <con:entry key="Host:Port" value=""/>
+  <con:entry key="Export JUnit Results" value="true"/>
+  <con:entry key="Export All" value="true"/>
+  <con:entry key="Save After" value="false"/>
+  <con:entry key="Add Settings" value="false"/>
+  <con:entry key="WSS Password Type" value=""/>
+  <con:entry key="TestSuite" value="&lt;all>"/>
+  <con:entry key="Endpoint" value=""/>
+  <con:entry key="Select Report Type" value=""/>
+  <con:entry key="System Properties" value=""/>
+  <con:entry key="Password" value=""/>
+  <con:entry key="Print Report" value="true"/>
+  <con:entry key="Open Report" value="false"/>
+  <con:entry key="Export JUnit Results with test properties" value="true"/>
+  <con:entry key="Global Properties" value=""/>
+  <con:entry key="Project Properties" value=""/>
+  <con:entry key="Project Password" value=""/>
+  <con:entry key="TestCase" value="&lt;all>"/>
+  <con:entry key="Username" value=""/>
+  <con:entry key="user-settings.xml Password" value=""/>
+  <con:entry key="TestRunner Path" value=""/>
+  <con:entry key="Environment" value="Default"/>
+  <con:entry key="Coverage Report" value="false"/>
+  <con:entry key="Enable UI" value="false"/>
+  <con:entry key="Root Folder" value="/Users/saranya/Desktop"/>
+  <con:entry key="Ignore Errors" value="false"/>
+  <con:entry key="Domain" value=""/>
+  <con:entry key="Tool Args" value=""/>
+  <con:entry key="Save Project" value="false"/>
+</xml-fragment>]]></con:setting></con:settings><con:interface xsi:type="con:RestService" id="9aa3dd6b-0fc6-40c3-91d3-3c016d581485" wadlVersion="http://wadl.dev.java.net/2009/02" name="https://pub.fidstage.com" type="rest" basePath="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart=""/><con:endpoints><con:endpoint>${#TestSuite#endpoint}</con:endpoint><con:endpoint>assets</con:endpoint><con:endpoint>https://pub.fidstage.com/api/</con:endpoint></con:endpoints><con:resource name="assets" path="/assets" id="85fc8c8e-16ac-4d9e-a346-ef56f3565e27"><con:settings/><con:parameters/><con:method name="getAllAssets" id="904f934d-777f-43b9-b9e1-7e3f798beb3a" method="GET"><con:settings/><con:parameters/><con:representation type="FAULT"><con:mediaType>text/html; charset=UTF-8</con:mediaType><con:status>404</con:status><con:params/><con:element>html</con:element></con:representation><con:representation type="REQUEST"><con:mediaType>application/json</con:mediaType><con:params/></con:representation><con:representation type="FAULT"><con:mediaType>application/json</con:mediaType><con:status>404 403</con:status><con:params/><con:element xmlns:ass="https://pub.fidstage.com/assets">ass:Fault</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json</con:mediaType><con:status>200</con:status><con:params/><con:element xmlns:ass="https://pub.fidstage.com/assets">ass:Response</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType>application/x-protobuf64</con:mediaType><con:status>200</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType>text/html;charset=utf-8</con:mediaType><con:status>400</con:status><con:params/><con:element>html</con:element></con:representation><con:request name="Request 1" id="a93d8cd5-6e9f-46db-8b20-240b608a6381" mediaType="application/json"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  &lt;con:entry key="Accept" value="application/json, text/javascript, */*; q=0.0"/>
+  &lt;con:entry key="Content-Type" value="application/json"/>
+&lt;/xml-fragment></con:setting><con:setting id="com.eviware.soapui.impl.support.AbstractHttpRequest@follow-redirects">true</con:setting></con:settings><con:encoding xsi:nil="true"/><con:endpoint>https://pub.fidstage.com/api</con:endpoint><con:request/><con:originalUri>https://pub.fidstage.com/assets</con:originalUri><con:credentials><con:selectedAuthProfile>Stage</con:selectedAuthProfile><con:authType>OAuth 1.0</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method></con:resource><con:resource name="assets" path="/assets" id="f3ae3c99-5325-4b69-9a61-dc24c4c8c81f"><con:settings/><con:parameters/><con:method name="postAsset" id="50a0b39e-10e4-4143-a89d-d4e79ee36499" method="POST"><con:settings/><con:parameters/><con:representation type="FAULT"><con:mediaType>text/html; charset=UTF-8</con:mediaType><con:status>404</con:status><con:params/><con:element>html</con:element></con:representation><con:representation type="REQUEST"><con:mediaType>application/json</con:mediaType><con:params/></con:representation><con:representation type="FAULT"><con:mediaType>application/json</con:mediaType><con:status>403 500 404</con:status><con:params/><con:element xmlns:ass="https://pub.fidstage.com/assets">ass:Fault</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json</con:mediaType><con:status>200</con:status><con:params/><con:element xmlns:ass="https://pub.fidstage.com/assets">ass:Response</con:element></con:representation><con:request name="Request 1" id="3e267618-6104-471a-bdb6-41d75d241ac8" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  &lt;con:entry key="Accept" value="application/json, text/javascript, */*; q=0.0"/>
+  &lt;con:entry key="Content-Type" value="application/json"/>
+&lt;/xml-fragment></con:setting></con:settings><con:endpoint>https://pub.fidstage.com/api</con:endpoint><con:request>{
+  "ownerId": "kQbnD",
+  "identifier": "temp1",
+  "rfidNumber": "",
+  "customerRefNumber": "",
+  "purchaseOrder": "",
+  "comments": "",
+  "identifiedDate": "2019-06-17T19:27:46.340Z",
+  "assetTypeId": "5CFdVi",
+  "assetStatusId": "",
+  "identifiedByUserId": "",
+  "assignedUserId": "",
+  "latitude": "",
+  "longitude": "",
+  "freeFormLocation": "",
+  "predefinedLocationId": "",
+  "orderNumber": ""
+}</con:request><con:originalUri>https://pub.fidstage.com/assets</con:originalUri><con:credentials><con:selectedAuthProfile>Stage</con:selectedAuthProfile><con:authType>OAuth 1.0</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method></con:resource><con:resource name="getAssetById" path="/assets/{assetId}" id="ea119ab5-11b6-43b1-8a1d-083ed51931b2"><con:settings/><con:parameters><con:parameter><con:name>assetId</con:name><con:value/><con:style>TEMPLATE</con:style><con:default/><con:description xsi:nil="true"/></con:parameter></con:parameters><con:method name="getAssetById" id="f05c0351-a3c8-44bd-a1b7-982cb1aaa24a" method="GET"><con:settings/><con:parameters/><con:representation type="REQUEST"><con:mediaType>application/json</con:mediaType><con:params/></con:representation><con:representation type="FAULT"><con:mediaType>application/json</con:mediaType><con:status>404</con:status><con:params/></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json</con:mediaType><con:status>200</con:status><con:params/><con:element xmlns:knl="https://pub.fidstage.com/api/assets/knlRUa">knl:Response</con:element></con:representation><con:request name="Request 1" id="9a9c4673-6d42-48fe-adc3-9a350d64d6dc" mediaType="application/json"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  &lt;con:entry key="Accept" value="application/json, text/javascript, */*; q=0.0"/>
+  &lt;con:entry key="Content-Type" value="application/json"/>
+&lt;/xml-fragment></con:setting></con:settings><con:endpoint>https://pub.fidstage.com/api/</con:endpoint><con:request/><con:originalUri>https://pub.fidstage.com/api//assets/</con:originalUri><con:credentials><con:selectedAuthProfile>Stage</con:selectedAuthProfile><con:authType>OAuth 1.0</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/><con:parameterOrder><con:entry>assetId</con:entry></con:parameterOrder></con:request></con:method></con:resource></con:interface><con:testSuite id="da130566-42d4-4037-9b66-64b86267e6e2" name="Verify Assets API"><con:description>TestSuite generated for REST Service [https://pub.fidstage.com]</con:description><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="29abcfbb-b700-428c-bc9b-44b4bc0d0193" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="getAssets" searchProperties="true"><con:description>TestCase generated for REST Resource [assets] located at [/assets]</con:description><con:settings/><con:testStep type="restrequest" name="Request 1" id="53d8fae2-d450-4b54-806c-c1b956bf8604"><con:settings/><con:config service="https://pub.fidstage.com" resourcePath="/assets" methodName="getAllAssets" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="Request 1" id="a93d8cd5-6e9f-46db-8b20-240b608a6381" mediaType="application/json"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  &lt;con:entry key="Accept" value="application/json, text/javascript, */*; q=0.0"/>
+  &lt;con:entry key="Content-Type" value="application/json"/>
+&lt;/xml-fragment></con:setting><con:setting id="com.eviware.soapui.impl.support.AbstractHttpRequest@follow-redirects">true</con:setting></con:settings><con:encoding xsi:nil="true"/><con:endpoint>${#TestSuite#endpoint}</con:endpoint><con:request/><con:originalUri>https://pub.fidstage.com/assets</con:originalUri><con:assertion type="GroovyScriptAssertion" id="4d370f0a-5563-4452-83dc-153ddd168bd7" name="Script Assertion"><con:configuration><scriptText>import groovy.json.JsonSlurper
+
+//grab the response from API
+def response=messageExchange.response.responseContent;
+
+def jsonResponse= new JsonSlurper().parseText(response);
+log.info(jsonResponse)
+
+//def assetId=json1.identifier
+assert jsonResponse.page==0
+assert jsonResponse.pageSize==25
+</scriptText></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>fidstage</con:selectedAuthProfile><con:authType>OAuth 1.0</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:setupScript>import com.eviware.soapui.support.types.StringToStringMap;
+
+def headers =testRunner.testCase.testSteps['Request 1'].testRequest.requestHeaders
+StringToStringMap headermap = new StringToStringMap(headers)
+if (headers.containsKeyIgnoreCase("Accept") ){
+                headermap.replace("Accept", context.expand('${#Project#AcceptValue}'))
+                } else {
+                headermap.put("Accept", context.expand('${#Project#AcceptValue}'))
+                }
+if (headers.containsKeyIgnoreCase("Content-Type") ){
+                headermap.replace("Content-Type", context.expand('${#Project#ContentTypeValue}'))
+                } else {
+                headermap.put("Content-Type", context.expand('${#Project#ContentTypeValue}'))
+                }
+testRunner.testCase.testSteps['Request 1'].testRequest.requestHeaders = headermap</con:setupScript><con:properties/></con:testCase><con:testCase id="695d7493-4e38-423f-918a-f52f9b6fe2a0" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="postAssets" searchProperties="true"><con:description>TestCase generated for REST Resource [assets] located at [/assets]</con:description><con:settings/><con:testStep type="groovy" name="generateAssetName" id="54f33253-987e-47b1-8fcb-4750eb08ee82"><con:settings/><con:config><script>import org.apache.commons.lang.RandomStringUtils
+class Asset{
+	def log;
+	def context;
+	def testRunner;
+
+	def Asset(log, context,testRunner){
+		this.log = log
+		this.context = context
+		this.testRunner = testRunner
+	}
+
+	def generateAssetName(){
+		String randomString = (RandomStringUtils.random(6, true, true))
+		testRunner.testCase.setPropertyValue("assetIdentifier",randomString)
+		log.info(testRunner.testCase.getPropertyValue("assetIdentifier"))
+		log.info(randomString)
+	}
+}
+context.setProperty("Asset", new Asset(log,context,testRunner))</script></con:config></con:testStep><con:testStep type="restrequest" name="Request 1" id="6b1c3b5e-94fd-4aa9-8709-692499dda136"><con:settings/><con:config service="https://pub.fidstage.com" resourcePath="/assets" methodName="postAsset" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="Request 1" id="3e267618-6104-471a-bdb6-41d75d241ac8" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  &lt;con:entry key="Accept" value="application/json, text/javascript, */*; q=0.0"/>
+  &lt;con:entry key="Content-Type" value="application/json"/>
+&lt;/xml-fragment></con:setting></con:settings><con:endpoint>${#TestSuite#endpoint}</con:endpoint><con:request>{
+  "ownerId": "kQbnD",
+  "identifier": "${#TestCase#assetIdentifier}",
+  "rfidNumber": "",
+  "customerRefNumber": "",
+  "purchaseOrder": "",
+  "comments": "",
+  "identifiedDate": "2019-06-17T19:27:46.340Z",
+  "assetTypeId": "5CFdVi",
+  "assetStatusId": "",
+  "identifiedByUserId": "",
+  "assignedUserId": "",
+  "latitude": "",
+  "longitude": "",
+  "freeFormLocation": "",
+  "predefinedLocationId": "",
+  "orderNumber": ""
+}</con:request><con:originalUri>https://pub.fidstage.com/assets</con:originalUri><con:assertion type="Simple Contains" id="fab93926-ac5e-4489-b0b8-10159d048fc1" name="Contains"><con:configuration><token>${#TestCase#assetIdentifier}</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Stage</con:selectedAuthProfile><con:authType>OAuth 1.0</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:properties><con:property><con:name>assetIdentifier</con:name><con:value>eaGYhX</con:value></con:property></con:properties></con:testCase><con:testCase id="faecff3c-f9e5-4149-9b61-830b658fdb38" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="getAssetById" searchProperties="true"><con:settings/><con:testStep type="groovy" name="generateAssetName" id="d9dde209-95a0-48fd-a45b-c8ee5e35a937"><con:settings/><con:config><script>testStep = testRunner.testCase.testSuite.project.testSuites["Verify Assets API"].testCases["postAssets"].getTestStepByName("generateAssetName")
+
+testStep.run(testRunner, context)
+
+context.Asset.generateAssetName()</script></con:config></con:testStep><con:testStep type="restrequest" name="createAsset" id="e6f376bc-93f8-436a-b2f1-191708a2ea9d"><con:settings/><con:config service="https://pub.fidstage.com" resourcePath="/assets" methodName="postAsset" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="createAsset" id="3e267618-6104-471a-bdb6-41d75d241ac8" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  &lt;con:entry key="Accept" value="application/json, text/javascript, */*; q=0.0"/>
+  &lt;con:entry key="Content-Type" value="application/json"/>
+&lt;/xml-fragment></con:setting></con:settings><con:endpoint>${#TestSuite#endpoint}</con:endpoint><con:request>{
+  "ownerId": "kQbnD",
+  "identifier": "${#TestCase#assetIdentifier}",
+  "rfidNumber": "",
+  "customerRefNumber": "",
+  "purchaseOrder": "",
+  "comments": "",
+  "identifiedDate": "2019-06-17T19:27:46.340Z",
+  "assetTypeId": "5CFdVi",
+  "assetStatusId": "",
+  "identifiedByUserId": "",
+  "assignedUserId": "",
+  "latitude": "",
+  "longitude": "",
+  "freeFormLocation": "",
+  "predefinedLocationId": "",
+  "orderNumber": ""
+}</con:request><con:originalUri>https://pub.fidstage.com/assets</con:originalUri><con:credentials><con:selectedAuthProfile>Stage</con:selectedAuthProfile><con:authType>OAuth 1.0</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:testStep type="transfer" name="getAssetIdFromResponse" id="452d1d9b-f7c7-4f3b-8856-9d27d34e9c79"><con:settings/><con:config xsi:type="con:PropertyTransfersStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:transfers setNullOnMissingSource="true" transferTextContent="true" failOnError="true" ignoreEmpty="false" transferToAll="false" entitize="false" transferChildNodes="false"><con:name>assetId</con:name><con:sourceType>Response</con:sourceType><con:sourceStep>createAsset</con:sourceStep><con:sourcePath>$.id</con:sourcePath><con:targetType>assetId</con:targetType><con:targetStep>getAsset</con:targetStep><con:targetPath/><con:type>JSONPATH</con:type><con:targetTransferType>XQUERY</con:targetTransferType><con:upgraded>true</con:upgraded></con:transfers></con:config></con:testStep><con:testStep type="restrequest" name="getAsset" id="9833420a-df33-4d42-9164-71b9a3d7a0b0"><con:settings/><con:config service="https://pub.fidstage.com" methodName="getAssetById" resourcePath="/assets/{assetId}" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="getAsset" id="7f3a0d9a-faa0-4b0e-8bd3-79ed58a5f058" mediaType="application/json"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  &lt;con:entry key="Accept" value="application/json, text/javascript, */*; q=0.0"/>
+  &lt;con:entry key="Content-Type" value="application/json"/>
+&lt;/xml-fragment></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>${#TestSuite#endpoint}</con:endpoint><con:request/><con:originalUri>https://pub.fidstage.com/api/assets/knlRUa</con:originalUri><con:assertion type="Simple Contains" id="3855b6ce-f30c-413d-950b-46e2e8f853b2" name="Contains"><con:configuration><token>${#TestCase#assetIdentifier}</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:assertion type="GroovyScriptAssertion" id="901e1622-a8a3-4f8b-a12c-3c69707e18ac" name="Script Assertion"><con:configuration><scriptText>import groovy.json.JsonSlurper
+
+//grab the response from API
+def response=messageExchange.response.responseContent;
+
+def json1= new JsonSlurper().parseText(response);
+log.info(json1)
+
+def assetId=json1.identifier
+assert assetId==context.expand('${#TestCase#assetIdentifier}')</scriptText></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Stage</con:selectedAuthProfile><con:authType>OAuth 1.0</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters><entry key="assetId" value="8F0uwW" xmlns="http://eviware.com/soapui/config"/></con:parameters></con:restRequest></con:config></con:testStep><con:properties><con:property><con:name>assetIdentifier</con:name><con:value>HJecba</con:value></con:property></con:properties></con:testCase><con:properties><con:property><con:name>endpoint</con:name><con:value>https://pub.fidstage.com/api</con:value></con:property><con:property><con:name>assetIdentifier</con:name><con:value>ngjhtK</con:value></con:property></con:properties><con:setupScript/><con:tearDownScript/></con:testSuite><con:properties><con:property><con:name>AccessToken</con:name><con:value>e0b49c6851dc4ef4a6f9a4f8cdc5c403</con:value></con:property><con:property><con:name>TokenSecret</con:name><con:value>038ccf714b9f4e088e7c9f07002980b4</con:value></con:property><con:property><con:name>ConsumerKey</con:name><con:value>569ce6080d264b97bd778bf832d1cdfc</con:value></con:property><con:property><con:name>ConsumerSecret</con:name><con:value>6dd322b70add4d67b0a7ab14c8064eea</con:value></con:property><con:property><con:name>HeaderAccept</con:name><con:value>Accept</con:value></con:property><con:property><con:name>AcceptValue</con:name><con:value>application/json, text/javascript, */*; q=0.0</con:value></con:property><con:property><con:name>HeaderContentType</con:name><con:value>Content-Type</con:value></con:property><con:property><con:name>ContentTypeValue</con:name><con:value>application/json</con:value></con:property></con:properties><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer><con:oAuth1Profile><con:name>Stage</con:name><con:accessToken>e0b49c6851dc4ef4a6f9a4f8cdc5c403</con:accessToken><con:accessTokenPosition>HEADER</con:accessTokenPosition><con:accessTokenStatus>ENTERED_MANUALLY</con:accessTokenStatus><con:accessTokenStartingStatus>ENTERED_MANUALLY</con:accessTokenStartingStatus><con:consumerKey>569ce6080d264b97bd778bf832d1cdfc</con:consumerKey><con:consumerSecret>6dd322b70add4d67b0a7ab14c8064eea</con:consumerSecret><con:tokenSecret>038ccf714b9f4e088e7c9f07002980b4</con:tokenSecret><con:tokenSecretStatus>ENTERED_MANUALLY</con:tokenSecretStatus><con:tokenSecretStartingStatus>ENTERED_MANUALLY</con:tokenSecretStartingStatus></con:oAuth1Profile><con:oAuth1Profile><con:name>fidstage</con:name><con:accessTokenPosition>HEADER</con:accessTokenPosition></con:oAuth1Profile></con:oAuth1ProfileContainer><con:afterRunScript>/**
+*
+* Below is the TearDown script for SoapUI Project level
+* Which create a custom report in a  given file
+* Modify the variable "reportFileName" below
+*
+**/
+//Modify the file as needed for report file
+//def reportFileName = '/tmp/abctestreport.txt'
+//Adding the below as user wants specific directory
+//Get the project path
+
+def dataFolder =  new com.eviware.soapui.support.GroovyUtils(context).projectPath
+
+//Create today's date for storing response
+def today = new Date().format("yyyy-MM-dd")
+
+def filePrefix = "${dataFolder}/TestReports/xxx_WebAPI_${today}" as String
+
+def fileNamePart = new Date().format("yyyy-MM-dd'T'HH.mm.ss")
+
+//creating filename dynamically.
+def reportFileName = "${filePrefix}/xxx_WebAPI_TestReport_${fileNamePart}.txt" as String
+
+
+//NOTE: Not required to edit beyond this point
+
+/**
+* This class holds the test case details
+**/
+class TestCaseResultHolder {
+    def log
+    Map&lt;String, String> properties = [:]
+    boolean status
+
+    def createProperties(testCase) {
+        testCase.getPropertyNames().each { key ->
+            properties[key] = testCase.getPropertyValue(key)
+        }       
+    }
+
+    def getCaseResult(caseRunner, caseName) {
+        log.info "Checking test case status ${caseName}"
+        if ( caseRunner.status.toString() == 'FAILED' ){
+            log.error "Test case $caseName has failed"
+            for ( stepResult in caseRunner?.results ){
+                stepResult.messages.each() { msg -> log.info msg }
+            }
+            return false
+        } else {
+            log.info "${caseName} is passed"
+        }
+        true
+    }
+
+    def buildCaseResult(caseRunner, caseName) {
+        status = getCaseResult(caseRunner, caseName)
+        if (!status) {
+            createProperties(caseRunner.testCase)
+        }
+    }
+
+}
+
+/**
+* This class holds the test suite details
+**/
+class SuiteResultsHolder {
+
+    def log
+    Map&lt;String, TestCaseResultHolder> casaeResults = [:]
+    int testCaseCount = 0
+    int passedCasesCount = 0
+    int failedCasesCount = 0
+
+    def buildSuiteResults(suiteRunner, suiteName){      
+        log.info "Building results of test suite ${suiteName}"
+        for ( caseRunner in suiteRunner?.results ) {
+            def caseName = caseRunner.testCase.name
+            testCaseCount++
+            def tcHolder = new TestCaseResultHolder(log: log)
+            tcHolder.buildCaseResult(caseRunner, caseName)          
+            casaeResults[caseName] = tcHolder
+            if (tcHolder.status) {
+                passedCasesCount++
+            } else {
+                failedCasesCount++
+            }
+        }
+    }
+
+    def getStatus() {
+        (0 &lt; failedCasesCount) ? false : true
+    }
+
+}
+
+/**
+* This class holds the project details
+**/
+class ProjectResultsHolder {
+
+    def log
+    Map&lt;String, SuiteResultsHolder> suiteResults = [:]
+    int suiteCount = 0
+    int passedSuitecount = 0
+    int failedSuiteCount = 0
+
+    def buildProjectResults(projectRunner, projectName) {
+        log.info "Building results of test project ${projectName}"          
+        for(suiteRunner in projectRunner?.results) {
+            def suiteName =  suiteRunner.testSuite.name
+            suiteCount++
+            def suiteResultsHolder = new SuiteResultsHolder(log: log)
+            suiteResultsHolder.buildSuiteResults(suiteRunner, suiteName)
+            suiteResults[suiteName] = suiteResultsHolder
+            if (suiteResultsHolder.status) {
+                passedSuitecount++
+            } else {
+                failedSuiteCount++
+            }
+        }
+    }
+
+    def getStatus() {
+        (0 &lt; failedSuiteCount) ? false : true
+    }
+
+}
+
+//Get the status string based on boolean
+def getResult(status){ status == true ? 'SUCCEED' : 'FAILED'}
+
+//Draws a line
+def drawLine(def letter = '=', def count = 70) { letter.multiply(count)}
+
+//Gets the summary report
+def getSummaryReport(project, projectResultHolder) {
+    def report = new StringBuffer()
+    report.append(drawLine()).append('\n')
+    report.append("\t\t\tTest Execution Summary\n")
+    report.append(drawLine('-', 60)).append('\n')
+    report.append("Project : ${project.name}\n")
+    report.append("Result : ${getResult(projectResultHolder.status)}\n")
+    report.append("Total test suites executed: ${projectResultHolder.suiteCount}\n")
+    report.append("Test suites passed: ${projectResultHolder.passedSuitecount}\n")
+    report.append("Test suites failed: ${projectResultHolder.failedSuiteCount}\n")
+    report.append(drawLine()).append('\n')
+    report
+}
+
+//Gets the test case report
+def getTestCaseReport(testCaseReport) {
+    def report = new StringBuffer()
+    report.append(drawLine('-', 60)).append('\n')
+    report.append("\t\tTest Case Details:\n")
+    report.append(drawLine('-', 60)).append('\n')
+    testCaseReport.each { kase, tcReport ->
+        report.append("Name : ${kase}\n")
+        report.append("Status : ${getResult(tcReport.status)}\n")
+        if (!tcReport.status) {
+            report.append("Properties : ${tcReport.properties.toString()}\n")
+        }
+    }
+    report
+}
+
+//Get the detailed report
+def getDetailedReport(projectResultHolder) {
+    def report = new StringBuffer()
+    report.append(drawLine()).append('\n')
+    report.append("\t\t\tTest Execution Detailed Report\n")
+    report.append(drawLine()).append('\n')
+    projectResultHolder.suiteResults.each { suite, details ->
+        report.append("Test Suite : ${suite}\n")
+        report.append("Result : ${getResult(details.status)}\n")
+        report.append("Total Cases : ${details.testCaseCount}\n")
+        report.append("Cases Passed : ${details.passedCasesCount}\n")
+        report.append("Cases Failed: ${details.failedCasesCount}\n")
+        report.append(getTestCaseReport(details.casaeResults))
+        report.append(drawLine()).append('\n')
+        report.append(drawLine()).append('\n')
+    }
+    report
+}
+
+//Save the contents to a file
+def saveToFile(file, content) {
+    if (!file.parentFile.exists()) {
+        file.parentFile.mkdirs()
+        log.info "Directory did not exist, created"
+    }
+    file.write(content) 
+    assert file.exists(), "${file.name} not created"
+}
+
+def holder = new ProjectResultsHolder(log: log)
+holder.buildProjectResults(runner, project.name)
+
+def finalReport = new StringBuffer()
+finalReport.append(getSummaryReport(project, holder))
+finalReport.append(getDetailedReport(holder))
+
+def reportFile = new File(reportFileName)
+saveToFile(reportFile, finalReport.toString())</con:afterRunScript><con:sensitiveInformation/></con:soapui-project>
