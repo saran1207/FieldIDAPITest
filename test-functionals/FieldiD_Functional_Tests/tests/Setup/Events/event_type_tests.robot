@@ -10,6 +10,10 @@ Library         Setup.Events.manage_event_types_page.ManageEventTypesPage  WITH 
 Library         Setup.Events.add_event_type_page.AddEventTypePage      WITH NAME       AddEventTypePage
 Library         Setup.Events.view_event_type_page.ViewEventTypePage     WITH NAME       ViewEventTypePage
 Library         Setup.Events.asset_type_assocation_page.AssetTypeAssocationPage    WITH NAME       AssetTypeAssocationPage
+Library         Setup.Events.observation_groups_page.ObservationGroupsPage     WITH NAME       ObservationGroupsPage
+Library         Setup.Events.score_groups_page.ScoreGroupsPage     WITH NAME       ScoreGroupsPage
+Library         Setup.Events.observations_page.ObservationsPage   WITH NAME       ObservationsPage
+Library         Setup.Events.scoring_page.ScoringPage   WITH NAME       ScoringPage
 Suite Setup      Perform Suite Setup
 Suite Teardown  Logout Of Field Id
 
@@ -24,6 +28,8 @@ ${ACTIONEVENT}    Action
 ${EVENTGROUP}   Visual Inspection
 ${ASSETTYPE}  Asset Type 1
 ${COPYEVENTTYPE}  Score Event
+${SCORENAME}  Test Score
+${SCOREVALUE}  70
 
 
 *** Keywords ***
@@ -100,4 +106,86 @@ Verify Asset Type Association For An Event Type
     Go To Asset Type Assocaition Tab Of An Event Type  ${eventTypeName}
     ${isChecked}  Verify If Asset Type Checkbox Is Checked   ${ASSETTYPE}
     Should Be True    ${isChecked}    
-    [Teardown]  Delete Event Type  ${eventTypeName}    
+    [Teardown]  Delete Event Type  ${eventTypeName}  
+    
+Verify Add Observation Group
+    [Tags]  C1872
+     ${observationGroupName}    Generate Random String  5 
+     Add Observation Group    ${observationGroupName}
+     Add Score To Observation Group    ${observationGroupName}    ${SCORENAME}
+     Click Save Score Button
+     Handle Alert    ACCEPT
+     Go To Page  ObservationGroupsPage
+     ${isObservationGroupPresent}=  Verify If Observation Group Is Added    ${observationGroupName}
+     Should Be True  ${isObservationGroupPresent}
+     Select Observation Group    ${observationGroupName}
+     ${isScorePresent}=  Verify If Score Is Added    ${SCORENAME}
+     Should Be True  ${isScorePresent}
+     [Teardown]  Delete Observation Group    ${observationGroupName}
+     
+Verify Edit Observation Group
+    [Tags]  C1873
+     ${observationGroupName}    Generate Random String  5 
+     Add Observation Group    ${observationGroupName}
+     Edit Observation Group    ${observationGroupName}   ${observationGroupName} editted
+     Go To Page  ObservationGroupsPage
+     ${isObservationGroupPresent}=  Verify If Observation Group Is Added    ${observationGroupName} editted
+     Should Be True  ${isObservationGroupPresent}
+     [Teardown]  Delete Observation Group    ${observationGroupName} editted
+     
+Verify Add Score Group
+    [Tags]  C1870
+     ${scoreGroupName}    Generate Random String  5 
+     Add Score Group    ${scoreGroupName}
+     Add Score To Score Group    ${scoreGroupName}    ${SCORENAME}  ${SCOREVALUE}
+     Go To Page  ScoreGroupsPage
+     ${isScoreGroupPresent}=  Verify If Score Group Is Added    ${scoreGroupName}
+     Should Be True  ${isScoreGroupPresent}
+     Select Observation Group    ${scoreGroupName}
+     ${isScorePresent}=  Verify If Score Is Added    ${SCORENAME}
+     Should Be True  ${isScorePresent}
+     [Teardown]  Delete Score Group    ${scoreGroupName}
+     
+Verify Edit Score Group
+    [Tags]  C1871
+     ${scoreGroupName}    Generate Random String  5 
+     Add Score Group    ${scoreGroupName}
+     Edit Score Group    ${scoreGroupName}   ${scoreGroupName} editted
+     Go To Page  ScoreGroupsPage
+     ${isScoreGroupPresent}=  Verify If Score Group Is Added    ${scoreGroupName} editted
+     Should Be True  ${isScoreGroupPresent}
+     [Teardown]  Delete Score Group    ${scoreGroupName} editted
+     
+Verify Observation Group In Event Type
+    [Tags]  C1896
+     ${eventTypeName}=   Create Event Type and Verify Creation  ${ASSETEVENT}  ${EVENTGROUP}
+    Setup Observations To Event Type   ${eventTypeName}   Default Observation Group  Unsafe  Safe  60  100  61  100
+    The Current Page Should Be   ViewEventTypePage
+    Click Observations Link
+    The Current Page Should Be  ObservationsPage
+    ${observationGroup}=  Verify Observation Group Name    Default Observation Group
+    ${observationCountFail}=  Verify Observation Count Fail    Unsafe
+    ${observationCountPass}=  Verify Observation Count Pass    Safe
+    ${failValue}=  Verify Fail Range Value    60  100
+    ${passValue}=  Verify Pass Range Value    61  100
+    Should Be True  ${observationGroup}
+    Should Be True  ${observationCountFail}
+    Should Be True  ${observationCountPass}
+    Should Be True  ${failValue}
+    Should Be True  ${passValue}
+    [Teardown]  Delete Event Type   ${eventTypeName}   
+    
+Verify Scoring In Event Type
+    [Tags]  C1907
+    ${eventTypeName}=   Create Event Type and Verify Creation  ${ASSETEVENT}  ${EVENTGROUP}
+    Setup Scoring To Event Type   ${eventTypeName}   Average  1  5  6  10
+    The Current Page Should Be   ViewEventTypePage
+    Click Scoring Link
+    The Current Page Should Be  ScoringPage
+    ${scoreName}=  Verify Score Name    Average
+    ${failValue}=  Verify Fail Range Value    1  5
+    ${passValue}=  Verify Pass Range Value    6  10
+    Should Be True  ${scoreName}
+    Should Be True  ${failValue}
+    Should Be True  ${passValue}
+    [Teardown]  Delete Event Type   ${eventTypeName}     
